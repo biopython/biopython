@@ -121,7 +121,7 @@ class StructureDecoder(object):
         if insertion_code == "\x00":
             insertion_code = " "
 
-        self.structure_builder.init_seg(' ')
+        self.structure_builder.init_seg(" ")
         self.structure_builder.init_residue(group_name, self.this_type,
                                             group_number, insertion_code)
 

@@ -44,12 +44,12 @@ class _PacketIterator:
         type = self.handle.read(1)
         if len(type) < 1:   # No more packet
             raise StopIteration
-        type = unpack('>B', type)[0]
+        type = unpack(">B", type)[0]
 
         length = self.handle.read(4)
         if len(length) < 4:
             raise ValueError("Unexpected end of packet")
-        length = unpack('>I', length)[0]
+        length = unpack(">I", length)[0]
 
         data = self.handle.read(length)
         if len(data) < length:
@@ -72,11 +72,11 @@ def _parse_dna_packet(length, data, record):
         raise ValueError("The file contains more than one DNA packet")
 
     flags, sequence = unpack(">B%ds" % (length - 1), data)
-    record.seq = Seq(sequence.decode('ASCII'), alphabet=Alphabet.generic_dna)
+    record.seq = Seq(sequence.decode("ASCII"), alphabet=Alphabet.generic_dna)
     if flags & 0x01:
-        record.annotations['topology'] = 'circular'
+        record.annotations["topology"] = "circular"
     else:
-        record.annotations['topology'] = 'linear'
+        record.annotations["topology"] = "linear"
 
 
 def _parse_notes_packet(length, data, record):
@@ -85,24 +85,24 @@ def _parse_notes_packet(length, data, record):
     This type of packet contains some metadata about the sequence. They
     are stored as a XML string with a 'Notes' root node.
     """
-    xml = parseString(data.decode('ASCII'))
-    type = _get_child_value(xml, 'Type')
-    if type == 'Synthetic':
-        record.annotations['data_file_division'] = 'SYN'
+    xml = parseString(data.decode("ASCII"))
+    type = _get_child_value(xml, "Type")
+    if type == "Synthetic":
+        record.annotations["data_file_division"] = "SYN"
     else:
-        record.annotations['data_file_division'] = 'UNC'
+        record.annotations["data_file_division"] = "UNC"
 
-    date = _get_child_value(xml, 'LastModified')
+    date = _get_child_value(xml, "LastModified")
     if date:
-        record.annotations['date'] = datetime.strptime(date, '%Y.%m.%d')
+        record.annotations["date"] = datetime.strptime(date, "%Y.%m.%d")
 
-    acc = _get_child_value(xml, 'AccessionNumber')
+    acc = _get_child_value(xml, "AccessionNumber")
     if acc:
         record.id = acc
 
-    comment = _get_child_value(xml, 'Comments')
+    comment = _get_child_value(xml, "Comments")
     if comment:
-        record.name = comment.split(' ', 1)[0]
+        record.name = comment.split(" ", 1)[0]
         record.description = comment
         if not acc:
             record.id = record.name
@@ -114,8 +114,8 @@ def _parse_cookie_packet(length, data, record):
     Every SnapGene file starts with a packet of this type. It acts as
     a magic cookie identifying the file as a SnapGene file.
     """
-    cookie, seq_type, exp_version, imp_version = unpack('>8sHHH', data)
-    if cookie.decode('ASCII') != 'SnapGene':
+    cookie, seq_type, exp_version, imp_version = unpack(">8sHHH", data)
+    if cookie.decode("ASCII") != "SnapGene":
         raise ValueError("The file is not a valid SnapGene file")
 
 
@@ -126,24 +126,24 @@ def _parse_features_packet(length, data, record):
     which are in a dedicated Primers packet). The data is a XML string
     starting with a 'Features' root node.
     """
-    xml = parseString(data.decode('ASCII'))
-    for feature in xml.getElementsByTagName('Feature'):
+    xml = parseString(data.decode("ASCII"))
+    for feature in xml.getElementsByTagName("Feature"):
         quals = {}
 
-        type = _get_attribute_value(feature, 'type', default='misc_feature')
-        label = _get_attribute_value(feature, 'name')
+        type = _get_attribute_value(feature, "type", default="misc_feature")
+        label = _get_attribute_value(feature, "name")
         if label:
-            quals['label'] = [label]
+            quals["label"] = [label]
 
         strand = +1
-        directionality = int(_get_attribute_value(feature, 'directionality', default="1"))
+        directionality = int(_get_attribute_value(feature, "directionality", default="1"))
         if directionality == 2:
             strand = -1
 
         location = None
-        for segment in feature.getElementsByTagName('Segment'):
-            rng = _get_attribute_value(segment, 'range')
-            start, end = [int(x) for x in rng.split('-')]
+        for segment in feature.getElementsByTagName("Segment"):
+            rng = _get_attribute_value(segment, "range")
+            start, end = [int(x) for x in rng.split("-")]
             # Account for SnapGene's 1-based coordinates
             start = start - 1
             if not location:
@@ -153,17 +153,17 @@ def _parse_features_packet(length, data, record):
         if not location:
             raise ValueError("Missing feature location")
 
-        for qualifier in feature.getElementsByTagName('Q'):
-            qname = _get_attribute_value(qualifier, 'name',
+        for qualifier in feature.getElementsByTagName("Q"):
+            qname = _get_attribute_value(qualifier, "name",
                                          error="Missing qualifier name")
             qvalues = []
-            for value in qualifier.getElementsByTagName('V'):
-                if value.hasAttribute('text'):
-                    qvalues.append(_decode(value.attributes['text'].value))
-                elif value.hasAttribute('predef'):
-                    qvalues.append(_decode(value.attributes['predef'].value))
-                elif value.hasAttribute('int'):
-                    qvalues.append(int(value.attributes['int'].value))
+            for value in qualifier.getElementsByTagName("V"):
+                if value.hasAttribute("text"):
+                    qvalues.append(_decode(value.attributes["text"].value))
+                elif value.hasAttribute("predef"):
+                    qvalues.append(_decode(value.attributes["predef"].value))
+                elif value.hasAttribute("int"):
+                    qvalues.append(int(value.attributes["int"].value))
             quals[qname] = qvalues
 
         feature = SeqFeature(location, type=type, qualifiers=quals)
@@ -177,25 +177,25 @@ def _parse_primers_packet(length, data, record):
     stores primer binding features. The data is a XML string starting
     with a 'Primers' root node.
     """
-    xml = parseString(data.decode('ASCII'))
-    for primer in xml.getElementsByTagName('Primer'):
+    xml = parseString(data.decode("ASCII"))
+    for primer in xml.getElementsByTagName("Primer"):
         quals = {}
 
-        name = _get_attribute_value(primer, 'name')
+        name = _get_attribute_value(primer, "name")
         if name:
-            quals['label'] = [name]
+            quals["label"] = [name]
 
-        for site in primer.getElementsByTagName('BindingSite'):
-            rng = _get_attribute_value(site, 'location', error="Missing binding site location")
-            start, end = [int(x) for x in rng.split('-')]
+        for site in primer.getElementsByTagName("BindingSite"):
+            rng = _get_attribute_value(site, "location", error="Missing binding site location")
+            start, end = [int(x) for x in rng.split("-")]
 
-            strand = int(_get_attribute_value(site, 'boundStrand', default="0"))
+            strand = int(_get_attribute_value(site, "boundStrand", default="0"))
             if strand == 1:
                 strand = -1
             else:
                 strand = +1
 
-            feature = SeqFeature(FeatureLocation(start, end, strand=strand), type='primer_bind', qualifiers=quals)
+            feature = SeqFeature(FeatureLocation(start, end, strand=strand), type="primer_bind", qualifiers=quals)
             record.features.append(feature)
 
 
@@ -213,7 +213,7 @@ _packet_handlers = {
 
 def _decode(text):
     # Get rid of HTML tags in some values
-    return sub('<[^>]+>', '', text)
+    return sub("<[^>]+>", "", text)
 
 
 def _get_attribute_value(node, name, default=None, error=None):

@@ -38,7 +38,7 @@ def _read_packet(handle):
     the GCK file.
     """
     length = _read(handle, 4)
-    length = unpack('>I', length)[0]
+    length = unpack(">I", length)[0]
     data = _read(handle, length)
     return (data, length)
 
@@ -49,8 +49,8 @@ def _read_pstring(handle):
     A Pascal string is one byte for length followed by the actual string.
     """
     length = _read(handle, 1)
-    length = unpack('>B', length)[0]
-    data = _read(handle, length).decode('ASCII')
+    length = unpack(">B", length)[0]
+    data = _read(handle, length).decode("ASCII")
     return data
 
 
@@ -60,8 +60,8 @@ def _read_p4string(handle):
     Similar to a Pascal string but length is encoded on 4 bytes.
     """
     length = _read(handle, 4)
-    length = unpack('>I', length)[0]
-    data = _read(handle, length).decode('ASCII')
+    length = unpack(">I", length)[0]
+    data = _read(handle, length).decode("ASCII")
     return data
 
 
@@ -81,12 +81,12 @@ def GckIterator(handle):
     packet, length = _read_packet(handle)
     # The body of the sequence packet starts with a 32-bit integer
     # representing the length of the sequence.
-    seq_length = unpack('>I', packet[:4])[0]
+    seq_length = unpack(">I", packet[:4])[0]
     # This length should not be larger than the length of the
     # sequence packet.
     if seq_length > length - 4:
         raise ValueError("Conflicting sequence length values")
-    sequence = packet[4:].decode('ASCII')
+    sequence = packet[4:].decode("ASCII")
     record = SeqRecord(Seq(sequence, alphabet=Alphabet.generic_dna))
 
     # Skip unknown packet
@@ -94,7 +94,7 @@ def GckIterator(handle):
 
     # Read features packet
     packet, length = _read_packet(handle)
-    (seq_length, num_features) = unpack('>IH', packet[:6])
+    (seq_length, num_features) = unpack(">IH", packet[:6])
     # Check that length in the features packet matches the actual
     # length of the sequence
     if seq_length != len(record):
@@ -108,7 +108,7 @@ def GckIterator(handle):
 
         # There's probably more stuff to unpack in that structure,
         # but those values are the only ones I understand.
-        (start, end, type, strand, has_name, has_comment, version) = unpack('>II6xH14xB17xII35xB', feature_data)
+        (start, end, type, strand, has_name, has_comment, version) = unpack(">II6xH14xB17xII35xB", feature_data)
 
         if strand == 1:     # Reverse strand
             strand = -1
@@ -121,9 +121,9 @@ def GckIterator(handle):
 
         # It looks like any value > 0 indicates a CDS...
         if type > 0:
-            type = 'CDS'
+            type = "CDS"
         else:
-            type = 'misc_feature'
+            type = "misc_feature"
 
         # Each feature may have a name and a comment, which are then
         # stored immediately after the features packet. Names are
@@ -133,10 +133,10 @@ def GckIterator(handle):
         qualifiers = {}
         if has_name > 0:
             name = _read_pstring(handle)
-            qualifiers['label'] = [name]
+            qualifiers["label"] = [name]
         if has_comment > 0:
             comment = _read_p4string(handle)
-            qualifiers['note'] = [comment]
+            qualifiers["note"] = [comment]
 
         # Each feature may exist in several "versions". We keep only
         # the most recent version.
@@ -152,7 +152,7 @@ def GckIterator(handle):
     # site, which are stored after that packet in a similar way as for
     # the features above.
     packet, length = _read_packet(handle)
-    (seq_length, num_sites) = unpack('>IH', packet[:6])
+    (seq_length, num_sites) = unpack(">IH", packet[:6])
     # Each site is stored in a 88-bytes structure
     if length - 6 != num_sites * 88:
         raise ValueError("Sites packet size inconsistent with number of sites")
@@ -160,7 +160,7 @@ def GckIterator(handle):
         offset = 6 + i * 88
         site_data = packet[offset:offset + 88]
 
-        (start, end, has_name, has_comment) = unpack('>II24xII48x', site_data)
+        (start, end, has_name, has_comment) = unpack(">II24xII48x", site_data)
 
         # Skip names and comments
         if has_name:
@@ -177,7 +177,7 @@ def GckIterator(handle):
     # short integer indicating how many versions are there, and then
     # as many 260-bytes block as we have versions.
     num_versions = _read(handle, 2)
-    num_versions = unpack('>H', num_versions)[0]
+    num_versions = unpack(">H", num_versions)[0]
     versions = _read(handle, num_versions * 260)
     for i in range(0, num_versions):
         offset = i * 260
@@ -185,7 +185,7 @@ def GckIterator(handle):
 
         # Each version may have a comment, which is then stored
         # after all the "version packets".
-        has_comment = unpack('>I', version_data[-4:])[0]
+        has_comment = unpack(">I", version_data[-4:])[0]
         if has_comment > 0:
             _read_p4string(handle)
 
@@ -196,17 +196,17 @@ def GckIterator(handle):
 
     # Read the construct's name
     name = _read_pstring(handle)
-    record.name = record.id = name.split(' ')[0]
+    record.name = record.id = name.split(" ")[0]
     record.description = name
 
     # Circularity byte
     # There may be other flags in that block, but their meaning
     # is unknown to me.
     flags = _read(handle, 17)
-    circularity = unpack('>16xB', flags)[0]
+    circularity = unpack(">16xB", flags)[0]
     if circularity > 0:
-        record.annotations['topology'] = 'circular'
+        record.annotations["topology"] = "circular"
     else:
-        record.annotations['topology'] = 'linear'
+        record.annotations["topology"] = "linear"
 
     yield record
