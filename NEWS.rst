@@ -48,6 +48,11 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite, and there has been further work to follow the
+Python PEP8, PEP257 and best practice standard coding style. We have also
+started to use the ``black`` Python code formatting tool.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 

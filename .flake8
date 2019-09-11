@@ -29,6 +29,9 @@ ignore =
     # ===========================================
     E123, # closing bracket does not match indentation of opening bracket's line
           # TODO? (main/Bio/Tests: 3/91/31 occurrences)
+    E203, # whitespace before ':'
+          # gives false positives after running black, see
+          # https://github.com/PyCQA/pycodestyle/issues/373
     E501, # line too long
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
     W504, # line break after binary operator (Bio/Tests/Scripts: 225/119/7) TODO?
