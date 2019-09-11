@@ -322,9 +322,9 @@ def _sff_file_header(handle):
         raise ValueError("Empty file.")
     elif len(data) < 31:
         raise ValueError("File too small to hold a valid SFF header.")
-    magic_number, ver0, ver1, ver2, ver3, index_offset, index_length, \
-    number_of_reads, header_length, key_length, number_of_flows_per_read, \
-    flowgram_format = struct.unpack(fmt, data)
+    (magic_number, ver0, ver1, ver2, ver3, index_offset, index_length,
+        number_of_reads, header_length, key_length, number_of_flows_per_read,
+        flowgram_format) = struct.unpack(fmt, data)
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
@@ -368,9 +368,8 @@ def _sff_do_slow_index(handle):
     Will use the handle seek/tell functions.
     """
     handle.seek(0)
-    header_length, index_offset, index_length, number_of_reads, \
-    number_of_flows_per_read, flow_chars, key_sequence \
-        = _sff_file_header(handle)
+    (header_length, index_offset, index_length, number_of_reads,
+        number_of_flows_per_read, flow_chars, key_sequence) = _sff_file_header(handle)
     # Now on to the reads...
     read_header_fmt = ">2HI4H"
     read_header_size = struct.calcsize(read_header_fmt)
@@ -394,9 +393,8 @@ def _sff_do_slow_index(handle):
         # assert record_offset%8 == 0 # Worth checking, but slow
         # First the fixed header
         data = handle.read(read_header_size)
-        read_header_length, name_length, seq_len, clip_qual_left, \
-        clip_qual_right, clip_adapter_left, clip_adapter_right \
-            = struct.unpack(read_header_fmt, data)
+        (read_header_length, name_length, seq_len, clip_qual_left,
+            clip_qual_right, clip_adapter_left, clip_adapter_right) = struct.unpack(read_header_fmt, data)
         if read_header_length < 10 or read_header_length % 8 != 0:
             raise ValueError("Malformed read header, says length is %i:\n%r"
                              % (read_header_length, data))
@@ -442,9 +440,8 @@ def _sff_find_roche_index(handle):
     Raises a ValueError for unsupported or non-Roche index blocks.
     """
     handle.seek(0)
-    header_length, index_offset, index_length, number_of_reads, \
-    number_of_flows_per_read, flow_chars, key_sequence \
-        = _sff_file_header(handle)
+    (header_length, index_offset, index_length, number_of_reads,
+        number_of_flows_per_read, flow_chars, key_sequence) = _sff_file_header(handle)
     assert handle.tell() == header_length
     if not index_offset or not index_offset:
         raise ValueError("No index present in this SFF file")
@@ -521,9 +518,8 @@ def ReadRocheXmlManifest(handle):
     Returns a string, or raises a ValueError if an Roche manifest could not be
     found.
     """
-    number_of_reads, header_length, index_offset, index_length, xml_offset, \
-    xml_size, read_index_offset, read_index_size = _sff_find_roche_index(
-        handle)
+    (number_of_reads, header_length, index_offset, index_length, xml_offset,
+        xml_size, read_index_offset, read_index_size) = _sff_find_roche_index(handle)
     if not xml_offset or not xml_size:
         raise ValueError("No XML manifest found")
     handle.seek(xml_offset)
@@ -548,9 +544,8 @@ def _sff_read_roche_index(handle):
     tool to combine SFF files beyound this limit, they issue a warning and
     omit the index (and manifest).
     """
-    number_of_reads, header_length, index_offset, index_length, xml_offset, \
-    xml_size, read_index_offset, read_index_size = _sff_find_roche_index(
-        handle)
+    (number_of_reads, header_length, index_offset, index_length, xml_offset,
+        xml_size, read_index_offset, read_index_size) = _sff_find_roche_index(handle)
     # Now parse the read index...
     handle.seek(read_index_offset)
     fmt = ">5B"
@@ -600,9 +595,9 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     read_flow_fmt = ">%iH" % number_of_flows_per_read
     read_flow_size = struct.calcsize(read_flow_fmt)
 
-    read_header_length, name_length, seq_len, clip_qual_left, \
-    clip_qual_right, clip_adapter_left, clip_adapter_right \
-        = struct.unpack(read_header_fmt, handle.read(read_header_size))
+    (read_header_length, name_length, seq_len, clip_qual_left,
+     clip_qual_right, clip_adapter_left,
+     clip_adapter_right) = struct.unpack(read_header_fmt, handle.read(read_header_size))
     if clip_qual_left:
         clip_qual_left -= 1  # python counting
     if clip_adapter_left:
@@ -905,9 +900,8 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     except AttributeError:
         # Probably a network handle or something like that
         handle = _AddTellHandle(handle)
-    header_length, index_offset, index_length, number_of_reads, \
-    number_of_flows_per_read, flow_chars, key_sequence \
-        = _sff_file_header(handle)
+    (header_length, index_offset, index_length, number_of_reads,
+        number_of_flows_per_read, flow_chars, key_sequence) = _sff_file_header(handle)
     # Now on to the reads...
     # the read header format (fixed part):
     # read_header_length     H
