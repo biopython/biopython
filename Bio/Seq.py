@@ -161,7 +161,7 @@ class Seq(object):
         return self._data
     
     def __format__(self, formatstr):
-        """ Using .format method 
+        """ Using .format() method 
 
         >>> from Bio.Seq import Seq
         >>> seq1 = Seq("ACGT")
