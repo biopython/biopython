@@ -6,10 +6,10 @@
 #             D2## - Whitespace Issues
 #             D4## - Docstring Content issues
 # flake8-bugbear: B###
+# flake8-quotes: Q###
 # flake8-commas: C#### (in case installed locally)
 # flake8-black : BLK### (in case installed locally)
 # flake8-pie : PIE### (in case installed locally)
-# flake8-quote : Q### (in case installed locally)
 # =================================================
 [flake8]
 doctests = True
@@ -84,7 +84,7 @@ per-file-ignores =
 #             instead callers should raise AssertionError()
 #        C812 missing trailing comma
 
-# ======================
-# flake8-quote settings:
-# ======================
+# =======================
+# flake8-quotes settings:
+# =======================
 inline-quotes = double
