@@ -489,7 +489,8 @@ class Parser(object):
                 self.ParsedSeqRecord.annotations[k] = int(v)
             else:
                 # self.ParsedSeqRecord.annotations["entry_%s" % k] = v
-                self.ParsedSeqRecord.annotations[k] = v  # to cope with swissProt plain text parser
+                # to cope with swissProt plain text parser:
+                self.ParsedSeqRecord.annotations[k] = v
 
         # Top-to-bottom entry children parsing
         for element in self.entry:
