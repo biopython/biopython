@@ -159,6 +159,16 @@ class Seq(object):
 
         """
         return self._data
+    
+    def __format__(self, formatstr):
+        """ Using .format method 
+
+        >>> from Bio.Seq import Seq
+        >>> seq1 = Seq("ACGT")
+        >>> print('The sequence is {}'.format(seq1))
+        The sequence is ACGT
+        """
+        return self._data.__format__(formatstr)
 
     def __hash__(self):
         """Hash for comparison.
