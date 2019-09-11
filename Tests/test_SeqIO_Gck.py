@@ -127,14 +127,14 @@ class TestGckWithDGVC(unittest.TestCase):
                     'start': 0,
                     'end': 587,
                     'strand': 1,
-                    'label': 'P 5\' end'
+                    'label': "P 5' end"
                     },
                 {
                     'type': 'misc_feature',
                     'start': 9327,
                     'end': 9560,
                     'strand': -1,
-                    'label': 'P 3\' end'
+                    'label': "P 3' end"
                     },
                 {
                     'type': 'misc_feature',
