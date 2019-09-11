@@ -59,6 +59,7 @@ _EXTRACT = {
 # for them for all of the available fields.
 _INSTRUMENT_SPECIFIC_TAGS = {}
 
+# fmt: off
 _INSTRUMENT_SPECIFIC_TAGS["general"] = {
     "APFN2": "Sequencing Analysis parameters file name",
     "APXV1": "Analysis Protocol XML schema version",
@@ -301,6 +302,7 @@ _INSTRUMENT_SPECIFIC_TAGS["abi_3530/3530xl"] = {
 _INSTRUMENT_SPECIFIC_TAGS["abi_3730/3730xl"] = {
     "BufT1": "Buffer tray heater temperature (degrees C)",
 }
+# fmt: on
 
 # dictionary for data unpacking format
 _BYTEFMT = {
