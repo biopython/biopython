@@ -811,6 +811,8 @@ def to_dict(sequences, key_function=None):
     Biopython 1.72, on older versions of Python we explicitly use an
     OrderedDict so that you can always assume the record order is preserved.
     """
+    # This is to avoid a lambda function:
+
     def _default_key_function(rec):
         return rec.id
 
