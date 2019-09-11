@@ -1146,7 +1146,7 @@ def format_alignment(align1, align2, score, begin, end,
     """
     align_begin = begin
     align_end = end
-    start1 = start2 = ''
+    start1 = start2 = ""
     start_m = begin  # Begin of match line (how many spaces to include)
     # For local alignments:
     if not full_sequences and (begin != 0 or end != len(align1)):
@@ -1178,7 +1178,7 @@ def format_alignment(align1, align2, score, begin, end,
         s1_line.append("{:^{width}}".format(a, width=m_len))
         s2_line.append("{:^{width}}".format(b, width=m_len))
         if full_sequences and (n < align_begin or n >= align_end):
-            m_line.append("{:^{width}}".format(' ', width=m_len))  # space
+            m_line.append("{:^{width}}".format(" ", width=m_len))  # space
             continue
         if a == b:
             m_line.append("{:^{width}}".format("|", width=m_len))  # match

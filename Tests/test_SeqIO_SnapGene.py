@@ -16,53 +16,53 @@ from Bio import SeqIO
 class TestSnapGene(unittest.TestCase):
 
     sample_data = {
-        'sample-d': {
-            'file': 'SnapGene/sample-d.dna',
-            'name': 'Sample',
-            'id': 'Sample',
-            'description': 'Sample Sequence D',
-            'length': 1000,
-            'topology': 'linear',
-            'date': datetime.datetime(2019, 8, 3, 0, 0),
-            'features': [
+        "sample-d": {
+            "file": "SnapGene/sample-d.dna",
+            "name": "Sample",
+            "id": "Sample",
+            "description": "Sample Sequence D",
+            "length": 1000,
+            "topology": "linear",
+            "date": datetime.datetime(2019, 8, 3, 0, 0),
+            "features": [
                 {
-                    'type': 'misc_binding',
-                    'start': 499,
-                    'end': 700,
-                    'strand': 1,
-                    'label': 'FeatureB'
+                    "type": "misc_binding",
+                    "start": 499,
+                    "end": 700,
+                    "strand": 1,
+                    "label": "FeatureB"
                     },
                 {
-                    'type': 'promoter',
-                    'start': 49,
-                    'end': 150,
-                    'strand': 1,
-                    'label': 'FeatureA'
+                    "type": "promoter",
+                    "start": 49,
+                    "end": 150,
+                    "strand": 1,
+                    "label": "FeatureA"
                     }
                 ]
             },
-        'sample-b': {
-            'file': 'SnapGene/sample-e.dna',
-            'name': 'Sample',
-            'id': 'Sample',
-            'description': 'Sample Sequence E',
-            'length': 1000,
-            'date': datetime.datetime(2019, 8, 3, 0, 0),
-            'topology': 'circular',
-            'features': [
+        "sample-b": {
+            "file": "SnapGene/sample-e.dna",
+            "name": "Sample",
+            "id": "Sample",
+            "description": "Sample Sequence E",
+            "length": 1000,
+            "date": datetime.datetime(2019, 8, 3, 0, 0),
+            "topology": "circular",
+            "features": [
                 {
-                    'type': 'terminator',
-                    'start': 399,
-                    'end': 750,
-                    'strand': -1,
-                    'label': 'FeatureB'
+                    "type": "terminator",
+                    "start": 399,
+                    "end": 750,
+                    "strand": -1,
+                    "label": "FeatureB"
                     },
                 {
-                    'type': 'rep_origin',
-                    'start': 160,
-                    'end': 241,
-                    'strand': 1,
-                    'label': 'FeatureA'
+                    "type": "rep_origin",
+                    "start": 160,
+                    "end": 241,
+                    "strand": 1,
+                    "label": "FeatureA"
                     }
                 ]
             }
@@ -71,29 +71,29 @@ class TestSnapGene(unittest.TestCase):
     def test_read(self):
         """Read sample files."""
         for sample in self.sample_data.values():
-            record = SeqIO.read(sample['file'], 'snapgene')
-            self.assertEqual(sample['name'], record.name)
-            self.assertEqual(sample['id'], record.id)
-            self.assertEqual(sample['description'], record.description)
-            self.assertEqual(sample['length'], len(record))
-            self.assertEqual(sample['date'], record.annotations['date'])
-            self.assertEqual(sample['topology'], record.annotations['topology'])
+            record = SeqIO.read(sample["file"], "snapgene")
+            self.assertEqual(sample["name"], record.name)
+            self.assertEqual(sample["id"], record.id)
+            self.assertEqual(sample["description"], record.description)
+            self.assertEqual(sample["length"], len(record))
+            self.assertEqual(sample["date"], record.annotations["date"])
+            self.assertEqual(sample["topology"], record.annotations["topology"])
 
-            self.assertEqual(len(sample['features']), len(record.features))
-            for i in range(len(sample['features'])):
-                exp_feat = sample['features'][i]
+            self.assertEqual(len(sample["features"]), len(record.features))
+            for i in range(len(sample["features"])):
+                exp_feat = sample["features"][i]
                 read_feat = record.features[i]
-                self.assertEqual(exp_feat['type'], read_feat.type)
-                self.assertEqual(exp_feat['start'], read_feat.location.start)
-                self.assertEqual(exp_feat['end'], read_feat.location.end)
-                self.assertEqual(exp_feat['strand'], read_feat.location.strand)
-                self.assertEqual(exp_feat['label'], read_feat.qualifiers['label'][0])
+                self.assertEqual(exp_feat["type"], read_feat.type)
+                self.assertEqual(exp_feat["start"], read_feat.location.start)
+                self.assertEqual(exp_feat["end"], read_feat.location.end)
+                self.assertEqual(exp_feat["strand"], read_feat.location.strand)
+                self.assertEqual(exp_feat["label"], read_feat.qualifiers["label"][0])
 
 
 class TestCorruptedSnapGene(unittest.TestCase):
 
     def setUp(self):
-        f = open('SnapGene/sample-d.dna', 'rb')
+        f = open("SnapGene/sample-d.dna", "rb")
         self.buffer = f.read()
         f.close()
 
@@ -110,13 +110,13 @@ class TestCorruptedSnapGene(unittest.TestCase):
         # Remove the first packet
         h = BytesIO(self.buffer[19:])
         with self.assertRaisesRegexp(ValueError, "The file does not start with a SnapGene cookie packet"):
-            SeqIO.read(h, 'snapgene')
+            SeqIO.read(h, "snapgene")
         h.close()
 
         # Keep the first packet but destroy the magic cookie
         h = self.munge_buffer(5, [0x4B, 0x41, 0x42, 0x4F, 0x4F, 0x4D])
         with self.assertRaisesRegexp(ValueError, "The file is not a valid SnapGene file"):
-            SeqIO.read(h, 'snapgene')
+            SeqIO.read(h, "snapgene")
         h.close()
 
     def test_missing_dna(self):
@@ -125,7 +125,7 @@ class TestCorruptedSnapGene(unittest.TestCase):
         # unknown packet type, so that the parser will skip the packet.
         h = self.munge_buffer(19, 0x80)
         with self.assertRaisesRegexp(ValueError, "No DNA packet in file"):
-            SeqIO.read(h, 'snapgene')
+            SeqIO.read(h, "snapgene")
         h.close()
 
     def test_extra_dna(self):
@@ -135,7 +135,7 @@ class TestCorruptedSnapGene(unittest.TestCase):
         buf.extend(self.buffer[19:1025])    # Append duplicated DNA packet
         h = BytesIO(buf)
         with self.assertRaisesRegexp(ValueError, "The file contains more than one DNA packet"):
-            SeqIO.read(h, 'snapgene')
+            SeqIO.read(h, "snapgene")
         h.close()
 
     def test_truncated_packet(self):
@@ -143,13 +143,13 @@ class TestCorruptedSnapGene(unittest.TestCase):
         # Truncate before the end of the length bytes
         h = BytesIO(self.buffer[3:])
         with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
-            SeqIO.read(h, 'snapgene')
+            SeqIO.read(h, "snapgene")
         h.close()
 
         # Truncate before the end of the data
         h = BytesIO(self.buffer[10:])
         with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
-            SeqIO.read(h, 'snapgene')
+            SeqIO.read(h, "snapgene")
         h.close()
 
 

@@ -231,10 +231,10 @@ class HSP(object):
     def __str__(self):
         """Return the BLAST HSP as a formatted string."""
         lines = ["Score %s (%s bits), expectation %s, alignment length %s" % (
-            fmt_(self.score, '%i'),
-            fmt_(self.bits, '%i'),
-            fmt_(self.expect, '%0.1e'),
-            fmt_(self.align_length, '%i'),
+            fmt_(self.score, "%i"),
+            fmt_(self.bits, "%i"),
+            fmt_(self.expect, "%0.1e"),
+            fmt_(self.align_length, "%i"),
         )]
         if self.align_length is None:
             return "\n".join(lines)
