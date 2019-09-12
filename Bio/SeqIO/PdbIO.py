@@ -305,21 +305,21 @@ def PdbAtomIterator(handle):
 # we will refer to the field names directly in the code.
 PDBX_POLY_SEQ_SCHEME_FIELDS = (
     "_pdbx_poly_seq_scheme.asym_id",  # Chain ID
-    "_pdbx_poly_seq_scheme.mon_id",
-)  # Residue type
+    "_pdbx_poly_seq_scheme.mon_id",  # Residue type
+)
 
 STRUCT_REF_FIELDS = (
     "_struct_ref.id",  # ID of this reference
     "_struct_ref.db_name",  # Name of the database
     "_struct_ref.db_code",  # Code for this entity
-    "_struct_ref.pdbx_db_accession",
-)  # DB accession ID of ref
+    "_struct_ref.pdbx_db_accession",  # DB accession ID of ref
+)
 
 STRUCT_REF_SEQ_FIELDS = (
     "_struct_ref_seq.ref_id",  # Pointer to _struct_ref
     "_struct_ref_seq.pdbx_PDB_id_code",  # PDB ID of this structure
-    "_struct_ref_seq.pdbx_strand_id",
-)  # Chain ID of the reference
+    "_struct_ref_seq.pdbx_strand_id",  # Chain ID of the reference
+)
 
 
 def CifSeqresIterator(handle):
