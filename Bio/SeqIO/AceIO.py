@@ -77,8 +77,9 @@ def AceIterator(handle):
             # For consistency with most other file formats, map
             # any * gaps into - gaps.
             assert "-" not in consensus_seq_str
-            consensus_seq = Seq(consensus_seq_str.replace("*", "-"),
-                                Gapped(alpha, gap_char="-"))
+            consensus_seq = Seq(
+                consensus_seq_str.replace("*", "-"), Gapped(alpha, gap_char="-")
+            )
         else:
             consensus_seq = Seq(consensus_seq_str, alpha)
 
@@ -89,9 +90,7 @@ def AceIterator(handle):
         # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
         # Perhaps as SeqFeature objects?
 
-        seq_record = SeqRecord(consensus_seq,
-                               id=ace_contig.name,
-                               name=ace_contig.name)
+        seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so
@@ -114,4 +113,5 @@ def AceIterator(handle):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

@@ -27,13 +27,10 @@ _seq_types = {
     1: Alphabet.generic_dna,
     2: Alphabet.generic_dna,
     3: Alphabet.generic_rna,
-    4: Alphabet.generic_protein
+    4: Alphabet.generic_protein,
 }
 
-_seq_topologies = {
-    0: "linear",
-    1: "circular"
-}
+_seq_topologies = {0: "linear", 1: "circular"}
 
 
 def _read(handle, length):
@@ -99,7 +96,7 @@ def _parse_feature_description(desc, qualifiers):
             # Store the qualifier as provided
             qual, value = m.groups()
             qualifiers[qual] = [value]
-        elif '"' not in line:   # Reject ill-formed qualifiers
+        elif '"' not in line:  # Reject ill-formed qualifiers
             # Store the entire line as a generic note qualifier
             qualifiers["note"] = [line]
 
@@ -157,7 +154,9 @@ def XdnaIterator(handle):
     # as I know, so we ignore that value. SerialCloner has no such concept
     # either and always generates files with a neg_length of zero.
     header = _read(handle, 112)
-    (version, type, topology, length, neg_length, com_length) = unpack(">BBB25xII60xI12x", header)
+    (version, type, topology, length, neg_length, com_length) = unpack(
+        ">BBB25xII60xI12x", header
+    )
     if version != 0:
         raise ValueError("Unsupported XDNA version")
     if type not in _seq_types:
@@ -171,8 +170,9 @@ def XdnaIterator(handle):
     name = comment.split(" ")[0]
 
     # Create record object
-    record = SeqRecord(Seq(sequence, _seq_types[type]),
-                       description=comment, name=name, id=name)
+    record = SeqRecord(
+        Seq(sequence, _seq_types[type]), description=comment, name=name, id=name
+    )
     if topology in _seq_topologies:
         record.annotations["topology"] = _seq_topologies[topology]
 
@@ -235,37 +235,50 @@ class XdnaWriter(SequenceWriter):
             comment = "{} {}".format(record.id, record.description)
 
         # Write header
-        self.handle.write(pack(">BBB25xII60xI11xB",
-                               0,   # version
-                               seqtype, topology, len(record),
-                               0,   # negative length
-                               len(comment),
-                               255  # end of header
-                               ))
+        self.handle.write(
+            pack(
+                ">BBB25xII60xI11xB",
+                0,  # version
+                seqtype,
+                topology,
+                len(record),
+                0,  # negative length
+                len(comment),
+                255,  # end of header
+            )
+        )
 
         # Actual sequence and comment
         self.handle.write(str(record.seq).encode("ASCII"))
         self.handle.write(comment.encode("ASCII"))
 
-        self.handle.write(pack(">B", 0))    # Annotation section marker
-        self._write_pstring("0")            # right-side overhang
-        self._write_pstring("0")            # left-side overhand
+        self.handle.write(pack(">B", 0))  # Annotation section marker
+        self._write_pstring("0")  # right-side overhang
+        self._write_pstring("0")  # left-side overhand
 
         # Write features
         # We must skip features with fuzzy locations as they cannot be
         # represented in the Xdna format
-        features = [f for f in record.features if type(f.location.start) == ExactPosition and type(f.location.end) == ExactPosition]
+        features = [
+            f
+            for f in record.features
+            if type(f.location.start) == ExactPosition
+            and type(f.location.end) == ExactPosition
+        ]
         drop = len(record.features) - len(features)
         if drop > 0:
-            warnings.warn("Dropping {} features with fuzzy locations".format(drop),
-                          BiopythonWarning)
+            warnings.warn(
+                "Dropping {} features with fuzzy locations".format(drop),
+                BiopythonWarning,
+            )
 
         # We also cannot store more than 255 features as the number of
         # features is stored on a single byte...
         if len(features) > 255:
             drop = len(features) - 255
-            warnings.warn("Too many features, dropping the last {}".format(drop),
-                          BiopythonWarning)
+            warnings.warn(
+                "Too many features, dropping the last {}".format(drop), BiopythonWarning
+            )
             features = features[:255]
 
         self.handle.write(pack(">B", len(features)))
@@ -298,8 +311,9 @@ class XdnaWriter(SequenceWriter):
             self._write_pstring("127,127,127")
 
         if self._has_truncated_strings:
-            warnings.warn("Some annotations were truncated to 255 characters",
-                          BiopythonWarning)
+            warnings.warn(
+                "Some annotations were truncated to 255 characters", BiopythonWarning
+            )
 
         return 1
 

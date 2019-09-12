@@ -104,13 +104,15 @@ def GckIterator(handle):
         raise ValueError("Features packet size inconsistent with number of features")
     for i in range(0, num_features):
         offset = 6 + i * 92
-        feature_data = packet[offset:offset + 92]
+        feature_data = packet[offset : offset + 92]
 
         # There's probably more stuff to unpack in that structure,
         # but those values are the only ones I understand.
-        (start, end, type, strand, has_name, has_comment, version) = unpack(">II6xH14xB17xII35xB", feature_data)
+        (start, end, type, strand, has_name, has_comment, version) = unpack(
+            ">II6xH14xB17xII35xB", feature_data
+        )
 
-        if strand == 1:     # Reverse strand
+        if strand == 1:  # Reverse strand
             strand = -1
         else:
             # Other possible values are 0 (no strand specified),
@@ -158,7 +160,7 @@ def GckIterator(handle):
         raise ValueError("Sites packet size inconsistent with number of sites")
     for i in range(0, num_sites):
         offset = 6 + i * 88
-        site_data = packet[offset:offset + 88]
+        site_data = packet[offset : offset + 88]
 
         (start, end, has_name, has_comment) = unpack(">II24xII48x", site_data)
 
@@ -181,7 +183,7 @@ def GckIterator(handle):
     versions = _read(handle, num_versions * 260)
     for i in range(0, num_versions):
         offset = i * 260
-        version_data = versions[offset:offset + 260]
+        version_data = versions[offset : offset + 260]
 
         # Each version may have a comment, which is then stored
         # after all the "version packets".

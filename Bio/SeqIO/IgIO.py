@@ -70,8 +70,7 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     while line:
         # Now iterate over the records
         if line[0] != ";":
-            raise ValueError(
-                "Records should start with ';' and not:\n%r" % line)
+            raise ValueError("Records should start with ';' and not:\n%r" % line)
 
         # Try and agree with SeqRecord convention from the GenBank parser,
         # (and followed in the SwissProt parser) which stores the comments
@@ -99,12 +98,10 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
             # Remove the optional terminator (digit one)
             seq_str = seq_str[:-1]
         if "1" in seq_str:
-            raise ValueError(
-                "Potential terminator digit one found within sequence.")
+            raise ValueError("Potential terminator digit one found within sequence.")
 
         # Return the record and then continue...
-        record = SeqRecord(Seq(seq_str, alphabet),
-                           id=title, name=title)
+        record = SeqRecord(Seq(seq_str, alphabet), id=title, name=title)
         record.annotations["comment"] = "\n".join(comment_lines)
         yield record
 
@@ -114,4 +111,5 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)
