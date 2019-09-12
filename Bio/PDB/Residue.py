@@ -60,9 +60,8 @@ class Residue(Entity):
         atoms (altloc) as a tie-breaker.
         """
         warnings.warn(
-            "The custom sort() method will be removed in the "
-            "future in favour of rich comparison methods. Use the "
-            "built-in sorted() function instead.",
+            "The custom sort() method will be removed in the future in favour of rich "
+            "comparison methods. Use the built-in sorted() function instead.",
             BiopythonDeprecationWarning,
         )
         self.child_list.sort()
@@ -85,9 +84,7 @@ class Residue(Entity):
         undisordered_atom_list = []
         for atom in atom_list:
             if atom.is_disordered():
-                undisordered_atom_list = (
-                    undisordered_atom_list + atom.disordered_get_list()
-                )
+                undisordered_atom_list += atom.disordered_get_list()
             else:
                 undisordered_atom_list.append(atom)
         return undisordered_atom_list
