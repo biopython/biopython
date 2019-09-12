@@ -70,6 +70,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Peter Kerpedjiev
 - Sergio Valqui
+- Spencer Bliven
 
 
 16 July 2019: Biopython 1.74
