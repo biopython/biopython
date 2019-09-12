@@ -9,8 +9,9 @@ try:
     from mmtf import fetch, parse
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError("Install mmtf to use Bio.PDB.mmtf "
-                                       "(e.g. pip install mmtf-python)")
+    raise MissingPythonDependencyError(
+        "Install mmtf to use Bio.PDB.mmtf (e.g. pip install mmtf-python)"
+    )
 from Bio.PDB.mmtf.DefaultParser import StructureDecoder
 from .mmtfio import MMTFIO
 

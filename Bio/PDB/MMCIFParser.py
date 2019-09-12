@@ -386,7 +386,8 @@ class FastMMCIFParser(object):
             icode = icode_list[i]
             if icode in _unassigned:
                 icode = " "
-            name = atom_id_list[i].strip('"')  # Remove occasional " from quoted atom names (e.g. xNA)
+            # Remove occasional " from quoted atom names (e.g. xNA)
+            name = atom_id_list[i].strip('"')
 
             # occupancy & B factor
             try:

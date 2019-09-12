@@ -232,7 +232,7 @@ def _get_atom_radius(atom, rtype="united"):
     # HIS is treated here as the same as HIE
     #
     # HISL is a deprotonated HIS (the L means liganded)
-    elif resname in {"HIS", "HID", "HIE", "HIP", "HISL"} and at_name in {"CE1", "CD2"}:  # noqa: E501
+    elif resname in {"HIS", "HID", "HIE", "HIP", "HISL"} and at_name in {"CE1", "CD2"}:
         return _atomic_radii[11][typekey]
     elif resname in {"HIS", "HID", "HIE", "HISL"} and at_name == "ND1":
         return _atomic_radii[14][typekey]
@@ -242,7 +242,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[4][typekey]
     elif resname in {"HID", "HISL"} and at_name in {"NE2", "RE2"}:
         return _atomic_radii[14][typekey]
-    elif resname in {"HIS", "HID", "HIP", "HISL"} and at_name.startswith(("AD", "AE")):  # noqa: E501
+    elif resname in {"HIS", "HID", "HIP", "HISL"} and at_name.startswith(("AD", "AE")):
         return _atomic_radii[4][typekey]
     # More amino acids
     elif resname == "ILE" and at_name == "CG1":
@@ -338,7 +338,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[2][typekey]
     elif resname in {"SO4", "SUL"} and at_name == "S":
         return _atomic_radii[13][typekey]
-    elif resname in {"SO4", "SUL", "PO4", "PHO"} and at_name in {"O1", "O2", "O3", "O4"}:  # noqa: E501
+    elif resname in {"SO4", "SUL", "PO4", "PHO"} and at_name in {"O1", "O2", "O3", "O4"}:
         return _atomic_radii[3][typekey]
     elif resname == "PC " and at_name in {"O1", "O2", "O3", "O4"}:
         return _atomic_radii[3][typekey]
@@ -367,7 +367,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[11][typekey]
     elif resname == "FMN" and at_name in {"C7M", "C8M"}:
         return _atomic_radii[9][typekey]
-    elif resname == "FMN" and at_name.startswith(("C1", "C2", "C3", "C4", "C5")):  # noqa: E501
+    elif resname == "FMN" and at_name.startswith(("C1", "C2", "C3", "C4", "C5")):
         return _atomic_radii[8][typekey]
     elif resname == "FMN" and at_name.startswith(("O2", "O3", "O4")):
         return _atomic_radii[2][typekey]
@@ -426,15 +426,15 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[13][typekey]
     elif at_name.startswith("P"):
         return _atomic_radii[13][typekey]
-    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("O"):  # noqa: E501
+    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("O"):
         return _atomic_radii[1][typekey]
-    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("N"):  # noqa: E501
+    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("N"):
         return _atomic_radii[4][typekey]
-    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("C"):  # noqa: E501
+    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("C"):
         return _atomic_radii[7][typekey]
-    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("P"):  # noqa: E501
+    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("P"):
         return _atomic_radii[13][typekey]
-    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("H"):  # noqa: E501
+    elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("H"):
         return _atomic_radii[15][typekey]
     else:
         warnings.warn("{}:{} not in radii library.".format(at_name, resname),

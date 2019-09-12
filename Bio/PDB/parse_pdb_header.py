@@ -133,16 +133,15 @@ def _parse_remark_465(line):
     if line:
         # Note that line has been stripped.
         assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
-    pattern = re.compile(r"""
-                (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
-                 [A-Z]{1,3})                  # Or only residue name with
-                                              # 1 (RNA) to 3 letters
-                \s ([A-Za-z0-9])              # A single character chain
-                \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed
-                                              # by an optional insertion code
-                                              # (Hetero-flags make no sense in
-                                              # context with missing res)
-                """, re.VERBOSE)
+    pattern = re.compile(
+        r"""
+        (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
+            [A-Z]{1,3})               # Or only residue name with 1 (RNA) to 3 letters
+        \s ([A-Za-z0-9])              # A single character chain
+        \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed by an optional
+                                      # insertion code (Hetero-flags make no sense in
+                                      # context with missing res)
+        """, re.VERBOSE)
     match = pattern.match(line)
     if match is None:
         return None
