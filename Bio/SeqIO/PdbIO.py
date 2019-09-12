@@ -511,7 +511,7 @@ def CifAtomIterator(handle):
             pdb_id = pdb_id[0]
     else:
         warnings.warn(
-            "Could not find the '_entry.id' field; can't determine " "PDB ID.",
+            "Could not find the '_entry.id' field; can't determine PDB ID.",
             BiopythonParserWarning,
         )
         pdb_id = "????"

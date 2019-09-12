@@ -125,9 +125,8 @@ def FastaTwoLineParser(handle):
         pass  # empty file
     elif idx % 2 == 0:  # on a title line
         raise ValueError(
-            "Missing sequence line at end of file "
-            "if this is strict two-line-per-record FASTA format. "
-            "Have title line '{}'".format(line)
+            "Missing sequence line at end of file if this is strict "
+            "two-line-per-record FASTA format. Have title line '{}'".format(line)
         )
     else:
         assert line[0] != ">", "line[0] == '>' ; this should be impossible!"

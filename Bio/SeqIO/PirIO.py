@@ -155,7 +155,7 @@ def PirIterator(handle):
         pir_type = line[1:3]
         if pir_type not in _pir_alphabets or line[3] != ";":
             raise ValueError(
-                "Records should start with '>XX;' " "where XX is a valid sequence type"
+                "Records should start with '>XX;' where XX is a valid sequence type"
             )
         identifier = line[4:].strip()
         description = handle.readline().strip()
