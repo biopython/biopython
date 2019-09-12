@@ -306,25 +306,25 @@ _INSTRUMENT_SPECIFIC_TAGS["abi_3730/3730xl"] = {
 
 # dictionary for data unpacking format
 _BYTEFMT = {
-    1: "b",     # byte
-    2: "s",     # char
-    3: "H",     # word
-    4: "h",     # short
-    5: "i",     # long
-    6: "2i",    # rational, legacy unsupported
-    7: "f",     # float
-    8: "d",     # double
+    1: "b",  # byte
+    2: "s",  # char
+    3: "H",  # word
+    4: "h",  # short
+    5: "i",  # long
+    6: "2i",  # rational, legacy unsupported
+    7: "f",  # float
+    8: "d",  # double
     10: "h2B",  # date
-    11: "4B",   # time
+    11: "4B",  # time
     12: "2i2b",  # thumb
-    13: "B",    # bool
-    14: "2h",   # point, legacy unsupported
-    15: "4h",   # rect, legacy unsupported
-    16: "2i",   # vPoint, legacy unsupported
-    17: "4i",   # vRect, legacy unsupported
-    18: "s",    # pString
-    19: "s",    # cString
-    20: "2i",   # tag, legacy unsupported
+    13: "B",  # bool
+    14: "2h",  # point, legacy unsupported
+    15: "4h",  # rect, legacy unsupported
+    16: "2i",  # vPoint, legacy unsupported
+    17: "4i",  # vRect, legacy unsupported
+    18: "s",  # pString
+    19: "s",  # cString
+    20: "2i",  # tag, legacy unsupported
 }
 # header data structure (exluding 4 byte ABIF marker)
 _HEADFMT = ">H4sI2H3I"
@@ -357,12 +357,9 @@ def AbiIterator(handle, alphabet=None, trim=False):
     """Return an iterator for the Abi file format."""
     # raise exception is alphabet is not dna
     if alphabet is not None:
-        if isinstance(Alphabet._get_base_alphabet(alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError(
-                "Invalid alphabet, ABI files do not hold proteins.")
-        if isinstance(Alphabet._get_base_alphabet(alphabet),
-                      Alphabet.RNAAlphabet):
+        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
+            raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
+        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
             raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
 
     # raise exception if handle mode is not 'rb'
@@ -380,14 +377,13 @@ def AbiIterator(handle, alphabet=None, trim=False):
         raise IOError("File should start ABIF, not %r" % marker)
 
     # dirty hack for handling time information
-    times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": "", }
+    times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
     # initialize annotations
     annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
     # parse header and extract data from directories
-    header = struct.unpack(_HEADFMT,
-                           handle.read(struct.calcsize(_HEADFMT)))
+    header = struct.unpack(_HEADFMT, handle.read(struct.calcsize(_HEADFMT)))
 
     # Set default sample ID value, which we expect to be present in most cases
     # in the SMPL1 tag, but may be missing.
@@ -438,11 +434,13 @@ def AbiIterator(handle, alphabet=None, trim=False):
 
         sample_id = _get_string_tag(raw.get("LIMS1"), sample_id)
         description = _get_string_tag(raw.get("CTID1"), "<unknown description>")
-        record = SeqRecord(Seq(""),
-                           id=sample_id,
-                           name=file_name,
-                           description=description,
-                           annotations=annot)
+        record = SeqRecord(
+            Seq(""),
+            id=sample_id,
+            name=file_name,
+            description=description,
+            annotations=annot,
+        )
 
     else:
         # use the file name as SeqRecord.name if available
@@ -450,11 +448,14 @@ def AbiIterator(handle, alphabet=None, trim=False):
             file_name = basename(handle.name).replace(".ab1", "")
         except AttributeError:
             file_name = ""
-        record = SeqRecord(Seq(seq, alphabet),
-                           id=sample_id, name=file_name,
-                           description="",
-                           annotations=annot,
-                           letter_annotations={"phred_quality": qual})
+        record = SeqRecord(
+            Seq(seq, alphabet),
+            id=sample_id,
+            name=file_name,
+            description="",
+            annotations=annot,
+            letter_annotations={"phred_quality": qual},
+        )
 
     if not trim or is_fsa_file:
         yield record
@@ -483,8 +484,9 @@ def _abi_parse_header(header, handle):
         # add directory offset to tuple
         # to handle directories with data size <= 4 bytes
         handle.seek(start)
-        dir_entry = struct.unpack(_DIRFMT,
-                                  handle.read(struct.calcsize(_DIRFMT))) + (start,)
+        dir_entry = struct.unpack(_DIRFMT, handle.read(struct.calcsize(_DIRFMT))) + (
+            start,
+        )
         index += 1
         # only parse desired dirs
         key = _bytes_to_string(dir_entry[0])
@@ -520,17 +522,19 @@ def _abi_trim(seq_record):
     http://www.phrap.org/phredphrap/phred.html
     http://resources.qiagenbioinformatics.com/manuals/clcgenomicsworkbench/650/Quality_trimming.html
     """
-    start = False   # flag for starting position of trimmed sequence
-    segment = 20    # minimum sequence length
+    start = False  # flag for starting position of trimmed sequence
+    segment = 20  # minimum sequence length
     trim_start = 0  # init start index
-    cutoff = 0.05   # default cutoff value for calculating base score
+    cutoff = 0.05  # default cutoff value for calculating base score
 
     if len(seq_record) <= segment:
         return seq_record
     else:
         # calculate base score
-        score_list = [cutoff - (10 ** (qual / -10.0)) for qual in
-                      seq_record.letter_annotations["phred_quality"]]
+        score_list = [
+            cutoff - (10 ** (qual / -10.0))
+            for qual in seq_record.letter_annotations["phred_quality"]
+        ]
 
         # calculate cummulative score
         # if cummulative value < 0, set it to 0

@@ -68,7 +68,8 @@ class XMLRecordIterator(object):
                     # call matching methods with attributes only
                     if hasattr(self, "_attr_" + node.localName):
                         getattr(self, "_attr_" + node.localName)(
-                            self._attributes(node), record)
+                            self._attributes(node), record
+                        )
 
                     # call matching methods with DOM tree
                     if hasattr(self, "_elem_" + node.localName):
@@ -78,7 +79,11 @@ class XMLRecordIterator(object):
 
                         getattr(self, "_elem_" + node.localName)(node, record)
 
-                elif event == "END_ELEMENT" and node.namespaceURI == self._namespace and node.localName == self._recordTag:
+                elif (
+                    event == "END_ELEMENT"
+                    and node.namespaceURI == self._namespace
+                    and node.localName == self._recordTag
+                ):
                     yield record
 
         except SAXParseException as e:
@@ -88,8 +93,12 @@ class XMLRecordIterator(object):
                 pass
             else:
                 import os
-                if e.getLineNumber() == 1 and e.getColumnNumber() == 1 \
-                        and os.name == "java":
+
+                if (
+                    e.getLineNumber() == 1
+                    and e.getColumnNumber() == 1
+                    and os.name == "java"
+                ):
                     # empty file, see http://bugs.jython.org/issue1774
                     pass
                 else:
@@ -97,8 +106,10 @@ class XMLRecordIterator(object):
 
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary (PRIVATE)."""
-        return {node.attributes.item(i).name: node.attributes.item(i).value
-                for i in range(node.attributes.length)}
+        return {
+            node.attributes.item(i).name: node.attributes.item(i).value
+            for i in range(node.attributes.length)
+        }
 
 
 class SeqXmlIterator(XMLRecordIterator):
@@ -143,7 +154,9 @@ class SeqXmlIterator(XMLRecordIterator):
             record.annotations[attr_dict["name"]].append(value)
         else:
             record.annotations[attr_dict["name"]] = [
-                record.annotations[attr_dict["name"]], value]
+                record.annotations[attr_dict["name"]],
+                value,
+            ]
 
     def _attr_species(self, attr_dict, record):
         """Parse the species information (PRIVATE)."""
@@ -205,8 +218,7 @@ class SeqXmlIterator(XMLRecordIterator):
             raise ValueError("Invalid DB cross reference.")
 
         if "%s:%s" % (attr_dict["source"], attr_dict["id"]) not in record.dbxrefs:
-            record.dbxrefs.append(
-                "%s:%s" % (attr_dict["source"], attr_dict["id"]))
+            record.dbxrefs.append("%s:%s" % (attr_dict["source"], attr_dict["id"]))
 
 
 class SeqXmlWriter(SequentialSequenceWriter):
@@ -217,8 +229,9 @@ class SeqXmlWriter(SequentialSequenceWriter):
     Bio.Alphapet.DNAAlphabet or Bio.Alphapet.ProteinAlphabet.
     """
 
-    def __init__(self, handle, source=None, source_version=None,
-                 species=None, ncbiTaxId=None):
+    def __init__(
+        self, handle, source=None, source_version=None, species=None, ncbiTaxId=None
+    ):
         """Create Object and start the xml generator."""
         SequentialSequenceWriter.__init__(self, handle)
 
@@ -233,9 +246,11 @@ class SeqXmlWriter(SequentialSequenceWriter):
         """Write root node with document metadata."""
         SequentialSequenceWriter.write_header(self)
 
-        attrs = {"xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                 "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",
-                 "seqXMLversion": "0.4"}
+        attrs = {
+            "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",
+            "seqXMLversion": "0.4",
+        }
 
         if self.source is not None:
             attrs["source"] = self.source
@@ -262,7 +277,10 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
         attrb = {"id": record.id}
 
-        if "source" in record.annotations and self.source != record.annotations["source"]:
+        if (
+            "source" in record.annotations
+            and self.source != record.annotations["source"]
+        ):
             if not isinstance(record.annotations["source"], basestring):
                 raise TypeError("source should be of type string")
             attrb["source"] = record.annotations["source"]
@@ -294,8 +312,10 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 elif len(local_ncbi_taxid) == 0:
                     local_ncbi_taxid = None
                 else:
-                    ValueError('Multiple entries for record.annotations["ncbi_taxid"], %r'
-                               % local_ncbi_taxid)
+                    ValueError(
+                        'Multiple entries for record.annotations["ncbi_taxid"], %r'
+                        % local_ncbi_taxid
+                    )
         if "organism" in record.annotations and local_ncbi_taxid:
             local_org = record.annotations["organism"]
 
@@ -308,10 +328,8 @@ class SeqXmlWriter(SequentialSequenceWriter):
             # The local species definition is only written if it differs from the global species definition
             if local_org != self.species or local_ncbi_taxid != self.ncbiTaxId:
 
-                attr = {"name": local_org,
-                        "ncbiTaxID": local_ncbi_taxid}
-                self.xml_generator.startElement(
-                    "species", AttributesImpl(attr))
+                attr = {"name": local_org, "ncbiTaxID": local_ncbi_taxid}
+                self.xml_generator.startElement("species", AttributesImpl(attr))
                 self.xml_generator.endElement("species")
 
     def _write_description(self, record):
@@ -326,8 +344,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 description = ""
 
             if len(record.description) > 0:
-                self.xml_generator.startElement(
-                    "description", AttributesImpl({}))
+                self.xml_generator.startElement("description", AttributesImpl({}))
                 self.xml_generator.characters(description)
                 self.xml_generator.endElement("description")
 
@@ -337,8 +354,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         Note that SeqXML requires a DNA, RNA or protein alphabet.
         """
         if isinstance(record.seq, UnknownSeq):
-            raise TypeError(
-                "Sequence type is UnknownSeq but SeqXML requires sequence")
+            raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
 
         seq = str(record.seq)
 
@@ -369,7 +385,9 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 if not isinstance(dbxref, basestring):
                     raise TypeError("dbxrefs should be of type list of string")
                 if dbxref.find(":") < 1:
-                    raise ValueError("dbxrefs should be in the form ['source:id', 'source:id' ]")
+                    raise ValueError(
+                        "dbxrefs should be in the form ['source:id', 'source:id' ]"
+                    )
 
                 dbsource, dbid = dbxref.split(":", 1)
 
@@ -386,8 +404,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 if value is None:
 
                     attr = {"name": key}
-                    self.xml_generator.startElement(
-                        "property", AttributesImpl(attr))
+                    self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")
 
                 elif isinstance(value, list):
@@ -396,12 +413,12 @@ class SeqXmlWriter(SequentialSequenceWriter):
                         if isinstance(value, (int, float, basestring)):
                             attr = {"name": key, "value": v}
                             self.xml_generator.startElement(
-                                "property", AttributesImpl(attr))
+                                "property", AttributesImpl(attr)
+                            )
                             self.xml_generator.endElement("property")
 
                 elif isinstance(value, (int, float, basestring)):
 
                     attr = {"name": key, "value": str(value)}
-                    self.xml_generator.startElement(
-                        "property", AttributesImpl(attr))
+                    self.xml_generator.startElement("property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")

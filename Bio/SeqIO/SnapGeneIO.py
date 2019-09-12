@@ -42,7 +42,7 @@ class _PacketIterator:
 
     def __next__(self):
         type = self.handle.read(1)
-        if len(type) < 1:   # No more packet
+        if len(type) < 1:  # No more packet
             raise StopIteration
         type = unpack(">B", type)[0]
 
@@ -136,7 +136,9 @@ def _parse_features_packet(length, data, record):
             quals["label"] = [label]
 
         strand = +1
-        directionality = int(_get_attribute_value(feature, "directionality", default="1"))
+        directionality = int(
+            _get_attribute_value(feature, "directionality", default="1")
+        )
         if directionality == 2:
             strand = -1
 
@@ -154,8 +156,9 @@ def _parse_features_packet(length, data, record):
             raise ValueError("Missing feature location")
 
         for qualifier in feature.getElementsByTagName("Q"):
-            qname = _get_attribute_value(qualifier, "name",
-                                         error="Missing qualifier name")
+            qname = _get_attribute_value(
+                qualifier, "name", error="Missing qualifier name"
+            )
             qvalues = []
             for value in qualifier.getElementsByTagName("V"):
                 if value.hasAttribute("text"):
@@ -186,7 +189,9 @@ def _parse_primers_packet(length, data, record):
             quals["label"] = [name]
 
         for site in primer.getElementsByTagName("BindingSite"):
-            rng = _get_attribute_value(site, "location", error="Missing binding site location")
+            rng = _get_attribute_value(
+                site, "location", error="Missing binding site location"
+            )
             start, end = [int(x) for x in rng.split("-")]
 
             strand = int(_get_attribute_value(site, "boundStrand", default="0"))
@@ -195,7 +200,11 @@ def _parse_primers_packet(length, data, record):
             else:
                 strand = +1
 
-            feature = SeqFeature(FeatureLocation(start, end, strand=strand), type="primer_bind", qualifiers=quals)
+            feature = SeqFeature(
+                FeatureLocation(start, end, strand=strand),
+                type="primer_bind",
+                qualifiers=quals,
+            )
             record.features.append(feature)
 
 
@@ -204,12 +213,13 @@ _packet_handlers = {
     0x05: _parse_primers_packet,
     0x06: _parse_notes_packet,
     0x09: _parse_cookie_packet,
-    0x0A: _parse_features_packet
-    }
+    0x0A: _parse_features_packet,
+}
 
 
 # Helper functions to process the XML data in
 # some of the segments
+
 
 def _decode(text):
     # Get rid of HTML tags in some values
@@ -227,7 +237,11 @@ def _get_attribute_value(node, name, default=None, error=None):
 
 def _get_child_value(node, name, default=None, error=None):
     children = node.getElementsByTagName(name)
-    if children and children[0].childNodes and children[0].firstChild.nodeType == node.TEXT_NODE:
+    if (
+        children
+        and children[0].childNodes
+        and children[0].firstChild.nodeType == node.TEXT_NODE
+    ):
         return _decode(children[0].firstChild.data)
     elif error:
         raise ValueError(error)
