@@ -97,8 +97,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
-        AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                                     property_list)
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, property_list)
 
     def _translate_id(self, ent_id):
         """Return entity identifier on residue (PRIVATE)."""
@@ -113,8 +112,7 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
 
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
-        AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                                     property_list)
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, property_list)
 
     def _translate_id(self, ent_id):
         """Return entity identifier on atoms (PRIVATE)."""

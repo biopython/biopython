@@ -134,8 +134,9 @@ def _get_atom_radius(atom, rtype="united"):
     elif rtype == "united":
         typekey = 2
     else:
-        raise ValueError("Radius type (%r) not understood. "
-                         "Must be 'explicit' or 'united'" % rtype)
+        raise ValueError(
+            "Radius type (%r) not understood. " "Must be 'explicit' or 'united'" % rtype
+        )
 
     resname = atom.parent.resname
     het_atm = atom.parent.id[0]
@@ -174,9 +175,21 @@ def _get_atom_radius(atom, rtype="united"):
     elif at_name == "CB":
         return _atomic_radii[8][typekey]
     # CG atoms
-    elif at_name == "CG" and resname in {"ASN", "ASP", "ASX", "HIS", "HIP",
-                                         "HIE", "HID", "HISN", "HISL",
-                                         "LEU", "PHE", "TRP", "TYR"}:
+    elif at_name == "CG" and resname in {
+        "ASN",
+        "ASP",
+        "ASX",
+        "HIS",
+        "HIP",
+        "HIE",
+        "HID",
+        "HISN",
+        "HISL",
+        "LEU",
+        "PHE",
+        "TRP",
+        "TYR",
+    }:
         return _atomic_radii[10][typekey]
     elif at_name == "CG" and resname == "LEU":
         return _atomic_radii[7][typekey]
@@ -294,11 +307,17 @@ def _get_atom_radius(atom, rtype="united"):
     elif at_name in {"CD", "CD"}:
         return _atomic_radii[8][typekey]
     # Co-factors, and other weirdos
-    elif resname in {"FS3", "FS4"} and at_name.startswith("FE") \
-            and at_name.endswith(("1", "2", "3", "4", "5", "6", "7")):
+    elif (
+        resname in {"FS3", "FS4"}
+        and at_name.startswith("FE")
+        and at_name.endswith(("1", "2", "3", "4", "5", "6", "7"))
+    ):
         return _atomic_radii[21][typekey]
-    elif resname in {"FS3", "FS4"} and at_name.startswith("S") \
-            and at_name.endswith(("1", "2", "3", "4", "5", "6", "7")):
+    elif (
+        resname in {"FS3", "FS4"}
+        and at_name.startswith("S")
+        and at_name.endswith(("1", "2", "3", "4", "5", "6", "7"))
+    ):
         return _atomic_radii[13][typekey]
     elif resname == "FS3" and at_name == "OXO":
         return _atomic_radii[1][typekey]
@@ -308,17 +327,48 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[1][typekey]
     elif resname == "HEM" and at_name == "FE":
         return _atomic_radii[21][typekey]
-    elif resname == "HEM" and at_name in {"CHA", "CHB", "CHC", "CHD",
-                                          "CAB", "CAC", "CBB", "CBC"}:
+    elif resname == "HEM" and at_name in {
+        "CHA",
+        "CHB",
+        "CHC",
+        "CHD",
+        "CAB",
+        "CAC",
+        "CBB",
+        "CBC",
+    }:
         return _atomic_radii[11][typekey]
-    elif resname == "HEM" and at_name in {"NA", "NB", "NC", "ND",
-                                          "N A", "N B", "N C", "N D"}:
+    elif resname == "HEM" and at_name in {
+        "NA",
+        "NB",
+        "NC",
+        "ND",
+        "N A",
+        "N B",
+        "N C",
+        "N D",
+    }:
         return _atomic_radii[14][typekey]
-    elif resname == "HEM" and at_name in {"C1A", "C1B", "C1C", "C1D",
-                                          "C2A", "C2B", "C2C", "C2D",
-                                          "C3A", "C3B", "C3C", "C3D",
-                                          "C4A", "C4B", "C4C", "C4D",
-                                          "CGA", "CGD"}:
+    elif resname == "HEM" and at_name in {
+        "C1A",
+        "C1B",
+        "C1C",
+        "C1D",
+        "C2A",
+        "C2B",
+        "C2C",
+        "C2D",
+        "C3A",
+        "C3B",
+        "C3C",
+        "C3D",
+        "C4A",
+        "C4B",
+        "C4C",
+        "C4D",
+        "CGA",
+        "CGD",
+    }:
         return _atomic_radii[10][typekey]
     elif resname == "HEM" and at_name in {"CMA", "CMB", "CMC", "CMD"}:
         return _atomic_radii[9][typekey]
@@ -338,7 +388,12 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[2][typekey]
     elif resname in {"SO4", "SUL"} and at_name == "S":
         return _atomic_radii[13][typekey]
-    elif resname in {"SO4", "SUL", "PO4", "PHO"} and at_name in {"O1", "O2", "O3", "O4"}:
+    elif resname in {"SO4", "SUL", "PO4", "PHO"} and at_name in {
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+    }:
         return _atomic_radii[3][typekey]
     elif resname == "PC " and at_name in {"O1", "O2", "O3", "O4"}:
         return _atomic_radii[3][typekey]
@@ -356,8 +411,16 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[23][typekey]
     elif resname == "FMN" and at_name in {"N1", "N5", "N10"}:
         return _atomic_radii[4][typekey]
-    elif resname == "FMN" and at_name in {"C2", "C4", "C7", "C8", "C10",
-                                          "C4A", "C5A", "C9A"}:
+    elif resname == "FMN" and at_name in {
+        "C2",
+        "C4",
+        "C7",
+        "C8",
+        "C10",
+        "C4A",
+        "C5A",
+        "C9A",
+    }:
         return _atomic_radii[10][typekey]
     elif resname == "FMN" and at_name in {"O2", "O4"}:
         return _atomic_radii[1][typekey]
@@ -437,8 +500,9 @@ def _get_atom_radius(atom, rtype="united"):
     elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("H"):
         return _atomic_radii[15][typekey]
     else:
-        warnings.warn("{}:{} not in radii library.".format(at_name, resname),
-                      BiopythonWarning)
+        warnings.warn(
+            "{}:{} not in radii library.".format(at_name, resname), BiopythonWarning
+        )
         return 0.01
 
 
@@ -469,9 +533,13 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     """
     # Issue warning if PDB_TO_XYZR is given
     if PDB_TO_XYZR is not None:
-        warnings.warn(("PDB_TO_XYZR argument will be deprecated soon"
-                       " in favor of an internal mapping algorithm."),
-                      BiopythonDeprecationWarning)
+        warnings.warn(
+            (
+                "PDB_TO_XYZR argument will be deprecated soon"
+                " in favor of an internal mapping algorithm."
+            ),
+            BiopythonDeprecationWarning,
+        )
 
     # Replace pdb_to_xyzr
     # Make x,y,z,radius file
@@ -482,8 +550,10 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
         for atom in atom_list:
             x, y, z = atom.coord
             radius = _get_atom_radius(atom, rtype="united")
-            print("{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}".format(x, y, z, radius),
-                  file=pdb_to_xyzr)
+            print(
+                "{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}".format(x, y, z, radius),
+                file=pdb_to_xyzr,
+            )
 
     # make surface
     surface_tmp = tempfile.mktemp()
@@ -492,8 +562,9 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     os.system(make_surface)
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
-        raise RuntimeError("Failed to generate surface file using "
-                           "command:\n%s" % make_surface)
+        raise RuntimeError(
+            "Failed to generate surface file using " "command:\n%s" % make_surface
+        )
 
     # read surface vertices from vertex file
     surface = _read_vertex_array(surface_file)
@@ -538,9 +609,12 @@ class ResidueDepth(AbstractPropertyMap):
         """Initialize the class."""
         # Issue warning if pdb_file is given
         if pdb_file is not None:
-            warnings.warn("ResidueDepth no longer requires a pdb file. "
-                          "This argument will be removed in a future release "
-                          "of Biopython.", BiopythonDeprecationWarning)
+            warnings.warn(
+                "ResidueDepth no longer requires a pdb file. "
+                "This argument will be removed in a future release "
+                "of Biopython.",
+                BiopythonDeprecationWarning,
+            )
 
         depth_dict = {}
         depth_list = []

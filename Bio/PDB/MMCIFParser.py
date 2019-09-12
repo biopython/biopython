@@ -194,11 +194,18 @@ class MMCIFParser(object):
 
             coord = numpy.array((x, y, z), "f")
             element = element_list[i].upper() if element_list else None
-            structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
-                                        name, element=element)
+            structure_builder.init_atom(
+                name, coord, tempfactor, occupancy, altloc, name, element=element
+            )
             if aniso_flag == 1 and i < len(aniso_u11):
-                u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
-                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
+                u = (
+                    aniso_u11[i],
+                    aniso_u12[i],
+                    aniso_u13[i],
+                    aniso_u22[i],
+                    aniso_u23[i],
+                    aniso_u33[i],
+                )
                 mapped_anisou = [float(_) for _ in u]
                 anisou_array = numpy.array(mapped_anisou, "f")
                 structure_builder.set_anisou(anisou_array)
@@ -217,7 +224,7 @@ class MMCIFParser(object):
                 raise Exception
             structure_builder.set_symmetry(spacegroup, cell)
         except Exception:
-            pass    # no cell found, so just ignore
+            pass  # no cell found, so just ignore
 
 
 class FastMMCIFParser(object):
@@ -436,11 +443,18 @@ class FastMMCIFParser(object):
 
             coord = numpy.array((x, y, z), "f")
             element = element_list[i] if element_list else None
-            structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
-                                        name, element=element)
+            structure_builder.init_atom(
+                name, coord, tempfactor, occupancy, altloc, name, element=element
+            )
             if aniso_flag == 1 and i < len(aniso_u11):
-                u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
-                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
+                u = (
+                    aniso_u11[i],
+                    aniso_u12[i],
+                    aniso_u13[i],
+                    aniso_u22[i],
+                    aniso_u23[i],
+                    aniso_u33[i],
+                )
                 mapped_anisou = [float(_) for _ in u]
                 anisou_array = numpy.array(mapped_anisou, "f")
                 structure_builder.set_anisou(anisou_array)

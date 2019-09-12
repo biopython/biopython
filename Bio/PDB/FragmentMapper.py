@@ -299,7 +299,7 @@ class FragmentMapper(object):
                     else:
                         # fragment
                         index = i - self.edge
-                        assert(index >= 0)
+                        assert index >= 0
                         fd[res] = mflist[index]
             except PDBException as why:
                 if why == "CHAINBREAK":
