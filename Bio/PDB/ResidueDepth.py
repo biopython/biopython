@@ -135,7 +135,7 @@ def _get_atom_radius(atom, rtype="united"):
         typekey = 2
     else:
         raise ValueError(
-            "Radius type (%r) not understood. " "Must be 'explicit' or 'united'" % rtype
+            "Radius type (%r) not understood. Must be 'explicit' or 'united'" % rtype
         )
 
     resname = atom.parent.resname
@@ -534,10 +534,8 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     # Issue warning if PDB_TO_XYZR is given
     if PDB_TO_XYZR is not None:
         warnings.warn(
-            (
-                "PDB_TO_XYZR argument will be deprecated soon"
-                " in favor of an internal mapping algorithm."
-            ),
+            "PDB_TO_XYZR argument will be deprecated soon in favor of an internal "
+            "mapping algorithm.",
             BiopythonDeprecationWarning,
         )
 
@@ -550,9 +548,8 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
         for atom in atom_list:
             x, y, z = atom.coord
             radius = _get_atom_radius(atom, rtype="united")
-            print(
-                "{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}".format(x, y, z, radius),
-                file=pdb_to_xyzr,
+            pdb_to_xyzr.write(
+                "{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}\n".format(x, y, z, radius)
             )
 
     # make surface
@@ -563,7 +560,7 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
         raise RuntimeError(
-            "Failed to generate surface file using " "command:\n%s" % make_surface
+            "Failed to generate surface file using command:\n%s" % make_surface
         )
 
     # read surface vertices from vertex file
@@ -610,9 +607,8 @@ class ResidueDepth(AbstractPropertyMap):
         # Issue warning if pdb_file is given
         if pdb_file is not None:
             warnings.warn(
-                "ResidueDepth no longer requires a pdb file. "
-                "This argument will be removed in a future release "
-                "of Biopython.",
+                "ResidueDepth no longer requires a pdb file. This argument will be "
+                "removed in a future release of Biopython.",
                 BiopythonDeprecationWarning,
             )
 

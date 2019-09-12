@@ -346,8 +346,8 @@ class _PPBuilder(object):
             # We probably need to update the hard coded list of
             # non-standard residues, see function is_aa for details.
             warnings.warn(
-                "Assuming residue %s is an unknown modified "
-                "amino acid" % residue.get_resname()
+                "Assuming residue %s is an unknown modified amino acid"
+                % residue.get_resname()
             )
             return True
         else:

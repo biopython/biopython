@@ -281,8 +281,8 @@ class PDBList(object):
 
         if file_format not in archive.keys():
             raise (
-                "Specified file_format %s doesn't exists or is not supported. Maybe a typo. "
-                "Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
+                "Specified file_format %s doesn't exists or is not supported. Maybe a "
+                "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
                 % file_format
             )
 

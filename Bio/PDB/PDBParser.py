@@ -119,11 +119,7 @@ class PDBParser(object):
             structure_builder.set_line_counter(i + 1)
             line = header_coords_trailer[i]
             record_type = line[0:6]
-            if (
-                record_type == "ATOM  "
-                or record_type == "HETATM"
-                or record_type == "MODEL "
-            ):
+            if record_type in ("ATOM  ", "HETATM", "MODEL "):
                 break
         header = header_coords_trailer[0:i]
         # Return the rest of the coords+trailer for further processing
@@ -217,9 +213,7 @@ class PDBParser(object):
                     self._handle_PDB_exception(
                         "Invalid or missing B factor", global_line_counter
                     )
-                    bfactor = (
-                        0.0
-                    )  # The PDB use a default of zero if the data is missing
+                    bfactor = 0.0  # PDB uses a default of zero if missing
                 segid = line[72:76]
                 element = line[76:78].strip().upper()
                 if current_segid != segid:
