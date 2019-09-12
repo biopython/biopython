@@ -1181,10 +1181,9 @@ class SffWriter(SequenceWriter):
             self._number_of_reads = 0  # dummy value
             if not hasattr(self.handle, "seek") or not hasattr(self.handle, "tell"):
                 raise ValueError(
-                    "A handle with a seek/tell methods is "
-                    "required in order to record the total "
-                    "record count in the file header (once it "
-                    "is known at the end)."
+                    "A handle with a seek/tell methods is required in order "
+                    "to record the total record count in the file header "
+                    "(once it is known at the end)."
                 )
         if self._index is not None and not (
             hasattr(self.handle, "seek") and hasattr(self.handle, "tell")

@@ -966,8 +966,8 @@ def FastqGeneralIterator(handle):
 
         if seq_len != len(quality_string):
             raise ValueError(
-                "Lengths of sequence and quality values differs "
-                " for %s (%i and %i)." % (title_line, seq_len, len(quality_string))
+                "Lengths of sequence and quality values differs for %s (%i and %i)."
+                % (title_line, seq_len, len(quality_string))
             )
 
         # Return the record and then continue...

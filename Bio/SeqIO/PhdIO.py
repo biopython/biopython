@@ -110,7 +110,7 @@ class PhdWriter(SequentialSequenceWriter):
         peak_locations = record.letter_annotations.get("peak_location")
         if len(record.seq) != len(phred_qualities):
             raise ValueError(
-                "Number of phd quality scores does not match " "length of sequence"
+                "Number of phd quality scores does not match length of sequence"
             )
         if peak_locations:
             if len(record.seq) != len(peak_locations):
