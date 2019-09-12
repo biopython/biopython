@@ -122,10 +122,10 @@ class StructureBuilder(object):
             if self.chain.has_id(res_id):
                 # There already is a residue with the id (field, resseq, icode).
                 # This only makes sense in the case of a point mutation.
-                warnings.warn("WARNING: Residue ('%s', %i, '%s') "
-                              "redefined at line %i."
-                              % (field, resseq, icode, self.line_counter),
-                              PDBConstructionWarning)
+                warnings.warn(
+                    "WARNING: Residue ('%s', %i, '%s') redefined at line %i."
+                    % (field, resseq, icode, self.line_counter),
+                    PDBConstructionWarning)
                 duplicate_residue = self.chain[res_id]
                 if duplicate_residue.is_disordered() == 2:
                     # The residue in the chain is a DisorderedResidue object.
@@ -143,12 +143,11 @@ class StructureBuilder(object):
                         return
                 else:
                     if resname == duplicate_residue.resname:
-                        warnings.warn("WARNING: Residue ('%s', %i, '%s','%s')"
-                                      " already defined with the same name "
-                                      "at line  %i."
-                                      % (field, resseq, icode, resname,
-                                         self.line_counter),
-                                      PDBConstructionWarning)
+                        warnings.warn(
+                            "WARNING: Residue ('%s', %i, '%s','%s') already defined "
+                            "with the same name at line  %i."
+                            % (field, resseq, icode, resname, self.line_counter),
+                            PDBConstructionWarning)
                         self.residue = duplicate_residue
                         return
                     # Make a new DisorderedResidue object and put all
@@ -203,11 +202,10 @@ class StructureBuilder(object):
             if duplicate_fullname != fullname:
                 # name of current atom now includes spaces
                 name = fullname
-                warnings.warn("Atom names %r and %r differ "
-                              "only in spaces at line %i."
-                              % (duplicate_fullname, fullname,
-                                 self.line_counter),
-                              PDBConstructionWarning)
+                warnings.warn(
+                    "Atom names %r and %r differ only in spaces at line %i."
+                    % (duplicate_fullname, fullname, self.line_counter),
+                    PDBConstructionWarning)
         self.atom = Atom(name, coord, b_factor, occupancy, altloc,
                          fullname, serial_number, element)
         if altloc != " ":
@@ -229,10 +227,10 @@ class StructureBuilder(object):
                     disordered_atom.disordered_add(self.atom)
                     disordered_atom.disordered_add(duplicate_atom)
                     residue.flag_disordered()
-                    warnings.warn("WARNING: disordered atom found "
-                                  "with blank altloc before line %i.\n"
-                                  % self.line_counter,
-                                  PDBConstructionWarning)
+                    warnings.warn(
+                        "WARNING: disordered atom found with blank altloc before "
+                        "line %i.\n" % self.line_counter,
+                        PDBConstructionWarning)
             else:
                 # The residue does not contain this disordered atom
                 # so we create a new one.

@@ -259,7 +259,8 @@ class PDBList(object):
         :return: filename
         :rtype: string
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
 
         # Get the compressed PDB structure
         code = pdb_code.lower()
@@ -327,7 +328,8 @@ class PDBList(object):
         assert os.path.isdir(self.local_pdb)
         assert os.path.isdir(self.obsolete_pdb)
 
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
 
         new, modified, obsolete = self.get_recent_changes()
 
@@ -400,7 +402,8 @@ class PDBList(object):
         :return: filenames
         :rtype: string
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
         for pdb_code in pdb_codes:
             self.retrieve_pdb_file(pdb_code, obsolete=obsolete, pdir=pdir, file_format=file_format, overwrite=overwrite)
 
@@ -420,7 +423,8 @@ class PDBList(object):
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
         entries = self.get_all_entries()
         for pdb_code in entries:
             self.retrieve_pdb_file(pdb_code, file_format=file_format)
@@ -441,7 +445,8 @@ class PDBList(object):
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
         entries = self.get_all_obsolete()
         for pdb_code in entries:
             self.retrieve_pdb_file(pdb_code, obsolete=True, file_format=file_format)
