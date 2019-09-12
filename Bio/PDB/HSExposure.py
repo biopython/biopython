@@ -25,8 +25,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
     subclasses.
     """
 
-    def __init__(self, model, radius, offset, hse_up_key, hse_down_key,
-                 angle_key=None):
+    def __init__(self, model, radius, offset, hse_up_key, hse_down_key, angle_key=None):
         """Initialize.
 
         :param model: model
@@ -49,7 +48,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
                           the entity.xtra attribute
         :type angle_key: string
         """
-        assert(offset >= 0)
+        assert offset >= 0
         # For PyMOL visualization
         self.ca_cb_list = []
         ppb = CaPPBuilder()
@@ -86,7 +85,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
                         if not is_aa(ro) or not ro.has_id("CA"):
                             continue
                         cao = ro["CA"].get_vector()
-                        d = (cao - ca2)
+                        d = cao - ca2
                         if d.norm() < radius:
                             if d.angle(pcb) < (pi / 2):
                                 hse_u += 1
@@ -154,9 +153,15 @@ class HSExposureCA(_AbstractHSExposure):
                        in the calculation of the number of neighbors
         :type offset: int
         """
-        _AbstractHSExposure.__init__(self, model, radius, offset,
-                                     "EXP_HSE_A_U", "EXP_HSE_A_D",
-                                     "EXP_CB_PCB_ANGLE")
+        _AbstractHSExposure.__init__(
+            self,
+            model,
+            radius,
+            offset,
+            "EXP_HSE_A_U",
+            "EXP_HSE_A_D",
+            "EXP_CB_PCB_ANGLE",
+        )
 
     def _get_cb(self, r1, r2, r3):
         """Calculate approx CA-CB direction (PRIVATE).
@@ -184,7 +189,7 @@ class HSExposureCA(_AbstractHSExposure):
         d1.normalize()
         d3.normalize()
         # bisection
-        b = (d1 + d3)
+        b = d1 + d3
         b.normalize()
         # Add to ca_cb_list for drawing
         self.ca_cb_list.append((ca2, b + ca2))
@@ -247,8 +252,9 @@ class HSExposureCB(_AbstractHSExposure):
                        in the calculation of the number of neighbors
         :type offset: int
         """
-        _AbstractHSExposure.__init__(self, model, radius, offset,
-                                     "EXP_HSE_B_U", "EXP_HSE_B_D")
+        _AbstractHSExposure.__init__(
+            self, model, radius, offset, "EXP_HSE_B_U", "EXP_HSE_B_D"
+        )
 
     def _get_cb(self, r1, r2, r3):
         """Calculate CB-CA vector (PRIVATE).
@@ -287,7 +293,7 @@ class ExposureCN(AbstractPropertyMap):
         :type offset: int
 
         """
-        assert(offset >= 0)
+        assert offset >= 0
         ppb = CaPPBuilder()
         ppl = ppb.build_peptides(model)
         fs_map = {}
@@ -308,7 +314,7 @@ class ExposureCN(AbstractPropertyMap):
                         if not is_aa(r2) or not r2.has_id("CA"):
                             continue
                         ca2 = r2["CA"]
-                        d = (ca2 - ca1)
+                        d = ca2 - ca1
                         if d < radius:
                             fs += 1
                 res_id = r1.get_id()

@@ -86,9 +86,11 @@ class StructureBuilder(object):
         """
         if self.model.has_id(chain_id):
             self.chain = self.model[chain_id]
-            warnings.warn("WARNING: Chain %s is discontinuous at line %i."
-                          % (chain_id, self.line_counter),
-                          PDBConstructionWarning)
+            warnings.warn(
+                "WARNING: Chain %s is discontinuous at line %i."
+                % (chain_id, self.line_counter),
+                PDBConstructionWarning,
+            )
         else:
             self.chain = Chain(chain_id)
             self.model.add(self.chain)
@@ -125,7 +127,8 @@ class StructureBuilder(object):
                 warnings.warn(
                     "WARNING: Residue ('%s', %i, '%s') redefined at line %i."
                     % (field, resseq, icode, self.line_counter),
-                    PDBConstructionWarning)
+                    PDBConstructionWarning,
+                )
                 duplicate_residue = self.chain[res_id]
                 if duplicate_residue.is_disordered() == 2:
                     # The residue in the chain is a DisorderedResidue object.
@@ -147,7 +150,8 @@ class StructureBuilder(object):
                             "WARNING: Residue ('%s', %i, '%s','%s') already defined "
                             "with the same name at line  %i."
                             % (field, resseq, icode, resname, self.line_counter),
-                            PDBConstructionWarning)
+                            PDBConstructionWarning,
+                        )
                         self.residue = duplicate_residue
                         return
                     # Make a new DisorderedResidue object and put all
@@ -159,7 +163,8 @@ class StructureBuilder(object):
                         self.residue = None
                         raise PDBConstructionException(
                             "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
-                            % (resname, field, resseq, icode))
+                            % (resname, field, resseq, icode)
+                        )
                     self.chain.detach_child(res_id)
                     new_residue = Residue(res_id, resname, self.segid)
                     disordered_residue = DisorderedResidue(res_id)
@@ -171,8 +176,17 @@ class StructureBuilder(object):
         self.residue = Residue(res_id, resname, self.segid)
         self.chain.add(self.residue)
 
-    def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
-                  serial_number=None, element=None):
+    def init_atom(
+        self,
+        name,
+        coord,
+        b_factor,
+        occupancy,
+        altloc,
+        fullname,
+        serial_number=None,
+        element=None,
+    ):
         """Create a new Atom object.
 
         Arguments:
@@ -205,9 +219,11 @@ class StructureBuilder(object):
                 warnings.warn(
                     "Atom names %r and %r differ only in spaces at line %i."
                     % (duplicate_fullname, fullname, self.line_counter),
-                    PDBConstructionWarning)
-        self.atom = Atom(name, coord, b_factor, occupancy, altloc,
-                         fullname, serial_number, element)
+                    PDBConstructionWarning,
+                )
+        self.atom = Atom(
+            name, coord, b_factor, occupancy, altloc, fullname, serial_number, element
+        )
         if altloc != " ":
             # The atom is disordered
             if residue.has_id(name):
@@ -230,7 +246,8 @@ class StructureBuilder(object):
                     warnings.warn(
                         "WARNING: disordered atom found with blank altloc before "
                         "line %i.\n" % self.line_counter,
-                        PDBConstructionWarning)
+                        PDBConstructionWarning,
+                    )
             else:
                 # The residue does not contain this disordered atom
                 # so we create a new one.

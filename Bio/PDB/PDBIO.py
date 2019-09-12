@@ -9,11 +9,14 @@ from Bio._py3k import basestring
 
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
+
 # Allowed Elements
 from Bio.Data.IUPACData import atom_weights
 
 
-_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
+_ATOM_FORMAT_STRING = (
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
+)
 
 
 class Select(object):
@@ -122,8 +125,18 @@ class PDBIO(StructureIO):
 
     # private mathods
 
-    def _get_atom_line(self, atom, hetfield, segid, atom_number, resname,
-                       resseq, icode, chain_id, charge="  "):
+    def _get_atom_line(
+        self,
+        atom,
+        hetfield,
+        segid,
+        atom_number,
+        resname,
+        resseq,
+        icode,
+        chain_id,
+        charge="  ",
+    ):
         """Return an ATOM PDB string (PRIVATE)."""
         if hetfield != " ":
             record_type = "HETATM"
@@ -157,15 +170,35 @@ class PDBIO(StructureIO):
                 occupancy_str = " " * 6
                 import warnings
                 from Bio import BiopythonWarning
-                warnings.warn("Missing occupancy in atom %s written as blank" %
-                              repr(atom.get_full_id()), BiopythonWarning)
-            else:
-                raise TypeError("Invalid occupancy %r in atom %r"
-                                % (occupancy, atom.get_full_id()))
 
-        args = (record_type, atom_number, name, altloc, resname, chain_id,
-                resseq, icode, x, y, z, occupancy_str, bfactor, segid,
-                element, charge)
+                warnings.warn(
+                    "Missing occupancy in atom %s written as blank"
+                    % repr(atom.get_full_id()),
+                    BiopythonWarning,
+                )
+            else:
+                raise TypeError(
+                    "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
+                )
+
+        args = (
+            record_type,
+            atom_number,
+            name,
+            altloc,
+            resname,
+            chain_id,
+            resseq,
+            icode,
+            x,
+            y,
+            z,
+            occupancy_str,
+            bfactor,
+            segid,
+            element,
+            charge,
+        )
         return _ATOM_FORMAT_STRING % args
 
     # Public methods
@@ -236,14 +269,24 @@ class PDBIO(StructureIO):
                             model_residues_written = 1
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
-                            s = get_atom_line(atom, hetfield, segid, atom_number, resname,
-                                              resseq, icode, chain_id)
+                            s = get_atom_line(
+                                atom,
+                                hetfield,
+                                segid,
+                                atom_number,
+                                resname,
+                                resseq,
+                                icode,
+                                chain_id,
+                            )
                             fp.write(s)
                             if not preserve_atom_numbering:
                                 atom_number += 1
                 if chain_residues_written:
-                    fp.write("TER   %5i      %3s %c%4i%c                                                      \n"
-                             % (atom_number, resname, chain_id, resseq, icode))
+                    fp.write(
+                        "TER   %5i      %3s %c%4i%c                                                      \n"
+                        % (atom_number, resname, chain_id, resseq, icode)
+                    )
 
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")

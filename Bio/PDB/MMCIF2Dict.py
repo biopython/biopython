@@ -85,7 +85,9 @@ class MMCIF2Dict(dict):
                     quote_open_char = c
                     in_token = True
                     start_i = i + 1
-                elif c == quote_open_char and (i + 1 == len(line) or line[i + 1] in self.whitespace_chars):
+                elif c == quote_open_char and (
+                    i + 1 == len(line) or line[i + 1] in self.whitespace_chars
+                ):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]
