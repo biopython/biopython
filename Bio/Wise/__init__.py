@@ -24,7 +24,9 @@ import tempfile
 from Bio import SeqIO
 
 
-def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
+def _build_align_cmdline(
+    cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False
+):
     """Build a command line string (PRIVATE).
 
     >>> os.environ["WISE_KBYTE"]="300000"
@@ -66,21 +68,25 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     return " ".join(cmdline)
 
 
-def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):
+def align(
+    cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False
+):
     """Run an alignment. Returns a filehandle."""
     if not pair or len(pair) != 2:
         raise ValueError("Expected pair of filename, not %s" % repr(pair))
 
     output_file = tempfile.NamedTemporaryFile(mode="r")
-    input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
+    input_files = (
+        tempfile.NamedTemporaryFile(mode="w"),
+        tempfile.NamedTemporaryFile(mode="w"),
+    )
 
     if dry_run:
-        print(_build_align_cmdline(cmdline,
-                                   pair,
-                                   output_file.name,
-                                   kbyte,
-                                   force_type,
-                                   quiet))
+        print(
+            _build_align_cmdline(
+                cmdline, pair, output_file.name, kbyte, force_type, quiet
+            )
+        )
         return
 
     for filename, input_file in zip(pair, input_files):
@@ -93,12 +99,9 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
 
     input_file_names = [input_file.name for input_file in input_files]
 
-    cmdline_str = _build_align_cmdline(cmdline,
-                                       input_file_names,
-                                       output_file.name,
-                                       kbyte,
-                                       force_type,
-                                       quiet)
+    cmdline_str = _build_align_cmdline(
+        cmdline, input_file_names, output_file.name, kbyte, force_type, quiet
+    )
 
     if debug:
         sys.stderr.write("%s\n" % cmdline_str)
@@ -138,6 +141,7 @@ def main():
 
 def _test(*args, **keywds):
     import doctest
+
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 
