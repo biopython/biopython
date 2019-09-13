@@ -308,32 +308,23 @@ class Parser(object):
             elif element.attrib["type"] == "mass spectrometry":
                 ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
                 start = end = 0
-                for loc_element in element.getiterator(NS + "location"):
-                    pos_els = loc_element.getiterator(NS + "position")
-                    pos_els = list(pos_els)
+                for el in element.getiterator(NS + "location"):
+                    pos_els = list(el.getiterator(NS + "position"))
                     # this try should be avoided, maybe it is safer to skip position parsing for mass spectrometry
                     try:
                         if pos_els:
                             end = int(pos_els[0].attrib["position"])
                             start = end - 1
                         else:
-                            start = (
-                                int(
-                                    list(loc_element.getiterator(NS + "begin"))[
-                                        0
-                                    ].attrib["position"]
-                                )
-                                - 1
+                            start = int(
+                                list(el.getiterator(NS + "begin"))[0].attrib["position"]
                             )
+                            start -= 1
                             end = int(
-                                list(loc_element.getiterator(NS + "end"))[0].attrib[
-                                    "position"
-                                ]
+                                list(el.getiterator(NS + "end"))[0].attrib["position"]
                             )
-                    except (
-                        ValueError,
-                        KeyError,
-                    ):  # undefined positions or erroneously mapped
+                    except (ValueError, KeyError):
+                        # undefined positions or erroneously mapped
                         pass
                 mass = element.attrib["mass"]
                 method = element.attrib["method"]
