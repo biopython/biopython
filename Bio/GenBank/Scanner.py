@@ -1110,7 +1110,7 @@ class GenBankScanner(InsdcScanner):
     FEATURE_END_MARKERS = []
     FEATURE_QUALIFIER_INDENT = 21
     FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
-    SEQUENCE_HEADERS = ["CONTIG", "ORIGIN", "BASE COUNT", "WGS"]  # trailing spaces removed
+    SEQUENCE_HEADERS = ["CONTIG", "ORIGIN", "BASE COUNT", "WGS", "TSA"]  # trailing spaces removed
 
     GENBANK_INDENT = HEADER_WIDTH
     GENBANK_SPACER = " " * GENBANK_INDENT
@@ -1697,6 +1697,9 @@ class GenBankScanner(InsdcScanner):
                         if self.debug:
                             print("origin_name = " + line)
                         consumer.origin_name(line)
+                if line.startswith("TSA "):
+                    line = line[3:].strip()
+                    consumer.tgs(line)
                 if line.startswith("WGS "):
                     line = line[3:].strip()
                     consumer.wgs(line)

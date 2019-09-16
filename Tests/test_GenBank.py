@@ -680,6 +680,28 @@ class TestRecordParser(unittest.TestCase):
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
 
+    def test_record_parser_tsa(self):
+        path = "GenBank/tsa_acropora.gb"
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+        length = 0
+        locus = "GHGH01000000"
+        definition = "TSA: Acropora millepora, transcriptome shotgun assembly"
+        accession = ["GHGH00000000"]
+        titles = ('Acropora millepora genome sequencing and assembly', 'Direct Submission')
+        features = [
+            ("source", "1..126539", (
+                ("/organism=", '"Acropora millepora"'),
+                ("/mol_type=", '"transcribed RNA"'),
+                ("/db_xref=", '"taxon:45264"'),
+                ("/tissue_type=", '"late planula"'),
+                ("/country=", '"Australia: Queensland"'),
+                ("/collection_date=", '"2011"'),
+            ))
+        ]
+        self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
+
 
 class TestFeatureParser(unittest.TestCase):
 

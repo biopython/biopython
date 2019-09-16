@@ -768,6 +768,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 # Use the FIRST accession as the ID, not the first on this line!
                 self.data.id = self.data.annotations["accessions"][0]
 
+    def tsa(self, content):
+        self.data.annotations["tsa"] = content.split("-")
+
     def wgs(self, content):
         self.data.annotations["wgs"] = content.split("-")
 
