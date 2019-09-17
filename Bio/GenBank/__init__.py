@@ -1373,7 +1373,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_qualifier = None
 
     def tsa(self, content):
-        self.data.tsa = content.split('-')
+        self.data.tsa = content.split("-")
 
     def wgs(self, content):
         self.data.wgs = content.split("-")

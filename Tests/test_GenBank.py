@@ -689,7 +689,7 @@ class TestRecordParser(unittest.TestCase):
         locus = "GHGH01000000"
         definition = "TSA: Acropora millepora, transcriptome shotgun assembly"
         accession = ["GHGH00000000"]
-        titles = ('Acropora millepora genome sequencing and assembly', 'Direct Submission')
+        titles = ("Acropora millepora genome sequencing and assembly", "Direct Submission")
         features = [
             ("source", "1..126539", (
                 ("/organism=", '"Acropora millepora"'),
