@@ -75,6 +75,11 @@ Bio.Index
 ---------
 Deprecated in release 1.75, was not used anywhere in Biopython.
 
+Bio.Crystal
+---------
+Declare obsolete in release 1.75, there is no implementation of the classes
+defined on Bio.Crystal. PDB NDB files can be opened with Bio.PDB.
+
 Bio.motifs
 ----------
 ``Bio.motifs.mast`` plain-text parsing deprecated in favor of XML parsing as of

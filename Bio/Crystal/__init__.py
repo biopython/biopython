@@ -3,11 +3,37 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Represent the NDB Atlas structure (a minimal subset of PDB format).
+"""Represent the NDB Atlas structure (a minimal subset of PDB format) (OBSOLETE).
 
 Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
 is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
 The NDB web interface is located at http://ndbserver.rutgers.edu
+
+There is no implementation of the classes defined on Bio.Crystal on Biopython,
+so the module will be removed.
+
+Bio.Crystal.Hetero sustitute is Bio.PDB.Atom
+Bio.Crystal.Chain sustitute is Bio.PDB.Chain
+Bio.Crystal.Crystal sustiture is Bio.PDB.Structure
+
+Using Bio.PDB you can navigate the data as below.
+
+from Bio.PDB.PDBParser import PDBParser
+parser = PDBParser(PERMISSIVE=1)
+# PDB NDB Only file
+structure = parser.get_structure(“001”, "001_msd.pbd")
+for model in structure:
+    print(‘Model ‘,model)
+    for chain in model:
+        print('Chain ', chain)
+        for residue in chain:
+            print('Res ', residue)
+            for atom in residue:
+                print('Atom ', atom)
+
+Since there is no implementation of the classes and their function are already
+covered by Bio.PDB, Bio.Crystal will be deprecated.
+
 """
 
 import copy
@@ -27,7 +53,7 @@ def wrap_line(line):
     """Add end of line at character eighty, to match PDB record standard."""
     output = ""
     for i in range(0, len(line), 80):
-        output += "%s\n" % line[i: i + 80]
+        output += "%s\n" % line[i : i + 80]
     return output
 
 
@@ -43,7 +69,7 @@ class Hetero(object):
     """Class to support the PDB hetero codes.
 
     Supports only the 3 alphanumeric code.
-    The annotation is available from http://xray.bmc.uu.se/hicup/
+    The annotation is available from http://xray.bmc.uu.se/hicup/xname.html
     """
 
     def __init__(self, data):
@@ -61,6 +87,7 @@ class Hetero(object):
         self.data = data[:].lower()
 
     def __eq__(self, other):
+        """No required."""
         return self.data == other.data
 
     def __ne__(self, other):
@@ -68,12 +95,15 @@ class Hetero(object):
         return not self.__eq__(other)
 
     def __repr__(self):
+        """No required."""
         return "%s" % self.data
 
     def __str__(self):
+        """No required."""
         return "%s" % self.data
 
     def __len__(self):
+        """No required."""
         return len(self.data)
 
 
@@ -111,6 +141,7 @@ class Chain(object):
             raise TypeError
 
     def __str__(self):
+        """No required."""
         output = ""
         for element in self.data:
             output = output + "%s " % element
@@ -119,9 +150,12 @@ class Chain(object):
         return output
 
     def __eq__(self, other):
+        """No required."""
         if len(self.data) != len(other.data):
             return 0
-        ok = reduce(lambda x, y: x and y, map(lambda x, y: x == y, self.data, other.data))
+        ok = reduce(
+            lambda x, y: x and y, map(lambda x, y: x == y, self.data, other.data)
+        )
         return ok
 
     def __ne__(self, other):
@@ -129,9 +163,11 @@ class Chain(object):
         return not self.__eq__(other)
 
     def __len__(self):
+        """No required."""
         return len(self.data)
 
     def __getitem__(self, index):
+        """No required."""
         if isinstance(index, int):
             return self.data[index]
         elif isinstance(index, slice):
@@ -140,6 +176,7 @@ class Chain(object):
             raise TypeError
 
     def __setitem__(self, index, value):
+        """No required."""
         if isinstance(index, int):
             try:
                 self.validate_element(value)
@@ -159,9 +196,11 @@ class Chain(object):
             raise TypeError
 
     def __delitem__(self, index):
+        """No required."""
         del self.data[index]
 
     def __contains__(self, item):
+        """No required."""
         try:
             self.validate_element(item)
         except TypeError:
@@ -206,6 +245,7 @@ class Chain(object):
         return self.data.index(item)
 
     def __add__(self, other):
+        """No required."""
         if isinstance(other, Chain):
             return self.__class__(self.data + other.data)
         elif isinstance(other, str):
@@ -214,6 +254,7 @@ class Chain(object):
             raise TypeError
 
     def __radd__(self, other):
+        """No required."""
         if isinstance(other, Chain):
             return self.__class__(other.data + self.data)
         elif isinstance(other, str):
@@ -222,6 +263,7 @@ class Chain(object):
             raise TypeError
 
     def __iadd__(self, other):
+        """No required."""
         if isinstance(other, Chain):
             self.data += other.data
         elif isinstance(other, str):
@@ -261,12 +303,14 @@ class Crystal(object):
                 raise TypeError
 
     def __repr__(self):
+        """No required."""
         output = ""
         for key in sorted(self.data):
             output += "%s : %s\n" % (key, self.data[key])
         return output
 
     def __str__(self):
+        """No required."""
         output = ""
         for key in sorted(self.data):
             output += "%s : %s\n" % (key, self.data[key])
@@ -277,12 +321,15 @@ class Crystal(object):
         return self.data
 
     def __len__(self):
+        """No required."""
         return len(self.data)
 
     def __getitem__(self, key):
+        """No required."""
         return self.data[key]
 
     def __setitem__(self, key, item):
+        """No required."""
         if isinstance(item, Chain):
             self.data[key] = item
         elif isinstance(item, str):
@@ -291,6 +338,7 @@ class Crystal(object):
             raise TypeError
 
     def __delitem__(self, key):
+        """No required."""
         del self.data[key]
 
     def clear(self):
@@ -314,6 +362,7 @@ class Crystal(object):
         return self.data.values()
 
     def __contains__(self, value):
+        """No required."""
         return value in self.data
 
     def has_key(self, key):
