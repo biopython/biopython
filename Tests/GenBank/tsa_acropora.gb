@@ -1,0 +1,46 @@
+LOCUS       GHGH01000000          126539 rc    RNA     linear   TSA 02-APR-2019
+DEFINITION  TSA: Acropora millepora, transcriptome shotgun assembly.
+ACCESSION   GHGH00000000
+VERSION     GHGH00000000.1
+DBLINK      BioProject: PRJNA473876
+            BioSample: SAMN10491283
+            Sequence Read Archive: SRR8254540
+KEYWORDS    TSA; Transcriptome Shotgun Assembly.
+SOURCE      Acropora millepora
+  ORGANISM  Acropora millepora
+            Eukaryota; Metazoa; Cnidaria; Anthozoa; Hexacorallia; Scleractinia;
+            Astrocoeniina; Acroporidae; Acropora.
+REFERENCE   1  (bases 1 to 126539)
+  AUTHORS   Ying,H., Foret,S., Ball,E., Hayward,D.C., Moya,A. and Miller,D.J.
+  TITLE     Acropora millepora genome sequencing and assembly
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 126539)
+  AUTHORS   Ying,H., Foret,S., Ball,E., Hayward,D.C., Moya,A. and Miller,D.J.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (19-FEB-2019) Research School of Biology, Australian
+            National University, Sullivans Creek Road, Canberra, ACT 2617,
+            Australia
+COMMENT     The Acropora millepora transcriptome shotgun assembly (TSA) project
+            has the project accession GHGH00000000.  This version of the
+            project (01) has the accession number GHGH01000000, and consists of
+            sequences GHGH01000001-GHGH01126539.
+            Raw RNA-seq reads were trimmed using libngs with minimum quality of
+            20 and minimum read size of 80 nt. Trinity r2013-02-16 was then
+            employed for de novo transcriptome assembly.
+            
+            ##Assembly-Data-START##
+            Assembly Method       :: Trinity r2013-02-16
+            Assembly Name         :: trinity.001
+            Sequencing Technology :: Illumina
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..126539
+                     /organism="Acropora millepora"
+                     /mol_type="transcribed RNA"
+                     /db_xref="taxon:45264"
+                     /tissue_type="late planula"
+                     /country="Australia: Queensland"
+                     /collection_date="2011"
+TSA         GHGH01000001-GHGH01126539
+//
+
