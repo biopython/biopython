@@ -228,8 +228,9 @@ class TestSeqIO(unittest.TestCase):
         """Check can write/read given records.
 
         messages is dictionary of error messages keyed by output format.
+        Set this to a non-dictionary to see the suggested value.
         """
-        if isinstance(messages, list):
+        if not isinstance(messages, dict):
             debug = True
             messages = {}
         else:
@@ -258,13 +259,17 @@ class TestSeqIO(unittest.TestCase):
                         warnings.simplefilter("ignore", BiopythonWarning)
                         SeqIO.write(sequences=records, handle=handle, format=format)
                 except (ValueError, TypeError) as e:
-                    self.assertEqual(
-                        str(e),
-                        messages[format],
-                        "Wrong error on %s -> %s" % (t_format, format),
-                    )
+                    if debug:
+                        messages[format] = str(e)
+                    else:
+                        self.assertEqual(
+                            str(e),
+                            messages[format],
+                            "Wrong error on %s -> %s" % (t_format, format),
+                        )
                 else:
-                    raise ValueError("Expected error writing to %s" % format)
+                    if not debug:
+                        raise ValueError("Expected error writing to %s" % format)
 
                 if records[0].seq.alphabet.letters is not None:
                     self.assertNotEqual(
@@ -373,8 +378,9 @@ class TestSeqIO(unittest.TestCase):
                     SeqIO.write(records[0], handle, format)
                     self.assertEqual(handle.getvalue(), records[0].format(format))
         if debug:
-            print("%s: messages = %r" % (t_format, messages))
-            raise ValueError("Expected error messages need updating to a dict.")
+            self.fail(
+                "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
+            )
 
     def perform_test(
         self,
