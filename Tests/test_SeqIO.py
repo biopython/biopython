@@ -229,7 +229,16 @@ class TestSeqIO(unittest.TestCase):
                 self.failureException(msg)
 
     def check_simple_write_read(self, records, t_format, t_count, messages):
-        messages = iter(messages)
+        """Check can write/read given records.
+
+        messages is dictionary of error messages keyed by output format.
+        Set this to a non-dictionary to see the suggested value.
+        """
+        if not isinstance(messages, dict):
+            debug = True
+            messages = {}
+        else:
+            debug = False
         for format in test_write_read_alignment_formats:
             if (
                 format not in possible_unknown_seq_formats
@@ -245,15 +254,27 @@ class TestSeqIO(unittest.TestCase):
             else:
                 handle = StringIO()
 
-            try:
-                with warnings.catch_warnings():
-                    # e.g. data loss
-                    warnings.simplefilter("ignore", BiopythonWarning)
-                    c = SeqIO.write(sequences=records, handle=handle, format=format)
-                self.assertEqual(c, len(records))
-            except (ValueError, TypeError) as e:
-                message = next(messages)
-                self.assertEqual(str(e), message)
+            if format in messages:
+                # Should fail.
+                # Can't use assertRaisesRegex with some of our msg strings
+                try:
+                    with warnings.catch_warnings():
+                        # e.g. data loss
+                        warnings.simplefilter("ignore", BiopythonWarning)
+                        SeqIO.write(sequences=records, handle=handle, format=format)
+                except (ValueError, TypeError) as e:
+                    if debug:
+                        messages[format] = str(e)
+                    else:
+                        self.assertEqual(
+                            str(e),
+                            messages[format],
+                            "Wrong error on %s -> %s" % (t_format, format),
+                        )
+                else:
+                    if not debug:
+                        raise ValueError("Expected error writing to %s" % format)
+
                 if records[0].seq.alphabet.letters is not None:
                     self.assertNotEqual(
                         format,
@@ -352,6 +373,10 @@ class TestSeqIO(unittest.TestCase):
                     SeqIO.write(records[0], handle, format)
                     if format not in SeqIO._BinaryFormats:
                         self.assertEqual(handle.getvalue(), records[0].format(format))
+        if debug:
+            self.fail(
+                "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
+            )
 
     def perform_test(
         self,
