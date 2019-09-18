@@ -21,7 +21,7 @@ Using Bio.PDB you can navigate the data as below::
     from Bio.PDB.PDBParser import PDBParser
     parser = PDBParser(PERMISSIVE=1)
     # PDB NDB Only file
-    structure = parser.get_structure(“001”, "001_msd.pbd")
+    structure = parser.get_structure("001", "001_msd.pbd")
     for model in structure:
         print(‘Model ‘,model)
         for chain in model:
