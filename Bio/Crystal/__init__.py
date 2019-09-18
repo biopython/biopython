@@ -16,20 +16,20 @@ Bio.Crystal.Hetero sustitute is Bio.PDB.Atom
 Bio.Crystal.Chain sustitute is Bio.PDB.Chain
 Bio.Crystal.Crystal sustiture is Bio.PDB.Structure
 
-Using Bio.PDB you can navigate the data as below.
+Using Bio.PDB you can navigate the data as below::
 
-from Bio.PDB.PDBParser import PDBParser
-parser = PDBParser(PERMISSIVE=1)
-# PDB NDB Only file
-structure = parser.get_structure(“001”, "001_msd.pbd")
-for model in structure:
-    print(‘Model ‘,model)
-    for chain in model:
-        print('Chain ', chain)
-        for residue in chain:
-            print('Res ', residue)
-            for atom in residue:
-                print('Atom ', atom)
+    from Bio.PDB.PDBParser import PDBParser
+    parser = PDBParser(PERMISSIVE=1)
+    # PDB NDB Only file
+    structure = parser.get_structure(“001”, "001_msd.pbd")
+    for model in structure:
+        print(‘Model ‘,model)
+        for chain in model:
+            print('Chain ', chain)
+            for residue in chain:
+                print('Res ', residue)
+                for atom in residue:
+                    print('Atom ', atom)
 
 Since there is no implementation of the classes and their function are already
 covered by Bio.PDB, Bio.Crystal will be deprecated.
