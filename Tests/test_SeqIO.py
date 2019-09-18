@@ -700,6 +700,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -751,6 +752,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -802,6 +804,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -847,6 +850,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
@@ -881,6 +885,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -914,6 +919,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -947,6 +953,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -979,6 +986,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1012,6 +1020,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1045,6 +1054,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1078,6 +1088,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1111,6 +1122,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1144,6 +1156,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1177,6 +1190,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1210,6 +1224,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1243,6 +1258,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1276,6 +1292,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1310,6 +1327,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1356,6 +1374,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -1393,6 +1412,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -1427,6 +1447,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1475,6 +1496,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -1523,6 +1545,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -1571,6 +1594,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -1619,6 +1643,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -1653,6 +1678,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1687,6 +1713,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -1728,6 +1755,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -1766,6 +1794,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -2296,6 +2325,96 @@ class TestSeqIO(unittest.TestCase):
             False,
             "Registry/EDD_RAT.dat",
             1,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+        )
+
+    def test_tinyseq1(self):
+        sequences = ["ACTGAGTCCCGGGACCCCGGGAGAGCGGTCAGTGTGTGGT...AACTTGA"]
+        ids = names = ["ref|NM_002253.1|"]
+        lengths = [5830]
+        alignment = None
+        messages = {
+            "embl": "Need a DNA, RNA or Protein alphabet",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NM_002253.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NM_002253.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NM_002253.1|).",
+            "genbank": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NM_002253.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NM_002253.1|).",
+            "seqxml": "Need a DNA, RNA or Protein alphabet",
+            "sff": "Missing SFF flow information",
+            "nexus": "Need a DNA, RNA or Protein alphabet",
+        }
+        self.perform_test(
+            "tinyseq",
+            False,
+            "TinySeq/NM_002253.tseq",
+            1,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+        )
+
+    def test_tinyseq2(self):
+        sequences = [
+            "CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACC...TTTTTTT",
+            "CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACC...TGCCTTC",
+            "CCATCCGTAGGGTGAACCTGCGGAAGGATCATTACCACAC...CGCCCCC",
+            "CCTTCCGTAGNGTGACCTGCGGAAGGATCATTACCACACC...CGCTCCC",
+            "CCCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACAC...CCCCTTT",
+            "CCCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACAC...CCCTTTT",
+            "CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACC...GCCCCCT",
+            "CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACC...CCTCTTG",
+        ]
+        ids = names = [
+            "HM357625.1",
+            "HM357624.1",
+            "HM357623.1",
+            "HM357622.1",
+            "HM357619.1",
+            "HM357618.1",
+            "HM357617.1",
+            "HM357616.1",
+        ]
+        lengths = [257, 254, 255, 275, 278, 277, 275, 276]
+        alignment = None
+        messages = {
+            "clustal": "Sequences must all be the same length",
+            "phylip": "Sequences must all be the same length",
+            "stockholm": "Sequences must all be the same length",
+            "phylip-relaxed": "Sequences must all be the same length",
+            "embl": "Need a DNA, RNA or Protein alphabet",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HM357616.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HM357616.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HM357616.1).",
+            "genbank": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "nib": "More than one sequence found",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HM357616.1).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HM357616.1).",
+            "seqxml": "Need a DNA, RNA or Protein alphabet",
+            "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
+            "maf": "Sequences must all be the same length",
+            "mauve": "Sequences must all be the same length",
+            "nexus": "Sequences must all be the same length",
+            "phylip-sequential": "Sequences must all be the same length",
+        }
+        self.perform_test(
+            "tinyseq",
+            False,
+            "TinySeq/eight_ITS1_with_gi.tseq",
+            8,
             ids,
             names,
             sequences,
@@ -3297,6 +3416,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
 
@@ -3473,6 +3593,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -3507,6 +3628,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -3642,6 +3764,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3698,6 +3821,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3740,6 +3864,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3787,6 +3912,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3833,6 +3959,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3880,6 +4007,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3926,6 +4054,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -3971,6 +4100,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -4017,6 +4147,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -4063,6 +4194,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -4102,6 +4234,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -4145,6 +4278,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -4364,6 +4498,7 @@ class TestSeqIO(unittest.TestCase):
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4410,6 +4545,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
@@ -4450,6 +4586,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -4678,6 +4815,7 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
@@ -4721,6 +4859,7 @@ class TestSeqIO(unittest.TestCase):
             "nib": "More than one sequence found",
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
@@ -4771,6 +4910,7 @@ class TestSeqIO(unittest.TestCase):
             "nib": "More than one sequence found",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
@@ -4821,6 +4961,7 @@ class TestSeqIO(unittest.TestCase):
             "nib": "More than one sequence found",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
@@ -4874,6 +5015,7 @@ class TestSeqIO(unittest.TestCase):
             "nib": "More than one sequence found",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation",
@@ -4903,6 +5045,7 @@ class TestSeqIO(unittest.TestCase):
             "imgt": "Need a DNA, RNA or Protein alphabet",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -4930,6 +5073,7 @@ class TestSeqIO(unittest.TestCase):
             "imgt": "Need a DNA, RNA or Protein alphabet",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -4957,6 +5101,7 @@ class TestSeqIO(unittest.TestCase):
             "imgt": "Need a DNA, RNA or Protein alphabet",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -4984,6 +5129,7 @@ class TestSeqIO(unittest.TestCase):
             "imgt": "Need a DNA, RNA or Protein alphabet",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "nexus": "Need a DNA, RNA or Protein alphabet",
         }
         self.perform_test(
@@ -5035,6 +5181,7 @@ class TestSeqIO(unittest.TestCase):
             "nib": "More than one sequence found",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Need a Nucleotide or Protein alphabet",
             "xdna": "More than one sequence found",
             "nexus": "Need a DNA, RNA or Protein alphabet",
             "phylip-sequential": "Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation",
@@ -5071,6 +5218,7 @@ class TestSeqIO(unittest.TestCase):
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
             "sff": "Missing SFF flow information",
+            "tinyseq": "Not sure if should allow new lines in TinySeq defline...",
             "xdna": "More than one sequence found",
         }
         self.perform_test(
@@ -5566,11 +5714,12 @@ class TestSeqIO(unittest.TestCase):
                 with self.assertRaisesRegexp(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
             elif t_format in (
-                "uniprot-xml",
-                "pdb-seqres",
-                "pdb-atom",
                 "cif-atom",
                 "cif-seqres",
+                "pdb-atom",
+                "pdb-seqres",
+                "tinyseq",
+                "uniprot-xml",
             ):
                 handle = StringIO()
                 with self.assertRaisesRegexp(ValueError, "Empty file."):
