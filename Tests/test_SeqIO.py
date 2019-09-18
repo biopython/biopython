@@ -235,6 +235,7 @@ class TestSeqIO(unittest.TestCase):
             messages = {}
         else:
             debug = False
+        unequal_length = len({len(_) for _ in records}) != 1
         for format in test_write_read_alignment_formats:
             if (
                 format not in possible_unknown_seq_formats
@@ -250,7 +251,16 @@ class TestSeqIO(unittest.TestCase):
             else:
                 handle = StringIO()
 
-            if format in messages:
+            if unequal_length and format in AlignIO._FormatToWriter:
+                msg = "Sequences must all be the same length"
+            elif format in messages:
+                msg = messages[format]
+            elif debug:
+                msg = True
+            else:
+                msg = None
+
+            if msg:
                 # Should fail.
                 # Can't use assertRaisesRegex with some of our msg strings
                 try:
@@ -263,9 +273,7 @@ class TestSeqIO(unittest.TestCase):
                         messages[format] = str(e)
                     else:
                         self.assertEqual(
-                            str(e),
-                            messages[format],
-                            "Wrong error on %s -> %s" % (t_format, format),
+                            str(e), msg, "Wrong error on %s -> %s" % (t_format, format)
                         )
                 else:
                     if not debug:
@@ -648,16 +656,8 @@ class TestSeqIO(unittest.TestCase):
         lengths = [265, 271, 310, 219]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "nib": "More than one sequence found",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "sff",
@@ -1345,10 +1345,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [633, 413, 471]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
@@ -1361,10 +1357,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "fasta",
@@ -1390,10 +1382,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [378, 382]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
@@ -1406,10 +1394,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "fasta",
@@ -1480,10 +1464,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [1023, 783, 195, 273]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
@@ -1496,10 +1476,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "fasta",
@@ -1536,10 +1512,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
@@ -1552,10 +1524,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "fasta",
@@ -1592,10 +1560,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [123, 353, 504, 274]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
@@ -1608,10 +1572,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "fasta",
@@ -1648,10 +1608,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
@@ -1664,10 +1620,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "tab",
@@ -1803,10 +1755,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [285, 222]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
@@ -1819,10 +1767,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "fasta",
@@ -2399,10 +2343,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [116, 118, 302]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
@@ -2411,10 +2351,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "uniprot-xml",
@@ -2637,10 +2573,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [513, 880, 441, 497]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
@@ -2649,10 +2581,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "genbank",
@@ -3069,10 +2997,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [2007, 2007, 1755]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
@@ -3081,10 +3005,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         # This example is a truncated copy of gbvrl1.seq from
         # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
@@ -3246,10 +3166,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [14, 14, 58, 496]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
@@ -3258,10 +3174,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "embl",
@@ -3288,10 +3200,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [358, 65, 25, 25]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
@@ -3301,10 +3209,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "embl",
@@ -3558,10 +3462,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [111, 27, 7, 754]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
@@ -3574,10 +3474,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "embl",
@@ -3696,10 +3592,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [3503, 3291, 2903, 822]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
@@ -3708,10 +3600,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "imgt",
@@ -4203,10 +4091,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [124, 124, 119, 125]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
@@ -4219,10 +4103,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "emboss",
@@ -4300,17 +4180,9 @@ class TestSeqIO(unittest.TestCase):
         lengths = [876, 862, 1280]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "nib": "More than one sequence found",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "phd",
@@ -4407,17 +4279,9 @@ class TestSeqIO(unittest.TestCase):
         lengths = [856, 3296]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "nib": "More than one sequence found",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "ace",
@@ -4490,10 +4354,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [303, 306, 267, 330]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
@@ -4506,10 +4366,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "ig",
@@ -4583,10 +4439,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [294, 294, 294, 294]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Need a DNA, RNA or Protein alphabet",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
@@ -4599,10 +4451,6 @@ class TestSeqIO(unittest.TestCase):
             "seqxml": "Need a DNA, RNA or Protein alphabet",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "ig",
@@ -4629,10 +4477,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [1089, 1009, 546, 619]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
@@ -4641,10 +4485,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "pir",
@@ -4671,10 +4511,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [366, 366, 366, 366]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
@@ -4683,10 +4519,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "pir",
@@ -4713,10 +4545,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [786, 564, 279, 279]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
@@ -4725,10 +4553,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "pir",
@@ -4755,10 +4579,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [263, 94, 94, 188]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
@@ -4767,10 +4587,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "pir",
@@ -5248,10 +5064,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [2460, 18, 14, 1]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
@@ -5260,10 +5072,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "seqxml",
@@ -5290,10 +5098,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [90, 18, 6, 48]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "embl": "Cannot have spaces in EMBL accession, 'empty description'",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
@@ -5305,10 +5109,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "seqxml",
@@ -5335,10 +5135,6 @@ class TestSeqIO(unittest.TestCase):
         lengths = [412, 29, 30, 33]
         alignment = None
         messages = {
-            "clustal": "Sequences must all be the same length",
-            "phylip": "Sequences must all be the same length",
-            "stockholm": "Sequences must all be the same length",
-            "phylip-relaxed": "Sequences must all be the same length",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
@@ -5347,10 +5143,6 @@ class TestSeqIO(unittest.TestCase):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "maf": "Sequences must all be the same length",
-            "mauve": "Sequences must all be the same length",
-            "nexus": "Sequences must all be the same length",
-            "phylip-sequential": "Sequences must all be the same length",
         }
         self.perform_test(
             "seqxml",
