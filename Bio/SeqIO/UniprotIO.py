@@ -56,11 +56,8 @@ def UniprotIterator(
     if handle.readline() == "":
         raise ValueError("Empty file.")
 
-    if isinstance(alphabet, Alphabet.NucleotideAlphabet):
+    if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.NucleotideAlphabet):
         raise ValueError("Wrong alphabet %r" % alphabet)
-    if isinstance(alphabet, Alphabet.Gapped):
-        if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
-            raise ValueError("Wrong alphabet %r" % alphabet)
 
     if not hasattr(handle, "read"):
         if isinstance(handle, str):
