@@ -254,7 +254,7 @@ class TestSeqIO(unittest.TestCase):
                     self.assertNotEqual(
                         format,
                         t_format,
-                        "Should be able to re-write " "in the original format!",
+                        "Should be able to re-write in the original format!",
                     )
                 # Carry on to the next format:
                 continue
@@ -403,7 +403,7 @@ class TestSeqIO(unittest.TestCase):
                 except StopIteration:
                     break
                 self.assertIsNotNone(
-                    record, "Should raise StopIteration, " "not return None"
+                    record, "Should raise StopIteration, not return None"
                 )
                 records3.append(record)
             h.close()
@@ -577,8 +577,8 @@ class TestSeqIO(unittest.TestCase):
                         ValueError,
                         next,
                         records6,
-                        "Forcing wrong alphabet, %s, "
-                        "should fail (%s)" % (repr(given_alpha), t_filename),
+                        "Forcing wrong alphabet, %s, should fail (%s)"
+                        % (repr(given_alpha), t_filename),
                     )
             del good, bad, given_alpha, base_alpha
 
