@@ -87,7 +87,6 @@ class Hetero(object):
         self.data = data[:].lower()
 
     def __eq__(self, other):
-        """No required."""
         return self.data == other.data
 
     def __ne__(self, other):
@@ -95,15 +94,12 @@ class Hetero(object):
         return not self.__eq__(other)
 
     def __repr__(self):
-        """No required."""
         return "%s" % self.data
 
     def __str__(self):
-        """No required."""
         return "%s" % self.data
 
     def __len__(self):
-        """No required."""
         return len(self.data)
 
 
@@ -141,7 +137,6 @@ class Chain(object):
             raise TypeError
 
     def __str__(self):
-        """No required."""
         output = ""
         for element in self.data:
             output = output + "%s " % element
@@ -150,7 +145,6 @@ class Chain(object):
         return output
 
     def __eq__(self, other):
-        """No required."""
         if len(self.data) != len(other.data):
             return 0
         ok = reduce(
@@ -163,11 +157,9 @@ class Chain(object):
         return not self.__eq__(other)
 
     def __len__(self):
-        """No required."""
         return len(self.data)
 
     def __getitem__(self, index):
-        """No required."""
         if isinstance(index, int):
             return self.data[index]
         elif isinstance(index, slice):
@@ -176,7 +168,6 @@ class Chain(object):
             raise TypeError
 
     def __setitem__(self, index, value):
-        """No required."""
         if isinstance(index, int):
             try:
                 self.validate_element(value)
@@ -196,11 +187,9 @@ class Chain(object):
             raise TypeError
 
     def __delitem__(self, index):
-        """No required."""
         del self.data[index]
 
     def __contains__(self, item):
-        """No required."""
         try:
             self.validate_element(item)
         except TypeError:
@@ -245,7 +234,6 @@ class Chain(object):
         return self.data.index(item)
 
     def __add__(self, other):
-        """No required."""
         if isinstance(other, Chain):
             return self.__class__(self.data + other.data)
         elif isinstance(other, str):
@@ -254,7 +242,6 @@ class Chain(object):
             raise TypeError
 
     def __radd__(self, other):
-        """No required."""
         if isinstance(other, Chain):
             return self.__class__(other.data + self.data)
         elif isinstance(other, str):
@@ -263,7 +250,6 @@ class Chain(object):
             raise TypeError
 
     def __iadd__(self, other):
-        """No required."""
         if isinstance(other, Chain):
             self.data += other.data
         elif isinstance(other, str):
@@ -303,14 +289,12 @@ class Crystal(object):
                 raise TypeError
 
     def __repr__(self):
-        """No required."""
         output = ""
         for key in sorted(self.data):
             output += "%s : %s\n" % (key, self.data[key])
         return output
 
     def __str__(self):
-        """No required."""
         output = ""
         for key in sorted(self.data):
             output += "%s : %s\n" % (key, self.data[key])
@@ -321,15 +305,12 @@ class Crystal(object):
         return self.data
 
     def __len__(self):
-        """No required."""
         return len(self.data)
 
     def __getitem__(self, key):
-        """No required."""
         return self.data[key]
 
     def __setitem__(self, key, item):
-        """No required."""
         if isinstance(item, Chain):
             self.data[key] = item
         elif isinstance(item, str):
@@ -338,7 +319,6 @@ class Crystal(object):
             raise TypeError
 
     def __delitem__(self, key):
-        """No required."""
         del self.data[key]
 
     def clear(self):
@@ -362,7 +342,6 @@ class Crystal(object):
         return self.data.values()
 
     def __contains__(self, value):
-        """No required."""
         return value in self.data
 
     def has_key(self, key):
