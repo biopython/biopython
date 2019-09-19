@@ -9,9 +9,6 @@ Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
 is a minimal subset of the PDB format.  Hetero supports a 3 alphanumeric code.
 The NDB web interface is located at http://ndbserver.rutgers.edu
 
-There is no use of the classes defined on Bio.Crystal on Biopython,
-so the module will be removed.
-
 Bio.Crystal.Hetero substitute is Bio.PDB.Atom
 Bio.Crystal.Chain substitute is Bio.PDB.Chain
 Bio.Crystal.Crystal substitute is Bio.PDB.Structure
@@ -31,9 +28,7 @@ Using Bio.PDB you can navigate the data as below::
                 for atom in residue:
                     print('Atom ', atom)
 
-Since there is no use of the classes and their function are already
-covered by Bio.PDB, Bio.Crystal will be deprecated.
-
+Bio.Crystal is self-contained, with the main functionality covered by Bio.PDB.
 """
 
 import copy
@@ -53,7 +48,7 @@ def wrap_line(line):
     """Add end of line at character eighty, to match PDB record standard."""
     output = ""
     for i in range(0, len(line), 80):
-        output += "%s\n" % line[i: i + 80]
+        output += "%s\n" % line[i : i + 80]
     return output
 
 
