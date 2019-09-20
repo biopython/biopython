@@ -4,7 +4,7 @@
 # as part of this package.
 
 # python unittest framework
-"""Tests for Crystal module."""
+"""Tests for Crystal module (OBSOLETE)."""
 
 import unittest
 import copy
