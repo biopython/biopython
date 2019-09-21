@@ -48,6 +48,10 @@ Variables:
     - api_key      Personal API key from NCBI. If not set, only 3 queries per
                    second are allowed. 10 queries per seconds otherwise with a
                    valid API key.
+    - max_tries    Configures how many times failed requests will be
+                   automatically retried on error (default is 3).
+    - sleep_between_tries   The delay, in seconds, before retrying a request on
+                            error (default is 15).
 
 Functions:
 
