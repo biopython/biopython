@@ -567,8 +567,8 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
             # treat them as a serverside error and try again after sleeping
             # for a bit.
             if isinstance(exception, _HTTPError) \
-                    and exception.status // 100 == 4 \
-                    and exception.status != 429:
+                    and exception.code // 100 == 4 \
+                    and exception.code != 429:
                 raise
 
             # Treat everything else as a transient error and try again after a
