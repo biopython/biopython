@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
@@ -80,7 +82,7 @@ class StructureAlignment(object):
         """Test if aa in sequence fits aa in structure (PRIVATE)."""
         resname = r1.get_resname()
         resname = SCOPData.protein_letters_3to1[resname]
-        assert(aa1 == resname)
+        assert aa1 == resname
 
     def get_maps(self):
         """Map residues between the structures.

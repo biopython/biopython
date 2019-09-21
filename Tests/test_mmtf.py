@@ -1,5 +1,6 @@
 # Copyright 2016 by Anthony Bradley.  All rights reserved.
 # Revisions copyright 2017 by Peter Cock.  All rights reserved.
+# Revisions copyright 2019 by Joe Greener.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -9,9 +10,13 @@
 
 import unittest
 import warnings
-from Bio.PDB.mmtf import MMTFParser
+import os
+import tempfile
+from Bio.PDB import PDBParser, Select
+from Bio.PDB.mmtf import MMTFParser, MMTFIO
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+import mmtf
 
 
 class ParseMMTF(unittest.TestCase):
@@ -104,6 +109,107 @@ class SimpleParseMMTF(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = MMTFParser.get_structure("PDB/1A8O.mmtf")
+
+
+class WriteMMTF(unittest.TestCase):
+    """Write some MMTF files, read them back in and check them."""
+
+    def test_write(self):
+        """Test a simple structure object is written out correctly to MMTF."""
+        parser = MMCIFParser()
+        struc = parser.get_structure("1A8O", "PDB/1A8O.cif")
+        io = MMTFIO()
+        io.set_structure(struc)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struc_back = MMTFParser.get_structure(filename)
+            dict_back = mmtf.parse(filename)
+            self.assertEqual(dict_back.structure_id, "1A8O")
+            self.assertEqual(dict_back.num_models, 1)
+            self.assertEqual(dict_back.num_chains, 2)
+            self.assertEqual(dict_back.num_groups, 158)
+            self.assertEqual(dict_back.num_atoms, 644)
+            self.assertEqual(len(dict_back.x_coord_list), 644)
+            self.assertEqual(len(dict_back.y_coord_list), 644)
+            self.assertEqual(len(dict_back.z_coord_list), 644)
+            self.assertEqual(len(dict_back.b_factor_list), 644)
+            self.assertEqual(len(dict_back.occupancy_list), 644)
+            self.assertEqual(dict_back.x_coord_list[5], 20.022)
+            self.assertEqual(set(dict_back.ins_code_list), {"\x00"})
+            self.assertEqual(set(dict_back.alt_loc_list), {"\x00"})
+            self.assertEqual(list(dict_back.atom_id_list), list(range(1, 645)))
+            self.assertEqual(list(dict_back.sequence_index_list), list(range(70)) + [-1] * 88)
+            self.assertEqual(dict_back.chain_id_list, ["A", "B"])
+            self.assertEqual(dict_back.chain_name_list, ["A", "A"])
+            self.assertEqual(dict_back.chains_per_model, [2])
+            self.assertEqual(len(dict_back.group_list), 21)
+            self.assertEqual(len(dict_back.group_id_list), 158)
+            self.assertEqual(len(dict_back.group_type_list), 158)
+            self.assertEqual(dict_back.groups_per_chain, [70, 88])
+            self.assertEqual(len(dict_back.entity_list), 2)
+            self.assertEqual(dict_back.entity_list[0]["type"], "polymer")
+            self.assertEqual(dict_back.entity_list[0]["chainIndexList"], [0])
+            self.assertEqual(dict_back.entity_list[0]["sequence"], "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG")
+            self.assertEqual(dict_back.entity_list[1]["type"], "water")
+            self.assertEqual(dict_back.entity_list[1]["chainIndexList"], [1])
+            self.assertEqual(dict_back.entity_list[1]["sequence"], "")
+        finally:
+            os.remove(filename)
+
+    def test_multi_model_write(self):
+        """Test multiple models are written out correctly to MMTF."""
+        parser = PDBParser()
+        struc = parser.get_structure("1SSU_mod", "PDB/1SSU_mod.pdb")
+        io = MMTFIO()
+        io.set_structure(struc)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struc_back = MMTFParser.get_structure(filename)
+            dict_back = mmtf.parse(filename)
+            self.assertEqual(dict_back.num_models, 2)
+            self.assertEqual(dict_back.num_chains, 4)
+            self.assertEqual(dict_back.num_groups, 4)
+            self.assertEqual(dict_back.num_atoms, 4)
+            self.assertEqual(list(dict_back.x_coord_list), [-1.058, -0.025, 7.024, 6.259])
+            self.assertEqual(dict_back.chain_id_list, ["A", "B", "A", "B"])
+            self.assertEqual(dict_back.chain_name_list, ["A", "B", "A", "B"])
+            self.assertEqual(dict_back.chains_per_model, [2, 2])
+            self.assertEqual(len(dict_back.group_list), 1)
+            self.assertEqual(len(dict_back.group_id_list), 4)
+            self.assertEqual(len(dict_back.group_type_list), 4)
+            self.assertEqual(dict_back.groups_per_chain, [1, 1, 1, 1])
+            self.assertEqual(len(dict_back.entity_list), 4)
+        finally:
+            os.remove(filename)
+
+    def test_selection_write(self):
+        """Test the use of a Select subclass when writing MMTF files."""
+        struc = MMTFParser.get_structure("PDB/4CUP.mmtf")
+        io = MMTFIO()
+        io.set_structure(struc)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        class CAonly(Select):
+            """Accepts only CA residues."""
+
+            def accept_atom(self, atom):
+                if atom.name == "CA" and atom.element == "C":
+                    return 1
+
+        try:
+            io.save(filename, CAonly())
+            struc_back = MMTFParser.get_structure(filename)
+            dict_back = mmtf.parse(filename)
+            self.assertEqual(dict_back.num_atoms, 116)
+            self.assertEqual(len(dict_back.x_coord_list), 116)
+            self.assertEqual(set(dict_back.alt_loc_list), {"\x00", "A", "B"})
+        finally:
+            os.remove(filename)
 
 
 if __name__ == "__main__":

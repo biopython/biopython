@@ -1,7 +1,9 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Code to work with Medline from the NCBI.
 
@@ -125,7 +127,7 @@ def parse(handle):
     textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
                 "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
                 "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
-                "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT")
+                "EDAT", "MHDA", "PST", "AB", "EA", "TI", "JT")
     handle = iter(handle)
 
     key = ""
@@ -133,7 +135,7 @@ def parse(handle):
     for line in handle:
         line = line.rstrip()
         if line[:6] == "      ":  # continuation line
-            if key == "MH":
+            if key in ["MH", "AD"]:
                 # Multi-line MESH term, want to append to last entry in list
                 record[key][-1] += line[5:]  # including space using line[5:]
             else:

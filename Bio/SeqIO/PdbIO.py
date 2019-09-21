@@ -45,9 +45,11 @@ def AtomIterator(pdb_id, struct):
     model = struct[0]
     for chn_id, chain in sorted(model.child_dict.items()):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
-        residues = [res for res in chain.get_unpacked_list()
-                    if seq1(res.get_resname().upper(),
-                            custom_map=protein_letters_3to1) != "X"]
+        residues = [
+            res
+            for res in chain.get_unpacked_list()
+            if seq1(res.get_resname().upper(), custom_map=protein_letters_3to1) != "X"
+        ]
         if not residues:
             continue
         # Identify missing residues in the structure
@@ -55,7 +57,7 @@ def AtomIterator(pdb_id, struct):
         gaps = []
         rnumbers = [r.id[1] for r in residues]
         for i, rnum in enumerate(rnumbers[:-1]):
-            if rnumbers[i + 1] != rnum + 1:
+            if rnumbers[i + 1] != rnum + 1 and rnumbers[i + 1] != rnum:
                 # It's a gap!
                 gaps.append((i + 1, rnum, rnumbers[i + 1]))
         if gaps:
@@ -68,8 +70,10 @@ def AtomIterator(pdb_id, struct):
                     prev_idx = i
                     res_out.append("X" * gapsize)
                 else:
-                    warnings.warn("Ignoring out-of-order residues after a gap",
-                                  BiopythonParserWarning)
+                    warnings.warn(
+                        "Ignoring out-of-order residues after a gap",
+                        BiopythonParserWarning,
+                    )
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
                     res_out.extend(restype(x) for x in residues[prev_idx:i])
@@ -86,8 +90,9 @@ def AtomIterator(pdb_id, struct):
         # if len(structure) > 1 :
         #     id = ("Model%s|" % str(model.id)) + id
 
-        record = SeqRecord(Seq("".join(res_out), generic_protein),
-                           id=record_id, description=record_id)
+        record = SeqRecord(
+            Seq("".join(res_out), generic_protein), id=record_id, description=record_id
+        )
 
         record.annotations["model"] = model.id
         record.annotations["chain"] = chain.id
@@ -134,9 +139,13 @@ def PdbSeqresIterator(handle):
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
     from Bio.SeqUtils import seq1
 
+    # raise exception if file is empty
+    empty = True
+
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
     for line in handle:
+        empty = False
         rec_name = line[0:6].strip()
         if rec_name == "SEQRES":
             # NB: We only actually need chain ID and the residues here;
@@ -150,7 +159,9 @@ def PdbSeqresIterator(handle):
             chn_id = line[11]
             # Number of residues in the chain (repeated on every record)
             # num_res = int(line[13:17])
-            residues = [seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()]
+            residues = [
+                seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()
+            ]
             chains[chn_id].extend(residues)
         elif rec_name == "DBREF":
             #  ID code of this entry (PDB ID)
@@ -181,9 +192,18 @@ def PdbSeqresIterator(handle):
             # Insertion code of the ending residue of the segment, if PDB is the
             # reference.
             # db_icode_end = line[67]
-            metadata[chn_id].append({"pdb_id": pdb_id, "database": database,
-                                    "db_acc": db_acc, "db_id_code": db_id_code})
+            metadata[chn_id].append(
+                {
+                    "pdb_id": pdb_id,
+                    "database": database,
+                    "db_acc": db_acc,
+                    "db_id_code": db_id_code,
+                }
+            )
         # ENH: 'SEQADV' 'MODRES'
+
+    if empty:
+        raise ValueError("Empty file.")
 
     for chn_id, residues in sorted(chains.items()):
         record = SeqRecord(Seq("".join(residues), generic_protein))
@@ -191,13 +211,18 @@ def PdbSeqresIterator(handle):
         if chn_id in metadata:
             m = metadata[chn_id][0]
             record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = ("%s:%s %s" % (m["database"],
-                                                m["db_acc"],
-                                                m["db_id_code"]))
+            record.description = "%s:%s %s" % (
+                m["database"],
+                m["db_acc"],
+                m["db_id_code"],
+            )
             for melem in metadata[chn_id]:
-                record.dbxrefs.extend([
-                    "%s:%s" % (melem["database"], melem["db_acc"]),
-                    "%s:%s" % (melem["database"], melem["db_id_code"])])
+                record.dbxrefs.extend(
+                    [
+                        "%s:%s" % (melem["database"], melem["db_acc"]),
+                        "%s:%s" % (melem["database"], melem["db_id_code"]),
+                    ]
+                )
         else:
             record.id = chn_id
         yield record
@@ -252,21 +277,24 @@ def PdbAtomIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
 
-    # Deduce the PDB ID from the PDB header
-    # ENH: or filename?
     from Bio.File import UndoHandle
+
     undo_handle = UndoHandle(handle)
     firstline = undo_handle.peekline()
-
     # check if file is empty
-    if firstline == "":
+    if not firstline:
         raise ValueError("Empty file.")
 
+    # Deduce the PDB ID from the PDB header
+    # ENH: or filename?
     if firstline.startswith("HEADER"):
         pdb_id = firstline[62:66]
     else:
-        warnings.warn("First line is not a 'HEADER'; can't determine PDB ID. "
-                      "Line: %r" % firstline, BiopythonParserWarning)
+        warnings.warn(
+            "First line is not a 'HEADER'; can't determine PDB ID. "
+            "Line: %r" % firstline,
+            BiopythonParserWarning,
+        )
         pdb_id = "????"
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
@@ -282,19 +310,22 @@ def PdbAtomIterator(handle):
 # We can't be sure that we have the enum module in python 2.7, so
 # we will refer to the field names directly in the code.
 PDBX_POLY_SEQ_SCHEME_FIELDS = (
-    "_pdbx_poly_seq_scheme.asym_id",     # Chain ID
-    "_pdbx_poly_seq_scheme.mon_id")      # Residue type
+    "_pdbx_poly_seq_scheme.asym_id",  # Chain ID
+    "_pdbx_poly_seq_scheme.mon_id",  # Residue type
+)
 
 STRUCT_REF_FIELDS = (
-    "_struct_ref.id",                    # ID of this reference
-    "_struct_ref.db_name",               # Name of the database
-    "_struct_ref.db_code",               # Code for this entity
-    "_struct_ref.pdbx_db_accession")     # DB accession ID of ref
+    "_struct_ref.id",  # ID of this reference
+    "_struct_ref.db_name",  # Name of the database
+    "_struct_ref.db_code",  # Code for this entity
+    "_struct_ref.pdbx_db_accession",  # DB accession ID of ref
+)
 
 STRUCT_REF_SEQ_FIELDS = (
-    "_struct_ref_seq.ref_id",            # Pointer to _struct_ref
+    "_struct_ref_seq.ref_id",  # Pointer to _struct_ref
     "_struct_ref_seq.pdbx_PDB_id_code",  # PDB ID of this structure
-    "_struct_ref_seq.pdbx_strand_id")    # Chain ID of the reference
+    "_struct_ref_seq.pdbx_strand_id",  # Chain ID of the reference
+)
 
 
 def CifSeqresIterator(handle):
@@ -342,43 +373,56 @@ def CifSeqresIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
+    from Bio.File import UndoHandle
+    undo_handle = UndoHandle(handle)
+
+    # check if file is empty
+    if not undo_handle.peekline():
+        raise ValueError("Empty file.")
+
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
-    records = MMCIF2Dict(handle)
+    records = MMCIF2Dict(undo_handle)
 
     # Explicitly convert records to list (See #1533).
     # If an item is not present, use an empty list
     for field in (
-            PDBX_POLY_SEQ_SCHEME_FIELDS
-            + STRUCT_REF_SEQ_FIELDS
-            + STRUCT_REF_FIELDS):
+        PDBX_POLY_SEQ_SCHEME_FIELDS + STRUCT_REF_SEQ_FIELDS + STRUCT_REF_FIELDS
+    ):
         if field not in records:
             records[field] = []
         elif not isinstance(records[field], list):
             records[field] = [records[field]]
 
-    for asym_id, mon_id in zip(records["_pdbx_poly_seq_scheme.asym_id"],
-                               records["_pdbx_poly_seq_scheme.mon_id"]):
+    for asym_id, mon_id in zip(
+        records["_pdbx_poly_seq_scheme.asym_id"],
+        records["_pdbx_poly_seq_scheme.mon_id"],
+    ):
         mon_id_1l = seq1(mon_id, custom_map=protein_letters_3to1)
         chains[asym_id].append(mon_id_1l)
 
     # Build a dict of _struct_ref records, indexed by the id field:
     struct_refs = {}
-    for fields in zip(records["_struct_ref.id"],
-                      records["_struct_ref.db_name"],
-                      records["_struct_ref.db_code"],
-                      records["_struct_ref.pdbx_db_accession"]):
+    for fields in zip(
+        records["_struct_ref.id"],
+        records["_struct_ref.db_name"],
+        records["_struct_ref.db_code"],
+        records["_struct_ref.pdbx_db_accession"],
+    ):
         ref_id, db_name, db_code, db_acc = fields
         struct_refs[ref_id] = {
             "database": db_name,
             "db_id_code": db_code,
-            "db_acc": db_acc}
+            "db_acc": db_acc,
+        }
 
     # Look through _struct_ref_seq records, look up the corresponding
     # _struct_ref and add an entry to the metadata list for this chain.
-    for fields in zip(records["_struct_ref_seq.ref_id"],
-                      records["_struct_ref_seq.pdbx_PDB_id_code"],
-                      records["_struct_ref_seq.pdbx_strand_id"]):
+    for fields in zip(
+        records["_struct_ref_seq.ref_id"],
+        records["_struct_ref_seq.pdbx_PDB_id_code"],
+        records["_struct_ref_seq.pdbx_strand_id"],
+    ):
         ref_id, pdb_id, chain_id = fields
         struct_ref = struct_refs[ref_id]
 
@@ -392,13 +436,18 @@ def CifSeqresIterator(handle):
         if chn_id in metadata:
             m = metadata[chn_id][0]
             record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = ("%s:%s %s" % (m["database"],
-                                                m["db_acc"],
-                                                m["db_id_code"]))
+            record.description = "%s:%s %s" % (
+                m["database"],
+                m["db_acc"],
+                m["db_id_code"],
+            )
             for melem in metadata[chn_id]:
-                record.dbxrefs.extend([
-                    "%s:%s" % (melem["database"], melem["db_acc"]),
-                    "%s:%s" % (melem["database"], melem["db_id_code"])])
+                record.dbxrefs.extend(
+                    [
+                        "%s:%s" % (melem["database"], melem["db_acc"]),
+                        "%s:%s" % (melem["database"], melem["db_id_code"]),
+                    ]
+                )
         else:
             record.id = chn_id
         yield record
@@ -464,7 +513,7 @@ def CifAtomIterator(handle):
     shutil.copyfileobj(handle, buffer)
 
     # check if file is empty
-    if len(buffer.getvalue()) == 0:
+    if not buffer.getvalue():
         raise ValueError("Empty file.")
 
     buffer.seek(0)
@@ -474,8 +523,10 @@ def CifAtomIterator(handle):
         if isinstance(pdb_id, list):
             pdb_id = pdb_id[0]
     else:
-        warnings.warn("Could not find the '_entry.id' field; can't determine "
-                      "PDB ID.", BiopythonParserWarning)
+        warnings.warn(
+            "Could not find the '_entry.id' field; can't determine PDB ID.",
+            BiopythonParserWarning,
+        )
         pdb_id = "????"
 
     buffer.seek(0)
@@ -486,4 +537,5 @@ def CifAtomIterator(handle):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

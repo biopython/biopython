@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Class that maps (chain_id, residue_id) to a residue property."""
 
@@ -95,8 +97,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
-        AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                                     property_list)
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, property_list)
 
     def _translate_id(self, ent_id):
         """Return entity identifier on residue (PRIVATE)."""
@@ -111,8 +112,7 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
 
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
-        AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                                     property_list)
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, property_list)
 
     def _translate_id(self, ent_id):
         """Return entity identifier on atoms (PRIVATE)."""

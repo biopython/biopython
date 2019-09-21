@@ -768,6 +768,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 # Use the FIRST accession as the ID, not the first on this line!
                 self.data.id = self.data.annotations["accessions"][0]
 
+    def tsa(self, content):
+        self.data.annotations["tsa"] = content.split("-")
+
     def wgs(self, content):
         self.data.annotations["wgs"] = content.split("-")
 
@@ -1115,9 +1118,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             locs = []
             for part in location_line[i + 1:-1].split(","):
                 s, e = part.split("..")
-                locs.append(SeqFeature.FeatureLocation(int(s) - 1,
-                                                       int(e),
-                                                       strand))
+
+                try:
+                    locs.append(SeqFeature.FeatureLocation(int(s) - 1,
+                                                           int(e),
+                                                           strand))
+                except ValueError:
+                    # Could be non-integers, more likely bad origin wrapping
+
+                    # In the case of bad origin wrapping, _loc will return
+                    # a CompoundLocation. CompoundLocation.parts returns a
+                    # list of the FeatureLocation objects inside the
+                    # CompoundLocation.
+                    locs.extend(_loc(part,
+                                     self._expected_size,
+                                     strand,
+                                     self._seq_type.lower()).parts)
+
             if len(locs) < 2:
                 # The CompoundLocation will raise a ValueError here!
                 warnings.warn("Should have at least 2 parts for compound location",
@@ -1155,12 +1172,19 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 else:
                     part_strand = strand
                 try:
-                    loc = _loc(part, self._expected_size, part_strand)
+                    # There is likely a problem with origin wrapping.
+                    # Using _loc to return a CompoundLocation of the
+                    # wrapped feature and returning the two FeatureLocation
+                    # objects to extend to the list of feature locations.
+                    loc = _loc(part, self._expected_size, part_strand,
+                               seq_type=self._seq_type.lower()).parts
+
                 except ValueError as err:
                     print(location_line)
                     print(part)
                     raise err
-                locs.append(loc)
+                # loc will be a list of one or two FeatureLocation items.
+                locs.extend(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
             # (the exons for a CDS) all given a strand of -1.  Likewise, for
@@ -1347,6 +1371,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference = None
         self._cur_feature = None
         self._cur_qualifier = None
+
+    def tsa(self, content):
+        self.data.tsa = content.split("-")
 
     def wgs(self, content):
         self.data.wgs = content.split("-")

@@ -680,6 +680,28 @@ class TestRecordParser(unittest.TestCase):
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
 
+    def test_record_parser_tsa(self):
+        path = "GenBank/tsa_acropora.gb"
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+        length = 0
+        locus = "GHGH01000000"
+        definition = "TSA: Acropora millepora, transcriptome shotgun assembly"
+        accession = ["GHGH00000000"]
+        titles = ("Acropora millepora genome sequencing and assembly", "Direct Submission")
+        features = [
+            ("source", "1..126539", (
+                ("/organism=", '"Acropora millepora"'),
+                ("/mol_type=", '"transcribed RNA"'),
+                ("/db_xref=", '"taxon:45264"'),
+                ("/tissue_type=", '"late planula"'),
+                ("/country=", '"Australia: Queensland"'),
+                ("/collection_date=", '"2011"'),
+            ))
+        ]
+        self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
+
 
 class TestFeatureParser(unittest.TestCase):
 
@@ -3254,7 +3276,7 @@ class GenBankTests(unittest.TestCase):
             self.assertIn("It appears that '6801..100' is a feature "
                           "that spans the origin", str(cm.exception))
 
-    def test_implicit_orign_wrap_fix(self):
+    def test_001_implicit_orign_wrap_fix(self):
         """Attempt to fix implied origin wrapping."""
         path = "GenBank/bad_origin_wrap.gb"
         with warnings.catch_warnings():
@@ -3266,6 +3288,32 @@ class GenBankTests(unittest.TestCase):
                              "as it looks like incorrect origin wrapping. "
                              "Please fix input file, this could have "
                              "unintended behavior.")
+
+    def test_compound_complex_origin_wrap(self):
+        """Test the attempts to fix compound complex origin wrapping."""
+        from Bio.SeqFeature import CompoundLocation
+        path = "GenBank/bad_origin_wrap.gb"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            record = SeqIO.read(path, "genbank")
+
+            self.assertIsInstance(record.features[3].location,
+                                  CompoundLocation)
+            self.assertEqual(str(record.features[3].location),
+                             "join{[<5399:5600](+), [5699:6100](+), "
+                             "[6800:7000](+), [0:100](+)}")
+
+            self.assertIsInstance(record.features[4].location,
+                                  CompoundLocation)
+            self.assertEqual(str(record.features[4].location),
+                             "join{[5399:5600](+), [5699:6100](+), "
+                             "[<6800:7000](+), [0:100](+)}")
+
+            self.assertIsInstance(record.features[5].location,
+                                  CompoundLocation)
+            self.assertEqual(str(record.features[5].location),
+                             "join{[5399:5600](+), [5699:6100](+), "
+                             "[0:100](-), [<6800:7000](-)}")
 
     def test_implicit_orign_wrap_extract_and_translate(self):
         """Test that features wrapped around origin give expected data."""

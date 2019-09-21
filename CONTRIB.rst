@@ -66,6 +66,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
+- Chris MacRaild <https://github.com/macraild>
 - Chris Mitchell <https://github.com/chrismit>
 - Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
@@ -77,6 +78,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Connor McCoy <cmccoy at the dot org domain fhcrc>
 - Connor T. Skennerton <https://github.com/ctSkennerton>
 - Cymon J Cox <https://github.com/cymon>
+- Damien Goutte-Gattat <dgouttegattat at incenp dot org>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - Darcy Mason <https://github.com/darcymason>
 - David Cain <gmail, david joseph cain>
@@ -110,6 +112,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Gert Hulselmans <https://github.com/ghuls>
 - Gleb Kuznetsov <https://github.com/glebkuznetsov>
 - Gokcen Eraslan <https://github.com/gokceneraslan>
+- Harry Jubb <https://github.com/harryjubb>
 - Harry Zuzan <iliketobicycle at domain yahoo.ca>
 - Hector Martinez <https://github.com/hmarlo>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
@@ -153,6 +156,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
 - Kian Ho <https://github.com/kianho>
+- Kiran Mukhyala <https://github.com/mukhyala>
 - Konrad Förstner <https://github.com/konrad>
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
 - Konstantin Vdovkin <https://github.com/rtf_const>

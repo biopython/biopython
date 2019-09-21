@@ -67,8 +67,16 @@ class Feature(object):
 
     """
 
-    def __init__(self, parent=None, feature_id=None, feature=None,
-                 color=colors.lightgreen, label=0, border=None, colour=None):
+    def __init__(
+        self,
+        parent=None,
+        feature_id=None,
+        feature=None,
+        color=colors.lightgreen,
+        label=0,
+        border=None,
+        colour=None,
+    ):
         """Initialize.
 
         Arguments:
@@ -93,10 +101,10 @@ class Feature(object):
         # Initialize attributes
         self.parent = parent
         self.id = feature_id
-        self.color = color            # default color to draw the feature
+        self.color = color  # default color to draw the feature
         self.border = border
-        self._feature = None            # Bio.SeqFeature object to wrap
-        self.hide = 0                   # show by default
+        self._feature = None  # Bio.SeqFeature object to wrap
+        self.hide = 0  # show by default
         self.sigil = "BOX"
         self.arrowhead_length = 0.5  # 50% of the box height
         self.arrowshaft_height = 0.4  # 40% of the box height
@@ -129,17 +137,18 @@ class Feature(object):
             #    start, end = end, start
             self.locations.append((start, end))
             bounds += [start, end]
-        self.type = str(self._feature.type)                     # Feature type
+        self.type = str(self._feature.type)  # Feature type
         # TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
         if self._feature.strand is None:
             # This is the SeqFeature default (None), but the drawing code
             # only expects 0, +1 or -1.
             self.strand = 0
         else:
-            self.strand = int(self._feature.strand)                 # Feature strand
-        if "color" in self._feature.qualifiers:                # Artemis color (if present)
+            self.strand = int(self._feature.strand)  # Feature strand
+        if "color" in self._feature.qualifiers:  # Artemis color (if present)
             self.color = self._colortranslator.artemis_color(
-                                         self._feature.qualifiers["color"][0])
+                self._feature.qualifiers["color"][0]
+            )
         self.name = self.type
         for qualifier in self.name_qualifiers:
             if qualifier in self._feature.qualifiers:

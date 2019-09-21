@@ -11,10 +11,25 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.75
 ===============================================
 
-This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
-also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
+This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and is expected
+to work on the soon to be released Python 3.8. It has also been tested on
+PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
 Note we intend to drop Python 2.7 support in early 2020.
+
+The restriction enzyme list in Bio.Restriction has been updated to the August
+2019 release of REBASE.
+
+``Bio.SeqIO`` now supports reading and writing files in the native format of
+Christian Marck's DNA Strider program ("xdna" format, also used by Serial
+Cloner), as well as reading files in the native formats of GSL Biotech's
+SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
+
+The ``MMTFIO`` class is added that allows writing of MMTF file format files
+from a Biopython structure object. ``MMTFIO`` has a similar interface to
+``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write
+out a specified selection. This final addition to read/write support for
+PDB/mmCIF/MMTF in Biopython allows conversion between all three file formats.
 
 Values from mmCIF files are now read in as a list even when they consist of a
 single value. This change improves consistency and reduces the likelihood of
@@ -23,16 +38,40 @@ making an error, but will require user code to be updated accordingly.
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
+A new keyword parameter ``full_sequences`` was added to ``Bio.pairwise2``'s
+pretty print method ``format_alignment`` to restore the output of local
+alignments to the 'old' format (showing the whole sequences including the
+un-aligned parts instead of only showing the aligned parts).
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite, and there has been further work to follow the
+Python PEP8, PEP257 and best practice standard coding style. We have also
+started to use the ``black`` Python code formatting tool.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Chris MacRaild
 - Chris Rands
+- Damien Goutte-Gattat (first contribution)
+- Devang Thakkar
+- Harry Jubb
 - Joe Greener
+- Kiran Mukhyala (first contribution)
 - Konstantin Vdovkin
+- Markus Piotrowski
 - Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
+- Nick Negretti
 - Peter Cock
+- Peter Kerpedjiev
 - Sergio Valqui
+- Spencer Bliven
 
 
 16 July 2019: Biopython 1.74
@@ -92,6 +131,9 @@ releases. Class structure remains the same plus an additional attribute
 maximum number of tries and the sleep between them can be configured by
 changing ``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
 (The defaults are 3 tries and 15 seconds, respectively.)
+
+The restriction enzyme list in Bio.Restriction has been updated to the May
+2019 release of REBASE.
 
 All tests using the older print-and-compare approach have been replaced by
 unittests following Python's standard testing framework.

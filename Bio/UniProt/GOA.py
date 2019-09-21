@@ -31,40 +31,44 @@ from Bio._py3k import zip
 #
 # GAF version 2.0
 
-GAF20FIELDS = ["DB",
-               "DB_Object_ID",
-               "DB_Object_Symbol",
-               "Qualifier",
-               "GO_ID",
-               "DB:Reference",
-               "Evidence",
-               "With",
-               "Aspect",
-               "DB_Object_Name",
-               "Synonym",
-               "DB_Object_Type",
-               "Taxon_ID",
-               "Date",
-               "Assigned_By",
-               "Annotation_Extension",
-               "Gene_Product_Form_ID"]
+GAF20FIELDS = [
+    "DB",
+    "DB_Object_ID",
+    "DB_Object_Symbol",
+    "Qualifier",
+    "GO_ID",
+    "DB:Reference",
+    "Evidence",
+    "With",
+    "Aspect",
+    "DB_Object_Name",
+    "Synonym",
+    "DB_Object_Type",
+    "Taxon_ID",
+    "Date",
+    "Assigned_By",
+    "Annotation_Extension",
+    "Gene_Product_Form_ID",
+]
 
 # GAF version 1.0
-GAF10FIELDS = ["DB",
-               "DB_Object_ID",
-               "DB_Object_Symbol",
-               "Qualifier",
-               "GO_ID",
-               "DB:Reference",
-               "Evidence",
-               "With",
-               "Aspect",
-               "DB_Object_Name",
-               "Synonym",
-               "DB_Object_Type",
-               "Taxon_ID",
-               "Date",
-               "Assigned_By"]
+GAF10FIELDS = [
+    "DB",
+    "DB_Object_ID",
+    "DB_Object_Symbol",
+    "Qualifier",
+    "GO_ID",
+    "DB:Reference",
+    "Evidence",
+    "With",
+    "Aspect",
+    "DB_Object_Name",
+    "Synonym",
+    "DB_Object_Type",
+    "Taxon_ID",
+    "Date",
+    "Assigned_By",
+]
 
 # GPA version 1.0
 GPA10FIELDS = [
@@ -79,7 +83,8 @@ GPA10FIELDS = [
     "Date",
     "Assigned_by",
     "Annotation_Extension",
-    "Spliceform_ID"]
+    "Spliceform_ID",
+]
 
 # GPA version 1.1
 GPA11FIELDS = [
@@ -94,7 +99,8 @@ GPA11FIELDS = [
     "Date",
     "Assigned_by",
     "Annotation Extension",
-    "Annotation_Properties"]
+    "Annotation_Properties",
+]
 
 # GPI version 1.0
 GPI10FIELDS = [
@@ -108,7 +114,8 @@ GPI10FIELDS = [
     "Taxon",
     "Annotation_Target_Set",
     "Annotation_Completed",
-    "Parent_Object_ID"]
+    "Parent_Object_ID",
+]
 
 # GPI version 1.1
 GPI11FIELDS = [
@@ -120,7 +127,8 @@ GPI11FIELDS = [
     "Taxon",
     "Parent_Object_ID",
     "DB_Xref",
-    "Gene_Product_Properties"]
+    "Gene_Product_Properties",
+]
 
 
 def _gpi10iterator(handle):
@@ -441,7 +449,7 @@ def record_has(inrec, fieldvals):
             set1 = {inrec[field]}
         else:
             set1 = set(inrec[field])
-        if (set1 & fieldvals[field]):
+        if set1 & fieldvals[field]:
             retval = True
             break
     return retval
@@ -449,4 +457,5 @@ def record_has(inrec, fieldvals):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

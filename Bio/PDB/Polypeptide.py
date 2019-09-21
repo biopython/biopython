@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Polypeptide-related classes (construction and representation).
 
@@ -60,9 +62,28 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.vectors import calc_dihedral, calc_angle
 
 
-standard_aa_names = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS",
-                     "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
-                     "TRP", "TYR"]
+standard_aa_names = [
+    "ALA",
+    "CYS",
+    "ASP",
+    "GLU",
+    "PHE",
+    "GLY",
+    "HIS",
+    "ILE",
+    "LYS",
+    "LEU",
+    "MET",
+    "ASN",
+    "PRO",
+    "GLN",
+    "ARG",
+    "SER",
+    "THR",
+    "VAL",
+    "TRP",
+    "TYR",
+]
 
 
 aa1 = "ACDEFGHIKLMNPQRSTVWY"
@@ -324,8 +345,10 @@ class _PPBuilder(object):
             # It has an alpha carbon...
             # We probably need to update the hard coded list of
             # non-standard residues, see function is_aa for details.
-            warnings.warn("Assuming residue %s is an unknown modified "
-                          "amino acid" % residue.get_resname())
+            warnings.warn(
+                "Assuming residue %s is an unknown modified amino acid"
+                % residue.get_resname()
+            )
             return True
         else:
             # not a standard AA so skip
@@ -365,9 +388,11 @@ class _PPBuilder(object):
                 continue
             pp = None
             for next_res in chain_it:
-                if accept(prev_res, aa_only) \
-                        and accept(next_res, aa_only) \
-                        and is_connected(prev_res, next_res):
+                if (
+                    accept(prev_res, aa_only)
+                    and accept(next_res, aa_only)
+                    and is_connected(prev_res, next_res)
+                ):
                     if pp is None:
                         pp = Polypeptide()
                         pp.append(prev_res)

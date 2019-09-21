@@ -80,14 +80,14 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
             if line.strip() == "":
                 # It's a blank line, ignore it
                 continue
-            raise ValueError("Each line should have one tab separating the" +
-                             " title and sequence, this line has %i tabs: %r"
-                             % (line.count("\t"), line))
+            raise ValueError(
+                "Each line should have one tab separating the"
+                + " title and sequence, this line has %i tabs: %r"
+                % (line.count("\t"), line)
+            )
         title = title.strip()
         seq = seq.strip()  # removes the trailing new line
-        yield SeqRecord(Seq(seq, alphabet),
-                        id=title, name=title,
-                        description="")
+        yield SeqRecord(Seq(seq, alphabet), id=title, name=title, description="")
 
 
 class TabWriter(SequentialSequenceWriter):
@@ -124,4 +124,5 @@ def as_tab(record):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

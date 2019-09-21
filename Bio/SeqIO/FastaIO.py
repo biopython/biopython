@@ -106,23 +106,28 @@ def FastaTwoLineParser(handle):
     for idx, line in enumerate(handle):
         if idx % 2 == 0:  # title line
             if line[0] != ">":
-                raise ValueError("Expected FASTA record starting with '>' character. "
-                                 "Perhaps this file is using FASTA line wrapping? "
-                                 "Got: '{}'".format(line))
+                raise ValueError(
+                    "Expected FASTA record starting with '>' character. "
+                    "Perhaps this file is using FASTA line wrapping? "
+                    "Got: '{}'".format(line)
+                )
             title = line[1:].rstrip()
         else:  # sequence line
             if line[0] == ">":
-                raise ValueError("Two '>' FASTA lines in a row. Missing sequence line "
-                                 "if this is strict two-line-per-record FASTA format. "
-                                 "Have '>{}' and '{}'".format(title, line))
+                raise ValueError(
+                    "Two '>' FASTA lines in a row. Missing sequence line "
+                    "if this is strict two-line-per-record FASTA format. "
+                    "Have '>{}' and '{}'".format(title, line)
+                )
             yield title, line.strip()
 
     if idx == -1:
         pass  # empty file
     elif idx % 2 == 0:  # on a title line
-        raise ValueError("Missing sequence line at end of file "
-                         "if this is strict two-line-per-record FASTA format. "
-                         "Have title line '{}'".format(line))
+        raise ValueError(
+            "Missing sequence line at end of file if this is strict "
+            "two-line-per-record FASTA format. Have title line '{}'".format(line)
+        )
     else:
         assert line[0] != ">", "line[0] == '>' ; this should be impossible!"
 
@@ -170,8 +175,9 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     if title2ids:
         for title, sequence in SimpleFastaParser(handle):
             id, name, descr = title2ids(title)
-            yield SeqRecord(Seq(sequence, alphabet),
-                            id=id, name=name, description=descr)
+            yield SeqRecord(
+                Seq(sequence, alphabet), id=id, name=name, description=descr
+            )
     else:
         for title, sequence in SimpleFastaParser(handle):
             try:
@@ -180,8 +186,12 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
                 assert not title, repr(title)
                 # Should we use SeqRecord default for no ID?
                 first_word = ""
-            yield SeqRecord(Seq(sequence, alphabet),
-                            id=first_word, name=first_word, description=title)
+            yield SeqRecord(
+                Seq(sequence, alphabet),
+                id=first_word,
+                name=first_word,
+                description=title,
+            )
 
 
 def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
@@ -204,8 +214,9 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
             assert not title, repr(title)
             # Should we use SeqRecord default for no ID?
             first_word = ""
-        yield SeqRecord(Seq(sequence, alphabet),
-                        id=first_word, name=first_word, description=title)
+        yield SeqRecord(
+            Seq(sequence, alphabet), id=first_word, name=first_word, description=title
+        )
 
 
 class FastaWriter(SequentialSequenceWriter):
@@ -288,7 +299,7 @@ class FastaWriter(SequentialSequenceWriter):
 
         if self.wrap:
             for i in range(0, len(data), self.wrap):
-                self.handle.write(data[i:i + self.wrap] + "\n")
+                self.handle.write(data[i : i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
 
@@ -332,8 +343,9 @@ class FastaTwoLineWriter(FastaWriter):
             handle.close()
 
         """
-        super(FastaTwoLineWriter, self).__init__(handle, wrap=None,
-                                                 record2title=record2title)
+        super(FastaTwoLineWriter, self).__init__(
+            handle, wrap=None, record2title=record2title
+        )
 
 
 def as_fasta(record):
@@ -359,7 +371,7 @@ def as_fasta(record):
     assert "\n" not in data
     assert "\r" not in data
     for i in range(0, len(data), 60):
-        lines.append(data[i:i + 60] + "\n")
+        lines.append(data[i : i + 60] + "\n")
 
     return "".join(lines)
 
@@ -391,4 +403,5 @@ def as_fasta_2line(record):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

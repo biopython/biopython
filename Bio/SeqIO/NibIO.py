@@ -46,13 +46,15 @@ except AttributeError:
     # python 2
     hex2bytes = lambda s: s.decode("hex")  # noqa: E731
 
-if sys.version_info < (3, ):
+if sys.version_info < (3,):
     # python2
     import binascii
+
     bytes2hex = binascii.hexlify
 elif sys.version_info < (3, 5):
     # python 3.4
     import binascii
+
     bytes2hex = lambda b: binascii.hexlify(b).decode("ascii")  # noqa: E731
 else:
     # python 3.5 and later
@@ -61,12 +63,15 @@ else:
 try:
     int.from_bytes  # python3
 except AttributeError:
+
     def byte2int(b, byteorder):
         """Convert byte array to integer."""
         if byteorder == "little":
             return struct.unpack("<i", b)[0]
         elif byteorder == "big":
             return struct.unpack(">i", b)[0]
+
+
 else:
     # python 3
     byte2int = lambda b, byteorder: int.from_bytes(b, byteorder)  # noqa: E731
@@ -76,6 +81,7 @@ try:
     maketrans = str.maketrans  # python3
 except AttributeError:
     import string
+
     maketrans = string.maketrans
 
 
@@ -111,6 +117,11 @@ def NibIterator(handle, alphabet=None):
     if alphabet is not None:
         raise ValueError("Alphabets are ignored.")
     word = handle.read(4)
+
+    # check if file is empty
+    if not word:
+        raise ValueError("Empty file.")
+
     signature = bytes2hex(word)
     if signature == "3a3de96b":
         byteorder = "little"  # little-endian
@@ -184,4 +195,5 @@ class NibWriter(SequenceWriter):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

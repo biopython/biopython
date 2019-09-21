@@ -3,11 +3,32 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Represent the NDB Atlas structure (a minimal subset of PDB format).
+"""Represent the NDB Atlas structure (a minimal subset of PDB format) (OBSOLETE).
 
 Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
-is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
+is a minimal subset of the PDB format.  Hetero supports a 3 alphanumeric code.
 The NDB web interface is located at http://ndbserver.rutgers.edu
+
+Bio.Crystal.Hetero substitute is Bio.PDB.Atom
+Bio.Crystal.Chain substitute is Bio.PDB.Chain
+Bio.Crystal.Crystal substitute is Bio.PDB.Structure
+
+Using Bio.PDB you can navigate the data as below::
+
+    from Bio.PDB.PDBParser import PDBParser
+    parser = PDBParser(PERMISSIVE=1)
+    # PDB NDB Only file
+    structure = parser.get_structure("001", "001_msd.pbd")
+    for model in structure:
+        print('Model ',model)
+        for chain in model:
+            print('Chain ', chain)
+            for residue in chain:
+                print('Res ', residue)
+                for atom in residue:
+                    print('Atom ', atom)
+
+Bio.Crystal is self-contained, with the main functionality covered by Bio.PDB.
 """
 
 import copy
@@ -27,7 +48,7 @@ def wrap_line(line):
     """Add end of line at character eighty, to match PDB record standard."""
     output = ""
     for i in range(0, len(line), 80):
-        output += "%s\n" % line[i: i + 80]
+        output += "%s\n" % line[i : i + 80]
     return output
 
 
@@ -43,7 +64,7 @@ class Hetero(object):
     """Class to support the PDB hetero codes.
 
     Supports only the 3 alphanumeric code.
-    The annotation is available from http://xray.bmc.uu.se/hicup/
+    The annotation is available from http://xray.bmc.uu.se/hicup/xname.html
     """
 
     def __init__(self, data):
@@ -121,7 +142,9 @@ class Chain(object):
     def __eq__(self, other):
         if len(self.data) != len(other.data):
             return 0
-        ok = reduce(lambda x, y: x and y, map(lambda x, y: x == y, self.data, other.data))
+        ok = reduce(
+            lambda x, y: x and y, map(lambda x, y: x == y, self.data, other.data)
+        )
         return ok
 
     def __ne__(self, other):

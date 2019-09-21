@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Turn an mmCIF file into a dictionary."""
 
@@ -83,7 +85,9 @@ class MMCIF2Dict(dict):
                     quote_open_char = c
                     in_token = True
                     start_i = i + 1
-                elif c == quote_open_char and (i + 1 == len(line) or line[i + 1] in self.whitespace_chars):
+                elif c == quote_open_char and (
+                    i + 1 == len(line) or line[i + 1] in self.whitespace_chars
+                ):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]

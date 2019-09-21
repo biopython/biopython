@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Atom class, used in Structure objects."""
 
@@ -24,8 +26,17 @@ class Atom(object):
     B factor and positions.
     """
 
-    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
-                 element=None):
+    def __init__(
+        self,
+        name,
+        coord,
+        bfactor,
+        occupancy,
+        altloc,
+        fullname,
+        serial_number,
+        element=None,
+    ):
         """Initialize Atom object.
 
         :param name: atom name (eg. "CA"). Note that spaces are normally stripped.
@@ -179,12 +190,17 @@ class Atom(object):
                     putative_element = self.name[0]
 
             if putative_element.capitalize() in IUPACData.atom_weights:
-                msg = "Used element %r for Atom (name=%s) with given element %r" \
-                      % (putative_element, self.name, element)
+                msg = "Used element %r for Atom (name=%s) with given element %r" % (
+                    putative_element,
+                    self.name,
+                    element,
+                )
                 element = putative_element
             else:
-                msg = "Could not assign element %r for Atom (name=%s) with given element %r" \
-                      % (putative_element, self.name, element)
+                msg = (
+                    "Could not assign element %r for Atom (name=%s) with given element %r"
+                    % (putative_element, self.name, element)
+                )
                 element = ""
             warnings.warn(msg, PDBConstructionWarning)
 

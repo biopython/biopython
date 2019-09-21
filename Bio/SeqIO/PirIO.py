@@ -89,23 +89,28 @@ Sequence codes and their meanings:
 
 from __future__ import print_function
 
-from Bio.Alphabet import single_letter_alphabet, generic_protein, \
-    generic_dna, generic_rna
+from Bio.Alphabet import (
+    single_letter_alphabet,
+    generic_protein,
+    generic_dna,
+    generic_rna,
+)
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
 
-_pir_alphabets = {"P1": generic_protein,
-                  "F1": generic_protein,
-                  "D1": generic_dna,
-                  "DL": generic_dna,
-                  "DC": generic_dna,
-                  "RL": generic_rna,
-                  "RC": generic_rna,
-                  "N3": generic_rna,
-                  "XX": single_letter_alphabet,
-                  }
+_pir_alphabets = {
+    "P1": generic_protein,
+    "F1": generic_protein,
+    "D1": generic_dna,
+    "DL": generic_dna,
+    "DC": generic_dna,
+    "RL": generic_rna,
+    "RC": generic_rna,
+    "N3": generic_rna,
+    "XX": single_letter_alphabet,
+}
 
 
 def PirIterator(handle):
@@ -146,13 +151,12 @@ def PirIterator(handle):
 
     while True:
         if line[0] != ">":
-            raise ValueError(
-                "Records in PIR files should start with '>' character")
+            raise ValueError("Records in PIR files should start with '>' character")
         pir_type = line[1:3]
         if pir_type not in _pir_alphabets or line[3] != ";":
             raise ValueError(
-                "Records should start with '>XX;' "
-                "where XX is a valid sequence type")
+                "Records should start with '>XX;' where XX is a valid sequence type"
+            )
         identifier = line[4:].strip()
         description = handle.readline().strip()
 
@@ -170,13 +174,15 @@ def PirIterator(handle):
         if seq[-1] != "*":
             # Note the * terminator is present on nucleotide sequences too,
             # it is not a stop codon!
-            raise ValueError(
-                "Sequences in PIR files should include a * terminator!")
+            raise ValueError("Sequences in PIR files should include a * terminator!")
 
         # Return the record and then continue...
-        record = SeqRecord(Seq(seq[:-1], _pir_alphabets[pir_type]),
-                           id=identifier, name=identifier,
-                           description=description)
+        record = SeqRecord(
+            Seq(seq[:-1], _pir_alphabets[pir_type]),
+            id=identifier,
+            name=identifier,
+            description=description,
+        )
         record.annotations["PIR-type"] = pir_type
         yield record
 
@@ -265,8 +271,9 @@ class PirWriter(SequentialSequenceWriter):
                 code = "XX"
 
         if code not in _pir_alphabets:
-            raise TypeError("Sequence code must be one of " +
-                            _pir_alphabets.keys() + ".")
+            raise TypeError(
+                "Sequence code must be one of " + _pir_alphabets.keys() + "."
+            )
         assert "\n" not in title
         assert "\r" not in description
 
@@ -280,7 +287,7 @@ class PirWriter(SequentialSequenceWriter):
         if self.wrap:
             line = ""
             for i in range(0, len(data), self.wrap):
-                line += data[i:i + self.wrap] + "\n"
+                line += data[i : i + self.wrap] + "\n"
             line = line[:-1] + "*\n"
             self.handle.write(line)
         else:
@@ -289,4 +296,5 @@ class PirWriter(SequentialSequenceWriter):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

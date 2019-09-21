@@ -6,8 +6,10 @@
 #             D2## - Whitespace Issues
 #             D4## - Docstring Content issues
 # flake8-bugbear: B###
+# flake8-quotes: Q###
 # flake8-commas: C#### (in case installed locally)
 # flake8-black : BLK### (in case installed locally)
+# flake8-pie : PIE### (in case installed locally)
 # =================================================
 [flake8]
 doctests = True
@@ -27,6 +29,9 @@ ignore =
     # ===========================================
     E123, # closing bracket does not match indentation of opening bracket's line
           # TODO? (main/Bio/Tests: 3/91/31 occurrences)
+    E203, # whitespace before ':'
+          # gives false positives after running black, see
+          # https://github.com/PyCQA/pycodestyle/issues/373
     E501, # line too long
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
     W504, # line break after binary operator (Bio/Tests/Scripts: 225/119/7) TODO?
@@ -79,7 +84,7 @@ per-file-ignores =
 #             instead callers should raise AssertionError()
 #        C812 missing trailing comma
 
-# =====================
-# flake-quote settings:
-# =====================
+# =======================
+# flake8-quotes settings:
+# =======================
 inline-quotes = double

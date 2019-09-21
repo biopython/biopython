@@ -5,43 +5,44 @@
 #include "cluster.h"
 
 
-/* ========================================================================== */
-/* -- Helper routines ------------------------------------------------------- */
-/* ========================================================================== */
+/* ========================================================================= */
+/* -- Helper routines ------------------------------------------------------ */
+/* ========================================================================= */
 
 #if PY_MAJOR_VERSION < 3
 static char
 extract_single_character(PyObject* object, const char variable[],
                          const char allowed[])
-{   char c = '\0';
+{
+    char c = '\0';
     const char* data;
     Py_ssize_t n;
-    if (PyString_Check(object))
-    {   n = PyString_GET_SIZE(object);
-        if (n==1) {
+    if (PyString_Check(object)) {
+        n = PyString_GET_SIZE(object);
+        if (n == 1) {
             data = PyString_AS_STRING(object);
             c = data[0];
         }
     }
-    else if (PyUnicode_Check(object))
-    {   n = PyUnicode_GET_SIZE(object);
-        if (n==1) {
+    else if (PyUnicode_Check(object)) {
+        n = PyUnicode_GET_SIZE(object);
+        if (n == 1) {
             Py_UNICODE* u = PyUnicode_AS_UNICODE(object);
             Py_UNICODE ch = u[0];
             if (ch < 128) c = (char) ch;
         }
     }
-    else
-    {   PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
+    else {
+        PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
         return 0;
     }
-    if (!c)
-    {   PyErr_Format(PyExc_ValueError,
+    if (!c) {
+        PyErr_Format(PyExc_ValueError,
                      "%s should be a single character", variable);
         return 0;
     }
-    else if (!strchr(allowed, c))
-    {   PyErr_Format(PyExc_ValueError,
+    else if (!strchr(allowed, c)) {
+        PyErr_Format(PyExc_ValueError,
                      "unknown %s function specified (should be one of '%s')",
                      variable, allowed);
         return 0;
@@ -52,22 +53,23 @@ extract_single_character(PyObject* object, const char variable[],
 static char
 extract_single_character(PyObject* object, const char variable[],
                          const char allowed[])
-{   Py_UCS4 ch;
+{
+    Py_UCS4 ch;
     Py_ssize_t n;
-    if (!PyUnicode_Check(object))
-    {   PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
+    if (!PyUnicode_Check(object)) {
+        PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
         return 0;
     }
-    if (PyUnicode_READY(object)==-1) return 0;
+    if (PyUnicode_READY(object) == -1) return 0;
     n = PyUnicode_GET_LENGTH(object);
-    if (n!=1)
-    {   PyErr_Format(PyExc_ValueError,
+    if (n != 1) {
+        PyErr_Format(PyExc_ValueError,
                      "%s should be a single character", variable);
         return 0;
     }
     ch = PyUnicode_READ_CHAR(object, 0);
-    if (ch < 128)
-    {   const char c = ch;
+    if (ch < 128) {
+        const char c = ch;
         if (strchr(allowed, c)) return c;
     }
     PyErr_Format(PyExc_ValueError,
@@ -79,41 +81,49 @@ extract_single_character(PyObject* object, const char variable[],
 
 static int
 distance_converter(PyObject* object, void* pointer)
-{ char c;
-  c = extract_single_character(object, "dist", "ebcauxsk");
-  if (c==0) return 0;
-  *((char*)pointer) = c;
-  return 1;
+{
+    char c;
+
+    c = extract_single_character(object, "dist", "ebcauxsk");
+    if (c == 0) return 0;
+    *((char*)pointer) = c;
+    return 1;
 }
 
 static int
 method_treecluster_converter(PyObject* object, void* pointer)
-{ char c;
-  c = extract_single_character(object, "method", "csma");
-  if (c==0) return 0;
-  *((char*)pointer) = c;
-  return 1;
+{
+    char c;
+
+    c = extract_single_character(object, "method", "csma");
+    if (c == 0) return 0;
+    *((char*)pointer) = c;
+    return 1;
 }
 
 static int
 method_kcluster_converter(PyObject* object, void* pointer)
-{ char c;
-  c = extract_single_character(object, "method", "am");
-  if (c==0) return 0;
-  *((char*)pointer) = c;
-  return 1;
+{
+    char c;
+
+    c = extract_single_character(object, "method", "am");
+    if (c == 0) return 0;
+    *((char*)pointer) = c;
+    return 1;
 }
 
 static int
 method_clusterdistance_converter(PyObject* object, void* pointer)
-{ char c;
-  c = extract_single_character(object, "method", "amsxv");
-  if (c==0) return 0;
-  *((char*)pointer) = c;
-  return 1;
+{
+    char c;
+
+    c = extract_single_character(object, "method", "amsxv");
+    if (c == 0) return 0;
+    *((char*)pointer) = c;
+    return 1;
 }
 
-/* -- data ------------------------------------------------------------------ */
+/* -- data ----------------------------------------------------------------- */
 
 typedef struct {
     int nrows;
@@ -176,7 +186,8 @@ data_converter(PyObject* object, void* pointer)
         PyErr_NoMemory();
         return 0;
     }
-    for (i=0, p = view->buf; i < nrows; i++, p+=stride) values[i] = (double*)p;
+    for (i = 0, p = view->buf; i < nrows; i++, p += stride)
+        values[i] = (double*)p;
     data->values = values;
     data->nrows = nrows;
     data->ncols = ncols;
@@ -184,14 +195,16 @@ data_converter(PyObject* object, void* pointer)
 }
 
 static void
-free_data(Data* data) {
+free_data(Data* data)
+{
     double** values = data->values;
     Py_buffer* view = &data->view;
+
     PyBuffer_Release(view);
     if (values) free(values);
 }
 
-/* -- mask ------------------------------------------------------------------ */
+/* -- mask ----------------------------------------------------------------- */
 
 typedef struct {
     int** values;
@@ -245,7 +258,8 @@ mask_converter(PyObject* object, void* pointer)
         PyErr_NoMemory();
         return 0;
     }
-    for (i=0, p = view->buf; i < nrows; i++, p+=stride) values[i] = (int*)p;
+    for (i = 0, p = view->buf; i < nrows; i++, p += stride)
+        values[i] = (int*)p;
     mask->values = values;
     return 1;
 }
@@ -254,11 +268,12 @@ static void
 free_mask(Mask* mask) {
     int** values = mask->values;
     Py_buffer* view = &mask->view;
+
     PyBuffer_Release(view);
     if (values) free(values);
 }
 
-/* -- 1d array -------------------------------------------------------------- */
+/* -- 1d array ------------------------------------------------------------- */
 
 static int
 vector_converter(PyObject* object, void* pointer)
@@ -296,14 +311,16 @@ vector_none_converter(PyObject* object, void* pointer)
     return vector_converter(object, pointer);
 }
 
-/* -- clusterid ------------------------------------------------------------- */
+/* -- clusterid ------------------------------------------------------------ */
 
-static int check_clusterid(Py_buffer clusterid) {
+static int
+check_clusterid(Py_buffer clusterid) {
     int i, j;
     int *p = clusterid.buf;
     int nclusters = 0;
     int* number;
     const int nitems = (int) clusterid.shape[0];
+
     if (nitems != clusterid.shape[0]) {
         PyErr_Format(PyExc_ValueError,
                      "clusterid array is too large (size = %zd)",
@@ -329,7 +346,7 @@ static int check_clusterid(Py_buffer clusterid) {
         j = p[i];
         number[j]++;
     }
-    for (j = 0; j < nclusters; j++) if(number[j]==0) break;
+    for (j = 0; j < nclusters; j++) if (number[j] == 0) break;
     free(number);
     if (j < nclusters) {
         PyErr_Format(PyExc_ValueError, "cluster %d is empty", j);
@@ -348,13 +365,15 @@ typedef struct {
 } Distancematrix;
 
 static int
-_convert_list_to_distancematrix(PyObject* list, Distancematrix* distances) {
+_convert_list_to_distancematrix(PyObject* list, Distancematrix* distances)
+{
     int i;
     double** values;
     Py_buffer* view;
     Py_buffer* views;
     const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
-    const int n = (int) PyList_GET_SIZE(list);   
+    const int n = (int) PyList_GET_SIZE(list);
+
     if (n != PyList_GET_SIZE(list)) {
         PyErr_SetString(PyExc_ValueError, "distance matrix is too large");
         return 0;
@@ -410,13 +429,15 @@ _convert_list_to_distancematrix(PyObject* list, Distancematrix* distances) {
 }
 
 static int
-_convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
+_convert_array_to_distancematrix(PyObject* array, Distancematrix* distances)
+{
     int i;
     int n;
     double** values;
     double* p;
     Py_buffer* view = &distances->view;
     const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
+
     if (PyObject_GetBuffer(array, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError,
                         "distance matrix has unexpected format.");
@@ -489,6 +510,7 @@ static int
 distancematrix_converter(PyObject* argument, void* pointer)
 {
     Distancematrix* distances = pointer;
+
     if (argument == Py_None) return 1;
     if (PyList_Check(argument)) {
         return _convert_list_to_distancematrix(argument, distances);
@@ -502,6 +524,7 @@ static void
 free_distancematrix(Distancematrix* distances)
 {
     double** values = distances->values;
+
     if (values == NULL) return;
     else {
         int i;
@@ -511,13 +534,13 @@ free_distancematrix(Distancematrix* distances)
             for (i = 0; i < n; i++) PyBuffer_Release(&views[i]);
             free(views);
         }
-        else 
+        else
             PyBuffer_Release(&distances->view);
         free(values);
     }
 }
 
-/* -- celldata -------------------------------------------------------------- */
+/* -- celldata ------------------------------------------------------------- */
 
 typedef struct {
     int nx;
@@ -540,6 +563,7 @@ celldata_converter(PyObject* argument, void* pointer)
     Celldata* celldata = pointer;
     Py_buffer* view = &celldata->view;
     const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
+
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError,
                         "celldata array has unexpected format.");
@@ -581,13 +605,14 @@ static void
 free_celldata(Celldata* celldata)
 {
     double*** ppp = celldata->values;
+
     if (!ppp) return;
     free(ppp[0]);
     free(ppp);
     PyBuffer_Release(&celldata->view);
 }
 
-/* -- index ----------------------------------------------------------------- */
+/* -- index ---------------------------------------------------------------- */
 
 static int
 index_converter(PyObject* argument, void* pointer)
@@ -657,9 +682,9 @@ index2d_converter(PyObject* argument, void* pointer)
     return 1;
 }
 
-/* ========================================================================== */
-/* -- Classes --------------------------------------------------------------- */
-/* ========================================================================== */
+/* ========================================================================= */
+/* -- Classes -------------------------------------------------------------- */
+/* ========================================================================= */
 
 typedef struct {
     PyObject_HEAD
@@ -686,6 +711,7 @@ static PyObject*
 PyNode_repr(PyNode* self)
 {
     char string[64];
+
     sprintf(string, "(%d, %d): %g",
                    self->node.left, self->node.right, self->node.distance);
 #if PY_MAJOR_VERSION >= 3
@@ -702,6 +728,7 @@ static PyObject*
 PyNode_getleft(PyNode* self, void* closure)
 {
     int left = self->node.left;
+
 #if PY_MAJOR_VERSION >= 3
     return PyLong_FromLong((long)left);
 #else
@@ -713,6 +740,7 @@ static int
 PyNode_setleft(PyNode* self, PyObject* value, void* closure)
 {
     long left = PyLong_AsLong(value);
+
     if (PyErr_Occurred()) return -1;
     self->node.left = (int) left;
     return 0;
@@ -725,6 +753,7 @@ static PyObject*
 PyNode_getright(PyNode* self, void* closure)
 {
     int right = self->node.right;
+
 #if PY_MAJOR_VERSION >= 3
     return PyLong_FromLong((long)right);
 #else
@@ -736,6 +765,7 @@ static int
 PyNode_setright(PyNode* self, PyObject* value, void* closure)
 {
     long right = PyLong_AsLong(value);
+
     if (PyErr_Occurred()) return -1;
     self->node.right = (int) right;
     return 0;
@@ -751,6 +781,7 @@ static int
 PyNode_setdistance(PyNode* self, PyObject* value, void* closure)
 {
     const double distance = PyFloat_AsDouble(value);
+
     if (PyErr_Occurred()) return -1;
     self->node.distance = distance;
     return 0;
@@ -906,17 +937,17 @@ PyTree_new(PyTypeObject *type, PyObject* args, PyObject* kwds)
         j = nodes[i].left;
         if (j < 0) {
             j = -j-1;
-            if (j>=i) break;
+            if (j >= i) break;
         }
-        else j+=n;
+        else j += n;
         if (flag[j]) break;
         flag[j] = 1;
         j = nodes[i].right;
         if (j < 0) {
           j = -j-1;
-          if (j>=i) break;
+          if (j >= i) break;
         }
-        else j+=n;
+        else j += n;
         if (flag[j]) break;
         flag[j] = 1;
     }
@@ -944,6 +975,7 @@ PyTree_str(PyTree* self)
     PyObject* output;
 #if PY_MAJOR_VERSION >= 3
     PyObject* temp;
+
     output = PyUnicode_FromString("");
 #else
     output = PyString_FromString("");
@@ -957,7 +989,7 @@ PyTree_str(PyTree* self)
 #else
         line = PyString_FromString(string);
 #endif
-        if(!line) {
+        if (!line) {
             Py_DECREF(output);
             return NULL;
         }
@@ -971,7 +1003,7 @@ PyTree_str(PyTree* self)
         output = temp;
 #else
         PyString_ConcatAndDel(&output, line);
-        if(!output) {
+        if (!output) {
             Py_DECREF(line);
             return NULL;
         }
@@ -1010,9 +1042,11 @@ PyTree_subscript(PyTree* self, PyObject* item)
         Py_ssize_t i, j;
         Py_ssize_t start, stop, step, slicelength;
 #if PY_MAJOR_VERSION < 3
-        if (PySlice_GetIndicesEx((PySliceObject*)item, self->n, &start, &stop, &step, &slicelength) == -1) return NULL;
+        if (PySlice_GetIndicesEx((PySliceObject*)item, self->n, &start, &stop,
+                                 &step, &slicelength) == -1) return NULL;
 #else
-        if (PySlice_GetIndicesEx(item, self->n, &start, &stop, &step, &slicelength) == -1) return NULL;
+        if (PySlice_GetIndicesEx(item, self->n, &start, &stop, &step,
+                                 &slicelength) == -1) return NULL;
 #endif
         if (slicelength == 0) return PyList_New(0);
         else {
@@ -1051,16 +1085,18 @@ static char PyTree_scale__doc__[] =
 "and zero.\n";
 
 static PyObject*
-PyTree_scale(PyTree* self) {
+PyTree_scale(PyTree* self)
+{
     int i;
     const int n = self->n;
     Node* nodes = self->nodes;
     double maximum = DBL_MIN;
+
     for (i = 0; i < n; i++) {
         double distance = nodes[i].distance;
         if (distance > maximum) maximum = distance;
     }
-    if (maximum!=0.0)
+    if (maximum != 0.0)
         for (i = 0; i < n; i++) nodes[i].distance /= maximum;
     Py_INCREF(Py_None);
     return Py_None;
@@ -1080,9 +1116,9 @@ PyTree_cut(PyTree* self, PyObject* args)
     int nclusters;
     const int n = self->n + 1;
     Py_buffer indices = {0};
+
     if (!PyArg_ParseTuple(args, "O&i",
-                          index_converter, &indices,
-                          &nclusters)) goto exit;
+                          index_converter, &indices, &nclusters)) goto exit;
     if (nclusters < 1) {
         PyErr_SetString(PyExc_ValueError,
                         "requested number of clusters should be positive");
@@ -1125,13 +1161,14 @@ PyTree_sort(PyTree* self, PyObject* args)
     Py_buffer indices = {0};
     const int n = self->n;
     Py_buffer order = {0};
+
     if (n == 0) {
         PyErr_SetString(PyExc_ValueError, "tree is empty");
         return NULL;
     }
-    if(!PyArg_ParseTuple(args, "O&O&",
-                         index_converter, &indices,
-                         vector_converter, &order)) goto exit;
+    if (!PyArg_ParseTuple(args, "O&O&",
+                          index_converter, &indices,
+                          vector_converter, &order)) goto exit;
     if (indices.shape[0] != n + 1) {
         PyErr_SetString(PyExc_RuntimeError,
                         "indices array inconsistent with tree");
@@ -1203,9 +1240,9 @@ static PyTypeObject PyTreeType = {
     (newfunc)PyTree_new,         /* tp_new */
 };
 
-/* ========================================================================== */
-/* -- Methods --------------------------------------------------------------- */
-/* ========================================================================== */
+/* ========================================================================= */
+/* -- Methods -------------------------------------------------------------- */
+/* ========================================================================= */
 
 /* version */
 static char version__doc__[] =
@@ -1217,9 +1254,9 @@ static PyObject*
 py_version(PyObject* self)
 {
 #if PY_MAJOR_VERSION >= 3
-  return PyUnicode_FromString( CLUSTERVERSION );
+    return PyUnicode_FromString( CLUSTERVERSION );
 #else
-  return PyString_FromString( CLUSTERVERSION );
+    return PyString_FromString( CLUSTERVERSION );
 #endif
 }
 
@@ -1301,16 +1338,17 @@ py_kcluster(PyObject* self, PyObject* args, PyObject* keywords)
                              "dist",
                              "clusterid",
                               NULL};
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&iO&O&iiO&O&O&", kwlist,
-                                    data_converter, &data,
-                                    &nclusters,
-                                    mask_converter, &mask,
-                                    vector_converter, &weight,
-                                    &transpose,
-                                    &npass,
-                                    method_kcluster_converter, &method,
-                                    distance_converter, &dist,
-                                    index_converter, &clusterid)) goto exit;
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&iO&O&iiO&O&O&", kwlist,
+                                     data_converter, &data,
+                                     &nclusters,
+                                     mask_converter, &mask,
+                                     vector_converter, &weight,
+                                     &transpose,
+                                     &npass,
+                                     method_kcluster_converter, &method,
+                                     distance_converter, &dist,
+                                     index_converter, &clusterid)) goto exit;
     if (!data.values) {
         PyErr_SetString(PyExc_RuntimeError, "data is None");
         goto exit;
@@ -1351,7 +1389,7 @@ py_kcluster(PyObject* self, PyObject* args, PyObject* keywords)
     }
     else if (npass == 0) {
         int n = check_clusterid(clusterid);
-        if (n==0) goto exit;
+        if (n == 0) goto exit;
         if (n != nclusters) {
             PyErr_SetString(PyExc_RuntimeError,
                             "more clusters requested than found in clusterid");
@@ -1446,11 +1484,12 @@ py_kmedoids(PyObject* self, PyObject* args, PyObject* keywords)
                              "npass",
                              "clusterid",
                               NULL};
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&iiO&", kwlist,
-                                    distancematrix_converter, &distances,
-                                    &nclusters,
-                                    &npass,
-                                    index_converter, &clusterid)) goto exit;
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&iiO&", kwlist,
+                                     distancematrix_converter, &distances,
+                                     &nclusters,
+                                     &npass,
+                                     index_converter, &clusterid)) goto exit;
     if (npass < 0) {
         PyErr_SetString(PyExc_RuntimeError, "expected a non-negative integer");
         goto exit;
@@ -1582,8 +1621,8 @@ static char treecluster__doc__[] =
 "solution is calculated from the distance matrix.\n"
 "Pairwise centroid-linkage clustering can be calculated only from the data\n"
 "and not from the distance matrix.\n"
-"Pairwise single-, maximum-, and average-linkage clustering can be calculated\n"
-"from either the data or from the distance matrix.\n";
+"Pairwise single-, maximum-, and average-linkage clustering can be\n"
+"calculated from either the data or from the distance matrix.\n";
 
 static PyObject*
 py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
@@ -1608,6 +1647,7 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
                              "dist",
                              "distancematrix",
                               NULL };
+
     if (!PyArg_ParseTupleAndKeywords(args, keywords, "O!O&O&O&iO&O&O&", kwlist,
                                      &PyTreeType, &tree,
                                      data_converter, &data,
@@ -1623,19 +1663,18 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
         PyErr_SetString(PyExc_RuntimeError, "expected an empty tree");
         goto exit;
     }
-    if (data.values!=NULL && distances.values!=NULL) {
+    if (data.values != NULL && distances.values != NULL) {
         PyErr_SetString(PyExc_ValueError,
             "use either data or distancematrix, do not use both");
         goto exit;
     }
-    if (data.values==NULL && distances.values==NULL) {
+    if (data.values == NULL && distances.values == NULL) {
         PyErr_SetString(PyExc_ValueError,
                         "neither data nor distancematrix was given");
-        goto exit; 
+        goto exit;
     }
 
-    if (data.values) /* use the values in data, not the distance matrix */
-    {
+    if (data.values) /* use the values in data, not the distance matrix */ {
         int nrows;
         int ncols;
         int ndata;
@@ -1678,7 +1717,9 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
     }
     else { /* use the distance matrix instead of the values in data */
         if (!strchr("sma", method)) {
-            PyErr_SetString(PyExc_ValueError, "argument method should be 's', 'm', or 'a' when specifying the distance matrix");
+            PyErr_SetString(PyExc_ValueError,
+                            "argument method should be 's', 'm', or 'a' "
+                            "when specifying the distance matrix");
             goto exit;
         }
         nitems = distances.n;
@@ -1693,7 +1734,7 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
                             distances.values);
     }
 
-    if(!nodes) {
+    if (!nodes) {
         PyErr_NoMemory();
         goto exit;
     }
@@ -1736,7 +1777,7 @@ static char somcluster__doc__[] =
 " - data: nrows x ncols array containing the data to be clustered.\n"
 "\n"
 " - mask: nrows x ncols array of integers, showing which data are\n"
-"   missing. If mask[i,j]==0, then data[i,j] is missing.\n"
+"   missing. If mask[i,j] == 0, then data[i,j] is missing.\n"
 "\n"
 " - weight: the weights to be used when calculating distances\n"
 "\n"
@@ -1787,6 +1828,7 @@ py_somcluster(PyObject* self, PyObject* args, PyObject* keywords)
                              "niter",
                              "dist",
                              NULL};
+
     if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&O&O&idiO&", kwlist,
                                      index2d_converter, &indices,
                                      celldata_converter, &celldata,
@@ -1866,7 +1908,7 @@ static char clusterdistance__doc__[] =
 " - data: nrows x ncols array containing the data values.\n"
 "\n"
 " - mask: nrows x ncols array of integers, showing which data are\n"
-"   missing. If mask[i,j]==0, then data[i,j] is missing.\n"
+"   missing. If mask[i,j] == 0, then data[i,j] is missing.\n"
 "\n"
 " - weight: the weights to be used when calculating distances\n"
 "\n"
@@ -2005,7 +2047,7 @@ static char clustercentroids__doc__[] =
 " - data: nrows x ncols array containing the data values.\n"
 "\n"
 " - mask: nrows x ncols array of integers, showing which data are\n"
-"   missing. If mask[i,j]==0, then data[i,j] is missing.\n"
+"   missing. If mask[i,j] == 0, then data[i,j] is missing.\n"
 "\n"
 " - clusterid: array containing the cluster number for each item.\n"
 "   The cluster number should be non-negative.\n"
@@ -2031,7 +2073,6 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
 {
     int nrows;
     int ncols;
-    int nitems;
     int nclusters;
     Data data = {0};
     Mask mask = {0};
@@ -2050,14 +2091,15 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
                              "cdata",
                              "cmask",
                               NULL };
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&O&O&ci", kwlist,
-                                    data_converter, &data,
-                                    mask_converter, &mask,
-                                    index_converter, &clusterid,
-                                    &method,
-                                    &transpose,
-                                    data_converter, &cdata,
-                                    mask_converter, &cmask)) goto exit;
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&O&iO&O&", kwlist,
+                                     data_converter, &data,
+                                     mask_converter, &mask,
+                                     index_converter, &clusterid,
+                                     method_kcluster_converter, &method,
+                                     &transpose,
+                                     data_converter, &cdata,
+                                     mask_converter, &cmask)) goto exit;
     if (!data.values) {
         PyErr_SetString(PyExc_RuntimeError, "data is None");
         goto exit;
@@ -2074,18 +2116,37 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
             mask.view.shape[0], mask.view.shape[1], data.nrows, data.ncols);
         goto exit;
     }
-    nitems = transpose ? ncols : nrows;
     nclusters = check_clusterid(clusterid);
     if (nclusters == 0) goto exit;
-    if (cdata.nrows != nitems) {
+    if (transpose == 0) nrows = nclusters;
+    else ncols = nclusters;
+    if (cdata.nrows != nrows) {
         PyErr_Format(PyExc_RuntimeError,
                      "cdata has incorrect number of rows (%d, expected %d)",
-                     cdata.nrows, nitems);
+                     cdata.nrows, nrows);
+        goto exit;
+    }
+    if (cdata.ncols != ncols) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "cdata has incorrect number of columns (%d, expected %d)",
+                     cdata.ncols, ncols);
+        goto exit;
+    }
+    if (cmask.view.shape[0] != nrows) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "cmask has incorrect number of rows (%zd, expected %d)",
+                     cmask.view.shape[0], nrows);
+        goto exit;
+    }
+    if (cmask.view.shape[1] != ncols) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "cmask has incorrect number of columns "
+                     "(%zd, expected %d)", cmask.view.shape[1], ncols);
         goto exit;
     }
     ok = getclustercentroids(nclusters,
-                             nrows,
-                             ncols,
+                             data.nrows,
+                             data.ncols,
                              data.values,
                              mask.values,
                              clusterid.buf,
@@ -2118,7 +2179,7 @@ static char distancematrix__doc__[] =
 " - data: nrows x ncols array containing the data values.\n"
 "\n"
 " - mask: nrows x ncols array of integers, showing which data are\n"
-"   missing. If mask[i,j]==0, then data[i,j] is missing.\n"
+"   missing. If mask[i,j] == 0, then data[i,j] is missing.\n"
 "\n"
 " - weight: the weights to be used when calculating distances.\n"
 "\n"
@@ -2175,13 +2236,14 @@ py_distancematrix(PyObject* self, PyObject* args, PyObject* keywords)
                              "dist",
                              "distancematrix",
                               NULL};
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&iO&O!", kwlist,
-                                    data_converter, &data,
-                                    mask_converter, &mask,
-                                    vector_converter, &weight,
-                                    &transpose,
-                                    distance_converter, &dist,
-                                    &PyList_Type, &list)) goto exit;
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&iO&O!", kwlist,
+                                     data_converter, &data,
+                                     mask_converter, &mask,
+                                     vector_converter, &weight,
+                                     &transpose,
+                                     distance_converter, &dist,
+                                     &PyList_Type, &list)) goto exit;
     if (!data.values) {
         PyErr_SetString(PyExc_RuntimeError, "data is None");
         goto exit;
@@ -2198,7 +2260,7 @@ py_distancematrix(PyObject* self, PyObject* args, PyObject* keywords)
             mask.view.shape[0], mask.view.shape[1], data.nrows, data.ncols);
         goto exit;
     }
-    ndata = (transpose==0) ? ncols : nrows;
+    ndata = (transpose == 0) ? ncols : nrows;
     if (weight.shape[0] != ndata) {
         PyErr_Format(PyExc_RuntimeError,
                      "weight has incorrect size %zd (expected %d)",
@@ -2318,71 +2380,103 @@ py_pca(PyObject* self, PyObject* args)
         u = pc.values;
         v = coordinates.values;
     }
-  /* -- Calculate the mean of each column ------------------------------ */
+    /* -- Calculate the mean of each column ------------------------------ */
     p = mean.buf;
     for (j = 0; j < ncols; j++) {
         p[j] = 0.0;
         for (i = 0; i < nrows; i++) p[j] += values[i][j];
         p[j] /= nrows;
     }
-  /* --   Subtract the mean of each column ----------------------------- */
-  for (i = 0; i < nrows; i++)
-      for (j = 0; j < ncols; j++)
-          u[i][j] = values[i][j] - p[j];
-  /* -- Perform the principal component analysis ----------------------- */
-  error = pca(nrows, ncols, u, v, eigenvalues.buf);
-  /* ------------------------------------------------------------------- */
+    /* --   Subtract the mean of each column ----------------------------- */
+    for (i = 0; i < nrows; i++)
+        for (j = 0; j < ncols; j++)
+            u[i][j] = values[i][j] - p[j];
+    /* -- Perform the principal component analysis ----------------------- */
+    error = pca(nrows, ncols, u, v, eigenvalues.buf);
+    /* ------------------------------------------------------------------- */
 exit:
-  free_data(&data);
-  free_data(&pc);
-  free_data(&coordinates);
-  PyBuffer_Release(&eigenvalues);
-  if (error == 0) {
-      Py_INCREF(Py_None);
-      return Py_None;
-  }
-  if (error == -1) return PyErr_NoMemory();
-  else if (error > 0)
-      PyErr_SetString(PyExc_RuntimeError,
-          "Singular value decomposition failed to converge");
-  return NULL;
+    free_data(&data);
+    free_data(&pc);
+    free_data(&coordinates);
+    PyBuffer_Release(&eigenvalues);
+    if (error == 0) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    if (error == -1) return PyErr_NoMemory();
+    else if (error > 0)
+        PyErr_SetString(PyExc_RuntimeError,
+            "Singular value decomposition failed to converge");
+    return NULL;
 }
 /* end of wrapper for pca */
 
-/* ========================================================================== */
-/* -- The methods table ----------------------------------------------------- */
-/* ========================================================================== */
+/* ========================================================================= */
+/* -- The methods table ---------------------------------------------------- */
+/* ========================================================================= */
 
 
 static struct PyMethodDef cluster_methods[] = {
-   {"version", (PyCFunction) py_version, METH_NOARGS, version__doc__},
-   {"kcluster", (PyCFunction) py_kcluster, METH_VARARGS | METH_KEYWORDS, kcluster__doc__},
-   {"kmedoids", (PyCFunction) py_kmedoids, METH_VARARGS | METH_KEYWORDS, kmedoids__doc__},
-   {"treecluster", (PyCFunction) py_treecluster, METH_VARARGS | METH_KEYWORDS, treecluster__doc__},
-   {"somcluster", (PyCFunction) py_somcluster, METH_VARARGS | METH_KEYWORDS, somcluster__doc__},
-   {"clusterdistance", (PyCFunction) py_clusterdistance, METH_VARARGS | METH_KEYWORDS, clusterdistance__doc__},
-   {"clustercentroids", (PyCFunction) py_clustercentroids, METH_VARARGS | METH_KEYWORDS, clustercentroids__doc__},
-   {"distancematrix", (PyCFunction) py_distancematrix, METH_VARARGS | METH_KEYWORDS, distancematrix__doc__},
-   {"pca", (PyCFunction) py_pca, METH_VARARGS | METH_KEYWORDS, pca__doc__},
-   {NULL,          NULL, 0, NULL}/* sentinel */
+    {"version", (PyCFunction) py_version, METH_NOARGS, version__doc__},
+    {"kcluster",
+     (PyCFunction) py_kcluster,
+     METH_VARARGS | METH_KEYWORDS,
+     kcluster__doc__
+    },
+    {"kmedoids",
+     (PyCFunction) py_kmedoids,
+     METH_VARARGS | METH_KEYWORDS,
+     kmedoids__doc__
+    },
+    {"treecluster",
+     (PyCFunction) py_treecluster,
+     METH_VARARGS | METH_KEYWORDS,
+     treecluster__doc__
+    },
+    {"somcluster",
+     (PyCFunction) py_somcluster,
+     METH_VARARGS | METH_KEYWORDS,
+     somcluster__doc__
+    },
+    {"clusterdistance",
+     (PyCFunction) py_clusterdistance,
+     METH_VARARGS | METH_KEYWORDS,
+     clusterdistance__doc__
+    },
+    {"clustercentroids",
+     (PyCFunction) py_clustercentroids,
+     METH_VARARGS | METH_KEYWORDS,
+     clustercentroids__doc__
+    },
+    {"distancematrix",
+     (PyCFunction) py_distancematrix,
+     METH_VARARGS | METH_KEYWORDS,
+     distancematrix__doc__
+    },
+    {"pca",
+     (PyCFunction) py_pca,
+     METH_VARARGS | METH_KEYWORDS,
+     pca__doc__
+    },
+    {NULL,          NULL, 0, NULL} /* sentinel */
 };
 
-/* ========================================================================== */
-/* -- Initialization -------------------------------------------------------- */
-/* ========================================================================== */
+/* ========================================================================= */
+/* -- Initialization ------------------------------------------------------- */
+/* ========================================================================= */
 
 #if PY_MAJOR_VERSION >= 3
 
 static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        "_cluster",
-        "C Clustering Library",
-        -1,
-        cluster_methods,
-        NULL,
-        NULL,
-        NULL,
-        NULL
+    PyModuleDef_HEAD_INIT,
+    "_cluster",
+    "C Clustering Library",
+    -1,
+    cluster_methods,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 PyObject *
@@ -2412,14 +2506,14 @@ init_cluster(void)
 
 #if PY_MAJOR_VERSION >= 3
     module = PyModule_Create(&moduledef);
-    if (module==NULL) return NULL;
+    if (module == NULL) return NULL;
 #else
     module = Py_InitModule4("_cluster",
                             cluster_methods,
                             "C Clustering Library",
                             NULL,
                             PYTHON_API_VERSION);
-    if (module==NULL) return;
+    if (module == NULL) return;
 #endif
 
     Py_INCREF(&PyTreeType);

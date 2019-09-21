@@ -64,7 +64,7 @@ class ColorTranslator(object):
         colorscheme information.
         """
         self._artemis_colorscheme = {
-            0: (colors.Color(1, 1, 1,), "pathogenicity, adaptation, chaperones"),
+            0: (colors.Color(1, 1, 1), "pathogenicity, adaptation, chaperones"),
             1: (colors.Color(0.39, 0.39, 0.39), "energy metabolism"),
             2: (colors.Color(1, 0, 0), "information transfer"),
             3: (colors.Color(0, 1, 0), "surface"),
@@ -82,7 +82,7 @@ class ColorTranslator(object):
             15: (colors.Color(1, 0.25, 0.25), "secondary metabolism"),
             16: (colors.Color(1, 0.5, 0.5), ""),
             17: (colors.Color(1, 0.75, 0.75), ""),
-        }      # Hardwired Artemis color scheme
+        }  # Hardwired Artemis color scheme
         self._colorscheme = {}
         if filename is not None:
             self.read_colorscheme(filename)  # Imported color scheme
@@ -149,10 +149,14 @@ class ColorTranslator(object):
                         comment = data[4]
                     else:
                         comment = ""
-                    self._colorscheme[label] = (self.int255_color((red, green, blue)),
-                                                comment)
+                    self._colorscheme[label] = (
+                        self.int255_color((red, green, blue)),
+                        comment,
+                    )
                 except ValueError:
-                    raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
+                    raise ValueError(
+                        "Expected INT \t INT \t INT \t INT \t string input"
+                    )
 
     def get_artemis_colorscheme(self):
         """Return the Artemis color scheme as a dictionary."""
@@ -212,7 +216,7 @@ class ColorTranslator(object):
         0 -> 255 and returns an appropriate colors.Color object.
         """
         red, green, blue = values
-        factor = 1 / 255.
+        factor = 1 / 255.0
         red, green, blue = red * factor, green * factor, blue * factor
         return colors.Color(red, green, blue)
 
@@ -231,4 +235,5 @@ class ColorTranslator(object):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=2)

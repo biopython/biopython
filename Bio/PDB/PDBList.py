@@ -89,8 +89,9 @@ class PDBList(object):
     http://www.pdb.org/.
     """
 
-    def __init__(self, server="ftp://ftp.wwpdb.org", pdb=None,
-                 obsolete_pdb=None, verbose=True):
+    def __init__(
+        self, server="ftp://ftp.wwpdb.org", pdb=None, obsolete_pdb=None, verbose=True
+    ):
         """Initialize the class with the default server or a custom one.
 
         Argument pdb is the local path to use, defaulting to the current
@@ -124,7 +125,9 @@ class PDBList(object):
         are being downloaded in mmCIF.
         """
         if file_format is None:
-            sys.stderr.write("WARNING: The default download format has changed from PDB to PDBx/mmCif\n")
+            sys.stderr.write(
+                "WARNING: The default download format has changed from PDB to PDBx/mmCif\n"
+            )
             return "mmCif"
         return file_format
 
@@ -176,8 +179,9 @@ class PDBList(object):
         if self._verbose:
             print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(_urlopen(url)) as handle:
-            all_entries = [_as_string(line[:4]) for line in handle.readlines()[2:]
-                           if len(line) > 4]
+            all_entries = [
+                _as_string(line[:4]) for line in handle.readlines()[2:] if len(line) > 4
+            ]
         return all_entries
 
     def get_all_obsolete(self):
@@ -216,7 +220,9 @@ class PDBList(object):
                 obsolete.append(_as_string(pdb))
         return obsolete
 
-    def retrieve_pdb_file(self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False):
+    def retrieve_pdb_file(
+        self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False
+    ):
         """Fetch PDB structure file from PDB server, and store it locally.
 
         The PDB structure's file name is returned as a single string.
@@ -259,26 +265,50 @@ class PDBList(object):
         :return: filename
         :rtype: string
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
 
         # Get the compressed PDB structure
         code = pdb_code.lower()
-        archive = {"pdb": "pdb%s.ent.gz", "mmCif": "%s.cif.gz", "xml": "%s.xml.gz", "mmtf": "%s",
-                   "bundle": "%s-pdb-bundle.tar.gz"}
+        archive = {
+            "pdb": "pdb%s.ent.gz",
+            "mmCif": "%s.cif.gz",
+            "xml": "%s.xml.gz",
+            "mmtf": "%s",
+            "bundle": "%s-pdb-bundle.tar.gz",
+        }
         archive_fn = archive[file_format] % code
 
         if file_format not in archive.keys():
-            raise("Specified file_format %s doesn't exists or is not supported. Maybe a typo. "
-                  "Please, use one of the following: mmCif, pdb, xml, mmtf, bundle" % file_format)
+            raise (
+                "Specified file_format %s doesn't exists or is not supported. Maybe a "
+                "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
+                % file_format
+            )
 
         if file_format in ("pdb", "mmCif", "xml"):
             pdb_dir = "divided" if not obsolete else "obsolete"
-            file_type = "pdb" if file_format == "pdb" else "mmCIF" if file_format == "mmCif" else "XML"
-            url = (self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (pdb_dir, file_type, code[1:3], archive_fn))
+            file_type = (
+                "pdb"
+                if file_format == "pdb"
+                else "mmCIF"
+                if file_format == "mmCif"
+                else "XML"
+            )
+            url = self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
+                pdb_dir,
+                file_type,
+                code[1:3],
+                archive_fn,
+            )
         elif file_format == "bundle":
-            url = (self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (code[1:3], code, archive_fn))
+            url = self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
+                code[1:3],
+                code,
+                archive_fn,
+            )
         else:
-            url = ("http://mmtf.rcsb.org/v1.0/full/%s" % code)
+            url = "http://mmtf.rcsb.org/v1.0/full/%s" % code
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -290,8 +320,13 @@ class PDBList(object):
         if not os.access(path, os.F_OK):
             os.makedirs(path)
         filename = os.path.join(path, archive_fn)
-        final = {"pdb": "pdb%s.ent", "mmCif": "%s.cif", "xml": "%s.xml",
-                 "mmtf": "%s.mmtf", "bundle": "%s-pdb-bundle.tar"}
+        final = {
+            "pdb": "pdb%s.ent",
+            "mmCif": "%s.cif",
+            "xml": "%s.xml",
+            "mmtf": "%s.mmtf",
+            "bundle": "%s-pdb-bundle.tar",
+        }
         final_file = os.path.join(path, final[file_format] % code)
 
         # Skip download if the file already exists
@@ -327,7 +362,8 @@ class PDBList(object):
         assert os.path.isdir(self.local_pdb)
         assert os.path.isdir(self.obsolete_pdb)
 
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
 
         new, modified, obsolete = self.get_recent_changes()
 
@@ -342,12 +378,12 @@ class PDBList(object):
         # Move the obsolete files to a special folder
         for pdb_code in obsolete:
             if self.flat_tree:
-                old_file = os.path.join(self.local_pdb,
-                                        "pdb%s.ent" % pdb_code)
+                old_file = os.path.join(self.local_pdb, "pdb%s.ent" % pdb_code)
                 new_dir = self.obsolete_pdb
             else:
-                old_file = os.path.join(self.local_pdb, pdb_code[1:3],
-                                        "pdb%s.ent" % pdb_code)
+                old_file = os.path.join(
+                    self.local_pdb, pdb_code[1:3], "pdb%s.ent" % pdb_code
+                )
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
             new_file = os.path.join(new_dir, "pdb%s.ent" % pdb_code)
             if os.path.isfile(old_file):
@@ -364,7 +400,9 @@ class PDBList(object):
                 if self._verbose:
                     print("Obsolete file %s is missing" % old_file)
 
-    def download_pdb_files(self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False):
+    def download_pdb_files(
+        self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False
+    ):
         """Fetch set of PDB structure files from the PDB server and stores them locally.
 
         The PDB structure's file name is returned as a single string.
@@ -400,9 +438,16 @@ class PDBList(object):
         :return: filenames
         :rtype: string
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
         for pdb_code in pdb_codes:
-            self.retrieve_pdb_file(pdb_code, obsolete=obsolete, pdir=pdir, file_format=file_format, overwrite=overwrite)
+            self.retrieve_pdb_file(
+                pdb_code,
+                obsolete=obsolete,
+                pdir=pdir,
+                file_format=file_format,
+                overwrite=overwrite,
+            )
 
     def download_entire_pdb(self, listfile=None, file_format=None):
         """Retrieve all PDB entries not present in the local PDB copy.
@@ -420,7 +465,8 @@ class PDBList(object):
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
         entries = self.get_all_entries()
         for pdb_code in entries:
             self.retrieve_pdb_file(pdb_code, file_format=file_format)
@@ -441,7 +487,8 @@ class PDBList(object):
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
-        file_format = self._print_default_format_warning(file_format)  # Deprecation warning
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
         entries = self.get_all_obsolete()
         for pdb_code in entries:
             self.retrieve_pdb_file(pdb_code, obsolete=True, file_format=file_format)
@@ -525,10 +572,14 @@ if __name__ == "__main__":
 
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
-            pl.retrieve_pdb_file(sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite)
+            pl.retrieve_pdb_file(
+                sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite
+            )
 
         elif sys.argv[1][0] == "(":
             # get a set of PDB entries
             pdb_ids = re.findall(sys.argv[1], "[0-9A-Za-z]{4}")
             for pdb_id in pdb_ids:
-                pl.retrieve_pdb_file(pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite)
+                pl.retrieve_pdb_file(
+                    pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                )

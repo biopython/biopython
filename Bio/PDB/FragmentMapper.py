@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classify protein backbone structure with Kolodny et al's fragment libraries.
 
@@ -297,7 +299,7 @@ class FragmentMapper(object):
                     else:
                         # fragment
                         index = i - self.edge
-                        assert(index >= 0)
+                        assert index >= 0
                         fd[res] = mflist[index]
             except PDBException as why:
                 if why == "CHAINBREAK":

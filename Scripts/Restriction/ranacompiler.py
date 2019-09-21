@@ -24,11 +24,11 @@
 """Convert a series of Rebase files into a Restriction_Dictionary.py module.
 
 The Rebase files are in the emboss format:
- - `emboss_e.###` - contains information about the restriction sites.
- - `emboss_r.###` - contains general information about the enzymes.
- - `emboss_s.###` - contains information about the suppliers.
+ - ``emboss_e.###`` - contains information about the restriction sites.
+ - ``emboss_r.###`` - contains general information about the enzymes.
+ - ``emboss_s.###`` - contains information about the suppliers.
 
-Here `###` is the 3 digit number REBASE release number (e.g. 312). The first
+Here ``###`` is the 3 digit number REBASE release number (e.g. 312). The first
 digit is the last digit of the year (e.g. 3 for 2013) and the two last the
 month (e.g. 12 for December).
 
@@ -70,6 +70,27 @@ enzymedict = {}
 suppliersdict = {}
 classdict = {}
 typedict = {}
+
+
+def double_quote_repr(value):
+    """Return string representation of value, preferring double quotes.
+
+    Used to produce Python code with double quotes.
+
+    Only special cases strings, tuples and lists so far.
+    """
+    if isinstance(value, str):
+        if '"' not in value:
+            return '"%s"' % value
+    elif isinstance(value, tuple):
+        if len(value) == 1:
+            # Need trailing comma
+            return "(%s,)" % double_quote_repr(list(value)[0])
+        else:
+            return "(%s)" % ", ".join(double_quote_repr(_) for _ in value)
+    elif isinstance(value, list):
+        return "[%s]" % ", ".join(double_quote_repr(_) for _ in value)
+    return repr(value)
 
 
 class OverhangError(ValueError):
@@ -449,10 +470,10 @@ class DictionaryBuilder(object):
                 results.write("    return {\n")
                 for key, value in sorted(classdict[name].items()):
                     results.write("        %s: %s,\n" %
-                                  (repr(key), repr(value)))
+                                  (double_quote_repr(key), double_quote_repr(value)))
                 results.write("    }\n")
                 results.write("\n\n")
-                results.write("rest_dict[%s] = _temp()\n" % repr(name))
+                results.write("rest_dict[%s] = _temp()\n" % double_quote_repr(name))
                 results.write("\n\n")
             print("OK.\n")
             print("Writing the dictionary containing the suppliers data...")
@@ -462,10 +483,10 @@ class DictionaryBuilder(object):
                 results.write("def _temp():\n")
                 results.write("    return (\n")
                 for value in suppliersdict[name]:
-                    results.write("        %s,\n" % repr(value))
+                    results.write("        %s,\n" % double_quote_repr(value))
                 results.write("    )\n")
                 results.write("\n\n")
-                results.write("suppliers[%s] = _temp()\n" % repr(name))
+                results.write("suppliers[%s] = _temp()\n" % double_quote_repr(name))
                 results.write("\n\n")
             print("OK.\n")
             print("Writing the dictionary containing the Restriction types...")
@@ -475,10 +496,10 @@ class DictionaryBuilder(object):
                 results.write("def _temp():\n")
                 results.write("    return (\n")
                 for value in typedict[name]:
-                    results.write("        %s,\n" % repr(value))
+                    results.write("        %s,\n" % double_quote_repr(value))
                 results.write("    )\n")
                 results.write("\n\n")
-                results.write("typedict[%s] = _temp()\n" % repr(name))
+                results.write("typedict[%s] = _temp()\n" % double_quote_repr(name))
                 results.write("\n\n")
             # I had wanted to do "del _temp" at each stage (just for clarity),
             # but that pushed the code size just over the Jython JVM limit. We
@@ -841,7 +862,7 @@ class DictionaryBuilder(object):
         #   and the name with '_as' at the end for the antisense sequence.
         #
         rg = ""
-        if is_palindrom(dna):
+        if is_palindrome(dna):
             line.append(True)
             rg = "".join(["(?=(?P<", name, ">", regex(site.upper()), "))"])
         else:

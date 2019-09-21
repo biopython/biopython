@@ -9,7 +9,7 @@ human readable documentation.
 
 import os
 import shutil
-# import sys
+import sys
 import tempfile
 
 from Bio import __version__
@@ -24,12 +24,14 @@ needs_sphinx = "1.8"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc",
-              "sphinx.ext.todo",
-              # Don't want to include source code in the API docs
-              # 'sphinx.ext.viewcode',
-              "sphinx.ext.autosummary",
-              "numpydoc"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.todo",
+    # Don't want to include source code in the API docs
+    # 'sphinx.ext.viewcode',
+    "sphinx.ext.autosummary",
+    "numpydoc",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -106,6 +108,17 @@ html_theme_options = {
     "logo_only": True,
 }
 
+# Based on:
+# https://github.com/readthedocs/sphinx_rtd_theme/issues/231#issuecomment-126447493
+html_context = {
+    "display_github": True,  # Add 'Edit on Github' link instead of 'View page source'
+    "github_user": "biopython",
+    "github_repo": "biopython",
+    "github_version": "master",
+    "conf_py_path": "/Doc/api/",
+    # "source_suffix": source_suffix,
+}
+
 html_logo = "../images/biopython_logo.svg"
 
 # The RST source is transient, don't need/want to include it
@@ -129,7 +142,7 @@ html_sidebars = {
         "relations.html",  # needs 'show_related': True theme option to display
         "searchbox.html",
         "donate.html",
-    ],
+    ]
 }
 
 
@@ -145,15 +158,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -162,18 +172,14 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, "Biopython_API.tex", document, author, "manual"),
-]
+latex_documents = [(master_doc, "Biopython_API.tex", document, author, "manual")]
 
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "biopython", document, [author], 1),
-]
+man_pages = [(master_doc, "biopython", document, [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -182,9 +188,15 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, "Biopython", document, author, "Biopython",
-     "Collection of modules for dealing with biological data in Python.",
-     "Miscellaneous"),
+    (
+        master_doc,
+        "Biopython",
+        document,
+        author,
+        "Biopython",
+        "Collection of modules for dealing with biological data in Python.",
+        "Miscellaneous",
+    )
 ]
 
 
@@ -218,9 +230,38 @@ numpydoc_class_members_toctree = False
 # on which this is based.
 
 
+def insert_github_link(filename):
+    """Insert file specific :github_url: metadata for theme breadcrumbs."""
+    assert "/" not in filename and filename.endswith(".rst")
+    with open(filename) as handle:
+        text = handle.read()
+    if ":github_url:" in text:
+        return
+
+    python = filename[:-4].replace(".", "/") + "/__init__.py"
+    if not os.path.isfile(os.path.join("../../", python)):
+        python = filename[:-4].replace(".", "/") + ".py"
+    if not os.path.isfile(os.path.join("../../", python)):
+        sys.stderr.write(
+            "WARNING: Could not map %s to a Python file, e.g. %s\n" % (filename, python)
+        )
+        return
+
+    text = ":github_url: https://github.com/%s/%s/blob/%s/%s\n\n%s" % (
+        html_context["github_user"],
+        html_context["github_repo"],
+        html_context["github_version"],
+        python,
+        text,
+    )
+    with open(filename, "w") as handle:
+        handle.write(text)
+
+
 def run_apidoc(_):
     """Call sphinx-apidoc on Bio and BioSQL modules."""
     from sphinx.ext.apidoc import main as apidoc_main
+
     cur_dir = os.path.abspath(os.path.dirname(__file__))
     # Can't see a better way than running apidoc twice, for Bio & BioSQL
     # We don't care about the index.rst / conf.py (we have our own)
@@ -233,9 +274,14 @@ def run_apidoc(_):
     os.remove(os.path.join(tmp_path, "index.rst"))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):
-            shutil.move(os.path.join(tmp_path, filename),
-                        os.path.join(cur_dir, filename))
+            shutil.move(
+                os.path.join(tmp_path, filename), os.path.join(cur_dir, filename)
+            )
     shutil.rmtree(tmp_path)
+
+    for f in os.listdir(cur_dir):
+        if f.startswith("Bio") and f.endswith(".rst"):
+            insert_github_link(f)
 
 
 def setup(app):

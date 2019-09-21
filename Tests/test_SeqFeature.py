@@ -16,6 +16,7 @@ from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
 from Bio.SeqFeature import CompoundLocation, UnknownPosition, SeqFeature
 from Bio.SeqFeature import ExactPosition, WithinPosition, BetweenPosition
+from Bio.SeqFeature import OneOfPosition
 
 
 class TestReference(unittest.TestCase):
@@ -192,6 +193,34 @@ class TestLocations(unittest.TestCase):
         self.assertEqual(location2.nofuzzy_end, 24)
         self.assertEqual(location3.nofuzzy_start, 10)
         self.assertEqual(location3.nofuzzy_end, 40)
+
+
+class TestPositions(unittest.TestCase):
+
+    def test_pickle(self):
+        """Test pickle behaviour of position instances."""
+        # setup
+        import pickle
+        within_pos = WithinPosition(10, left=10, right=13)
+        between_pos = BetweenPosition(24, left=20, right=24)
+        oneof_pos = OneOfPosition(1888, [ExactPosition(1888), ExactPosition(1901)])
+        # test __getnewargs__
+        self.assertEqual(within_pos.__getnewargs__(), (10, 10, 13))
+        self.assertEqual(between_pos.__getnewargs__(), (24, 20, 24))
+        self.assertEqual(oneof_pos.__getnewargs__(),
+                         (1888, [ExactPosition(1888), ExactPosition(1901)]))
+        # test pickle behaviour
+        within_pos2 = pickle.loads(pickle.dumps(within_pos))
+        between_pos2 = pickle.loads(pickle.dumps(between_pos))
+        oneof_pos2 = pickle.loads(pickle.dumps(oneof_pos))
+        self.assertEqual(within_pos, within_pos2)
+        self.assertEqual(between_pos, between_pos2)
+        self.assertEqual(oneof_pos, oneof_pos2)
+        self.assertEqual(within_pos._left, within_pos2._left)
+        self.assertEqual(within_pos._right, within_pos2._right)
+        self.assertEqual(between_pos._left, between_pos2._left)
+        self.assertEqual(between_pos._right, between_pos2._right)
+        self.assertEqual(oneof_pos.position_choices, oneof_pos2.position_choices)
 
 
 if __name__ == "__main__":

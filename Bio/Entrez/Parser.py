@@ -48,6 +48,7 @@ from xml.sax.saxutils import escape
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
 from Bio._py3k import unicode
+from Bio._py3k import raise_from as _raise_from
 
 
 # The following four classes are used to add a member .attributes to integers,
@@ -336,11 +337,11 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, so we can be sure that
                 # we are parsing XML data. Most likely, the XML file is
                 # corrupted.
-                raise CorruptedXMLError(e)
+                _raise_from(CorruptedXMLError(e), None)
             else:
                 # We have not seen the initial <!xml declaration, so probably
                 # the input data is not in XML format.
-                raise NotXMLError(e)
+                _raise_from(NotXMLError(e), None)
         try:
             return self.record
         except AttributeError:
@@ -348,11 +349,11 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, and expat didn't notice
                 # any errors, so self.record should be defined. If not, this is
                 # a bug.
-                raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance.")
+                _raise_from(RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance."), None)
             else:
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
-                raise NotXMLError("XML declaration not found")
+                _raise_from(NotXMLError("XML declaration not found"), None)
 
     def parse(self, handle):
         """Parse the XML in the given file handle."""
@@ -367,11 +368,11 @@ class DataHandler(object):
                     # We saw the initial <!xml declaration, so we can be sure
                     # that we are parsing XML data. Most likely, the XML file
                     # is corrupted.
-                    raise CorruptedXMLError(e)
+                    _raise_from(CorruptedXMLError(e), None)
                 else:
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
-                    raise NotXMLError(e)
+                    _raise_from(NotXMLError(e), None)
             try:
                 records = self.record
             except AttributeError:
@@ -379,11 +380,11 @@ class DataHandler(object):
                     # We saw the initial <!xml declaration, and expat
                     # didn't notice any errors, so self.record should be
                     # defined. If not, this is a bug.
-                    raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance.")
+                    _raise_from(RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance."), None)
                 else:
                     # We did not see the initial <!xml declaration, so
                     # probably the input data is not in XML format.
-                    raise NotXMLError("XML declaration not found")
+                    _raise_from(NotXMLError("XML declaration not found"), None)
 
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
@@ -947,7 +948,7 @@ class DataHandler(object):
             try:
                 handle = _urlopen(url)
             except IOError:
-                raise RuntimeError("Failed to access %s at %s" % (filename, url))
+                _raise_from(RuntimeError("Failed to access %s at %s" % (filename, url)), None)
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
@@ -985,14 +986,14 @@ class DataHandler(object):
             # Trying os.makedirs first and then checking for os.path.isdir avoids
             # a race condition.
             if not os.path.isdir(self.local_dtd_dir):
-                raise exception
+                _raise_from(exception, None)
         # Create XSD local directory
         self.local_xsd_dir = os.path.join(self.directory, "Bio", "Entrez", "XSDs")
         try:
             os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
         except OSError as exception:
             if not os.path.isdir(self.local_xsd_dir):
-                raise exception
+                _raise_from(exception, None)
 
     @property
     def directory(self):

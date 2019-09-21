@@ -1,31 +1,17 @@
 #!/usr/bin/env python
-# Copyright 2004 Kristian Rother
+# Copyright 2004 Kristian Rother.
+# Revisions copyright 2004 Thomas Hamelryck.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Parse header of PDB files into a python dictionary.
 
-Emerged from the Columba database project www.columba-db.de.
-
-Original author: Kristian Rother.
+Emerged from the Columba database project www.columba-db.de, original author
+Kristian Rother.
 """
-
-# license: same as Biopython, read LICENSE.TXT from current Biopython release.
-#
-# last modified: 9.2.2004
-#
-# Added some small changes: the whole PDB file is not read in anymore, but just
-# until the first ATOM record (faster). I also split parse_pdb_header into
-# parse_pdb_header and parse_pdb_header_list, because parse_pdb_header_list
-# can be more easily reused in PDBParser.
-#
-# Thomas, 19/03/04
-#
-# Renamed some clearly private functions to _something (ie. parse_pdb_header_list
-# is now _parse_pdb_header_list)
-# Thomas 9/05/04
 
 from __future__ import print_function
 
@@ -77,8 +63,21 @@ def _format_date(pdb_date):
     else:
         century = 1900
     date = str(century + year) + "-"
-    all_months = ["xxx", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                  "Aug", "Sep", "Oct", "Nov", "Dec"]
+    all_months = [
+        "xxx",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
     month = str(all_months.index(pdb_date[3:6]))
     if len(month) == 1:
         month = "0" + month
@@ -147,16 +146,17 @@ def _parse_remark_465(line):
     if line:
         # Note that line has been stripped.
         assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
-    pattern = re.compile(r"""
-                (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
-                 [A-Z]{1,3})                  # Or only residue name with
-                                              # 1 (RNA) to 3 letters
-                \s ([A-Za-z0-9])              # A single character chain
-                \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed
-                                              # by an optional insertion code
-                                              # (Hetero-flags make no sense in
-                                              # context with missing res)
-                """, re.VERBOSE)
+    pattern = re.compile(
+        r"""
+        (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
+            [A-Z]{1,3})               # Or only residue name with 1 (RNA) to 3 letters
+        \s ([A-Za-z0-9])              # A single character chain
+        \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed by an optional
+                                      # insertion code (Hetero-flags make no sense in
+                                      # context with missing res)
+        """,
+        re.VERBOSE,
+    )
     match = pattern.match(line)
     if match is None:
         return None
@@ -191,9 +191,11 @@ def _parse_pdb_header_list(header):
         "structure_reference": "unknown",
         "journal_reference": "unknown",
         "author": "",
-        "compound": {"1": {"misc": ""}}, "source": {"1": {"misc": ""}},
+        "compound": {"1": {"misc": ""}},
+        "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
-        "missing_residues": []}
+        "missing_residues": [],
+    }
 
     dict["structure_reference"] = _get_references(header)
     dict["journal_reference"] = _get_journal(header)
