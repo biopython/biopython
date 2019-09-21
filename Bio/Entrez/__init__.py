@@ -46,7 +46,7 @@ Variables:
     - email        Set the Entrez email parameter (default is not set).
     - tool         Set the Entrez tool parameter (default is ``biopython``).
     - api_key      Personal API key from NCBI. If not set, only 3 queries per
-                   seconds are allowed. 10 queries per seconds otherwise with a
+                   second are allowed. 10 queries per seconds otherwise with a
                    valid API key.
 
 Functions:
