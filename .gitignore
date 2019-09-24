@@ -102,6 +102,10 @@ Doc/hevea.sty
 Doc/*/hevea.sty
 Doc/*/*/hevea.sty
 
+#Ignore artifacts of building the docs
+_build
+Doc/api/*.rst
+
 #Ignore IntelliJ IDEA directory and project files
 .idea
 *.iml
