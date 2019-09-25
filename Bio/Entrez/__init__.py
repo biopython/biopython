@@ -563,9 +563,16 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
                 raise
 
             # Reraise if the exception is triggered by a HTTP 4XX error
-            # indicating some kind of bad request
+            # indicating some kind of bad request, UNLESS it's specifically a
+            # 429 "Too Many Requests" response. NCBI seems to sometimes
+            # erroneously return 429s even when their rate limit is
+            # honored (and indeed even with the rate-limit-related fudging
+            # higher up in this function in place), so the best we can do is
+            # treat them as a serverside error and try again after sleeping
+            # for a bit.
             if isinstance(exception, _HTTPError) \
-                    and exception.status // 100 == 4:
+                    and exception.code // 100 == 4 \
+                    and exception.code != 429:
                 raise
 
             # Treat everything else as a transient error and try again after a
