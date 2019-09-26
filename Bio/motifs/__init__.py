@@ -477,11 +477,11 @@ class Motif(object):
         """
         from Bio._py3k import urlopen, urlencode, Request
 
-        if self.alphabet == "ACDEFGHIKLMNPQRSTVWY":
+        if set(self.alphabet) == set("ACDEFGHIKLMNPQRSTVWY"):
             alpha = "alphabet_protein"
-        elif self.alphabet == "ACGU":
+        elif set(self.alphabet) == set("ACGU"):
             alpha = "alphabet_rna"
-        elif self.alphabet == "ACGT":
+        elif set(self.alphabet) == set("ACGT"):
             alpha = "alphabet_dna"
         else:
             alpha = "auto"
