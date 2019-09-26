@@ -28,10 +28,10 @@ def read(handle, pfm_format):
     Call the appropriate routine based on the format passed.
     """
     pfm_format = pfm_format.lower()
-    if pfm_format == "pfm_four_columns":
+    if pfm_format == "pfm-four-columns":
         record = _read_pfm_four_columns(handle)
         return record
-    elif pfm_format == "pfm_four_rows":
+    elif pfm_format == "pfm-four-rows":
         record = _read_pfm_four_rows(handle)
         return record
     else:
