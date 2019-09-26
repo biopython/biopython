@@ -86,11 +86,10 @@ class JASPAR5(object):
         """Construct a JASPAR5 instance and connect to specified DB.
 
         Arguments:
-
-        - host - host name of the the JASPAR DB server
-        - name - name of the JASPAR database
-        - user - user name to connect to the JASPAR DB
-        - password - JASPAR DB password
+         - host - host name of the the JASPAR DB server
+         - name - name of the JASPAR database
+         - user - user name to connect to the JASPAR DB
+         - password - JASPAR DB password
 
         """
         self.name = name
@@ -110,14 +109,13 @@ class JASPAR5(object):
         Example id 'MA0001.1'.
 
         Arguments:
-
-            - id - JASPAR matrix ID. This may be a fully specified ID including
-              the version number (e.g. MA0049.2) or just the base ID (e.g.
-              MA0049). If only a base ID is provided, the latest version is
-              returned.
+         - id - JASPAR matrix ID. This may be a fully specified ID including
+                the version number (e.g. MA0049.2) or just the base ID (e.g.
+                MA0049). If only a base ID is provided, the latest version is
+                returned.
 
         Returns:
-            - A Bio.motifs.jaspar.Motif object
+         - A Bio.motifs.jaspar.Motif object
 
         **NOTE:** The perl TFBS module allows you to specify the type of matrix
         to return (PFM, PWM, ICM) but matrices are always stored in JASPAR as

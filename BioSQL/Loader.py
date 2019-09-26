@@ -384,10 +384,9 @@ class DatabaseLoader(object):
         """Get the taxon id for record from NCBI taxon ID (PRIVATE).
 
         Arguments:
-
-        - ncbi_taxon_id - string containing an NCBI taxon id
-        - scientific_name - string, used if a stub entry is recorded
-        - common_name - string, used if a stub entry is recorded
+         - ncbi_taxon_id - string containing an NCBI taxon id
+         - scientific_name - string, used if a stub entry is recorded
+         - common_name - string, used if a stub entry is recorded
 
         This searches the taxon table using ONLY the NCBI taxon ID
         to find the matching taxon table entry's ID (database key).

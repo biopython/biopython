@@ -184,9 +184,8 @@ class FeatureSet(object):
         """Return a formatted string with information about the set.
 
         Arguments:
-
-        - verbose: Boolean indicating whether a short (default) or
-          complete account of the set is required
+         - verbose: Boolean indicating whether a short (default) or
+           complete account of the set is required
 
         """
         if not verbose:  # Short account only required
