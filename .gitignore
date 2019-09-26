@@ -110,8 +110,11 @@ Doc/api/*.rst
 .idea
 *.iml
 
-#Ignore unittest cache dirctory
+#Ignore unittest cache directory
 .cache/
 
 #Ignore vscode directory
 .vscode
+
+#Ignore mypy cache directory
+.mypy_cache
