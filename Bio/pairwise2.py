@@ -246,6 +246,7 @@ type ``help(pairwise2.align.localds)`` at the Python prompt.
 """  # noqa: W291
 
 import warnings
+from collections import namedtuple
 
 from Bio import BiopythonWarning
 
@@ -960,6 +961,8 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
+    Alignment = namedtuple('Alignment',
+                           ('sequence1, sequence2, score, start, end'))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:
@@ -976,7 +979,7 @@ def _clean_alignments(alignments):
         if begin >= end:
             del unique_alignments[i]
             continue
-        unique_alignments[i] = seqA, seqB, score, begin, end
+        unique_alignments[i] = Alignment(seqA, seqB, score, begin, end)
         i += 1
     return unique_alignments
 
