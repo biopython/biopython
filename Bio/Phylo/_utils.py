@@ -108,7 +108,7 @@ def draw_graphviz(tree, label_func=str, prog="twopi", args="",
                 from Bio import Phylo, AlignIO
                 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
                 constructor = DistanceTreeConstructor()
-                aln = AlignIO.read(open('/TreeConstruction/msa.phy'), 'phylip')
+                aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
                 calculator = DistanceCalculator('identity')
                 dm = calculator.get_distance(aln)
                 tree = constructor.upgma(dm)
