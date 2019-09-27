@@ -682,7 +682,7 @@ class Seq(object):
         >>> my_rna.index("T")
         Traceback (most recent call last):
                    ...
-        ValueError: substring not found
+        ValueError: substring not found...
         """
         # If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
