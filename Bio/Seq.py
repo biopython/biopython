@@ -672,6 +672,28 @@ class Seq(object):
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).rfind(sub_str, start, end)
 
+    def index(self, sub, start=0, end=sys.maxsize):
+        """Like find() but raise ValueError when the substring is not found.
+
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.find("T")
+        -1
+        >>> my_rna.index("T")
+        Traceback (most recent call last):
+                   ...
+        ValueError: substring not found
+        """
+        # If it has one, check the alphabet:
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        return str(self).index(sub_str, start, end)
+
+    def rindex(self, sub, start=0, end=sys.maxsize):
+        """Like rfind() but raise ValueError when the substring is not found."""
+        # If it has one, check the alphabet:
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        return str(self).rindex(sub_str, start, end)
+
     def startswith(self, prefix, start=0, end=sys.maxsize):
         """Return True if the Seq starts with the given prefix, False otherwise.
 
@@ -2454,15 +2476,19 @@ class MutableSeq(object):
     def index(self, item):
         """Return first occurrence position of a single entry (i.e. letter).
 
-        >>> my_seq = MutableSeq('ACTCGACGTCG')
-        >>> my_seq.index('A')
+        >>> my_seq = MutableSeq("ACTCGACGTCG")
+        >>> my_seq.index("A")
         0
-        >>> my_seq.index('T')
+        >>> my_seq.index("T")
+        2
+        >>> my_seq.index(Seq("T"))
         2
 
         Note unlike a Biopython Seq object, or Python string, multi-letter
-        subsequences are not supported.
+        subsequences are not supported.  Instead this acts like an array or
+        a list of the entries. There is therefore no ``.rindex()`` method.
         """
+        # TODO?: return self.data.index(i)
         for i in range(len(self.data)):
             if self.data[i] == item:
                 return i
