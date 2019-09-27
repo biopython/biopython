@@ -42,6 +42,7 @@ def read(handle):
     IFXA
 
     This function wont retrieve instances, as there are none in minimal meme format.
+
     """
     motif_number = 0
     record = Record()
