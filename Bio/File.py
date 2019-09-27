@@ -577,7 +577,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         format = self._format
         proxy_factory = self._proxy_factory
 
-        con = _sqlite.connect(index_filename)
+        con = _sqlite.connect(index_filename,
+                              check_same_thread=False)
         self._con = con
         # Check the count...
         try:

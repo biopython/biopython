@@ -16,6 +16,7 @@ import sys
 import os
 import unittest
 import tempfile
+import threading
 import gzip
 import warnings
 from io import BytesIO
@@ -110,6 +111,20 @@ if sqlite3:
             d = SeqIO.index_db("Roche/triple_sff.idx")
             self.assertEqual(54, len(d))
             self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
+
+        def test_old_check_same_thread(self):
+            """Setting check_same_thread to False doesn't raise an exception."""
+            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
+
+            def reader_thread():
+                try:
+                    d['alpha']
+                except sqlite3.ProgrammingError:
+                    self.fail('Raised sqlite3.ProgrammingError in violation of check_same_thread=False')
+
+            reader = threading.Thread(target=reader_thread)
+            reader.start()
+            reader.join()
 
         def test_old_rel(self):
             """Load existing index (with relative paths) with no options (from parent directory)."""
