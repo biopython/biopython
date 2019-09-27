@@ -41,6 +41,7 @@ Other public methods are:
  - gravy
  - protein_scale
  - flexibility
+
 """
 
 from __future__ import print_function
