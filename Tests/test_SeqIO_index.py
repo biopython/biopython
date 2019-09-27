@@ -118,9 +118,9 @@ if sqlite3:
 
             def reader_thread():
                 try:
-                    d['alpha']
+                    d["alpha"]
                 except sqlite3.ProgrammingError:
-                    self.fail('Raised sqlite3.ProgrammingError in violation of check_same_thread=False')
+                    self.fail("Raised sqlite3.ProgrammingError in violation of check_same_thread=False")
 
             reader = threading.Thread(target=reader_thread)
             reader.start()
