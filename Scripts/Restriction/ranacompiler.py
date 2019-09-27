@@ -102,7 +102,8 @@ class OverhangError(ValueError):
 def regex(site):
     """Construct a regular expression (string) from a DNA sequence.
 
-    Example:
+    Examples
+    --------
     >>> regex('ABCGN')
     'A[CGT]CG.'
 

@@ -5,7 +5,8 @@
 # package.
 """Simple protein analysis.
 
-Example:
+Examples
+--------
 >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis
 >>> X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGT"
 ...                     "RDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEEC"
