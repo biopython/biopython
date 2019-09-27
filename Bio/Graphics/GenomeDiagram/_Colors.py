@@ -93,13 +93,12 @@ class ColorTranslator(object):
         """Translate a color into a ReportLab Color object.
 
         Arguments:
-
-        - color - Color defined as an int, a tuple of three ints 0->255
-          or a tuple of three floats 0 -> 1, or a string giving
-          one of the named colors defined by ReportLab, or a
-          ReportLab color object (returned as is).
-        - colour - Backards compatible alias using UK spelling (which
-          will over-ride any color argument).
+         - color - Color defined as an int, a tuple of three ints 0->255
+           or a tuple of three floats 0 -> 1, or a string giving
+           one of the named colors defined by ReportLab, or a
+           ReportLab color object (returned as is).
+         - colour - Backwards compatible alias using UK spelling (which
+           will over-ride any color argument).
 
         Returns a colors.Color object, determined semi-intelligently
         depending on the input values
@@ -166,12 +165,11 @@ class ColorTranslator(object):
         """Artemis color (integer) to ReportLab Color object.
 
         Arguments:
-
-        - value: An int representing a functional class in the Artemis
-          color scheme (see www.sanger.ac.uk for a description),
-          or a string from a GenBank feature annotation for the
-          color which may be dot delimited (in which case the
-          first value is used).
+         - value: An int representing a functional class in the Artemis
+           color scheme (see www.sanger.ac.uk for a description),
+           or a string from a GenBank feature annotation for the
+           color which may be dot delimited (in which case the
+           first value is used).
 
         Takes an int representing a functional class in the Artemis color
         scheme, and returns the appropriate colors.Color object

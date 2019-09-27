@@ -331,7 +331,6 @@ def _compact4nexus(orig_list):
 
     Example
     -------
-
     >>> _compact4nexus([1, 2, 3, 5, 6, 7, 8, 12, 15, 18, 20])
     '2-4 6-9 13-19\\3 21'
 

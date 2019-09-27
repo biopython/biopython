@@ -16,8 +16,8 @@ import math
 def read(handle):
     """Parse the text output of the MEME program into a meme.Record object.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.motifs import minimal
     >>> with open("motifs/meme.out") as f:
     ...     record = minimal.read(f)
@@ -29,8 +29,6 @@ def read(handle):
 
     You can access individual motifs in the record by their index or find a motif
     by its name:
-
-    Example:
 
     >>> from Bio import motifs
     >>> with open("motifs/minimal_test.meme") as f:
@@ -44,6 +42,7 @@ def read(handle):
     IFXA
 
     This function wont retrieve instances, as there are none in minimal meme format.
+
     """
     motif_number = 0
     record = Record()

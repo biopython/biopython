@@ -82,8 +82,7 @@ class Chain(Entity):
         " ") tuple.
 
         Arguments:
-
-        - id - int, residue resseq
+         - id - int, residue resseq
 
         """
         if isinstance(id, int):
@@ -98,8 +97,7 @@ class Chain(Entity):
         method.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -109,8 +107,7 @@ class Chain(Entity):
         """Check if a residue with given id is present in this chain.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -120,8 +117,7 @@ class Chain(Entity):
         """Delete item.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -158,8 +154,7 @@ class Chain(Entity):
         method.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
