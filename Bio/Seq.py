@@ -27,6 +27,13 @@ import sys
 import warnings
 import collections
 
+try:
+    # Python 3
+    from collections.abc import Iterable as _Iterable
+except ImportError:
+    # Python 2.7
+    from collections import Iterable as _Iterable
+
 from Bio._py3k import range
 from Bio._py3k import basestring
 
@@ -1302,7 +1309,7 @@ class Seq(object):
         Throws error if other is not an iterable and if objects inside of the iterable
         are not Seq or String objects
         """
-        if not isinstance(other, collections.Iterable):  # doesn't detect single strings
+        if not isinstance(other, _Iterable):  # doesn't detect single strings
             raise ValueError("Input must be an iterable")
         if isinstance(other, basestring):
             raise ValueError("Input must be an iterable")
