@@ -27,7 +27,8 @@ def read(handle, pfm_format):
     Return the record of PFM(s).
     Call the appropriate routine based on the format passed.
     """
-    pfm_format = pfm_format.lower()
+    # Supporting underscores here for backward compatibility
+    pfm_format = pfm_format.lower().replace("_", "-")
     if pfm_format == "pfm-four-columns":
         record = _read_pfm_four_columns(handle)
         return record
