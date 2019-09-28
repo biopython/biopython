@@ -71,6 +71,7 @@ possible, especially the following contributors:
 - Joe Greener
 - Kiran Mukhyala (first contribution)
 - Konstantin Vdovkin
+- Mark Amery
 - Markus Piotrowski
 - Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
