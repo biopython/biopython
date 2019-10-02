@@ -178,7 +178,7 @@ def _augment_blast_hsp(hsp, attr):
             setattr(hsp, attr, hsp.aln_span - hsp.ident_num - hsp.mismatch_num)
 
         elif attr == "mismatch_num":
-            hsp.mistmatch_num = hsp.aln_span - hsp.ident_num - hsp.gap_num
+            setattr(hsp, attr, hsp.aln_span - hsp.ident_num - hsp.gap_num)
 
         elif attr == "gapopen_num":
             if not hasattr(hsp, "query") or not hasattr(hsp, "hit"):
