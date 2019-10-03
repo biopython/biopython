@@ -59,8 +59,22 @@ All the different alignment functions are contained in an object
     >>> from Bio import pairwise2
     >>> alignments = pairwise2.align.globalxx("ACCGT", "ACG")
 
-will return a list of the alignments between the two strings. For a nice
-printout, use the ``format_alignment`` method of the module:
+will return a list of the alignments between the two strings. Each alignment
+is a named tuple consisting of the two aligned sequences, the score and the
+start and end positions of the alignment:
+
+   >>> print(alignments)
+   [Alignment(sequence1='ACGT', sequence2='ACG-', score=3.0, start=0, end=4)]
+
+You can access each element of an aligment by index or name:
+
+   >>> alignments[0][2]
+   3.0
+   >>> alignments[0].score
+   3.0
+   
+For a nice printout of an alignment, use the ``format_alignment`` method of
+the module:
 
     >>> from Bio.pairwise2 import format_alignment
     >>> print(format_alignment(*alignments[0]))
