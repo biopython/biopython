@@ -42,6 +42,7 @@ Other public methods are:
  - protein_scale
  - flexibility
  - charge_at_pH
+
 """
 
 from __future__ import print_function
