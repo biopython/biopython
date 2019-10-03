@@ -41,6 +41,7 @@ Other public methods are:
  - gravy
  - protein_scale
  - flexibility
+ - charge_at_pH
 
 """
 
@@ -295,6 +296,12 @@ class ProteinAnalysis(object):
 
         ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return ie_point.pi()
+
+    def charge_at_pH(self, pH):
+        """Calculate the charge of a protein at given pH."""
+        aa_content = self.count_amino_acids()
+        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
+        return charge.charge_at_pH(pH)
 
     def secondary_structure_fraction(self):
         """Calculate fraction of helix, turn and sheet.

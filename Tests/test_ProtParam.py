@@ -37,23 +37,25 @@ class ProtParamTest(unittest.TestCase):
 
     def test_get_molecular_weight(self):
         """Calculate protein molecular weight."""
-        self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
-                               17103.16)
+        self.assertAlmostEqual(self.analysis.molecular_weight(), 17103.16, 2)
 
     def test_get_monoisotopic_molecular_weight(self):
         """Calculate monoisotopic molecular weight."""
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
-        self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
-                               17092.61)
+        self.assertAlmostEqual(self.analysis.molecular_weight(), 17092.61, 2)
 
     def test_get_molecular_weight_identical(self):
         """Confirm protein molecular weight agrees with calculation from Bio.SeqUtils."""
+        # This test is somehow useless, since ProteinAnalysis.molecular_weight
+        # is internally calling SeqUtils.molecular_weight.
         mw_1 = self.analysis.molecular_weight()
         mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein))
         self.assertAlmostEqual(mw_1, mw_2)
 
     def test_get_monoisotopic_molecular_weight_identical(self):
         """Confirm protein molecular weight agrees with calculation from Bio.SeqUtils."""
+        # This test is somehow useless, since ProteinAnalysis.molecular_weight
+        # is internally calling SeqUtils.molecular_weight.
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
         mw_1 = self.analysis.molecular_weight()
         mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein), monoisotopic=True)
@@ -62,12 +64,12 @@ class ProtParamTest(unittest.TestCase):
     def test_aromaticity(self):
         """Calculate protein aromaticity."""
         # Old test used a number rounded to two digits, so use the same
-        self.assertEqual(round(self.analysis.aromaticity(), 2), 0.10)
+        self.assertAlmostEqual(self.analysis.aromaticity(), 0.10, 2)
 
     def test_instability_index(self):
         """Calculate protein instability index."""
         # Old test used a number rounded to two digits, so use the same
-        self.assertEqual(round(self.analysis.instability_index(), 2), 41.98)
+        self.assertAlmostEqual(self.analysis.instability_index(), 41.98, 2)
 
     def test_flexibility(self):
         """Calculate protein flexibility."""
@@ -128,15 +130,19 @@ class ProtParamTest(unittest.TestCase):
     def test_isoelectric_point(self):
         """Calculate the isoelectric point."""
         # Old test used a number rounded to two digits, so use the same
-        self.assertAlmostEqual(round(self.analysis.isoelectric_point(), 2), 7.72)
+        self.assertAlmostEqual(self.analysis.isoelectric_point(), 7.72, 2)
+
+    def test_charge_at_pH(self):
+        """Test charge_at_pH function."""
+        self.assertAlmostEqual(self.analysis.charge_at_pH(7.72), 0.00, 2)
 
     def test_secondary_structure_fraction(self):
         """Calculate secondary structure fractions."""
         helix, turn, sheet = self.analysis.secondary_structure_fraction()
         # Old test used numbers rounded to two digits, so use the same
-        self.assertAlmostEqual(round(helix, 2), 0.28)
-        self.assertAlmostEqual(round(turn, 2), 0.26)
-        self.assertAlmostEqual(round(sheet, 2), 0.25)
+        self.assertAlmostEqual(helix, 0.28, 2)
+        self.assertAlmostEqual(turn, 0.26, 2)
+        self.assertAlmostEqual(sheet, 0.25, 2)
 
     def test_protein_scale(self):
         """Calculate the Kite Doolittle scale."""
