@@ -327,7 +327,7 @@ class SeqFeature:
             qualifiers=OrderedDict(self.qualifiers.items()),
         )
 
-    def extract(self, parent_sequence):
+    def extract(self, parent_sequence, references=None):
         """Extract the feature's sequence from supplied parent sequence.
 
         The parent_sequence can be a Seq like object or a string, and will
@@ -337,7 +337,9 @@ class SeqFeature:
         This should cope with complex locations including complements, joins
         and fuzzy positions. Even mixed strand features should work! This
         also covers features on protein sequences (e.g. domains), although
-        here reverse strand features are not permitted.
+        here reverse strand features are not permitted. If the
+        location refers to other records, they must be supplied in the
+        optional dictionary references.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -365,7 +367,7 @@ class SeqFeature:
                 "The feature's .location is None. Check the "
                 "sequence file for a valid location."
             )
-        return self.location.extract(parent_sequence)
+        return self.location.extract(parent_sequence, references=references)
 
     def translate(
         self,
@@ -1092,12 +1094,14 @@ class FeatureLocation:
                 return None
             raise
 
-    def extract(self, parent_sequence):
+    def extract(self, parent_sequence, references=None):
         """Extract the sequence from supplied parent sequence using the FeatureLocation object.
 
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
         a MutableSeq as the parent sequence will return a Seq object.
+        If the location refers to other records, they must be supplied
+        in the optional dictionary references.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import FeatureLocation
@@ -1108,8 +1112,11 @@ class FeatureLocation:
 
         """
         if self.ref or self.ref_db:
-            # TODO - Take a dictionary as an optional argument?
-            raise ValueError("Feature references another sequence.")
+            if not references:
+                raise ValueError("Feature references another sequence ({}), references mandatory".format(self.ref))
+            if not references.get(self.ref):
+                raise ValueError("Feature references another sequence ({}), not found in references".format(self.ref))
+            parent_sequence = references[self.ref]
         if isinstance(parent_sequence, MutableSeq):
             # This avoids complications with reverse complements
             # (the MutableSeq reverse complement acts in situ)
@@ -1509,12 +1516,14 @@ class CompoundLocation:
         """Not present in CompoundLocation, dummy method for API compatibility."""
         return None
 
-    def extract(self, parent_sequence):
+    def extract(self, parent_sequence, references=None):
         """Extract the sequence from supplied parent sequence using the CompoundLocation object.
 
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
         a MutableSeq as the parent sequence will return a Seq object.
+        If the location refers to other records, they must be supplied
+        in the optional dictionary references.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
@@ -1527,7 +1536,7 @@ class CompoundLocation:
 
         """
         # This copes with mixed strand features & all on reverse:
-        parts = [loc.extract(parent_sequence) for loc in self.parts]
+        parts = [loc.extract(parent_sequence, references=references) for loc in self.parts]
         f_seq = functools.reduce(lambda x, y: x + y, parts)
         return f_seq
 
