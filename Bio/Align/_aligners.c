@@ -29,9 +29,11 @@
 #define CHARINDEX(s) (c = s, c >= 'a' ? c - 'a' : c - 'A')
 
 #define SAFE_ADD(t, s) \
-{   term = t; \
-    if (term > PY_SSIZE_T_MAX - s) { count = OVERFLOW_ERROR; goto exit; } \
-    s += term; \
+{   if (s != OVERFLOW_ERROR) { \
+        term = t; \
+        if (term > PY_SSIZE_T_MAX - s) s = OVERFLOW_ERROR; \
+        else s += term; \
+    } \
 }
 
 
@@ -232,7 +234,6 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
             counts[j] = count;
         }
     }
-exit:
     PyMem_Free(counts);
     return count;
 }
@@ -271,7 +272,6 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
         }
     }
     count = total;
-exit:
     PyMem_Free(counts);
     return count;
 }
