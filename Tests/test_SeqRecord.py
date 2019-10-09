@@ -150,6 +150,13 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
         self.assertEqual(expected, self.record.format("fasta"))
 
+    def test_format_spaces(self):
+        rec = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+                        id="TestID", name="TestName", description="TestDescr")
+        rec.description = "TestDescr     with5spaces"
+        expected = ">TestID TestDescr     with5spaces\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
+        self.assertEqual(expected, rec.format("fasta"))
+
     def test_upper(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", str(self.record.lower().upper().seq))
 
