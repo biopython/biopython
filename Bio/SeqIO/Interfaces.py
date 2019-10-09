@@ -92,7 +92,7 @@ def _get_seq_string(record):
 # Function variant of the SequenceWriter method.
 def _clean(text):
     """Use this to avoid getting newlines in the output (PRIVATE)."""
-    return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+    return text.replace("\n", " ").replace("\r", " ")
 
 
 class SequenceWriter(object):
@@ -123,7 +123,7 @@ class SequenceWriter(object):
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+        return text.replace("\n", " ").replace("\r", " ")
 
     def write_file(self, records):
         """Use this to write an entire file containing the given records.
