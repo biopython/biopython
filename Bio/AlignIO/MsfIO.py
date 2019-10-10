@@ -1,4 +1,5 @@
-# Copyright 2019 by Peter Cock.  All rights reserved.
+# Copyright 2019, National Marrow Donor Program (NMPD).  All rights reserved.
+# Written by Peter Cock, The James Hutton Institute, under contract to NMDP.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
