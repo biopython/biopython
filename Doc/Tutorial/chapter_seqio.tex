@@ -282,7 +282,7 @@ In the previous section, we demonstrated how to extract data from a
 \verb|SeqRecord|. Another common task is to alter this data. The attributes 
 of a \verb|SeqRecord| can be modified directly, for example:
 
-%doctest
+%doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
@@ -300,15 +300,18 @@ the \verb|id| and \verb|description| attributes. To ensure the correct
 behaviour, it is best to include the \verb|id| plus a space at the start of 
 the desired \verb|description|:
 
-%doctest
+%doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 >>> first_record = next(record_iterator)
 >>> first_record.id = "new_id"
 >>> first_record.description = first_record.id + " " + "desired new description"
->>> print(first_record.format("fasta").split("\n")[0])
+>>> print(first_record.format("fasta")[:200])
 >new_id desired new description
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA
+CGATCGAGTGAATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGT
+GACCCTGATTTGTTGTTGGGCCGCCTCGGGAGCGTCCATGGCGGGT
 \end{minted}
 
 \section{Parsing sequences from compressed files}
