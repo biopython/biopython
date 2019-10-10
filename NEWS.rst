@@ -25,6 +25,9 @@ Christian Marck's DNA Strider program ("xdna" format, also used by Serial
 Cloner), as well as reading files in the native formats of GSL Biotech's
 SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
 
+``Bio.AlignIO`` now supports GCG MSF mutliple sequence alignments as the "msf"
+format (work funded by the National Marrow Donor Program).
+
 The main ``Seq`` object now has string-like ``.index()`` and ``.rindex()``
 methods, matching the existing ``.find()`` and ``.rfind()`` implementations.
 The ``MutableSeq`` object retains its more list-like ``.index()`` behaviour.
