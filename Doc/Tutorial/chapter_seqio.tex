@@ -276,6 +276,44 @@ In general, extracting information from the FASTA description line is not very n
 If you can get your sequences in a well annotated file format like GenBank or EMBL,
 then this sort of annotation information is much easier to deal with.
 
+\subsection{Modifying data}
+
+In the previous section, we demonstrated how to extract data from a 
+\verb|SeqRecord|. Another common task is to alter this data. The attributes 
+of a \verb|SeqRecord| can be modified directly, for example:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
+>>> first_record = next(record_iterator)
+>>> first_record.id
+'gi|2765658|emb|Z78533.1|CIZ78533'
+>>> first_record.id = "new_id"
+>>> first_record.id
+'new_id'
+\end{minted}
+
+Note, if you want to change the way FASTA is output when written to a file 
+(see Section~\ref{sec:writing-sequence-files}), then you should modify both 
+the \verb|id| and \verb|description| attributes. To ensure the correct 
+behaviour, it is best to include the \verb|id| plus a space at the start of 
+the desired \verb|description|:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
+>>> first_record = next(record_iterator)
+>>> first_record.id = "new_id"
+>>> first_record.description = first_record.id + " " + "desired new description"
+>>> print(first_record.format("fasta")[:200])
+>new_id desired new description
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA
+CGATCGAGTGAATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGT
+GACCCTGATTTGTTGTTGGGCCGCCTCGGGAGCGTCCATGGCGGGT
+\end{minted}
+
 \section{Parsing sequences from compressed files}
 \label{sec:SeqIO_compressed}
 In the previous section, we looked at parsing sequence data from a file.
