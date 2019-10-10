@@ -282,13 +282,16 @@ In the previous section, we demonstrated how to extract data from a
 \verb|SeqRecord|. Another common task is to alter this data. The attributes 
 of a \verb|SeqRecord| can be modified directly, for example:
 
-\begin{minted}{python}
-from Bio import SeqIO
-record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
-first_record = next(record_iterator)
-print(first_record.id)
-first_record.id = "new_id"
-print(first_record.id)
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
+>>> first_record = next(record_iterator)
+>>> first_record.id
+'gi|2765658|emb|Z78533.1|CIZ78533'
+>>> first_record.id = "new_id"
+>>> first_record.id
+'new_id'
 \end{minted}
 
 Note, if you want to change the way FASTA is output when written to a file 
@@ -297,22 +300,16 @@ the \verb|id| and \verb|description| attributes. To ensure the correct
 behaviour, it is best to include the \verb|id| plus a space at the start of 
 the desired \verb|description|:
 
-\begin{minted}{python}
-from Bio import SeqIO
-record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
-first_record = next(record_iterator)
-first_record.id = "new_id"
-first_record.description = first_record.id + " " + "desired new description"
-print(first_record.format("fasta"))
-\end{minted}
-
-For this example, the first line printed is:
-
-\begin{minted}{python}
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
+>>> first_record = next(record_iterator)
+>>> first_record.id = "new_id"
+>>> first_record.description = first_record.id + " " + "desired new description"
+>>> print(first_record.format("fasta").split("\n")[0])
 >new_id desired new description
 \end{minted}
-
-This is followed by the sequence.
 
 \section{Parsing sequences from compressed files}
 \label{sec:SeqIO_compressed}
