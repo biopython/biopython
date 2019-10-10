@@ -162,7 +162,7 @@ class MsfIterator(AlignmentIterator):
             line = handle.readline()
             if line.strip().startswith("Name: "):
                 if " Len: " in line and " Check: " in line and " Weight: " in line:
-                    rest = line[line.index("Name: ") + 6:].strip()
+                    rest = line[line.index("Name: ") + 6 :].strip()
                     name, rest = rest.split(" Len: ")
                     length, rest = rest.split(" Check: ")
                     check, weight = rest.split(" Weight: ")
@@ -191,11 +191,12 @@ class MsfIterator(AlignmentIterator):
             if max_count > 0.75 * len(ids):
                 import warnings
                 from Bio import BiopythonParserWarning
+
                 warnings.warn(
                     "GCG MSF header said alignment length %i, "
                     "but %s of %i sequences said Len: %s - attempting to continue"
                     % (aln_length, max_count, len(ids), max_length),
-                    BiopythonParserWarning
+                    BiopythonParserWarning,
                 )
                 aln_length = max_length
             else:
@@ -320,9 +321,10 @@ class MsfIterator(AlignmentIterator):
         if padded:
             import warnings
             from Bio import BiopythonParserWarning
+
             warnings.warn(
                 "One of more alignment sequences were truncated and have been gap padded",
-                BiopythonParserWarning
+                BiopythonParserWarning,
             )
 
         records = (
