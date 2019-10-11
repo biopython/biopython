@@ -31,7 +31,7 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import _binary_to_string_handle
 
 
-def _q(op, arg1, arg2=None, arg3=None):
+def _q(op, arg1, arg2=None, arg3=None, timeout=None):
     URL = "http://rest.kegg.jp/%s"
     if arg2 and arg3:
         args = "%s/%s/%s/%s" % (op, arg1, arg2, arg3)
@@ -39,7 +39,11 @@ def _q(op, arg1, arg2=None, arg3=None):
         args = "%s/%s/%s" % (op, arg1, arg2)
     else:
         args = "%s/%s" % (op, arg1)
-    resp = _urlopen(URL % (args))
+
+    if timeout is not None:
+        resp = _urlopen(URL % (args), timeout=timeout)
+    else:
+        resp = _urlopen(URL % (args))
 
     if "image" == arg2:
         return resp
@@ -48,7 +52,7 @@ def _q(op, arg1, arg2=None, arg3=None):
 
 
 # http://www.kegg.jp/kegg/rest/keggapi.html
-def kegg_info(database):
+def kegg_info(database, timeout=None):
     """KEGG info - Displays the current statistics of a given database.
 
     db - database or organism (string)
@@ -71,10 +75,10 @@ def kegg_info(database):
     #              ko | genome |<org> | compound | glycan | reaction |
     #              rpair | rclass | enzyme | genomes | genes | ligand | kegg
     # <org> = KEGG organism code or T number
-    return _q("info", database)
+    return _q("info", database, timeout=timeout)
 
 
-def kegg_list(database, org=None):
+def kegg_list(database, org=None, timeout=None):
     """KEGG list - Entry list for database, or specified database entries.
 
     db - database or organism (string)
@@ -91,7 +95,7 @@ def kegg_list(database, org=None):
     #  <database> = pathway | module
     #  <org> = KEGG organism code
     if isinstance(database, str) and (database in ["pathway", "module"]) and org:
-        resp = _q("list", database, org)
+        resp = _q("list", database, org, timeout=timeout)
     elif isinstance(database, str) and database and org:
         raise Exception("Invalid database arg for kegg list request.")
 
@@ -115,12 +119,12 @@ def kegg_list(database, org=None):
             database = ("+").join(database)
         elif isinstance(database, list) and len(database) > 100:
             raise Exception("Maximuim number of databases is 100 for kegg list query")
-        resp = _q("list", database)
+        resp = _q("list", database, timeout=timeout)
 
     return resp
 
 
-def kegg_find(database, query, option=None):
+def kegg_find(database, query, option=None, timeout=None):
     """KEGG find - Data search.
 
     Finds entries with matching query keywords or other query data in
@@ -145,7 +149,7 @@ def kegg_find(database, query, option=None):
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
     if (database in ["compound", "drug"] and option in ["formula", "exact_mass", "mol_weight"]):
-        resp = _q("find", database, query, option)
+        resp = _q("find", database, query, option, timeout=timeout)
     elif option:
         raise Exception("Invalid option arg for kegg find request.")
 
@@ -158,12 +162,12 @@ def kegg_find(database, query, option=None):
     else:
         if isinstance(query, list):
             query = "+".join(query)
-        resp = _q("find", database, query)
+        resp = _q("find", database, query, timeout=timeout)
 
     return resp
 
 
-def kegg_get(dbentries, option=None):
+def kegg_get(dbentries, option=None, timeout=None):
     """KEGG get - Data retrieval.
 
     dbentries - Identifiers (single string, or list of strings), see below.
@@ -190,16 +194,16 @@ def kegg_get(dbentries, option=None):
     #
     # <option> = aaseq | ntseq | mol | kcf | image
     if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml"]:
-        resp = _q("get", dbentries, option)
+        resp = _q("get", dbentries, option, timeout=timeout)
     elif option:
         raise Exception("Invalid option arg for kegg get request.")
     else:
-        resp = _q("get", dbentries)
+        resp = _q("get", dbentries, timeout=timeout)
 
     return resp
 
 
-def kegg_conv(target_db, source_db, option=None):
+def kegg_conv(target_db, source_db, option=None, timeout=None):
     """KEGG conv - convert KEGG identifiers to/from outside identifiers.
 
     Arguments:
@@ -249,16 +253,16 @@ def kegg_conv(target_db, source_db, option=None):
            source_db in ["drug", "compound", "glycan"]):
 
         if option:
-            resp = _q("conv", target_db, source_db, option)
+            resp = _q("conv", target_db, source_db, option, timeout=timeout)
         else:
-            resp = _q("conv", target_db, source_db)
+            resp = _q("conv", target_db, source_db, timeout=timeout)
 
         return resp
     else:
         raise Exception("Bad argument target_db or source_db for kegg conv request.")
 
 
-def kegg_link(target_db, source_db, option=None):
+def kegg_link(target_db, source_db, option=None, timeout=None):
     """KEGG link - find related entries by using database cross-references.
 
     target_db - Target database
@@ -291,8 +295,8 @@ def kegg_link(target_db, source_db, option=None):
         source_db = "+".join(source_db)
 
     if option:
-        resp = _q("link", target_db, source_db, option)
+        resp = _q("link", target_db, source_db, option, timeout=timeout)
     else:
-        resp = _q("link", target_db, source_db)
+        resp = _q("link", target_db, source_db, timeout=timeout)
 
     return resp
