@@ -20,7 +20,7 @@ IC_Chain: object for Biopython Chain.internal_coords attribute.  Manages
     apply IC_Residue methods along chain.
 
 IC_Residue: object for Biopython Residue.internal_coords attribute.
-    Most control and methods of interest in this class, see description.
+    Most control and methods of interest are in this class, see description.
 
 Dihedron: four joined atoms forming a dihedral angle.  Dihedral angle,
     homogeneous atom coordinates in local coordinate space, references to
@@ -73,7 +73,7 @@ def set_accuracy_95(num):
 def set_accuracy_83(num):
     """Reduce floating point accuracy to 8.3 (xxxxx.xxx).
 
-    Used by IC_Residue class.
+    Used by IC_Residue class, matches PDB output format.
     :param float num: input number
     :returns: float with specified accuracy
     """
@@ -112,22 +112,21 @@ class AtomKey(object):
     altloc_match(other)
         Returns True if this AtomKey matches other AtomKey excluding altloc
         and occupancy fields
-    # is_sidechain_gamma()
-    #    Returns True if atom name contains 'G', meaning it is gamma element
-    #    of sidechain
 
     """
 
-    atom_re = re.compile(r'^(?P<resSeq>-?\d+)(?P<icode>[A-Za-z])?'
+    atom_re = re.compile(r'^(?P<respos>-?\d+)(?P<icode>[A-Za-z])?'
                          r'_(?P<resname>[a-zA-Z]+)_(?P<atm>[A-Za-z0-9]+)'
                          r'(?:_(?P<altloc>\w))?(?:_(?P<occ>-?\d\.\d?\d?))?$')
+
     # PDB altLoc = Character = [\w ] (any non-ctrl ASCII incl space)
     # PDB iCode = AChar = [A-Za-z]
-    # rtm TODO change resSeq to respos for case consistency
-    fieldNames = ('resSeq', 'icode', 'resname', 'atm', 'altloc', 'occ')
-    fields = namedtuple('fieldsDef', 'resSeq, icode, resname, '
+
+    fieldNames = ('respos', 'icode', 'resname', 'atm', 'altloc', 'occ')
+    fields = namedtuple('fieldsDef', 'respos, icode, resname, '
                         'atm, altloc, occ')(0, 1, 2, 3, 4, 5)
-    d2h = False
+
+    d2h = False  # convert D Deuterium to H Hydrogen on input
 
     def __init__(self, *args, **kwargs):
         """Initialize AtomKey with residue and atom data.
@@ -137,8 +136,8 @@ class AtomKey(object):
             (<IC_Residue>, <Atom>)       : IC_Residue with Biopython Atom
             ([52, None, 'G', 'CA', ...])  : list of ordered data fields
             (52, None, 'G', 'CA', ...)    : multiple ordered arguments
-            ({resSeq: 52, icode: None, atm: 'CA', ...}) : dict with fieldNames
-            (resSeq: 52, icode: None, atm: 'CA', ...) : kwargs with fieldNames
+            ({respos: 52, icode: None, atm: 'CA', ...}) : dict with fieldNames
+            (respos: 52, icode: None, atm: 'CA', ...) : kwargs with fieldNames
             52_G_CA, 52B_G_CA, 52_G_CA_0.33, 52_G_CA_B_0.33  : id strings
         """
         akl = []
@@ -191,7 +190,7 @@ class AtomKey(object):
                 akl[atmNdx] = re.sub('D', 'H', akl[atmNdx], count=1)
 
             # unused option:
-            # (self.resSeq, self.icode, self.resname, self.atm, self.occ,
+            # (self.respos, self.icode, self.resname, self.atm, self.occ,
             #    self.altloc) = akl
 
         self.id = '_'.join(
@@ -202,8 +201,6 @@ class AtomKey(object):
 
         self.akl = tuple(akl)
         self._hash = hash(self.akl)
-
-        # pass
 
     def __repr__(self):
         """Repr string from id."""
@@ -239,25 +236,19 @@ class AtomKey(object):
         else:
             return NotImplemented
 
-    # def is_sidechain_gamma(self):
-    #    """Test atom name contains 'G', then it is sidechain gamma atom."""
-    #    if 'G' in self.akl[3]:
-    #        return True
-    #    return False
-
     def _cmp(self, other):
         """Comparison function ranking self vs. other."""
         akl_s = self.akl
         akl_o = other.akl
         atmNdx = self.fields.atm
         occNdx = self.fields.occ
-        rsNdx = self.fields.resSeq
+        rsNdx = self.fields.respos
         for i in range(6):
             s, o = akl_s[i], akl_o[i]
             if s != o:
                 if atmNdx != i:
                     # only sorting complications at atom level, occ.
-                    # otherwise resSeq, insertion code will trigger
+                    # otherwise respos, insertion code will trigger
                     # before residue name
                     if occNdx == i:
                         tmp = float(s)
@@ -927,20 +918,6 @@ class Dihedron(Edron):
 
         self.atoms_updated = True
 
-    """
-    # unused - get Biopython Residue atoms to test dihedral calculations
-    def find_bp_atom(self, ak):
-        bpa = self.IC_Residue.bp_atoms.get(ak, None)
-        if bpa is not None:
-            return bpa
-        if self.IC_Residue.rnext:
-            bpa = self.IC_Residue.rnext.bp_atoms.get(ak, None)
-            if bpa is not None:
-                return bpa
-        if self.IC_Residue.rprev:
-            bpa = self.IC_Residue.rprev.bp_atoms.get(ak, None)
-        return bpa
-    """
 
     def set_angle(self, dangle_deg):
         """Save new dihedral angle and update initial_coords.
@@ -950,17 +927,6 @@ class Dihedron(Edron):
         """
         self.dihedral1 = dangle_deg
         self.atoms_updated = False
-
-        # if self.atoms_updated:
-        # if self.hedron1 is not None:  # then we are updating
-        #    initial = list(self.initial_coords)
-        #    mrz = homog_rot_mtx(numpy.deg2rad(dangle_deg, 'z'))
-        #    # initial[3] = mrz @ self.a4_pre_rotation
-        #    initial[3] = mrz.dot(self.a4_pre_rotation)
-        #    self.initial_coords = tuple(initial)
-        #    # self.atoms_updated = True still valid
-        # else:
-        #    self.init_pos()
 
     def get_angle(self):
         """Get this object dihedral angle."""
@@ -1077,7 +1043,7 @@ class IC_Residue(object):
           IC_Residue.accept_atoms = IC_Residue.accept_backbone + ('H',)
     accept_resnames : tuple
         list of 3-letter residue names for HETATMs to accept when generating
-        internal coordinates from atoms.  Sidechain will be ignored, but normal
+        internal coordinates from atoms.  HETATM sidechain will be ignored, but normal
         backbone atoms (N, CA, C, O, CB) will be included.  Currently only
         CYG, YCM and UNK; override at your own risk.  To generate
         sidechain, add appropriate entries to pic_data_sidechains in
@@ -1085,9 +1051,9 @@ class IC_Residue(object):
     gly_Cbeta : bool default False
         override class variable to True to generate internal coordinates for
         glycine CB atoms in dihedra_from_atoms().
-            IC_Residue.gly_Cbeta = True
+        IC_Residue.gly_Cbeta = True
     scale : optional float
-        added for OpenSCAD output, required to generate gly_Cbeta
+        used for OpenSCAD output to generate gly_Cbeta bond length
 
     Methods
     -------
@@ -1107,7 +1073,7 @@ class IC_Residue(object):
         Compute atom coordinates for this residue from internal coordinates
     dihedra_from_atoms() :
         Create hedra and dihedra for atom coordinates
-    write_PIC(pdbid, chainId, s, stats) :
+    write_PIC(pdbid, chainId, s) :
         Generate PIC format strings for this residue
     coords_to_residue() :
         Convert homogeneous atom_coords to Biopython cartesian Atom coords
@@ -1129,8 +1095,8 @@ class IC_Residue(object):
     """
 
     # add 3-letter residue name here for non-standard residues with
-    # normal backbone.  Currently only CYG for test case 4LGY
-    # (1305 residue contiguous chain)
+    # normal backbone.  CYG for test case 4LGY (1305 residue contiguous
+    # chain)
     accept_resnames = ('CYG', 'YCM', 'UNK', )
 
     def __init__(self, parent, NO_ALTLOC=False):
@@ -1163,8 +1129,6 @@ class IC_Residue(object):
         # generated from dihedra include some i+1 atoms
         # or initialised here from parent residue if loaded from coordinates
         self.atom_coords = {}
-        # TODO: remove bp_atoms, just for testing against bp vector()
-        # self.bp_atoms = {}
         # bfactors copied from PDB file
         self.bfactors = {}
         if NO_ALTLOC:
@@ -1259,7 +1223,6 @@ class IC_Residue(object):
         ak = self.rak(atm)
         self.atom_coords[ak] = IC_Residue.atm241(atm.coord)
         self.ak_set.add(ak)
-        # self.bp_atoms[ak] = atm
 
     def __str__(self):
         """Print string is parent Residue ID."""
@@ -1299,19 +1262,15 @@ class IC_Residue(object):
         self.id3_dh_index = id3i
         # more efficient to catch NCaC KeyError later, but fixing here
         # avoids having to test/find altloc problem in future code
-        # need to handle differently - want list of tuples not list of atomkeys
         newNCaCKey = []
         for tpl in self.NCaCKey:
             newNCaCKey.extend(self._split_akl(tpl))
         self.NCaCKey = tuple(newNCaCKey)
-        # self.NCaCKey = self._split_akl(self.NCaCKey)
-        # pass
 
     def render_dihedra(self):
-        # TODO: check!
-        """Call init_pos for each dihedron in dihedra."""
+        """Set hedron-space atom coordinates for each dihedron."""
         for d in self.dihedra.values():
-            # if d.atoms_updated:
+            #if d.atoms_updated:   # sorry, not fully implemented
             d.init_pos()
 
     def set_flexible(self):
@@ -1352,11 +1311,7 @@ class IC_Residue(object):
             if 3 > len(startPos):
                 startPos = None  # interested if we hit this?
         else:
-            # in theory the atom posns already added by load_structure
-            # resSeq, icode = self.residue.id[1:]
-            # NCaCselect = str(resSeq) + icode
-            # stored in IC_Chain object
-            # NCaCselect]
+            # get atom posns already added by load_structure
             startPos = self.residue.parent.internal_coord.initNCaC.get(
                 self.rbase, None)
 
@@ -1447,8 +1402,6 @@ class IC_Residue(object):
         else:
             atomCoords = self.get_startpos()
 
-# TODO: optimise - need to check both len and not None????
-
         while q:  # deque is not empty
             if dbg:
                 print('assemble loop start q=', q)
@@ -1475,7 +1428,7 @@ class IC_Residue(object):
                             q.appendleft(d_h2key)
                             # print('    4- already done, append left')
                         elif 3 == acount:
-                            # TODO:[0, 1, x, 3] possible? then bug
+                            # if [0, 1, x, 3] is possible then bug
                             # print('    3- call coord_space')
                             mt, mtr = coord_space(
                                 [atomCoords[a] for a in akl[:3]], True)
@@ -1485,7 +1438,6 @@ class IC_Residue(object):
                                 print(
                                     '        initial_coords[3]=',
                                     d.initial_coords[3].transpose())
-                            # acak3 = mtr @ d.initial_coords[3]
                             acak3 = mtr.dot(d.initial_coords[3])
                             if dbg:
                                 print('        acak3=', acak3.transpose())
@@ -1508,8 +1460,6 @@ class IC_Residue(object):
             return transformations
         else:
             return atomCoords
-
-    # altloc_re = re.compile(r'-([A-Z])\Z')
 
     def _split_akl(self, lst):
         """Get AtomKeys for this residue (ak_set) given generic list of AtomKeys.
@@ -1595,8 +1545,6 @@ class IC_Residue(object):
             # print(new_edraLst)
             return new_edraLst
 
-        # can't reach here
-
     def _gen_edra(self, lst):
         """Populate hedra/dihedra given edron ID tuple.
 
@@ -1630,13 +1578,10 @@ class IC_Residue(object):
         """Create hedra and dihedra for atom coordinates."""
         sN, sCA, sC = self.rak('N'), self.rak('CA'), self.rak('C')
         sCB = self.rak('CB')
-        # sO, sCB = self.rak('O'), self.rak('CB')
-        # sN = AtomKey(self, 'N')
 
         if 0 < len(self.rnext):
             # atom_coords, hedra and dihedra for backbone dihedra
             # which reach into next residue
-            # rn = self.rnext
             for rn in self.rnext:
                 nN, nCA, nC = rn.rak('N'), rn.rak('CA'), rn.rak('C')
 
@@ -1657,54 +1602,8 @@ class IC_Residue(object):
                 self._gen_edra([sC, nN, nCA])
                 self._gen_edra([nN, nCA, nC])
 
-        # backbone O and C-beta hedra and dihedra within this residue
-        # self._gen_edra([sN, sCA, sC, sO])
-        # self._gen_edra([sO, sC, sCA, sCB])
-
         if 0 == len(self.rprev):
             self._gen_edra([sN, sCA, sC])
-
-        # self._gen_edra([sCA, sC, sO])
-        # self._gen_edra([sCB, sCA, sC])
-
-        # if res is not G or A
-        # only needed for sidechain CG residues
-        # (not gly or ala or any missing rest of side chain)
-
-        # if 'G' != self.lc and 'A' != self.lc:  # need for CB h's
-        # if 'G' != self.lc:
-        # for ak in self.atom_coords:
-        #        if ak.is_sidechain_gamma():
-        #            self._gen_edra([sN, sCA, sCB])
-        #            break
-
-        # terminal OXT if present
-        # sOXT = self.rak('OXT')
-        # if sOXT in self.atom_coords:  # TODO: remove check done in gen_edra
-        #    self._gen_edra([sCA, sC, sOXT])
-        #    self._gen_edra([sN, sCA, sC, sOXT])
-
-        # amide proton N H if present
-        # sH = self.rak('H')
-        # self._gen_edra([sH, sN, sCA])
-        # self._gen_edra([sC, sCA, sN, sH])
-
-        # if (self.gly_Cbeta and 'G' == self.lc and sCB not in
-        # self.atom_coords):
-        #    # add C-beta for Gly
-        #    sO = self.rak('O')
-        #    self.atom_coords[sCB] = None
-        #    self._gen_edra([sCB, sCA, sC])
-        #    self._gen_edra([sO, sC, sCA, sCB])
-
-            # cb = numpy.append(genCBjones(self.residue), [1])
-            # self.atom_coords[sCB] = numpy.array(cb, dtype=numpy.float64)[
-            #    numpy.newaxis].transpose()
-            # rest is just to print bfactor in pic file so testing works well
-            # ac = self.atom_coords[sCB]
-            # ac = ac[:3].transpose()[0]
-            # newAtom = Atom('CB', ac, 0.0, 1.00, ' ', 'CB', 0, 'C')
-            # self.residue.add(newAtom)
 
         # standard backbone atoms independent of neighbours
         backbone = pic_data_backbone
@@ -1724,16 +1623,6 @@ class IC_Residue(object):
                 for edra in sidechain:
                     r_edra = [self.rak(atom) for atom in edra]
                     self._gen_edra(r_edra[0:4])
-
-        # testing C-beta generation against Ala:
-        # if 'A' == self.lc:
-        #    aj = genCBjones(self.residue)
-        #    ah = genCBhamelryck(self.residue)
-        #    cac = self.residue['CB'].coord
-        #    cav = self.residue['CB'].get_vector()
-        #    dj = aj - cac
-        #    dh = ah - cav
-        #    print('deltaJ=',dj,'deltaH=',dh,aj,cac)
 
         self.link_dihedra()
 
@@ -1755,9 +1644,9 @@ class IC_Residue(object):
             self._gen_edra(htpl)
             h = self.hedra[htpl]
             h.len3 = self.hedra[(sN, sCA, sC)].len3
-            # TODO: databse work to generate constants
-            h.angle2 = 112.81236
-            h.len1 = 1.53908 * (self.scale if hasattr(self, 'scale') else 1.0)
+            # data averaged from May 2019 Dunbrack cullpdb_pc20_res2.2_R1.0
+            h.angle2 = 110.17513
+            h.len1 = 1.53363 * (self.scale if hasattr(self, 'scale') else 1.0)
             dtpl = (sO, sC, sCA, sCB)
             self._gen_edra(dtpl)
             d = self.dihedra[dtpl]
@@ -1817,13 +1706,12 @@ class IC_Residue(object):
             s += '\n'
         return s, col
 
-    def write_PIC(self, pdbid, chainid, s='', stats=False):
+    def write_PIC(self, pdbid, chainid, s=''):
         """Write PIC format lines for this residue.
 
         :param str pdbid: PDB idcode string
         :param str chainid: PDB Chain ID character
         :param str s: result string to add to
-        :param bool stats: option to output counts TODO: what stats???
         """
         s += IC_Residue._residue_string(self.residue)
         if 0 == len(self.rprev):
@@ -1834,7 +1722,7 @@ class IC_Residue(object):
                 s += ts  # only if no exception, have all 3 atoms
             except KeyError:
                 pass
-        # TODO: lose pdbid .. chainid format after lua compare?
+
         base = pdbid + ' ' + chainid + ' '
         for h in sorted(self.hedra.values()):
             try:
@@ -1871,8 +1759,8 @@ class IC_Residue(object):
         Change homogeneous IC_Residue atom_coords to self.residue cartesian
         Biopython Atom coords.
         """
-        resSeq, icode = self.residue.id[1:3]
-        resSeq = str(resSeq)
+        respos, icode = self.residue.id[1:3]
+        respos = str(respos)
         spNdx, icNdx, resnNdx, atmNdx, altlocNdx, occNdx = AtomKey.fields
 
         Res = self.residue
@@ -1880,7 +1768,7 @@ class IC_Residue(object):
 
         for ak in sorted(self.atom_coords):
             # print(ak)
-            if (resSeq == ak.akl[spNdx] and
+            if (respos == ak.akl[spNdx] and
                 ((icode == ' ' and ak.akl[icNdx] is None)
                  or icode == ak.akl[icNdx])):
 
@@ -1972,7 +1860,6 @@ class IC_Residue(object):
 
         :return: Matching Hedron, Dihedron, or None.
         """
-        # AK = AtomKey
 
         rval = None
         if isinstance(angle_key, tuple):
@@ -2086,7 +1973,7 @@ class IC_Chain:
 
     Attributes
     ----------
-    MaxPeptideBond : Class attribute to detect chain breaks.  Override to
+    MaxPeptideBond : Class attribute to detect chain breaks.  Override for
         fully contiguous chains with some very long bonds - e.g. for 3D
         printing (OpennSCAD output) a structure with fully disordered (missing)
         residues.
@@ -2118,7 +2005,7 @@ class IC_Chain:
 
     """
 
-    MaxPeptideBond = 1.4
+    MaxPeptideBond = 1.4  # larger C-N distance than this is chain break
 
     def __init__(self, parent):
         """Initialize IC_Chain object, with or without residue/Atom data.
@@ -2257,15 +2144,15 @@ class IC_Chain:
              process
         """
         for rpic in self.ordered_aa_pic_list:
-            resSeq, resicode = rpic.residue.id[1:]
+            respos, resicode = rpic.residue.id[1:]
             go = True
             if (start and
-                (start[0] > resSeq or
-                    (start[0] == resSeq and start[1] < resicode))):
+                (start[0] > respos or
+                    (start[0] == respos and start[1] < resicode))):
                 go = False
             if (go and fin and
-                (fin[0] < resSeq or
-                    (fin[0] == resSeq and fin[1] > resicode))):
+                (fin[0] < respos or
+                    (fin[0] == respos and fin[1] > resicode))):
                 go = False
             if go:
                 rpic.atom_coords = rpic.assemble()
@@ -2282,15 +2169,10 @@ class IC_Chain:
             elif res.internal_coord:
                 res.internal_coord.coords_to_residue()
 
-    # TODO: fix to allow only updating parts of structure
-    # esp sidechain rotamers
-
     def internal_to_atom_coordinates(self):
         """Complete process pic data to Residue/Atom coords."""
-        # self.link_residues()
-        # self.render_dihedra()
-        self.assemble_residues()
-        self.coords_to_structure()
+        self.assemble_residues()  # internal to XYZ coordinates
+        self.coords_to_structure()  # promote to BioPython Residue/Atom
 
     def dihedra_from_atoms(self, allBonds=False):
         """Calculate dihedrals, angles, bond lengths for Atom data."""
@@ -2335,20 +2217,35 @@ class IC_Chain:
         fp.write(' ]')  # close residue array of dihedra entry
 
     def write_SCAD(self, fp, scale, backboneOnly):
-        """Write self to file as OpenSCAD data matrices.
+        """Write self to file fp as OpenSCAD data matrices.
 
-        See standalone write_SCAD() in SCADIO.py for details.
+        Works with write_SCAD() and embedded OpenSCAD routines in SCADIO.py.
+        The OpenSCAD code explicitly creates spheres and cylinders to 
+        represent atoms and bonds in a 3D model.  Options are available
+        to support rotatable bonds and magnetic hydrogen bonds.
+
+        Matrices are written to link, enumerate and describe residues,
+        dihedra, hedra, and chains, mirroring contents of the relevant IC_*
+        data structures.  
+
+        The OpenSCAD matrix of hedra has additional information as follows:
+        - the atom and bond state (single, double, resonance) are logged
+          so that covalent radii may be used for atom spheres in the 3D
+          models
+        - bonds and atoms are tracked so that each is only created once
+        - bond options for rotation and magnet holders for hydrogen bonds
+          may be specified
         """
         fp.write('   "{}", // chain id\n'.format(self.chain.id))
 
         # generate dict for all hedra to eliminate redundant references
         hedra = {}
         for rpic in self.ordered_aa_pic_list:
-            resSeq, resicode = rpic.residue.id[1:]
+            respos, resicode = rpic.residue.id[1:]
             for k, h in rpic.hedra.items():
                 hedra[k] = h
         atomSet = set()
-        bondSet = {}  # set()
+        bondDict = {}  # set()
         hedraSet = set()
         ndx = 0
         hedraNdx = {}
@@ -2357,7 +2254,7 @@ class IC_Chain:
             hedraNdx[hk] = ndx
             ndx += 1
 
-        # write residue table
+        # write residue dihedra table
 
         fp.write('   [  // residue array of dihedra')
         resNdx = {}
@@ -2400,14 +2297,15 @@ class IC_Chain:
         fp.write('\n  ],\n')  # end of all dihedra table
 
         # write hedra table
+        
         fp.write('   [  //hedra\n')
         for hk in sorted(hedra):
             hed = hedra[hk]
             fp.write('     [ ')
             fp.write("{:9.5f}, {:9.5f}, {:9.5f}".format(
                 hed.len1, hed.angle2, hed.len3))
-            atom_str = ''
-            atom_done_str = ''
+            atom_str = '' # atom and bond state
+            atom_done_str = '' # create each only once
             akndx = 0
             for ak in hed.aks:
                 atm = ak.akl[ak.fields.atm]
@@ -2423,6 +2321,7 @@ class IC_Chain:
                     else:
                         ab_state = ''
                 atom_str += ', "' + ab_state + '"'
+
                 if ak in atomSet:
                     atom_done_str += ', 0'
                 elif hk in hedraSet:
@@ -2450,38 +2349,41 @@ class IC_Chain:
                 akndx += 1
             fp.write(atom_str)
             fp.write(atom_done_str)
+
+            # specify bond options
+
             bond = []
             bond.append(hed.aks[0].id + '-' + hed.aks[1].id)
             bond.append(hed.aks[1].id + '-' + hed.aks[2].id)
             b0 = True
             for b in bond:
                 wstr = ''
-                if b in bondSet and bondSet[b] == 1:
+                if b in bondDict and bondDict[b] == 'StdBond':
                     wstr = ', 0'
                 elif hk in hedraSet:
-                    bondType = 1
+                    bondType = 'StdBond'
                     if b0:
                         if hasattr(hed, 'flex_female_1'):
-                            bondType = 2
+                            bondType = 'FemaleJoinBond'
                         elif hasattr(hed, 'flex_male_1'):
-                            bondType = 3
+                            bondType = 'MaleJoinBond'
                         elif hasattr(hed, 'skinny_1'):
-                            bondType = 4
+                            bondType = 'SkinnyBond'
                         elif hasattr(hed, 'hbond_1'):
-                            bondType = 5
+                            bondType = 'HBond'
                     else:
                         if hasattr(hed, 'flex_female_2'):
-                            bondType = 2
+                            bondType = 'FemaleJoinBond'
                         elif hasattr(hed, 'flex_male_2'):
-                            bondType = 3
+                            bondType = 'MaleJoinBond'
 #                        elif hasattr(hed, 'skinny_2'):  # unused
-#                            bondType = 4
+#                            bondType = 'SkinnyBond'
                         elif hasattr(hed, 'hbond_2'):
-                            bondType = 5
-                    if b in bondSet:
-                        bondSet[b] = 1
+                            bondType = 'HBond'
+                    if b in bondDict:
+                        bondDict[b] = 'StdBond'
                     else:
-                        bondSet[b] = bondType
+                        bondDict[b] = bondType
                     wstr = ', ' + str(bondType)
                 else:
                     wstr = ', 0'
@@ -2489,7 +2391,7 @@ class IC_Chain:
                 b0 = False
             akl = hed.aks[0].akl
             fp.write(', "' + akl[ak.fields.resname] + '", ' +
-                     akl[ak.fields.resSeq] + ', "' + hed.dh_class + '"')
+                     akl[ak.fields.respos] + ', "' + hed.dh_class + '"')
             fp.write(' ], // ' + str(hk) + '\n')
         fp.write('   ],\n')  # end of hedra table
 
