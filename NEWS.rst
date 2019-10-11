@@ -20,10 +20,11 @@ Note we intend to drop Python 2.7 support in early 2020.
 The restriction enzyme list in Bio.Restriction has been updated to the August
 2019 release of REBASE.
 
-``Bio.SeqIO`` now supports reading and writing files in the native format of
-Christian Marck's DNA Strider program ("xdna" format, also used by Serial
-Cloner), as well as reading files in the native formats of GSL Biotech's
-SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
+``Bio.SeqIO`` now supports reading and writing files in the NCBI TinySeq XML
+format ("tinyseq"), and native format of Christian Marck's DNA Strider program
+("xdna" format, also used by Serial Cloner), as well as reading files in the
+native formats of GSL Biotech's SnapGene ("snapgene") and Textco Biosoftware's
+Gene Construction Kit ("gck").
 
 The main ``Seq`` object now has string-like ``.index()`` and ``.rindex()``
 methods, matching the existing ``.find()`` and ``.rfind()`` implementations.

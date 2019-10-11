@@ -1,0 +1,90 @@
+<TSeqSet>
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497606</TSeq_gi>
+  <TSeq_accver>HM357625.1</TSeq_accver>
+  <TSeq_taxid>4793</TSeq_taxid>
+  <TSeq_orgname>Phytophthora citrophthora</TSeq_orgname>
+  <TSeq_defline>Phytophthora citrophthora strain IK-KD/Duzce/almond 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>257</TSeq_length>
+  <TSeq_sequence>CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAAAACTTTCCACGTGAACCGTATCAACCCTTTTAGTTGGGGGTGTTGCTTGGCGTTTTTGCTGAGCCACGCCCTATCATGGCGAATGTTTGGACTTCGGTCTGGGCTAGTAGCTTTTTTGTTTTAAACCCATTTAACAATACTGATTATACTGTGGGGACGAAAGTCTCTGCTTTAACTAGATAGCAACTTTAGTCAGGGTTGCTTTTTTTTT</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497605</TSeq_gi>
+  <TSeq_accver>HM357624.1</TSeq_accver>
+  <TSeq_taxid>4793</TSeq_taxid>
+  <TSeq_orgname>Phytophthora citrophthora</TSeq_orgname>
+  <TSeq_defline>Phytophthora citrophthora strain IK-KD/Kayseri 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>254</TSeq_length>
+  <TSeq_sequence>CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAAAACTTTCCACGTGAACCGTATCAACCCTTTTAGTTGGGGGTGTTGCTTGGCGTTTTTGCTGAGCCACGCCCTATCATGGCGAATGTTTGGACTTCGGTCTGGGCTAGTAGCTTTTTTGTTTTAAACCCATTTAACAATACTGATTATACTGTGGGGACGAAAGTCTCTGCTTTTAACTAGATAGCAACTTCATNCAGTAGTTGCCTTC</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497604</TSeq_gi>
+  <TSeq_accver>HM357623.1</TSeq_accver>
+  <TSeq_taxid>4793</TSeq_taxid>
+  <TSeq_orgname>Phytophthora citrophthora</TSeq_orgname>
+  <TSeq_defline>Phytophthora citrophthora strain IK-KD/Ankara/almond-2 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>255</TSeq_length>
+  <TSeq_sequence>CCATCCGTAGGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAAAACTTTCCACGTGAACCGTATCAACCCTTTTAGTTGGGGGTGTTGCTTGGCGTTTTTGCTGAGCCACGCCCTATCATGGCGAATGTTTGGACTTCGGTCTGGGCTAGTAGCTTTTTTGTTTTAAACCCATTTAACAATACTGATTATACTGTGGGGACGAAAGTCTCTGCTTTTAACTAGATAGCAACTTCAGNCAGGATTCGCCCCC</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497603</TSeq_gi>
+  <TSeq_accver>HM357622.1</TSeq_accver>
+  <TSeq_taxid>29920</TSeq_taxid>
+  <TSeq_orgname>Phytophthora cactorum</TSeq_orgname>
+  <TSeq_defline>Phytophthora cactorum strain IK-KD/Ankara/almond 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>275</TSeq_length>
+  <TSeq_sequence>CCTTCCGTAGNGTGACCTGCGGAAGGATCATTACCACACCTAAAAACTTTCCACGTGAACCGTTTCAAACCAAATAGTTGGGGGTCTTGTCTGGTGGCGGCTGCTGGCTTTATTGTTGGCGGCTGCTGCTGGGTGAGCCCTATCATGGCGAGCGTTTGGGCTTCGGCCTGAGCTAGTAGCTTTTCTTTTAAACCCATTCCTTAATACTGATTATACTGTGGGGACGAAAGTCCTTGCTTTTAACTAGATAGCAACTTCATGCATGGATCGCTCCC</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497600</TSeq_gi>
+  <TSeq_accver>HM357619.1</TSeq_accver>
+  <TSeq_taxid>29920</TSeq_taxid>
+  <TSeq_orgname>Phytophthora cactorum</TSeq_orgname>
+  <TSeq_defline>Phytophthora cactorum strain IK-KD/Nigde/apple 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>278</TSeq_length>
+  <TSeq_sequence>CCCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAACTTTCCACGTGAACCGTTTCAAACCAAATAGTTGGGGGTCTTGTCTGGTGGCGGCTGCTGGCTTTATTGTTGGCGGCTGCTGCTGGGTGAGCCCTATCATGGCGAGCGTTTGGGCTTCGGCCTGAGCTAGTAGCTTTTCTTTTAAACCCATTCCTTAATACTGATTATACTGTGGGGACGAAAGTCCTTGCTTTTAACTAGATAGCAACTTCAGTCAGGATCTGCCCCTTT</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497599</TSeq_gi>
+  <TSeq_accver>HM357618.1</TSeq_accver>
+  <TSeq_taxid>29920</TSeq_taxid>
+  <TSeq_orgname>Phytophthora cactorum</TSeq_orgname>
+  <TSeq_defline>Phytophthora cactorum strain IK-KD/Isparta-Gelendost-2 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>277</TSeq_length>
+  <TSeq_sequence>CCCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAACTTTCCACGTGAACCGTTTCAAACCAAATAGTTGGGGGTCTTGTCTGGTGGCGGCTGCTGGCTTTATTGTTGGCGGCTGCTGCTGGGTGAGCCCTATCATGGCGAGCGTTTGGGCTTCGGCCTGAGCTAGTAGCTTTTCTTTTAAACCCATTCCTTAATACTGATTATACTGTGGGGACGAAAGTCCTTGCTTTTAACTAGATAGCAACTTCAGCAGGGATTTCCCTTTT</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497598</TSeq_gi>
+  <TSeq_accver>HM357617.1</TSeq_accver>
+  <TSeq_taxid>29920</TSeq_taxid>
+  <TSeq_orgname>Phytophthora cactorum</TSeq_orgname>
+  <TSeq_defline>Phytophthora cactorum strain IK-KD/Isparta-Gelendost 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>275</TSeq_length>
+  <TSeq_sequence>CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAACTTTCCACGTGAACCGTTTCAAACCAAATAGTTGGGGGTCTTGTCTGGTGGCGGCTGCTGGCTTTATTGTTGGCGGCTGCTGCTGGGTGAGCCCTATCATGGCGAGCGTTTGGGCTTCGGCCTGAGCTAGTAGCTTTTCTTTTAAACCCATTCCTTAATACTGATTATACTGTGGGGACGAAAGTCCTTGCTTTTAACTAGATAGCAACTTCAGCAGGTTCTGCCCCCT</TSeq_sequence>
+</TSeq>
+
+<TSeq>
+  <TSeq_seqtype value="nucleotide"/>
+  <TSeq_gi>298497597</TSeq_gi>
+  <TSeq_accver>HM357616.1</TSeq_accver>
+  <TSeq_taxid>29920</TSeq_taxid>
+  <TSeq_orgname>Phytophthora cactorum</TSeq_orgname>
+  <TSeq_defline>Phytophthora cactorum strain IK-KD/Isparta 18S ribosomal RNA gene, partial sequence; internal transcribed spacer 1, complete sequence; and 5.8S ribosomal RNA gene, partial sequence</TSeq_defline>
+  <TSeq_length>276</TSeq_length>
+  <TSeq_sequence>CCTTCCGTAGGTGAACCTGCGGAAGGATCATTACCACACCTAAAAACTTTCCACGTGAACCGTTTCAAACCAAATAGTTGGGGGTCTTGTCTGGTGGCGGCTGCTGGCTTTATTGTTGGCGGCTGCTGCTGGGTGAGCCCTATCATGGCGAGCGTTTGGGCTTCGGCCTGAGCTAGTAGCTTTTCTTTTAAACCCATTCCTTAATACTGATTATACTGTGGGGACGAAAGTCCTTGCTTTAACTAGATAGCACTTTCAGCAGTGGTTGCCCTCTTG</TSeq_sequence>
+</TSeq>
+
+</TSeqSet>

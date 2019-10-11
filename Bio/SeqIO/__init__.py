@@ -322,6 +322,7 @@ names are also used in Bio.AlignIO and include the following:
       line holds a record's identifier and sequence. For example,
       this is used as by Aligent's eArray software when saving
       microarray probes in a minimal tab delimited text file.
+    - tinyseq - NCBI Tiny Sequence XML format, has an explicit organism field.
     - qual    - A "FASTA like" format holding PHRED quality values from
       sequencing DNA, but no actual sequences (usually provided
       in separate FASTA files).
@@ -405,6 +406,7 @@ from . import SffIO
 from . import SnapGeneIO
 from . import SwissIO
 from . import TabIO
+from . import TinySeqIO
 from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 from . import XdnaIO
@@ -452,11 +454,12 @@ _FormatToIterator = {
     "qual": QualityIO.QualPhredIterator,
     "seqxml": SeqXmlIO.SeqXmlIterator,
     "sff": SffIO.SffIterator,
-    "snapgene": SnapGeneIO.SnapGeneIterator,
     # Not sure about this in the long run:
     "sff-trim": SffIO._SffTrimIterator,
+    "snapgene": SnapGeneIO.SnapGeneIterator,
     "swiss": SwissIO.SwissIterator,
     "tab": TabIO.TabIterator,
+    "tinyseq": TinySeqIO.TinySeqIterator,
     "uniprot-xml": UniprotIO.UniprotIterator,
     "xdna": XdnaIO.XdnaIterator,
 }
@@ -492,6 +495,7 @@ _FormatToWriter = {
     "seqxml": SeqXmlIO.SeqXmlWriter,
     "sff": SffIO.SffWriter,
     "tab": TabIO.TabWriter,
+    "tinyseq": TinySeqIO.TinySeqWriter,
     "xdna": XdnaIO.XdnaWriter,
 }
 

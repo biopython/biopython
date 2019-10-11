@@ -324,6 +324,8 @@ class SeqXmlWriter(SequentialSequenceWriter):
                         'Multiple entries for record.annotations["ncbi_taxid"], %r'
                         % local_ncbi_taxid
                     )
+            if isinstance(local_ncbi_taxid, int):
+                local_ncbi_taxid = str(local_ncbi_taxid)
         if "organism" in record.annotations and local_ncbi_taxid:
             local_org = record.annotations["organism"]
 
