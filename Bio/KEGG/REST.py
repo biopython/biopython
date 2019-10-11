@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+#contributor: Sasankh BC
+
 """Provides code to access the REST-style KEGG online API.
 
 This module aims to make the KEGG online REST-style API easier to use. See:
@@ -235,14 +237,15 @@ def kegg_conv(target_db, source_db, option=None):
     # <database> = drug | compound | glycan | pubchem | chebi
     #
     # <option> = turtle | n-triple
+    #\source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
+
     if option and option not in ["turtle", "n-triple"]:
         raise Exception("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
 
-    if target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
+    if target_db in ["ncbi-gi", "ncbi-geneid", "uniprot","genes"] or \
        (target_db in ["drug", "compound", "glycan"] and
            source_db in ["pubchem", "glycan"]) or \
        (target_db in ["pubchem", "glycan"] and
