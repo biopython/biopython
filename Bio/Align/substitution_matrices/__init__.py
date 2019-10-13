@@ -257,7 +257,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
     def keys(self):
-        """A.keys() -> list of A's keys"""
+        """Return a tuple with the keys associated with the array."""
         dims = len(self.shape)
         alphabet = self._alphabet
         if dims == 1:
