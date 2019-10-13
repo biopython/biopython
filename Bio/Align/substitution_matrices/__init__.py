@@ -1,3 +1,5 @@
+"""Substitution matrices."""
+
 import os
 import string
 import numpy
@@ -7,8 +9,10 @@ from Bio._py3k import raise_from
 
 
 class Array(numpy.ndarray):
+    """numpy array subclass indexed by integers and by letters."""
 
     def __new__(cls, alphabet=None, dims=None, data=None, dtype=float):
+        """Create a new Array instance."""
 
         if isinstance(data, dict):
             if alphabet is not None:
@@ -73,7 +77,7 @@ class Array(numpy.ndarray):
         if alphabet is None:
             alphabet = string.ascii_uppercase
         elif not (isinstance(alphabet, str) or isinstance(alphabet, tuple)):
-            raise ValueError("alphabet should be a string or a tuple") 
+            raise ValueError("alphabet should be a string or a tuple")
         n = len(alphabet)
         if data is None:
             if dims is None:
@@ -111,7 +115,7 @@ class Array(numpy.ndarray):
     def __array_finalize__(self, obj):
         if obj is None:
             return
-        self._alphabet = getattr(obj, '_alphabet', None)
+        self._alphabet = getattr(obj, "_alphabet", None)
 
     def _convert_key(self, key):
         if isinstance(key, tuple):
@@ -175,7 +179,7 @@ class Array(numpy.ndarray):
             else:
                 args.append(arg)
 
-        outputs = kwargs.pop('out', None)
+        outputs = kwargs.pop("out", None)
         if outputs:
             out_args = []
             for arg in outputs:
@@ -185,16 +189,16 @@ class Array(numpy.ndarray):
                     out_args.append(arg.view(numpy.ndarray))
                 else:
                     out_args.append(arg)
-            kwargs['out'] = tuple(out_args)
+            kwargs["out"] = tuple(out_args)
         else:
             outputs = (None,) * ufunc.nout
 
         raw_results = super(Array, self).__array_ufunc__(ufunc, method,
-                                                            *args, **kwargs)
+                                                         *args, **kwargs)
         if raw_results is NotImplemented:
             return NotImplemented
 
-        if method == 'at':
+        if method == "at":
             return
 
         if ufunc.nout == 1:
@@ -215,6 +219,7 @@ class Array(numpy.ndarray):
         return results[0] if len(results) == 1 else results
 
     def transpose(self, axes=None):
+        """Transpose the array."""
         other = numpy.ndarray.transpose(self, axes)
         other._alphabet = self._alphabet
         return other
@@ -224,12 +229,8 @@ class Array(numpy.ndarray):
         return self._alphabet
 
     def copy(self):
+        """Copy the array."""
         other = Array(alphabet=self._alphabet, data=self)
-        return other
-
-    def fromalphabet(self, value):
-        other = Array(alphabet=self._alphabet)
-        other[:,:] = value
         return other
 
     def get(self, key, value=None):
@@ -239,6 +240,7 @@ class Array(numpy.ndarray):
             return value
         
     def items(self):
+        """A.items() -> list of A's (key, value) pairs, as 2-tuples"""
         dims = len(self.shape)
         if dims == 1:
             for index, key in enumerate(self._alphabet):
@@ -254,6 +256,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
     def keys(self):
+        """A.keys() -> list of A's keys"""
         dims = len(self.shape)
         alphabet = self._alphabet
         if dims == 1:
@@ -264,6 +267,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
     def values(self):
+        """A.values() -> list of A's values"""
         dims = len(self.shape)
         alphabet = self._alphabet
         if dims == 1:

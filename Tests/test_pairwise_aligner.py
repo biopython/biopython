@@ -1784,14 +1784,12 @@ class TestSequencesAsLists(unittest.TestCase):
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(str(alignments[0]),
-"""\
+        self.assertEqual(str(alignments[0]), """\
 Gly Ala --- --- Thr
 ||| ||| --- --- |||
 Gly Ala Ala Cys Thr
 """)
-        self.assertEqual(str(alignments[1]),
-"""\
+        self.assertEqual(str(alignments[1]), """\
 Gly --- Ala --- Thr
 ||| --- ||| --- |||
 Gly Ala Ala Cys Thr
@@ -1805,14 +1803,12 @@ Gly Ala Ala Cys Thr
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(str(alignments[0]),
-"""\
+        self.assertEqual(str(alignments[0]), """\
 Pro Pro Gly Ala --- --- Thr --- ---
 --- --- ||| ||| --- --- ||| --- ---
 --- --- Gly Ala Ala Cys Thr Asn Asn
 """)
-        self.assertEqual(str(alignments[1]),
-"""\
+        self.assertEqual(str(alignments[1]), """\
 Pro Pro Gly --- Ala --- Thr --- ---
 --- --- ||| --- ||| --- ||| --- ---
 --- --- Gly Ala Ala Cys Thr Asn Asn
@@ -1833,14 +1829,12 @@ Pro Pro Gly --- Ala --- Thr --- ---
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(str(alignments[0]),
-"""\
+        self.assertEqual(str(alignments[0]), """\
 Gly Ala --- --- Thr
 ||| ||| --- --- |||
 Gly Ala Ala Cys Thr
 """)
-        self.assertEqual(str(alignments[1]),
-"""\
+        self.assertEqual(str(alignments[1]), """\
 Gly --- Ala --- Thr
 ||| --- ||| --- |||
 Gly Ala Ala Cys Thr
@@ -1912,7 +1906,7 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score(s1, s2)
         self.assertEqual("sequence has incorrect data type",
                          str(context_manager.exception))
-        s2 = numpy.zeros((3,2), numpy.int32)
+        s2 = numpy.zeros((3, 2), numpy.int32)
         with self.assertRaises(ValueError) as context_manager:
             aligner.score(s1, s2)
         self.assertEqual("sequence has incorrect rank (2 expected 1)",

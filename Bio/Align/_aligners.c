@@ -2097,6 +2097,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
         const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
         if (characters) {
 #else
+    {
         char* characters;
         if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
 #endif
@@ -2105,11 +2106,11 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
                 j = characters[i];
                 mapping[j] = i;
             }
-#if PY_MAJOR_VERSION > 2
         }
+#if PY_MAJOR_VERSION > 2
         else (*mapping) = UNMAPPED;
-#endif
     }
+#endif
     else {
         PyObject* item;
 #if PY_MAJOR_VERSION > 2
@@ -2141,6 +2142,9 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
         if (i < size) (*mapping) = UNMAPPED;
         Py_DECREF(sequence);
     }
+#if PY_MAJOR_VERSION < 3
+    }
+#endif
     Py_INCREF(alphabet);
     Py_XDECREF(self->alphabet);
     self->alphabet = alphabet;
@@ -6484,10 +6488,11 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
     const Algorithm algorithm = _get_algorithm(self);
     PyObject* result = NULL;
     PyObject* substitution_matrix = self->substitution_matrix.obj;
-    bA.obj = (PyObject*)self;
-    bB.obj = (PyObject*)self;
 
     static char *kwlist[] = {"sequenceA", "sequenceB", NULL};
+
+    bA.obj = (PyObject*)self;
+    bB.obj = (PyObject*)self;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB))
@@ -6582,10 +6587,11 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     const Algorithm algorithm = _get_algorithm(self);
     PyObject* result = NULL;
     PyObject* substitution_matrix = self->substitution_matrix.obj;
-    bA.obj = (PyObject*)self;
-    bB.obj = (PyObject*)self;
 
     static char *kwlist[] = {"sequenceA", "sequenceB", NULL};
+
+    bA.obj = (PyObject*)self;
+    bB.obj = (PyObject*)self;
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB))

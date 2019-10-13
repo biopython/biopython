@@ -175,14 +175,14 @@ class MultipleSeqAlignment(object):
 
         # Annotations about the whole alignment
         if annotations is None:
-            annotations = dict()
+            annotations = {}
         elif not isinstance(annotations, dict):
             raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
         # Annotations about each colum of the alignment
         if column_annotations is None:
-            column_annotations = dict()
+            column_annotations = {}
         # Handle this via the property set function which will validate it
         self.column_annotations = column_annotations
 
@@ -977,9 +977,10 @@ class PairwiseAlignment(object):
         if isinstance(self.query, str) and isinstance(self.target, str):
             return self.format()
         else:
-            return self.format_generalized()
+            return self._format_generalized()
 
     def format(self):
+        """Create a human-readable representation of the alignment."""
         query = self.query
         target = self.target
         try:
@@ -1042,7 +1043,7 @@ class PairwiseAlignment(object):
         pattern += "." * n
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
-    def format_generalized(self):
+    def _format_generalized(self):
         seq1 = self.target
         seq2 = self.query
         n1 = len(seq1)
@@ -1054,14 +1055,14 @@ class PairwiseAlignment(object):
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             if end1 <= end2:
-                for c2 in seq2[:end2-end1]:
+                for c2 in seq2[:end2 - end1]:
                     s2 = str(c2)
                     s1 = "." * len(s2)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
                     pattern.append(s1)
             else:  # end1 > end2
-                for c1 in seq1[:end1-end2]:
+                for c1 in seq1[:end1 - end2]:
                     s1 = str(c1)
                     s2 = "." * len(s1)
                     aligned_seq1.append(s1)
