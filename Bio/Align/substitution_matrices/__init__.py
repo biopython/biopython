@@ -229,19 +229,19 @@ class Array(numpy.ndarray):
         return self._alphabet
 
     def copy(self):
-        """A.copy() -> a copy of A."""
+        """Create and return a copy of the array."""
         other = Array(alphabet=self._alphabet, data=self)
         return other
 
     def get(self, key, value=None):
-        "A.get(k[,d]) -> A[k] if k in A, else d.  d defaults to None."
+        """Return the value of the key if found; return value otherwise."""
         try:
             return self[key]
         except IndexError:
             return value
 
     def items(self):
-        """A.items() -> list of A's (key, value) pairs, as 2-tuples"""
+        """Return an iterator  of (key, value) pairs in the array."""
         dims = len(self.shape)
         if dims == 1:
             for index, key in enumerate(self._alphabet):
@@ -268,7 +268,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
     def values(self):
-        """A.values() -> list of A's values"""
+        """Return a tuple with the values stored in the array."""
         dims = len(self.shape)
         alphabet = self._alphabet
         if dims == 1:
@@ -280,7 +280,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
     def update(self, E=None, **F):
-        """A.update([E, ]**F) -> None.  Update A from dict/iterable E and F."""
+        """Update the array from dict/iterable E and F."""
         if E is not None:
             try:
                 alphabet = E.keys()
@@ -382,12 +382,13 @@ class Array(numpy.ndarray):
         text = numpy.ndarray.__repr__(self)
         alphabet = self._alphabet
         if isinstance(alphabet, str):
-            assert text.endswith(')')
+            assert text.endswith(")")
             text = text[:-1] + ",\n         alphabet='%s')" % self._alphabet
         return text
 
 
 def read(handle, dtype=float):
+    """Parse the file and return an Array object."""
     header = []
     with File.as_handle(handle) as fp:
         for line in fp:
@@ -400,13 +401,13 @@ def read(handle, dtype=float):
             row = line.split()
             rows.append(row)
     if len(rows[0]) == len(rows[1]) == 2:
-        alphabet = [row[0] for row in rows]
+        alphabet = [key for key, value in rows]
         for key in alphabet:
             if len(key) > 1:
                 alphabet = tuple(alphabet)
                 break
         else:
-            alphabet = ''.join(alphabet)
+            alphabet = "".join(alphabet)
         matrix = Array(alphabet=alphabet, dims=1, dtype=dtype)
         matrix.update(rows)
     else:
@@ -416,7 +417,7 @@ def read(handle, dtype=float):
                 alphabet = tuple(alphabet)
                 break
         else:
-            alphabet = ''.join(alphabet)
+            alphabet = "".join(alphabet)
         matrix = Array(alphabet=alphabet, dims=2, dtype=dtype)
         for letter1, row in zip(alphabet, rows):
             assert letter1 == row.pop(0)
@@ -424,6 +425,7 @@ def read(handle, dtype=float):
                 matrix[letter1, letter2] = float(word)
     matrix.header = header
     return matrix
+
 
 def load(name=None):
     """Load and return a precalculated substitution matrix.
@@ -433,7 +435,7 @@ def load(name=None):
     """
     path = os.path.realpath(__file__)
     directory = os.path.dirname(path)
-    subdirectory = os.path.join(directory, 'data')
+    subdirectory = os.path.join(directory, "data")
     if name is None:
         filenames = os.listdir(subdirectory)
         return sorted(filenames)
