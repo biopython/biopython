@@ -94,6 +94,7 @@ ONLINE_DOCTEST_MODULES = [
 if numpy is None:
     EXCLUDE_DOCTEST_MODULES.extend([
         "Bio.Affy.CelFile",
+        "Bio.Align",
         "Bio.Cluster",
         "Bio.KDTree",
         "Bio.KDTree.KDTree",

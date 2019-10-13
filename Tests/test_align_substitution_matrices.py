@@ -2,7 +2,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for scoring matrices in the Bio.Align module."""
+"""Tests for Array in the Bio.Align.substitution_matrices module."""
+
+try:
+    import numpy
+    del numpy
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+        "Install NumPy if you want to use Bio.Align.substitution_matrices.")
 
 
 import os
