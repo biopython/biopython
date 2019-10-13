@@ -7,6 +7,7 @@
 
 """Tests for pairwise aligner module."""
 
+import sys
 import unittest
 
 from Bio import Align
@@ -273,14 +274,14 @@ Pairwise sequence aligner with parameters
   query_right_extend_gap_score: -0.100000
   mode: local
 """)
-        score = aligner.score("AxBx", "zABz")
+        score = aligner.score("AwBw", "zABz")
         self.assertAlmostEqual(score, 1.9)
-        alignments = aligner.align("AxBx", "zABz")
+        alignments = aligner.align("AwBw", "zABz")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
-.AxBx
+.AwBw
 .|-|.
 zA-Bz
 """)
@@ -310,14 +311,14 @@ Pairwise sequence aligner with parameters
   query_right_extend_gap_score: 0.000000
   mode: local
 """)
-        score = aligner.score("AxBx", "zABz")
+        score = aligner.score("AwBw", "zABz")
         self.assertAlmostEqual(score, 1.9)
-        alignments = aligner.align("AxBx", "zABz")
+        alignments = aligner.align("AwBw", "zABz")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
-.AxBx
+.AwBw
 .|-|.
 zA-Bz
 """)
@@ -903,31 +904,41 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         }
 
     def test_match_dictionary1(self):
+        try:
+            from Bio.Align import substitution_matrices
+        except ImportError:
+            return
+        substitution_matrix = substitution_matrices.Array(data=self.match_dict)
         seq1 = "ATAT"
         seq2 = "ATT"
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.substitution_matrix = self.match_dict
+        aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
-Pairwise sequence aligner with parameters
-  match/mismatch_score: <substitution matrix>
-  target_open_gap_score: -0.500000
-  target_extend_gap_score: 0.000000
-  target_left_open_gap_score: -0.500000
-  target_left_extend_gap_score: 0.000000
-  target_right_open_gap_score: -0.500000
-  target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.500000
-  query_extend_gap_score: 0.000000
-  query_left_open_gap_score: -0.500000
-  query_left_extend_gap_score: 0.000000
-  query_right_open_gap_score: -0.500000
-  query_right_extend_gap_score: 0.000000
-  mode: local
-""")
+        lines = str(aligner).splitlines()
+        self.assertEqual(len(lines), 15)
+        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
+        line = lines[1]
+        prefix = "  substitution_matrix: <Array object at "
+        suffix = ">"
+        self.assertTrue(line.startswith(prefix))
+        self.assertTrue(line.endswith(suffix))
+        address = int(line[len(prefix):-len(suffix)], 16)
+        self.assertEqual(lines[2], "  target_open_gap_score: -0.500000")
+        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
+        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[6], "  target_right_open_gap_score: -0.500000")
+        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_open_gap_score: -0.500000")
+        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[10], "  query_left_open_gap_score: -0.500000")
+        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[12], "  query_right_open_gap_score: -0.500000")
+        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -950,30 +961,40 @@ AT-T
         self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((0, 2), (2, 3))))
 
     def test_match_dictionary2(self):
+        try:
+            from Bio.Align import substitution_matrices
+        except ImportError:
+            return
+        substitution_matrix = substitution_matrices.Array(data=self.match_dict)
         seq1 = "ATAT"
         seq2 = "ATT"
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.substitution_matrix = self.match_dict
+        aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertEqual(str(aligner), """\
-Pairwise sequence aligner with parameters
-  match/mismatch_score: <substitution matrix>
-  target_open_gap_score: -1.000000
-  target_extend_gap_score: 0.000000
-  target_left_open_gap_score: -1.000000
-  target_left_extend_gap_score: 0.000000
-  target_right_open_gap_score: -1.000000
-  target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -1.000000
-  query_extend_gap_score: 0.000000
-  query_left_open_gap_score: -1.000000
-  query_left_extend_gap_score: 0.000000
-  query_right_open_gap_score: -1.000000
-  query_right_extend_gap_score: 0.000000
-  mode: local
-""")
+        lines = str(aligner).splitlines()
+        self.assertEqual(len(lines), 15)
+        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
+        line = lines[1]
+        prefix = "  substitution_matrix: <Array object at "
+        suffix = ">"
+        self.assertTrue(line.startswith(prefix))
+        self.assertTrue(line.endswith(suffix))
+        address = int(line[len(prefix):-len(suffix)], 16)
+        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -988,30 +1009,199 @@ ATT.
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary3(self):
+        try:
+            from Bio.Align import substitution_matrices
+        except ImportError:
+            return
+        substitution_matrix = substitution_matrices.Array(data=self.match_dict)
         seq1 = "ATT"
         seq2 = "ATAT"
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.substitution_matrix = self.match_dict
+        aligner.substitution_matrix = substitution_matrix
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
-        self.assertEqual(str(aligner), """\
-Pairwise sequence aligner with parameters
-  match/mismatch_score: <substitution matrix>
-  target_open_gap_score: -1.000000
-  target_extend_gap_score: 0.000000
-  target_left_open_gap_score: -1.000000
-  target_left_extend_gap_score: 0.000000
-  target_right_open_gap_score: -1.000000
-  target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -1.000000
-  query_extend_gap_score: 0.000000
-  query_left_open_gap_score: -1.000000
-  query_left_extend_gap_score: 0.000000
-  query_right_open_gap_score: -1.000000
-  query_right_extend_gap_score: 0.000000
-  mode: local
+        lines = str(aligner).splitlines()
+        self.assertEqual(len(lines), 15)
+        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
+        line = lines[1]
+        prefix = "  substitution_matrix: <Array object at "
+        suffix = ">"
+        self.assertTrue(line.startswith(prefix))
+        self.assertTrue(line.endswith(suffix))
+        address = int(line[len(prefix):-len(suffix)], 16)
+        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[14], "  mode: local")
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(str(alignment), """\
+ATT.
+||X.
+ATAT
 """)
+        self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+
+    def test_match_dictionary4(self):
+        try:
+            from Bio.Align import substitution_matrices
+        except ImportError:
+            return
+        substitution_matrix = substitution_matrices.Array(alphabet="AT", dims=2)
+        self.assertEqual(substitution_matrix.shape, (2, 2))
+        substitution_matrix.update(self.match_dict)
+        seq1 = "ATAT"
+        seq2 = "ATT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.substitution_matrix = substitution_matrix
+        aligner.open_gap_score = -0.5
+        aligner.extend_gap_score = 0.0
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
+        lines = str(aligner).splitlines()
+        self.assertEqual(len(lines), 15)
+        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
+        line = lines[1]
+        prefix = "  substitution_matrix: <Array object at "
+        suffix = ">"
+        self.assertTrue(line.startswith(prefix))
+        self.assertTrue(line.endswith(suffix))
+        address = int(line[len(prefix):-len(suffix)], 16)
+        self.assertEqual(lines[2], "  target_open_gap_score: -0.500000")
+        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
+        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[6], "  target_right_open_gap_score: -0.500000")
+        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_open_gap_score: -0.500000")
+        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[10], "  query_left_open_gap_score: -0.500000")
+        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[12], "  query_right_open_gap_score: -0.500000")
+        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[14], "  mode: local")
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(str(alignment), """\
+ATAT
+||X.
+ATT.
+""")
+        self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(str(alignment), """\
+ATAT
+||-|
+AT-T
+""")
+        self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((0, 2), (2, 3))))
+
+    def test_match_dictionary5(self):
+        try:
+            from Bio.Align import substitution_matrices
+        except ImportError:
+            return
+        substitution_matrix = substitution_matrices.Array(alphabet="AT", dims=2)
+        self.assertEqual(substitution_matrix.shape, (2, 2))
+        substitution_matrix.update(self.match_dict)
+        seq1 = "ATAT"
+        seq2 = "ATT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.substitution_matrix = substitution_matrix
+        aligner.open_gap_score = -1.0
+        aligner.extend_gap_score = 0.0
+        lines = str(aligner).splitlines()
+        self.assertEqual(len(lines), 15)
+        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
+        line = lines[1]
+        prefix = "  substitution_matrix: <Array object at "
+        suffix = ">"
+        self.assertTrue(line.startswith(prefix))
+        self.assertTrue(line.endswith(suffix))
+        address = int(line[len(prefix):-len(suffix)], 16)
+        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[14], "  mode: local")
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(str(alignment), """\
+ATAT
+||X.
+ATT.
+""")
+        self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
+
+    def test_match_dictionary6(self):
+        try:
+            from Bio.Align import substitution_matrices
+        except ImportError:
+            return
+        substitution_matrix = substitution_matrices.Array(alphabet="AT", dims=2)
+        self.assertEqual(substitution_matrix.shape, (2, 2))
+        substitution_matrix.update(self.match_dict)
+        seq1 = "ATT"
+        seq2 = "ATAT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.substitution_matrix = substitution_matrix
+        aligner.open_gap_score = -1.0
+        aligner.extend_gap_score = 0.0
+        lines = str(aligner).splitlines()
+        self.assertEqual(len(lines), 15)
+        self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
+        line = lines[1]
+        prefix = "  substitution_matrix: <Array object at "
+        suffix = ">"
+        self.assertTrue(line.startswith(prefix))
+        self.assertTrue(line.endswith(suffix))
+        address = int(line[len(prefix):-len(suffix)], 16)
+        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
+        self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
+        self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
+        self.assertEqual(lines[13], "  query_right_extend_gap_score: 0.000000")
+        self.assertEqual(lines[14], "  mode: local")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -1572,6 +1762,192 @@ TTGGAA
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
+
+
+class TestSequencesAsLists(unittest.TestCase):
+    """Check aligning sequences provided as lists.
+
+    This tests whether we can align sequences that are provided as lists
+    consisting of three-letter codons or three-letter amino acids.
+    """
+
+    def test_three_letter_amino_acids_global(self):
+        seq1 = ["Gly", "Ala", "Thr"]
+        seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        aligner.alphabet = ["Ala", "Arg", "Asn", "Asp", "Cys",
+                            "Gln", "Glu", "Gly", "His", "Ile",
+                            "Leu", "Lys", "Met", "Phe", "Pro",
+                            "Ser", "Thr", "Trp", "Tyr", "Val"]
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 2)
+        self.assertEqual(str(alignments[0]),
+"""\
+Gly Ala --- --- Thr
+||| ||| --- --- |||
+Gly Ala Ala Cys Thr
+""")
+        self.assertEqual(str(alignments[1]),
+"""\
+Gly --- Ala --- Thr
+||| --- ||| --- |||
+Gly Ala Ala Cys Thr
+""")
+        self.assertAlmostEqual(alignments[0].score, 3.0)
+        self.assertAlmostEqual(alignments[1].score, 3.0)
+
+        seq1 = ["Pro", "Pro", "Gly", "Ala", "Thr"]
+        seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 2)
+        self.assertEqual(str(alignments[0]),
+"""\
+Pro Pro Gly Ala --- --- Thr --- ---
+--- --- ||| ||| --- --- ||| --- ---
+--- --- Gly Ala Ala Cys Thr Asn Asn
+""")
+        self.assertEqual(str(alignments[1]),
+"""\
+Pro Pro Gly --- Ala --- Thr --- ---
+--- --- ||| --- ||| --- ||| --- ---
+--- --- Gly Ala Ala Cys Thr Asn Asn
+""")
+        self.assertAlmostEqual(alignments[0].score, 3.0)
+        self.assertAlmostEqual(alignments[1].score, 3.0)
+
+    def test_three_letter_amino_acids_local(self):
+        seq1 = ["Asn", "Asn", "Gly", "Ala", "Thr", "Glu", "Glu"]
+        seq2 = ["Pro", "Pro", "Gly", "Ala", "Ala", "Cys", "Thr", "Leu"]
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.alphabet = ["Ala", "Arg", "Asn", "Asp", "Cys",
+                            "Gln", "Glu", "Gly", "His", "Ile",
+                            "Leu", "Lys", "Met", "Phe", "Pro",
+                            "Ser", "Thr", "Trp", "Tyr", "Val"]
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 2)
+        self.assertEqual(str(alignments[0]),
+"""\
+Gly Ala --- --- Thr
+||| ||| --- --- |||
+Gly Ala Ala Cys Thr
+""")
+        self.assertEqual(str(alignments[1]),
+"""\
+Gly --- Ala --- Thr
+||| --- ||| --- |||
+Gly Ala Ala Cys Thr
+""")
+        self.assertAlmostEqual(alignments[0].score, 3.0)
+        self.assertAlmostEqual(alignments[1].score, 3.0)
+
+
+class TestArgumentErrors(unittest.TestCase):
+
+    def test_aligner_string_errors(self):
+        aligner = Align.PairwiseAligner()
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score("AAA", 3)
+        self.assertEqual("sequence has unexpected format",
+                         str(context_manager.exception))
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score("AAA", "")
+        self.assertEqual("sequence has zero length",
+                         str(context_manager.exception))
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score("AAA", "AA&")
+        self.assertEqual("sequence contains letters not in the alphabet",
+                         str(context_manager.exception))
+
+    def test_aligner_array_errors(self):
+        aligner = Align.PairwiseAligner()
+        self.assertEqual(aligner.alphabet, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        s1 = "GGG"
+        if sys.version_info[0] >= 3:
+            # on python2, array.array buffer support is broken
+            import array
+            s2 = array.array("i", [6, 0, 6])
+            score = aligner.score(s1, s2)
+            self.assertAlmostEqual(score, 2.0)
+            s2 = array.array("f", [1.0, 0.0, 1.0])
+            with self.assertRaises(ValueError) as context_manager:
+                aligner.score(s1, s2)
+            self.assertEqual("sequence has incorrect data type",
+                             str(context_manager.exception))
+            s1 = array.array("i", [1, 5, 6])
+            s2 = array.array("i", [1, 8, 6])
+            s2a = array.array("i", [1, 8, -6])
+            s2b = array.array("i", [1, 28, 6])
+            aligner.match = 3.0
+            aligner.mismatch = -2.0
+            aligner.gap_score = -10.0
+            score = aligner.score(s1, s2)
+            self.assertAlmostEqual(score, 4.0)
+            # the following two are valid as we are using match/mismatch scores
+            # instead of a substitution matrix:
+            score = aligner.score(s1, s2a)
+            # negative number is interpreted as an unknown character, and
+            # gets a zero score:
+            self.assertAlmostEqual(score, 1.0)
+            score = aligner.score(s1, s2b)
+            self.assertAlmostEqual(score, 4.0)
+        try:
+            import numpy
+        except ImportError:
+            return
+        aligner = Align.PairwiseAligner()
+        s1 = "GGG"
+        s2 = numpy.array([6, 0, 6], numpy.int32)  # interpreted as GAG
+        score = aligner.score(s1, s2)
+        self.assertAlmostEqual(score, 2.0)
+        s2 = numpy.array([1.0, 0.0, 1.0])
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score(s1, s2)
+        self.assertEqual("sequence has incorrect data type",
+                         str(context_manager.exception))
+        s2 = numpy.zeros((3,2), numpy.int32)
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score(s1, s2)
+        self.assertEqual("sequence has incorrect rank (2 expected 1)",
+                         str(context_manager.exception))
+        s1 = numpy.array([1, 5, 6], numpy.int32)
+        s2 = numpy.array([1, 8, 6], numpy.int32)
+        s2a = numpy.array([1, 8, -6], numpy.int32)
+        s2b = numpy.array([1, 28, 6], numpy.int32)
+        aligner.match = 3.0
+        aligner.mismatch = -2.0
+        aligner.gap_score = -10.0
+        score = aligner.score(s1, s2)
+        self.assertAlmostEqual(score, 4.0)
+        # the following two are valid as we are using match/mismatch scores
+        # instead of a substitution matrix:
+        score = aligner.score(s1, s2a)
+        # negative number is interpreted as an unknown character, and
+        # gets a zero score:
+        self.assertAlmostEqual(score, 1.0)
+        score = aligner.score(s1, s2b)
+        self.assertAlmostEqual(score, 4.0)
+        # when using a substitution matrix, all indices should be between 0
+        # and the size of the substitution matrix:
+        m = 5 * numpy.eye(10)
+        aligner.substitution_matrix = m
+        score = aligner.score(s1, s2)  # no ValueError
+        self.assertAlmostEqual(score, 10.0)
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score(s1, s2a)
+        self.assertEqual("sequence item 2 is negative (-6)",
+                         str(context_manager.exception))
+        with self.assertRaises(ValueError) as context_manager:
+            aligner.score(s1, s2b)
+        self.assertEqual("sequence item 1 is out of bound (28, should be < 10)",
+                         str(context_manager.exception))
 
 
 if __name__ == "__main__":
