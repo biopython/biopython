@@ -13,7 +13,6 @@ class Array(numpy.ndarray):
 
     def __new__(cls, alphabet=None, dims=None, data=None, dtype=float):
         """Create a new Array instance."""
-
         if isinstance(data, dict):
             if alphabet is not None:
                 raise ValueError("alphabet should be None if data is a dict")
@@ -226,19 +225,21 @@ class Array(numpy.ndarray):
 
     @property
     def alphabet(self):
+        """Return the alphabet property."""
         return self._alphabet
 
     def copy(self):
-        """Copy the array."""
+        """A.copy() -> a copy of A."""
         other = Array(alphabet=self._alphabet, data=self)
         return other
 
     def get(self, key, value=None):
+        "A.get(k[,d]) -> A[k] if k in A, else d.  d defaults to None."
         try:
             return self[key]
         except IndexError:
             return value
-        
+
     def items(self):
         """A.items() -> list of A's (key, value) pairs, as 2-tuples"""
         dims = len(self.shape)
@@ -279,6 +280,7 @@ class Array(numpy.ndarray):
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
     def update(self, E=None, **F):
+        """A.update([E, ]**F) -> None.  Update A from dict/iterable E and F."""
         if E is not None:
             try:
                 alphabet = E.keys()
@@ -360,11 +362,11 @@ class Array(numpy.ndarray):
         return text
 
     def __format__(self, fmt):
-        if fmt == '':
+        if fmt == "":
             if self.dtype in (numpy.integer, numpy.unsignedinteger):
-                fmt = '%i'
+                fmt = "%i"
             else:
-                fmt = '%.1f'
+                fmt = "%.1f"
         n = len(self.shape)
         if n == 1:
             return self._format_1D(fmt)
