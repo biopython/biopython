@@ -7,6 +7,10 @@ import numpy
 from Bio import File
 from Bio._py3k import raise_from
 
+# These two can be removed once we drop python2:
+import sys
+import platform
+
 
 class Array(numpy.ndarray):
     """numpy array subclass indexed by integers and by letters."""
@@ -397,8 +401,6 @@ class Array(numpy.ndarray):
         return text
 
 
-import sys
-import platform
 if sys.version_info[0] < 3 and platform.python_implementation() == "PyPy":
     # For python2 on PyPy, subclassing from a numpy array, which supports the
     # buffer protocol, loses the Py_TPFLAGS_HAVE_NEWBUFFER flag on tp_flags on
