@@ -150,11 +150,11 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
     const int nB = self->nB;
     Trace** M = self->M;
     Py_ssize_t term;
-    Py_ssize_t count;
+    Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t temp;
     Py_ssize_t* counts;
     counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!counts) return MEMORY_ERROR;
+    if (!counts) goto exit;
     counts[0] = 1;
     for (j = 1; j <= nB; j++) {
         trace = M[0][j].trace;
@@ -179,6 +179,7 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
         }
     }
     PyMem_Free(counts);
+exit:
     return count;
 }
 
@@ -192,12 +193,12 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
     const int nB = self->nB;
     Trace** M = self->M;
     Py_ssize_t term;
-    Py_ssize_t count;
+    Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
     Py_ssize_t temp;
     Py_ssize_t* counts;
     counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!counts) return MEMORY_ERROR;
+    if (!counts) goto exit;
     counts[0] = 1;
     for (j = 1; j <= nB; j++) counts[j] = 1;
     for (i = 1; i <= nA; i++) {
@@ -217,6 +218,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
     }
     count = total;
     PyMem_Free(counts);
+exit:
     return count;
 }
 
@@ -5828,9 +5830,6 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     TraceGapsGotoh** gaps;
     PathGenerator* paths;
 
-    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
-    if (!paths) return NULL;
-
     paths->iA = 0;
     paths->iB = 0;
     paths->nA = nA;
@@ -5844,7 +5843,19 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     switch (mode) {
         case Global: trace = 0; break;
         case Local: trace = STARTPOINT; break;
+        default:
+            /* Should not happen, but the compiler has no way of knowing that,
+             * as the enum Mode does not restrict the value of mode, which can
+             * be any integer. Include default: here to prevent compiler
+             * warnings.
+             */
+            PyErr_Format(PyExc_RuntimeError,
+                         "mode has unexpected value %d", mode);
+            return NULL;
     }
+
+    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!paths) return NULL;
 
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
@@ -6364,7 +6375,11 @@ sequence_converter(PyObject* argument, void* pointer)
     Py_ssize_t n;
     int index;
     int* indices;
+#if PY_MAJOR_VERSION < 3
     char* s;
+#else
+    const char* s;
+#endif
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
     char* mapping;
