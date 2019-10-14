@@ -397,6 +397,17 @@ class Array(numpy.ndarray):
         return text
 
 
+import sys
+import platform
+if sys.version_info[0] < 3 and platform.python_implementation() == "PyPy":
+    # For python2 on PyPy, subclassing from a numpy array, which supports the
+    # buffer protocol, loses the Py_TPFLAGS_HAVE_NEWBUFFER flag on tp_flags on
+    # the class type, although the subclass still supports the buffer protocol.
+    # Adding this flag by hand here, as a temporary hack until we drop python2.
+    from .. import _aligners
+    _aligners.add_buffer_protocol_flag(Array)
+
+
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
     header = []

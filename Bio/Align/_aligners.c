@@ -6742,11 +6742,44 @@ static PyTypeObject AlignerType = {
     (initproc)Aligner_init,        /* tp_init */
 };
 
+
+#if PY_MAJOR_VERSION < 3
+/* Only needed for python2 with PyPy */
+
+static char add_buffer_protocol_flag__doc__[] =
+"Hack to add the Py_TPFLAGS_HAVE_NEWBUFFER flag to the Array class\n"
+"(needed for python2 but missing in PyPy).\n"
+"Don't use unless you know what you are doing.\n";
+
+static PyObject*
+add_buffer_protocol_flag(PyObject* self, PyObject* args)
+{
+    PyTypeObject* type;
+    if (!PyArg_ParseTuple(args, "O!", &PyType_Type, &type)) return NULL;
+    if (strcmp(type->tp_name, "Array") != 0) {
+        PyErr_SetString(PyExc_ValueError,
+                        "Should be applied to the Array type only");
+        return NULL;
+    }
+    type->tp_flags |= Py_TPFLAGS_HAVE_NEWBUFFER;
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+#endif
+
 /* Module definition */
 
 static PyMethodDef _aligners_methods[] = {
+#if PY_MAJOR_VERSION < 3
+    {"add_buffer_protocol_flag",
+     (PyCFunction) add_buffer_protocol_flag,
+     METH_VARARGS | METH_KEYWORDS,
+     add_buffer_protocol_flag__doc__
+    },
+#endif
     {NULL, NULL, 0, NULL}
 };
+
 
 static char _aligners__doc__[] =
 "C extension module implementing pairwise alignment algorithms";
