@@ -6808,7 +6808,6 @@ init_aligners(void)
 #endif
 {
     PyObject* module;
-#if 0
     AlignerType.tp_new = PyType_GenericNew;
 
     if (PyType_Ready(&AlignerType) < 0 || PyType_Ready(&PathGenerator_Type) < 0)
@@ -6816,7 +6815,6 @@ init_aligners(void)
       return NULL;
 #else
       return;
-#endif
 #endif
 
 #if PY_MAJOR_VERSION >= 3
@@ -6827,7 +6825,6 @@ init_aligners(void)
     if (!module) return;
 #endif
 
-#if 0
     Py_INCREF(&AlignerType);
     /* Reference to AlignerType will be stolen by PyModule_AddObject
      * only if it is successful. */
@@ -6841,7 +6838,6 @@ init_aligners(void)
           return;
 #endif
     }
-#endif
 
 #if PY_MAJOR_VERSION >= 3
     return module;
