@@ -5830,16 +5830,6 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     TraceGapsGotoh** gaps;
     PathGenerator* paths;
 
-    paths->iA = 0;
-    paths->iB = 0;
-    paths->nA = nA;
-    paths->nB = nB;
-    paths->M = NULL;
-    paths->gaps.gotoh = NULL;
-    paths->algorithm = Gotoh;
-    paths->mode = mode;
-    paths->length = 0;
-
     switch (mode) {
         case Global: trace = 0; break;
         case Local: trace = STARTPOINT; break;
@@ -5856,6 +5846,16 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
 
     paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
     if (!paths) return NULL;
+
+    paths->iA = 0;
+    paths->iB = 0;
+    paths->nA = nA;
+    paths->nB = nB;
+    paths->M = NULL;
+    paths->gaps.gotoh = NULL;
+    paths->algorithm = Gotoh;
+    paths->mode = mode;
+    paths->length = 0;
 
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
