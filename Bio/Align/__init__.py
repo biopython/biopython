@@ -21,7 +21,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
 
-from Bio.Align import _aligners
+# from Bio.Align import _aligners
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
@@ -1375,7 +1375,8 @@ class PairwiseAlignments(object):
         next = __next__
 
 
-class PairwiseAligner(_aligners.PairwiseAligner):
+if False:
+  class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
 
     This provides functions to get global and local alignments between two
