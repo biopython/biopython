@@ -95,6 +95,7 @@ if numpy is None:
     EXCLUDE_DOCTEST_MODULES.extend([
         "Bio.Affy.CelFile",
         "Bio.Align",
+        "Bio.Align.substitution_matrices",
         "Bio.Cluster",
         "Bio.KDTree",
         "Bio.KDTree.KDTree",
