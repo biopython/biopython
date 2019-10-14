@@ -250,8 +250,12 @@ class Record(object):
 
     def __repr__(self):
         """Represent the UniGene Record object as a string for debugging."""
-        return "<%s> %s %s\n%s" % (self.__class__.__name__,
-                                   self.ID, self.symbol, self.title)
+        return "<%s> %s %s\n%s" % (
+            self.__class__.__name__,
+            self.ID,
+            self.symbol,
+            self.title,
+        )
 
 
 def parse(handle):
@@ -324,8 +328,11 @@ def _read(handle):
             record.sts.append(sts)
         elif tag == "//":
             if len(record.sequence) != scount:
-                raise ValueError("The number of sequences specified in the record"
-                                 " (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence)))
+                raise ValueError(
+                    "The number of sequences specified in the record"
+                    " (%d) does not agree with the number of sequences found (%d)"
+                    % (scount, len(record.sequence))
+                )
             return record
         else:
             raise ValueError("Unknown tag %s" % tag)
