@@ -162,10 +162,20 @@ class Array(numpy.ndarray):
         # Follow dict definition of __contains__
         return key in self.alphabet
 
+    def __array_prepare__(self, out_arr, context=None):
+        # needed for numpy older than 1.13.0
+        ufunc, inputs, i = context
+        alphabet = self.alphabet
+        for arg in inputs:
+            if isinstance(arg, Array):
+                if arg.alphabet != alphabet:
+                    raise ValueError("alphabets are inconsistent")
+        return numpy.ndarray.__array_prepare__(self, out_arr, context)
+
     def __array_wrap__(self, out_arr, context=None):
         if len(out_arr) == 1:
             return out_arr[0]
-        return out_arr.view(numpy.ndarray)
+        return numpy.ndarray.__array_wrap__(self, out_arr, context)
 
     def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
         args = []

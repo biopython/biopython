@@ -280,7 +280,7 @@ def can_import(module_name):
 # setup.py's install_requires is preferred for a library
 # (and should try not to be overly narrow with versions).
 REQUIRES = [
-    "numpy>1.13",
+    "numpy",
 ]
 
 if is_jython() or is_ironpython():
