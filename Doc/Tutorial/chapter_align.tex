@@ -2276,7 +2276,7 @@ In most cases, \verb+PairwiseAligner+ is used to perform alignments of sequences
 
 Schneider \textit{et al.} \cite{schneider2005} created a substitution matrix for aligning three-nucleotide codons (see \hyperlink{codonmatrix}{below} in section \ref{sec:substitution_matrices} for more information). This substitution matrix is associated with an alphabet consisting of all three-letter codons:
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> m = substitution_matrices.load("SCHNEIDER")
@@ -2387,7 +2387,7 @@ Asn --- Leu Phe
 
 Internally, the first step when performing an alignment is to replace the two sequences by integer arrays consisting of the indices of each letter in each sequence in the alphabet associated with the aligner. This step can be bypassed by passing integer arrays directly:
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> import numpy
 >>> from Bio import Align
@@ -2441,7 +2441,7 @@ Negative indices are interpreted as unknown letters, and receive a zero score:
 
 Integer sequences can also be aligned using a substitution matrix, in this case a numpy square array without an alphabet associated with it. In this case, all index values must be non-negative, and smaller than the size of the substitution matrix:
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> import numpy
@@ -2485,7 +2485,7 @@ The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass o
 
 To create a one-dimensional \verb+Array+, only the alphabet of allowed letters needs to be specified:
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio.Align.substitution_matrices import Array
 >>> counts = Array("ACGT")
@@ -2540,7 +2540,7 @@ IndexError: index 7 is out of bounds for axis 0 with size 4
 
 A two-dimensional \verb+Array+ can be created by specifying \verb+dims=2+:
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio.Align.substitution_matrices import Array
 >>> counts = Array("ACGT", dims=2)
@@ -2731,7 +2731,7 @@ The matrix can be used to set the substitution matrix for the pairwise aligner:
 
 A \verb+ValueError+ is triggered if the \verb+Array+ objects appearing in a mathematical operation have different alphabets:
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio.Align.substitution_matrices import Array
 >>> d = Array("ACGT")
@@ -2868,7 +2868,7 @@ and write the \verb+text+ to a file.
 
 Biopython contains a large set of substitution matrices defined in the literature, including BLOSUM (Blocks Substitution Matrix) \cite{henikoff1992} and PAM (Point Accepted Mutation) matrices \cite{dayhoff1978}. These matrices are available as flat files in the \verb+Bio/Align/scoring_matrices/data+ directory, and can be loaded into Python using the \verb+load+ function in the \verb+scoring_matrices+ submodule. For example, the BLOSUM62 matrix can be loaded by running
 
-%doctest lib:numpy
+%doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> m = substitution_matrices.load("BLOSUM62")
