@@ -293,7 +293,6 @@ PACKAGES = [
     "Bio",
     "Bio.Align",
     "Bio.Align.Applications",
-    "Bio.Align.substitution_matrices",
     "Bio.AlignIO",
     "Bio.Alphabet",
     "Bio.Application",
@@ -371,6 +370,7 @@ if is_jython():
 # packages that require Numeric Python
 NUMPY_PACKAGES = [
     "Bio.Affy",
+    "Bio.Align.substitution_matrices",
     "Bio.Cluster",
     "Bio.KDTree",
     "Bio.phenotype",
