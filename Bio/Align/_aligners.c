@@ -6808,7 +6808,7 @@ init_aligners(void)
 #endif
 {
     PyObject* module;
-
+return;
     AlignerType.tp_new = PyType_GenericNew;
 
     if (PyType_Ready(&AlignerType) < 0 || PyType_Ready(&PathGenerator_Type) < 0)
