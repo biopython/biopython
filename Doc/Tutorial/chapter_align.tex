@@ -1966,7 +1966,7 @@ You can perform the following operations on \verb+alignments+:
 \begin{itemize}
 \item \verb+len(alignments)+ returns the number of alignments stored. This function returns quickly, even if the number of alignments is huge. If the number of alignments is extremely large (typically, larger than 9,223,372,036,854,775,807, which is the largest integer that can be stored as a \verb+long int+ on 64 bit machines), \verb+len(alignments)+ will raise an \verb+OverflowError+. A large number of alignments suggests that the alignment quality is low.
 
-%doctest examples
+%doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1976,7 +1976,7 @@ You can perform the following operations on \verb+alignments+:
 \end{minted}
 \item You can extract a specific alignment by index:
 
-%doctest examples
+%doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -2000,7 +2000,7 @@ AA-
 \end{minted}
 Note that \verb+alignments+ can be reused, i.e. you can iterate over alignments multiple times:
 
-%doctest examples
+%doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -2481,7 +2481,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 
 The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass of numpy arrays that supports indexing both by integers and by specific strings. An \verb+Array+ instance can either be a one-dimensional array or a square two-dimensional arrays. A one-dimensional \verb+Array+ object can for example be used to store the nucleotide frequency of a DNA sequence, while a two-dimensional \verb+Array+ object can be used to represent a scoring matrix for sequence alignments.
 
-\subsection*{Creating an Array objsect}
+\subsection*{Creating an Array object}
 
 To create a one-dimensional \verb+Array+, only the alphabet of allowed letters needs to be specified:
 

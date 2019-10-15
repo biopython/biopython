@@ -377,7 +377,7 @@ class Array(numpy.ndarray):
 
     def __format__(self, fmt):
         if fmt == "":
-            if self.dtype in (numpy.integer, numpy.unsignedinteger):
+            if numpy.issubdtype(self.dtype, numpy.integer):
                 fmt = "%i"
             else:
                 fmt = "%.1f"

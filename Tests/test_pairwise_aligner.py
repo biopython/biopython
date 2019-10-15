@@ -1873,7 +1873,7 @@ class TestArgumentErrors(unittest.TestCase):
             s2 = array.array("f", [1.0, 0.0, 1.0])
             with self.assertRaises(ValueError) as context_manager:
                 aligner.score(s1, s2)
-            self.assertEqual("sequence has incorrect data type",
+            self.assertEqual("sequence has incorrect data type 'f'",
                              str(context_manager.exception))
             s1 = array.array("i", [1, 5, 6])
             s2 = array.array("i", [1, 8, 6])
@@ -1904,7 +1904,7 @@ class TestArgumentErrors(unittest.TestCase):
         s2 = numpy.array([1.0, 0.0, 1.0])
         with self.assertRaises(ValueError) as context_manager:
             aligner.score(s1, s2)
-        self.assertEqual("sequence has incorrect data type",
+        self.assertEqual("sequence has incorrect data type 'd'",
                          str(context_manager.exception))
         s2 = numpy.zeros((3, 2), numpy.int32)
         with self.assertRaises(ValueError) as context_manager:

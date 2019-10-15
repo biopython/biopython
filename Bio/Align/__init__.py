@@ -1375,8 +1375,7 @@ class PairwiseAlignments(object):
         next = __next__
 
 
-if False:
-  class PairwiseAligner(_aligners.PairwiseAligner):
+class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
 
     This provides functions to get global and local alignments between two

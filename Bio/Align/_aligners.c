@@ -6449,7 +6449,8 @@ sequence_converter(PyObject* argument, void* pointer)
         view->len = n;
         view->buf = indices;
     }
-    else if (strcmp(view->format, "i") == 0) {
+    else if (strcmp(view->format, "i") == 0
+          || strcmp(view->format, "l") == 0) {
         if (view->itemsize != sizeof(int)) {
             PyErr_Format(PyExc_ValueError,
                         "sequence has unexpected item byte size "
@@ -6477,8 +6478,8 @@ sequence_converter(PyObject* argument, void* pointer)
         }
     }
     else {
-        PyErr_SetString(PyExc_ValueError,
-                        "sequence has incorrect data type");
+        PyErr_Format(PyExc_ValueError,
+                     "sequence has incorrect data type '%s'", view->format);
         return 0;
     }
 #if PY_MAJOR_VERSION < 3
@@ -6513,8 +6514,8 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     sequence_converter, &bB))
 #if PY_MAJOR_VERSION < 3
     {
-        sequence_converter(NULL, &bA);
-        sequence_converter(NULL, &bB);
+        if (bA.obj != self) sequence_converter(NULL, &bA);
+        if (bB.obj != self) sequence_converter(NULL, &bB);
 #endif
         return NULL;
 #if PY_MAJOR_VERSION < 3
@@ -6612,8 +6613,8 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                                     sequence_converter, &bB))
 #if PY_MAJOR_VERSION < 3
     {
-        sequence_converter(NULL, &bA);
-        sequence_converter(NULL, &bB);
+        if (bA.obj != self) sequence_converter(NULL, &bA);
+        if (bB.obj != self) sequence_converter(NULL, &bB);
 #endif
         return NULL;
 #if PY_MAJOR_VERSION < 3
