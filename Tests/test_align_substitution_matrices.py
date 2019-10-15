@@ -89,7 +89,9 @@ Z  0.0
     def test_read_write(self):
         from Bio.Align import substitution_matrices
         path = os.path.join("Align", "hg38.chrom.sizes")
-        sizes = substitution_matrices.read(path, int)
+        sizes = substitution_matrices.read(path, numpy.int64)
+        # Note that sum(sizes) below is larger than 2147483647, and won't
+        # fit in an int on a 32-bits machine.
         self.assertEqual(len(sizes), 455)
         self.assertEqual(sizes["chr1"], 248956422)
         self.assertEqual(sizes["chr2"], 242193529)
