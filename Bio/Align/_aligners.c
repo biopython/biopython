@@ -6514,8 +6514,8 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     sequence_converter, &bB))
 #if PY_MAJOR_VERSION < 3
     {
-        if (bA.obj != self) sequence_converter(NULL, &bA);
-        if (bB.obj != self) sequence_converter(NULL, &bB);
+        if (bA.obj != (PyObject*)self) sequence_converter(NULL, &bA);
+        if (bB.obj != (PyObject*)self) sequence_converter(NULL, &bB);
 #endif
         return NULL;
 #if PY_MAJOR_VERSION < 3
@@ -6613,8 +6613,8 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                                     sequence_converter, &bB))
 #if PY_MAJOR_VERSION < 3
     {
-        if (bA.obj != self) sequence_converter(NULL, &bA);
-        if (bB.obj != self) sequence_converter(NULL, &bB);
+        if (bA.obj != (PyObject*)self) sequence_converter(NULL, &bA);
+        if (bB.obj != (PyObject*)self) sequence_converter(NULL, &bB);
 #endif
         return NULL;
 #if PY_MAJOR_VERSION < 3
