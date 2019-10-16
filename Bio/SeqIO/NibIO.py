@@ -8,7 +8,7 @@
 
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
 The two nibbles in a byte each store one nucleotide, represented numerically
-as follows::
+as follows:
 
     - ``0`` - T
     - ``1`` - C
@@ -17,7 +17,7 @@ as follows::
     - ``4`` - N (unknown)
 
 As the first bit in a nibble is set if the nucleotide is soft-masked, we
-additionally have::
+additionally have:
 
     - ``8`` - t
     - ``9`` - c
