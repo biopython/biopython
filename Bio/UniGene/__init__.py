@@ -250,7 +250,7 @@ class Record(object):
 
     def __repr__(self):
         """Represent the UniGene Record object as a string for debugging."""
-        return "<%s> %s %s\n%s" % (
+        return "<%s> %s %s %s" % (
             self.__class__.__name__,
             self.ID,
             self.symbol,
@@ -329,8 +329,8 @@ def _read(handle):
         elif tag == "//":
             if len(record.sequence) != scount:
                 raise ValueError(
-                    "The number of sequences specified in the record"
-                    " (%d) does not agree with the number of sequences found (%d)"
+                    "The number of sequences specified in the record "
+                    "(%d) does not agree with the number of sequences found (%d)"
                     % (scount, len(record.sequence))
                 )
             return record
