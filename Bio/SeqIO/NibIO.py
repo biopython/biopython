@@ -16,17 +16,23 @@ as follows:
     3 - G
     4 - N (unknown)
 
+As the first bit in a nibble is set if the nucleotide is soft-masked, we
+additionally have
+
+    8 - t
+    9 - c
+    a - a
+    b - g
+    c - n (unknown)
+
 A nib file contains only one sequence record.
 You are expected to use this module via the Bio.SeqIO functions under
 the format name "nib":
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read("Nib/test_bigendian.nib", "nib")
+    >>> record = SeqIO.read("Nib/test_even_bigendian.nib", "nib")
     >>> print("%i %s..." % (len(record), record.seq[:20]))
-    37 ACGTAAACCGTACCCGTANA...
-
-Notice that the sequence is given in upper case; unknown nucleotides are
-written as N.
+    50 nAGAAGagccgcNGgCActt...
 
 For detailed information on the file format, please see the UCSC
 description at https://genome.ucsc.edu/FAQ/FAQformat.html.
@@ -101,17 +107,17 @@ def NibIterator(handle, alphabet=None):
     This function is used internally via the Bio.SeqIO functions:
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read("Nib/test_bigendian.nib", "nib")
+    >>> record = SeqIO.read("Nib/test_even_bigendian.nib", "nib")
     >>> print("%s %i" % (record.seq, len(record)))
-    ACGTAAACCGTACCCGTANANCANNNNACNANNANCN 37
+    nAGAAGagccgcNGgCActtGAnTAtCGTCgcCacCaGncGncTtGNtGG 50
 
     You can also call it directly:
 
-    >>> with open("Nib/test_bigendian.nib", "rb") as handle:
+    >>> with open("Nib/test_even_bigendian.nib", "rb") as handle:
     ...     for record in NibIterator(handle):
     ...         print("%s %i" % (record.seq, len(record)))
     ...
-    ACGTAAACCGTACCCGTANANCANNNNACNANNANCN 37
+    nAGAAGagccgcNGgCActtGAnTAtCGTCgcCacCaGncGncTtGNtGG 50
 
     """
     if alphabet is not None:
@@ -140,9 +146,9 @@ def NibIterator(handle, alphabet=None):
         if len(indices) != length + 1:
             raise ValueError("Unexpected file size")
         indices = indices[:length]
-    if set(indices) != set("01234"):
+    if not set(indices).issubset("0123489abc"):
         raise ValueError("Unexpected sequence data found in file")
-    table = maketrans("01234", "TCAGN")
+    table = maketrans("0123489abc", "TCAGNtcagn")
     nucleotides = indices.translate(table)
     sequence = Seq(nucleotides)
     record = SeqRecord(sequence)
@@ -182,13 +188,13 @@ class NibWriter(SequenceWriter):
         nucleotides = str(sequence)
         length = len(sequence)
         handle.write(struct.pack("i", length))
-        table = maketrans("TCAGNtcagn", "0123401234")
+        table = maketrans("TCAGNtcagn", "0123489abc")
         padding = length % 2
         suffix = padding * "T"
         nucleotides += suffix
-        indices = nucleotides.translate(table)
-        if set(indices) != set("01234"):
+        if not set(nucleotides).issubset("ACGTNacgtn"):
             raise ValueError("Sequence should contain A,C,G,T,N,a,c,g,t,n only")
+        indices = nucleotides.translate(table)
         handle.write(hex2bytes(indices))
         return count
 
