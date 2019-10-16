@@ -8,22 +8,22 @@
 
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
 The two nibbles in a byte each store one nucleotide, represented numerically
-as follows:
+as follows::
 
-    0 - T
-    1 - C
-    2 - A
-    3 - G
-    4 - N (unknown)
+    - ``0`` - T
+    - ``1`` - C
+    - ``2`` - A
+    - ``3`` - G
+    - ``4`` - N (unknown)
 
 As the first bit in a nibble is set if the nucleotide is soft-masked, we
-additionally have
+additionally have::
 
-    8 - t
-    9 - c
-    a - a
-    b - g
-    c - n (unknown)
+    - ``8`` - t
+    - ``9`` - c
+    - ``a`` - a
+    - ``b`` - g
+    - ``c`` - n (unknown)
 
 A nib file contains only one sequence record.
 You are expected to use this module via the Bio.SeqIO functions under
