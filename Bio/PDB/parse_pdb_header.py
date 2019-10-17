@@ -214,7 +214,7 @@ def _parse_pdb_header_list(header):
         # From here, all the keys from the header are being parsed
         if key == "TITLE":
             name = _chop_end_codes(tail).lower()
-            if "name" in dict:
+            if "name" in dict and "" != dict["name"]:
                 dict["name"] += " " + name
             else:
                 dict["name"] = name
