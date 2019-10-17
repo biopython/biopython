@@ -30,7 +30,7 @@ class Residue(Entity):
         self.disordered = 0
         self.resname = resname
         self.segid = segid
-        self.internal_coord = None;
+        self.internal_coord = None
         Entity.__init__(self, id)
 
     def __repr__(self):
