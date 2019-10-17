@@ -6,7 +6,7 @@
 """Model class, used in Structure objects."""
 
 from Bio.PDB.Entity import Entity
-from Bio.PDB.ic_classes import IC_Chain
+from Bio.PDB.internal_coords import IC_Chain
 
 
 class Model(Entity):
