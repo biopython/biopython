@@ -1172,7 +1172,7 @@ class TestUniGene(unittest.TestCase):
                                            "ACC=GDB:310613 UNISTS=156423, ACC=GDB:187676 "
                                            "UNISTS=155563]")
 
-        self.assertEqual(repr(record), "<Record> Hs.2 NAT2\nN-acetyltransferase 2 "
+        self.assertEqual(repr(record), "<Record> Hs.2 NAT2 N-acetyltransferase 2 "
                                        "(arylamine N-acetyltransferase)")
 
         handle.close()
