@@ -73,8 +73,7 @@ def _get_entry_formats(db):
 
 
 def _get_convert_formats():
-    return [pair.split(".") for pair in
-            _get_fields(_BASE_URL + "/convert/")]
+    return [pair.split(".") for pair in _get_fields(_BASE_URL + "/convert/")]
 
 
 def entry(db, id, format=None, field=None):
@@ -108,8 +107,9 @@ def entry(db, id, format=None, field=None):
     if _entry_db_names is None:
         _entry_db_names = _get_entry_dbs()
     if db not in _entry_db_names:
-        raise ValueError("TogoWS entry fetch does not officially support "
-                         "database '%s'." % db)
+        raise ValueError(
+            "TogoWS entry fetch does not officially support " "database '%s'." % db
+        )
     if field:
         try:
             fields = _entry_db_fields[db]
@@ -120,11 +120,16 @@ def entry(db, id, format=None, field=None):
             # Backwards compatibility fix for TogoWS change Nov/Dec 2013
             field = "title"
             import warnings
-            warnings.warn("TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead.")
+
+            warnings.warn(
+                "TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead."
+            )
         if field not in fields:
-            raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "field '%s' for database '%s'. Only: %s"
-                             % (field, db, ", ".join(sorted(fields))))
+            raise ValueError(
+                "TogoWS entry fetch does not explicitly support "
+                "field '%s' for database '%s'. Only: %s"
+                % (field, db, ", ".join(sorted(fields)))
+            )
     if format:
         try:
             formats = _entry_db_formats[db]
@@ -132,9 +137,11 @@ def entry(db, id, format=None, field=None):
             formats = _get_entry_formats(db)
             _entry_db_formats[db] = formats
         if format not in formats:
-            raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "format '%s' for database '%s'. Only: %s"
-                             % (format, db, ", ".join(sorted(formats))))
+            raise ValueError(
+                "TogoWS entry fetch does not explicitly support "
+                "format '%s' for database '%s'. Only: %s"
+                % (format, db, ", ".join(sorted(formats)))
+            )
 
     if isinstance(id, list):
         id = ",".join(id)
@@ -164,8 +171,11 @@ def search_count(db, query):
         # TODO - Make this a ValueError? Right now despite the HTML website
         # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
-        warnings.warn("TogoWS search does not officially support database '%s'. "
-                      "See %s/search/ for options." % (db, _BASE_URL))
+
+        warnings.warn(
+            "TogoWS search does not officially support database '%s'. "
+            "See %s/search/ for options." % (db, _BASE_URL)
+        )
     url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
     handle = _open(url)
     data = handle.read()
@@ -218,8 +228,7 @@ def search_iter(db, query, limit=None, batch=100):
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
             if identifier in prev_ids:
-                raise RuntimeError("Result %s was in previous batch"
-                                   % identifier)
+                raise RuntimeError("Result %s was in previous batch" % identifier)
             yield identifier
         offset += batch
         remain -= batch
@@ -265,18 +274,25 @@ def search(db, query, offset=None, limit=None, format=None):
         # TODO - Make this a ValueError? Right now despite the HTML website
         # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
-        warnings.warn("TogoWS search does not explicitly support database '%s'. "
-                      "See %s/search/ for options." % (db, _BASE_URL))
+
+        warnings.warn(
+            "TogoWS search does not explicitly support database '%s'. "
+            "See %s/search/ for options." % (db, _BASE_URL)
+        )
     url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
         except ValueError:
-            raise ValueError("Offset should be an integer (at least one), not %r" % offset)
+            raise ValueError(
+                "Offset should be an integer (at least one), not %r" % offset
+            )
         try:
             limit = int(limit)
         except ValueError:
-            raise ValueError("Limit should be an integer (at least one), not %r" % limit)
+            raise ValueError(
+                "Limit should be an integer (at least one), not %r" % limit
+            )
         if offset <= 0:
             raise ValueError("Offset should be at least one, not %i" % offset)
         if limit <= 0:
@@ -354,4 +370,5 @@ _open.previous = 0
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)
