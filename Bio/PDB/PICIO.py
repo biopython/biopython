@@ -31,8 +31,8 @@ def read_PIC(file, verbose=False):
     PIC file format:
         # comment lines start with #
         (optional) PDB HEADER record
-            - idcode and deposition date recommended but optional
-            - deposition date in PDB format or as changed by Biopython
+        - idcode and deposition date recommended but optional
+        - deposition date in PDB format or as changed by Biopython
         (optional) PDB TITLE record
         repeat:
             Biopython Residue Full ID - sets ID of returned structure
@@ -45,7 +45,7 @@ def read_PIC(file, verbose=False):
     :returns: Biopython Structure object, Residues with .pic attributes
         but no coordinates except for chain start N, CA, C atoms if supplied,
         or None on parse fail (silent unless verbose=True)
-    
+
     """
     pdb_hdr_re = re.compile(
         r"^HEADER\s{4}(?P<cf>.{1,40})"
@@ -283,8 +283,9 @@ def enumerate_atoms(entity):
 
 
 def pdb_date(datestr):
+    """Convert yyyy-mm-dd date to dd-month-yy."""
     if datestr:
-        m = re.match("(\d{4})-(\d{2})-(\d{2})", datestr)
+        m = re.match(r"(\d{4})-(\d{2})-(\d{2})", datestr)
         if m:
             mo = [
                 "XXX",
@@ -360,4 +361,3 @@ def write_PIC(entity, file, pdbid=None, chainid=None):
             raise Exception(
                 "write_PIC: argument is not a Biopython PDB Entity " + str(entity)
             )
-

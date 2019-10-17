@@ -1850,7 +1850,7 @@ class IC_Residue(object):
                 atm.coord[2],
                 atm.occupancy,
                 atm.bfactor,
-                atm.element
+                atm.element,
             )
             # print(s)
         return s
