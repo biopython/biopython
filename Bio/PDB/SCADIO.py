@@ -10,7 +10,7 @@
 from Bio.File import as_handle
 from Bio.PDB.PDBExceptions import PDBException
 
-from Bio.PDB.ic_classes import IC_Residue, IC_Chain
+from Bio.PDB.internal_coords import IC_Residue, IC_Chain
 from Bio.PDB.Structure import Structure
 from Bio.PDB.vectors import homog_scale_mtx
 
@@ -21,8 +21,8 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
 
     Output data format is primarily:
         matrix for each hedron: len1, angle2, len3, atom covalent bond class,
-            flags toindicate atom/bond represented in previous hedron (OpenSCAD
-            very slow for overlapping elements)
+        flags to indicate atom/bond represented in previous hedron (OpenSCAD
+        very slow for overlapping elements)
         matrices for each residue to assemble hedra into dihedrons
         matrices to transform each residue set of dihedra to position in chain
 
