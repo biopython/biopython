@@ -67,6 +67,49 @@ class MMCIFParser(object):
 
     # Private methods
 
+    def _mmcif_get(self, key, dict, deflt):
+        if key in dict:
+            rslt = dict[key][0]
+            if "?" != rslt:
+                return rslt
+        return deflt
+
+    def _get_mmcif_header_dict(self, md):
+        dict = {
+            "name": "",
+            "head": "",
+            "idcode": "",
+            "deposition_date": "",
+            "structure_method": "",
+            "resolution": 0.0,
+        }
+
+        dict["idcode"] = self._mmcif_get("_entry.id", md, None)
+        if not dict["idcode"]:
+            dict["idcode"] = self._mmcif_get("_exptl.entry_id", md, None)
+        if not dict["idcode"]:
+            dict["idcode"] = self._mmcif_get("_struct.entry_id", md, None)
+
+        dict["name"] = self._mmcif_get("_struct.title", md, None)
+
+        dict["head"] = self._mmcif_get("_struct_keywords.pdbx_keywords", md, None)
+        if not dict["head"]:
+            dict["head"] = self._mmcif_get("_struct_keywords.text", md, None)
+
+        dict["deposition_date"] = self._mmcif_get(
+            "_pdbx_database_status.recvd_initial_deposition_date", md, None
+        )
+
+        dict["structure_method"] = self._mmcif_get("_exptl.method", md, None)
+
+        dict["resolution"] = float(self._mmcif_get("_refine.ls_d_res_high", md, 0.0))
+        if 0.0 == dict["resolution"]:
+            dict["resolution"] = float(
+                self._mmcif_get("_refine_hist.d_res_high", md, 0.0)
+            )
+
+        return dict
+
     def _build_structure(self, structure_id):
 
         # two special chars as placeholders in the mmCIF format
@@ -122,6 +165,7 @@ class MMCIFParser(object):
         structure_builder = self._structure_builder
         structure_builder.init_structure(structure_id)
         structure_builder.init_seg(" ")
+        structure_builder.set_header(self._get_mmcif_header_dict(mmcif_dict))
         # Historically, Biopython PDB parser uses model_id to mean array index
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
