@@ -35,10 +35,10 @@ def read_PIC(file, verbose=False):
         - deposition date in PDB format or as changed by Biopython
         (optional) PDB TITLE record
         repeat:
-            Biopython Residue Full ID - sets ID of returned structure
-            (optional) PDB ATOM records for chain start N, CA, C
-            PIC Hedra records for residue
-            PIC Dihedra records for residue
+        -    Biopython Residue Full ID - sets ID of returned structure
+        -    (optional) PDB ATOM records for chain start N, CA, C
+        -    PIC Hedra records for residue
+        -    PIC Dihedra records for residue
 
     :param Bio.File file: file name or handle
     :param bool verbose: complain when lines not as expected
