@@ -12,11 +12,26 @@ from Bio.PDB.PDBExceptions import PDBException
 
 from Bio.PDB.internal_coords import IC_Residue, IC_Chain
 from Bio.PDB.Structure import Structure
+from Bio.PDB.Residue import Residue
 from Bio.PDB.vectors import homog_scale_mtx
 
 
-def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
-               backboneOnly=False, includeCode=True):
+def _scale_residue(res, scale, scaleMtx):
+    if res.internal_coord:
+        res.internal_coord.applyMtx(scaleMtx)
+        if res.internal_coord.gly_Cbeta:
+            res.internal_coord.scale = scale
+
+
+def write_SCAD(
+    entity,
+    file,
+    scale=None,
+    handle="protein",
+    pdbid=None,
+    backboneOnly=False,
+    includeCode=True,
+):
     """Write hedron assembly to file as OpenSCAD matrices.
 
     Output data format is primarily:
@@ -46,16 +61,16 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
     """
     # step one need IC_Residue atom_coords loaded in order to scale
     have_PIC_Atoms = False
-    if 'S' == entity.level or 'M' == entity.level:
+    if "S" == entity.level or "M" == entity.level:
         for chn in entity.get_chains():
             if not chn.internal_coord:
                 chn.internal_coord = IC_Chain(chn)
                 have_PIC_Atoms = True
-    elif 'C' == entity.level:
+    elif "C" == entity.level:
         if not entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
             have_PIC_Atoms = True
-    elif 'R' == entity.level:
+    elif "R" == entity.level:
         if not entity.internal_coord:
             entity.internal_coord = IC_Residue(entity)
             have_PIC_Atoms = True
@@ -69,10 +84,11 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
     if scale is not None:
         scaleMtx = homog_scale_mtx(scale)
         for res in entity.get_residues():
-            if res.internal_coord:
-                res.internal_coord.applyMtx(scaleMtx)
-                if res.internal_coord.gly_Cbeta:
-                    res.internal_coord.scale = scale
+            if 2 == res.is_disordered():
+                for r in res.child_dict.values():
+                    _scale_residue(r, scale, scaleMtx)
+            else:
+                _scale_residue(res, scale, scaleMtx)
 
     # generate internal coords for scaled entity
     # -- hedron bond lengths have changed
@@ -86,37 +102,36 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
 
     entity.internal_to_atom_coordinates()
 
-    with as_handle(file, 'w') as fp:
+    with as_handle(file, "w") as fp:
 
-        fp.write('protein_scale=' + str(scale) + ';\n')
+        fp.write("protein_scale=" + str(scale) + ";\n")
         if includeCode:
-            fp.write('$fn=20;\nchain(protein);\n')
+            fp.write("$fn=20;\nchain(protein);\n")
             fp.write(peptide_scad)
             # codeFile = re.sub(r"pic.py\Z", "peptide.scad", __file__)
             # with as_handle(codeFile, 'r') as cf:
             #     for line in cf.readlines():
             #        fp.write(line)
 
-        if not pdbid and hasattr(entity, 'header'):
-            pdbid = entity.header.get('idcode', None)
-        if pdbid is None or '' == pdbid:
-            pdbid = '0PDB'
+        if not pdbid and hasattr(entity, "header"):
+            pdbid = entity.header.get("idcode", None)
+        if pdbid is None or "" == pdbid:
+            pdbid = "0PDB"
         fp.write('protein = [ "' + pdbid + '", protein_scale,\n')
 
-        if 'S' == entity.level or 'M' == entity.level:
+        if "S" == entity.level or "M" == entity.level:
             for chn in entity.get_chains():
-                fp.write(' [\n')
-                chn.internal_coord.write_SCAD(fp, scale, backboneOnly)
-                fp.write(' ]\n')
-        elif 'C' == entity.level:
-            fp.write(' [\n')
-            entity.internal_coord.write_SCAD(fp, scale, backboneOnly)
-            fp.write(' ]\n')
-        elif 'R' == entity.level:
-            raise NotImplementedError(
-                'writescad single residue not yet implemented.')
+                fp.write(" [\n")
+                chn.internal_coord.write_SCAD(fp, backboneOnly)
+                fp.write(" ]\n")
+        elif "C" == entity.level:
+            fp.write(" [\n")
+            entity.internal_coord.write_SCAD(fp, backboneOnly)
+            fp.write(" ]\n")
+        elif "R" == entity.level:
+            raise NotImplementedError("writescad single residue not yet implemented.")
 
-        fp.write('\n];\n')
+        fp.write("\n];\n")
 
 
 peptide_scad = """

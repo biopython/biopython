@@ -1581,13 +1581,18 @@ class IC_Residue(object):
                         for a in akl:
                             if a in atomCoords and atomCoords[a] is not None:
                                 acount += 1
-                        if 4 == acount:
+                        if 4 == acount:  # and not need_transform:
                             # dihedron already done, queue 2nd hedron key
                             q.appendleft(d_h2key)
-                            # print('    4- already done, append left')
-                        elif 3 == acount:
-                            # if [0, 1, x, 3] is possible then bug
-                            # print('    3- call coord_space')
+                            # print("    4- already done, append left")
+                            if transforms and not (h1k in transformations):
+                                # can happen for altloc atoms
+                                mt, mtr = coord_space(
+                                    [atomCoords[a] for a in akl[:3]], True
+                                )
+                                transformations[h1k] = mtr
+                        elif 3 == acount:  # or need_transform:
+                            # print("    3- call coord_space")
                             mt, mtr = coord_space(
                                 [atomCoords[a] for a in akl[:3]], True
                             )
@@ -2183,6 +2188,8 @@ class IC_Chain:
         Process pic data to Residue/Atom coordinates
     dihedra_from_atoms()
         Calculate dihedrals, angles, bond lengths for Atom data
+    write_SCAD()
+        Write OpenSCAD matrices for internal coordinate data comprising chain
 
     """
 
@@ -2408,7 +2415,7 @@ class IC_Chain:
         IC_Chain._write_mtx(fp, mtx)
         fp.write(" ]")  # close residue array of dihedra entry
 
-    def write_SCAD(self, fp, scale, backboneOnly):
+    def write_SCAD(self, fp, backboneOnly):
         """Write self to file fp as OpenSCAD data matrices.
 
         Works with write_SCAD() and embedded OpenSCAD routines in SCADIO.py.
@@ -2427,6 +2434,11 @@ class IC_Chain:
         - bond options for rotation and magnet holders for hydrogen bonds
         may be specified
 
+        Note the IC_Chain attribute MaxPeptideBond: missing residues may be
+        linked (joining chain segments) by setting this to a large value.
+
+        It is intentional that all ALTLOC (disordered) residues and atoms
+        are written to the output model.
         """
         fp.write('   "{}", // chain id\n'.format(self.chain.id))
 
@@ -2517,6 +2529,8 @@ class IC_Chain:
                 # try first for generic backbone/Cbeta atoms
                 ab_state_res = residue_atom_bond_state["X"]
                 ab_state = ab_state_res.get(atm, None)
+                if "H" == atm[0]:
+                    ab_state = "Hsb"
                 if ab_state is None:
                     # not found above, must be sidechain atom
                     ab_state_res = residue_atom_bond_state.get(res, None)
@@ -2580,8 +2594,8 @@ class IC_Chain:
                             bondType = "FemaleJoinBond"
                         elif hasattr(hed, "flex_male_2"):
                             bondType = "MaleJoinBond"
-                        #                        elif hasattr(hed, 'skinny_2'):  # unused
-                        #                            bondType = 'SkinnyBond'
+                        # elif hasattr(hed, 'skinny_2'):  # unused
+                        #     bondType = 'SkinnyBond'
                         elif hasattr(hed, "hbond_2"):
                             bondType = "HBond"
                     if b in bondDict:
