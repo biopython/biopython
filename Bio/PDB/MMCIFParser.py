@@ -49,25 +49,27 @@ class MMCIFParser(object):
 
     # Public methods
 
-    def get_structure(self, structure_id, filename):
+    def get_structure(self, structure_id, filename, use_label_seq_id=False):
         """Return the structure.
 
         Arguments:
          - structure_id - string, the id that will be used for the structure
          - filename - name of mmCIF file, OR an open text mode file handle
+         - use_label_seq_id - boolean, to use _atom_site.label_seq_id over
+             _atom_site.auth_seq_id.
 
         """
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
             self._mmcif_dict = MMCIF2Dict(filename)
-            self._build_structure(structure_id)
+            self._build_structure(structure_id, use_label_seq_id)
 
         return self._structure_builder.get_structure()
 
     # Private methods
 
-    def _build_structure(self, structure_id):
+    def _build_structure(self, structure_id, use_label_seq_id):
 
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
@@ -111,7 +113,7 @@ class MMCIFParser(object):
             aniso_flag = 0
         # if auth_seq_id is present, we use this.
         # Otherwise label_seq_id is used.
-        if "_atom_site.auth_seq_id" in mmcif_dict:
+        if "_atom_site.auth_seq_id" in mmcif_dict and not use_label_seq_id:
             seq_id_list = mmcif_dict["_atom_site.auth_seq_id"]
         else:
             seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
@@ -141,7 +143,12 @@ class MMCIFParser(object):
             altloc = alt_list[i]
             if altloc in _unassigned:
                 altloc = " "
-            int_resseq = int(seq_id_list[i])
+            try:
+                int_resseq = int(seq_id_list[i])
+            except ValueError:
+                raise PDBConstructionException(
+                    "try parser.get_structure('structure_id', 'file_name', use_label_seq_id=True)"
+                )
             icode = icode_list[i]
             if icode in _unassigned:
                 icode = " "
