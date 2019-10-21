@@ -301,22 +301,26 @@ def _read_id(record, line):
     # check if the data class is one of the allowed values
     allowed = ("STANDARD", "PRELIMINARY", "IPI", "Reviewed", "Unreviewed")
     if record.data_class not in allowed:
-        raise ValueError("Unrecognized data class %s in line\n%s" %
-                         (record.data_class, line))
+        raise ValueError(
+            "Unrecognized data class %s in line\n%s" % (record.data_class, line)
+        )
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, "PRT"):
-        raise ValueError("Unrecognized molecule type %s in line\n%s" %
-                         (record.molecule_type, line))
+        raise ValueError(
+            "Unrecognized molecule type %s in line\n%s" % (record.molecule_type, line)
+        )
 
 
 def _read_dt(record, line):
     value = line[5:]
     uprline = value.upper()
     cols = value.rstrip().split()
-    if ("CREATED" in uprline
-            or "LAST SEQUENCE UPDATE" in uprline
-            or "LAST ANNOTATION UPDATE" in uprline):
+    if (
+        "CREATED" in uprline
+        or "LAST SEQUENCE UPDATE" in uprline
+        or "LAST ANNOTATION UPDATE" in uprline
+    ):
         # Old style DT line
         # =================
         # e.g.
@@ -360,9 +364,11 @@ def _read_dt(record, line):
             record.annotation_update = date, version
         else:
             raise ValueError("Unrecognised DT (DaTe) line.")
-    elif ("INTEGRATED INTO" in uprline
-          or "SEQUENCE VERSION" in uprline
-          or "ENTRY VERSION" in uprline):
+    elif (
+        "INTEGRATED INTO" in uprline
+        or "SEQUENCE VERSION" in uprline
+        or "ENTRY VERSION" in uprline
+    ):
         # New style DT line
         # =================
         # As of UniProt Knowledgebase release 7.0 (including
@@ -447,11 +453,15 @@ def _read_rn(reference, rn):
     # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
     words = rn.split(None, 1)
     number = words[0]
-    assert number.startswith("[") and number.endswith("]"), "Missing brackets %s" % number
+    assert number.startswith("[") and number.endswith("]"), (
+        "Missing brackets %s" % number
+    )
     reference.number = int(number[1:-1])
     if len(words) > 1:
         evidence = words[1]
-        assert evidence.startswith("{") and evidence.endswith("}"), "Missing braces %s" % evidence
+        assert evidence.startswith("{") and evidence.endswith("}"), (
+            "Missing braces %s" % evidence
+        )
         reference.evidence = evidence[1:-1].split("|")
 
 
@@ -467,7 +477,7 @@ def _read_rc(reference, value):
         # The token is everything before the first '=' character.
         i = col.find("=")
         if i >= 0:
-            token, text = col[:i], col[i + 1:]
+            token, text = col[:i], col[i + 1 :]
             comment = token.lstrip(), text
             reference.comments.append(comment)
         else:
@@ -518,13 +528,13 @@ def _read_rx(reference, value):
     if warn:
         import warnings
         from Bio import BiopythonParserWarning
-        warnings.warn("Possibly corrupt RX line %r" % value,
-                      BiopythonParserWarning)
+
+        warnings.warn("Possibly corrupt RX line %r" % value, BiopythonParserWarning)
 
 
 def _read_cc(record, line):
     key, value = line[5:8], line[9:].rstrip()
-    if key == "-!-":   # Make a new comment
+    if key == "-!-":  # Make a new comment
         record.comments.append(value)
     elif key == "   ":  # add to the previous comment
         if not record.comments:
@@ -563,7 +573,7 @@ def _read_kw(record, value):
 
 
 def _read_ft(record, line):
-    line = line[5:]    # get rid of junk in front
+    line = line[5:]  # get rid of junk in front
     name = line[0:8].rstrip()
     try:
         from_res = int(line[9:15])
@@ -613,4 +623,5 @@ def _read_ft(record, line):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)
