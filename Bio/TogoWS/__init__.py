@@ -108,7 +108,7 @@ def entry(db, id, format=None, field=None):
         _entry_db_names = _get_entry_dbs()
     if db not in _entry_db_names:
         raise ValueError(
-            "TogoWS entry fetch does not officially support " "database '%s'." % db
+            "TogoWS entry fetch does not officially support database '%s'." % db
         )
     if field:
         try:
