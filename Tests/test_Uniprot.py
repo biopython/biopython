@@ -420,26 +420,25 @@ class TestUniprot(unittest.TestCase):
             self.compare_txt_xml(txt, xml)
 
     def test_embl(self):
-	    """Test embl-cds from dbxref"""
+        """Test embl-cds from dbxref"""
         with open("SwissProt/Q13639.xml") as test_handle:
-	    seq_record = SeqIO.read(test_handle, "uniprot-xml")
-        #                                                                                                                                         
-	    embl_cds_ref = sorted(['EMBL-CDS:AAH74755.1', 'EMBL-CDS:CAA09600.1', 'EMBL-CDS:CAA70002.1',
-	                           'EMBL-CDS:CAA70774.1', 'EMBL-CDS:CAA71462.1', 'EMBL-CDS:CAA73107.1',
-                               'EMBL-CDS:CAA73108.1', 'EMBL-CDS:CAA73109.1', 'EMBL-CDS:CAA73911.1',
-	                           'EMBL-CDS:CAA88167.1', 'EMBL-CDS:CAB71316.1', 'EMBL-CDS:CAC22248.1',
-                               'EMBL-CDS:CAC22250.1', 'EMBL-CDS:CAC22251.1'] )
+            seq_record = SeqIO.read(test_handle, "uniprot-xml")
+
+        embl_cds_ref = sorted(["EMBL-CDS:AAH74755.1", "EMBL-CDS:CAA09600.1", "EMBL-CDS:CAA70002.1",
+                               "EMBL-CDS:CAA70774.1", "EMBL-CDS:CAA71462.1", "EMBL-CDS:CAA73107.1",
+                               "EMBL-CDS:CAA73108.1", "EMBL-CDS:CAA73109.1", "EMBL-CDS:CAA73911.1",
+                               "EMBL-CDS:CAA88167.1", "EMBL-CDS:CAB71316.1", "EMBL-CDS:CAC22248.1",
+                               "EMBL-CDS:CAC22250.1", "EMBL-CDS:CAC22251.1"])
         embl_cds = []
         for entry in seq_record.dbxrefs:
-	       if entry.startswith('EMBL-CDS:'): embl_cds.append(entry)
-	    #
-        embl_cds = sorted( embl_cds )
-	    self.assertEqual(len(embl_cds), len(embl_cds_ref))
-	    for e, e_r in zip(embl_cds,embl_cds_ref):
+            if entry.startswith("EMBL-CDS:"):
+                embl_cds.append(entry)
+
+        embl_cds = sorted(embl_cds)
+        self.assertEqual(len(embl_cds), len(embl_cds_ref))
+        for e, e_r in zip(embl_cds, embl_cds_ref):
             self.assertEqual(e, e_r)
-        #                                                                                                                                         
-    #                                                                                                                                                      
-    
+
     def test_multi_ex_index(self):
         """Index SwissProt text and uniprot XML versions of several examples."""
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))

@@ -356,10 +356,10 @@ class Parser(object):
                 element.attrib["type"] + ":" + element.attrib["id"]
             )
             if "type" in element.attrib:
-                #<dbReference type="EMBL" id="U96180">                                                                                            
-                #   <property type="protein sequence ID" value="AAB66902.1"/>                                                                     
-                #   <property type="molecule type" value="mRNA"/>                                                                                 
-                #</dbReference>                                                                                                                   
+                # <dbReference type="EMBL" id="U96180">
+                #    <property type="protein sequence ID" value="AAB66902.1"/>
+                #    <property type="molecule type" value="mRNA"/>
+                # </dbReference>
                 if element.attrib['type'] == 'EMBL':
                     for ref_element in element:
                         if 'type' in ref_element.attrib and 'value' in ref_element.attrib:
@@ -370,7 +370,7 @@ class Parser(object):
                 #   <property value="X-ray" type="method"/>
                 #   <property value="2.60 A" type="resolution"/>
                 #   <property value="A/C/E/G=1-192, B/D/F/H=193-325" type="chains"/>
-                # </dbReference>  
+                # </dbReference>
                 if element.attrib["type"] == "PDB":
                     method = ""
                     resolution = ""
