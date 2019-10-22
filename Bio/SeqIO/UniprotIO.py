@@ -360,11 +360,11 @@ class Parser(object):
                 #    <property type="protein sequence ID" value="AAB66902.1"/>
                 #    <property type="molecule type" value="mRNA"/>
                 # </dbReference>
-                if element.attrib['type'] == 'EMBL':
+                if element.attrib["type"] == "EMBL":
                     for ref_element in element:
-                        if 'type' in ref_element.attrib and 'value' in ref_element.attrib:
-                            if ref_element.attrib['type'] == 'protein sequence ID':
-                                self.ParsedSeqRecord.dbxrefs.append('EMBL-CDS:' + ref_element.attrib['value'])
+                        if "type" in ref_element.attrib and "value" in ref_element.attrib:
+                            if ref_element.attrib["type"] == "protein sequence ID":
+                                self.ParsedSeqRecord.dbxrefs.append("EMBL-CDS:" + ref_element.attrib["value"])
                 # e.g.
                 # <dbReference type="PDB" key="11" id="2GEZ">
                 #   <property value="X-ray" type="method"/>

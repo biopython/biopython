@@ -420,7 +420,7 @@ class TestUniprot(unittest.TestCase):
             self.compare_txt_xml(txt, xml)
 
     def test_embl(self):
-        """Test embl-cds from dbxref"""
+        """Test embl-cds from dbxref."""
         with open("SwissProt/Q13639.xml") as test_handle:
             seq_record = SeqIO.read(test_handle, "uniprot-xml")
 
@@ -435,9 +435,7 @@ class TestUniprot(unittest.TestCase):
                 embl_cds.append(entry)
 
         embl_cds = sorted(embl_cds)
-        self.assertEqual(len(embl_cds), len(embl_cds_ref))
-        for e, e_r in zip(embl_cds, embl_cds_ref):
-            self.assertEqual(e, e_r)
+        self.assertEqual(embl_cds, embl_cds_ref)
 
     def test_multi_ex_index(self):
         """Index SwissProt text and uniprot XML versions of several examples."""
