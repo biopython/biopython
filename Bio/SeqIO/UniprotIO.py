@@ -371,7 +371,7 @@ class Parser(object):
                 #   <property value="2.60 A" type="resolution"/>
                 #   <property value="A/C/E/G=1-192, B/D/F/H=193-325" type="chains"/>
                 # </dbReference>
-                if element.attrib["type"] == "PDB":
+                elif element.attrib["type"] == "PDB":
                     method = ""
                     resolution = ""
                     for ref_element in element:
