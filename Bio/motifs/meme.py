@@ -6,6 +6,7 @@
 """Module for the support of MEME motif format."""
 
 from __future__ import print_function
+import xml.etree.ElementTree as ET
 
 from Bio import Seq
 from Bio import motifs
@@ -35,38 +36,14 @@ def read(handle):
 
     """
     record = Record()
-    __read_version(record, handle)
-    __read_datafile(record, handle)
-    __read_alphabet(record, handle)
-    __read_sequences(record, handle)
-    __read_command(record, handle)
-    for line in handle:
-        if line.startswith("MOTIF "):
-            break
-    else:
-        raise ValueError("Unexpected end of stream")
-    alphabet = record.alphabet
-    revcomp = "revcomp" in record.command
-    while True:
-        motif_number, length, num_occurrences, evalue = __read_motif_statistics(line)
-        name = __read_motif_name(handle)
-        instances = __read_motif_sequences(handle, name, alphabet, length, revcomp)
-        motif = Motif(alphabet, instances)
-        motif.length = length
-        motif.num_occurrences = num_occurrences
-        motif.evalue = evalue
-        motif.name = name
-        record.append(motif)
-        assert len(record) == motif_number
-        __skip_unused_lines(handle)
-        try:
-            line = next(handle)
-        except StopIteration:
-            raise ValueError("Unexpected end of stream: Expected to find new motif, or the summary of motifs")
-        if line.startswith("SUMMARY OF MOTIFS"):
-            break
-        if not line.startswith("MOTIF"):
-            raise ValueError("Line does not start with 'MOTIF':\n%s" % line)
+    try:
+        xml_tree = ET.parse(handle)
+    except ET.ParseError:
+        raise ValueError("Improper MAST XML input file. XML root tag should start with <mast version= ...")
+    __read_metadata(record, xml_tree)
+    __read_alphabet(record, xml_tree)
+    __read_sequences(record, xml_tree)
+    __read_motifs(record, xml_tree)
     return record
 
 
@@ -128,7 +105,7 @@ class Record(list):
         self.version = ""
         self.datafile = ""
         self.command = ""
-        self.alphabet = None
+        self.alphabet = ""
         self.sequences = []
 
     def __getitem__(self, key):
@@ -144,223 +121,48 @@ class Record(list):
 # Everything below is private
 
 
-def __read_version(record, handle):
-    for line in handle:
-        if line.startswith("MEME version"):
-            break
-    else:
-        raise ValueError("Improper input file. File should contain a line starting MEME version.")
-    line = line.strip()
-    ls = line.split()
-    record.version = ls[2]
+def __read_metadata(record, xml_tree):
+    record.version = xml_tree.getroot().get("version")
+    record.datafile = xml_tree.find("training_set").get("primary_sequences")
+    record.command = xml_tree.find("model").find("command_line").text
+    # TODO - background_frequencies, other metadata under model
 
 
-def __read_datafile(record, handle):
-    for line in handle:
-        if line.startswith("TRAINING SET"):
-            break
-    else:
-        raise ValueError(
-            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
-            "minimal MEME files (MEME databases) which are not supported yet.")
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
-    if not line.startswith("****"):
-        raise ValueError("Line does not start with '****':\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
-    if not line.startswith("DATAFILE"):
-        raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
-    line = line.strip()
-    line = line.replace("DATAFILE= ", "")
-    record.datafile = line
+def __read_alphabet(record, xml_tree):
+    alphabet_tree = xml_tree.find("training_set").find("letter_frequencies").find("alphabet_array")
+    for value in alphabet_tree.findall("value"):
+        record.alphabet += value.get("letter_id")
 
 
-def __read_alphabet(record, handle):
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'ALPHABET'")
-    if not line.startswith("ALPHABET"):
-        raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
-    line = line.strip()
-    line = line.replace("ALPHABET= ", "")
-    if line == "ACGT":
-        al = "ACGT"
-    elif line == "ACGU":
-        al = "ACGU"
-    else:
-        al = "ACDEFGHIKLMNPQRSTVWY"
-    record.alphabet = al
+def __read_sequences(record, xml_tree):
+    for sequence_tree in xml_tree.find("training_set").findall("sequence"):
+        sequence_name = sequence_tree.get('name')
+        record.sequences.append(sequence_name)
+        # TODO - sequence id, length, weight
 
 
-def __read_sequences(record, handle):
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'Sequence name'")
-    if not line.startswith("Sequence name"):
-        raise ValueError("Line does not start with 'Sequence name':\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '----'")
-    if not line.startswith("----"):
-        raise ValueError("Line does not start with '----':\n%s" % line)
-    for line in handle:
-        if line.startswith("***"):
-            break
-        line = line.strip()
-        ls = line.split()
-        record.sequences.append(ls[0])
-        if len(ls) == 6:
-            record.sequences.append(ls[3])
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
-
-
-def __read_command(record, handle):
-    for line in handle:
-        if line.startswith("command:"):
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'command'")
-    line = line.strip()
-    line = line.replace("command: ", "")
-    record.command = line
-
-
-def __read_motif_statistics(line):
-    # Depending on the version of MEME, this line either like like
-    #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
-    # or like
-    #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
-    # or in v 4.11.4 onwards
-    #    MOTIF ATTATAAAAAAA MEME-1	width =  12  sites =   5  llr = 43  E-value = 1.9e-003
-    words = line.split()
-    assert words[0] == "MOTIF"
-    if words[2][:5] == "MEME-":
-        motif_number = int(words[2].split("-")[1])
-    else:
-        motif_number = int(words[1])
-    if words[2].startswith("MEME"):
-        key_values = words[3:]
-    else:
-        key_values = words[2:]
-    keys = key_values[::3]
-    equal_signs = key_values[1::3]
-    values = key_values[2::3]
-    assert keys == ["width", "sites", "llr", "E-value"]
-    for equal_sign in equal_signs:
-        assert equal_sign == "="
-    length = int(values[0])
-    num_occurrences = int(values[1])
-    evalue = float(values[3])
-    return motif_number, length, num_occurrences, evalue
-
-
-def __read_motif_name(handle):
-    for line in handle:
-        if "sorted by position p-value" in line:
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Failed to find motif name")
-    line = line.strip()
-    words = line.split()
-    name = " ".join(words[0:2])
-    return name
-
-
-def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Failed to find motif sequences")
-    if not line.startswith("---"):
-        raise ValueError("Line does not start with '---':\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'Sequence name'")
-    if not line.startswith("Sequence name"):
-        raise ValueError("Line does not start with 'Sequence name':\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Failed to find motif sequences")
-    if not line.startswith("---"):
-        raise ValueError("Line does not start with '---':\n%s" % line)
-    instances = []
-    for line in handle:
-        if line.startswith("---"):
-            break
-        line = line.strip()
-        words = line.split()
-        if revcomp:
-            strand = words.pop(1)
-        else:
-            strand = "+"
-        sequence = words[4]
-        assert len(sequence) == length
-        instance = Instance(sequence, alphabet)
-        instance.motif_name = motif_name
-        instance.sequence_name = words[0]
-        instance.start = int(words[1])
-        instance.pvalue = float(words[2])
-        instance.strand = strand
-        instance.length = length
-        instances.append(instance)
-    else:
-        raise ValueError("Unexpected end of stream")
-    return motifs.Instances(instances, alphabet)
-
-
-def __skip_unused_lines(handle):
-    for line in handle:
-        if line.startswith("log-odds matrix"):
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'log-odds matrix'")
-    for line in handle:
-        if line.startswith("---"):
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '---'")
-    for line in handle:
-        if line.startswith("letter-probability matrix"):
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'letter-probability matrix'")
-    for line in handle:
-        if line.startswith("---"):
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '---'")
-    for line in handle:
-        if line.startswith("Time"):
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'Time'")
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find blank line")
-    if line.strip():
-        raise ValueError("Expected blank line, but got:\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
-    if not line.startswith("***"):
-        raise ValueError("Line does not start with '***':\n%s" % line)
-    for line in handle:
-        if line.strip():
-            break
-    else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
-    if not line.startswith("***"):
-        raise ValueError("Line does not start with '***':\n%s" % line)
+def __read_motifs(record, xml_tree):
+    for motif_tree in xml_tree.find("motifs").findall("motif"):
+        instances = []
+        for site_tree in motif_tree.find("contributing_sites").findall("contributing_site"):
+            letters = [letter_ref.get("letter_id") for letter_ref in site_tree.find("site").findall("letter_ref")]
+            sequence = ''.join(letters)
+            instance = Instance(sequence, record.alphabet)
+            instance.motif_name = motif_tree.get("name")
+            instance.sequence_name = site_tree.get("sequence_id")  # TODO - rename to sequence_id, get sequence_name
+            # TODO - left flank, right flank
+            instance.start = site_tree.get("position")
+            instance.pvalue = float(site_tree.get("pvalue"))
+            instance.strand = site_tree.get("strand")
+            instance.length = len(sequence)
+            instances.append(instance)
+        instances = motifs.Instances(instances, record.alphabet)
+        motif = Motif(record.alphabet, instances)
+        motif.id = motif_tree.get("id")
+        motif.name = motif_tree.get("name")
+        motif.alt_id = motif_tree.get("alt")
+        motif.length = int(motif_tree.get("width"))
+        motif.num_occurrences = int(motif_tree.get("sites"))
+        motif.evalue = float(motif_tree.get("e_value"))
+        # TODO - ic, re, llr, pvalue, bayes_threshold, elapsed_time
+        record.append(motif)
