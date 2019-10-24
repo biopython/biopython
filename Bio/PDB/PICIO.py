@@ -42,7 +42,7 @@ def read_PIC(file, verbose=False):
 
     :param Bio.File file: file name or handle
     :param bool verbose: complain when lines not as expected
-    :returns: Biopython Structure object, Residues with .pic attributes
+    :returns: Biopython Structure object, Residues with .internal_coord attributes
         but no coordinates except for chain start N, CA, C atoms if supplied,
         or None on parse fail (silent unless verbose=True)
 
@@ -152,7 +152,7 @@ def read_PIC(file, verbose=False):
                                 break
                     sb_res.internal_coord = IC_Residue(sb_res)
                     # print('res id:', m.groupdict())
-                    # print(report_PIC(struct_builder.get_structure()))
+                    # print(report_IC(struct_builder.get_structure()))
                 else:
                     if verbose:
                         print(

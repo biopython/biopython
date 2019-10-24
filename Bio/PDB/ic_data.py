@@ -6,10 +6,10 @@
 
 """Per residue sidechain hedra and dihedra definitions.
 
-Listed in order of output for internal coordinates (.pic) specification file
+Listed in order of output for internal coordinates (.pic) output file
 """
 
-pic_data_backbone = (
+ic_data_backbone = (
     ("N", "CA", "C", "O"),  # locate backbone O
     ("O", "C", "CA", "CB"),  # locate CB
     ("CA", "C", "O"),
@@ -41,7 +41,7 @@ pic_data_backbone = (
     ("C", "CA", "N", "H3"),
 )
 
-pic_data_sidechains = {
+ic_data_sidechains = {
     "V": (
         ("CA", "CB", "CG1"),
         ("N", "CA", "CB", "CG1", "chi1"),  # chi1
@@ -381,7 +381,7 @@ pic_data_sidechains = {
 }
 
 # complete the ring bond sets for OpenSCAD output
-pic_data_sidechain_extras = {
+ic_data_sidechain_extras = {
     "F": (("CE1", "CZ", "CE2"), ("CD1", "CE1", "CZ", "CE2")),
     "P": (("CG", "CD", "N"), ("CB", "CG", "CD", "N")),
     "Y": (("CE1", "CZ", "CE2"), ("CD1", "CE1", "CZ", "CE2")),

@@ -44,14 +44,14 @@ def structure_rebuild_test(entity, verbose=False):
     sp.seek(0)
     pdb2 = read_PIC(sp)
     if verbose:
-        report_PIC(pdb2, verbose=True)
+        report_IC(pdb2, verbose=True)
     pdb2.internal_to_atom_coordinates()
     r = compare_residues(entity, pdb2, verbose=verbose)
     return r
 
 
-def report_PIC(entity, reportDict=None, verbose=False):
-    """Generate dict with counts of PIC data elements for each entity level.
+def report_IC(entity, reportDict=None, verbose=False):
+    """Generate dict with counts of ic data elements for each entity level.
 
     reportDict entries are:
         idcode : PDB ID
@@ -66,7 +66,7 @@ def report_PIC(entity, reportDict=None, verbose=False):
     :param Entity entity: Biopython PDB Entity object: S, M, C or R
     :raises PDBException: if entity level not S, M, C, or R
     :raises Exception: if entity does not have .level attribute
-    :returns: dict with counts of PIC data elements
+    :returns: dict with counts of IC data elements
     """
     if reportDict is None:
         reportDict = {
@@ -82,7 +82,7 @@ def report_PIC(entity, reportDict=None, verbose=False):
         }
     try:
         if "A" == entity.level:
-            raise PDBException("No PIC output at Atom level")
+            raise PDBException("No IC output at Atom level")
         elif "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
@@ -97,12 +97,12 @@ def report_PIC(entity, reportDict=None, verbose=False):
             reportDict["chn"] += 1
             reportDict["chn_ids"].append(entity.id)
             for res in entity:
-                reportDict = report_PIC(res, reportDict)
+                reportDict = report_IC(res, reportDict)
 
         elif "M" == entity.level:
             reportDict["mdl"] += 1
             for chn in entity:
-                reportDict = report_PIC(chn, reportDict)
+                reportDict = report_IC(chn, reportDict)
 
         elif "S" == entity.level:
             if reportDict["idcode"] is None:
@@ -115,7 +115,7 @@ def report_PIC(entity, reportDict=None, verbose=False):
             if nam:
                 reportDict["hdr"] += 1
             for mdl in entity:
-                reportDict = report_PIC(mdl, reportDict)
+                reportDict = report_IC(mdl, reportDict)
         else:
             raise PDBException("Cannot identify level: " + str(entity.level))
     except KeyError:
@@ -141,8 +141,8 @@ def report_PIC(entity, reportDict=None, verbose=False):
     return reportDict
 
 
-def PIC_duplicate(entity):
-    """Duplicate structure entity with PIC data, no atom coordinates.
+def IC_duplicate(entity):
+    """Duplicate structure entity with IC data, no atom coordinates.
 
     Employs write_PIC(), read_PIC() with StringIO buffer.
     Calls atom_to_internal_coordinates() if needed.

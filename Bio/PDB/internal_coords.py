@@ -58,8 +58,8 @@ from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.PDB.Polypeptide import three_to_one
 
 from Bio.PDB.vectors import homog_rot_mtx, coord_space
-from Bio.PDB.ic_data import pic_data_backbone, pic_data_sidechains
-from Bio.PDB.ic_data import pic_data_sidechain_extras, residue_atom_bond_state
+from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
+from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 
 
 def set_accuracy_95(num):
@@ -859,16 +859,16 @@ class Dihedron(Edron):
         )
 
     @staticmethod
-    def _get_hedron(pic_res, id3):
+    def _get_hedron(ic_res, id3):
         """Find specified hedron on this residue or its adjacent neighbors."""
-        hedron = pic_res.hedra.get(id3, None)
-        if not hedron and 0 < len(pic_res.rprev):
-            for rp in pic_res.rprev:
+        hedron = ic_res.hedra.get(id3, None)
+        if not hedron and 0 < len(ic_res.rprev):
+            for rp in ic_res.rprev:
                 hedron = rp.hedra.get(id3, None)
                 if hedron is not None:
                     break
-        if not hedron and 0 < len(pic_res.rnext):
-            for rn in pic_res.rnext:
+        if not hedron and 0 < len(ic_res.rnext):
+            for rn in ic_res.rnext:
                 hedron = rn.hedra.get(id3, None)
                 if hedron is not None:
                     break
@@ -1086,8 +1086,8 @@ class IC_Residue(object):
         internal coordinates from atoms.  HETATM sidechain will be ignored, but normal
         backbone atoms (N, CA, C, O, CB) will be included.  Currently only
         CYG, YCM and UNK; override at your own risk.  To generate
-        sidechain, add appropriate entries to pic_data_sidechains in
-        PIC_Data.py
+        sidechain, add appropriate entries to ic_data_sidechains in
+        ic_data.py
     gly_Cbeta : bool default False
         override class variable to True to generate internal coordinates for
         glycine CB atoms in dihedra_from_atoms().
@@ -1776,20 +1776,20 @@ class IC_Residue(object):
             self._gen_edra([sN, sCA, sC])
 
         # standard backbone atoms independent of neighbours
-        backbone = pic_data_backbone
+        backbone = ic_data_backbone
         for edra in backbone:
             r_edra = [self.rak(atom) for atom in edra]
             self._gen_edra(r_edra[0:4])  # [4] is label on some table entries
 
         # sidechain hedra and dihedra
         if self.lc is not None:
-            sidechain = pic_data_sidechains.get(self.lc, [])
+            sidechain = ic_data_sidechains.get(self.lc, [])
             for edra in sidechain:
                 r_edra = [self.rak(atom) for atom in edra]
                 # [4] is label on some table entries
                 self._gen_edra(r_edra[0:4])
             if allBonds:
-                sidechain = pic_data_sidechain_extras.get(self.lc, [])
+                sidechain = ic_data_sidechain_extras.get(self.lc, [])
                 for edra in sidechain:
                     r_edra = [self.rak(atom) for atom in edra]
                     self._gen_edra(r_edra[0:4])
@@ -2079,7 +2079,7 @@ class IC_Residue(object):
             sCA = self.rak("CA")
             rval = rp.dihedra.get((pCA, pC, sN, sCA), None)
         elif angle_key.startswith("chi"):
-            sclist = pic_data_sidechains.get(self.lc, None)
+            sclist = ic_data_sidechains.get(self.lc, None)
             if sclist is None:
                 return None
             for akl in sclist:
@@ -2165,15 +2165,15 @@ class IC_Chain:
         residues.
     chain : biopython Chain object reference
         The Chain object this extends
-    ordered_aa_pic_list : list of IC_Residue objects
-        IC_Residue objects PIC algorithms can process (e.g. no waters)
+    ordered_aa_ic_list : list of IC_Residue objects
+        IC_Residue objects ic algorithms can process (e.g. no waters)
     initNCaC : AtomKey indexed dictionary of N, Ca, C atom coordinates to start
         chain segments (first residue or after chain break)
 
     Methods
     -------
     set_residues()
-        Add .pic attribute for all Residues, populate ordered_aa_pic_list, set
+        Add .internal_coord attribute for all Residues, populate ordered_aa_ic_list, set
         IC_Residue rprev, rnext or initNCaC coordinates
     link_residues()
         Call link_dihedra() on each IC_Residue (needs rprev, rnext set)
@@ -2185,7 +2185,7 @@ class IC_Chain:
         update Biopython Residue.Atom coords for all Residues with IC_Residue
         attributes
     internal_to_atom_coordinates()
-        Process pic data to Residue/Atom coordinates
+        Process ic data to Residue/Atom coordinates
     dihedra_from_atoms()
         Calculate dihedrals, angles, bond lengths for Atom data
     write_SCAD()
@@ -2202,7 +2202,7 @@ class IC_Chain:
             Chain object this extends
         """
         self.chain = parent
-        self.ordered_aa_pic_list = []
+        self.ordered_aa_ic_list = []
         self.initNCaC = {}
         self.sqMaxPeptideBond = IC_Chain.MaxPeptideBond * IC_Chain.MaxPeptideBond
         self.set_residues()  # no effect if no residues loaded
@@ -2259,17 +2259,17 @@ class IC_Chain:
         elif all(atm in res.child_dict for atm in ("N", "CA", "C")):
             # chain break, save coords for restart
             initNCaC = {}
-            rpic = res.internal_coord
+            ric = res.internal_coord
             for atm in ("N", "CA", "C"):
                 bpAtm = res.child_dict[atm]
                 if bpAtm.is_disordered():
                     for altAtom in bpAtm.child_dict.values():
-                        ak = AtomKey(rpic, altAtom)
+                        ak = AtomKey(ric, altAtom)
                         initNCaC[ak] = IC_Residue.atm241(altAtom.coord)
                 else:
-                    ak = AtomKey(rpic, bpAtm)
+                    ak = AtomKey(ric, bpAtm)
                     initNCaC[ak] = IC_Residue.atm241(bpAtm.coord)
-            self.initNCaC[rpic.rbase] = initNCaC
+            self.initNCaC[ric.rbase] = initNCaC
             return True
         elif (
             0 == len(res.child_list)
@@ -2277,16 +2277,16 @@ class IC_Chain:
             and res.internal_coord.is20AA
         ):
             # this is first residue, no atoms at all, is std amino acid
-            # conclude reading PIC file with no N-Ca-C coords
+            # conclude reading pic file with no N-Ca-C coords
             return True
         # chain break but do not have N, Ca, C coords to restart from
         return False
 
     def set_residues(self):
-        """Initialize pic data for loaded Residues.
+        """Initialize internal_coord data for loaded Residues.
 
-        Add IC_Residue as .pic attribute for each Residue in parent Chain;
-        populate ordered_aa_pic_list with IC_Residue references for residues
+        Add IC_Residue as .internal_coord attribute for each Residue in parent Chain;
+        populate ordered_aa_ic_list with IC_Residue references for residues
         which can be built (amino acids and some hetatms); set rprev and rnext
         on each sequential IC_Residue, populate initNCaC at start and after
         chain breaks.
@@ -2308,19 +2308,19 @@ class IC_Chain:
                         this_res.append(res.internal_coord)
 
                 if 0 < len(this_res):
-                    self.ordered_aa_pic_list.extend(this_res)
+                    self.ordered_aa_ic_list.extend(this_res)
                     last_ord_res = this_res
                 last_res = this_res
 
     def link_residues(self):
         """link_dihedra() for each IC_Residue; needs rprev, rnext set."""
-        for rpic in self.ordered_aa_pic_list:
-            rpic.link_dihedra()
+        for ric in self.ordered_aa_ic_list:
+            ric.link_dihedra()
 
     def render_dihedra(self):
         """Set dihedron local coords for each IC_Residue."""
-        for rpic in self.ordered_aa_pic_list:
-            rpic.render_dihedra()
+        for ric in self.ordered_aa_ic_list:
+            ric.render_dihedra()
 
     def assemble_residues(self, start=False, fin=False):
         """Generate IC_Residue atom coords from internal coordinates.
@@ -2332,8 +2332,8 @@ class IC_Chain:
              sequence position, insert code for begin, end of subregion to
              process
         """
-        for rpic in self.ordered_aa_pic_list:
-            respos, resicode = rpic.residue.id[1:]
+        for ric in self.ordered_aa_ic_list:
+            respos, resicode = ric.residue.id[1:]
             go = True
             if start and (
                 start[0] > respos or (start[0] == respos and start[1] < resicode)
@@ -2346,11 +2346,11 @@ class IC_Chain:
             ):
                 go = False
             if go:
-                rpic.atom_coords = rpic.assemble()
-                rpic.ak_set = set(rpic.atom_coords.keys())
+                ric.atom_coords = ric.assemble()
+                ric.ak_set = set(ric.atom_coords.keys())
 
     def coords_to_structure(self):
-        """All pic atom_coords to Biopython Residue/Atom coords."""
+        """All ic atom_coords to Biopython Residue/Atom coords."""
         self.ndx = 0
         for res in self.chain.get_residues():
             if 2 == res.is_disordered():
@@ -2361,14 +2361,14 @@ class IC_Chain:
                 res.internal_coord.coords_to_residue()
 
     def internal_to_atom_coordinates(self):
-        """Complete process pic data to Residue/Atom coords."""
+        """Complete process ic data to Residue/Atom coords."""
         self.assemble_residues()  # internal to XYZ coordinates
         self.coords_to_structure()  # promote to BioPython Residue/Atom
 
     def dihedra_from_atoms(self, allBonds=False):
         """Calculate dihedrals, angles, bond lengths for Atom data."""
-        for rpic in self.ordered_aa_pic_list:
-            rpic.dihedra_from_atoms(allBonds)
+        for ric in self.ordered_aa_ic_list:
+            ric.dihedra_from_atoms(allBonds)
 
     @staticmethod
     def _write_mtx(fp, mtx):
@@ -2444,9 +2444,9 @@ class IC_Chain:
 
         # generate dict for all hedra to eliminate redundant references
         hedra = {}
-        for rpic in self.ordered_aa_pic_list:
-            respos, resicode = rpic.residue.id[1:]
-            for k, h in rpic.hedra.items():
+        for ric in self.ordered_aa_ic_list:
+            respos, resicode = ric.residue.id[1:]
+            for k, h in ric.hedra.items():
                 hedra[k] = h
         atomSet = set()
         bondDict = {}  # set()
@@ -2465,8 +2465,8 @@ class IC_Chain:
         dihedraNdx = {}
         ndx = 0
         chnStarted = False
-        for rpic in self.ordered_aa_pic_list:
-            resNdx[rpic] = ndx
+        for ric in self.ordered_aa_ic_list:
+            resNdx[ric] = ndx
             if chnStarted:
                 fp.write("\n     ],")
             else:
@@ -2475,26 +2475,26 @@ class IC_Chain:
                 "\n     [ // "
                 + str(ndx)
                 + " : "
-                + str(rpic.residue.id)
+                + str(ric.residue.id)
                 + " "
-                + rpic.lc
+                + ric.lc
                 + " backbone\n"
             )
             ndx += 1
             # assemble with no start position, return transform matrices
-            transformations = rpic.assemble(True, True)
+            transformations = ric.assemble(True, True)
             ndx2 = 0
             for i in range(1 if backboneOnly else 2):
                 if i == 1:
                     fp.write(
                         ",\n       // "
-                        + str(rpic.residue.id)
+                        + str(ric.residue.id)
                         + " "
-                        + rpic.lc
+                        + ric.lc
                         + " sidechain\n"
                     )
                 started = False
-                for dk, d in rpic.dihedra.items():
+                for dk, d in ric.dihedra.items():
                     if d.h2key in hedraNdx and (
                         (i == 0 and d.is_backbone()) or (i == 1 and not d.is_backbone())
                     ):
@@ -2624,11 +2624,11 @@ class IC_Chain:
 
         fp.write("\n[  // chain - world transform for each residue\n")
         chnStarted = False
-        for rpic in self.ordered_aa_pic_list:
+        for ric in self.ordered_aa_ic_list:
             # handle start / end
-            for NCaCKey in rpic.NCaCKey:
-                if 0 < len(rpic.rprev):
-                    for rpr in rpic.rprev:
+            for NCaCKey in ric.NCaCKey:
+                if 0 < len(ric.rprev):
+                    for rpr in ric.rprev:
                         acl = [rpr.atom_coords[ak] for ak in NCaCKey]
                         mt, mtr = coord_space(acl, True)
                 else:
@@ -2637,10 +2637,8 @@ class IC_Chain:
                     fp.write(",\n")
                 else:
                     chnStarted = True
-                fp.write(
-                    "     [ " + str(resNdx[rpic]) + ', "' + str(rpic.residue.id[1])
-                )
-                fp.write(rpic.lc + '",\n      ')
+                fp.write("     [ " + str(resNdx[ric]) + ', "' + str(ric.residue.id[1]))
+                fp.write(ric.lc + '",\n      ')
                 IC_Chain._write_mtx(fp, mtr)
                 fp.write(" ]")
         fp.write("\n   ]\n")
