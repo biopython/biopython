@@ -242,10 +242,8 @@ def open(filename, mode="rb"):
     """Open a BGZF file for reading, writing or appending."""
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
-    elif "w" in mode.lower():
+    elif "w" in mode.lower() or "a" in mode.lower():
         return BgzfWriter(filename, mode)
-    elif "a" in mode.lower():
-        raise NotImplementedError("Append mode is not implemented yet")
     else:
         raise ValueError("Bad mode %r" % mode)
 
@@ -743,7 +741,8 @@ class BgzfWriter(object):
             if "w" not in mode.lower() and "a" not in mode.lower():
                 raise ValueError("Must use write or append mode, not %r" % mode)
             if "a" in mode.lower():
-                handle = _open(filename, "ab")
+                raise NotImplementedError("Append mode is not implemented yet")
+                # handle = _open(filename, "ab")
             else:
                 handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
