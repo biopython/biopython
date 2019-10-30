@@ -240,7 +240,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn("retmode=xml", url)
         result = handle.read()
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
-        self.assertEquals(result, expected_result)
+        self.assertEqual(result, expected_result)
         handle.close()
 
     def test_efetch_gds_utf8(self):

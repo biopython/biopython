@@ -135,11 +135,11 @@ if sqlite3:
 
         def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
-            self.assertEquals(len(idx), 48)
+            self.assertEqual(len(idx), 48)
 
         def test_good_big(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
-            self.assertEquals(len(idx), 983)
+            self.assertEqual(len(idx), 983)
 
         def test_bundle_without_target(self):
             self.assertRaises(ValueError,
