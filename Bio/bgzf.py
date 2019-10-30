@@ -390,6 +390,8 @@ def BgzfBlocks(handle):
     >>> handle.close()
 
     """
+    if isinstance(handle, BgzfReader):
+        raise TypeError("Function BgzfBlocks expects a binary handle")
     data_start = 0
     while True:
         start_offset = handle.tell()
