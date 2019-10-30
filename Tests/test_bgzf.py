@@ -444,6 +444,13 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(data[-5:], b"\x01\x02\x03\x04\n")
         h.close()
 
+    def test_BgzfBlocks_TypeError(self):
+        """Check get expected TypeError from BgzfBlocks."""
+        for mode in ("r", "rb"):
+            decompressed = bgzf.open("GenBank/cor6_6.gb.bgz", mode)
+            with self.assertRaises(TypeError):
+                list(bgzf.BgzfBlocks(decompressed))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
