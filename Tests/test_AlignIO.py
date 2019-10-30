@@ -7,6 +7,7 @@
 
 
 import unittest
+import warnings
 
 
 from Bio._py3k import StringIO
@@ -410,6 +411,29 @@ class TestAlignIO_reading(unittest.TestCase):
                 "but 11 of 12 sequences said Len: 250"
         ):
             AlignIO.read(path, "msf")
+
+    def test_reading_alignments_msf2(self):
+        path = "msf/W_prot.msf"
+        with warnings.catch_warnings(record=True) as w:
+            self.check_iterator_for_loop_handle(path, "msf", 1, 11)
+            self.check_iterator_for_loop_filename(path, "msf", 1)
+            self.check_iterator_next(path, "msf", 1)
+            self.check_iterator_next_and_list(path, "msf", 1)
+            self.check_iterator_next_for_loop(path, "msf", 1)
+            alignment = self.check_read(path, "msf", 11, 99)
+        warning_msgs = {str(_.message) for _ in w}
+        self.assertIn(
+            "One of more alignment sequences were truncated and have been gap padded",
+            warning_msgs)
+        self.check_alignment_columns(
+            alignment, ["GGGGGGGGGGG",
+                        "LLLLLLLLLLL",
+                        "TTTTTTTTTTT",
+                        "PPPPPPPPPPP",
+                        "FFFFFFSSSSS",
+                        # ...
+                        "LLLLLL----L"])
+        self.check_summary_simple(alignment)
 
     def test_reading_alignments_stockholm1(self):
         path = "Stockholm/simple.sth"
