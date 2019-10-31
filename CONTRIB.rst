@@ -253,6 +253,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
+- Valery Weber <https://github.com/valeryweber>
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
 - Walter Gillett <https://github.com/wgillett>
