@@ -586,36 +586,6 @@ def write(sequences, handle, format):
 
     return count
 
-def old_parse(handle, format, alphabet):
-    from Bio import AlignIO
-    # Hack for SFF, will need to make this more general in future
-    if format in _BinaryFormats:
-        mode = "rb"
-    else:
-        mode = "rU"
-    with as_handle(handle, mode) as fp:
-        # Map the file format to a sequence iterator:
-        if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
-            if alphabet is None:
-                i = iterator_generator(fp)
-            else:
-                try:
-                    i = iterator_generator(fp, alphabet=alphabet)
-                except TypeError:
-                    i = _force_alphabet(iterator_generator(fp), alphabet)
-        elif format in AlignIO._FormatToIterator:
-            # Use Bio.AlignIO to read in the alignments
-            i = (
-                r
-                for alignment in AlignIO.parse(fp, format, alphabet=alphabet)
-                for r in alignment
-            )
-        else:
-            raise ValueError("Unknown format '%s'" % format)
-        # This imposes some overhead... wait until we drop Python 2.4 to fix it
-        for r in i:
-            yield r
 
 def parse(handle, format, alphabet=None):
     r"""Turn a sequence file into an iterator returning SeqRecords.
@@ -689,8 +659,6 @@ def parse(handle, format, alphabet=None):
     ):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
-    if format in AlignIO._FormatToIterator:
-        return old_parse(handle, format, alphabet)
     iterator_generator = _FormatToIterator.get(format)
     if iterator_generator:
         if alphabet is None:
@@ -700,6 +668,14 @@ def parse(handle, format, alphabet=None):
                 i = iterator_generator(handle, alphabet=alphabet)
             except TypeError:
                 i = _force_alphabet(iterator_generator(handle), alphabet)
+        return i
+    if format in AlignIO._FormatToIterator:
+        # Use Bio.AlignIO to read in the alignments
+        i = (
+            r
+            for alignment in AlignIO.parse(handle, format, alphabet=alphabet)
+            for r in alignment
+        )
         return i
     raise ValueError("Unknown format '%s'" % format)
 
