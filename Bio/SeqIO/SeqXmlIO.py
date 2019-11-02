@@ -174,6 +174,7 @@ class SeqXmlIterator(object):
 
     if sys.version_info[0] < 3:  # python2
         def next(self):
+            """hello"""
             return self.__next__()
 
     def _attributes(self, node):
