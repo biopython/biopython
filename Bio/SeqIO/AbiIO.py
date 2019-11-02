@@ -26,6 +26,7 @@ from os.path import basename
 from Bio import BiopythonParserWarning
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -367,101 +368,104 @@ def AbiIterator(handle, alphabet=None, trim=False):
         if set("rb") != set(handle.mode.lower()):
             raise ValueError("ABI files has to be opened in 'rb' mode.")
 
-    # check if input file is a valid Abi file
-    handle.seek(0)
-    marker = handle.read(4)
-    if not marker:
-        # handle empty file gracefully
-        raise ValueError("Empty file.")
+    with as_handle(handle, "rb") as handle:
 
-    if marker != b"ABIF":
-        raise IOError("File should start ABIF, not %r" % marker)
+        # check if input file is a valid Abi file
+        handle.seek(0)
+        marker = handle.read(4)
+        if not marker:
+            # handle empty file gracefully
+            raise ValueError("Empty file.")
 
-    # dirty hack for handling time information
-    times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
+        if marker != b"ABIF":
+            raise IOError("File should start ABIF, not %r" % marker)
 
-    # initialize annotations
-    annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
+        # dirty hack for handling time information
+        times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
-    # parse header and extract data from directories
-    header = struct.unpack(_HEADFMT, handle.read(struct.calcsize(_HEADFMT)))
+        # initialize annotations
+        annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
-    # Set default sample ID value, which we expect to be present in most cases
-    # in the SMPL1 tag, but may be missing.
-    sample_id = "<unknown id>"
+        # parse header and extract data from directories
+        header = struct.unpack(_HEADFMT, handle.read(struct.calcsize(_HEADFMT)))
 
-    raw = {}
-    for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
-        key = tag_name + str(tag_number)
+        # Set default sample ID value, which we expect to be present in most
+        # cases in the SMPL1 tag, but may be missing.
+        sample_id = "<unknown id>"
 
-        raw[key] = tag_data
+        raw = {}
+        for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
+            key = tag_name + str(tag_number)
 
-        # PBAS2 is base-called sequence, only available in 3530
-        if key == "PBAS2":
-            seq = _bytes_to_string(tag_data)
-            ambigs = "KYWMRS"
-            if alphabet is None:
-                if set(seq).intersection(ambigs):
-                    alphabet = ambiguous_dna
-                else:
-                    alphabet = unambiguous_dna
-        # PCON2 is quality values of base-called sequence
-        elif key == "PCON2":
-            qual = [ord(val) for val in _bytes_to_string(tag_data)]
-        # SMPL1 is sample id entered before sequencing run, it must be a string.
-        elif key == "SMPL1":
-            sample_id = _get_string_tag(tag_data)
-        elif key in times:
-            times[key] = tag_data
+            raw[key] = tag_data
+
+            # PBAS2 is base-called sequence, only available in 3530
+            if key == "PBAS2":
+                seq = _bytes_to_string(tag_data)
+                ambigs = "KYWMRS"
+                if alphabet is None:
+                    if set(seq).intersection(ambigs):
+                        alphabet = ambiguous_dna
+                    else:
+                        alphabet = unambiguous_dna
+            # PCON2 is quality values of base-called sequence
+            elif key == "PCON2":
+                qual = [ord(val) for val in _bytes_to_string(tag_data)]
+            # SMPL1 is sample id entered before sequencing run, it must be
+            # a string.
+            elif key == "SMPL1":
+                sample_id = _get_string_tag(tag_data)
+            elif key in times:
+                times[key] = tag_data
+            else:
+                if key in _EXTRACT:
+                    annot[_EXTRACT[key]] = tag_data
+
+        # set time annotations
+        annot["run_start"] = "%s %s" % (times["RUND1"], times["RUNT1"])
+        annot["run_finish"] = "%s %s" % (times["RUND2"], times["RUNT2"])
+
+        # raw data (for advanced end users benefit)
+        annot["abif_raw"] = raw
+
+        # fsa check
+        is_fsa_file = all(tn not in raw for tn in ("PBAS1", "PBAS2"))
+
+        if is_fsa_file:
+            try:
+                file_name = basename(handle.name).replace(".fsa", "")
+            except AttributeError:
+                file_name = ""
+
+            sample_id = _get_string_tag(raw.get("LIMS1"), sample_id)
+            description = _get_string_tag(raw.get("CTID1"), "<unknown description>")
+            record = SeqRecord(
+                Seq(""),
+                id=sample_id,
+                name=file_name,
+                description=description,
+                annotations=annot,
+            )
+
         else:
-            if key in _EXTRACT:
-                annot[_EXTRACT[key]] = tag_data
+            # use the file name as SeqRecord.name if available
+            try:
+                file_name = basename(handle.name).replace(".ab1", "")
+            except AttributeError:
+                file_name = ""
+            record = SeqRecord(
+                Seq(seq, alphabet),
+                id=sample_id,
+                name=file_name,
+                description="",
+                annotations=annot,
+                letter_annotations={"phred_quality": qual},
+            )
 
-    # set time annotations
-    annot["run_start"] = "%s %s" % (times["RUND1"], times["RUNT1"])
-    annot["run_finish"] = "%s %s" % (times["RUND2"], times["RUNT2"])
-
-    # raw data (for advanced end users benefit)
-    annot["abif_raw"] = raw
-
-    # fsa check
-    is_fsa_file = all(tn not in raw for tn in ("PBAS1", "PBAS2"))
-
-    if is_fsa_file:
-        try:
-            file_name = basename(handle.name).replace(".fsa", "")
-        except AttributeError:
-            file_name = ""
-
-        sample_id = _get_string_tag(raw.get("LIMS1"), sample_id)
-        description = _get_string_tag(raw.get("CTID1"), "<unknown description>")
-        record = SeqRecord(
-            Seq(""),
-            id=sample_id,
-            name=file_name,
-            description=description,
-            annotations=annot,
-        )
-
-    else:
-        # use the file name as SeqRecord.name if available
-        try:
-            file_name = basename(handle.name).replace(".ab1", "")
-        except AttributeError:
-            file_name = ""
-        record = SeqRecord(
-            Seq(seq, alphabet),
-            id=sample_id,
-            name=file_name,
-            description="",
-            annotations=annot,
-            letter_annotations={"phred_quality": qual},
-        )
-
-    if not trim or is_fsa_file:
-        yield record
-    else:
-        yield _abi_trim(record)
+        if not trim or is_fsa_file:
+            yield record
+        else:
+            yield _abi_trim(record)
 
 
 def _AbiTrimIterator(handle):

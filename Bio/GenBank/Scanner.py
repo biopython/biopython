@@ -32,6 +32,7 @@ from __future__ import print_function
 import warnings
 import re
 from collections import OrderedDict
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
@@ -489,17 +490,18 @@ class InsdcScanner(object):
         This method is intended for use in Bio.SeqIO
         """
         # This is a generator function
-        while True:
-            record = self.parse(handle, do_features)
-            if record is None:
-                break
-            if record.id is None:
-                raise ValueError("Failed to parse the record's ID. Invalid ID line?")
-            if record.name == "<unknown name>":
-                raise ValueError("Failed to parse the record's name. Invalid ID line?")
-            if record.description == "<unknown description>":
-                raise ValueError("Failed to parse the record's description")
-            yield record
+        with as_handle(handle, "rU") as handle:
+            while True:
+                record = self.parse(handle, do_features)
+                if record is None:
+                    break
+                if record.id is None:
+                    raise ValueError("Failed to parse the record's ID. Invalid ID line?")
+                if record.name == "<unknown name>":
+                    raise ValueError("Failed to parse the record's name. Invalid ID line?")
+                if record.description == "<unknown description>":
+                    raise ValueError("Failed to parse the record's description")
+                yield record
 
     def parse_cds_features(self, handle,
                            alphabet=generic_protein,
@@ -515,73 +517,74 @@ class InsdcScanner(object):
 
         This method is intended for use in Bio.SeqIO
         """
-        self.set_handle(handle)
-        while self.find_start():
-            # Got an EMBL or GenBank record...
-            self.parse_header()  # ignore header lines!
-            feature_tuples = self.parse_features()
-            # self.parse_footer() # ignore footer lines!
-            while True:
-                line = self.handle.readline()
-                if not line:
-                    break
-                if line[:2] == "//":
-                    break
-            self.line = line.rstrip()
+        with as_handle(handle, "rU") as handle:
+            self.set_handle(handle)
+            while self.find_start():
+                # Got an EMBL or GenBank record...
+                self.parse_header()  # ignore header lines!
+                feature_tuples = self.parse_features()
+                # self.parse_footer() # ignore footer lines!
+                while True:
+                    line = self.handle.readline()
+                    if not line:
+                        break
+                    if line[:2] == "//":
+                        break
+                self.line = line.rstrip()
 
-            # Now go though those features...
-            for key, location_string, qualifiers in feature_tuples:
-                if key == "CDS":
-                    # Create SeqRecord
-                    # ================
-                    # SeqRecord objects cannot be created with annotations, they
-                    # must be added afterwards.  So create an empty record and
-                    # then populate it:
-                    record = SeqRecord(seq=None)
-                    annotations = record.annotations
+                # Now go though those features...
+                for key, location_string, qualifiers in feature_tuples:
+                    if key == "CDS":
+                        # Create SeqRecord
+                        # ================
+                        # SeqRecord objects cannot be created with annotations, they
+                        # must be added afterwards.  So create an empty record and
+                        # then populate it:
+                        record = SeqRecord(seq=None)
+                        annotations = record.annotations
 
-                    # Should we add a location object to the annotations?
-                    # I *think* that only makes sense for SeqFeatures with their
-                    # sub features...
-                    annotations["raw_location"] = location_string.replace(" ", "")
+                        # Should we add a location object to the annotations?
+                        # I *think* that only makes sense for SeqFeatures with their
+                        # sub features...
+                        annotations["raw_location"] = location_string.replace(" ", "")
 
-                    for (qualifier_name, qualifier_data) in qualifiers:
-                        if qualifier_data is not None \
+                        for (qualifier_name, qualifier_data) in qualifiers:
+                            if qualifier_data is not None \
                                 and qualifier_data[0] == '"' and qualifier_data[-1] == '"':
-                            # Remove quotes
-                            qualifier_data = qualifier_data[1:-1]
-                        # Append the data to the annotation qualifier...
-                        if qualifier_name == "translation":
-                            assert record.seq is None, "Multiple translations!"
-                            record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
-                        elif qualifier_name == "db_xref":
-                            # its a list, possibly empty.  Its safe to extend
-                            record.dbxrefs.append(qualifier_data)
-                        else:
-                            if qualifier_data is not None:
-                                qualifier_data = qualifier_data.replace("\n", " ").replace("  ", " ")
-                            try:
-                                annotations[qualifier_name] += " " + qualifier_data
-                            except KeyError:
-                                # Not an addition to existing data, its the first bit
-                                annotations[qualifier_name] = qualifier_data
+                                # Remove quotes
+                                qualifier_data = qualifier_data[1:-1]
+                            # Append the data to the annotation qualifier...
+                            if qualifier_name == "translation":
+                                assert record.seq is None, "Multiple translations!"
+                                record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
+                            elif qualifier_name == "db_xref":
+                                # its a list, possibly empty.  Its safe to extend
+                                record.dbxrefs.append(qualifier_data)
+                            else:
+                                if qualifier_data is not None:
+                                    qualifier_data = qualifier_data.replace("\n", " ").replace("  ", " ")
+                                try:
+                                    annotations[qualifier_name] += " " + qualifier_data
+                                except KeyError:
+                                    # Not an addition to existing data, its the first bit
+                                    annotations[qualifier_name] = qualifier_data
 
-                    # Fill in the ID, Name, Description
-                    # =================================
-                    try:
-                        record.id = annotations[tags2id[0]]
-                    except KeyError:
-                        pass
-                    try:
-                        record.name = annotations[tags2id[1]]
-                    except KeyError:
-                        pass
-                    try:
-                        record.description = annotations[tags2id[2]]
-                    except KeyError:
-                        pass
+                        # Fill in the ID, Name, Description
+                        # =================================
+                        try:
+                            record.id = annotations[tags2id[0]]
+                        except KeyError:
+                            pass
+                        try:
+                            record.name = annotations[tags2id[1]]
+                        except KeyError:
+                            pass
+                        try:
+                            record.description = annotations[tags2id[2]]
+                        except KeyError:
+                            pass
 
-                    yield record
+                        yield record
 
 
 class EmblScanner(InsdcScanner):

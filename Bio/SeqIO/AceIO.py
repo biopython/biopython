@@ -13,6 +13,7 @@ the contig consensus sequences in an ACE file as SeqRecord objects.
 
 from __future__ import print_function
 
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
@@ -60,54 +61,56 @@ def AceIterator(handle):
     90
 
     """
-    for ace_contig in Ace.parse(handle):
-        # Convert the ACE contig record into a SeqRecord...
-        consensus_seq_str = ace_contig.sequence
-        # Assume its DNA unless there is a U in it,
-        if "U" in consensus_seq_str:
-            if "T" in consensus_seq_str:
-                # Very odd! Error?
-                alpha = generic_nucleotide
+    with as_handle(handle, 'rU') as handle:
+
+        for ace_contig in Ace.parse(handle):
+            # Convert the ACE contig record into a SeqRecord...
+            consensus_seq_str = ace_contig.sequence
+            # Assume its DNA unless there is a U in it,
+            if "U" in consensus_seq_str:
+                if "T" in consensus_seq_str:
+                    # Very odd! Error?
+                    alpha = generic_nucleotide
+                else:
+                    alpha = generic_rna
             else:
-                alpha = generic_rna
-        else:
-            alpha = generic_dna
+                alpha = generic_dna
 
-        if "*" in consensus_seq_str:
-            # For consistency with most other file formats, map
-            # any * gaps into - gaps.
-            assert "-" not in consensus_seq_str
-            consensus_seq = Seq(
-                consensus_seq_str.replace("*", "-"), Gapped(alpha, gap_char="-")
-            )
-        else:
-            consensus_seq = Seq(consensus_seq_str, alpha)
-
-        # TODO? - Base segments (BS lines) which indicates which read
-        # phrap has chosen to be the consensus at a particular position.
-        # Perhaps as SeqFeature objects?
-
-        # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
-        # Perhaps as SeqFeature objects?
-
-        seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
-
-        # Consensus base quality (BQ lines).  Note that any gaps (originally
-        # as * characters) in the consensus do not get a quality entry, so
-        # we assign a quality of None (zero would be misleading as there may
-        # be excellent support for having a gap here).
-        quals = []
-        i = 0
-        for base in consensus_seq:
-            if base == "-":
-                quals.append(0)
+            if "*" in consensus_seq_str:
+                # For consistency with most other file formats, map
+                # any * gaps into - gaps.
+                assert "-" not in consensus_seq_str
+                consensus_seq = Seq(
+                    consensus_seq_str.replace("*", "-"), Gapped(alpha, gap_char="-")
+                )
             else:
-                quals.append(ace_contig.quality[i])
-                i += 1
-        assert i == len(ace_contig.quality)
-        seq_record.letter_annotations["phred_quality"] = quals
+                consensus_seq = Seq(consensus_seq_str, alpha)
 
-        yield seq_record
+            # TODO? - Base segments (BS lines) which indicates which read
+            # phrap has chosen to be the consensus at a particular position.
+            # Perhaps as SeqFeature objects?
+
+            # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
+            # Perhaps as SeqFeature objects?
+
+            seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
+
+            # Consensus base quality (BQ lines).  Note that any gaps (originally
+            # as * characters) in the consensus do not get a quality entry, so
+            # we assign a quality of None (zero would be misleading as there may
+            # be excellent support for having a gap here).
+            quals = []
+            i = 0
+            for base in consensus_seq:
+                if base == "-":
+                    quals.append(0)
+                else:
+                    quals.append(ace_contig.quality[i])
+                    i += 1
+            assert i == len(ace_contig.quality)
+            seq_record.letter_annotations["phred_quality"] = quals
+
+            yield seq_record
     # All done
 
 
