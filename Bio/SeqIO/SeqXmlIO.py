@@ -14,7 +14,6 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
 
-from __future__ import print_function
 
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
@@ -23,6 +22,8 @@ from xml.sax import SAXParseException
 
 from Bio._py3k import range
 from Bio._py3k import basestring
+from Bio._py3k import raise_from
+
 
 from Bio import Alphabet
 from Bio.Seq import Seq
@@ -31,9 +32,10 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequentialSequenceWriter
 
 
-class XMLRecordIterator(object):
-    """Base class for building iterators for record style XML formats.
+class SeqXmlIterator(object):
+    """Breaks seqXML file into SeqRecords.
 
+    Assumes valid seqXML please validate beforehand.
     It is assumed that all information for one record can be found within a
     record element or above. Two types of methods are called when the start
     tag of an element is reached. To receive only the attributes of an
@@ -43,30 +45,72 @@ class XMLRecordIterator(object):
     method calls.
     """
 
-    def __init__(self, handle, recordTag, namespace=None):
-        """Create the object and initializing the XML parser."""
-        self._recordTag = recordTag
+    def __init__(self, handle, namespace=None):
+        """Create the object and initialize the XML parser."""
+        self.source = None
+        self.source_version = None
+        self.version = None
+        self.speciesName = None
+        self.ncbiTaxID = None
         self._namespace = namespace
+        # pulldom.parse can accept both file handles and file names.
+        # However, it doesn't use a context manager. so if we provide a file
+        # name and let pulldom.parse open the file for us, then the file
+        # will remain open until SeqXmlIterator is deallocated or we delete
+        # the DOMEventStream returned by pulldom.parse.
+        # Use a try: except: block to delete the DOMEventStream in case any
+        # exceptions happen.
         self._events = pulldom.parse(handle)
+        try:
+            try:
+                event, node = next(self._events)
+            except StopIteration:
+                raise_from(ValueError("Empty file."), None)
+            if event != "START_DOCUMENT" or node.localName is not None:
+                raise ValueError("Failed to find start of XML")
+            self._read_header()
+        except:
+            self._events = None
+            raise
 
-    # TODO: Implement __next__ in order for Python to treat this class as
-    # an iterator and not just as an iterable. The SequenceIterator API
-    # expects base implementation of __iter__ to call __next__ internally.
+    def _read_header(self):
+        # Parse the document metadata
+        event, node = next(self._events)
+        if event != "START_ELEMENT" or node.localName != 'seqXML':
+            raise ValueError("Failed to find seqXML tag in file")
+        for index in range(node.attributes.length):
+            item = node.attributes.item(index)
+            name = item.name
+            value = item.value
+            if name == "source":
+                self.source = value
+            elif name == "sourceVersion":
+                self.sourceVersion = value
+            elif name == "seqXMLversion":
+                self.seqXMLversion = value
+            elif name == "ncbiTaxID":
+                self.ncbiTaxID = value
+            elif name == "speciesName":
+                self.speciesName = value
 
     def __iter__(self):
+        return self
+
+    def __next__(self):
         """Iterate over the records in the XML file."""
+        if self._events is None:
+            # No more events; we are at the end of the file
+            raise StopIteration
+
         record = None
         try:
-            empty = True
             for event, node in self._events:
 
                 # the for loop is entered only if there is some content in self._events
-                # if the empty flag is still True, the file is empty
-                empty = False
 
                 if event == "START_ELEMENT" and node.namespaceURI == self._namespace:
 
-                    if node.localName == self._recordTag:
+                    if node.localName == "entry":
                         # create an empty SeqRecord
                         record = SeqRecord("", id="")
 
@@ -84,17 +128,27 @@ class XMLRecordIterator(object):
 
                         getattr(self, "_elem_" + node.localName)(node, record)
 
-                elif (
-                    event == "END_ELEMENT"
-                    and node.namespaceURI == self._namespace
-                    and node.localName == self._recordTag
-                ):
-                    yield record
-
-            if empty:
-                raise ValueError("Empty file.")
+                elif event == "END_ELEMENT":
+                    if node.namespaceURI == self._namespace:
+                        if node.localName == "entry":
+                            return record
+                        elif node.localName == "seqXML":
+                            # It would be cleaner to continue reading until
+                            # we get to the END_DOCUMENT event.
+                            # However, pulldom seems to have a bug preventing
+                            # this from happening:
+                            # https://bugs.python.org/issue9371
+                            # So we raise a StopIteration here.
+                            # Perhaps we should switch to a SAX parser,
+                            # which seems more robust.
+                            # First, close any temporary file handles:
+                            self._events = None
+                            raise StopIteration
 
         except SAXParseException as e:
+
+            # Close any temporary file handles
+            self._events.clear()
 
             if e.getLineNumber() == 1 and e.getColumnNumber() == 0:
                 # empty file
@@ -112,42 +166,18 @@ class XMLRecordIterator(object):
                 else:
                     raise
 
+        except:
+
+            # In case of an error, close any temporary file handles
+            self._events = None
+            raise
+
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary (PRIVATE)."""
         return {
             node.attributes.item(i).name: node.attributes.item(i).value
             for i in range(node.attributes.length)
         }
-
-
-class SeqXmlIterator(XMLRecordIterator):
-    """Breaks seqXML file into SeqRecords.
-
-    Assumes valid seqXML please validate beforehand.
-    """
-
-    def __init__(self, handle):
-        """Create the object."""
-        XMLRecordIterator.__init__(self, handle, "entry")
-
-        self._source = None
-        self._source_version = None
-        self._version = None
-        self._speciesName = None
-        self._ncbiTaxId = None
-
-    def _attr_seqXML(self, attr_dict, record):
-        """Parse the document metadata (PRIVATE)."""
-        if "source" in attr_dict:
-            self._source = attr_dict["source"]
-        if "sourceVersion" in attr_dict:
-            self._source_version = attr_dict["sourceVersion"]
-        if "version" in attr_dict:
-            self._version = attr_dict["seqXMLversion"]
-        if "ncbiTaxID" in attr_dict:
-            self._ncbiTaxId = attr_dict["ncbiTaxID"]
-        if "speciesName" in attr_dict:
-            self._speciesName = attr_dict["speciesName"]
 
     def _attr_property(self, attr_dict, record):
         """Parse key value pair properties and store them as annotations (PRIVATE)."""
@@ -184,15 +214,15 @@ class SeqXmlIterator(XMLRecordIterator):
         record.id = attr_dict["id"]
         if "source" in attr_dict:
             record.annotations["source"] = attr_dict["source"]
-        elif self._source is not None:
-            record.annotations["source"] = self._source
+        elif self.source is not None:
+            record.annotations["source"] = self.source
 
         # initialize entry with global species definition
         # the keywords for the species annotation are taken from SwissIO
-        if self._ncbiTaxId is not None:
-            record.annotations["ncbi_taxid"] = self._ncbiTaxId
-        if self._speciesName is not None:
-            record.annotations["organism"] = self._speciesName
+        if self.ncbiTaxID is not None:
+            record.annotations["ncbi_taxid"] = self.ncbiTaxID
+        if self.speciesName is not None:
+            record.annotations["organism"] = self.speciesName
 
     def _elem_DNAseq(self, node, record):
         """Parse DNA sequence (PRIVATE)."""
