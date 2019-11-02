@@ -14,6 +14,7 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
 
+import sys
 
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
@@ -170,6 +171,10 @@ class SeqXmlIterator(object):
             # In case of an error, close any temporary file handles
             self._events = None
             raise
+
+    if sys.version_info[0] < 3:  # python2
+        def next(self):
+            return self.__next__()
 
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary (PRIVATE)."""
