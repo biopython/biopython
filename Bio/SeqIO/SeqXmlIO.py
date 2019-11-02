@@ -58,8 +58,7 @@ class SeqXmlIterator(object):
         # name and let pulldom.parse open the file for us, then the file
         # will remain open until SeqXmlIterator is deallocated or we delete
         # the DOMEventStream returned by pulldom.parse.
-        # Use a try: except: block to delete the DOMEventStream in case any
-        # exceptions happen.
+        # Delete the DOMEventStream in case any exceptions happen.
         self._events = pulldom.parse(handle)
         try:
             try:
@@ -69,14 +68,14 @@ class SeqXmlIterator(object):
             if event != "START_DOCUMENT" or node.localName is not None:
                 raise ValueError("Failed to find start of XML")
             self._read_header()
-        except:
+        except Exception:
             self._events = None
             raise
 
     def _read_header(self):
         # Parse the document metadata
         event, node = next(self._events)
-        if event != "START_ELEMENT" or node.localName != 'seqXML':
+        if event != "START_ELEMENT" or node.localName != "seqXML":
             raise ValueError("Failed to find seqXML tag in file")
         for index in range(node.attributes.length):
             item = node.attributes.item(index)
@@ -166,7 +165,7 @@ class SeqXmlIterator(object):
                 else:
                     raise
 
-        except:
+        except Exception:
 
             # In case of an error, close any temporary file handles
             self._events = None

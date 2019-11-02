@@ -61,7 +61,7 @@ def AceIterator(handle):
     90
 
     """
-    with as_handle(handle, 'rU') as handle:
+    with as_handle(handle, "rU") as handle:
 
         for ace_contig in Ace.parse(handle):
             # Convert the ACE contig record into a SeqRecord...

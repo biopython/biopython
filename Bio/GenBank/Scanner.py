@@ -550,7 +550,8 @@ class InsdcScanner(object):
 
                         for (qualifier_name, qualifier_data) in qualifiers:
                             if qualifier_data is not None \
-                                and qualifier_data[0] == '"' and qualifier_data[-1] == '"':
+                                and qualifier_data[0] == '"' \
+                                    and qualifier_data[-1] == '"':
                                 # Remove quotes
                                 qualifier_data = qualifier_data[1:-1]
                             # Append the data to the annotation qualifier...
