@@ -1402,39 +1402,39 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     >>> from Bio import Align
     >>> aligner = Align.PairwiseAligner()
-    >>> alignments = aligner.align("ACCGT", "ACG")
+    >>> alignments = aligner.align("TACCG", "ACG")
     >>> for alignment in sorted(alignments):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 3.0:
-    ACCGT
-    |-||-
-    A-CG-
+    TACCG
+    -|-||
+    -A-CG
     <BLANKLINE>
     Score = 3.0:
-    ACCGT
-    ||-|-
-    AC-G-
+    TACCG
+    -||-|
+    -AC-G
     <BLANKLINE>
 
     Specify the aligner mode as local to generate local alignments:
 
     >>> aligner.mode = 'local'
-    >>> alignments = aligner.align("ACCGT", "ACG")
+    >>> alignments = aligner.align("TACCG", "ACG")
     >>> for alignment in sorted(alignments):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 3.0:
-    ACCGT
-    |-|| 
-    A-CG 
+    TACCG
+     |-||
+     A-CG
     <BLANKLINE>
     Score = 3.0:
-    ACCGT
-    ||-| 
-    AC-G 
+    TACCG
+     ||-|
+     AC-G
     <BLANKLINE>
 
     Do a global alignment.  Identical characters are given 2 points,
@@ -1443,19 +1443,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> aligner.mode = 'global'
     >>> aligner.match_score = 2
     >>> aligner.mismatch_score = -1
-    >>> for alignment in aligner.align("ACCGT", "ACG"):
+    >>> for alignment in aligner.align("TACCG", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 6.0:
-    ACCGT
-    ||-|-
-    AC-G-
+    TACCG
+    -||-|
+    -AC-G
     <BLANKLINE>
     Score = 6.0:
-    ACCGT
-    |-||-
-    A-CG-
+    TACCG
+    -|-||
+    -A-CG
     <BLANKLINE>
 
     Same as above, except now 0.5 points are deducted when opening a
@@ -1465,19 +1465,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> aligner.extend_gap_score = -0.1
     >>> aligner.target_end_gap_score = 0.0
     >>> aligner.query_end_gap_score = 0.0
-    >>> for alignment in aligner.align("ACCGT", "ACG"):
+    >>> for alignment in aligner.align("TACCG", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 5.5:
-    ACCGT
-    |-||-
-    A-CG-
+    TACCG
+    -|-||
+    -A-CG
     <BLANKLINE>
     Score = 5.5:
-    ACCGT
-    ||-|-
-    AC-G-
+    TACCG
+    -||-|
+    -AC-G
     <BLANKLINE>
 
     The alignment function can also use known matrices already included in
