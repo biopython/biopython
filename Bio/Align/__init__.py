@@ -1006,9 +1006,9 @@ class PairwiseAlignment(object):
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
-            aligned_seq1 += "." * (end - end1) + seq1[:end1]
-            aligned_seq2 += "." * (end - end2) + seq2[:end2]
-            pattern += "." * end
+            aligned_seq1 += " " * (end - end1) + seq1[:end1]
+            aligned_seq2 += " " * (end - end2) + seq2[:end2]
+            pattern += " " * end
         start1 = end1
         start2 = end2
         for end1, end2 in path[1:]:
@@ -1032,15 +1032,15 @@ class PairwiseAlignment(object):
                     if c1 == c2:
                         pattern += "|"
                     else:
-                        pattern += "X"
+                        pattern += "."
             start1 = end1
             start2 = end2
         n1 -= end1
         n2 -= end2
         n = max(n1, n2)
-        aligned_seq1 += seq1[end1:] + "." * (n - n1)
-        aligned_seq2 += seq2[end2:] + "." * (n - n2)
-        pattern += "." * n
+        aligned_seq1 += seq1[end1:] + " " * (n - n1)
+        aligned_seq2 += seq2[end2:] + " " * (n - n2)
+        pattern += " " * n
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_generalized(self):
@@ -1057,14 +1057,14 @@ class PairwiseAlignment(object):
             if end1 <= end2:
                 for c2 in seq2[:end2 - end1]:
                     s2 = str(c2)
-                    s1 = "." * len(s2)
+                    s1 = " " * len(s2)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
                     pattern.append(s1)
             else:  # end1 > end2
                 for c1 in seq1[:end1 - end2]:
                     s1 = str(c1)
-                    s2 = "." * len(s1)
+                    s2 = " " * len(s1)
                     aligned_seq1.append(s1)
                     aligned_seq2.append(s2)
                     pattern.append(s2)
@@ -1096,7 +1096,7 @@ class PairwiseAlignment(object):
                     if c1 == c2:
                         p = "|"
                     else:
-                        p = "X"
+                        p = "."
                     if m1 < m2:
                         space = (m2 - m1) * " "
                         s1 += space
@@ -1428,13 +1428,13 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...
     Score = 3.0:
     ACCGT
-    |-||.
-    A-CG.
+    |-|| 
+    A-CG 
     <BLANKLINE>
     Score = 3.0:
     ACCGT
-    ||-|.
-    AC-G.
+    ||-| 
+    AC-G 
     <BLANKLINE>
 
     Do a global alignment.  Identical characters are given 2 points,
