@@ -164,7 +164,7 @@ class Array(numpy.ndarray):
 
     def __contains__(self, key):
         # Follow dict definition of __contains__
-        return key in self.alphabet
+        return key in self.keys()
 
     def __array_prepare__(self, out_arr, context=None):
         # needed for numpy older than 1.13.0
