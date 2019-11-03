@@ -5,11 +5,20 @@ import string
 import numpy
 
 from Bio import File
+from Bio import BiopythonExperimentalWarning
 from Bio._py3k import raise_from
 
 # These two can be removed once we drop python2:
 import sys
 import platform
+
+import warnings
+warnings.warn("Bio.Align.substitution_matrices is an experimental module "
+              "which may still undergo significant changes. In particular, "
+              "the location of this module may change, and the Array class "
+              "defined in this module may be moved to other existing or new "
+              "modules in Biopython.",
+              BiopythonExperimentalWarning)
 
 
 class Array(numpy.ndarray):
