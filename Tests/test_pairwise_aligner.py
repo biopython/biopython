@@ -284,7 +284,7 @@ Pairwise sequence aligner with parameters
  AwBw
  |-| 
 zA-Bz
-""")
+""")  # noqa: W291
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
     def test_gotoh_local(self):
