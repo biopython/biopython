@@ -19,8 +19,10 @@ try:
     from numpy.linalg import svd, det
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.SVDSuperimposer.")
+        "Install NumPy if you want to use Bio.SVDSuperimposer."
+    )
 
 
 class SVDSuperimposer(object):
@@ -137,7 +139,7 @@ class SVDSuperimposer(object):
         self.coords = coords
         n = reference_coords.shape
         m = coords.shape
-        if n != m or not(n[1] == m[1] == 3):
+        if n != m or not (n[1] == m[1] == 3):
             raise Exception("Coordinate number/dimension mismatch.")
         self.n = n[0]
 
@@ -196,4 +198,5 @@ class SVDSuperimposer(object):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)
