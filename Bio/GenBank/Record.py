@@ -46,7 +46,7 @@ def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
         cur_pos = 0
         info_parts = []
         while cur_pos < len(information):
-            info_parts.append(information[cur_pos: cur_pos + info_length])
+            info_parts.append(information[cur_pos : cur_pos + info_length])
             cur_pos += info_length
 
     # first get the information string split up by line
@@ -149,16 +149,23 @@ class Record(object):
     GB_SEQUENCE_INDENT = 9
 
     BASE_FORMAT = "%-" + str(GB_BASE_INDENT) + "s"
-    INTERNAL_FORMAT = " " * GB_INTERNAL_INDENT + "%-" + \
-                      str(GB_BASE_INDENT - GB_INTERNAL_INDENT) + "s"
-    OTHER_INTERNAL_FORMAT = " " * GB_OTHER_INTERNAL_INDENT + "%-" + \
-                            str(GB_BASE_INDENT - GB_OTHER_INTERNAL_INDENT) + \
-                            "s"
+    INTERNAL_FORMAT = (
+        " " * GB_INTERNAL_INDENT + "%-" + str(GB_BASE_INDENT - GB_INTERNAL_INDENT) + "s"
+    )
+    OTHER_INTERNAL_FORMAT = (
+        " " * GB_OTHER_INTERNAL_INDENT
+        + "%-"
+        + str(GB_BASE_INDENT - GB_OTHER_INTERNAL_INDENT)
+        + "s"
+    )
 
     BASE_FEATURE_FORMAT = "%-" + str(GB_FEATURE_INDENT) + "s"
-    INTERNAL_FEATURE_FORMAT = " " * GB_FEATURE_INTERNAL_INDENT + "%-" + \
-                              str(GB_FEATURE_INDENT -
-                                  GB_FEATURE_INTERNAL_INDENT) + "s"
+    INTERNAL_FEATURE_FORMAT = (
+        " " * GB_FEATURE_INTERNAL_INDENT
+        + "%-"
+        + str(GB_FEATURE_INDENT - GB_FEATURE_INTERNAL_INDENT)
+        + "s"
+    )
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
 
     def __init__(self):
@@ -344,8 +351,7 @@ class Record(object):
             keyword_info = keyword_info[:-2]
             keyword_info += "."
 
-            output += _wrapped_genbank(keyword_info,
-                                       Record.GB_BASE_INDENT)
+            output += _wrapped_genbank(keyword_info, Record.GB_BASE_INDENT)
 
         return output
 
@@ -393,8 +399,7 @@ class Record(object):
         output = ""
         if self.comment:
             output += Record.BASE_FORMAT % "COMMENT"
-            output += _indent_genbank(self.comment,
-                                      Record.GB_BASE_INDENT)
+            output += _indent_genbank(self.comment, Record.GB_BASE_INDENT)
         return output
 
     def _features_line(self):
@@ -437,8 +442,7 @@ class Record(object):
         if self.sequence:
             output += Record.BASE_FORMAT % "ORIGIN"
             if self.origin:
-                output += _wrapped_genbank(self.origin,
-                                           Record.GB_BASE_INDENT)
+                output += _wrapped_genbank(self.origin, Record.GB_BASE_INDENT)
             else:
                 output += "\n"
         return output
@@ -484,8 +488,9 @@ class Record(object):
         output = ""
         if self.contig:
             output += Record.BASE_FORMAT % "CONTIG"
-            output += _wrapped_genbank(self.contig,
-                                       Record.GB_BASE_INDENT, split_char=",")
+            output += _wrapped_genbank(
+                self.contig, Record.GB_BASE_INDENT, split_char=","
+            )
         return output
 
 
@@ -623,8 +628,9 @@ class Feature(object):
     def __str__(self):
         """Return feature as a GenBank format string."""
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
-        output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
-                                   split_char=",")
+        output += _wrapped_genbank(
+            self.location, Record.GB_FEATURE_INDENT, split_char=","
+        )
         for qualifier in self.qualifiers:
             output += str(qualifier)
         return output
@@ -657,5 +663,6 @@ class Qualifier(object):
             if no_space_key in self.key:
                 space_wrap = 0
         # return double quotes as-is, leave it to the user to escape them
-        return output + _wrapped_genbank(self.key + self.value,
-                                         Record.GB_FEATURE_INDENT, space_wrap)
+        return output + _wrapped_genbank(
+            self.key + self.value, Record.GB_FEATURE_INDENT, space_wrap
+        )
