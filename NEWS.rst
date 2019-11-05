@@ -50,6 +50,10 @@ un-aligned parts instead of only showing the aligned parts).
 A new function ``charge_at_pH(pH)`` has been added to ``ProtParam`` and
 ``IsoelectricPoint`` in ``Bio.SeqUtils``.
 
+The ``PairwiseAligner`` in ``Bio.Align`` was extended to allow generalized pairwise alignments, i.e. alignments of any Python object, for example three-letter amino acid sequences, three-nucleotide codons, and arrays of integers.
+
+A new module ``substitution_matrices`` was added to ``Bio.Align``, which includes an ``Array`` class that can be used as a substitution matrix. As this ``Array`` class is a subclass of a numpy array, mathematical operations can be applied to it directly, and C code that makes use of substitution matrices can directly access the numerical values stored in the substitution matrices. This module is intended as a replacement of ``Bio.SubsMat``, which is currently unmaintained.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
