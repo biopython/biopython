@@ -311,11 +311,11 @@ class SeqMat(dict):
     ):
         """Print the full matrix to the file handle f or stdout."""
         warnings.warn(
-            "SeqMat.print_full_mat has been deprecated, and we intend to remove"
-            " it in a future release of Biopython. Instead of\n"
-            " mat.print_full_mat(<arguments>)\n"
-            " please use\n"
-            " print(mat.format(<arguments>, full=True)",
+            "SeqMat.print_full_mat has been deprecated, and we intend to remove "
+            "it in a future release of Biopython. Instead of\n"
+            "mat.print_full_mat(<arguments>)\n"
+            "please use\n"
+            "print(mat.format(<arguments>, full=True)",
             BiopythonDeprecationWarning,
         )
         if factor == 1:
@@ -343,11 +343,11 @@ class SeqMat(dict):
         order will be the order of the letters on the axes.
         """
         warnings.warn(
-            "SeqMat.print_mat has been deprecated, and we intend to remove it"
-            " in a future release of Biopython. Instead of\n"
-            " mat.print_mat(<arguments>)\n"
-            " please use\n"
-            " print(mat.format(<arguments>)",
+            "SeqMat.print_mat has been deprecated, and we intend to remove it "
+            "in a future release of Biopython. Instead of\n"
+            "mat.print_mat(<arguments>)\n"
+            "please use\n"
+            "print(mat.format(<arguments>)",
             BiopythonDeprecationWarning,
         )
         if factor == 1:
