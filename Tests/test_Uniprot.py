@@ -59,7 +59,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations["references"][0].journal, "Virology 286:182-196(2001)")
         self.assertEqual(seq_record.annotations["references"][0].comment, "journal article | 2001 | Scope: NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA] | ")
 
-        self.assertEqual(len(seq_record.dbxrefs), 12)
+        self.assertEqual(len(seq_record.dbxrefs), 11)
         self.assertEqual(seq_record.dbxrefs[0], "DOI:10.1006/viro.2001.0963")
 
         self.assertEqual(seq_record.annotations["sequence_length"], 116)
@@ -418,24 +418,6 @@ class TestUniprot(unittest.TestCase):
             self.assertIn(txt.id, fas.id.split("|"))
             self.assertEqual(str(txt.seq), str(fas.seq))
             self.compare_txt_xml(txt, xml)
-
-    def test_embl(self):
-        """Test embl-cds from dbxref."""
-        with open("SwissProt/Q13639.xml") as test_handle:
-            seq_record = SeqIO.read(test_handle, "uniprot-xml")
-
-        embl_cds_ref = sorted(["EMBL-CDS:AAH74755.1", "EMBL-CDS:CAA09600.1", "EMBL-CDS:CAA70002.1",
-                               "EMBL-CDS:CAA70774.1", "EMBL-CDS:CAA71462.1", "EMBL-CDS:CAA73107.1",
-                               "EMBL-CDS:CAA73108.1", "EMBL-CDS:CAA73109.1", "EMBL-CDS:CAA73911.1",
-                               "EMBL-CDS:CAA88167.1", "EMBL-CDS:CAB71316.1", "EMBL-CDS:CAC22248.1",
-                               "EMBL-CDS:CAC22250.1", "EMBL-CDS:CAC22251.1"])
-        embl_cds = []
-        for entry in seq_record.dbxrefs:
-            if entry.startswith("EMBL-CDS:"):
-                embl_cds.append(entry)
-
-        embl_cds = sorted(embl_cds)
-        self.assertEqual(embl_cds, embl_cds_ref)
 
     def test_multi_ex_index(self):
         """Index SwissProt text and uniprot XML versions of several examples."""

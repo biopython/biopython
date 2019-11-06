@@ -96,7 +96,6 @@ possible, especially the following contributors:
 - Peter Kerpedjiev
 - Sergio Valqui
 - Spencer Bliven
-- Valery Weber (first contribution)
 
 
 16 July 2019: Biopython 1.74
