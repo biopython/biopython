@@ -42,6 +42,7 @@ include Doc/examples/ec_5.4.2.2.txt
 # Note setup.py will only install these if Numpy is installed.
 recursive-include Bio/Cluster *.py
 recursive-include Bio/Affy *.py
+recursive-include Bio/Align *.py
 recursive-include Bio/KDTree *.py
 recursive-include Bio/phenotype *.py
 
