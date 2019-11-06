@@ -207,7 +207,7 @@ class SeqMat(dict):
 
     def _correct_matrix(self):
         """Sort key tuples (PRIVATE)."""
-        for key in self:
+        for key in list(self):  # iterate over a copy
             if key[0] > key[1]:
                 self[(key[1], key[0])] = self[key]
                 del self[key]
