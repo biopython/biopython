@@ -33,14 +33,14 @@ Christian Marck's DNA Strider program ("xdna" format, also used by Serial
 Cloner), as well as reading files in the native formats of GSL Biotech's
 SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
 
-``Bio.AlignIO`` now supports GCG MSF mutliple sequence alignments as the "msf"
+``Bio.AlignIO`` now supports GCG MSF multiple sequence alignments as the "msf"
 format (work funded by the National Marrow Donor Program).
 
 The main ``Seq`` object now has string-like ``.index()`` and ``.rindex()``
 methods, matching the existing ``.find()`` and ``.rfind()`` implementations.
 The ``MutableSeq`` object retains its more list-like ``.index()`` behaviour.
 
-The ``MMTFIO`` class is added that allows writing of MMTF file format files
+The ``MMTFIO`` class has been added that allows writing of MMTF file format files
 from a Biopython structure object. ``MMTFIO`` has a similar interface to
 ``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write
 out a specified selection. This final addition to read/write support for
