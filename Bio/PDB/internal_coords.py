@@ -1812,8 +1812,24 @@ class IC_Residue(object):
             htpl = (sCB, sCA, sC)
             self._gen_edra(htpl)
             h = self.hedra[htpl]
-            h.len3 = self.hedra[(sN, sCA, sC)].len3
-            # data averaged from May 2019 Dunbrack cullpdb_pc20_res2.2_R1.0
+            h.len3 = self.hedra[(sCA, sC, sO)].len1
+            # data averaged from Sep 2019 Dunbrack cullpdb_pc20_res2.2_R1.0
+            # restricted to structures with amide protons.
+            # Ala avg rotation of OCCACB from NCACO query:
+            # select avg(g.rslt) as avg_rslt, stddev(g.rslt) as sd_rslt, count(*)
+            # from
+            # (select f.d1d, f.d2d,
+            # (case when f.rslt > 0 then f.rslt-360.0 else f.rslt end) as rslt
+            # from (select d1.dihedral1 as d1d, d2.dihedral1 as d2d,
+            # (d2.dihedral1 - d1.dihedral1) as rslt from dihedron d1,
+            # dihedron d2 where d1.rdh_class='AOACACAACB' and
+            # d2.rdh_class='ANACAACAO' and d1.pdb=d2.pdb and d1.chn=d2.chn
+            # and d1.res=d2.res) as f) as g
+            # +-------------------+------------------+---------+
+            # | avg_rslt          | sd_rslt          | count   |
+            # |-------------------+------------------+---------|
+            # | -122.682194862932 | 5.04403040513919 | 14098   |
+            # +-------------------+------------------+---------+
             h.angle2 = 110.17513
             h.len1 = 1.53363 * (self.scale if hasattr(self, "scale") else 1.0)
             dtpl = (sO, sC, sCA, sCB)
@@ -1821,7 +1837,14 @@ class IC_Residue(object):
             d = self.dihedra[dtpl]
             d.IC_Residue = self
             d._set_hedra()
-            d.dihedral1 = 121.51471
+            sN = self.rak("N")
+            refval = self.dihedra.get((sN, sCA, sC, sO), None)
+            if refval:
+                d.dihedral1 = 122.68219 + refval.dihedral1
+                if d.dihedral1 > 180.0:
+                    d.dihedral1 -= 360.0
+            else:
+                d.dihedral1 = 120
             del self.atom_coords[sCB]  # remove None so now must populate
 
     @staticmethod
