@@ -618,7 +618,6 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
         if mat_1[key] > EPSILON and mat_2[key] > EPSILON:
             val_1 = mat_1[key] / sum_ent_1
             val_2 = mat_2[key] / sum_ent_2
-            #            rel_ent += mat_1[key] * log(mat_1[key]/mat_2[key])/log(logbase)
             rel_ent += val_1 * log(val_1 / val_2) / log(logbase)
     return rel_ent
 
