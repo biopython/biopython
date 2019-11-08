@@ -14,7 +14,19 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
 also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
-Note we intend to drop Python 2.7 support in early 2020
+Note we intend to drop Python 2.7 support in early 2020.
+
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite. There has been further work to follow the Python
+PEP8, PEP257 and best practice standard coding style, and more of the code
+style has been reformatted with the ``black`` tool.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Christian Brueffer
+- Peter Cock
+- Sergio Valqui
 
 6 November 2019: Biopython 1.75
 ===============================
