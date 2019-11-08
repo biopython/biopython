@@ -542,7 +542,7 @@ If you are using Biopython 1.59 or later, the feature location's start and end a
 AGCCTTTGCCGTC
 \end{minted}
 
-This is a simple example so this isn't too bad -- however once you have to deal with compound features (joins) this is rather messy. Instead, the \verb|SeqFeature| object has an \verb|extract| method to take care of all this:
+This is a simple example so this isn't too bad -- however once you have to deal with compound features (joins) this is rather messy. Instead, the \verb|SeqFeature| object has an \verb|extract| method to take care of all this (and since Biopython 1.78 can handle trans-splicing by supplying a dictionary of referenced sequences):
 
 %cont-doctest
 \begin{minted}{pycon}
