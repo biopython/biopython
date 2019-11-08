@@ -40,8 +40,8 @@ The main ``Seq`` object now has string-like ``.index()`` and ``.rindex()``
 methods, matching the existing ``.find()`` and ``.rfind()`` implementations.
 The ``MutableSeq`` object retains its more list-like ``.index()`` behaviour.
 
-The ``MMTFIO`` class has been added that allows writing of MMTF file format files
-from a Biopython structure object. ``MMTFIO`` has a similar interface to
+The ``MMTFIO`` class has been added that allows writing of MMTF file format
+files from a Biopython structure object. ``MMTFIO`` has a similar interface to
 ``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write
 out a specified selection. This final addition to read/write support for
 PDB/mmCIF/MMTF in Biopython allows conversion between all three file formats.
