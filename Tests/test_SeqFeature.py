@@ -247,48 +247,73 @@ class TestPositions(unittest.TestCase):
 
 
 class TestExtract(unittest.TestCase):
-
     def test_reference_in_location_record(self):
         """Test location with reference to another record."""
         parent_record = SeqRecord.SeqRecord(seq=Seq.Seq("actg"))
         another_record = SeqRecord.SeqRecord(seq=Seq.Seq("gtcagctac"))
         location = FeatureLocation(5, 8, ref="ANOTHER.7")
-        with self.assertRaises(ValueError) as err:
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
+        ):
             location.extract(parent_record)
-        assert "Feature references another sequence (ANOTHER.7), references mandatory" in str(err.exception)
-        with self.assertRaises(ValueError) as err:
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), not found in references",
+        ):
             location.extract(parent_record, references={"SOMEOTHER.2": another_record})
-        assert "Feature references another sequence (ANOTHER.7), not found in references" in str(err.exception)
-        self.assertEqual(str(location.extract(parent_record, references={"ANOTHER.7": another_record}).seq), "cta")
+        self.assertEqual(
+            location.extract(
+                parent_record, references={"ANOTHER.7": another_record}
+            ).seq,
+            "cta",
+        )
 
     def test_reference_in_location_sequence(self):
         """Test location with reference to another sequence."""
         parent_sequence = Seq.Seq("actg")
         another_sequence = Seq.Seq("gtcagctac")
         location = FeatureLocation(5, 8, ref="ANOTHER.7")
-        self.assertEqual(str(location.extract(parent_sequence, references={"ANOTHER.7": another_sequence})), "cta")
+        self.assertEqual(
+            location.extract(
+                parent_sequence, references={"ANOTHER.7": another_sequence}
+            ),
+            "cta",
+        )
 
     def test_reference_in_compound_location_record(self):
-        "Test compound location with reference to another record."""
+        """Test compound location with reference to another record."""
         parent_record = SeqRecord.SeqRecord(Seq.Seq("aaccaaccaaccaaccaa"))
         another_record = SeqRecord.SeqRecord(Seq.Seq("ttggttggttggttggtt"))
         location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
-        with self.assertRaises(ValueError) as err:
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
+        ):
             location.extract(parent_record)
-        assert "Feature references another sequence (ANOTHER.7), references mandatory" in str(err.exception)
-        with self.assertRaises(ValueError) as err:
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), not found in references",
+        ):
             location.extract(parent_record, references={"SOMEOTHER.2": another_record})
-        assert "Feature references another sequence (ANOTHER.7), not found in references" in str(err.exception)
-        self.assertEqual(str(location.extract(parent_record, references={"ANOTHER.7": another_record}).seq),
-                         "ccaa" + "tgg")
+        self.assertEqual(
+            location.extract(
+                parent_record, references={"ANOTHER.7": another_record}
+            ).seq,
+            "ccaatgg",
+        )
 
     def test_reference_in_compound_location_sequence(self):
-        "Test compound location with reference to another sequence."""
+        """Test compound location with reference to another sequence."""
         parent_sequence = Seq.Seq("aaccaaccaaccaaccaa")
         another_sequence = Seq.Seq("ttggttggttggttggtt")
         location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
-        self.assertEqual(str(location.extract(parent_sequence, references={"ANOTHER.7": another_sequence})),
-                         "ccaa" + "tgg")
+        self.assertEqual(
+            location.extract(
+                parent_sequence, references={"ANOTHER.7": another_sequence}
+            ),
+            "ccaatgg",
+        )
 
 
 if __name__ == "__main__":
