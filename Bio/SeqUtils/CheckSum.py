@@ -47,10 +47,10 @@ def _init_table_h():
             rflag = part_l & 1
             part_l >>= 1
             if part_h & 1:
-                part_l |= (1 << 31)
+                part_l |= 1 << 31
             part_h >>= 1
             if rflag:
-                part_h ^= 0xd8000000
+                part_h ^= 0xD8000000
         _table_h.append(part_h)
     return _table_h
 
@@ -136,6 +136,7 @@ def seguid(seq):
     """
     import hashlib
     import base64
+
     m = hashlib.sha1()
     try:
         # Assume it's a Seq object
@@ -156,4 +157,5 @@ def seguid(seq):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

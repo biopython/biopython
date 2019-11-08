@@ -51,7 +51,8 @@ SynonymousCodons = {
     "TRP": ["TGG"],
     "VAL": ["GTA", "GTC", "GTG", "GTT"],
     "GLU": ["GAG", "GAA"],
-    "TYR": ["TAT", "TAC"]}
+    "TYR": ["TAT", "TAC"],
+}
 
 
 class CodonAdaptationIndex(object):
@@ -89,8 +90,10 @@ class CodonAdaptationIndex(object):
         """
         # first make sure we're not overwriting an existing index:
         if self.index != {} or self.codon_count != {}:
-            raise ValueError("an index has already been set or a codon count "
-                             "has been done. Cannot overwrite either.")
+            raise ValueError(
+                "an index has already been set or a codon count "
+                "has been done. Cannot overwrite either."
+            )
 
         # count codon occurrences in the file.
         self._count_codons(fasta_file)
@@ -134,7 +137,7 @@ class CodonAdaptationIndex(object):
             dna_sequence = dna_sequence.upper()
 
         for i in range(0, len(dna_sequence), 3):
-            codon = dna_sequence[i:i + 3]
+            codon = dna_sequence[i : i + 3]
             if codon in self.index:
                 # these two codons are always one, exclude them:
                 if codon not in ["ATG", "TGG"]:
@@ -142,8 +145,9 @@ class CodonAdaptationIndex(object):
                     cai_length += 1
             # some indices may not include stop codons:
             elif codon not in ["TGA", "TAA", "TAG"]:
-                raise TypeError("illegal codon in sequence: %s.\n%s"
-                                % (codon, self.index))
+                raise TypeError(
+                    "illegal codon in sequence: %s.\n%s" % (codon, self.index)
+                )
 
         return math.exp(cai_value / (cai_length - 1.0))
 
@@ -161,12 +165,13 @@ class CodonAdaptationIndex(object):
                 else:
                     dna_sequence = str(cur_record.seq)
                 for i in range(0, len(dna_sequence), 3):
-                    codon = dna_sequence[i:i + 3]
+                    codon = dna_sequence[i : i + 3]
                     if codon in self.codon_count:
                         self.codon_count[codon] += 1
                     else:
-                        raise TypeError("illegal codon %s in gene: %s"
-                                        % (codon, cur_record.id))
+                        raise TypeError(
+                            "illegal codon %s in gene: %s" % (codon, cur_record.id)
+                        )
 
     def print_index(self):
         """Print out the index used.

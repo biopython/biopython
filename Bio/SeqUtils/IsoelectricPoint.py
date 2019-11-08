@@ -80,6 +80,7 @@ class IsoelectricPoint(object):
         self.sequence = str(protein_sequence).upper()
         if not aa_content:
             from Bio.SeqUtils.ProtParam import ProteinAnalysis as _PA
+
             aa_content = _PA(self.sequence).count_amino_acids()
         self.charged_aas_content = self._select_charged(aa_content)
 

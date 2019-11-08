@@ -498,15 +498,17 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     """
     if method in (5, 6, 7) and not seq:
-        raise ValueError("sequence is missing (is needed to calculate " +
-                         "GC content or sequence length).")
+        raise ValueError(
+            "sequence is missing (is needed to calculate "
+            + "GC content or sequence length)."
+        )
     if seq:
         seq = str(seq)
     corr = 0
     if not method:
         return corr
     Mon = Na + K + Tris / 2.0  # Note: all these values are millimolar
-    mg = Mg * 1e-3             # Lowercase ions (mg, mon, dntps) are molar
+    mg = Mg * 1e-3  # Lowercase ions (mg, mon, dntps) are molar
     # Na equivalent according to von Ahsen et al. (2001):
     if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7 and dNTPs < Mg:
         # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
@@ -515,8 +517,9 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     mon = Mon * 1e-3
     # Note: math.log = ln(), math.log10 = log()
     if method in range(1, 7) and not mon:
-        raise ValueError("Total ion concentration of zero is not allowed in " +
-                         "this method.")
+        raise ValueError(
+            "Total ion concentration of zero is not allowed in " + "this method."
+        )
     if method == 1:
         corr = 16.6 * math.log10(mon)
     if method == 2:
@@ -528,8 +531,9 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     if method == 5:
         corr = 0.368 * (len(seq) - 1) * math.log(mon)
     if method == 6:
-        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon) +\
-            9.40e-6 * math.log(mon) ** 2
+        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(
+            mon
+        ) + 9.40e-6 * math.log(mon) ** 2
     if method == 7:
         a, b, c, d = 3.92, -0.911, 6.26, 1.42
         e, f, g = -48.2, 52.5, 8.31
@@ -537,31 +541,40 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
             dntps = dNTPs * 1e-3
             ka = 3e4  # Dissociation constant for Mg:dNTP
             # Free Mg2+ calculation:
-            mg = (-(ka * dntps - ka * mg + 1.0) +
-                  math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 +
-                            4.0 * ka * mg)) / (2.0 * ka)
+            mg = (
+                -(ka * dntps - ka * mg + 1.0)
+                + math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 + 4.0 * ka * mg)
+            ) / (2.0 * ka)
         if Mon > 0:
             R = math.sqrt(mg) / mon
             if R < 0.22:
-                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * \
-                    1e-5 * math.log(mon) + 9.40e-6 * math.log(mon) ** 2
+                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(
+                    mon
+                ) + 9.40e-6 * math.log(mon) ** 2
                 return corr
             elif R < 6.0:
                 a = 3.92 * (0.843 - 0.352 * math.sqrt(mon) * math.log(mon))
-                d = 1.42 * (1.279 - 4.03e-3 * math.log(mon) -
-                            8.03e-3 * math.log(mon) ** 2)
-                g = 8.31 * (0.486 - 0.258 * math.log(mon) +
-                            5.25e-3 * math.log(mon) ** 3)
-        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100) *
-                (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1))) *
-                (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
+                d = 1.42 * (
+                    1.279 - 4.03e-3 * math.log(mon) - 8.03e-3 * math.log(mon) ** 2
+                )
+                g = 8.31 * (
+                    0.486 - 0.258 * math.log(mon) + 5.25e-3 * math.log(mon) ** 3
+                )
+        corr = (
+            a
+            + b * math.log(mg)
+            + (SeqUtils.GC(seq) / 100) * (c + d * math.log(mg))
+            + (1 / (2.0 * (len(seq) - 1)))
+            * (e + f * math.log(mg) + g * math.log(mg) ** 2)
+        ) * 1e-5
     if method > 7:
         raise ValueError("Allowed values for parameter 'method' are 1-7.")
     return corr
 
 
-def chem_correction(melting_temp, DMSO=0, fmd=0, DMSOfactor=0.75,
-                    fmdfactor=0.65, fmdmethod=1, GC=None):
+def chem_correction(
+    melting_temp, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65, fmdmethod=1, GC=None
+):
     """Correct a given Tm for DMSO and formamide.
 
     Please note that these corrections are +/- rough approximations.
@@ -640,16 +653,20 @@ def Tm_Wallace(seq, check=True, strict=True):
     if check:
         seq = _check(seq, "Tm_Wallace")
 
-    melting_temp = 2 * (sum(map(seq.count, ("A", "T", "W")))) + \
-        4 * (sum(map(seq.count, ("C", "G", "S"))))
+    melting_temp = 2 * (sum(map(seq.count, ("A", "T", "W")))) + 4 * (
+        sum(map(seq.count, ("C", "G", "S")))
+    )
 
     # Intermediate values for ambiguous positions:
-    tmp = 3 * (sum(map(seq.count, ("K", "M", "N", "R", "Y")))) + \
-        10 / 3.0 * (sum(map(seq.count, ("B", "V")))) + \
-        8 / 3.0 * (sum(map(seq.count, ("D", "H"))))
+    tmp = (
+        3 * (sum(map(seq.count, ("K", "M", "N", "R", "Y"))))
+        + 10 / 3.0 * (sum(map(seq.count, ("B", "V"))))
+        + 8 / 3.0 * (sum(map(seq.count, ("D", "H"))))
+    )
     if strict and tmp:
-        raise ValueError("ambiguous bases B, D, H, K, M, N, R, V, Y not " +
-                         "allowed when strict=True")
+        raise ValueError(
+            "ambiguous bases B, D, H, K, M, N, R, V, Y not allowed when strict=True"
+        )
     else:
         melting_temp += tmp
     return melting_temp
@@ -712,19 +729,21 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
 
     """
     if saltcorr == 5:
-        raise ValueError("salt-correction method 5 not applicable "
-                         "to Tm_GC")
+        raise ValueError("salt-correction method 5 not applicable " "to Tm_GC")
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_GC")
     percent_gc = SeqUtils.GC(seq)
     # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
-    tmp = sum(map(seq.count, ("K", "M", "N", "R", "Y"))) * 50.0 / len(seq) + \
-        sum(map(seq.count, ("B", "V"))) * 66.67 / len(seq) + \
-        sum(map(seq.count, ("D", "H"))) * 33.33 / len(seq)
+    tmp = (
+        sum(map(seq.count, ("K", "M", "N", "R", "Y"))) * 50.0 / len(seq)
+        + sum(map(seq.count, ("B", "V"))) * 66.67 / len(seq)
+        + sum(map(seq.count, ("D", "H"))) * 33.33 / len(seq)
+    )
     if strict and tmp:
-        raise ValueError("ambiguous bases B, D, H, K, M, N, R, V, Y not "
-                         "allowed when 'strict=True'")
+        raise ValueError(
+            "ambiguous bases B, D, H, K, M, N, R, V, Y not allowed when 'strict=True'"
+        )
     else:
         percent_gc += tmp
     if userset:
@@ -759,8 +778,9 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
 
     melting_temp = A + B * percent_gc - C / (len(seq) * 1.0)
     if saltcorr:
-        melting_temp += salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg,
-                                        dNTPs=dNTPs, seq=seq, method=saltcorr)
+        melting_temp += salt_correction(
+            Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs, seq=seq, method=saltcorr
+        )
     if mismatch:
         melting_temp -= D * (seq.count("X") * 100.0 / len(seq))
     return melting_temp
@@ -770,12 +790,13 @@ def _key_error(neighbors, strict):
     """Throw an error or a warning if there is no data for the neighbors (PRIVATE)."""
     # We haven't found the key in the tables
     if strict:
-        raise ValueError("no thermodynamic data for neighbors %r available"
-                         % neighbors)
+        raise ValueError("no thermodynamic data for neighbors %r available" % neighbors)
     else:
-        warnings.warn("no themodynamic data for neighbors %r available. "
-                      "Calculation will be wrong" % neighbors,
-                      BiopythonWarning)
+        warnings.warn(
+            "no themodynamic data for neighbors %r available. "
+            "Calculation will be wrong" % neighbors,
+            BiopythonWarning,
+        )
 
 
 def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0,
@@ -961,8 +982,11 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0,
 
     # Finally, the 'zipping'
     for basenumber in range(len(tmp_seq) - 1):
-        neighbors = tmp_seq[basenumber:basenumber + 2] + "/" + \
-            tmp_cseq[basenumber:basenumber + 2]
+        neighbors = (
+            tmp_seq[basenumber : basenumber + 2]
+            + "/"
+            + tmp_cseq[basenumber : basenumber + 2]
+        )
         if neighbors in imm_table:
             delta_h += imm_table[neighbors][d_h]
             delta_s += imm_table[neighbors][d_s]
@@ -986,8 +1010,9 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0,
         delta_s += nn_table["sym"][d_s]
     R = 1.987  # universal gas constant in Cal/degrees C*Mol
     if saltcorr:
-        corr = salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs,
-                               method=saltcorr, seq=seq)
+        corr = salt_correction(
+            Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs, method=saltcorr, seq=seq
+        )
     if saltcorr == 5:
         delta_s += corr
     melting_temp = (1000 * delta_h) / (delta_s + (R * (math.log(k)))) - 273.15
@@ -995,7 +1020,7 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0,
         melting_temp += corr
     if saltcorr in (6, 7):
         # Tm = 1/(1/Tm + corr)
-        melting_temp = (1 / (1 / (melting_temp + 273.15) + corr) - 273.15)
+        melting_temp = 1 / (1 / (melting_temp + 273.15) + corr) - 273.15
 
     return melting_temp
 
@@ -1035,17 +1060,19 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     # Original method was by Sebastian Bassi <sbassi@genesdigitales.com>. It is
     # now superseded by Tm_NN.
 
-    warnings.warn("Tm_staluc may be depreciated in the future. Use Tm_NN " +
-                  "instead.", PendingDeprecationWarning)
+    warnings.warn(
+        "Tm_staluc may be depreciated in the future. Use Tm_NN " + "instead.",
+        PendingDeprecationWarning,
+    )
     if not rna:
         return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc)
     elif rna == 1:
-        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc,
-                     nn_table=RNA_NN2)
+        return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc, nn_table=RNA_NN2)
     else:
         raise ValueError("rna={0} not supported".format(rna))
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
