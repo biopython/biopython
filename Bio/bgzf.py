@@ -776,7 +776,7 @@ class BgzfWriter(object):
         del c
         if len(compressed) > 65536:
             raise RuntimeError(
-                "TODO - Didn't compress enough, " "try less data in this block"
+                "TODO - Didn't compress enough, try less data in this block"
             )
         crc = zlib.crc32(block)
         # Should cope with a mix of Python platforms...
