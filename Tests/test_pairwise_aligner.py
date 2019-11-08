@@ -1964,8 +1964,8 @@ class TestOverflowError(unittest.TestCase):
         self.assertIn(str(context_manager.exception),
                       [message % 2147483647,  # on 32-bit systems
                        message % 9223372036854775807,  # on 64-bit systems
-                      ]
-                     )
+                       ]
+                      )
         # confirm that we can still pull out individual alignments
         alignment = alignments[0]
         self.assertEqual(str(alignment), """\
