@@ -1113,9 +1113,16 @@ class FeatureLocation:
         """
         if self.ref or self.ref_db:
             if not references:
-                raise ValueError("Feature references another sequence ({}), references mandatory".format(self.ref))
-            if not references.get(self.ref):
-                raise ValueError("Feature references another sequence ({}), not found in references".format(self.ref))
+                raise ValueError(
+                    f"Feature references another sequence ({self.ref}),"
+                    " references mandatory"
+                )
+            elif self.ref not in references:
+                # KeyError?
+                raise ValueError(
+                    f"Feature references another sequence ({self.ref}),"
+                    " not found in references"
+                )
             parent_sequence = references[self.ref]
         if isinstance(parent_sequence, MutableSeq):
             # This avoids complications with reverse complements
@@ -1536,7 +1543,9 @@ class CompoundLocation:
 
         """
         # This copes with mixed strand features & all on reverse:
-        parts = [loc.extract(parent_sequence, references=references) for loc in self.parts]
+        parts = [
+            loc.extract(parent_sequence, references=references) for loc in self.parts
+        ]
         f_seq = functools.reduce(lambda x, y: x + y, parts)
         return f_seq
 
