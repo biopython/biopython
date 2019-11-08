@@ -23,6 +23,9 @@ object methods.
 ``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
 in the ``Bio.SeqIO.QualityIO`` module.
 
+The ``SeqFeature`` object's ``.extract()`` method can now be used for
+trans-spliced locations via an optional dictionary of references.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -36,6 +39,7 @@ been reformatted with the ``black`` tool to match the main code base.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Adam Sjøgren (first contribution)
 - Carlos Pena
 - Chris Daley
 - Chris Rands
