@@ -324,7 +324,8 @@ class TestSeqIO(unittest.TestCase):
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", BiopythonWarning)
                     SeqIO.write(records[0], handle, format)
-                    self.assertEqual(handle.getvalue(), records[0].format(format))
+                    if format not in SeqIO._BinaryFormats:
+                        self.assertEqual(handle.getvalue(), records[0].format(format))
 
     def perform_test(self, t_format, t_alignment, t_filename, t_count,
                      expected_ids, expected_names, expected_sequences,
