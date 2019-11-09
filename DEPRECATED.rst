@@ -822,6 +822,7 @@ These modules were declared obsolete in Release 1.72, and deprecated in
 Release 1.73. We encourage users to switch to alternative libraries
 implementing a trie data structure, for example pygtrie.
 
-Bio.statistics
+Bio.Statistics
 --------------
-This module was declared obsolete in Release 1.74.
+This module was declared obsolete in Release 1.74, and deprecated in Release
+1.76.
