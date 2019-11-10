@@ -18,7 +18,7 @@ _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 )
 _PQR_ATOM_FORMAT_STRING = (
-    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7.4f  %6.4f      %2s\n"
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6.4f      %2s\n"
 )
 
 
@@ -118,7 +118,7 @@ class PDBIO(StructureIO):
 
     """
 
-    def __init__(self, use_model_flag=0, is_pqr = False):
+    def __init__(self, use_model_flag=0, is_pqr=False):
         """Create the PDBIO object.
 
         :param use_model_flag: if 1, force use of the MODEL record in output.
@@ -169,22 +169,22 @@ class PDBIO(StructureIO):
         x, y, z = atom.get_coord()
 
         # PDB Arguments
-        if self.is_pqr == False:
+        if not self.is_pqr:
             bfactor = atom.get_bfactor()
             occupancy = atom.get_occupancy()
-            
+
             radius = None
             charge = None
-        
+
         # PQR Arguments
         else:
             radius = atom.get_radius()
             charge = atom.get_charge()
-        
+
             bfactor = None
             occupancy = None
-            
-        if self.is_pqr == False:
+
+        if not self.is_pqr:
             try:
                 occupancy_str = "%6.2f" % occupancy
             except TypeError:
@@ -192,7 +192,6 @@ class PDBIO(StructureIO):
                     occupancy_str = " " * 6
                     import warnings
                     from Bio import BiopythonWarning
-
                     warnings.warn(
                         "Missing occupancy in atom %s written as blank"
                         % repr(atom.get_full_id()),
@@ -222,7 +221,7 @@ class PDBIO(StructureIO):
                 charge,
             )
             return _ATOM_FORMAT_STRING % args
-        
+
         else:
             # PQR case
             try:
@@ -233,10 +232,10 @@ class PDBIO(StructureIO):
                     import warnings
                     from Bio import BiopythonWarning
                     warnings.warn("Missing charge in atom %s written as blank" %
-                              repr(atom.get_full_id()), BiopythonWarning)
+                                  repr(atom.get_full_id()), BiopythonWarning)
                 else:
                     raise TypeError("Invalid charge %r in atom %r"
-                              % (charge, atom.get_full_id()))
+                                    % (charge, atom.get_full_id()))
 
             args = (
                 record_type, 
