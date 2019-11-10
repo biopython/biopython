@@ -31,7 +31,8 @@ TESTS=(test_PDB                    \
        test_PDB_ResidueDepth       \
        test_PDB_StructureAlignment \
        test_PDB_Superimposer       \
-       test_PDB_vectors )
+       test_PDB_vectors            \
+       test_PQRParser)
 
 $PYTHON_CC ./Tests/run_tests.py --offline "${TESTS[@]}" 
 
