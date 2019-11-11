@@ -180,6 +180,9 @@ from Bio import BiopythonWarning
 # duplex sequence (e.g., GT/CA, to read 5'GT3'-3'CA5'). The values are tuples
 # of dH (kcal/mol), dS (cal/mol K).
 
+# Turn black code style off
+# fmt: off
+
 # DNA/DNA
 # Breslauer et al. (1986), Proc Natl Acad Sci USA 83: 3746-3750
 DNA_NN1 = {
@@ -381,6 +384,9 @@ RNA_DE1 = {
     "AG/.T": (1.6, 6.1), "CG/.T": (2.2, 8.1), "GG/.T": (0.7, 3.5),
     "TG/.T": (3.1, 10.6)}
 
+# Turn black code style on
+# fmt: on
+
 
 def make_table(oldtable=None, values=None):
     """Return a table with thermodynamic parameters (as dictionary).
@@ -404,12 +410,25 @@ def make_table(oldtable=None, values=None):
 
     """
     if oldtable is None:
-        table = {"init": (0, 0), "init_A/T": (0, 0), "init_G/C": (0, 0),
-                 "init_oneG/C": (0, 0), "init_allA/T": (0, 0),
-                 "init_5T/A": (0, 0), "sym": (0, 0), "AA/TT": (0, 0),
-                 "AT/TA": (0, 0), "TA/AT": (0, 0), "CA/GT": (0, 0),
-                 "GT/CA": (0, 0), "CT/GA": (0, 0), "GA/CT": (0, 0),
-                 "CG/GC": (0, 0), "GC/CG": (0, 0), "GG/CC": (0, 0)}
+        table = {
+            "init": (0, 0),
+            "init_A/T": (0, 0),
+            "init_G/C": (0, 0),
+            "init_oneG/C": (0, 0),
+            "init_allA/T": (0, 0),
+            "init_5T/A": (0, 0),
+            "sym": (0, 0),
+            "AA/TT": (0, 0),
+            "AT/TA": (0, 0),
+            "TA/AT": (0, 0),
+            "CA/GT": (0, 0),
+            "GT/CA": (0, 0),
+            "CT/GA": (0, 0),
+            "GA/CT": (0, 0),
+            "CG/GC": (0, 0),
+            "GC/CG": (0, 0),
+            "GG/CC": (0, 0),
+        }
     else:
         table = oldtable.copy()
     if values:
@@ -440,8 +459,25 @@ def _check(seq, method):
     if method == "Tm_Wallace":
         return seq
     if method == "Tm_GC":
-        baseset = ("A", "B", "C", "D", "G", "H", "I", "K", "M", "N", "R", "S",
-                   "T", "V", "W", "X", "Y")
+        baseset = (
+            "A",
+            "B",
+            "C",
+            "D",
+            "G",
+            "H",
+            "I",
+            "K",
+            "M",
+            "N",
+            "R",
+            "S",
+            "T",
+            "V",
+            "W",
+            "X",
+            "Y",
+        )
     if method == "Tm_NN":
         baseset = ("A", "C", "G", "T", "I")
     seq = "".join([base for base in seq if base in baseset])
@@ -672,8 +708,20 @@ def Tm_Wallace(seq, check=True, strict=True):
     return melting_temp
 
 
-def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
-          Tris=0, Mg=0, dNTPs=0, saltcorr=0, mismatch=True):
+def Tm_GC(
+    seq,
+    check=True,
+    strict=True,
+    valueset=7,
+    userset=None,
+    Na=50,
+    K=0,
+    Tris=0,
+    Mg=0,
+    dNTPs=0,
+    saltcorr=0,
+    mismatch=True,
+):
     """Return the Tm using empirical formulas based on GC content.
 
     General format: Tm = A + B(%GC) - C/N + salt correction - D(%mismatch)
@@ -799,10 +847,26 @@ def _key_error(neighbors, strict):
         )
 
 
-def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0,
-          nn_table=None, tmm_table=None, imm_table=None, de_table=None,
-          dnac1=25, dnac2=25, selfcomp=False, Na=50, K=0, Tris=0, Mg=0,
-          dNTPs=0, saltcorr=5):
+def Tm_NN(
+    seq,
+    check=True,
+    strict=True,
+    c_seq=None,
+    shift=0,
+    nn_table=None,
+    tmm_table=None,
+    imm_table=None,
+    de_table=None,
+    dnac1=25,
+    dnac2=25,
+    selfcomp=False,
+    Na=50,
+    K=0,
+    Tris=0,
+    Mg=0,
+    dNTPs=0,
+    saltcorr=5,
+):
     """Return the Tm using nearest neighbor thermodynamics.
 
     Arguments:
