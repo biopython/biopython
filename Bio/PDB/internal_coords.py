@@ -1565,9 +1565,14 @@ class IC_Residue(object):
             if dbg:
                 print("assemble loop start q=", q)
             h1k = q.pop()
-            # print('  h1k:', h1k)
             dihedra = self.id3_dh_index.get(h1k, None)
-            # print('  dihedra:', dihedra)
+            if dbg:
+                print(
+                    "  h1k:",
+                    h1k,
+                    "len dihedra: ",
+                    len(dihedra) if dihedra is not None else "None",
+                )
             if dihedra is not None:
                 for d in dihedra:
                     if 4 == len(d.initial_coords) and d.initial_coords[3] is not None:
@@ -1796,6 +1801,10 @@ class IC_Residue(object):
 
         self.link_dihedra()
 
+        if self.gly_Cbeta and "G" == self.lc and sCB not in self.atom_coords:
+            # do here because dihedra_from_atoms() may need
+            self.atom_coords[sCB] = None  # so _gen_edra will complete
+
         for d in self.dihedra.values():
             # populate values and hedra for dihedron ojects
             d.dihedron_from_atoms()
@@ -1805,14 +1814,9 @@ class IC_Residue(object):
                 # print(h)
                 h.hedron_from_atoms(self.atom_coords)
 
-        if self.gly_Cbeta and "G" == self.lc and sCB not in self.atom_coords:
+        if self.gly_Cbeta and "G" == self.lc and self.atom_coords[sCB] is None:
             # add C-beta for Gly
-            sO = self.rak("O")
-            self.atom_coords[sCB] = None  # so _gen_edra will complete
-            htpl = (sCB, sCA, sC)
-            self._gen_edra(htpl)
-            h = self.hedra[htpl]
-            h.len3 = self.hedra[(sCA, sC, sO)].len1
+
             # data averaged from Sep 2019 Dunbrack cullpdb_pc20_res2.2_R1.0
             # restricted to structures with amide protons.
             # Ala avg rotation of OCCACB from NCACO query:
@@ -1830,8 +1834,20 @@ class IC_Residue(object):
             # |-------------------+------------------+---------|
             # | -122.682194862932 | 5.04403040513919 | 14098   |
             # +-------------------+------------------+---------+
+
+            Ca_Cb_Len = 1.53363 * (self.scale if hasattr(self, "scale") else 1.0)
+
+            # main orientation comes from O-C-Ca-Cb so make Cb-Ca-C hedron
+            sO = self.rak("O")
+            htpl = (sCB, sCA, sC)
+            self._gen_edra(htpl)
+            h = self.hedra[htpl]
+            h.len3 = self.hedra[(sCA, sC, sO)].len1
             h.angle2 = 110.17513
-            h.len1 = 1.53363 * (self.scale if hasattr(self, "scale") else 1.0)
+            h.len1 = Ca_Cb_Len
+            h.init_pos()
+
+            # generate dihedral based on N-Ca-C-O offset from db query above
             dtpl = (sO, sC, sCA, sCB)
             self._gen_edra(dtpl)
             d = self.dihedra[dtpl]
@@ -1846,6 +1862,9 @@ class IC_Residue(object):
             else:
                 d.dihedral1 = 120
             del self.atom_coords[sCB]  # remove None so now must populate
+            d.init_pos()
+
+            self.link_dihedra()  # re-run for new dihedra
 
     @staticmethod
     def _pdb_atom_string(atm):
