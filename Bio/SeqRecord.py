@@ -689,7 +689,8 @@ class SeqRecord(object):
         concatenating multiple sequence strings together.
 
         Note that this method will NOT work on every possible file format
-        supported by Bio.SeqIO (e.g. some are for multiple sequences only).
+        supported by Bio.SeqIO (e.g. some are for multiple sequences only,
+        and binary formats are not supported).
         """
         # See also the __format__ added for Python 2.6 / 3.0, PEP 3101
         # See also the Bio.Align.Generic.Alignment class and its format()
@@ -703,8 +704,8 @@ class SeqRecord(object):
         supported by Bio.SeqIO as an output file format. See also the
         SeqRecord's format() method.
 
-        Under Python 3 please note that for binary formats a bytes
-        string is returned, otherwise a (unicode) string is returned.
+        Under Python 3 binary formats raise a ValueError, while on
+        Python 2 this will work with a deprecation warning.
         """
         if not format_spec:
             # Follow python convention and default to using __str__
@@ -715,14 +716,26 @@ class SeqRecord(object):
         if format_spec in SeqIO._FormatToString:
             return SeqIO._FormatToString[format_spec](self)
 
-        # Harder case, make a temp handle instead
         if format_spec in SeqIO._BinaryFormats:
-            # Return bytes on Python 3
-            from io import BytesIO
-            handle = BytesIO()
-        else:
-            from Bio._py3k import StringIO
-            handle = StringIO()
+            import sys
+            if sys.version_info[0] < 3:
+                import warnings
+                from Bio import BiopythonDeprecationWarning
+                warnings.warn(
+                    "Binary format %s cannot be used with SeqRecord format method on Python 3"
+                    % format_spec,
+                    BiopythonDeprecationWarning
+                )
+                # Continue - Python 2 StringIO will work...
+            else:
+                raise ValueError(
+                    "Binary format %s cannot be used with SeqRecord format method"
+                    % format_spec
+                )
+
+        # Harder case, make a temp handle instead
+        from Bio._py3k import StringIO
+        handle = StringIO()
         SeqIO.write(self, handle, format_spec)
         return handle.getvalue()
 

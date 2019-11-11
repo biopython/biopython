@@ -11,6 +11,26 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.75
 ===============================================
 
+This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
+also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
+
+Note we intend to drop Python 2.7 support in early 2020.
+
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite. There has been further work to follow the Python
+PEP8, PEP257 and best practice standard coding style, and more of the code
+style has been reformatted with the ``black`` tool.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Christian Brueffer
+- Peter Cock
+- Sergio Valqui
+
+6 November 2019: Biopython 1.75
+===============================
+
 This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and is expected
 to work on the soon to be released Python 3.8. It has also been tested on
 PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
@@ -25,12 +45,15 @@ Christian Marck's DNA Strider program ("xdna" format, also used by Serial
 Cloner), as well as reading files in the native formats of GSL Biotech's
 SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
 
+``Bio.AlignIO`` now supports GCG MSF multiple sequence alignments as the "msf"
+format (work funded by the National Marrow Donor Program).
+
 The main ``Seq`` object now has string-like ``.index()`` and ``.rindex()``
 methods, matching the existing ``.find()`` and ``.rfind()`` implementations.
 The ``MutableSeq`` object retains its more list-like ``.index()`` behaviour.
 
-The ``MMTFIO`` class is added that allows writing of MMTF file format files
-from a Biopython structure object. ``MMTFIO`` has a similar interface to
+The ``MMTFIO`` class has been added that allows writing of MMTF file format
+files from a Biopython structure object. ``MMTFIO`` has a similar interface to
 ``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write
 out a specified selection. This final addition to read/write support for
 PDB/mmCIF/MMTF in Biopython allows conversion between all three file formats.
@@ -49,6 +72,19 @@ un-aligned parts instead of only showing the aligned parts).
 
 A new function ``charge_at_pH(pH)`` has been added to ``ProtParam`` and
 ``IsoelectricPoint`` in ``Bio.SeqUtils``.
+
+The ``PairwiseAligner`` in ``Bio.Align`` was extended to allow generalized
+pairwise alignments, i.e. alignments of any Python object, for example
+three-letter amino acid sequences, three-nucleotide codons, and arrays of
+integers.
+
+A new module ``substitution_matrices`` was added to ``Bio.Align``, which
+includes an ``Array`` class that can be used as a substitution matrix. As
+the ``Array`` class is a subclass of a numpy array, mathematical operations
+can be applied to it directly, and C code that makes use of substitution
+matrices can directly access the numerical values stored in the substitution
+matrices. This module is intended as a replacement of ``Bio.SubsMat``,
+which is currently unmaintained.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but

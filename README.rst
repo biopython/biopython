@@ -77,12 +77,12 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.7 from http://www.python.org
+We currently recommend using Python 3.8 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.4, 3.5, 3.6, 3.7 -- see http://www.python.org
+- Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 -- see http://www.python.org
 
   Python 3 is the primary development platform for Biopython. We will drop
   support for Python 2.7 in early 2020, in line with the end-of-life or

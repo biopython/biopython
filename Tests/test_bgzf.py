@@ -25,6 +25,7 @@ def _have_bug17666():
     3.2.4 and 3.3.1 only.
     """
     from io import BytesIO
+
     h = gzip.GzipFile(fileobj=BytesIO(bgzf._bgzf_eof))
     try:
         data = h.read()
@@ -38,8 +39,11 @@ def _have_bug17666():
 
 if _have_bug17666():
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError("Your Python has a broken gzip library, see "
-                                       "http://bugs.python.org/issue17666 for details")
+
+    raise MissingPythonDependencyError(
+        "Your Python has a broken gzip library, see "
+        "http://bugs.python.org/issue17666 for details"
+    )
 
 
 class BgzfTests(unittest.TestCase):
@@ -138,8 +142,9 @@ class BgzfTests(unittest.TestCase):
                 h.close()
 
                 self.assertEqual(len(old), len(new))
-                self.assertEqual(old[:10], new[:10],
-                                 "%r vs %r, mode %r" % (old[:10], new[:10], mode))
+                self.assertEqual(
+                    old[:10], new[:10], "%r vs %r, mode %r" % (old[:10], new[:10], mode)
+                )
                 self.assertEqual(old, new)
 
     def check_by_char(self, old_file, new_file, old_gzip=False):
@@ -174,8 +179,9 @@ class BgzfTests(unittest.TestCase):
 
                 self.assertEqual(len(old), len(new))
                 # If bytes vs unicode mismatch, give a short error message:
-                self.assertEqual(old[:10], new[:10],
-                                 "%r vs %r, mode %r" % (old[:10], new[:10], mode))
+                self.assertEqual(
+                    old[:10], new[:10], "%r vs %r, mode %r" % (old[:10], new[:10], mode)
+                )
                 self.assertEqual(old, new)
 
     def check_random(self, filename):
@@ -389,8 +395,9 @@ class BgzfTests(unittest.TestCase):
         h.write("Magic" + "Y" * 100000)
         h.flush()
         offset3 = h.tell()
-        self.assertEqual(((offset3 << 16) - (offset2 << 16)),
-                         ((offset2 << 16) - (offset1 << 16)))
+        self.assertEqual(
+            (offset3 << 16) - (offset2 << 16), (offset2 << 16) - (offset1 << 16)
+        )
 
         # Flushing should change the offset
         h.flush()
@@ -443,6 +450,13 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(data[:4], b"\x01\x02\x03\x04")
         self.assertEqual(data[-5:], b"\x01\x02\x03\x04\n")
         h.close()
+
+    def test_BgzfBlocks_TypeError(self):
+        """Check get expected TypeError from BgzfBlocks."""
+        for mode in ("r", "rb"):
+            decompressed = bgzf.open("GenBank/cor6_6.gb.bgz", mode)
+            with self.assertRaises(TypeError):
+                list(bgzf.BgzfBlocks(decompressed))
 
 
 if __name__ == "__main__":

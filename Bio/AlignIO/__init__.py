@@ -110,6 +110,7 @@ names are also used in Bio.SeqIO and include the following:
     readable output.
   - ig        - The IntelliGenetics file format, apparently the same as the
     MASE alignment format.
+  - msf       - The GCG MSF alignment format, originally from PileUp tool.
   - nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
     read any phylogenetic trees in these files.
   - phylip    - Interlaced PHYLIP, as used by the PHLIP tools.
@@ -156,6 +157,7 @@ from . import EmbossIO
 from . import FastaIO
 from . import MafIO
 from . import MauveIO
+from . import MsfIO
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl and EMBOSS where possible.
@@ -166,6 +168,7 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
                      "fasta-m10": FastaIO.FastaM10Iterator,
                      "maf": MafIO.MafIterator,
                      "mauve": MauveIO.MauveIterator,
+                     "msf": MsfIO.MsfIterator,
                      "nexus": NexusIO.NexusIterator,
                      "phylip": PhylipIO.PhylipIterator,
                      "phylip-sequential": PhylipIO.SequentialPhylipIterator,

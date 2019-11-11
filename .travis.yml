@@ -72,8 +72,7 @@ matrix:
       python: 3.7
       env: TOXENV=py37-cover
     - stage: test
-      # TODO: Change this once a stable Python 3.8 is on TravisCI:
-      python: 3.8-dev
+      python: 3.8
       env: TOXENV=py38-cover
     - stage: test
       python: pypy

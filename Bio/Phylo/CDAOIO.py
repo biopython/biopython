@@ -30,12 +30,6 @@ from ._cdao_owl import cdao_namespaces, resolve_uri
 # import of cdao_elements from ._cdao_owl removed in Biopython 1.74
 
 
-class CDAOError(Exception):
-    """Exception raised when CDAO object construction cannot continue (DEPRECATED)."""
-
-    pass
-
-
 try:
     import rdflib
     rdfver = rdflib.__version__
