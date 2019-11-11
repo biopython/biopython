@@ -2184,9 +2184,9 @@ showing an alignment score of 72.0. To see the individual alignments, do
 \end{minted}
 In this example, the total number of optimal alignments is huge (more than $4 \times 10^{37}$), and calling \verb+len(alignments)+ will raise an \verb+OverflowError+:
 
-%cont-doctest
+% don't include in the doctest, as 32-bit system show a different number
 \begin{minted}{pycon}
->>> len(alignments)  #doctest: +ELLIPSIS
+>>> len(alignments)
 Traceback (most recent call last):
 ...
 OverflowError: number of optimal alignments is larger than 9223372036854775807
