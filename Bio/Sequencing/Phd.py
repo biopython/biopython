@@ -19,10 +19,20 @@ from Bio import Seq
 from Bio.Alphabet import generic_dna
 
 
-CKEYWORDS = ["CHROMAT_FILE", "ABI_THUMBPRINT", "PHRED_VERSION", "CALL_METHOD",
-             "QUALITY_LEVELS", "TIME", "TRACE_ARRAY_MIN_INDEX",
-             "TRACE_ARRAY_MAX_INDEX", "TRIM", "TRACE_PEAK_AREA_RATIO", "CHEM",
-             "DYE"]
+CKEYWORDS = [
+    "CHROMAT_FILE",
+    "ABI_THUMBPRINT",
+    "PHRED_VERSION",
+    "CALL_METHOD",
+    "QUALITY_LEVELS",
+    "TIME",
+    "TRACE_ARRAY_MIN_INDEX",
+    "TRACE_ARRAY_MAX_INDEX",
+    "TRIM",
+    "TRACE_PEAK_AREA_RATIO",
+    "CHEM",
+    "DYE",
+]
 
 
 class Record(object):
@@ -68,19 +78,23 @@ def read(handle):
         keyword, value = line.split(":", 1)
         keyword = keyword.lower()
         value = value.strip()
-        if keyword in ("chromat_file",
-                       "phred_version",
-                       "call_method",
-                       "chem",
-                       "dye",
-                       "time",
-                       "basecaller_version",
-                       "trace_processor_version"):
+        if keyword in (
+            "chromat_file",
+            "phred_version",
+            "call_method",
+            "chem",
+            "dye",
+            "time",
+            "basecaller_version",
+            "trace_processor_version",
+        ):
             record.comments[keyword] = value
-        elif keyword in ("abi_thumbprint",
-                         "quality_levels",
-                         "trace_array_min_index",
-                         "trace_array_max_index"):
+        elif keyword in (
+            "abi_thumbprint",
+            "quality_levels",
+            "trace_array_min_index",
+            "trace_array_max_index",
+        ):
             record.comments[keyword] = int(value)
         elif keyword == "trace_peak_area_ratio":
             record.comments[keyword] = float(value)
@@ -107,8 +121,10 @@ def read(handle):
             if len(parts) in [2, 3]:
                 record.sites.append(tuple(parts))
             else:
-                raise ValueError("DNA line must contain a base and quality "
-                                 "score, and optionally a peak location.")
+                raise ValueError(
+                    "DNA line must contain a base and quality "
+                    "score, and optionally a peak location."
+                )
 
     for line in handle:
         if line.startswith("END_SEQUENCE"):
