@@ -238,19 +238,19 @@ class PDBIO(StructureIO):
                                     % (charge, atom.get_full_id()))
 
             args = (
-                record_type, 
-                atom_number, 
-                name, 
-                altloc, 
-                resname, 
+                record_type,
+                atom_number,
+                name,
+                altloc,
+                resname,
                 chain_id,
-                resseq, 
-                icode, 
-                x, 
-                y, 
-                z, 
-                charge, 
-                radius, 
+                resseq,
+                icode,
+                x,
+                y,
+                z,
+                charge,
+                radius,
                 element,
                 )
 

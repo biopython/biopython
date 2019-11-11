@@ -7,8 +7,6 @@
 
 from __future__ import print_function
 
-import warnings
-
 try:
     import numpy
 except ImportError:
@@ -16,11 +14,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use the PQR parser.")
 
-from Bio.File import as_handle
 from Bio.PDB.PDBExceptions import PDBConstructionException
-from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB.StructureBuilder import StructureBuilder
-from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBParser import PDBParser
 
 
@@ -39,7 +33,7 @@ class PQRParser(PDBParser):
         current_residue_id = None
         current_resname = None
         for i in range(0, len(coords_trailer)):
-            line = coords_trailer[i].rstrip('\n')
+            line = coords_trailer[i].rstrip("\n")
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
             structure_builder.set_line_counter(global_line_counter)
