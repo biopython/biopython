@@ -22,6 +22,7 @@ from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
+from Bio.File import as_handle
 from Bio._py3k import StringIO
 
 
@@ -53,47 +54,49 @@ def UniprotIterator(
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
-    # check if file is empty
-    if handle.readline() == "":
-        raise ValueError("Empty file.")
+    with as_handle(handle, "rU") as handle:
 
-    if isinstance(alphabet, Alphabet.NucleotideAlphabet):
-        raise ValueError("Wrong alphabet %r" % alphabet)
-    if isinstance(alphabet, Alphabet.Gapped):
-        if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
+        # check if file is empty
+        if handle.readline() == "":
+            raise ValueError("Empty file.")
+
+        if isinstance(alphabet, Alphabet.NucleotideAlphabet):
             raise ValueError("Wrong alphabet %r" % alphabet)
+        if isinstance(alphabet, Alphabet.Gapped):
+            if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
+                raise ValueError("Wrong alphabet %r" % alphabet)
 
-    if not hasattr(handle, "read"):
-        if isinstance(handle, str):
-            import warnings
-            from Bio import BiopythonDeprecationWarning
+        if not hasattr(handle, "read"):
+            if isinstance(handle, str):
+                import warnings
+                from Bio import BiopythonDeprecationWarning
 
-            warnings.warn(
-                "Passing an XML-containing handle is recommended",
-                BiopythonDeprecationWarning,
+                warnings.warn(
+                    "Passing an XML-containing handle is recommended",
+                    BiopythonDeprecationWarning,
+                )
+                handle = StringIO(handle)
+            else:
+                raise TypeError(
+                    "Requires an XML-containing handle"
+                    " (or XML as a string, but that's deprecated)"
+                )
+
+        if ElementTree is None:
+            from Bio import MissingExternalDependencyError
+
+            raise MissingExternalDependencyError(
+                "No ElementTree module was found. "
+                "Use Python 2.5+, lxml or elementtree if you "
+                "want to use Bio.SeqIO.UniprotIO."
             )
-            handle = StringIO(handle)
-        else:
-            raise TypeError(
-                "Requires an XML-containing handle"
-                " (or XML as a string, but that's deprecated)"
-            )
 
-    if ElementTree is None:
-        from Bio import MissingExternalDependencyError
-
-        raise MissingExternalDependencyError(
-            "No ElementTree module was found. "
-            "Use Python 2.5+, lxml or elementtree if you "
-            "want to use Bio.SeqIO.UniprotIO."
-        )
-
-    for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
-        if event == "end" and elem.tag == NS + "entry":
-            yield Parser(
-                elem, alphabet=alphabet, return_raw_comments=return_raw_comments
-            ).parse()
-            elem.clear()
+        for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
+            if event == "end" and elem.tag == NS + "entry":
+                yield Parser(
+                    elem, alphabet=alphabet, return_raw_comments=return_raw_comments
+                ).parse()
+                elem.clear()
 
 
 class Parser(object):

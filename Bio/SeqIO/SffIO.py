@@ -237,6 +237,7 @@ from __future__ import print_function
 
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
@@ -1012,56 +1013,58 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
         raise ValueError("Invalid alphabet, SFF files do not hold proteins.")
     if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
-    try:
-        if 0 != handle.tell():
-            raise ValueError("Not at start of file, offset %i" % handle.tell())
-    except AttributeError:
-        # Probably a network handle or something like that
-        handle = _AddTellHandle(handle)
-    (
-        header_length,
-        index_offset,
-        index_length,
-        number_of_reads,
-        number_of_flows_per_read,
-        flow_chars,
-        key_sequence,
-    ) = _sff_file_header(handle)
-    # Now on to the reads...
-    # the read header format (fixed part):
-    # read_header_length     H
-    # name_length            H
-    # seq_len                I
-    # clip_qual_left         H
-    # clip_qual_right        H
-    # clip_adapter_left      H
-    # clip_adapter_right     H
-    # [rest of read header depends on the name length etc]
-    read_header_fmt = ">2HI4H"
-    read_header_size = struct.calcsize(read_header_fmt)
-    read_flow_fmt = ">%iH" % number_of_flows_per_read
-    read_flow_size = struct.calcsize(read_flow_fmt)
-    assert 1 == struct.calcsize(">B")
-    assert 1 == struct.calcsize(">s")
-    assert 1 == struct.calcsize(">c")
-    assert read_header_size % 8 == 0  # Important for padding calc later!
-    # The spec allows for the index block to be before or even in the middle
-    # of the reads. We can check that if we keep track of our position
-    # in the file...
-    for read in range(number_of_reads):
-        if index_offset and handle.tell() == index_offset:
-            offset = index_offset + index_length
-            if offset % 8:
-                offset += 8 - (offset % 8)
-            assert offset % 8 == 0
-            handle.seek(offset)
-            # Now that we've done this, we don't need to do it again. Clear
-            # the index_offset so we can skip extra handle.tell() calls:
-            index_offset = 0
-        yield _sff_read_seq_record(
-            handle, number_of_flows_per_read, flow_chars, key_sequence, alphabet, trim
+
+    with as_handle(handle, "rb") as handle:
+        try:
+            if 0 != handle.tell():
+                raise ValueError("Not at start of file, offset %i" % handle.tell())
+        except AttributeError:
+            # Probably a network handle or something like that
+            handle = _AddTellHandle(handle)
+        (
+            header_length,
+            index_offset,
+            index_length,
+            number_of_reads,
+            number_of_flows_per_read,
+            flow_chars,
+            key_sequence,
+        ) = _sff_file_header(handle)
+        # Now on to the reads...
+        # the read header format (fixed part):
+        # read_header_length     H
+        # name_length            H
+        # seq_len                I
+        # clip_qual_left         H
+        # clip_qual_right        H
+        # clip_adapter_left      H
+        # clip_adapter_right     H
+        # [rest of read header depends on the name length etc]
+        read_header_fmt = ">2HI4H"
+        read_header_size = struct.calcsize(read_header_fmt)
+        read_flow_fmt = ">%iH" % number_of_flows_per_read
+        read_flow_size = struct.calcsize(read_flow_fmt)
+        assert 1 == struct.calcsize(">B")
+        assert 1 == struct.calcsize(">s")
+        assert 1 == struct.calcsize(">c")
+        assert read_header_size % 8 == 0  # Important for padding calc later!
+        # The spec allows for the index block to be before or even in the middle
+        # of the reads. We can check that if we keep track of our position
+        # in the file...
+        for read in range(number_of_reads):
+            if index_offset and handle.tell() == index_offset:
+                offset = index_offset + index_length
+                if offset % 8:
+                    offset += 8 - (offset % 8)
+                assert offset % 8 == 0
+                handle.seek(offset)
+                # Now that we've done this, we don't need to do it again. Clear
+                # the index_offset so we can skip extra handle.tell() calls:
+                index_offset = 0
+            yield _sff_read_seq_record(
+                handle, number_of_flows_per_read, flow_chars, key_sequence, alphabet, trim
         )
-    _check_eof(handle, index_offset, index_length)
+        _check_eof(handle, index_offset, index_length)
 
 
 def _check_eof(handle, index_offset, index_length):

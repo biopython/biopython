@@ -16,6 +16,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 
 from __future__ import print_function
 
+from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -174,26 +175,27 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     DELTA
 
     """
-    if title2ids:
-        for title, sequence in SimpleFastaParser(handle):
-            id, name, descr = title2ids(title)
-            yield SeqRecord(
-                Seq(sequence, alphabet), id=id, name=name, description=descr
-            )
-    else:
-        for title, sequence in SimpleFastaParser(handle):
-            try:
-                first_word = title.split(None, 1)[0]
-            except IndexError:
-                assert not title, repr(title)
-                # Should we use SeqRecord default for no ID?
-                first_word = ""
-            yield SeqRecord(
-                Seq(sequence, alphabet),
-                id=first_word,
-                name=first_word,
-                description=title,
-            )
+    with as_handle(handle, "rU") as handle:
+        if title2ids:
+            for title, sequence in SimpleFastaParser(handle):
+                id, name, descr = title2ids(title)
+                yield SeqRecord(
+                    Seq(sequence, alphabet), id=id, name=name, description=descr
+                )
+        else:
+            for title, sequence in SimpleFastaParser(handle):
+                try:
+                    first_word = title.split(None, 1)[0]
+                except IndexError:
+                    assert not title, repr(title)
+                    # Should we use SeqRecord default for no ID?
+                    first_word = ""
+                yield SeqRecord(
+                    Seq(sequence, alphabet),
+                    id=first_word,
+                    name=first_word,
+                    description=title,
+                )
 
 
 def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
@@ -209,16 +211,17 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
     Only the default title to ID/name/description parsing offered
     by the relaxed FASTA parser is offered.
     """
-    for title, sequence in FastaTwoLineParser(handle):
-        try:
-            first_word = title.split(None, 1)[0]
-        except IndexError:
-            assert not title, repr(title)
-            # Should we use SeqRecord default for no ID?
-            first_word = ""
-        yield SeqRecord(
-            Seq(sequence, alphabet), id=first_word, name=first_word, description=title
-        )
+    with as_handle(handle, "rU") as handle:
+        for title, sequence in FastaTwoLineParser(handle):
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                # Should we use SeqRecord default for no ID?
+                first_word = ""
+            yield SeqRecord(
+                Seq(sequence, alphabet), id=first_word, name=first_word, description=title
+            )
 
 
 class FastaWriter(SequentialSequenceWriter):
