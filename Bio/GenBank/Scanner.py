@@ -541,7 +541,6 @@ class InsdcScanner(object):
 
         This method is intended for use in Bio.SeqIO
         """
-
         with as_handle(handle, "rU") as handle:
             self.set_handle(handle)
             while self.find_start():
