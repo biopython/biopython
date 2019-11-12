@@ -171,17 +171,18 @@ peptide_scad = """
 //    'include <>' facility at the end of your modified OpenSCAD program.
 */
 
-chain(protein);   // this is the main subroutine call to  build the structure
+rotate([-90,0,0])  // convenient for default location (no N-Ca-C start coordinates)
+     chain(protein);   // this is the main subroutine call to  build the structure
 
 // top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8 inside, regardless of this setting.
-$fn = 0;  // 0 yields OpenSCAD default of 30.  $n=8 should print with minimal support 
+$fn = 0;  // 0 yields OpenSCAD default of 30.  $n=8 should print with minimal support
 
 tubes=false;     // style: render atoms and bonds as constant diameter cylinders, preferred for rotatable bonds / h-bonds
 support=false;   // enable print-in-place internal support for rotatable bonds
 // N.B. rotatable bonds must be parallel to build plate for internal support structures to be generated correctly by slicer
 
 // output parameters
-atomScale=1.0;
+atomScale=1.0;  // 0.8 better for rotatable bonds
 defaultAtomRadius = 0.77;  // used if tubes = true
 
 bondRadius = (tubes ? defaultAtomRadius * atomScale : 0.4);
@@ -213,6 +214,7 @@ hblen = 1.97;             // hydrogen bond length
 wall = 3*nozzleDiameter;
 joinerStep = 1;           // radius difference between rotatable bond axle and end knob inside bond cylinder
 
+caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedron() and hedron_dispatch() examples)
 
 /*
 //
@@ -355,7 +357,7 @@ HBond = 5;             // make room inside atom/bond to insert magnet to appropr
 
 module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 
-     br = (key == FemaleJoinBond ? jBondRadius * scal : br)  * (key == SkinnyBond ? 0.7 : 1);   // bond radius smaller for skinnyBond
+     br = (key == FemaleJoinBond ? jBondRadius * scal : br)  * (key == SkinnyBond ? 0.65 : 1);   // bond radius smaller for skinnyBond
      bl = (key == FemaleJoinBond ? bl * bondLenFac : bl);  // make female joiner shorter
      if (key == MaleJoinBond) { // male join is direct solid, others need difference()
           joiner(bl, scal, male = true, ver = ver, supportSelect=supportSel);
@@ -502,7 +504,8 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
 //
 */
 module hedronDispatch(h,rev=0,scal) {
-     hedron(h, rev, scal);  // default action is just to pass to hedron()
+     // default action is just to pass to hedron()
+     hedron(h, rev, scal, 0, (support ? 1 : 0));
 
 
      /*
@@ -511,7 +514,6 @@ module hedronDispatch(h,rev=0,scal) {
 
      // caTop needs to be a global variable so hedron() above can see it.
 
-caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedron() above)
 caBase1 = false;   // only make bottom of N_C-alpha_C hedron
 caBase2 = false;   // same as caBase1 but for case of reversed hedron (for testing, should be identical to caBase1 result)
 amideOnly = false; // make only the first amide
