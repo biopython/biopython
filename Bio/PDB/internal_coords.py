@@ -604,7 +604,8 @@ class Hedron(Edron):
         Compute length, angle, length for hedron from IC_Residue atom coords
     set_angle()
         update angle2 with supplied value
-
+    set_length()
+        update length for specified atom pair
     """
 
     def __init__(self, *args, **kwargs):
@@ -1075,12 +1076,12 @@ class IC_Residue(object):
     accept_atoms : tuple
         list of PDB atom names to use when generatiing internal coordinates.
         Default is:
-        accept_atoms = accept_backbone + accept_hydrogens
+        accept_atoms = accept_mainchain + accept_hydrogens
         to exclude hydrogens in internal coordinates and generated PDB files,
         override as:
-        IC_Residue.accept_atoms = IC_Residue.accept_backbone
+        IC_Residue.accept_atoms = IC_Residue.accept_mainchain
         to get only backbone atoms plus amide proton, use:
-        IC_Residue.accept_atoms = IC_Residue.accept_backbone + ('H',)
+        IC_Residue.accept_atoms = IC_Residue.accept_mainchain + ('H',)
     accept_resnames : tuple
         list of 3-letter residue names for HETATMs to accept when generating
         internal coordinates from atoms.  HETATM sidechain will be ignored, but normal
@@ -1210,7 +1211,7 @@ class IC_Residue(object):
             ak = self.akc[atm] = AtomKey(self, atm)
         return ak
 
-    accept_backbone = (
+    accept_mainchain = (
         "N",
         "CA",
         "C",
@@ -1349,7 +1350,7 @@ class IC_Residue(object):
         "DH",
         "DH2",
     )
-    accept_atoms = accept_backbone + accept_hydrogens
+    accept_atoms = accept_mainchain + accept_hydrogens
 
     gly_Cbeta = False
 
@@ -1415,7 +1416,7 @@ class IC_Residue(object):
         # more efficient to catch NCaC KeyError later, but fixing here
         # avoids having to test/find altloc problem in future code
         newNCaCKey = []
-        for tpl in self.NCaCKey:
+        for tpl in sorted(self.NCaCKey):
             newNCaCKey.extend(self._split_akl(tpl))
         self.NCaCKey = tuple(newNCaCKey)
 
@@ -1469,7 +1470,7 @@ class IC_Residue(object):
         if startPos is None:
             # fallback: use N-CA-C initial coords from creating dihedral
             startPos = {}
-            dlist0 = [self.id3_dh_index[akl] for akl in self.NCaCKey]
+            dlist0 = [self.id3_dh_index[akl] for akl in sorted(self.NCaCKey)]
             # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
             dlist = [val for sublist in dlist0 for val in sublist]
             # dlist = self.id3_dh_index[NCaCKey]
@@ -1532,7 +1533,7 @@ class IC_Residue(object):
         NCaCKey = self.NCaCKey
 
         if transforms:
-            for akl in NCaCKey:
+            for akl in sorted(NCaCKey):
                 transformations[akl] = numpy.identity(4, dtype=numpy.float64)
 
         startLst = []
@@ -1551,7 +1552,7 @@ class IC_Residue(object):
         if resetLocation:
             # use N-CA-C initial coords from creating dihedral
             atomCoords = {}
-            dlist0 = [self.id3_dh_index[akl] for akl in NCaCKey]
+            dlist0 = [self.id3_dh_index[akl] for akl in sorted(NCaCKey)]
             # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
             dlist = [val for sublist in dlist0 for val in sublist]
             # dlist = self.id3_dh_index[NCaCKey]
@@ -2536,7 +2537,7 @@ class IC_Chain:
                         + " sidechain\n"
                     )
                 started = False
-                for dk, d in ric.dihedra.items():
+                for dk, d in sorted(ric.dihedra.items()):
                     if d.h2key in hedraNdx and (
                         (i == 0 and d.is_backbone()) or (i == 1 and not d.is_backbone())
                     ):
@@ -2668,7 +2669,7 @@ class IC_Chain:
         chnStarted = False
         for ric in self.ordered_aa_ic_list:
             # handle start / end
-            for NCaCKey in ric.NCaCKey:
+            for NCaCKey in sorted(ric.NCaCKey):
                 if 0 < len(ric.rprev):
                     for rpr in ric.rprev:
                         acl = [rpr.atom_coords[ak] for ak in NCaCKey]
@@ -2680,7 +2681,7 @@ class IC_Chain:
                 else:
                     chnStarted = True
                 fp.write("     [ " + str(resNdx[ric]) + ', "' + str(ric.residue.id[1]))
-                fp.write(ric.lc + '",\n      ')
+                fp.write(ric.lc + '", //' + str(NCaCKey) + "\n")
                 IC_Chain._write_mtx(fp, mtr)
                 fp.write(" ]")
         fp.write("\n   ]\n")
