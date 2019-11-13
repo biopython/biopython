@@ -535,8 +535,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     """
     if method in (5, 6, 7) and not seq:
         raise ValueError(
-            "sequence is missing (is needed to calculate "
-            + "GC content or sequence length)."
+            "sequence is missing (is needed to calculate GC content or sequence length)."
         )
     if seq:
         seq = str(seq)
@@ -554,7 +553,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     # Note: math.log = ln(), math.log10 = log()
     if method in range(1, 7) and not mon:
         raise ValueError(
-            "Total ion concentration of zero is not allowed in " + "this method."
+            "Total ion concentration of zero is not allowed in this method."
         )
     if method == 1:
         corr = 16.6 * math.log10(mon)
@@ -566,43 +565,42 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         corr = 11.7 * math.log10(mon)
     if method == 5:
         corr = 0.368 * (len(seq) - 1) * math.log(mon)
+    # Turn black code style off
+    # fmt: off
     if method == 6:
-        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(
-            mon
-        ) + 9.40e-6 * math.log(mon) ** 2
+        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon) +\
+            9.40e-6 * math.log(mon) ** 2
+    # Turn black code style on
+    # fmt: on
     if method == 7:
+        # Turn black code style off
+        # fmt: off
         a, b, c, d = 3.92, -0.911, 6.26, 1.42
         e, f, g = -48.2, 52.5, 8.31
         if dNTPs > 0:
             dntps = dNTPs * 1e-3
             ka = 3e4  # Dissociation constant for Mg:dNTP
             # Free Mg2+ calculation:
-            mg = (
-                -(ka * dntps - ka * mg + 1.0)
-                + math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 + 4.0 * ka * mg)
-            ) / (2.0 * ka)
+            mg = (-(ka * dntps - ka * mg + 1.0) +
+                  math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 +
+                            4.0 * ka * mg)) / (2.0 * ka)
         if Mon > 0:
             R = math.sqrt(mg) / mon
             if R < 0.22:
-                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(
-                    mon
-                ) + 9.40e-6 * math.log(mon) ** 2
+                corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * \
+                    1e-5 * math.log(mon) + 9.40e-6 * math.log(mon) ** 2
                 return corr
             elif R < 6.0:
                 a = 3.92 * (0.843 - 0.352 * math.sqrt(mon) * math.log(mon))
-                d = 1.42 * (
-                    1.279 - 4.03e-3 * math.log(mon) - 8.03e-3 * math.log(mon) ** 2
-                )
-                g = 8.31 * (
-                    0.486 - 0.258 * math.log(mon) + 5.25e-3 * math.log(mon) ** 3
-                )
-        corr = (
-            a
-            + b * math.log(mg)
-            + (SeqUtils.GC(seq) / 100) * (c + d * math.log(mg))
-            + (1 / (2.0 * (len(seq) - 1)))
-            * (e + f * math.log(mg) + g * math.log(mg) ** 2)
-        ) * 1e-5
+                d = 1.42 * (1.279 - 4.03e-3 * math.log(mon) -
+                            8.03e-3 * math.log(mon) ** 2)
+                g = 8.31 * (0.486 - 0.258 * math.log(mon) +
+                            5.25e-3 * math.log(mon) ** 3)
+        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100) *
+                (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1))) *
+                (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
+        # Turn black code style on
+        # fmt: on
     if method > 7:
         raise ValueError("Allowed values for parameter 'method' are 1-7.")
     return corr
@@ -777,7 +775,7 @@ def Tm_GC(
 
     """
     if saltcorr == 5:
-        raise ValueError("salt-correction method 5 not applicable " "to Tm_GC")
+        raise ValueError("salt-correction method 5 not applicable to Tm_GC")
     seq = str(seq)
     if check:
         seq = _check(seq, "Tm_GC")
@@ -1125,7 +1123,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     # now superseded by Tm_NN.
 
     warnings.warn(
-        "Tm_staluc may be depreciated in the future. Use Tm_NN " + "instead.",
+        "Tm_staluc may be depreciated in the future. Use Tm_NN instead.",
         PendingDeprecationWarning,
     )
     if not rna:
