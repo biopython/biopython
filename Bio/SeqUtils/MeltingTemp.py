@@ -570,11 +570,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     if method == 6:
         corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon) +\
             9.40e-6 * math.log(mon) ** 2
-    # Turn black code style on
-    # fmt: on
     if method == 7:
-        # Turn black code style off
-        # fmt: off
         a, b, c, d = 3.92, -0.911, 6.26, 1.42
         e, f, g = -48.2, 52.5, 8.31
         if dNTPs > 0:
@@ -599,8 +595,8 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
         corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100) *
                 (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1))) *
                 (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
-        # Turn black code style on
-        # fmt: on
+    # Turn black code style on
+    # fmt: on
     if method > 7:
         raise ValueError("Allowed values for parameter 'method' are 1-7.")
     return corr
