@@ -4,7 +4,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""PICIO: read and write Protein Internal Coordinate (PIC) data files."""
+"""PICIO: read and write Protein Internal Coordinate (.pic) data files."""
 
 import re
 
@@ -27,8 +27,6 @@ from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Edron
 
 def read_PIC(file, verbose=False):
     """Load Protein Internal Coordinate (.pic) data from file.
-
-    Returns **None** on parse fail.
 
     PIC file format:
         - comment lines start with #
