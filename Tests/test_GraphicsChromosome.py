@@ -309,7 +309,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                             for (start, end, strand, label) in features]
             else:
                 # Features as 5-tuples
-                features = [(start, end, strand, label, color)
+                features = [(start, end, strand, label, color)  # noqa: C416
                             for (start, end, strand, label) in features]
 
             # I haven't found a nice source of data for real Arabidopsis
