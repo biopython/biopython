@@ -188,7 +188,7 @@ def _read(handle):
             _read_id(record, line)
             _sequence_lines = []
         elif key == "AC":
-            accessions = [word for word in value.rstrip(";").split("; ")]
+            accessions = value.rstrip(";").split("; ")
             record.accessions.extend(accessions)
         elif key == "DT":
             _read_dt(record, line)
@@ -203,7 +203,7 @@ def _read(handle):
         elif key == "OG":
             record.organelle += line[5:]
         elif key == "OC":
-            cols = [col for col in value.rstrip(";.").split("; ")]
+            cols = value.rstrip(";.").split("; ")
             record.organism_classification.extend(cols)
         elif key == "OX":
             _read_ox(record, line)

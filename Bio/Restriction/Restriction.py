@@ -1006,9 +1006,9 @@ class NonPalindromic(AbstractCut):
 
         for start, group in iterator:
             if group(s):
-                cls.results += [r for r in modif(start)]
+                cls.results += list(modif(start))
             else:
-                cls.on_minus += [r for r in revmodif(start)]
+                cls.on_minus += list(revmodif(start))
         cls.results += cls.on_minus
 
         if cls.results:
@@ -1547,8 +1547,8 @@ class Defined(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = [x for x in drop(lambda x:x <= 1, cls.results)]
-            cls.results = [x for x in take(lambda x:x <= length, cls.results)]
+            cls.results = list(drop(lambda x:x <= 1, cls.results))
+            cls.results = list(take(lambda x:x <= length, cls.results))
         else:
             for index, location in enumerate(cls.results):
                 if location < 1:
@@ -1696,8 +1696,8 @@ class Ambiguous(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = [x for x in drop(lambda x: x <= 1, cls.results)]
-            cls.results = [x for x in take(lambda x: x <= length, cls.results)]
+            cls.results = list(drop(lambda x: x <= 1, cls.results))
+            cls.results = list(take(lambda x: x <= length, cls.results))
         else:
             for index, location in enumerate(cls.results):
                 if location < 1:
@@ -2138,7 +2138,7 @@ class RestrictionBatch(set):
         The new batch will contain only the enzymes for which
         func return True.
         """
-        d = [x for x in filter(func, self)]
+        d = list(filter(func, self))
         new = RestrictionBatch()
         new._data = dict(zip(d, [True] * len(d)))
         return new
@@ -2251,7 +2251,7 @@ class RestrictionBatch(set):
                 else:
                     continue
             return True
-        d = [k for k in filter(splittest, self)]
+        d = list(filter(splittest, self))
         new = RestrictionBatch()
         new._data = dict(zip(d, [True] * len(d)))
         return new

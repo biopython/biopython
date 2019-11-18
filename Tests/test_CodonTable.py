@@ -23,7 +23,7 @@ from Bio.Data.CodonTable import list_ambiguous_codons, list_possible_proteins
 from Bio.Data.CodonTable import TranslationError
 
 exception_list = []
-ids = [key for key in unambiguous_dna_by_id]
+ids = list(unambiguous_dna_by_id)
 
 # Find codon tables with 'ambiguous' stop codons (coding both for stop and
 # an amino acid) and put them into exception_list

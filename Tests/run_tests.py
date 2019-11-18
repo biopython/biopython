@@ -307,7 +307,7 @@ class TestRunner(unittest.TextTestRunner):
             self.tests.remove("doctest")
             modules = find_modules(self.testdir + "/..")
             modules.difference_update(set(EXCLUDE_DOCTEST_MODULES))
-            self.tests.extend(sorted(list(modules)))
+            self.tests.extend(sorted(modules))
         stream = StringIO()
         unittest.TextTestRunner.__init__(self, stream,
                                          verbosity=verbosity)

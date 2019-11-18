@@ -598,7 +598,7 @@ class Parser(object):
                 pass
 
         # remove duplicate dbxrefs
-        self.ParsedSeqRecord.dbxrefs = sorted(list(set(self.ParsedSeqRecord.dbxrefs)))
+        self.ParsedSeqRecord.dbxrefs = sorted(set(self.ParsedSeqRecord.dbxrefs))
 
         # use first accession as id
         if not self.ParsedSeqRecord.id:

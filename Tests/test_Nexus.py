@@ -543,7 +543,7 @@ Root:  16
                                                                          0.1894244])
 
         subtree = tree.set_subtree(10)
-        self.assertEqual(sorted(list(subtree)), ["E 0", "E 7"])
+        self.assertEqual(sorted(subtree), ["E 0", "E 7"])
         tree.collapse_genera()
         self.assertEqual(tree.all_ids(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 17])
 

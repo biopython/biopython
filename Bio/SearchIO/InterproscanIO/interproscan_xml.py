@@ -126,9 +126,8 @@ class InterproscanXmlParser(object):
                 signature.find(self.NS + "entry"))
 
             # parse each hsp
-            hsps = [hsp for hsp in self._parse_hsp(
-                hit_elem.find(self.NS + "locations"),
-                query_id, hit_id, query_seq)]
+            hsps = list(self._parse_hsp(hit_elem.find(self.NS + "locations"),
+                                        query_id, hit_id, query_seq))
 
             # create hit and assign attributes
             hit = Hit(hsps, hit_id)

@@ -582,7 +582,7 @@ class MafIndex(object):
             raise ValueError("Strand must be 1 or -1, got %s" % str(strand))
 
         # pull all alignments that span the desired intervals
-        fetched = [multiseq for multiseq in self.search(starts, ends)]
+        fetched = list(self.search(starts, ends))
 
         # keep track of the expected letter count
         # (sum of lengths of [start, end) segments,

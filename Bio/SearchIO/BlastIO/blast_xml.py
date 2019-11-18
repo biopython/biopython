@@ -426,9 +426,8 @@ class BlastXmlParser(object):
             hit_id, alt_hit_ids = ids[0], ids[1:]
             hit_desc, alt_hit_descs = descs[0], descs[1:]
 
-            hsps = [hsp for hsp in
-                    self._parse_hsp(hit_elem.find("Hit_hsps"),
-                                    query_id, hit_id)]
+            hsps = list(self._parse_hsp(hit_elem.find("Hit_hsps"),
+                                        query_id, hit_id))
 
             hit = Hit(hsps)
             hit.description = hit_desc

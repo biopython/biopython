@@ -462,7 +462,7 @@ class QueryResult(_BaseSearchObject):
     @property
     def fragments(self):
         """Access the HSPFragment objects contained in the QueryResult."""
-        return [frag for frag in chain(*self.hsps)]
+        return list(chain(*self.hsps))
 
     # public methods #
     def absorb(self, hit):

@@ -73,7 +73,7 @@ class xbb_translations(object):
         length = len(seq)
         protein = self.frame(seq, frame, translation_table)
         protein_length = len(protein)
-        protein = "  ".join([aa for aa in protein])
+        protein = "  ".join(list(protein))
         protein += (((length - (abs(frame) - 1)) % 3) + 2) * " "
         if frame < 0:
             protein = protein[::-1]

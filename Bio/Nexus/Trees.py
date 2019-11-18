@@ -334,7 +334,7 @@ class Tree(Nodes.Chain):
                 if len(genera) == 1:
                     self.node(n).data.taxon = genera[0] + " <collapsed>"
                     # now we kill all nodes downstream
-                    nodes2kill = [kn for kn in self._walk(node=n)]
+                    nodes2kill = list(self._walk(node=n))
                     for kn in nodes2kill:
                         self.kill(kn)
                     self.node(n).succ = []

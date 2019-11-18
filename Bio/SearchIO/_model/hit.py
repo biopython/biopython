@@ -328,7 +328,7 @@ class Hit(_BaseSearchObject):
     @property
     def fragments(self):
         """Access the HSPFragment objects contained in the Hit."""
-        return [frag for frag in chain(*self._items)]
+        return list(chain(*self._items))
 
     # public methods #
     def append(self, hsp):

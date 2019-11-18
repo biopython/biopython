@@ -889,8 +889,7 @@ class DictionaryBuilder(object):
 
     def removestart(self, file):
         """Remove the header of the file."""
-        return [l for l in itertools.dropwhile(lambda l:l.startswith("#"),
-                                               file)]
+        return list(itertools.dropwhile(lambda l:l.startswith("#"), file))
 
     def getblock(self, file, index):
         """Get a data block from the emboss_r file."""
@@ -898,8 +897,7 @@ class DictionaryBuilder(object):
         #   emboss_r.txt, separation between blocks is //
         #
         take = itertools.takewhile
-        block = [l for l in take(lambda l: not l.startswith("//"),
-                                 file[index:])]
+        block = list(take(lambda l: not l.startswith("//"), file[index:]))
         index += len(block) + 1
         return block, index
 

@@ -537,7 +537,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     for key, value in kwargs.items():
         try:
             # Check that the pyplot option input is iterable, as required
-            [i for i in value]
+            list(value)
         except TypeError:
             raise ValueError('Keyword argument "%s=%s" is not in the format '
                              "pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),"
