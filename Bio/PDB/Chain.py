@@ -10,6 +10,7 @@
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
 
+
 class Chain(Entity):
     """Define Chain class.
 
@@ -20,7 +21,7 @@ class Chain(Entity):
     def __init__(self, id):
         """Initialize the class."""
         self.level = "C"
-        self.internal_coord = None;
+        self.internal_coord = None
         Entity.__init__(self, id)
 
     # Sorting methods: empty chain IDs come last.
@@ -180,8 +181,8 @@ class Chain(Entity):
         Internal coordinates are bond length, angle and dihedral angles.
 
         :param allBonds bool: default False
-        include hedra and dihedra for bonds around sidechain rings.
-        (not required to capture all atoms)
+            include hedra and dihedra for bonds around sidechain rings.
+            (not required to capture all atoms)
         """
         if not self.internal_coord:
             self.internal_coord = IC_Chain(self)
@@ -196,6 +197,6 @@ class Chain(Entity):
             self.internal_coord.internal_to_atom_coordinates()
         else:
             raise Exception(
-                'Structure %s Chain %s does not have internal coordinates set'
-                % (self.parent.parent, self))
-    
+                "Structure %s Chain %s does not have internal coordinates set"
+                % (self.parent.parent, self)
+            )

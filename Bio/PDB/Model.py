@@ -60,8 +60,8 @@ class Model(Entity):
         Internal coordinates are bond length, angle and dihedral angles.
 
         :param allBonds bool: default False
-        include hedra and dihedra for bonds around sidechain rings.
-        (not required to capture all atoms)
+            include hedra and dihedra for bonds around sidechain rings.
+            (not required to capture all atoms)
         """
         for chn in self.get_chains():
             chn.atom_to_internal_coordinates(allBonds)
