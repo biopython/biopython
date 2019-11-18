@@ -34,12 +34,21 @@ def write_SCAD(
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
 
+    This routine calls both internal_to_atom_coordinates() and
+    atom_to_internal_coordinates() due to requirements for scaling, explicit
+    bonds around rings, and setting the coordinate space of the output model.
+
     Output data format is primarily:
-     -   matrix for each hedron: len1, angle2, len3, atom covalent bond class,
-          flags to indicate atom/bond represented in previous hedron (OpenSCAD
-          very slow for overlapping elements)
-     -   matrices for each residue to assemble hedra into dihedrons
-     -   matrices to transform each residue set of dihedra to position in chain
+
+    - matrix for each hedron:
+        len1, angle2, len3, atom covalent bond class, flags to indicate
+        atom/bond represented in previous hedron (OpenSCAD very slow with
+        redundant overlapping elements), flags for bond features
+    - transform matrices to assemble each hedron into residue dihedra sets
+    - transform matrices for each residue to position in chain
+
+    OpenSCAD software is included in this Python file to process these
+    matrices into a model suitable for a 3D printing project.
 
     :param entity: Biopython PDB structure entity
         structure data to export
@@ -51,15 +60,15 @@ def write_SCAD(
         PDB idcode, written in output. Defaults to '0PDB' if not supplied
         and no 'idcode' set in entity
     :param backboneOnly: bool default False
-        Do not output side chain data if True
+        Do not output side chain data past Cbeta if True
     :param includeCode: bool default True
-        Include Bio/PDB/peptide.scad so output file can be loaded into
-        OpenSCAD; if False, output data matrices only
+        Include OpenSCAD software (inline below) so output file can be loaded
+        into OpenSCAD; if False, output data matrices only
     :param handle: str, default 'protein'
-        name for top level of generated OpenSCAD matrix structure,
-
+        name for top level of generated OpenSCAD matrix structure
     """
     # step one need IC_Residue atom_coords loaded in order to scale
+    # so if no internal_coords, initialise from Atom coordinates
     have_IC_Atoms = False
     if "S" == entity.level or "M" == entity.level:
         for chn in entity.get_chains():
@@ -70,12 +79,8 @@ def write_SCAD(
         if not entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
             have_IC_Atoms = True
-    elif "R" == entity.level:
-        if not entity.internal_coord:
-            entity.internal_coord = IC_Residue(entity)
-            have_IC_Atoms = True
-    else:
-        raise PDBException("level not S, M. C or R: " + str(entity.level))
+        else:
+            raise PDBException("level not S, M or C: " + str(entity.level))
 
     if not have_IC_Atoms and scale is not None:
         # if loaded pic file and need to scale, generate atom coords
@@ -100,6 +105,9 @@ def write_SCAD(
     for chn in entity.get_chains():
         chn.internal_coord.initNCaC = {}
 
+    # rebuild atom coordinates now starting at origin: in OpenSCAD code, each
+    # residue model is transformed to N-Ca-C start position instead of updating
+    # transform matrix along chain
     entity.internal_to_atom_coordinates()
 
     with as_handle(file, "w") as fp:
@@ -172,7 +180,7 @@ peptide_scad = """
 */
 
 rotate([-90,0,0])  // convenient for default location (no N-Ca-C start coordinates)
-     chain(protein);   // this is the main subroutine call to  build the structure
+    chain(protein);   // this is the main subroutine call to  build the structure
 
 // top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8 inside, regardless of this setting.
 $fn = 0;  // 0 yields OpenSCAD default of 30.  $n=8 should print with minimal support
@@ -228,10 +236,10 @@ caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedro
 */
 module atom(a,scal,clr=0)
 {
-     ad = atomData[search([a],atomData)[0]];
-     color(ad[1]) {
-          rotate([0,0,fnRot]) sphere(r=((ad[2]*atomScale)*scal)+clr);
-     }
+    ad = atomData[search([a],atomData)[0]];
+    color(ad[1]) {
+        rotate([0,0,fnRot]) sphere(r=((ad[2]*atomScale)*scal)+clr);
+    }
 }
 
 /*
@@ -240,11 +248,11 @@ module atom(a,scal,clr=0)
 //
 */
 function hFlip(h,rev) =
-                 //   yes reversed                                     :  not reversed
-                 //    0    1     2     3     4     5     6      7     :     0     1     2     3    4     5      6      7
-                 //  len1  len3  atom1 atom3  a1    a2   a1-a2  a2-a3      len1  len3  atom1 atom3   a1    a3  a1-a2  a2-a3
-     (rev ? [ h[2], h[0], h[5], h[3], h[8], h[6], h[10], h[9] ] : [ h[0], h[2], h[3], h[5], h[6], h[8],  h[9], h[10] ]);
-     // h[1] = angle2 for both cases
+        //   yes reversed                                     :  not reversed
+        //    0    1     2     3     4     5     6      7     :     0     1     2     3    4     5      6      7
+        //  len1  len3  atom1 atom3  a1    a2   a1-a2  a2-a3      len1  len3  atom1 atom3   a1    a3  a1-a2  a2-a3
+    (rev ? [ h[2], h[0], h[5], h[3], h[8], h[6], h[10], h[9] ] : [ h[0], h[2], h[3], h[5], h[6], h[8],  h[9], h[10] ]);
+    // h[1] = angle2 for both cases
 
 
 /*
@@ -253,17 +261,17 @@ function hFlip(h,rev) =
 //
 */
 module joinUnit(cOuterLen, cOuterRad, cInnerLen, cInnerRad, male=false) {
-  if (male) {
-          rotate([0,0,oRot]) {
-               cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=8);
-               cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=8);
-          }
-     } else {
-          rotate([0,0,fnRot]) {
-               cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=30);
-               cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=30);
-          }
-     }
+    if (male) {
+        rotate([0,0,oRot]) {
+            cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=8);
+            cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=8);
+        }
+    } else {
+        rotate([0,0,fnRot]) {
+            cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=30);
+            cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=30);
+        }
+    }
 }
 
 /*
@@ -274,62 +282,61 @@ module joinUnit(cOuterLen, cOuterRad, cInnerLen, cInnerRad, male=false) {
 //
 */
 module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differentiate joiner part lengths to guide assembly, but not used
-     lenfac = bondLenFac;
-     jClr = clearance+0.05;
+    lenfac = bondLenFac;
+    jClr = clearance+0.05;
 
-     cOuterRad = (jBondRadius * scal) - (2*wall + (male ? jClr/2 : -jClr/2));
-     cInnerRad = cOuterRad - joinerStep;  // m/f jClr already in cOuterRad;  - (male ? 0 : -0*jClr/2);
+    cOuterRad = (jBondRadius * scal) - (2*wall + (male ? jClr/2 : -jClr/2));
+    cInnerRad = cOuterRad - joinerStep;  // m/f jClr already in cOuterRad;  - (male ? 0 : -0*jClr/2);
 
-     hArmLen = (bondlen * lenfac);
-     lenClr = 0.6*jClr;  // length clearance applied to male and female both, so effective clearance is 2x this value
-     cOuterLen = hArmLen * lenfac + (ver ? 0.5 : - 0.5) - (wall+ (male ? lenClr*2 : -lenClr*2  ));
+    hArmLen = (bondlen * lenfac);
+    lenClr = 0.6*jClr;  // length clearance applied to male and female both, so effective clearance is 2x this value
+    cOuterLen = hArmLen * lenfac + (ver ? 0.5 : - 0.5) - (wall+ (male ? lenClr*2 : -lenClr*2  ));
 
-     joinerOffset = (hArmLen * (1 - lenfac)) + (male ? lenClr : -lenClr) - (ver ? 1 : 0);
+    joinerOffset = (hArmLen * (1 - lenfac)) + (male ? lenClr : -lenClr) - (ver ? 1 : 0);
 
-     i=supportSelect-1;
-     oside = cOuterRad*octSide;
-     wid = oside+2*wall+4*jClr+1;
+    i=supportSelect-1;
+    oside = cOuterRad*octSide;
+    wid = oside+2*wall+4*jClr+1;
 
-     if (male) {
-          rotate([0,180,0])
-          translate([0,0,-(bondlen-joinerOffset)]) {
-               difference() {
-                    joinUnit(cOuterLen, cOuterRad, bondlen, cInnerRad, male=true);
-                    if (supportSelect) {
-                         rotate([0,0,i*180]) {
-                              translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
-                                   cube([oside+2*shim,layerHeight+shim,cOuterLen+2*shim],center=true);
-                              }
-                         }
-                    }
-               }
-               if (supportSelect) {
+    if (male) {
+        rotate([0,180,0])
+        translate([0,0,-(bondlen-joinerOffset)]) {
+            difference() {
+                joinUnit(cOuterLen, cOuterRad, bondlen, cInnerRad, male=true);
+                if (supportSelect) {
                     rotate([0,0,i*180]) {
-                         translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
-                              for (j=[0:1]) {
-                                   rotate([0,(j?60:-60),0])
-                                        cube([wid,layerHeight,2*nozzleDiameter],center=true);
-                              }
-                         }
+                        translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
+                                cube([oside+2*shim,layerHeight+shim,cOuterLen+2*shim],center=true);
+                        }
                     }
-               }
-          }
-     } else {
-          translate([0,0,joinerOffset]) {
-               joinUnit(cOuterLen, cOuterRad, bondlen, cInnerRad);
-               if (supportSelect) {  // extra gap top and bottom because filament sags
-                    supHeight = max(5*layerHeight,2*(cOuterRad-cOuterRad*apmFac));  // double because center=true below
-                    for(j=[0:1]) {
-                         rotate([0,0,j*180]) {
-                              translate([0,(cOuterRad*apmFac),cOuterLen/2]) {
-                                   cube([oside+2*shim,supHeight+shim,cOuterLen+2*shim],center=true);
-                              }
-                         }
+                }
+            }
+            if (supportSelect) {
+                rotate([0,0,i*180]) {
+                    translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
+                        for (j=[0:1]) {
+                            rotate([0,(j?60:-60),0])
+                                cube([wid,layerHeight,2*nozzleDiameter],center=true);
+                        }
                     }
-               }
-          }
-
-     }
+                }
+            }
+        }
+    } else {
+        translate([0,0,joinerOffset]) {
+            joinUnit(cOuterLen, cOuterRad, bondlen, cInnerRad);
+            if (supportSelect) {  // extra gap top and bottom because filament sags
+                supHeight = max(5*layerHeight,2*(cOuterRad-cOuterRad*apmFac));  // double because center=true below
+                for(j=[0:1]) {
+                    rotate([0,0,j*180]) {
+                        translate([0,(cOuterRad*apmFac),cOuterLen/2]) {
+                            cube([oside+2*shim,supHeight+shim,cOuterLen+2*shim],center=true);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -357,28 +364,28 @@ HBond = 5;             // make room inside atom/bond to insert magnet to appropr
 
 module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 
-     br = (key == FemaleJoinBond ? jBondRadius * scal : br)  * (key == SkinnyBond ? 0.65 : 1);   // bond radius smaller for skinnyBond
-     bl = (key == FemaleJoinBond ? bl * bondLenFac : bl);  // make female joiner shorter
-     if (key == MaleJoinBond) { // male join is direct solid, others need difference()
-          joiner(bl, scal, male = true, ver = ver, supportSelect=supportSel);
-     } else {  // regular bond / skinny / h-bond / female join
-          bhblen = bl +(hblen/2 * scal);
-          rotate([0,0,fnRot]) {
-               difference() {
-                    union() {
-                         cylinder(h=bl,r=br,center=false);
-                         if (key == HBond) {  // make extension collar for h-bond magnet
-                              rotate([0,0,oRot-fnRot]) cylinder(h=bhblen-1,r=(magR + clearance +wall),center=false, $fn=8);
-                         }
+    br = (key == FemaleJoinBond ? jBondRadius * scal : br)  * (key == SkinnyBond ? 0.65 : 1);   // bond radius smaller for skinnyBond
+    bl = (key == FemaleJoinBond ? bl * bondLenFac : bl);  // make female joiner shorter
+    if (key == MaleJoinBond) { // male join is direct solid, others need difference()
+        joiner(bl, scal, male = true, ver = ver, supportSelect=supportSel);
+    } else {  // regular bond / skinny / h-bond / female join
+        bhblen = bl +(hblen/2 * scal);
+        rotate([0,0,fnRot]) {
+            difference() {
+                union() {
+                    cylinder(h=bl,r=br,center=false);
+                    if (key == HBond) {  // make extension collar for h-bond magnet
+                        rotate([0,0,oRot-fnRot]) cylinder(h=bhblen-1,r=(magR + clearance +wall),center=false, $fn=8);
                     }
-                    atom(atm,scal,-clearance);  // remove overlap with atom to clear area for female join
-                    if (key == HBond) {     // make space to insert magnet inside bond cylinder
-                         translate([0,0,(bhblen-magL)-pClearance])
-                              cylinder(h=magL+pClearance+shim, r=magR+pClearance, center=false, $fn=8);
-                    }
-               }
-          }
-     }
+                }
+                atom(atm,scal,-clearance);  // remove overlap with atom to clear area for female join
+                if (key == HBond) {     // make space to insert magnet inside bond cylinder
+                    translate([0,0,(bhblen-magL)-pClearance])
+                        cylinder(h=magL+pClearance+shim, r=magR+pClearance, center=false, $fn=8);
+                }
+            }
+        }
+    }
 }
 
 /*
@@ -406,93 +413,92 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 
 module hedron(h,rev=0,scal,split=0, supportSel) {
 
-     newh = hFlip(h, rev);  // make a consistent hedron array regardless of rev flag
+    newh = hFlip(h, rev);  // make a consistent hedron array regardless of rev flag
 
-     bondRad = bondRadius * scal;
-     difference() {
-          union(){
-               if (h[7]) {
-               // central atom at 0,0,0
-               atom(h[4],scal);
-               }
+    bondRad = bondRadius * scal;
+    difference() {
+        union(){
+            if (h[7]) {
+                // central atom at 0,0,0
+                atom(h[4],scal);
+            }
 
-               if (newh[5] && newh[7] != FemaleJoinBond) {  // not female join
-               // comments for non-reversed case
-               // atom 3 is len3 up on +z
-               translate([0,0,newh[1]])
-                         difference() {
-                         atom(newh[3],scal * (newh[7] == SkinnyBond ? 0.7 : 1));  // if skinny bond make atom (C-beta) same diameter as bond
-                         if (newh[7] == HBond) {  // make room for hbond magnet through atom - this branch not used for backbone N,O
-                              translate([0,0,scal*hblen/2-magL-pClearance])
-                                   cylinder(h=magL+pClearance,r=magR+pClearance,$fn=8);
-                         }
+            if (newh[5] && newh[7] != FemaleJoinBond) {  // not female join
+                // comments for non-reversed case
+                // atom 3 is len3 up on +z
+                translate([0,0,newh[1]])
+                    difference() {
+                        atom(newh[3],scal * (newh[7] == SkinnyBond ? 0.7 : 1));  // if skinny bond make atom (C-beta) same diameter as bond
+                        if (newh[7] == HBond) {  // make room for hbond magnet through atom - this branch not used for backbone N,O
+                            translate([0,0,scal*hblen/2-magL-pClearance])
+                                cylinder(h=magL+pClearance,r=magR+pClearance,$fn=8);
+                        }
                     }
-               }
+            }
 
-               if (newh[7]) {
-               // atom 2 - atom 3 bond from origin up +z distance len3
-               bond(newh[1], bondRad, scal, newh[7], h[4], ver=1, supportSel=supportSel);
-               }
-               rotate([0, h[1], 0]) {                        // rotate following elements by angle2 about Y
-               if (newh[6]) {
+            if (newh[7]) {
+                // atom 2 - atom 3 bond from origin up +z distance len3
+                bond(newh[1], bondRad, scal, newh[7], h[4], ver=1, supportSel=supportSel);
+            }
+            rotate([0, h[1], 0]) {                        // rotate following elements by angle2 about Y
+                if (newh[6]) {
                     bond(newh[0], bondRad, scal, newh[6], h[4], ver=1, supportSel=supportSel);  // h[4] is center atom (atom 2)
-               }
-               if (newh[4] && newh[6] != FemaleJoinBond) {   // if draw atom 2 and atom1-atom2 not joiner
-                         translate([0,0,newh[0]]) {
-                              difference() {
-                                   atom(newh[2],scal * (newh[6] == SkinnyBond ? 0.7 : 1));  // put atom1 sphere len1 away on Z
-                                   if (newh[6] == HBond) {  // make room for hbond magnet through atom
-                                        translate([0,0,scal*hblen/2-magL-pClearance])
-                                             cylinder(h=magL+pClearance,r=magR+pClearance,$fn=8);
-                                   }
-                              }
-                         }
-               }
-               }
-          }
-
-          if (split) {
-               // top / bottom half cutter
-               thick = 2*bondRadius * scal;
-               Zdim = newh[0];
-               Xdim = newh[1];
-
-               cside = 7* defaultAtomRadius * atomScale * scal / 12 + (caTop ? pClearance : -pClearance);
-               difference() {
-                    translate([-Xdim,((rev || caTop) ? 0 : -thick),-Zdim]) {
-                         cube([2*Xdim,thick,2*Zdim]);
+                }
+                if (newh[4] && newh[6] != FemaleJoinBond) {   // if draw atom 2 and atom1-atom2 not joiner
+                    translate([0,0,newh[0]]) {
+                        difference() {
+                            atom(newh[2],scal * (newh[6] == SkinnyBond ? 0.7 : 1));  // put atom1 sphere len1 away on Z
+                            if (newh[6] == HBond) {  // make room for hbond magnet through atom
+                                translate([0,0,scal*hblen/2-magL-pClearance])
+                                    cylinder(h=magL+pClearance,r=magR+pClearance,$fn=8);
+                            }
+                        }
                     }
-                    if (!caTop) {
-                              rotate([0,(rev ? h[1] : 0),0])
-                              rotate([45,0,0])
-                              cube([cside, cside, cside],center=true);
-                    }
-               }
-               if (caTop) {
-                    //translate([tx+cside,0,tx+cside])
-                         rotate([0,(rev ? h[1] : 0),0])
-                         rotate([45,0,0])
-                         cube([cside, cside, cside], center=true);
-               }
-          }
+                }
+            }
+        }
 
-          if (newh[7] == FemaleJoinBond) {  // female join
-               joiner(newh[1], scal, male=false, ver=1, supportSelect=supportSel);
-          }
+        if (split) {
+            // top / bottom half cutter
+            thick = 2*bondRadius * scal;
+            Zdim = newh[0];
+            Xdim = newh[1];
 
-          if (newh[6] == FemaleJoinBond) {  // female join
-               rotate([0, h[1], 0]) {                        // rotate following elements by angle2 about Y
-               joiner(newh[0], scal, male=false, ver=1, supportSelect=supportSel);
-               translate([0,0,newh[0]])
-                    atom(newh[2],scal+0.5,clearance);  // clearance for atom against join outer cylinder
-               }
-          }
+            cside = 7* defaultAtomRadius * atomScale * scal / 12 + (caTop ? pClearance : -pClearance);
+            difference() {
+                translate([-Xdim,((rev || caTop) ? 0 : -thick),-Zdim]) {
+                    cube([2*Xdim,thick,2*Zdim]);
+                }
+                if (!caTop) {
+                    rotate([0,(rev ? h[1] : 0),0])
+                    rotate([45,0,0])
+                    cube([cside, cside, cside],center=true);
+                }
+            }
+            if (caTop) {
+                //translate([tx+cside,0,tx+cside])
+                    rotate([0,(rev ? h[1] : 0),0])
+                        rotate([45,0,0])
+                        cube([cside, cside, cside], center=true);
+            }
+        }
 
-          if (newh[7] == FemaleJoinBond || newh[6] == FemaleJoinBond) {  // female join both hedron arms
-               translate([0,0,newh[1]]) atom(newh[3],scal+0.5,clearance);  // clearance for atom against join outer cylinder
+        if (newh[7] == FemaleJoinBond) {  // female join
+            joiner(newh[1], scal, male=false, ver=1, supportSelect=supportSel);
+        }
 
-          }
-     }
+        if (newh[6] == FemaleJoinBond) {  // female join
+            rotate([0, h[1], 0]) {                        // rotate following elements by angle2 about Y
+            joiner(newh[0], scal, male=false, ver=1, supportSelect=supportSel);
+            translate([0,0,newh[0]])
+                atom(newh[2],scal+0.5,clearance);  // clearance for atom against join outer cylinder
+            }
+        }
+
+        if (newh[7] == FemaleJoinBond || newh[6] == FemaleJoinBond) {  // female join both hedron arms
+            translate([0,0,newh[1]]) atom(newh[3],scal+0.5,clearance);  // clearance for atom against join outer cylinder
+        }
+    }
 }
 
 /*
@@ -504,103 +510,100 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
 //
 */
 module hedronDispatch(h,rev=0,scal) {
-     // default action is just to pass to hedron()
-     hedron(h, rev, scal, 0, (support ? 1 : 0));
+    // default action is just to pass to hedron()
+    hedron(h, rev, scal, 0, (support ? 1 : 0));
 
 
-     /*
-     // Some examples for special handling for specific hedra below:
+    /*
+    // Some examples for special handling for specific hedra below:
 
 
-     // caTop needs to be a global variable so hedron() above can see it.
+    // caTop needs to be a global variable so hedron() above can see it.
 
 caBase1 = false;   // only make bottom of N_C-alpha_C hedron
 caBase2 = false;   // same as caBase1 but for case of reversed hedron (for testing, should be identical to caBase1 result)
 amideOnly = false; // make only the first amide
 
-     if (caTop) {
-          if (h[h_seqpos] == 1) {
-               if (h[h_class] == "NCAC") {
-                    hedron(h, rev, scal, 1);
-               } else if (h[h_class] == "CBCAC") {
-                    color("yellow") {  // ca-cb
-                         hedron(h, rev, scal);
-                    }
-               }
-          }
-     } else if (caBase1) {
-          if (h[h_seqpos] == 1 && (h[h_class] == "NCAC")) {
-               hedron(h, rev, scal, true, (support ? 1 : 0));
-          }
-     } else if (caBase2) {
-          if (h[h_seqpos] == 5 && (h[h_class] == "NCAC")) {
-               hedron(h, rev, scal, true, (support ? 1 : 0));
-          }
-     } else if (amideOnly) {
-          if (h[h_seqpos] == 1) {
-               if (h[h_class] == "CACN") {
-                    color("darkgray") {
-                         hedron(h, rev, scal);
-                    }
-               }  else if (h[h_class] == "CACO") {
-                    color("red") {   // c=o
-                         hedron(h, rev, scal);
-                    }
-               }  else if (h[h_class] == "CNCA") {
-                    color("cyan") {  // h=n
-                         hedron(h, rev, scal);
-                    }
-               }
-          } else if ((h[h_seqpos] == 2) && (h[h_class] == "HNCA")) {
-               color("cyan") {  // h=n
+    if (caTop) {
+        if (h[h_seqpos] == 1) {
+            if (h[h_class] == "NCAC") {
+                hedron(h, rev, scal, 1);
+            } else if (h[h_class] == "CBCAC") {
+                color("yellow") {  // ca-cb
                     hedron(h, rev, scal);
-               }
-          }
-
+                }
+            }
+        }
+    } else if (caBase1) {
+        if (h[h_seqpos] == 1 && (h[h_class] == "NCAC")) {
+            hedron(h, rev, scal, true, (support ? 1 : 0));
+        }
+    } else if (caBase2) {
+        if (h[h_seqpos] == 5 && (h[h_class] == "NCAC")) {
+            hedron(h, rev, scal, true, (support ? 1 : 0));
+        }
+    } else if (amideOnly) {
+        if (h[h_seqpos] == 1) {
+            if (h[h_class] == "CACN") {
+                color("darkgray") {
+                    hedron(h, rev, scal);
+                }
+            }  else if (h[h_class] == "CACO") {
+                color("red") {   // c=o
+                    hedron(h, rev, scal);
+                }
+            }  else if (h[h_class] == "CNCA") {
+                color("cyan") {  // h=n
+                    hedron(h, rev, scal);
+                }
+            }
+        } else if ((h[h_seqpos] == 2) && (h[h_class] == "HNCA")) {
+            color("cyan") {  // h=n
+                hedron(h, rev, scal);
+            }
+        }
        // actions above select out only a single hedron
-     } else {
-       // actions below will process hedra all but handle selected ones differently
+    } else {
+        // actions below will process hedra all but handle selected ones differently
 
-          if (h[h_class] == "NCAC") {
-
-               if (h[h_seqpos] == 1) {
-                    if (! CCap && NCap) {  // make split rotatable bond for terminal NH3
-                         hedron(h, rev, scal, true, (support ? 1 : 0));
-                    }
-               } else if (h[h_seqpos] == 5) {  // make split rotatable bond for terminal COOH
-                    hedron(h, rev, scal, true, (support ? 2 : 0));  // note supportSel = 2
-               } else {
-                    hedron(h, rev, scal, 0, (support ? 2 : 0));
-               }
-          } else if (h[h_class] == "CBCAC") {
-               color("yellow") {                     // ca-cb -- color yellow in OpenSCAD renderer
-                    if (h[h_seqpos] == 1 ) {         // don't make here for N-term
-                    } else if (h[h_seqpos] == 5 ) {  // don't make here for C-term
-                    } else {
-                         hedron(h, rev, scal);       // otherwise do make here
-                    }
-               }
-          } else if (h[h_class] == "HNCA") {
-               color("cyan") { // color h-n in OenSCAD renderer
-                 if (h[h_seqpos] == 1) {
+        if (h[h_class] == "NCAC") {
+            if (h[h_seqpos] == 1) {
+                if (! CCap && NCap) {  // make split rotatable bond for terminal NH3
+                    hedron(h, rev, scal, true, (support ? 1 : 0));
+                }
+            } else if (h[h_seqpos] == 5) {  // make split rotatable bond for terminal COOH
+                hedron(h, rev, scal, true, (support ? 2 : 0));  // note supportSel = 2
+            } else {
+                hedron(h, rev, scal, 0, (support ? 2 : 0));
+            }
+        } else if (h[h_class] == "CBCAC") {
+            color("yellow") {                     // ca-cb -- color yellow in OpenSCAD renderer
+                if (h[h_seqpos] == 1 ) {         // don't make here for N-term
+                } else if (h[h_seqpos] == 5 ) {  // don't make here for C-term
+                } else {
+                    hedron(h, rev, scal);       // otherwise do make here
+                }
+            }
+        } else if (h[h_class] == "HNCA") {
+            color("cyan") { // color h-n in OenSCAD renderer
+                if (h[h_seqpos] == 1) {
                     if (NCap) {                      // only make at N term if variable NCap is true
                         hedron(h, rev, scal, 0, (support ? 1 : 0));
                     }
-                 } else {
+                } else {
                     hedron(h, rev, scal, 0, (support ? 1 : 0));
-                 }
-               }
-          } else if (h[h_residue] == "P") {
-               color("darkgray")   // hightlight Prolines in OpenSCAD renderer
-                    hedron(h, rev, scal);
-
-          } else {
-               echo("unrecognised hedron", h[h_class]);
-               color("pink")
-               hedron(h, rev, scal, 0, (support ? 1 : 0));
-          }
-     }
-     */
+                }
+            }
+        } else if (h[h_residue] == "P") {
+            color("darkgray")   // hightlight Prolines in OpenSCAD renderer
+                hedron(h, rev, scal);
+        } else {
+            echo("unrecognised hedron", h[h_class]);
+            color("pink")
+                hedron(h, rev, scal, 0, (support ? 1 : 0));
+        }
+    }
+    */
 }
 
 /*
@@ -610,14 +613,14 @@ amideOnly = false; // make only the first amide
 */
 module d2(d,hedra,scal)
 {
-     tz = (d[d_reversed] ? hedra[d[d_h2ndx]][2] : hedra[d[d_h2ndx]][0]);      // get h2 len1 depending on reversed
-     rotate(d[d_dangle1]) {                                                   // 4. rotate h2 to specified dihedral angle
-          translate([0,0,tz]) {                                               // 3. translate h2 h2:len1 up +z
-               rotate([180, 0, 0]) {                                          // 2. rotate h2r about X so h2:a3 in +z and h2:a1 in -z
-                    hedronDispatch(hedra[d[d_h2ndx]],(!d[d_reversed]),scal);  // 1. reverse hedron 2 orientation = h2r
-               }
-          }
-     }
+    tz = (d[d_reversed] ? hedra[d[d_h2ndx]][2] : hedra[d[d_h2ndx]][0]);      // get h2 len1 depending on reversed
+    rotate(d[d_dangle1]) {                                                   // 4. rotate h2 to specified dihedral angle
+        translate([0,0,tz]) {                                               // 3. translate h2 h2:len1 up +z
+            rotate([180, 0, 0]) {                                          // 2. rotate h2r about X so h2:a3 in +z and h2:a1 in -z
+                hedronDispatch(hedra[d[d_h2ndx]],(!d[d_reversed]),scal);  // 1. reverse hedron 2 orientation = h2r
+            }
+        }
+    }
 }
 
 /*
@@ -627,10 +630,10 @@ module d2(d,hedra,scal)
 */
 module dihedron(d,hedra,scal)
 {
-     if (d[d_h1new])
-          hedronDispatch(hedra[d[d_h1ndx]],d[d_reversed],scal);                // reverse h1 if dihedral reversed
-     if (d[d_h2new])
-          d2(d,hedra,scal);
+    if (d[d_h1new])
+        hedronDispatch(hedra[d[d_h1ndx]],d[d_reversed],scal);                // reverse h1 if dihedral reversed
+    if (d[d_h2new])
+        d2(d,hedra,scal);
 }
 
 /*
@@ -641,11 +644,11 @@ module dihedron(d,hedra,scal)
 */
 module residue(r,hedra, scal)
 {
-     for (d = r) {
-          multmatrix(d[d_dihedralTransform]) {
-               dihedron(d, hedra, scal);
-          }
-     }
+    for (d = r) {
+        multmatrix(d[d_dihedralTransform]) {
+            dihedron(d, hedra, scal);
+        }
+    }
 }
 
 /*
@@ -659,11 +662,11 @@ module chain(protein)
     c = chnD[c_residues];
     dihedra = chnD[c_dihedra];
     hedra = chnD[c_hedra];
-     for (r = c) {
-          multmatrix(r[r_resTransform]) {
-               residue(dihedra[r[r_resNdx]],hedra, protein[p_proteinScale]);
-          }
-     }
+    for (r = c) {
+        multmatrix(r[r_resTransform]) {
+            residue(dihedra[r[r_resNdx]],hedra, protein[p_proteinScale]);
+        }
+    }
 }
 
 /*
@@ -716,22 +719,22 @@ r_resTransform = 2;
 
 // use single default atom radius for all atoms if tubes = true, else use covalent radii from literature
 atomData = ( tubes ?
-             [ ["Csb","green" , defaultAtomRadius], ["Cres","green" , defaultAtomRadius], ["Cdb","green" , defaultAtomRadius],
-               ["Osb","red" , defaultAtomRadius], ["Ores","red" , defaultAtomRadius], ["Odb","red" , defaultAtomRadius],
-               ["Nsb","blue" , defaultAtomRadius], ["Nres","blue" , defaultAtomRadius], ["Ndb","blue" , defaultAtomRadius],
-               ["Hsb","gray" , defaultAtomRadius],
-               ["Ssb","yellow" , defaultAtomRadius] ]
-             :
+            [   ["Csb","green" , defaultAtomRadius], ["Cres","green" , defaultAtomRadius], ["Cdb","green" , defaultAtomRadius],
+                ["Osb","red" , defaultAtomRadius], ["Ores","red" , defaultAtomRadius], ["Odb","red" , defaultAtomRadius],
+                ["Nsb","blue" , defaultAtomRadius], ["Nres","blue" , defaultAtomRadius], ["Ndb","blue" , defaultAtomRadius],
+                ["Hsb","gray" , defaultAtomRadius],
+                ["Ssb","yellow" , defaultAtomRadius] ]
+            :
 
 // covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty Essential Amino Acids and a Tripeptide, with Bond Lengths as Sums of Atomic Covalent Radii'
 // https://arxiv.org/pdf/0804.2488.pdf
 
-             [ ["Csb","green" , 0.77], ["Cres","green" , 0.72], ["Cdb","green" , 0.67],
-               ["Osb","red" , 0.67], ["Ores","red" , 0.635], ["Odb","red" , 0.60],
-               ["Nsb","blue" , 0.70], ["Nres","blue" , 0.66], ["Ndb","blue" , 0.62],
-               ["Hsb","gray" , 0.37],
-               ["Ssb","yellow" , 1.04] ]
-     );
+            [   ["Csb","green" , 0.77], ["Cres","green" , 0.72], ["Cdb","green" , 0.67],
+                ["Osb","red" , 0.67], ["Ores","red" , 0.635], ["Odb","red" , 0.60],
+                ["Nsb","blue" , 0.70], ["Nres","blue" , 0.66], ["Ndb","blue" , 0.62],
+                ["Hsb","gray" , 0.37],
+                ["Ssb","yellow" , 1.04] ]
+    );
 
 
 // optionally include protein array data here [ write_SCAD(includeCode=False) ], e.g.:
