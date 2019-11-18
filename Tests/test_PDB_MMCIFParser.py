@@ -17,12 +17,13 @@ import warnings
 try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
+
     del dot
     from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
 
 
 from Bio.Seq import Seq
@@ -81,8 +82,11 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(s.alphabet, generic_protein)
 
             # Here non-standard MSE are shown as M
-            self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
-                             "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
+            self.assertEqual(
+                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
+                "NANPDCKTILKALGPGATLEEMMTACQG",
+                str(s),
+            )
 
             # ==========================================================
             # Now try strict version with only standard amino acids
@@ -127,7 +131,9 @@ class ParseReal(unittest.TestCase):
             self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_occupancy() for a in atoms[:5]], [1., 1., 1., 1., 1.])
+            self.assertSequenceEqual(
+                [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
+            )
             self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
             coord = numpy.array([19.594, 32.367, 28.012], dtype=numpy.float32)
             numpy.testing.assert_array_equal(atoms[0].get_coord(), coord)
@@ -156,15 +162,21 @@ class ParseReal(unittest.TestCase):
             self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
-            self.assertSequenceEqual([a.get_occupancy() for a in atoms[:5]], [1., 1., 1., 1., 1.])
+            self.assertSequenceEqual(
+                [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
+            )
             self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
             coord = numpy.array([50.346, 19.287, 17.288], dtype=numpy.float32)
             numpy.testing.assert_array_equal(atoms[0].get_coord(), coord)
             self.assertEqual(atoms[0].get_bfactor(), 32.02)
 
-            ansiou = numpy.array([0.4738, -0.0309, -0.0231, 0.4524, 0.0036, 0.2904], dtype=numpy.float32)
+            ansiou = numpy.array(
+                [0.4738, -0.0309, -0.0231, 0.4524, 0.0036, 0.2904], dtype=numpy.float32
+            )
             numpy.testing.assert_array_equal(atoms[0].get_anisou(), ansiou)
-            ansiou = numpy.array([1.1242, 0.2942, -0.0995, 1.1240, -0.1088, 0.8221], dtype=numpy.float32)
+            ansiou = numpy.array(
+                [1.1242, 0.2942, -0.0995, 1.1240, -0.1088, 0.8221], dtype=numpy.float32
+            )
             atom_937 = list(f_structure[0]["A"])[114]["CB"]
             numpy.testing.assert_array_equal(atom_937.get_anisou(), ansiou)
 
@@ -198,8 +210,9 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
-            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
-                             str(s))
+            self.assertEqual(
+                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
+            )
             # ==========================================================
             # Now try strict version with only standard amino acids
             polypeptides = ppbuild.build_peptides(structure[0], True)
@@ -212,8 +225,9 @@ class ParseReal(unittest.TestCase):
             s = pp.get_sequence()
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
-                             str(s))
+            self.assertEqual(
+                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
+            )
 
         # This structure contains several models with multiple lengths.
         # The tests were failing.
@@ -235,10 +249,12 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 16)
             self.assertEqual(pp[-1].get_id()[1], 244)
             # Check the sequence
-            refseq = "IIGGEFTTIENQPWFAAIYRRHRGGSVTYVCGGSLISPCWVISATHCFIDYPKKEDYIVYLGR" \
-                     "SRLNSNTQGEMKFEVENLILHKDYSADTLAYHNDIALLKIRSKEGRCAQPSRTIQTIALPSMY" \
-                     "NDPQFGTSCEITGFGKEQSTDYLYPEQLKMTVVKLISHRECQQPHYYGSEVTTKMLCAADPQW" \
-                     "KTDSCQGDSGGPLVCSLQGRMTLTGIVSWGRGCALKDKPGVYTRVSHFLPWIRSHTKE"
+            refseq = (
+                "IIGGEFTTIENQPWFAAIYRRHRGGSVTYVCGGSLISPCWVISATHCFIDYPKKEDYIVYLGR"
+                "SRLNSNTQGEMKFEVENLILHKDYSADTLAYHNDIALLKIRSKEGRCAQPSRTIQTIALPSMY"
+                "NDPQFGTSCEITGFGKEQSTDYLYPEQLKMTVVKLISHRECQQPHYYGSEVTTKMLCAADPQW"
+                "KTDSCQGDSGGPLVCSLQGRMTLTGIVSWGRGCALKDKPGVYTRVSHFLPWIRSHTKE"
+            )
 
             s = pp.get_sequence()
             self.assertTrue(isinstance(s, Seq))
@@ -278,30 +294,42 @@ class ParseReal(unittest.TestCase):
         # Check a non-mutated residue just to be sure we didn't break the
         # parser and cause everyhing to be disordered.
         self.assertFalse(
-            structure[0]["A"][13].is_disordered(),
-            "Residue 13 is not disordered")
+            structure[0]["A"][13].is_disordered(), "Residue 13 is not disordered"
+        )
 
         # Check that the residue types were parsed correctly.
         self.assertSetEqual(
             set(res_1.disordered_get_id_list()),
             {"PRO", "SER"},
-            "Residue 1 is proline/serine")
+            "Residue 1 is proline/serine",
+        )
         self.assertSetEqual(
             set(res_15.disordered_get_id_list()),
             {"ARG", "GLN", "GLU"},
-            "Residue 15 is arginine/glutamine/glutamic acid")
+            "Residue 15 is arginine/glutamine/glutamic acid",
+        )
 
         # Quickly check that we can switch between residues and that the
         # correct set of residues was parsed.
         res_1.disordered_select("PRO")
         self.assertAlmostEqual(
-            res_1["CA"].get_occupancy(),
-            0.83, 2, "Residue 1 proline occupancy correcy")
+            res_1["CA"].get_occupancy(), 0.83, 2, "Residue 1 proline occupancy correcy"
+        )
 
         res_1.disordered_select("SER")
         self.assertAlmostEqual(
-            res_1["CA"].get_occupancy(),
-            0.17, 2, "Residue 1 serine occupancy correcy")
+            res_1["CA"].get_occupancy(), 0.17, 2, "Residue 1 serine occupancy correcy"
+        )
+
+    def test_header(self):
+        """Test if the parser populates header data."""
+        parser = MMCIFParser()
+        structure = parser.get_structure("example", "PDB/1A8O.cif")
+        self.assertEqual("1A8O", structure.header["idcode"])
+        self.assertEqual("Viral protein", structure.header["head"])
+        self.assertIsNone(structure.header["deposition_date"])
+        self.assertEqual("X-RAY DIFFRACTION", structure.header["structure_method"])
+        self.assertEqual(1.7, structure.header["resolution"])
 
 
 class CIFtoPDB(unittest.TestCase):
