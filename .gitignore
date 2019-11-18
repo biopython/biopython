@@ -59,6 +59,8 @@ Tests/biosql.ini
 Tests/BioSQL/temp_sqlite.db
 Tests/BioSQL/temp_sqlite.db-journal
 Tests/Cluster/cyano_result*
+# Created by Tests/test_BWA_tool.py:
+Tests/out.bam
 
 #TODO - The Tutorial doctests should leave example files after
 #running Tests/test_Tutorial.py
