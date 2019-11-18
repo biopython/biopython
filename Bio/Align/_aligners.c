@@ -1804,10 +1804,10 @@ Aligner_str(Aligner* self)
         p += n;
     }
     else {
-        n = sprintf(p, "  target_open_gap_score: %f\n",
+        n = sprintf(p, "  target_internal_open_gap_score: %f\n",
                        self->target_open_gap_score);
         p += n;
-        n = sprintf(p, "  target_extend_gap_score: %f\n",
+        n = sprintf(p, "  target_internal_extend_gap_score: %f\n",
                        self->target_extend_gap_score);
         p += n;
         n = sprintf(p, "  target_left_open_gap_score: %f\n",
@@ -1828,10 +1828,10 @@ Aligner_str(Aligner* self)
         p += n;
     }
     else {
-        n = sprintf(p, "  query_open_gap_score: %f\n",
+        n = sprintf(p, "  query_internal_open_gap_score: %f\n",
                        self->query_open_gap_score);
         p += n;
-        n = sprintf(p, "  query_extend_gap_score: %f\n",
+        n = sprintf(p, "  query_internal_extend_gap_score: %f\n",
                        self->query_extend_gap_score);
         p += n;
         n = sprintf(p, "  query_left_open_gap_score: %f\n",

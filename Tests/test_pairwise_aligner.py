@@ -52,14 +52,14 @@ class TestAlignerProperties(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 3.000000
   mismatch_score: -2.000000
-  target_open_gap_score: 0.000000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: 0.000000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: 0.000000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: 0.000000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: 0.000000
@@ -91,14 +91,14 @@ Pairwise sequence aligner with parameters
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -5.000000
-  target_extend_gap_score: -1.000000
+  target_internal_open_gap_score: -5.000000
+  target_internal_extend_gap_score: -1.000000
   target_left_open_gap_score: -3.000000
   target_left_extend_gap_score: -9.000000
   target_right_open_gap_score: -3.000000
   target_right_extend_gap_score: -9.000000
-  query_open_gap_score: -6.000000
-  query_extend_gap_score: -7.000000
+  query_internal_open_gap_score: -6.000000
+  query_internal_extend_gap_score: -7.000000
   query_left_open_gap_score: -1.000000
   query_left_extend_gap_score: -2.000000
   query_right_open_gap_score: -1.000000
@@ -143,14 +143,14 @@ Pairwise sequence aligner with parameters
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -3.000000
-  target_extend_gap_score: -3.000000
+  target_internal_open_gap_score: -3.000000
+  target_internal_extend_gap_score: -3.000000
   target_left_open_gap_score: -4.000000
   target_left_extend_gap_score: -4.000000
   target_right_open_gap_score: -4.000000
   target_right_extend_gap_score: -4.000000
-  query_open_gap_score: -2.000000
-  query_extend_gap_score: -2.000000
+  query_internal_open_gap_score: -2.000000
+  query_internal_extend_gap_score: -2.000000
   query_left_open_gap_score: -5.000000
   query_left_extend_gap_score: -5.000000
   query_right_open_gap_score: -5.000000
@@ -185,14 +185,14 @@ class TestPairwiseGlobal(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: 0.000000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: 0.000000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: 0.000000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: 0.000000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: 0.000000
@@ -233,14 +233,14 @@ G-A-T
 Pairwise sequence aligner with parameters
   match_score: 0.000000
   mismatch_score: -1.000000
-  target_open_gap_score: -5.000000
-  target_extend_gap_score: -1.000000
+  target_internal_open_gap_score: -5.000000
+  target_internal_extend_gap_score: -1.000000
   target_left_open_gap_score: -5.000000
   target_left_extend_gap_score: -1.000000
   target_right_open_gap_score: -5.000000
   target_right_extend_gap_score: -1.000000
-  query_open_gap_score: -5.000000
-  query_extend_gap_score: -1.000000
+  query_internal_open_gap_score: -5.000000
+  query_internal_extend_gap_score: -1.000000
   query_left_open_gap_score: -5.000000
   query_left_extend_gap_score: -1.000000
   query_right_open_gap_score: -5.000000
@@ -262,14 +262,14 @@ class TestPairwiseLocal(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.100000
-  target_extend_gap_score: -0.100000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: -0.100000
   target_left_open_gap_score: -0.100000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: -0.100000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: -0.100000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: -0.100000
   query_right_open_gap_score: -0.100000
@@ -299,14 +299,14 @@ zA-Bz
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.100000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.100000
@@ -341,14 +341,14 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 2.000000
   mismatch_score: -1.000000
-  target_open_gap_score: -0.100000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.100000
@@ -390,14 +390,14 @@ A-
 Pairwise sequence aligner with parameters
   match_score: 1.500000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.100000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.100000
@@ -437,14 +437,14 @@ GA-
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: 0.000000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: 0.000000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.100000
@@ -477,14 +477,14 @@ GA--T
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -2.000000
-  target_open_gap_score: -0.100000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.100000
@@ -527,14 +527,14 @@ class TestPairwiseExtendPenalty(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.200000
-  target_extend_gap_score: -0.500000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -0.500000
   target_left_open_gap_score: -0.200000
   target_left_extend_gap_score: -0.500000
   target_right_open_gap_score: -0.200000
   target_right_extend_gap_score: -0.500000
-  query_open_gap_score: -0.200000
-  query_extend_gap_score: -0.500000
+  query_internal_open_gap_score: -0.200000
+  query_internal_extend_gap_score: -0.500000
   query_left_open_gap_score: -0.200000
   query_left_extend_gap_score: -0.500000
   query_right_open_gap_score: -0.200000
@@ -566,14 +566,14 @@ G--T
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.200000
-  target_extend_gap_score: -1.500000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -1.500000
   target_left_open_gap_score: -0.200000
   target_left_extend_gap_score: -1.500000
   target_right_open_gap_score: -0.200000
   target_right_extend_gap_score: -1.500000
-  query_open_gap_score: -0.200000
-  query_extend_gap_score: -1.500000
+  query_internal_open_gap_score: -0.200000
+  query_internal_extend_gap_score: -1.500000
   query_left_open_gap_score: -0.200000
   query_left_extend_gap_score: -1.500000
   query_right_open_gap_score: -0.200000
@@ -616,14 +616,14 @@ class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -1.700000
-  target_extend_gap_score: -1.500000
+  target_internal_open_gap_score: -1.700000
+  target_internal_extend_gap_score: -1.500000
   target_left_open_gap_score: -1.700000
   target_left_extend_gap_score: -1.500000
   target_right_open_gap_score: -1.700000
   target_right_extend_gap_score: -1.500000
-  query_open_gap_score: -1.700000
-  query_extend_gap_score: -1.500000
+  query_internal_open_gap_score: -1.700000
+  query_internal_extend_gap_score: -1.500000
   query_left_open_gap_score: -1.700000
   query_left_extend_gap_score: -1.500000
   query_right_open_gap_score: -1.700000
@@ -660,14 +660,14 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.200000
-  target_extend_gap_score: -0.800000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -0.800000
   target_left_open_gap_score: 0.000000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: 0.000000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.200000
-  query_extend_gap_score: -0.800000
+  query_internal_open_gap_score: -0.200000
+  query_internal_extend_gap_score: -0.800000
   query_left_open_gap_score: 0.000000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: 0.000000
@@ -729,14 +729,14 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.300000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.300000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.800000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.800000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.800000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.800000
@@ -776,14 +776,14 @@ GTCT
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.300000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.300000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.200000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.200000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: -0.200000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: -0.200000
@@ -826,14 +826,14 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.100000
-  target_extend_gap_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: 0.000000
   target_left_open_gap_score: -0.100000
   target_left_extend_gap_score: 0.000000
   target_right_open_gap_score: -0.100000
   target_right_extend_gap_score: 0.000000
-  query_open_gap_score: -0.100000
-  query_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: -0.100000
   query_left_open_gap_score: -0.100000
   query_left_extend_gap_score: -0.100000
   query_right_open_gap_score: -0.100000
@@ -928,14 +928,14 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
         address = int(line[len(prefix):-len(suffix)], 16)
-        self.assertEqual(lines[2], "  target_open_gap_score: -0.500000")
-        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
+        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
         self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[6], "  target_right_open_gap_score: -0.500000")
         self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_open_gap_score: -0.500000")
-        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_internal_open_gap_score: -0.500000")
+        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[10], "  query_left_open_gap_score: -0.500000")
         self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[12], "  query_right_open_gap_score: -0.500000")
@@ -984,14 +984,14 @@ AT-T
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
         address = int(line[len(prefix):-len(suffix)], 16)
-        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
         self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
         self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
         self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
@@ -1032,14 +1032,14 @@ ATT
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
         address = int(line[len(prefix):-len(suffix)], 16)
-        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
         self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
         self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
         self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
@@ -1083,14 +1083,14 @@ ATAT
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
         address = int(line[len(prefix):-len(suffix)], 16)
-        self.assertEqual(lines[2], "  target_open_gap_score: -0.500000")
-        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
+        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
         self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[6], "  target_right_open_gap_score: -0.500000")
         self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_open_gap_score: -0.500000")
-        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_internal_open_gap_score: -0.500000")
+        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[10], "  query_left_open_gap_score: -0.500000")
         self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[12], "  query_right_open_gap_score: -0.500000")
@@ -1141,14 +1141,14 @@ AT-T
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
         address = int(line[len(prefix):-len(suffix)], 16)
-        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
         self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
         self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
         self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
@@ -1191,14 +1191,14 @@ ATT
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
         address = int(line[len(prefix):-len(suffix)], 16)
-        self.assertEqual(lines[2], "  target_open_gap_score: -1.000000")
-        self.assertEqual(lines[3], "  target_extend_gap_score: 0.000000")
+        self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
         self.assertEqual(lines[5], "  target_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[6], "  target_right_open_gap_score: -1.000000")
         self.assertEqual(lines[7], "  target_right_extend_gap_score: 0.000000")
-        self.assertEqual(lines[8], "  query_open_gap_score: -1.000000")
-        self.assertEqual(lines[9], "  query_extend_gap_score: 0.000000")
+        self.assertEqual(lines[8], "  query_internal_open_gap_score: -1.000000")
+        self.assertEqual(lines[9], "  query_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[10], "  query_left_open_gap_score: -1.000000")
         self.assertEqual(lines[11], "  query_left_extend_gap_score: 0.000000")
         self.assertEqual(lines[12], "  query_right_open_gap_score: -1.000000")
@@ -1230,14 +1230,14 @@ class TestPairwiseOneCharacter(unittest.TestCase):
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.300000
-  target_extend_gap_score: -0.100000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: -0.100000
   target_left_open_gap_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
-  query_open_gap_score: -0.300000
-  query_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
   query_left_open_gap_score: -0.300000
   query_left_extend_gap_score: -0.100000
   query_right_open_gap_score: -0.300000
@@ -1267,14 +1267,14 @@ abcde
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.300000
-  target_extend_gap_score: -0.100000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: -0.100000
   target_left_open_gap_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
-  query_open_gap_score: -0.300000
-  query_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
   query_left_open_gap_score: -0.300000
   query_left_extend_gap_score: -0.100000
   query_right_open_gap_score: -0.300000
@@ -1312,14 +1312,14 @@ abcce
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.300000
-  target_extend_gap_score: -0.100000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: -0.100000
   target_left_open_gap_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
-  query_open_gap_score: -0.300000
-  query_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
   query_left_open_gap_score: -0.300000
   query_left_extend_gap_score: -0.100000
   query_right_open_gap_score: -0.300000
@@ -1351,14 +1351,14 @@ abcde
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
-  target_open_gap_score: -0.300000
-  target_extend_gap_score: -0.100000
+  target_internal_open_gap_score: -0.300000
+  target_internal_extend_gap_score: -0.100000
   target_left_open_gap_score: -0.300000
   target_left_extend_gap_score: -0.100000
   target_right_open_gap_score: -0.300000
   target_right_extend_gap_score: -0.100000
-  query_open_gap_score: -0.300000
-  query_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
   query_left_open_gap_score: -0.300000
   query_left_extend_gap_score: -0.100000
   query_right_open_gap_score: -0.300000
@@ -1486,8 +1486,8 @@ Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
-  query_open_gap_score: 0.000000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: 0.000000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: 0.000000
@@ -1670,8 +1670,8 @@ Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
-  query_open_gap_score: 0.000000
-  query_extend_gap_score: 0.000000
+  query_internal_open_gap_score: 0.000000
+  query_internal_extend_gap_score: 0.000000
   query_left_open_gap_score: 0.000000
   query_left_extend_gap_score: 0.000000
   query_right_open_gap_score: 0.000000
