@@ -889,7 +889,7 @@ class DictionaryBuilder(object):
 
     def removestart(self, file):
         """Remove the header of the file."""
-        return list(itertools.dropwhile(lambda l:l.startswith("#"), file))
+        return list(itertools.dropwhile(lambda l: l.startswith("#"), file))
 
     def getblock(self, file, index):
         """Get a data block from the emboss_r file."""
