@@ -4,11 +4,17 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Per residue sidechain hedra and dihedra definitions.
+"""Per residue backbone and sidechain hedra and dihedra definitions.
 
-Listed in order of output for internal coordinates (.pic) output file
+Listed in order of output for internal coordinates (.pic) output file.
+Require sufficient overlap to link all defined dihedra.  Entries in these
+tables without correponding atom coordinates are ignored.
+
+<http://www.imgt.org/IMGTeducation/Aide-memoire/_UK/aminoacids/formuleAA/>
+for naming of individual atoms
 """
 
+# Backbone hedra and dihedra.
 ic_data_backbone = (
     ("N", "CA", "C", "O"),  # locate backbone O
     ("O", "C", "CA", "CB"),  # locate CB
@@ -41,6 +47,7 @@ ic_data_backbone = (
     ("C", "CA", "N", "H3"),
 )
 
+# Sidechain hedra and dihedra.
 ic_data_sidechains = {
     "V": (
         ("CA", "CB", "CG1"),
@@ -380,7 +387,12 @@ ic_data_sidechains = {
     ),
 }
 
-# complete the ring bond sets for OpenSCAD output
+# Additional sidechain entries for explicit bonds.
+
+# OpenSCAD output requires specification of bonds to be rendered as cylinders.
+# These entries define hedra and dihedra to explicitly cover all bonds in rings,
+# otherwise the entries above only capture atoms.
+
 ic_data_sidechain_extras = {
     "F": (("CE1", "CZ", "CE2"), ("CD1", "CE1", "CZ", "CE2")),
     "P": (("CG", "CD", "N"), ("CB", "CG", "CD", "N")),
@@ -393,15 +405,13 @@ ic_data_sidechain_extras = {
     ),
     "H": (("ND1", "CE1", "NE2"), ("CG", "ND1", "CE1", "NE2")),
 }
-# http://www.imgt.org/IMGTeducation/Aide-memoire/_UK/aminoacids/formuleAA/
-# for naming of individual atoms
 
+# Covalent radii for OpenSCAD output.
 
-# covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty
+# Covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty
 # Essential Amino Acids and a Tripeptide, with Bond Lengths as Sums of Atomic
-# Covalent Radii'
-# https://arxiv.org/pdf/0804.2488.pdf
-# adding Ores between Osb and Odb for Asp and Glu, Nres between Nsb and Ndb
+# Covalent Radii' <https://arxiv.org/pdf/0804.2488.pdf>
+# Adding Ores between Osb and Odb for Asp and Glu, Nres between Nsb and Ndb
 # for Arg, as PDB does not specify
 
 covalent_radii = {
@@ -418,7 +428,8 @@ covalent_radii = {
     "Ssb": 1.04,
 }
 
-# atom classes based on Heyrovska, Raji covalent radii paper
+# Atom classes based on Heyrovska, Raji covalent radii paper.
+
 residue_atom_bond_state = {
     "X": {
         "N": "Nsb",

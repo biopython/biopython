@@ -35,7 +35,7 @@ def structure_rebuild_test(entity, verbose=False):
         Structure to test
     :param verbose: bool
         print extra messages
-    :return: dict
+    :returns: dict
         comparison dict from compare_residues()
     """
     sp = StringIO()
@@ -54,14 +54,14 @@ def report_IC(entity, reportDict=None, verbose=False):
     """Generate dict with counts of ic data elements for each entity level.
 
     reportDict entries are:
-        idcode : PDB ID
-        hdr : PDB header lines
-        mdl : models
-        chn : chains
-        res : residue objects
-        res_e : residues with dihedra and/or hedra
-        dih : dihedra
-        hed : hedra
+        - idcode : PDB ID
+        - hdr : PDB header lines
+        - mdl : models
+        - chn : chains
+        - res : residue objects
+        - res_e : residues with dihedra and/or hedra
+        - dih : dihedra
+        - hed : hedra
 
     :param Entity entity: Biopython PDB Entity object: S, M, C or R
     :raises PDBException: if entity level not S, M, C, or R

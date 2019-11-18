@@ -26,25 +26,30 @@ from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Edron
 
 
 def read_PIC(file, verbose=False):
-    """Load Protein Internal Coordinate (PIC) data from file.
+    """Load Protein Internal Coordinate (.pic) data from file.
+
+    Returns **None** on parse fail.
 
     PIC file format:
-        # comment lines start with #
-        (optional) PDB HEADER record
-        - idcode and deposition date recommended but optional
-        - deposition date in PDB format or as changed by Biopython
-        (optional) PDB TITLE record
-        repeat:
-        -    Biopython Residue Full ID - sets ID of returned structure
-        -    (optional) PDB ATOM records for chain start N, CA, C
-        -    PIC Hedra records for residue
-        -    PIC Dihedra records for residue
+        - comment lines start with #
+        - (optional) PDB HEADER record
+           - idcode and deposition date recommended but optional
+           - deposition date in PDB format or as changed by Biopython
+        - (optional) PDB TITLE record
+        - repeat:
+           - Biopython Residue Full ID - sets residue IDs of returned structure
+           - (optional) PDB N, CA, C ATOM records for chain start
+           - (optional) PIC Hedra records for residue
+           - (optional) PIC Dihedra records for residue
+           - (optional) BFAC records listing AtomKeys and b-factors
+
+    An improvement would define relative positions for HOH (water) entries.
 
     :param Bio.File file: file name or handle
     :param bool verbose: complain when lines not as expected
     :returns: Biopython Structure object, Residues with .internal_coord attributes
         but no coordinates except for chain start N, CA, C atoms if supplied,
-        or None on parse fail (silent unless verbose=True)
+        **OR** None on parse fail (silent unless verbose=True)
 
     """
     pdb_hdr_re = re.compile(
