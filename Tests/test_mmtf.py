@@ -53,8 +53,8 @@ class ParseMMTF(unittest.TestCase):
             self.assertEqual(mmtf_r.disordered, mmcif_r.disordered)
             self.assertEqual(mmtf_r.resname, mmcif_r.resname)
             self.assertEqual(mmtf_r.segid, mmcif_r.segid)
-            self.mmcif_atoms = [x for x in mmcif_r.get_atoms()]
-            self.mmtf_atoms = [x for x in mmtf_r.get_atoms()]
+            self.mmcif_atoms = list(mmcif_r.get_atoms())
+            self.mmtf_atoms = list(mmtf_r.get_atoms())
             self.check_atoms()
 
     def check_mmtf_vs_cif(self, mmtf_filename, cif_filename):
@@ -64,21 +64,21 @@ class ParseMMTF(unittest.TestCase):
             mmtf_struct = MMTFParser.get_structure(mmtf_filename)
         mmcif_parser = MMCIFParser()
         mmcif_struct = mmcif_parser.get_structure("4CUP", cif_filename)
-        self.mmcif_atoms = [x for x in mmcif_struct.get_atoms()]
-        self.mmtf_atoms = [x for x in mmtf_struct.get_atoms()]
+        self.mmcif_atoms = list(mmcif_struct.get_atoms())
+        self.mmtf_atoms = list(mmtf_struct.get_atoms())
         self.check_atoms()
-        mmcif_chains = [x for x in mmcif_struct.get_chains()]
-        mmtf_chains = [x for x in mmtf_struct.get_chains()]
+        mmcif_chains = list(mmcif_struct.get_chains())
+        mmtf_chains = list(mmtf_struct.get_chains())
         self.assertEqual(len(mmcif_chains), len(mmtf_chains))
         for i, e in enumerate(mmcif_chains):
-            self.mmcif_res = [x for x in mmcif_chains[i].get_residues()]
-            self.mmtf_res = [x for x in mmtf_chains[i].get_residues()]
+            self.mmcif_res = list(mmcif_chains[i].get_residues())
+            self.mmtf_res = list(mmtf_chains[i].get_residues())
             self.check_residues()
 
-        self.mmcif_res = [x for x in mmcif_struct.get_residues()]
-        self.mmtf_res = [x for x in mmtf_struct.get_residues()]
+        self.mmcif_res = list(mmcif_struct.get_residues())
+        self.mmtf_res = list(mmtf_struct.get_residues())
         self.check_residues()
-        self.assertEqual(len([x for x in mmcif_struct.get_models()]), len([x for x in mmtf_struct.get_models()]))
+        self.assertEqual(sum(1 for _ in mmcif_struct.get_models()), sum(1 for _ in mmtf_struct.get_models()))
 
     def test_4CUP(self):
         """Compare parsing 4CUP.mmtf and 4CUP.cif."""

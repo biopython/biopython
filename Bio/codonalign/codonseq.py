@@ -420,17 +420,17 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
                 if i == j:
                     pass
                 elif i in purine and j in purine:
-                    codon_chars = [c for c in codon]
+                    codon_chars = list(codon)
                     codon_chars[n] = j
                     this_codon = "".join(codon_chars)
                     neighbor_codon["transition"].append(this_codon)
                 elif i in pyrimidine and j in pyrimidine:
-                    codon_chars = [c for c in codon]
+                    codon_chars = list(codon)
                     codon_chars[n] = j
                     this_codon = "".join(codon_chars)
                     neighbor_codon["transition"].append(this_codon)
                 else:
-                    codon_chars = [c for c in codon]
+                    codon_chars = list(codon)
                     codon_chars[n] = j
                     this_codon = "".join(codon_chars)
                     neighbor_codon["transversion"].append(this_codon)
@@ -592,7 +592,7 @@ def _get_codon_fold(codon_table):
     def find_fold_class(codon, forward_table):
         base = {"A", "T", "C", "G"}
         fold = ""
-        codon_base_lst = [i for i in codon]
+        codon_base_lst = list(codon)
         for i, b in enumerate(codon_base_lst):
             other_base = base - set(b)
             aa = []
