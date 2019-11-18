@@ -24,6 +24,7 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Chris Rands
 - Christian Brueffer
 - Peter Cock
 - Sergio Valqui
