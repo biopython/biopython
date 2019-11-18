@@ -12,7 +12,7 @@ bond lengths comprising a protein chain.  These routines can compute internal
 coordinates from atom XYZ coordinates, and compute atom XYZ coordinates from
 internal coordinates.
 
-Internal coordinates are necessarily defined on sequences of atoms which span
+Internal coordinates are defined on sequences of atoms which span
 residues or follow accepted nomenclature along sidechains.  To manage these
 sequences and support Biopython's disorder mechanisms, AtomKey specifiers are
 implemented to capture residue, atom and variant identification in a single
@@ -1087,10 +1087,10 @@ class IC_Residue(object):
         dbg = False
 
         transformations = {}
-        NCaCKey = self.NCaCKey
+        NCaCKey = sorted(self.NCaCKey)
 
         if transforms:
-            for akl in sorted(NCaCKey):
+            for akl in NCaCKey:
                 transformations[akl] = numpy.identity(4, dtype=numpy.float64)
 
         startLst = []
@@ -1100,7 +1100,7 @@ class IC_Residue(object):
             (self.rak("O"), self.rak("C"), self.rak("CA")),
         ]:
             startLst.extend(self._split_akl(lst))
-        startLst.extend(sorted(NCaCKey))
+        startLst.extend(NCaCKey)
 
         q = deque(startLst)
 
@@ -1109,7 +1109,7 @@ class IC_Residue(object):
         if resetLocation:
             # use N-CA-C initial coords from creating dihedral
             atomCoords = {}
-            dlist0 = [self.id3_dh_index[akl] for akl in sorted(NCaCKey)]
+            dlist0 = [self.id3_dh_index[akl] for akl in NCaCKey]
             # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
             dlist = [val for sublist in dlist0 for val in sublist]
             # dlist = self.id3_dh_index[NCaCKey]
