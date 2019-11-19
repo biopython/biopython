@@ -7,7 +7,12 @@
 """Convert XYZ Structure to internal coordinates and back, test result."""
 
 import re
-import itertools
+try:
+    from itertools import zip_longest
+except ImportError:
+    from itertools import izip_longest as zip_longest
+
+# import itertools
 
 try:
     import numpy
@@ -281,9 +286,9 @@ def compare_residues(e0, e1, verbose=False):
     cmpdict["pass"] = None
     cmpdict["report"] = None
 
-    for r0, r1 in itertools.zip_longest(e0.get_residues(), e1.get_residues()):
+    for r0, r1 in zip_longest(e0.get_residues(), e1.get_residues()):
         if 2 == r0.is_disordered() == r1.is_disordered():
-            for dr0, dr1 in itertools.zip_longest(
+            for dr0, dr1 in zip_longest(
                 r0.child_dict.values(), r1.child_dict.values()
             ):
                 _cmp_res(dr0, dr1, verbose, cmpdict)

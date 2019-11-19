@@ -2004,7 +2004,7 @@ class Hedron(Edron):
             As for Edron, plus optional 'len1', 'angle2', 'len3'
             keyworded values.
         """
-        super().__init__(*args, **kwargs)
+        super(Hedron, self).__init__(*args, **kwargs)
 
         # print('initialising', self.id)
 
@@ -2202,7 +2202,7 @@ class Dihedron(Edron):
         Acceptable input:
             As for Edron, plus optional 'dihedral1' keyworded angle value.
         """
-        super().__init__(*args, **kwargs)
+        super(Dihedron, self).__init__(*args, **kwargs)
 
         # hedra making up this dihedron; set by self:_set_hedra()
         self.hedron1 = None
