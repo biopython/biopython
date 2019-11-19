@@ -1306,6 +1306,7 @@ class IC_Residue(object):
                 tnlst = tuple(nlst)
                 if tnlst not in dct:
                     dct[tnlst] = obj(nlst)
+                dct[tnlst].atoms_updated = False
 
     def dihedra_from_atoms(self, allBonds=False):
         """Create hedra and dihedra for atom coordinates.
@@ -1372,7 +1373,8 @@ class IC_Residue(object):
             d.dihedron_from_atoms()
         for h in self.hedra.values():
             # miss redundant hedra above, needed for some chi1 angles
-            if h.len1 is None:
+            # also miss if missing atoms means hedron not in dihedra
+            if (h.len1 is None) or (not h.atoms_updated):
                 # print(h)
                 h.hedron_from_atoms(self.atom_coords)
 
