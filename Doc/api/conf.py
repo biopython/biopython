@@ -320,5 +320,5 @@ def setup(app):
     def add_documenter(app, env, docnames):
         app.add_autodocumenter(BioPythonAPI, True)
 
-    # Over-ride autdoc documenter
+    # Over-ride autodoc documenter
     app.connect("env-before-read-docs", add_documenter)
