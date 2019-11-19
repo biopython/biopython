@@ -6,7 +6,7 @@
 
 """SCADIO: write OpenSCAD program to create protein structure 3D model.
 
-3D printing a protein structure is a non-trivial exercise due to the 
+3D printing a protein structure is a non-trivial exercise due to the
 overall complexity and the general requirement for supporting overhang regions
 while printing.  This software is a path to generating a model for printing
 (e.g. an STL file), and does not address the issues around converting the

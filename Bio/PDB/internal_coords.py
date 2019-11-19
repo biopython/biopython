@@ -1026,7 +1026,7 @@ class IC_Residue(object):
         if startPos is None:
             # fallback: use N-CA-C initial coords from creating dihedral
             startPos = {}
-            dlist0 = [self.id3_dh_index[akl] for akl in sorted(self.NCaCKey)]
+            dlist0 = [self.id3_dh_index[akl2] for akl2 in sorted(self.NCaCKey)]
             # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
             dlist = [val for sublist in dlist0 for val in sublist]
             # dlist = self.id3_dh_index[NCaCKey]
@@ -1222,7 +1222,7 @@ class IC_Residue(object):
         for ak in lst:
             posnAltlocs[ak] = set()
             if ak in self.ak_set:
-                edraLst.append(tuple([ak]))
+                edraLst.append(([ak]))
             else:
                 ak2_lst = []
                 for ak2 in self.ak_set:

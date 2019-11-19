@@ -646,9 +646,23 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
         residues = list(struct[1]["B"]) + [struct[1]["A"][44]]
-        self.assertEqual([("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
-                         ["A 44 ", "B 44 ", "B 46 ", "B 47 ", "B 48 ", "B 49 ", "B 50 ",
-                          "B 51 ", "B 51A", "B 52 ", "BH_SEP45 ", "BW0 "])
+        self.assertEqual(
+            [("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
+            [
+                "A 44 ",
+                "B 44 ",
+                "B 46 ",
+                "B 47 ",
+                "B 48 ",
+                "B 49 ",
+                "B 50 ",
+                "B 51 ",
+                "B 51A",
+                "B 52 ",
+                "BH_SEP45 ",
+                "BW0 ",
+            ],
+        )
         # DisorderedAtom
         atoms = [a.altloc for a in sorted(struct[1]["A"][74]["OD1"])]
         self.assertEqual(atoms, ["A", "B"])

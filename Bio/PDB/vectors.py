@@ -399,21 +399,36 @@ def homog_rot_mtx(angle_rads, axis):
     cosang = numpy.cos(angle_rads)
     sinang = numpy.sin(angle_rads)
 
-    if 'z' == axis:
-        return numpy.array([[cosang, -sinang, 0, 0],
-                            [sinang, cosang, 0, 0],
-                            [0, 0, 1, 0],
-                            [0, 0, 0, 1]], dtype=numpy.float64)
-    elif 'y' == axis:
-        return numpy.array([[cosang, 0, sinang, 0],
-                            [0, 1, 0, 0],
-                            [-sinang, 0, cosang, 0],
-                            [0, 0, 0, 1]], dtype=numpy.float64)
+    if "z" == axis:
+        return numpy.array(
+            [
+                [cosang, -sinang, 0, 0],
+                [sinang, cosang, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1],
+            ],
+            dtype=numpy.float64,
+        )
+    elif "y" == axis:
+        return numpy.array(
+            [
+                [cosang, 0, sinang, 0],
+                [0, 1, 0, 0],
+                [-sinang, 0, cosang, 0],
+                [0, 0, 0, 1],
+            ],
+            dtype=numpy.float64,
+        )
     else:
-        return numpy.array([[1, 0, 0, 0],
-                            [0, cosang, -sinang, 0],
-                            [0, sinang, cosang, 0],
-                            [0, 0, 0, 1]], dtype=numpy.float64)
+        return numpy.array(
+            [
+                [1, 0, 0, 0],
+                [0, cosang, -sinang, 0],
+                [0, sinang, cosang, 0],
+                [0, 0, 0, 1],
+            ],
+            dtype=numpy.float64,
+        )
 
 
 def homog_trans_mtx(x, y, z):
@@ -421,11 +436,9 @@ def homog_trans_mtx(x, y, z):
 
     :param x, y, z: translation in each axis
     """
-    return numpy.array([[1, 0, 0, x],
-                        [0, 1, 0, y],
-                        [0, 0, 1, z],
-                        [0, 0, 0, 1]
-                        ], dtype=numpy.float64)
+    return numpy.array(
+        [[1, 0, 0, x], [0, 1, 0, y], [0, 0, 1, z], [0, 0, 0, 1]], dtype=numpy.float64
+    )
 
 
 def homog_scale_mtx(scale):
@@ -433,11 +446,10 @@ def homog_scale_mtx(scale):
 
     :param float scale: scale multiplier
     """
-    return numpy.array([[scale, 0, 0, 0],
-                        [0, scale, 0, 0],
-                        [0, 0, scale, 0],
-                        [0, 0, 0, 1]
-                        ], dtype=numpy.float64)
+    return numpy.array(
+        [[scale, 0, 0, 0], [0, scale, 0, 0], [0, 0, scale, 0], [0, 0, 0, 1]],
+        dtype=numpy.float64,
+    )
 
 
 def get_spherical_coordinates(xyz):
@@ -450,8 +462,11 @@ def get_spherical_coordinates(xyz):
     if 0 == r:
         return numpy.array([0, 0, 0])
     sign = -1.0 if xyz[1][0] < 0.0 else 1.0
-    theta = ((numpy.pi / 2.0 * sign) if 0 == xyz[0][0]
-             else numpy.arctan2(xyz[1][0], xyz[0][0]))
+    theta = (
+        (numpy.pi / 2.0 * sign)
+        if 0 == xyz[0][0]
+        else numpy.arctan2(xyz[1][0], xyz[0][0])
+    )
     phi = numpy.arccos(xyz[2][0] / r)
     return (r, theta, phi)
 
@@ -493,8 +508,8 @@ def coord_space(acs, rev=False):
     #    print('p', p.transpose())
     #    print('sc', sc)
 
-    mrz = homog_rot_mtx(-sc[1], 'z')  # rotate translated a3 -theta about Z
-    mry = homog_rot_mtx(-sc[2], 'y')  # rotate translated a3 -phi about Y
+    mrz = homog_rot_mtx(-sc[1], "z")  # rotate translated a3 -theta about Z
+    mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a3 -phi about Y
 
     # mt completes a2-a3 on Z-axis, still need to align a1 with XZ plane
     # mt = mry @ mrz @ tm  # python 3.5 and later
@@ -510,10 +525,11 @@ def coord_space(acs, rev=False):
     # need theta of translated a0
     # sc2 = get_spherical_coordinates(p)
     sign = -1.0 if (p[1][0] < 0.0) else 1.0
-    theta2 = ((numpy.pi / 2.0 * sign) if 0 == p[0][0]
-              else numpy.arctan2(p[1][0], p[0][0]))
+    theta2 = (
+        (numpy.pi / 2.0 * sign) if 0 == p[0][0] else numpy.arctan2(p[1][0], p[0][0])
+    )
     # rotate a0 -theta2 about Z to align with X
-    mrz2 = homog_rot_mtx(-theta2, 'z')
+    mrz2 = homog_rot_mtx(-theta2, "z")
 
     # mt = mrz2 @ mt
     mt = mrz2.dot(mt)
@@ -524,11 +540,11 @@ def coord_space(acs, rev=False):
     # rev=True, so generate the reverse transformation
 
     # rotate a0 theta about Z, reversing alignment with X
-    mrz2 = homog_rot_mtx(theta2, 'z')
+    mrz2 = homog_rot_mtx(theta2, "z")
     # rotate a2 phi about Y
-    mry = homog_rot_mtx(sc[2], 'y')
+    mry = homog_rot_mtx(sc[2], "y")
     # rotate a2 theta about Z
-    mrz = homog_rot_mtx(sc[1], 'z')
+    mrz = homog_rot_mtx(sc[1], "z")
     # translation matrix origin to a1
     tm = homog_trans_mtx(a1[0], a1[1], a1[2])
 
