@@ -32,6 +32,7 @@ class Rebuild(unittest.TestCase):
     CIF_parser = MMCIFParser(QUIET=True)
     pdb_1LCD = PDB_parser.get_structure("1LCD", "PDB/1LCD.pdb")
     cif_3JQH = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
+    cif_4CUP = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
 
     def test_rebuild_multichain_missing_residues(self):
         """Convert multichain protein to internal coordinates and back."""
@@ -65,25 +66,25 @@ class Rebuild(unittest.TestCase):
     def test_write_SCAD(self):
         sf = StringIO()
         write_SCAD(
-            self.cif_3JQH, sf, 10.0, pdbid="3jqh", backboneOnly=True, includeCode=False
+            self.cif_4CUP, sf, 10.0, pdbid="4cup", backboneOnly=True, includeCode=False
         )
         sf.seek(0)
         next_one = False
         with as_handle(sf, mode="r") as handle:
             for aline in handle.readlines():
-                if "// (1_P_N_A_0.83, 1_P_CA_A_0.83, 1_P_C_A_0.83)" in aline:
+                if "// (1856_S_CB, 1856_S_CA, 1856_S_C)" in aline:
                     m = re.search(r"\[\s+(\d+\.\d+)\,", aline)
                     if m:
-                        # test correctly scaled altloc residue/atom bond length
-                        self.assertAlmostEqual(float(m.group(1)), 14.65214)
-                elif '[ 25, "23L",' in aline:
+                        # test correctly scaled atom bond length
+                        self.assertAlmostEqual(float(m.group(1)), 15.30583, places=3)
+                elif '[ 114, "1970K",' in aline:
                     next_one = True
                 elif next_one:
                     next_one = False
                     # test last residue transform looks roughly correct
                     # some differences due to sorting issues on different python
                     # versions
-                    target = [-335.294, -24.402, -15.566, 1.0]
+                    target = [184.474, 125.988, -99.326, 1.0]
                     ms = re.findall(r"\s+(-?\d+\.\d+)\s+\]", aline)
                     if ms:
                         for i in range(0, 3):
