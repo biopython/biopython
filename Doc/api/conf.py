@@ -12,7 +12,9 @@ import shutil
 import sys
 import tempfile
 
-from Bio import __version__
+from sphinx.ext import autodoc
+
+from Bio import __version__, Application
 
 # -- General configuration ------------------------------------------------
 
@@ -284,6 +286,35 @@ def run_apidoc(_):
             insert_github_link(f)
 
 
+class BioPythonAPI(autodoc.ClassDocumenter):
+    """Custom Class Documenter for AbstractCommandline classes."""
+
+    @classmethod
+    def can_document_member(cls, member, membername, isattr, parent):
+        """Check if the member is an AbstractCommandline subclass."""
+        try:
+            if issubclass(member, Application.AbstractCommandline):
+                return True
+            else:
+                return False
+        except TypeError:
+            return False
+
+    def import_object(self):
+        """If the class is an AbstractCommandline we return an instance."""
+        ret = super().import_object()
+        try:
+            ret = self.object()
+        except TypeError:
+            pass
+        return ret
+
+
 def setup(app):
     """Over-ride Sphinx setup to trigger sphinx-apidoc."""
     app.connect("builder-inited", run_apidoc)
+
+    def add_documenter(app, env, docnames):
+        app.add_autodocumenter(BioPythonAPI, True)
+
+    app.connect("env-before-read-docs", add_documenter)
