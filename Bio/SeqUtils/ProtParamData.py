@@ -5,6 +5,8 @@
 # package.
 """Indices to be used with ProtParam."""
 
+# Turn black code style off
+# fmt: off
 
 # Kyte & Doolittle index of hydrophobicity
 # J. Mol. Biol. 157:105-132(1982).
@@ -151,3 +153,6 @@ DIWV = {"A": {"A": 1.0, "C": 44.94, "E": 1.0, "D": -7.49,
               "Q": 1.0, "P": 13.34, "S": 1.0, "R": -15.91,
               "T": -7.49, "W": -9.37, "V": 1.0, "Y": 13.34},
         }
+
+# Turn black code style on
+# fmt: on
