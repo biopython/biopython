@@ -151,7 +151,7 @@ def __read_motifs(record, xml_tree):
             instance.motif_name = motif_tree.get("name")
             instance.sequence_name = site_tree.get("sequence_id")  # TODO - rename to sequence_id, get sequence_name
             # TODO - left flank, right flank
-            instance.start = site_tree.get("position")
+            instance.start = int(site_tree.get("position")) + 1
             instance.pvalue = float(site_tree.get("pvalue"))
             instance.strand = site_tree.get("strand")
             instance.length = len(sequence)
