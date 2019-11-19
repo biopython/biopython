@@ -923,7 +923,7 @@ class ParseReal(unittest.TestCase):
 
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
-
+        # comment for black formatter vs. flake8 issue
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 3)
             for idx, model in enumerate(struct):
