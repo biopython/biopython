@@ -298,14 +298,17 @@ class BioPythonAPI(autodoc.ClassDocumenter):
             else:
                 return False
         except TypeError:
+            # Throws if the member is not a class
             return False
 
     def import_object(self):
-        """If the class is an AbstractCommandline we return an instance."""
+        """Import the class."""
         ret = super().import_object()
         try:
+            # If the class is an AbstractCommandline we return an instance.
             ret = self.object()
         except TypeError:
+            # Throws if the object is the base AbstractCommandline class
             pass
         return ret
 
@@ -317,4 +320,5 @@ def setup(app):
     def add_documenter(app, env, docnames):
         app.add_autodocumenter(BioPythonAPI, True)
 
+    # Over-ride autdoc documenter
     app.connect("env-before-read-docs", add_documenter)
