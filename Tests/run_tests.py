@@ -358,6 +358,15 @@ class TestRunner(unittest.TextTestRunner):
                 except MissingPythonDependencyError:
                     sys.stderr.write("skipped, missing Python dependency\n")
                     return True
+                except ValueError as e:
+                    if str(e).startswith("module ") and str(e).endswith("has no docstrings"):
+                        # Seen with some C modules via Debian build testing
+                        sys.stderr.write("skipped, has no docstrings\n")
+                        return True
+                    sys.stderr.write("FAIL, ValueError\n")
+                    result.stream.write("ERROR while importing %s: %s\n" % (name, e))
+                    result.printErrors()
+                    return False
                 except ImportError as e:
                     sys.stderr.write("FAIL, ImportError\n")
                     result.stream.write("ERROR while importing %s: %s\n" % (name, e))
