@@ -4,7 +4,29 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""SCADIO: write OpenSCAD program to create protein structure 3D model."""
+"""SCADIO: write OpenSCAD program to create protein structure 3D model.
+
+3D printing a protein structure is a non-trivial exercise due to the 
+overall complexity and the general requirement for supporting overhang regions
+while printing.  This software is a path to generating a model for printing
+(e.g. an STL file), and does not address the issues around converting the
+model to a physical product.  OpenSCAD <http://www.openscad.org/> can create
+a printable model from the script this software produces.  MeshMixer
+<http://www.meshmixer.com/>, various slicer software, and the 3D printer
+technology available to you provide options for addressing the problems around
+physically rendering the model.
+
+I suggest generating your initial model using the OpenSCAD script provided
+here, then modifying that script according to your needs.  Changing the
+atomScale and bondRadius values can simplify the model by removing gaps and
+the corresponding need for supports, or you may wish to modify the hedronDispatch()
+routine to select residues or chain sections for printing separately and
+subsequently joining with rotatable bonds.  During this development phase you
+will likely have your version `include` only the data matrices generated here,
+by using the `includeCode-False` option to write_SCAD().  An example project
+with modifications of the script generated here is
+<https://www.thingiverse.com/thing:3957471>.
+"""
 # import re
 
 from Bio.File import as_handle
