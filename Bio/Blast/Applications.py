@@ -639,10 +639,14 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     """Use composition-based statistics for blastp, blastx, or tblastn:
 
                     D or d: default (equivalent to 2 )
+
                     0 or F or f: no composition-based statistics
+
                     1: Composition-based statistics as in NAR 29:2994-3005, 2001
+
                     2 or T or t : Composition-based score adjustment as in
                     Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+
                     3: Composition-based score adjustment as in
                     Bioinformatics 21:902-911, 2005, unconditionally
 
@@ -718,11 +722,14 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     r"""Use composition-based statistics (string, default 2, i.e. True).
 
                     0, F or f: no composition-based statistics
+
                     1: Composition-based statistics as in NAR 29:2994-3005, 2001
+
                     2, T or t, D or d : Composition-based score adjustment as in
-                    \   Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+
                     3: Composition-based score adjustment as in Bioinformatics 21:902-911,
-                    \   2005, unconditionally
+                    2005, unconditionally
 
                     Note that only tblastn supports values of 1 and 3.""",
                     checker_function=lambda value: value in "0Ft12TtDd3",
@@ -732,7 +739,9 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     """Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+
+                    Default is "12 2.2 2.5"
+                    """,
                     equate=False),
             # Extension options:
             _Switch(["-ungapped", "ungapped"],
@@ -805,7 +814,8 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
                     """Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                    Default is "12 2.2 2.5"
+                    """,
                     equate=False),
         ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -971,7 +981,8 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     r"""Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5" """,
+                    Default is "12 2.2 2.5"
+                    """,
                     equate=False),
             # Restrict search or results:
             _Option(["-culling_limit", "culling_limit"],
@@ -1002,8 +1013,10 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     r"""Use composition-based statistics.
 
                     D or d: default (equivalent to 0 )
+
                     0 or F or f: Simplified Composition-based statistics as in
-                    \             Bioinformatics 15:1000-1011, 1999
+                    Bioinformatics 15:1000-1011, 1999
+
                     1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
 
                     Default = 0.
@@ -1072,8 +1085,10 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     r"""Use composition-based statistics.
 
                     D or d: default (equivalent to 0 )
+
                     0 or F or f: Simplified Composition-based statistics as in
-                    \             Bioinformatics 15:1000-1011, 1999
+                    Bioinformatics 15:1000-1011, 1999
+
                     1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
 
                     Default = 0.
@@ -1174,6 +1189,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     """Use composition-based statistics (string, default 2, i.e. True).
 
                     0, F or f: no composition-based statistics.
+
                     2, T or t, D or d : Composition-based score adjustment as in
                     Bioinformatics 21:902-911, 2005, conditioned on sequence properties
 
