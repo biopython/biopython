@@ -65,15 +65,15 @@ class PhymlCommandline(AbstractCommandline):
                     ),
 
             _Option(["-b", "--bootstrap", "bootstrap"],
-                    """Number of bootstrap replicates, if value is > 0.
+                    r"""Number of bootstrap replicates, if value is > 0.
 
                     Otherwise:
 
                     0: neither approximate likelihood ratio test nor bootstrap
-                       values are computed.
+                    \   values are computed.
                     -1: approximate likelihood ratio test returning aLRT statistics.
                     -2: approximate likelihood ratio test returning Chi2-based
-                        parametric branch supports.
+                    \    parametric branch supports.
                     -4: SH-like branch supports alone.
                     """,
                     equate=False,
@@ -193,10 +193,10 @@ class PhymlCommandline(AbstractCommandline):
                     ),
 
             _Option(["-o", "optimize"],
-                    """Specific parameter optimisation.
+                    r"""Specific parameter optimisation.
 
                     tlr : tree topology (t), branch length (l) and
-                          rate parameters (r) are optimised.
+                    \      rate parameters (r) are optimised.
                     tl  : tree topology and branch length are optimised.
                     lr  : branch length and rate parameters are optimised.
                     l   : branch length are optimised.
@@ -230,12 +230,12 @@ class PhymlCommandline(AbstractCommandline):
                     ),
 
             _Switch(["--print_site_lnl", "print_site_lnl"],
-                    "Print the likelihood for each site in file *_phyml_lk.txt."
+                    r"Print the likelihood for each site in file \*_phyml_lk.txt."
                     ),
 
             _Switch(["--print_trace", "print_trace"],
-                    """Print each phylogeny explored during the tree search process
-                    in file *_phyml_trace.txt."""
+                    r"""Print each phylogeny explored during the tree search process
+                    in file \*_phyml_trace.txt."""
                     ),
 
             _Option(["--run_id", "run_id"],

@@ -431,7 +431,7 @@ class BwaMemCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             _Option(["-d", "d"],
-                    "Off-diagonal X-dropoff (Z-dropoff). Stop extension when the difference between the best and the current extension score is above |i-j|*A+INT, where i and j are the current positions of the query and reference, respectively, and A is the matching score. Z-dropoff is similar to BLAST\'s X-dropoff except that it doesn\'t penalize gaps in one of the sequences in the alignment. Z-dropoff not only avoids unnecessary extension, but also reduces poor alignments inside a long good alignment. [100]",
+                    r"Off-diagonal X-dropoff (Z-dropoff). Stop extension when the difference between the best and the current extension score is above \|i-j\|*A+INT, where i and j are the current positions of the query and reference, respectively, and A is the matching score. Z-dropoff is similar to BLAST\'s X-dropoff except that it doesn\'t penalize gaps in one of the sequences in the alignment. Z-dropoff not only avoids unnecessary extension, but also reduces poor alignments inside a long good alignment. [100]",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             _Option(["-r", "r"],
