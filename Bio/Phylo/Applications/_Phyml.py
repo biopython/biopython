@@ -70,10 +70,13 @@ class PhymlCommandline(AbstractCommandline):
                     Otherwise:
 
                     0: neither approximate likelihood ratio test nor bootstrap
-                    \   values are computed.
+                    values are computed.
+
                     -1: approximate likelihood ratio test returning aLRT statistics.
+
                     -2: approximate likelihood ratio test returning Chi2-based
-                    \    parametric branch supports.
+                    parametric branch supports.
+
                     -4: SH-like branch supports alone.
                     """,
                     equate=False,
@@ -130,8 +133,8 @@ class PhymlCommandline(AbstractCommandline):
                           the substitution model.
 
                     "fA fC fG fT" : only valid for nucleotide-based models.
-                        fA, fC, fG and fT are floating-point numbers that correspond
-                        to the frequencies of A, C, G and T, respectively.
+                    fA, fC, fG and fT are floating-point numbers that correspond
+                    to the frequencies of A, C, G and T, respectively.
                     """,
                     filename=True,  # ensure ".25 .25 .25 .25" stays quoted
                     equate=False,
@@ -178,7 +181,9 @@ class PhymlCommandline(AbstractCommandline):
                     Can be one of:
 
                         NNI : default, fast
+
                         SPR : a bit slower than NNI
+
                         BEST : best of NNI and SPR search
                     """,
                     checker_function=lambda x: x in ("NNI", "SPR", "BEST"),
@@ -196,11 +201,16 @@ class PhymlCommandline(AbstractCommandline):
                     r"""Specific parameter optimisation.
 
                     tlr : tree topology (t), branch length (l) and
-                    \      rate parameters (r) are optimised.
+                    rate parameters (r) are optimised.
+
                     tl  : tree topology and branch length are optimised.
+
                     lr  : branch length and rate parameters are optimised.
+
                     l   : branch length are optimised.
+
                     r   : rate parameters are optimised.
+
                     n   : no parameter is optimised.
                     """,
                     equate=False,
@@ -234,7 +244,8 @@ class PhymlCommandline(AbstractCommandline):
                     ),
 
             _Switch(["--print_trace", "print_trace"],
-                    r"""Print each phylogeny explored during the tree search process
+                    r"""
+                    Print each phylogeny explored during the tree search process
                     in file \*_phyml_trace.txt."""
                     ),
 

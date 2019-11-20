@@ -99,60 +99,60 @@ class RaxmlCommandline(AbstractCommandline):
                         Select algorithm:
 
                         a: Rapid Bootstrap analysis and search for best-scoring ML
-                        \   tree in one program run.
+                        tree in one program run.
 
                         b: Draw bipartition information on a tree provided with '-t'
-                        \   based on multiple trees (e.g. form a bootstrap) in a file
-                        \   specifed by '-z'.
+                        based on multiple trees (e.g. form a bootstrap) in a file
+                        specifed by '-z'.
 
                         c: Check if the alignment can be properly read by RAxML.
 
                         d: New rapid hill-climbing (DEFAULT).
 
                         e: Optimize model+branch lengths for given input tree under
-                        \   GAMMA/GAMMAI only.
+                        GAMMA/GAMMAI only.
 
                         g: Compute per site log Likelihoods for one ore more trees
-                        \   passed via '-z' and write them to a file that can be read
-                        \   by CONSEL.
+                        passed via '-z' and write them to a file that can be read
+                        by CONSEL.
 
                         h: Compute log likelihood test (SH-test) between best tree
-                        \   passed via '-t' and a bunch of other trees passed via '-z'.
+                        passed via '-t' and a bunch of other trees passed via '-z'.
 
                         i: Perform a really thorough bootstrap, refinement of final
-                        \   bootstrap tree under GAMMA and a more exhaustive algorithm.
+                        bootstrap tree under GAMMA and a more exhaustive algorithm.
 
                         j: Generate a bunch of bootstrapped alignment files from an
-                        \   original alignemnt file.
+                        original alignemnt file.
 
                         m: Compare bipartitions between two bunches of trees passed
-                        \   via '-t' and '-z' respectively. This will return the
-                        \   Pearson correlation between all bipartitions found in the
-                        \   two tree files. A file called
-                        \   RAxML_bipartitionFrequencies.outputFileName will be
-                        \   printed that contains the pair-wise bipartition
-                        \   frequencies of the two sets.
+                        via '-t' and '-z' respectively. This will return the
+                        Pearson correlation between all bipartitions found in the
+                        two tree files. A file called
+                        RAxML_bipartitionFrequencies.outputFileName will be
+                        printed that contains the pair-wise bipartition
+                        frequencies of the two sets.
 
                         n: Compute the log likelihood score of all trees contained
-                        \   in a tree file provided by '-z' under GAMMA or
-                        \   GAMMA+P-Invar.
+                        in a tree file provided by '-z' under GAMMA or
+                        GAMMA+P-Invar.
 
                         o: Old and slower rapid hill-climbing.
 
                         p: Perform pure stepwise MP addition of new sequences to an
-                        \   incomplete starting tree.
+                        incomplete starting tree.
 
                         s: Split up a multi-gene partitioned alignment into the
-                        \   respective subalignments.
+                        respective subalignments.
 
                         t: Do randomized tree searches on one fixed starting tree.
 
                         w: Compute ELW test on a bunch of trees passed via '-z'.
 
                         x: Compute pair-wise ML distances, ML model parameters will
-                        \   be estimated on an MP starting tree or a user-defined
-                        \   tree passed via '-t', only allowed for GAMMA-based models
-                        \   of rate heterogeneity.
+                        be estimated on an MP starting tree or a user-defined
+                        tree passed via '-t', only allowed for GAMMA-based models
+                        of rate heterogeneity.
                         """,
                         checker_function=(lambda x:
                                           isinstance(x, basestring) and len(x) == 1),
@@ -211,20 +211,20 @@ class RaxmlCommandline(AbstractCommandline):
                         NUCLEOTIDES:
 
                         GTRCAT         : GTR + Optimization of substitution rates + Optimization of site-specific
-                        \                 evolutionary rates which are categorized into numberOfCategories distinct
-                        \                 rate categories for greater computational efficiency
-                        \                 if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
-                        \                 will use GTRMIX instead
+                        evolutionary rates which are categorized into numberOfCategories distinct
+                        rate categories for greater computational efficiency
+                        if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
+                        will use GTRMIX instead
 
                         GTRGAMMA       : GTR + Optimization of substitution rates + GAMMA model of rate
-                        \                 heterogeneity (alpha parameter will be estimated)
+                        heterogeneity (alpha parameter will be estimated)
 
                         GTRMIX         : Inference of the tree under GTRCAT
-                        \                 and thereafter evaluation of the final tree topology under GTRGAMMA
+                        and thereafter evaluation of the final tree topology under GTRGAMMA
 
                         GTRCAT_GAMMA   : Inference of the tree with site-specific evolutionary rates.
-                        \                 However, here rates are categorized using the 4 discrete GAMMA rates.
-                        \                 Evaluation of the final tree topology under GTRGAMMA
+                        However, here rates are categorized using the 4 discrete GAMMA rates.
+                        Evaluation of the final tree topology under GTRGAMMA
 
                         GTRGAMMAI      : Same as GTRGAMMA, but with estimate of proportion of invariable sites
 
@@ -235,20 +235,20 @@ class RaxmlCommandline(AbstractCommandline):
                         AMINO ACIDS:
 
                         PROTCATmatrixName[F]    : specified AA matrix + Optimization of substitution rates + Optimization of site-specific
-                        \                          evolutionary rates which are categorized into numberOfCategories distinct
-                        \                          rate categories for greater computational efficiency
-                        \                          if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
-                        \                          will use PROTMIX... instead
+                        evolutionary rates which are categorized into numberOfCategories distinct
+                        rate categories for greater computational efficiency
+                        if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
+                        will use PROTMIX... instead
 
                         PROTGAMMAmatrixName[F]  : specified AA matrix + Optimization of substitution rates + GAMMA model of rate
-                        \                          heterogeneity (alpha parameter will be estimated)
+                        heterogeneity (alpha parameter will be estimated)
 
                         PROTMIXmatrixName[F]    : Inference of the tree under specified AA matrix + CAT
-                        \                          and thereafter evaluation of the final tree topology under specified AA matrix + GAMMA
+                        and thereafter evaluation of the final tree topology under specified AA matrix + GAMMA
 
                         PROTCAT_GAMMAmatrixName[F] : Inference of the tree under specified AA matrix and site-specific evolutionary rates.
-                        \                          However, here rates are categorized using the 4 discrete GAMMA rates.
-                        \                          Evaluation of the final tree topology under specified AA matrix + GAMMA
+                        However, here rates are categorized using the 4 discrete GAMMA rates.
+                        Evaluation of the final tree topology under specified AA matrix + GAMMA
 
                         PROTGAMMAImatrixName[F] : Same as PROTGAMMAmatrixName[F], but with estimate of proportion of invariable sites
 
