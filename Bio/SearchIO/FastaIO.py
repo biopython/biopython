@@ -195,9 +195,10 @@ def _set_hsp_seqs(hsp, parsed, program):
             stop = stop + start_adj - stop_adj
             parsed[seq_type]["seq"] = pseq["seq"][start:stop]
     if len(parsed["query"]["seq"]) != len(parsed["hit"]["seq"]):
-        raise ValueError("Length mismatch: %r %r"
-                         % (len(parsed["query"]["seq"]),
-                            len(parsed["hit"]["seq"])))
+        raise ValueError(
+            "Length mismatch: %r %r"
+            % (len(parsed["query"]["seq"]), len(parsed["hit"]["seq"]))
+        )
     if "similarity" in hsp.aln_annotation:
         # only using 'start' since FASTA seems to have trimmed the 'excess'
         # end part
@@ -259,8 +260,10 @@ def _get_aln_slice_coords(parsed_hsp):
         stop = disp_start - stop + 1
     stop += seq_stripped.count("-")
     if not (0 <= start and start < stop and stop <= len(seq_stripped)):
-        raise ValueError("Problem with sequence start/stop,"
-                         "\n%s[%i:%i]\n%s" % (seq, start, stop, parsed_hsp))
+        raise ValueError(
+            "Problem with sequence start/stop,\n%s[%i:%i]\n%s"
+            % (seq, start, stop, parsed_hsp)
+        )
     return start, stop
 
 
@@ -332,8 +335,7 @@ class FastaM10Parser(object):
             elif not self.line.startswith(">>>") and ">>>" in self.line:
                 qres_state = state_QRES_NEW
             # the beginning of the query info and its hits + hsps
-            elif self.line.startswith(">>>") and not \
-                    self.line.strip() == ">>><<<":
+            elif self.line.startswith(">>>") and not self.line.strip() == ">>><<<":
                 qres_state = state_QRES_CONTENT
             # default qres mark
             else:
@@ -404,14 +406,14 @@ class FastaM10Parser(object):
             peekline = self.handle.peekline()
             # yield hit if we've reached the start of a new query or
             # the end of the search
-            if peekline.strip() in [">>><<<", ">>>///"] or \
-                    (not peekline.startswith(">>>") and ">>>" in peekline):
+            if peekline.strip() in [">>><<<", ">>>///"] or (
+                not peekline.startswith(">>>") and ">>>" in peekline
+            ):
                 # append last parsed_hsp['hit']['seq'] line
                 if state == _STATE_HIT_BLOCK:
                     parsed_hsp["hit"]["seq"] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.aln_annotation["similarity"] += \
-                            self.line.strip("\r\n")
+                    hsp.aln_annotation["similarity"] += self.line.strip("\r\n")
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble["program"])
                 hit = Hit(hsp_list)
@@ -508,8 +510,7 @@ class FastaM10Parser(object):
                 elif state == _STATE_QUERY_BLOCK:
                     parsed_hsp["query"]["seq"] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.fragment.aln_annotation["similarity"] += \
-                            self.line.strip("\r\n")
+                    hsp.fragment.aln_annotation["similarity"] += self.line.strip("\r\n")
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)
@@ -546,7 +547,9 @@ class FastaM10Indexer(SearchIndexer):
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (not peekline.startswith(query_mark) and query_mark in peekline) or not line:
+                if (
+                    not peekline.startswith(query_mark) and query_mark in peekline
+                ) or not line:
                     yield qresult_key, start_offset, end_offset - start_offset
                     if not line:
                         break
@@ -576,8 +579,9 @@ class FastaM10Indexer(SearchIndexer):
             qresult_raw += line
 
             # break when we've reached qresult end
-            if (not peekline.startswith(query_mark) and query_mark in peekline) or \
-                    not line:
+            if (
+                not peekline.startswith(query_mark) and query_mark in peekline
+            ) or not line:
                 break
 
         # append mock end marker to qresult_raw, since it's not always present
@@ -587,4 +591,5 @@ class FastaM10Indexer(SearchIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

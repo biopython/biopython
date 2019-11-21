@@ -50,9 +50,8 @@ def _make_triplets(seq, phase=0):
     pre = seq[:phase]
     np_seq = seq[phase:]
     non_triplets = len(np_seq) % 3
-    post = "" if not non_triplets else np_seq[-1 * non_triplets:]
-    intacts = [np_seq[3 * i:3 * (i + 1)]
-               for i in range(len(np_seq) // 3)]
+    post = "" if not non_triplets else np_seq[-1 * non_triplets :]
+    intacts = [np_seq[3 * i : 3 * (i + 1)] for i in range(len(np_seq) // 3)]
     return pre, intacts, post
 
 
@@ -79,8 +78,7 @@ def _get_fragments_coord(frags):
         return []
     # first fragment always starts from position 0
     init = [0]
-    return reduce(lambda acc, frag: acc + [acc[-1] + len(frag)],
-                  frags[:-1], init)
+    return reduce(lambda acc, frag: acc + [acc[-1] + len(frag)], frags[:-1], init)
 
 
 def _get_fragments_phase(frags):
@@ -125,12 +123,10 @@ def _adjust_aa_seq(fraglist):
         # fragment should have a length that is a multiple of 3
         # assert len(frag) % 3 == 0
         qseq = str(frag.query.seq)
-        q_triplets_pre, q_triplets, q_triplets_post = \
-            _make_triplets(qseq, phase)
+        q_triplets_pre, q_triplets, q_triplets_post = _make_triplets(qseq, phase)
 
         hseq = str(frag.hit.seq)
-        h_triplets_pre, h_triplets, h_triplets_post = \
-            _make_triplets(hseq, phase)
+        h_triplets_pre, h_triplets, h_triplets_post = _make_triplets(hseq, phase)
 
         # get one letter codes
         # and replace gap codon markers and termination characters
@@ -162,8 +158,9 @@ def _adjust_aa_seq(fraglist):
         # by turning them into list of triplets
         for annot, annotseq in frag.aln_annotation.items():
             pre, intact, post = _make_triplets(annotseq, phase)
-            frag.aln_annotation[annot] = \
+            frag.aln_annotation[annot] = (
                 list(filter(None, [pre])) + intact + list(filter(None, [post]))
+            )
 
         # update values for next iteration
         hsp_hstart, hsp_qstart = hend, qend
@@ -193,7 +190,7 @@ def _split_fragment(frag):
             shifts = re.search(_RE_SHIFTS, simil).group(1)
             s_start = simil.find(shifts)
             s_stop = s_start + len(shifts)
-            split = frag[abs_pos:abs_pos + s_start]
+            split = frag[abs_pos : abs_pos + s_start]
         except AttributeError:  # no '#' in simil, i.e. last frag
             shifts = ""
             s_start = 0
@@ -202,10 +199,12 @@ def _split_fragment(frag):
 
         # coordinates for the split strand
         qstart, hstart = qpos, hpos
-        qpos += (len(split) - sum(str(split.query.seq).count(x)
-                 for x in ("-", "<", ">"))) * qstep
-        hpos += (len(split) - sum(str(split.hit.seq).count(x)
-                 for x in ("-", "<", ">"))) * hstep
+        qpos += (
+            len(split) - sum(str(split.query.seq).count(x) for x in ("-", "<", ">"))
+        ) * qstep
+        hpos += (
+            len(split) - sum(str(split.hit.seq).count(x) for x in ("-", "<", ">"))
+        ) * hstep
 
         split.hit_start = min(hstart, hpos)
         split.query_start = min(qstart, qpos)
@@ -215,11 +214,12 @@ def _split_fragment(frag):
         # account for frameshift length
         abs_slice = slice(abs_pos + s_start, abs_pos + s_stop)
         if len(frag.aln_annotation) == 2:
-            seqs = (str(frag[abs_slice].query.seq),
-                    str(frag[abs_slice].hit.seq))
+            seqs = (str(frag[abs_slice].query.seq), str(frag[abs_slice].hit.seq))
         elif len(frag.aln_annotation) == 3:
-            seqs = (frag[abs_slice].aln_annotation["query_annotation"],
-                    frag[abs_slice].aln_annotation["hit_annotation"],)
+            seqs = (
+                frag[abs_slice].aln_annotation["query_annotation"],
+                frag[abs_slice].aln_annotation["hit_annotation"],
+            )
         if "#" in seqs[0]:
             qpos += len(shifts) * qstep
         elif "#" in seqs[1]:
@@ -267,9 +267,11 @@ def _create_hsp(hid, qid, hspd):
                 frags.extend(_split_fragment(frag))
                 continue
         # try to set frame if there are translation in the alignment
-        if len(frag.aln_annotation) > 1 or \
-           frag.query_strand == 0 or \
-           ("vulgar_comp" in hspd and re.search(_RE_TRANS, hspd["vulgar_comp"])):
+        if (
+            len(frag.aln_annotation) > 1
+            or frag.query_strand == 0
+            or ("vulgar_comp" in hspd and re.search(_RE_TRANS, hspd["vulgar_comp"]))
+        ):
             _set_frame(frag)
 
         frags.append(frag)
@@ -282,8 +284,15 @@ def _create_hsp(hid, qid, hspd):
 
     hsp = HSP(frags)
     # set hsp-specific attributes
-    for attr in ("score", "hit_split_codons", "query_split_codons",
-                 "model", "vulgar_comp", "cigar_comp", "alphabet"):
+    for attr in (
+        "score",
+        "hit_split_codons",
+        "query_split_codons",
+        "model",
+        "vulgar_comp",
+        "cigar_comp",
+        "alphabet",
+    ):
         if attr in hspd:
             setattr(hsp, attr, hspd[attr])
 
@@ -315,12 +324,13 @@ class _BaseExonerateParser(object):
         while True:
             self.line = self.handle.readline()
             # flag for human-readable alignment block
-            if self.line.startswith("C4 Alignment:") and not \
-                    self.has_c4_alignment:
+            if self.line.startswith("C4 Alignment:") and not self.has_c4_alignment:
                 self.has_c4_alignment = True
-            if self.line.startswith("C4 Alignment:") or \
-                    self.line.startswith("vulgar:") or \
-                    self.line.startswith("cigar:"):
+            if (
+                self.line.startswith("C4 Alignment:")
+                or self.line.startswith("vulgar:")
+                or self.line.startswith("cigar:")
+            ):
                 break
             elif not self.line or self.line.startswith("-- completed "):
                 return
@@ -356,12 +366,10 @@ class _BaseExonerateParser(object):
         for line in aln_header:
             # query line
             if line.startswith("Query:"):
-                qresult["id"], qresult["description"] = \
-                        _parse_hit_or_query_line(line)
+                qresult["id"], qresult["description"] = _parse_hit_or_query_line(line)
             # target line
             elif line.startswith("Target:"):
-                hit["id"], hit["description"] = \
-                        _parse_hit_or_query_line(line)
+                hit["id"], hit["description"] = _parse_hit_or_query_line(line)
             # model line
             elif line.startswith("Model:"):
                 qresult["model"] = line.split(" ", 1)[1]
@@ -431,8 +439,7 @@ class _BaseExonerateParser(object):
                 header = {"qresult": {}, "hit": {}, "hsp": {}}
                 # if the file has c4 alignments, try to parse the header
                 if self.has_c4_alignment:
-                    self.read_until(lambda line:
-                                    line.strip().startswith("Query:"))
+                    self.read_until(lambda line: line.strip().startswith("Query:"))
                     header = self._parse_alignment_header()
                 # parse the block contents
                 cur = self.parse_alignment_block(header)
@@ -509,18 +516,17 @@ class _BaseExonerateIndexer(SearchIndexer):
                 else:
                     curr_key = self.get_qresult_id(start_offset)
                     if curr_key != qresult_key:
-                        yield qresult_key, qresult_offset, \
-                                start_offset - qresult_offset
+                        yield qresult_key, qresult_offset, start_offset - qresult_offset
                         qresult_key = curr_key
                         qresult_offset = start_offset
                         handle.seek(qresult_offset)
             elif not line:
-                yield qresult_key, qresult_offset, \
-                        start_offset - qresult_offset
+                yield qresult_key, qresult_offset, start_offset - qresult_offset
                 break
 
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

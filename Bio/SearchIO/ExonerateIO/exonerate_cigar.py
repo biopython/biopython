@@ -17,11 +17,14 @@ __all__ = ("ExonerateCigarParser", "ExonerateCigarIndexer")
 
 
 # precompile regex
-_RE_CIGAR = re.compile(r"""^cigar:\s+
+_RE_CIGAR = re.compile(
+    r"""^cigar:\s+
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand
         (\d+)(\s+.*)$                         # score, vulgar components
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
 
 class ExonerateCigarParser(_BaseExonerateParser):
@@ -104,4 +107,5 @@ class ExonerateCigarIndexer(ExonerateVulgarIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
