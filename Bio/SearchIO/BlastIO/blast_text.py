@@ -17,7 +17,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._legacy import NCBIStandalone
 
 
-__all__ = ("BlastTextParser", )
+__all__ = ("BlastTextParser",)
 
 
 class BlastTextParser(object):
@@ -90,12 +90,10 @@ class BlastTextParser(object):
                         else:
                             frag.hit_frame = 1
                     # set query coordinates
-                    frag.query_start = min(bhsp.query_start,
-                                           bhsp.query_end) - 1
+                    frag.query_start = min(bhsp.query_start, bhsp.query_end) - 1
                     frag.query_end = max(bhsp.query_start, bhsp.query_end)
                     # set hit coordinates
-                    frag.hit_start = min(bhsp.sbjct_start,
-                                         bhsp.sbjct_end) - 1
+                    frag.hit_start = min(bhsp.sbjct_start, bhsp.sbjct_end) - 1
                     frag.hit_end = max(bhsp.sbjct_start, bhsp.sbjct_end)
                     # set query, hit sequences and its annotation
                     qseq = ""
@@ -142,4 +140,5 @@ class BlastTextParser(object):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

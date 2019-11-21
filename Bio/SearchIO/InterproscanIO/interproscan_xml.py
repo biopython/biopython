@@ -32,10 +32,7 @@ _ELEM_HIT = {
     "desc": ("description", str),
 }
 # element - hsp attribute name mapping
-_ELEM_HSP = {
-    "score": ("bitscore", float),
-    "evalue": ("evalue", float),
-}
+_ELEM_HSP = {"score": ("bitscore", float), "evalue": ("evalue", float)}
 # element - fragment attribute name mapping
 _ELEM_FRAG = {
     "start": ("query_start", int),
@@ -50,8 +47,7 @@ class InterproscanXmlParser(object):
 
     def __init__(self, handle):
         """Initialize the class."""
-        self.xml_iter = iter(ElementTree.iterparse(
-            handle, events=("start", "end")))
+        self.xml_iter = iter(ElementTree.iterparse(handle, events=("start", "end")))
         self._meta = self._parse_header()
 
     def __iter__(self):
@@ -86,7 +82,8 @@ class InterproscanXmlParser(object):
                 # parse each hit
                 hit_list = []
                 for hit_new in self._parse_hit(
-                        elem.find(self.NS + "matches"), query_id, query_seq):
+                    elem.find(self.NS + "matches"), query_id, query_seq
+                ):
                     # interproscan results contain duplicate hits rather than
                     # a single hit with multiple hsps. In this case the hsps
                     # of a duplicate hit will be appended to the already
@@ -114,20 +111,20 @@ class InterproscanXmlParser(object):
 
         for hit_elem in root_hit_elem:
             # store the match/location type
-            hit_type = re.sub(r"%s(\w+)-match" % self.NS,
-                              r"\1",
-                              hit_elem.find(".").tag)
+            hit_type = re.sub(r"%s(\w+)-match" % self.NS, r"\1", hit_elem.find(".").tag)
             # store the hit id
             signature = hit_elem.find(self.NS + "signature")
             hit_id = signature.attrib["ac"]
 
             # store xrefs and alt_descs
-            xrefs = self._parse_xrefs(
-                signature.find(self.NS + "entry"))
+            xrefs = self._parse_xrefs(signature.find(self.NS + "entry"))
 
             # parse each hsp
-            hsps = list(self._parse_hsp(hit_elem.find(self.NS + "locations"),
-                                        query_id, hit_id, query_seq))
+            hsps = list(
+                self._parse_hsp(
+                    hit_elem.find(self.NS + "locations"), query_id, hit_id, query_seq
+                )
+            )
 
             # create hit and assign attributes
             hit = Hit(hsps, hit_id)
@@ -138,12 +135,9 @@ class InterproscanXmlParser(object):
                     setattr(hit, attr, caster(value))
             # format specific attributes
             hit.attributes["Hit type"] = str(hit_type)
-            signature_lib = signature.find(
-                    self.NS + "signature-library-release")
-            hit.attributes["Target"] = str(
-                signature_lib.attrib.get("library"))
-            hit.attributes["Target version"] = str(
-                signature_lib.attrib.get("version"))
+            signature_lib = signature.find(self.NS + "signature-library-release")
+            hit.attributes["Target"] = str(signature_lib.attrib.get("library"))
+            hit.attributes["Target version"] = str(signature_lib.attrib.get("version"))
 
             yield hit
 
@@ -194,10 +188,8 @@ class InterproscanXmlParser(object):
         # store go-xrefs and pathway-refs id and description
         if root_entry_elem is not None:
             xref_elems = []
-            xref_elems = xref_elems + root_entry_elem.findall(
-                self.NS + "go-xref")
-            xref_elems = xref_elems + root_entry_elem.findall(
-                self.NS + "pathway-xref")
+            xref_elems = xref_elems + root_entry_elem.findall(self.NS + "go-xref")
+            xref_elems = xref_elems + root_entry_elem.findall(self.NS + "pathway-xref")
 
             for entry in xref_elems:
                 xref = entry.attrib["id"]
@@ -210,4 +202,5 @@ class InterproscanXmlParser(object):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

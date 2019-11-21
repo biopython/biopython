@@ -14,8 +14,12 @@ from Bio._py3k import zip
 
 from Bio.Alphabet import generic_protein
 
-from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
-        _parse_hit_or_query_line
+from ._base import (
+    _BaseExonerateParser,
+    _BaseExonerateIndexer,
+    _STRAND_MAP,
+    _parse_hit_or_query_line,
+)
 from .exonerate_vulgar import _RE_VULGAR
 
 
@@ -27,7 +31,9 @@ __all__ = ("ExonerateTextParser", "ExonerateTextIndexer")
 _RE_ALN_ROW = re.compile(r"\s*\d+\s+: (.*) :\s+\d+")
 # for splitting the line based on intron annotations
 # e.g. '  >>>> Target Intron 1 >>>>  ' or 'gt.........................ag'
-_RE_EXON = re.compile(r"[atgc ]{2,}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2,}?")
+_RE_EXON = re.compile(
+    r"[atgc ]{2,}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2,}?"
+)
 # captures the intron length
 # from e.g. '61 bp // 154295 bp' (joint intron lengths) or '177446 bp'
 _RE_EXON_LEN = re.compile(r"(?:(\d+) bp // (\d+) bp)|(?:(\d+) bp)")
@@ -162,8 +168,7 @@ def _get_row_dict(row_len, model):
         idx["hit"] = 3
         idx["hannot"] = 4
     else:
-        raise ValueError("Unexpected row count in alignment block: "
-                         "%i" % row_len)
+        raise ValueError("Unexpected row count in alignment block: %i" % row_len)
     return idx
 
 
@@ -216,8 +221,9 @@ def _clean_blocks(tmp_seq_blocks):
     seq_blocks = []
     for seq_block in tmp_seq_blocks:
         for line_name in seq_block:
-            seq_block[line_name] = \
-                    seq_block[line_name].replace("{", "").replace("}", "")
+            seq_block[line_name] = (
+                seq_block[line_name].replace("{", "").replace("}", "")
+            )
         seq_blocks.append(seq_block)
 
     return seq_blocks
@@ -232,8 +238,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
     # "ATGTT{TT}  >>>> Target Intron 1 >>>>  {G}TGTGTGTACATT"
     # and sets the opposing sequence type's intron (since this
     # line is present on the opposite sequence type line)
-    has_intron_after = ["Intron" in x[seq_type] for x in
-                        inter_blocks]
+    has_intron_after = ["Intron" in x[seq_type] for x in inter_blocks]
     assert len(has_intron_after) == len(raw_inter_lens)
     # create list containing coord adjustments incorporating
     # intron lengths
@@ -243,14 +248,14 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
             # joint introns
             if all(parsed_len[:2]):
                 # intron len is [0] if opp_type is query, otherwise it's [1]
-                intron_len = int(parsed_len[0]) if opp_type == "query" \
-                        else int(parsed_len[1])
+                intron_len = (
+                    int(parsed_len[0]) if opp_type == "query" else int(parsed_len[1])
+                )
             # single hit/query introns
             elif parsed_len[2]:
                 intron_len = int(parsed_len[2])
             else:
-                raise ValueError("Unexpected intron parsing "
-                                 "result: %r" % parsed_len)
+                raise ValueError("Unexpected intron parsing result: %r" % parsed_len)
         else:
             intron_len = 0
 
@@ -266,8 +271,11 @@ def _comp_coords(hsp, seq_type, inter_lens):
     seq_step = 1 if hsp["%s_strand" % seq_type] >= 0 else -1
     fstart = hsp["%s_start" % seq_type]
     # fend is fstart + number of residues in the sequence, minus gaps
-    fend = fstart + len(
-        hsp[seq_type][0].replace("-", "").replace(">", "").replace("<", "")) * seq_step
+    fend = (
+        fstart
+        + len(hsp[seq_type][0].replace("-", "").replace(">", "").replace("<", ""))
+        * seq_step
+    )
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
     for idx, block in enumerate(hsp[seq_type][1:]):
@@ -322,8 +330,14 @@ class ExonerateTextParser(_BaseExonerateParser):
         hit = header["hit"]
         hsp = header["hsp"]
         # check for values that must have been set by previous methods
-        for val_name in ("query_start", "query_end", "hit_start", "hit_end",
-                         "query_strand", "hit_strand"):
+        for val_name in (
+            "query_start",
+            "query_end",
+            "hit_start",
+            "hit_end",
+            "query_strand",
+            "hit_strand",
+        ):
             assert val_name in hsp, hsp
 
         # get the alignment rows
@@ -358,14 +372,16 @@ class ExonerateTextParser(_BaseExonerateParser):
         hsp["aln_annotation"] = {}
         # set the alphabet
         # currently only limited to models with protein queries
-        if "protein2" in qresult["model"] or "coding2" in qresult["model"] \
-                or "2protein" in qresult["model"]:
+        if (
+            "protein2" in qresult["model"]
+            or "coding2" in qresult["model"]
+            or "2protein" in qresult["model"]
+        ):
             hsp["alphabet"] = generic_protein
         # get the annotations if they exist
         for annot_type in ("similarity", "query_annotation", "hit_annotation"):
             try:
-                hsp["aln_annotation"][annot_type] = \
-                        [x[annot_type] for x in seq_blocks]
+                hsp["aln_annotation"][annot_type] = [x[annot_type] for x in seq_blocks]
             except KeyError:
                 pass
 
@@ -386,8 +402,7 @@ class ExonerateTextParser(_BaseExonerateParser):
             # returns a three-component tuple of intron lengths
             # first two component filled == intron in hit and query
             # last component filled == intron in hit or query
-            raw_inter_lens = re.findall(_RE_EXON_LEN,
-                                        cmbn_rows[row_dict["midline"]])
+            raw_inter_lens = re.findall(_RE_EXON_LEN, cmbn_rows[row_dict["midline"]])
 
         # compute start and end coords for each block
         for seq_type in ("query", "hit"):
@@ -395,28 +410,31 @@ class ExonerateTextParser(_BaseExonerateParser):
             # ner blocks and intron blocks require different adjustments
             if not has_ner:
                 opp_type = "hit" if seq_type == "query" else "query"
-                inter_lens = _comp_intron_lens(seq_type, inter_blocks,
-                                               raw_inter_lens)
+                inter_lens = _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens)
             else:
                 # for NER blocks, the length of the inter-fragment gaps is
                 # written on the same strand, so opp_type is seq_type
                 opp_type = seq_type
-                inter_lens = [int(x) for x in
-                              re.findall(_RE_NER_LEN,
-                                         cmbn_rows[row_dict[seq_type]])]
+                inter_lens = [
+                    int(x)
+                    for x in re.findall(_RE_NER_LEN, cmbn_rows[row_dict[seq_type]])
+                ]
 
             # check that inter_lens's length is len opp_type block - 1
             if len(inter_lens) != len(hsp[opp_type]) - 1:
-                raise ValueError("Length mismatch: %r vs %r"
-                                 % (len(inter_lens), len(hsp[opp_type]) - 1))
+                raise ValueError(
+                    "Length mismatch: %r vs %r"
+                    % (len(inter_lens), len(hsp[opp_type]) - 1)
+                )
             # fill the hsp query and hit coordinates
             hsp["%s_ranges" % opp_type] = _comp_coords(hsp, opp_type, inter_lens)
             # and fill the split codon coordinates, if model != ner
             # can't do this in the if-else clause above since we need to
             # compute the ranges first
             if not has_ner:
-                hsp["%s_split_codons" % opp_type] = \
-                        _comp_split_codons(hsp, opp_type, scodon_moves)
+                hsp["%s_split_codons" % opp_type] = _comp_split_codons(
+                    hsp, opp_type, scodon_moves
+                )
 
         # now that we've finished parsing coords, we can set the hit and start
         # coord according to Biopython's convention (start <= end)
@@ -446,7 +464,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 raw_aln_block = []
             # if we're in an alignment row, grab the sequence
             if in_aln_row:
-                raw_aln_block.append(self.line[start_idx:start_idx + row_len])
+                raw_aln_block.append(self.line[start_idx : start_idx + row_len])
             # reset flags and values if the line matches, we're in an alignment
             # row, and there are more than 1 line in rows
             if match and in_aln_row and len(raw_aln_block) > 1:
@@ -523,4 +541,5 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

@@ -46,27 +46,27 @@ class Hmmer3TabParser(object):
 
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
-        qresult["id"] = cols[2]                     # query name
-        qresult["accession"] = cols[3]              # query accession
+        qresult["id"] = cols[2]  # query name
+        qresult["accession"] = cols[3]  # query accession
         hit = {}
-        hit["id"] = cols[0]                         # target name
-        hit["accession"] = cols[1]                  # target accession
-        hit["evalue"] = float(cols[4])              # evalue (full sequence)
-        hit["bitscore"] = float(cols[5])            # score (full sequence)
-        hit["bias"] = float(cols[6])                # bias (full sequence)
-        hit["domain_exp_num"] = float(cols[10])     # exp
-        hit["region_num"] = int(cols[11])           # reg
-        hit["cluster_num"] = int(cols[12])          # clu
-        hit["overlap_num"] = int(cols[13])          # ov
-        hit["env_num"] = int(cols[14])              # env
-        hit["domain_obs_num"] = int(cols[15])       # dom
+        hit["id"] = cols[0]  # target name
+        hit["accession"] = cols[1]  # target accession
+        hit["evalue"] = float(cols[4])  # evalue (full sequence)
+        hit["bitscore"] = float(cols[5])  # score (full sequence)
+        hit["bias"] = float(cols[6])  # bias (full sequence)
+        hit["domain_exp_num"] = float(cols[10])  # exp
+        hit["region_num"] = int(cols[11])  # reg
+        hit["cluster_num"] = int(cols[12])  # clu
+        hit["overlap_num"] = int(cols[13])  # ov
+        hit["env_num"] = int(cols[14])  # env
+        hit["domain_obs_num"] = int(cols[15])  # dom
         hit["domain_reported_num"] = int(cols[16])  # rep
         hit["domain_included_num"] = int(cols[17])  # inc
-        hit["description"] = cols[18]               # description of target
+        hit["description"] = cols[18]  # description of target
         hsp = {}
-        hsp["evalue"] = float(cols[7])              # evalue (best 1 domain)
-        hsp["bitscore"] = float(cols[8])            # score (best 1 domain)
-        hsp["bias"] = float(cols[9])                # bias (best 1 domain)
+        hsp["evalue"] = float(cols[7])  # evalue (best 1 domain)
+        hsp["bitscore"] = float(cols[8])  # score (best 1 domain)
+        hsp["bias"] = float(cols[9])  # bias (best 1 domain)
         # strand is always 0, since HMMER now only handles protein
         frag = {}
         frag["hit_strand"] = frag["query_strand"] = 0
@@ -181,15 +181,21 @@ class Hmmer3TabIndexer(SearchIndexer):
 
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
-                    yield (_bytes_to_string(qresult_key), start_offset,
-                           adj_end - start_offset)
+                    yield (
+                        _bytes_to_string(qresult_key),
+                        start_offset,
+                        adj_end - start_offset,
+                    )
                     qresult_key = curr_key
                     start_offset = adj_end
 
             line = handle.readline()
             if not line:
-                yield (_bytes_to_string(qresult_key), start_offset,
-                       end_offset - start_offset)
+                yield (
+                    _bytes_to_string(qresult_key),
+                    start_offset,
+                    end_offset - start_offset,
+                )
                 break
 
     def get_raw(self, offset):
@@ -263,7 +269,8 @@ class Hmmer3TabWriter(object):
             taccw = max(10, len(first_qresult[0].accession))
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
-
+        # Turn black code style off
+        # fmt: off
         header = ("#%*s %22s %22s %33s\n"
                   % (tnamew + qnamew + taccw + qaccw + 2, "",
                      "--- full sequence ----", "--- best 1 domain ----",
@@ -283,7 +290,8 @@ class Hmmer3TabWriter(object):
                       "----------", "---------", "------", "-----", "---------",
                       "------", "-----", "---", "---", "---", "---", "---", "---",
                       "---", "---", "---------------------"))
-
+        # Turn black code style on
+        # fmt: on
         return header
 
     def _build_row(self, qresult):
@@ -298,15 +306,35 @@ class Hmmer3TabWriter(object):
         taccw = max(10, len(qresult[0].accession))
 
         for hit in qresult:
-            rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f" \
-                    " %5.1f %5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % \
-                    (tnamew, hit.id, taccw, hit.accession, qnamew, qresult.id,
-                     qaccw, qresult.accession, hit.evalue, hit.bitscore,
-                     hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
-                     hit.hsps[0].bias, hit.domain_exp_num, hit.region_num,
-                     hit.cluster_num, hit.overlap_num, hit.env_num,
-                     hit.domain_obs_num, hit.domain_reported_num,
-                     hit.domain_included_num, hit.description)
+            rows += (
+                "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f"
+                " %5.1f %5.1f %3d %3d %3d %3d %3d %3d %3d %s\n"
+                % (
+                    tnamew,
+                    hit.id,
+                    taccw,
+                    hit.accession,
+                    qnamew,
+                    qresult.id,
+                    qaccw,
+                    qresult.accession,
+                    hit.evalue,
+                    hit.bitscore,
+                    hit.bias,
+                    hit.hsps[0].evalue,
+                    hit.hsps[0].bitscore,
+                    hit.hsps[0].bias,
+                    hit.domain_exp_num,
+                    hit.region_num,
+                    hit.cluster_num,
+                    hit.overlap_num,
+                    hit.env_num,
+                    hit.domain_obs_num,
+                    hit.domain_reported_num,
+                    hit.domain_included_num,
+                    hit.description,
+                )
+            )
 
         return rows
 
@@ -314,4 +342,5 @@ class Hmmer3TabWriter(object):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

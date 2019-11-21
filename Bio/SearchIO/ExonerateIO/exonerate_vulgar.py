@@ -17,18 +17,24 @@ __all__ = ("ExonerateVulgarParser", "ExonerateVulgarIndexer")
 
 
 # precompile regex
-_RE_VULGAR = re.compile(r"""^vulgar:\s+
+_RE_VULGAR = re.compile(
+    r"""^vulgar:\s+
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand
         (\d+)(\s+.*)$                         # score, vulgar components
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
-_RE_VCOMP = re.compile(r"""
+_RE_VCOMP = re.compile(
+    r"""
         \s+(\S+) # vulgar label (C/M: codon/match, G: gap, N: ner, 5/3: splice
                  #               site, I: intron, S: split codon, F: frameshift)
         \s+(\d+) # how many residues to advance in query sequence
         \s+(\d+) # how many residues to advance in hit sequence
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
 
 def parse_vulgar_comp(hsp, vulgar_comp):
@@ -89,8 +95,9 @@ def parse_vulgar_comp(hsp, vulgar_comp):
 
         # append to ends if the next comp is not an MCGS block or
         # if it's the last comp
-        if idx == len(vcomps) - 1 or \
-                (label in "MCGS" and vcomps[idx + 1][0] not in "MCGS"):
+        if idx == len(vcomps) - 1 or (
+            label in "MCGS" and vcomps[idx + 1][0] not in "MCGS"
+        ):
             qends.append(qpos)
             hends.append(hpos)
 
@@ -100,8 +107,10 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # switch coordinates if strand is < 0
         if strand < 0:
             # switch the starts and ends
-            hsp[seq_type + "start"], hsp[seq_type + "end"] = \
-                    hsp[seq_type + "end"], hsp[seq_type + "start"]
+            hsp[seq_type + "start"], hsp[seq_type + "end"] = (
+                hsp[seq_type + "end"],
+                hsp[seq_type + "start"],
+            )
             if seq_type == "query_":
                 qstarts, qends = qends, qstarts
             else:
@@ -209,4 +218,5 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

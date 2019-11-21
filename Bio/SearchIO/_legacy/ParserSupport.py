@@ -109,9 +109,14 @@ class TaggingConsumer(AbstractConsumer):
             self._handle.write("%s %s\n" % ("*" * self._colwidth, name))
         else:
             # Write the tag and line.
-            self._handle.write("%-*s: %s\n" % (
-                self._colwidth, name[:self._colwidth],
-                data[:self._maxwidth - self._colwidth - 2].rstrip()))
+            self._handle.write(
+                "%-*s: %s\n"
+                % (
+                    self._colwidth,
+                    name[: self._colwidth],
+                    data[: self._maxwidth - self._colwidth - 2].rstrip(),
+                )
+            )
 
     def __getattr__(self, attr):
         if attr[:6] == "start_" or attr[:4] == "end_":
@@ -205,13 +210,14 @@ def attempt_read_and_call(uhandle, method, **keywds):
     return passed
 
 
-def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
-                      has_re=None):
+def _fails_conditions(
+    line, start=None, end=None, contains=None, blank=None, has_re=None
+):
     if start is not None:
-        if line[:len(start)] != start:
+        if line[: len(start)] != start:
             return "Line does not start with '%s':\n%s" % (start, line)
     if end is not None:
-        if line.rstrip()[-len(end):] != end:
+        if line.rstrip()[-len(end) :] != end:
             return "Line does not end with '%s':\n%s" % (end, line)
     if contains is not None:
         if contains not in line:
@@ -225,8 +231,7 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                 return "Expected non-blank line, but got a blank one"
     if has_re is not None:
         if has_re.search(line) is None:
-            return "Line does not match regex '%s':\n%s" % (
-                has_re.pattern, line)
+            return "Line does not match regex '%s':\n%s" % (has_re.pattern, line)
     return None
 
 

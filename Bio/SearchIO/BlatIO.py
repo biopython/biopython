@@ -229,8 +229,10 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
 
     """
     if len(starts) != len(blksizes):
-        raise RuntimeError("Unequal start coordinates and block sizes list"
-                           " (%r vs %r)" % (len(starts), len(blksizes)))
+        raise RuntimeError(
+            "Unequal start coordinates and block sizes list (%r vs %r)"
+            % (len(starts), len(blksizes))
+        )
     # see: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
     # no need to reorient if it's already the positive strand
     if strand >= 0:
@@ -238,8 +240,7 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
     else:
         # the plus-oriented coordinate is calculated by this:
         # plus_coord = length - minus_coord - block_size
-        return [seqlen - start - blksize for
-                start, blksize in zip(starts, blksizes)]
+        return [seqlen - start - blksize for start, blksize in zip(starts, blksizes)]
 
 
 def _is_protein(psl):
@@ -248,11 +249,11 @@ def _is_protein(psl):
     # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
     if len(psl["strand"]) == 2:
         if psl["strand"][1] == "+":
-            return psl["tend"] == psl["tstarts"][-1] + \
-                    3 * psl["blocksizes"][-1]
+            return psl["tend"] == psl["tstarts"][-1] + 3 * psl["blocksizes"][-1]
         elif psl["strand"][1] == "-":
-            return psl["tstart"] == psl["tsize"] - \
-                    (psl["tstarts"][-1] + 3 * psl["blocksizes"][-1])
+            return psl["tstart"] == psl["tsize"] - (
+                psl["tstarts"][-1] + 3 * psl["blocksizes"][-1]
+            )
 
     return False
 
@@ -274,8 +275,14 @@ def _calc_millibad(psl, is_protein):
 
     total = size_mul * (psl["matches"] + psl["repmatches"] + psl["mismatches"])
     if total != 0:
-        millibad = (1000 * (psl["mismatches"] * size_mul + psl["qnuminsert"] +
-                    round(3 * log(1 + size_dif)))) / total
+        millibad = (
+            1000
+            * (
+                psl["mismatches"] * size_mul
+                + psl["qnuminsert"]
+                + round(3 * log(1 + size_dif))
+            )
+        ) / total
 
     return millibad
 
@@ -284,10 +291,12 @@ def _calc_score(psl, is_protein):
     """Calculate score (PRIVATE)."""
     # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
     size_mul = 3 if is_protein else 1
-    return (size_mul * (psl["matches"] + (psl["repmatches"] >> 1))
-            - size_mul * psl["mismatches"]
-            - psl["qnuminsert"]
-            - psl["tnuminsert"])
+    return (
+        size_mul * (psl["matches"] + (psl["repmatches"] >> 1))
+        - size_mul * psl["mismatches"]
+        - psl["qnuminsert"]
+        - psl["tnuminsert"]
+    )
 
 
 def _create_hsp(hid, qid, psl):
@@ -308,26 +317,37 @@ def _create_hsp(hid, qid, psl):
 
     blocksize_multiplier = 3 if is_protein else 1
     # query block starts
-    qstarts = _reorient_starts(psl["qstarts"],
-                               psl["blocksizes"], psl["qsize"], qstrand)
+    qstarts = _reorient_starts(psl["qstarts"], psl["blocksizes"], psl["qsize"], qstrand)
     # hit block starts
     if len(psl["strand"]) == 2:
-        hstarts = _reorient_starts(psl["tstarts"],
-                                   [blocksize_multiplier * i for i in
-                                   psl["blocksizes"]], psl["tsize"], hstrand)
+        hstarts = _reorient_starts(
+            psl["tstarts"],
+            [blocksize_multiplier * i for i in psl["blocksizes"]],
+            psl["tsize"],
+            hstrand,
+        )
     else:
         hstarts = psl["tstarts"]
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl["blocksizes"])
-    query_range_all = list(zip(qstarts, [x + y for x, y in
-                                         zip(qstarts, psl["blocksizes"])]))
-    hit_range_all = list(zip(hstarts, [x + y * blocksize_multiplier for x, y in
-                                       zip(hstarts, psl["blocksizes"])]))
+    query_range_all = list(
+        zip(qstarts, [x + y for x, y in zip(qstarts, psl["blocksizes"])])
+    )
+    hit_range_all = list(
+        zip(
+            hstarts,
+            [x + y * blocksize_multiplier for x, y in zip(hstarts, psl["blocksizes"])],
+        )
+    )
     # check length of sequences and coordinates, all must match
     if "tseqs" in psl and "qseqs" in psl:
-        assert len(psl["tseqs"]) == len(psl["qseqs"]) == \
-                len(query_range_all) == len(hit_range_all)
+        assert (
+            len(psl["tseqs"])
+            == len(psl["qseqs"])
+            == len(query_range_all)
+            == len(hit_range_all)
+        )
     else:
         assert len(query_range_all) == len(hit_range_all)
 
@@ -417,30 +437,30 @@ class BlatPslParser(object):
         self._validate_cols(cols)
 
         psl = {}
-        psl["qname"] = cols[9]                             # qName
-        psl["qsize"] = int(cols[10])                       # qSize
-        psl["tname"] = cols[13]                            # tName
-        psl["tsize"] = int(cols[14])                       # tSize
-        psl["matches"] = int(cols[0])                      # matches
-        psl["mismatches"] = int(cols[1])                   # misMatches
-        psl["repmatches"] = int(cols[2])                   # repMatches
-        psl["ncount"] = int(cols[3])                       # nCount
-        psl["qnuminsert"] = int(cols[4])                   # qNumInsert
-        psl["qbaseinsert"] = int(cols[5])                  # qBaseInsert
-        psl["tnuminsert"] = int(cols[6])                   # tNumInsert
-        psl["tbaseinsert"] = int(cols[7])                  # tBaseInsert
-        psl["strand"] = cols[8]                            # strand
-        psl["qstart"] = int(cols[11])                      # qStart
-        psl["qend"] = int(cols[12])                        # qEnd
-        psl["tstart"] = int(cols[15])                      # tStart
-        psl["tend"] = int(cols[16])                        # tEnd
-        psl["blockcount"] = int(cols[17])                  # blockCount
+        psl["qname"] = cols[9]  # qName
+        psl["qsize"] = int(cols[10])  # qSize
+        psl["tname"] = cols[13]  # tName
+        psl["tsize"] = int(cols[14])  # tSize
+        psl["matches"] = int(cols[0])  # matches
+        psl["mismatches"] = int(cols[1])  # misMatches
+        psl["repmatches"] = int(cols[2])  # repMatches
+        psl["ncount"] = int(cols[3])  # nCount
+        psl["qnuminsert"] = int(cols[4])  # qNumInsert
+        psl["qbaseinsert"] = int(cols[5])  # qBaseInsert
+        psl["tnuminsert"] = int(cols[6])  # tNumInsert
+        psl["tbaseinsert"] = int(cols[7])  # tBaseInsert
+        psl["strand"] = cols[8]  # strand
+        psl["qstart"] = int(cols[11])  # qStart
+        psl["qend"] = int(cols[12])  # qEnd
+        psl["tstart"] = int(cols[15])  # tStart
+        psl["tend"] = int(cols[16])  # tEnd
+        psl["blockcount"] = int(cols[17])  # blockCount
         psl["blocksizes"] = _list_from_csv(cols[18], int)  # blockSizes
-        psl["qstarts"] = _list_from_csv(cols[19], int)     # qStarts
-        psl["tstarts"] = _list_from_csv(cols[20], int)     # tStarts
+        psl["qstarts"] = _list_from_csv(cols[19], int)  # qStarts
+        psl["tstarts"] = _list_from_csv(cols[20], int)  # tStarts
         if self.pslx:
-            psl["qseqs"] = _list_from_csv(cols[21])       # query sequence
-            psl["tseqs"] = _list_from_csv(cols[22])       # hit sequence
+            psl["qseqs"] = _list_from_csv(cols[21])  # query sequence
+            psl["tseqs"] = _list_from_csv(cols[22])  # hit sequence
 
         return psl
 
@@ -448,14 +468,16 @@ class BlatPslParser(object):
         """Validate column's length of PSL or PSLX (PRIVATE)."""
         if not self.pslx:
             if len(cols) != 21:
-                raise ValueError("Invalid PSL line: %r. Expected 21 "
-                                 "tab-separated columns, found %i"
-                                 % (self.line, len(cols)))
+                raise ValueError(
+                    "Invalid PSL line: %r. Expected 21 tab-separated columns, found %i"
+                    % (self.line, len(cols))
+                )
         else:
             if len(cols) != 23:
-                raise ValueError("Invalid PSLX line: %r. Expected 23 "
-                                 "tab-separated columns, found %i"
-                                 % (self.line, len(cols)))
+                raise ValueError(
+                    "Invalid PSLX line: %r. Expected 23 tab-separated columns, found %i"
+                    % (self.line, len(cols))
+                )
 
     def _parse_qresult(self):
         """Yield QueryResult objects (PRIVATE)."""
@@ -566,15 +588,17 @@ class BlatPslIndexer(SearchIndexer):
                 curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield _bytes_to_string(qresult_key), start_offset, \
-                            end_offset - start_offset
+                    yield _bytes_to_string(
+                        qresult_key
+                    ), start_offset, end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
             line = handle.readline()
             if not line:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield _bytes_to_string(
+                    qresult_key
+                ), start_offset, end_offset - start_offset
                 break
 
     def get_raw(self, offset):
@@ -636,12 +660,14 @@ class BlatPslWriter(object):
         header = "psLayout version 3\n"
 
         # adapted from BLAT's source: lib/psl.c#L496
-        header += ("\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
-                   "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   "
-                   "\tT    \tT  \tblock\tblockSizes \tqStarts\t tStarts"
-                   "\n     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases"
-                   "\t      \tname     \tsize\tstart\tend\tname     \tsize"
-                   "\tstart\tend\tcount\n%s\n" % ("-" * 159))
+        header += (
+            "\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
+            "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   "
+            "\tT    \tT  \tblock\tblockSizes \tqStarts\t tStarts"
+            "\n     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases"
+            "\t      \tname     \tsize\tstart\tend\tname     \tsize"
+            "\tstart\tend\tcount\n%s\n" % ("-" * 159)
+        )
 
         return header
 
@@ -681,9 +707,12 @@ class BlatPslWriter(object):
                     strand = "+"
                 else:
                     strand = "-"
-                qstarts = _reorient_starts([x[0] for x in hsp.query_range_all],
-                                           hsp.query_span_all, qresult.seq_len,
-                                           hsp[0].query_strand)
+                qstarts = _reorient_starts(
+                    [x[0] for x in hsp.query_range_all],
+                    hsp.query_span_all,
+                    qresult.seq_len,
+                    hsp[0].query_strand,
+                )
 
                 if hsp[0].hit_strand == 1:
                     hstrand = 1
@@ -693,9 +722,12 @@ class BlatPslWriter(object):
                 else:
                     hstrand = -1
                     strand += "-"
-                hstarts = _reorient_starts([x[0] for x in hsp.hit_range_all],
-                                           hsp.hit_span_all, hit.seq_len,
-                                           hstrand)
+                hstarts = _reorient_starts(
+                    [x[0] for x in hsp.hit_range_all],
+                    hsp.hit_span_all,
+                    hit.seq_len,
+                    hstrand,
+                )
 
                 line.append(strand)
                 line.append(qresult.id)
@@ -723,4 +755,5 @@ class BlatPslWriter(object):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
