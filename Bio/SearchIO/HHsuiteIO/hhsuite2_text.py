@@ -167,7 +167,6 @@ class Hhsuite2TextParser(object):
             T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
 
         """
-
         def match_is_valid(match):
             """Return True if match is not a Consensus column (PRIVATE).
 
