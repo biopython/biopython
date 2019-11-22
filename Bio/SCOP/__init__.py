@@ -58,88 +58,33 @@ from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-
-nodeCodeDict = {
-    "cl": "class",
-    "cf": "fold",
-    "sf": "superfamily",
-    "fa": "family",
-    "dm": "protein",
-    "sp": "species",
-    "px": "domain",
-}
+# Turn black code style off
+# fmt: off
+nodeCodeDict = {"cl": "class", "cf": "fold", "sf": "superfamily",
+                "fa": "family", "dm": "protein", "sp": "species", "px": "domain"}
 
 
-_nodetype_to_code = {
-    "class": "cl",
-    "fold": "cf",
-    "superfamily": "sf",
-    "family": "fa",
-    "protein": "dm",
-    "species": "sp",
-    "domain": "px",
-}
+_nodetype_to_code = {"class": "cl", "fold": "cf", "superfamily": "sf",
+                     "family": "fa", "protein": "dm", "species": "sp", "domain": "px"}
 
 nodeCodeOrder = ["ro", "cl", "cf", "sf", "fa", "dm", "sp", "px"]
 
 astralBibIds = [10, 20, 25, 30, 35, 40, 50, 70, 90, 95, 100]
 
-astralEvs = [
-    10,
-    5,
-    1,
-    0.5,
-    0.1,
-    0.05,
-    0.01,
-    0.005,
-    0.001,
-    1e-4,
-    1e-5,
-    1e-10,
-    1e-15,
-    1e-20,
-    1e-25,
-    1e-50,
-]
+astralEvs = [10, 5, 1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 1e-4, 1e-5, 1e-10, 1e-15,
+             1e-20, 1e-25, 1e-50]
 
-astralEv_to_file = {
-    10: "e+1",
-    5: "e+0,7",
-    1: "e+0",
-    0.5: "e-0,3",
-    0.1: "e-1",
-    0.05: "e-1,3",
-    0.01: "e-2",
-    0.005: "e-2,3",
-    0.001: "e-3",
-    1e-4: "e-4",
-    1e-5: "e-5",
-    1e-10: "e-10",
-    1e-15: "e-15",
-    1e-20: "e-20",
-    1e-25: "e-25",
-    1e-50: "e-50",
-}
+astralEv_to_file = {10: "e+1", 5: "e+0,7", 1: "e+0", 0.5: "e-0,3", 0.1: "e-1",
+                    0.05: "e-1,3", 0.01: "e-2", 0.005: "e-2,3", 0.001: "e-3",
+                    1e-4: "e-4", 1e-5: "e-5", 1e-10: "e-10", 1e-15: "e-15",
+                    1e-20: "e-20", 1e-25: "e-25", 1e-50: "e-50"}
 
-astralEv_to_sql = {
-    10: "e1",
-    5: "e0_7",
-    1: "e0",
-    0.5: "e_0_3",
-    0.1: "e_1",
-    0.05: "e_1_3",
-    0.01: "e_2",
-    0.005: "e_2_3",
-    0.001: "e_3",
-    1e-4: "e_4",
-    1e-5: "e_5",
-    1e-10: "e_10",
-    1e-15: "e_15",
-    1e-20: "e_20",
-    1e-25: "e_25",
-    1e-50: "e_50",
-}
+astralEv_to_sql = {10: "e1", 5: "e0_7", 1: "e0", 0.5: "e_0_3", 0.1: "e_1",
+                   0.05: "e_1_3", 0.01: "e_2", 0.005: "e_2_3", 0.001: "e_3",
+                   1e-4: "e_4", 1e-5: "e_5", 1e-10: "e_10", 1e-15: "e_15",
+                   1e-20: "e_20", 1e-25: "e_25", 1e-50: "e_50"}
+# Turn black code style on
+# fmt: on
 
 try:
     # See if the cmp function exists (will on Python 2)
