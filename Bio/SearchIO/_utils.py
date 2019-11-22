@@ -46,7 +46,6 @@ def singleitem(attr=None, doc=""):
     Returns a property that fetches the given attribute from
     the first item in a SearchIO container object.
     """
-
     def getter(self):
         if len(self._items) > 1:
             raise ValueError("More than one HSPFragment objects " "found in HSP")
@@ -63,7 +62,6 @@ def allitems(attr=None, doc=""):
     Returns a property that fetches the given attributes from
     all items in a SearchIO container object.
     """
-
     def getter(self):
         if attr is None:
             return self._items
@@ -82,7 +80,6 @@ def fullcascade(attr, doc=""):
     that it only sets attributes to items in the object, not the object itself.
 
     """
-
     def getter(self):
         return getattr(self._items[0], attr)
 
@@ -106,7 +103,6 @@ def optionalcascade(cont_attr, item_attr, doc=""):
     the setter cascades any new value given to the items' values.
 
     """
-
     def getter(self):
         if self._items:
             # don't use self._items here, so QueryResult can use this property
