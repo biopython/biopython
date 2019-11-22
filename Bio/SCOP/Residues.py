@@ -65,7 +65,7 @@ class Residues(object):
             if chain:
                 if chain[-1] != ":":
                     raise ValueError("I don't understand the chain in %s" % l)
-                chain = chain[:-1]   # chop off the ':'
+                chain = chain[:-1]  # chop off the ':'
             else:
                 chain = ""
 

@@ -47,8 +47,8 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        line = line.rstrip()         # no trailing whitespace
-        columns = line.split("\t")   # separate the tab-delineated cols
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 6:
             raise ValueError("I don't understand the format of %s" % line)
 
@@ -69,8 +69,11 @@ class Record(object):
         s.append(self.sccs)
         s.append(self.sunid)
 
-        s.append(",".join("=".join((key, str(value))) for key, value
-                          in self.hierarchy.items()))
+        s.append(
+            ",".join(
+                "=".join((key, str(value))) for key, value in self.hierarchy.items()
+            )
+        )
 
         return "\t".join(map(str, s)) + "\n"
 
