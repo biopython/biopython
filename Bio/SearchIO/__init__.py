@@ -423,6 +423,7 @@ def to_dict(qresults, key_function=None):
     than 3.6 (and for other Python older than 3.7) so that you can always
     assume the record order is preserved.
     """
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def _default_key_function(rec):
         return rec.id
 
