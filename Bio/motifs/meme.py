@@ -18,21 +18,25 @@ def read(handle):
     Examples
     --------
     >>> from Bio.motifs import meme
-    >>> with open("motifs/meme.out") as f:
+    >>> with open("motifs/meme.INO_up800.classic.oops.xml") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
-    Motif 1 SEQ10; + 8.71e-07
-    Motif 1 SEQ9; + 8.71e-07
-    Motif 1 SEQ8; + 8.71e-07
-    Motif 1 SEQ7; + 8.71e-07
-    Motif 1 SEQ6; + 8.71e-07
-    Motif 1 SEQ5; + 8.71e-07
-    Motif 1 SEQ4; + 8.71e-07
-    Motif 1 SEQ3; + 8.71e-07
-    Motif 1 SEQ2; + 8.71e-07
-    Motif 1 SEQ1; + 8.71e-07
+    GSKGCATGTGAAA sequence_5 + 1.21e-08
+    GSKGCATGTGAAA sequence_2 - 1.87e-08
+    GSKGCATGTGAAA sequence_4 - 6.62e-08
+    GSKGCATGTGAAA sequence_1 - 1.05e-07
+    GSKGCATGTGAAA sequence_0 - 1.69e-07
+    GSKGCATGTGAAA sequence_3 - 5.62e-07
+    GSKGCATGTGAAA sequence_6 + 1.08e-06
+    TTGACWCYTGCYCWG sequence_1 + 7.2e-10
+    TTGACWCYTGCYCWG sequence_6 - 2.56e-08
+    TTGACWCYTGCYCWG sequence_4 - 1.59e-07
+    TTGACWCYTGCYCWG sequence_0 + 2.05e-07
+    TTGACWCYTGCYCWG sequence_2 + 3.85e-07
+    TTGACWCYTGCYCWG sequence_3 - 5.11e-07
+    TTGACWCYTGCYCWG sequence_5 + 8.01e-07
 
     """
     record = Record()
@@ -90,14 +94,14 @@ class Record(list):
     by its name:
 
     >>> from Bio import motifs
-    >>> with open("motifs/meme.out") as f:
+    >>> with open("motifs/meme.INO_up800.classic.oops.xml") as f:
     ...     record = motifs.parse(f, 'MEME')
     >>> motif = record[0]
     >>> print(motif.name)
-    Motif 1
-    >>> motif = record['Motif 1']
+    GSKGCATGTGAAA
+    >>> motif = record['GSKGCATGTGAAA']
     >>> print(motif.name)
-    Motif 1
+    GSKGCATGTGAAA
     """
 
     def __init__(self):
