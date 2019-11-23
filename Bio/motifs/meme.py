@@ -153,7 +153,7 @@ def __read_motifs(record, xml_tree):
             # TODO - left flank, right flank
             instance.start = int(site_tree.get("position")) + 1
             instance.pvalue = float(site_tree.get("pvalue"))
-            instance.strand = site_tree.get("strand")
+            instance.strand = __read_strand(site_tree.get("strand"))
             instance.length = len(sequence)
             instances.append(instance)
         instances = motifs.Instances(instances, record.alphabet)
@@ -166,3 +166,11 @@ def __read_motifs(record, xml_tree):
         motif.evalue = float(motif_tree.get("e_value"))
         # TODO - ic, re, llr, pvalue, bayes_threshold, elapsed_time
         record.append(motif)
+
+
+def __read_strand(strand):
+    """Convert strand (+/-) from XML if present. Default: +"""
+    if (strand == "minus"):
+        return "-"
+    if (strand == "plus" or strand == "none"):
+        return "+"
