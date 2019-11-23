@@ -136,7 +136,7 @@ def __read_alphabet(record, xml_tree):
 
 def __read_sequences(record, xml_tree):
     for sequence_tree in xml_tree.find("training_set").findall("sequence"):
-        sequence_name = sequence_tree.get('name')
+        sequence_name = sequence_tree.get("name")
         record.sequences.append(sequence_name)
         # TODO - sequence id, length, weight
 
@@ -145,8 +145,9 @@ def __read_motifs(record, xml_tree):
     for motif_tree in xml_tree.find("motifs").findall("motif"):
         instances = []
         for site_tree in motif_tree.find("contributing_sites").findall("contributing_site"):
-            letters = [letter_ref.get("letter_id") for letter_ref in site_tree.find("site").findall("letter_ref")]
-            sequence = ''.join(letters)
+            letters = [letter_ref.get("letter_id")
+                       for letter_ref in site_tree.find("site").findall("letter_ref")]
+            sequence = "".join(letters)
             instance = Instance(sequence, record.alphabet)
             instance.motif_name = motif_tree.get("name")
             instance.sequence_name = site_tree.get("sequence_id")  # TODO - rename to sequence_id, get sequence_name
