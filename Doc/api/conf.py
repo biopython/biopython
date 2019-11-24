@@ -225,6 +225,8 @@ epub_exclude_files = ["search.html"]
 # -- Options for numpydoc -------------------------------------------------
 
 numpydoc_class_members_toctree = False
+# Prevents the attributes and methods from being shown twice
+numpydoc_show_class_members = False
 
 # -- Magic to run sphinx-apidoc automatically -----------------------------
 
@@ -289,24 +291,16 @@ def run_apidoc(_):
 class BioPythonAPI(autodoc.ClassDocumenter):
     """Custom Class Documenter for AbstractCommandline classes."""
 
-    @classmethod
-    def can_document_member(cls, member, membername, isattr, parent):
-        """Check if the member is an AbstractCommandline subclass."""
-        try:
-            if issubclass(member, Application.AbstractCommandline):
-                return True
-            else:
-                return False
-        except TypeError:
-            # Throws if the member is not a class
-            return False
-
     def import_object(self):
         """Import the class."""
         ret = super().import_object()
+
+        if not issubclass(self.object, Application.AbstractCommandline):
+            return ret
+
         try:
-            # If the class is an AbstractCommandline we return an instance.
-            ret = self.object()
+            # If the object is an AbstractCommandline we instantiate it.
+            self.object()
         except TypeError:
             # Throws if the object is the base AbstractCommandline class
             pass
