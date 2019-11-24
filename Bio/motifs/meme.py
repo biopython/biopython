@@ -174,7 +174,10 @@ def __read_motifs(record, xml_tree):
 
 
 def __read_strand(strand):
-    """Convert strand (+/-) from XML if present. Default: +"""
+    """Convert strand (+/-) from XML if present.
+
+    Default: +
+    """
     if (strand == "minus"):
         return "-"
     if (strand == "plus" or strand == "none"):
