@@ -9,7 +9,7 @@
 
 """Unit tests for the PQR parser in Bio.PDB module."""
 from __future__ import print_function
-from Bio.PDB.PQRParser import PQRParser
+from Bio.PDB.PDBParser import PDBParser
 import unittest
 import warnings
 from Bio._py3k import StringIO
@@ -29,7 +29,7 @@ class ParseSimplePQR(unittest.TestCase):
         data = "ATOM      1  N   PRO     1      000001  02.000 3.0000 -0.1000  1.0000       N\n"
 
         # Get sole atom of this structure
-        parser = PQRParser()   # default initialization
+        parser = PDBParser(is_pqr=True)   # default initialization
         struct = parser.get_structure("test", StringIO(data))
         atom = next(struct.get_atoms())
 
@@ -49,7 +49,7 @@ class ParseSimplePQR(unittest.TestCase):
         data = "ATOM      1  N   PRO     1      00abc1  02.000 3.0000 -0.1000  1.0000       N\n"
 
         # Get sole atom of this structure
-        parser = PQRParser()   # default initiallization
+        parser = PDBParser(is_pqr=True)   # default initialization
         self.assertRaises(PDBConstructionException,
                           parser.get_structure, "example", StringIO(data))
 
@@ -60,7 +60,7 @@ class ParseSimplePQR(unittest.TestCase):
         missing = "ATOM      1  N   PRO     1      000001  02.000 3.0000          1.0000       N\n"
 
         # Malformed
-        parser = PQRParser(PERMISSIVE=True)   # default initialization
+        parser = PDBParser(PERMISSIVE=True, is_pqr=True)   # default initialization
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
             structure = parser.get_structure("test", StringIO(malformed))
@@ -77,7 +77,7 @@ class ParseSimplePQR(unittest.TestCase):
         self.assertEqual(atom.get_charge(), None)
 
         # Test PERMISSIVE mode behaviour
-        parser = PQRParser(PERMISSIVE=False)   # default initialization
+        parser = PDBParser(PERMISSIVE=False, is_pqr=True)   # default initialization
         self.assertRaises(PDBConstructionException,
                           parser.get_structure, "example", StringIO(malformed))
 
@@ -89,7 +89,7 @@ class ParseSimplePQR(unittest.TestCase):
         negative = "ATOM      1  N   PRO     1      000001  02.000 3.0000 -0.1000 -1.0000       N\n"
 
         # Malformed
-        parser = PQRParser(PERMISSIVE=True)   # default initialization
+        parser = PDBParser(PERMISSIVE=True, is_pqr=True)   # default initialization
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
             structure = parser.get_structure("test", StringIO(malformed))
@@ -114,7 +114,7 @@ class ParseSimplePQR(unittest.TestCase):
         self.assertEqual(atom.get_radius(), None)
 
         # Test PERMISSIVE mode behaviour
-        parser = PQRParser(PERMISSIVE=False)   # default initialization
+        parser = PDBParser(PERMISSIVE=False, is_pqr=True)   # default initialization
         self.assertRaises(PDBConstructionException,
                           parser.get_structure, "example", StringIO(malformed))
         self.assertRaises(PDBConstructionException,
@@ -131,7 +131,7 @@ class WriteTest(unittest.TestCase):
             warnings.simplefilter("ignore", PDBConstructionWarning)
 
             # Open a parser in permissive mode and parse an example file
-            self.pqr_parser = PQRParser(PERMISSIVE=1)
+            self.pqr_parser = PDBParser(PERMISSIVE=1, is_pqr=True)
             self.example_structure = self.pqr_parser.get_structure("example", "PQR/1A80.pqr")
 
     def test_pdbio_write_pqr_structure(self):
