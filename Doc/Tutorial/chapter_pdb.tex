@@ -138,12 +138,32 @@ object, ie. directly from the PDB file:
 ...
 \end{minted}
 
+\subsection{Reading a PQR file}
+
+In order to parse a PQR file, proceed in a similar manner as in the case
+of PDB files:
+
+Create a \texttt{PDBParser} object, using the \texttt{is_pqr} flag:
+
+\begin{minted}{pycon}
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> pqr_parser = PDBParser(PERMISSIVE=1, is_pqr=True)
+\end{minted}
+
+The \texttt{is_pqr} flag set to \texttt{True} indicates that the file to be parsed is a PQR file, 
+and that the parser should read the atomic charge and radius fields for each atom entry. Following the same procedure as for PQR files, a Structure object is then produced, and the PQR file is parsed.
+
+\begin{minted}{pycon}
+>>> structure_id = "1fat"
+>>> filename = "pdb1fat.ent"
+>>> structure = parser.get_structure(structure_id, filename, is_pqr=True)
+\end{minted}
+
 \subsection{Reading files in the PDB XML format}
 
 That's not yet supported, but we are definitely planning to support that
 in the future (it's not a lot of work). Contact the Biopython developers
 via the mailing list if you need this.
-
 
 \subsection{Writing mmCIF files}
 
@@ -205,6 +225,19 @@ out glycine residues:
 If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
 a chain between a start and end residue.
+
+\subsection{Writing PQR files}
+
+Use the \texttt{PDBIO} class as you would for a PDB file, with the flag \texttt{is_pqr=True}. 
+The PDBIO methods can be used in the case of PQR files as well.
+
+Example: writing a PQR file
+
+\begin{minted}{pycon}
+>>> io = PDBIO(is_pqr=True)
+>>> io.set_structure(s)
+>>> io.save("out.pdb")
+\end{minted}
 
 \subsection{Writing MMTF files}
 
