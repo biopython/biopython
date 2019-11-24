@@ -430,12 +430,8 @@ class Scop(object):
 
         if type != "px":
             cur.execute(
-                "SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM \
-            cla,des WHERE cla."
-                + node.type
-                + "=%s AND cla."
-                + type
-                + "=des.sunid",
+                "SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM "
+                "cla,des WHERE cla." + node.type + "=%s AND cla." + type + "=des.sunid",
                 (node.sunid),
             )
             data = cur.fetchall()
@@ -459,10 +455,8 @@ class Scop(object):
 
         else:
             cur.execute(
-                "SELECT cla.sunid,sid,pdbid,residues,cla.sccs,type,description,sp\
-             FROM cla,des where cla.sunid=des.sunid and cla."
-                + node.type
-                + "=%s",
+                "SELECT cla.sunid,sid,pdbid,residues,cla.sccs,type,description,sp "
+                "FROM cla,des where cla.sunid=des.sunid and cla." + node.type + "=%s",
                 node.sunid,
             )
 
@@ -489,8 +483,8 @@ class Scop(object):
 
         cur.execute("DROP TABLE IF EXISTS hie")
         cur.execute(
-            "CREATE TABLE hie (parent INT, child INT, PRIMARY KEY (child),\
-        INDEX (parent) )"
+            "CREATE TABLE hie (parent INT, child INT, PRIMARY KEY (child), "
+            "INDEX (parent) )"
         )
 
         for p in self._sunidDict.values():
@@ -503,9 +497,9 @@ class Scop(object):
 
         cur.execute("DROP TABLE IF EXISTS cla")
         cur.execute(
-            "CREATE TABLE cla (sunid INT, sid CHAR(8), pdbid CHAR(4),\
-        residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT,\
-        dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )"
+            "CREATE TABLE cla (sunid INT, sid CHAR(8), pdbid CHAR(4), "
+            "residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT, "
+            "dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )"
         )
 
         for n in self._sidDict.values():
@@ -534,9 +528,8 @@ class Scop(object):
 
         cur.execute("DROP TABLE IF EXISTS des")
         cur.execute(
-            "CREATE TABLE des (sunid INT, type CHAR(2), sccs CHAR(10),\
-        description VARCHAR(255),\
-        PRIMARY KEY (sunid) )"
+            "CREATE TABLE des (sunid INT, type CHAR(2), sccs CHAR(10), "
+            "description VARCHAR(255), PRIMARY KEY (sunid) )"
         )
 
         for n in self._sunidDict.values():
