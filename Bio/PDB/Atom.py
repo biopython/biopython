@@ -24,6 +24,9 @@ class Atom(object):
     coordinates, B factor, occupancy, alternative location specifier
     and (optionally) anisotropic B factor and standard deviations of
     B factor and positions.
+
+    In the case of PQR files, B factor and occupancy are replaced by
+    atomic charge and radius. 
     """
 
     def __init__(
@@ -36,7 +39,7 @@ class Atom(object):
         fullname,
         serial_number,
         element=None,
-        charge=None,
+        pqr_charge=None,
         radius=None
     ):
         """Initialize Atom object.
@@ -63,8 +66,8 @@ class Atom(object):
         :param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         :type element: uppercase string (or None if unknown)
 
-        :param charge: atom charge
-        :type charge: number
+        :param pqr_charge: atom charge
+        :type pqr_charge: number
 
         :param radius: atom radius
         :type radius: number
@@ -91,7 +94,7 @@ class Atom(object):
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
-        self.charge = charge
+        self.pqr_charge = pqr_charge
         self.radius = radius
 
         # For atom sorting (protein backbone atoms first)
@@ -296,9 +299,9 @@ class Atom(object):
         """
         self.anisou_array = anisou_array
 
-    def set_charge(self, charge):
+    def set_charge(self, pqr_charge):
         """Set charge."""
-        self.charge = charge
+        self.pqr_charge = pqr_charge
 
     def set_radius(self, radius):
         """Set radius."""
@@ -393,7 +396,7 @@ class Atom(object):
 
     def get_charge(self):
         """Return charge."""
-        return self.charge
+        return self.pqr_charge
 
     def get_radius(self):
         """Return radius."""

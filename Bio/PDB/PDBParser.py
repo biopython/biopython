@@ -225,11 +225,11 @@ class PDBParser(object):
                 elif self.is_pqr:
                     # Attempt to parse charge and radius fields
                     try:
-                        charge = float(line[54:62])
+                        pqr_charge = float(line[54:62])
                     except Exception:
                         self._handle_PDB_exception("Invalid or missing charge",
                                                    global_line_counter)
-                        charge = None  # Rather than arbitrary zero or one
+                        pqr_charge = None  # Rather than arbitrary zero or one
                     try:
                         radius = float(line[62:70])
                     except Exception:
@@ -288,13 +288,13 @@ class PDBParser(object):
                         structure_builder.init_atom(
                             name,
                             coord,
-                            charge,
+                            pqr_charge,
                             radius,
                             altloc,
                             fullname,
                             serial_number,
                             element,
-                            charge,
+                            pqr_charge,
                             radius,
                             self.is_pqr
                         )

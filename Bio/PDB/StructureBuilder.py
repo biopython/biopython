@@ -186,7 +186,7 @@ class StructureBuilder(object):
         fullname,
         serial_number=None,
         element=None,
-        charge=None,
+        pqr_charge=None,
         radius=None,
         is_pqr=False
     ):
@@ -200,8 +200,8 @@ class StructureBuilder(object):
          - altloc - string, alternative location specifier
          - fullname - string, atom name including spaces, e.g. " CA "
          - element - string, upper case, e.g. "HG" for mercury
-         - charge - float, atom charge (appears in PQR format)
-         - radius - float, atom radius
+         - pqr_charge - float, atom charge (PQR format)
+         - radius - float, atom radius (PQR format)
          - is_pqr - boolean, flag to specify if a .pqr file is being parsed
 
         """
@@ -234,7 +234,7 @@ class StructureBuilder(object):
         elif is_pqr:
             self.atom = Atom(
                 name, coord, None, None, altloc, fullname, serial_number,
-                element, charge, radius
+                element, pqr_charge, radius
             )
         if altloc != " ":
             # The atom is disordered
@@ -273,14 +273,14 @@ class StructureBuilder(object):
             # The atom is not disordered
             residue.add(self.atom)
 
-    def init_atom_from_pqr(self, name, coord, charge, radius, altloc, fullname,
+    def init_atom_from_pqr(self, name, coord, pqr_charge, radius, altloc, fullname,
                            serial_number=None, element=None):
         """Create a new Atom object from PQR files.
 
         Arguments:
          - name - string, atom name, e.g. CA, spaces should be stripped
          - coord - Numeric array (Float0, size 3), atomic coordinates
-         - charge - float, atom charge
+         - pqr_charge - float, atom charge
          - radius - float, atom radius
          - altloc - string, alternative location specifier
          - fullname - string, atom name including spaces, e.g. " CA "
@@ -310,7 +310,7 @@ class StructureBuilder(object):
                                  self.line_counter),
                               PDBConstructionWarning)
         self.atom = Atom(name, coord, None, None, altloc,
-                         fullname, serial_number, element, charge, radius)
+                         fullname, serial_number, element, pqr_charge, radius)
         if altloc != " ":
             # The atom is disordered
             if residue.has_id(name):
