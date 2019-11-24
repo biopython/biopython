@@ -43,7 +43,7 @@ def read(handle):
     try:
         xml_tree = ET.parse(handle)
     except ET.ParseError:
-        raise ValueError("Improper MAST XML input file. XML root tag should start with <mast version= ...")
+        raise ValueError("Improper MEME XML input file. XML root tag should start with <MEME version= ...")
     __read_metadata(record, xml_tree)
     __read_alphabet(record, xml_tree)
     __read_sequences(record, xml_tree)
