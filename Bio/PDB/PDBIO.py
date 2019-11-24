@@ -141,7 +141,7 @@ class PDBIO(StructureIO):
         resseq,
         icode,
         chain_id,
-        charge="  ",
+        pqr_charge="  ",
     ):
         """Return an ATOM PDB string (PRIVATE)."""
         if hetfield != " ":
@@ -174,12 +174,12 @@ class PDBIO(StructureIO):
             occupancy = atom.get_occupancy()
 
             radius = None
-            charge = None
+            pqr_charge = None
 
         # PQR Arguments
         else:
             radius = atom.get_radius()
-            charge = atom.get_charge()
+            pqr_charge = atom.get_charge()
 
             bfactor = None
             occupancy = None
@@ -218,24 +218,36 @@ class PDBIO(StructureIO):
                 bfactor,
                 segid,
                 element,
-                charge,
+                pqr_charge,
             )
             return _ATOM_FORMAT_STRING % args
 
         else:
             # PQR case
             try:
-                charge = "%7.4f" % charge
+                pqr_charge = "%7.4f" % pqr_charge
             except TypeError:
-                if charge is None:
-                    charge = " " * 7
+                if pqr_charge is None:
+                    pqr_charge = " " * 7
                     import warnings
                     from Bio import BiopythonWarning
                     warnings.warn("Missing charge in atom %s written as blank" %
                                   repr(atom.get_full_id()), BiopythonWarning)
                 else:
                     raise TypeError("Invalid charge %r in atom %r"
-                                    % (charge, atom.get_full_id()))
+                                    % (pqr_charge, atom.get_full_id()))
+            try:
+                radius = "%6.4f" % pqr_charge
+            except TypeError:
+                if radius is None:
+                    radius = " " * 6
+                    import warnings
+                    from Bio import BiopythonWarning
+                    warnings.warn("Missing radius in atom %s written as blank" %
+                                  repr(atom.get_full_id()), BiopythonWarning)
+                else:
+                    raise TypeError("Invalid radius %r in atom %r"
+                                    % (radius, atom.get_full_id()))
 
             args = (
                 record_type,
@@ -249,10 +261,10 @@ class PDBIO(StructureIO):
                 x,
                 y,
                 z,
-                charge,
+                pqr_charge,
                 radius,
                 element,
-                )
+            )
 
             return _PQR_ATOM_FORMAT_STRING % args
 
