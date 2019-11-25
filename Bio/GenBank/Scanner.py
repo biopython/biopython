@@ -1792,7 +1792,21 @@ class GenBankScanner(InsdcScanner):
                                     print(
                                         "Structured Comment continuation [" + data + "]"
                                     )
-                            elif self.STRUCTURED_COMMENT_END not in data:
+                            elif (
+                                structured_comment_key is not None
+                                and self.STRUCTURED_COMMENT_END not in data
+                            ):
+                                # The current structured comment has a multiline value
+                                previous_value_line = structured_comment_dict[
+                                    structured_comment_key][
+                                    match.group(1)]
+                                structured_comment_dict[
+                                    structured_comment_key][
+                                    match.group(1)] = previous_value_line + " " + line.strip()
+                            elif self.STRUCTURED_COMMENT_END in data:
+                                # End of structured comment
+                                structured_comment_key = None
+                            else:
                                 comment_list.append(data)
                                 if self.debug > 2:
                                     print("Comment continuation [" + data + "]")

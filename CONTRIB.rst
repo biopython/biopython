@@ -184,6 +184,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
 - Matteo Sticco <https://github.com/sticken88>
+- Matteo Ugolotti <https://github.com/matteougolotti>
 - Maximilian Greil <https://github.com/MaxGreil>
 - Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>

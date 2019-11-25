@@ -6601,6 +6601,18 @@ KEYWORDS    """
             "COMPLETENESS: full length.",
         )
 
+    def test_multiline_structured_comment_parsing(self):
+        """Multiline structured comment parsing."""
+        # GU949562.1, MIENS-Data, environment has value on multiple lines
+        path = "GenBank/GU949562.1.gb"
+        record = SeqIO.read(path, "genbank")
+        self.assertEqual(
+            record.annotations["structured_comment"]["MIENS-Data"]["environment"],
+            "Temperate shelf and sea biome [ENVO:00000895], "
+            "coastal water body [ENVO:02000049], "
+            "coastal water [ENVO:00002150]"
+        )
+
     def test_locus_line_topogoly(self):
         """Test if chromosome topology is conserved."""
         record = SeqIO.read("GenBank/DS830848.gb", "genbank")
