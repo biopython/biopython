@@ -126,8 +126,8 @@ def open_database(driver="MySQLdb", **kwargs):
     if driver in ["psycopg2", "pgdb"]:
         sql = (
             "SELECT ev_class FROM pg_rewrite WHERE "
-            + "rulename='rule_bioentry_i1' OR "
-            + "rulename='rule_bioentry_i2';"
+            "rulename='rule_bioentry_i1' OR "
+            "rulename='rule_bioentry_i2';"
         )
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
@@ -296,8 +296,8 @@ class DBServer(object):
         """Add a new database to the server and return it."""
         # make the database
         sql = (
-            r"INSERT INTO biodatabase (name, authority, description)"
-            r" VALUES (%s, %s, %s)"
+            "INSERT INTO biodatabase (name, authority, description)"
+            " VALUES (%s, %s, %s)"
         )
         self.adaptor.execute(sql, (db_name, authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
@@ -440,7 +440,7 @@ class Adaptor(object):
     def fetch_dbid_by_dbname(self, dbname):
         """Return the internal id for the sub-database using its name."""
         self.execute(
-            r"select biodatabase_id from biodatabase where name = %s", (dbname,)
+            "select biodatabase_id from biodatabase where name = %s", (dbname,)
         )
         rv = self.cursor.fetchall()
         if not rv:
@@ -456,7 +456,7 @@ class Adaptor(object):
            name column of the bioentry table of the SQL schema
 
         """
-        sql = r"select bioentry_id from bioentry where name = %s"
+        sql = "select bioentry_id from bioentry where name = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -478,7 +478,7 @@ class Adaptor(object):
            accession column of the bioentry table of the SQL schema
 
         """
-        sql = r"select bioentry_id from bioentry where accession = %s"
+        sql = "select bioentry_id from bioentry where accession = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -500,7 +500,7 @@ class Adaptor(object):
            accession column of the bioentry table of the SQL schema
 
         """
-        sql = r"select bioentry_id from bioentry where accession = %s"
+        sql = "select bioentry_id from bioentry where accession = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -524,10 +524,7 @@ class Adaptor(object):
             version = acc_version[1]
         else:
             version = "0"
-        sql = (
-            r"SELECT bioentry_id FROM bioentry WHERE accession = %s"
-            r" AND version = %s"
-        )
+        sql = "SELECT bioentry_id FROM bioentry WHERE accession = %s AND version = %s"
         fields = [acc, version]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -799,22 +796,22 @@ class BioSeqDatabase(object):
         """Remove an entry and all its annotation."""
         if key not in self:
             raise KeyError(
-                "Entry %r cannot be deleted. " "It was not found or is invalid" % key
+                "Entry %r cannot be deleted. It was not found or is invalid" % key
             )
         # Assuming this will automatically cascade to the other tables...
-        sql = "DELETE FROM bioentry " + "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        sql = "DELETE FROM bioentry WHERE biodatabase_id=%s AND bioentry_id=%s;"
         self.adaptor.execute(sql, (self.dbid, key))
 
     def __len__(self):
         """Return number of records in this namespace (sub database)."""
-        sql = "SELECT COUNT(bioentry_id) FROM bioentry " + "WHERE biodatabase_id=%s;"
+        sql = "SELECT COUNT(bioentry_id) FROM bioentry WHERE biodatabase_id=%s;"
         return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid,))[0])
 
     def __contains__(self, value):
         """Check if a primary (internal) id is this namespace (sub database)."""
         sql = (
             "SELECT COUNT(bioentry_id) FROM bioentry "
-            + "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+            "WHERE biodatabase_id=%s AND bioentry_id=%s;"
         )
         # The bioentry_id field is an integer in the schema.
         # PostgreSQL will throw an error if we use a non integer in the query.
@@ -954,16 +951,16 @@ class BioSeqDatabase(object):
                     version = 0
                 gi = cur_record.annotations.get("gi")
                 sql = (
-                    "SELECT bioentry_id FROM bioentry WHERE (identifier "
-                    + "= '%s' AND biodatabase_id = '%s') OR (accession = "
-                    + "'%s' AND version = '%s' AND biodatabase_id = '%s')"
+                    "SELECT bioentry_id FROM bioentry "
+                    "WHERE (identifier = '%s' AND biodatabase_id = '%s') "
+                    "OR (accession = '%s' AND version = '%s' AND biodatabase_id = '%s')"
                 )
                 self.adaptor.execute(
                     sql % (gi, self.dbid, accession, version, self.dbid)
                 )
                 if self.adaptor.cursor.fetchone():
                     raise self.adaptor.conn.IntegrityError(
-                        "Duplicate record detected: " "record has not been inserted"
+                        "Duplicate record detected: record has not been inserted"
                     )
             # End of hack
             db_loader.load_seqrecord(cur_record)

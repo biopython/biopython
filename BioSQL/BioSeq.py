@@ -203,8 +203,7 @@ def _retrieve_seq(adaptor, primary_id):
     # but length will be populated.  This means length(seq)
     # will return None.
     seqs = adaptor.execute_and_fetchall(
-        "SELECT alphabet, length, length(seq) FROM biosequence"
-        " WHERE bioentry_id = %s",
+        "SELECT alphabet, length, length(seq) FROM biosequence WHERE bioentry_id = %s",
         (primary_id,),
     )
     if not seqs:
@@ -220,7 +219,7 @@ def _retrieve_seq(adaptor, primary_id):
     except TypeError:
         assert length is None
         seqs = adaptor.execute_and_fetchall(
-            "SELECT alphabet, length, seq FROM biosequence" " WHERE bioentry_id = %s",
+            "SELECT alphabet, length, seq FROM biosequence WHERE bioentry_id = %s",
             (primary_id,),
         )
         assert len(seqs) == 1
@@ -412,7 +411,7 @@ def _retrieve_features(adaptor, primary_id):
 
 def _retrieve_location_qualifier_value(adaptor, location_id):
     value = adaptor.execute_and_fetch_col0(
-        "SELECT value FROM location_qualifier_value" " WHERE location_id = %s",
+        "SELECT value FROM location_qualifier_value WHERE location_id = %s",
         (location_id,),
     )
     try:
@@ -563,7 +562,7 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
 
 def _retrieve_comment(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
-        "SELECT comment_text FROM comment" " WHERE bioentry_id=%s" ' ORDER BY "rank"',
+        'SELECT comment_text FROM comment WHERE bioentry_id=%s ORDER BY "rank"',
         (primary_id,),
     )
     comments = [comm[0] for comm in qvs]
