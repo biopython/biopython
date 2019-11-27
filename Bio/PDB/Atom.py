@@ -26,7 +26,7 @@ class Atom(object):
     B factor and positions.
 
     In the case of PQR files, B factor and occupancy are replaced by
-    atomic charge and radius. 
+    atomic charge and radius.
     """
 
     def __init__(

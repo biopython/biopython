@@ -18,7 +18,7 @@ _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 )
 _PQR_ATOM_FORMAT_STRING = (
-    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6.4f      %2s\n"
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
 
 
@@ -141,7 +141,7 @@ class PDBIO(StructureIO):
         resseq,
         icode,
         chain_id,
-        pqr_charge="  ",
+        charge="  ",
     ):
         """Return an ATOM PDB string (PRIVATE)."""
         if hetfield != " ":
@@ -173,16 +173,10 @@ class PDBIO(StructureIO):
             bfactor = atom.get_bfactor()
             occupancy = atom.get_occupancy()
 
-            radius = None
-            pqr_charge = None
-
         # PQR Arguments
         else:
             radius = atom.get_radius()
             pqr_charge = atom.get_charge()
-
-            bfactor = None
-            occupancy = None
 
         if not self.is_pqr:
             try:
@@ -218,7 +212,7 @@ class PDBIO(StructureIO):
                 bfactor,
                 segid,
                 element,
-                pqr_charge,
+                charge,
             )
             return _ATOM_FORMAT_STRING % args
 
@@ -237,7 +231,7 @@ class PDBIO(StructureIO):
                     raise TypeError("Invalid charge %r in atom %r"
                                     % (pqr_charge, atom.get_full_id()))
             try:
-                radius = "%6.4f" % pqr_charge
+                radius = "%6.4f" % radius
             except TypeError:
                 if radius is None:
                     radius = " " * 6
