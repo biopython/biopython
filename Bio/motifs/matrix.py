@@ -25,15 +25,13 @@ try:
     # the Python standard library instead of numpy arrays; this would still
     # allow us to use the C module.
 
-    def _calculate(score_dict, sequence, m):
+    def _calculate(logodds_array, sequence, m):
         """Calculate scores using C code (PRIVATE)."""
         n = len(sequence)
         # Create the numpy arrays here; the C module then does not rely on numpy
         # Use a float32 for the scores array to save space
         scores = numpy.empty(n - m + 1, numpy.float32)
-        logodds = numpy.array([[score_dict[letter][i] for letter in "ACGT"]
-                               for i in range(m)], float)
-        _pwm.calculate(sequence, logodds, scores)
+        _pwm.calculate(sequence, logodds_array, scores)
         return scores
 
 except ImportError:
@@ -43,7 +41,7 @@ except ImportError:
         warnings.warn("Using pure-Python as missing Biopython's C code for PWM.",
                       BiopythonWarning)
 
-    def _calculate(score_dict, sequence, m):
+    def _calculate(logodds_array, sequence, m):
         """Calculate scores using Python code (PRIVATE).
 
         The C code handles mixed case so Python version must too.
@@ -56,8 +54,9 @@ except ImportError:
             for position in range(m):
                 letter = sequence[i + position]
                 try:
-                    score += score_dict[letter][position]
-                except KeyError:
+                    # Is this correct?
+                    score += logodds_array["ACGT".index(letter), position]
+                except IndexError:
                     score = float("nan")
                     break
             scores.append(score)
@@ -398,7 +397,14 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # case would impose an overhead to allocate the extra memory.
         sequence = str(sequence)
         m = self.length
-        scores = _calculate(self, sequence, m)
+        logodds_array = numpy.array(
+            # Bypassing self.__getitem__ for speed!
+            [[dict.__getitem__(self, "A")[i],
+              dict.__getitem__(self, "C")[i],
+              dict.__getitem__(self, "G")[i],
+              dict.__getitem__(self, "T")[i]]
+             for i in range(m)], float)
+        scores = _calculate(logodds_array, sequence, m)
 
         if len(scores) == 1:
             return scores[0]
