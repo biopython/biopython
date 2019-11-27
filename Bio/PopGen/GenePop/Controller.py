@@ -46,11 +46,10 @@ def _read_allele_freq_table(f):
         parts = [x for x in line.split(" ") if x != ""]
         try:
             table.append(
-                (parts[0], [_gp_float(x) for x in parts[1: -1]],
-                 _gp_int(parts[-1])))
+                (parts[0], [_gp_float(x) for x in parts[1:-1]], _gp_int(parts[-1]))
+            )
         except ValueError:
-            table.append(
-                (parts[0], [None] * len(alleles), 0))
+            table.append((parts[0], [None] * len(alleles), 0))
         line = f.readline().rstrip()
     return alleles, table
 
@@ -78,8 +77,7 @@ def _read_triangle_matrix(f):
     matrix = []
     line = f.readline().rstrip()
     while line != "":
-        matrix.append(
-            [_gp_float(x) for x in [y for y in line.split(" ") if y != ""]])
+        matrix.append([_gp_float(x) for x in [y for y in line.split(" ") if y != ""]])
         line = f.readline().rstrip()
     return matrix
 
@@ -115,7 +113,9 @@ def _hw_func(stream, is_locus, has_fisher=False):
             stream.readline()
             stream.readline()
             stream.readline()
-            table = _read_table(stream, [str, _gp_float, _gp_float, _gp_float, _gp_float, _gp_int, str])
+            table = _read_table(
+                stream, [str, _gp_float, _gp_float, _gp_float, _gp_float, _gp_int, str]
+            )
             # loci might mean pop if hook="Locus "
             loci = {}
             for entry in table:
@@ -160,6 +160,7 @@ class _FileIterator(object):
         return self.func(self)
 
     if sys.version_info[0] < 3:
+
         def next(self):
             """Return next item, a Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
@@ -178,8 +179,7 @@ class _GenePopCommandline(AbstractCommandline):
 
     def __init__(self, genepop_dir=None, cmd="Genepop", **kwargs):
         self.parameters = [
-            _Argument(["command"], "GenePop option to be called",
-                      is_required=True),
+            _Argument(["command"], "GenePop option to be called", is_required=True),
             _Argument(["mode"], "Should allways be batch", is_required=True),
             _Argument(["input"], "Input file", is_required=True),
             _Argument(["Dememorization"], "Dememorization step"),
@@ -198,8 +198,9 @@ class _GenePopCommandline(AbstractCommandline):
 
         Example set_menu([6,1]) = get all F statistics (menu 6.1)
         """
-        self.set_parameter("command", "MenuOptions=" +
-                           ".".join(str(x) for x in option_list))
+        self.set_parameter(
+            "command", "MenuOptions=" + ".".join(str(x) for x in option_list)
+        )
 
     def set_input(self, fname):
         """Set the input file name."""
@@ -248,9 +249,16 @@ class GenePopController(object):
         shutil.rmtree(temp_dir)
         return
 
-    def _test_pop_hz_both(self, fname, type, ext, enum_test=True,
-                          dememorization=10000, batches=20,
-                          iterations=5000):
+    def _test_pop_hz_both(
+        self,
+        fname,
+        type,
+        ext,
+        enum_test=True,
+        dememorization=10000,
+        batches=20,
+        iterations=5000,
+    ):
         """Use Hardy-Weinberg test for heterozygote deficiency/excess (PRIVATE).
 
         Returns a population iterator containing a dictionary where
@@ -267,9 +275,16 @@ class GenePopController(object):
 
         return _FileIterator(hw_func, fname + ext)
 
-    def _test_global_hz_both(self, fname, type, ext, enum_test=True,
-                             dememorization=10000, batches=20,
-                             iterations=5000):
+    def _test_global_hz_both(
+        self,
+        fname,
+        type,
+        ext,
+        enum_test=True,
+        dememorization=10000,
+        batches=20,
+        iterations=5000,
+    ):
         """Use Global Hardy-Weinberg test for heterozygote deficiency/excess (PRIVATE).
 
         Returns a triple with:
@@ -307,13 +322,15 @@ class GenePopController(object):
             f.readline()
             f.readline()
             line = f.readline().rstrip()
-            p, se, switches = tuple(_gp_float(x) for x in [y for y in line.split(" ") if y != ""])
+            p, se, switches = tuple(
+                _gp_float(x) for x in [y for y in line.split(" ") if y != ""]
+            )
         return pop_p, loc_p, (p, se, switches)
 
     # 1.1
-    def test_pop_hz_deficiency(self, fname, enum_test=True,
-                               dememorization=10000, batches=20,
-                               iterations=5000):
+    def test_pop_hz_deficiency(
+        self, fname, enum_test=True, dememorization=10000, batches=20, iterations=5000
+    ):
         """Use Hardy-Weinberg test for heterozygote deficiency.
 
         Returns a population iterator containing a dictionary wehre
@@ -322,13 +339,14 @@ class GenePopController(object):
         Some loci have a None if the info is not available.
         SE might be none (for enumerations).
         """
-        return self._test_pop_hz_both(fname, 1, ".D", enum_test,
-                                      dememorization, batches, iterations)
+        return self._test_pop_hz_both(
+            fname, 1, ".D", enum_test, dememorization, batches, iterations
+        )
 
     # 1.2
-    def test_pop_hz_excess(self, fname, enum_test=True,
-                           dememorization=10000, batches=20,
-                           iterations=5000):
+    def test_pop_hz_excess(
+        self, fname, enum_test=True, dememorization=10000, batches=20, iterations=5000
+    ):
         """Use Hardy-Weinberg test for heterozygote deficiency.
 
         Returns a population iterator containing a dictionary where
@@ -337,13 +355,20 @@ class GenePopController(object):
         Some loci have a None if the info is not available.
         SE might be none (for enumerations).
         """
-        return self._test_pop_hz_both(fname, 2, ".E", enum_test,
-                                      dememorization, batches, iterations)
+        return self._test_pop_hz_both(
+            fname, 2, ".E", enum_test, dememorization, batches, iterations
+        )
 
     # 1.3 P file
-    def test_pop_hz_prob(self, fname, ext, enum_test=False,
-                         dememorization=10000, batches=20,
-                         iterations=5000):
+    def test_pop_hz_prob(
+        self,
+        fname,
+        ext,
+        enum_test=False,
+        dememorization=10000,
+        batches=20,
+        iterations=5000,
+    ):
         """Use Hardy-Weinberg test based on probability.
 
         Returns 2 iterators and a final tuple:
@@ -372,12 +397,15 @@ class GenePopController(object):
 
         shutil.copyfile(fname + ".P", fname + ".P2")
 
-        return _FileIterator(hw_prob_loci_func, fname + ".P"), _FileIterator(hw_prob_pop_func, fname + ".P2")
+        return (
+            _FileIterator(hw_prob_loci_func, fname + ".P"),
+            _FileIterator(hw_prob_pop_func, fname + ".P2"),
+        )
 
     # 1.4
-    def test_global_hz_deficiency(self, fname, enum_test=True,
-                                  dememorization=10000, batches=20,
-                                  iterations=5000):
+    def test_global_hz_deficiency(
+        self, fname, enum_test=True, dememorization=10000, batches=20, iterations=5000
+    ):
         """Use Global Hardy-Weinberg test for heterozygote deficiency.
 
         Returns a triple with:
@@ -390,13 +418,14 @@ class GenePopController(object):
          - Overall results (P-val, SE, switches).
 
         """
-        return self._test_global_hz_both(fname, 4, ".DG", enum_test,
-                                         dememorization, batches, iterations)
+        return self._test_global_hz_both(
+            fname, 4, ".DG", enum_test, dememorization, batches, iterations
+        )
 
     # 1.5
-    def test_global_hz_excess(self, fname, enum_test=True,
-                              dememorization=10000, batches=20,
-                              iterations=5000):
+    def test_global_hz_excess(
+        self, fname, enum_test=True, dememorization=10000, batches=20, iterations=5000
+    ):
         """Use Global Hardy-Weinberg test for heterozygote excess.
 
         Returns a triple with:
@@ -409,12 +438,12 @@ class GenePopController(object):
          - Overall results (P-val, SE, switches)
 
         """
-        return self._test_global_hz_both(fname, 5, ".EG", enum_test,
-                                         dememorization, batches, iterations)
+        return self._test_global_hz_both(
+            fname, 5, ".EG", enum_test, dememorization, batches, iterations
+        )
 
     # 2.1
-    def test_ld(self, fname, dememorization=10000,
-                batches=20, iterations=5000):
+    def test_ld(self, fname, dememorization=10000, batches=20, iterations=5000):
         """Test for linkage disequilibrium on each pair of loci in each population."""
         opts = self._get_opts(dememorization, batches, iterations)
         self._run_genepop([".DIS"], [2, 1], fname, opts)
@@ -461,8 +490,10 @@ class GenePopController(object):
             line = f2.readline()
         while "----" not in line:
             line = f2.readline()
-        return (_FileIterator(ld_pop_func, fname + ".DIS", f1),
-                _FileIterator(ld_func, fname + ".DI2", f2))
+        return (
+            _FileIterator(ld_pop_func, fname + ".DIS", f1),
+            _FileIterator(ld_func, fname + ".DI2", f2),
+        )
 
     # 2.2
     def create_contingency_tables(self, fname):
@@ -470,26 +501,30 @@ class GenePopController(object):
         raise NotImplementedError
 
     # 3.1 PR/GE files
-    def test_genic_diff_all(self, fname, dememorization=10000,
-                            batches=20, iterations=5000):
+    def test_genic_diff_all(
+        self, fname, dememorization=10000, batches=20, iterations=5000
+    ):
         """Provision for Genic differentiation for all populations."""
         raise NotImplementedError
 
     # 3.2 PR2/GE2 files
-    def test_genic_diff_pair(self, fname, dememorization=10000,
-                             batches=20, iterations=5000):
+    def test_genic_diff_pair(
+        self, fname, dememorization=10000, batches=20, iterations=5000
+    ):
         """Provision for Genic differentiation for all population pairs."""
         raise NotImplementedError
 
     # 3.3 G files
-    def test_genotypic_diff_all(self, fname, dememorization=10000,
-                                batches=20, iterations=5000):
+    def test_genotypic_diff_all(
+        self, fname, dememorization=10000, batches=20, iterations=5000
+    ):
         """Provision for Genotypic differentiation for all populations."""
         raise NotImplementedError
 
     # 3.4 2G2 files
-    def test_genotypic_diff_pair(self, fname, dememorization=10000,
-                                 batches=20, iterations=5000):
+    def test_genotypic_diff_pair(
+        self, fname, dememorization=10000, batches=20, iterations=5000
+    ):
         """Provision for Genotypic differentiation for all population pairs."""
         raise NotImplementedError
 
@@ -625,10 +660,14 @@ class GenePopController(object):
                 while line != "\n":
                     m2 = re.match(" +([0-9]+) , ([0-9]+) *([0-9]+) *(.+)", line)
                     if m2 is not None:
-                        geno_list.append((_gp_int(m2.group(1)),
-                                          _gp_int(m2.group(2)),
-                                          _gp_int(m2.group(3)),
-                                          _gp_float(m2.group(4))))
+                        geno_list.append(
+                            (
+                                _gp_int(m2.group(1)),
+                                _gp_int(m2.group(2)),
+                                _gp_int(m2.group(3)),
+                                _gp_float(m2.group(4)),
+                            )
+                        )
                     else:
                         line = self.stream.readline()
                         continue
@@ -653,17 +692,24 @@ class GenePopController(object):
                 while "----" not in line:
                     vals = [x for x in line.rstrip().split(" ") if x != ""]
                     if vals[0] == "Tot":
-                        overall_fis = (_gp_int(vals[1]),
-                                       _gp_float(vals[2]),
-                                       _gp_float(vals[3]))
+                        overall_fis = (
+                            _gp_int(vals[1]),
+                            _gp_float(vals[2]),
+                            _gp_float(vals[3]),
+                        )
                     else:
-                        freq_fis[_gp_int(vals[0])] = (_gp_int(vals[1]),
-                                                      _gp_float(vals[2]),
-                                                      _gp_float(vals[3]))
+                        freq_fis[_gp_int(vals[0])] = (
+                            _gp_int(vals[1]),
+                            _gp_float(vals[2]),
+                            _gp_float(vals[3]),
+                        )
                     line = self.stream.readline()
-                loci_content[locus] = (geno_list,
-                                       (expHo, obsHo, expHe, obsHe),
-                                       freq_fis, overall_fis)
+                loci_content[locus] = (
+                    geno_list,
+                    (expHo, obsHo, expHe, obsHe),
+                    freq_fis,
+                    overall_fis,
+                )
             self.done = True
             raise StopIteration
 
@@ -691,7 +737,9 @@ class GenePopController(object):
             line = f.readline()
             while line != "":
                 line = line.rstrip()
-                if line.startswith("Statistics per sample over all loci with at least two individuals typed"):
+                if line.startswith(
+                    "Statistics per sample over all loci with at least two individuals typed"
+                ):
                     avg_fis = _read_table(f, [str, _gp_float, _gp_float, _gp_float])
                     avg_Qintra = _read_table(f, [str, _gp_float])
                 line = f.readline()
@@ -707,10 +755,16 @@ class GenePopController(object):
                     if "No complete" in self.stream.readline():
                         return locus, None
                     self.stream.readline()
-                    fis_table = _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
+                    fis_table = _read_table(
+                        self.stream, [str, _gp_float, _gp_float, _gp_float]
+                    )
                     self.stream.readline()
-                    avg_qinter, avg_fis = tuple(_gp_float(x) for x in
-                                                [y for y in self.stream.readline().split(" ") if y != ""])
+                    avg_qinter, avg_fis = tuple(
+                        _gp_float(x)
+                        for x in [
+                            y for y in self.stream.readline().split(" ") if y != ""
+                        ]
+                    )
                     return locus, fis_table, avg_qinter, avg_fis
                 line = self.stream.readline()
             self.done = True
@@ -802,6 +856,7 @@ class GenePopController(object):
             self.stream.close()
             self.done = True
             raise StopIteration
+
         return (allFis, allFst, allFit), _FileIterator(proc, fname + ".FST")
 
     # 6.2
@@ -844,11 +899,16 @@ class GenePopController(object):
 
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
         """Calculate isolation by distance statistics (PRIVATE)."""
-        self._run_genepop([".GRA", ".MIG", ".ISO"], [6, sub],
-                          fname, opts={
-                              "MinimalDistance": min_dist,
-                              "GeographicScale": scale,
-                              "IsolBDstatistic": stat})
+        self._run_genepop(
+            [".GRA", ".MIG", ".ISO"],
+            [6, sub],
+            fname,
+            opts={
+                "MinimalDistance": min_dist,
+                "GeographicScale": scale,
+                "IsolBDstatistic": stat,
+            },
+        )
         with open(fname + ".ISO") as f:
             f.readline()
             f.readline()
