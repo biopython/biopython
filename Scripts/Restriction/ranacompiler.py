@@ -72,7 +72,7 @@ classdict = {}
 typedict = {}
 
 
-def double_quote_repr(value):
+def double_quote_repr(value):  # TODO similar not to produce long horizontal lists
     """Return string representation of value, preferring double quotes.
 
     Used to produce Python code with double quotes.
@@ -463,6 +463,7 @@ class DictionaryBuilder(object):
             print("Writing the dictionary containing the new Restriction " +
                   "classes...")
             results.write(start)
+            results.write("# Turn black code style off\n# fmt: off\n")
             results.write("rest_dict = {}\n")
             results.write("\n\n")
             for name in sorted(classdict):
@@ -505,6 +506,7 @@ class DictionaryBuilder(object):
             # but that pushed the code size just over the Jython JVM limit. We
             # include one the final "del _temp" to clean up the namespace.
             results.write("del _temp\n")
+            results.write("# Turn black code style on\n# fmt: on\n")
             print("OK.\n")
         return
 
