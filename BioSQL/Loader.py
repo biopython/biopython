@@ -106,7 +106,7 @@ class DatabaseLoader(object):
         The ontology_id should be used to disambiguate the term.
         """
         # try to get the term id
-        sql = r"SELECT term_id FROM term " r"WHERE name = %s"
+        sql = "SELECT term_id FROM term WHERE name = %s"
         fields = [name]
         if ontology_id:
             sql += " AND ontology_id = %s"
@@ -119,9 +119,9 @@ class DatabaseLoader(object):
             return id_results[0][0]
         else:
             sql = (
-                r"INSERT INTO term (name, definition,"
-                r" identifier, ontology_id)"
-                r" VALUES (%s, %s, %s, %s)"
+                "INSERT INTO term (name, definition,"
+                " identifier, ontology_id)"
+                " VALUES (%s, %s, %s, %s)"
             )
             self.adaptor.execute(sql, (name, definition, identifier, ontology_id))
             return self.adaptor.last_id("term")
@@ -129,7 +129,7 @@ class DatabaseLoader(object):
     def _add_dbxref(self, dbname, accession, version):
         """Insert a dbxref and return its id (PRIVATE)."""
         self.adaptor.execute(
-            "INSERT INTO dbxref(dbname, accession, version)" " VALUES (%s, %s, %s)",
+            "INSERT INTO dbxref(dbname, accession, version) VALUES (%s, %s, %s)",
             (dbname, accession, version),
         )
         return self.adaptor.last_id("dbxref")
@@ -219,7 +219,7 @@ class DatabaseLoader(object):
         # Last chance...
         if common_name:
             taxa = self.adaptor.execute_and_fetch_col0(
-                "SELECT DISTINCT taxon_id FROM taxon_name" " WHERE name = %s",
+                "SELECT DISTINCT taxon_id FROM taxon_name WHERE name = %s",
                 (common_name,),
             )
             # Its natural that several distinct taxa will have the same common
@@ -372,10 +372,10 @@ class DatabaseLoader(object):
         left_rows = sorted(left_rows, key=lambda x: x[0], reverse=True)
 
         self.adaptor.executemany(
-            "UPDATE taxon SET left_value = %s " "WHERE taxon_id = %s", left_rows
+            "UPDATE taxon SET left_value = %s WHERE taxon_id = %s", left_rows
         )
         self.adaptor.executemany(
-            "UPDATE taxon SET right_value = %s " "WHERE taxon_id = %s", right_rows
+            "UPDATE taxon SET right_value = %s WHERE taxon_id = %s", right_rows
         )
 
     def _get_taxon_id_from_ncbi_taxon_id(
@@ -719,9 +719,9 @@ class DatabaseLoader(object):
             seq_str = str(record.seq)
 
         sql = (
-            r"INSERT INTO biosequence (bioentry_id, version, "
-            r"length, seq, alphabet) "
-            r"VALUES (%s, 0, %s, %s, %s)"
+            "INSERT INTO biosequence (bioentry_id, version, "
+            "length, seq, alphabet) "
+            "VALUES (%s, 0, %s, %s, %s)"
         )
         self.adaptor.execute(sql, (bioentry_id, len(record.seq), seq_str, alphabet))
 
@@ -809,14 +809,14 @@ class DatabaseLoader(object):
         if reference.medline_id:
             refs = self.adaptor.execute_and_fetch_col0(
                 "SELECT reference_id"
-                "  FROM reference JOIN dbxref USING (dbxref_id)"
+                " FROM reference JOIN dbxref USING (dbxref_id)"
                 " WHERE dbname = 'MEDLINE' AND accession = %s",
                 (reference.medline_id,),
             )
         if not refs and reference.pubmed_id:
             refs = self.adaptor.execute_and_fetch_col0(
                 "SELECT reference_id"
-                "  FROM reference JOIN dbxref USING (dbxref_id)"
+                " FROM reference JOIN dbxref USING (dbxref_id)"
                 " WHERE dbname = 'PUBMED' AND accession = %s",
                 (reference.pubmed_id,),
             )
@@ -826,7 +826,7 @@ class DatabaseLoader(object):
                 s.append(f or "<undef>")
             crc = crc64("".join(s))
             refs = self.adaptor.execute_and_fetch_col0(
-                "SELECT reference_id FROM reference" r" WHERE crc = %s", (crc,)
+                "SELECT reference_id FROM reference WHERE crc = %s", (crc,)
             )
         if not refs:
             if reference.medline_id:
@@ -1014,9 +1014,9 @@ class DatabaseLoader(object):
             #or "order" (see Tests/GenBank/protein_refseq2.gb)
             location_id = self.adaptor.last_id('location')
             loc_qual_term_id = None # Not allowed in BioSQL v1.0.1
-            sql = r"INSERT INTO location_qualifier_value" \
-                  r"(location_id, term_id, value)" \
-                  r"VALUES (%s, %s, %s)"
+            sql = "INSERT INTO location_qualifier_value" \
+                  "(location_id, term_id, value) " \
+                  "VALUES (%s, %s, %s)"
             self.adaptor.execute(sql, (location_id, loc_qual_term_id,
                                        feature.location_operator))
         """
@@ -1118,7 +1118,7 @@ class DatabaseLoader(object):
         if there is no record.
         """
         # Check for an existing record
-        sql = r"SELECT dbxref_id FROM dbxref WHERE dbname = %s " r"AND accession = %s"
+        sql = "SELECT dbxref_id FROM dbxref WHERE dbname = %s AND accession = %s"
         dbxref_id = self.adaptor.execute_and_fetch_col0(sql, (db, accession))
         # If there was a record, return the dbxref_id, else create the
         # record and return the created dbxref_id
@@ -1135,8 +1135,8 @@ class DatabaseLoader(object):
         """
         # Check for an existing record
         sql = (
-            r"SELECT seqfeature_id, dbxref_id FROM seqfeature_dbxref "
-            r"WHERE seqfeature_id = %s AND dbxref_id = %s"
+            "SELECT seqfeature_id, dbxref_id FROM seqfeature_dbxref "
+            "WHERE seqfeature_id = %s AND dbxref_id = %s"
         )
         result = self.adaptor.execute_and_fetch_col0(sql, (seqfeature_id, dbxref_id))
         # If there was a record, return without executing anything, else create
@@ -1193,8 +1193,8 @@ class DatabaseLoader(object):
         """
         # Check for an existing record
         sql = (
-            r"SELECT bioentry_id, dbxref_id FROM bioentry_dbxref "
-            r"WHERE bioentry_id = %s AND dbxref_id = %s"
+            "SELECT bioentry_id, dbxref_id FROM bioentry_dbxref "
+            "WHERE bioentry_id = %s AND dbxref_id = %s"
         )
         result = self.adaptor.execute_and_fetch_col0(sql, (bioentry_id, dbxref_id))
         # If there was a record, return without executing anything, else create
@@ -1236,7 +1236,7 @@ class DatabaseRemover(object):
 
     def remove(self):
         """Remove everything related to the given database id."""
-        sql = r"DELETE FROM bioentry WHERE biodatabase_id = %s"
+        sql = "DELETE FROM bioentry WHERE biodatabase_id = %s"
         self.adaptor.execute(sql, (self.dbid,))
-        sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
+        sql = "DELETE FROM biodatabase WHERE biodatabase_id = %s"
         self.adaptor.execute(sql, (self.dbid,))
