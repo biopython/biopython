@@ -565,7 +565,7 @@ def _sff_find_roche_index(handle):
         )
     elif magic_number == _hsh:
         raise ValueError(
-            "Hash table style indexes (.hsh) in SFF files are " "not (yet) supported"
+            "Hash table style indexes (.hsh) in SFF files are not (yet) supported"
         )
     else:
         raise ValueError(
@@ -1144,7 +1144,7 @@ def _check_eof(handle, index_offset, index_length):
         )
     elif extra:
         raise ValueError(
-            "Additional data at end of SFF file, " "see offset %i" % offset
+            "Additional data at end of SFF file, see offset %i" % offset
         )
 
 
