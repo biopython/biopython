@@ -14,7 +14,7 @@ The following dictionaries used to be defined in one go, but that does
 not work on Jython due to JVM limitations. Therefore we break this up
 into steps, using temporary functions to avoid the JVM limits.
 
-Used REBASE emboss files version 911 (2019).
+Used REBASE emboss files version 908 (2019).
 
 """
 # Turn black code style off
@@ -2095,31 +2095,6 @@ def _temp():
 
 
 rest_dict["Asp114pII"] = _temp()
-
-
-def _temp():
-    return {
-        "charac": (None, None, None, None, "CARABGG"),
-        "compsite": "(?=(?P<Asp337I>CA[AG]A[CGT]GG))|(?=(?P<Asp337I_as>CC[ACG]T[CT]TG))",
-        "dna": None,
-        "freq": 2730.6666666666665,
-        "fst3": None,
-        "fst5": None,
-        "inact_temp": 65,
-        "opt_temp": 37,
-        "ovhg": None,
-        "ovhgseq": None,
-        "results": None,
-        "scd3": None,
-        "scd5": None,
-        "site": "CARABGG",
-        "size": 7,
-        "substrat": "DNA",
-        "suppl": (),
-    }
-
-
-rest_dict["Asp337I"] = _temp()
 
 
 def _temp():
@@ -21699,31 +21674,6 @@ rest_dict["SmoI"] = _temp()
 
 def _temp():
     return {
-        "charac": (None, None, None, None, "CRTTGAG"),
-        "compsite": "(?=(?P<Sna507VIII>C[AG]TTGAG))|(?=(?P<Sna507VIII_as>CTCAA[CT]G))",
-        "dna": None,
-        "freq": 8192.0,
-        "fst3": None,
-        "fst5": None,
-        "inact_temp": 65,
-        "opt_temp": 37,
-        "ovhg": None,
-        "ovhgseq": None,
-        "results": None,
-        "scd3": None,
-        "scd5": None,
-        "site": "CRTTGAG",
-        "size": 7,
-        "substrat": "DNA",
-        "suppl": (),
-    }
-
-
-rest_dict["Sna507VIII"] = _temp()
-
-
-def _temp():
-    return {
         "charac": (3, -3, None, None, "TACGTA"),
         "compsite": "(?=(?P<SnaBI>TACGTA))",
         "dna": None,
@@ -22220,31 +22170,6 @@ def _temp():
 
 
 rest_dict["SspI"] = _temp()
-
-
-def _temp():
-    return {
-        "charac": (None, None, None, None, "AGCGANC"),
-        "compsite": "(?=(?P<SspJOR1II>AGCGA.C))|(?=(?P<SspJOR1II_as>G.TCGCT))",
-        "dna": None,
-        "freq": 4096.0,
-        "fst3": None,
-        "fst5": None,
-        "inact_temp": 65,
-        "opt_temp": 37,
-        "ovhg": None,
-        "ovhgseq": None,
-        "results": None,
-        "scd3": None,
-        "scd5": None,
-        "site": "AGCGANC",
-        "size": 7,
-        "substrat": "DNA",
-        "suppl": (),
-    }
-
-
-rest_dict["SspJOR1II"] = _temp()
 
 
 def _temp():
@@ -24431,7 +24356,7 @@ typedict["type144"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["Aba6411II", "AbaB8342IV", "AbaCIII", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asp103I", "Asp337I", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdu23823II", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cla11845III", "Cly7489II", "Cma23826I", "Csp2014I", "DrdII", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4465II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Eli8509II", "EsaSSI", "Esp3007I", "Fco1691IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "HbaII", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kor51II", "Kpn156V", "Kpn327I", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Lba2029III", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mcr10I", "MkaDII", "Mlu211III", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pal408I", "Pba2294I", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "PpiP13II", "Pse18267I", "Psp0357II", "Pst145I", "Pst273I", "Pst14472I", "Rba2021I", "RdeGBI", "RflFIII", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sba460II", "Sbo46I", "ScoDS2II", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV"],
+        ["Aba6411II", "AbaB8342IV", "AbaCIII", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asp103I", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdu23823II", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cla11845III", "Cly7489II", "Cma23826I", "Csp2014I", "DrdII", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4465II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Eli8509II", "EsaSSI", "Esp3007I", "Fco1691IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "HbaII", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kor51II", "Kpn156V", "Kpn327I", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Lba2029III", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mcr10I", "MkaDII", "Mlu211III", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pal408I", "Pba2294I", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "PpiP13II", "Pse18267I", "Psp0357II", "Pst145I", "Pst273I", "Pst14472I", "Rba2021I", "RdeGBI", "RflFIII", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sba460II", "Sbo46I", "ScoDS2II", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "SmaUMH5I", "SmaUMH8I", "Sno506I", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV"],
     )
 
 
@@ -24451,7 +24376,7 @@ typedict["type148"] = _temp()
 def _temp():
     return (
         ("Palindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["AvaIII", "HpyUM032XIII", "MjaIV"],
+        ["HpyUM032XIII", "MjaIV"],
     )
 
 
@@ -24671,7 +24596,7 @@ typedict["type288"] = _temp()
 def _temp():
     return (
         ("Palindromic", "NoCut", "Unknown", "NotDefined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["CjuI", "Dde51507I", "HgiEII", "NhoI", "SnaI", "TssI"],
+        ["AvaIII", "CjuI", "Dde51507I", "HgiEII", "NhoI", "SnaI", "TssI"],
     )
 
 
@@ -24731,7 +24656,7 @@ typedict["type77"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["BspMII", "CfrI", "XhoII", "XmaIII"],
+        ["CfrI", "XhoII", "XmaIII"],
     )
 
 
@@ -24751,7 +24676,7 @@ typedict["type79"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["Asi256I", "BetI", "BspLU11I", "Ppu10I", "SelI", "SplI", "Sse232I", "TspEI"],
+        ["Asi256I", "BetI", "BspLU11I", "BspMII", "Ppu10I", "SelI", "SplI", "Sse232I", "TspEI"],
     )
 
 
@@ -24801,7 +24726,7 @@ typedict["type84"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AatII", "ApaI", "AsiSI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NsiI", "NspI", "PluTI", "PstI", "SacI", "SacII"],
+        ["AatII", "ApaI", "AsiSI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NspI", "PluTI", "PstI", "SacI", "SacII"],
     )
 
 
@@ -24821,7 +24746,7 @@ typedict["type90"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AspLEI", "BfoI", "BmtI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
+        ["AspLEI", "BfoI", "BmtI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "NsiI", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
     )
 
 
