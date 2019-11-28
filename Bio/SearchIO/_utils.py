@@ -49,7 +49,7 @@ def singleitem(attr=None, doc=""):
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def getter(self):
         if len(self._items) > 1:
-            raise ValueError("More than one HSPFragment objects " "found in HSP")
+            raise ValueError("More than one HSPFragment objects found in HSP")
         if attr is None:
             return self._items[0]
         return getattr(self._items[0], attr)
