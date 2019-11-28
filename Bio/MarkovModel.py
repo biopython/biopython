@@ -176,13 +176,11 @@ def train_bw(states, alphabet, training_data,
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N, N):
-            raise ValueError("pseudo_transition not shape " +
-                             "len(states) X len(states)")
+            raise ValueError("pseudo_transition not shape len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N, M):
-            raise ValueError("pseudo_emission not shape " +
-                             "len(states) X len(alphabet)")
+            raise ValueError("pseudo_emission not shape len(states) X len(alphabet)")
 
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
@@ -421,13 +419,11 @@ def train_visible(states, alphabet, training_data,
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N, N):
-            raise ValueError("pseudo_transition not shape " +
-                             "len(states) X len(states)")
+            raise ValueError("pseudo_transition not shape len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N, M):
-            raise ValueError("pseudo_emission not shape " +
-                             "len(states) X len(alphabet)")
+            raise ValueError("pseudo_emission not shape len(states) X len(alphabet)")
 
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier

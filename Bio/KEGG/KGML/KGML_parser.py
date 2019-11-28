@@ -68,8 +68,7 @@ def parse(handle, debug=0):
         if isinstance(handle, str):
             handle = StringIO(handle)
         else:
-            exc_txt = "An XML-containing handle or an XML string " + \
-                      "must be provided"
+            exc_txt = "An XML-containing handle or an XML string must be provided"
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
     for event, elem in \
