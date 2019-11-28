@@ -42,9 +42,9 @@ plugins which can be installed as follows::
 
     $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes
 
-Unless you are using Python 2.7, please also install the bugbear plugin::
+Unless you are using Python 2.7, please also install these plugins too::
 
-    $ pip install flake8-bugbear
+    $ pip install flake8-bugbear flake8-implicit-str-concat
 
 We currently strongly suggest you then install the ``flake8`` git pre-commit
 hook which will check our basic coding conventions as you work::
