@@ -1380,10 +1380,7 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
             if qualities and min(qualities) < 0:
                 warnings.warn(
-                    (
-                        "Negative quality score %i found, "
-                        + "substituting PHRED zero instead."
-                    )
+                    "Negative quality score %i found, substituting PHRED zero instead."
                     % min(qualities),
                     BiopythonParserWarning,
                 )

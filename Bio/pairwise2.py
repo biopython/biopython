@@ -1082,7 +1082,7 @@ class affine_penalty(object):
         if open > 0 or extend > 0:
             raise ValueError("Gap penalties should be non-positive.")
         if not penalize_extend_when_opening and (extend < open):
-            raise ValueError("Gap opening penalty should be higher than " +
+            raise ValueError("Gap opening penalty should be higher than "
                              "gap extension penalty (or equal)")
         self.open, self.extend = open, extend
         self.penalize_extend_when_opening = penalize_extend_when_opening
@@ -1203,7 +1203,7 @@ _python_rint = rint
 try:
     from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
 except ImportError:
-    warnings.warn("Import of C module failed. Falling back to pure Python " +
+    warnings.warn("Import of C module failed. Falling back to pure Python "
                   "implementation. This may be slooow...", BiopythonWarning)
 
 if __name__ == "__main__":

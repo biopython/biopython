@@ -165,7 +165,7 @@ class PlateRecord(object):
                 self._is_well(w)
                 self[w.id] = w
         except TypeError:
-            raise TypeError("You must provide an iterator-like object " +
+            raise TypeError("You must provide an iterator-like object "
                             "containing the single wells")
 
         self._update()

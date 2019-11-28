@@ -79,8 +79,8 @@ class Pathway(object):
     def get_KGML(self):
         """Return the pathway as a string in prettified KGML format."""
         header = "\n".join(['<?xml version="1.0"?>',
-                            "<!DOCTYPE pathway SYSTEM " +
-                            '"http://www.genome.jp/kegg/xml/' +
+                            "<!DOCTYPE pathway SYSTEM "
+                            '"http://www.genome.jp/kegg/xml/'
                             'KGML_v0.7.1_.dtd">',
                             "<!-- Created by KGML_Pathway.py %s -->" %
                             time.asctime()])
