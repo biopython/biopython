@@ -649,7 +649,7 @@ class EmblScanner(InsdcScanner):
             or self.line.strip() == "//"
         ):
             raise ValueError(
-                "Unexpected content after SQ or CO " "line: %r" % self.line
+                "Unexpected content after SQ or CO line: %r" % self.line
             )
 
         seq_lines = []
@@ -1296,7 +1296,7 @@ class GenBankScanner(InsdcScanner):
             #       'LOCUS line does not contain size units at expected position:\n' + line
             if line[41:42] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 42:\n" + line
+                    "LOCUS line does not contain space at position 42:\n" + line
                 )
             if line[42:51].strip() not in ["", "linear", "circular"]:
                 raise ValueError(
@@ -1305,7 +1305,7 @@ class GenBankScanner(InsdcScanner):
                 )
             if line[51:52] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 52:\n" + line
+                    "LOCUS line does not contain space at position 52:\n" + line
                 )
             # if line[55:62] != '       ':
             #      raise ValueError('LOCUS line does not contain spaces from position 56 to 62:\n' + line)
@@ -1327,11 +1327,11 @@ class GenBankScanner(InsdcScanner):
             name_and_length = name_and_length_str.split(" ")
             if len(name_and_length) > 2:
                 raise ValueError(
-                    "Cannot parse the name and length in " "the LOCUS line:\n" + line
+                    "Cannot parse the name and length in the LOCUS line:\n" + line
                 )
             if len(name_and_length) == 1:
                 raise ValueError(
-                    "Name and length collide in the LOCUS " "line:\n" + line
+                    "Name and length collide in the LOCUS line:\n" + line
                 )
             # Should be possible to split them based on position, if
             # a clear definition of the standard exists THAT AGREES with
@@ -1393,7 +1393,7 @@ class GenBankScanner(InsdcScanner):
                 # See issue #1656 e.g.
                 # LOCUS       pEH010                  5743 bp    DNA     circular
                 warnings.warn(
-                    "Truncated LOCUS line found - is this " "correct?\n:%r" % line,
+                    "Truncated LOCUS line found - is this correct?\n:%r" % line,
                     BiopythonParserWarning,
                 )
                 padding_len = 79 - len(line)
@@ -1422,7 +1422,7 @@ class GenBankScanner(InsdcScanner):
                 )
             if line[54:55] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 55:\n" + line
+                    "LOCUS line does not contain space at position 55:\n" + line
                 )
             if line[55:63].strip() not in ["", "linear", "circular"]:
                 raise ValueError(
@@ -1431,11 +1431,11 @@ class GenBankScanner(InsdcScanner):
                 )
             if line[63:64] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 64:\n" + line
+                    "LOCUS line does not contain space at position 64:\n" + line
                 )
             if line[67:68] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 68:\n" + line
+                    "LOCUS line does not contain space at position 68:\n" + line
                 )
             if line[68:79].strip():
                 if line[70:71] != "-":
@@ -1455,11 +1455,11 @@ class GenBankScanner(InsdcScanner):
             name_and_length = name_and_length_str.split(" ")
             if len(name_and_length) > 2:
                 raise ValueError(
-                    "Cannot parse the name and length in " "the LOCUS line:\n" + line
+                    "Cannot parse the name and length in the LOCUS line:\n" + line
                 )
             if len(name_and_length) == 1:
                 raise ValueError(
-                    "Name and length collide in the LOCUS " "line:\n" + line
+                    "Name and length collide in the LOCUS line:\n" + line
                 )
             # Should be possible to split them based on position, if
             # a clear definition of the stand exists THAT AGREES with
@@ -1504,7 +1504,7 @@ class GenBankScanner(InsdcScanner):
                 # Must just have just "LOCUS       ", is this even legitimate?
                 # We should be able to continue parsing... we need real world testcases!
                 warnings.warn(
-                    "Minimal LOCUS line found - is this " "correct?\n:%r" % line,
+                    "Minimal LOCUS line found - is this correct?\n:%r" % line,
                     BiopythonParserWarning,
                 )
         elif (
@@ -1562,7 +1562,7 @@ class GenBankScanner(InsdcScanner):
             # Cope with EMBOSS seqret output where it seems the locus id can cause
             # the other fields to overflow.  We just IGNORE the other fields!
             warnings.warn(
-                "Malformed LOCUS line found - is this " "correct?\n:%r" % line,
+                "Malformed LOCUS line found - is this correct?\n:%r" % line,
                 BiopythonParserWarning,
             )
             consumer.locus(line.split()[1])
@@ -1572,7 +1572,7 @@ class GenBankScanner(InsdcScanner):
             #   "LOCUS       RNA5 complete       1718 bp"
             # Treat everything between LOCUS and the size as the identifier.
             warnings.warn(
-                "Malformed LOCUS line found - is this " "correct?\n:%r" % line,
+                "Malformed LOCUS line found - is this correct?\n:%r" % line,
                 BiopythonParserWarning,
             )
             consumer.locus(line[5:].rsplit(None, 2)[0].strip())
