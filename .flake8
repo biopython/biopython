@@ -40,20 +40,19 @@ ignore =
     # =========================================
     # Optional ignores for local installations:
     # =========================================
-    BLK100, # Black would make changes, only on local installations (so far)
     PIE781, # Assigning to temp variable and then returning, not enforcing
 
 # ========================
 # Folder specific ignores:
 # ========================
 per-file-ignores =
-    Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812
+    Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815,BLK100
+    Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812,BLK100
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
-    /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812
+    /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815,BLK100
+    /Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812,BLK100
 
 # =============================
 # per-file-ignores error codes:
@@ -71,6 +70,7 @@ per-file-ignores =
 #           instead callers should raise AssertionError().
 #      C812 missing trailing comma
 #      C815 missing trailing comma in Python 3.5+
+#      BLK100 Black would make changes
 #Tests/*:F401 module imported but unused TODO? (88 occurrences)
 #        F841 local variable is assigned to but never used TODO? (64 occurrences)
 #        D101 missing docstring in public class (207 occurrences)
@@ -83,7 +83,7 @@ per-file-ignores =
 #        B011 do not call assert False since python -O removes these calls;
 #             instead callers should raise AssertionError()
 #        C812 missing trailing comma
-
+#        BLK100 Black would make changes
 # =======================
 # flake8-quotes settings:
 # =======================
