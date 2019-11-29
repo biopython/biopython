@@ -127,8 +127,8 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %i vs %i for " \
-            "%r vs %r" % (len(obj_a), len(obj_b), obj_a, obj_b)
+        assert len(obj_a) == len(obj_b), ("length: %i vs %i for %r vs %r"
+                                          % (len(obj_a), len(obj_b), obj_a, obj_b))
 
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
