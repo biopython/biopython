@@ -143,8 +143,10 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(expected.lstrip(), str(self.record))
 
     def test_repr(self):
-        expected = "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), " \
-                   "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
+        expected = (
+            "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), "
+            "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
+        )
         self.assertEqual(expected, repr(self.record))
 
     def test_format(self):

@@ -181,8 +181,10 @@ def _have_bug17666():
         return False
     import gzip
     # Would like to use byte literal here:
-    bgzf_eof = "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
-               "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+    bgzf_eof = (
+        "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC"
+        "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+    )
     if sys.version_info[0] >= 3:
         import codecs
         bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]

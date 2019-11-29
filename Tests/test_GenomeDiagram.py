@@ -643,12 +643,14 @@ class DiagramTest(unittest.TestCase):
 
     def test_str(self):
         """Test diagram's info as string."""
-        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
-                   "\n1 tracks" \
-                   "\nTrack 1: " \
-                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
-                   "\n0 sets" \
-                   "\n"
+        expected = (
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>"
+            "\n1 tracks"
+            "\nTrack 1: "
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>"
+            "\n0 sets"
+            "\n"
+        )
         self.assertEqual(expected, str(self.gdd))
 
     def test_add_track(self):
@@ -679,23 +681,27 @@ class DiagramTest(unittest.TestCase):
     def test_move_track(self):
         """Move a track."""
         self.gdd.move_track(1, 2)
-        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
-                   "\n1 tracks" \
-                   "\nTrack 2: " \
-                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
-                   "\n0 sets" \
-                   "\n"
+        expected = (
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>"
+            "\n1 tracks"
+            "\nTrack 2: "
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>"
+            "\n0 sets"
+            "\n"
+        )
         self.assertEqual(expected, str(self.gdd))
 
     def test_renumber(self):
         """Test renumbering tracks."""
         self.gdd.renumber_tracks(0)
-        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
-                   "\n1 tracks" \
-                   "\nTrack 0: " \
-                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
-                   "\n0 sets" \
-                   "\n"
+        expected = (
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>"
+            "\n1 tracks"
+            "\nTrack 0: "
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>"
+            "\n0 sets"
+            "\n"
+        )
         self.assertEqual(expected, str(self.gdd))
 
     def test_write_arguments(self):

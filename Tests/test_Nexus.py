@@ -465,8 +465,10 @@ Root:  16
 
     def test_TreeTest2(self):
         """Handle text labels on internal nodes."""
-        ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)" \
-               "TT1:25.000000)Taxaceae:90.000000;"
+        ts1b = (
+            "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"
+            "TT1:25.000000)Taxaceae:90.000000;"
+        )
         tree = Trees.Tree(ts1b)
         self.assertEqual(self._get_flat_nodes(tree), [("Taxaceae", 90.0, None, None),
                                                       ("Cephalotaxus", 125.0, None, None),
