@@ -47,15 +47,17 @@ param_panel = ttk.Frame(main_window, relief=tk.GROOVE, padding=5)
 
 codon_panel = ttk.LabelFrame(param_panel, text="Codon Tables")
 codon_scroller = ttk.Scrollbar(codon_panel, orient=tk.VERTICAL)
-codon_list = tk.Listbox(codon_panel, height=5, width=25,
-                        yscrollcommand=codon_scroller.set)
+codon_list = tk.Listbox(
+    codon_panel, height=5, width=25, yscrollcommand=codon_scroller.set
+)
 
 # Import actual codon tables from Biopython and sort alphabetically
-codon_table_list = sorted(table.names[0] for n, table in
-                          CodonTable.generic_by_id.items())
+codon_table_list = sorted(
+    table.names[0] for n, table in CodonTable.generic_by_id.items()
+)
 
 # 'Standard' table should be first in the list
-del(codon_table_list[codon_table_list.index("Standard")])
+del codon_table_list[codon_table_list.index("Standard")]
 codon_table_list.insert(0, "Standard")
 
 for codon_table in codon_table_list:
@@ -68,16 +70,18 @@ codon_scroller.config(command=codon_list.yview)
 transform_panel = ttk.LabelFrame(param_panel, text="Transformation")
 
 transform_var = tk.StringVar()
-transform_transcribe = ttk.Radiobutton(transform_panel, text="Transcribe",
-                                       variable=transform_var,
-                                       value="transcribe")
-transform_translate = ttk.Radiobutton(transform_panel, text="Translate",
-                                      variable=transform_var,
-                                      value="translate")
-transform_backtranscribe = ttk.Radiobutton(transform_panel,
-                                           text="Back transcribe",
-                                           variable=transform_var,
-                                           value="back transcribe")
+transform_transcribe = ttk.Radiobutton(
+    transform_panel, text="Transcribe", variable=transform_var, value="transcribe"
+)
+transform_translate = ttk.Radiobutton(
+    transform_panel, text="Translate", variable=transform_var, value="translate"
+)
+transform_backtranscribe = ttk.Radiobutton(
+    transform_panel,
+    text="Back transcribe",
+    variable=transform_var,
+    value="back transcribe",
+)
 transform_translate.invoke()
 
 # Right panel with sequence in- and output
@@ -85,14 +89,14 @@ seq_panel = ttk.Frame(main_window, relief=tk.GROOVE, padding=5)
 
 input_panel = ttk.LabelFrame(seq_panel, text="Original Sequence")
 input_scroller = ttk.Scrollbar(input_panel, orient=tk.VERTICAL)
-input_text = tk.Text(input_panel, width=39, height=5,
-                     yscrollcommand=input_scroller.set)
+input_text = tk.Text(input_panel, width=39, height=5, yscrollcommand=input_scroller.set)
 input_scroller.config(command=input_text.yview)
 
 output_panel = ttk.LabelFrame(seq_panel, text="Transformed Sequence")
 output_scroller = ttk.Scrollbar(output_panel, orient=tk.VERTICAL)
-output_text = tk.Text(output_panel, width=39, height=5,
-                      yscrollcommand=output_scroller.set)
+output_text = tk.Text(
+    output_panel, width=39, height=5, yscrollcommand=output_scroller.set
+)
 output_scroller.config(command=output_text.yview)
 
 # Buttons
@@ -103,8 +107,7 @@ close_button = ttk.Button(seq_panel, text="Close", command=main_window.destroy)
 
 # Statusbar
 statustext = tk.StringVar()
-statusbar = ttk.Label(main_window, textvariable=statustext, relief=tk.GROOVE,
-                      padding=5)
+statusbar = ttk.Label(main_window, textvariable=statustext, relief=tk.GROOVE, padding=5)
 statustext.set("This is the statusbar")
 sizegrip = ttk.Sizegrip(statusbar)
 

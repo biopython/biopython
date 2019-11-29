@@ -46,10 +46,14 @@ class MissingTable(object):
 # Make the codon table given an existing table
 def makeTableX(table):
     assert table.protein_alphabet == IUPAC.extended_protein
-    return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                                 MissingTable(table.forward_table),
-                                 table.back_table, table.start_codons,
-                                 table.stop_codons)
+    return CodonTable.CodonTable(
+        table.nucleotide_alphabet,
+        proteinX,
+        MissingTable(table.forward_table),
+        table.back_table,
+        table.start_codons,
+        table.stop_codons,
+    )
 
 
 class NextOrf(object):
@@ -86,8 +90,11 @@ class NextOrf(object):
             self.Output(CDS)
 
     def ToFasta(self, header, seq):
-        seq = re.sub("(............................................................)",
-                     "\\1\n", seq)
+        seq = re.sub(
+            "(............................................................)",
+            "\\1\n",
+            seq,
+        )
         return ">%s\n%s" % (header, seq)
 
     def Gc(self, seq):
@@ -106,7 +113,7 @@ class NextOrf(object):
             d[nt] = [0, 0, 0]
 
         for i in range(0, length, 3):
-            codon = seq[i:i + 3]
+            codon = seq[i : i + 3]
             if len(codon) < 3:
                 codon += "  "
             for pos in range(0, 3):
@@ -136,13 +143,13 @@ class NextOrf(object):
         n = len(seq)
         start_codons = self.table.start_codons
         stop_codons = self.table.stop_codons
-#        print('Start codons %s' % start_codons)
-#        print('Stop codons %s' % stop_codons)
+        #        print('Start codons %s' % start_codons)
+        #        print('Stop codons %s' % stop_codons)
         frame_coordinates = []
         for frame in range(0, 3):
             coordinates = []
             for i in range(0 + frame, n - n % 3, 3):
-                codon = s[i:i + 3]
+                codon = s[i : i + 3]
                 if codon in start_codons:
                     coordinates.append((i + 1, 1, codon))
                 elif codon in stop_codons:
@@ -171,17 +178,18 @@ class NextOrf(object):
                 elif codon_type == STOP:
                     if start_site == 0:
                         continue
-#                    if codon == 'XXX': print('do something')
+                    #                    if codon == 'XXX': print('do something')
                     stop = pos + 2
-#                    print("stop")
+                    #                    print("stop")
                     length = stop - start_site + 1
                     if length >= minlength and length <= maxlength:
                         if nostart == "1" and start_site == 1:
                             start_site = start_site + f - 1
                         if codon == "XXX":
-                            stop = start_site \
-                                + 3 * ((int((stop - 1) - start_site) // 3))
-                        s = seq[start_site - 1:stop]
+                            stop = start_site + 3 * (
+                                (int((stop - 1) - start_site) // 3)
+                            )
+                        s = seq[start_site - 1 : stop]
                         CDS.append((start_site, stop, length, s, strand * f))
                         start_site = 0
                         if nostart == "1":
@@ -199,13 +207,21 @@ class NextOrf(object):
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
             if strand > 0:
-                head = "orf_%s:%s:%d:%d:%d" % (self.counter, self.header,
-                                               strand, start, stop)
+                head = "orf_%s:%s:%d:%d:%d" % (
+                    self.counter,
+                    self.header,
+                    strand,
+                    start,
+                    stop,
+                )
             if strand < 0:
-                head = "orf_%s:%s:%d:%d:%d" % (self.counter, self.header,
-                                               strand,
-                                               n - stop + 1,
-                                               n - start + 1)
+                head = "orf_%s:%s:%d:%d:%d" % (
+                    self.counter,
+                    self.header,
+                    strand,
+                    n - stop + 1,
+                    n - start + 1,
+                )
             if self.options["gc"]:
                 head = "%s:%s" % (head, self.Gc2(subs))
 
@@ -234,9 +250,9 @@ def help():
     print("--gc          Creates GC statistics of ORF [0 1]                     0")
     print("--table       Genetic code to use (see below)                        1")
 
-#    for a,b in options.items():
-#        print("\t%s %s" % (a, b)
-#    print("")
+    #    for a,b in options.items():
+    #        print("\t%s %s" % (a, b)
+    #    print("")
     print("\nNCBI's Codon Tables:")
     for key, table in CodonTable.ambiguous_dna_by_id.items():
         print("\t%s %s" % (key, table._codon_table.names[0]))
