@@ -141,5 +141,5 @@ class BlastWorker(threading.Thread):
 
 
 if __name__ == "__main__":
-    os.system("python xbb_blast.py" +
+    os.system("python xbb_blast.py"
               " ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC")

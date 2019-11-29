@@ -460,7 +460,7 @@ class DictionaryBuilder(object):
         update = os.getcwd()
         with open(os.path.join(update, "Restriction_Dictionary.py"),
                   "w") as results:
-            print("Writing the dictionary containing the new Restriction " +
+            print("Writing the dictionary containing the new Restriction "
                   "classes...")
             results.write(start)
             results.write("rest_dict = {}\n")
@@ -540,7 +540,7 @@ class DictionaryBuilder(object):
             print("\
             \n\tThe new file seems ok. Proceeding with the installation.")
         except SyntaxError:
-            print("\n The new dictionary file is corrupted. Aborting the " +
+            print("\n The new dictionary file is corrupted. Aborting the "
                   "installation.")
             return
         try:
