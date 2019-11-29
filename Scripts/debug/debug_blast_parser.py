@@ -84,7 +84,7 @@ def choose_parser(outfile):
     data = open(outfile).read()
     ldata = data.lower()
     if "<html>" in ldata or "<pre>" in ldata:
-        raise NotImplementedError("Biopython no longer has an HTML BLAST " "parser.")
+        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
     if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
@@ -106,7 +106,7 @@ def test_blast_output(outfile):
         )
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
-        raise NotImplementedError("Biopython no longer has an HTML " "BLAST parser.")
+        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
     print("")
 
     scanner_class = parser_class()._scanner.__class__
