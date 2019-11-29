@@ -46,56 +46,55 @@ class RaxmlCommandline(AbstractCommandline):
     def __init__(self, cmd="raxmlHPC", **kwargs):
         """Initialize the class."""
         self.parameters = [
-                _Option(["-a", "weight_filename"],
-                        "Name of a column weight file to assign individual weights "
-                        "to each column of the alignment. Those weights must be "
-                        "integers separated by any type and number of whitespaces "
-                        "within a separate file.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-b", "bootstrap_seed"],
-                        "Random seed for bootstrapping.",
-                        equate=False,
-                        ),
-
-                _Option(["-c", "num_categories"],
-                        "Number of distinct rate categories for RAxML when "
-                        "evolution model is set to GTRCAT or GTRMIX."
-                        "Individual per-site rates are categorized into this "
-                        "many rate categories to accelerate computations. "
-                        "Default: 25.",
-                        equate=False,
-                        ),
-
-                _Switch(["-d", "random_starting_tree"],
-                        "Start ML optimization from random starting tree."
-                        ),
-
-                _Option(["-e", "epsilon"],
-                        "Set model optimization precision in log likelihood units "
-                        "for final optimization of tree topology under MIX/MIXI "
-                        "or GAMMA/GAMMAI."
-                        "Default: 0.1 for models not using proportion of "
-                        "invariant sites estimate; 0.001 for models using "
-                        "proportion of invariant sites estimate.",
-                        equate=False,
-                        ),
-
-                _Option(["-E", "exclude_filename"],
-                        "An exclude file name, containing a specification of "
-                        "alignment positions you wish to exclude.  Format is "
-                        "similar to Nexus, the file shall contain entries like "
-                        "'100-200 300-400'; to exclude a single column write, "
-                        "e.g., '100-100'. If you use a mixed model, an "
-                        "appropriately adapted model file will be written.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-f", "algorithm"],
-                        r"""
+            _Option(
+                ["-a", "weight_filename"],
+                "Name of a column weight file to assign individual weights "
+                "to each column of the alignment. Those weights must be "
+                "integers separated by any type and number of whitespaces "
+                "within a separate file.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-b", "bootstrap_seed"], "Random seed for bootstrapping.", equate=False
+            ),
+            _Option(
+                ["-c", "num_categories"],
+                "Number of distinct rate categories for RAxML when "
+                "evolution model is set to GTRCAT or GTRMIX."
+                "Individual per-site rates are categorized into this "
+                "many rate categories to accelerate computations. "
+                "Default: 25.",
+                equate=False,
+            ),
+            _Switch(
+                ["-d", "random_starting_tree"],
+                "Start ML optimization from random starting tree.",
+            ),
+            _Option(
+                ["-e", "epsilon"],
+                "Set model optimization precision in log likelihood units "
+                "for final optimization of tree topology under MIX/MIXI "
+                "or GAMMA/GAMMAI."
+                "Default: 0.1 for models not using proportion of "
+                "invariant sites estimate; 0.001 for models using "
+                "proportion of invariant sites estimate.",
+                equate=False,
+            ),
+            _Option(
+                ["-E", "exclude_filename"],
+                "An exclude file name, containing a specification of "
+                "alignment positions you wish to exclude.  Format is "
+                "similar to Nexus, the file shall contain entries like "
+                "'100-200 300-400'; to exclude a single column write, "
+                "e.g., '100-100'. If you use a mixed model, an "
+                "appropriately adapted model file will be written.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-f", "algorithm"],
+                r"""
                         Select algorithm:
 
                         a: Rapid Bootstrap analysis and search for best-scoring ML
@@ -154,59 +153,58 @@ class RaxmlCommandline(AbstractCommandline):
                         tree passed via '-t', only allowed for GAMMA-based models
                         of rate heterogeneity.
                         """,
-                        checker_function=(lambda x:
-                                          isinstance(x, basestring) and len(x) == 1),
-                        equate=False,
-                        ),
-
-                _Option(["-g", "grouping_constraint"],
-                        "File name of a multifurcating constraint tree. "
-                        "this tree does not need to be comprehensive, i.e. "
-                        "contain all taxa.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-i", "rearrangements"],
-                        "Initial rearrangement setting for the subsequent "
-                        "application of topological changes phase.",
-                        equate=False,
-                        ),
-
-                _Switch(["-j", "checkpoints"],
-                        "Write checkpoints (intermediate tree topologies)."
-                        ),
-
-                _Switch(["-k", "bootstrap_branch_lengths"],
-                        "Print bootstrapped trees with branch lengths. "
-                        "The bootstraps will run a bit longer, because model "
-                        "parameters will be optimized at the end of each run. "
-                        "Use with CATMIX/PROTMIX or GAMMA/GAMMAI."
-                        ),
-
-                _Option(["-l", "cluster_threshold"],
-                        "Threshold for sequence similarity clustering. "
-                        "RAxML will then print out an alignment to a file "
-                        "called sequenceFileName.reducedBy.threshold that "
-                        "only contains sequences <= the specified threshold "
-                        "that must be between 0.0 and 1.0. RAxML uses the "
-                        "QT-clustering algorithm to perform this task. "
-                        "In addition, a file called "
-                        "RAxML_reducedList.outputFileName will be written "
-                        "that contains clustering information.",
-                        equate=False,
-                        ),
-
-                _Option(["-L", "cluster_threshold_fast"],
-                        "Same functionality as '-l', but uses a less "
-                        "exhaustive and thus faster clustering algorithm. "
-                        "This is intended for very large datasets with more "
-                        "than 20,000-30,000 sequences.",
-                        equate=False,
-                        ),
-
-                _Option(["-m", "model"],
-                        r"""Model of Nucleotide or Amino Acid Substitution:
+                checker_function=(lambda x: isinstance(x, basestring) and len(x) == 1),
+                equate=False,
+            ),
+            _Option(
+                ["-g", "grouping_constraint"],
+                "File name of a multifurcating constraint tree. "
+                "this tree does not need to be comprehensive, i.e. "
+                "contain all taxa.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-i", "rearrangements"],
+                "Initial rearrangement setting for the subsequent "
+                "application of topological changes phase.",
+                equate=False,
+            ),
+            _Switch(
+                ["-j", "checkpoints"],
+                "Write checkpoints (intermediate tree topologies).",
+            ),
+            _Switch(
+                ["-k", "bootstrap_branch_lengths"],
+                "Print bootstrapped trees with branch lengths. "
+                "The bootstraps will run a bit longer, because model "
+                "parameters will be optimized at the end of each run. "
+                "Use with CATMIX/PROTMIX or GAMMA/GAMMAI.",
+            ),
+            _Option(
+                ["-l", "cluster_threshold"],
+                "Threshold for sequence similarity clustering. "
+                "RAxML will then print out an alignment to a file "
+                "called sequenceFileName.reducedBy.threshold that "
+                "only contains sequences <= the specified threshold "
+                "that must be between 0.0 and 1.0. RAxML uses the "
+                "QT-clustering algorithm to perform this task. "
+                "In addition, a file called "
+                "RAxML_reducedList.outputFileName will be written "
+                "that contains clustering information.",
+                equate=False,
+            ),
+            _Option(
+                ["-L", "cluster_threshold_fast"],
+                "Same functionality as '-l', but uses a less "
+                "exhaustive and thus faster clustering algorithm. "
+                "This is intended for very large datasets with more "
+                "than 20,000-30,000 sequences.",
+                equate=False,
+            ),
+            _Option(
+                ["-m", "model"],
+                r"""Model of Nucleotide or Amino Acid Substitution:
 
                         NUCLEOTIDES:
 
@@ -261,143 +259,140 @@ class RaxmlCommandline(AbstractCommandline):
                         Please not that for mixed models you can in addition specify the per-gene AA model in
                         the mixed model file (see manual for details)
                         """,
-                        equate=False,
-                        ),
-
-                _Switch(["-M", "partition_branch_lengths"],
-                        "Switch on estimation of individual per-partition "
-                        "branch lengths. Only has effect when used in "
-                        "combination with 'partition_filename' ('-q'). "
-                        "Branch lengths for individual partitions will be "
-                        "printed to separate files.  A weighted average of the "
-                        "branch lengths is computed by using the respective "
-                        "partition lengths. "
-                        ),
-
-                _Option(["-n", "name"],
-                        "Name used in the output files.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-o", "outgroup"],
-                        "Name of a single outgroup or a comma-separated list "
-                        "of outgroups, eg '-o Rat' or '-o Rat,Mouse'. In case "
-                        "that multiple outgroups are not monophyletic the "
-                        "first name in the list will be selected as outgroup. "
-                        "Don't leave spaces between taxon names!",
-                        checker_function=lambda x: len(x.split()) == 1,
-                        equate=False,
-                        ),
-
-                _Option(["-q", "partition_filename"],
-                        "File name containing the assignment of models to "
-                        "alignment partitions for multiple models of "
-                        "substitution. For the syntax of this file please "
-                        "consult the RAxML manual.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-p", "parsimony_seed"],
-                        "Random number seed for the parsimony inferences. "
-                        "This allows you to reproduce your results and will "
-                        "help developers debug the program. This option HAS "
-                        "NO EFFECT in the parallel MPI version.",
-                        equate=False,
-                        ),
-
-                _Option(["-P", "protein_model"],
-                        "File name of a user-defined AA (Protein) substitution "
-                        "model. This file must contain 420 entries, the first "
-                        "400 being the AA substitution rates (this must be a "
-                        "symmetric matrix) and the last 20 are the empirical "
-                        "base frequencies.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-r", "binary_constraint"],
-                        "File name of a binary constraint tree. "
-                        "This tree does not need to be comprehensive, i.e. "
-                        "contain all taxa.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-s", "sequences"],
-                        "Name of the alignment data file, in PHYLIP format.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-t", "starting_tree"],
-                        "File name of a user starting tree, in Newick format.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-T", "threads"],
-                        "Number of threads to run. "
-                        "PTHREADS VERSION ONLY! "
-                        "Make sure to set this at most the number of CPUs "
-                        "you have on your machine, otherwise, there will be "
-                        "a huge performance decrease!",
-                        equate=False,
-                        ),
-
-                _Option(["-u", "num_bootstrap_searches"],
-                        "Number of multiple bootstrap searches per replicate. "
-                        "Use this to obtain better ML trees for each "
-                        "replicate. Default: 1 ML search per bootstrap "
-                        "replicate.",
-                        equate=False,
-                        ),
-
-                _Switch(["-v", "version"],
-                        "Display version information."
-                        ),
-
-                _Option(["-w", "working_dir"],
-                        "Name of the working directory where RAxML will "
-                        "write its output files. Default: current directory.",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-x", "rapid_bootstrap_seed"],
-                        "Random seed for rapid bootstrapping.",
-                        equate=False,
-                        ),
-
-                _Switch(["-y", "parsimony"],
-                        "Only compute a parsimony starting tree, then exit."
-                        ),
-
-                _Option(["-z", "bipartition_filename"],
-                        "Name of a file containing multiple trees, e.g. from "
-                        "a bootstrap run, that shall be used to draw "
-                        "bipartition values onto a tree provided with '-t'. "
-                        "It can also be used to compute per-site log "
-                        "likelihoods in combination with '-f g', and to read "
-                        "a bunch of trees for a couple of other options "
-                        "('-f h', '-f m', '-f n').",
-                        filename=True,
-                        equate=False,
-                        ),
-
-                _Option(["-N", "-#", "num_replicates"],
-                        "Number of alternative runs on distinct starting trees. "
-                        "In combination with the '-b' option, this will invoke a "
-                        "multiple bootstrap analysis. "
-                        "DEFAULT: 1 single analysis."
-                        "Note that '-N' has been added as an alternative since "
-                        "'-#' sometimes caused problems with certain MPI job "
-                        "submission systems, since '-#' is often used to start "
-                        "comments. ",
-                        equate=False,
-                        ),
-                ]
+                equate=False,
+            ),
+            _Switch(
+                ["-M", "partition_branch_lengths"],
+                "Switch on estimation of individual per-partition "
+                "branch lengths. Only has effect when used in "
+                "combination with 'partition_filename' ('-q'). "
+                "Branch lengths for individual partitions will be "
+                "printed to separate files.  A weighted average of the "
+                "branch lengths is computed by using the respective "
+                "partition lengths. ",
+            ),
+            _Option(
+                ["-n", "name"],
+                "Name used in the output files.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-o", "outgroup"],
+                "Name of a single outgroup or a comma-separated list "
+                "of outgroups, eg '-o Rat' or '-o Rat,Mouse'. In case "
+                "that multiple outgroups are not monophyletic the "
+                "first name in the list will be selected as outgroup. "
+                "Don't leave spaces between taxon names!",
+                checker_function=lambda x: len(x.split()) == 1,
+                equate=False,
+            ),
+            _Option(
+                ["-q", "partition_filename"],
+                "File name containing the assignment of models to "
+                "alignment partitions for multiple models of "
+                "substitution. For the syntax of this file please "
+                "consult the RAxML manual.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-p", "parsimony_seed"],
+                "Random number seed for the parsimony inferences. "
+                "This allows you to reproduce your results and will "
+                "help developers debug the program. This option HAS "
+                "NO EFFECT in the parallel MPI version.",
+                equate=False,
+            ),
+            _Option(
+                ["-P", "protein_model"],
+                "File name of a user-defined AA (Protein) substitution "
+                "model. This file must contain 420 entries, the first "
+                "400 being the AA substitution rates (this must be a "
+                "symmetric matrix) and the last 20 are the empirical "
+                "base frequencies.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-r", "binary_constraint"],
+                "File name of a binary constraint tree. "
+                "This tree does not need to be comprehensive, i.e. "
+                "contain all taxa.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-s", "sequences"],
+                "Name of the alignment data file, in PHYLIP format.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-t", "starting_tree"],
+                "File name of a user starting tree, in Newick format.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-T", "threads"],
+                "Number of threads to run. "
+                "PTHREADS VERSION ONLY! "
+                "Make sure to set this at most the number of CPUs "
+                "you have on your machine, otherwise, there will be "
+                "a huge performance decrease!",
+                equate=False,
+            ),
+            _Option(
+                ["-u", "num_bootstrap_searches"],
+                "Number of multiple bootstrap searches per replicate. "
+                "Use this to obtain better ML trees for each "
+                "replicate. Default: 1 ML search per bootstrap "
+                "replicate.",
+                equate=False,
+            ),
+            _Switch(["-v", "version"], "Display version information."),
+            _Option(
+                ["-w", "working_dir"],
+                "Name of the working directory where RAxML will "
+                "write its output files. Default: current directory.",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-x", "rapid_bootstrap_seed"],
+                "Random seed for rapid bootstrapping.",
+                equate=False,
+            ),
+            _Switch(
+                ["-y", "parsimony"],
+                "Only compute a parsimony starting tree, then exit.",
+            ),
+            _Option(
+                ["-z", "bipartition_filename"],
+                "Name of a file containing multiple trees, e.g. from "
+                "a bootstrap run, that shall be used to draw "
+                "bipartition values onto a tree provided with '-t'. "
+                "It can also be used to compute per-site log "
+                "likelihoods in combination with '-f g', and to read "
+                "a bunch of trees for a couple of other options "
+                "('-f h', '-f m', '-f n').",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-N", "-#", "num_replicates"],
+                "Number of alternative runs on distinct starting trees. "
+                "In combination with the '-b' option, this will invoke a "
+                "multiple bootstrap analysis. "
+                "DEFAULT: 1 single analysis."
+                "Note that '-N' has been added as an alternative since "
+                "'-#' sometimes caused problems with certain MPI job "
+                "submission systems, since '-#' is often used to start "
+                "comments. ",
+                equate=False,
+            ),
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
         # ENH: enforce -s, -n and -m
         if not self.parsimony_seed:
@@ -406,4 +401,5 @@ class RaxmlCommandline(AbstractCommandline):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

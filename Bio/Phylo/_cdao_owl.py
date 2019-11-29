@@ -2879,7 +2879,7 @@ root = ET.fromstring(cdao_owl)
 for node_type in "ObjectProperty", "Class", "DatatypeProperty":
     for element in root.findall("{http://www.w3.org/2002/07/owl#}%s" % node_type):
         obo = element.attrib[
-            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"].split("/")[-1]
-        cdao = element.find(
-            "{http://www.w3.org/2000/01/rdf-schema#}label").text
+            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"
+        ].split("/")[-1]
+        cdao = element.find("{http://www.w3.org/2000/01/rdf-schema#}label").text
         cdao_elements[cdao] = obo

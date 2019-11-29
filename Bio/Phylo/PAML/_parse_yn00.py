@@ -31,7 +31,9 @@ def parse_ng86(lines, results):
         # This regex is an attempt to cover more pathological cases while also
         # parsing all existing versions of yn00 output with shorter names.
 
-        matrix_row_res = re.match(r"^([^\s]+?)(\s+-?\d+\.\d+.*$|\s*$|-1.0000\s*\(.*$)", line)
+        matrix_row_res = re.match(
+            r"^([^\s]+?)(\s+-?\d+\.\d+.*$|\s*$|-1.0000\s*\(.*$)", line
+        )
         if matrix_row_res is not None:
             # Find all floating point numbers in this line, accounting
             # for the fact that the sequence IDs might have bits that
@@ -130,8 +132,7 @@ def parse_others(lines, results, sequences):
                 # sign, while the rest have 7 characters. On Windows,
                 # NaNs take on weird values like -1.#IND, which might fill the
                 # entire fixed column width.
-                res_matches = re.findall(r"[dSNwrho]{1,3} =.{7,8}?",
-                                         line_stats)
+                res_matches = re.findall(r"[dSNwrho]{1,3} =.{7,8}?", line_stats)
                 for stat_pair in res_matches:
                     stat = stat_pair.split("=")[0].strip()
                     value = stat_pair.split("=")[1].strip()
