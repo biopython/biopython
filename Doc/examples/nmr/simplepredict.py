@@ -62,12 +62,12 @@ from Bio.NMR import NOEtools  # A module specific for generate NOE predictions
 
 # ***** INITS *****
 
-inc = 1                      # The NOE increment (n where i->i+n and i->i-n are noes)
-infn = "./noed.xpk"          # Input peaklist
+inc = 1  # The NOE increment (n where i->i+n and i->i-n are noes)
+infn = "./noed.xpk"  # Input peaklist
 outfn = "./out_example.xpk"  # Output peaklist
-detectatom = "H1"           # Directly detected atom
-relayatom = "N15"           # J-coupling from here to detected atom
-fromatom = "15N2"           # The other labelled nucleus
+detectatom = "H1"  # Directly detected atom
+relayatom = "N15"  # J-coupling from here to detected atom
+fromatom = "15N2"  # The other labelled nucleus
 
 #  First the peaklist is read into a data class from xpktools
 #  that contains methods for easily extracting information from
@@ -99,11 +99,11 @@ peaklist.write_header(outfn)  # Write the header to the output file
 # Predict the i->i+inc and i->i-inc noe positions if possible
 # Write each one to the output file as they are calculated
 
-count = 0     # A counter that number the output data lines in order
+count = 0  # A counter that number the output data lines in order
 res = MINRES  # minimum residue number in the set
 outlist = []  # Holds the output data
 
-while (res <= MAXRES):
+while res <= MAXRES:
     # Predicting the NOE positions based on peak assignment data
     # is done by supplying the peaklist to and specifying the label
     # of the origin and detected atom in the NOE transfer as well as
@@ -128,10 +128,16 @@ while (res <= MAXRES):
         # The data table contains the assignment, coordinates and
         # intensity of the resonance.
 
-        print(entry1.fields["15N2.L"].split(".")[0], "-->",
-              entry1.fields["N15.L"].split(".")[0], "\t",
-              entry1.fields["H1.P"], entry1.fields["N15.P"],
-              entry1.fields["15N2.P"], entry1.fields["int"])
+        print(
+            entry1.fields["15N2.L"].split(".")[0],
+            "-->",
+            entry1.fields["N15.L"].split(".")[0],
+            "\t",
+            entry1.fields["H1.P"],
+            entry1.fields["N15.P"],
+            entry1.fields["15N2.P"],
+            entry1.fields["int"],
+        )
 
         noe1 = noe1 + "\012"
         noe1 = xpktools.replace_entry(noe1, 1, count)

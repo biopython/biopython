@@ -31,23 +31,55 @@ name = "Proux Fig 6"
 
 A_rec = SeqIO.read("NC_002703.gbk", "gb")
 B_rec = SeqIO.read("AF323668.gbk", "gb")
-C_rec = SeqIO.read("NC_003212.gbk",
-                   "gb")[2587879:2625807].reverse_complement(name=True)
+C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(name=True)
 records = {rec.name: rec for rec in [A_rec, B_rec, C_rec]}
 
 # Here we hard code the gene colors for simiplicity and to match the target image.
 # In practice you might have an automatic mapping based on the gene annotation
 # or some other classification:
 
-A_colors = [red] * 5 + [grey] * 7 + [orange] * 2 + [grey] * 2 + [orange] \
-    + [grey] * 11 + [green] * 4 + [grey] + [green] * 2 + [grey, green] \
-    + [brown] * 5 + [blue] * 4 + [lightblue] * 5 + [grey, lightblue] \
-    + [purple] * 2 + [grey]
-B_colors = [red] * 6 + [grey] * 8 + [orange] * 2 + [grey] + [orange] \
-    + [grey] * 21 + [green] * 5 + [grey] + [brown] * 4 + [blue] * 3 \
-    + [lightblue] * 3 + [grey] * 5 + [purple] * 2
-C_colors = [grey] * 33 + [green] * 5 + [brown] * 4 + [blue] * 2 \
-    + [grey, blue] + [lightblue] * 2 + [grey] * 8
+A_colors = (
+    [red] * 5
+    + [grey] * 7
+    + [orange] * 2
+    + [grey] * 2
+    + [orange]
+    + [grey] * 11
+    + [green] * 4
+    + [grey]
+    + [green] * 2
+    + [grey, green]
+    + [brown] * 5
+    + [blue] * 4
+    + [lightblue] * 5
+    + [grey, lightblue]
+    + [purple] * 2
+    + [grey]
+)
+B_colors = (
+    [red] * 6
+    + [grey] * 8
+    + [orange] * 2
+    + [grey]
+    + [orange]
+    + [grey] * 21
+    + [green] * 5
+    + [grey]
+    + [brown] * 4
+    + [blue] * 3
+    + [lightblue] * 3
+    + [grey] * 5
+    + [purple] * 2
+)
+C_colors = (
+    [grey] * 33
+    + [green] * 5
+    + [brown] * 4
+    + [blue] * 2
+    + [grey, blue]
+    + [lightblue] * 2
+    + [grey] * 8
+)
 
 # Here we hard code a list of cross-links with percentage identity scores, based
 # on a manual inspection of the target image (there could be mistakes here).
@@ -122,40 +154,48 @@ for i, record in enumerate([A_rec, B_rec, C_rec]):
     # Allocate tracks 5 (top), 3, 1 (bottom) for A, B, C
     # (empty tracks 2 and 4 add useful white space to emphasise the cross links
     # and also serve to make the tracks vertically more compressed)
-    gd_track_for_features = gd_diagram.new_track(5 - 2 * i,
-                                                 name=record.name,
-                                                 greytrack=True, height=0.5,
-                                                 start=0, end=len(record))
+    gd_track_for_features = gd_diagram.new_track(
+        5 - 2 * i,
+        name=record.name,
+        greytrack=True,
+        height=0.5,
+        start=0,
+        end=len(record),
+    )
     assert record.name not in feature_sets
     feature_sets[record.name] = gd_track_for_features.new_set()
 
 # We add dummy features to the tracks for each cross-link BEFORE we add the
 # arrow features for the genes. This ensures the genes appear on top:
-for X, Y, X_vs_Y in [("NC_002703", "AF323668", A_vs_B),
-                     ("AF323668", "NC_003212", B_vs_C)]:
+for X, Y, X_vs_Y in [
+    ("NC_002703", "AF323668", A_vs_B),
+    ("AF323668", "NC_003212", B_vs_C),
+]:
     features_X = records[X].features
     features_Y = records[Y].features
     set_X = feature_sets[X]
     set_Y = feature_sets[Y]
     for score, x, y in X_vs_Y:
-        color = colors.linearlyInterpolatedColor(colors.white, colors.firebrick,
-                                                 0, 100, score)
+        color = colors.linearlyInterpolatedColor(
+            colors.white, colors.firebrick, 0, 100, score
+        )
         border = colors.lightgrey
         f_x = get_feature(features_X, x)
-        F_x = set_X.add_feature(SeqFeature(FeatureLocation(f_x.location.start,
-                                                           f_x.location.end,
-                                                           strand=0)),
-                                color=color, border=border)
+        F_x = set_X.add_feature(
+            SeqFeature(FeatureLocation(f_x.location.start, f_x.location.end, strand=0)),
+            color=color,
+            border=border,
+        )
         f_y = get_feature(features_Y, y)
-        F_y = set_Y.add_feature(SeqFeature(FeatureLocation(f_y.location.start,
-                                                           f_y.location.end,
-                                                           strand=0)),
-                                color=color, border=border)
+        F_y = set_Y.add_feature(
+            SeqFeature(FeatureLocation(f_y.location.start, f_y.location.end, strand=0)),
+            color=color,
+            border=border,
+        )
         gd_diagram.cross_track_links.append(CrossLink(F_x, F_y, color, border))
 
 
-for record, gene_colors in zip([A_rec, B_rec, C_rec],
-                               [A_colors, B_colors, C_colors]):
+for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_colors]):
     gd_feature_set = feature_sets[record.name]
 
     i = 0
@@ -168,15 +208,19 @@ for record, gene_colors in zip([A_rec, B_rec, C_rec],
         except IndexError:
             print("Don't have color for %s gene %i" % (record.name, i))
             g_color = grey
-        gd_feature_set.add_feature(feature, sigil="BIGARROW",
-                                   color=g_color, label=True,
-                                   name=str(i + 1),
-                                   label_position="start",
-                                   label_size=6, label_angle=0)
+        gd_feature_set.add_feature(
+            feature,
+            sigil="BIGARROW",
+            color=g_color,
+            label=True,
+            name=str(i + 1),
+            label_position="start",
+            label_size=6,
+            label_angle=0,
+        )
         i += 1
 
-gd_diagram.draw(format="linear", pagesize="A4", fragments=1,
-                start=0, end=max_len)
+gd_diagram.draw(format="linear", pagesize="A4", fragments=1, start=0, end=max_len)
 gd_diagram.write(name + ".pdf", "PDF")
 gd_diagram.write(name + ".eps", "EPS")
 gd_diagram.write(name + ".svg", "SVG")
