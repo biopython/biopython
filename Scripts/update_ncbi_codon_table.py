@@ -47,12 +47,16 @@ def line_wrap(text, indent=0, max_len=78, string=False):
         return line + "\n" + line_wrap(rest, indent, max_len, string)
 
 
-print("""
+print(
+    """
 ##########################################################################
 # Start of auto-generated output from Scripts/update_ncbi_codon_table.py #
 ##########################################################################
 
-"""[1:])
+"""[
+        1:
+    ]
+)
 
 version = ""
 for line in open("gc.prt").readlines():
@@ -74,47 +78,54 @@ for line in open("gc.prt").readlines():
     elif line[:4] == "  id":
         id = int(re.search(r"(\d+)", line).group(1))
     elif line[:10] == "  ncbieaa ":
-        aa = line[12:12 + 64]
+        aa = line[12 : 12 + 64]
     elif line[:10] == "  sncbieaa":
-        start = line[12:12 + 64]
+        start = line[12 : 12 + 64]
     elif line[:9] == "  -- Base":
-        bases.append(line[12:12 + 64])
+        bases.append(line[12 : 12 + 64])
     elif line[:2] == " }":
         assert names != [] and id is not None and aa is not None
         assert start is not None and bases != []
         if len(names) == 1:
             names.append(None)
         # Use %r instead of %s to include the quotes of the string!
-        print(line_wrap("register_ncbi_table(name=%r," % names[0],
-              indent=INDENT, string=True))
+        print(
+            line_wrap(
+                "register_ncbi_table(name=%r," % names[0], indent=INDENT, string=True
+            )
+        )
         print(" " * INDENT + "alt_name=%r, id=%d," % (names[1], id))
         s = " " * INDENT + "table={"
         for i in range(64):
             if aa[i] != "*":
-                t = "'%s%s%s': '%s', " % (bases[0][i], bases[1][i],
-                                          bases[2][i], aa[i])
+                t = "'%s%s%s': '%s', " % (bases[0][i], bases[1][i], bases[2][i], aa[i])
                 if len(s) + len(t) > 75:
                     print(s.rstrip())
                     s = " " * INDENT2 + t
                 else:
                     s += t
         print("%s}," % s[:-2])  # remove ', ' from last entry before '}'
-        codons = [bases[0][i] + bases[1][i] + bases[2][i]
-                  for i in range(64) if start[i] == "*"]
-        print(line_wrap(" " * INDENT + "stop_codons=%r,"
-                        % codons, indent=INDENT + 13))
-        codons = [bases[0][i] + bases[1][i] + bases[2][i]
-                  for i in range(64) if start[i] == "M"]
-        print(line_wrap(" " * INDENT + "start_codons=%r)"
-                        % codons, indent=INDENT + 14))
+        codons = [
+            bases[0][i] + bases[1][i] + bases[2][i]
+            for i in range(64)
+            if start[i] == "*"
+        ]
+        print(line_wrap(" " * INDENT + "stop_codons=%r," % codons, indent=INDENT + 13))
+        codons = [
+            bases[0][i] + bases[1][i] + bases[2][i]
+            for i in range(64)
+            if start[i] == "M"
+        ]
+        print(line_wrap(" " * INDENT + "start_codons=%r)" % codons, indent=INDENT + 14))
         print("")
-    elif line[:2] == "--" or line in ("\n", "}\n",
-                                      "Genetic-code-table ::= {\n"):
+    elif line[:2] == "--" or line in ("\n", "}\n", "Genetic-code-table ::= {\n"):
         pass
     else:
         raise Exception("Unparsed: " + repr(line))
 
-print("""
+print(
+    """
 ########################################################################
 # End of auto-generated output from Scripts/update_ncbi_codon_table.py #
-########################################################################""")
+########################################################################"""
+)

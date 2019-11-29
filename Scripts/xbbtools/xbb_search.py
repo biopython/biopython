@@ -130,8 +130,8 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         self.forward = ttk.Button(f, text="Search +", command=self.do_search)
         self.forward.pack(side=tk.LEFT)
         self.forward = ttk.Button(
-            f, text="Search -",
-            command=lambda x=self.do_search: x(other_strand=1))
+            f, text="Search -", command=lambda x=self.do_search: x(other_strand=1)
+        )
         self.forward.pack(side=tk.LEFT)
         self.cancel = ttk.Button(f, text="Cancel", command=self.exit)
         self.cancel.pack(side=tk.LEFT)
@@ -151,8 +151,9 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         self.current_color = color
         self.current_tag = "searched_%s" % self.current_color
         self.master.tag_config(self.current_tag, background=self.current_color)
-        self.master.tag_config(self.current_tag + "R",
-                               background=self.current_color, underline=1)
+        self.master.tag_config(
+            self.current_tag + "R", background=self.current_color, underline=1
+        )
         self.colors.append(color)
 
     def change_color(self):
@@ -177,8 +178,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
             if self.highlight:
                 start, stop = pos, pos + len(self.pattern)
                 if other_strand:
-                    w.tag_add(self.current_tag + "R", "1.%d" % start,
-                              "1.%s" % stop)
+                    w.tag_add(self.current_tag + "R", "1.%d" % start, "1.%s" % stop)
                 else:
                     w.tag_add(self.current_tag, "1.%d" % start, "1.%s" % stop)
                 w.see("1.%d" % start)
@@ -189,7 +189,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
             self.master.tag_remove("searched_%s" % c, 1.0, tk.END)
             self.master.tag_remove("searched_%sR" % c, 1.0, tk.END)
         self.destroy()
-        del(self)
+        del self
 
 
 if __name__ == "__main__":

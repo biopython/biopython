@@ -128,9 +128,11 @@ def is_palindrom(sequence):
     """
     import warnings
     from Bio import BiopythonDeprecationWarning
-    warnings.warn("is_palindrom is deprecated, please use "
-                  "is_palindrome instead.",
-                  BiopythonDeprecationWarning)
+
+    warnings.warn(
+        "is_palindrom is deprecated, please use " "is_palindrome instead.",
+        BiopythonDeprecationWarning,
+    )
 
     return is_palindrome(sequence)
 
@@ -243,10 +245,10 @@ class newenzyme(object):
                 #
                 if cls.fst5 - (cls.fst3 + cls.size) < 0:
                     cls.bases += ("Ov5", "Defined")
-                    cls.ovhg = - len(cls.ovhg)
+                    cls.ovhg = -len(cls.ovhg)
                 else:
                     cls.bases += ("Ov3", "Defined")
-                    cls.ovhg = + len(cls.ovhg)
+                    cls.ovhg = +len(cls.ovhg)
         #
         #   Next class : sensibility to methylation.
         #   Set by EmbossMixer from emboss_r.txt file
@@ -256,7 +258,7 @@ class newenzyme(object):
         #   But the class is there for further development.
         #
         if target[8]:
-            cls.bases += ("Meth_Dep", )
+            cls.bases += ("Meth_Dep",)
             cls.compsite = target[12]
         else:
             cls.bases += ("Meth_Undep",)
@@ -266,9 +268,9 @@ class newenzyme(object):
         #   suppliers. Not essential but can be useful.
         #
         if cls.suppl:
-            cls.bases += ("Commercially_available", )
+            cls.bases += ("Commercially_available",)
         else:
-            cls.bases += ("Not_available", )
+            cls.bases += ("Not_available",)
         cls.bases += ("AbstractCut", "RestrictionType")
         cls.__name__ = name
         cls.results = None
@@ -310,9 +312,15 @@ class TypeCompiler(object):
         #   emboss_*.403 AspCNI is unknown and commercially available.
         #   So now do not remove the most obvious.
         #
-        types = [(p, c, o, d, m, co, baT[0], baT[1])
-                 for p in paT for c in cuT for o in ovT
-                 for d in deT for m in meT for co in coT]
+        types = [
+            (p, c, o, d, m, co, baT[0], baT[1])
+            for p in paT
+            for c in cuT
+            for o in ovT
+            for d in deT
+            for m in meT
+            for co in coT
+        ]
         n = 1
         for ty in types:
             dct = {}
@@ -329,9 +337,16 @@ class TypeCompiler(object):
                 dct["substrat"] = "DNA"
                 dct["dna"] = None
                 if t == NoCut:
-                    dct.update({"fst5": None, "fst3": None,
-                                "scd5": None, "scd3": None,
-                                "ovhg": None, "ovhgseq": None})
+                    dct.update(
+                        {
+                            "fst5": None,
+                            "fst3": None,
+                            "scd5": None,
+                            "scd3": None,
+                            "ovhg": None,
+                            "ovhgseq": None,
+                        }
+                    )
                 elif t == OneCut:
                     dct.update({"scd5": None, "scd3": None})
 
@@ -367,7 +382,9 @@ into steps, using temporary functions to avoid the JVM limits.
 Used REBASE emboss files version {} ({}).
 
 """
-'''.format(release_number, time.gmtime().tm_year)
+'''.format(
+    release_number, time.gmtime().tm_year
+)
 
 
 class DictionaryBuilder(object):
@@ -433,15 +450,25 @@ class DictionaryBuilder(object):
             del dct["__name__"]  # no need to keep, it's already in the type.
             classdict[name] = dct
 
-            commonattr = ["fst5", "fst3", "scd5", "scd3", "substrat",
-                          "ovhg", "ovhgseq", "results", "dna"]
+            commonattr = [
+                "fst5",
+                "fst3",
+                "scd5",
+                "scd3",
+                "substrat",
+                "ovhg",
+                "ovhgseq",
+                "results",
+                "dna",
+            ]
             if typename in typedict:
                 typedict[typename][1].append(name)
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict([(k, v) for k, v in tydct.items()  # noqa: C404
-                              if k in commonattr])
+                tydct = dict(
+                    [(k, v) for k, v in tydct.items() if k in commonattr]  # noqa: C404
+                )
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__["suppl"]:
@@ -461,10 +488,8 @@ class DictionaryBuilder(object):
         # update = config.updatefolder
 
         update = os.getcwd()
-        with open(os.path.join(update, "Restriction_Dictionary.py"),
-                  "w") as results:
-            print("Writing the dictionary containing the new Restriction "
-                  "classes...")
+        with open(os.path.join(update, "Restriction_Dictionary.py"), "w") as results:
+            print("Writing the dictionary containing the new Restriction " "classes...")
             results.write(start)
             results.write("rest_dict = {}\n")
             results.write("\n\n")
@@ -472,8 +497,10 @@ class DictionaryBuilder(object):
                 results.write("def _temp():\n")
                 results.write("    return {\n")
                 for key, value in sorted(classdict[name].items()):
-                    results.write("        %s: %s,\n" %
-                                  (double_quote_repr(key), double_quote_repr(value)))
+                    results.write(
+                        "        %s: %s,\n"
+                        % (double_quote_repr(key), double_quote_repr(value))
+                    )
                 results.write("    }\n")
                 results.write("\n\n")
                 results.write("rest_dict[%s] = _temp()\n" % double_quote_repr(name))
@@ -529,12 +556,10 @@ class DictionaryBuilder(object):
         #
         #   first save the old file in Updates
         #
-        old = os.path.join(os.path.split(rd.__file__)[0],
-                           "Restriction_Dictionary.py")
+        old = os.path.join(os.path.split(rd.__file__)[0], "Restriction_Dictionary.py")
         # update_folder = config.updatefolder
         update_folder = os.getcwd()
-        shutil.copyfile(old, os.path.join(update_folder,
-                                          "Restriction_Dictionary.old"))
+        shutil.copyfile(old, os.path.join(update_folder, "Restriction_Dictionary.old"))
         #
         #   Now test and install.
         #
@@ -578,11 +603,9 @@ class DictionaryBuilder(object):
         #
         #   first save the old file in Updates
         #
-        old = os.path.join(os.path.split(rd.__file__)[0],
-                           "Restriction_Dictionary.py")
+        old = os.path.join(os.path.split(rd.__file__)[0], "Restriction_Dictionary.py")
         update = os.getcwd()
-        shutil.copyfile(old, os.path.join(update,
-                                          "Restriction_Dictionary.old"))
+        shutil.copyfile(old, os.path.join(update, "Restriction_Dictionary.old"))
         places = update, os.path.split(Bio.Restriction.Restriction.__file__)[0]
         print(
             "\t\tCompilation of the new dictionary : OK."
@@ -643,6 +666,7 @@ class DictionaryBuilder(object):
                 #
                 class NotFoundError(Exception):
                     pass
+
                 for name in embossnames:
                     try:
                         for file in dircontent:
@@ -651,8 +675,7 @@ class DictionaryBuilder(object):
                         else:
                             raise NotFoundError
                     except NotFoundError:
-                        print("\nNo %s file found. Upgrade is impossible.\n" %
-                              name)
+                        print("\nNo %s file found. Upgrade is impossible.\n" % name)
                         sys.exit()
                     continue
                 pass
@@ -687,21 +710,16 @@ class DictionaryBuilder(object):
                     else:
                         raise ValueError
                 print(strmess)
-                emboss_e = open(os.path.join(base, "emboss_e.%s" % number),
-                                "r")
-                emboss_r = open(os.path.join(base, "emboss_r.%s" % number),
-                                "r")
-                emboss_s = open(os.path.join(base, "emboss_s.%s" % number),
-                                "r")
+                emboss_e = open(os.path.join(base, "emboss_e.%s" % number), "r")
+                emboss_r = open(os.path.join(base, "emboss_r.%s" % number), "r")
+                emboss_s = open(os.path.join(base, "emboss_s.%s" % number), "r")
                 return emboss_e, emboss_r, emboss_s
             except ValueError:
                 continue
 
     def parseline(self, line):
         """Parse a line from the Rebase emboss_e.xxx file."""
-        line = [line[0]] + \
-            [line[1].upper()] + [int(i) for i in line[2:9]] + \
-            line[9:]
+        line = [line[0]] + [line[1].upper()] + [int(i) for i in line[2:9]] + line[9:]
         name = line[0].replace("-", "_").replace(".", "_")
         site = line[1]  # sequence of the recognition site
         dna = Seq(site, generic_dna)
@@ -748,8 +766,8 @@ class DictionaryBuilder(object):
             print(
                 "\nWARNING : %s cut twice with different overhang length each time."
                 "\n\tUnable to deal with this behaviour. "
-                "\n\tThis enzyme will not be included in the database. Sorry."
-                % name)
+                "\n\tThis enzyme will not be included in the database. Sorry." % name
+            )
             print("\tChecking...")
             raise OverhangError
         if 0 <= fst5 <= size and 0 <= fst3 <= size:
@@ -778,7 +796,7 @@ class DictionaryBuilder(object):
                     #
                     ovhgseq = ovhg1
                     if fst5 < fst3:
-                        ovhg1 = - len(ovhg1)
+                        ovhg1 = -len(ovhg1)
                     else:
                         ovhg1 = len(ovhg1)
                     break
@@ -878,8 +896,9 @@ class DictionaryBuilder(object):
         else:
             line.append(False)
             sense = "".join(["(?=(?P<", name, ">", regex(site.upper()), "))"])
-            antisense = "".join(["(?=(?P<", name, "_as>",
-                                 regex(dna.reverse_complement()), "))"])
+            antisense = "".join(
+                ["(?=(?P<", name, "_as>", regex(dna.reverse_complement()), "))"]
+            )
             rg = sense + "|" + antisense
         #
         #   exact frequency of the site. (ie freq(N) == 1, ...)
@@ -958,14 +977,14 @@ class DictionaryBuilder(object):
                 i2 += 1
                 try:
                     line = self.parseline(line)
-                except OverhangError:   # overhang error
-                    n = name            # do not include the enzyme
+                except OverhangError:  # overhang error
+                    n = name  # do not include the enzyme
                     if not bl[2]:
-                        print("Anyway, %s is not commercially available.\n" %
-                              n)
+                        print("Anyway, %s is not commercially available.\n" % n)
                     else:
-                        print("Unfortunately, %s is commercially " % n +
-                              " available.\n")
+                        print(
+                            "Unfortunately, %s is commercially " % n + " available.\n"
+                        )
 
                     continue
                 # Hyphens and dots can't be used as a Python name, nor as a
@@ -985,9 +1004,9 @@ class DictionaryBuilder(object):
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
                     sense = "(?=(?P<{}>{})|{})".format(other, sense1, sense2)
-                    antisense = "(?=(?P<{}_as>{}|{}))".format(other,
-                                                              antisense1,
-                                                              antisense2)
+                    antisense = "(?=(?P<{}_as>{}|{}))".format(
+                        other, antisense1, antisense2
+                    )
                     reg = sense + "|" + antisense
                     line[1] = line[1] + "|" + enzymedict[other][0]
                     line[-1] = reg
@@ -1012,13 +1031,16 @@ def standalone():
     parser = optparse.OptionParser()
     add = parser.add_option
 
-    add("-i", "--install",
+    add(
+        "-i",
+        "--install",
         action="store_true",
         dest="i",
         default=False,
         help="compile and install the newly created file. "
         "default behaviour (without switch): "
-        "Compile the enzymes and store them in the Updates folder")
+        "Compile the enzymes and store them in the Updates folder",
+    )
     options, args = parser.parse_args()
     return options, args
 

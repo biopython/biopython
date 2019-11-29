@@ -39,8 +39,7 @@ with open(gzname, "wb") as gzh:
 
 # size as of 13 April 2012
 if os.path.getsize(gzname) < 29944258:
-    warnings.warn("ERROR: Downloaded file is too small",
-                  RuntimeWarning)
+    warnings.warn("ERROR: Downloaded file is too small", RuntimeWarning)
 
 fh = gzip.open(gzname, "rb")
 
@@ -56,13 +55,13 @@ fh = gzip.open(gzname, "rb")
 # _chem_comp.one_letter_code
 # _chem_comp.three_letter_code
 
-three_to_one_buf = []      # all three-letter codes
+three_to_one_buf = []  # all three-letter codes
 three_to_one_buf_noq = []  # only those with non-'?' one-letter codes
 
 current_line = "to_one_letter_code = {"
 current_line_noq = "to_one_letter_code = {"
 
-found_one = False    # found one-letter code
+found_one = False  # found one-letter code
 found_three = False  # found three-letter code
 
 counter = 0
@@ -91,8 +90,7 @@ while line:
                 three_to_one_buf_noq.append("%s\n" % (current_line_noq,))
                 current_line_noq = "    "
 
-            current_line_noq = "%s'%s':'%s'," % (current_line_noq, three,
-                                                 one)
+            current_line_noq = "%s'%s':'%s'," % (current_line_noq, three, one)
             counter_noq += 1
 
         found_one = False
@@ -113,11 +111,9 @@ else:
     three_to_one_buf_noq.append("%s }" % (current_line_noq[:-1]))
 
 # Find path of current script
-_scriptPath = os.path.abspath(
-    os.path.split(inspect.getfile(inspect.currentframe()))[0])
+_scriptPath = os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])
 # Path to SCOP module
-_rafPath = os.path.normpath(os.path.join(_scriptPath,
-                                         "..", "..", "Bio", "SCOP"))
+_rafPath = os.path.normpath(os.path.join(_scriptPath, "..", "..", "Bio", "SCOP"))
 _threeAllPath = os.path.join(_rafPath, "three_to_one_all.py")
 _threePath = os.path.join(_rafPath, "three_to_one_dict.py")
 

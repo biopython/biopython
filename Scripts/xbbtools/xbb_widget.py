@@ -41,7 +41,7 @@ class xbb_widget(object):
 
     def __init__(self, parent=None):
         """Set up main window."""
-        self.is_a_master = (parent is None)
+        self.is_a_master = parent is None
         self.parent = parent
 
         self.init_variables()
@@ -110,12 +110,15 @@ class xbb_widget(object):
         menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
         menu.add_cascade(label="Frame", menu=self.frame_menu)
         menu.add_separator()
-        menu.add_command(label="Single frame translation",
-                         command=self.translate)
-        menu.add_command(label="Three frame translation (+)",
-                         command=lambda: self.gcframe(direction="plus"))
-        menu.add_command(label="Three frame translation (-)",
-                         command=lambda: self.gcframe(direction="minus"))
+        menu.add_command(label="Single frame translation", command=self.translate)
+        menu.add_command(
+            label="Three frame translation (+)",
+            command=lambda: self.gcframe(direction="plus"),
+        )
+        menu.add_command(
+            label="Three frame translation (-)",
+            command=lambda: self.gcframe(direction="minus"),
+        )
         menu.add_command(label="Six frame translation", command=self.gcframe)
         menu.add_command(label="Extract to FASTA", command=self.extract)
 
@@ -142,12 +145,13 @@ class xbb_widget(object):
 
         menu = self.gencode_menu
         for table in keys:
-            menu.add_radiobutton(label=table,
-                                 command=self.set_codon_table,
-                                 variable=self.current_codon_table)
+            menu.add_radiobutton(
+                label=table,
+                command=self.set_codon_table,
+                variable=self.current_codon_table,
+            )
 
-        self.menubar.add_cascade(label="Translations",
-                                 menu=self.translation_menu)
+        self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
 
         # Tools menu
         self.tools_menu = tk.Menu(self.menubar)
@@ -166,8 +170,9 @@ class xbb_widget(object):
 
     def set_codon_table(self):
         """Set codon table to selection in Translations menu."""
-        self.current_codon_table_id = \
-            self.translation_tables[self.current_codon_table.get()]
+        self.current_codon_table_id = self.translation_tables[
+            self.current_codon_table.get()
+        ]
 
     def exit(self, *args):
         """Close the program."""
@@ -180,8 +185,7 @@ class xbb_widget(object):
     def create_seqinfo(self, parent):
         """Set up two info lines at top of main window."""
         # all the sequence information in the top labels
-        self.seq_info1 = ttk.Frame(parent, relief="ridge",
-                                   borderwidth=5, height=30)
+        self.seq_info1 = ttk.Frame(parent, relief="ridge", borderwidth=5, height=30)
         self.seq_info1.pack(fill="both", expand=1, side="top")
 
         self.position_ids = {}
@@ -194,8 +198,7 @@ class xbb_widget(object):
         for i in ["id", "from_id", "to_id", "length_id", "label"]:
             d[i].pack(side="left", fill="both", expand=1)
 
-        self.seq_info2 = ttk.Frame(parent, relief="ridge",
-                                   borderwidth=5, height=30)
+        self.seq_info2 = ttk.Frame(parent, relief="ridge", borderwidth=5, height=30)
         self.seq_info2.pack(fill="both", expand=1, side="top")
         self.statistics_ids = {}
         d = self.statistics_ids
@@ -210,13 +213,14 @@ class xbb_widget(object):
         self.button_frame = ttk.Frame(parent)
         self.button_frame.pack(fill="y", side="left")
         self.buttons = {}
-        for text, func in [("Open", self.open),
-                           ("Export", self.export),
-                           ("GC Frame", self.gcframe),
-                           ("Blast", self.blast),
-                           ("Exit", self.exit)]:
-            b_id = ttk.Button(self.button_frame, text=text,
-                              command=func, width=7)
+        for text, func in [
+            ("Open", self.open),
+            ("Export", self.export),
+            ("GC Frame", self.gcframe),
+            ("Blast", self.blast),
+            ("Exit", self.exit),
+        ]:
+            b_id = ttk.Button(self.button_frame, text=text, command=func, width=7)
             b_id.pack(side="top", pady=5, padx=10)
             self.buttons[text] = b_id
 
@@ -238,8 +242,9 @@ class xbb_widget(object):
     def create_bindings(self):
         """Bind events to commands."""
         self.sequence_id.bind("<Motion>", self.position)
-        self.sequence_id.bind("<Leave>", lambda x, s=self:
-                              s.position_ids["id"].configure(text=""))
+        self.sequence_id.bind(
+            "<Leave>", lambda x, s=self: s.position_ids["id"].configure(text="")
+        )
         self.sequence_id.bind("<1>", self.zero)
         self.sequence_id.bind("<B1-Motion>", self.count_selection)
         self.sequence_id.bind("<Double-Button-1>", self.select_all)
@@ -308,8 +313,7 @@ class xbb_widget(object):
             self.position_ids["to_id"].configure(text="Stop:%d" % b)
             self.position_ids["length_id"].configure(text="%d nt" % length)
 
-            self.statistics_ids["length_id"].configure(text="Length=%d"
-                                                       % length)
+            self.statistics_ids["length_id"].configure(text="Length=%d" % length)
             seq = self.get_self_selection()
             for nt in ["A", "C", "G", "T"]:
                 n = seq.count(nt)
@@ -372,9 +376,9 @@ class xbb_widget(object):
             return
         np = NotePad()
         tid = np.text_id()
-        tid.insert("end",
-                   self.translator.gcframe(seq, self.current_codon_table_id,
-                                           direction))
+        tid.insert(
+            "end", self.translator.gcframe(seq, self.current_codon_table_id, direction)
+        )
 
     def translate(self):
         """Run pretty print single frame translation."""
@@ -384,9 +388,9 @@ class xbb_widget(object):
             return
         np = NotePad()
         tid = np.text_id()
-        tid.insert("end",
-                   self.translator.frame_nice(seq, frame,
-                                              self.current_codon_table_id))
+        tid.insert(
+            "end", self.translator.frame_nice(seq, frame, self.current_codon_table_id)
+        )
 
     def extract(self):
         """Make single frame translation and display aa sequence as fasta."""
@@ -417,11 +421,12 @@ class xbb_widget(object):
         np = NotePad()
         tid = np.text_id()
 
-        tid.insert("end", "%s\n\n" %
-                   (time.strftime("%y %b %d, %X\n",
-                                  time.localtime(time.time()))) +
-                   "Length = %d\nA=%d C=%d G=%d T=%d other=%d\nGC=%f\n\n" %
-                   (len(seq), aa["A"], aa["C"], aa["G"], aa["T"], aa["N"], GC))
+        tid.insert(
+            "end",
+            "%s\n\n" % (time.strftime("%y %b %d, %X\n", time.localtime(time.time())))
+            + "Length = %d\nA=%d C=%d G=%d T=%d other=%d\nGC=%f\n\n"
+            % (len(seq), aa["A"], aa["C"], aa["G"], aa["T"], aa["N"], GC),
+        )
 
     def blast(self):
         """Set-up and start BLASTing."""
@@ -510,6 +515,7 @@ class xbb_widget(object):
                 return
             except ValueError:
                 import traceback
+
                 traceback.print_exc()
 
                 self.goto_entry.delete(0, "end")
