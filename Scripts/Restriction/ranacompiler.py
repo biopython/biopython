@@ -131,6 +131,7 @@ def is_palindrom(sequence):
     warnings.warn("is_palindrom is deprecated, please use "
                   "is_palindrome instead.",
                   BiopythonDeprecationWarning)
+
     return is_palindrome(sequence)
 
 
@@ -276,12 +277,14 @@ class newenzyme(object):
         cls.charac = (cls.fst5, cls.fst3, cls.scd5, cls.scd3, cls.site)
         if not target[2] and cls.suppl:
             supp = ", ".join(suppliersdict[s][0] for s in cls.suppl)
-            print("WARNING : It seems that %s is both commercially available\
-            \n\tand its characteristics are unknown. \
-            \n\tThis seems counter-intuitive.\
-            \n\tThere is certainly an error either in ranacompiler or\
-            \n\tin this REBASE release.\
-            \n\tThe supplier is : %s." % (name, supp))
+            print(
+                "WARNING : It seems that %s is both commercially available"
+                "\n\tand its characteristics are unknown. "
+                "\n\tThis seems counter-intuitive."
+                "\n\tThere is certainly an error either in ranacompiler or"
+                "\n\tin this REBASE release."
+                "\n\tThe supplier is : %s." % (name, supp)
+            )
         return
 
 
@@ -520,9 +523,10 @@ class DictionaryBuilder(object):
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
         except ImportError:
-            print("\
-            \n Unable to locate the previous Restriction_Dictionary.py module\
-            \n Aborting installation.")
+            print(
+                "\n Unable to locate the previous Restriction_Dictionary.py module"
+                "\n Aborting installation."
+            )
             sys.exit()
         #
         #   first save the old file in Updates
@@ -539,24 +543,25 @@ class DictionaryBuilder(object):
         new = os.path.join(update_folder, "Restriction_Dictionary.py")
         try:
             exec(compile(open(new).read(), new, "exec"))
-            print("\
-            \n\tThe new file seems ok. Proceeding with the installation.")
+            print("\n\tThe new file seems ok. Proceeding with the installation.")
         except SyntaxError:
-            print("\n The new dictionary file is corrupted. Aborting the "
-                  "installation.")
+            print("\n The new dictionary file is corrupted. Aborting the installation.")
             return
         try:
             shutil.copyfile(new, old)
-            print("\n\t Everything ok. If you need it a version of the old\
-            \n\t dictionary have been saved in the Updates folder under\
-            \n\t the name Restriction_Dictionary.old.")
+            print(
+                "\n\t Everything ok. If you need it a version of the old"
+                "\n\t dictionary have been saved in the Updates folder under"
+                "\n\t the name Restriction_Dictionary.old."
+            )
             print("\n " + "*" * 78 + " \n")
         except IOError:
             print("\n " + "*" * 78 + " \n")
-            print("\
-            \n\t WARNING : Impossible to install the new dictionary.\
-            \n\t Are you sure you have write permission to the folder :\n\
-            \n\t %s ?\n\n" % os.path.split(old)[0])
+            print(
+                "\n\t WARNING : Impossible to install the new dictionary."
+                "\n\t Are you sure you have write permission to the folder :\n"
+                "\n\t %s ?\n\n" % os.path.split(old)[0]
+            )
             return self.no_install()
         return
 
@@ -567,9 +572,10 @@ class DictionaryBuilder(object):
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
         except ImportError:
-            print("\
-            \n Unable to locate the previous Restriction_Dictionary.py module\
-            \n Aborting installation.")
+            print(
+                "\n Unable to locate the previous Restriction_Dictionary.py module"
+                "\n Aborting installation."
+            )
             sys.exit()
         #
         #   first save the old file in Updates
@@ -580,16 +586,18 @@ class DictionaryBuilder(object):
         shutil.copyfile(old, os.path.join(update,
                                           "Restriction_Dictionary.old"))
         places = update, os.path.split(Bio.Restriction.Restriction.__file__)[0]
-        print("\t\tCompilation of the new dictionary : OK.\
-        \n\t\tInstallation : No.\n\
-        \n You will find the newly created 'Restriction_Dictionary.py' file\
-        \n in the folder : \n\
-        \n\t%s\n\
-        \n Make a copy of 'Restriction_Dictionary.py' and place it with \
-        \n the other Restriction libraries.\n\
-        \n note : \
-        \n This folder should be :\n\
-        \n\t%s\n" % places)
+        print(
+            "\t\tCompilation of the new dictionary : OK."
+            "\n\t\tInstallation : No.\n"
+            "\n You will find the newly created 'Restriction_Dictionary.py' file"
+            "\n in the folder : \n"
+            "\n\t%s\n"
+            "\n Make a copy of 'Restriction_Dictionary.py' and place it with "
+            "\n the other Restriction libraries.\n"
+            "\n note : "
+            "\n This folder should be :\n"
+            "\n\t%s\n" % places
+        )
         print("\n " + "*" * 78 + "\n")
         return
 
@@ -620,8 +628,10 @@ class DictionaryBuilder(object):
             #
             #   may be download the files.
             #
-            print("\n The rebase files are missing or more than one month old.\
-            \n Would you like to update them before proceeding?(y/n)")
+            print(
+                "\n The rebase files are missing or more than one month old."
+                "\n Would you like to update them before proceeding?(y/n)"
+            )
             r = _input(" update [n] >>> ")
             if r in ["y", "yes", "Y", "Yes"]:
                 get_files()
@@ -737,11 +747,11 @@ class DictionaryBuilder(object):
             #   Should HaeIV become commercially available or other similar
             #   new enzymes be added, this might be modified.
             #
-            print("\
-            \nWARNING : %s cut twice with different overhang length each time.\
-            \n\tUnable to deal with this behaviour. \
-            \n\tThis enzyme will not be included in the database. Sorry." %
-                  name)
+            print(
+                "\nWARNING : %s cut twice with different overhang length each time."
+                "\n\tUnable to deal with this behaviour. "
+                "\n\tThis enzyme will not be included in the database. Sorry."
+                % name)
             print("\tChecking...")
             raise OverhangError
         if 0 <= fst5 <= size and 0 <= fst3 <= size:
