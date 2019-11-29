@@ -130,7 +130,7 @@ def is_palindrom(sequence):
     from Bio import BiopythonDeprecationWarning
 
     warnings.warn(
-        "is_palindrom is deprecated, please use " "is_palindrome instead.",
+        "is_palindrom is deprecated, please use is_palindrome instead.",
         BiopythonDeprecationWarning,
     )
 
@@ -466,8 +466,8 @@ class DictionaryBuilder(object):
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict(
-                    [(k, v) for k, v in tydct.items() if k in commonattr]  # noqa: C404
+                tydct = dict(  # noqa: C404
+                    [(k, v) for k, v in tydct.items() if k in commonattr]
                 )
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
@@ -489,7 +489,7 @@ class DictionaryBuilder(object):
 
         update = os.getcwd()
         with open(os.path.join(update, "Restriction_Dictionary.py"), "w") as results:
-            print("Writing the dictionary containing the new Restriction " "classes...")
+            print("Writing the dictionary containing the new Restriction classes...")
             results.write(start)
             results.write("rest_dict = {}\n")
             results.write("\n\n")

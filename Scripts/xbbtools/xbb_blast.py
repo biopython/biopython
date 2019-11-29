@@ -78,8 +78,7 @@ class BlastIt(object):
                 pin.extend(glob.glob(database_folder + "/*.pin"))
                 if not (nin and pin):
                     messagebox.showerror(
-                        "xbb tools",
-                        "This folder does not" " contain any BLAST databases!",
+                        "xbb tools", "This folder does not contain any BLAST databases!"
                     )
                     self.toplevel.destroy()
                     return False

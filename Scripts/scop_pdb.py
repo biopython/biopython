@@ -107,7 +107,7 @@ def main():
             pdb_url = a
 
     if len(args) < 2:
-        sys.stderr.write("Not enough arguments. " "Try --help for more details.\n")
+        sys.stderr.write("Not enough arguments. Try --help for more details.\n")
         sys.exit(2)
 
     raf_url = args[0]
