@@ -831,7 +831,7 @@ class BlastXmlWriter(object):
                 # ensure attrs that is not present is optional
                 if elem not in _DTD_OPT:
                     raise ValueError(
-                        "Element %r (attribute %r) not " "found" % (elem, attr)
+                        "Element %r (attribute %r) not found" % (elem, attr)
                     )
             else:
                 # custom element-attribute mapping, for fallback values
