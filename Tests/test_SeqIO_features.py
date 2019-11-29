@@ -401,7 +401,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, reverse_complement("CCCCC" + "TTT"),
+        self.check(s, f, reverse_complement("CCCCCTTT"),
                    "complement(join(6..10,13..15))")
 
     def test_simple_dna_join_before(self):
@@ -410,7 +410,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, reverse_complement("CCCCC" + "TTT"),
+        self.check(s, f, reverse_complement("CCCCCTTT"),
                    "complement(join(<6..10,13..15))")
 
     def test_simple_dna_join_after(self):
@@ -419,7 +419,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, AfterPosition(15)), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, reverse_complement("CCCCC" + "TTT"),
+        self.check(s, f, reverse_complement("CCCCCTTT"),
                    "complement(join(6..10,13..>15))")
 
     def test_mixed_strand_dna_join(self):
@@ -453,7 +453,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10))
         f2 = SeqFeature(FeatureLocation(15, 20))
         f = make_join_feature([f1, f2])
-        self.check(s, f, "FGHIJ" + "PQRST", "join(6..10,16..20)")
+        self.check(s, f, "FGHIJPQRST", "join(6..10,16..20)")
 
     def test_protein_join_fuzzy(self):
         """Feature on protein (fuzzy join)."""
@@ -463,7 +463,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                                                            ExactPosition(16))),
                                         AfterPosition(20)))
         f = make_join_feature([f1, f2])
-        self.check(s, f, "FGHIJ" + "PQRST", "join(<6..10,one-of(16,17)..>20)")
+        self.check(s, f, "FGHIJPQRST", "join(<6..10,one-of(16,17)..>20)")
 
     def test_protein_multi_join(self):
         """Feature on protein (multi-join)."""
