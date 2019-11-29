@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Represent the NDB Atlas structure (a minimal subset of PDB format) (OBSOLETE).
+"""Represent the NDB Atlas structure (a minimal subset of PDB format) (DEPRECATED).
 
 Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
 is a minimal subset of the PDB format.  Hetero supports a 3 alphanumeric code.
@@ -32,10 +32,16 @@ Bio.Crystal is self-contained, with the main functionality covered by Bio.PDB.
 """
 
 import copy
+import warnings
 from functools import reduce
 
 from Bio._py3k import map
 from Bio._py3k import basestring
+
+from Bio import BiopythonDeprecationWarning
+warnings.warn("Bio.Crystal has been deprecated, and we intend to remove it"
+              " in a future release of Biopython. Please use Bio.PDB instead"
+              " to parse NDB files.", BiopythonDeprecationWarning)
 
 
 class CrystalError(Exception):
