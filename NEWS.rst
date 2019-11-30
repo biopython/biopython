@@ -21,6 +21,8 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+``PDBParser`` and ``PDBIO`` now support PQR format file parsing and input/output.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
 PEP8, PEP257 and best practice standard coding style, and more of the code
@@ -29,13 +31,15 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Chris Daley (first contribution)
 - Chris Rands
+- Artemi Bendandi (first contribution)
 - Christian Brueffer
-- Jakub Lipinski (first contribution)
-- Michiel de Hoon
 - Peter Cock
+- Chris Daley (first contribution)
+- Michiel de Hoon
+- Jakub Lipinski (first contribution)
 - Sergio Valqui
+- Konstantinos Zisis (first contribution)
 
 6 November 2019: Biopython 1.75
 ===============================
