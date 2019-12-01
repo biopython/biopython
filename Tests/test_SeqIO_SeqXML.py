@@ -19,12 +19,6 @@ test_files = {
     "globalSpecies": ["SeqXML/global_species_example.xml", 2],
 }
 
-corrupt_files = [
-    "SeqXML/corrupt_example1.xml",
-    "SeqXML/corrupt_example2.xml",
-]
-
-
 def assert_equal_records(testCase, record_a, record_b):
     testCase.assertEqual(record_a.id, record_b.id)
     testCase.assertEqual(record_a.name, record_b.name)
@@ -88,18 +82,18 @@ class TestDetailedRead(unittest.TestCase):
     def test_local_species(self):
         """Check local species."""
         self.assertEqual(self.records["rna"][1].annotations["organism"], "Mus musculus")
-        self.assertEqual(self.records["rna"][1].annotations["ncbi_taxid"], "10090")
+        self.assertEqual(self.records["rna"][1].annotations["ncbi_taxid"], 10090)
 
         self.assertEqual(self.records["rna"][0].annotations["organism"], "Gallus gallus")
-        self.assertEqual(self.records["rna"][0].annotations["ncbi_taxid"], "9031")
+        self.assertEqual(self.records["rna"][0].annotations["ncbi_taxid"], 9031)
 
     def test_global_species(self):
         """Check global species."""
         self.assertEqual(self.records["globalSpecies"][0].annotations["organism"], "Mus musculus")
-        self.assertEqual(self.records["globalSpecies"][0].annotations["ncbi_taxid"], "10090")
+        self.assertEqual(self.records["globalSpecies"][0].annotations["ncbi_taxid"], 10090)
 
         self.assertEqual(self.records["globalSpecies"][1].annotations["organism"], "Homo sapiens")
-        self.assertEqual(self.records["globalSpecies"][1].annotations["ncbi_taxid"], "9606")
+        self.assertEqual(self.records["globalSpecies"][1].annotations["ncbi_taxid"], 9606)
 
     def test_local_source_definition(self):
         """Check local source."""
@@ -177,9 +171,10 @@ class TestReadCorruptFiles(unittest.TestCase):
 
     def test_for_errors(self):
         """Handling of corrupt files."""
-        for filename in corrupt_files:
-            iterator = SeqIO.parse(filename, "seqxml")
-            self.assertRaises(ValueError, next, iterator)
+        iterator = SeqIO.parse("SeqXML/corrupt_example1.xml", "seqxml")
+        self.assertRaises(ValueError, next, iterator)
+        iterator = SeqIO.parse("SeqXML/corrupt_example2.xml", "seqxml")
+        self.assertRaises(ValueError, next, iterator)
 
 
 if __name__ == "__main__":
