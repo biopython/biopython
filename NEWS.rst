@@ -21,7 +21,8 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
-``PDBParser`` and ``PDBIO`` now support PQR format file parsing and input/output.
+``PDBParser`` and ``PDBIO`` now support PQR format file parsing and input/
+output.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
