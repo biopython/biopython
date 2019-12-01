@@ -62,7 +62,7 @@ class PhymlCommandline(AbstractCommandline):
 
                     This option is taken into account when the '-u' option is absent
                     and when tree topology modifications are to be done.
-                    """,
+                """,
             ),
             _Option(
                 ["-b", "--bootstrap", "bootstrap"],
@@ -79,7 +79,7 @@ class PhymlCommandline(AbstractCommandline):
                     parametric branch supports.
 
                     -4: SH-like branch supports alone.
-                    """,
+                """,
                 equate=False,
             ),
             _Option(
@@ -100,7 +100,7 @@ class PhymlCommandline(AbstractCommandline):
 
                     LG (default) | WAG | JTT | MtREV | Dayhoff | DCMut | RtREV |
                     CpREV | VT | Blosum62 | MtMam | MtArt | HIVw | HIVb | custom
-                    """,
+                """,
                 checker_function=(
                     lambda x: x
                     in (
@@ -158,7 +158,7 @@ class PhymlCommandline(AbstractCommandline):
                     "fA fC fG fT" : only valid for nucleotide-based models.
                     fA, fC, fG and fT are floating-point numbers that correspond
                     to the frequencies of A, C, G and T, respectively.
-                    """,
+                """,
                 filename=True,  # ensure ".25 .25 .25 .25" stays quoted
                 equate=False,
             ),
@@ -168,7 +168,7 @@ class PhymlCommandline(AbstractCommandline):
 
                     Can be a fixed positive value (ex:4.0) or e to get the
                     maximum-likelihood estimate.
-                    """,
+                """,
                 equate=False,
             ),
             _Option(
@@ -177,7 +177,7 @@ class PhymlCommandline(AbstractCommandline):
 
                     Can be a fixed value in the range [0,1], or 'e' to get the
                     maximum-likelihood estimate.
-                    """,
+                """,
                 equate=False,
             ),
             _Option(
@@ -185,7 +185,7 @@ class PhymlCommandline(AbstractCommandline):
                 """Number of relative substitution rate categories.
 
                     Default 1. Must be a positive integer.
-                    """,
+                """,
                 equate=False,
             ),
             _Option(
@@ -194,7 +194,7 @@ class PhymlCommandline(AbstractCommandline):
 
                     Can be a fixed positive value, or 'e' to get the
                     maximum-likelihood estimate.
-                    """,
+                """,
                 equate=False,
             ),
             _Option(
@@ -208,7 +208,7 @@ class PhymlCommandline(AbstractCommandline):
                         SPR : a bit slower than NNI
 
                         BEST : best of NNI and SPR search
-                    """,
+                """,
                 checker_function=lambda x: x in ("NNI", "SPR", "BEST"),
                 equate=False,
             ),
@@ -235,7 +235,7 @@ class PhymlCommandline(AbstractCommandline):
                     r   : rate parameters are optimised.
 
                     n   : no parameter is optimised.
-                    """,
+                """,
                 equate=False,
             ),
             _Switch(
@@ -243,14 +243,14 @@ class PhymlCommandline(AbstractCommandline):
                 """Sets the initial tree to random.
 
                     Only valid if SPR searches are to be performed.
-                    """,
+                """,
             ),
             _Option(
                 ["--n_rand_starts", "n_rand_starts"],
                 """Number of initial random trees to be used.
 
                     Only valid if SPR searches are to be performed.
-                    """,
+                """,
                 equate=False,
             ),
             _Option(
@@ -258,7 +258,7 @@ class PhymlCommandline(AbstractCommandline):
                 """Seed used to initiate the random number generator.
 
                     Must be an integer.
-                    """,
+                """,
                 equate=False,
             ),
             _Switch(
@@ -269,7 +269,8 @@ class PhymlCommandline(AbstractCommandline):
                 ["--print_trace", "print_trace"],
                 r"""
                     Print each phylogeny explored during the tree search process
-                    in file \*_phyml_trace.txt.""",
+                    in file \*_phyml_trace.txt.
+                """,
             ),
             _Option(
                 ["--run_id", "run_id"],
@@ -277,7 +278,7 @@ class PhymlCommandline(AbstractCommandline):
 
                     This option may be useful when running simulations involving
                     PhyML.
-                    """,
+                """,
                 checker_function=lambda x: isinstance(x, basestring),
                 equate=False,
             ),
