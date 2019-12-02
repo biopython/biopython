@@ -26,8 +26,7 @@ class AlignmentIterator(object):
     """
 
     # TODO - Should the default be Gapped(single_letter_alphabet) instead?
-    def __init__(self, handle, seq_count=None,
-                 alphabet=single_letter_alphabet):
+    def __init__(self, handle, seq_count=None, alphabet=single_letter_alphabet):
         """Create an AlignmentIterator object.
 
         Arguments:
@@ -66,6 +65,7 @@ class AlignmentIterator(object):
         #####################################################
 
     if sys.version_info[0] < 3:
+
         def next(self):
             """Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()

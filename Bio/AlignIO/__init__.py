@@ -163,30 +163,30 @@ from . import MsfIO
 # Please use the same names as BioPerl and EMBOSS where possible.
 
 _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
-                     "clustal": ClustalIO.ClustalIterator,
-                     "emboss": EmbossIO.EmbossIterator,
-                     "fasta-m10": FastaIO.FastaM10Iterator,
-                     "maf": MafIO.MafIterator,
-                     "mauve": MauveIO.MauveIterator,
-                     "msf": MsfIO.MsfIterator,
-                     "nexus": NexusIO.NexusIterator,
-                     "phylip": PhylipIO.PhylipIterator,
-                     "phylip-sequential": PhylipIO.SequentialPhylipIterator,
-                     "phylip-relaxed": PhylipIO.RelaxedPhylipIterator,
-                     "stockholm": StockholmIO.StockholmIterator,
-                     }
+    "clustal": ClustalIO.ClustalIterator,
+    "emboss": EmbossIO.EmbossIterator,
+    "fasta-m10": FastaIO.FastaM10Iterator,
+    "maf": MafIO.MafIterator,
+    "mauve": MauveIO.MauveIterator,
+    "msf": MsfIO.MsfIterator,
+    "nexus": NexusIO.NexusIterator,
+    "phylip": PhylipIO.PhylipIterator,
+    "phylip-sequential": PhylipIO.SequentialPhylipIterator,
+    "phylip-relaxed": PhylipIO.RelaxedPhylipIterator,
+    "stockholm": StockholmIO.StockholmIterator,
+}
 
 _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
-                     # "emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "clustal": ClustalIO.ClustalWriter,
-                   "maf": MafIO.MafWriter,
-                   "mauve": MauveIO.MauveWriter,
-                   "nexus": NexusIO.NexusWriter,
-                   "phylip": PhylipIO.PhylipWriter,
-                   "phylip-sequential": PhylipIO.SequentialPhylipWriter,
-                   "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
-                   "stockholm": StockholmIO.StockholmWriter,
-                   }
+    # "emboss" : EmbossIO.EmbossWriter, (unfinished)
+    "clustal": ClustalIO.ClustalWriter,
+    "maf": MafIO.MafWriter,
+    "mauve": MauveIO.MauveWriter,
+    "nexus": NexusIO.NexusWriter,
+    "phylip": PhylipIO.PhylipWriter,
+    "phylip-sequential": PhylipIO.SequentialPhylipWriter,
+    "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
+    "stockholm": StockholmIO.StockholmWriter,
+}
 
 
 def write(alignments, handle, format):
@@ -228,20 +228,25 @@ def write(alignments, handle, format):
             count = 0
             for alignment in alignments:
                 if not isinstance(alignment, MultipleSeqAlignment):
-                    raise TypeError("Expect a list or iterator of MultipleSeqAlignment "
-                                    "objects, got: %r" % alignment)
+                    raise TypeError(
+                        "Expect a list or iterator of MultipleSeqAlignment "
+                        "objects, got: %r" % alignment
+                    )
                 SeqIO.write(alignment, fp, format)
                 count += 1
         elif format in _FormatToIterator or format in SeqIO._FormatToIterator:
-            raise ValueError("Reading format '%s' is supported, but not writing"
-                             % format)
+            raise ValueError(
+                "Reading format '%s' is supported, but not writing" % format
+            )
         else:
             raise ValueError("Unknown format '%s'" % format)
 
     if not isinstance(count, int):
-        raise RuntimeError("Internal error - the underlying %s "
-                           "writer should have returned the alignment count, not %s"
-                           % (format, repr(count)))
+        raise RuntimeError(
+            "Internal error - the underlying %s "
+            "writer should have returned the alignment count, not %s"
+            % (format, repr(count))
+        )
 
     return count
 
@@ -292,17 +297,21 @@ def _force_alphabet(alignment_iterator, alphabet):
     # Assume the alphabet argument has been pre-validated
     given_base_class = _get_base_alphabet(alphabet).__class__
     for align in alignment_iterator:
-        if not isinstance(_get_base_alphabet(align._alphabet),
-                          given_base_class):
-            raise ValueError("Specified alphabet %s clashes with "
-                             "that determined from the file, %s"
-                             % (repr(alphabet), repr(align._alphabet)))
+        if not isinstance(_get_base_alphabet(align._alphabet), given_base_class):
+            raise ValueError(
+                "Specified alphabet %s clashes with "
+                "that determined from the file, %s"
+                % (repr(alphabet), repr(align._alphabet))
+            )
         for record in align:
-            if not isinstance(_get_base_alphabet(record.seq.alphabet),
-                              given_base_class):
-                raise ValueError("Specified alphabet %s clashes with "
-                                 "that determined from the file, %s"
-                                 % (repr(alphabet), repr(record.seq.alphabet)))
+            if not isinstance(
+                _get_base_alphabet(record.seq.alphabet), given_base_class
+            ):
+                raise ValueError(
+                    "Specified alphabet %s clashes with "
+                    "that determined from the file, %s"
+                    % (repr(alphabet), repr(record.seq.alphabet))
+                )
             record.seq.alphabet = alphabet
         align._alphabet = alphabet
         yield align
@@ -351,8 +360,9 @@ def parse(handle, format, seq_count=None, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (isinstance(alphabet, Alphabet) or
-                                     isinstance(alphabet, AlphabetEncoder)):
+    if alphabet is not None and not (
+        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
+    ):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
     if seq_count is not None and not isinstance(seq_count, int):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
@@ -369,14 +379,13 @@ def parse(handle, format, seq_count=None, alphabet=None):
                     i = iterator_generator(fp, seq_count, alphabet=alphabet)
                 except TypeError:
                     # It isn't supported.
-                    i = _force_alphabet(iterator_generator(fp, seq_count),
-                                        alphabet)
+                    i = _force_alphabet(iterator_generator(fp, seq_count), alphabet)
 
         elif format in SeqIO._FormatToIterator:
             # Exploit the existing SeqIO parser to the dirty work!
-            i = _SeqIO_to_alignment_iterator(fp, format,
-                                             alphabet=alphabet,
-                                             seq_count=seq_count)
+            i = _SeqIO_to_alignment_iterator(
+                fp, format, alphabet=alphabet, seq_count=seq_count
+            )
         else:
             raise ValueError("Unknown format '%s'" % format)
 
@@ -448,7 +457,10 @@ def read(handle, format, seq_count=None, alphabet=None):
         raise ValueError("More than one record found in handle")
     if seq_count:
         if len(first) != seq_count:
-            raise RuntimeError("More sequences found in alignment than specified in seq_count: %s." % seq_count)
+            raise RuntimeError(
+                "More sequences found in alignment than specified in seq_count: %s."
+                % seq_count
+            )
     return first
 
 
@@ -482,4 +494,5 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
