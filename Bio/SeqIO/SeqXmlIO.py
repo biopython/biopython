@@ -173,6 +173,7 @@ class SeqXmlIterator(object):
             raise
 
     if sys.version_info[0] < 3:  # python2
+
         def next(self):
             """Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()

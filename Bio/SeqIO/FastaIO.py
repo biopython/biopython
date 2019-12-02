@@ -220,7 +220,10 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
                 # Should we use SeqRecord default for no ID?
                 first_word = ""
             yield SeqRecord(
-                Seq(sequence, alphabet), id=first_word, name=first_word, description=title
+                Seq(sequence, alphabet),
+                id=first_word,
+                name=first_word,
+                description=title,
             )
 
 
