@@ -427,7 +427,7 @@ class StockholmIterator(AlignmentIterator):
                 if len(parts) != 2:
                     # This might be someone attempting to store a zero length sequence?
                     raise ValueError(
-                        "Could not split line into identifier " "and sequence:\n" + line
+                        "Could not split line into identifier and sequence:\n" + line
                     )
                 seq_id, seq = parts
                 if seq_id not in ids:
