@@ -100,9 +100,10 @@ class PhylipWriter(SequentialAlignmentWriter):
             """
             name = sanitize_name(record.id, id_width)
             if name in names:
-                raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation"
-                                 % (name, record.id))
+                raise ValueError(
+                    "Repeated name %r (originally %r), "
+                    "possibly due to truncation" % (name, record.id)
+                )
             names.append(name)
             sequence = str(record.seq)
             if "." in sequence:
@@ -129,7 +130,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                 # Write five chunks of ten letters per line...
                 for chunk in range(0, 5):
                     i = block * 50 + chunk * 10
-                    seq_segment = sequence[i:i + 10]
+                    seq_segment = sequence[i : i + 10]
                     # TODO - Force any gaps to be '-' character?  Look at the
                     # alphabet...
                     # TODO - How to cope with '?' or '.' in the sequence?
@@ -181,8 +182,8 @@ class PhylipIterator(AlignmentIterator):
         The first 10 characters in the line are are the sequence id, the
         remainder are sequence data.
         """
-        seq_id = line[:self.id_width].strip()
-        seq = line[self.id_width:].strip().replace(" ", "")
+        seq_id = line[: self.id_width].strip()
+        seq = line[self.id_width :].strip().replace(" ", "")
         return seq_id, seq
 
     def __next__(self):
@@ -211,11 +212,14 @@ class PhylipIterator(AlignmentIterator):
 
         assert self._is_header(line)
 
-        if self.records_per_alignment is not None and \
-                self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, "
-                             "told to expect %i"
-                             % (number_of_seqs, self.records_per_alignment))
+        if (
+            self.records_per_alignment is not None
+            and self.records_per_alignment != number_of_seqs
+        ):
+            raise ValueError(
+                "Found %i records in this alignment, "
+                "told to expect %i" % (number_of_seqs, self.records_per_alignment)
+            )
 
         ids = []
         seqs = []
@@ -258,9 +262,10 @@ class PhylipIterator(AlignmentIterator):
             if not line:
                 break  # end of file
 
-        records = (SeqRecord(Seq("".join(s), self.alphabet),
-                             id=i, name=i, description=i)
-                   for (i, s) in zip(ids, seqs))
+        records = (
+            SeqRecord(Seq("".join(s), self.alphabet), id=i, name=i, description=i)
+            for (i, s) in zip(ids, seqs)
+        )
         return MultipleSeqAlignment(records, self.alphabet)
 
 
@@ -273,8 +278,7 @@ class RelaxedPhylipWriter(PhylipWriter):
         # Check inputs
         for name in (s.id.strip() for s in alignment):
             if any(c in name for c in string.whitespace):
-                raise ValueError("Whitespace not allowed in identifier: %s"
-                                 % name)
+                raise ValueError("Whitespace not allowed in identifier: %s" % name)
 
         # Calculate a truncation length - maximum length of sequence ID plus a
         # single character for padding
@@ -326,9 +330,10 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             # else like an underscore "_" or pipe "|" character...
             name = sanitize_name(record.id, id_width)
             if name in names:
-                raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation"
-                                 % (name, record.id))
+                raise ValueError(
+                    "Repeated name %r (originally %r), "
+                    "possibly due to truncation" % (name, record.id)
+                )
             names.append(name)
 
         # From experimentation, the use of tabs is not understood by the
@@ -387,11 +392,14 @@ class SequentialPhylipIterator(PhylipIterator):
 
         assert self._is_header(line)
 
-        if self.records_per_alignment is not None and \
-                self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, "
-                             "told to expect %i"
-                             % (number_of_seqs, self.records_per_alignment))
+        if (
+            self.records_per_alignment is not None
+            and self.records_per_alignment != number_of_seqs
+        ):
+            raise ValueError(
+                "Found %i records in this alignment, "
+                "told to expect %i" % (number_of_seqs, self.records_per_alignment)
+            )
 
         ids = []
         seqs = []
@@ -411,9 +419,10 @@ class SequentialPhylipIterator(PhylipIterator):
                     continue
                 s = "".join([s, line.strip().replace(" ", "")])
                 if len(s) > length_of_seqs:
-                    raise ValueError("Found a record of length %i, "
-                                     "should be %i"
-                                     % (len(s), length_of_seqs))
+                    raise ValueError(
+                        "Found a record of length %i, "
+                        "should be %i" % (len(s), length_of_seqs)
+                    )
             if "." in s:
                 raise ValueError(_NO_DOTS)
             seqs.append(s)
@@ -426,9 +435,10 @@ class SequentialPhylipIterator(PhylipIterator):
                 self._header = line
                 break
 
-        records = (SeqRecord(Seq(s, self.alphabet),
-                             id=i, name=i, description=i)
-                   for (i, s) in zip(ids, seqs))
+        records = (
+            SeqRecord(Seq(s, self.alphabet), id=i, name=i, description=i)
+            for (i, s) in zip(ids, seqs)
+        )
         return MultipleSeqAlignment(records, self.alphabet)
 
 
