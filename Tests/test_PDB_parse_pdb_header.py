@@ -87,6 +87,16 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["idcode"], "3EFG")
         self.assertEqual(header["deposition_date"], "2008-09-08")
 
+    def test_parse_title_line(self):
+        """Unit test for correct parsing of multiline title records."""
+        header = parse_pdb_header("PDB/1LCD.pdb")
+        self.assertEqual(
+            header["name"],
+            "structure of the complex of lac repressor headpiece and an 11 "
+            "base-pair half-operator determined by nuclear magnetic resonance "
+            "spectroscopy and restrained molecular dynamics",
+        )
+
     def test_parse_pdb_with_remark_99(self):
         """Tests that parse_pdb_header can identify REMARK 99 ASTRAL entries."""
         header = parse_pdb_header("PDB/d256ba_.ent")
