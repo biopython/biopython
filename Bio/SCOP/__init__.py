@@ -937,12 +937,11 @@ def search(
 
 
 def _open(cgi, params=None, get=1):
-    """Open a handle to SCOP, returns an UndoHandle (PRIVATE).
+    """Open a handle to SCOP and return it (PRIVATE).
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  get is a boolean
-    that describes whether a GET should be used.  Does some
-    simple error checking, and will raise an IOError if it encounters one.
+    that describes whether a GET should be used.
 
     """
     from Bio._py3k import urlopen, urlencode
