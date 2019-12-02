@@ -168,7 +168,7 @@ class ClustalIterator(AlignmentIterator):
                         letters = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, " "bad sequence number:\n%s" % line
+                            "Could not parse line, bad sequence number:\n%s" % line
                         )
                     if len(fields[1].replace("-", "")) != letters:
                         raise ValueError(
@@ -256,7 +256,7 @@ class ClustalIterator(AlignmentIterator):
                         letters = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, " "bad sequence number:\n%s" % line
+                            "Could not parse line, bad sequence number:\n%s" % line
                         )
                     if len(seqs[i].replace("-", "")) != letters:
                         raise ValueError(
