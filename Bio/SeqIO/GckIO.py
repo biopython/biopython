@@ -105,7 +105,9 @@ def GckIterator(handle):
             raise ValueError("Conflicting sequence length values")
         # Each feature is stored in a 92-bytes structure.
         if length - 6 != num_features * 92:
-            raise ValueError("Features packet size inconsistent with number of features")
+            raise ValueError(
+                "Features packet size inconsistent with number of features"
+            )
         for i in range(0, num_features):
             offset = 6 + i * 92
             feature_data = packet[offset : offset + 92]

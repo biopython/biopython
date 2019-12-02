@@ -923,7 +923,9 @@ def FastqGeneralIterator(handle):
 
         while line:
             if line[0] != "@":
-                raise ValueError("Records in Fastq files should start with '@' character")
+                raise ValueError(
+                    "Records in Fastq files should start with '@' character"
+                )
             title_line = line[1:].rstrip()
             # Will now be at least one line of quality data - in most FASTQ files
             # just one line! We therefore use string concatenation (if needed)
@@ -1360,7 +1362,9 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
         while True:
             if line[0] != ">":
-                raise ValueError("Records in Fasta files should start with '>' character")
+                raise ValueError(
+                    "Records in Fasta files should start with '>' character"
+                )
             if title2ids:
                 id, name, descr = title2ids(line[1:].rstrip())
             else:
@@ -1388,7 +1392,10 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
             # Return the record and then continue...
             record = SeqRecord(
-                UnknownSeq(len(qualities), alphabet), id=id, name=name, description=descr
+                UnknownSeq(len(qualities), alphabet),
+                id=id,
+                name=name,
+                description=descr,
             )
             # Dirty trick to speed up this line:
             # record.letter_annotations["phred_quality"] = qualities

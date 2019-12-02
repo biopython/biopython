@@ -115,12 +115,14 @@ def SwissIterator(handle):
                 annotations["date"] = swiss_record.created[0]
                 annotations["sequence_version"] = swiss_record.created[1]
             if swiss_record.sequence_update:
-                annotations["date_last_sequence_update"] = swiss_record.sequence_update[0]
-                annotations["sequence_version"] = swiss_record.sequence_update[1]
-            if swiss_record.annotation_update:
-                annotations["date_last_annotation_update"] = swiss_record.annotation_update[
+                annotations["date_last_sequence_update"] = swiss_record.sequence_update[
                     0
                 ]
+                annotations["sequence_version"] = swiss_record.sequence_update[1]
+            if swiss_record.annotation_update:
+                annotations[
+                    "date_last_annotation_update"
+                ] = swiss_record.annotation_update[0]
                 annotations["entry_version"] = swiss_record.annotation_update[1]
             if swiss_record.gene_name:
                 annotations["gene_name"] = swiss_record.gene_name
@@ -137,7 +139,9 @@ def SwissIterator(handle):
                 annotations["references"] = []
                 for reference in swiss_record.references:
                     feature = SeqFeature.Reference()
-                    feature.comment = " ".join("%s=%s;" % k_v for k_v in reference.comments)
+                    feature.comment = " ".join(
+                        "%s=%s;" % k_v for k_v in reference.comments
+                    )
                     for key, value in reference.references:
                         if key == "PubMed":
                             feature.pubmed_id = value

@@ -1062,8 +1062,13 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
                 # the index_offset so we can skip extra handle.tell() calls:
                 index_offset = 0
             yield _sff_read_seq_record(
-                handle, number_of_flows_per_read, flow_chars, key_sequence, alphabet, trim
-        )
+                handle,
+                number_of_flows_per_read,
+                flow_chars,
+                key_sequence,
+                alphabet,
+                trim,
+            )
         _check_eof(handle, index_offset, index_length)
 
 
@@ -1143,9 +1148,7 @@ def _check_eof(handle, index_offset, index_length):
             "See offset %i" % offset
         )
     elif extra:
-        raise ValueError(
-            "Additional data at end of SFF file, see offset %i" % offset
-        )
+        raise ValueError("Additional data at end of SFF file, see offset %i" % offset)
 
 
 # This is a generator function!

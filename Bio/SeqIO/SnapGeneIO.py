@@ -267,7 +267,9 @@ def SnapGeneIterator(handle):
         for n, (type, length, data) in enumerate(_PacketIterator(handle)):
             empty = False
             if n == 0 and type != 0x09:
-                raise ValueError("The file does not start with a SnapGene cookie packet")
+                raise ValueError(
+                    "The file does not start with a SnapGene cookie packet"
+                )
 
             if type in _packet_handlers:
                 _packet_handlers[type](length, data, record)

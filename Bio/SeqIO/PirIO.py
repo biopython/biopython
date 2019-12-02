@@ -176,7 +176,9 @@ def PirIterator(handle):
             if seq[-1] != "*":
                 # Note the * terminator is present on nucleotide sequences too,
                 # it is not a stop codon!
-                raise ValueError("Sequences in PIR files should include a * terminator!")
+                raise ValueError(
+                    "Sequences in PIR files should include a * terminator!"
+                )
 
             # Return the record and then continue...
             record = SeqRecord(

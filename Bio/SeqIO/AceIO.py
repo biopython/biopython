@@ -93,7 +93,9 @@ def AceIterator(handle):
             # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
             # Perhaps as SeqFeature objects?
 
-            seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
+            seq_record = SeqRecord(
+                consensus_seq, id=ace_contig.name, name=ace_contig.name
+            )
 
             # Consensus base quality (BQ lines).  Note that any gaps (originally
             # as * characters) in the consensus do not get a quality entry, so

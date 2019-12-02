@@ -165,7 +165,8 @@ def PdbSeqresIterator(handle):
                 # Number of residues in the chain (repeated on every record)
                 # num_res = int(line[13:17])
                 residues = [
-                    seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()
+                    seq1(res, custom_map=protein_letters_3to1)
+                    for res in line[19:].split()
                 ]
                 chains[chn_id].extend(residues)
             elif rec_name == "DBREF":
