@@ -1014,9 +1014,9 @@ class DatabaseLoader(object):
             #or "order" (see Tests/GenBank/protein_refseq2.gb)
             location_id = self.adaptor.last_id('location')
             loc_qual_term_id = None # Not allowed in BioSQL v1.0.1
-            sql = "INSERT INTO location_qualifier_value" \
-                  "(location_id, term_id, value) " \
-                  "VALUES (%s, %s, %s)"
+            sql = ("INSERT INTO location_qualifier_value"
+                   "(location_id, term_id, value) "
+                   "VALUES (%s, %s, %s)")
             self.adaptor.execute(sql, (location_id, loc_qual_term_id,
                                        feature.location_operator))
         """
