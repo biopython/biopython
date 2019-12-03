@@ -152,7 +152,7 @@ class RaxmlCommandline(AbstractCommandline):
                         be estimated on an MP starting tree or a user-defined
                         tree passed via '-t', only allowed for GAMMA-based models
                         of rate heterogeneity.
-                """,
+                        """,
                 checker_function=(lambda x: isinstance(x, basestring) and len(x) == 1),
                 equate=False,
             ),
@@ -258,7 +258,7 @@ class RaxmlCommandline(AbstractCommandline):
                         With the optional 'F' appendix you can specify if you want to use empirical base frequencies
                         Please not that for mixed models you can in addition specify the per-gene AA model in
                         the mixed model file (see manual for details)
-                """,
+                        """,
                 equate=False,
             ),
             _Switch(
