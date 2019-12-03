@@ -246,7 +246,7 @@ if __name__ == "__main__":
     if len(args) != 1:
         sys.stderr.write(USAGE)
         sys.exit(-1)
-    TESTFILE, = args
+    (TESTFILE,) = args
     if not os.path.exists(TESTFILE):
         sys.stderr.write("I could not find file: %s\n" % TESTFILE)
         sys.exit(-1)

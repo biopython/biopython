@@ -441,7 +441,11 @@ class DatabaseLoader(object):
                     ncbi_taxon_id
                 ), "%s versus %s" % (taxonomic_record[0]["TaxId"], ncbi_taxon_id)
 
-                parent_taxon_id, parent_left_value, parent_right_value = self._get_taxon_id_from_ncbi_lineage(
+                (
+                    parent_taxon_id,
+                    parent_left_value,
+                    parent_right_value,
+                ) = self._get_taxon_id_from_ncbi_lineage(
                     taxonomic_record[0]["LineageEx"]
                 )
 
@@ -550,9 +554,11 @@ class DatabaseLoader(object):
         if len(taxonomic_lineage) > 1:
             # Use recursion to find out the taxon id (database key) of the
             # parent.
-            parent_taxon_id, parent_left_value, parent_right_value = self._get_taxon_id_from_ncbi_lineage(
-                taxonomic_lineage[:-1]
-            )
+            (
+                parent_taxon_id,
+                parent_left_value,
+                parent_right_value,
+            ) = self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
             left_value = parent_right_value
             right_value = parent_right_value + 1
             assert _is_int_or_long(parent_taxon_id), repr(parent_taxon_id)
