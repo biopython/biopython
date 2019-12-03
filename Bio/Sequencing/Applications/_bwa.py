@@ -538,7 +538,7 @@ class BwaMemCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-d", "d"],
-                "Off-diagonal X-dropoff (Z-dropoff). Stop extension when the difference between the best and the current extension score is above |i-j|*A+INT, where i and j are the current positions of the query and reference, respectively, and A is the matching score. Z-dropoff is similar to BLAST's X-dropoff except that it doesn't penalize gaps in one of the sequences in the alignment. Z-dropoff not only avoids unnecessary extension, but also reduces poor alignments inside a long good alignment. [100]",
+                r"Off-diagonal X-dropoff (Z-dropoff). Stop extension when the difference between the best and the current extension score is above \|i-j\|*A+INT, where i and j are the current positions of the query and reference, respectively, and A is the matching score. Z-dropoff is similar to BLAST's X-dropoff except that it doesn't penalize gaps in one of the sequences in the alignment. Z-dropoff not only avoids unnecessary extension, but also reduces poor alignments inside a long good alignment. [100]",
                 checker_function=lambda x: isinstance(x, int),
                 equate=False,
             ),
@@ -592,7 +592,7 @@ class BwaMemCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-R", "R"],
-                "Complete read group header line. '\\t' can be used in STR and will be converted to a TAB in the output SAM. The read group ID will be attached to every read in the output. An example is '@RG\tID:foo\tSM:bar'. [null]",
+                "Complete read group header line. 't' can be used in STR and will be converted to a TAB in the output SAM. The read group ID will be attached to every read in the output. An example is '@RG\tID:foo\tSM:bar'. [null]",
                 checker_function=lambda x: isinstance(x, basestring),
                 equate=False,
             ),
