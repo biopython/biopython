@@ -21,6 +21,7 @@ from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
+from Bio.File import as_handle
 
 
 _seq_types = {
@@ -154,44 +155,47 @@ def XdnaIterator(handle):
     # Biopython's SeqRecord has no such concept of a sequence origin as far
     # as I know, so we ignore that value. SerialCloner has no such concept
     # either and always generates files with a neg_length of zero.
-    header = _read_header(handle, 112)
-    (version, type, topology, length, neg_length, com_length) = unpack(
-        ">BBB25xII60xI12x", header
-    )
-    if version != 0:
-        raise ValueError("Unsupported XDNA version")
-    if type not in _seq_types:
-        raise ValueError("Unknown sequence type")
 
-    # Read actual sequence and comment found in all XDNA files
-    sequence = _read(handle, length).decode("ASCII")
-    comment = _read(handle, com_length).decode("ASCII")
+    with as_handle(handle, "rb") as handle:
 
-    # Try to derive a name from the first "word" of the comment
-    name = comment.split(" ")[0]
+        header = _read_header(handle, 112)
+        (version, type, topology, length, neg_length, com_length) = unpack(
+            ">BBB25xII60xI12x", header
+        )
+        if version != 0:
+            raise ValueError("Unsupported XDNA version")
+        if type not in _seq_types:
+            raise ValueError("Unknown sequence type")
 
-    # Create record object
-    record = SeqRecord(
-        Seq(sequence, _seq_types[type]), description=comment, name=name, id=name
-    )
-    if topology in _seq_topologies:
-        record.annotations["topology"] = _seq_topologies[topology]
+        # Read actual sequence and comment found in all XDNA files
+        sequence = _read(handle, length).decode("ASCII")
+        comment = _read(handle, com_length).decode("ASCII")
 
-    if len(handle.read(1)) == 1:
-        # This is an XDNA file with an optional annotation section.
+        # Try to derive a name from the first "word" of the comment
+        name = comment.split(" ")[0]
 
-        # Skip the overhangs as I don't know how to represent
-        # them in the SeqRecord model.
-        _read_overhang(handle)  # right-side overhang
-        _read_overhang(handle)  # left-side overhang
+        # Create record object
+        record = SeqRecord(
+            Seq(sequence, _seq_types[type]), description=comment, name=name, id=name
+        )
+        if topology in _seq_topologies:
+            record.annotations["topology"] = _seq_topologies[topology]
 
-        # Read the features
-        num_features = unpack(">B", _read(handle, 1))[0]
-        while num_features > 0:
-            _read_feature(handle, record)
-            num_features -= 1
+        if len(handle.read(1)) == 1:
+            # This is an XDNA file with an optional annotation section.
 
-    yield record
+            # Skip the overhangs as I don't know how to represent
+            # them in the SeqRecord model.
+            _read_overhang(handle)  # right-side overhang
+            _read_overhang(handle)  # left-side overhang
+
+            # Read the features
+            num_features = unpack(">B", _read(handle, 1))[0]
+            while num_features > 0:
+                _read_feature(handle, record)
+                num_features -= 1
+
+        yield record
 
 
 class XdnaWriter(SequenceWriter):

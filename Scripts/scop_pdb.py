@@ -18,7 +18,8 @@ from Bio.SCOP import Raf, Cla
 
 def usage():
     """Print a help message."""
-    print("""Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
+    print(
+        """Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
 
 For example:
   scop_pdb.py astral-rapid-access-1.55.raf dir.cla.scop.txt_1.55 d3hbib_
@@ -56,11 +57,14 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
               See [http://scop.berkeley.edu/parse/index.html]
 
   sid      -- A SCOP domain identifier. e.g. d3hbib_
-""")
+"""
+    )
 
 
-default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
+default_pdb_url = (
+    "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?"
     "format=PDB&pdbId=%s&compression=None"
+)
 # default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"  # noqa: E501
 
 
@@ -76,9 +80,9 @@ def open_pdb(pdbid, pdb_url=None):
 def main():
     """Extract a SCOP domain's ATOM and HETATOM records from a PDB file."""
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
-                                   ["help", "usage", "pdb=", "output=",
-                                    "input="])
+        opts, args = getopt.getopt(
+            sys.argv[1:], "hp:o:i:", ["help", "usage", "pdb=", "output=", "input="]
+        )
     except getopt.GetoptError:
         # show help information and exit:
         usage()
@@ -103,8 +107,7 @@ def main():
             pdb_url = a
 
     if len(args) < 2:
-        sys.stderr.write("Not enough arguments. "
-                         "Try --help for more details.\n")
+        sys.stderr.write("Not enough arguments. Try --help for more details.\n")
         sys.exit(2)
 
     raf_url = args[0]
@@ -156,8 +159,7 @@ def main():
                     finally:
                         f.close()
                 except (IOError, KeyError, RuntimeError) as e:
-                    sys.stderr.write("I cannot do SCOP domain %s : %s\n"
-                                     % (id, e))
+                    sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
             finally:
                 out_handle.close()
     finally:

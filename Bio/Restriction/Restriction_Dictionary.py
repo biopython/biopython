@@ -17,6 +17,8 @@ into steps, using temporary functions to avoid the JVM limits.
 Used REBASE emboss files version 908 (2019).
 
 """
+# Turn black code style off
+# fmt: off
 rest_dict = {}
 
 
@@ -24802,3 +24804,5 @@ typedict["type96"] = _temp()
 
 
 del _temp
+# Turn black code style on
+# fmt: on

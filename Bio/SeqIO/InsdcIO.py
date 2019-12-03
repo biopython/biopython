@@ -823,7 +823,7 @@ class GenBankWriter(_InsdcWriter):
                 )
             if line[54:55] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 55:\n" + line
+                    "LOCUS line does not contain space at position 55:\n" + line
                 )
             if line[55:63].strip() not in ["", "linear", "circular"]:
                 raise ValueError(
@@ -832,19 +832,19 @@ class GenBankWriter(_InsdcWriter):
                 )
             if line[63:64] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 64:\n" + line
+                    "LOCUS line does not contain space at position 64:\n" + line
                 )
             if line[67:68] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 68:\n" + line
+                    "LOCUS line does not contain space at position 68:\n" + line
                 )
             if line[70:71] != "-":
                 raise ValueError(
-                    "LOCUS line does not contain - at " "position 71 in date:\n" + line
+                    "LOCUS line does not contain - at position 71 in date:\n" + line
                 )
             if line[74:75] != "-":
                 raise ValueError(
-                    "LOCUS line does not contain - at " "position 75 in date:\n" + line
+                    "LOCUS line does not contain - at position 75 in date:\n" + line
                 )
 
             self.handle.write(line)

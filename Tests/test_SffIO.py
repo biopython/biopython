@@ -64,7 +64,7 @@ class TestUAN(unittest.TestCase):
     """Test annotations."""
 
     def setUp(self):
-        self.records = [record for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")]
+        self.records = list(SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"))
         self.test_annotations = {}
         for line in test_data.splitlines():
             fields = re.split(r"\s+", line.strip())

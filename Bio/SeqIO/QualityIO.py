@@ -361,6 +361,7 @@ are approximately equal.
 """
 from __future__ import print_function
 
+from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
@@ -909,69 +910,70 @@ def FastqGeneralIterator(handle):
     is that (provided there are no line breaks in the quality sequence) it
     would prevent the above problem with the "@" character.
     """
-    # We need to call handle.readline() at least four times per record,
-    # so we'll save a property look up each time:
-    handle_readline = handle.readline
+    with as_handle(handle, "rU") as handle:
+        # We need to call handle.readline() at least four times per record,
+        # so we'll save a property look up each time:
+        handle_readline = handle.readline
 
-    line = handle_readline()
-    if not line:
-        return  # Premature end of file, or just empty?
-    if isinstance(line[0], int):
-        raise ValueError("Is this handle in binary mode not text mode?")
+        line = handle_readline()
+        if not line:
+            return  # Premature end of file, or just empty?
+        if isinstance(line[0], int):
+            raise ValueError("Is this handle in binary mode not text mode?")
 
-    while line:
-        if line[0] != "@":
-            raise ValueError("Records in Fastq files should start with '@' character")
-        title_line = line[1:].rstrip()
-        # Will now be at least one line of quality data - in most FASTQ files
-        # just one line! We therefore use string concatenation (if needed)
-        # rather using than the "".join(...) trick just in case it is multiline:
-        seq_string = handle_readline().rstrip()
-        # There may now be more sequence lines, or the "+" quality marker line:
-        while True:
-            line = handle_readline()
-            if not line:
-                raise ValueError("End of file without quality information.")
-            if line[0] == "+":
-                # The title here is optional, but if present must match!
-                second_title = line[1:].rstrip()
-                if second_title and second_title != title_line:
-                    raise ValueError("Sequence and quality captions differ.")
-                break
-            seq_string += line.rstrip()  # removes trailing newlines
-        # This is going to slow things down a little, but assuming
-        # this isn't allowed we should try and catch it here:
-        if " " in seq_string or "\t" in seq_string:
-            raise ValueError("Whitespace is not allowed in the sequence.")
-        seq_len = len(seq_string)
-
-        # Will now be at least one line of quality data...
-        quality_string = handle_readline().rstrip()
-        # There may now be more quality data, or another sequence, or EOF
-        while True:
-            line = handle_readline()
-            if not line:
-                break  # end of file
-            if line[0] == "@":
-                # This COULD be the start of a new sequence. However, it MAY just
-                # be a line of quality data which starts with a "@" character.  We
-                # should be able to check this by looking at the sequence length
-                # and the amount of quality data found so far.
-                if len(quality_string) >= seq_len:
-                    # We expect it to be equal if this is the start of a new record.
-                    # If the quality data is longer, we'll raise an error below.
+        while line:
+            if line[0] != "@":
+                raise ValueError("Records in Fastq files should start with '@' character")
+            title_line = line[1:].rstrip()
+            # Will now be at least one line of quality data - in most FASTQ files
+            # just one line! We therefore use string concatenation (if needed)
+            # rather using than the "".join(...) trick just in case it is multiline:
+            seq_string = handle_readline().rstrip()
+            # There may now be more sequence lines, or the "+" quality marker line:
+            while True:
+                line = handle_readline()
+                if not line:
+                    raise ValueError("End of file without quality information.")
+                if line[0] == "+":
+                    # The title here is optional, but if present must match!
+                    second_title = line[1:].rstrip()
+                    if second_title and second_title != title_line:
+                        raise ValueError("Sequence and quality captions differ.")
                     break
-                # Continue - its just some (more) quality data.
-            quality_string += line.rstrip()
+                seq_string += line.rstrip()  # removes trailing newlines
+            # This is going to slow things down a little, but assuming
+            # this isn't allowed we should try and catch it here:
+            if " " in seq_string or "\t" in seq_string:
+                raise ValueError("Whitespace is not allowed in the sequence.")
+            seq_len = len(seq_string)
 
-        if seq_len != len(quality_string):
-            raise ValueError(
-                "Lengths of sequence and quality values differs for %s (%i and %i)."
-                % (title_line, seq_len, len(quality_string))
-            )
+            # Will now be at least one line of quality data...
+            quality_string = handle_readline().rstrip()
+            # There may now be more quality data, or another sequence, or EOF
+            while True:
+                line = handle_readline()
+                if not line:
+                    break  # end of file
+                if line[0] == "@":
+                    # This COULD be the start of a new sequence. However, it MAY just
+                    # be a line of quality data which starts with a "@" character.  We
+                    # should be able to check this by looking at the sequence length
+                    # and the amount of quality data found so far.
+                    if len(quality_string) >= seq_len:
+                        # We expect it to be equal if this is the start of a new record.
+                        # If the quality data is longer, we'll raise an error below.
+                        break
+                    # Continue - its just some (more) quality data.
+                quality_string += line.rstrip()
 
-        # Return the record and then continue...
-        yield (title_line, seq_string, quality_string)
+            if seq_len != len(quality_string):
+                raise ValueError(
+                    "Lengths of sequence and quality values differs for %s (%i and %i)."
+                    % (title_line, seq_len, len(quality_string))
+                )
+
+            # Return the record and then continue...
+            yield (title_line, seq_string, quality_string)
 
 
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
@@ -1047,6 +1049,7 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     q_mapping = {}
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
+
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
         if title2ids:
             id, name, descr = title2ids(title_line)
@@ -1206,6 +1209,7 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
     q_mapping = {}
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
+
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
         if title2ids:
             id, name, descr = title_line
@@ -1258,6 +1262,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
     q_mapping = {}
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
+
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
         if title2ids:
             id, name, descr = title2ids(title_line)
@@ -1344,57 +1349,55 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     scores but will replace them with the lowest possible PHRED score of zero.
     This will trigger a warning, previously it raised a ValueError exception.
     """
-    # Skip any text before the first record (e.g. blank lines, comments)
-    while True:
-        line = handle.readline()
-        if line == "":
-            return  # Premature end of file, or just empty?
-        if line[0] == ">":
-            break
-
-    while True:
-        if line[0] != ">":
-            raise ValueError("Records in Fasta files should start with '>' character")
-        if title2ids:
-            id, name, descr = title2ids(line[1:].rstrip())
-        else:
-            descr = line[1:].rstrip()
-            id = descr.split()[0]
-            name = id
-
-        qualities = []
-        line = handle.readline()
+    with as_handle(handle, "rU") as handle:
+        # Skip any text before the first record (e.g. blank lines, comments)
         while True:
-            if not line:
-                break
+            line = handle.readline()
+            if line == "":
+                return  # Premature end of file, or just empty?
             if line[0] == ">":
                 break
-            qualities.extend(int(word) for word in line.split())
+
+        while True:
+            if line[0] != ">":
+                raise ValueError("Records in Fasta files should start with '>' character")
+            if title2ids:
+                id, name, descr = title2ids(line[1:].rstrip())
+            else:
+                descr = line[1:].rstrip()
+                id = descr.split()[0]
+                name = id
+
+            qualities = []
             line = handle.readline()
+            while True:
+                if not line:
+                    break
+                if line[0] == ">":
+                    break
+                qualities.extend(int(word) for word in line.split())
+                line = handle.readline()
 
-        if qualities and min(qualities) < 0:
-            warnings.warn(
-                (
-                    "Negative quality score %i found, "
-                    + "substituting PHRED zero instead."
+            if qualities and min(qualities) < 0:
+                warnings.warn(
+                    "Negative quality score %i found, substituting PHRED zero instead."
+                    % min(qualities),
+                    BiopythonParserWarning,
                 )
-                % min(qualities),
-                BiopythonParserWarning,
+                qualities = [max(0, q) for q in qualities]
+
+            # Return the record and then continue...
+            record = SeqRecord(
+                UnknownSeq(len(qualities), alphabet), id=id, name=name, description=descr
             )
-            qualities = [max(0, q) for q in qualities]
+            # Dirty trick to speed up this line:
+            # record.letter_annotations["phred_quality"] = qualities
+            dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
+            yield record
 
-        # Return the record and then continue...
-        record = SeqRecord(
-            UnknownSeq(len(qualities), alphabet), id=id, name=name, description=descr
-        )
-        # Dirty trick to speed up this line:
-        # record.letter_annotations["phred_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
-        yield record
-
-        if not line:
-            return  # StopIteration
-    raise ValueError("Unrecognised QUAL record format.")
+            if not line:
+                return  # StopIteration
+        raise ValueError("Unrecognised QUAL record format.")
 
 
 class FastqPhredWriter(SequentialSequenceWriter):

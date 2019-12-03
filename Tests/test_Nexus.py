@@ -465,8 +465,10 @@ Root:  16
 
     def test_TreeTest2(self):
         """Handle text labels on internal nodes."""
-        ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)" \
-               "TT1:25.000000)Taxaceae:90.000000;"
+        ts1b = (
+            "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"
+            "TT1:25.000000)Taxaceae:90.000000;"
+        )
         tree = Trees.Tree(ts1b)
         self.assertEqual(self._get_flat_nodes(tree), [("Taxaceae", 90.0, None, None),
                                                       ("Cephalotaxus", 125.0, None, None),
@@ -543,7 +545,7 @@ Root:  16
                                                                          0.1894244])
 
         subtree = tree.set_subtree(10)
-        self.assertEqual(sorted(list(subtree)), ["E 0", "E 7"])
+        self.assertEqual(sorted(subtree), ["E 0", "E 7"])
         tree.collapse_genera()
         self.assertEqual(tree.all_ids(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 17])
 

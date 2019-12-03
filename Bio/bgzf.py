@@ -445,7 +445,7 @@ def _load_bgzf_block(handle, text_mode=False):
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
     if expected_size != len(data):
-        raise RuntimeError("Decompressed to %i, " "not %i" % (len(data), expected_size))
+        raise RuntimeError("Decompressed to %i, not %i" % (len(data), expected_size))
     # Should cope with a mix of Python platforms...
     crc = zlib.crc32(data)
     if crc < 0:

@@ -22,11 +22,13 @@ try:
 except ImportError:
     from tkinter import messagebox  # Python 3
 
-from Bio.Blast.Applications import (NcbiblastnCommandline,
-                                    NcbiblastpCommandline,
-                                    NcbiblastxCommandline,
-                                    NcbitblastnCommandline,
-                                    NcbitblastxCommandline)
+from Bio.Blast.Applications import (
+    NcbiblastnCommandline,
+    NcbiblastpCommandline,
+    NcbiblastxCommandline,
+    NcbitblastnCommandline,
+    NcbitblastxCommandline,
+)
 
 
 class BlastDisplayer(object):
@@ -58,8 +60,10 @@ class BlastDisplayer(object):
         else:
             options = {}
 
-        args, kwargs = blast_program, {"query": self.infile, "db": database,
-                                       "out": self.outfile}
+        args, kwargs = (
+            blast_program,
+            {"query": self.infile, "db": database, "out": self.outfile},
+        )
 
         if blast_program.endswith("blastn"):
             blast_cmd = NcbiblastnCommandline(args, **kwargs)
@@ -79,8 +83,7 @@ class BlastDisplayer(object):
                 for key in options:
                     blast_cmd.set_parameter(key, options[key])
             except ValueError as e:
-                messagebox.showerror("xbb tools",
-                                     "Commandline error:\n\n" + str(e))
+                messagebox.showerror("xbb tools", "Commandline error:\n\n" + str(e))
                 self.tid.destroy()
                 return
 
@@ -135,11 +138,9 @@ class BlastWorker(threading.Thread):
         try:
             self.com()
         except Exception as e:
-            messagebox.showwarning("BLAST error",
-                                   "BLAST error:\n\n" + str(e))
+            messagebox.showwarning("BLAST error", "BLAST error:\n\n" + str(e))
         self.finished = 1
 
 
 if __name__ == "__main__":
-    os.system("python xbb_blast.py" +
-              " ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC")
+    os.system("python xbb_blast.py ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC")

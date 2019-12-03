@@ -25,7 +25,7 @@ class EasyController(object):
         """
         self._fname = fname
         self._controller = GenePopController(genepop_dir)
-        self.__fst_pair_locus = {}    # More caches like this needed!
+        self.__fst_pair_locus = {}  # More caches like this needed!
         self.__allele_frequency = {}  # More caches like this needed!
 
     def get_basic_info(self):
@@ -42,28 +42,41 @@ class EasyController(object):
         elif test_type == "excess":
             hw_res = self._controller.test_pop_hz_excess(self._fname)
         else:
-            loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname, ".P")
+            loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(
+                self._fname, ".P"
+            )
         for i in range(pop_pos - 1):
             next(hw_res)
         return next(hw_res)
 
     # 1.4
-    def test_hw_global(self, test_type="deficiency", enum_test=True,
-                       dememorization=10000, batches=20, iterations=5000):
+    def test_hw_global(
+        self,
+        test_type="deficiency",
+        enum_test=True,
+        dememorization=10000,
+        batches=20,
+        iterations=5000,
+    ):
         """Perform Hardy-Weinberg global Heterozygote test."""
         if test_type == "deficiency":
             pop_res, loc_res, all = self._controller.test_global_hz_deficiency(
-                self._fname, enum_test, dememorization, batches, iterations)
+                self._fname, enum_test, dememorization, batches, iterations
+            )
         else:
             pop_res, loc_res, all = self._controller.test_global_hz_excess(
-                self._fname, enum_test, dememorization, batches, iterations)
+                self._fname, enum_test, dememorization, batches, iterations
+            )
         return list(pop_res), list(loc_res), all
 
     # 2.1
-    def test_ld_all_pair(self, locus1, locus2, dememorization=10000,
-                         batches=20, iterations=5000):
+    def test_ld_all_pair(
+        self, locus1, locus2, dememorization=10000, batches=20, iterations=5000
+    ):
         """Test for linkage disequilibrium for each pair of loci in each population."""
-        all_ld = self._controller.test_ld(self._fname, dememorization, batches, iterations)[1]
+        all_ld = self._controller.test_ld(
+            self._fname, dememorization, batches, iterations
+        )[1]
         for ld_case in all_ld:
             (l1, l2), result = ld_case
             if (l1 == locus1 and l2 == locus2) or (l1 == locus2 and l2 == locus1):

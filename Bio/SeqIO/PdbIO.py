@@ -15,6 +15,7 @@ from Bio import BiopythonParserWarning
 from Bio._py3k import StringIO
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -147,88 +148,89 @@ def PdbSeqresIterator(handle):
 
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
-    for line in handle:
-        empty = False
-        rec_name = line[0:6].strip()
-        if rec_name == "SEQRES":
-            # NB: We only actually need chain ID and the residues here;
-            # commented bits are placeholders from the wwPDB spec.
-            # Serial number of the SEQRES record for the current chain.
-            # Starts at 1 and increments by one each line.
-            # Reset to 1 for each chain.
-            # ser_num = int(line[8:10])
-            # Chain identifier. This may be any single legal character,
-            # including a blank which is used if there is only one chain.
-            chn_id = line[11]
-            # Number of residues in the chain (repeated on every record)
-            # num_res = int(line[13:17])
-            residues = [
-                seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()
-            ]
-            chains[chn_id].extend(residues)
-        elif rec_name == "DBREF":
-            #  ID code of this entry (PDB ID)
-            pdb_id = line[7:11]
-            # Chain identifier.
-            chn_id = line[12]
-            # Initial sequence number of the PDB sequence segment.
-            # seq_begin = int(line[14:18])
-            # Initial insertion code of the PDB sequence segment.
-            # icode_begin = line[18]
-            # Ending sequence number of the PDB sequence segment.
-            # seq_end = int(line[20:24])
-            # Ending insertion code of the PDB sequence segment.
-            # icode_end = line[24]
-            # Sequence database name.
-            database = line[26:32].strip()
-            # Sequence database accession code.
-            db_acc = line[33:41].strip()
-            # Sequence database identification code.
-            db_id_code = line[42:54].strip()
-            # Initial sequence number of the database seqment.
-            # db_seq_begin = int(line[55:60])
-            # Insertion code of initial residue of the segment, if PDB is the
-            # reference.
-            # db_icode_begin = line[60]
-            # Ending sequence number of the database segment.
-            # db_seq_end = int(line[62:67])
-            # Insertion code of the ending residue of the segment, if PDB is the
-            # reference.
-            # db_icode_end = line[67]
-            metadata[chn_id].append(
-                {
-                    "pdb_id": pdb_id,
-                    "database": database,
-                    "db_acc": db_acc,
-                    "db_id_code": db_id_code,
-                }
-            )
-        # ENH: 'SEQADV' 'MODRES'
-
-    if empty:
-        raise ValueError("Empty file.")
-
-    for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues), generic_protein))
-        record.annotations = {"chain": chn_id}
-        if chn_id in metadata:
-            m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = "%s:%s %s" % (
-                m["database"],
-                m["db_acc"],
-                m["db_id_code"],
-            )
-            for melem in metadata[chn_id]:
-                record.dbxrefs.extend(
-                    [
-                        "%s:%s" % (melem["database"], melem["db_acc"]),
-                        "%s:%s" % (melem["database"], melem["db_id_code"]),
-                    ]
+    with as_handle(handle, "rU") as handle:
+        for line in handle:
+            empty = False
+            rec_name = line[0:6].strip()
+            if rec_name == "SEQRES":
+                # NB: We only actually need chain ID and the residues here;
+                # commented bits are placeholders from the wwPDB spec.
+                # Serial number of the SEQRES record for the current chain.
+                # Starts at 1 and increments by one each line.
+                # Reset to 1 for each chain.
+                # ser_num = int(line[8:10])
+                # Chain identifier. This may be any single legal character,
+                # including a blank which is used if there is only one chain.
+                chn_id = line[11]
+                # Number of residues in the chain (repeated on every record)
+                # num_res = int(line[13:17])
+                residues = [
+                    seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()
+                ]
+                chains[chn_id].extend(residues)
+            elif rec_name == "DBREF":
+                #  ID code of this entry (PDB ID)
+                pdb_id = line[7:11]
+                # Chain identifier.
+                chn_id = line[12]
+                # Initial sequence number of the PDB sequence segment.
+                # seq_begin = int(line[14:18])
+                # Initial insertion code of the PDB sequence segment.
+                # icode_begin = line[18]
+                # Ending sequence number of the PDB sequence segment.
+                # seq_end = int(line[20:24])
+                # Ending insertion code of the PDB sequence segment.
+                # icode_end = line[24]
+                # Sequence database name.
+                database = line[26:32].strip()
+                # Sequence database accession code.
+                db_acc = line[33:41].strip()
+                # Sequence database identification code.
+                db_id_code = line[42:54].strip()
+                # Initial sequence number of the database seqment.
+                # db_seq_begin = int(line[55:60])
+                # Insertion code of initial residue of the segment, if PDB is the
+                # reference.
+                # db_icode_begin = line[60]
+                # Ending sequence number of the database segment.
+                # db_seq_end = int(line[62:67])
+                # Insertion code of the ending residue of the segment, if PDB is the
+                # reference.
+                # db_icode_end = line[67]
+                metadata[chn_id].append(
+                    {
+                        "pdb_id": pdb_id,
+                        "database": database,
+                        "db_acc": db_acc,
+                        "db_id_code": db_id_code,
+                    }
                 )
-        else:
-            record.id = chn_id
-        yield record
+            # ENH: 'SEQADV' 'MODRES'
+
+        if empty:
+            raise ValueError("Empty file.")
+
+        for chn_id, residues in sorted(chains.items()):
+            record = SeqRecord(Seq("".join(residues), generic_protein))
+            record.annotations = {"chain": chn_id}
+            if chn_id in metadata:
+                m = metadata[chn_id][0]
+                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
+                record.description = "%s:%s %s" % (
+                    m["database"],
+                    m["db_acc"],
+                    m["db_id_code"],
+                )
+                for melem in metadata[chn_id]:
+                    record.dbxrefs.extend(
+                        [
+                            "%s:%s" % (melem["database"], melem["db_acc"]),
+                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                        ]
+                    )
+            else:
+                record.id = chn_id
+            yield record
 
 
 def PdbAtomIterator(handle):
@@ -282,32 +284,33 @@ def PdbAtomIterator(handle):
 
     from Bio.File import UndoHandle
 
-    undo_handle = UndoHandle(handle)
-    firstline = undo_handle.peekline()
-    # check if file is empty
-    if not firstline:
-        raise ValueError("Empty file.")
+    with as_handle(handle, "rU") as handle:
+        undo_handle = UndoHandle(handle)
+        firstline = undo_handle.peekline()
+        # check if file is empty
+        if not firstline:
+            raise ValueError("Empty file.")
 
-    # Deduce the PDB ID from the PDB header
-    # ENH: or filename?
-    if firstline.startswith("HEADER"):
-        pdb_id = firstline[62:66]
-    else:
-        warnings.warn(
-            "First line is not a 'HEADER'; can't determine PDB ID. "
-            "Line: %r" % firstline,
-            BiopythonParserWarning,
-        )
-        pdb_id = "????"
+        # Deduce the PDB ID from the PDB header
+        # ENH: or filename?
+        if firstline.startswith("HEADER"):
+            pdb_id = firstline[62:66]
+        else:
+            warnings.warn(
+                "First line is not a 'HEADER'; can't determine PDB ID. "
+                "Line: %r" % firstline,
+                BiopythonParserWarning,
+            )
+            pdb_id = "????"
 
-    struct = PDBParser().get_structure(pdb_id, undo_handle)
-    for record in AtomIterator(pdb_id, struct):
-        # The PDB header was loaded as a dictionary, so let's reuse it all
-        record.annotations.update(struct.header)
+        struct = PDBParser().get_structure(pdb_id, undo_handle)
+        for record in AtomIterator(pdb_id, struct):
+            # The PDB header was loaded as a dictionary, so let's reuse it all
+            record.annotations.update(struct.header)
 
-        # ENH - add letter annotations -- per-residue info, e.g. numbers
+            # ENH - add letter annotations -- per-residue info, e.g. numbers
 
-        yield record
+            yield record
 
 
 # We can't be sure that we have the enum module in python 2.7, so
@@ -377,83 +380,86 @@ def CifSeqresIterator(handle):
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
     from Bio.File import UndoHandle
-    undo_handle = UndoHandle(handle)
 
-    # check if file is empty
-    if not undo_handle.peekline():
-        raise ValueError("Empty file.")
+    with as_handle(handle, "rU") as handle:
 
-    chains = collections.defaultdict(list)
-    metadata = collections.defaultdict(list)
-    records = MMCIF2Dict(undo_handle)
+        undo_handle = UndoHandle(handle)
 
-    # Explicitly convert records to list (See #1533).
-    # If an item is not present, use an empty list
-    for field in (
-        PDBX_POLY_SEQ_SCHEME_FIELDS + STRUCT_REF_SEQ_FIELDS + STRUCT_REF_FIELDS
-    ):
-        if field not in records:
-            records[field] = []
-        elif not isinstance(records[field], list):
-            records[field] = [records[field]]
+        # check if file is empty
+        if not undo_handle.peekline():
+            raise ValueError("Empty file.")
 
-    for asym_id, mon_id in zip(
-        records["_pdbx_poly_seq_scheme.asym_id"],
-        records["_pdbx_poly_seq_scheme.mon_id"],
-    ):
-        mon_id_1l = seq1(mon_id, custom_map=protein_letters_3to1)
-        chains[asym_id].append(mon_id_1l)
+        chains = collections.defaultdict(list)
+        metadata = collections.defaultdict(list)
+        records = MMCIF2Dict(undo_handle)
 
-    # Build a dict of _struct_ref records, indexed by the id field:
-    struct_refs = {}
-    for fields in zip(
-        records["_struct_ref.id"],
-        records["_struct_ref.db_name"],
-        records["_struct_ref.db_code"],
-        records["_struct_ref.pdbx_db_accession"],
-    ):
-        ref_id, db_name, db_code, db_acc = fields
-        struct_refs[ref_id] = {
-            "database": db_name,
-            "db_id_code": db_code,
-            "db_acc": db_acc,
-        }
+        # Explicitly convert records to list (See #1533).
+        # If an item is not present, use an empty list
+        for field in (
+            PDBX_POLY_SEQ_SCHEME_FIELDS + STRUCT_REF_SEQ_FIELDS + STRUCT_REF_FIELDS
+        ):
+            if field not in records:
+                records[field] = []
+            elif not isinstance(records[field], list):
+                records[field] = [records[field]]
 
-    # Look through _struct_ref_seq records, look up the corresponding
-    # _struct_ref and add an entry to the metadata list for this chain.
-    for fields in zip(
-        records["_struct_ref_seq.ref_id"],
-        records["_struct_ref_seq.pdbx_PDB_id_code"],
-        records["_struct_ref_seq.pdbx_strand_id"],
-    ):
-        ref_id, pdb_id, chain_id = fields
-        struct_ref = struct_refs[ref_id]
+        for asym_id, mon_id in zip(
+            records["_pdbx_poly_seq_scheme.asym_id"],
+            records["_pdbx_poly_seq_scheme.mon_id"],
+        ):
+            mon_id_1l = seq1(mon_id, custom_map=protein_letters_3to1)
+            chains[asym_id].append(mon_id_1l)
 
-        # The names here mirror those in PdbIO
-        metadata[chain_id].append({"pdb_id": pdb_id})
-        metadata[chain_id][-1].update(struct_ref)
+        # Build a dict of _struct_ref records, indexed by the id field:
+        struct_refs = {}
+        for fields in zip(
+            records["_struct_ref.id"],
+            records["_struct_ref.db_name"],
+            records["_struct_ref.db_code"],
+            records["_struct_ref.pdbx_db_accession"],
+        ):
+            ref_id, db_name, db_code, db_acc = fields
+            struct_refs[ref_id] = {
+                "database": db_name,
+                "db_id_code": db_code,
+                "db_acc": db_acc,
+            }
 
-    for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues), generic_protein))
-        record.annotations = {"chain": chn_id}
-        if chn_id in metadata:
-            m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = "%s:%s %s" % (
-                m["database"],
-                m["db_acc"],
-                m["db_id_code"],
-            )
-            for melem in metadata[chn_id]:
-                record.dbxrefs.extend(
-                    [
-                        "%s:%s" % (melem["database"], melem["db_acc"]),
-                        "%s:%s" % (melem["database"], melem["db_id_code"]),
-                    ]
+        # Look through _struct_ref_seq records, look up the corresponding
+        # _struct_ref and add an entry to the metadata list for this chain.
+        for fields in zip(
+            records["_struct_ref_seq.ref_id"],
+            records["_struct_ref_seq.pdbx_PDB_id_code"],
+            records["_struct_ref_seq.pdbx_strand_id"],
+        ):
+            ref_id, pdb_id, chain_id = fields
+            struct_ref = struct_refs[ref_id]
+
+            # The names here mirror those in PdbIO
+            metadata[chain_id].append({"pdb_id": pdb_id})
+            metadata[chain_id][-1].update(struct_ref)
+
+        for chn_id, residues in sorted(chains.items()):
+            record = SeqRecord(Seq("".join(residues), generic_protein))
+            record.annotations = {"chain": chn_id}
+            if chn_id in metadata:
+                m = metadata[chn_id][0]
+                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
+                record.description = "%s:%s %s" % (
+                    m["database"],
+                    m["db_acc"],
+                    m["db_id_code"],
                 )
-        else:
-            record.id = chn_id
-        yield record
+                for melem in metadata[chn_id]:
+                    record.dbxrefs.extend(
+                        [
+                            "%s:%s" % (melem["database"], melem["db_acc"]),
+                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                        ]
+                    )
+            else:
+                record.id = chn_id
+            yield record
 
 
 def CifAtomIterator(handle):
@@ -513,7 +519,8 @@ def CifAtomIterator(handle):
     # StringIO buffer first, so that both MMCIF2Dict and MMCIFParser can
     # consume the handle.
     buffer = StringIO()
-    shutil.copyfileobj(handle, buffer)
+    with as_handle(handle, "rU") as handle:
+        shutil.copyfileobj(handle, buffer)
 
     # check if file is empty
     if not buffer.getvalue():

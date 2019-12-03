@@ -134,14 +134,26 @@ _COLUMN_FRAG = {
     "qseq": ("query", str),
     "sseq": ("hit", str),
 }
-_SUPPORTED_FIELDS = set(list(_COLUMN_QRESULT) + list(_COLUMN_HIT) +
-                        list(_COLUMN_HSP) + list(_COLUMN_FRAG))
+_SUPPORTED_FIELDS = set(
+    list(_COLUMN_QRESULT) + list(_COLUMN_HIT) + list(_COLUMN_HSP) + list(_COLUMN_FRAG)
+)
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
-_DEFAULT_FIELDS = ["qseqid", "sseqid", "pident", "length", "mismatch",
-                   "gapopen", "qstart", "qend", "sstart", "send",
-                   "evalue", "bitscore"]
+_DEFAULT_FIELDS = [
+    "qseqid",
+    "sseqid",
+    "pident",
+    "length",
+    "mismatch",
+    "gapopen",
+    "qstart",
+    "qend",
+    "sstart",
+    "send",
+    "evalue",
+    "bitscore",
+]
 # one field from each of the following sets must exist in order for the
 # parser to work
 _MIN_QUERY_FIELDS = {"qseqid", "qacc", "qaccver"}
@@ -216,9 +228,10 @@ class BlastTabParser(object):
             iterfunc = self._parse_commented_qresult
         else:
             if self.line.startswith("#"):
-                raise ValueError("Encountered unexpected character '#' at the"
-                                 " beginning of a line. Set comments=True if"
-                                 " the file is a commented file.")
+                raise ValueError(
+                    "Encountered unexpected character '#' at the beginning of a line. "
+                    "Set comments=True if the file is a commented file."
+                )
             iterfunc = self._parse_qresult
 
         for qresult in iterfunc():
@@ -233,11 +246,12 @@ class BlastTabParser(object):
         # we want to transform 'std' to its proper column names
         if "std" in fields:
             idx = fields.index("std")
-            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx + 1:]
+            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx + 1 :]
         # if set(fields) has a null intersection with minimum required
         # fields for hit and query, raise an exception
-        if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
-                not set(fields).intersection(_MIN_HIT_FIELDS):
+        if not set(fields).intersection(_MIN_QUERY_FIELDS) or not set(
+            fields
+        ).intersection(_MIN_HIT_FIELDS):
             raise ValueError("Required query and/or hit ID field not found.")
 
         return fields
@@ -273,23 +287,23 @@ class BlastTabParser(object):
             # parse program and version
             # example: # BLASTX 2.2.26+
             if "BLAST" in self.line and "processed" not in self.line:
-                program_line = self.line[len(" #"):].split(" ")
+                program_line = self.line[len(" #") :].split(" ")
                 comments["program"] = program_line[0].lower()
                 comments["version"] = program_line[1]
             # parse query id and description (if available)
             # example: # Query: gi|356995852 Mus musculus POU domain
             elif "Query" in self.line:
-                query_line = self.line[len("# Query: "):].split(" ", 1)
+                query_line = self.line[len("# Query: ") :].split(" ", 1)
                 comments["id"] = query_line[0]
                 if len(query_line) == 2:
                     comments["description"] = query_line[1]
             # parse target database
             # example: # Database: db/minirefseq_protein
             elif "Database" in self.line:
-                comments["target"] = self.line[len("# Database: "):]
+                comments["target"] = self.line[len("# Database: ") :]
             # parse RID (from remote searches)
             elif "RID" in self.line:
-                comments["rid"] = self.line[len("# RID: "):]
+                comments["rid"] = self.line[len("# RID: ") :]
             # parse column order, required for parsing the result lines
             # example: # Fields: query id, query gi, query acc., query length
             elif "Fields" in self.line:
@@ -309,7 +323,7 @@ class BlastTabParser(object):
 
     def _parse_fields_line(self):
         """Return column short names line from 'Fields' comment line (PRIVATE)."""
-        raw_field_str = self.line[len("# Fields: "):]
+        raw_field_str = self.line[len("# Fields: ") :]
         long_fields = raw_field_str.split(", ")
         fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
         return self._prep_fields(fields)
@@ -319,8 +333,9 @@ class BlastTabParser(object):
         fields = self.fields
         columns = self.line.strip().split("\t")
         if len(fields) != len(columns):
-            raise ValueError("Expected %i columns, found: "
-                             "%i" % (len(fields), len(columns)))
+            raise ValueError(
+                "Expected %i columns, found: %i" % (len(fields), len(columns))
+            )
 
         qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):
@@ -330,10 +345,11 @@ class BlastTabParser(object):
             # iterate over each dict, mapping pair to determine
             # attribute name and value of each column
             for parsed_dict, mapping in (
-                    (qresult, _COLUMN_QRESULT),
-                    (hit, _COLUMN_HIT),
-                    (hsp, _COLUMN_HSP),
-                    (frag, _COLUMN_FRAG)):
+                (qresult, _COLUMN_QRESULT),
+                (hit, _COLUMN_HIT),
+                (hsp, _COLUMN_HSP),
+                (frag, _COLUMN_FRAG),
+            ):
                 # process parsed value according to mapping
                 if sname in mapping:
                     attr_name, caster = mapping[sname]
@@ -424,22 +440,18 @@ class BlastTabParser(object):
                     # start / end coords
                     for seq_type in ("query", "hit"):
                         if attr == seq_type + "_start":
-                            value = min(value,
-                                        prev["frag"][seq_type + "_end"]) - 1
+                            value = min(value, prev["frag"][seq_type + "_end"]) - 1
                         elif attr == seq_type + "_end":
-                            value = max(value,
-                                        prev["frag"][seq_type + "_start"])
+                            value = max(value, prev["frag"][seq_type + "_start"])
                     setattr(frag, attr, value)
                 # strand and frame setattr require the full parsed values
                 # to be set first
                 for seq_type in ("hit", "query"):
                     # try to set hit and query frame
-                    frame = self._get_frag_frame(frag, seq_type,
-                                                 prev["frag"])
+                    frame = self._get_frag_frame(frag, seq_type, prev["frag"])
                     setattr(frag, "%s_frame" % seq_type, frame)
                     # try to set hit and query strand
-                    strand = self._get_frag_strand(frag, seq_type,
-                                                   prev["frag"])
+                    strand = self._get_frag_strand(frag, seq_type, prev["frag"])
                     setattr(frag, "%s_strand" % seq_type, strand)
 
                 hsp = HSP([frag])
@@ -532,9 +544,10 @@ class BlastTabIndexer(SearchIndexer):
             elif "qaccver" in fields:
                 self._key_idx = fields.index("qaccver")
             else:
-                raise ValueError("Custom fields is missing an ID column. "
-                                 "One of these must be present: 'qseqid', "
-                                 "'qacc', or 'qaccver'.")
+                raise ValueError(
+                    "Custom fields is missing an ID column. One of these must be "
+                    "present: 'qseqid', 'qacc', or 'qaccver'."
+                )
 
     def __iter__(self):
         """Iterate over the file handle; yields key, start offset, and length."""
@@ -569,7 +582,7 @@ class BlastTabIndexer(SearchIndexer):
                 query_mark = line
                 start_offset = end_offset
             elif line.startswith(qid_mark):
-                qresult_key = line[len(qid_mark):].split()[0]
+                qresult_key = line[len(qid_mark) :].split()[0]
             elif line == query_mark or line.startswith(end_mark):
                 yield qresult_key, start_offset, end_offset - start_offset
                 start_offset = end_offset
@@ -762,8 +775,9 @@ class BlastTabWriter(object):
 
         strand = getattr(hsp, "%s_strand" % seq_type, None)
         if strand is None:
-            raise ValueError("Required attribute %r not found." %
-                             ("%s_strand" % (seq_type)))
+            raise ValueError(
+                "Required attribute %r not found." % ("%s_strand" % (seq_type))
+            )
         # switch start <--> end coordinates if strand is -1
         if strand < 0:
             if field.endswith("start"):
@@ -824,8 +838,15 @@ class BlastTabWriter(object):
             value = "<>".join(value)
 
         # list into ';'-delimited string
-        elif field in ("sallseqid", "sallacc", "staxids", "sscinames",
-                       "scomnames", "sblastnames", "sskingdoms"):
+        elif field in (
+            "sallseqid",
+            "sallacc",
+            "staxids",
+            "sscinames",
+            "scomnames",
+            "sblastnames",
+            "sskingdoms",
+        ):
             value = ";".join(value)
 
         # everything else
@@ -860,8 +881,10 @@ class BlastTabWriter(object):
         comments.append("# Database: %s" % qres.target)
         # qresults without hits don't show the Fields comment
         if qres:
-            comments.append("# Fields: %s" %
-                            ", ".join(inv_field_map[field] for field in self.fields))
+            comments.append(
+                "# Fields: %s"
+                % ", ".join(inv_field_map[field] for field in self.fields)
+            )
         comments.append("# %i hits found" % len(qres))
 
         return "\n".join(comments) + "\n"
@@ -870,4 +893,5 @@ class BlastTabWriter(object):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

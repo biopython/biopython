@@ -49,8 +49,8 @@ class Record(object):
         # 0       -       46456,48724,51349,53931,56572,56835,56992,57942
         # 21953   49268   -
         # 49267   49266   49268,49269
-        line = line.rstrip()        # no trailing whitespace
-        columns = line.split("\t")   # separate the tab-delineated cols
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 3:
             raise ValueError("I don't understand the format of %s" % line)
 

@@ -112,19 +112,19 @@ class QueryResultCases(unittest.TestCase):
     def test_hits(self):
         """Test QueryResult.hits."""
         # hits should return hits contained in qresult
-        hits = [x for x in self.qresult.hits]
+        hits = list(self.qresult.hits)
         self.assertEqual([hit11, hit21, hit31], hits)
 
     def test_hit_keys(self):
         """Test QueryResult.hit_keys."""
         # hit_keys should return hit keys (which default to hit ids)
-        hit_keys = [x for x in self.qresult.hit_keys]
+        hit_keys = list(self.qresult.hit_keys)
         self.assertEqual(["hit1", "hit2", "hit3"], hit_keys)
 
     def test_items(self):
         """Test QueryResult.items."""
         # items should return tuples of hit key, hit object pair
-        items = [x for x in self.qresult.items]
+        items = list(self.qresult.items)
         self.assertEqual([("hit1", hit11), ("hit2", hit21),
                          ("hit3", hit31)], items)
 

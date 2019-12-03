@@ -219,53 +219,53 @@ __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
-        "blast-tab": ("BlastIO", "BlastTabParser"),
-        "blast-text": ("BlastIO", "BlastTextParser"),
-        "blast-xml": ("BlastIO", "BlastXmlParser"),
-        "blat-psl": ("BlatIO", "BlatPslParser"),
-        "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),
-        "exonerate-text": ("ExonerateIO", "ExonerateTextParser"),
-        "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarParser"),
-        "fasta-m10": ("FastaIO", "FastaM10Parser"),
-        "hhsuite2-text": ("HHsuiteIO", "Hhsuite2TextParser"),
-        "hhsuite3-text": ("HHsuiteIO", "Hhsuite2TextParser"),
-        "hmmer2-text": ("HmmerIO", "Hmmer2TextParser"),
-        "hmmer3-text": ("HmmerIO", "Hmmer3TextParser"),
-        "hmmer3-tab": ("HmmerIO", "Hmmer3TabParser"),
-        # for hmmer3-domtab, the specific program is part of the format name
-        # as we need it distinguish hit / target coordinates
-        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
-        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
-        "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
-        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+    "blast-tab": ("BlastIO", "BlastTabParser"),
+    "blast-text": ("BlastIO", "BlastTextParser"),
+    "blast-xml": ("BlastIO", "BlastXmlParser"),
+    "blat-psl": ("BlatIO", "BlatPslParser"),
+    "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),
+    "exonerate-text": ("ExonerateIO", "ExonerateTextParser"),
+    "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarParser"),
+    "fasta-m10": ("FastaIO", "FastaM10Parser"),
+    "hhsuite2-text": ("HHsuiteIO", "Hhsuite2TextParser"),
+    "hhsuite3-text": ("HHsuiteIO", "Hhsuite2TextParser"),
+    "hmmer2-text": ("HmmerIO", "Hmmer2TextParser"),
+    "hmmer3-text": ("HmmerIO", "Hmmer3TextParser"),
+    "hmmer3-tab": ("HmmerIO", "Hmmer3TabParser"),
+    # for hmmer3-domtab, the specific program is part of the format name
+    # as we need it distinguish hit / target coordinates
+    "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
+    "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+    "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
+    "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
 }
 
 # dictionary of supported formats for index()
 _INDEXER_MAP = {
-        "blast-tab": ("BlastIO", "BlastTabIndexer"),
-        "blast-xml": ("BlastIO", "BlastXmlIndexer"),
-        "blat-psl": ("BlatIO", "BlatPslIndexer"),
-        "exonerate-cigar": ("ExonerateIO", "ExonerateCigarIndexer"),
-        "exonerate-text": ("ExonerateIO", "ExonerateTextIndexer"),
-        "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarIndexer"),
-        "fasta-m10": ("FastaIO", "FastaM10Indexer"),
-        "hmmer2-text": ("HmmerIO", "Hmmer2TextIndexer"),
-        "hmmer3-text": ("HmmerIO", "Hmmer3TextIndexer"),
-        "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
-        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
-        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
-        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+    "blast-tab": ("BlastIO", "BlastTabIndexer"),
+    "blast-xml": ("BlastIO", "BlastXmlIndexer"),
+    "blat-psl": ("BlatIO", "BlatPslIndexer"),
+    "exonerate-cigar": ("ExonerateIO", "ExonerateCigarIndexer"),
+    "exonerate-text": ("ExonerateIO", "ExonerateTextIndexer"),
+    "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarIndexer"),
+    "fasta-m10": ("FastaIO", "FastaM10Indexer"),
+    "hmmer2-text": ("HmmerIO", "Hmmer2TextIndexer"),
+    "hmmer3-text": ("HmmerIO", "Hmmer3TextIndexer"),
+    "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
+    "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
+    "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+    "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
 }
 
 # dictionary of supported formats for write()
 _WRITER_MAP = {
-        "blast-tab": ("BlastIO", "BlastTabWriter"),
-        "blast-xml": ("BlastIO", "BlastXmlWriter"),
-        "blat-psl": ("BlatIO", "BlatPslWriter"),
-        "hmmer3-tab": ("HmmerIO", "Hmmer3TabWriter"),
-        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitWriter"),
-        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
-        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
+    "blast-tab": ("BlastIO", "BlastTabWriter"),
+    "blast-xml": ("BlastIO", "BlastXmlWriter"),
+    "blat-psl": ("BlatIO", "BlatPslWriter"),
+    "hmmer3-tab": ("HmmerIO", "Hmmer3TabWriter"),
+    "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitWriter"),
+    "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
+    "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
 }
 
 
@@ -423,6 +423,7 @@ def to_dict(qresults, key_function=None):
     than 3.6 (and for other Python older than 3.7) so that you can always
     assume the record order is preserved.
     """
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def _default_key_function(rec):
         return rec.id
 
@@ -501,15 +502,15 @@ def index(filename, format=None, key_function=None, **kwargs):
         raise TypeError("Need a filename (not a handle)")
 
     from Bio.File import _IndexedSeqFileDict
+
     proxy_class = get_processor(format, _INDEXER_MAP)
-    repr = "SearchIO.index(%r, %r, key_function=%r)" \
-        % (filename, format, key_function)
-    return _IndexedSeqFileDict(proxy_class(filename, **kwargs),
-                               key_function, repr, "QueryResult")
+    repr = "SearchIO.index(%r, %r, key_function=%r)" % (filename, format, key_function)
+    return _IndexedSeqFileDict(
+        proxy_class(filename, **kwargs), key_function, repr, "QueryResult"
+    )
 
 
-def index_db(index_filename, filenames=None, format=None,
-             key_function=None, **kwargs):
+def index_db(index_filename, filenames=None, format=None, key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
      - index_filename - The SQLite filename.
@@ -575,8 +576,13 @@ def index_db(index_filename, filenames=None, format=None,
         filenames = [filenames]
 
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = ("SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)"
-            % (index_filename, filenames, format, key_function))
+
+    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" % (
+        index_filename,
+        filenames,
+        format,
+        key_function,
+    )
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
@@ -585,9 +591,9 @@ def index_db(index_filename, filenames=None, format=None,
         else:
             return format in _INDEXER_MAP
 
-    return _SQLiteManySeqFilesDict(index_filename, filenames,
-                                   proxy_factory, format,
-                                   key_function, repr)
+    return _SQLiteManySeqFilesDict(
+        index_filename, filenames, proxy_factory, format, key_function, repr
+    )
 
 
 def write(qresults, handle, format=None, **kwargs):
@@ -638,8 +644,7 @@ def write(qresults, handle, format=None, **kwargs):
     return qresult_count, hit_count, hsp_count, frag_count
 
 
-def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
-            out_kwargs=None):
+def convert(in_file, in_format, out_file, out_format, in_kwargs=None, out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
      - in_file    - Handle to the input file, or the filename as string.
@@ -696,4 +701,5 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

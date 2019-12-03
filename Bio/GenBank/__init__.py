@@ -1263,7 +1263,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # See Bug 3197
             msg = (
                 'Combinations of "join" and "order" within the same '
-                + "location (nested operators) are illegal:\n"
+                "location (nested operators) are illegal:\n"
                 + location_line
             )
             raise LocationParserError(msg)

@@ -275,9 +275,8 @@ def compare_record(old, new):
             old_comment = old_comment.replace("\n", " ").replace("  ", " ")
             new_comment = new_comment.replace("\n", " ").replace("  ", " ")
             assert old_comment == new_comment, \
-                "Comment annotation changed by load/retrieve\n" \
-                "Was:%s\nNow:%s" \
-                % (repr(old_comment), repr(new_comment))
+                ("Comment annotation changed by load/retrieve\n"
+                 "Was:%s\nNow:%s" % (repr(old_comment), repr(new_comment)))
         elif key in ["taxonomy", "organism", "source"]:
             # If there is a taxon id recorded, these fields get overwritten
             # by data from the taxon/taxon_name tables.  There is no

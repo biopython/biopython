@@ -16,6 +16,11 @@ also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
 PEP8, PEP257 and best practice standard coding style, and more of the code
@@ -24,7 +29,10 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Chris Daley (first contribution)
+- Chris Rands
 - Christian Brueffer
+- Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
 
@@ -109,6 +117,7 @@ possible, especially the following contributors:
 - Konstantin Vdovkin
 - Mark Amery
 - Markus Piotrowski
+- Michiel de Hoon
 - Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
 - Nick Negretti

@@ -579,7 +579,7 @@ class ParseTest(unittest.TestCase):
         residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
-        residues = [r for r in struct[1]["B"]] + [struct[1]["A"][44]]
+        residues = list(struct[1]["B"]) + [struct[1]["A"][44]]
         self.assertEqual([("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
                          ["A 44 ", "B 44 ", "B 46 ", "B 47 ", "B 48 ", "B 49 ", "B 50 ",
                           "B 51 ", "B 51A", "B 52 ", "BH_SEP45 ", "BW0 "])

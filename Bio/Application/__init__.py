@@ -247,12 +247,16 @@ class AbstractCommandline(object):
 
             doc = p.description
             if isinstance(p, _Switch):
-                doc += "\n\nThis property controls the addition of the %s " \
-                       "switch, treat this property as a boolean." % p.names[0]
+                doc += (
+                    "\n\nThis property controls the addition of the %s "
+                    "switch, treat this property as a boolean." % p.names[0]
+                )
             else:
-                doc += "\n\nThis controls the addition of the %s parameter " \
-                       "and its associated value.  Set this property to the " \
-                       "argument value required." % p.names[0]
+                doc += (
+                    "\n\nThis controls the addition of the %s parameter "
+                    "and its associated value.  Set this property to the "
+                    "argument value required." % p.names[0]
+                )
             prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop)  # magic!
         for key, value in kwargs.items():

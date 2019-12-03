@@ -17,7 +17,8 @@ from Bio import Entrez
 
 def print_usage():
     """Print a help message."""
-    print("""query_pubmed.py [-h] [-c] [-d delay] query
+    print(
+        """query_pubmed.py [-h] [-c] [-d delay] query
 
 This script sends a query to PubMed (via the NCBI Entrez webservice*)
 and prints the MEDLINE formatted results to the screen.
@@ -27,7 +28,8 @@ Arguments:
     -c           Count the hits, and don't print them out.
 
 * http://www.ncbi.nlm.nih.gov/Entrez/
-""")
+"""
+    )
 
 
 if __name__ == "__main__":
@@ -36,8 +38,8 @@ if __name__ == "__main__":
     except getopt.error as x:
         print(x)
         sys.exit(0)
-    if len(args) != 1:     # If they gave extraneous arguments,
-        print_usage()      # print the instructions and quit.
+    if len(args) != 1:  # If they gave extraneous arguments,
+        print_usage()  # print the instructions and quit.
         sys.exit(0)
     query = args[0]
 
@@ -74,10 +76,15 @@ if __name__ == "__main__":
     for start in range(0, count, batch_size):
         end = min(count, start + batch_size)
         # print("Going to download record %i to %i" % (start+1, end))
-        fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",
-                                     retmode="text",
-                                     retstart=start, retmax=batch_size,
-                                     webenv=webenv, query_key=query_key)
+        fetch_handle = Entrez.efetch(
+            db="pubmed",
+            rettype="medline",
+            retmode="text",
+            retstart=start,
+            retmax=batch_size,
+            webenv=webenv,
+            query_key=query_key,
+        )
         data = fetch_handle.read()
         fetch_handle.close()
         sys.stdout.write(data)

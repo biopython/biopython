@@ -32,6 +32,7 @@ from __future__ import print_function
 import warnings
 import re
 from collections import OrderedDict
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
@@ -510,17 +511,18 @@ class InsdcScanner(object):
         This method is intended for use in Bio.SeqIO
         """
         # This is a generator function
-        while True:
-            record = self.parse(handle, do_features)
-            if record is None:
-                break
-            if record.id is None:
-                raise ValueError("Failed to parse the record's ID. Invalid ID line?")
-            if record.name == "<unknown name>":
-                raise ValueError("Failed to parse the record's name. Invalid ID line?")
-            if record.description == "<unknown description>":
-                raise ValueError("Failed to parse the record's description")
-            yield record
+        with as_handle(handle, "rU") as handle:
+            while True:
+                record = self.parse(handle, do_features)
+                if record is None:
+                    break
+                if record.id is None:
+                    raise ValueError("Failed to parse the record's ID. Invalid ID line?")
+                if record.name == "<unknown name>":
+                    raise ValueError("Failed to parse the record's name. Invalid ID line?")
+                if record.description == "<unknown description>":
+                    raise ValueError("Failed to parse the record's description")
+                yield record
 
     def parse_cds_features(
         self,
@@ -539,78 +541,79 @@ class InsdcScanner(object):
 
         This method is intended for use in Bio.SeqIO
         """
-        self.set_handle(handle)
-        while self.find_start():
-            # Got an EMBL or GenBank record...
-            self.parse_header()  # ignore header lines!
-            feature_tuples = self.parse_features()
-            # self.parse_footer() # ignore footer lines!
-            while True:
-                line = self.handle.readline()
-                if not line:
-                    break
-                if line[:2] == "//":
-                    break
-            self.line = line.rstrip()
+        with as_handle(handle, "rU") as handle:
+            self.set_handle(handle)
+            while self.find_start():
+                # Got an EMBL or GenBank record...
+                self.parse_header()  # ignore header lines!
+                feature_tuples = self.parse_features()
+                # self.parse_footer() # ignore footer lines!
+                while True:
+                    line = self.handle.readline()
+                    if not line:
+                        break
+                    if line[:2] == "//":
+                        break
+                self.line = line.rstrip()
 
-            # Now go though those features...
-            for key, location_string, qualifiers in feature_tuples:
-                if key == "CDS":
-                    # Create SeqRecord
-                    # ================
-                    # SeqRecord objects cannot be created with annotations, they
-                    # must be added afterwards.  So create an empty record and
-                    # then populate it:
-                    record = SeqRecord(seq=None)
-                    annotations = record.annotations
+                # Now go though those features...
+                for key, location_string, qualifiers in feature_tuples:
+                    if key == "CDS":
+                        # Create SeqRecord
+                        # ================
+                        # SeqRecord objects cannot be created with annotations, they
+                        # must be added afterwards.  So create an empty record and
+                        # then populate it:
+                        record = SeqRecord(seq=None)
+                        annotations = record.annotations
 
-                    # Should we add a location object to the annotations?
-                    # I *think* that only makes sense for SeqFeatures with their
-                    # sub features...
-                    annotations["raw_location"] = location_string.replace(" ", "")
+                        # Should we add a location object to the annotations?
+                        # I *think* that only makes sense for SeqFeatures with their
+                        # sub features...
+                        annotations["raw_location"] = location_string.replace(" ", "")
 
-                    for (qualifier_name, qualifier_data) in qualifiers:
-                        if (
-                            qualifier_data is not None
-                            and qualifier_data[0] == '"'
-                            and qualifier_data[-1] == '"'
-                        ):
-                            # Remove quotes
-                            qualifier_data = qualifier_data[1:-1]
-                        # Append the data to the annotation qualifier...
-                        if qualifier_name == "translation":
-                            assert record.seq is None, "Multiple translations!"
-                            record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
-                        elif qualifier_name == "db_xref":
-                            # its a list, possibly empty.  Its safe to extend
-                            record.dbxrefs.append(qualifier_data)
-                        else:
-                            if qualifier_data is not None:
-                                qualifier_data = qualifier_data.replace(
-                                    "\n", " "
-                                ).replace("  ", " ")
-                            try:
-                                annotations[qualifier_name] += " " + qualifier_data
-                            except KeyError:
-                                # Not an addition to existing data, its the first bit
-                                annotations[qualifier_name] = qualifier_data
+                        for (qualifier_name, qualifier_data) in qualifiers:
+                            if (
+                                qualifier_data is not None
+                                and qualifier_data[0] == '"'
+                                and qualifier_data[-1] == '"'
+                            ):
+                                # Remove quotes
+                                qualifier_data = qualifier_data[1:-1]
+                            # Append the data to the annotation qualifier...
+                            if qualifier_name == "translation":
+                                assert record.seq is None, "Multiple translations!"
+                                record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
+                            elif qualifier_name == "db_xref":
+                                # its a list, possibly empty.  Its safe to extend
+                                record.dbxrefs.append(qualifier_data)
+                            else:
+                                if qualifier_data is not None:
+                                    qualifier_data = qualifier_data.replace(
+                                        "\n", " "
+                                    ).replace("  ", " ")
+                                try:
+                                    annotations[qualifier_name] += " " + qualifier_data
+                                except KeyError:
+                                    # Not an addition to existing data, its the first bit
+                                    annotations[qualifier_name] = qualifier_data
 
-                    # Fill in the ID, Name, Description
-                    # =================================
-                    try:
-                        record.id = annotations[tags2id[0]]
-                    except KeyError:
-                        pass
-                    try:
-                        record.name = annotations[tags2id[1]]
-                    except KeyError:
-                        pass
-                    try:
-                        record.description = annotations[tags2id[2]]
-                    except KeyError:
-                        pass
+                        # Fill in the ID, Name, Description
+                        # =================================
+                        try:
+                            record.id = annotations[tags2id[0]]
+                        except KeyError:
+                            pass
+                        try:
+                            record.name = annotations[tags2id[1]]
+                        except KeyError:
+                            pass
+                        try:
+                            record.description = annotations[tags2id[2]]
+                        except KeyError:
+                            pass
 
-                    yield record
+                        yield record
 
 
 class EmblScanner(InsdcScanner):
@@ -646,7 +649,7 @@ class EmblScanner(InsdcScanner):
             or self.line.strip() == "//"
         ):
             raise ValueError(
-                "Unexpected content after SQ or CO " "line: %r" % self.line
+                "Unexpected content after SQ or CO line: %r" % self.line
             )
 
         seq_lines = []
@@ -1293,7 +1296,7 @@ class GenBankScanner(InsdcScanner):
             #       'LOCUS line does not contain size units at expected position:\n' + line
             if line[41:42] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 42:\n" + line
+                    "LOCUS line does not contain space at position 42:\n" + line
                 )
             if line[42:51].strip() not in ["", "linear", "circular"]:
                 raise ValueError(
@@ -1302,7 +1305,7 @@ class GenBankScanner(InsdcScanner):
                 )
             if line[51:52] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 52:\n" + line
+                    "LOCUS line does not contain space at position 52:\n" + line
                 )
             # if line[55:62] != '       ':
             #      raise ValueError('LOCUS line does not contain spaces from position 56 to 62:\n' + line)
@@ -1324,11 +1327,11 @@ class GenBankScanner(InsdcScanner):
             name_and_length = name_and_length_str.split(" ")
             if len(name_and_length) > 2:
                 raise ValueError(
-                    "Cannot parse the name and length in " "the LOCUS line:\n" + line
+                    "Cannot parse the name and length in the LOCUS line:\n" + line
                 )
             if len(name_and_length) == 1:
                 raise ValueError(
-                    "Name and length collide in the LOCUS " "line:\n" + line
+                    "Name and length collide in the LOCUS line:\n" + line
                 )
             # Should be possible to split them based on position, if
             # a clear definition of the standard exists THAT AGREES with
@@ -1390,7 +1393,7 @@ class GenBankScanner(InsdcScanner):
                 # See issue #1656 e.g.
                 # LOCUS       pEH010                  5743 bp    DNA     circular
                 warnings.warn(
-                    "Truncated LOCUS line found - is this " "correct?\n:%r" % line,
+                    "Truncated LOCUS line found - is this correct?\n:%r" % line,
                     BiopythonParserWarning,
                 )
                 padding_len = 79 - len(line)
@@ -1419,7 +1422,7 @@ class GenBankScanner(InsdcScanner):
                 )
             if line[54:55] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 55:\n" + line
+                    "LOCUS line does not contain space at position 55:\n" + line
                 )
             if line[55:63].strip() not in ["", "linear", "circular"]:
                 raise ValueError(
@@ -1428,11 +1431,11 @@ class GenBankScanner(InsdcScanner):
                 )
             if line[63:64] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 64:\n" + line
+                    "LOCUS line does not contain space at position 64:\n" + line
                 )
             if line[67:68] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 68:\n" + line
+                    "LOCUS line does not contain space at position 68:\n" + line
                 )
             if line[68:79].strip():
                 if line[70:71] != "-":
@@ -1452,11 +1455,11 @@ class GenBankScanner(InsdcScanner):
             name_and_length = name_and_length_str.split(" ")
             if len(name_and_length) > 2:
                 raise ValueError(
-                    "Cannot parse the name and length in " "the LOCUS line:\n" + line
+                    "Cannot parse the name and length in the LOCUS line:\n" + line
                 )
             if len(name_and_length) == 1:
                 raise ValueError(
-                    "Name and length collide in the LOCUS " "line:\n" + line
+                    "Name and length collide in the LOCUS line:\n" + line
                 )
             # Should be possible to split them based on position, if
             # a clear definition of the stand exists THAT AGREES with
@@ -1501,7 +1504,7 @@ class GenBankScanner(InsdcScanner):
                 # Must just have just "LOCUS       ", is this even legitimate?
                 # We should be able to continue parsing... we need real world testcases!
                 warnings.warn(
-                    "Minimal LOCUS line found - is this " "correct?\n:%r" % line,
+                    "Minimal LOCUS line found - is this correct?\n:%r" % line,
                     BiopythonParserWarning,
                 )
         elif (
@@ -1559,7 +1562,7 @@ class GenBankScanner(InsdcScanner):
             # Cope with EMBOSS seqret output where it seems the locus id can cause
             # the other fields to overflow.  We just IGNORE the other fields!
             warnings.warn(
-                "Malformed LOCUS line found - is this " "correct?\n:%r" % line,
+                "Malformed LOCUS line found - is this correct?\n:%r" % line,
                 BiopythonParserWarning,
             )
             consumer.locus(line.split()[1])
@@ -1569,7 +1572,7 @@ class GenBankScanner(InsdcScanner):
             #   "LOCUS       RNA5 complete       1718 bp"
             # Treat everything between LOCUS and the size as the identifier.
             warnings.warn(
-                "Malformed LOCUS line found - is this " "correct?\n:%r" % line,
+                "Malformed LOCUS line found - is this correct?\n:%r" % line,
                 BiopythonParserWarning,
             )
             consumer.locus(line[5:].rsplit(None, 2)[0].strip())

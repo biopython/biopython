@@ -70,14 +70,16 @@ class BlastIt(object):
 
             # If no system variable BLASTDB exists, give user the chance to
             # locate his database folder:
-            if not(nin and pin):
+            if not (nin and pin):
                 database_folder = filedialog.askdirectory(
-                    title="Please locate your BLAST database(s) folder:")
+                    title="Please locate your BLAST database(s) folder:"
+                )
                 nin.extend(glob.glob(database_folder + "/*.nin"))
                 pin.extend(glob.glob(database_folder + "/*.pin"))
                 if not (nin and pin):
-                    messagebox.showerror("xbb tools", "This folder does not"
-                                         " contain any BLAST databases!")
+                    messagebox.showerror(
+                        "xbb tools", "This folder does not contain any BLAST databases!"
+                    )
                     self.toplevel.destroy()
                     return False
 
@@ -95,13 +97,16 @@ class BlastIt(object):
             # Test if blast binaries are in path
             if os.system("blastn -version"):  # Return of non-zero means error
                 self.blast_path = filedialog.askdirectory(
-                    title="Please locate your BLAST program folder:")
+                    title="Please locate your BLAST program folder:"
+                )
                 self.blast_path += os.sep
                 if os.system("{}blastn -version".format(self.blast_path)):
                     messagebox.showerror(
-                        "xbb tools", "Wrong folder or missing BLAST"
+                        "xbb tools",
+                        "Wrong folder or missing BLAST"
                         " binaries!\n  To run BLAST you must install the "
-                        " standalone BLAST binaries.")
+                        " standalone BLAST binaries.",
+                    )
                     self.toplevel.destroy()
                     return False
                 else:
@@ -116,8 +121,7 @@ class BlastIt(object):
 
     def database_readable(self, db_paths):
         """Return the name of the blast database without path and extension."""
-        db_names = [entry.split(os.sep)[-1].split(".")[0]
-                    for entry in db_paths]
+        db_names = [entry.split(os.sep)[-1].split(".")[0] for entry in db_paths]
         return db_names
 
     def convert_dbname_to_dbpath(self, db_name):
@@ -143,16 +147,19 @@ class BlastIt(object):
         self.dbs_frame.pack(side="left", padx=5, pady=5, expand=1, fill="x")
         nin_values = self.database_readable(self.nin)
         pin_values = self.database_readable(self.pin)
-        self.dbs = ttk.Combobox(self.dbs_frame, exportselection=0,
-                                values=nin_values + pin_values)
+        self.dbs = ttk.Combobox(
+            self.dbs_frame, exportselection=0, values=nin_values + pin_values
+        )
         self.dbs.current(0)
 
         self.blast_frame = ttk.LabelFrame(self.cf, text="BLAST programs")
         self.blast_frame.pack(side="left", padx=5, pady=5, expand=1, fill="x")
-        self.blasts = ttk.Combobox(self.blast_frame, exportselection=0,
-                                   textvariable=self.blast_string,
-                                   values=["blastn", "blastp", "blastx",
-                                           "tblastn", "tblastx"])
+        self.blasts = ttk.Combobox(
+            self.blast_frame,
+            exportselection=0,
+            textvariable=self.blast_string,
+            values=["blastn", "blastp", "blastx", "tblastn", "tblastx"],
+        )
 
         self.dbs.pack(side="left", padx=5, pady=5, expand=1, fill="x")
         self.blasts.pack(side="left", padx=5, pady=5, expand=1, fill="x")
@@ -161,8 +168,7 @@ class BlastIt(object):
         self.option_f.pack(side="left", padx=5, pady=5, expand=1, fill="x")
         self.option = ttk.Entry(self.option_f)
         self.option.pack(side="left", padx=5, pady=5, fill="x", expand=1)
-        self.ok = ttk.Button(self.cf, text="Run", command=self._Run,
-                             state="disabled")
+        self.ok = ttk.Button(self.cf, text="Run", command=self._Run, state="disabled")
         self.ok.pack(side="right")
 
         self.Validate()

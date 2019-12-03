@@ -50,11 +50,14 @@ def open_database(driver="MySQLdb", **kwargs):
 
     """
     if driver == "psycopg":
-        raise ValueError("Using BioSQL with psycopg (version one) is no "
-                         "longer supported. Use psycopg2 instead.")
+        raise ValueError(
+            "Using BioSQL with psycopg (version one) is no "
+            "longer supported. Use psycopg2 instead."
+        )
 
     if os.name == "java":
         from com.ziclix.python.sql import zxJDBC
+
         module = zxJDBC
         if driver in ["MySQLdb"]:
             jdbc_driver = "com.mysql.jdbc.Driver"
@@ -91,12 +94,19 @@ def open_database(driver="MySQLdb", **kwargs):
     # SQLite connect takes the database name as input
     if os.name == "java":
         if driver in ["MySQLdb"]:
-            conn = connect(url_pref + kw.get("database", "mysql"),
-                           kw["user"], kw["password"], jdbc_driver)
+            conn = connect(
+                url_pref + kw.get("database", "mysql"),
+                kw["user"],
+                kw["password"],
+                jdbc_driver,
+            )
         elif driver in ["psycopg2"]:
-            conn = connect(url_pref + kw.get("database", "postgresql") +
-                           "?stringtype=unspecified",
-                           kw["user"], kw["password"], jdbc_driver)
+            conn = connect(
+                url_pref + kw.get("database", "postgresql") + "?stringtype=unspecified",
+                kw["user"],
+                kw["password"],
+                jdbc_driver,
+            )
     elif driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
@@ -114,21 +124,27 @@ def open_database(driver="MySQLdb", **kwargs):
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
     # Test for RULES in PostgreSQL schema, see also Bug 2833.
     if driver in ["psycopg2", "pgdb"]:
-        sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
-              "rulename='rule_bioentry_i1' OR " + \
-              "rulename='rule_bioentry_i2';"
+        sql = (
+            "SELECT ev_class FROM pg_rewrite WHERE "
+            "rulename='rule_bioentry_i1' OR "
+            "rulename='rule_bioentry_i2';"
+        )
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
             from Bio import BiopythonWarning
-            warnings.warn("Your BioSQL PostgreSQL schema includes some rules "
-                          "currently required for bioperl-db but which may"
-                          "cause problems loading data using Biopython (see "
-                          "BioSQL's RedMine Bug 2839 aka GitHub Issue 4 "
-                          "https://github.com/biosql/biosql/issues/4). "
-                          "If you do not use BioPerl, please remove these "
-                          "rules. Biopython should cope with the rules "
-                          "present, but with a performance penalty when "
-                          "loading new records.", BiopythonWarning)
+
+            warnings.warn(
+                "Your BioSQL PostgreSQL schema includes some rules "
+                "currently required for bioperl-db but which may"
+                "cause problems loading data using Biopython (see "
+                "BioSQL's RedMine Bug 2839 aka GitHub Issue 4 "
+                "https://github.com/biosql/biosql/issues/4). "
+                "If you do not use BioPerl, please remove these "
+                "rules. Biopython should cope with the rules "
+                "present, but with a performance penalty when "
+                "loading new records.",
+                BiopythonWarning,
+            )
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
@@ -167,8 +183,9 @@ class DBServer(object):
             wrap_cursor = False
         # Get module specific Adaptor or the base (general) Adaptor
         Adapt = _interface_specific_adaptors.get(module_name, Adaptor)
-        self.adaptor = Adapt(conn, DBUtils.get_dbutils(module_name),
-                             wrap_cursor=wrap_cursor)
+        self.adaptor = Adapt(
+            conn, DBUtils.get_dbutils(module_name), wrap_cursor=wrap_cursor
+        )
         self.module_name = module_name
 
     def __repr__(self):
@@ -226,6 +243,7 @@ class DBServer(object):
             """Iterate over (namespace, BioSeqDatabase) in the database."""
             for key in self:
                 yield key, self[key]
+
     else:
         # Python 3, items etc are all iterators
         def keys(self):
@@ -265,16 +283,22 @@ class DBServer(object):
 
         """
         import warnings
-        warnings.warn("This method is deprecated.  In keeping with the "
-                      "dictionary interface, you can now use 'del "
-                      "server[name]' instead", BiopythonDeprecationWarning)
+
+        warnings.warn(
+            "This method is deprecated.  In keeping with the "
+            "dictionary interface, you can now use 'del "
+            "server[name]' instead",
+            BiopythonDeprecationWarning,
+        )
         self.__delitem__(db_name)
 
     def new_database(self, db_name, authority=None, description=None):
         """Add a new database to the server and return it."""
         # make the database
-        sql = r"INSERT INTO biodatabase (name, authority, description)" \
-              r" VALUES (%s, %s, %s)"
+        sql = (
+            "INSERT INTO biodatabase (name, authority, description)"
+            " VALUES (%s, %s, %s)"
+        )
         self.adaptor.execute(sql, (db_name, authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
 
@@ -314,8 +338,9 @@ class DBServer(object):
             for sql_line in sql_parts[:-1]:
                 self.adaptor.cursor.execute(sql_line)
         else:
-            raise ValueError("Module %s not supported by the loader." %
-                             (self.module_name))
+            raise ValueError(
+                "Module %s not supported by the loader." % (self.module_name)
+            )
 
     def commit(self):
         """Commit the current transaction to the database."""
@@ -415,8 +440,8 @@ class Adaptor(object):
     def fetch_dbid_by_dbname(self, dbname):
         """Return the internal id for the sub-database using its name."""
         self.execute(
-            r"select biodatabase_id from biodatabase where name = %s",
-            (dbname,))
+            "select biodatabase_id from biodatabase where name = %s", (dbname,)
+        )
         rv = self.cursor.fetchall()
         if not rv:
             raise KeyError("Cannot find biodatabase with name %r" % dbname)
@@ -431,7 +456,7 @@ class Adaptor(object):
            name column of the bioentry table of the SQL schema
 
         """
-        sql = r"select bioentry_id from bioentry where name = %s"
+        sql = "select bioentry_id from bioentry where name = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -453,7 +478,7 @@ class Adaptor(object):
            accession column of the bioentry table of the SQL schema
 
         """
-        sql = r"select bioentry_id from bioentry where accession = %s"
+        sql = "select bioentry_id from bioentry where accession = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -475,7 +500,7 @@ class Adaptor(object):
            accession column of the bioentry table of the SQL schema
 
         """
-        sql = r"select bioentry_id from bioentry where accession = %s"
+        sql = "select bioentry_id from bioentry where accession = %s"
         fields = [name]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -499,8 +524,7 @@ class Adaptor(object):
             version = acc_version[1]
         else:
             version = "0"
-        sql = r"SELECT bioentry_id FROM bioentry WHERE accession = %s" \
-              r" AND version = %s"
+        sql = "SELECT bioentry_id FROM bioentry WHERE accession = %s AND version = %s"
         fields = [acc, version]
         if dbid:
             sql += " and biodatabase_id = %s"
@@ -536,8 +560,7 @@ class Adaptor(object):
 
     def list_biodatabase_names(self):
         """Return a list of all of the sub-databases."""
-        return self.execute_and_fetch_col0(
-            "SELECT name FROM biodatabase")
+        return self.execute_and_fetch_col0("SELECT name FROM biodatabase")
 
     def list_bioentry_ids(self, dbid):
         """Return a list of internal ids for all of the sequences in a sub-databae.
@@ -547,8 +570,8 @@ class Adaptor(object):
 
         """
         return self.execute_and_fetch_col0(
-            "SELECT bioentry_id FROM bioentry WHERE biodatabase_id = %s",
-            (dbid,))
+            "SELECT bioentry_id FROM bioentry WHERE biodatabase_id = %s", (dbid,)
+        )
 
     def list_bioentry_display_ids(self, dbid):
         """Return a list of all sequence names in a sub-databae.
@@ -558,8 +581,8 @@ class Adaptor(object):
 
         """
         return self.execute_and_fetch_col0(
-            "SELECT name FROM bioentry WHERE biodatabase_id = %s",
-            (dbid,))
+            "SELECT name FROM bioentry WHERE biodatabase_id = %s", (dbid,)
+        )
 
     def list_any_ids(self, sql, args):
         """Return ids given a SQL statement to select for them.
@@ -608,10 +631,13 @@ class Adaptor(object):
         #
         # Convert to a string on returning for databases that give back
         # unicode. Shouldn't need unicode for sequences so this seems safe.
-        return str(self.execute_one(
-            """select SUBSTR(seq, %s, %s)
+        return str(
+            self.execute_one(
+                """select SUBSTR(seq, %s, %s)
                      from biosequence where bioentry_id = %s""",
-            (start + 1, length, seqid))[0])
+                (start + 1, length, seqid),
+            )[0]
+        )
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
@@ -654,7 +680,7 @@ class MysqlConnectorAdaptor(Adaptor):
 _interface_specific_adaptors = {
     # If SQL interfaces require a specific adaptor, use this to map the adaptor
     "mysql.connector": MysqlConnectorAdaptor,
-    "MySQLdb": MysqlConnectorAdaptor
+    "MySQLdb": MysqlConnectorAdaptor,
 }
 
 _allowed_lookups = {
@@ -746,9 +772,12 @@ class BioSeqDatabase(object):
         Please use .keys() instead of .get_all_primary_ids()
         """
         import warnings
-        warnings.warn("Use bio_seq_database.keys() instead of "
-                      "bio_seq_database.get_all_primary_ids()",
-                      BiopythonDeprecationWarning)
+
+        warnings.warn(
+            "Use bio_seq_database.keys() instead of "
+            "bio_seq_database.get_all_primary_ids()",
+            BiopythonDeprecationWarning,
+        )
         return list(self.keys())
 
     def __getitem__(self, key):
@@ -766,31 +795,33 @@ class BioSeqDatabase(object):
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
-            raise KeyError("Entry %r cannot be deleted. "
-                           "It was not found or is invalid" % key)
+            raise KeyError(
+                "Entry %r cannot be deleted. It was not found or is invalid" % key
+            )
         # Assuming this will automatically cascade to the other tables...
-        sql = "DELETE FROM bioentry " + \
-              "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        sql = "DELETE FROM bioentry WHERE biodatabase_id=%s AND bioentry_id=%s;"
         self.adaptor.execute(sql, (self.dbid, key))
 
     def __len__(self):
         """Return number of records in this namespace (sub database)."""
-        sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
-              "WHERE biodatabase_id=%s;"
-        return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid, ))[0])
+        sql = "SELECT COUNT(bioentry_id) FROM bioentry WHERE biodatabase_id=%s;"
+        return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid,))[0])
 
     def __contains__(self, value):
         """Check if a primary (internal) id is this namespace (sub database)."""
-        sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
-              "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        sql = (
+            "SELECT COUNT(bioentry_id) FROM bioentry "
+            "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        )
         # The bioentry_id field is an integer in the schema.
         # PostgreSQL will throw an error if we use a non integer in the query.
         try:
             bioentry_id = int(value)
         except ValueError:
             return False
-        return bool(self.adaptor.execute_and_fetch_col0(sql,
-                                                        (self.dbid, bioentry_id))[0])
+        return bool(
+            self.adaptor.execute_and_fetch_col0(sql, (self.dbid, bioentry_id))[0]
+        )
 
     def __iter__(self):
         """Iterate over ids (which may not be meaningful outside this database)."""
@@ -824,6 +855,7 @@ class BioSeqDatabase(object):
             """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
             for key in self:
                 yield key, self[key]
+
     else:
         # Python 3, items etc are all iterators
         def keys(self):
@@ -852,8 +884,10 @@ class BioSeqDatabase(object):
             raise TypeError("single key/value parameter expected")
         k, v = list(kwargs.items())[0]
         if k not in _allowed_lookups:
-            raise TypeError("lookup() expects one of %r, not %r" %
-                            (list(_allowed_lookups.keys()), k))
+            raise TypeError(
+                "lookup() expects one of %r, not %r"
+                % (list(_allowed_lookups.keys()), k)
+            )
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
         seqid = lookup_func(self.dbid, v)
@@ -868,9 +902,12 @@ class BioSeqDatabase(object):
         rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         import warnings
-        warnings.warn("Use bio_seq_database[my_id] instead of "
-                      "bio_seq_database.get_Seq_by_primary_id(my_id)",
-                      BiopythonDeprecationWarning)
+
+        warnings.warn(
+            "Use bio_seq_database[my_id] instead of "
+            "bio_seq_database.get_Seq_by_primary_id(my_id)",
+            BiopythonDeprecationWarning,
+        )
         return self[seqid]
 
     def load(self, record_iterator, fetch_NCBI_taxonomy=False):
@@ -893,8 +930,7 @@ class BioSeqDatabase(object):
 
         Returns the number of records loaded.
         """
-        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid,
-                                          fetch_NCBI_taxonomy)
+        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid, fetch_NCBI_taxonomy)
         num_records = 0
         global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
@@ -914,15 +950,18 @@ class BioSeqDatabase(object):
                     accession = cur_record.id
                     version = 0
                 gi = cur_record.annotations.get("gi")
-                sql = "SELECT bioentry_id FROM bioentry WHERE (identifier " + \
-                      "= '%s' AND biodatabase_id = '%s') OR (accession = " + \
-                      "'%s' AND version = '%s' AND biodatabase_id = '%s')"
+                sql = (
+                    "SELECT bioentry_id FROM bioentry "
+                    "WHERE (identifier = '%s' AND biodatabase_id = '%s') "
+                    "OR (accession = '%s' AND version = '%s' AND biodatabase_id = '%s')"
+                )
                 self.adaptor.execute(
-                    sql % (gi, self.dbid, accession, version, self.dbid))
+                    sql % (gi, self.dbid, accession, version, self.dbid)
+                )
                 if self.adaptor.cursor.fetchone():
                     raise self.adaptor.conn.IntegrityError(
-                        "Duplicate record detected: "
-                        "record has not been inserted")
+                        "Duplicate record detected: record has not been inserted"
+                    )
             # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records

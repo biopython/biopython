@@ -120,7 +120,9 @@ class FileRecord(object):
                 break
             self.loci_list.append(line)
         else:
-            raise ValueError("No population data found, file probably not GenePop related")
+            raise ValueError(
+                "No population data found, file probably not GenePop related"
+            )
         # self._after_pop = True
         self.current_pop = 0
         self.current_ind = 0

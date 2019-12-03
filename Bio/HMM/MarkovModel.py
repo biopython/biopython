@@ -158,7 +158,7 @@ class MarkovModelBuilder(object):
         """
         # user must set initial probabilities
         if not self.initial_prob:
-            raise Exception("set_initial_probabilities must be called to " +
+            raise Exception("set_initial_probabilities must be called to "
                             "fully initialize the Markov model")
 
         initial_prob = copy.deepcopy(self.initial_prob)
@@ -262,8 +262,8 @@ class MarkovModelBuilder(object):
         Returns the dictionary containing the transition probabilities.
         """
         if not self.transition_prob:
-            raise Exception("No transitions have been allowed yet. " +
-                            "Allow some or all transitions by calling " +
+            raise Exception("No transitions have been allowed yet. "
+                            "Allow some or all transitions by calling "
                             "allow_transition or allow_all_transitions first.")
 
         transitions_from = _calculate_from_transitions(self.transition_prob)
@@ -280,7 +280,7 @@ class MarkovModelBuilder(object):
         Returns the dictionary containing the emission probabilities.
         """
         if not self.emission_prob:
-            raise Exception("No emissions have been allowed yet. " +
+            raise Exception("No emissions have been allowed yet. "
                             "Allow some or all emissions.")
 
         emissions = _calculate_emissions(self.emission_prob)

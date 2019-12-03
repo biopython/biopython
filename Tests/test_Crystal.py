@@ -8,9 +8,13 @@
 
 import unittest
 import copy
+import warnings
 
-# modules to be tested
-from Bio.Crystal import Hetero, Chain, Crystal, CrystalError
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    # modules to be tested
+    from Bio.Crystal import Hetero, Chain, Crystal, CrystalError
 
 
 class ChainTestCase(unittest.TestCase):

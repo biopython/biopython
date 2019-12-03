@@ -168,7 +168,7 @@ class PrintFormat(object):
         """
         return self._make_list(cut, title, nc, s1)
 
-# _make_* methods to be used with the virtual method make_format
+    # _make_* methods to be used with the virtual method make_format
 
     def _make_list(self, ls, title, nc, s1):
         """Summarise a list of positions by enzyme (PRIVATE).
@@ -231,8 +231,7 @@ class PrintFormat(object):
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
-        return self._make_number_only(ls, title) \
-            + self._make_nocut_only(nc, s1)
+        return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_nocut(self, ls, title, nc, s1):
         """Summarise non-cutting enzymes (PRIVATE).
@@ -396,17 +395,26 @@ class PrintFormat(object):
                 for n in enzymemap[key]:
                     s = " ".join((s, n))
                 k = key % 60
-                lineo = Join((line[0:(k - 1)], str(key), s, "\n"))
-                line = Join((line[0:(k - 1)], a, line[k:]))
-                line2 = Join((line[0:(k - 1)], a, line[k:], "\n"))
+                lineo = Join((line[0 : (k - 1)], str(key), s, "\n"))
+                line = Join((line[0 : (k - 1)], a, line[k:]))
+                line2 = Join((line[0 : (k - 1)], a, line[k:], "\n"))
                 linetot = Join((lineo, line2))
                 map = Join((map, linetot))
-            mapunit = "\n".join((sequence[counter: base], a * 60,
-                                 revsequence[counter: base],
-                                 Join((str.ljust(str(counter + 1), 15),
-                                       " " * 30, str.rjust(str(base), 15),
-                                       "\n\n"))
-                                 ))
+            mapunit = "\n".join(
+                (
+                    sequence[counter:base],
+                    a * 60,
+                    revsequence[counter:base],
+                    Join(
+                        (
+                            str.ljust(str(counter + 1), 15),
+                            " " * 30,
+                            str.rjust(str(base), 15),
+                            "\n\n",
+                        )
+                    ),
+                )
+            )
             map = Join((map, mapunit))
         line = " " * 60
         for key in cutloc[base]:
@@ -414,7 +422,7 @@ class PrintFormat(object):
             if key == length:
                 for n in enzymemap[key]:
                     s = Join((s, " ", n))
-                chunk = line[0:(length - 1)]
+                chunk = line[0 : (length - 1)]
                 lineo = Join((chunk, str(key), s, "\n"))
                 line2 = Join((chunk, a, "\n"))
                 linetot = Join((lineo, line2))
@@ -423,22 +431,32 @@ class PrintFormat(object):
             for n in enzymemap[key]:
                 s = Join((s, " ", n))
             k = key % 60
-            lineo = Join((line[0:(k - 1)], str(key), s, "\n"))
-            line = Join((line[0:(k - 1)], a, line[k:]))
-            line2 = Join((line[0:(k - 1)], a, line[k:], "\n"))
+            lineo = Join((line[0 : (k - 1)], str(key), s, "\n"))
+            line = Join((line[0 : (k - 1)], a, line[k:]))
+            line2 = Join((line[0 : (k - 1)], a, line[k:], "\n"))
             linetot = Join((lineo, line2))
             map = Join((map, linetot))
         mapunit = ""
-        mapunit = Join((sequence[base: length], "\n"))
+        mapunit = Join((sequence[base:length], "\n"))
         mapunit = Join((mapunit, a * (length - base), "\n"))
         mapunit = Join((mapunit, revsequence[base:length], "\n"))
-        mapunit = Join((mapunit, Join((str.ljust(str(base + 1), 15), " " * (
-            length - base - 30), str.rjust(str(length), 15),
-            "\n\n"))))
+        mapunit = Join(
+            (
+                mapunit,
+                Join(
+                    (
+                        str.ljust(str(base + 1), 15),
+                        " " * (length - base - 30),
+                        str.rjust(str(length), 15),
+                        "\n\n",
+                    )
+                ),
+            )
+        )
         map = Join((map, mapunit))
         return map
 
-# private method to do lists:
+    # private method to do lists:
 
     def __next_section(self, ls, into):
         """Next section (PRIVATE).
@@ -471,6 +489,7 @@ class PrintFormat(object):
                 stringsite = indentation.join(output)
             else:
                 stringsite = output
-            into = Join((into, str(name).ljust(self.NameWidth), " :  ",
-                         stringsite, "\n"))
+            into = Join(
+                (into, str(name).ljust(self.NameWidth), " :  ", stringsite, "\n")
+            )
         return into

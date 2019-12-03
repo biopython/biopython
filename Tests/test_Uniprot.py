@@ -221,7 +221,7 @@ class TestUniprot(unittest.TestCase):
                           "muscle system."])
         self.assertEqual(seq_record.annotations["comment_induction"],
                          ["Repressed in presence of fatty acids. Repressed "
-                          "3-fold by ""lipid precursors, inositol and "
+                          "3-fold by lipid precursors, inositol and "
                           "choline, and also controlled by regulatory "
                           "factors INO2, INO4 and OPI1."])
         self.assertEqual(seq_record.annotations["comment_interaction_intactId"],

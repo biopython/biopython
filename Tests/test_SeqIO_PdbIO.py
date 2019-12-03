@@ -117,12 +117,14 @@ def AtomTestGenerator(extension, parser):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", PDBConstructionWarning)
                 chains = list(SeqIO.parse("PDB/2XHE." + extension, parser))
-            actual_seq = "DRLSRLRQMAAENQXXXXXXXXXXXXXXXXXXXXXXXPEPFMADFFNRVK"\
-                         "RIRDNIEDIEQAIEQVAQLHTESLVAVSKEDRDRLNEKLQDTMARISALG"\
-                         "NKIRADLKQIEKENKRAQQEGTFEDGTVSTDLRIRQSQHSSLSRKFVKVM"\
-                         "TRYNDVQAENKRRYGENVARQCRVVEPSLSDDAIQKVIEHGXXXXXXXXX"\
-                         "XXXXXXXXNEIRDRHKDIQQLERSLLELHEMFTDMSTLVASQGEMIDRIE"\
-                         "FSVEQSHNYV"
+            actual_seq = (
+                "DRLSRLRQMAAENQXXXXXXXXXXXXXXXXXXXXXXXPEPFMADFFNRVK"
+                "RIRDNIEDIEQAIEQVAQLHTESLVAVSKEDRDRLNEKLQDTMARISALG"
+                "NKIRADLKQIEKENKRAQQEGTFEDGTVSTDLRIRQSQHSSLSRKFVKVM"
+                "TRYNDVQAENKRRYGENVARQCRVVEPSLSDDAIQKVIEHGXXXXXXXXX"
+                "XXXXXXXXNEIRDRHKDIQQLERSLLELHEMFTDMSTLVASQGEMIDRIE"
+                "FSVEQSHNYV"
+            )
             self.assertEqual(str(chains[1].seq), actual_seq)
 
         def test_atom_read(self):
