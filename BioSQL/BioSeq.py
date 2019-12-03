@@ -191,7 +191,7 @@ def _retrieve_seq_len(adaptor, primary_id):
     if not seqs:
         return None
     assert len(seqs) == 1
-    given_length, = seqs[0]
+    (given_length,) = seqs[0]
     return int(given_length)
 
 
