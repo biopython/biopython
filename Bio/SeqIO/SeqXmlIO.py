@@ -69,7 +69,9 @@ class ContentHandler(handler.ContentHandler):
                 elif localname == "seqXMLversion":
                     self.seqXMLversion = value
                 elif localname == "ncbiTaxID":
-                    self.ncbiTaxID = int(value)
+                    # check if it is an integer, but store as string
+                    number = int(value)
+                    self.ncbiTaxID = value
                 elif localname == "speciesName":
                     self.speciesName = value
                 else:
@@ -168,7 +170,9 @@ class ContentHandler(handler.ContentHandler):
                 if localname == "name":
                     name = value
                 elif localname == "ncbiTaxID":
-                    ncbiTaxID = int(value)
+                    # check if it is an integer, but store as string
+                    number = int(value)
+                    ncbiTaxID = value
                 else:
                     raise ValueError("Unexpected attribute '%s' found in species tag", key)
             else:
@@ -378,6 +382,8 @@ class SeqXmlIterator(object):
         self.seqXMLversion = seqXMLversion
         self.source = content_handler.source
         self.sourceVersion = content_handler.sourceVersion
+        self.ncbiTaxID = content_handler.ncbiTaxID
+        self.speciesName = content_handler.speciesName
 
     def __iter__(self):
         return self
