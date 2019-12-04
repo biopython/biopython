@@ -285,7 +285,7 @@ def PdbAtomIterator(handle):
 
     with as_handle(handle, "rU") as handle:
         struct = PDBParser().get_structure(None, handle)
-        pdb_id = struct.header['idcode']
+        pdb_id = struct.header["idcode"]
         if not pdb_id:
             warnings.warn(
                 "'HEADER' line not found; can't determine PDB ID.",
