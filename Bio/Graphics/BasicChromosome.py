@@ -71,7 +71,7 @@ class _ChromosomeComponent(Widget):
         """Add a sub_component to the list of components under this item."""
         if not isinstance(component, _ChromosomeComponent):
             raise TypeError(
-                "Expected a _ChromosomeComponent " "object, got %s" % component
+                "Expected a _ChromosomeComponent object, got %s" % component
             )
 
         self._sub_components.append(component)
