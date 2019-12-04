@@ -49,11 +49,13 @@ except AttributeError:
     if not hasattr(ElementTree, "_namespace_map"):
         # cElementTree needs the pure-Python xml.etree.ElementTree
         from xml.etree import ElementTree as ET_py
+
         ElementTree._namespace_map = ET_py._namespace_map
 
     def register_namespace(prefix, uri):
         """Set NameSpace map."""
         ElementTree._namespace_map[uri] = prefix
+
 
 for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
@@ -66,7 +68,7 @@ def qUri(s):
 
 def cdao_to_obo(s):
     """Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI."""
-    return "obo:%s" % cdao_elements[s[len("cdao:"):]]
+    return "obo:%s" % cdao_elements[s[len("cdao:") :]]
 
 
 def matches(s):
@@ -85,6 +87,7 @@ class NeXMLError(Exception):
 
 # ---------------------------------------------------------
 # Public API
+
 
 def parse(handle, **kwargs):
     """Iterate over the trees in a NeXML file handle.
@@ -106,6 +109,7 @@ def write(trees, handle, plain=False, **kwargs):
 
 # ---------------------------------------------------------
 # Input
+
 
 class Parser(object):
     """Parse a NeXML tree given a file handle.
@@ -178,7 +182,9 @@ class Parser(object):
                     node_children[src].add(tar)
                     if "length" in edge.attrib:
                         node_dict[tar]["branch_length"] = float(edge.attrib["length"])
-                    if "property" in edge.attrib and edge.attrib["property"] in matches("cdao:has_Support_Value"):
+                    if "property" in edge.attrib and edge.attrib["property"] in matches(
+                        "cdao:has_Support_Value"
+                    ):
                         node_dict[tar]["confidence"] = float(edge.attrib["content"])
 
                     for child in edge.getchildren():
@@ -189,14 +195,18 @@ class Parser(object):
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
                     rooted = False
-                    possible_roots = (node.attrib["id"] for node in nodes
-                                      if node.attrib["id"] in srcs and
-                                      node.attrib["id"] not in tars)
+                    possible_roots = (
+                        node.attrib["id"]
+                        for node in nodes
+                        if node.attrib["id"] in srcs and node.attrib["id"] not in tars
+                    )
                     root = next(possible_roots)
                 else:
                     rooted = True
 
-                yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
+                yield NeXML.Tree(
+                    root=self._make_tree(root, node_dict, node_children), rooted=rooted
+                )
 
     @classmethod
     def _make_tree(cls, node, node_dict, children):
@@ -210,10 +220,12 @@ class Parser(object):
         clade = NeXML.Clade(**this_node)
 
         if node in children:
-            clade.clades = [cls._make_tree(child, node_dict, children)
-                            for child in children[node]]
+            clade.clades = [
+                cls._make_tree(child, node_dict, children) for child in children[node]
+            ]
 
         return clade
+
 
 # ---------------------------------------------------------
 # Output
@@ -249,17 +261,22 @@ class Writer(object):
         for prefix, uri in NAMESPACES.items():
             root_node.set("xmlns:%s" % prefix, uri)
 
-        otus = ElementTree.SubElement(root_node, "otus",
-                                      **{"id": "tax", "label": "RootTaxaBlock"})
+        otus = ElementTree.SubElement(
+            root_node, "otus", **{"id": "tax", "label": "RootTaxaBlock"}
+        )
 
         # create trees
-        trees = ElementTree.SubElement(root_node, "trees",
-                                       **{"id": "Trees", "label": "TreesBlockFromXML", "otus": "tax"})
+        trees = ElementTree.SubElement(
+            root_node,
+            "trees",
+            **{"id": "Trees", "label": "TreesBlockFromXML", "otus": "tax"}
+        )
         count = 0
         tus = set()
         for tree in self.trees:
-            this_tree = ElementTree.SubElement(trees, "tree",
-                                               **{"id": self.new_label("tree")})
+            this_tree = ElementTree.SubElement(
+                trees, "tree", **{"id": self.new_label("tree")}
+            )
 
             first_clade = tree.clade
             tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
@@ -310,16 +327,20 @@ class Writer(object):
         if parent is not None:
             edge_id = self.new_label("edge")
             attrib = {
-                "id": edge_id, "source": parent.node_id, "target": node_id,
+                "id": edge_id,
+                "source": parent.node_id,
+                "target": node_id,
                 "length": str(clade.branch_length),
                 "typeof": convert_uri("cdao:Edge"),
             }
             if hasattr(clade, "confidence") and clade.confidence is not None:
-                attrib.update({
-                    "property": convert_uri("cdao:has_Support_Value"),
-                    "datatype": "xsd:float",
-                    "content": "%1.2f" % clade.confidence,
-                })
+                attrib.update(
+                    {
+                        "property": convert_uri("cdao:has_Support_Value"),
+                        "datatype": "xsd:float",
+                        "content": "%1.2f" % clade.confidence,
+                    }
+                )
             node = ElementTree.SubElement(tree, "edge", **attrib)
 
         if not clade.is_terminal():

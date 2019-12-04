@@ -14,13 +14,7 @@ This API follows the same semantics as Biopython's ``SeqIO`` and
 from __future__ import print_function
 
 from Bio import File
-from Bio.Phylo import (
-    BaseTree,
-    NewickIO,
-    NexusIO,
-    PhyloXMLIO,
-    NeXMLIO,
-)
+from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, NeXMLIO
 
 supported_formats = {
     "newick": NewickIO,
@@ -31,6 +25,7 @@ supported_formats = {
 
 try:
     from Bio.Phylo import CDAOIO
+
     supported_formats["cdao"] = CDAOIO
 except ImportError:
     pass
@@ -72,8 +67,7 @@ def read(file, format, **kwargs):
     except StopIteration:
         return tree
     else:
-        raise ValueError(
-            "There are multiple trees in this file; use parse() instead.")
+        raise ValueError("There are multiple trees in this file; use parse() instead.")
 
 
 def write(trees, file, format, **kwargs):

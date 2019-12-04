@@ -49,12 +49,14 @@ def parse(handle):
             name=node.data.taxon,
             clades=subclades,
             confidence=node.data.support,
-            comment=node.data.comment)
+            comment=node.data.comment,
+        )
 
     for nxtree in nex.trees:
         newroot = node2clade(nxtree, nxtree.node(nxtree.root))
-        yield Newick.Tree(root=newroot, rooted=nxtree.rooted, name=nxtree.name,
-                          weight=nxtree.weight)
+        yield Newick.Tree(
+            root=newroot, rooted=nxtree.rooted, name=nxtree.name, weight=nxtree.weight
+        )
 
 
 def write(obj, handle, **kwargs):
@@ -65,10 +67,12 @@ def write(obj, handle, **kwargs):
     """
     trees = list(obj)
     writer = NewickIO.Writer(trees)
-    nexus_trees = [TREE_TEMPLATE % {"index": idx + 1, "tree": nwk}
-                   for idx, nwk in enumerate(
-        writer.to_strings(plain=False, plain_newick=True,
-                          **kwargs))]
+    nexus_trees = [
+        TREE_TEMPLATE % {"index": idx + 1, "tree": nwk}
+        for idx, nwk in enumerate(
+            writer.to_strings(plain=False, plain_newick=True, **kwargs)
+        )
+    ]
     tax_labels = [str(x.name) for x in chain(*(t.get_terminals() for t in trees))]
     text = NEX_TEMPLATE % {
         "count": len(tax_labels),

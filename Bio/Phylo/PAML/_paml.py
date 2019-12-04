@@ -23,8 +23,7 @@ class PamlError(EnvironmentError):
 class Paml(object):
     """Base class for wrapping PAML commands."""
 
-    def __init__(self, alignment=None, working_dir=None,
-                 out_file=None):
+    def __init__(self, alignment=None, working_dir=None, out_file=None):
         """Initialize the class."""
         if working_dir is None:
             self.working_dir = os.getcwd()
@@ -83,8 +82,7 @@ class Paml(object):
         if self.working_dir is not None:
             self._rel_working_dir = os.path.relpath(self.working_dir)
         if self.alignment is not None:
-            self._rel_alignment = os.path.relpath(self.alignment,
-                                                  self.working_dir)
+            self._rel_alignment = os.path.relpath(self.alignment, self.working_dir)
         if self.out_file is not None:
             self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 
@@ -130,8 +128,10 @@ class Paml(object):
             # If the program fails for any reason
             raise PamlError(
                 "%s has failed (return code %i). Run with verbose = True to view error message"
-                % (command, result_code))
+                % (command, result_code)
+            )
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError("The %s process was killed (return code %i)."
-                                   % (command, result_code))
+            raise EnvironmentError(
+                "The %s process was killed (return code %i)." % (command, result_code)
+            )
