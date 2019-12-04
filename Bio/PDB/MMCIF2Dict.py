@@ -105,7 +105,9 @@ class MMCIF2Dict(dict):
             raise ValueError("Line ended with quote open: " + line)
 
     def _tokenize(self, handle):
+        empty = True
         for line in handle:
+            empty = False
             if line.startswith("#"):
                 continue
             elif line.startswith(";"):
@@ -122,3 +124,5 @@ class MMCIF2Dict(dict):
             else:
                 for token in self._splitline(line.strip()):
                     yield token
+        if empty:
+            raise ValueError("Empty file.")
