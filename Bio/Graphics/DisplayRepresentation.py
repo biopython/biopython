@@ -20,13 +20,15 @@ from Bio.Graphics.BasicChromosome import TelomereSegment
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV
-RAINBOW_COLORS = {(1, 1): colors.violet,
-                  (2, 2): colors.indigo,
-                  (3, 3): colors.blue,
-                  (4, 4): colors.green,
-                  (5, 5): colors.yellow,
-                  (6, 6): colors.orange,
-                  (7, 20): colors.red}
+RAINBOW_COLORS = {
+    (1, 1): colors.violet,
+    (2, 2): colors.indigo,
+    (3, 3): colors.blue,
+    (4, 4): colors.green,
+    (5, 5): colors.yellow,
+    (6, 6): colors.orange,
+    (7, 20): colors.red,
+}
 
 
 class ChromosomeCounts(object):
@@ -86,8 +88,9 @@ class ChromosomeCounts(object):
         are instead counts divided by some number.
         """
         try:
-            self._count_info[segment_name] = \
-                float(self._count_info[segment_name]) / float(scale_value)
+            self._count_info[segment_name] = float(
+                self._count_info[segment_name]
+            ) / float(scale_value)
         except KeyError:
             raise KeyError("Segment name %s not found." % segment_name)
 
@@ -125,8 +128,7 @@ class ChromosomeCounts(object):
         order_info = []
 
         for seg_name in self._names:
-            order_info.append((self._count_info[seg_name],
-                               self._label_info[seg_name]))
+            order_info.append((self._count_info[seg_name], self._label_info[seg_name]))
 
         return order_info
 
@@ -182,5 +184,4 @@ class ChromosomeCounts(object):
                 return self._color_scheme[(count_start, count_end)]
 
         # if we got here we didn't find a color for the count
-        raise ValueError("Count value %s was not found in the color scheme."
-                         % count)
+        raise ValueError("Count value %s was not found in the color scheme." % count)

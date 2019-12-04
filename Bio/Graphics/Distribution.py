@@ -62,18 +62,19 @@ class DistributionPage(object):
         self._draw_title(cur_drawing, title, width, height)
 
         # calculate the x and y position changes for each distribution
-        cur_x_pos = inch * .5
-        end_x_pos = width - inch * .5
+        cur_x_pos = inch * 0.5
+        end_x_pos = width - inch * 0.5
         cur_y_pos = height - 1.5 * inch
-        end_y_pos = .5 * inch
-        x_pos_change = ((end_x_pos - cur_x_pos) /
-                        float(self.number_of_columns))
-        num_y_rows = math.ceil(float(len(self.distributions)) /
-                               float(self.number_of_columns))
+        end_y_pos = 0.5 * inch
+        x_pos_change = (end_x_pos - cur_x_pos) / float(self.number_of_columns)
+        num_y_rows = math.ceil(
+            float(len(self.distributions)) / float(self.number_of_columns)
+        )
         y_pos_change = (cur_y_pos - end_y_pos) / num_y_rows
 
-        self._draw_distributions(cur_drawing, cur_x_pos, x_pos_change,
-                                 cur_y_pos, y_pos_change, num_y_rows)
+        self._draw_distributions(
+            cur_drawing, cur_x_pos, x_pos_change, cur_y_pos, y_pos_change, num_y_rows
+        )
         self._draw_legend(cur_drawing, 2.5 * inch, width)
 
         return _write(cur_drawing, output_file, self.output_format)
@@ -87,8 +88,15 @@ class DistributionPage(object):
 
         cur_drawing.add(title_string)
 
-    def _draw_distributions(self, cur_drawing, start_x_pos, x_pos_change,
-                            start_y_pos, y_pos_change, num_y_drawings):
+    def _draw_distributions(
+        self,
+        cur_drawing,
+        start_x_pos,
+        x_pos_change,
+        start_y_pos,
+        y_pos_change,
+        num_y_drawings,
+    ):
         """Draw all of the distributions on the page (PRIVATE).
 
         Arguments:
@@ -104,10 +112,10 @@ class DistributionPage(object):
         for y_drawing in range(int(num_y_drawings)):
             # if we are on the last y position, we may not be able
             # to fill all of the x columns
-            if (y_drawing + 1) * self.number_of_columns > \
-               len(self.distributions):
-                num_x_drawings = len(self.distributions) - \
-                                 y_drawing * self.number_of_columns
+            if (y_drawing + 1) * self.number_of_columns > len(self.distributions):
+                num_x_drawings = (
+                    len(self.distributions) - y_drawing * self.number_of_columns
+                )
             else:
                 num_x_drawings = self.number_of_columns
             for x_drawing in range(num_x_drawings):
@@ -121,8 +129,7 @@ class DistributionPage(object):
                 y_pos = end_y_pos - y_pos_change
 
                 # draw the distribution
-                cur_distribution.draw(cur_drawing, x_pos, y_pos, end_x_pos,
-                                      end_y_pos)
+                cur_distribution.draw(cur_drawing, x_pos, y_pos, end_x_pos, end_y_pos)
 
     def _draw_legend(self, cur_drawing, start_y, width):
         """Add a legend to the figure (PRIVATE).
@@ -159,13 +166,13 @@ class BarChartDistribution(object):
         """Draw a bar chart with the info in the specified range."""
         bar_chart = VerticalBarChart()
         if self.chart_title:
-            self._draw_title(cur_drawing, self.chart_title,
-                             start_x, start_y, end_x, end_y)
+            self._draw_title(
+                cur_drawing, self.chart_title, start_x, start_y, end_x, end_y
+            )
         # set the position of the bar chart
-        x_start, x_end, y_start, y_end = self._determine_position(start_x,
-                                                                  start_y,
-                                                                  end_x,
-                                                                  end_y)
+        x_start, x_end, y_start, y_end = self._determine_position(
+            start_x, start_y, end_x, end_y
+        )
 
         bar_chart.x = x_start
         bar_chart.y = y_start
