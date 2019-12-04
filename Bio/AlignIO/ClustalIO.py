@@ -172,8 +172,7 @@ class ClustalIterator(AlignmentIterator):
                         )
                     if len(fields[1].replace("-", "")) != letters:
                         raise ValueError(
-                            "Could not parse line, "
-                            "invalid sequence number:\n%s" % line
+                            "Could not parse line, invalid sequence number:\n%s" % line
                         )
             elif line[0] == " ":
                 # Sequence consensus line...
@@ -234,8 +233,8 @@ class ClustalIterator(AlignmentIterator):
 
                 if fields[0] != ids[i]:
                     raise ValueError(
-                        "Identifiers out of order? "
-                        "Got '%s' but expected '%s'" % (fields[0], ids[i])
+                        "Identifiers out of order? Got '%s' but expected '%s'"
+                        % (fields[0], ids[i])
                     )
 
                 if fields[1] != line[seq_cols]:
@@ -260,8 +259,7 @@ class ClustalIterator(AlignmentIterator):
                         )
                     if len(seqs[i].replace("-", "")) != letters:
                         raise ValueError(
-                            "Could not parse line, "
-                            "invalid sequence number:\n%s" % line
+                            "Could not parse line, invalid sequence number:\n%s" % line
                         )
 
                 # Read in the next line
@@ -286,8 +284,8 @@ class ClustalIterator(AlignmentIterator):
             and self.records_per_alignment != len(ids)
         ):
             raise ValueError(
-                "Found %i records in this alignment, "
-                "told to expect %i" % (len(ids), self.records_per_alignment)
+                "Found %i records in this alignment, told to expect %i"
+                % (len(ids), self.records_per_alignment)
             )
 
         records = (

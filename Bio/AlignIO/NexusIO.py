@@ -116,8 +116,7 @@ class NexusWriter(AlignmentWriter):
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
         minimal_record = (
-            "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; "
-            + "format datatype=%s; end;"
+            "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=%s; end;"
             % self._classify_alphabet_for_nexus(alignment._alphabet)
         )
         n = Nexus.Nexus(minimal_record)

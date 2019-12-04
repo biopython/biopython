@@ -101,8 +101,8 @@ class PhylipWriter(SequentialAlignmentWriter):
             name = sanitize_name(record.id, id_width)
             if name in names:
                 raise ValueError(
-                    "Repeated name %r (originally %r), "
-                    "possibly due to truncation" % (name, record.id)
+                    "Repeated name %r (originally %r), possibly due to truncation"
+                    % (name, record.id)
                 )
             names.append(name)
             sequence = str(record.seq)
@@ -217,8 +217,8 @@ class PhylipIterator(AlignmentIterator):
             and self.records_per_alignment != number_of_seqs
         ):
             raise ValueError(
-                "Found %i records in this alignment, "
-                "told to expect %i" % (number_of_seqs, self.records_per_alignment)
+                "Found %i records in this alignment, told to expect %i"
+                % (number_of_seqs, self.records_per_alignment)
             )
 
         ids = []
@@ -331,8 +331,8 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             name = sanitize_name(record.id, id_width)
             if name in names:
                 raise ValueError(
-                    "Repeated name %r (originally %r), "
-                    "possibly due to truncation" % (name, record.id)
+                    "Repeated name %r (originally %r), possibly due to truncation"
+                    % (name, record.id)
                 )
             names.append(name)
 
@@ -397,8 +397,8 @@ class SequentialPhylipIterator(PhylipIterator):
             and self.records_per_alignment != number_of_seqs
         ):
             raise ValueError(
-                "Found %i records in this alignment, "
-                "told to expect %i" % (number_of_seqs, self.records_per_alignment)
+                "Found %i records in this alignment, told to expect %i"
+                % (number_of_seqs, self.records_per_alignment)
             )
 
         ids = []
