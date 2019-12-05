@@ -328,6 +328,7 @@ class align:
                   "of the gap.  They should return a gap penalty."),
         }
 
+
         def __init__(self, name):
             """Check to make sure the name of the function is reasonable."""
             if name.startswith("global"):
@@ -381,6 +382,31 @@ alignment occurs.
             to this function into forms appropriate for _align.
             """
             keywds = keywds.copy()
+
+            # Replace possible "keywords" with arguments:
+            """
+            for n, name in enumerate(self.param_names):
+                if name in keywds:
+                    args = args[:n] + (keywds[name],) + args[n:]
+                    del keywds[name]
+            """
+            for key in keywds.copy():
+                if key in self.param_names:
+                    _index = self.param_names.index(key)
+                    args = args[:_index] + (keywds[key],) + args[_index:]
+                    del keywds[key]
+                elif key not in ("penalize_extend_when_opening",
+                                 "penalize_end_gaps",
+                                 "align_globally",
+                                 "gap_char",
+                                 "force_generic",
+                                 "score_only",
+                                 "one_alignment_only"):
+                    raise ValueError("unknown parameter %r"
+                                     % key)
+                    
+            print(self.param_names)
+            print(args, keywds)
             if len(args) != len(self.param_names):
                 raise TypeError("%s takes exactly %d argument (%d given)"
                                 % (self.function_name, len(self.param_names),
