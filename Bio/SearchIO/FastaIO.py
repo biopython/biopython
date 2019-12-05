@@ -349,8 +349,8 @@ class FastaM10Parser(object):
                 if qres_state == state_QRES_HITTAB:
                     # parse hit table if flag is set
                     hit_rows = self.__parse_hit_table()
-                    self.line = self.handle.readline()
-                    line = self.line
+                    line = self.handle.readline()
+                    self.line = line
 
                 elif qres_state == state_QRES_END:
                     yield _set_qresult_hits(qresult, hit_rows)
@@ -360,7 +360,7 @@ class FastaM10Parser(object):
                     # if qresult is filled, yield it first
                     if qresult is not None:
                         yield _set_qresult_hits(qresult, hit_rows)
-                    regx = re.search(_RE_ID_DESC_SEQLEN, self.line)
+                    regx = re.search(_RE_ID_DESC_SEQLEN, line)
                     query_id = regx.group(1)
                     seq_len = regx.group(3)
                     desc = regx.group(2)
@@ -375,11 +375,11 @@ class FastaM10Parser(object):
                     # set values from preamble
                     for key, value in self._preamble.items():
                         setattr(qresult, key, value)
-                    self.line = self.handle.readline()
-                    line = self.line
+                    line = self.handle.readline()
+                    self.line = line
 
                 elif qres_state == state_QRES_CONTENT:
-                    assert self.line[3:].startswith(qresult.id), self.line
+                    assert line[3:].startswith(qresult.id), line
                     for hit, strand in self._parse_hit(query_id):
                         # HACK: re-set desc, for hsp hit and query description
                         hit.description = hit.description
@@ -397,8 +397,8 @@ class FastaM10Parser(object):
                     line = self.line
 
             else:
-                self.line = self.handle.readline()
-                line = self.line
+                line = self.handle.readline()
+                self.line = line
 
 
     def _parse_hit(self, query_id):
