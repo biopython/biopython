@@ -184,7 +184,7 @@ class PlateRecord(object):
         # Value should be of WellRecord type
         if not isinstance(obj, WellRecord):
             raise ValueError(
-                "A WellRecord type object is needed as value" + " (got %s)" % type(obj)
+                "A WellRecord type object is needed as value (got %s)" % type(obj)
             )
 
     def __getitem__(self, index):
