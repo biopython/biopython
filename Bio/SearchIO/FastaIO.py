@@ -350,7 +350,6 @@ class FastaM10Parser(object):
                     # parse hit table if flag is set
                     hit_rows = self.__parse_hit_table()
                     line = self.handle.readline()
-                    self.line = line
 
                 elif qres_state == state_QRES_END:
                     yield _set_qresult_hits(qresult, hit_rows)
@@ -368,7 +367,6 @@ class FastaM10Parser(object):
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
                     line = self.handle.readline()
-                    self.line = line
                     qresult.target = [x for x in line.split(" ") if x][1].strip()
                     if desc is not None:
                         qresult.description = desc
@@ -376,7 +374,6 @@ class FastaM10Parser(object):
                     for key, value in self._preamble.items():
                         setattr(qresult, key, value)
                     line = self.handle.readline()
-                    self.line = line
 
                 elif qres_state == state_QRES_CONTENT:
                     assert line[3:].startswith(qresult.id), line
@@ -398,14 +395,15 @@ class FastaM10Parser(object):
 
             else:
                 line = self.handle.readline()
-                self.line = line
+
+        self.line = line
 
 
     def _parse_hit(self, query_id):
         """Parse hit on query identifier (PRIVATE)."""
         while True:
-            self.line = self.handle.readline()
-            if self.line.startswith(">>"):
+            line = self.handle.readline()
+            if line.startswith(">>"):
                 break
 
         state = _STATE_NONE
@@ -416,7 +414,6 @@ class FastaM10Parser(object):
         hit_desc = None
         seq_len = None
         while True:
-            line = self.line
             # yield hit if we've reached the start of a new query or
             # the end of the search
             self.line = self.handle.readline()
@@ -528,7 +525,7 @@ class FastaM10Parser(object):
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % line)
-
+            line = self.line
 
 
 class FastaM10Indexer(SearchIndexer):
