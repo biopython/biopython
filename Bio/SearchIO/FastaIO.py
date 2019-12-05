@@ -309,7 +309,7 @@ class FastaM10Parser(object):
             line = self.handle.readline()
             if (not line) or line.strip():
                 break
-            hit_rows.append('')
+            hit_rows.append("")
         self.line = line
         return hit_rows
 
@@ -396,7 +396,6 @@ class FastaM10Parser(object):
                 line = self.handle.readline()
 
         self.line = line
-
 
     def _parse_hit(self, query_id):
         """Parse hit on query identifier (PRIVATE)."""
