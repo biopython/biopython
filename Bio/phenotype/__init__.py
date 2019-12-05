@@ -94,18 +94,20 @@ from . import phen_micro
 import warnings
 
 
-warnings.warn("Bio.phenotype is an experimental submodule which may undergo "
-              "significant changes prior to its future official release.",
-              BiopythonExperimentalWarning)
+warnings.warn(
+    "Bio.phenotype is an experimental submodule which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
 
 # Convention for format names is "mainname-format" in lower case.
 
-_FormatToIterator = {"pm-csv": phen_micro.CsvIterator,
-                     "pm-json": phen_micro.JsonIterator,
-                     }
+_FormatToIterator = {
+    "pm-csv": phen_micro.CsvIterator,
+    "pm-json": phen_micro.JsonIterator,
+}
 
-_FormatToWriter = {"pm-json": phen_micro.JsonWriter,
-                   }
+_FormatToWriter = {"pm-json": phen_micro.JsonWriter}
 
 
 def write(plates, handle, format):
@@ -140,9 +142,11 @@ def write(plates, handle, format):
             raise ValueError("Unknown format '%s'" % format)
 
         if not isinstance(count, int):
-            raise TypeError("Internal error - the underlying %s "
-                            "writer should have returned the record count, "
-                            "not %s" % (format, repr(count)))
+            raise TypeError(
+                "Internal error - the underlying %s "
+                "writer should have returned the record count, not %s"
+                % (format, repr(count))
+            )
 
     return count
 
