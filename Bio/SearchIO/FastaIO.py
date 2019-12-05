@@ -327,17 +327,19 @@ class FastaM10Parser(object):
 
         while True:
 
+            line = self.line
+
             # one line before the hit table
-            if self.line.startswith("The best scores are:"):
+            if line.startswith("The best scores are:"):
                 qres_state = state_QRES_HITTAB
             # the end of a query or the file altogether
-            elif self.line.strip() == ">>>///" or not self.line:
+            elif line.strip() == ">>>///" or not line:
                 qres_state = state_QRES_END
             # the beginning of a new query
-            elif not self.line.startswith(">>>") and ">>>" in self.line:
+            elif not line.startswith(">>>") and ">>>" in line:
                 qres_state = state_QRES_NEW
             # the beginning of the query info and its hits + hsps
-            elif self.line.startswith(">>>") and not self.line.strip() == ">>><<<":
+            elif line.startswith(">>>") and not line.strip() == ">>><<<":
                 qres_state = state_QRES_CONTENT
             # default qres mark
             else:
