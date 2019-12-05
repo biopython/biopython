@@ -345,6 +345,7 @@ class FastaM10Parser(object):
                 if qres_state == state_QRES_HITTAB:
                     # parse hit table if flag is set
                     hit_rows = self.__parse_hit_table()
+                    self.line = self.handle.readline()
 
                 elif qres_state == state_QRES_END:
                     yield _set_qresult_hits(qresult, hit_rows)
@@ -368,6 +369,7 @@ class FastaM10Parser(object):
                     # set values from preamble
                     for key, value in self._preamble.items():
                         setattr(qresult, key, value)
+                    self.line = self.handle.readline()
 
                 elif qres_state == state_QRES_CONTENT:
                     assert self.line[3:].startswith(qresult.id), self.line
@@ -386,7 +388,8 @@ class FastaM10Parser(object):
                                 assert strand != hsp.query_strand
                                 qresult[hit.id].append(hsp)
 
-            self.line = self.handle.readline()
+            else:
+                self.line = self.handle.readline()
 
     def _parse_hit(self, query_id):
         """Parse hit on query identifier (PRIVATE)."""
@@ -421,6 +424,7 @@ class FastaM10Parser(object):
                 hit.seq_len = seq_len
                 yield hit, strand
                 hsp_list = []
+                self.line = self.handle.readline()
                 break
             # yield hit and create a new one if we're still in the same query
             elif self.line.startswith(">>"):
