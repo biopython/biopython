@@ -17,16 +17,18 @@ class MultiGraph(object):
 
     def __init__(self, nodes=()):
         """Initialize a new MultiGraph object."""
-        self._adjacency_list = {}    # maps parent -> set of (child, label) pairs
+        self._adjacency_list = {}  # maps parent -> set of (child, label) pairs
         for n in nodes:
             self._adjacency_list[n] = set()
-        self._label_map = {}         # maps label -> set of (parent, child) pairs
+        self._label_map = {}  # maps label -> set of (parent, child) pairs
 
     def __eq__(self, g):
         """Return true if g is equal to this graph."""
-        return (isinstance(g, MultiGraph)
-                and self._adjacency_list == g._adjacency_list
-                and self._label_map == g._label_map)
+        return (
+            isinstance(g, MultiGraph)
+            and self._adjacency_list == g._adjacency_list
+            and self._label_map == g._label_map
+        )
 
     def __ne__(self, g):
         """Return true if g is not equal to this graph."""
@@ -43,13 +45,19 @@ class MultiGraph(object):
     def __str__(self):
         """Return a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x, y: x + y,
-                         [len(v) for v in self._adjacency_list.values()])
+        edgenum = reduce(
+            lambda x, y: x + y, [len(v) for v in self._adjacency_list.values()]
+        )
         labelnum = len(self._label_map)
-        return "<MultiGraph: " + \
-               str(nodenum) + " node(s), " + \
-               str(edgenum) + " edge(s), " + \
-               str(labelnum) + " unique label(s)>"
+        return (
+            "<MultiGraph: "
+            + str(nodenum)
+            + " node(s), "
+            + str(edgenum)
+            + " edge(s), "
+            + str(labelnum)
+            + " unique label(s)>"
+        )
 
     def add_node(self, node):
         """Add a node to this graph."""
@@ -115,12 +123,14 @@ class MultiGraph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list:
-            self._adjacency_list[n] = {x for x in self._adjacency_list[n]
-                                       if x[0] != node}
+            self._adjacency_list[n] = {
+                x for x in self._adjacency_list[n] if x[0] != node
+            }
         # remove all referring pairs in label map
         for label in list(self._label_map.keys()):  # we're editing this!
-            lm = {x for x in self._label_map[label]
-                  if (x[0] != node) and (x[1] != node)}
+            lm = {
+                x for x in self._label_map[label] if (x[0] != node) and (x[1] != node)
+            }
             # remove the entry completely if the label is now unused
             if lm:
                 self._label_map[label] = lm
@@ -131,6 +141,7 @@ class MultiGraph(object):
         """Remove edge (NOT IMPLEMENTED)."""
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
+
 
 # auxiliary graph functions
 

@@ -16,18 +16,20 @@ class Graph(object):
 
     def __init__(self, nodes=()):
         """Initialize a new Graph object."""
-        self._adjacency_list = {}    # maps parent -> set of child objects
+        self._adjacency_list = {}  # maps parent -> set of child objects
         for n in nodes:
             self._adjacency_list[n] = set()
-        self._label_map = {}         # maps label -> set of (parent, child) pairs
-        self._edge_map = {}          # maps (parent, child) pair -> label
+        self._label_map = {}  # maps label -> set of (parent, child) pairs
+        self._edge_map = {}  # maps (parent, child) pair -> label
 
     def __eq__(self, g):
         """Return true if g is equal to this graph."""
-        return (isinstance(g, Graph)
-                and self._adjacency_list == g._adjacency_list
-                and self._label_map == g._label_map
-                and self._edge_map == g._edge_map)
+        return (
+            isinstance(g, Graph)
+            and self._adjacency_list == g._adjacency_list
+            and self._label_map == g._label_map
+            and self._edge_map == g._edge_map
+        )
 
     def __ne__(self, g):
         """Return true if g is not equal to this graph."""
@@ -37,21 +39,28 @@ class Graph(object):
         """Return a unique string representation of this graph."""
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
-            values = sorted((x, self._edge_map[(key, x)])
-                            for x in list(self._adjacency_list[key]))
+            values = sorted(
+                (x, self._edge_map[(key, x)]) for x in list(self._adjacency_list[key])
+            )
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
     def __str__(self):
         """Return a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x, y: x + y,
-                         [len(v) for v in self._adjacency_list.values()])
+        edgenum = reduce(
+            lambda x, y: x + y, [len(v) for v in self._adjacency_list.values()]
+        )
         labelnum = len(self._label_map)
-        return "<Graph: " + \
-               str(nodenum) + " node(s), " + \
-               str(edgenum) + " edge(s), " + \
-               str(labelnum) + " unique label(s)>"
+        return (
+            "<Graph: "
+            + str(nodenum)
+            + " node(s), "
+            + str(edgenum)
+            + " edge(s), "
+            + str(labelnum)
+            + " unique label(s)>"
+        )
 
     def add_node(self, node):
         """Add a node to this graph."""
@@ -76,8 +85,10 @@ class Graph(object):
         """Return a list of (child, label) pairs for parent."""
         if parent not in self._adjacency_list:
             raise ValueError("Unknown <parent> node: " + str(parent))
-        return [(x, self._edge_map[(parent, x)])
-                for x in sorted(self._adjacency_list[parent])]
+        return [
+            (x, self._edge_map[(parent, x)])
+            for x in sorted(self._adjacency_list[parent])
+        ]
 
     def children(self, parent):
         """Return a list of unique children for parent."""
@@ -120,12 +131,12 @@ class Graph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list.keys():
-            self._adjacency_list[n] = {x for x in self._adjacency_list[n]
-                                       if x != node}
+            self._adjacency_list[n] = {x for x in self._adjacency_list[n] if x != node}
         # remove all referring pairs in label map
         for label in list(self._label_map.keys()):  # we're editing this!
-            lm = {x for x in self._label_map[label]
-                  if (x[0] != node) and (x[1] != node)}
+            lm = {
+                x for x in self._label_map[label] if (x[0] != node) and (x[1] != node)
+            }
             # remove the entry completely if the label is now unused
             if lm:
                 self._label_map[label] = lm
