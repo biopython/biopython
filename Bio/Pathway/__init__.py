@@ -69,8 +69,7 @@ class Reaction(object):
 
     """
 
-    def __init__(self, reactants=None, catalysts=(),
-                 reversible=0, data=None):
+    def __init__(self, reactants=None, catalysts=(), reversible=0, data=None):
         """Initialize a new Reaction object."""
         # enforce invariants on reactants:
         if reactants is None:
@@ -87,11 +86,13 @@ class Reaction(object):
 
     def __eq__(self, r):
         """Return true iff self is equal to r."""
-        return (isinstance(r, Reaction)
-                and self.reactants == r.reactants
-                and self.catalysts == r.catalysts
-                and self.data == r.data
-                and self.reversible == r.reversible)
+        return (
+            isinstance(r, Reaction)
+            and self.reactants == r.reactants
+            and self.catalysts == r.catalysts
+            and self.data == r.data
+            and self.reversible == r.reversible
+        )
 
     def __ne__(self, r):
         """Return true iff self is not equal to r."""
@@ -104,11 +105,13 @@ class Reaction(object):
 
     def __repr__(self):
         """Return a debugging string representation of self."""
-        return "Reaction(" + \
-               ",".join(map(repr, [self.reactants,
-                                   self.catalysts,
-                                   self.data,
-                                   self.reversible])) + ")"
+        return (
+            "Reaction("
+            + ",".join(
+                map(repr, [self.reactants, self.catalysts, self.data, self.reversible])
+            )
+            + ")"
+        )
 
     def __str__(self):
         """Return a string representation of self."""
@@ -142,9 +145,8 @@ class Reaction(object):
         """Return a new Reaction that is the reverse of self."""
         reactants = {}
         for r in self.reactants:
-            reactants[r] = - self.reactants[r]
-        return Reaction(reactants, self.catalysts,
-                        self.reversible, self.data)
+            reactants[r] = -self.reactants[r]
+        return Reaction(reactants, self.catalysts, self.reversible, self.data)
 
     def species(self):
         """Return a list of all Species involved in self."""
@@ -172,9 +174,13 @@ class System(object):
 
     def __str__(self):
         """Return a string representation of self."""
-        return "System of " + str(len(self.__reactions)) + \
-               " reactions involving " + str(len(self.species())) + \
-               " species"
+        return (
+            "System of "
+            + str(len(self.__reactions))
+            + " reactions involving "
+            + str(len(self.species()))
+            + " species"
+        )
 
     def add_reaction(self, reaction):
         """Add reaction to self."""
@@ -194,8 +200,9 @@ class System(object):
 
     def species(self):
         """Return a list of the species in this system."""
-        return sorted(set(reduce(lambda s, x: s + x,
-                          [x.species() for x in self.reactions()], [])))
+        return sorted(
+            set(reduce(lambda s, x: s + x, [x.species() for x in self.reactions()], []))
+        )
 
     def stochiometry(self):
         """Compute the stoichiometry matrix for self.
@@ -274,8 +281,13 @@ class Network(object):
 
     def __str__(self):
         """Return a string representation of this network."""
-        return "Network of " + str(len(self.species())) + " species and " + \
-               str(len(self.interactions())) + " interactions."
+        return (
+            "Network of "
+            + str(len(self.species()))
+            + " species and "
+            + str(len(self.interactions()))
+            + " interactions."
+        )
 
     def add_species(self, species):
         """Add species to this network."""
