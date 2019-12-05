@@ -304,13 +304,13 @@ class FastaM10Parser(object):
 
     def __parse_hit_table(self):
         """Parse hit table rows."""
-        # move to the first row
-        line = self.handle.readline()
         # parse hit table until we see an empty line
         hit_rows = []
-        while line and not line.strip():
-            hit_rows.append(line.strip())
+        while True:
             line = self.handle.readline()
+            if (not line) or line.strip():
+                break
+            hit_rows.append('')
         self.line = line
         return hit_rows
 
