@@ -325,9 +325,9 @@ class FastaM10Parser(object):
         state_QRES_CONTENT = 5
         state_QRES_END = 7
 
-        while True:
+        line = self.line
 
-            line = self.line
+        while True:
 
             # one line before the hit table
             if line.startswith("The best scores are:"):
@@ -350,6 +350,7 @@ class FastaM10Parser(object):
                     # parse hit table if flag is set
                     hit_rows = self.__parse_hit_table()
                     self.line = self.handle.readline()
+                    line = self.line
 
                 elif qres_state == state_QRES_END:
                     yield _set_qresult_hits(qresult, hit_rows)
@@ -367,6 +368,7 @@ class FastaM10Parser(object):
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
                     line = self.handle.readline()
+                    self.line = line
                     qresult.target = [x for x in line.split(" ") if x][1].strip()
                     if desc is not None:
                         qresult.description = desc
@@ -374,6 +376,7 @@ class FastaM10Parser(object):
                     for key, value in self._preamble.items():
                         setattr(qresult, key, value)
                     self.line = self.handle.readline()
+                    line = self.line
 
                 elif qres_state == state_QRES_CONTENT:
                     assert self.line[3:].startswith(qresult.id), self.line
@@ -391,9 +394,12 @@ class FastaM10Parser(object):
                             for hsp in hit.hsps:
                                 assert strand != hsp.query_strand
                                 qresult[hit.id].append(hsp)
+                    line = self.line
 
             else:
                 self.line = self.handle.readline()
+                line = self.line
+
 
     def _parse_hit(self, query_id):
         """Parse hit on query identifier (PRIVATE)."""
