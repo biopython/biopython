@@ -2048,8 +2048,7 @@ class MutableSeq(object):
         elif isinstance(data, (Seq, int, float)):
             raise TypeError(
                 "The sequence data given to a MutableSeq object "
-                "should be a string or an array "
-                "(not a Seq object etc)"
+                "should be a string or an array (not a Seq object etc)"
             )
         else:
             self.data = data  # assumes the input is an array
