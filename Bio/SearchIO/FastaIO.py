@@ -109,7 +109,6 @@ import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_dna, generic_protein
-from Bio.File import UndoHandle
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -536,7 +535,7 @@ class FastaM10Indexer(SearchIndexer):
     def __init__(self, filename):
         """Initialize the class."""
         SearchIndexer.__init__(self, filename)
-        self._handle = UndoHandle(self._handle)
+        self._handle = self._handle
 
     def __iter__(self):
         """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""
@@ -546,9 +545,8 @@ class FastaM10Indexer(SearchIndexer):
         qresult_key = None
         query_mark = b">>>"
 
+        line = handle.readline()
         while True:
-            line = handle.readline()
-            peekline = handle.peekline()
             end_offset = handle.tell()
 
             if not line.startswith(query_mark) and query_mark in line:
@@ -557,13 +555,15 @@ class FastaM10Indexer(SearchIndexer):
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (
-                    not peekline.startswith(query_mark) and query_mark in peekline
-                ) or not line:
+                if not line:
                     yield qresult_key, start_offset, end_offset - start_offset
-                    if not line:
-                        break
+                    break
+                line = handle.readline()
+                if not line.startswith(query_mark) and query_mark in line:
+                    yield qresult_key, start_offset, end_offset - start_offset
                     start_offset = end_offset
+            else:
+                line = handle.readline()
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""
@@ -573,25 +573,25 @@ class FastaM10Indexer(SearchIndexer):
 
         # read header first
         handle.seek(0)
+        line = handle.readline()
         while True:
-            line = handle.readline()
-            peekline = handle.peekline()
             qresult_raw += line
-            if not peekline.startswith(query_mark) and query_mark in peekline:
+            line = handle.readline()
+            if not line.startswith(query_mark) and query_mark in line:
                 break
 
         # and read the qresult raw string
         handle.seek(offset)
+        line = handle.readline()
         while True:
             # preserve whitespace, don't use read_forward
-            line = handle.readline()
-            peekline = handle.peekline()
+            if not line:
+                break
             qresult_raw += line
 
+            line = handle.readline()
             # break when we've reached qresult end
-            if (
-                not peekline.startswith(query_mark) and query_mark in peekline
-            ) or not line:
+            if not line.startswith(query_mark) and query_mark in line:
                 break
 
         # append mock end marker to qresult_raw, since it's not always present
