@@ -153,9 +153,9 @@ class Peaklist(object):
 
             res = int(key)
 
-            if (maxres == -1):
+            if maxres == -1:
                 maxres = res
-            if (minres == -1):
+            if minres == -1:
                 minres = res
 
             maxres = max([maxres, res])
@@ -204,7 +204,7 @@ def replace_entry(line, fieldn, newentry):
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
-    newline = line[:start] + str(newentry) + line[(start + leng):]
+    newline = line[:start] + str(newentry) + line[(start + leng) :]
     return newline
 
 
@@ -222,10 +222,10 @@ def _find_start_entry(line, n):
     """
     # This function is used by replace_entry
 
-    infield = 0       # A flag that indicates that the counter is in a field
+    infield = 0  # A flag that indicates that the counter is in a field
 
-    if (n == 1):
-        return 0        # Special case
+    if n == 1:
+        return 0  # Special case
 
     # Count the number of fields by counting spaces
     c = 1
@@ -233,19 +233,19 @@ def _find_start_entry(line, n):
 
     # Initialize variables according to whether the first character
     #  is a space or a character
-    if (line[0] == " "):
+    if line[0] == " ":
         infield = 0
         field = 0
     else:
         infield = 1
         field = 1
 
-    while (c < leng and field < n):
-        if (infield):
-            if (line[c] == " " and not (line[c - 1] == " ")):
+    while c < leng and field < n:
+        if infield:
+            if line[c] == " " and not (line[c - 1] == " "):
                 infield = 0
             else:
-                if (not line[c] == " "):
+                if not line[c] == " ":
                     infield = 1
                     field = field + 1
 
@@ -282,19 +282,23 @@ def data_table(fn_list, datalabel, keyatom):
     maxr = dict_list[0]["maxres"]
 
     for dictionary in dict_list:
-        if (maxr < dictionary["maxres"]):
+        if maxr < dictionary["maxres"]:
             maxr = dictionary["maxres"]
-        if (minr > dictionary["minres"]):
+        if minr > dictionary["minres"]:
             minr = dictionary["minres"]
 
     res = minr
-    while res <= maxr:        # s.t. res numbers
+    while res <= maxr:  # s.t. res numbers
         count = 0
         line = str(res)
-        for dictionary in dict_list:      # s.t. dictionaries
+        for dictionary in dict_list:  # s.t. dictionaries
             label = label_line_list[count]
             if str(res) in dictionary:
-                line = line + "\t" + XpkEntry(dictionary[str(res)][0], label).fields[datalabel]
+                line = (
+                    line
+                    + "\t"
+                    + XpkEntry(dictionary[str(res)][0], label).fields[datalabel]
+                )
             else:
                 line = line + "\t" + "*"
             count = count + 1
@@ -320,4 +324,5 @@ def _read_dicts(fn_list, keyatom):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
