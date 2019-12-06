@@ -32,10 +32,10 @@ possible, especially the following contributors:
 - Chris Daley (first contribution)
 - Chris Rands
 - Christian Brueffer
+- Jakub Lipinski (first contribution)
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
-- Jakub Lipinski (first contribution)
 
 6 November 2019: Biopython 1.75
 ===============================
