@@ -587,8 +587,9 @@ These methods modify the tree in-place. If you want to keep the original tree in
 complete copy of the tree first, using Python's \texttt{copy} module:
 
 \begin{minted}{python}
-tree = Phylo.read('example.xml', 'phyloxml')
+tree = Phylo.read("example.xml", "phyloxml")
 import copy
+
 newtree = copy.deepcopy(tree)
 \end{minted}
 

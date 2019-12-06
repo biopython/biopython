@@ -56,6 +56,7 @@ handle:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for record in SeqIO.parse("m_cold.fasta", "fasta"):
     print(record.id, len(record))
 \end{minted}
@@ -64,6 +65,7 @@ On older versions of Biopython you had to use a handle, e.g.
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 handle = open("m_cold.fasta", "r")
 for record in SeqIO.parse(handle, "fasta"):
     print(record.id, len(record))
@@ -76,6 +78,7 @@ compressed FASTA file you want to parse:
 \begin{minted}{python}
 import gzip
 from Bio import SeqIO
+
 handle = gzip.open("m_cold.fasta.gz", "rt")
 for record in SeqIO.parse(handle, "fasta"):
     print(record.id, len(record))
