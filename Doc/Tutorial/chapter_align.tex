@@ -159,6 +159,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignment = AlignIO.read("PF05371_seed.faa", "fasta")
 print(alignment)
 \end{minted}
@@ -226,6 +227,7 @@ If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 %TODO - Replace the print blank line with print()?
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignments = AlignIO.parse("resampled.phy", "phylip")
 for alignment in alignments:
     print(alignment)
@@ -271,6 +273,7 @@ If you want to keep all the alignments in memory at once, which will allow you t
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignments = list(AlignIO.parse("resampled.phy", "phylip"))
 last_align = alignments[-1]
 first_align = alignments[0]
@@ -385,23 +388,29 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
-align1 = MultipleSeqAlignment([
-             SeqRecord(Seq("ACTGCTAGCTAG", generic_dna), id="Alpha"),
-             SeqRecord(Seq("ACT-CTAGCTAG", generic_dna), id="Beta"),
-             SeqRecord(Seq("ACTGCTAGDTAG", generic_dna), id="Gamma"),
-         ])
+align1 = MultipleSeqAlignment(
+    [
+        SeqRecord(Seq("ACTGCTAGCTAG", generic_dna), id="Alpha"),
+        SeqRecord(Seq("ACT-CTAGCTAG", generic_dna), id="Beta"),
+        SeqRecord(Seq("ACTGCTAGDTAG", generic_dna), id="Gamma"),
+    ]
+)
 
-align2 = MultipleSeqAlignment([
-             SeqRecord(Seq("GTCAGC-AG", generic_dna), id="Delta"),
-             SeqRecord(Seq("GACAGCTAG", generic_dna), id="Epsilon"),
-             SeqRecord(Seq("GTCAGCTAG", generic_dna), id="Zeta"),
-         ])
+align2 = MultipleSeqAlignment(
+    [
+        SeqRecord(Seq("GTCAGC-AG", generic_dna), id="Delta"),
+        SeqRecord(Seq("GACAGCTAG", generic_dna), id="Epsilon"),
+        SeqRecord(Seq("GTCAGCTAG", generic_dna), id="Zeta"),
+    ]
+)
 
-align3 = MultipleSeqAlignment([
-             SeqRecord(Seq("ACTAGTACAGCTG", generic_dna), id="Eta"),
-             SeqRecord(Seq("ACTAGTACAGCT-", generic_dna), id="Theta"),
-             SeqRecord(Seq("-CTACTACAGGTG", generic_dna), id="Iota"),
-         ])
+align3 = MultipleSeqAlignment(
+    [
+        SeqRecord(Seq("ACTAGTACAGCTG", generic_dna), id="Eta"),
+        SeqRecord(Seq("ACTAGTACAGCT-", generic_dna), id="Theta"),
+        SeqRecord(Seq("-CTACTACAGGTG", generic_dna), id="Iota"),
+    ]
+)
 
 my_alignments = [align1, align2, align3]
 \end{minted}
@@ -410,6 +419,7 @@ my_alignments = [align1, align2, align3]
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 AlignIO.write(my_alignments, "my_example.phy", "phylip")
 \end{minted}
 
@@ -450,6 +460,7 @@ For this example, we'll load the PFAM/Stockholm format file used earlier and sav
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 count = AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.aln", "clustal")
 print("Converted %i alignments" % count)
 \end{minted}
@@ -458,6 +469,7 @@ Or, using \verb|Bio.AlignIO.parse()| and \verb|Bio.AlignIO.write()|:
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignments = AlignIO.parse("PF05371_seed.sth", "stockholm")
 count = AlignIO.write(alignments, "PF05371_seed.aln", "clustal")
 print("Converted %i alignments" % count)
@@ -469,6 +481,7 @@ In this case, we know there is only one alignment in the file so we could have u
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 AlignIO.write([alignment], "PF05371_seed.aln", "clustal")
 \end{minted}
@@ -500,6 +513,7 @@ Alternatively, you could make a PHYLIP format file which we'll name ``PF05371\_s
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip")
 \end{minted}
 
@@ -532,6 +546,7 @@ the original PHYLIP format is now quite widely used:
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip-relaxed")
 \end{minted}
 
@@ -563,6 +578,7 @@ This following bit of code manipulates the record identifiers before saving the 
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 name_mapping = {}
 for i, record in enumerate(alignment):
@@ -576,9 +592,9 @@ AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
 \noindent This code used a Python dictionary to record a simple mapping from the new sequence system to the original identifier:
 \begin{minted}{python}
 {
-    0: 'COATB_BPIKE/30-81',
-    1: 'Q9T0Q8_BPIKE/1-52',
-    2: 'COATB_BPI22/32-83',
+    0: "COATB_BPIKE/30-81",
+    1: "Q9T0Q8_BPIKE/1-52",
+    2: "COATB_BPI22/32-83",
     # ...
 }
 \end{minted}
@@ -615,6 +631,7 @@ This takes a single mandatory argument, a lower case string which is supported b
 
 \begin{minted}{python}
 from Bio import AlignIO
+
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 print(alignment.format("clustal"))
 \end{minted}
@@ -2113,8 +2130,10 @@ Generally, if the alignment between target (t) and query (q) consists of $N$
 chunks, you get two tuples of length $N$:
 
 \begin{minted}{python}
-(((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
- ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
+(
+    ((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
+    ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)),
+)
 \end{minted}
 
 In the current example, `alignment.aligned` returns two tuples of length 2:

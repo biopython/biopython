@@ -70,7 +70,7 @@ for line in human_pathways.rstrip().split("\n"):
         repair_pathways.append(entry)
 
 # Get the genes for pathways and add them to a list
-repair_genes = [] 
+repair_genes = []
 for pathway in repair_pathways:
     pathway_file = REST.kegg_get(pathway).read()  # query and read each pathway
 
@@ -81,7 +81,7 @@ for pathway in repair_pathways:
         section = line[:12].strip()  # section names are within 12 columns
         if not section == "":
             current_section = section
-        
+
         if current_section == "GENE":
             gene_identifiers, gene_description = line[12:].split("; ")
             gene_id, gene_symbol = gene_identifiers.split()
@@ -89,8 +89,10 @@ for pathway in repair_pathways:
             if not gene_symbol in repair_genes:
                 repair_genes.append(gene_symbol)
 
-print("There are %d repair pathways and %d repair genes. The genes are:" % \
-      (len(repair_pathways), len(repair_genes)))
+print(
+    "There are %d repair pathways and %d repair genes. The genes are:"
+    % (len(repair_pathways), len(repair_genes))
+)
 print(", ".join(repair_genes))
 \end{minted}
 
