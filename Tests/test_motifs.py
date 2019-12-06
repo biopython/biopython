@@ -2260,10 +2260,10 @@ class MotifTestPWM(unittest.TestCase):
 
     def test_calculate_pseudocounts(self):
         pseudocounts = motifs.jaspar.calculate_pseudocounts(self.m)
-        self.assertAlmostEqual(pseudocounts['A'], 1.695582495781317, places=5)
-        self.assertAlmostEqual(pseudocounts['C'], 1.695582495781317, places=5)
-        self.assertAlmostEqual(pseudocounts['G'], 1.695582495781317, places=5)
-        self.assertAlmostEqual(pseudocounts['T'], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["A"], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["C"], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["G"], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["T"], 1.695582495781317, places=5)
 
 
 if __name__ == "__main__":
