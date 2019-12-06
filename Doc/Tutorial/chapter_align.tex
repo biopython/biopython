@@ -575,7 +575,12 @@ AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
 
 \noindent This code used a Python dictionary to record a simple mapping from the new sequence system to the original identifier:
 \begin{minted}{python}
-{0: 'COATB_BPIKE/30-81', 1: 'Q9T0Q8_BPIKE/1-52', 2: 'COATB_BPI22/32-83', ...}
+{
+    0: 'COATB_BPIKE/30-81',
+    1: 'Q9T0Q8_BPIKE/1-52',
+    2: 'COATB_BPI22/32-83',
+    # ...
+}
 \end{minted}
 
 \noindent Here is the new (strict) PHYLIP format output:
