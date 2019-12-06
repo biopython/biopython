@@ -336,14 +336,14 @@ ONLINE_DOCTEST_MODULES = [
     'Bio.Entrez',
     'Bio.ExPASy',
     'Bio.TogoWS',
-    ]
+]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
     EXCLUDE_DOCTEST_MODULES.extend([
-        ``Bio.Affy.CelFile'',
-        ``Bio.Cluster'',
-        ...
+        'Bio.Affy.CelFile',
+        'Bio.Cluster',
+        # ...
     ])
 \end{minted}
 
