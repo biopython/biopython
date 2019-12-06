@@ -35,11 +35,9 @@ into \verb|SeqRecord| objects.
 
 \subsection{SubsMat}
 
-This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices. The \verb+SeqMat+ class derives from a dictionary:
-\begin{minted}{python}
-class SeqMat(dict):
-    # ...
-\end{minted}
+This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices.
+
+The \verb+SeqMat+ class derives from a dictionary.
 The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| where i, j are alphabet letters, and n is a value.
 
 \begin{enumerate}
