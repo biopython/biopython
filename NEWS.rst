@@ -32,6 +32,7 @@ possible, especially the following contributors:
 - Chris Daley (first contribution)
 - Chris Rands
 - Christian Brueffer
+- Jakub Lipinski (first contribution)
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
