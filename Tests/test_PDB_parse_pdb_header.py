@@ -98,7 +98,7 @@ class ParseReal(unittest.TestCase):
         )
 
     def test_parse_no_title(self):
-        """Unit test for sensible result with no TITLE line"""
+        """Unit test for sensible result with no TITLE line."""
         header = parse_pdb_header("PDB/occupancy.pdb")
         self.assertEqual(header["name"], "")
 
