@@ -35,7 +35,9 @@ class StandardData(object):
 
         # Enforce string data requirement
         if not isinstance(data, basestring):
-            raise NexusError("The coding data given to a StandardData object should be a string")
+            raise NexusError(
+                "The coding data given to a StandardData object should be a string"
+            )
 
         # Transfer each coding to a position within a sequence
         multi_coding = False
@@ -71,9 +73,13 @@ class StandardData(object):
                     coding_list["t"] = "uncer"
                     continue
                 elif coding in [")", "}"]:
-                    raise NexusError('Improper character "' + coding +
-                                     '" at position ' + pos +
-                                     " of a coding sequence.")
+                    raise NexusError(
+                        'Improper character "'
+                        + coding
+                        + '" at position '
+                        + pos
+                        + " of a coding sequence."
+                    )
                 else:
                     coding_list["d"].append(coding)
 
@@ -105,6 +111,7 @@ class StandardData(object):
             return return_coding
 
     if sys.version_info[0] < 3:
+
         def next(self):
             """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
