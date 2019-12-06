@@ -97,6 +97,11 @@ class ParseReal(unittest.TestCase):
             "spectroscopy and restrained molecular dynamics",
         )
 
+    def test_parse_no_title(self):
+        """Unit test for sensible result with no TITLE line"""
+        header = parse_pdb_header("PDB/occupancy.pdb")
+        self.assertEqual(header["name"], "")
+
     def test_parse_pdb_with_remark_99(self):
         """Tests that parse_pdb_header can identify REMARK 99 ASTRAL entries."""
         header = parse_pdb_header("PDB/d256ba_.ent")
