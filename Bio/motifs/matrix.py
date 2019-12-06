@@ -405,26 +405,40 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         else:
             return scores
 
-    def search(self, sequence, threshold=0.0, both=True):
+    def search(self, sequence, threshold=0.0, both=True, chunksize=10**6):
         """Find hits with PWM score above given threshold.
 
         A generator function, returning found hits in the given sequence
         with the pwm score higher than the threshold.
         """
+        import numpy as np
         sequence = sequence.upper()
-        n = len(sequence)
-        m = self.length
+        seq_len = len(sequence)
+        motif_l = self.length
+        chunk_starts = np.arange(0, seq_len, chunksize)
         if both:
             rc = self.reverse_complement()
-        for position in range(0, n - m + 1):
-            s = sequence[position:position + m]
-            score = self.calculate(s)
-            if score > threshold:
-                yield (position, score)
+        for chunk_start in chunk_starts:
+            subseq = sequence[chunk_start:chunk_start + chunksize + motif_l - 1]
+            pos_scores = self.calculate(subseq)
+            pos_ind = pos_scores >= threshold
+            pos_positions = np.where(pos_ind)[0] + chunk_start
+            pos_scores = pos_scores[pos_ind]
             if both:
-                score = rc.calculate(s)
-                if score > threshold:
-                    yield (position - n, score)
+                neg_scores = rc.calculate(subseq)
+                neg_ind = neg_scores >= threshold
+                neg_positions = np.where(neg_ind)[0] + chunk_start
+                neg_scores = neg_scores[neg_ind]
+            else:
+                neg_positions = np.empty((0), dtype=int)
+                neg_scores = np.empty((0), dtype=int)
+            chunk_positions = np.append(pos_positions, neg_positions - seq_len)
+            chunk_scores = np.append(pos_scores, neg_scores)
+            order = np.argsort(np.append(pos_positions, neg_positions))
+            chunk_positions = chunk_positions[order]
+            chunk_scores = chunk_scores[order]
+            for pos, score in zip(chunk_positions, chunk_scores):
+                yield pos, score
 
     @property
     def max(self):

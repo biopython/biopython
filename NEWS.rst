@@ -16,6 +16,10 @@ also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
+``Bio.motifs.PositionSpecificScoringMatrix.search()`` method has been
+re-written: it now applies ``.calculate()`` to chunks of the sequence
+to maintain a low memory footprint for long sequences.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -38,6 +42,7 @@ possible, especially the following contributors:
 - Chris Daley (first contribution)
 - Chris Rands
 - Christian Brueffer
+- Ilya Flyamer (first contribution)
 - Jakub Lipinski (first contribution)
 - Michael R. Crusoe (first contribution)
 - Michiel de Hoon
