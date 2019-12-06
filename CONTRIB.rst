@@ -122,6 +122,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
+- Jakub Lipinski <https://github.com/jakublipinski>
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>

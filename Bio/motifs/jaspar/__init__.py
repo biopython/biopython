@@ -326,7 +326,7 @@ def calculate_pseudocounts(motif):
     total = 0
     for i in range(motif.length):
         total += sum(float(motif.counts[letter][i])
-                     for letter in alphabet.letters)
+                     for letter in alphabet)
 
     avg_nb_instances = total / motif.length
     sq_nb_instances = math.sqrt(avg_nb_instances)
@@ -334,12 +334,12 @@ def calculate_pseudocounts(motif):
     if background:
         background = dict(background)
     else:
-        background = dict.fromkeys(sorted(alphabet.letters), 1.0)
+        background = dict.fromkeys(sorted(alphabet), 1.0)
 
     total = sum(background.values())
     pseudocounts = {}
 
-    for letter in alphabet.letters:
+    for letter in alphabet:
         background[letter] /= total
         pseudocounts[letter] = sq_nb_instances * background[letter]
 
