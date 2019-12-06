@@ -37,7 +37,8 @@ into \verb|SeqRecord| objects.
 
 This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices. The \verb+SeqMat+ class derives from a dictionary:
 \begin{minted}{python}
-class SeqMat(dict)
+class SeqMat(dict):
+    # ...
 \end{minted}
 The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| where i, j are alphabet letters, and n is a value.
 
@@ -55,7 +56,7 @@ The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| whe
 
     \item
 \begin{minted}{python}
-__init__(self,data=None,alphabet=None, mat_name='', build_later=0):
+__init__(self,data=None,alphabet=None, mat_name='', build_later=0)
 \end{minted}
 
     \begin{enumerate}
@@ -178,7 +179,7 @@ But you can supply your own \verb|exp_freq_table|, if you wish
 Use:
 
 \begin{minted}{python}
-SFM = SubsMat._build_subs_mat(OFM,EFM)
+SFM = SubsMat._build_subs_mat(OFM, EFM)
 \end{minted}
 
   Accepts an OFM, EFM. Provides the division product of the corresponding values.
@@ -187,7 +188,7 @@ SFM = SubsMat._build_subs_mat(OFM,EFM)
 
    Use:
 \begin{minted}{python}
-LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
+LOM = SubsMat._build_log_odds_mat(SFM, logbase=10, factor=10.0, round_digit=1)
 \end{minted}
 
    \begin{enumerate}
@@ -206,8 +207,8 @@ LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
 As most people would want to generate a log-odds matrix, with minimum hassle, SubsMat provides one function which does it all:
 
 \begin{minted}{python}
-make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
-                      factor=10.0,round_digit=0):
+make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=10,
+                     factor=10.0, round_digit=0)
 \end{minted}
 
 \begin{enumerate}
