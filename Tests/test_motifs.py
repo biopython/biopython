@@ -470,7 +470,7 @@ XX
 
     def test_reverse_complement(self):
         """Test if motifs can be reverse-complemented."""
-        background = {'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3}
+        background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
         pseudocounts = 0.5
         m = self.m
         m.background = background

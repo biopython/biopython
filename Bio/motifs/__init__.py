@@ -399,19 +399,19 @@ class Motif(object):
                       "C": self.counts["G"][::-1],
                       "G": self.counts["C"][::-1],
                       "T": self.counts["A"][::-1],
-                     }
+                      }
             res = Motif(alphabet=alphabet, counts=counts)
         res.__mask = self.__mask[::-1]
         res.background = {"A": self.background["T"],
                           "C": self.background["G"],
                           "G": self.background["C"],
                           "T": self.background["A"],
-                         }
+                          }
         res.pseudocounts = {"A": self.pseudocounts["T"],
                             "C": self.pseudocounts["G"],
                             "G": self.pseudocounts["C"],
                             "T": self.pseudocounts["A"],
-                           }
+                            }
         return res
 
     @property
