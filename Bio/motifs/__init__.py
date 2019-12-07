@@ -393,15 +393,14 @@ class Motif(object):
         alphabet = self.alphabet
         if self.instances is not None:
             instances = self.instances.reverse_complement()
-            res = Motif(instances=instances, alphabet=alphabet)
+            res = Motif(alphabet=alphabet, instances=instances)
         else:  # has counts
-            res = Motif(alphabet)
-            res.counts = {}
-            res.counts["A"] = self.counts["T"][::-1]
-            res.counts["T"] = self.counts["A"][::-1]
-            res.counts["G"] = self.counts["C"][::-1]
-            res.counts["C"] = self.counts["G"][::-1]
-            res.length = self.length
+            counts = {"A": self.counts["T"][::-1],
+                      "T": self.counts["A"][::-1],
+                      "G": self.counts["C"][::-1],
+                      "C": self.counts["G"][::-1],
+                     }
+            res = Motif(alphabet=alphabet, counts=counts)
         res.__mask = self.__mask[::-1]
         return res
 
