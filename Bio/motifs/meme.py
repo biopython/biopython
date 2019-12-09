@@ -46,8 +46,9 @@ def read(handle):
         raise ValueError("Improper MEME XML input file. XML root tag should start with <MEME version= ...")
     __read_metadata(record, xml_tree)
     __read_alphabet(record, xml_tree)
-    __read_sequences(record, xml_tree)
-    __read_motifs(record, xml_tree)
+    sequence_id_name_map = __get_sequence_id_name_map(xml_tree)
+    record.sequences = list(sequence_id_name_map.keys())
+    __read_motifs(record, xml_tree, sequence_id_name_map)
     return record
 
 
@@ -76,6 +77,7 @@ class Instance(Seq.Seq):
         """Initialize the class."""
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
+        self.sequence_id = ""
         self.start = 0
         self.pvalue = 1.0
         self.strand = 0
@@ -138,14 +140,12 @@ def __read_alphabet(record, xml_tree):
         record.alphabet += value.get("letter_id")
 
 
-def __read_sequences(record, xml_tree):
-    for sequence_tree in xml_tree.find("training_set").findall("sequence"):
-        sequence_name = sequence_tree.get("name")
-        record.sequences.append(sequence_name)
-        # TODO - sequence id, length, weight
+def __get_sequence_id_name_map(xml_tree):
+    return {sequence_tree.get("id"): sequence_tree.get("name")
+            for sequence_tree in xml_tree.find("training_set").findall("sequence")}
 
 
-def __read_motifs(record, xml_tree):
+def __read_motifs(record, xml_tree, sequence_id_name_map):
     for motif_tree in xml_tree.find("motifs").findall("motif"):
         instances = []
         for site_tree in motif_tree.find("contributing_sites").findall("contributing_site"):
@@ -154,7 +154,8 @@ def __read_motifs(record, xml_tree):
             sequence = "".join(letters)
             instance = Instance(sequence, record.alphabet)
             instance.motif_name = motif_tree.get("name")
-            instance.sequence_name = site_tree.get("sequence_id")  # TODO - rename to sequence_id, get sequence_name
+            instance.sequence_id = site_tree.get("sequence_id")
+            instance.sequence_name = sequence_id_name_map[instance.sequence_id]
             # TODO - left flank, right flank
             instance.start = int(site_tree.get("position")) + 1
             instance.pvalue = float(site_tree.get("pvalue"))
