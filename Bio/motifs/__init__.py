@@ -1,5 +1,6 @@
 # Copyright 2003-2009 by Bartek Wilczynski.  All rights reserved.
 # Copyright 2012-2013 by Michiel JL de Hoon.  All rights reserved.
+# Revisions copyright 2019 by Victor Lin.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -120,10 +121,10 @@ def read(handle, format, strict=True):
     Or a single-motif MEME file,
 
     >>> from Bio import motifs
-    >>> with open("motifs/meme.out") as handle:
+    >>> with open("motifs/meme.psp_test.classic.zoops.xml") as handle:
     ...     m = motifs.read(handle, "meme")
     >>> m.consensus
-    Seq('CTCAATCGTA')
+    Seq('GCTTATGTAA')
 
     If the handle contains no records, or more than one record,
     an exception is raised:
