@@ -105,12 +105,11 @@ class Reaction(object):
 
     def __repr__(self):
         """Return a debugging string representation of self."""
-        return (
-            "Reaction("
-            + ",".join(
-                map(repr, [self.reactants, self.catalysts, self.data, self.reversible])
-            )
-            + ")"
+        return "Reaction(%r, %r, %r, %r)" % (
+            self.reactants,
+            self.catalysts,
+            self.reversible,
+            self.data,
         )
 
     def __str__(self):
@@ -281,12 +280,9 @@ class Network(object):
 
     def __str__(self):
         """Return a string representation of this network."""
-        return (
-            "Network of "
-            + str(len(self.species()))
-            + " species and "
-            + str(len(self.interactions()))
-            + " interactions."
+        return "Network of %i species and %i interactions." % (
+            len(self.species()),
+            len(self.interactions()),
         )
 
     def add_species(self, species):
