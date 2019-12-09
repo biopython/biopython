@@ -356,6 +356,7 @@ def _compact4nexus(orig_list):
 
     Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
+
     """
     if not orig_list:
         return ""
@@ -2031,7 +2032,7 @@ class Nexus(object):
         pos=0: first position
         pos=nchar: last position
         """
-
+        # This comment stops black style adding a blank line here, which causes flake8 D202.
         def _adjust(set, x, d, leftgreedy=False):
             """Adjust character sets if gaps are inserted (PRIVATE).
 
