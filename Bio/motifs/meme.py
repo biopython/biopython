@@ -23,21 +23,21 @@ def read(handle):
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
-    ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
-    GSKGCATGTGAAA sequence_5 + 1.21e-08
-    GSKGCATGTGAAA sequence_2 - 1.87e-08
-    GSKGCATGTGAAA sequence_4 - 6.62e-08
-    GSKGCATGTGAAA sequence_1 - 1.05e-07
-    GSKGCATGTGAAA sequence_0 - 1.69e-07
-    GSKGCATGTGAAA sequence_3 - 5.62e-07
-    GSKGCATGTGAAA sequence_6 + 1.08e-06
-    TTGACWCYTGCYCWG sequence_1 + 7.2e-10
-    TTGACWCYTGCYCWG sequence_6 - 2.56e-08
-    TTGACWCYTGCYCWG sequence_4 - 1.59e-07
-    TTGACWCYTGCYCWG sequence_0 + 2.05e-07
-    TTGACWCYTGCYCWG sequence_2 + 3.85e-07
-    TTGACWCYTGCYCWG sequence_3 - 5.11e-07
-    TTGACWCYTGCYCWG sequence_5 + 8.01e-07
+    ...         print(instance.motif_name, instance.sequence_name, instance.sequence_id, instance.strand, instance.pvalue)
+    GSKGCATGTGAAA INO1 sequence_5 + 1.21e-08
+    GSKGCATGTGAAA FAS1 sequence_2 - 1.87e-08
+    GSKGCATGTGAAA ACC1 sequence_4 - 6.62e-08
+    GSKGCATGTGAAA CHO2 sequence_1 - 1.05e-07
+    GSKGCATGTGAAA CHO1 sequence_0 - 1.69e-07
+    GSKGCATGTGAAA FAS2 sequence_3 - 5.62e-07
+    GSKGCATGTGAAA OPI3 sequence_6 + 1.08e-06
+    TTGACWCYTGCYCWG CHO2 sequence_1 + 7.2e-10
+    TTGACWCYTGCYCWG OPI3 sequence_6 - 2.56e-08
+    TTGACWCYTGCYCWG ACC1 sequence_4 - 1.59e-07
+    TTGACWCYTGCYCWG CHO1 sequence_0 + 2.05e-07
+    TTGACWCYTGCYCWG FAS1 sequence_2 + 3.85e-07
+    TTGACWCYTGCYCWG FAS2 sequence_3 - 5.11e-07
+    TTGACWCYTGCYCWG INO1 sequence_5 + 8.01e-07
 
     """
     record = Record()
