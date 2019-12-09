@@ -1,4 +1,5 @@
-# Copyright 2008 by Bartek Wilczynski
+# Copyright 2008 by Bartek Wilczynski.
+# Revisions copyright 2019 by Victor Lin.
 # Adapted from  Bio.MEME.Parser by Jason A. Hackney.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
