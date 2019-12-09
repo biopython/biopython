@@ -921,6 +921,21 @@ class Seq(object):
         """
         return Seq(str(self).lower(), self.alphabet._lower())
 
+    def encode(self, encoding="utf-8", errors="strict"):
+        """Return an encoded version of the sequence as a bytes object.
+
+        The Seq object aims to match the interfact of a Python string.
+        (This means on Python 3 it acts like a unicode string.)
+
+        This is essentially to save you doing str(my_seq).encode() when
+        you need a bytes string, for example for computing a hash:
+
+        >>> from Bio.Seq import Seq
+        >>> Seq("ACGT").encode("ascii")
+        b'ACGT'
+        """
+        return str(self).encode(encoding, errors)
+
     def complement(self):
         """Return the complement sequence by creating a new Seq object.
 
