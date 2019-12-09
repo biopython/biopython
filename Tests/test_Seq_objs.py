@@ -480,6 +480,15 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             self.assertEqual(str(example1.lower()), str1.lower())
 
+    def test_str_encode(self):
+        """Check matches the python string encode method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            str1 = str(example1)
+            self.assertEqual(example1.encode("ascii"), str1.encode("ascii"))
+            self.assertEqual(example1.encode(), str1.encode())
+
     def test_str_hash(self):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
