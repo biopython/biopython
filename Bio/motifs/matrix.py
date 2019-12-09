@@ -10,58 +10,25 @@ and position-specific scoring matrices.
 
 import math
 import platform
+import numpy as np
 
 from Bio._py3k import range
 
 from Bio.Seq import Seq
 
+from . import _pwm
 
-# Make sure that we use C-accelerated PWM calculations if running under CPython.
-# Fall back to the slower Python implementation if Jython or IronPython.
-try:
-    from . import _pwm
-    import numpy
-    # We could further generalize this code by using array objects from
-    # the Python standard library instead of numpy arrays; this would still
-    # allow us to use the C module.
 
-    def _calculate(score_dict, sequence, m):
-        """Calculate scores using C code (PRIVATE)."""
-        n = len(sequence)
-        # Create the numpy arrays here; the C module then does not rely on numpy
-        # Use a float32 for the scores array to save space
-        scores = numpy.empty(n - m + 1, numpy.float32)
-        logodds = numpy.array([[score_dict[letter][i] for letter in "ACGT"]
-                               for i in range(m)], float)
-        _pwm.calculate(sequence, logodds, scores)
-        return scores
-
-except ImportError:
-    if platform.python_implementation() == "CPython":
-        import warnings
-        from Bio import BiopythonWarning
-        warnings.warn("Using pure-Python as missing Biopython's C code for PWM.",
-                      BiopythonWarning)
-
-    def _calculate(score_dict, sequence, m):
-        """Calculate scores using Python code (PRIVATE).
-
-        The C code handles mixed case so Python version must too.
-        """
-        n = len(sequence)
-        sequence = sequence.upper()
-        scores = []
-        for i in range(n - m + 1):
-            score = 0.0
-            for position in range(m):
-                letter = sequence[i + position]
-                try:
-                    score += score_dict[letter][position]
-                except KeyError:
-                    score = float("nan")
-                    break
-            scores.append(score)
-        return scores
+def _calculate(score_dict, sequence, m):
+    """Calculate scores using C code (PRIVATE)."""
+    n = len(sequence)
+    # Create the numpy arrays here; the C module then does not rely on numpy
+    # Use a float32 for the scores array to save space
+    scores = np.empty(n - m + 1, np.float32)
+    logodds = np.array([[score_dict[letter][i] for letter in "ACGT"]
+                        for i in range(m)], float)
+    _pwm.calculate(sequence, logodds, scores)
+    return scores
 
 
 class GenericPositionMatrix(dict):
@@ -411,7 +378,6 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         A generator function, returning found hits in the given sequence
         with the pwm score higher than the threshold.
         """
-        import numpy as np
         sequence = sequence.upper()
         seq_len = len(sequence)
         motif_l = self.length
