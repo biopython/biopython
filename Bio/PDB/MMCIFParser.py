@@ -41,7 +41,7 @@ class MMCIFParser(object):
             self._structure_builder = structure_builder
         else:
             self._structure_builder = StructureBuilder()
-        # self.header = None
+        self.header = None
         # self.trailer = None
         self.line_counter = 0
         self.build_structure = None
@@ -62,6 +62,7 @@ class MMCIFParser(object):
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
             self._mmcif_dict = MMCIF2Dict(filename)
             self._build_structure(structure_id)
+            self._structure_builder.set_header(self._get_header())
 
         return self._structure_builder.get_structure()
 
@@ -74,8 +75,20 @@ class MMCIFParser(object):
                 return rslt
         return deflt
 
-    def _get_mmcif_header_dict(self, md):
-        dict = {
+    def _update_header_entry(self, target_key, keys, is_float=False):
+        md = self._mmcif_dict
+        for key in keys:
+            val = md.get(key)
+            try:
+                item = val[0]
+            except (TypeError, IndexError):
+                continue
+            if item != "?":
+                self.header[target_key] = item if not is_float else float(item)
+                return
+
+    def _get_header(self):
+        self.header = {
             "name": "",
             "head": "",
             "idcode": "",
@@ -84,31 +97,22 @@ class MMCIFParser(object):
             "resolution": 0.0,
         }
 
-        dict["idcode"] = self._mmcif_get("_entry.id", md, None)
-        if not dict["idcode"]:
-            dict["idcode"] = self._mmcif_get("_exptl.entry_id", md, None)
-        if not dict["idcode"]:
-            dict["idcode"] = self._mmcif_get("_struct.entry_id", md, None)
-
-        dict["name"] = self._mmcif_get("_struct.title", md, None)
-
-        dict["head"] = self._mmcif_get("_struct_keywords.pdbx_keywords", md, None)
-        if not dict["head"]:
-            dict["head"] = self._mmcif_get("_struct_keywords.text", md, None)
-
-        dict["deposition_date"] = self._mmcif_get(
-            "_pdbx_database_status.recvd_initial_deposition_date", md, None
+        self._update_header_entry(
+            "idcode", ["_entry_id", "_exptl.entry_id", "_struct.entry_id"]
+        )
+        self._update_header_entry("name", ["_struct.title"])
+        self._update_header_entry(
+            "head", ["_struct_keywords.pdbx_keywords", "_struct_keywords.text"]
+        )
+        self._update_header_entry(
+            "deposition_date", ["_pdbx_database_status.recvd_initial_deposition_date"]
+        )
+        self._update_header_entry("structure_method", ["_exptl.method"])
+        self._update_header_entry(
+            "resolution", ["_refine.ls_d_res_high", "_refine_hist.d_res_high"], True
         )
 
-        dict["structure_method"] = self._mmcif_get("_exptl.method", md, None)
-
-        dict["resolution"] = float(self._mmcif_get("_refine.ls_d_res_high", md, 0.0))
-        if 0.0 == dict["resolution"]:
-            dict["resolution"] = float(
-                self._mmcif_get("_refine_hist.d_res_high", md, 0.0)
-            )
-
-        return dict
+        return self.header
 
     def _build_structure(self, structure_id):
 
@@ -165,7 +169,6 @@ class MMCIFParser(object):
         structure_builder = self._structure_builder
         structure_builder.init_structure(structure_id)
         structure_builder.init_seg(" ")
-        structure_builder.set_header(self._get_mmcif_header_dict(mmcif_dict))
         # Historically, Biopython PDB parser uses model_id to mean array index
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
