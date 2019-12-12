@@ -74,11 +74,8 @@ class StandardData(object):
                     continue
                 elif coding in [")", "}"]:
                     raise NexusError(
-                        'Improper character "'
-                        + coding
-                        + '" at position '
-                        + pos
-                        + " of a coding sequence."
+                        "Improper character %s at position %i of a coding sequence."
+                        % (coding, pos)
                     )
                 else:
                     coding_list["d"].append(coding)
