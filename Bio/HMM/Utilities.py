@@ -14,11 +14,15 @@ dealing with HMMs.
 from __future__ import print_function
 
 
-def pretty_print_prediction(emissions, real_state, predicted_state,
-                            emission_title="Emissions",
-                            real_title="Real State",
-                            predicted_title="Predicted State",
-                            line_width=75):
+def pretty_print_prediction(
+    emissions,
+    real_state,
+    predicted_state,
+    emission_title="Emissions",
+    real_title="Real State",
+    predicted_title="Predicted State",
+    line_width=75,
+):
     """Print out a state sequence prediction in a nice manner.
 
     Arguments:
@@ -29,8 +33,7 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
 
     """
     # calculate the length of the titles and sequences
-    title_length = max(len(emission_title), len(real_title),
-                       len(predicted_title)) + 1
+    title_length = max(len(emission_title), len(real_title), len(predicted_title)) + 1
     seq_length = line_width - title_length
 
     # set up the titles so they'll print right
@@ -46,15 +49,22 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
         else:
             extension = len(emissions) - cur_position
 
-        print("%s%s" % (emission_title,
-                        emissions[cur_position:cur_position + seq_length]))
-        print("%s%s" % (real_title,
-                        real_state[cur_position:cur_position + seq_length]))
-        print("%s%s\n" % (predicted_title,
-                          predicted_state[cur_position:
-                                          cur_position + seq_length]))
+        print(
+            "%s%s"
+            % (emission_title, emissions[cur_position : cur_position + seq_length])
+        )
+        print(
+            "%s%s" % (real_title, real_state[cur_position : cur_position + seq_length])
+        )
+        print(
+            "%s%s\n"
+            % (
+                predicted_title,
+                predicted_state[cur_position : cur_position + seq_length],
+            )
+        )
 
-        if (len(emissions) < (cur_position + seq_length)):
+        if len(emissions) < (cur_position + seq_length):
             break
 
         cur_position += seq_length
