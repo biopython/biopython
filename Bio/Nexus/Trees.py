@@ -438,11 +438,9 @@ class Tree(Nodes.Chain):
             (set(tree2.get_taxa(n)), tree2.node(n).data.support)
             for n in tree2.all_ids()
             if tree2.node(n).succ
-            and (
-                tree2.node(n).data
-                and tree2.node(n).data.support
-                and tree2.node(n).data.support >= threshold
-            )
+            and tree2.node(n).data
+            and tree2.node(n).data.support
+            and tree2.node(n).data.support >= threshold
         ]
         conflict = []
         for (st1, sup1) in t1:
