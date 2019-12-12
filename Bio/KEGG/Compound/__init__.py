@@ -21,9 +21,7 @@ from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
 
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
-name_wrap = [0, "",
-             (" ", "$", 1, 1),
-             ("-", "$", 1, 1)]
+name_wrap = [0, "", (" ", "$", 1, 1), ("-", "$", 1, 1)]
 id_wrap = _default_wrap
 struct_wrap = _struct_wrap
 
@@ -56,61 +54,56 @@ class Record(object):
 
     def __str__(self):
         """Return a string representation of this Record."""
-        return (self._entry() +
-                self._name() +
-                self._formula() +
-                self._mass() +
-                self._pathway() +
-                self._enzyme() +
-                self._structures() +
-                self._dblinks() +
-                "///")
+        return (
+            self._entry()
+            + self._name()
+            + self._formula()
+            + self._mass()
+            + self._pathway()
+            + self._enzyme()
+            + self._structures()
+            + self._dblinks()
+            + "///"
+        )
 
     def _entry(self):
-        return _write_kegg("ENTRY",
-                           [self.entry])
+        return _write_kegg("ENTRY", [self.entry])
 
     def _name(self):
-        return _write_kegg("NAME",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.name])
+        return _write_kegg(
+            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+        )
 
     def _formula(self):
-        return _write_kegg("FORMULA",
-                           [self.formula])
+        return _write_kegg("FORMULA", [self.formula])
 
     def _mass(self):
-        return _write_kegg("MASS",
-                           [self.mass])
+        return _write_kegg("MASS", [self.mass])
 
     def _pathway(self):
         s = []
         for entry in self.pathway:
             s.append(entry[0] + "  " + entry[1])
-        return _write_kegg("PATHWAY",
-                           [_wrap_kegg(l, wrap_rule=id_wrap(16))
-                            for l in s])
+        return _write_kegg("PATHWAY", [_wrap_kegg(l, wrap_rule=id_wrap(16)) for l in s])
 
     def _enzyme(self):
-        return _write_kegg("ENZYME",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.enzyme])
+        return _write_kegg(
+            "ENZYME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.enzyme]
+        )
 
     def _structures(self):
         s = []
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
-        return _write_kegg("STRUCTURES",
-                           [_wrap_kegg(l, wrap_rule=struct_wrap(5))
-                            for l in s])
+        return _write_kegg(
+            "STRUCTURES", [_wrap_kegg(l, wrap_rule=struct_wrap(5)) for l in s]
+        )
 
     def _dblinks(self):
         s = []
         for entry in self.dblinks:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("DBLINKS",
-                           [_wrap_kegg(l, wrap_rule=id_wrap(9))
-                            for l in s])
+        return _write_kegg("DBLINKS", [_wrap_kegg(l, wrap_rule=id_wrap(9)) for l in s])
 
 
 def parse(handle):
@@ -179,4 +172,5 @@ def parse(handle):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

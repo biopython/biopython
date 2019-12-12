@@ -146,7 +146,11 @@ def kegg_find(database, query, option=None):
     #
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
-    if (database in ["compound", "drug"] and option in ["formula", "exact_mass", "mol_weight"]):
+    if database in ["compound", "drug"] and option in [
+        "formula",
+        "exact_mass",
+        "mol_weight",
+    ]:
         resp = _q("find", database, query, option)
     elif option:
         raise Exception("Invalid option arg for kegg find request.")
@@ -208,6 +212,7 @@ def kegg_conv(target_db, source_db, option=None):
      - target_db - Target database
      - source_db_or_dbentries - source database or database entries
      - option - Can be "turtle" or "n-triple" (string).
+
     """
     # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #
@@ -243,12 +248,18 @@ def kegg_conv(target_db, source_db, option=None):
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
 
-    if target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       (target_db in ["drug", "compound", "glycan"] and
-           source_db in ["pubchem", "glycan"]) or \
-       (target_db in ["pubchem", "glycan"] and
-           source_db in ["drug", "compound", "glycan"]):
+    if (
+        target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        or source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        or (
+            target_db in ["drug", "compound", "glycan"]
+            and source_db in ["pubchem", "glycan"]
+        )
+        or (
+            target_db in ["pubchem", "glycan"]
+            and source_db in ["drug", "compound", "glycan"]
+        )
+    ):
 
         if option:
             resp = _q("conv", target_db, source_db, option)
