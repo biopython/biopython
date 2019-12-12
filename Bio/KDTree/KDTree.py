@@ -88,8 +88,7 @@ class KDTree(object):
         if not self.built:
             raise Exception("No point set specified")
         if center.shape != (self.dim,):
-            raise Exception("Expected a %i-dimensional NumPy array"
-                            % self.dim)
+            raise Exception("Expected a %i-dimensional NumPy array" % self.dim)
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):

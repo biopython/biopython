@@ -19,7 +19,10 @@ from .KDTree import KDTree
 
 import warnings
 from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.KDTree has been deprecated, and we intend to remove it"
-              " in a future release of Biopython. Please use Bio.PDB.kdtrees"
-              " instead, which is functionally very similar.",
-              BiopythonDeprecationWarning)
+
+warnings.warn(
+    "Bio.KDTree has been deprecated, and we intend to remove it"
+    " in a future release of Biopython. Please use Bio.PDB.kdtrees"
+    " instead, which is functionally very similar.",
+    BiopythonDeprecationWarning,
+)
