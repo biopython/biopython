@@ -75,7 +75,7 @@ class MMCIFParser(object):
                 return rslt
         return deflt
 
-    def _update_header_entry(self, target_key, keys, is_float=False):
+    def _update_header_entry(self, target_key, keys):
         md = self._mmcif_dict
         for key in keys:
             val = md.get(key)
@@ -84,7 +84,7 @@ class MMCIFParser(object):
             except (TypeError, IndexError):
                 continue
             if item != "?":
-                self.header[target_key] = item if not is_float else float(item)
+                self.header[target_key] = item
                 return
 
     def _get_header(self):
@@ -109,8 +109,9 @@ class MMCIFParser(object):
         )
         self._update_header_entry("structure_method", ["_exptl.method"])
         self._update_header_entry(
-            "resolution", ["_refine.ls_d_res_high", "_refine_hist.d_res_high"], True
+            "resolution", ["_refine.ls_d_res_high", "_refine_hist.d_res_high"]
         )
+        self.header["resolution"] = float(self.header["resolution"])
 
         return self.header
 
