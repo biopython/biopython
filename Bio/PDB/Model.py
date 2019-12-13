@@ -6,6 +6,7 @@
 """Model class, used in Structure objects."""
 
 from Bio.PDB.Entity import Entity
+from Bio.PDB.internal_coords import IC_Chain
 
 
 class Model(Entity):
@@ -49,3 +50,23 @@ class Model(Entity):
         """Return atoms."""
         for r in self.get_residues():
             yield from r
+
+    def atom_to_internal_coordinates(self, allBonds=False):
+        """Create/update internal coordinates from Atom X,Y,Z coordinates.
+
+        Internal coordinates are bond length, angle and dihedral angles.
+
+        :param allBonds bool: default False
+            include hedra and dihedra for bonds around sidechain rings.
+            (not required to capture all atoms)
+        """
+        for chn in self.get_chains():
+            chn.atom_to_internal_coordinates(allBonds)
+
+    def internal_to_atom_coordinates(self):
+        """Create/update atom coordinates from internal coordinates.
+
+        :raises Exception: if any chain does not have .pic attribute
+        """
+        for chn in self.get_chains():
+            chn.internal_to_atom_coordinates()
