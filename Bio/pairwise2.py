@@ -57,14 +57,19 @@ All the different alignment functions are contained in an object
 ``align``. For example:
 
     >>> from Bio import pairwise2
-    >>> alignments = pairwise2.align.globalxx("ACCGT", "ACG")
+    >>> alignments = pairwise2.align.globalxx(sequenceA="ACCGT",
+    ...                                       sequenceB="ACG")
 
-will return a list of the alignments between the two strings. Each alignment
+Keywords can be ommitted, so this call is identical:
+
+    >>> alignments = pairwise2.align.globalxx("ACGT", "ACG")
+
+The result is a list of the alignments between the two strings. Each alignment
 is a named tuple consisting of the two aligned sequences, the score and the
 start and end positions of the alignment:
 
    >>> print(alignments)
-   [Alignment(sequence1='ACGT', sequence2='ACG-', score=3.0, start=0, end=4)]
+   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3.0, start=0, end=5), ...
 
 You can access each element of an aligment by index or name:
 
@@ -265,7 +270,7 @@ from collections import namedtuple
 from Bio import BiopythonWarning
 
 
-MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
+MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback
 
 
 class align:
@@ -367,11 +372,11 @@ class align:
             if penalty_doc:
                 doc += "\n%s\n" % penalty_doc
             doc += ("""\
-\nalignments is a list of tuples (seqA, seqB, score, begin, end).
-seqA and seqB are strings showing the alignment between the
-sequences.  score is the score of the alignment.  begin and end
-are indexes into seqA and seqB that indicate the where the
-alignment occurs.
+\nalignments is a list of named tuples (seqA, seqB, score,
+begin, end). seqA and seqB are strings showing the alignment
+between the sequences.  score is the score of the alignment.
+begin and end are indexes of seqA and seqB that indicate
+where the alignment occurs.
 """)
             self.__doc__ = doc
 
@@ -384,12 +389,6 @@ alignment occurs.
             keywds = keywds.copy()
 
             # Replace possible "keywords" with arguments:
-            """
-            for n, name in enumerate(self.param_names):
-                if name in keywds:
-                    args = args[:n] + (keywds[name],) + args[n:]
-                    del keywds[name]
-            """
             for key in keywds.copy():
                 if key in self.param_names:
                     _index = self.param_names.index(key)
@@ -402,11 +401,8 @@ alignment occurs.
                                  "force_generic",
                                  "score_only",
                                  "one_alignment_only"):
-                    raise ValueError("unknown parameter %r"
-                                     % key)
+                    raise ValueError("unknown parameter %r" % key)
                     
-            print(self.param_names)
-            print(args, keywds)
             if len(args) != len(self.param_names):
                 raise TypeError("%s takes exactly %d argument (%d given)"
                                 % (self.function_name, len(self.param_names),
@@ -1002,7 +998,7 @@ def _clean_alignments(alignments):
     empty alignments.
     """
     Alignment = namedtuple('Alignment',
-                           ('sequence1, sequence2, score, start, end'))
+                           ('seqA, seqB, score, start, end'))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:
