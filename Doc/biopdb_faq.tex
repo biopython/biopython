@@ -502,9 +502,15 @@ a chain between a start and end residue.
 
 \subsubsection*{Can I write mmCIF files?}
 
-No, and I also don't have plans to add that functionality soon (or
-ever - I don't need it at all, and it's a lot of work, plus no-one
-has ever asked for it). People who want to add this can contact me.
+Yes, very similar to writing PDB files, use the \texttt{MMCIFIO} class:
+\begin{lyxcode}
+	io=MMCIFIO()
+	
+	io.set\_structure(s)
+	
+	io.save('out.cif')
+\end{lyxcode}
+This class also makes use of the \texttt{Select} class from \texttt{PDBIO}.
 
 
 \subsection{The Structure object\label{sub:The-Structure-object}}
