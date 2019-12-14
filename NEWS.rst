@@ -14,6 +14,11 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
 also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
+We now test every contribution on the arm64, ppc64le, and s390x CPU
+architectures thanks to Travis CI. This is in addition to the additional
+post-release testing done by Debian and other packagers and distributors of
+Biopython: https://buildd.debian.org/python-biopython
+
 Note we intend to drop Python 2.7 support in early 2020.
 
 As in recent releases, more of our code is now explicitly available under
