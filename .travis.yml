@@ -62,30 +62,75 @@ matrix:
     - stage: test
       python: 2.7
       env: TOXENV=py27-cover
+      addons:
+        apt:
+          packages:
+            - &amd64_only_packages [ bwa, ]
+            - *default_packages
     - stage: test
       python: 3.5
       env: TOXENV=py35-cover
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
     - stage: test
       python: 3.6
       env: TOXENV=py36-cover
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
     - stage: test
       python: 3.7
       env: TOXENV=py37-cover
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
     - stage: test
       python: 3.8
       env: TOXENV=py38-cover
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
+    - stage: test
+      python: 3.8
+      env: TOXENV=py38-cover
+      arch: arm64
+    - stage: test
+      python: 3.8
+      env: TOXENV=py38-cover
+      arch: ppc64le
+    - stage: test
+      python: 3.8
+      env: TOXENV=py38-cover
+      arch: s390x
     - stage: test
       python: pypy
       env: TOXENV=pypy-nocov
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
     - stage: test
       python: pypy3
       env: TOXENV=pypy3-nocov
+      addons:
+        apt:
+          packages:
+            - *amd64_only_packages
+            - *default_packages
 
-sudo: false
 addons:
   apt:
-    packages:
-    - bwa
+    packages: &default_packages
     - clustalo
     - clustalw
     - emboss
@@ -115,18 +160,24 @@ before_install:
   #- curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
   #- mv dssp-2.0.4-linux-amd64 bin/dssp
   #- chmod a+x bin/dssp
-  - echo "Installing Genepop"
-  - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
-  # This will create ./bin/Genepop and a harmless ./info/ folder.
-  - tar -jxvf genepop-4.5.1-0.tar.bz2
+  - |
+    if [ $TRAVIS_CPU_ARCH == amd64 ]; then
+     echo "Installing Genepop"
+     curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
+     # This will create ./bin/Genepop and a harmless ./info/ folder.
+     tar -jxvf genepop-4.5.1-0.tar.bz2
+    fi
   # Setup environment for t-coffee
   - mkdir -p $HOME/tcoffee_temp
   - export HOME_4_TCOFFEE=$HOME/tcoffee_temp
   - popd
   - cp Tests/biosql.ini.sample Tests/biosql.ini
-  - psql -c "create database biosql_test;" -U postgres
-  - psql -c "create user biosql_user with encrypted password 'biosql_pass';" -U postgres
-  - psql -c "grant all privileges on database biosql_test to biosql_user;" -U postgres
+  - |
+    if [ $TRAVIS_CPU_ARCH == amd64 ]; then
+     psql -c "create database biosql_test;" -U postgres
+     psql -c "create user biosql_user with encrypted password 'biosql_pass';" -U postgres
+     psql -c "grant all privileges on database biosql_test to biosql_user;" -U postgres
+    fi
 
 
 # This is minimal and used under all stages
