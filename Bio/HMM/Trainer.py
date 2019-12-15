@@ -106,6 +106,7 @@ class AbstractTrainer(object):
 
         See estimate_params for a description of the formula used for
         calculation.
+
         """
         # get an ordered list of all items
         all_ordered = sorted(counts)
@@ -269,6 +270,7 @@ class BaumWelchTrainer(AbstractTrainer):
 
         This calculates A_{kl} (the estimated transition counts from state
         k to state l) using formula 3.20 in Durbin et al.
+
         """
         # set up the transition and emission probabilities we are using
         transitions = self._markov_model.transition_prob
@@ -323,6 +325,7 @@ class BaumWelchTrainer(AbstractTrainer):
 
         This calculates E_{k}(b) (the estimated emission probability for
         emission letter b from state k) using formula 3.21 in Durbin et al.
+
         """
         # loop over the possible combinations of state path letters
         for k in training_seq.states.alphabet.letters:

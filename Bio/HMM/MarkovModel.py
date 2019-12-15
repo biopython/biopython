@@ -201,7 +201,7 @@ class MarkovModelBuilder(object):
         for state in initial_prob:
             if state not in self._state_alphabet.letters:
                 raise ValueError(
-                    "State %s was not found in the sequence " "alphabet" % state
+                    "State %s was not found in the sequence alphabet" % state
                 )
 
         # distribute the residual probability, if any
