@@ -1698,7 +1698,7 @@ typedef struct {
     PyObject* query_gap_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
-    char mapping[256];
+    signed char mapping[128];
 } Aligner;
 
 
@@ -1751,7 +1751,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.obj = NULL;
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
-    for (i = 0; i < 256; i++) self->mapping[i] = MISSING_LETTER;
+    for (i = 0; i < 128; i++) self->mapping[i] = MISSING_LETTER;
     i = (int)'A';
     for (j = 0; j < n; i++, j++) self->mapping[i] = j;
     i = (int)'a';
@@ -2025,16 +2025,22 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
     alphabet = PyObject_GetAttrString(values, "alphabet");
     if (alphabet) {
         int i;
-        char* mapping = self->mapping;
+        signed char* mapping = self->mapping;
 #if PY_MAJOR_VERSION > 2
         if (PyUnicode_Check(alphabet)) {
-            const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
-            if (characters) {
+            if (PyUnicode_READY(alphabet) < 0) {
+                PyBuffer_Release(&view);
+                Py_DECREF(alphabet);
+                return -1;
+            }
+            if (PyUnicode_IS_COMPACT_ASCII(alphabet)) {
+                const char* characters = PyUnicode_DATA(alphabet);
+                size = PyUnicode_GET_LENGTH(alphabet);
 #else
         char* characters;
         if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
 #endif
-                for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
+                for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
                 for (i = 0; i < size; i++) {
                     int j = characters[i];
                     mapping[j] = i;
@@ -2081,7 +2087,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
 {
     int i, j;
     Py_ssize_t size = -1;
-    char* mapping = self->mapping;
+    signed char* mapping = self->mapping;
     if (self->substitution_matrix.obj) {
         PyErr_SetString(PyExc_AttributeError,
             "can't set alphabet if a substitution matrix is used");
@@ -2096,14 +2102,19 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
     }
 #if PY_MAJOR_VERSION > 2
     if (PyUnicode_Check(alphabet)) {
-        const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
-        if (characters) {
+        if (PyUnicode_READY(alphabet) < 0) {
+            Py_DECREF(alphabet);
+            return 0;
+        }
+        if (PyUnicode_IS_COMPACT_ASCII(alphabet)) {
+            const char* characters = PyUnicode_DATA(alphabet);
+            size = PyUnicode_GET_LENGTH(alphabet);
 #else
     {
         char* characters;
         if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
 #endif
-            for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
+            for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
             for (i = 0; i < size; i++) {
                 j = characters[i];
                 mapping[j] = i;
@@ -2128,7 +2139,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
             "strings, lists, and tuples can be valid alphabets).");
         if (!sequence) return -1;
         size = PySequence_Fast_GET_SIZE(sequence);
-        for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
+        for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
         for (i = 0; i < size; i++) {
             item = PySequence_Fast_GET_ITEM(sequence, i);
 #if PY_MAJOR_VERSION > 2
@@ -2138,6 +2149,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
 #endif
             if (k != 1) break;
             j = *character;
+            if (j < 0 || j >= 128) break;
             mapping[j] = i;
         }
         PyErr_Clear();
@@ -6283,7 +6295,8 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 }
 
 static int*
-convert_sequence_to_ints(const char mapping[], Py_ssize_t n, const char s[])
+convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
+                         const char s[])
 {
     char c;
     Py_ssize_t i;
@@ -6382,7 +6395,7 @@ sequence_converter(PyObject* argument, void* pointer)
 #endif
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
-    char* mapping;
+    signed char* mapping;
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
