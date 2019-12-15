@@ -1698,7 +1698,7 @@ typedef struct {
     PyObject* query_gap_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
-    signed char mapping[128];
+    signed char mapping[256];
 } Aligner;
 
 
@@ -1751,7 +1751,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.obj = NULL;
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
-    for (i = 0; i < 128; i++) self->mapping[i] = MISSING_LETTER;
+    for (i = 0; i < 256; i++) self->mapping[i] = MISSING_LETTER;
     i = (int)'A';
     for (j = 0; j < n; i++, j++) self->mapping[i] = j;
     i = (int)'a';
@@ -2028,19 +2028,13 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
         signed char* mapping = self->mapping;
 #if PY_MAJOR_VERSION > 2
         if (PyUnicode_Check(alphabet)) {
-            if (PyUnicode_READY(alphabet) < 0) {
-                PyBuffer_Release(&view);
-                Py_DECREF(alphabet);
-                return -1;
-            }
-            if (PyUnicode_IS_COMPACT_ASCII(alphabet)) {
-                const char* characters = PyUnicode_DATA(alphabet);
-                size = PyUnicode_GET_LENGTH(alphabet);
+            const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
+            if (characters) {
 #else
         char* characters;
         if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
 #endif
-                for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
+                for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
                 for (i = 0; i < size; i++) {
                     int j = characters[i];
                     mapping[j] = i;
@@ -2102,19 +2096,14 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
     }
 #if PY_MAJOR_VERSION > 2
     if (PyUnicode_Check(alphabet)) {
-        if (PyUnicode_READY(alphabet) < 0) {
-            Py_DECREF(alphabet);
-            return 0;
-        }
-        if (PyUnicode_IS_COMPACT_ASCII(alphabet)) {
-            const char* characters = PyUnicode_DATA(alphabet);
-            size = PyUnicode_GET_LENGTH(alphabet);
+        const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
+        if (characters) {
 #else
     {
         char* characters;
         if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
 #endif
-            for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
+            for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
             for (i = 0; i < size; i++) {
                 j = characters[i];
                 mapping[j] = i;
@@ -2149,7 +2138,6 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
 #endif
             if (k != 1) break;
             j = *character;
-            if (j < 0 || j >= 128) break;
             mapping[j] = i;
         }
         PyErr_Clear();

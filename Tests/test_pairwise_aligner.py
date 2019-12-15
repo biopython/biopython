@@ -906,7 +906,6 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         }
 
     def test_match_dictionary1(self):
-        self.maxDiff = None
         try:
             from Bio.Align import substitution_matrices
         except ImportError:
@@ -920,8 +919,6 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.maxDiff = None
-        self.assertEqual(str(aligner), "weet ik veel")
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
