@@ -33,6 +33,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Christian Brueffer
 - Jakub Lipinski (first contribution)
+- Michael R. Crusoe (first contribution)
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
