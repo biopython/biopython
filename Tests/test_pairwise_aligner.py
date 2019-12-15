@@ -919,6 +919,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
+        print(aligner)
         lines = str(aligner).splitlines()
         self.assertEqual(len(lines), 15)
         self.assertEqual(lines[0], "Pairwise sequence aligner with parameters")
