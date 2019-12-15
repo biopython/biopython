@@ -2128,7 +2128,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
             "strings, lists, and tuples can be valid alphabets).");
         if (!sequence) return -1;
         size = PySequence_Fast_GET_SIZE(sequence);
-        for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
+        for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
         for (i = 0; i < size; i++) {
             item = PySequence_Fast_GET_ITEM(sequence, i);
 #if PY_MAJOR_VERSION > 2
