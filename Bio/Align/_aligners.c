@@ -1698,7 +1698,7 @@ typedef struct {
     PyObject* query_gap_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
-    char mapping[256];
+    signed char mapping[256];
 } Aligner;
 
 
@@ -2025,7 +2025,7 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
     alphabet = PyObject_GetAttrString(values, "alphabet");
     if (alphabet) {
         int i;
-        char* mapping = self->mapping;
+        signed char* mapping = self->mapping;
 #if PY_MAJOR_VERSION > 2
         if (PyUnicode_Check(alphabet)) {
             const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
@@ -2081,7 +2081,7 @@ Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
 {
     int i, j;
     Py_ssize_t size = -1;
-    char* mapping = self->mapping;
+    signed char* mapping = self->mapping;
     if (self->substitution_matrix.obj) {
         PyErr_SetString(PyExc_AttributeError,
             "can't set alphabet if a substitution matrix is used");
@@ -6283,7 +6283,8 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 }
 
 static int*
-convert_sequence_to_ints(const char mapping[], Py_ssize_t n, const char s[])
+convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
+                         const char s[])
 {
     char c;
     Py_ssize_t i;
@@ -6382,7 +6383,7 @@ sequence_converter(PyObject* argument, void* pointer)
 #endif
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
-    char* mapping;
+    signed char* mapping;
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
