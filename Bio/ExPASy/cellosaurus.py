@@ -121,9 +121,7 @@ class Record(dict):
     def __repr__(self):
         if self["ID"]:
             if self["AC"]:
-                return "%s (%s, %s)" % (
-                    self.__class__.__name__, self["ID"], self["AC"]
-                    )
+                return "%s (%s, %s)" % (self.__class__.__name__, self["ID"], self["AC"])
             else:
                 return "%s (%s)" % (self.__class__.__name__, self["ID"])
         else:
@@ -162,8 +160,21 @@ def __read(handle):
             record["ID"] = value
         elif key in ["AC", "AS", "SY", "SX", "CA"]:
             record[key] += value
-        elif key in ["AC", "AS", "SY", "RX", "WW", "CC",
-                     "ST", "DI", "OX", "HI", "OI", "SX", "CA"]:
+        elif key in [
+            "AC",
+            "AS",
+            "SY",
+            "RX",
+            "WW",
+            "CC",
+            "ST",
+            "DI",
+            "OX",
+            "HI",
+            "OI",
+            "SX",
+            "CA",
+        ]:
             record[key].append(value)
         elif key == "DR":
             k, v = value.split(";")
