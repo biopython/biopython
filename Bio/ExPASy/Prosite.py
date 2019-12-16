@@ -152,8 +152,10 @@ class Record(object):
 
 # Everything below are private functions
 
+
 def __read(handle):
     import re
+
     record = None
     for line in handle:
         keyword, value = line[:2], line[5:].rstrip()
@@ -161,10 +163,9 @@ def __read(handle):
             record = Record()
             cols = value.split("; ")
             if len(cols) != 2:
-                raise ValueError("I don't understand identification line\n%s"
-                                 % line)
+                raise ValueError("I don't understand identification line\n%s" % line)
             record.name = cols[0]
-            record.type = cols[1].rstrip(".")    # don't want '.'
+            record.type = cols[1].rstrip(".")  # don't want '.'
         elif keyword == "AC":
             record.accession = value.rstrip(";")
         elif keyword == "DT":
@@ -214,20 +215,22 @@ def __read(handle):
                 elif qual in ["/TOTAL", "/POSITIVE", "/UNKNOWN", "/FALSE_POS"]:
                     m = re.match(r"(\d+)\((\d+)\)", data)
                     if not m:
-                        raise Exception("Broken data %s in comment line\n%s"
-                                        % (repr(data), line))
+                        raise Exception(
+                            "Broken data %s in comment line\n%s" % (repr(data), line)
+                        )
                     hits = tuple(map(int, m.groups()))
-                    if(qual == "/TOTAL"):
+                    if qual == "/TOTAL":
                         record.nr_total = hits
-                    elif(qual == "/POSITIVE"):
+                    elif qual == "/POSITIVE":
                         record.nr_positive = hits
-                    elif(qual == "/UNKNOWN"):
+                    elif qual == "/UNKNOWN":
                         record.nr_unknown = hits
-                    elif(qual == "/FALSE_POS"):
+                    elif qual == "/FALSE_POS":
                         record.nr_false_pos = hits
                 else:
-                    raise ValueError("Unknown qual %s in comment line\n%s"
-                                     % (repr(qual), line))
+                    raise ValueError(
+                        "Unknown qual %s in comment line\n%s" % (repr(qual), line)
+                    )
         elif keyword == "CC":
             # Expect CC lines like this:
             # CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
@@ -267,8 +270,9 @@ def __read(handle):
                 elif qual == "/VERSION":
                     record.cc_version = data
                 else:
-                    raise ValueError("Unknown qual %s in comment line\n%s"
-                                     % (repr(qual), line))
+                    raise ValueError(
+                        "Unknown qual %s in comment line\n%s" % (repr(qual), line)
+                    )
         elif keyword == "DR":
             refs = value.split(";")
             for ref in refs:

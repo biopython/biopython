@@ -48,9 +48,9 @@ def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
     This function returns a handle to the search results returned by
     ScanProsite. Search results in the XML format can be parsed into a
     Python object, by using the Bio.ExPASy.ScanProsite.read function.
+
     """
-    parameters = {"seq": seq,
-                  "output": output}
+    parameters = {"seq": seq, "output": output}
     for key, value in keywords.items():
         if value is not None:
             parameters[key] = value
@@ -68,6 +68,7 @@ def read(handle):
     saxparser.parse(handle)
     record = content_handler.record
     return record
+
 
 # The classess below are considered private
 
@@ -101,12 +102,14 @@ class ContentHandler(handler.ContentHandler):
     """Process and fill in the records, results of the search (PRIVATE)."""
 
     integers = ("start", "stop")
-    strings = ("sequence_ac",
-               "sequence_id",
-               "sequence_db",
-               "signature_ac",
-               "level",
-               "level_tag")
+    strings = (
+        "sequence_ac",
+        "sequence_id",
+        "sequence_db",
+        "signature_ac",
+        "level",
+        "level_tag",
+    )
 
     def __init__(self):
         """Initialize the class."""

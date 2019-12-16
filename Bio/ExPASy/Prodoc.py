@@ -78,6 +78,7 @@ class Reference(object):
         self.authors = ""
         self.citation = ""
 
+
 # Below are private functions
 
 
