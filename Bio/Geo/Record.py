@@ -89,6 +89,6 @@ def out_block(text, prefix=""):
     """Format text in blocks of 80 chars with an additional optional prefix."""
     output = ""
     for j in range(0, len(text), 80):
-        output += "%s%s\n" % (prefix, text[j:j + 80])
+        output += "%s%s\n" % (prefix, text[j : j + 80])
     output += "\n"
     return output
