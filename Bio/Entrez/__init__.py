@@ -229,8 +229,7 @@ def esearch(db, term, **keywds):
 
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-    variables = {"db": db,
-                 "term": term}
+    variables = {"db": db, "term": term}
     variables.update(keywds)
     return _open(cgi, variables)
 
@@ -401,7 +400,14 @@ def espell(**keywds):
 def _update_ecitmatch_variables(keywds):
     # XML is the only supported value, and it actually returns TXT.
     variables = {"retmode": "xml"}
-    citation_keys = ("journal_title", "year", "volume", "first_page", "author_name", "key")
+    citation_keys = (
+        "journal_title",
+        "year",
+        "volume",
+        "first_page",
+        "author_name",
+        "key",
+    )
 
     # Accept pre-formatted strings
     if isinstance(keywds["bdata"], str):
@@ -411,7 +417,9 @@ def _update_ecitmatch_variables(keywds):
         variables["db"] = keywds["db"]
         bdata = []
         for citation in keywds["bdata"]:
-            formatted_citation = "|".join([citation.get(key, "") for key in citation_keys])
+            formatted_citation = "|".join(
+                [citation.get(key, "") for key in citation_keys]
+            )
             bdata.append(formatted_citation)
         variables["bdata"] = "\r".join(bdata)
     return variables
@@ -474,6 +482,7 @@ def read(handle, validate=True, escape=False):
     the tag name in my_element.tag.
     """
     from .Parser import DataHandler
+
     handler = DataHandler(validate, escape)
     record = handler.read(handle)
     return record
@@ -511,6 +520,7 @@ def parse(handle, validate=True, escape=False):
     the tag name in my_element.tag.
     """
     from .Parser import DataHandler
+
     handler = DataHandler(validate, escape)
     records = handler.parse(handle)
     return records
@@ -570,9 +580,11 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
             # higher up in this function in place), so the best we can do is
             # treat them as a serverside error and try again after sleeping
             # for a bit.
-            if isinstance(exception, _HTTPError) \
-                    and exception.code // 100 == 4 \
-                    and exception.code != 429:
+            if (
+                isinstance(exception, _HTTPError)
+                and exception.code // 100 == 4
+                and exception.code != 429
+            ):
                 raise
 
             # Treat everything else as a transient error and try again after a
@@ -604,7 +616,8 @@ def _construct_params(params):
         if email is not None:
             params["email"] = email
         else:
-            warnings.warn("""
+            warnings.warn(
+                """
 Email address is not specified.
 
 To make use of NCBI's E-utilities, NCBI requires you to specify your
@@ -614,7 +627,9 @@ is A.N.Other@example.com, you can specify it as follows:
    Entrez.email = 'A.N.Other@example.com'
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
-E-utilities.""", UserWarning)
+E-utilities.""",
+                UserWarning,
+            )
     if api_key and "api_key" not in params:
         params["api_key"] = api_key
     return params
@@ -638,4 +653,5 @@ def _construct_cgi(cgi, post, options):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
