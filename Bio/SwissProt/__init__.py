@@ -21,6 +21,14 @@ from __future__ import print_function
 from Bio._py3k import _as_string
 
 
+class SwissProtParserError(ValueError):
+    """An error occurred while parsing a SwissProt file."""
+
+    def __init__(self, *args, line=None):
+        super().__init__(*args)
+        self.line = line
+
+
 class Record(object):
     """Holds information from a SwissProt record.
 
@@ -167,6 +175,14 @@ def read(handle):
 def _read(handle):
     record = None
     unread = ""
+    line = next(handle)
+    line = _as_string(line)
+    key, value = line[:2], line[5:].rstrip()
+    if key != "ID":
+        raise SwissProtParserError("Failed to find ID in first line", line=line)
+    record = Record()
+    _read_id(record, line)
+    _sequence_lines = []
     for line in handle:
         # This is for Python 3 to cope with a binary handle (byte strings),
         # or a text handle (unicode strings):
@@ -175,19 +191,7 @@ def _read(handle):
         if unread:
             value = unread + " " + value
             unread = ""
-        if key == "**":
-            # See Bug 2353, some files from the EBI have extra lines
-            # starting "**" (two asterisks/stars).  They appear
-            # to be unofficial automated annotations. e.g.
-            # **
-            # **   #################    INTERNAL SECTION    ##################
-            # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
-            pass
-        elif key == "ID":
-            record = Record()
-            _read_id(record, line)
-            _sequence_lines = []
-        elif key == "AC":
+        if key == "AC":
             accessions = value.rstrip(";").split("; ")
             record.accessions.extend(accessions)
         elif key == "DT":
@@ -273,8 +277,18 @@ def _read(handle):
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
+        elif key == "**":
+            # Do this one last, as it will almost never occur.
+            # See Bug 2353, some files from the EBI have extra lines
+            # starting "**" (two asterisks/stars).  They appear
+            # to be unofficial automated annotations. e.g.
+            # **
+            # **   #################    INTERNAL SECTION    ##################
+            # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
+            pass
         else:
-            raise ValueError("Unknown keyword '%s' found" % key)
+            raise SwissProtParserError("Unknown keyword '%s' found" % key,
+                                       line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
 
@@ -297,19 +311,18 @@ def _read_id(record, line):
         record.molecule_type = None
         record.sequence_length = int(cols[2])
     else:
-        raise ValueError("ID line has unrecognised format:\n" + line)
+        raise SwissProtParserError("ID line has unrecognised format", line=line)
     # check if the data class is one of the allowed values
     allowed = ("STANDARD", "PRELIMINARY", "IPI", "Reviewed", "Unreviewed")
     if record.data_class not in allowed:
-        raise ValueError(
-            "Unrecognized data class %s in line\n%s" % (record.data_class, line)
-        )
+        message = "Unrecognized data class '%s'" % record.data_class
+        raise SwissProtParserError(message, line=line)
+
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, "PRT"):
-        raise ValueError(
-            "Unrecognized molecule type %s in line\n%s" % (record.molecule_type, line)
-        )
+        message = "Unrecognized molecule type '%s'" % record.molecule_type
+        raise SwissProtParserError(message, line=line)
 
 
 def _read_dt(record, line):
@@ -363,7 +376,8 @@ def _read_dt(record, line):
         elif "LAST ANNOTATION UPDATE" in uprline:
             record.annotation_update = date, version
         else:
-            raise ValueError("Unrecognised DT (DaTe) line.")
+            raise SwissProtParserError("Unrecognised DT (DaTe) line",
+                                       line=line)
     elif (
         "INTEGRATED INTO" in uprline
         or "SEQUENCE VERSION" in uprline
@@ -407,9 +421,9 @@ def _read_dt(record, line):
         elif "ENTRY VERSION" in uprline:
             record.annotation_update = date, version
         else:
-            raise ValueError("Unrecognised DT (DaTe) line.")
+            raise SwissProtParserError("Unrecognised DT (DaTe) line", line=line)
     else:
-        raise ValueError("I don't understand the date line %s" % line)
+        raise SwissProtParserError("Failed to parse DT (DaTe) line", line=line)
 
 
 def _read_ox(record, line):
