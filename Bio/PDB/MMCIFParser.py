@@ -83,7 +83,7 @@ class MMCIFParser:
                 continue
             if item != "?":
                 self.header[target_key] = item
-                return
+                break
 
     def _get_header(self):
         self.header = {
