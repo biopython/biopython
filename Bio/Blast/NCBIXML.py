@@ -27,7 +27,7 @@ class _XMLparser(ContentHandler):
     """
 
     def __init__(self, debug=0):
-        """Constructor.
+        """Initialize the parser.
 
         Arguments:
          - debug - integer, amount of debug information to print
@@ -139,7 +139,7 @@ class BlastParser(_XMLparser):
     """
 
     def __init__(self, debug=0):
-        """Constructor.
+        """Initialize the parser.
 
         Arguments:
          - debug - integer, amount of debug information to print
