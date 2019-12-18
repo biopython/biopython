@@ -41,6 +41,7 @@ possible, especially the following contributors:
 - Michael R. Crusoe (first contribution)
 - Michiel de Hoon
 - Peter Cock
+- Rob Miller
 - Sergio Valqui
 
 6 November 2019: Biopython 1.75
@@ -230,7 +231,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Peter Kerpedjiev
 - Ralf Stephan
-- Rob Miller
+- Rob Miller (first contribution)
 - Sergio Valqui
 - Victor Lin
 - Wibowo 'Bow' Arindrarto
