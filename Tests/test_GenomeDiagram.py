@@ -73,16 +73,12 @@ def apply_to_window(sequence, window_size, function, step=None):
     sequence of length window_size (stepped by step), calculated by the passed
     function.  Returned positions are the midpoint of each window.
 
-    Arguments:
-
     - sequence - Bio.Seq.Seq object.
     - window_size - an integer describing the length of sequence to consider.
     - step - an integer describing the step to take between windows
       (default = window_size//2).
     - function - Method or function that accepts a Bio.Seq.Seq object
       as its sole argument and returns a single value.
-
-    apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
     """
     seqlen = len(sequence)      # Total length of sequence to be used
     if step is None:    # No step specified, so use half window-width or 1 if larger
