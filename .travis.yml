@@ -101,7 +101,7 @@ matrix:
             - *default_packages
     - stage: test
       python: 3.8
-      env: TOXENV=py38-cover
+      env: TOXENV=py38-nocov
       arch: arm64
     - stage: test
       python: 3.8
