@@ -105,7 +105,7 @@ matrix:
       arch: arm64
     - stage: test
       python: 3.8
-      env: TOXENV=py38-cover
+      env: TOXENV=py38-nocov
       arch: ppc64le
     - stage: test
       python: 3.8
