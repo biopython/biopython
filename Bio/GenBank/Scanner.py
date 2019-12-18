@@ -517,9 +517,13 @@ class InsdcScanner(object):
                 if record is None:
                     break
                 if record.id is None:
-                    raise ValueError("Failed to parse the record's ID. Invalid ID line?")
+                    raise ValueError(
+                        "Failed to parse the record's ID. Invalid ID line?"
+                    )
                 if record.name == "<unknown name>":
-                    raise ValueError("Failed to parse the record's name. Invalid ID line?")
+                    raise ValueError(
+                        "Failed to parse the record's name. Invalid ID line?"
+                    )
                 if record.description == "<unknown description>":
                     raise ValueError("Failed to parse the record's description")
                 yield record
@@ -540,6 +544,7 @@ class InsdcScanner(object):
            for the record id, name and description,
 
         This method is intended for use in Bio.SeqIO
+
         """
         with as_handle(handle, "rU") as handle:
             self.set_handle(handle)
@@ -583,7 +588,9 @@ class InsdcScanner(object):
                             # Append the data to the annotation qualifier...
                             if qualifier_name == "translation":
                                 assert record.seq is None, "Multiple translations!"
-                                record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
+                                record.seq = Seq(
+                                    qualifier_data.replace("\n", ""), alphabet
+                                )
                             elif qualifier_name == "db_xref":
                                 # its a list, possibly empty.  Its safe to extend
                                 record.dbxrefs.append(qualifier_data)
@@ -648,9 +655,7 @@ class EmblScanner(InsdcScanner):
             self.line[: self.HEADER_WIDTH] == " " * self.HEADER_WIDTH
             or self.line.strip() == "//"
         ):
-            raise ValueError(
-                "Unexpected content after SQ or CO line: %r" % self.line
-            )
+            raise ValueError("Unexpected content after SQ or CO line: %r" % self.line)
 
         seq_lines = []
         line = self.line
@@ -1330,9 +1335,7 @@ class GenBankScanner(InsdcScanner):
                     "Cannot parse the name and length in the LOCUS line:\n" + line
                 )
             if len(name_and_length) == 1:
-                raise ValueError(
-                    "Name and length collide in the LOCUS line:\n" + line
-                )
+                raise ValueError("Name and length collide in the LOCUS line:\n" + line)
             # Should be possible to split them based on position, if
             # a clear definition of the standard exists THAT AGREES with
             # existing files.
@@ -1458,9 +1461,7 @@ class GenBankScanner(InsdcScanner):
                     "Cannot parse the name and length in the LOCUS line:\n" + line
                 )
             if len(name_and_length) == 1:
-                raise ValueError(
-                    "Name and length collide in the LOCUS line:\n" + line
-                )
+                raise ValueError("Name and length collide in the LOCUS line:\n" + line)
             # Should be possible to split them based on position, if
             # a clear definition of the stand exists THAT AGREES with
             # existing files.
@@ -1798,11 +1799,11 @@ class GenBankScanner(InsdcScanner):
                             ):
                                 # The current structured comment has a multiline value
                                 previous_value_line = structured_comment_dict[
-                                    structured_comment_key][
-                                    match.group(1)]
-                                structured_comment_dict[
-                                    structured_comment_key][
-                                    match.group(1)] = previous_value_line + " " + line.strip()
+                                    structured_comment_key
+                                ][match.group(1)]
+                                structured_comment_dict[structured_comment_key][
+                                    match.group(1)
+                                ] = (previous_value_line + " " + line.strip())
                             elif self.STRUCTURED_COMMENT_END in data:
                                 # End of structured comment
                                 structured_comment_key = None
