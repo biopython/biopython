@@ -131,6 +131,8 @@ matrix:
           packages:
             - *amd64_only_packages
             - *default_packages
+  allow_failures:
+    - arch: arm64
 
 addons:
   apt:
