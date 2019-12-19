@@ -429,7 +429,7 @@ class xbb_widget(object):
         )
 
     def blast(self):
-        """Set-up and start BLASTing."""
+        """Initialize and start BLASTing."""
         seq = self.get_selection_or_sequence()
         self.blaster = BlastIt(seq, self.parent)
 
@@ -493,7 +493,7 @@ class xbb_widget(object):
         w.tag_remove("sel", stop, "end")
 
     def search(self):
-        """Set-up and start search process."""
+        """Initialize and start search process."""
         seq = self.get_selection_or_sequence()
         XDNAsearch(seq, master=self.sequence_id, highlight=1)
 
