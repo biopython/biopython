@@ -11,4 +11,7 @@ from UniProt-GOA as the module Bio.UniProt.GOA.
 
 See also Bio.SwissProt and the "swiss" support in Bio.SeqIO for
 the legacy plain text sequence format still used in UniProt.
+
+See also Bio.SeqIO.SwissIO for the "uniprot-xml" support in
+Bio.SeqIO.
 """
