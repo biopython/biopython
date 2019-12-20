@@ -11,8 +11,10 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.77
 ===============================================
 
-This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
+This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
 tested on PyPy3.6.1 v7.1.1-beta0.
+
+**We have dropped support for Python 2 now.**
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
