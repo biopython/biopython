@@ -118,26 +118,6 @@ def is_pypy():
     return False
 
 
-def is_jython():
-    """Check if running under the Jython implementation of Python."""
-    import platform
-
-    try:
-        if platform.python_implementation() == "Jython":
-            return True
-    except AttributeError:
-        # This was missing prior to ~ Jython 2.7.0
-        pass
-    # Fall back which will work with older Jython:
-    return os.name == "java"
-
-
-def is_ironpython():
-    """Check if running under the IronPython implementation of Python."""
-    return sys.platform == "cli"
-    # TODO - Use platform as in Pypy test?
-
-
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (3, 6):
     sys.stderr.write(
@@ -145,10 +125,6 @@ if sys.version_info[:2] < (3, 6):
         "Python %d.%d detected.\n" % sys.version_info[:2]
     )
     sys.exit(1)
-
-
-if is_jython():
-    sys.stderr.write("WARNING: Biopython support for Jython is now deprecated.\n")
 
 
 def check_dependencies_once():
@@ -196,16 +172,7 @@ class build_py_biopython(build_py):
         """Run the build."""
         if not check_dependencies_once():
             return
-        if is_jython() and "Bio.Restriction" in self.packages:
-            # Evil hack to work on Jython 2.7 to avoid
-            # java.lang.RuntimeException: Method code too large!
-            # from Bio/Restriction/Restriction_Dictionary.py
-            self.packages.remove("Bio.Restriction")
-        # Add software that requires Numpy to be installed.
-        if is_jython() or is_ironpython():
-            pass
-        else:
-            self.packages.extend(NUMPY_PACKAGES)
+        self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
 
@@ -273,10 +240,6 @@ def can_import(module_name):
 # setup.py's install_requires is preferred for a library
 # (and should try not to be overly narrow with versions).
 REQUIRES = ["numpy"]
-
-if is_jython() or is_ironpython():
-    REQUIRES.remove("numpy")
-
 
 # --- set up the packages we are going to install
 # standard biopython packages
@@ -351,13 +314,6 @@ PACKAGES = [
     "BioSQL",
 ]
 
-if is_jython():
-    # Evil hack to work on Jython 2.7
-    # This is to avoid java.lang.RuntimeException: Method code too large!
-    # from Bio/Restriction/Restriction_Dictionary.py
-    PACKAGES.remove("Bio.Restriction")
-
-
 # packages that require Numeric Python
 NUMPY_PACKAGES = [
     "Bio.Affy",
@@ -367,40 +323,33 @@ NUMPY_PACKAGES = [
     "Bio.phenotype",
 ]
 
-if is_jython():
-    # Jython doesn't support C extensions
-    EXTENSIONS = []
-elif is_ironpython():
-    # Skip C extensions for now
-    EXTENSIONS = []
-else:
-    EXTENSIONS = [
-        Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
-        Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
-        Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
-        Extension(
-            "Bio.PDB.QCPSuperimposer.qcprotmodule",
-            ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-        ),
-        Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
-        Extension(
-            "Bio.Cluster._cluster",
-            ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
-        ),
-        Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
-        Extension(
-            "Bio.KDTree._CKDTree", ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]
-        ),
-    ]
-    if not is_pypy():
-        # Bio.trie has a problem under PyPy2 v5.6 and 5.7
-        EXTENSIONS.extend(
-            [
-                Extension(
-                    "Bio.trie", ["Bio/triemodule.c", "Bio/trie.c"], include_dirs=["Bio"]
-                )
-            ]
-        )
+EXTENSIONS = [
+    Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
+    Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
+    Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
+    Extension(
+        "Bio.PDB.QCPSuperimposer.qcprotmodule",
+        ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+    ),
+    Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
+    Extension(
+        "Bio.Cluster._cluster",
+        ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
+    ),
+    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension(
+        "Bio.KDTree._CKDTree", ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]
+    ),
+]
+if not is_pypy():
+    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
+    EXTENSIONS.extend(
+        [
+            Extension(
+                "Bio.trie", ["Bio/triemodule.c", "Bio/trie.c"], include_dirs=["Bio"]
+            )
+        ]
+    )
 
 
 # We now define the Biopython version number in Bio/__init__.py
