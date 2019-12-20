@@ -28,8 +28,9 @@ release 1.66 onwards.
 
 Python 2.7
 ----------
-We will drop support for Python 2.7 no later than 2020, in line with the
-end-of-life or sunset date for Python 2.7 itself.
+No longer supported as of Release 1.77 (2020, in line with end-of-life or
+sunset date for Python 2.7 itself), having triggered a warning in prior
+releases.
 
 Python 3.0, 3.1, 3.2
 --------------------
@@ -49,7 +50,7 @@ warning in release 1.74. First supported in release 1.64.
 
 Python 3.5
 ----------
-First supported in release 1.66.
+No longer supported as of Release 1.77. First supported in release 1.66.
 
 Python 3.6
 ----------
@@ -65,6 +66,7 @@ First supported in release 1.75.
 
 Jython
 ------
+No longer supported as of Release 1.77 with the end of Python 2 support.
 Biopython was mostly working under Jython 2.7.0, but support for Jython
 was deprecated as of Release 1.70.
 
