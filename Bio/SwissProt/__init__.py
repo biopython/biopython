@@ -16,10 +16,6 @@ Functions:
 
 """
 
-from __future__ import print_function
-
-from Bio._py3k import _as_string
-
 
 class SwissProtParserError(ValueError):
     """An error occurred while parsing a SwissProt file."""
@@ -177,7 +173,6 @@ def _read(handle):
     record = None
     unread = ""
     line = next(handle)
-    line = _as_string(line)
     key, value = line[:2], line[5:].rstrip()
     if key != "ID":
         raise SwissProtParserError("Failed to find ID in first line", line=line)
@@ -185,9 +180,6 @@ def _read(handle):
     _read_id(record, line)
     _sequence_lines = []
     for line in handle:
-        # This is for Python 3 to cope with a binary handle (byte strings),
-        # or a text handle (unicode strings):
-        line = _as_string(line)
         key, value = line[:2], line[5:].rstrip()
         if unread:
             value = unread + " " + value

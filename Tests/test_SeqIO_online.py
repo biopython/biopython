@@ -22,11 +22,8 @@ from Bio import ExPASy
 
 # In order to check any sequences returned
 from Bio import SeqIO
-from Bio._py3k import StringIO
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SwissProt import SwissProtParserError
-
-from Bio._py3k import _as_string, raise_from
 
 import requires_internet
 requires_internet.check()
@@ -46,8 +43,9 @@ class ExPASyTests(unittest.TestCase):
             record = SeqIO.read(handle, "swiss")
         except SwissProtParserError as e:
             # This is to catch an error page from our proxy
-            if e.line.startswith("<!DOCTYPE HTML"):
-                raise_from(IOError, None)
+            if (str(e) == 'Failed to find ID in first line'
+                and e.line.startswith("<!DOCTYPE HTML")):
+                raise IOError from None
         handle.close()
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)
