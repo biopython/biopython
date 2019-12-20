@@ -82,26 +82,16 @@ We currently recommend using Python 3.8 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 -- see http://www.python.org
+- Python 3.6, 3.7, 3.8 -- see http://www.python.org
 
-  Python 3 is the primary development platform for Biopython. We will drop
-  support for Python 2.7 in early 2020, in line with the end-of-life or
-  sunset date for Python 2.7 itself.
-
-- PyPy2.7 or PyPy3.5 v7.1.1 -- see http://www.pypy.org
+- PyPy3.5 v7.1.1 -- see http://www.pypy.org
 
   Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
   currently missing under PyPy), everything should work. Older versions
   of PyPy mostly work too.
 
-- Jython 2.7 -- see http://www.jython.org
-
-  We have decided to deprecate support for Jython, but aside from
-  ``Bio.Restriction``, modules with C code, or dependent on SQLite3 or NumPy,
-  everything should work. There are some known issues with test failures
-  which have not yet been resolved.
-
-Biopython 1.68 was our final release to support Python 2.6.
+Biopython 1.68 was our final release to support Python 2.6, while Biopython
+1.76 was our final release to support Python 2.7.
 
 
 Optional Dependencies
