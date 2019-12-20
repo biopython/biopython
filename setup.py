@@ -172,7 +172,6 @@ class build_py_biopython(build_py):
         """Run the build."""
         if not check_dependencies_once():
             return
-        self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
 
@@ -245,13 +244,16 @@ REQUIRES = ["numpy"]
 # standard biopython packages
 PACKAGES = [
     "Bio",
+    "Bio.Affy",
     "Bio.Align",
     "Bio.Align.Applications",
+    "Bio.Align.substitution_matrices",
     "Bio.AlignIO",
     "Bio.Alphabet",
     "Bio.Application",
     "Bio.Blast",
     "Bio.CAPS",
+    "Bio.Cluster",
     "Bio.codonalign",
     "Bio.Compass",
     "Bio.Crystal",
@@ -265,6 +267,7 @@ PACKAGES = [
     "Bio.Graphics",
     "Bio.Graphics.GenomeDiagram",
     "Bio.HMM",
+    "Bio.KDTree",
     "Bio.KEGG",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
@@ -281,6 +284,7 @@ PACKAGES = [
     "Bio.Pathway",
     "Bio.Pathway.Rep",
     "Bio.PDB",
+    "Bio.phenotype",
     "Bio.PopGen",
     "Bio.PopGen.GenePop",
     "Bio.Restriction",
@@ -312,15 +316,6 @@ PACKAGES = [
     "Bio._py3k",
     # Other top level packages,
     "BioSQL",
-]
-
-# packages that require Numeric Python
-NUMPY_PACKAGES = [
-    "Bio.Affy",
-    "Bio.Align.substitution_matrices",
-    "Bio.Cluster",
-    "Bio.KDTree",
-    "Bio.phenotype",
 ]
 
 EXTENSIONS = [
