@@ -96,6 +96,9 @@ class ForwardOnlyHandle(object):
         """Iterate."""
         return iter(self._handle)
 
+    def __next__(self):
+        return next(self._handle)
+
     def read(self, length=None):
         if length is None:
             return self._handle.read()
