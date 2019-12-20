@@ -109,6 +109,7 @@ matrix:
             - *default_packages
   allow_failures:
     - arch: arm64
+    - arch: ppc64le
 
 addons:
   apt:
