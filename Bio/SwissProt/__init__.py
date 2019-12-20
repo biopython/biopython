@@ -591,7 +591,7 @@ def _read_ft(record, line):
         ft_id = ""
         description = line[29:70].rstrip()
     if not name:  # is continuation of last one
-        assert not from_res and not to_res
+        assert not from_res and not to_res, line
         name, from_res, to_res, old_description, old_ft_id = record.features[-1]
         del record.features[-1]
         description = ("%s %s" % (old_description, description)).strip()
