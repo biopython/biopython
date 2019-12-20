@@ -22,14 +22,6 @@ cache: pip
 matrix:
   include:
     - stage: basics
-      python: 2.7
-      env: TOXENV=style
-      services:
-      addons:
-        apt:
-          packages:
-      before_install: echo "Going to run basic checks"
-    - stage: basics
       python: 3.7
       env: TOXENV=style
       services:
@@ -59,22 +51,6 @@ matrix:
         skip_cleanup: true
         on:
           branch: master
-    - stage: test
-      python: 2.7
-      env: TOXENV=py27-cover
-      addons:
-        apt:
-          packages:
-            - &amd64_only_packages [ bwa, ]
-            - *default_packages
-    - stage: test
-      python: 3.5
-      env: TOXENV=py35-cover
-      addons:
-        apt:
-          packages:
-            - *amd64_only_packages
-            - *default_packages
     - stage: test
       python: 3.6
       env: TOXENV=py36-cover
