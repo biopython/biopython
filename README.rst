@@ -125,15 +125,11 @@ other optional Python dependencies, which can be installed later if needed:
 
 - MySQL Connector/Python, see http://dev.mysql.com/downloads/connector/python/
   This package is used by ``BioSQL`` to access a MySQL database, and is
-  supported on Python 2 and 3 and PyPy too.
+  supported on PyPy too.
 
 - mysqlclient, see https://github.com/PyMySQL/mysqlclient-python (optional)
   This is a fork of the older MySQLdb and is used by ``BioSQL`` to access a
-  MySQL database. It is supported by Python 2.7, Python 3.5 and above, PyPy 2,
-  and PyPy 3.
-
-Note that some of these libraries are not available for PyPy or Jython,
-and not all are available for Python 3 yet either.
+  MySQL database. It is supported by PyPy.
 
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
