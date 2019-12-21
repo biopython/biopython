@@ -92,14 +92,6 @@ matrix:
       env: TOXENV=py38-cover
       arch: s390x
     - stage: test
-      python: pypy
-      env: TOXENV=pypy-nocov
-      addons:
-        apt:
-          packages:
-            - *amd64_only_packages
-            - *default_packages
-    - stage: test
       python: pypy3
       env: TOXENV=pypy3-nocov
       addons:
