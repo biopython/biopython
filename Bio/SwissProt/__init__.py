@@ -156,14 +156,13 @@ def read(handle):
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
-    # We should have reached the end of the record by now
-    # Used to check with handle.read() but that breaks on Python 3.5
-    # due to http://bugs.python.org/issue26499 and could download
-    # lot of data needlessly if there were more records.
-    remainder = handle.readline()
-    if remainder:
-        raise ValueError("More than one SwissProt record found")
-    return record
+    # We should have reached the end of the record by now.
+    # Try to read one more line to be sure:
+    try:
+        next(handle)
+    except StopIteration:
+        return record
+    raise ValueError("More than one SwissProt record found")
 
 
 # Everything below is considered private
@@ -172,7 +171,10 @@ def read(handle):
 def _read(handle):
     record = None
     unread = ""
-    line = next(handle)
+    try:
+        line = next(handle)
+    except StopIteration:
+        return record
     key, value = line[:2], line[5:].rstrip()
     if key != "ID":
         raise SwissProtParserError("Failed to find ID in first line", line=line)
