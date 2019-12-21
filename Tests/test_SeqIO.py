@@ -97,6 +97,7 @@ class ForwardOnlyHandle(object):
         return iter(self._handle)
 
     def __next__(self):
+        """Get the next line."""
         return next(self._handle)
 
     def read(self, length=None):
