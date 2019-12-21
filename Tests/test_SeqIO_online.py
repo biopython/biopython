@@ -43,7 +43,7 @@ class ExPASyTests(unittest.TestCase):
             record = SeqIO.read(handle, "swiss")
         except SwissProtParserError as e:
             # This is to catch an error page from our proxy
-            if (str(e) == 'Failed to find ID in first line' and
+            if (str(e) == "Failed to find ID in first line" and
                     e.line.startswith("<!DOCTYPE HTML")):
                 raise IOError from None
         handle.close()
