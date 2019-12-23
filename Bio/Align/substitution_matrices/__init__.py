@@ -6,11 +6,7 @@ import numpy
 
 from Bio import File
 from Bio import BiopythonExperimentalWarning
-from Bio._py3k import raise_from
 
-# These two can be removed once we drop python2:
-import sys
-import platform
 
 import warnings
 warnings.warn("Bio.Align.substitution_matrices is an experimental module "
@@ -137,14 +133,14 @@ class Array(numpy.ndarray):
                     try:
                         index = self._alphabet.index(index)
                     except ValueError:
-                        raise_from(IndexError("'%s'" % index), None)
+                        raise IndexError("'%s'" % index) from None
                 indices.append(index)
             key = tuple(indices)
         elif isinstance(key, str):
             try:
                 key = self._alphabet.index(key)
             except ValueError:
-                raise_from(IndexError("'%s'" % key), None)
+                raise IndexError("'%s'" % key) from None
         return key
 
     def __getitem__(self, key):
@@ -408,15 +404,6 @@ class Array(numpy.ndarray):
             assert text.endswith(")")
             text = text[:-1] + ",\n         alphabet='%s')" % self._alphabet
         return text
-
-
-if sys.version_info[0] < 3 and platform.python_implementation() == "PyPy":
-    # For python2 on PyPy, subclassing from a numpy array, which supports the
-    # buffer protocol, loses the Py_TPFLAGS_HAVE_NEWBUFFER flag on tp_flags on
-    # the class type, although the subclass still supports the buffer protocol.
-    # Adding this flag by hand here, as a temporary hack until we drop python2.
-    from .. import _aligners
-    _aligners.add_buffer_protocol_flag(Array)
 
 
 def read(handle, dtype=float):
