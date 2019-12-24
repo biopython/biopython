@@ -40,11 +40,7 @@ checks, so if you are making a contribution it is best to check this locally.
 We use the tool ``flake8`` for code style checks, together with various
 plugins which can be installed as follows::
 
-    $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes
-
-Unless you are using Python 2.7, please also install these plugins too::
-
-    $ pip install flake8-bugbear flake8-implicit-str-concat
+    $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes flake8-bugbear flake8-implicit-str-concat
 
 We currently strongly suggest you then install the ``flake8`` git pre-commit
 hook which will check our basic coding conventions as you work::
@@ -85,8 +81,8 @@ Please always run the style checks (see above) and the full test suite on
 your local computer before submitting a pull request, e.g.::
 
     $ git commit Bio/XXX.py Tests/test_XXX.py  -m "Fixed bug 123"
-    $ python3.5 setup.py build
-    $ python3.5 setup.py test
+    $ python setup.py build
+    $ python setup.py test
 
 If you have multiple versions of Python installed, ideally test them all
 (the Python tool ``tox`` can be helpful here).
