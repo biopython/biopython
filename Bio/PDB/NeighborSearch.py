@@ -8,7 +8,6 @@
 
 """Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
-from __future__ import print_function
 
 import numpy
 

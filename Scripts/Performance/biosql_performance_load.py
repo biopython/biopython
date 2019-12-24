@@ -6,7 +6,6 @@
 # as part of this package.
 
 """Test timing of loading records into a BioSQL database."""
-from __future__ import print_function
 
 import time
 

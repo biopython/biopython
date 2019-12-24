@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for GenomeDiagram general functionality."""
 
-from __future__ import print_function
 
 import os
 import unittest

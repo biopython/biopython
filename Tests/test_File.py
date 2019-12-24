@@ -4,7 +4,6 @@
 # as part of this package.
 """Tests for Bio.File module."""
 
-from __future__ import print_function
 
 import os.path
 import shutil

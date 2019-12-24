@@ -50,7 +50,6 @@ in a residue)::
 
 """
 
-from __future__ import print_function
 
 import os
 import tempfile

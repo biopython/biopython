@@ -21,7 +21,6 @@ Command line options::
 By default, all tests are run.
 """
 
-from __future__ import print_function
 
 # standard modules
 import sys

@@ -5,7 +5,6 @@
 # as part of this package.
 
 """Unittests for the Seq objects."""
-from __future__ import print_function
 
 import warnings
 import unittest

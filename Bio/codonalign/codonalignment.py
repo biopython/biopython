@@ -8,7 +8,6 @@
 CodonAlignment class is inherited from MultipleSeqAlignment class. This is
 the core class to deal with codon alignment in biopython.
 """
-from __future__ import division, print_function
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord

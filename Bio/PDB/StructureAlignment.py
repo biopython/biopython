@@ -7,7 +7,6 @@
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
-from __future__ import print_function
 
 from Bio.Data import SCOPData
 

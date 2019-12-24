@@ -7,7 +7,6 @@
 
 """Selection of atoms, residues, etc."""
 
-from __future__ import print_function
 
 import itertools
 

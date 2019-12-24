@@ -19,7 +19,6 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
-from __future__ import print_function
 
 import os
 import tempfile

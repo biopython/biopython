@@ -18,7 +18,6 @@ Functions:
 
 """
 
-from __future__ import print_function
 
 try:
     import xml.etree.cElementTree as ElementTree

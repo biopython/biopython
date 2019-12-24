@@ -15,7 +15,6 @@ files are also defined under Bio.File but these are not intended for direct
 use.
 """
 
-from __future__ import print_function
 
 import codecs
 import os

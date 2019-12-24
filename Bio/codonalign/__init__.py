@@ -5,7 +5,6 @@
 # as part of this package.
 
 """Code for dealing with Codon Alignments."""
-from __future__ import print_function
 
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning

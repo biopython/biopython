@@ -4,7 +4,6 @@
 
 """Tests for seq module."""
 
-from __future__ import print_function
 import array
 import copy
 import sys

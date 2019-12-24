@@ -5,7 +5,6 @@
 
 """Command line wrapper for bwa."""
 
-from __future__ import print_function
 from Bio._py3k import basestring
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline

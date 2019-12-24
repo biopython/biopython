@@ -10,7 +10,6 @@
 Maximum likelihood analysis using codon substitution models.
 """
 
-from __future__ import print_function
 
 import os.path
 from ._paml import Paml

@@ -12,7 +12,6 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-from __future__ import print_function
 
 import os
 import tempfile

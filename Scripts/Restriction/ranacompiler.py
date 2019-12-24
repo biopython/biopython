@@ -40,7 +40,6 @@ This Python file is intended to be used via the scripts in
 `Scripts/Restriction/*.py` only.
 """
 
-from __future__ import print_function
 
 from Bio._py3k import input as _input
 

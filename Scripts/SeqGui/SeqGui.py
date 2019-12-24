@@ -18,7 +18,6 @@ It runs as a standalone application.
 
 """
 
-from __future__ import print_function
 
 from Bio.Seq import translate, transcribe, back_transcribe
 from Bio.Data import CodonTable

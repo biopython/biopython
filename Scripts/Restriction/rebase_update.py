@@ -14,7 +14,6 @@ The Rebase EMBOSS files are used by ``ranacompiler.py`` to build the updated
 
 """
 
-from __future__ import print_function
 
 import os
 from datetime import date

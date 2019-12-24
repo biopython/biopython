@@ -6,7 +6,6 @@
 """Methods for codon usage calculations."""
 
 
-from __future__ import print_function
 
 import math
 from .CodonUsageIndices import SharpEcoliIndex

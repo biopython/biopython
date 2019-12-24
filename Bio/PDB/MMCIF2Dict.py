@@ -7,7 +7,6 @@
 
 """Turn an mmCIF file into a dictionary."""
 
-from __future__ import print_function
 
 from Bio.File import as_handle
 

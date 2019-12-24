@@ -31,7 +31,6 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
-from __future__ import print_function
 
 import time
 from Bio._py3k import _binary_to_string_handle, _as_bytes

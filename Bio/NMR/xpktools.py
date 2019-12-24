@@ -4,7 +4,6 @@
 # as part of this package.
 """Tools to manipulate data from nmrview .xpk peaklist files."""
 
-from __future__ import print_function
 
 
 HEADERLEN = 6

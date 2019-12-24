@@ -82,7 +82,6 @@ Notes about the diverses class of the restriction enzyme implementation::
 
 """
 
-from __future__ import print_function
 
 import warnings
 

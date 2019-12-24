@@ -108,7 +108,6 @@ Functions:
     - _open        Internally used function.
 
 """
-from __future__ import print_function
 
 import time
 import warnings

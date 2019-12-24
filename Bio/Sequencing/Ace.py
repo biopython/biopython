@@ -55,7 +55,6 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
 
-from __future__ import print_function
 from Bio._py3k import zip
 
 

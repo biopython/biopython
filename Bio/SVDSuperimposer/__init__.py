@@ -12,7 +12,6 @@ eg. useful to superimpose crystal structures. SVD stands for singular
 value decomposition, which is used in the algorithm.
 """
 
-from __future__ import print_function
 
 try:
     from numpy import dot, transpose, sqrt
