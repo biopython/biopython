@@ -245,6 +245,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
 - Stuart Nelis <https://github.com/biostu24>
+- Sujan Dulal <https://github.com/Dsujan>
 - Sunhwan Jo <https://github.com/sunhwan>
 - Suresh Panneerselvam <https://github.com/Amrithasuresh>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
