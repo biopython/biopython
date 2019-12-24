@@ -6,7 +6,6 @@
 """Example of connecting with exPASy and parsing SwissProt records."""
 
 # biopython
-from __future__ import print_function
 
 from Bio import ExPASy, SwissProt
 

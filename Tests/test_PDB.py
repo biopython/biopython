@@ -11,7 +11,6 @@
 # package.
 
 """Unit tests for the Bio.PDB module."""
-from __future__ import print_function
 
 from copy import deepcopy
 import os

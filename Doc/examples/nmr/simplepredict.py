@@ -49,7 +49,6 @@ This script generates a human readable standard output version of the
 NOE coordinates as well as an nmrview peaklist out_example.xpk.
 """
 
-from __future__ import print_function
 
 # -- don't need to modify sys.path with the *tools in Biopython
 # -- just need Biopython installed somewhere in the PYTHONPATH

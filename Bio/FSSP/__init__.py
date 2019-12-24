@@ -19,7 +19,6 @@ Functions
     :mult_align: returns a Biopython alignment object.
 
 """
-from __future__ import print_function
 
 import re
 

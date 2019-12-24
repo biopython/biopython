@@ -42,7 +42,6 @@ The library files can be found in directory 'fragment_data'.
 
 """
 
-from __future__ import print_function
 
 import numpy
 

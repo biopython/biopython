@@ -14,7 +14,6 @@ This module provides code to work with the WWW version of BLAST
 provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 """
 
-from __future__ import print_function
 
 import warnings
 

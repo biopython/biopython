@@ -7,7 +7,6 @@
 # TODO samtools 1.x has additional options over 0.x which
 # are missing from this wrapper
 
-from __future__ import print_function
 
 from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList

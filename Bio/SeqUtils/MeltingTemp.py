@@ -161,7 +161,6 @@ by '1':
 
 """
 
-from __future__ import print_function
 
 import math
 import warnings

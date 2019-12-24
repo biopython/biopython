@@ -84,7 +84,6 @@ Note that while Bio.phenotype can read the above file formats, it can only
 write in JSON format.
 """
 
-from __future__ import print_function
 from Bio._py3k import basestring
 
 from Bio import BiopythonExperimentalWarning

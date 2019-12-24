@@ -30,7 +30,6 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
 
-from __future__ import print_function
 
 import warnings
 from datetime import datetime

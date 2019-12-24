@@ -53,7 +53,6 @@ appropriate::
             pass # do something with the motif
 """
 
-from __future__ import print_function
 
 import warnings
 from Bio import BiopythonWarning

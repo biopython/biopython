@@ -26,7 +26,6 @@ keys and offsets in an SQLite database - which can be re-used to avoid
 re-indexing the file for use another time.
 """
 
-from __future__ import print_function
 
 import re
 from io import BytesIO

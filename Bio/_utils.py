@@ -7,7 +7,6 @@
 # package.
 """Common utility functions for various Bio submodules."""
 
-from __future__ import print_function
 
 import os
 

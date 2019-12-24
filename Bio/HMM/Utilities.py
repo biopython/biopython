@@ -11,7 +11,6 @@ This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
-from __future__ import print_function
 
 
 def pretty_print_prediction(

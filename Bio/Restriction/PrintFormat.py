@@ -78,7 +78,6 @@ Example output::
 
 """  # noqa: W291
 
-from __future__ import print_function
 
 import re
 

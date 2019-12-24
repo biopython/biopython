@@ -8,7 +8,6 @@
 # package.
 
 """Objects to represent NEXUS standard data type matrix coding."""
-from __future__ import print_function
 
 import sys
 

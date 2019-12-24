@@ -13,7 +13,6 @@ Emerged from the Columba database project www.columba-db.de, original author
 Kristian Rother.
 """
 
-from __future__ import print_function
 
 import re
 

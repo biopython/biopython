@@ -12,7 +12,6 @@ One of the most important things in this module is the MultipleSeqAlignment
 class, used in the Bio.AlignIO module.
 
 """
-from __future__ import print_function
 
 import sys  # Only needed to check if we are using Python 2 or 3
 

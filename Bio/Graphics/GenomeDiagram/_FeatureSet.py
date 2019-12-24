@@ -24,7 +24,6 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-from __future__ import print_function
 
 # GenomeDiagram
 from ._Feature import Feature

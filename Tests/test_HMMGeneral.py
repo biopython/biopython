@@ -12,7 +12,6 @@
 Also tests Training methods.
 """
 # standard modules
-from __future__ import print_function
 
 import unittest
 import math

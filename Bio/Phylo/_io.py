@@ -11,7 +11,6 @@ This API follows the same semantics as Biopython's ``SeqIO`` and
 ``AlignIO``.
 """
 
-from __future__ import print_function
 
 from Bio import File
 from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, NeXMLIO

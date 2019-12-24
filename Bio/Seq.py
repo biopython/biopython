@@ -19,7 +19,6 @@ See also the Seq_ wiki and the chapter in our tutorial:
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 """
-from __future__ import print_function
 
 import string  # for maketrans only
 import array

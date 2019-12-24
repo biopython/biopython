@@ -5,7 +5,6 @@
 # as part of this package.
 """Module for the support of MEME motif format."""
 
-from __future__ import print_function
 
 from Bio import Seq
 from Bio import motifs

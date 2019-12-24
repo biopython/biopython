@@ -359,7 +359,6 @@ the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
 are approximately equal.
 
 """
-from __future__ import print_function
 
 from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet

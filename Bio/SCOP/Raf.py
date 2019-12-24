@@ -24,7 +24,6 @@ acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
 chemically modified residues.
 """
 
-from __future__ import print_function
 from Bio._py3k import basestring
 from Bio._py3k import _universal_read_mode
 

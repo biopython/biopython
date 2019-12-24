@@ -16,7 +16,6 @@ Usage:
 
 """
 # standard library
-from __future__ import print_function
 
 import sys
 

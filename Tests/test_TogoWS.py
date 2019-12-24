@@ -6,7 +6,6 @@
 # package.
 """Testing Bio.TogoWS online code."""
 
-from __future__ import print_function
 
 import unittest
 from Bio._py3k import StringIO

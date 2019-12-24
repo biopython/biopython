@@ -11,7 +11,6 @@ See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
 
-from __future__ import print_function
 
 from Bio.File import as_handle
 from Bio.Seq import Seq

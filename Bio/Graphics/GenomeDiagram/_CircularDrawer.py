@@ -14,7 +14,6 @@
 """CircularDrawer module for GenomeDiagram."""
 
 # ReportLab imports
-from __future__ import print_function
 
 from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Polygon
 from reportlab.lib import colors

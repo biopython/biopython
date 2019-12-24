@@ -14,7 +14,6 @@ Usage:
 python check_output.py <name of file to parse>
 """
 # standard modules
-from __future__ import print_function
 
 import sys
 import os

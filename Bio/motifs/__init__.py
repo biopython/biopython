@@ -13,7 +13,6 @@ and MAST programs, as well as files in the TRANSFAC format.
 Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
-from __future__ import print_function
 
 from Bio._py3k import range
 

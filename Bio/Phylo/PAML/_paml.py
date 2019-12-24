@@ -7,7 +7,6 @@
 
 """Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
 
-from __future__ import print_function
 
 import os
 import subprocess

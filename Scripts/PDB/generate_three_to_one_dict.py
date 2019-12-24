@@ -11,7 +11,6 @@ Download and parse PDB Chemical Component Dictionary,
 then write out dict for to_one_letter_code.
 """
 
-from __future__ import print_function
 
 import gzip
 import inspect

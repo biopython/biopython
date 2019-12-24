@@ -18,7 +18,6 @@ classes in this module directly. Rather, call the load() method on
 a database object.
 """
 # standard modules
-from __future__ import print_function
 
 from time import gmtime, strftime
 

@@ -22,7 +22,6 @@ preferred. Furthermore, the NCBI themselves regard these command line tools as
 wrappers for these under Bio.Blast.Applications (see the tutorial).
 """
 
-from __future__ import print_function
 
 import sys
 import re

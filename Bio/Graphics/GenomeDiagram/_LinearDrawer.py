@@ -21,7 +21,6 @@ the diagram: http://www.reportlab.com
 """
 
 # ReportLab imports
-from __future__ import print_function
 
 from reportlab.graphics.shapes import Drawing, Line, String, Group, Polygon
 from reportlab.lib import colors

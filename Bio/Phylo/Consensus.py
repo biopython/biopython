@@ -11,7 +11,6 @@ This module contains a ``_BitString`` class to assist the consensus tree
 searching and some common consensus algorithms such as strict, majority rule and
 adam consensus.
 """
-from __future__ import division
 
 import random
 import itertools

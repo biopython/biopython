@@ -11,7 +11,6 @@
 The BLAST XML DTD file is on the NCBI FTP site at:
 ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 """
-from __future__ import print_function
 
 from Bio.Blast import Record
 import xml.sax

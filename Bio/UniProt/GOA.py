@@ -21,7 +21,6 @@ gp_information (GPI format) README:
 http://geneontology.org/docs/gene-product-information-gpi-format/
 """
 
-from __future__ import print_function
 
 import copy
 

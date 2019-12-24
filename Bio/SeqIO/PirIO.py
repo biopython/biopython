@@ -87,7 +87,6 @@ Sequence codes and their meanings:
 
 """
 
-from __future__ import print_function
 
 from Bio.Alphabet import (
     single_letter_alphabet,

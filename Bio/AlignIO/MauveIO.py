@@ -77,7 +77,6 @@ the annotation attribute of each record::
 
 """
 
-from __future__ import print_function
 
 import re
 from Bio.Seq import Seq
