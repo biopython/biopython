@@ -92,11 +92,6 @@ class BlastTableReader(object):
         self._in_header = 1
         return self.table_record
 
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def _consume_entry(self, inline):
         current_entry = BlastTableEntry(inline)
         self.table_record.add_entry(current_entry)

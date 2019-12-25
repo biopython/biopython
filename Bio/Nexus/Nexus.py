@@ -103,12 +103,6 @@ class CharBuffer(object):
         else:
             return None
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def next_nonwhitespace(self):
         """Check for next non whitespace character in NEXUS file."""
         while True:

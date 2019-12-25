@@ -63,12 +63,6 @@ class AlignmentIterator(object):
         # into MultipleSeqAlignment objects.                #
         #####################################################
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         """Iterate over the entries as MultipleSeqAlignment objects.
 

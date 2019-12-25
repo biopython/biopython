@@ -104,12 +104,6 @@ class StandardData(object):
             self._current_pos += 1
             return return_coding
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def raw(self):
         """Return the full coding as a python list."""
         return self._data
