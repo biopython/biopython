@@ -75,7 +75,8 @@ Biopython modules, methods, functions
 
 Bio.Index
 ---------
-Deprecated in release 1.75, was not used anywhere in Biopython.
+Deprecated in release 1.75, removed in release 1.77. Was not used anywhere in
+Biopython.
 
 Bio.Crystal
 -----------
