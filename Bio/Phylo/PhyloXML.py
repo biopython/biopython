@@ -17,7 +17,6 @@ Journal article:
 """
 
 import re
-import sys
 import warnings
 
 from Bio._py3k import basestring
@@ -788,12 +787,6 @@ class Confidence(PhyloElement):
     def __int__(self):
         """Return integer value of Confidence object."""
         return int(self.value)
-
-    if sys.version_info[0] < 3:
-
-        def __long__(self):
-            """Return long value of Confidence object."""
-            return long(self.value)  # noqa : F821
 
 
 class Date(PhyloElement):
