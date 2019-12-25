@@ -17,13 +17,7 @@ The Rebase EMBOSS files are used by ``ranacompiler.py`` to build the updated
 
 import os
 from datetime import date
-
-try:
-    # Python 2
-    from urllib import urlretrieve, urlcleanup
-except ImportError:
-    # Python 3
-    from urllib.request import urlretrieve, urlcleanup
+from urllib.request import urlretrieve, urlcleanup
 
 
 # Rebase ftp location, do not modify these addresses:
