@@ -749,23 +749,10 @@ class SeqRecord(object):
             return SeqIO._FormatToString[format_spec](self)
 
         if format_spec in SeqIO._BinaryFormats:
-            import sys
-
-            if sys.version_info[0] < 3:
-                import warnings
-                from Bio import BiopythonDeprecationWarning
-
-                warnings.warn(
-                    "Binary format %s cannot be used with SeqRecord format method on Python 3"
-                    % format_spec,
-                    BiopythonDeprecationWarning,
-                )
-                # Continue - Python 2 StringIO will work...
-            else:
-                raise ValueError(
-                    "Binary format %s cannot be used with SeqRecord format method"
-                    % format_spec
-                )
+            raise ValueError(
+                "Binary format %s cannot be used with SeqRecord format method"
+                % format_spec
+            )
 
         # Harder case, make a temp handle instead
         from Bio._py3k import StringIO
