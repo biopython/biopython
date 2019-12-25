@@ -7,7 +7,6 @@
 
 import os.path
 import shutil
-import sys
 import tempfile
 import unittest
 
@@ -131,10 +130,6 @@ class AsHandleTestCase(unittest.TestCase):
             self.assertFalse(handle.closed)
         self.assertTrue(handle.closed)
 
-    @unittest.skipIf(
-        sys.version_info < (3, 6),
-        "Passing Path objects to File.as_handle requires Python >= 3.6",
-    )
     def test_path_object(self):
         """Test as_handle with a pathlib.Path object."""
         from pathlib import Path
@@ -146,10 +141,6 @@ class AsHandleTestCase(unittest.TestCase):
             self.assertFalse(handle.closed)
         self.assertTrue(handle.closed)
 
-    @unittest.skipIf(
-        sys.version_info < (3, 6),
-        "Passing path-like objects to File.as_handle requires Python >= 3.6",
-    )
     def test_custom_path_like_object(self):
         """Test as_handle with a custom path-like object."""
         class CustomPathLike:
