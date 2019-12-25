@@ -110,8 +110,6 @@ Methods for subtraction, addition and multiplication of matrices:
 
 """
 
-
-
 import re
 import sys
 import copy
