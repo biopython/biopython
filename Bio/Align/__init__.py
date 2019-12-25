@@ -1370,9 +1370,6 @@ class PairwiseAlignments(object):
         self.alignment = alignment
         return alignment
 
-    if sys.version_info[0] < 3:  # Python 2
-        next = __next__
-
 
 class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
