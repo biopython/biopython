@@ -3,17 +3,13 @@
 # as part of this package.
 """Dealing with storage of biopython objects in a BioSQL relational db."""
 
+import configparser
 import os
 import platform
 import sys
 import tempfile
 import time
 import unittest
-
-try:
-    import configparser  # Python 3
-except ImportError:
-    import ConfigParser as configparser  # Python 2
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
