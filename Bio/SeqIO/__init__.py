@@ -628,11 +628,7 @@ def parse(handle, format, alphabet=None):
 
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
     ...     print("%s %s" % (record.id, record.seq))
     Alpha ACCGGATGTA
