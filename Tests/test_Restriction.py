@@ -4,6 +4,7 @@
 #
 
 """Testing code for Restriction enzyme classes of Biopython."""
+import unittest
 
 from Bio.Restriction import Analysis, Restriction, RestrictionBatch
 from Bio.Restriction import CommOnly, NonComm, AllEnzymes
@@ -13,18 +14,6 @@ from Bio.Restriction import FormattedSeq
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
 from Bio import BiopythonWarning
-
-
-from sys import version_info
-if version_info[0] < 3:
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2 this test needs "
-                                           "the unittest2 library")
-else:
-    import unittest
 
 
 class SequenceTesting(unittest.TestCase):
