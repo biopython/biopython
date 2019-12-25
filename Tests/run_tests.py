@@ -35,16 +35,7 @@ import gc
 from io import BytesIO
 from pkgutil import iter_modules
 from setuptools import find_packages
-
-
-# Note, we want to be able to call run_tests.py BEFORE
-# Biopython is installed, so we can't use this:
-# from Bio._py3k import StringIO
-try:
-    from StringIO import StringIO  # Python 2 (byte strings)
-except ImportError:
-    from io import StringIO  # Python 3 (unicode strings)
-
+from io import StringIO
 
 try:
     import numpy
