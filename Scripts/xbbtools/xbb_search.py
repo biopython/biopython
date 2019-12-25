@@ -12,16 +12,9 @@
 """Search code for graphical Xbbtools tool."""
 
 import re
-
-
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-    import tkColorChooser as colorchooser
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import colorchooser
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import colorchooser
 
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
