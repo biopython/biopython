@@ -6,24 +6,13 @@
 # package.
 """Tests for the SeqIO Xdna module."""
 
+import unittest
 from io import BytesIO
 
 from Bio import Alphabet, SeqIO, BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
 from Bio.SeqRecord import SeqRecord
-
-import sys
-if sys.version_info[0] < 3:
-    try:
-        import unittest2 as unittest
-        has_assert_warn = True
-    except ImportError:
-        import unittest
-        has_assert_warn = False
-else:
-    import unittest
-    has_assert_warn = True
 
 
 class TestXdna(unittest.TestCase):
@@ -204,7 +193,6 @@ class TestXdnaWriter(unittest.TestCase):
 
         h.close()
 
-    @unittest.skipUnless(has_assert_warn, "No assertWarn support in unittest")
     def test_warnings_on_data_loss(self):
         """Emit warnings when dropping data on write."""
         h = BytesIO()
