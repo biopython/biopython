@@ -1793,12 +1793,6 @@ class Iterator(object):
             return self._parser.parse(StringIO(data))
         return data
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         return iter(self.__next__, None)
 

@@ -426,12 +426,6 @@ class SeqXmlIterator(object):
             self.handle.close()
         raise StopIteration
 
-    if sys.version_info[0] < 3:  # python2
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
 
 class SeqXmlWriter(SequentialSequenceWriter):
     """Writes SeqRecords into seqXML file.
