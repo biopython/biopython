@@ -6,8 +6,6 @@
 # package.
 """Command line wrapper for the multiple sequence alignment program MSAProbs."""
 
-
-
 from Bio.Application import _Argument, _Option, _Switch, AbstractCommandline
 
 

@@ -6,8 +6,6 @@
 # package.
 """Command line wrapper for the multiple alignment program DIALIGN2-2."""
 
-
-
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 
 

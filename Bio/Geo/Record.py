@@ -13,7 +13,6 @@ See http://www.ncbi.nlm.nih.gov/geo/
 """
 
 
-
 class Record(object):
     """Hold GEO information in a format similar to the original record.
 

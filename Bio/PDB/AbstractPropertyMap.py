@@ -8,7 +8,6 @@
 """Class that maps (chain_id, residue_id) to a residue property."""
 
 
-
 class AbstractPropertyMap(object):
     """Define base class, map holder of residue properties."""
 

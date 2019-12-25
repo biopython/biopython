@@ -5,7 +5,6 @@
 """Tools to manipulate data from nmrview .xpk peaklist files."""
 
 
-
 HEADERLEN = 6
 
 

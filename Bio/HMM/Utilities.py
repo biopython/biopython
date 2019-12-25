@@ -12,7 +12,6 @@ dealing with HMMs.
 """
 
 
-
 def pretty_print_prediction(
     emissions,
     real_state,
