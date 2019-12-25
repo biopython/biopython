@@ -79,17 +79,17 @@ def as_handle(handleish, mode="r", **kwargs):
     >>> from Bio import File
     >>> import os
     >>> with File.as_handle('seqs.fasta', 'w') as fp:
-    ...     # Python2/3 docstring workaround, revise for 'Python 3 only'.
-    ...     _ = fp.write('>test\nACGT')
+    ...     fp.write('>test\nACGT')
     ...
+    10
     >>> fp.closed
     True
 
     >>> handle = open('seqs.fasta', 'w')
     >>> with File.as_handle(handle) as fp:
-    ...     # Python 2/3 docstring workaround, revise for 'Python 3 only'.
-    ...     _ = fp.write('>test\nACGT')
+    ...     fp.write('>test\nACGT')
     ...
+    10
     >>> fp.closed
     False
     >>> fp.close()
