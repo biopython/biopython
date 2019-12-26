@@ -85,7 +85,6 @@ write in JSON format.
 """
 
 from __future__ import print_function
-from Bio._py3k import basestring
 
 from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
@@ -121,7 +120,7 @@ def write(plates, handle, format):
     Returns the number of records written (as an integer).
     """
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
@@ -171,7 +170,7 @@ def parse(handle, format):
     only.
     """
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")

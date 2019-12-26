@@ -28,7 +28,6 @@ import warnings
 import collections
 
 from Bio._py3k import range
-from Bio._py3k import basestring
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
@@ -115,7 +114,7 @@ class Seq(object):
         IUPACProtein()
         """
         # Enforce string storage
-        if not isinstance(data, basestring):
+        if not isinstance(data, str):
             raise TypeError("The sequence data given to a Seq object should "
                             "be a string (not another Seq object etc)")
         self._data = data
@@ -355,7 +354,7 @@ class Seq(object):
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
             return self.__class__(str(self) + str(other), a)
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             # other is a plain string - use the current alphabet
             return self.__class__(str(self) + other, self.alphabet)
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
@@ -387,7 +386,7 @@ class Seq(object):
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
             return self.__class__(str(other) + str(self), a)
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             # other is a plain string - use the current alphabet
             return self.__class__(other + str(self), self.alphabet)
         else:
@@ -1304,7 +1303,7 @@ class Seq(object):
         """
         if not isinstance(other, collections.Iterable):  # doesn't detect single strings
             raise ValueError("Input must be an iterable")
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
         a = self.alphabet
@@ -1318,7 +1317,7 @@ class Seq(object):
                             "Incompatible alphabets {0!r} and {1!r}".format(
                                 a, c.alphabet))
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
-            elif not isinstance(c, basestring):
+            elif not isinstance(c, str):
                 raise ValueError("Input must be an iterable of Seqs or Strings")
         temp_data = str(self).join([str(z) for z in other])
         return self.__class__(temp_data, a)
@@ -1882,7 +1881,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, collections.Iterable):  # doesn't detect single strings
             raise ValueError("Input must be an iterable")
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
         a = self.alphabet
@@ -1899,7 +1898,7 @@ class UnknownSeq(Seq):
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
                 if not isinstance(c, UnknownSeq):
                     type_is_unknown = False
-            elif isinstance(c, basestring):
+            elif isinstance(c, str):
                 type_is_unknown = False
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
@@ -2172,7 +2171,7 @@ class MutableSeq(object):
                 return self.__class__(self.data + other.data, a)
             else:
                 return self.__class__(str(self) + str(other), a)
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             # other is a plain string - use the current alphabet
             return self.__class__(str(self) + str(other), self.alphabet)
         else:
@@ -2201,7 +2200,7 @@ class MutableSeq(object):
                 return self.__class__(other.data + self.data, a)
             else:
                 return self.__class__(str(other) + str(self), a)
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             # other is a plain string - use the current alphabet
             return self.__class__(str(other) + str(self), self.alphabet)
         else:
@@ -2368,7 +2367,7 @@ class MutableSeq(object):
         except AttributeError:
             search = sub
 
-        if not isinstance(search, basestring):
+        if not isinstance(search, str):
             raise TypeError("expected a string, Seq or MutableSeq")
 
         if len(search) == 1:
@@ -2714,7 +2713,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                       "translation. This may become an error in future.",
                       BiopythonWarning)
     if gap is not None:
-        if not isinstance(gap, basestring):
+        if not isinstance(gap, str):
             raise TypeError("Gap character should be a single character "
                             "string.")
         elif len(gap) > 1:

@@ -14,7 +14,6 @@ import copy
 from functools import reduce
 
 from Bio._py3k import map
-from Bio._py3k import basestring
 
 
 class CrystalError(Exception):
@@ -151,7 +150,7 @@ class Chain(object):
                 self.data[index] = value.data
             elif isinstance(value, type(self.data)):
                 self.data[index] = value
-            elif isinstance(value, basestring):
+            elif isinstance(value, str):
                 self.data[index] = Chain(value).data
             else:
                 raise TypeError

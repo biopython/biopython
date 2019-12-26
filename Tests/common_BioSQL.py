@@ -18,7 +18,6 @@ except ImportError:
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
-from Bio._py3k import basestring
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
@@ -470,7 +469,7 @@ class SeqInterfaceTest(unittest.TestCase):
         for feature in test_record.features:
             self.assertTrue(isinstance(feature, SeqFeature))
         # shouldn't cause any errors!
-        self.assertTrue(isinstance(str(test_record), basestring))
+        self.assertTrue(isinstance(str(test_record), str))
         # Confirm can delete annotations etc to test these properties
         del test_record.annotations
         del test_record.dbxrefs

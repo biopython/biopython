@@ -18,8 +18,6 @@ import re
 import sys
 import warnings
 
-from Bio._py3k import basestring
-
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -82,7 +80,7 @@ class Phyloxml(PhyloElement):
         """Get a phylogeny by index or name."""
         if isinstance(index, (int, slice)):
             return self.phylogenies[index]
-        if not isinstance(index, basestring):
+        if not isinstance(index, str):
             raise KeyError("can't use %s as an index" % type(index))
         for tree in self.phylogenies:
             if tree.name == index:

@@ -9,7 +9,7 @@ All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
 """
 
-from Bio._py3k import basestring, filter, unicode, zip
+from Bio._py3k import filter, zip
 
 import collections
 import copy
@@ -25,7 +25,7 @@ import sys
 if sys.version_info[0] < 3:
     def as_string(s):
         """Encode string to UTF-8."""
-        if isinstance(s, unicode):
+        if isinstance(s, str):
             return s.encode("utf-8")
         return str(s)
 else:
@@ -136,8 +136,8 @@ def _attribute_matcher(kwargs):
             if not hasattr(node, key):
                 return False
             target = getattr(node, key)
-            if isinstance(pattern, basestring):
-                return (isinstance(target, basestring) and
+            if isinstance(pattern, str):
+                return (isinstance(target, str) and
                         re.match(pattern + "$", target))
             if isinstance(pattern, bool):
                 return (pattern == bool(target))
@@ -177,7 +177,7 @@ def _object_matcher(obj):
         return _identity_matcher(obj)
     if isinstance(obj, type):
         return _class_matcher(obj)
-    if isinstance(obj, basestring):
+    if isinstance(obj, str):
         return _string_matcher(obj)
     if isinstance(obj, dict):
         return _attribute_matcher(obj)
@@ -221,7 +221,7 @@ def _combine_args(first, *rest):
     # (for backward compatibility and consistency between methods).
     if hasattr(first, "__iter__") and not (isinstance(first, TreeElement) or
                                            isinstance(first, type) or
-                                           isinstance(first, basestring) or
+                                           isinstance(first, str) or
                                            isinstance(first, dict)):
         # terminals is an iterable of targets
         if rest:
@@ -241,7 +241,7 @@ class TreeElement(object):
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
         def pair_as_kwarg_string(key, val):
-            if isinstance(val, basestring):
+            if isinstance(val, str):
                 return ("%s='%s'"
                         % (key, _utils.trim_str(as_string(val), 60, "...")))
             return "%s=%s" % (key, val)
@@ -250,7 +250,7 @@ class TreeElement(object):
                    ", ".join(pair_as_kwarg_string(key, val)
                              for key, val in sorted(self.__dict__.items())
                              if val is not None and
-                             type(val) in (str, int, float, bool, unicode))))
+                             type(val) in (str, int, float, bool, str))))
 
     __str__ = __repr__
 
@@ -1088,7 +1088,7 @@ class Clade(TreeElement, TreeMixin):
     def _set_color(self, arg):
         if arg is None or isinstance(arg, BranchColor):
             self._color = arg
-        elif isinstance(arg, basestring):
+        elif isinstance(arg, str):
             if arg in BranchColor.color_names:
                 # Known color name
                 self._color = BranchColor.from_name(arg)
@@ -1172,7 +1172,7 @@ class BranchColor(object):
         The string format is the same style used in HTML and CSS, such as
         '#FF8000' for an RGB value of (255, 128, 0).
         """
-        assert (isinstance(hexstr, basestring) and
+        assert (isinstance(hexstr, str) and
                 hexstr.startswith("#") and
                 len(hexstr) == 7
                 ), "need a 24-bit hexadecimal string, e.g. #000000"

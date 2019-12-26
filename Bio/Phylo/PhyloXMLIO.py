@@ -19,8 +19,6 @@ About capitalization:
 
 import sys
 
-from Bio._py3k import basestring
-
 from Bio.Phylo import PhyloXML as PX
 
 # For speed try to use cElementTree rather than ElementTree
@@ -675,7 +673,7 @@ def _handle_complex(tag, attribs, subnodes, has_text=False):
         """Wrap nodes and subnodes as elements."""
         elem = ElementTree.Element(tag, _clean_attrib(obj, attribs))
         for subn in subnodes:
-            if isinstance(subn, basestring):
+            if isinstance(subn, str):
                 # singular object: method and attribute names are the same
                 if getattr(obj, subn) is not None:
                     elem.append(getattr(self, subn)(getattr(obj, subn)))

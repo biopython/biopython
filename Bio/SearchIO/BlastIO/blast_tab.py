@@ -10,7 +10,6 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._py3k import basestring
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -227,7 +226,7 @@ class BlastTabParser(object):
     def _prep_fields(self, fields):
         """Validate and format the given fields for use by the parser (PRIVATE)."""
         # cast into list if fields is a space-separated string
-        if isinstance(fields, basestring):
+        if isinstance(fields, str):
             fields = fields.strip().split(" ")
         # blast allows 'std' as a proxy for the standard default lists
         # we want to transform 'std' to its proper column names

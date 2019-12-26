@@ -22,7 +22,6 @@ from xml.dom import pulldom
 from xml.sax import SAXParseException
 
 from Bio._py3k import range
-from Bio._py3k import basestring
 
 from Bio import Alphabet
 from Bio.Seq import Seq
@@ -242,11 +241,11 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if self.source_version is not None:
             attrs["sourceVersion"] = self.source_version
         if self.species is not None:
-            if not isinstance(self.species, basestring):
+            if not isinstance(self.species, str):
                 raise TypeError("species should be of type string")
             attrs["speciesName"] = self.species
         if self.ncbiTaxId is not None:
-            if not isinstance(self.ncbiTaxId, (basestring, int)):
+            if not isinstance(self.ncbiTaxId, (str, int)):
                 raise TypeError("ncbiTaxID should be of type string or int")
             attrs["ncbiTaxID"] = self.ncbiTaxId
 
@@ -257,13 +256,13 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if not record.id or record.id == "<unknown id>":
             raise ValueError("SeqXML requires identifier")
 
-        if not isinstance(record.id, basestring):
+        if not isinstance(record.id, str):
             raise TypeError("Identifier should be of type string")
 
         attrb = {"id": record.id}
 
         if "source" in record.annotations and self.source != record.annotations["source"]:
-            if not isinstance(record.annotations["source"], basestring):
+            if not isinstance(record.annotations["source"], str):
                 raise TypeError("source should be of type string")
             attrb["source"] = record.annotations["source"]
 
@@ -299,10 +298,10 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if "organism" in record.annotations and local_ncbi_taxid:
             local_org = record.annotations["organism"]
 
-            if not isinstance(local_org, basestring):
+            if not isinstance(local_org, str):
                 raise TypeError("organism should be of type string")
 
-            if not isinstance(local_ncbi_taxid, (basestring, int)):
+            if not isinstance(local_ncbi_taxid, (str, int)):
                 raise TypeError("ncbiTaxID should be of type string or int")
 
             # The local species definition is only written if it differs from the global species definition
@@ -318,7 +317,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         """Write the description if given (PRIVATE)."""
         if record.description:
 
-            if not isinstance(record.description, basestring):
+            if not isinstance(record.description, str):
                 raise TypeError("Description should be of type string")
 
             description = record.description
@@ -366,7 +365,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
             for dbxref in record.dbxrefs:
 
-                if not isinstance(dbxref, basestring):
+                if not isinstance(dbxref, str):
                     raise TypeError("dbxrefs should be of type list of string")
                 if dbxref.find(":") < 1:
                     raise ValueError("dbxrefs should be in the form ['source:id', 'source:id' ]")
@@ -393,13 +392,13 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 elif isinstance(value, list):
 
                     for v in value:
-                        if isinstance(value, (int, float, basestring)):
+                        if isinstance(value, (int, float, str)):
                             attr = {"name": key, "value": v}
                             self.xml_generator.startElement(
                                 "property", AttributesImpl(attr))
                             self.xml_generator.endElement("property")
 
-                elif isinstance(value, (int, float, basestring)):
+                elif isinstance(value, (int, float, str)):
 
                     attr = {"name": key, "value": str(value)}
                     self.xml_generator.startElement(

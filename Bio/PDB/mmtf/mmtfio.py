@@ -10,7 +10,6 @@
 import itertools
 from collections import defaultdict
 from string import ascii_uppercase
-from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBIO import Select, StructureIO
 from mmtf.api.mmtf_writer import MMTFEncoder
@@ -63,7 +62,7 @@ class MMTFIO(StructureIO):
         """
         # Similar to the PDBIO save method, we check if the filepath is a
         # string for a filepath or an open file handle
-        if not isinstance(filepath, basestring):
+        if not isinstance(filepath, str):
             raise ValueError("Writing to a file handle is not supported for MMTF, filepath must be a string")
         if hasattr(self, "structure"):
             self._save_structure(filepath, select)

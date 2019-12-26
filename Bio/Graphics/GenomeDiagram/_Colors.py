@@ -23,7 +23,6 @@ http://www.reportlab.com
 
 # ReportLab imports
 from __future__ import print_function
-from Bio._py3k import basestring
 
 from reportlab.lib import colors
 
@@ -114,7 +113,7 @@ class ColorTranslator(object):
             color = self.scheme_color(color)
         elif isinstance(color, colors.Color):
             return color
-        elif isinstance(color, basestring):
+        elif isinstance(color, str):
             # Assume its a named reportlab color like "red".
             color = colors.toColor(color)
         elif isinstance(color, tuple) and isinstance(color[0], float):

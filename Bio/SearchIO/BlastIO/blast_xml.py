@@ -32,7 +32,7 @@ from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from Bio._py3k import _as_bytes, _bytes_to_string, unicode
+from Bio._py3k import _as_bytes, _bytes_to_string
 _empty_bytes_string = _as_bytes("")
 
 __all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
@@ -735,7 +735,7 @@ class _BlastXmlGenerator(XMLGenerator):
 
     def characters(self, content):
         """Replace quotes and apostrophe."""
-        content = escape(unicode(content))
+        content = escape(str(content))
         for a, b in ((u'"', u"&quot;"), (u"'", u"&apos;")):
             content = content.replace(a, b)
         self.write(content)

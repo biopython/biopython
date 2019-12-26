@@ -25,7 +25,6 @@ chemically modified residues.
 """
 
 from __future__ import print_function
-from Bio._py3k import basestring
 from Bio._py3k import _universal_read_mode
 
 from copy import copy
@@ -96,7 +95,7 @@ class SeqMapIndex(dict):
            converted into a Residues instance.
 
         """
-        if isinstance(residues, basestring):
+        if isinstance(residues, str):
             residues = Residues(residues)
 
         pdbid = residues.pdbid

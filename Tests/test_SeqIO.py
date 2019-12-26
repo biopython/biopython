@@ -6,8 +6,6 @@
 """Tests for SeqIO module."""
 
 
-from Bio._py3k import basestring
-
 import gzip
 import sys
 import unittest
@@ -422,9 +420,9 @@ class TestSeqIO(unittest.TestCase):
                         self.failureException("Expected a Seq or UnknownSeq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
-                self.assertIsInstance(record.id, basestring)
-                self.assertIsInstance(record.name, basestring)
-                self.assertIsInstance(record.description, basestring)
+                self.assertIsInstance(record.id, str)
+                self.assertIsInstance(record.name, str)
+                self.assertIsInstance(record.description, str)
                 self.assertTrue(record.id)
 
                 if "accessions" in record.annotations:

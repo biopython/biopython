@@ -9,8 +9,6 @@ from __future__ import print_function
 
 import sys
 
-from Bio._py3k import basestring
-
 
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
@@ -31,7 +29,7 @@ class StandardData(object):
         self._current_pos = 0
 
         # Enforce string data requirement
-        if not isinstance(data, basestring):
+        if not isinstance(data, str):
             raise NexusError("The coding data given to a StandardData object should be a string")
 
         # Transfer each coding to a position within a sequence

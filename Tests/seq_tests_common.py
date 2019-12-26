@@ -5,7 +5,6 @@
 """Common code for SeqRecord object tests."""
 
 from Bio._py3k import range
-from Bio._py3k import basestring
 
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
@@ -282,7 +281,7 @@ def compare_record(old, new):
             # If there is a taxon id recorded, these fields get overwritten
             # by data from the taxon/taxon_name tables.  There is no
             # guarantee that they will be identical after a load/retrieve.
-            assert isinstance(new.annotations[key], basestring) \
+            assert isinstance(new.annotations[key], str) \
                 or isinstance(new.annotations[key], list)
         elif isinstance(old.annotations[key], type(new.annotations[key])):
             assert old.annotations[key] == new.annotations[key], \
