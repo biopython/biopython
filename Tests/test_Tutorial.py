@@ -211,7 +211,6 @@ for latex in files:
             missing_deps.update(missing)
             continue
 
-        example = ">>> from __future__ import print_function\n" + example
         try:
             example = rt.refactor_docstring(example, name)
         except TokenError:
