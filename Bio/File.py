@@ -11,7 +11,6 @@ Bio.File defines private classes used in Bio.SeqIO and Bio.SearchIO for
 indexing files. These are not intended for direct use.
 """
 
-
 import codecs
 import os
 import sys
@@ -46,6 +45,10 @@ except ImportError:
     # Still want to offer in-memory indexing.
     _sqlite = None
     pass
+
+
+import warnings
+from Bio import BiopythonDeprecationWarning
 
 
 @contextlib.contextmanager
@@ -146,6 +149,25 @@ def _open_for_random_access(filename):
             )
 
     return handle
+
+
+class UndoHandle(object):
+    """A Python handle that adds functionality for saving lines (DEPRECATED).
+
+    Saves lines in a LIFO fashion.
+
+    Added methods:
+     - saveline    Save a line to be returned next time.
+     - peekline    Peek at the next line without consuming it.
+
+    """
+
+    def __init__(self, handle):
+        """Initialize the class."""
+        warnings.warn("The UndoHandle class has been deprecated, and was "
+                      "moved to Bio/SearchIO/_legacy/ParserSupport.py "
+                      "(which is the only module in Biopython still using "
+                      "UndoHandle.")
 
 
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
