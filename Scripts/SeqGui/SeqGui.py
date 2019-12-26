@@ -17,7 +17,8 @@ from several codon tables which are implemented in Biopython.
 It runs as a standalone application.
 
 """
-
+import tkinter as tk
+import tkinter.ttk as ttk
 
 from Bio.Seq import translate, transcribe, back_transcribe
 from Bio.Data import CodonTable
