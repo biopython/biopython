@@ -13,7 +13,7 @@ from Bio.Application import _Option, _Switch, AbstractCommandline
 
 
 class ClustalOmegaCommandline(AbstractCommandline):
-    u"""Command line wrapper for clustal omega.
+    """Command line wrapper for clustal omega.
 
     http://www.clustal.org/omega
 

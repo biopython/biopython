@@ -133,34 +133,34 @@ class AffyTest(unittest.TestCase):
                       "magic": 64,
                       "rows": 5,
                       "version": 4}
-        goodH = {u"Axis-invertX": b"0"}
-        badH = {u"Axis-invertX": b"1"}
+        goodH = {"Axis-invertX": b"0"}
+        badH = {"Axis-invertX": b"1"}
 
-        headers = {u"Algorithm": b"Percentile",
-                   u"AlgorithmParameters": b"Percentile:75;CellMargin:4;Outlie"
+        headers = {"Algorithm": b"Percentile",
+                   "AlgorithmParameters": b"Percentile:75;CellMargin:4;Outlie"
                    b"rHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize"
                    b":TRUE;FullFeatureWidth:7;FullFeatureHeight:7;IgnoreOutlie"
                    b"rsInShiftRows:FALSE;FeatureExtraction:TRUE;PoolWidthExten"
                    b"stion:1;PoolHeightExtension:1;UseSubgrids:FALSE;Randomize"
                    b"Pixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000;NumDATS"
                    b"ubgrids:169",
-                   u"AxisInvertY": b"0",
-                   u"Cols": b"5",
-                   u"DatHeader": b"[0..65534]  20_10N:CLS=19420RWS=19420XIN=0"
+                   "AxisInvertY": b"0",
+                   "Cols": b"5",
+                   "DatHeader": b"[0..65534]  20_10N:CLS=19420RWS=19420XIN=0"
                    b" YIN=0  VE=30        2.0 05/25/05 23:19:07 50102310  M10 "
                    b"  \x14  \x14 HuEx-1_0-st-v2.1sq \x14  \x14  \x14  \x14  "
                    b"\x14570 \x14 25540.671875 \x14 3.500000 \x14 0.7000 \x14"
                    b" 3",
-                   u"GridCornerLL": b"518 18668",
-                   u"GridCornerLR": b"18800 18825",
-                   u"GridCornerUL": b"659 469",
-                   u"GridCornerUR": b"18942 623",
-                   u"OffsetX": b"0",
-                   u"OffsetY": b"0",
-                   u"Rows": b"5",
-                   u"TotalX": b"2560",
-                   u"TotalY": b"2560",
-                   u"swapXY": b"0"}
+                   "GridCornerLL": b"518 18668",
+                   "GridCornerLR": b"18800 18825",
+                   "GridCornerUL": b"659 469",
+                   "GridCornerUR": b"18942 623",
+                   "OffsetX": b"0",
+                   "OffsetY": b"0",
+                   "Rows": b"5",
+                   "TotalX": b"2560",
+                   "TotalY": b"2560",
+                   "swapXY": b"0"}
         if not bad:
             headers.update(goodH)
         else:
