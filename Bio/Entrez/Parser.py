@@ -47,7 +47,6 @@ from xml.sax.saxutils import escape
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
-from Bio._py3k import unicode
 from Bio._py3k import raise_from as _raise_from
 
 
@@ -141,12 +140,12 @@ class StringElement(str):
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
 
-class UnicodeElement(unicode):
+class UnicodeElement(str):
     """NCBI Entrez XML element mapped to a unicode string."""
 
     def __new__(cls, value, tag, attributes, key=None):
         """Create a UnicodeElement."""
-        self = unicode.__new__(cls, value)
+        self = str.__new__(cls, value)
         self.tag = tag
         if key is None:
             self.key = tag
@@ -157,7 +156,7 @@ class UnicodeElement(unicode):
 
     def __repr__(self):
         """Return a string representation of the object."""
-        text = unicode.__repr__(self)
+        text = str.__repr__(self)
         attributes = self.attributes
         if not attributes:
             return text

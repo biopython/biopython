@@ -56,7 +56,6 @@ if sys.version_info[0] >= 3:
     # Lots of our Python 2 code uses isinstance(x, basestring)
     # which after 2to3 becomes isinstance(x, str)
     basestring = str
-    unicode = str
 
     _bytes_to_string = lambda b: b.decode()  # bytes to unicode string
     _string_to_bytes = lambda s: s.encode()  # unicode string to bytes

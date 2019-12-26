@@ -18,8 +18,6 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from Bio._py3k import unicode
-
 from Bio import Alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
@@ -405,14 +403,14 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
     for key, val in annotations.items():
         if isinstance(val, list):
             val = [_make_unicode_into_string(x) for x in val]
-        elif isinstance(val, unicode):
+        elif isinstance(val, str):
             val = str(val)
         str_anns[key] = val
     return str_anns
 
 
 def _make_unicode_into_string(text):
-    if isinstance(text, unicode):
+    if isinstance(text, str):
         return str(text)
     else:
         return text

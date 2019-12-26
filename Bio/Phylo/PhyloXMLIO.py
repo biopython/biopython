@@ -20,7 +20,6 @@ About capitalization:
 import sys
 
 from Bio._py3k import basestring
-from Bio._py3k import unicode
 
 from Bio.Phylo import PhyloXML as PX
 
@@ -168,7 +167,7 @@ def _get_child_as(parent, tag, construct):
         return construct(child)
 
 
-def _get_child_text(parent, tag, construct=unicode):
+def _get_child_text(parent, tag, construct=str):
     """Find a child node by tag; pass its text through a constructor (PRIVATE).
 
     Returns None if no matching child is found.
@@ -187,7 +186,7 @@ def _get_children_as(parent, tag, construct):
             parent.findall(_ns(tag))]
 
 
-def _get_children_text(parent, tag, construct=unicode):
+def _get_children_text(parent, tag, construct=str):
     """Find child nodes by tag; pass each node's text through a constructor (PRIVATE).
 
     Returns an empty list if no matching child is found.
@@ -654,10 +653,10 @@ class Parser(object):
 def _serialize(value):
     """Convert a Python primitive to a phyloXML-compatible Unicode string (PRIVATE)."""
     if isinstance(value, float):
-        return unicode(value).upper()
+        return str(value).upper()
     elif isinstance(value, bool):
-        return unicode(value).lower()
-    return unicode(value)
+        return str(value).lower()
+    return str(value)
 
 
 def _clean_attrib(obj, attrs):
