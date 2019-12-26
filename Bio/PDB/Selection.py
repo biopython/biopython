@@ -7,7 +7,6 @@
 
 """Selection of atoms, residues, etc."""
 
-from __future__ import print_function
 
 import itertools
 
@@ -81,4 +80,5 @@ def unfold_entities(entity_list, target_level):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

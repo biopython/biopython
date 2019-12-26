@@ -1,8 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Base class for Residue, Chain, Model and Structure classes.
 
 It is a simple container class, with list and dictionary like properties.
@@ -171,9 +172,9 @@ class Entity(object):
         if self.parent:
             if value in self.parent.child_dict:
                 raise ValueError(
-                              "Cannot change id from `{}` to `{}`. "
-                              "The id `{}` is already used for a sibling of"
-                              " this entity.".format(self._id, value, value))
+                    "Cannot change id from `{}` to `{}`. The id `{}` is already used "
+                    "for a sibling of this entity.".format(self._id, value, value)
+                )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
 
@@ -211,8 +212,7 @@ class Entity(object):
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException(
-                "%s defined twice" % str(entity_id))
+            raise PDBConstructionException("%s defined twice" % entity_id)
         entity.set_parent(self)
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
@@ -221,8 +221,7 @@ class Entity(object):
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException(
-                "%s defined twice" % str(entity_id))
+            raise PDBConstructionException("%s defined twice" % entity_id)
         entity.set_parent(self)
         self.child_list[pos:pos] = [entity]
         self.child_dict[entity_id] = entity

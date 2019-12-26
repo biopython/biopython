@@ -16,9 +16,14 @@ Functions:
 
 """
 
-from __future__ import print_function
 
-from Bio._py3k import _as_string
+class SwissProtParserError(ValueError):
+    """An error occurred while parsing a SwissProt file."""
+
+    def __init__(self, *args, line=None):
+        """Create a SwissProtParserError object with the offending line."""
+        super().__init__(*args)
+        self.line = line
 
 
 class Record(object):
@@ -151,14 +156,13 @@ def read(handle):
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
-    # We should have reached the end of the record by now
-    # Used to check with handle.read() but that breaks on Python 3.5
-    # due to http://bugs.python.org/issue26499 and could download
-    # lot of data needlessly if there were more records.
-    remainder = handle.readline()
-    if remainder:
-        raise ValueError("More than one SwissProt record found")
-    return record
+    # We should have reached the end of the record by now.
+    # Try to read one more line to be sure:
+    try:
+        next(handle)
+    except StopIteration:
+        return record
+    raise ValueError("More than one SwissProt record found")
 
 
 # Everything below is considered private
@@ -167,28 +171,23 @@ def read(handle):
 def _read(handle):
     record = None
     unread = ""
+    try:
+        line = next(handle)
+    except StopIteration:
+        return record
+    key, value = line[:2], line[5:].rstrip()
+    if key != "ID":
+        raise SwissProtParserError("Failed to find ID in first line", line=line)
+    record = Record()
+    _read_id(record, line)
+    _sequence_lines = []
     for line in handle:
-        # This is for Python 3 to cope with a binary handle (byte strings),
-        # or a text handle (unicode strings):
-        line = _as_string(line)
         key, value = line[:2], line[5:].rstrip()
         if unread:
             value = unread + " " + value
             unread = ""
-        if key == "**":
-            # See Bug 2353, some files from the EBI have extra lines
-            # starting "**" (two asterisks/stars).  They appear
-            # to be unofficial automated annotations. e.g.
-            # **
-            # **   #################    INTERNAL SECTION    ##################
-            # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
-            pass
-        elif key == "ID":
-            record = Record()
-            _read_id(record, line)
-            _sequence_lines = []
-        elif key == "AC":
-            accessions = [word for word in value.rstrip(";").split("; ")]
+        if key == "AC":
+            accessions = value.rstrip(";").split("; ")
             record.accessions.extend(accessions)
         elif key == "DT":
             _read_dt(record, line)
@@ -203,7 +202,7 @@ def _read(handle):
         elif key == "OG":
             record.organelle += line[5:]
         elif key == "OC":
-            cols = [col for col in value.rstrip(";.").split("; ")]
+            cols = value.rstrip(";.").split("; ")
             record.organism_classification.extend(cols)
         elif key == "OX":
             _read_ox(record, line)
@@ -273,8 +272,18 @@ def _read(handle):
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
+        elif key == "**":
+            # Do this one last, as it will almost never occur.
+            # See Bug 2353, some files from the EBI have extra lines
+            # starting "**" (two asterisks/stars).  They appear
+            # to be unofficial automated annotations. e.g.
+            # **
+            # **   #################    INTERNAL SECTION    ##################
+            # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
+            pass
         else:
-            raise ValueError("Unknown keyword '%s' found" % key)
+            raise SwissProtParserError("Unknown keyword '%s' found" % key,
+                                       line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
 
@@ -297,26 +306,29 @@ def _read_id(record, line):
         record.molecule_type = None
         record.sequence_length = int(cols[2])
     else:
-        raise ValueError("ID line has unrecognised format:\n" + line)
+        raise SwissProtParserError("ID line has unrecognised format", line=line)
     # check if the data class is one of the allowed values
     allowed = ("STANDARD", "PRELIMINARY", "IPI", "Reviewed", "Unreviewed")
     if record.data_class not in allowed:
-        raise ValueError("Unrecognized data class %s in line\n%s" %
-                         (record.data_class, line))
+        message = "Unrecognized data class '%s'" % record.data_class
+        raise SwissProtParserError(message, line=line)
+
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, "PRT"):
-        raise ValueError("Unrecognized molecule type %s in line\n%s" %
-                         (record.molecule_type, line))
+        message = "Unrecognized molecule type '%s'" % record.molecule_type
+        raise SwissProtParserError(message, line=line)
 
 
 def _read_dt(record, line):
     value = line[5:]
     uprline = value.upper()
     cols = value.rstrip().split()
-    if ("CREATED" in uprline
-            or "LAST SEQUENCE UPDATE" in uprline
-            or "LAST ANNOTATION UPDATE" in uprline):
+    if (
+        "CREATED" in uprline
+        or "LAST SEQUENCE UPDATE" in uprline
+        or "LAST ANNOTATION UPDATE" in uprline
+    ):
         # Old style DT line
         # =================
         # e.g.
@@ -359,10 +371,13 @@ def _read_dt(record, line):
         elif "LAST ANNOTATION UPDATE" in uprline:
             record.annotation_update = date, version
         else:
-            raise ValueError("Unrecognised DT (DaTe) line.")
-    elif ("INTEGRATED INTO" in uprline
-          or "SEQUENCE VERSION" in uprline
-          or "ENTRY VERSION" in uprline):
+            raise SwissProtParserError("Unrecognised DT (DaTe) line",
+                                       line=line)
+    elif (
+        "INTEGRATED INTO" in uprline
+        or "SEQUENCE VERSION" in uprline
+        or "ENTRY VERSION" in uprline
+    ):
         # New style DT line
         # =================
         # As of UniProt Knowledgebase release 7.0 (including
@@ -401,9 +416,9 @@ def _read_dt(record, line):
         elif "ENTRY VERSION" in uprline:
             record.annotation_update = date, version
         else:
-            raise ValueError("Unrecognised DT (DaTe) line.")
+            raise SwissProtParserError("Unrecognised DT (DaTe) line", line=line)
     else:
-        raise ValueError("I don't understand the date line %s" % line)
+        raise SwissProtParserError("Failed to parse DT (DaTe) line", line=line)
 
 
 def _read_ox(record, line):
@@ -447,11 +462,15 @@ def _read_rn(reference, rn):
     # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
     words = rn.split(None, 1)
     number = words[0]
-    assert number.startswith("[") and number.endswith("]"), "Missing brackets %s" % number
+    assert number.startswith("[") and number.endswith("]"), (
+        "Missing brackets %s" % number
+    )
     reference.number = int(number[1:-1])
     if len(words) > 1:
         evidence = words[1]
-        assert evidence.startswith("{") and evidence.endswith("}"), "Missing braces %s" % evidence
+        assert evidence.startswith("{") and evidence.endswith("}"), (
+            "Missing braces %s" % evidence
+        )
         reference.evidence = evidence[1:-1].split("|")
 
 
@@ -467,7 +486,7 @@ def _read_rc(reference, value):
         # The token is everything before the first '=' character.
         i = col.find("=")
         if i >= 0:
-            token, text = col[:i], col[i + 1:]
+            token, text = col[:i], col[i + 1 :]
             comment = token.lstrip(), text
             reference.comments.append(comment)
         else:
@@ -518,13 +537,13 @@ def _read_rx(reference, value):
     if warn:
         import warnings
         from Bio import BiopythonParserWarning
-        warnings.warn("Possibly corrupt RX line %r" % value,
-                      BiopythonParserWarning)
+
+        warnings.warn("Possibly corrupt RX line %r" % value, BiopythonParserWarning)
 
 
 def _read_cc(record, line):
     key, value = line[5:8], line[9:].rstrip()
-    if key == "-!-":   # Make a new comment
+    if key == "-!-":  # Make a new comment
         record.comments.append(value)
     elif key == "   ":  # add to the previous comment
         if not record.comments:
@@ -563,7 +582,7 @@ def _read_kw(record, value):
 
 
 def _read_ft(record, line):
-    line = line[5:]    # get rid of junk in front
+    line = line[5:]  # get rid of junk in front
     name = line[0:8].rstrip()
     try:
         from_res = int(line[9:15])
@@ -581,7 +600,7 @@ def _read_ft(record, line):
         ft_id = ""
         description = line[29:70].rstrip()
     if not name:  # is continuation of last one
-        assert not from_res and not to_res
+        assert not from_res and not to_res, line
         name, from_res, to_res, old_description, old_ft_id = record.features[-1]
         del record.features[-1]
         description = ("%s %s" % (old_description, description)).strip()
@@ -613,4 +632,5 @@ def _read_ft(record, line):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

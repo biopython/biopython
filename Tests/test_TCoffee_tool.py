@@ -40,6 +40,7 @@ class TCoffeeApplication(unittest.TestCase):
         self.outfile3 = "Fasta/tc_out.pir"
         self.outfile4 = "Fasta/tc_out.aln"
         self.outfile5 = "Fasta/tc_out.phy"
+        self.outfile6 = "Fasta/tc_out.msf"
 
     def tearDown(self):
         if os.path.isfile(self.outfile1):
@@ -121,6 +122,23 @@ class TCoffeeApplication(unittest.TestCase):
         for old, new in zip(records, align):
             # TCoffee does strict 10 character truncation as per original PHYLIP
             self.assertEqual(old.id[:10], new.id[:10])
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+
+    def test_TCoffee_msf(self):
+        """Round-trip through app and read GCG MSF alignment from file."""
+        cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1,
+                                     outfile=self.outfile6,
+                                     quiet=True, output="msf_aln")
+        self.assertEqual(str(cmdline), t_coffee_exe + " -output msf_aln "
+                         "-infile Fasta/fa01 -outfile Fasta/tc_out.msf -quiet")
+        stdout, stderr = cmdline()
+        # Can get warnings in stderr output
+        self.assertNotIn("error", stderr.lower(), stderr)
+        align = AlignIO.read(self.outfile6, "msf")
+        records = list(SeqIO.parse(self.infile1, "fasta"))
+        self.assertEqual(len(records), len(align))
+        for old, new in zip(records, align):
+            self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
 

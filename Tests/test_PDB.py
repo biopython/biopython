@@ -5,12 +5,12 @@
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
 #
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Unit tests for the Bio.PDB module."""
-from __future__ import print_function
 
 from copy import deepcopy
 import os
@@ -578,7 +578,7 @@ class ParseTest(unittest.TestCase):
         residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
-        residues = [r for r in struct[1]["B"]] + [struct[1]["A"][44]]
+        residues = list(struct[1]["B"]) + [struct[1]["A"][44]]
         self.assertEqual([("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
                          ["A 44 ", "B 44 ", "B 46 ", "B 47 ", "B 48 ", "B 49 ", "B 50 ",
                           "B 51 ", "B 51A", "B 52 ", "BH_SEP45 ", "BW0 "])
@@ -649,14 +649,10 @@ class ParseReal(unittest.TestCase):
     def test_empty(self):
         """Parse an empty file."""
         parser = PDBParser()
-        filenumber, filename = tempfile.mkstemp()
-        os.close(filenumber)
-        try:
-            struct = parser.get_structure("MT", filename)
-            # Structure has no children (models)
-            self.assertFalse(len(struct))
-        finally:
-            os.remove(filename)
+        handle = StringIO()
+        with self.assertRaises(ValueError) as context_manager:
+            struct = parser.get_structure("MT", handle)
+        self.assertEqual(str(context_manager.exception), "Empty file.")
 
     def test_residue_sort(self):
         """Sorting atoms in residues."""

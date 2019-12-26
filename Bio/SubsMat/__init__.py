@@ -110,9 +110,6 @@ Methods for subtraction, addition and multiplication of matrices:
 
 """
 
-
-from __future__ import print_function
-
 import re
 import sys
 import copy
@@ -207,7 +204,7 @@ class SeqMat(dict):
 
     def _correct_matrix(self):
         """Sort key tuples (PRIVATE)."""
-        for key in self:
+        for key in list(self):  # iterate over a copy
             if key[0] > key[1]:
                 self[(key[1], key[0])] = self[key]
                 del self[key]
@@ -223,7 +220,7 @@ class SeqMat(dict):
         if len(self) == N * (N + 1) / 2:
             return
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i) + 1]:
+            for j in self.ab_list[: self.ab_list.index(i) + 1]:
                 if i != j:
                     self[j, i] = self[j, i] + self[i, j]
                     del self[i, j]
@@ -231,8 +228,8 @@ class SeqMat(dict):
     def _init_zero(self):
         """Initialize the ab_list values to zero (PRIVATE)."""
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i) + 1]:
-                self[j, i] = 0.
+            for j in self.ab_list[: self.ab_list.index(i) + 1]:
+                self[j, i] = 0.0
 
     def make_entropy(self):
         """Calculate and set the entropy attribute."""
@@ -256,8 +253,9 @@ class SeqMat(dict):
                 result[i2] += value / 2
         return result
 
-    def format(self, fmt="%4d", letterfmt="%4s", alphabet=None,
-               non_sym=None, full=False):
+    def format(
+        self, fmt="%4d", letterfmt="%4s", alphabet=None, non_sym=None, full=False
+    ):
         """Create a string with the bottom-half (default) or a full matrix.
 
         User may pass own alphabet, which should contain all letters in the
@@ -267,8 +265,7 @@ class SeqMat(dict):
         if not alphabet:
             alphabet = self.ab_list
         lines = []
-        assert non_sym is None or isinstance(non_sym, float) or \
-        isinstance(non_sym, int)
+        assert non_sym is None or isinstance(non_sym, float) or isinstance(non_sym, int)
         letterline = ""
         for i in alphabet:
             letterline += letterfmt % i
@@ -300,28 +297,40 @@ class SeqMat(dict):
             lines.append(letterline)
         return "\n".join(lines)
 
-    def print_full_mat(self, f=None, format="%4d", topformat="%4s",
-                       alphabet=None, factor=1, non_sym=None):
+    def print_full_mat(
+        self,
+        f=None,
+        format="%4d",
+        topformat="%4s",
+        alphabet=None,
+        factor=1,
+        non_sym=None,
+    ):
         """Print the full matrix to the file handle f or stdout."""
-        warnings.warn("SeqMat.print_full_mat has been deprecated, and we intend to remove"
-                      " it in a future release of Biopython. Instead of\n"
-                      " mat.print_full_mat(<arguments>)\n"
-                      " please use\n"
-                      " print(mat.format(<arguments>, full=True)",
-                      BiopythonDeprecationWarning)
+        warnings.warn(
+            "SeqMat.print_full_mat has been deprecated, and we intend to remove "
+            "it in a future release of Biopython. Instead of\n"
+            "mat.print_full_mat(<arguments>)\n"
+            "please use\n"
+            "print(mat.format(<arguments>, full=True)",
+            BiopythonDeprecationWarning,
+        )
         if factor == 1:
             mat = self
         else:
             mat = factor * self
-            warnings.warn("Instead of 'mat.print_full_mat(..., factor, ...)' please "
-                          "use 'mat2 = factor * mat; print(mat2.format(..., full=True))'",
-                          BiopythonDeprecationWarning)
+            warnings.warn(
+                "Instead of 'mat.print_full_mat(..., factor, ...)' please "
+                "use 'mat2 = factor * mat; print(mat2.format(..., full=True))'",
+                BiopythonDeprecationWarning,
+            )
         f = f or sys.stdout
         text = mat.format(format, topformat, alphabet, non_sym, True)
         f.write(text + "\n")
 
-    def print_mat(self, f=None, format="%4d", bottomformat="%4s",
-                  alphabet=None, factor=1):
+    def print_mat(
+        self, f=None, format="%4d", bottomformat="%4s", alphabet=None, factor=1
+    ):
         """Print a nice half-matrix.
 
         f=sys.stdout to see on the screen.
@@ -330,19 +339,23 @@ class SeqMat(dict):
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes.
         """
-        warnings.warn("SeqMat.print_mat has been deprecated, and we intend to remove it"
-                      " in a future release of Biopython. Instead of\n"
-                      " mat.print_mat(<arguments>)\n"
-                      " please use\n"
-                      " print(mat.format(<arguments>)",
-                      BiopythonDeprecationWarning)
+        warnings.warn(
+            "SeqMat.print_mat has been deprecated, and we intend to remove it "
+            "in a future release of Biopython. Instead of\n"
+            "mat.print_mat(<arguments>)\n"
+            "please use\n"
+            "print(mat.format(<arguments>)",
+            BiopythonDeprecationWarning,
+        )
         if factor == 1:
             mat = self
         else:
             mat = factor * self
-            warnings.warn("Instead of 'mat.print_mat(..., factor, ...)' please "
-                          "use 'mat2 = factor * mat; print(mat2.format(...))'",
-                          BiopythonDeprecationWarning)
+            warnings.warn(
+                "Instead of 'mat.print_mat(..., factor, ...)' please "
+                "use 'mat2 = factor * mat; print(mat2.format(...))'",
+                BiopythonDeprecationWarning,
+            )
         f = f or sys.stdout
         text = self.format(format, bottomformat, alphabet, None, False)
         f.write(text + "\n")
@@ -355,7 +368,7 @@ class SeqMat(dict):
         """Return integer subtraction product of the two matrices."""
         mat_diff = 0
         for i in self:
-            mat_diff += (self[i] - other[i])
+            mat_diff += self[i] - other[i]
         return mat_diff
 
     def __mul__(self, other):
@@ -396,7 +409,7 @@ class SubstitutionMatrix(SeqMat):
 
     def calculate_relative_entropy(self, obs_freq_mat):
         """Calculate and return relative entropy w.r.t. observed frequency matrix."""
-        relative_entropy = 0.
+        relative_entropy = 0.0
         for key, value in self.items():
             if value > EPSILON:
                 relative_entropy += obs_freq_mat[key] * log(value)
@@ -409,7 +422,7 @@ class LogOddsMatrix(SeqMat):
 
     def calculate_relative_entropy(self, obs_freq_mat):
         """Calculate and return relative entropy w.r.t. observed frequency matrix."""
-        relative_entropy = 0.
+        relative_entropy = 0.0
         for key, value in self.items():
             relative_entropy += obs_freq_mat[key] * value / log(2)
         return relative_entropy
@@ -433,13 +446,13 @@ def _exp_freq_table_from_obs_freq(obs_freq_mat):
     """Build expected frequence table from observed frequences (PRIVATE)."""
     exp_freq_table = {}
     for i in obs_freq_mat.alphabet.letters:
-        exp_freq_table[i] = 0.
+        exp_freq_table[i] = 0.0
     for i in obs_freq_mat:
         if i[0] == i[1]:
             exp_freq_table[i[0]] += obs_freq_mat[i]
         else:
-            exp_freq_table[i[0]] += obs_freq_mat[i] / 2.
-            exp_freq_table[i[1]] += obs_freq_mat[i] / 2.
+            exp_freq_table[i[0]] += obs_freq_mat[i] / 2.0
+            exp_freq_table[i[1]] += obs_freq_mat[i] / 2.0
     return FreqTable.FreqTable(exp_freq_table, FreqTable.FREQ)
 
 
@@ -504,8 +517,9 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
 # and rounding factor. Generates a log-odds matrix, calling internal SubsMat
 # functions.
 #
-def make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=2,
-                         factor=1., round_digit=9, keep_nd=0):
+def make_log_odds_matrix(
+    acc_rep_mat, exp_freq_table=None, logbase=2, factor=1.0, round_digit=9, keep_nd=0
+):
     """Make log-odds matrix."""
     obs_freq_mat = _build_obs_freq_mat(acc_rep_mat)
     if not exp_freq_table:
@@ -533,11 +547,11 @@ def read_text_matrix(data_file):
         table.append(i.split())
     # remove records beginning with ``#''
     for rec in table[:]:
-        if (rec.count("#") > 0):
+        if rec.count("#") > 0:
             table.remove(rec)
 
     # remove null lists
-    while (table.count([]) > 0):
+    while table.count([]) > 0:
         table.remove([])
     # build a dictionary
     alphabet = table[0]
@@ -559,7 +573,7 @@ def read_text_matrix(data_file):
     # delete entries with an asterisk
     for i in matrix:
         if "*" in i:
-            del(matrix[i])
+            del matrix[i]
     ret_mat = SeqMat(matrix)
     return ret_mat
 
@@ -571,12 +585,12 @@ diagALL = 3
 
 def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
     """Return relative entropy of two matrices."""
-    rel_ent = 0.
+    rel_ent = 0.0
     key_list_1 = sorted(mat_1)
     key_list_2 = sorted(mat_2)
     key_list = []
-    sum_ent_1 = 0.
-    sum_ent_2 = 0.
+    sum_ent_1 = 0.0
+    sum_ent_2 = 0.0
     for i in key_list_1:
         if i in key_list_2:
             key_list.append(i)
@@ -601,7 +615,6 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
         if mat_1[key] > EPSILON and mat_2[key] > EPSILON:
             val_1 = mat_1[key] / sum_ent_1
             val_2 = mat_2[key] / sum_ent_2
-#            rel_ent += mat_1[key] * log(mat_1[key]/mat_2[key])/log(logbase)
             rel_ent += val_1 * log(val_1 / val_2) / log(logbase)
     return rel_ent
 
@@ -611,7 +624,9 @@ def two_mat_correlation(mat_1, mat_2):
     try:
         import numpy
     except ImportError:
-        raise ImportError("Please install Numerical Python (numpy) if you want to use this function")
+        raise ImportError(
+            "Please install Numerical Python (numpy) if you want to use this function"
+        )
     values = []
     assert mat_1.ab_list == mat_2.ab_list
     for ab_pair in mat_1:

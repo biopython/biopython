@@ -19,7 +19,6 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
-from __future__ import print_function
 
 import os
 import tempfile
@@ -27,11 +26,15 @@ import shutil
 import subprocess
 import warnings
 from Bio.PDB.PDBIO import PDBIO
-from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
+from Bio.PDB.AbstractPropertyMap import (
+    AbstractResiduePropertyMap,
+    AbstractAtomPropertyMap,
+)
 
 
-def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
-                naccess="naccess", temp_path="/tmp/"):
+def run_naccess(
+    model, pdb_file, probe_size=None, z_slice=None, naccess="naccess", temp_path="/tmp/"
+):
     """Run naccess for a pdb file."""
     # make temp directory;
     tmp_path = tempfile.mkdtemp(dir=temp_path)
@@ -61,8 +64,9 @@ def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
     if z_slice:
         command.extend(["-z", z_slice])
 
-    p = subprocess.Popen(command, universal_newlines=True,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        command, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     out, err = p.communicate()
     os.chdir(old_dir)
 
@@ -106,7 +110,8 @@ def process_rsa_data(rsa_data):
                 "non_polar_abs": float(line[55:61]),
                 "non_polar_rel": float(line[62:67]),
                 "all_polar_abs": float(line[68:74]),
-                "all_polar_rel": float(line[75:80])}
+                "all_polar_rel": float(line[75:80]),
+            }
     return naccess_rel_dict
 
 
@@ -121,7 +126,7 @@ def process_asa_data(rsa_data):
         icode = line[26]
         res_id = (" ", resseq, icode)
         id = (chainid, res_id, atom_id)
-        asa = line[54:62]               # solvent accessibility in Angstrom^2
+        asa = line[54:62]  # solvent accessibility in Angstrom^2
         naccess_atom_dict[id] = asa
     return naccess_atom_dict
 
@@ -129,12 +134,13 @@ def process_asa_data(rsa_data):
 class NACCESS(AbstractResiduePropertyMap):
     """Define NACCESS class for residue properties map."""
 
-    def __init__(self, model, pdb_file=None,
-                 naccess_binary="naccess", tmp_directory="/tmp"):
+    def __init__(
+        self, model, pdb_file=None, naccess_binary="naccess", tmp_directory="/tmp"
+    ):
         """Initialize the class."""
-        res_data, atm_data = run_naccess(model, pdb_file,
-                                         naccess=naccess_binary,
-                                         temp_path=tmp_directory)
+        res_data, atm_data = run_naccess(
+            model, pdb_file, naccess=naccess_binary, temp_path=tmp_directory
+        )
         naccess_dict = process_rsa_data(res_data)
         property_dict = {}
         property_keys = []
@@ -147,26 +153,28 @@ class NACCESS(AbstractResiduePropertyMap):
                 if (chain_id, res_id) in naccess_dict:
                     item = naccess_dict[(chain_id, res_id)]
                     res_name = item["res_name"]
-                    assert (res_name == res.get_resname())
+                    assert res_name == res.get_resname()
                     property_dict[(chain_id, res_id)] = item
                     property_keys.append((chain_id, res_id))
                     property_list.append((res, item))
                     res.xtra["EXP_NACCESS"] = item
                 else:
                     pass
-        AbstractResiduePropertyMap.__init__(self, property_dict, property_keys,
-                                            property_list)
+        AbstractResiduePropertyMap.__init__(
+            self, property_dict, property_keys, property_list
+        )
 
 
 class NACCESS_atomic(AbstractAtomPropertyMap):
     """Define NACCESS atomic class for atom properties map."""
 
-    def __init__(self, model, pdb_file=None,
-                 naccess_binary="naccess", tmp_directory="/tmp"):
+    def __init__(
+        self, model, pdb_file=None, naccess_binary="naccess", tmp_directory="/tmp"
+    ):
         """Initialize the class."""
-        res_data, atm_data = run_naccess(model, pdb_file,
-                                         naccess=naccess_binary,
-                                         temp_path=tmp_directory)
+        res_data, atm_data = run_naccess(
+            model, pdb_file, naccess=naccess_binary, temp_path=tmp_directory
+        )
         self.naccess_atom_dict = process_asa_data(atm_data)
         property_dict = {}
         property_keys = []
@@ -185,8 +193,9 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
                         property_keys.append((full_id))
                         property_list.append((atom, asa))
                         atom.xtra["EXP_NACCESS"] = asa
-        AbstractAtomPropertyMap.__init__(self, property_dict,
-                                         property_keys, property_list)
+        AbstractAtomPropertyMap.__init__(
+            self, property_dict, property_keys, property_list
+        )
 
 
 if __name__ == "__main__":

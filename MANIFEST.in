@@ -42,6 +42,7 @@ include Doc/examples/ec_5.4.2.2.txt
 # Note setup.py will only install these if Numpy is installed.
 recursive-include Bio/Cluster *.py
 recursive-include Bio/Affy *.py
+recursive-include Bio/Align *.py
 recursive-include Bio/KDTree *.py
 recursive-include Bio/phenotype *.py
 
@@ -60,3 +61,5 @@ include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez
 include Bio/Entrez/DTDs/*.ent  # Include DTD files for Entrez
 include Bio/Entrez/DTDs/*.mod  # Include DTD files for Entrez
 include Bio/Entrez/XSDs/*.xsd  # Include XSD files for Entrez
+include Bio/Align/substitution_matrices/data/*  # Include precalculated substitution matrices
+exclude Bio/Align/substitution_matrices/data/README.txt

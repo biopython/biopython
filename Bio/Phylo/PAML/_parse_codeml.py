@@ -1,7 +1,9 @@
 # Copyright (C) 2011, 2016 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Methods for parsing codeml results files."""
 
@@ -20,7 +22,8 @@ except ValueError:
         except ValueError:
             if text.lower() == "nan":
                 import struct
-                return struct.unpack("d", struct.pack("Q", 0xfff8000000000000))[0]
+
+                return struct.unpack("d", struct.pack("Q", 0xFFF8000000000000))[0]
             else:
                 raise
 
@@ -97,13 +100,15 @@ def parse_nssites(lines, results, multi_models, multi_genes):
         # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
-        current_model = {"one-ratio": 0,
-                         "NearlyNeutral": 1,
-                         "PositiveSelection": 2,
-                         "discrete": 3,
-                         "beta": 7,
-                         "beta&w>1": 8,
-                         "M2a_rel": 22}[siteclass_model]
+        current_model = {
+            "one-ratio": 0,
+            "NearlyNeutral": 1,
+            "PositiveSelection": 2,
+            "discrete": 3,
+            "beta": 7,
+            "beta&w>1": 8,
+            "M2a_rel": 22,
+        }[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
@@ -256,8 +261,10 @@ def parse_model(lines, results):
             gene_num = int(re.match(r"gene # (\d+)", line).group(1))
             if parameters.get("genes") is None:
                 parameters["genes"] = {}
-            parameters["genes"][gene_num] = {"kappa": line_floats[0],
-                                             "omega": line_floats[1]}
+            parameters["genes"][gene_num] = {
+                "kappa": line_floats[0],
+                "omega": line_floats[1],
+            }
         # Find dN values.
         # Example match: "tree length for dN:       0.2990"
         elif "tree length for dN" in line and line_floats:
@@ -289,8 +296,9 @@ def parse_model(lines, results):
             if branch_type:
                 site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
-                site_classes = parse_clademodelc(branch_type_no, line_floats,
-                                                 site_classes)
+                site_classes = parse_clademodelc(
+                    branch_type_no, line_floats, site_classes
+                )
                 parameters["site classes"] = site_classes
         # Find the omega values of the foreground branch for each site
         # class in the branch site A model
@@ -328,7 +336,8 @@ def parse_model(lines, results):
                 "dN": _nan_float(params[4].strip()),
                 "dS": _nan_float(params[5].strip()),
                 "N*dN": _nan_float(params[6].strip()),
-                "S*dS": _nan_float(params[7].strip())}
+                "S*dS": _nan_float(params[7].strip()),
+            }
         # Find model parameters, which can be spread across multiple
         # lines.
         # Example matches:
@@ -430,12 +439,16 @@ def parse_pairwise(lines, results):
             pairwise[seq1][seq2] = {"lnL": line_floats[0]}
             pairwise[seq2][seq1] = pairwise[seq1][seq2]
         elif len(line_floats) == 6 and seq1 is not None and seq2 is not None:
-            pairwise[seq1][seq2].update({"t": line_floats[0],
-                                         "S": line_floats[1],
-                                         "N": line_floats[2],
-                                         "omega": line_floats[3],
-                                         "dN": line_floats[4],
-                                         "dS": line_floats[5]})
+            pairwise[seq1][seq2].update(
+                {
+                    "t": line_floats[0],
+                    "S": line_floats[1],
+                    "N": line_floats[2],
+                    "omega": line_floats[3],
+                    "dN": line_floats[4],
+                    "dS": line_floats[5],
+                }
+            )
             pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if pairwise:
         results["pairwise"] = pairwise
@@ -463,8 +476,7 @@ def parse_distances(lines, results):
             raw_aa_distances_flag = False
         # Parse AA distances (raw or ML), in a lower diagonal matrix
         matrix_row_res = matrix_row_re.match(line)
-        if matrix_row_res and (raw_aa_distances_flag or
-                               ml_aa_distances_flag):
+        if matrix_row_res and (raw_aa_distances_flag or ml_aa_distances_flag):
             seq_name = matrix_row_res.group(1).strip()
             if seq_name not in sequences:
                 sequences.append(seq_name)

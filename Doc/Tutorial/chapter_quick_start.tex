@@ -56,7 +56,7 @@ Now that you've got some idea of what it is like to interact with the Biopython 
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{https://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{https://images.google.com/images?q=lady\%20slipper\%20orchid}{Google Image Search}).
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{https://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{https://google.com/search?q=lady slipper orchids&tbm=isch}{Google Image Search}).
 
 Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So let's suppose we're thinking about writing a funding proposal to do a molecular study of Lady Slipper evolution, and would like to see what kind of research has already been done and how we can add to that.
 
@@ -75,7 +75,7 @@ A large part of much bioinformatics work involves dealing with the many types of
 
 We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:seqio}.  We'll start with an online search for our friends, the lady slipper orchids. To keep this introduction simple, we're just using the NCBI website by hand.  Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{https://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids).
 
-When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file and as a GenBank formatted text file (files \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}\texttt{ls\_orchid.fasta} and \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}\texttt{ls\_orchid.gbk}, also included with the Biopython source code under \texttt{docs/tutorial/examples/}).
+When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file and as a GenBank formatted text file (files \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} and \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk}, also included with the Biopython source code under \texttt{docs/tutorial/examples/}).
 
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
@@ -85,7 +85,7 @@ If you run the search today, you'll get hundreds of results!  When following the
 \subsection{Simple FASTA parsing example}
 \label{sec:fasta-parsing}
 
-If you open the lady slipper orchids FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}\texttt{ls\_orchid.fasta} in your favourite text editor, you'll see that the file starts like this:
+If you open the lady slipper orchids FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} in your favourite text editor, you'll see that the file starts like this:
 
 \begin{minted}{text}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
@@ -98,6 +98,7 @@ It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print(seq_record.id)
     print(repr(seq_record.seq))
@@ -120,10 +121,11 @@ Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| 
 
 \subsection{Simple GenBank parsing example}
 
-Now let's load the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}\texttt{ls\_orchid.gbk} instead - notice that the code to do this is almost identical to the snippet used above for the FASTA file - the only difference is we change the filename and the format string:
+Now let's load the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk} instead - notice that the code to do this is almost identical to the snippet used above for the FASTA file - the only difference is we change the filename and the format string:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(seq_record.id)
     print(repr(seq_record.seq))

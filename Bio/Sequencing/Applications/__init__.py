@@ -13,31 +13,36 @@ from ._samtools import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
 from ._samtools import SamtoolsIndexCommandline, SamtoolsMergeCommandline
 from ._samtools import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
 from ._samtools import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
-from ._samtools import SamtoolsVersion0xSortCommandline, SamtoolsVersion1xSortCommandline, SamtoolsTargetcutCommandline
+from ._samtools import (
+    SamtoolsVersion0xSortCommandline,
+    SamtoolsVersion1xSortCommandline,
+    SamtoolsTargetcutCommandline,
+)
 from ._samtools import SamtoolsVersion0xSortCommandline as SamtoolsSortCommandline
 
 
 # Make this explicit, then they show up in the API docs
-__all__ = ("BwaIndexCommandline",
-           "BwaAlignCommandline",
-           "BwaSamseCommandline",
-           "BwaSampeCommandline",
-           "BwaBwaswCommandline",
-           "BwaMemCommandline",
-           "SamtoolsViewCommandline",
-           "SamtoolsCalmdCommandline",
-           "SamtoolsCatCommandline",
-           "SamtoolsFaidxCommandline",
-           "SamtoolsFixmateCommandline",
-           "SamtoolsIdxstatsCommandline",
-           "SamtoolsIndexCommandline",
-           "SamtoolsMergeCommandline",
-           "SamtoolsMpileupCommandline",
-           "SamtoolsPhaseCommandline",
-           "SamtoolsReheaderCommandline",
-           "SamtoolsRmdupCommandline",
-           "SamtoolsSortCommandline",
-           "SamtoolsVersion0xSortCommandline",
-           "SamtoolsVersion1xSortCommandline",
-           "SamtoolsTargetcutCommandline",
-           )
+__all__ = (
+    "BwaIndexCommandline",
+    "BwaAlignCommandline",
+    "BwaSamseCommandline",
+    "BwaSampeCommandline",
+    "BwaBwaswCommandline",
+    "BwaMemCommandline",
+    "SamtoolsViewCommandline",
+    "SamtoolsCalmdCommandline",
+    "SamtoolsCatCommandline",
+    "SamtoolsFaidxCommandline",
+    "SamtoolsFixmateCommandline",
+    "SamtoolsIdxstatsCommandline",
+    "SamtoolsIndexCommandline",
+    "SamtoolsMergeCommandline",
+    "SamtoolsMpileupCommandline",
+    "SamtoolsPhaseCommandline",
+    "SamtoolsReheaderCommandline",
+    "SamtoolsRmdupCommandline",
+    "SamtoolsSortCommandline",
+    "SamtoolsVersion0xSortCommandline",
+    "SamtoolsVersion1xSortCommandline",
+    "SamtoolsTargetcutCommandline",
+)

@@ -357,7 +357,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
 
 
 class SeqRetAlignIOTests(unittest.TestCase):
-    """Check EMBOSS seqret against Bio.SeqIO for converting files."""
+    """Check EMBOSS seqret against Bio.AlignIO for converting files."""
 
     def tearDown(self):
         clean_up()
@@ -367,7 +367,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         """Check AlignIO can read seqret's conversion of the file."""
         self.assertTrue(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(filename, old_format))
-        formats = ["clustal", "phylip", "ig"]
+        formats = ["clustal", "phylip", "ig", "msf"]
         if len(old_aligns) == 1:
             formats.extend(["fasta", "nexus"])
         for new_format in formats:

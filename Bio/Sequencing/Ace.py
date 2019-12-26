@@ -55,7 +55,6 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
 
-from __future__ import print_function
 from Bio._py3k import zip
 
 
@@ -104,14 +103,26 @@ class ds(object):
         self.template = ""
         self.direction = ""
         if line:
-            tags = ["CHROMAT_FILE", "PHD_FILE", "TIME", "CHEM", "DYE", "TEMPLATE", "DIRECTION"]
+            tags = [
+                "CHROMAT_FILE",
+                "PHD_FILE",
+                "TIME",
+                "CHEM",
+                "DYE",
+                "TEMPLATE",
+                "DIRECTION",
+            ]
             poss = [line.find(x) for x in tags]
             tagpos = dict(zip(poss, tags))
             if -1 in tagpos:
                 del tagpos[-1]
             ps = sorted(tagpos)  # the keys
             for (p1, p2) in zip(ps, ps[1:] + [len(line) + 1]):
-                setattr(self, tagpos[p1].lower(), line[p1 + len(tagpos[p1]) + 1:p2].strip())
+                setattr(
+                    self,
+                    tagpos[p1].lower(),
+                    line[p1 + len(tagpos[p1]) + 1 : p2].strip(),
+                )
 
 
 class af(object):
@@ -235,11 +246,11 @@ class Reads(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.rd = None    # one per read
-        self.qa = None    # one per read
-        self.ds = None    # none or one per read
-        self.rt = None    # none or many per read
-        self.wr = None    # none or many per read
+        self.rd = None  # one per read
+        self.qa = None  # one per read
+        self.ds = None  # none or one per read
+        self.rt = None  # none or many per read
+        self.wr = None  # none or many per read
         if line:
             self.rd = rd()
             header = line.split()
@@ -264,8 +275,8 @@ class Contig(object):
         self.af = []
         self.bs = []
         self.reads = []
-        self.ct = None    # none or many
-        self.wa = None    # none or many
+        self.ct = None  # none or many
+        self.wa = None  # none or many
         if line:
             header = line.split()
             self.name = header[1]
@@ -490,7 +501,7 @@ class ACEFileRecord(object):
         self.ncontigs = None
         self.nreads = None
         self.contigs = []
-        self.wa = None    # none or many
+        self.wa = None  # none or many
 
     def sort(self):
         """Sorts wr, rt and ct tags into the appropriate contig / read instance, if possible."""

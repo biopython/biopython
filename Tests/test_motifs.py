@@ -468,6 +468,67 @@ XX
         self.assertEqual(s3, expected_transfac)
         self.assertRaises(ValueError, self.m.format, "foo_bar")
 
+    def test_reverse_complement(self):
+        """Test if motifs can be reverse-complemented."""
+        background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
+        pseudocounts = 0.5
+        m = self.m
+        m.background = background
+        m.pseudocounts = pseudocounts
+        received_forward = self.m.format("transfac")
+        expected_forward = """\
+P0      A      C      G      T
+01      1      0      0      0      A
+02      0      0      0      1      T
+03      1      0      0      0      A
+04      0      0      0      1      T
+05      1      0      0      0      A
+XX
+//
+"""
+        self.assertEqual(received_forward, expected_forward)
+        expected_forward_pwm = """\
+        0      1      2      3      4
+A:   0.50   0.17   0.50   0.17   0.50
+C:   0.17   0.17   0.17   0.17   0.17
+G:   0.17   0.17   0.17   0.17   0.17
+T:   0.17   0.50   0.17   0.50   0.17
+"""
+        self.assertEqual(str(m.pwm), expected_forward_pwm)
+        m = m.reverse_complement()
+        received_reverse = m.format("transfac")
+        expected_reverse = """\
+P0      A      C      G      T
+01      0      0      0      1      T
+02      1      0      0      0      A
+03      0      0      0      1      T
+04      1      0      0      0      A
+05      0      0      0      1      T
+XX
+//
+"""
+        self.assertEqual(received_reverse, expected_reverse)
+        expected_reverse_pwm = """\
+        0      1      2      3      4
+A:   0.17   0.50   0.17   0.50   0.17
+C:   0.17   0.17   0.17   0.17   0.17
+G:   0.17   0.17   0.17   0.17   0.17
+T:   0.50   0.17   0.50   0.17   0.50
+"""
+        self.assertEqual(str(m.pwm), expected_reverse_pwm)
+        # Same thing, but now start with a motif calculated from a count matrix
+        counts = self.m.counts
+        m = motifs.Motif(counts=counts)
+        m.background = background
+        m.pseudocounts = pseudocounts
+        received_forward = m.format("transfac")
+        self.assertEqual(received_forward, expected_forward)
+        self.assertEqual(str(m.pwm), expected_forward_pwm)
+        m = m.reverse_complement()
+        received_reverse = m.format("transfac")
+        self.assertEqual(received_reverse, expected_reverse)
+        self.assertEqual(str(m.pwm), expected_reverse_pwm)
+
 
 class TestMEME(unittest.TestCase):
 
@@ -2257,6 +2318,13 @@ class MotifTestPWM(unittest.TestCase):
                 Seq("AATGC", generic_dna)]
         # ValueError: Alphabets are inconsistent
         self.assertRaises(ValueError, motifs.create, seqs)
+
+    def test_calculate_pseudocounts(self):
+        pseudocounts = motifs.jaspar.calculate_pseudocounts(self.m)
+        self.assertAlmostEqual(pseudocounts["A"], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["C"], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["G"], 1.695582495781317, places=5)
+        self.assertAlmostEqual(pseudocounts["T"], 1.695582495781317, places=5)
 
 
 if __name__ == "__main__":

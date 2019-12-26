@@ -13,7 +13,7 @@ from Bio._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Alphabet import generic_protein
 
-__all__ = ("Hhsuite2TextParser", )
+__all__ = ("Hhsuite2TextParser",)
 
 # precompile regex patterns for faster processing
 # regex for query name capture
@@ -74,7 +74,9 @@ class Hhsuite2TextParser(object):
         """Parse HHSUITE output file (PRIVATE)."""
         hit_block_data = []
         self._parse_preamble()
-        self._read_until(lambda line: re.search(_RE_HIT_BLOCK_START, line), stop_on_blank=False)
+        self._read_until(
+            lambda line: re.search(_RE_HIT_BLOCK_START, line), stop_on_blank=False
+        )
         while not self.done:
             hit_dict = self._parse_hit_block()
             hit_block_data.append(hit_dict)
@@ -97,7 +99,9 @@ class Hhsuite2TextParser(object):
         self.line = read_forward(self.handle)
         match = re.search(_RE_HIT_BLOCK_DESC, self.line)
         if not match:
-            raise RuntimeError("Unexpected content in HIT_BLOCK_DESC line'{}'".format(self.line))
+            raise RuntimeError(
+                "Unexpected content in HIT_BLOCK_DESC line'{}'".format(self.line)
+            )
         hit_data = {
             "hit_id": match.group(1),
             "description": match.group(2).lstrip(" ;"),
@@ -109,7 +113,7 @@ class Hhsuite2TextParser(object):
             "query_start": None,
             "query_end": None,
             "query_seq": "",
-            "score": None
+            "score": None,
         }
         self.line = self.handle.readline()
         self._process_score_line(self.line, hit_data)
@@ -134,9 +138,7 @@ class Hhsuite2TextParser(object):
         E-value could be in decimal or scientific notation, so split the string rather then use regexp - this
         also means we should be tolerant of additional fields being added/removed
         """
-        score_map = {"E-value": "evalue",
-                     "Score": "score",
-                     "Probab": "prob"}
+        score_map = {"E-value": "evalue", "Score": "score", "Probab": "prob"}
         for score_pair in line.strip().split():
             key, value = score_pair.split("=")
             if key in score_map:
@@ -144,7 +146,11 @@ class Hhsuite2TextParser(object):
                     hit_data[score_map[key]] = float(value)
                 except KeyError:
                     # We trigger warnings here as it's not a big enough problem to crash, but indicates something unexpected.
-                    warnings.warn("HHsuite parser: unable to extract {} from line: {}".format(key, line))
+                    warnings.warn(
+                        "HHsuite parser: unable to extract {} from line: {}".format(
+                            key, line
+                        )
+                    )
 
     def _parse_hit_match_block(self, hit_match_data):
         """Parse a single block of hit sequence data (PRIVATE).
@@ -161,6 +167,7 @@ class Hhsuite2TextParser(object):
             T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
 
         """
+        # This comment stops black style adding a blank line here, which causes flake8 D202.
         def match_is_valid(match):
             """Return True if match is not a Consensus column (PRIVATE).
 

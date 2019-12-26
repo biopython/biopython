@@ -36,6 +36,7 @@ In general \verb|Bio.SeqIO.parse()| is used to read in sequence files as \verb|S
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print(seq_record.id)
     print(repr(seq_record.seq))
@@ -46,6 +47,7 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(seq_record.id)
     print(repr(seq_record.seq))
@@ -79,6 +81,7 @@ Instead of using a for loop, can also use the \verb|next()| function on an itera
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 
 first_record = next(record_iterator)
@@ -96,6 +99,7 @@ One special case to consider is when your sequence files have multiple records, 
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 first_record = next(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{minted}
 
@@ -109,18 +113,19 @@ In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| g
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 records = list(SeqIO.parse("ls_orchid.gbk", "genbank"))
 
 print("Found %i records" % len(records))
 
 print("The last record")
-last_record = records[-1] #using Python's list tricks
+last_record = records[-1]  # using Python's list tricks
 print(last_record.id)
 print(repr(last_record.seq))
 print(len(last_record))
 
 print("The first record")
-first_record = records[0] #remember, Python counts from zero
+first_record = records[0]  # remember, Python counts from zero
 print(first_record.id)
 print(repr(first_record.seq))
 print(len(first_record))
@@ -149,6 +154,7 @@ Chapter~\ref{chapter:seq_annot}.  As an example of how annotations are stored, w
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 record_iterator = SeqIO.parse("ls_orchid.gbk", "genbank")
 first_record = next(record_iterator)
 print(first_record)
@@ -214,6 +220,7 @@ Now let's go through all the records, building up a list of the species each orc
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 all_species = []
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     all_species.append(seq_record.annotations["organism"])
@@ -224,8 +231,11 @@ Another way of writing this code is to use a list comprehension:
 
 \begin{minted}{python}
 from Bio import SeqIO
-all_species = [seq_record.annotations["organism"] for seq_record in \
-               SeqIO.parse("ls_orchid.gbk", "genbank")]
+
+all_species = [
+    seq_record.annotations["organism"]
+    for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank")
+]
 print(all_species)
 \end{minted}
 
@@ -251,6 +261,7 @@ You can check by hand, but for every record the species name is in the descripti
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 all_species = []
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     all_species.append(seq_record.description.split()[1])
@@ -267,14 +278,55 @@ The concise alternative using list comprehensions would be:
 
 \begin{minted}{python}
 from Bio import SeqIO
-all_species == [seq_record.description.split()[1] for seq_record in \
-                SeqIO.parse("ls_orchid.fasta", "fasta")]
+
+all_species == [
+    seq_record.description.split()[1]
+    for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta")
+]
 print(all_species)
 \end{minted}
 
 In general, extracting information from the FASTA description line is not very nice.
 If you can get your sequences in a well annotated file format like GenBank or EMBL,
 then this sort of annotation information is much easier to deal with.
+
+\subsection{Modifying data}
+
+In the previous section, we demonstrated how to extract data from a 
+\verb|SeqRecord|. Another common task is to alter this data. The attributes 
+of a \verb|SeqRecord| can be modified directly, for example:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
+>>> first_record = next(record_iterator)
+>>> first_record.id
+'gi|2765658|emb|Z78533.1|CIZ78533'
+>>> first_record.id = "new_id"
+>>> first_record.id
+'new_id'
+\end{minted}
+
+Note, if you want to change the way FASTA is output when written to a file 
+(see Section~\ref{sec:writing-sequence-files}), then you should modify both 
+the \verb|id| and \verb|description| attributes. To ensure the correct 
+behaviour, it is best to include the \verb|id| plus a space at the start of 
+the desired \verb|description|:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
+>>> first_record = next(record_iterator)
+>>> first_record.id = "new_id"
+>>> first_record.description = first_record.id + " " + "desired new description"
+>>> print(first_record.format("fasta")[:200])
+>new_id desired new description
+CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA
+CGATCGAGTGAATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGT
+GACCCTGATTTGTTGTTGGGCCGCCTCGGGAGCGTCCATGGCGGGT
+\end{minted}
 
 \section{Parsing sequences from compressed files}
 \label{sec:SeqIO_compressed}
@@ -385,8 +437,11 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 \begin{minted}{python}
 from Bio import Entrez
 from Bio import SeqIO
+
 Entrez.email = "A.N.Other@example.com"
-with Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291") as handle:
+with Entrez.efetch(
+    db="nucleotide", rettype="fasta", retmode="text", id="6273291"
+) as handle:
     seq_record = SeqIO.read(handle, "fasta")
 print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{minted}
@@ -409,9 +464,12 @@ alias for ``genbank'' in \verb|Bio.SeqIO|.
 \begin{minted}{python}
 from Bio import Entrez
 from Bio import SeqIO
+
 Entrez.email = "A.N.Other@example.com"
-with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291") as handle
-    seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
+with Entrez.efetch(
+    db="nucleotide", rettype="gb", retmode="text", id="6273291"
+) as handle:
+    seq_record = SeqIO.read(handle, "gb")  # using "gb" as an alias for "genbank"
 print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{minted}
 
@@ -429,13 +487,21 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 \begin{minted}{python}
 from Bio import Entrez
 from Bio import SeqIO
+
 Entrez.email = "A.N.Other@example.com"
-with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
-                   id="6273291,6273290,6273289") as handle:
+with Entrez.efetch(
+    db="nucleotide", rettype="gb", retmode="text", id="6273291,6273290,6273289"
+) as handle:
     for seq_record in SeqIO.parse(handle, "gb"):
         print("%s %s..." % (seq_record.id, seq_record.description[:50]))
-        print("Sequence length %i, %i features, from: %s"
-              % (len(seq_record), len(seq_record.features), seq_record.annotations["source"]))
+        print(
+            "Sequence length %i, %i features, from: %s"
+            % (
+                len(seq_record),
+                len(seq_record.features),
+                seq_record.annotations["source"],
+            )
+        )
 \end{minted}
 
 \noindent That should give the following output:
@@ -461,6 +527,7 @@ use the \verb|Bio.SeqIO.read()| function:
 \begin{minted}{python}
 from Bio import ExPASy
 from Bio import SeqIO
+
 with ExPASy.get_sprot_raw("O23729") as handle:
     seq_record = SeqIO.read(handle, "swiss")
 print(seq_record.id)
@@ -575,6 +642,7 @@ Using the same code as above, but for the FASTA file instead:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.fasta", "fasta"))
 print(orchid_dict.keys())
 \end{minted}
@@ -605,7 +673,10 @@ def get_accession(record):
 
 \begin{minted}{python}
 from Bio import SeqIO
-orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.fasta", "fasta"), key_function=get_accession)
+
+orchid_dict = SeqIO.to_dict(
+    SeqIO.parse("ls_orchid.fasta", "fasta"), key_function=get_accession
+)
 print(orchid_dict.keys())
 \end{minted}
 
@@ -627,6 +698,7 @@ Once again, working with the orchids GenBank file:
 \begin{minted}{python}
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
+
 for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(record.id, seguid(record.seq))
 \end{minted}
@@ -998,6 +1070,7 @@ formats the length of each record is stored as well as its offset.
 \end{itemize}
 
 \section{Writing Sequence Files}
+\label{sec:writing-sequence-files}
 
 We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some \verb|SeqRecord| objects, a handle or filename to write to, and a sequence format.
 
@@ -1008,27 +1081,42 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
 
-rec1 = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD" \
-                    +"GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK" \
-                    +"NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM" \
-                    +"SSAC", generic_protein),
-                 id="gi|14150838|gb|AAK54648.1|AF376133_1",
-                 description="chalcone synthase [Cucumis sativus]")
+rec1 = SeqRecord(
+    Seq(
+        "MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD"
+        "GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK"
+        "NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM"
+        "SSAC",
+        generic_protein,
+    ),
+    id="gi|14150838|gb|AAK54648.1|AF376133_1",
+    description="chalcone synthase [Cucumis sativus]",
+)
 
-rec2 = SeqRecord(Seq("YPDYYFRITNREHKAELKEKFQRMCDKSMIKKRYMYLTEEILKENPSMCEYMAPSLDARQ" \
-                    +"DMVVVEIPKLGKEAAVKAIKEWGQ", generic_protein),
-                 id="gi|13919613|gb|AAK33142.1|",
-                 description="chalcone synthase [Fragaria vesca subsp. bracteata]")
+rec2 = SeqRecord(
+    Seq(
+        "YPDYYFRITNREHKAELKEKFQRMCDKSMIKKRYMYLTEEILKENPSMCEYMAPSLDARQ"
+        "DMVVVEIPKLGKEAAVKAIKEWGQ",
+        generic_protein,
+    ),
+    id="gi|13919613|gb|AAK33142.1|",
+    description="chalcone synthase [Fragaria vesca subsp. bracteata]",
+)
 
-rec3 = SeqRecord(Seq("MVTVEEFRRAQCAEGPATVMAIGTATPSNCVDQSTYPDYYFRITNSEHKVELKEKFKRMC" \
-                    +"EKSMIKKRYMHLTEEILKENPNICAYMAPSLDARQDIVVVEVPKLGKEAAQKAIKEWGQP" \
-                    +"KSKITHLVFCTTSGVDMPGCDYQLTKLLGLRPSVKRFMMYQQGCFAGGTVLRMAKDLAEN" \
-                    +"NKGARVLVVCSEITAVTFRGPNDTHLDSLVGQALFGDGAAAVIIGSDPIPEVERPLFELV" \
-                    +"SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW" \
-                    +"IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT" \
-                    +"TGEGLEWGVLFGFGPGLTVETVVLHSVAT", generic_protein),
-                 id="gi|13925890|gb|AAK49457.1|",
-                 description="chalcone synthase [Nicotiana tabacum]")
+rec3 = SeqRecord(
+    Seq(
+        "MVTVEEFRRAQCAEGPATVMAIGTATPSNCVDQSTYPDYYFRITNSEHKVELKEKFKRMC"
+        "EKSMIKKRYMHLTEEILKENPNICAYMAPSLDARQDIVVVEVPKLGKEAAQKAIKEWGQP"
+        "KSKITHLVFCTTSGVDMPGCDYQLTKLLGLRPSVKRFMMYQQGCFAGGTVLRMAKDLAEN"
+        "NKGARVLVVCSEITAVTFRGPNDTHLDSLVGQALFGDGAAAVIIGSDPIPEVERPLFELV"
+        "SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW"
+        "IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT"
+        "TGEGLEWGVLFGFGPGLTVETVVLHSVAT",
+        generic_protein,
+    ),
+    id="gi|13925890|gb|AAK49457.1|",
+    description="chalcone synthase [Nicotiana tabacum]",
+)
 
 my_records = [rec1, rec2, rec3]
 \end{minted}
@@ -1037,6 +1125,7 @@ my_records = [rec1, rec2, rec3]
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 SeqIO.write(my_records, "my_example.faa", "fasta")
 \end{minted}
 
@@ -1109,6 +1198,7 @@ For this example we'll read in the GenBank format file \href{https://raw.githubu
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 records = SeqIO.parse("ls_orchid.gbk", "genbank")
 count = SeqIO.write(records, "my_example.fasta", "fasta")
 print("Converted %i records" % count)
@@ -1119,6 +1209,7 @@ common task, there is a helper function letting you replace that with just:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 count = SeqIO.convert("ls_orchid.gbk", "genbank", "my_example.fasta", "fasta")
 print("Converted %i records" % count)
 \end{minted}
@@ -1217,6 +1308,7 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 \begin{minted}{python}
 from Bio import SeqIO
 from StringIO import StringIO
+
 records = SeqIO.parse("ls_orchid.gbk", "genbank")
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
@@ -1229,6 +1321,7 @@ This isn't entirely straightforward the first time you see it!  On the bright si
 Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, for example something like this:
 \begin{minted}{python}
 from Bio import SeqIO
+
 with open("ls_orchid_long.tab", "w") as out_handle:
     for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
         if len(record) > 100:
@@ -1237,6 +1330,7 @@ with open("ls_orchid_long.tab", "w") as out_handle:
 \noindent While this style of code will work for a simple sequential file format like FASTA or the simple tab separated format used here, it will \emph{not} work for more complex or interlaced file formats.  This is why we still recommend using \verb|Bio.SeqIO.write()|, as in the following example:
 \begin{minted}{python}
 from Bio import SeqIO
+
 records = (rec for rec in SeqIO.parse("ls_orchid.gbk", "genbank") if len(rec) > 100)
 SeqIO.write(records, "ls_orchid.tab", "tab")
 \end{minted}

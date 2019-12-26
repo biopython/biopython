@@ -441,11 +441,14 @@ Note that a more typical use would be to save the sequence data to a local file,
 import os
 from Bio import SeqIO
 from Bio import Entrez
+
 Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 filename = "EU490707.gbk"
 if not os.path.isfile(filename):
     # Downloading...
-    net_handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+    net_handle = Entrez.efetch(
+        db="nucleotide", id="EU490707", rettype="gb", retmode="text"
+    )
     out_handle = open(filename, "w")
     out_handle.write(net_handle.read())
     out_handle.close()
@@ -997,7 +1000,16 @@ The \verb+record+ returned by \verb+UniGene.read+ is a Python object with attrib
 
 The \verb+EXPRESS+ and \verb+RESTR_EXPR+ lines are stored as Python lists of strings:
 \begin{minted}{python}
-['bone', 'connective tissue', 'intestine', 'liver', 'liver tumor', 'normal', 'soft tissue/muscle tissue tumor', 'adult']
+[
+    "bone",
+    "connective tissue",
+    "intestine",
+    "liver",
+    "liver tumor",
+    "normal",
+    "soft tissue/muscle tissue tumor",
+    "adult",
+]
 \end{minted}
 
 Specialized objects are returned for the \verb+STS+, \verb+PROTSIM+, and \verb+SEQUENCE+ lines, storing the keys shown in each line as attributes:
@@ -1034,6 +1046,7 @@ within Python at the start of your script, for example:
 
 \begin{minted}{python}
 import os
+
 os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
 \end{minted}
 
@@ -1422,13 +1435,18 @@ For example,
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0, count, batch_size):
-    end = min(count, start+batch_size)
-    print("Going to download record %i to %i" % (start+1, end))
-    fetch_handle = Entrez.efetch(db="nucleotide",
-                                 rettype="fasta", retmode="text",
-                                 retstart=start, retmax=batch_size,
-                                 webenv=webenv, query_key=query_key,
-                                 idtype="acc")
+    end = min(count, start + batch_size)
+    print("Going to download record %i to %i" % (start + 1, end))
+    fetch_handle = Entrez.efetch(
+        db="nucleotide",
+        rettype="fasta",
+        retmode="text",
+        retstart=start,
+        retmax=batch_size,
+        webenv=webenv,
+        query_key=query_key,
+        idtype="acc",
+    )
     data = fetch_handle.read()
     fetch_handle.close()
     out_handle.write(data)
@@ -1442,24 +1460,30 @@ Here is another history example, searching for papers published in the last year
 
 \begin{minted}{python}
 from Bio import Entrez
+
 Entrez.email = "history.user@example.com"
-search_results = Entrez.read(Entrez.esearch(db="pubmed",
-                                            term="Opuntia[ORGN]",
-                                            reldate=365, datetype="pdat",
-                                            usehistory="y"))
+search_results = Entrez.read(
+    Entrez.esearch(
+        db="pubmed", term="Opuntia[ORGN]", reldate=365, datetype="pdat", usehistory="y"
+    )
+)
 count = int(search_results["Count"])
 print("Found %i results" % count)
 
 batch_size = 10
 out_handle = open("recent_orchid_papers.txt", "w")
-for start in range(0,count,batch_size):
-    end = min(count, start+batch_size)
-    print("Going to download record %i to %i" % (start+1, end))
-    fetch_handle = Entrez.efetch(db="pubmed",rettype="medline",
-                                 retmode="text",retstart=start,
-                                 retmax=batch_size,
-                                 webenv=search_results["WebEnv"],
-                                 query_key=search_results["QueryKey"])
+for start in range(0, count, batch_size):
+    end = min(count, start + batch_size)
+    print("Going to download record %i to %i" % (start + 1, end))
+    fetch_handle = Entrez.efetch(
+        db="pubmed",
+        rettype="medline",
+        retmode="text",
+        retstart=start,
+        retmax=batch_size,
+        webenv=search_results["WebEnv"],
+        query_key=search_results["QueryKey"],
+    )
     data = fetch_handle.read()
     fetch_handle.close()
     out_handle.write(data)

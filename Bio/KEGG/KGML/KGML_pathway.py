@@ -1,7 +1,9 @@
 # Copyright 2013 by Leighton Pritchard.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes to represent a KGML Pathway Map.
 
@@ -76,12 +78,15 @@ class Pathway(object):
 
     def get_KGML(self):
         """Return the pathway as a string in prettified KGML format."""
-        header = "\n".join(['<?xml version="1.0"?>',
-                            "<!DOCTYPE pathway SYSTEM " +
-                            '"http://www.genome.jp/kegg/xml/' +
-                            'KGML_v0.7.1_.dtd">',
-                            "<!-- Created by KGML_Pathway.py %s -->" %
-                            time.asctime()])
+        header = "\n".join(
+            [
+                '<?xml version="1.0"?>',
+                "<!DOCTYPE pathway SYSTEM "
+                '"http://www.genome.jp/kegg/xml/'
+                'KGML_v0.7.1_.dtd">',
+                "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
+            ]
+        )
         rough_xml = header + _as_string(ET.tostring(self.element, "utf-8"))
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
@@ -90,16 +95,18 @@ class Pathway(object):
         """Add an Entry element to the pathway."""
         # We insist that the node ID is an integer
         if not _is_int_or_long(entry.id):
-            raise TypeError("Node ID must be an integer, got %s (%s)"
-                            % (type(entry.id), entry.id))
-        entry._pathway = self           # Let the entry know about the pathway
+            raise TypeError(
+                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
+            )
+        entry._pathway = self  # Let the entry know about the pathway
         self.entries[entry.id] = entry
 
     def remove_entry(self, entry):
         """Remove an Entry element from the pathway."""
         if not _is_int_or_long(entry.id):
-            raise TypeError("Node ID must be an integer, got %s (%s)"
-                            % (type(entry.id), entry.id))
+            raise TypeError(
+                "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
+            )
         # We need to remove the entry from any other elements that may
         # contain it, which means removing those elements
         # TODO
@@ -109,19 +116,24 @@ class Pathway(object):
         """Add a Reaction element to the pathway."""
         # We insist that the node ID is an integer and corresponds to an entry
         if not _is_int_or_long(reaction.id):
-            raise ValueError("Node ID must be an integer, got %s (%s)"
-                             % (type(reaction.id), reaction.id))
+            raise ValueError(
+                "Node ID must be an integer, got %s (%s)"
+                % (type(reaction.id), reaction.id)
+            )
         if reaction.id not in self.entries:
-            raise ValueError("Reaction ID %d has no corresponding"
-                             " entry" % reaction.id)
-        reaction._pathway = self    # Let the reaction know about the pathway
+            raise ValueError(
+                "Reaction ID %d has no corresponding entry" % reaction.id
+            )
+        reaction._pathway = self  # Let the reaction know about the pathway
         self._reactions[reaction.id] = reaction
 
     def remove_reaction(self, reaction):
         """Remove a Reaction element from the pathway."""
         if not _is_int_or_long(reaction.id):
-            raise TypeError("Node ID must be an integer, got %s (%s)"
-                            % (type(reaction.id), reaction.id))
+            raise TypeError(
+                "Node ID must be an integer, got %s (%s)"
+                % (type(reaction.id), reaction.id)
+            )
         # We need to remove the reaction from any other elements that may
         # contain it, which means removing those elements
         # TODO
@@ -129,7 +141,7 @@ class Pathway(object):
 
     def add_relation(self, relation):
         """Add a Relation element to the pathway."""
-        relation._pathway = self    # Let the reaction know about the pathway
+        relation._pathway = self  # Let the reaction know about the pathway
         self._relations.add(relation)
 
     def remove_relation(self, relation):
@@ -138,14 +150,15 @@ class Pathway(object):
 
     def __str__(self):
         """Return a readable summary description string."""
-        outstr = ["Pathway: %s" % self.title,
-                  "KEGG ID: %s" % self.name,
-                  "Image file: %s" % self.image,
-                  "Organism: %s" % self.org,
-                  "Entries: %d" % len(self.entries),
-                  "Entry types:"]
-        for t in ["ortholog", "enzyme", "reaction",
-                  "gene", "group", "compound", "map"]:
+        outstr = [
+            "Pathway: %s" % self.title,
+            "KEGG ID: %s" % self.name,
+            "Image file: %s" % self.image,
+            "Organism: %s" % self.org,
+            "Entries: %d" % len(self.entries),
+            "Entry types:",
+        ]
+        for t in ["ortholog", "enzyme", "reaction", "gene", "group", "compound", "map"]:
             etype = [e for e in self.entries.values() if e.type == t]
             if len(etype):
                 outstr.append("\t%s: %d" % (t, len(etype)))
@@ -157,14 +170,15 @@ class Pathway(object):
 
     def _setname(self, value):
         if not value.startswith("path:"):
-            raise ValueError("Pathway name should begin with 'path:', "
-                             "got %s" % value)
+            raise ValueError(
+                "Pathway name should begin with 'path:', got %s" % value
+            )
         self._name = value
 
     def _delname(self):
         del self._name
-    name = property(_getname, _setname, _delname,
-                    "The KEGGID for the pathway map.")
+
+    name = property(_getname, _setname, _delname, "The KEGGID for the pathway map.")
 
     def _getnumber(self):
         return self._number
@@ -174,8 +188,8 @@ class Pathway(object):
 
     def _delnumber(self):
         del self._number
-    number = property(_getnumber, _setnumber, _delnumber,
-                      "The KEGG map number.")
+
+    number = property(_getnumber, _setnumber, _delnumber, "The KEGG map number.")
 
     @property
     def compounds(self):
@@ -217,13 +231,14 @@ class Pathway(object):
         """Return the Pathway as a valid KGML element."""
         # The root is this Pathway element
         pathway = ET.Element("pathway")
-        pathway.attrib = {"name": self._name,
-                          "org": self.org,
-                          "number": str(self._number),
-                          "title": self.title,
-                          "image": self.image,
-                          "link": self.link,
-                          }
+        pathway.attrib = {
+            "name": self._name,
+            "org": self.org,
+            "number": str(self._number),
+            "title": self.title,
+            "image": self.image,
+            "link": self.link,
+        }
         # We add the Entries in node ID order
         for eid, entry in sorted(self.entries.items()):
             pathway.append(entry.element)
@@ -245,8 +260,7 @@ class Pathway(object):
         for b in [g.bounds for g in self.entries.values()]:
             xlist.extend([b[0][0], b[1][0]])
             ylist.extend([b[0][1], b[1][1]])
-        return [(min(xlist), min(ylist)),
-                (max(xlist), max(ylist))]
+        return [(min(xlist), min(ylist)), (max(xlist), max(ylist))]
 
 
 # Entry
@@ -288,13 +302,14 @@ class Entry(object):
 
     def __str__(self):
         """Return readable descriptive string."""
-        outstr = ["Entry node ID: %d" % self.id,
-                  "Names: %s" % self.name,
-                  "Type: %s" % self.type,
-                  "Components: %s" % self.components,
-                  "Reactions: %s" % self.reaction,
-                  "Graphics elements: %d %s" % (len(self.graphics),
-                                                self.graphics)]
+        outstr = [
+            "Entry node ID: %d" % self.id,
+            "Names: %s" % self.name,
+            "Type: %s" % self.type,
+            "Components: %s" % self.components,
+            "Reactions: %s" % self.reaction,
+            "Graphics elements: %d %s" % (len(self.graphics), self.graphics),
+        ]
         return "\n".join(outstr) + "\n"
 
     def add_component(self, element):
@@ -305,8 +320,9 @@ class Entry(object):
         """
         if self._pathway is not None:
             if element.id not in self._pathway.entries:
-                raise ValueError("Component %s is not an entry in the "
-                                 "pathway" % element.id)
+                raise ValueError(
+                    "Component %s is not an entry in the pathway" % element.id
+                )
         self.components.add(element)
 
     def remove_component(self, value):
@@ -330,8 +346,10 @@ class Entry(object):
 
     def _delname(self):
         self._names = []
-    name = property(_getname, _setname, _delname,
-                    "List of KEGG identifiers for the Entry.")
+
+    name = property(
+        _getname, _setname, _delname, "List of KEGG identifiers for the Entry."
+    )
 
     # Reactions may be given as a space-separated list of KEGG identifiers
     def _getreaction(self):
@@ -342,8 +360,13 @@ class Entry(object):
 
     def _delreaction(self):
         self._reactions = []
-    reaction = property(_getreaction, _setreaction, _delreaction,
-                        "List of reaction KEGG IDs for this Entry.")
+
+    reaction = property(
+        _getreaction,
+        _setreaction,
+        _delreaction,
+        "List of reaction KEGG IDs for this Entry.",
+    )
 
     # We make sure that the node ID is an integer
     def _getid(self):
@@ -354,19 +377,20 @@ class Entry(object):
 
     def _delid(self):
         del self._id
-    id = property(_getid, _setid, _delid,
-                  "The pathway graph node ID for the Entry.")
+
+    id = property(_getid, _setid, _delid, "The pathway graph node ID for the Entry.")
 
     @property
     def element(self):
         """Return the Entry as a valid KGML element."""
         # The root is this Entry element
         entry = ET.Element("entry")
-        entry.attrib = {"id": str(self._id),
-                        "name": self.name,
-                        "link": self.link,
-                        "type": self.type
-                        }
+        entry.attrib = {
+            "id": str(self._id),
+            "name": self.name,
+            "link": self.link,
+            "type": self.type,
+        }
         if len(self._reactions):
             entry.attrib["reaction"] = self.reaction
         if len(self.graphics):
@@ -388,8 +412,7 @@ class Entry(object):
         for b in [g.bounds for g in self.graphics]:
             xlist.extend([b[0][0], b[1][0]])
             ylist.extend([b[0][1], b[1][1]])
-        return [(min(xlist), min(ylist)),
-                (max(xlist), max(ylist))]
+        return [(min(xlist), min(ylist)), (max(xlist), max(ylist))]
 
     @property
     def is_reactant(self):
@@ -427,8 +450,7 @@ class Component(object):
     def _delid(self):
         del self._id
 
-    id = property(_getid, _setid, _delid,
-                  "The pathway graph node ID for the Entry")
+    id = property(_getid, _setid, _delid, "The pathway graph node ID for the Entry")
 
     @property
     def element(self):
@@ -487,8 +509,8 @@ class Graphics(object):
 
     def _delx(self):
         del self._x
-    x = property(_getx, _setx, _delx,
-                 "The X coordinate for the graphics element.")
+
+    x = property(_getx, _setx, _delx, "The X coordinate for the graphics element.")
 
     def _gety(self):
         return self._y
@@ -498,8 +520,8 @@ class Graphics(object):
 
     def _dely(self):
         del self._y
-    y = property(_gety, _sety, _dely,
-                 "The Y coordinate for the graphics element.")
+
+    y = property(_gety, _sety, _dely, "The Y coordinate for the graphics element.")
 
     def _getwidth(self):
         return self._width
@@ -509,8 +531,10 @@ class Graphics(object):
 
     def _delwidth(self):
         del self._width
-    width = property(_getwidth, _setwidth, _delwidth,
-                     "The width of the graphics element.")
+
+    width = property(
+        _getwidth, _setwidth, _delwidth, "The width of the graphics element."
+    )
 
     def _getheight(self):
         return self._height
@@ -520,8 +544,10 @@ class Graphics(object):
 
     def _delheight(self):
         del self._height
-    height = property(_getheight, _setheight, _delheight,
-                      "The height of the graphics element.")
+
+    height = property(
+        _getheight, _setheight, _delheight, "The height of the graphics element."
+    )
 
     # We make sure that the polyline co-ordinates are integers, too
     def _getcoords(self):
@@ -529,12 +555,17 @@ class Graphics(object):
 
     def _setcoords(self, value):
         clist = [int(e) for e in value.split(",")]
-        self._coords = [tuple(clist[i:i + 2]) for i in range(0, len(clist), 2)]
+        self._coords = [tuple(clist[i : i + 2]) for i in range(0, len(clist), 2)]
 
     def _delcoords(self):
         del self._coords
-    coords = property(_getcoords, _setcoords, _delcoords,
-                      "Polyline coordinates for the graphics element.")
+
+    coords = property(
+        _getcoords,
+        _setcoords,
+        _delcoords,
+        "Polyline coordinates for the graphics element.",
+    )
 
     # Set default colors
     def _getfgcolor(self):
@@ -548,8 +579,8 @@ class Graphics(object):
 
     def _delfgcolor(self):
         del self._fgcolor
-    fgcolor = property(_getfgcolor, _setfgcolor, _delfgcolor,
-                       "Foreground color.")
+
+    fgcolor = property(_getfgcolor, _setfgcolor, _delfgcolor, "Foreground color.")
 
     def _getbgcolor(self):
         return self._bgcolor
@@ -562,8 +593,8 @@ class Graphics(object):
 
     def _delbgcolor(self):
         del self._bgcolor
-    bgcolor = property(_getbgcolor, _setbgcolor, _delbgcolor,
-                       "Background color.")
+
+    bgcolor = property(_getbgcolor, _setbgcolor, _delbgcolor, "Background color.")
 
     @property
     def element(self):
@@ -578,17 +609,24 @@ class Graphics(object):
             bghex = self.bgcolor
         else:  # Assumes ReportLab Color object
             bghex = "#" + self.bgcolor.hexval()[2:]
-        graphics.attrib = {"name": self.name,
-                           "type": self.type,
-                           "fgcolor": fghex,
-                           "bgcolor": bghex}
-        for (n, attr) in [("x", "_x"), ("y", "_y"),
-                          ("width", "_width"), ("height", "_height")]:
+        graphics.attrib = {
+            "name": self.name,
+            "type": self.type,
+            "fgcolor": fghex,
+            "bgcolor": bghex,
+        }
+        for (n, attr) in [
+            ("x", "_x"),
+            ("y", "_y"),
+            ("width", "_width"),
+            ("height", "_height"),
+        ]:
             if getattr(self, attr) is not None:
                 graphics.attrib[n] = str(getattr(self, attr))
         if self.type == "line":  # Need to write polycoords
-            graphics.attrib["coords"] = \
-                ",".join([str(e) for e in chain.from_iterable(self.coords)])
+            graphics.attrib["coords"] = ",".join(
+                [str(e) for e in chain.from_iterable(self.coords)]
+            )
         return graphics
 
     @property
@@ -603,17 +641,20 @@ class Graphics(object):
         if self.type == "line":
             xlist = [x for x, y in self.coords]
             ylist = [y for x, y in self.coords]
-            return [(min(xlist), min(ylist)),
-                    (max(xlist), max(ylist))]
+            return [(min(xlist), min(ylist)), (max(xlist), max(ylist))]
         else:
-            return [(self.x - self.width * 0.5, self.y - self.height * 0.5),
-                    (self.x + self.width * 0.5, self.y + self.height * 0.5)]
+            return [
+                (self.x - self.width * 0.5, self.y - self.height * 0.5),
+                (self.x + self.width * 0.5, self.y + self.height * 0.5),
+            ]
 
     @property
     def centre(self):
         """Return the centre of the Graphics object as an (x, y) tuple."""
-        return (0.5 * (self.bounds[0][0] + self.bounds[1][0]),
-                0.5 * (self.bounds[0][1] + self.bounds[1][1]))
+        return (
+            0.5 * (self.bounds[0][0] + self.bounds[1][0]),
+            0.5 * (self.bounds[0][1] + self.bounds[1][1]),
+        )
 
 
 # Reaction
@@ -643,30 +684,32 @@ class Reaction(object):
 
     def __str__(self):
         """Return an informative human-readable string."""
-        outstr = ["Reaction node ID: %s" % self.id,
-                  "Reaction KEGG IDs: %s" % self.name,
-                  "Type: %s" % self.type,
-                  "Substrates: %s" %
-                  ",".join([s.name for s in self.substrates]),
-                  "Products: %s" %
-                  ",".join([s.name for s in self.products]),
-                  ]
+        outstr = [
+            "Reaction node ID: %s" % self.id,
+            "Reaction KEGG IDs: %s" % self.name,
+            "Type: %s" % self.type,
+            "Substrates: %s" % ",".join([s.name for s in self.substrates]),
+            "Products: %s" % ",".join([s.name for s in self.products]),
+        ]
         return "\n".join(outstr) + "\n"
 
     def add_substrate(self, substrate_id):
         """Add a substrate, identified by its node ID, to the reaction."""
         if self._pathway is not None:
             if int(substrate_id) not in self._pathway.entries:
-                raise ValueError("Couldn't add substrate, no node ID %d in "
-                                 "Pathway" % int(substrate_id))
+                raise ValueError(
+                    "Couldn't add substrate, no node ID %d in Pathway"
+                    % int(substrate_id)
+                )
         self._substrates.add(substrate_id)
 
     def add_product(self, product_id):
         """Add a product, identified by its node ID, to the reaction."""
         if self._pathway is not None:
             if int(product_id) not in self._pathway.entries:
-                raise ValueError("Couldn't add product, no node ID %d in "
-                                 "Pathway" % product_id)
+                raise ValueError(
+                    "Couldn't add product, no node ID %d in Pathway" % product_id
+                )
         self._products.add(int(product_id))
 
     # The node ID is also the node ID of the Entry that corresponds to the
@@ -680,8 +723,8 @@ class Reaction(object):
 
     def _delid(self):
         del self._id
-    id = property(_getid, _setid, _delid,
-                  "Node ID for the reaction.")
+
+    id = property(_getid, _setid, _delid, "Node ID for the reaction.")
 
     # Names may show up as a space-separated list of several KEGG identifiers
     def _getnames(self):
@@ -692,8 +735,10 @@ class Reaction(object):
 
     def _delnames(self):
         del self.names
-    name = property(_getnames, _setnames, _delnames,
-                    "List of KEGG identifiers for the reaction.")
+
+    name = property(
+        _getnames, _setnames, _delnames, "List of KEGG identifiers for the reaction."
+    )
 
     # products and substrates are read-only properties, returning lists
     # of Entry objects
@@ -722,9 +767,7 @@ class Reaction(object):
         """Return KGML element describing the Reaction."""
         # The root is this Relation element
         reaction = ET.Element("reaction")
-        reaction.attrib = {"id": str(self.id),
-                           "name": self.name,
-                           "type": self.type}
+        reaction.attrib = {"id": str(self.id), "name": self.name, "type": self.type}
         for s in self._substrates:
             substrate = ET.Element("substrate")
             substrate.attrib["id"] = str(s)
@@ -767,9 +810,13 @@ class Relation(object):
 
     def __str__(self):
         """Return a useful human-readable string."""
-        outstr = ["Relation (subtypes: %d):" % len(self.subtypes),
-                  "Entry1:", str(self.entry1),
-                  "Entry2:", str(self.entry2)]
+        outstr = [
+            "Relation (subtypes: %d):" % len(self.subtypes),
+            "Entry1:",
+            str(self.entry1),
+            "Entry2:",
+            str(self.entry2),
+        ]
         for s in self.subtypes:
             outstr.extend(["Subtype: %s" % s[0], str(s[1])])
         return "\n".join(outstr)
@@ -785,8 +832,8 @@ class Relation(object):
 
     def _delentry1(self):
         del self._entry1
-    entry1 = property(_getentry1, _setentry1, _delentry1,
-                      "Entry1 of the relation.")
+
+    entry1 = property(_getentry1, _setentry1, _delentry1, "Entry1 of the relation.")
 
     def _getentry2(self):
         if self._pathway is not None:
@@ -798,17 +845,19 @@ class Relation(object):
 
     def _delentry2(self):
         del self._entry2
-    entry2 = property(_getentry2, _setentry2, _delentry2,
-                      "Entry2 of the relation.")
+
+    entry2 = property(_getentry2, _setentry2, _delentry2, "Entry2 of the relation.")
 
     @property
     def element(self):
         """Return KGML element describing the Relation."""
         # The root is this Relation element
         relation = ET.Element("relation")
-        relation.attrib = {"entry1": str(self._entry1),
-                           "entry2": str(self._entry2),
-                           "type": self.type}
+        relation.attrib = {
+            "entry1": str(self._entry1),
+            "entry2": str(self._entry2),
+            "type": self.type,
+        }
         for (name, value) in self.subtypes:
             subtype = ET.Element("subtype")
             subtype.attrib[name] = str(value)

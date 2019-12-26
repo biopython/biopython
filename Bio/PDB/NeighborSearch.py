@@ -8,7 +8,6 @@
 
 """Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
-from __future__ import print_function
 
 import numpy
 
@@ -40,6 +39,7 @@ class NeighborSearch(object):
 
         """
         from Bio.PDB.kdtrees import KDTree
+
         self.atom_list = atom_list
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]
@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
         def __init__(self):
             """Initialize the class."""
-            self.coord = (100 * random(3))
+            self.coord = 100 * random(3)
 
         def get_coord(self):
             """Return coordinates."""

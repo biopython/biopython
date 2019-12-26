@@ -10,7 +10,6 @@ Unless you are writing a new parser or writer for Bio.SeqIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-from __future__ import print_function
 
 import sys  # for checking if Python 2
 
@@ -54,6 +53,7 @@ class SequenceIterator(object):
         raise NotImplementedError("The subclass should implement the __next__ method.")
 
     if sys.version_info[0] < 3:
+
         def next(self):
             """Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
@@ -82,18 +82,16 @@ def _get_seq_string(record):
     if not isinstance(record, SeqRecord):
         raise TypeError("Expected a SeqRecord object")
     if record.seq is None:
-        raise TypeError("SeqRecord (id=%s) has None for its sequence."
-                        % record.id)
+        raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
     elif not isinstance(record.seq, (Seq, MutableSeq)):
-        raise TypeError("SeqRecord (id=%s) has an invalid sequence."
-                        % record.id)
+        raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
     return str(record.seq)
 
 
 # Function variant of the SequenceWriter method.
 def _clean(text):
     """Use this to avoid getting newlines in the output (PRIVATE)."""
-    return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+    return text.replace("\n", " ").replace("\r", " ")
 
 
 class SequenceWriter(object):
@@ -117,16 +115,14 @@ class SequenceWriter(object):
         if not isinstance(record, SeqRecord):
             raise TypeError("Expected a SeqRecord object")
         if record.seq is None:
-            raise TypeError("SeqRecord (id=%s) has None for its sequence."
-                            % record.id)
+            raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
         elif not isinstance(record.seq, (Seq, MutableSeq)):
-            raise TypeError("SeqRecord (id=%s) has an invalid sequence."
-                            % record.id)
+            raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
         return str(record.seq)
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+        return text.replace("\n", " ").replace("\r", " ")
 
     def write_file(self, records):
         """Use this to write an entire file containing the given records.
@@ -184,7 +180,9 @@ class SequentialSequenceWriter(SequenceWriter):
         to ensure the header is only written once.
         """
         assert not self._header_written, "You have aleady called write_header()"
-        assert not self._record_written, "You have aleady called write_record() or write_records()"
+        assert (
+            not self._record_written
+        ), "You have aleady called write_record() or write_records()"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._header_written = True
 
@@ -198,7 +196,9 @@ class SequentialSequenceWriter(SequenceWriter):
         to ensure the footer is only written once.
         """
         assert self._header_written, "You must call write_header() first"
-        assert self._record_written, "You have not called write_record() or write_records() yet"
+        assert (
+            self._record_written
+        ), "You have not called write_record() or write_records() yet"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._footer_written = True
 

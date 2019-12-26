@@ -142,10 +142,10 @@ class TestPhenoMicro(unittest.TestCase):
         p2 = p.subtract_control()
         self.assertEqual(p2.id, p.id)
         self.assertEqual(p2["A02"], p["A02"] - p["A01"])
-        self.assertEqual(repr(p), "PlateRecord('WellRecord['A01'], WellRecord" +
+        self.assertEqual(repr(p), "PlateRecord('WellRecord['A01'], WellRecord"
                          "['A02'], WellRecord['A03'], ..., WellRecord['B12']')")
-        self.assertEqual(str(p), "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: " +
-                         "12\nPlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord" +
+        self.assertEqual(str(p), "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: "
+                         "12\nPlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord"
                          "['A03'], ..., WellRecord['B12']')")
 
         with open(SMALL_JSON_PLATE_2) as handle:
@@ -232,15 +232,18 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w.get_times()[-1], 95.75)
         self.assertEqual(w.get_signals()[0], 37.0)
         self.assertEqual(w.get_signals()[-1], 217.0)
-        self.assertEqual(repr(w),
-                         "WellRecord('(0.0, 37.0), (0.25, 29.0), (0.5, 32.0)," +
-                         " (0.75, 30.0), (1.0, 29.0), ..., (95.75, 217.0)')")
-        self.assertEqual(str(w),
-                         "Well ID: A10\nTime points: 384\nMinum signal 0.25 at " +
-                         "time 29.00\nMaximum signal 16.75 at time " +
-                         "313.00\nWellRecord('(0.0, 37.0), (0.25, 29.0), " +
-                         "(0.5, 32.0), (0.75, 30.0), " +
-                         "(1.0, 29.0), ..., (95.75, 217.0)')")
+        self.assertEqual(
+            repr(w),
+            "WellRecord('(0.0, 37.0), (0.25, 29.0), (0.5, 32.0),"
+            " (0.75, 30.0), (1.0, 29.0), ..., (95.75, 217.0)')"
+        )
+        self.assertEqual(
+            str(w),
+            "Well ID: A10\nTime points: 384\nMinum signal 0.25 at time 29.00\n"
+            "Maximum signal 16.75 at time 313.00\n"
+            "WellRecord('(0.0, 37.0), (0.25, 29.0), (0.5, 32.0), (0.75, 30.0), "
+            "(1.0, 29.0), ..., (95.75, 217.0)')"
+        )
 
         w.fit(None)
         self.assertEqual(w.area, None)

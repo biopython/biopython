@@ -1,11 +1,12 @@
 # Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
 
-from __future__ import print_function
 
 import os
 import subprocess
@@ -21,8 +22,7 @@ class PamlError(EnvironmentError):
 class Paml(object):
     """Base class for wrapping PAML commands."""
 
-    def __init__(self, alignment=None, working_dir=None,
-                 out_file=None):
+    def __init__(self, alignment=None, working_dir=None, out_file=None):
         """Initialize the class."""
         if working_dir is None:
             self.working_dir = os.getcwd()
@@ -81,8 +81,7 @@ class Paml(object):
         if self.working_dir is not None:
             self._rel_working_dir = os.path.relpath(self.working_dir)
         if self.alignment is not None:
-            self._rel_alignment = os.path.relpath(self.alignment,
-                                                  self.working_dir)
+            self._rel_alignment = os.path.relpath(self.alignment, self.working_dir)
         if self.out_file is not None:
             self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 
@@ -128,8 +127,10 @@ class Paml(object):
             # If the program fails for any reason
             raise PamlError(
                 "%s has failed (return code %i). Run with verbose = True to view error message"
-                % (command, result_code))
+                % (command, result_code)
+            )
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError("The %s process was killed (return code %i)."
-                                   % (command, result_code))
+            raise EnvironmentError(
+                "The %s process was killed (return code %i)." % (command, result_code)
+            )

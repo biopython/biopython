@@ -1,7 +1,9 @@
 # Copyright 2013 by Leighton Pritchard.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes and functions to parse a KGML pathway map.
 
@@ -16,12 +18,7 @@ Functions:
 
 """
 
-from __future__ import print_function
-
-try:
-    import xml.etree.cElementTree as ElementTree
-except ImportError:
-    import xml.etree.ElementTree as ElementTree
+from xml.etree import ElementTree
 
 from Bio._py3k import StringIO
 
@@ -60,18 +57,17 @@ def parse(handle, debug=0):
      - debug - integer for amount of debug information to print
 
     This is a generator for the return of multiple Pathway objects.
+
     """
     # Check handle
     if not hasattr(handle, "read"):
         if isinstance(handle, str):
             handle = StringIO(handle)
         else:
-            exc_txt = "An XML-containing handle or an XML string " + \
-                      "must be provided"
+            exc_txt = "An XML-containing handle or an XML string must be provided"
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
-    for event, elem in \
-            ElementTree.iterparse(handle, events=("start", "end")):
+    for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
         if event == "end" and elem.tag == "pathway":
             yield KGMLParser(elem).parse()
             elem.clear()
@@ -111,6 +107,7 @@ class KGMLParser(object):
 
     def parse(self):
         """Parse the input elements."""
+        # This comment stops black style adding a blank line here, which causes flake8 D202.
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)
@@ -179,11 +176,15 @@ class KGMLParser(object):
                 # This should warn us of any unimplemented tags
                 import warnings
                 from Bio import BiopythonParserWarning
-                warnings.warn("Warning: tag %s not implemented in parser" %
-                              element.tag, BiopythonParserWarning)
+
+                warnings.warn(
+                    "Warning: tag %s not implemented in parser" % element.tag,
+                    BiopythonParserWarning,
+                )
         return self.pathway
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

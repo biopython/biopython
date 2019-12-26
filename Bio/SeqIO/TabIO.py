@@ -32,9 +32,9 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 example above.
 """
 
-from __future__ import print_function
 
 from Bio.Alphabet import single_letter_alphabet
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
@@ -73,21 +73,22 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     gi|45478721|ref|NP_995576.1| length 90
 
     """
-    for line in handle:
-        try:
-            title, seq = line.split("\t")  # will fail if more than one tab!
-        except ValueError:
-            if line.strip() == "":
-                # It's a blank line, ignore it
-                continue
-            raise ValueError("Each line should have one tab separating the" +
-                             " title and sequence, this line has %i tabs: %r"
-                             % (line.count("\t"), line))
-        title = title.strip()
-        seq = seq.strip()  # removes the trailing new line
-        yield SeqRecord(Seq(seq, alphabet),
-                        id=title, name=title,
-                        description="")
+    with as_handle(handle, "rU") as handle:
+        for line in handle:
+            try:
+                title, seq = line.split("\t")  # will fail if more than one tab!
+            except ValueError:
+                if line.strip() == "":
+                    # It's a blank line, ignore it
+                    continue
+                raise ValueError(
+                    "Each line should have one tab separating the"
+                    + " title and sequence, this line has %i tabs: %r"
+                    % (line.count("\t"), line)
+                )
+            title = title.strip()
+            seq = seq.strip()  # removes the trailing new line
+            yield SeqRecord(Seq(seq, alphabet), id=title, name=title, description="")
 
 
 class TabWriter(SequentialSequenceWriter):
@@ -124,4 +125,5 @@ def as_tab(record):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

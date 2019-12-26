@@ -15,7 +15,6 @@ files are also defined under Bio.File but these are not intended for direct
 use.
 """
 
-from __future__ import print_function
 
 import codecs
 import os
@@ -78,17 +77,17 @@ def as_handle(handleish, mode="r", **kwargs):
     >>> from Bio import File
     >>> import os
     >>> with File.as_handle('seqs.fasta', 'w') as fp:
-    ...     # Python2/3 docstring workaround, revise for 'Python 3 only'.
-    ...     _ = fp.write('>test\nACGT')
+    ...     fp.write('>test\nACGT')
     ...
+    10
     >>> fp.closed
     True
 
     >>> handle = open('seqs.fasta', 'w')
     >>> with File.as_handle(handle) as fp:
-    ...     # Python 2/3 docstring workaround, revise for 'Python 3 only'.
-    ...     _ = fp.write('>test\nACGT')
+    ...     fp.write('>test\nACGT')
     ...
+    10
     >>> fp.closed
     False
     >>> fp.close()
@@ -575,7 +574,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         format = self._format
         proxy_factory = self._proxy_factory
 
-        con = _sqlite.connect(index_filename)
+        con = _sqlite.connect(index_filename,
+                              check_same_thread=False)
         self._con = con
         # Check the count...
         try:

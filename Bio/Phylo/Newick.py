@@ -1,7 +1,9 @@
 # Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes corresponding to Newick trees, also used for Nexus trees.
 
@@ -16,17 +18,24 @@ class Tree(BaseTree.Tree):
 
     def __init__(self, root=None, rooted=False, id=None, name=None, weight=1.0):
         """Initialize parameters for a Newick tree object."""
-        BaseTree.Tree.__init__(self, root=root or Clade(),
-                               rooted=rooted, id=id, name=name)
+        BaseTree.Tree.__init__(
+            self, root=root or Clade(), rooted=rooted, id=id, name=name
+        )
         self.weight = weight
 
 
 class Clade(BaseTree.Clade):
     """Newick Clade (sub-tree) object."""
 
-    def __init__(self, branch_length=None, name=None, clades=None,
-                 confidence=None, comment=None):
+    def __init__(
+        self, branch_length=None, name=None, clades=None, confidence=None, comment=None
+    ):
         """Initialize parameters for a Newick Clade object."""
-        BaseTree.Clade.__init__(self, branch_length=branch_length,
-                                name=name, clades=clades, confidence=confidence)
+        BaseTree.Clade.__init__(
+            self,
+            branch_length=branch_length,
+            name=name,
+            clades=clades,
+            confidence=confidence,
+        )
         self.comment = comment

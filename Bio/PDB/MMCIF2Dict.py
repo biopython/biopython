@@ -7,7 +7,6 @@
 
 """Turn an mmCIF file into a dictionary."""
 
-from __future__ import print_function
 
 from Bio.File import as_handle
 
@@ -85,7 +84,9 @@ class MMCIF2Dict(dict):
                     quote_open_char = c
                     in_token = True
                     start_i = i + 1
-                elif c == quote_open_char and (i + 1 == len(line) or line[i + 1] in self.whitespace_chars):
+                elif c == quote_open_char and (
+                    i + 1 == len(line) or line[i + 1] in self.whitespace_chars
+                ):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]
@@ -103,7 +104,9 @@ class MMCIF2Dict(dict):
             raise ValueError("Line ended with quote open: " + line)
 
     def _tokenize(self, handle):
+        empty = True
         for line in handle:
+            empty = False
             if line.startswith("#"):
                 continue
             elif line.startswith(";"):
@@ -120,3 +123,5 @@ class MMCIF2Dict(dict):
             else:
                 for token in self._splitline(line.strip()):
                     yield token
+        if empty:
+            raise ValueError("Empty file.")

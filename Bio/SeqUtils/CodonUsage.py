@@ -5,28 +5,33 @@
 # package.
 """Methods for codon usage calculations."""
 
-
-from __future__ import print_function
-
 import math
 from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO  # To parse a FASTA file
 
+# Turn black code style off
+# fmt: off
 
 CodonsDict = {
-    "TTT": 0, "TTC": 0, "TTA": 0, "TTG": 0, "CTT": 0,
-    "CTC": 0, "CTA": 0, "CTG": 0, "ATT": 0, "ATC": 0,
-    "ATA": 0, "ATG": 0, "GTT": 0, "GTC": 0, "GTA": 0,
-    "GTG": 0, "TAT": 0, "TAC": 0, "TAA": 0, "TAG": 0,
-    "CAT": 0, "CAC": 0, "CAA": 0, "CAG": 0, "AAT": 0,
-    "AAC": 0, "AAA": 0, "AAG": 0, "GAT": 0, "GAC": 0,
-    "GAA": 0, "GAG": 0, "TCT": 0, "TCC": 0, "TCA": 0,
-    "TCG": 0, "CCT": 0, "CCC": 0, "CCA": 0, "CCG": 0,
-    "ACT": 0, "ACC": 0, "ACA": 0, "ACG": 0, "GCT": 0,
-    "GCC": 0, "GCA": 0, "GCG": 0, "TGT": 0, "TGC": 0,
-    "TGA": 0, "TGG": 0, "CGT": 0, "CGC": 0, "CGA": 0,
-    "CGG": 0, "AGT": 0, "AGC": 0, "AGA": 0, "AGG": 0,
+    "TTT": 0, "TTC": 0, "TTA": 0, "TTG": 0,
+    "CTT": 0, "CTC": 0, "CTA": 0, "CTG": 0,
+    "ATT": 0, "ATC": 0, "ATA": 0, "ATG": 0,
+    "GTT": 0, "GTC": 0, "GTA": 0, "GTG": 0,
+    "TAT": 0, "TAC": 0, "TAA": 0, "TAG": 0,
+    "CAT": 0, "CAC": 0, "CAA": 0, "CAG": 0,
+    "AAT": 0, "AAC": 0, "AAA": 0, "AAG": 0,
+    "GAT": 0, "GAC": 0, "GAA": 0, "GAG": 0,
+    "TCT": 0, "TCC": 0, "TCA": 0, "TCG": 0,
+    "CCT": 0, "CCC": 0, "CCA": 0, "CCG": 0,
+    "ACT": 0, "ACC": 0, "ACA": 0, "ACG": 0,
+    "GCT": 0, "GCC": 0, "GCA": 0, "GCG": 0,
+    "TGT": 0, "TGC": 0, "TGA": 0, "TGG": 0,
+    "CGT": 0, "CGC": 0, "CGA": 0, "CGG": 0,
+    "AGT": 0, "AGC": 0, "AGA": 0, "AGG": 0,
     "GGT": 0, "GGC": 0, "GGA": 0, "GGG": 0}
+
+# Turn black code style on
+# fmt: on
 
 
 # this dictionary shows which codons encode the same AA
@@ -51,7 +56,8 @@ SynonymousCodons = {
     "TRP": ["TGG"],
     "VAL": ["GTA", "GTC", "GTG", "GTT"],
     "GLU": ["GAG", "GAA"],
-    "TYR": ["TAT", "TAC"]}
+    "TYR": ["TAT", "TAC"],
+}
 
 
 class CodonAdaptationIndex(object):
@@ -89,8 +95,10 @@ class CodonAdaptationIndex(object):
         """
         # first make sure we're not overwriting an existing index:
         if self.index != {} or self.codon_count != {}:
-            raise ValueError("an index has already been set or a codon count "
-                             "has been done. Cannot overwrite either.")
+            raise ValueError(
+                "an index has already been set or a codon count "
+                "has been done. Cannot overwrite either."
+            )
 
         # count codon occurrences in the file.
         self._count_codons(fasta_file)
@@ -134,7 +142,7 @@ class CodonAdaptationIndex(object):
             dna_sequence = dna_sequence.upper()
 
         for i in range(0, len(dna_sequence), 3):
-            codon = dna_sequence[i:i + 3]
+            codon = dna_sequence[i : i + 3]
             if codon in self.index:
                 # these two codons are always one, exclude them:
                 if codon not in ["ATG", "TGG"]:
@@ -142,8 +150,9 @@ class CodonAdaptationIndex(object):
                     cai_length += 1
             # some indices may not include stop codons:
             elif codon not in ["TGA", "TAA", "TAG"]:
-                raise TypeError("illegal codon in sequence: %s.\n%s"
-                                % (codon, self.index))
+                raise TypeError(
+                    "illegal codon in sequence: %s.\n%s" % (codon, self.index)
+                )
 
         return math.exp(cai_value / (cai_length - 1.0))
 
@@ -161,12 +170,13 @@ class CodonAdaptationIndex(object):
                 else:
                     dna_sequence = str(cur_record.seq)
                 for i in range(0, len(dna_sequence), 3):
-                    codon = dna_sequence[i:i + 3]
+                    codon = dna_sequence[i : i + 3]
                     if codon in self.codon_count:
                         self.codon_count[codon] += 1
                     else:
-                        raise TypeError("illegal codon %s in gene: %s"
-                                        % (codon, cur_record.id))
+                        raise TypeError(
+                            "illegal codon %s in gene: %s" % (codon, cur_record.id)
+                        )
 
     def print_index(self):
         """Print out the index used.

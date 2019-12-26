@@ -24,7 +24,6 @@ acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
 chemically modified residues.
 """
 
-from __future__ import print_function
 from Bio._py3k import _universal_read_mode
 
 from copy import copy
@@ -171,14 +170,14 @@ class SeqMap(object):
         self.version = line[6:10]
 
         # Raf format versions 0.01 and 0.02 are identical for practical purposes
-        if(self.version != "0.01" and self.version != "0.02"):
+        if self.version != "0.01" and self.version != "0.02":
             raise ValueError("Incompatible RAF version: " + self.version)
 
         self.pdb_datestamp = line[14:20]
         self.flags = line[21:27]
 
         for i in range(header_len, len(line), 7):
-            f = line[i:i + 7]
+            f = line[i : i + 7]
             if len(f) != 7:
                 raise ValueError("Corrupt Field: (" + f + ")")
             r = Res()
@@ -286,9 +285,11 @@ class SeqMap(object):
             # for k in resFound:
             #    del resSet[k]
             # print(resSet)
-            raise RuntimeError("Could not find at least one ATOM or HETATM"
-                               " record for each and every residue in this"
-                               " sequence map.")
+            raise RuntimeError(
+                "Could not find at least one ATOM or HETATM"
+                " record for each and every residue in this"
+                " sequence map."
+            )
 
 
 class Res(object):

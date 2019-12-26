@@ -6,7 +6,6 @@
 # package.
 """Command line wrapper for the multiple alignment program TCOFFEE."""
 
-from __future__ import print_function
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -57,8 +56,6 @@ class TCoffeeCommandline(AbstractCommandline):
                     One (or more separated by a comma) of:
                     'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
                     'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
-
-                    Note currently Bio.AlignIO does not parse GCG MSF format.
                     """,
                     equate=False),
             _Option(["-infile", "infile"],

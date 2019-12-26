@@ -10,7 +10,6 @@ Unless you are writing a new parser or writer for Bio.AlignIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-from __future__ import print_function
 
 import sys  # for checking if Python 2
 
@@ -26,8 +25,7 @@ class AlignmentIterator(object):
     """
 
     # TODO - Should the default be Gapped(single_letter_alphabet) instead?
-    def __init__(self, handle, seq_count=None,
-                 alphabet=single_letter_alphabet):
+    def __init__(self, handle, seq_count=None, alphabet=single_letter_alphabet):
         """Create an AlignmentIterator object.
 
         Arguments:
@@ -66,6 +64,7 @@ class AlignmentIterator(object):
         #####################################################
 
     if sys.version_info[0] < 3:
+
         def next(self):
             """Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
@@ -116,7 +115,7 @@ class AlignmentWriter(object):
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+        return text.replace("\n", " ").replace("\r", " ")
 
 
 class SequentialAlignmentWriter(AlignmentWriter):

@@ -24,12 +24,14 @@ from copy import deepcopy
 
 def get_indiv(line):
     """Extract the details of the individual information on the line."""
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def int_no_zero(val):
         """Return integer of val, or None if is zero."""
         v = int(val)
         if v == 0:
             return None
         return v
+
     indiv_name, marker_line = line.split(",")
     markers = marker_line.replace("\t", " ").split(" ")
     markers = [marker for marker in markers if marker != ""]
@@ -38,12 +40,12 @@ def get_indiv(line):
     else:
         marker_len = 3
     try:
-        allele_list = [(int_no_zero(marker[0:marker_len]),
-                       int_no_zero(marker[marker_len:]))
-                       for marker in markers]
+        allele_list = [
+            (int_no_zero(marker[0:marker_len]), int_no_zero(marker[marker_len:]))
+            for marker in markers
+        ]
     except ValueError:  # Haploid
-        allele_list = [(int_no_zero(marker[0:marker_len]),)
-                       for marker in markers]
+        allele_list = [(int_no_zero(marker[0:marker_len]),) for marker in markers]
     return indiv_name, allele_list, marker_len
 
 
@@ -66,8 +68,9 @@ def read(handle):
             break
         record.loci_list.append(line)
     else:
-        raise ValueError("No population data found, "
-                         "file probably not GenePop related")
+        raise ValueError(
+            "No population data found, file probably not GenePop related"
+        )
     record.populations.append([])
     for line in handle:
         line = line.rstrip()

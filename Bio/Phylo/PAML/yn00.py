@@ -1,7 +1,9 @@
 # Copyright (C) 2011, 2018 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes for the support of yn00.
 
@@ -34,11 +36,13 @@ class Yn00(Paml):
         """
         Paml.__init__(self, alignment, working_dir, out_file)
         self.ctl_file = "yn00.ctl"
-        self._options = {"verbose": None,
-                         "icode": None,
-                         "weighting": None,
-                         "commonf3x4": None,
-                         "ndata": None}
+        self._options = {
+            "verbose": None,
+            "icode": None,
+            "weighting": None,
+            "commonf3x4": None,
+            "ndata": None,
+        }
 
     def write_ctl_file(self):
         """Dynamically build a yn00 control file from the options.
@@ -72,7 +76,8 @@ class Yn00(Paml):
                     if uncommented != "":
                         if "=" not in uncommented:
                             raise AttributeError(
-                                "Malformed line in control file:\n%r" % line)
+                                "Malformed line in control file:\n%r" % line
+                            )
                         (option, value) = uncommented.split("=")
                         option = option.strip()
                         value = value.strip()
@@ -120,20 +125,25 @@ def read(results_file):
     with open(results_file) as handle:
         lines = handle.readlines()
     if not lines:
-        raise ValueError("Empty results file.  Did YN00 exit successfully?  "
-                         "Run 'Yn00.run()' with 'verbose=True'.")
+        raise ValueError(
+            "Empty results file.  Did YN00 exit successfully?  "
+            "Run 'Yn00.run()' with 'verbose=True'."
+        )
     for line_num, line in enumerate(lines):
         if "(A) Nei-Gojobori (1986) method" in line:
             ng86_start = line_num + 1
         elif "(B) Yang & Nielsen (2000) method" in line:
-            (results, sequences) = _parse_yn00.parse_ng86(lines[ng86_start:line_num],
-                                                          results)
+            (results, sequences) = _parse_yn00.parse_ng86(
+                lines[ng86_start:line_num], results
+            )
             yn00_start = line_num + 1
         elif "(C) LWL85, LPB93 & LWLm methods" in line:
-            results = _parse_yn00.parse_yn00(lines[yn00_start:line_num], results,
-                                             sequences)
-            results = _parse_yn00.parse_others(lines[line_num + 1:], results,
-                                               sequences)
+            results = _parse_yn00.parse_yn00(
+                lines[yn00_start:line_num], results, sequences
+            )
+            results = _parse_yn00.parse_others(
+                lines[line_num + 1 :], results, sequences
+            )
     if not results:
         raise ValueError("Invalid results file.")
     return results

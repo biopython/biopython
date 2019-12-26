@@ -1,0 +1,74 @@
+LOCUS       GU949562                 717 bp    DNA     linear   BCT 30-JUL-2010
+DEFINITION  Shewanella sp. MAR_280_P06_2010-01-20 16S ribosomal RNA gene,
+            partial sequence.
+ACCESSION   GU949562
+VERSION     GU949562.1
+KEYWORDS    GSC:MIENS:2.1.
+SOURCE      Shewanella sp. MAR_280_P06_2010-01-20
+  ORGANISM  Shewanella sp. MAR_280_P06_2010-01-20
+            Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;
+            Shewanellaceae; Shewanella.
+REFERENCE   1  (bases 1 to 717)
+  AUTHORS   Hankeln,W., Buttigieg,P.L., Fink,D., Kottmann,R., Yilmaz,P. and
+            Glockner,F.O.
+  TITLE     MetaBar - a tool for consistent contextual data acquisition and
+            standards compliant submission
+  JOURNAL   BMC Bioinformatics 11, 358 (2010)
+   PUBMED   20591175
+  REMARK    Publication Status: Online-Only
+REFERENCE   2  (bases 1 to 717)
+  AUTHORS   Hankeln,W., Buttigieg,P.L., Fink,D., Kottman,R., Yilmaz,P. and
+            Gloeckner,F.O.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (02-MAR-2010) Microbial Genomics Group, Max Planck
+            Institute for Marine Microbiology, Celsiusstr. 1, Bremen 28359,
+            Germany
+COMMENT     ##MIENS-Data-START##
+            collection_date    :: 2009-10-14
+            collection_time    :: 09:38:00
+            lat_lon            :: 55.02814 8.45248
+            geodetic_datum     :: WGS84
+            lat_long_details   :: 11 m recorded accuracy
+            site               :: German Wadden Sea, Sylt
+            depth              :: -1.0 m
+            samp_size          :: 1000.0 ml
+            temperature        :: 10.155 degrees Celsius
+            container          :: 10 ml glass exetainers
+            environment        :: Temperate shelf and sea biome
+                                  [ENVO:00000895], coastal water body
+                                  [ENVO:02000049], coastal water
+                                  [ENVO:00002150]
+            alt_elev           :: 0 m
+            country            :: Germany
+            investigation_type :: miens-survey
+            project_name       :: Marine Microbiology (MarMic) class 2013 field
+                                  excursion to Sylt, 2009
+            sequencing_meth    :: Sanger
+            target_gene        :: 16S rRNA
+            MetaBar_barcode    :: 1000009000039
+            ##MIENS-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..717
+                     /organism="Shewanella sp. MAR_280_P06_2010-01-20"
+                     /mol_type="genomic DNA"
+                     /strain="MAR_280_P06_2010-01-20"
+                     /db_xref="taxon:748143"
+                     /lat_lon="55.03 N 8.45 E"
+                     /collection_date="14-Oct-2009"
+                     /collected_by="Olga Matantseva"
+     rRNA            <1..>717
+                     /product="16S ribosomal RNA"
+ORIGIN      
+        1 tcagattgaa cgcggcggca ggcctaacac atgcaagtcg agcggtaaca ggaattagct
+       61 tgctaatttg ctgacgagcg gcggacgggt gagtaatgcc tagggaactg cccagtcgag
+      121 ggggataaca gttggaaacg actgctaata ccgcatacgc cctacggggg aaaagagggg
+      181 accttcgggc cttctgcgat tggatgtacc taggtgggat tagctagttg gtgaggtaat
+      241 ggctcaccaa ggcgacgatc cctagctgtt tgagaggatg atcagccaca ctgggactga
+      301 gacacggccc agactcctac gggaggcagc agtggggaat attgcacaat gggcgcaagc
+      361 ctgatgcagc catgccgcgt gtgtgaagaa gcttcgggtt gtaaagcact ttcagcgagg
+      421 aggaaagaat agcgtttagg tgtgacgtta ctcgcagaag aaggaccggc taacttcgtg
+      481 ccagcagccg cggtaatacg aggggtcaac gttaatcgga attactgggc gtaaagcgta
+      541 cgcaggcggt ttgttaagcg agatgtgaaa gccccgggct caacctggga actgcatttc
+      601 gaactggcaa actagagtct gtagaggggg gtagaatttc aggtgtagcg gtgaaatgaa
+      661 gatctgaagg aataccggtg gcgaaggcgg ccccctggac aaagactgac gctcatg
+//

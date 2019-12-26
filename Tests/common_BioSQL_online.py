@@ -2,7 +2,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Test storing biopython objects in a BioSQL relational db."""
-from __future__ import print_function
 
 import os
 import platform

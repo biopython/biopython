@@ -63,7 +63,9 @@ class MMTFIO(StructureIO):
         # Similar to the PDBIO save method, we check if the filepath is a
         # string for a filepath or an open file handle
         if not isinstance(filepath, str):
-            raise ValueError("Writing to a file handle is not supported for MMTF, filepath must be a string")
+            raise ValueError(
+                "Writing to a file handle is not supported for MMTF, filepath must be a string"
+            )
         if hasattr(self, "structure"):
             self._save_structure(filepath, select)
         else:
@@ -90,13 +92,10 @@ class MMTFIO(StructureIO):
             total_num_groups=0,
             total_num_chains=0,
             total_num_models=0,
-            structure_id=self.structure.id
+            structure_id=self.structure.id,
         )
 
-        encoder.set_xtal_info(
-            space_group="",
-            unit_cell=None
-        )
+        encoder.set_xtal_info(space_group="", unit_cell=None)
 
         # The header information is missing for some structure objects
         header_dict = defaultdict(str, self.structure.header)
@@ -114,7 +113,7 @@ class MMTFIO(StructureIO):
             title=header_dict["name"],
             deposition_date=header_dict["deposition_date"],
             release_date=header_dict["release_date"],
-            experimental_methods=header_dict["structure_method"]
+            experimental_methods=header_dict["structure_method"],
         )
 
         # Tracks values to replace them at the end
@@ -130,7 +129,7 @@ class MMTFIO(StructureIO):
             count_models += 1
             encoder.set_model_info(
                 model_id=mi,  # According to mmtf-python this is meaningless
-                chain_count=0  # Set to 0 here and changed later
+                chain_count=0,  # Set to 0 here and changed later
             )
             for chain in model.get_chains():
                 if not select.accept_chain(chain):
@@ -165,20 +164,26 @@ class MMTFIO(StructureIO):
                     # Checking for similar entities is non-trivial from the
                     #  structure object so we treat each molecule as a separate
                     #  entity
-                    if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
+                    if residue_type != prev_residue_type or (
+                        residue_type == "HETATM" and resname != prev_resname
+                    ):
                         encoder.set_entity_info(
                             chain_indices=[count_chains],
                             sequence="",  # Set to empty here and changed later
                             description="",
-                            entity_type=entity_type
+                            entity_type=entity_type,
                         )
                         encoder.set_chain_info(
                             chain_id=next(chain_id_iterator),
-                            chain_name="\x00" if len(chain.get_id().strip()) == 0 else chain.get_id(),
-                            num_groups=0  # Set to 0 here and changed later
+                            chain_name="\x00"
+                            if len(chain.get_id().strip()) == 0
+                            else chain.get_id(),
+                            num_groups=0,  # Set to 0 here and changed later
                         )
                         if count_chains > 0:
-                            groups_per_chain.append(count_groups - sum(groups_per_chain) - 1)
+                            groups_per_chain.append(
+                                count_groups - sum(groups_per_chain) - 1
+                            )
                         if not first_chain:
                             seqs.append(seq)
                         first_chain = False
@@ -194,13 +199,21 @@ class MMTFIO(StructureIO):
                     encoder.set_group_info(
                         group_name=resname,
                         group_number=residue.id[1],
-                        insertion_code="\x00" if residue.id[2] == " " else residue.id[2],
+                        insertion_code="\x00"
+                        if residue.id[2] == " "
+                        else residue.id[2],
                         group_type="",  # Value in the chemcomp dictionary, which is unknown here
-                        atom_count=sum(1 for a in residue.get_unpacked_list() if select.accept_atom(a)),
+                        atom_count=sum(
+                            1
+                            for a in residue.get_unpacked_list()
+                            if select.accept_atom(a)
+                        ),
                         bond_count=0,
-                        single_letter_code=seq1(resname, custom_map=protein_letters_3to1),
+                        single_letter_code=seq1(
+                            resname, custom_map=protein_letters_3to1
+                        ),
                         sequence_index=len(seq) - 1 if entity_type == "polymer" else -1,
-                        secondary_structure_type=-1
+                        secondary_structure_type=-1,
                     )
 
                     for atom in residue.get_unpacked_list():
@@ -208,15 +221,19 @@ class MMTFIO(StructureIO):
                             count_atoms += 1
                             encoder.set_atom_info(
                                 atom_name=atom.name,
-                                serial_number=count_atoms if renumber_atoms else atom.serial_number,
-                                alternative_location_id="\x00" if atom.altloc == " " else atom.altloc,
+                                serial_number=count_atoms
+                                if renumber_atoms
+                                else atom.serial_number,
+                                alternative_location_id="\x00"
+                                if atom.altloc == " "
+                                else atom.altloc,
                                 x=atom.coord[0],
                                 y=atom.coord[1],
                                 z=atom.coord[2],
                                 occupancy=atom.occupancy,
                                 temperature_factor=atom.bfactor,
                                 element=atom.element,
-                                charge=0
+                                charge=0,
                             )
 
                 seqs.append(seq)

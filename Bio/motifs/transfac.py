@@ -183,7 +183,7 @@ def read(handle, strict=True):
             if len(references) != index - 1:
                 raise ValueError('The index "{0:d}" of the TRANSFAC RN line '
                                  "does not match the current number of seen "
-                                 "references "'"{1:d}": "{2:s}"'.format(index, len(references) + 1, line))
+                                 'references "{1:d}": "{2:s}"'.format(index, len(references) + 1, line))
             reference = {key: value}
             references.append(reference)
         elif key == "//":

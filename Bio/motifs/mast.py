@@ -5,7 +5,6 @@
 # as part of this package.
 """Module for the support of Motif Alignment and Search Tool (MAST)."""
 
-from __future__ import print_function
 import xml.etree.ElementTree as ET
 
 from Bio.motifs import meme

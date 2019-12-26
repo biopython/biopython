@@ -13,7 +13,6 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
-# from __future__ import print_function
 from numpy import array, empty
 from Bio.KDTree import _CKDTree
 
@@ -88,8 +87,7 @@ class KDTree(object):
         if not self.built:
             raise Exception("No point set specified")
         if center.shape != (self.dim,):
-            raise Exception("Expected a %i-dimensional NumPy array"
-                            % self.dim)
+            raise Exception("Expected a %i-dimensional NumPy array" % self.dim)
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):

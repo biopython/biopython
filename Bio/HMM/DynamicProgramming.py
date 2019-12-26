@@ -85,8 +85,7 @@ class AbstractDPAlgorithms(object):
             for main_state in state_letters:
                 # calculate the forward value using the appropriate
                 # method to prevent underflow errors
-                forward_value = self._forward_recursion(main_state, i,
-                                                        forward_var)
+                forward_value = self._forward_recursion(main_state, i, forward_var)
 
                 if forward_value is not None:
                     forward_var[(main_state, i)] = forward_value
@@ -97,11 +96,9 @@ class AbstractDPAlgorithms(object):
 
         for state_item in state_letters:
             # f_{k}(L)
-            forward_value = forward_var[(state_item,
-                                         len(self._seq.emissions) - 1)]
+            forward_value = forward_var[(state_item, len(self._seq.emissions) - 1)]
             # a_{k0}
-            transition_value = self._mm.transition_prob[(state_item,
-                                                         first_state)]
+            transition_value = self._mm.transition_prob[(state_item, first_state)]
 
             seq_prob += forward_value * transition_value
 
@@ -137,8 +134,9 @@ class AbstractDPAlgorithms(object):
         first_letter = state_letters[0]
         # b_{k}(L) = a_{k0} for all k
         for state in state_letters:
-            backward_var[(state, len(self._seq.emissions) - 1)] = \
-                self._mm.transition_prob[(state, state_letters[0])]
+            backward_var[
+                (state, len(self._seq.emissions) - 1)
+            ] = self._mm.transition_prob[(state, state_letters[0])]
 
         # -- recursion
         # first loop over the training sequence backwards
@@ -150,8 +148,7 @@ class AbstractDPAlgorithms(object):
             for main_state in state_letters:
                 # calculate the backward value using the appropriate
                 # method to prevent underflow errors
-                backward_value = self._backward_recursion(main_state, i,
-                                                          backward_var)
+                backward_value = self._backward_recursion(main_state, i, backward_var)
 
                 if backward_value is not None:
                     backward_var[(main_state, i)] = backward_value
@@ -208,8 +205,9 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # loop over all of the possible states
         s_value = 0
         for main_state in state_letters:
-            emission = self._mm.emission_prob[(main_state,
-                                               self._seq.emissions[seq_pos])]
+            emission = self._mm.emission_prob[
+                (main_state, self._seq.emissions[seq_pos])
+            ]
 
             # now sum over all of the previous vars and transitions
             trans_and_var_sum = 0
@@ -218,12 +216,11 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
                 var_value = previous_vars[(second_state, seq_pos - 1)]
 
                 # the transition probability
-                trans_value = self._mm.transition_prob[(second_state,
-                                                        main_state)]
+                trans_value = self._mm.transition_prob[(second_state, main_state)]
 
-                trans_and_var_sum += (var_value * trans_value)
+                trans_and_var_sum += var_value * trans_value
 
-            s_value += (emission * trans_and_var_sum)
+            s_value += emission * trans_and_var_sum
 
         return s_value
 
@@ -240,15 +237,17 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
         if sequence_pos not in self._s_values:
-            self._s_values[sequence_pos] = \
-                self._calculate_s_value(sequence_pos, forward_vars)
+            self._s_values[sequence_pos] = self._calculate_s_value(
+                sequence_pos, forward_vars
+            )
 
         # e_{l}(x_{i})
         seq_letter = self._seq.emissions[sequence_pos]
         cur_emission_prob = self._mm.emission_prob[(cur_state, seq_letter)]
         # divide by the scaling value
-        scale_emission_prob = (float(cur_emission_prob) /
-                               float(self._s_values[sequence_pos]))
+        scale_emission_prob = float(cur_emission_prob) / float(
+            self._s_values[sequence_pos]
+        )
 
         # loop over all of the possible states at the position
         state_pos_sum = 0
@@ -261,14 +260,13 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
             prev_forward = forward_vars[(second_state, sequence_pos - 1)]
 
             # a_{kl}
-            cur_trans_prob = self._mm.transition_prob[(second_state,
-                                                       cur_state)]
+            cur_trans_prob = self._mm.transition_prob[(second_state, cur_state)]
             state_pos_sum += prev_forward * cur_trans_prob
 
         # if we have the possibility of having a transition
         # return the recursion value
         if have_transition:
-            return (scale_emission_prob * state_pos_sum)
+            return scale_emission_prob * state_pos_sum
         else:
             return None
 
@@ -285,8 +283,9 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
         if sequence_pos not in self._s_values:
-            self._s_values[sequence_pos] = \
-                self._calculate_s_value(sequence_pos, backward_vars)
+            self._s_values[sequence_pos] = self._calculate_s_value(
+                sequence_pos, backward_vars
+            )
 
         # loop over all of the possible states at the position
         state_pos_sum = 0
@@ -302,15 +301,13 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
             prev_backward = backward_vars[(second_state, sequence_pos + 1)]
 
             # the transition probability -- a_{kl}
-            cur_transition_prob = self._mm.transition_prob[(cur_state,
-                                                            second_state)]
+            cur_transition_prob = self._mm.transition_prob[(cur_state, second_state)]
 
-            state_pos_sum += (cur_emission_prob * prev_backward *
-                              cur_transition_prob)
+            state_pos_sum += cur_emission_prob * prev_backward * cur_transition_prob
 
         # if we have a probability for a transition, return it
         if have_transition:
-            return (state_pos_sum / float(self._s_values[sequence_pos]))
+            return state_pos_sum / float(self._s_values[sequence_pos])
         # otherwise we have no probability (ie. we can't do this transition)
         # and return None
         else:

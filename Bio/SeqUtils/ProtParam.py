@@ -5,45 +5,46 @@
 # package.
 """Simple protein analysis.
 
-Example:
+Examples
+--------
+>>> from Bio.SeqUtils.ProtParam import ProteinAnalysis
+>>> X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGT"
+...                     "RDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEEC"
+...                     "LFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILF"
+...                     "LPLPV")
+>>> print(X.count_amino_acids()['A'])
+6
+>>> print(X.count_amino_acids()['E'])
+12
+>>> print("%0.2f" % X.get_amino_acids_percent()['A'])
+0.04
+>>> print("%0.2f" % X.get_amino_acids_percent()['L'])
+0.12
+>>> print("%0.2f" % X.molecular_weight())
+17103.16
+>>> print("%0.2f" % X.aromaticity())
+0.10
+>>> print("%0.2f" % X.instability_index())
+41.98
+>>> print("%0.2f" % X.isoelectric_point())
+7.72
+>>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
+>>> print("%0.2f" % sec_struc[0])  # helix
+0.28
+>>> epsilon_prot = X.molar_extinction_coefficient()  # [reduced, oxidized]
+>>> print(epsilon_prot[0])  # with reduced cysteines
+17420
+>>> print(epsilon_prot[1])  # with disulfid bridges
+17545
 
-    >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis
-    >>> X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGT"
-    ...                     "RDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEEC"
-    ...                     "LFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILF"
-    ...                     "LPLPV")
-    >>> print(X.count_amino_acids()['A'])
-    6
-    >>> print(X.count_amino_acids()['E'])
-    12
-    >>> print("%0.2f" % X.get_amino_acids_percent()['A'])
-    0.04
-    >>> print("%0.2f" % X.get_amino_acids_percent()['L'])
-    0.12
-    >>> print("%0.2f" % X.molecular_weight())
-    17103.16
-    >>> print("%0.2f" % X.aromaticity())
-    0.10
-    >>> print("%0.2f" % X.instability_index())
-    41.98
-    >>> print("%0.2f" % X.isoelectric_point())
-    7.72
-    >>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
-    >>> print("%0.2f" % sec_struc[0])  # helix
-    0.28
-    >>> epsilon_prot = X.molar_extinction_coefficient()  # [reduced, oxidized]
-    >>> print(epsilon_prot[0])  # with reduced cysteines
-    17420
-    >>> print(epsilon_prot[1])  # with disulfid bridges
-    17545
+Other public methods are:
+ - gravy
+ - protein_scale
+ - flexibility
+ - charge_at_pH
 
-    Other public methods are:
-     - gravy
-     - protein_scale
-     - flexibility
 """
 
-from __future__ import print_function
 
 import sys
 from Bio.SeqUtils import ProtParamData  # Local
@@ -153,7 +154,7 @@ class ProteinAnalysis(object):
         score = 0.0
 
         for i in range(self.length - 1):
-            this, next = self.sequence[i:i + 2]
+            this, next = self.sequence[i : i + 2]
             dipeptide_value = index[this][next]
             score += dipeptide_value
 
@@ -172,14 +173,13 @@ class ProteinAnalysis(object):
         scores = []
 
         for i in range(self.length - window_size):
-            subsequence = self.sequence[i:i + window_size]
+            subsequence = self.sequence[i : i + window_size]
             score = 0.0
 
             for j in range(window_size // 2):
                 front = subsequence[j]
                 back = subsequence[window_size - j - 1]
-                score += (flexibilities[front] +
-                          flexibilities[back]) * weights[j]
+                score += (flexibilities[front] + flexibilities[back]) * weights[j]
 
             middle = subsequence[window_size // 2 + 1]
             score += flexibilities[middle]
@@ -256,7 +256,7 @@ class ProteinAnalysis(object):
         sum_of_weights = sum(weights) * 2 + 1
 
         for i in range(self.length - window + 1):
-            subsequence = self.sequence[i:i + window]
+            subsequence = self.sequence[i : i + window]
             score = 0.0
 
             for j in range(window // 2):
@@ -268,18 +268,19 @@ class ProteinAnalysis(object):
                     back = param_dict[subsequence[window - j - 1]]
                     score += weights[j] * front + weights[j] * back
                 except KeyError:
-                    sys.stderr.write("warning: %s or %s is not a standard "
-                                     "amino acid.\n"
-                                     % (subsequence[j],
-                                        subsequence[window - j - 1]))
+                    sys.stderr.write(
+                        "warning: %s or %s is not a standard "
+                        "amino acid.\n" % (subsequence[j], subsequence[window - j - 1])
+                    )
 
             # Now add the middle value, which always has a weight of 1.
             middle = subsequence[window // 2]
             if middle in param_dict:
                 score += param_dict[middle]
             else:
-                sys.stderr.write("warning: %s  is not a standard amino acid.\n"
-                                 % middle)
+                sys.stderr.write(
+                    "warning: %s  is not a standard amino acid.\n" % middle
+                )
 
             scores.append(score / sum_of_weights)
 
@@ -294,6 +295,12 @@ class ProteinAnalysis(object):
 
         ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return ie_point.pi()
+
+    def charge_at_pH(self, pH):
+        """Calculate the charge of a protein at given pH."""
+        aa_content = self.count_amino_acids()
+        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
+        return charge.charge_at_pH(pH)
 
     def secondary_structure_fraction(self):
         """Calculate fraction of helix, turn and sheet.
@@ -324,9 +331,10 @@ class ProteinAnalysis(object):
         num_aa = self.count_amino_acids()
         mec_reduced = num_aa["W"] * 5500 + num_aa["Y"] * 1490
         mec_cystines = mec_reduced + (num_aa["C"] // 2) * 125
-        return(mec_reduced, mec_cystines)
+        return (mec_reduced, mec_cystines)
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

@@ -26,6 +26,7 @@ from os.path import basename
 from Bio import BiopythonParserWarning
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -59,6 +60,7 @@ _EXTRACT = {
 # for them for all of the available fields.
 _INSTRUMENT_SPECIFIC_TAGS = {}
 
+# fmt: off
 _INSTRUMENT_SPECIFIC_TAGS["general"] = {
     "APFN2": "Sequencing Analysis parameters file name",
     "APXV1": "Analysis Protocol XML schema version",
@@ -301,28 +303,29 @@ _INSTRUMENT_SPECIFIC_TAGS["abi_3530/3530xl"] = {
 _INSTRUMENT_SPECIFIC_TAGS["abi_3730/3730xl"] = {
     "BufT1": "Buffer tray heater temperature (degrees C)",
 }
+# fmt: on
 
 # dictionary for data unpacking format
 _BYTEFMT = {
-    1: "b",     # byte
-    2: "s",     # char
-    3: "H",     # word
-    4: "h",     # short
-    5: "i",     # long
-    6: "2i",    # rational, legacy unsupported
-    7: "f",     # float
-    8: "d",     # double
+    1: "b",  # byte
+    2: "s",  # char
+    3: "H",  # word
+    4: "h",  # short
+    5: "i",  # long
+    6: "2i",  # rational, legacy unsupported
+    7: "f",  # float
+    8: "d",  # double
     10: "h2B",  # date
-    11: "4B",   # time
+    11: "4B",  # time
     12: "2i2b",  # thumb
-    13: "B",    # bool
-    14: "2h",   # point, legacy unsupported
-    15: "4h",   # rect, legacy unsupported
-    16: "2i",   # vPoint, legacy unsupported
-    17: "4i",   # vRect, legacy unsupported
-    18: "s",    # pString
-    19: "s",    # cString
-    20: "2i",   # tag, legacy unsupported
+    13: "B",  # bool
+    14: "2h",  # point, legacy unsupported
+    15: "4h",  # rect, legacy unsupported
+    16: "2i",  # vPoint, legacy unsupported
+    17: "4i",  # vRect, legacy unsupported
+    18: "s",  # pString
+    19: "s",  # cString
+    20: "2i",  # tag, legacy unsupported
 }
 # header data structure (exluding 4 byte ABIF marker)
 _HEADFMT = ">H4sI2H3I"
@@ -355,12 +358,9 @@ def AbiIterator(handle, alphabet=None, trim=False):
     """Return an iterator for the Abi file format."""
     # raise exception is alphabet is not dna
     if alphabet is not None:
-        if isinstance(Alphabet._get_base_alphabet(alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError(
-                "Invalid alphabet, ABI files do not hold proteins.")
-        if isinstance(Alphabet._get_base_alphabet(alphabet),
-                      Alphabet.RNAAlphabet):
+        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
+            raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
+        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
             raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
 
     # raise exception if handle mode is not 'rb'
@@ -368,96 +368,104 @@ def AbiIterator(handle, alphabet=None, trim=False):
         if set("rb") != set(handle.mode.lower()):
             raise ValueError("ABI files has to be opened in 'rb' mode.")
 
-    # check if input file is a valid Abi file
-    handle.seek(0)
-    marker = handle.read(4)
-    if not marker:
-        # handle empty file gracefully
-        return
-    if marker != b"ABIF":
-        raise IOError("File should start ABIF, not %r" % marker)
+    with as_handle(handle, "rb") as handle:
 
-    # dirty hack for handling time information
-    times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": "", }
+        # check if input file is a valid Abi file
+        handle.seek(0)
+        marker = handle.read(4)
+        if not marker:
+            # handle empty file gracefully
+            raise ValueError("Empty file.")
 
-    # initialize annotations
-    annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
+        if marker != b"ABIF":
+            raise IOError("File should start ABIF, not %r" % marker)
 
-    # parse header and extract data from directories
-    header = struct.unpack(_HEADFMT,
-                           handle.read(struct.calcsize(_HEADFMT)))
+        # dirty hack for handling time information
+        times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
-    # Set default sample ID value, which we expect to be present in most cases
-    # in the SMPL1 tag, but may be missing.
-    sample_id = "<unknown id>"
+        # initialize annotations
+        annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
-    raw = {}
-    for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
-        key = tag_name + str(tag_number)
+        # parse header and extract data from directories
+        header = struct.unpack(_HEADFMT, handle.read(struct.calcsize(_HEADFMT)))
 
-        raw[key] = tag_data
+        # Set default sample ID value, which we expect to be present in most
+        # cases in the SMPL1 tag, but may be missing.
+        sample_id = "<unknown id>"
 
-        # PBAS2 is base-called sequence, only available in 3530
-        if key == "PBAS2":
-            seq = _bytes_to_string(tag_data)
-            ambigs = "KYWMRS"
-            if alphabet is None:
-                if set(seq).intersection(ambigs):
-                    alphabet = ambiguous_dna
-                else:
-                    alphabet = unambiguous_dna
-        # PCON2 is quality values of base-called sequence
-        elif key == "PCON2":
-            qual = [ord(val) for val in _bytes_to_string(tag_data)]
-        # SMPL1 is sample id entered before sequencing run, it must be a string.
-        elif key == "SMPL1":
-            sample_id = _get_string_tag(tag_data)
-        elif key in times:
-            times[key] = tag_data
+        raw = {}
+        for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
+            key = tag_name + str(tag_number)
+
+            raw[key] = tag_data
+
+            # PBAS2 is base-called sequence, only available in 3530
+            if key == "PBAS2":
+                seq = _bytes_to_string(tag_data)
+                ambigs = "KYWMRS"
+                if alphabet is None:
+                    if set(seq).intersection(ambigs):
+                        alphabet = ambiguous_dna
+                    else:
+                        alphabet = unambiguous_dna
+            # PCON2 is quality values of base-called sequence
+            elif key == "PCON2":
+                qual = [ord(val) for val in _bytes_to_string(tag_data)]
+            # SMPL1 is sample id entered before sequencing run, it must be
+            # a string.
+            elif key == "SMPL1":
+                sample_id = _get_string_tag(tag_data)
+            elif key in times:
+                times[key] = tag_data
+            else:
+                if key in _EXTRACT:
+                    annot[_EXTRACT[key]] = tag_data
+
+        # set time annotations
+        annot["run_start"] = "%s %s" % (times["RUND1"], times["RUNT1"])
+        annot["run_finish"] = "%s %s" % (times["RUND2"], times["RUNT2"])
+
+        # raw data (for advanced end users benefit)
+        annot["abif_raw"] = raw
+
+        # fsa check
+        is_fsa_file = all(tn not in raw for tn in ("PBAS1", "PBAS2"))
+
+        if is_fsa_file:
+            try:
+                file_name = basename(handle.name).replace(".fsa", "")
+            except AttributeError:
+                file_name = ""
+
+            sample_id = _get_string_tag(raw.get("LIMS1"), sample_id)
+            description = _get_string_tag(raw.get("CTID1"), "<unknown description>")
+            record = SeqRecord(
+                Seq(""),
+                id=sample_id,
+                name=file_name,
+                description=description,
+                annotations=annot,
+            )
+
         else:
-            if key in _EXTRACT:
-                annot[_EXTRACT[key]] = tag_data
+            # use the file name as SeqRecord.name if available
+            try:
+                file_name = basename(handle.name).replace(".ab1", "")
+            except AttributeError:
+                file_name = ""
+            record = SeqRecord(
+                Seq(seq, alphabet),
+                id=sample_id,
+                name=file_name,
+                description="",
+                annotations=annot,
+                letter_annotations={"phred_quality": qual},
+            )
 
-    # set time annotations
-    annot["run_start"] = "%s %s" % (times["RUND1"], times["RUNT1"])
-    annot["run_finish"] = "%s %s" % (times["RUND2"], times["RUNT2"])
-
-    # raw data (for advanced end users benefit)
-    annot["abif_raw"] = raw
-
-    # fsa check
-    is_fsa_file = all(tn not in raw for tn in ("PBAS1", "PBAS2"))
-
-    if is_fsa_file:
-        try:
-            file_name = basename(handle.name).replace(".fsa", "")
-        except AttributeError:
-            file_name = ""
-
-        sample_id = _get_string_tag(raw.get("LIMS1"), sample_id)
-        description = _get_string_tag(raw.get("CTID1"), "<unknown description>")
-        record = SeqRecord(Seq(""),
-                           id=sample_id,
-                           name=file_name,
-                           description=description,
-                           annotations=annot)
-
-    else:
-        # use the file name as SeqRecord.name if available
-        try:
-            file_name = basename(handle.name).replace(".ab1", "")
-        except AttributeError:
-            file_name = ""
-        record = SeqRecord(Seq(seq, alphabet),
-                           id=sample_id, name=file_name,
-                           description="",
-                           annotations=annot,
-                           letter_annotations={"phred_quality": qual})
-
-    if not trim or is_fsa_file:
-        yield record
-    else:
-        yield _abi_trim(record)
+        if not trim or is_fsa_file:
+            yield record
+        else:
+            yield _abi_trim(record)
 
 
 def _AbiTrimIterator(handle):
@@ -481,8 +489,9 @@ def _abi_parse_header(header, handle):
         # add directory offset to tuple
         # to handle directories with data size <= 4 bytes
         handle.seek(start)
-        dir_entry = struct.unpack(_DIRFMT,
-                                  handle.read(struct.calcsize(_DIRFMT))) + (start,)
+        dir_entry = struct.unpack(_DIRFMT, handle.read(struct.calcsize(_DIRFMT))) + (
+            start,
+        )
         index += 1
         # only parse desired dirs
         key = _bytes_to_string(dir_entry[0])
@@ -518,17 +527,19 @@ def _abi_trim(seq_record):
     http://www.phrap.org/phredphrap/phred.html
     http://resources.qiagenbioinformatics.com/manuals/clcgenomicsworkbench/650/Quality_trimming.html
     """
-    start = False   # flag for starting position of trimmed sequence
-    segment = 20    # minimum sequence length
+    start = False  # flag for starting position of trimmed sequence
+    segment = 20  # minimum sequence length
     trim_start = 0  # init start index
-    cutoff = 0.05   # default cutoff value for calculating base score
+    cutoff = 0.05  # default cutoff value for calculating base score
 
     if len(seq_record) <= segment:
         return seq_record
     else:
         # calculate base score
-        score_list = [cutoff - (10 ** (qual / -10.0)) for qual in
-                      seq_record.letter_annotations["phred_quality"]]
+        score_list = [
+            cutoff - (10 ** (qual / -10.0))
+            for qual in seq_record.letter_annotations["phred_quality"]
+        ]
 
         # calculate cummulative score
         # if cummulative value < 0, set it to 0

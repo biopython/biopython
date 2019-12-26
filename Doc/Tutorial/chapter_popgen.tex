@@ -43,12 +43,10 @@ rec.populations:
 \begin{minted}{python}
 [
     [
-        ('Ind1', [(1, 2),    (3, 3), (200, 201)],
-        ('Ind2', [(2, None), (3, 3), (None, None)],
+        ("Ind1", [(1, 2), (3, 3), (200, 201)]),
+        ("Ind2", [(2, None), (3, 3), (None, None)]),
     ],
-    [
-        ('Other1', [(1, 1),  (4, 3), (200, 200)],
-    ]
+    [("Other1", [(1, 1), (4, 3), (200, 200)]),],
 ]
 \end{minted}
 
@@ -72,7 +70,7 @@ rec.remove_population(pos)
 # rec is altered.
 
 rec.remove_locus_by_position(pos)
-#Removes a locus by its position, pos is the locus position in
+# Removes a locus by its position, pos is the locus position in
 #  rec.loci_list, remember that it starts on position 0.
 #  rec is altered.
 
@@ -89,7 +87,7 @@ rec_loci = rec.split_in_loci()
 # The value is the GenePop record.
 # rec is not altered.
 
-rec_pops =  rec.split_in_pops(pop_names)
+rec_pops = rec.split_in_pops(pop_names)
 # Splits a record in populations, that is, for each population, it creates
 # a new record, with a single population and all loci.
 # The result is returned in a dictionary, being each key

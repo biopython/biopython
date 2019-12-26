@@ -8,7 +8,8 @@
 Currently this module only defines a single codon adaption index from
 Sharp & Li, Nucleic Acids Res. 1987.
 """
-
+# Turn black code style off
+# fmt: off
 
 SharpEcoliIndex = {
     "GCA": 0.586, "GCC": 0.122, "GCG": 0.424, "GCT": 1, "AGA": 0.004,
@@ -22,3 +23,6 @@ SharpEcoliIndex = {
     "AGT": 0.085, "TCA": 0.077, "TCC": 0.744, "TCG": 0.017, "TCT": 1,
     "ACA": 0.076, "ACC": 1, "ACG": 0.099, "ACT": 0.965, "TGG": 1, "TAC": 1,
     "TAT": 0.239, "GTA": 0.495, "GTC": 0.066, "GTG": 0.221, "GTT": 1}
+
+# Turn black code style on
+# fmt: on

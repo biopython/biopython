@@ -13,7 +13,6 @@ and MAST programs, as well as files in the TRANSFAC format.
 Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
-from __future__ import print_function
 
 from Bio._py3k import range
 
@@ -393,16 +392,25 @@ class Motif(object):
         alphabet = self.alphabet
         if self.instances is not None:
             instances = self.instances.reverse_complement()
-            res = Motif(instances=instances, alphabet=alphabet)
+            res = Motif(alphabet=alphabet, instances=instances)
         else:  # has counts
-            res = Motif(alphabet)
-            res.counts = {}
-            res.counts["A"] = self.counts["T"][::-1]
-            res.counts["T"] = self.counts["A"][::-1]
-            res.counts["G"] = self.counts["C"][::-1]
-            res.counts["C"] = self.counts["G"][::-1]
-            res.length = self.length
+            counts = {"A": self.counts["T"][::-1],
+                      "C": self.counts["G"][::-1],
+                      "G": self.counts["C"][::-1],
+                      "T": self.counts["A"][::-1],
+                      }
+            res = Motif(alphabet=alphabet, counts=counts)
         res.__mask = self.__mask[::-1]
+        res.background = {"A": self.background["T"],
+                          "C": self.background["G"],
+                          "G": self.background["C"],
+                          "T": self.background["A"],
+                          }
+        res.pseudocounts = {"A": self.pseudocounts["T"],
+                            "C": self.pseudocounts["G"],
+                            "G": self.pseudocounts["C"],
+                            "T": self.pseudocounts["A"],
+                            }
         return res
 
     @property
@@ -477,11 +485,11 @@ class Motif(object):
         """
         from Bio._py3k import urlopen, urlencode, Request
 
-        if self.alphabet == "ACDEFGHIKLMNPQRSTVWY":
+        if set(self.alphabet) == set("ACDEFGHIKLMNPQRSTVWY"):
             alpha = "alphabet_protein"
-        elif self.alphabet == "ACGU":
+        elif set(self.alphabet) == set("ACGU"):
             alpha = "alphabet_rna"
-        elif self.alphabet == "ACGT":
+        elif set(self.alphabet) == set("ACGT"):
             alpha = "alphabet_dna"
         else:
             alpha = "auto"

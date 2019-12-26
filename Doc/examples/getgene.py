@@ -33,17 +33,12 @@ To use from a python script::
 
 """
 
-from __future__ import print_function
 
 import os
 import re
 import string
 import sys
-
-try:
-    import gdbm  # Python 2
-except ImportError:
-    from dbm import gnu as gdbm  # Python 3
+from dbm import gnu as gdbm
 
 
 class DB_Index(object):
@@ -86,8 +81,10 @@ class DB_Index(object):
                         db[acc] = value
                         id, acc, start, stop = None, None, None, None
                     except Exception:
-                        print("AARRGGGG %d %d %s %s" %
-                              (start, stop, type(start), type(stop)))
+                        print(
+                            "AARRGGGG %d %d %s %s"
+                            % (start, stop, type(start), type(stop))
+                        )
                         print("%s %s" % (id, acc))
 
             db.close()

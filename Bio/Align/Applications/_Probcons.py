@@ -6,9 +6,6 @@
 # package.
 """Command line wrapper for the multiple alignment program PROBCONS."""
 
-from __future__ import print_function
-
-
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 

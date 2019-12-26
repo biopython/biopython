@@ -239,7 +239,6 @@ the docstring for the function via the help function, e.g.
 type ``help(pairwise2.align.localds)`` at the Python prompt.
 
 """  # noqa: W291
-from __future__ import print_function
 
 import warnings
 
@@ -1082,7 +1081,7 @@ class affine_penalty(object):
         if open > 0 or extend > 0:
             raise ValueError("Gap penalties should be non-positive.")
         if not penalize_extend_when_opening and (extend < open):
-            raise ValueError("Gap opening penalty should be higher than " +
+            raise ValueError("Gap opening penalty should be higher than "
                              "gap extension penalty (or equal)")
         self.open, self.extend = open, extend
         self.penalize_extend_when_opening = penalize_extend_when_opening
@@ -1146,7 +1145,7 @@ def format_alignment(align1, align2, score, begin, end,
     """
     align_begin = begin
     align_end = end
-    start1 = start2 = ''
+    start1 = start2 = ""
     start_m = begin  # Begin of match line (how many spaces to include)
     # For local alignments:
     if not full_sequences and (begin != 0 or end != len(align1)):
@@ -1178,7 +1177,7 @@ def format_alignment(align1, align2, score, begin, end,
         s1_line.append("{:^{width}}".format(a, width=m_len))
         s2_line.append("{:^{width}}".format(b, width=m_len))
         if full_sequences and (n < align_begin or n >= align_end):
-            m_line.append("{:^{width}}".format(' ', width=m_len))  # space
+            m_line.append("{:^{width}}".format(" ", width=m_len))  # space
             continue
         if a == b:
             m_line.append("{:^{width}}".format("|", width=m_len))  # match
@@ -1203,7 +1202,7 @@ _python_rint = rint
 try:
     from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
 except ImportError:
-    warnings.warn("Import of C module failed. Falling back to pure Python " +
+    warnings.warn("Import of C module failed. Falling back to pure Python "
                   "implementation. This may be slooow...", BiopythonWarning)
 
 if __name__ == "__main__":

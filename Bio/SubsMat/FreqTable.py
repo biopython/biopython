@@ -53,6 +53,7 @@ Example of use:
 """
 
 from Bio import Alphabet
+
 COUNT = 1
 FREQ = 2
 

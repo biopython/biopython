@@ -1,10 +1,10 @@
+
 # Copyright 2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """Unittests for the Seq objects."""
-from __future__ import print_function
 
 import warnings
 import unittest
@@ -103,6 +103,12 @@ class StringMethodTests(unittest.TestCase):
     def _test_method(self, method_name, pre_comp_function=None,
                      start_end=False):
         """Check this method matches the plain string's method."""
+        if pre_comp_function is None:
+            # Define a no-op function:
+
+            def pre_comp_function(x):
+                return x
+
         self.assertTrue(isinstance(method_name, str))
         for example1 in self._examples:
             if not hasattr(example1, method_name):
@@ -114,15 +120,21 @@ class StringMethodTests(unittest.TestCase):
                 if not hasattr(example2, method_name):
                     # e.g. MutableSeq does not support find
                     continue
+                if method_name in ("index", "rindex") and isinstance(example1, MutableSeq) and len(example2) > 1:
+                    # MutableSeq index only supports single entries
+                    continue
                 str2 = str(example2)
 
-                i = getattr(example1, method_name)(str2)
-                j = getattr(str1, method_name)(str2)
-                if pre_comp_function:
-                    i = pre_comp_function(i)
-                    j = pre_comp_function(j)
+                try:
+                    i = pre_comp_function(getattr(example1, method_name)(str2))
+                except ValueError:
+                    i = ValueError
+                try:
+                    j = pre_comp_function(getattr(str1, method_name)(str2))
+                except ValueError:
+                    j = ValueError
                 if i != j:
-                    raise ValueError("%s.%s(%s) = %i, not %i"
+                    raise ValueError("%s.%s(%s) = %r, not %r"
                                      % (repr(example1),
                                         method_name,
                                         repr(str2),
@@ -130,13 +142,16 @@ class StringMethodTests(unittest.TestCase):
                                         j))
 
                 try:
-                    i = getattr(example1, method_name)(example2)
-                    j = getattr(str1, method_name)(str2)
-                    if pre_comp_function:
-                        i = pre_comp_function(i)
-                        j = pre_comp_function(j)
+                    try:
+                        i = pre_comp_function(getattr(example1, method_name)(example2))
+                    except ValueError:
+                        i = ValueError
+                    try:
+                        j = pre_comp_function(getattr(str1, method_name)(str2))
+                    except ValueError:
+                        j = ValueError
                     if i != j:
-                        raise ValueError("%s.%s(%s) = %i, not %i"
+                        raise ValueError("%s.%s(%s) = %r, not %r"
                                          % (repr(example1),
                                             method_name,
                                             repr(example2),
@@ -147,14 +162,20 @@ class StringMethodTests(unittest.TestCase):
                     pass
 
                 if start_end:
+                    if isinstance(example1, MutableSeq):
+                        # Does not support start/end arguments
+                        continue
                     for start in self._start_end_values:
-                        i = getattr(example1, method_name)(str2, start)
-                        j = getattr(str1, method_name)(str2, start)
-                        if pre_comp_function:
-                            i = pre_comp_function(i)
-                            j = pre_comp_function(j)
+                        try:
+                            i = pre_comp_function(getattr(example1, method_name)(str2, start))
+                        except ValueError:
+                            i = ValueError
+                        try:
+                            j = pre_comp_function(getattr(str1, method_name)(str2, start))
+                        except ValueError:
+                            j = ValueError
                         if i != j:
-                            raise ValueError("%s.%s(%s, %i) = %i, not %i"
+                            raise ValueError("%s.%s(%s, %i) = %r, not %r"
                                              % (repr(example1),
                                                 method_name,
                                                 repr(str2),
@@ -163,13 +184,16 @@ class StringMethodTests(unittest.TestCase):
                                                 j))
 
                         for end in self._start_end_values:
-                            i = getattr(example1, method_name)(str2, start, end)
-                            j = getattr(str1, method_name)(str2, start, end)
-                            if pre_comp_function:
-                                i = pre_comp_function(i)
-                                j = pre_comp_function(j)
+                            try:
+                                i = pre_comp_function(getattr(example1, method_name)(str2, start, end))
+                            except ValueError:
+                                i = ValueError
+                            try:
+                                j = pre_comp_function(getattr(str1, method_name)(str2, start, end))
+                            except ValueError:
+                                j = ValueError
                             if i != j:
-                                raise ValueError("%s.%s(%s, %i, %i) = %i, not %i"
+                                raise ValueError("%s.%s(%s, %i, %i) = %r, not %r"
                                                  % (repr(example1),
                                                     method_name,
                                                     repr(str2),
@@ -350,6 +374,14 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
 
+    def test_str_index(self):
+        """Check matches the python string index method."""
+        self._test_method("index", start_end=True)
+
+    def test_str_rindex(self):
+        """Check matches the python string rindex method."""
+        self._test_method("rindex", start_end=True)
+
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
@@ -446,6 +478,15 @@ class StringMethodTests(unittest.TestCase):
                 continue
             str1 = str(example1)
             self.assertEqual(str(example1.lower()), str1.lower())
+
+    def test_str_encode(self):
+        """Check matches the python string encode method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            str1 = str(example1)
+            self.assertEqual(example1.encode("ascii"), str1.encode("ascii"))
+            self.assertEqual(example1.encode(), str1.encode())
 
     def test_str_hash(self):
         for example1 in self._examples:

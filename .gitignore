@@ -3,7 +3,7 @@ build
 
 #Ignore the distribution directory
 dist
- 
+
 #Ignore backup files from some Unix editors,
 \#*.py\#
 *~
@@ -21,11 +21,10 @@ dist
 
 #Ignore hidden files from Dolphin window manager
 .directory
- 
+
 #Ignore all compiled python files (e.g. from running the unit tests):
 *.pyc
 *.pyo
-*.py{}
 *.py-e
 
 #Ignore all Jython class files (present if using Jython)
@@ -42,7 +41,7 @@ MANIFEST
 
 #Ignore potential directory created during install:
 biopython.egg-info
- 
+
 #The graphics unit tests produce output files for human inspection
 #(at the time of writing, only PDF and PNG files are created)
 Tests/Graphics/*.pdf
@@ -60,6 +59,8 @@ Tests/biosql.ini
 Tests/BioSQL/temp_sqlite.db
 Tests/BioSQL/temp_sqlite.db-journal
 Tests/Cluster/cyano_result*
+# Created by Tests/test_BWA_tool.py:
+Tests/out.bam
 
 #TODO - The Tutorial doctests should leave example files after
 #running Tests/test_Tutorial.py
@@ -102,12 +103,19 @@ Doc/hevea.sty
 Doc/*/hevea.sty
 Doc/*/*/hevea.sty
 
+#Ignore artifacts of building the docs
+_build
+Doc/api/*.rst
+
 #Ignore IntelliJ IDEA directory and project files
 .idea
 *.iml
 
-#Ignore unittest cache dirctory
+#Ignore unittest cache directory
 .cache/
 
 #Ignore vscode directory
 .vscode
+
+#Ignore mypy cache directory
+.mypy_cache

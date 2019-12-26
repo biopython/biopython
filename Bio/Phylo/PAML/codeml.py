@@ -1,14 +1,15 @@
 # Copyright (C) 2011, 2018 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes for the support of CODEML.
 
 Maximum likelihood analysis using codon substitution models.
 """
 
-from __future__ import print_function
 
 import os.path
 from ._paml import Paml
@@ -22,8 +23,7 @@ class CodemlError(EnvironmentError):
 class Codeml(Paml):
     """An interface to CODEML, part of the PAML package."""
 
-    def __init__(self, alignment=None, tree=None, working_dir=None,
-                 out_file=None):
+    def __init__(self, alignment=None, tree=None, working_dir=None, out_file=None):
         """Initialize the codeml instance.
 
         The user may optionally pass in strings specifying the locations
@@ -38,35 +38,37 @@ class Codeml(Paml):
                 raise IOError("The specified tree file does not exist.")
         self.tree = tree
         self.ctl_file = "codeml.ctl"
-        self._options = {"noisy": None,
-                         "verbose": None,
-                         "runmode": None,
-                         "seqtype": None,
-                         "CodonFreq": None,
-                         "ndata": None,
-                         "clock": None,
-                         "aaDist": None,
-                         "aaRatefile": None,
-                         "model": None,
-                         "NSsites": None,
-                         "icode": None,
-                         "Mgene": None,
-                         "fix_kappa": None,
-                         "kappa": None,
-                         "fix_omega": None,
-                         "omega": None,
-                         "fix_alpha": None,
-                         "alpha": None,
-                         "Malpha": None,
-                         "ncatG": None,
-                         "getSE": None,
-                         "RateAncestor": None,
-                         "Small_Diff": None,
-                         "cleandata": None,
-                         "fix_blength": None,
-                         "method": None,
-                         "rho": None,
-                         "fix_rho": None}
+        self._options = {
+            "noisy": None,
+            "verbose": None,
+            "runmode": None,
+            "seqtype": None,
+            "CodonFreq": None,
+            "ndata": None,
+            "clock": None,
+            "aaDist": None,
+            "aaRatefile": None,
+            "model": None,
+            "NSsites": None,
+            "icode": None,
+            "Mgene": None,
+            "fix_kappa": None,
+            "kappa": None,
+            "fix_omega": None,
+            "omega": None,
+            "fix_alpha": None,
+            "alpha": None,
+            "Malpha": None,
+            "ncatG": None,
+            "getSE": None,
+            "RateAncestor": None,
+            "Small_Diff": None,
+            "cleandata": None,
+            "fix_blength": None,
+            "method": None,
+            "rho": None,
+            "fix_rho": None,
+        }
 
     def write_ctl_file(self):
         """Dynamically build a CODEML control file from the options.
@@ -109,7 +111,8 @@ class Codeml(Paml):
                     if uncommented != "":
                         if "=" not in uncommented:
                             raise AttributeError(
-                                "Malformed line in control file:\n%r" % line)
+                                "Malformed line in control file:\n%r" % line
+                            )
                         (option, value) = uncommented.split("=", 1)
                         option = option.strip()
                         value = value.strip()
@@ -126,7 +129,8 @@ class Codeml(Paml):
                                     site_classes[n] = int(site_classes[n])
                                 except ValueError:
                                     raise TypeError(
-                                        "Invalid site class: %s" % site_classes[n])
+                                        "Invalid site class: %s" % site_classes[n]
+                                    )
                             temp_options["NSsites"] = site_classes
                         elif option not in self._options:
                             raise KeyError("Invalid option: %s" % option)
@@ -198,12 +202,12 @@ def read(results_file):
     with open(results_file) as handle:
         lines = handle.readlines()
     if not lines:
-        raise ValueError("Empty results file.  Did CODEML exit successfully?  "
-                         "Run 'Codeml.run()' with 'verbose=True'.")
-    (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
-                                                                      results)
-    results = _parse_codeml.parse_nssites(lines, results, multi_models,
-                                          multi_genes)
+        raise ValueError(
+            "Empty results file.  Did CODEML exit successfully?  "
+            "Run 'Codeml.run()' with 'verbose=True'."
+        )
+    (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines, results)
+    results = _parse_codeml.parse_nssites(lines, results, multi_models, multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
     if not results:

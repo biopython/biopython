@@ -1,11 +1,13 @@
 # Copyright 2014 Joe Cora.
 # Revisions copyright 2017 Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Objects to represent NEXUS standard data type matrix coding."""
-from __future__ import print_function
 
 import sys
 
@@ -30,7 +32,9 @@ class StandardData(object):
 
         # Enforce string data requirement
         if not isinstance(data, str):
-            raise NexusError("The coding data given to a StandardData object should be a string")
+            raise NexusError(
+                "The coding data given to a StandardData object should be a string"
+            )
 
         # Transfer each coding to a position within a sequence
         multi_coding = False
@@ -66,9 +70,10 @@ class StandardData(object):
                     coding_list["t"] = "uncer"
                     continue
                 elif coding in [")", "}"]:
-                    raise NexusError('Improper character "' + coding +
-                                     '" at position ' + pos +
-                                     " of a coding sequence.")
+                    raise NexusError(
+                        "Improper character %s at position %i of a coding sequence."
+                        % (coding, pos)
+                    )
                 else:
                     coding_list["d"].append(coding)
 
@@ -100,6 +105,7 @@ class StandardData(object):
             return return_coding
 
     if sys.version_info[0] < 3:
+
         def next(self):
             """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()

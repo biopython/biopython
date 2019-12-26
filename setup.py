@@ -22,7 +22,6 @@ mailing list and ask for help.  See:
 
 http://biopython.org/wiki/Mailing_lists
 """
-from __future__ import print_function
 
 import sys
 import os
@@ -35,15 +34,19 @@ try:
     from setuptools.command.build_ext import build_ext
     from setuptools import Extension
 except ImportError:
-    sys.exit("We need the Python library setuptools to be installed. "
-             "Try runnning: python -m ensurepip")
+    sys.exit(
+        "We need the Python library setuptools to be installed. "
+        "Try runnning: python -m ensurepip"
+    )
 
 if "bdist_wheel" in sys.argv:
     try:
         import wheel  # noqa: F401
     except ImportError:
-        sys.exit("We need both setuptools AND wheel packages installed "
-                 "for bdist_wheel to work. Try running: pip install wheel")
+        sys.exit(
+            "We need both setuptools AND wheel packages installed "
+            "for bdist_wheel to work. Try running: pip install wheel"
+        )
 
 _CHECKED = None
 
@@ -84,6 +87,7 @@ def osx_clang_fix():
         from commands import getoutput
     from distutils.ccompiler import new_compiler
     from distutils.sysconfig import customize_compiler
+
     # The compiler test should be made on the actual compiler that'll be used
     compiler = new_compiler()
     customize_compiler(compiler)
@@ -103,6 +107,7 @@ osx_clang_fix()
 def is_pypy():
     """Check if running under the PyPy implementation of Python."""
     import platform
+
     try:
         if platform.python_implementation() == "PyPy":
             return True
@@ -112,45 +117,13 @@ def is_pypy():
     return False
 
 
-def is_jython():
-    """Check if running under the Jython implementation of Python."""
-    import platform
-    try:
-        if platform.python_implementation() == "Jython":
-            return True
-    except AttributeError:
-        # This was missing prior to ~ Jython 2.7.0
-        pass
-    # Fall back which will work with older Jython:
-    return os.name == "java"
-
-
-def is_ironpython():
-    """Check if running under the IronPython implementation of Python."""
-    return sys.platform == "cli"
-    # TODO - Use platform as in Pypy test?
-
-
 # Make sure we have the right Python version.
-if sys.version_info[:2] < (2, 7):
-    sys.stderr.write("Biopython requires Python 2.7, or Python 3.5 or later. "
-                     "Python %d.%d detected.\n" % sys.version_info[:2])
-    sys.exit(1)
-elif sys.version_info[0] < 3:
+if sys.version_info[:2] < (3, 6):
     sys.stderr.write(
-        "=" * 66 +
-        "\nWARNING: Biopython will drop support for Python 2.7 in early 2020.\n" +
-        "=" * 66 + "\n"
+        "Biopython requires Python 3.6 or later. "
+        "Python %d.%d detected.\n" % sys.version_info[:2]
     )
-elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 5):
-    sys.stderr.write("Biopython requires Python 3.5 or later (or Python 2.7). "
-                     "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-# if sys.version_info[:2] == (3, 5):
-#     print("WARNING: Biopython support for Python 3.5 is now deprecated.")
-
-if is_jython():
-    sys.stderr.write("WARNING: Biopython support for Jython is now deprecated.\n")
 
 
 def check_dependencies_once():
@@ -189,12 +162,6 @@ class install_biopython(install):
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
-        if sys.version_info[0] < 3:
-            sys.stderr.write(
-                "=" * 66 +
-                "\nWARNING: Biopython will drop support for Python 2.7 in early 2020.\n" +
-                "=" * 66 + "\n"
-            )
 
 
 class build_py_biopython(build_py):
@@ -204,16 +171,6 @@ class build_py_biopython(build_py):
         """Run the build."""
         if not check_dependencies_once():
             return
-        if is_jython() and "Bio.Restriction" in self.packages:
-            # Evil hack to work on Jython 2.7 to avoid
-            # java.lang.RuntimeException: Method code too large!
-            # from Bio/Restriction/Restriction_Dictionary.py
-            self.packages.remove("Bio.Restriction")
-        # Add software that requires Numpy to be installed.
-        if is_jython() or is_ironpython():
-            pass
-        else:
-            self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
 
@@ -258,6 +215,7 @@ class test_biopython(Command):
         os.chdir("Tests")
         sys.path.insert(0, "")
         import run_tests
+
         if self.offline:
             run_tests.main(["--offline"])
         else:
@@ -279,25 +237,22 @@ def can_import(module_name):
 # (and likely will pin specific version numbers), using
 # setup.py's install_requires is preferred for a library
 # (and should try not to be overly narrow with versions).
-REQUIRES = [
-    "numpy",
-]
-
-if is_jython() or is_ironpython():
-    REQUIRES.remove("numpy")
-
+REQUIRES = ["numpy"]
 
 # --- set up the packages we are going to install
 # standard biopython packages
 PACKAGES = [
     "Bio",
+    "Bio.Affy",
     "Bio.Align",
     "Bio.Align.Applications",
+    "Bio.Align.substitution_matrices",
     "Bio.AlignIO",
     "Bio.Alphabet",
     "Bio.Application",
     "Bio.Blast",
     "Bio.CAPS",
+    "Bio.Cluster",
     "Bio.codonalign",
     "Bio.Compass",
     "Bio.Crystal",
@@ -311,6 +266,7 @@ PACKAGES = [
     "Bio.Graphics",
     "Bio.Graphics.GenomeDiagram",
     "Bio.HMM",
+    "Bio.KDTree",
     "Bio.KEGG",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
@@ -327,6 +283,7 @@ PACKAGES = [
     "Bio.Pathway",
     "Bio.Pathway.Rep",
     "Bio.PDB",
+    "Bio.phenotype",
     "Bio.PopGen",
     "Bio.PopGen.GenePop",
     "Bio.Restriction",
@@ -358,55 +315,35 @@ PACKAGES = [
     "Bio._py3k",
     # Other top level packages,
     "BioSQL",
-    ]
-
-if is_jython():
-    # Evil hack to work on Jython 2.7
-    # This is to avoid java.lang.RuntimeException: Method code too large!
-    # from Bio/Restriction/Restriction_Dictionary.py
-    PACKAGES.remove("Bio.Restriction")
-
-
-# packages that require Numeric Python
-NUMPY_PACKAGES = [
-    "Bio.Affy",
-    "Bio.Cluster",
-    "Bio.KDTree",
-    "Bio.phenotype",
 ]
 
-if is_jython():
-    # Jython doesn't support C extensions
-    EXTENSIONS = []
-elif is_ironpython():
-    # Skip C extensions for now
-    EXTENSIONS = []
-else:
-    EXTENSIONS = [
-        Extension("Bio.Align._aligners",
-                  ["Bio/Align/_aligners.c"]),
-        Extension("Bio.cpairwise2",
-                  ["Bio/cpairwise2module.c"]),
-        Extension("Bio.Nexus.cnexus",
-                  ["Bio/Nexus/cnexus.c"]),
-        Extension("Bio.PDB.QCPSuperimposer.qcprotmodule",
-                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"]),
-        Extension("Bio.motifs._pwm",
-                  ["Bio/motifs/_pwm.c"]),
-        Extension("Bio.Cluster._cluster",
-                  ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]),
-        Extension("Bio.PDB.kdtrees",
-                  ["Bio/PDB/kdtrees.c"]),
-        Extension("Bio.KDTree._CKDTree",
-                  ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]),
+EXTENSIONS = [
+    Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
+    Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
+    Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
+    Extension(
+        "Bio.PDB.QCPSuperimposer.qcprotmodule",
+        ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+    ),
+    Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
+    Extension(
+        "Bio.Cluster._cluster",
+        ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
+    ),
+    Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension(
+        "Bio.KDTree._CKDTree", ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]
+    ),
+]
+if not is_pypy():
+    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
+    EXTENSIONS.extend(
+        [
+            Extension(
+                "Bio.trie", ["Bio/triemodule.c", "Bio/trie.c"], include_dirs=["Bio"]
+            )
         ]
-    if not is_pypy():
-        # Bio.trie has a problem under PyPy2 v5.6 and 5.7
-        EXTENSIONS.extend([
-            Extension("Bio.trie",
-                      ["Bio/triemodule.c", "Bio/trie.c"],
-                      include_dirs=["Bio"]),
-            ])
+    )
 
 
 # We now define the Biopython version number in Bio/__init__.py
@@ -414,7 +351,7 @@ else:
 # tell us the version of Biopython already installed (if any).
 __version__ = "Undefined"
 for line in open("Bio/__init__.py"):
-    if (line.startswith("__version__")):
+    if line.startswith("__version__"):
         exec(line.strip())
 
 # We now load in our reStructuredText README.rst file to pass
@@ -433,43 +370,42 @@ with open("README.rst", "rb") as handle:
     # on both Python 2 and 3.
     readme_rst = handle.read().decode("ascii")
 
-setup(name="biopython",
-      version=__version__,
-      author="The Biopython Contributors",
-      author_email="biopython@biopython.org",
-      url="https://biopython.org/",
-      description="Freely available tools for computational molecular biology.",
-      long_description=readme_rst,
-      classifiers=[
-          "Development Status :: 5 - Production/Stable",
-          "Intended Audience :: Developers",
-          "Intended Audience :: Science/Research",
-          "License :: Freely Distributable",
-          # Technically the "Biopython License Agreement" is not OSI approved,
-          # but is almost https://opensource.org/licenses/HPND so might put:
-          # 'License :: OSI Approved',
-          # To resolve this we are moving to dual-licensing with 3-clause BSD:
-          # 'License :: OSI Approved :: BSD License',
-          "Operating System :: OS Independent",
-          "Programming Language :: Python",
-          "Programming Language :: Python :: 2",
-          "Programming Language :: Python :: 2.7",
-          "Programming Language :: Python :: 3",
-          "Programming Language :: Python :: 3.4",
-          "Programming Language :: Python :: 3.5",
-          "Programming Language :: Python :: 3.6",
-          "Topic :: Scientific/Engineering",
-          "Topic :: Scientific/Engineering :: Bio-Informatics",
-          "Topic :: Software Development :: Libraries :: Python Modules",
-      ],
-      cmdclass={
-          "install": install_biopython,
-          "build_py": build_py_biopython,
-          "build_ext": build_ext_biopython,
-          "test": test_biopython,
-      },
-      packages=PACKAGES,
-      ext_modules=EXTENSIONS,
-      include_package_data=True,  # done via MANIFEST.in under setuptools
-      install_requires=REQUIRES,
-      )
+setup(
+    name="biopython",
+    version=__version__,
+    author="The Biopython Contributors",
+    author_email="biopython@biopython.org",
+    url="https://biopython.org/",
+    description="Freely available tools for computational molecular biology.",
+    long_description=readme_rst,
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
+        "License :: Freely Distributable",
+        # Technically the "Biopython License Agreement" is not OSI approved,
+        # but is almost https://opensource.org/licenses/HPND so might put:
+        # 'License :: OSI Approved',
+        # To resolve this we are moving to dual-licensing with 3-clause BSD:
+        # 'License :: OSI Approved :: BSD License',
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
+    cmdclass={
+        "install": install_biopython,
+        "build_py": build_py_biopython,
+        "build_ext": build_ext_biopython,
+        "test": test_biopython,
+    },
+    packages=PACKAGES,
+    ext_modules=EXTENSIONS,
+    include_package_data=True,  # done via MANIFEST.in under setuptools
+    install_requires=REQUIRES,
+)

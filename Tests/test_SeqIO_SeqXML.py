@@ -12,18 +12,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import StringIO
 
-test_files = {
-    "dna": ["SeqXML/dna_example.xml", 4],
-    "rna": ["SeqXML/rna_example.xml", 5],
-    "protein": ["SeqXML/protein_example.xml", 5],
-    "globalSpecies": ["SeqXML/global_species_example.xml", 2],
-}
-
-corrupt_files = [
-    "SeqXML/corrupt_example1.xml",
-    "SeqXML/corrupt_example2.xml",
-]
-
 
 def assert_equal_records(testCase, record_a, record_b):
     testCase.assertEqual(record_a.id, record_b.id)
@@ -38,9 +26,14 @@ class TestSimpleRead(unittest.TestCase):
 
     def test_check_SeqIO(self):
         """Files readable using parser via SeqIO."""
-        for key in test_files:
-            records = list(SeqIO.parse(test_files[key][0], "seqxml"))
-            self.assertEqual(len(records), test_files[key][1])
+        records = list(SeqIO.parse("SeqXML/dna_example.xml", "seqxml"))
+        self.assertEqual(len(records), 4)
+        records = list(SeqIO.parse("SeqXML/rna_example.xml", "seqxml"))
+        self.assertEqual(len(records), 5)
+        records = list(SeqIO.parse("SeqXML/protein_example.xml", "seqxml"))
+        self.assertEqual(len(records), 5)
+        records = list(SeqIO.parse("SeqXML/global_species_example.xml", "seqxml"))
+        self.assertEqual(len(records), 2)
 
 
 class TestDetailedRead(unittest.TestCase):
@@ -48,8 +41,10 @@ class TestDetailedRead(unittest.TestCase):
     records = {}
 
     def setUp(self):
-        for key in test_files:
-            self.records[key] = list(SeqIO.parse(test_files[key][0], "seqxml"))
+        self.records["dna"] = list(SeqIO.parse("SeqXML/dna_example.xml", "seqxml"))
+        self.records["rna"] = list(SeqIO.parse("SeqXML/rna_example.xml", "seqxml"))
+        self.records["protein"] = list(SeqIO.parse("SeqXML/protein_example.xml", "seqxml"))
+        self.records["globalSpecies"] = list(SeqIO.parse("SeqXML/global_species_example.xml", "seqxml"))
 
     def test_special_characters_desc(self):
         """Read special XML characters in description."""
@@ -110,26 +105,59 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records["rna"][4].description, SeqRecord(id="", seq=Seq("")).description)
 
 
+class TestReadHeader(unittest.TestCase):
+
+    def test_check_dna_header(self):
+        """Check if the header information is parsed."""
+        records = SeqIO.parse("SeqXML/dna_example.xml", "seqxml")
+        self.assertEqual(records.source, "Ensembl")
+        self.assertEqual(records.sourceVersion, "56")
+        self.assertEqual(records.seqXMLversion, "0.4")
+
+    def test_check_rna_header(self):
+        """Check if the header information is parsed."""
+        records = SeqIO.parse("SeqXML/rna_example.xml", "seqxml")
+        self.assertEqual(records.source, "Ensembl")
+        self.assertEqual(records.sourceVersion, "56")
+        self.assertEqual(records.seqXMLversion, "0.3")
+
+    def test_check_protein_header(self):
+        """Check if the header information is parsed."""
+        records = SeqIO.parse("SeqXML/protein_example.xml", "seqxml")
+        self.assertEqual(records.source, "Ensembl")
+        self.assertEqual(records.sourceVersion, "56")
+        self.assertEqual(records.seqXMLversion, "0.4")
+
+    def test_check_global_species_example_header(self):
+        """Check if the header information is parsed."""
+        records = SeqIO.parse("SeqXML/global_species_example.xml", "seqxml")
+        self.assertEqual(records.speciesName, "Mus musculus")
+        self.assertEqual(records.ncbiTaxID, "10090")
+        self.assertEqual(records.source, "Ensembl")
+        self.assertEqual(records.sourceVersion, "56")
+        self.assertEqual(records.seqXMLversion, "0.4")
+
+
 class TestReadAndWrite(unittest.TestCase):
 
     def test_read_write_rna(self):
         """Read and write RNA."""
-        read1_records = list(SeqIO.parse(test_files["rna"][0], "seqxml"))
+        read1_records = list(SeqIO.parse("SeqXML/rna_example.xml", "seqxml"))
         self._write_parse_and_compare(read1_records)
 
     def test_read_write_dna(self):
         """Read and write DNA."""
-        read1_records = list(SeqIO.parse(test_files["dna"][0], "seqxml"))
+        read1_records = list(SeqIO.parse("SeqXML/dna_example.xml", "seqxml"))
         self._write_parse_and_compare(read1_records)
 
     def test_read_write_protein(self):
         """Read and write protein."""
-        read1_records = list(SeqIO.parse(test_files["protein"][0], "seqxml"))
+        read1_records = list(SeqIO.parse("SeqXML/protein_example.xml", "seqxml"))
         self._write_parse_and_compare(read1_records)
 
     def test_read_write_globalSpecies(self):
         """Read and write global species."""
-        read1_records = list(SeqIO.parse(test_files["globalSpecies"][0], "seqxml"))
+        read1_records = list(SeqIO.parse("SeqXML/global_species_example.xml", "seqxml"))
         self._write_parse_and_compare(read1_records)
 
     def _write_parse_and_compare(self, read1_records):
@@ -177,9 +205,17 @@ class TestReadCorruptFiles(unittest.TestCase):
 
     def test_for_errors(self):
         """Handling of corrupt files."""
-        for filename in corrupt_files:
-            iterator = SeqIO.parse(filename, "seqxml")
-            self.assertRaises(ValueError, next, iterator)
+        # SeqIO.parse reads the file in blocks until it finds the seqXML
+        # element with global information such as the source and sourceVersion.
+        # Since one block is likely large enough to cover the first few
+        # entries in the file, the ValueError may be raised after we call
+        # SeqIO.parse, before we start iterating over the file.
+        def f(path):
+            records = SeqIO.parse(path, "seqxml")
+            for record in records:
+                pass
+        self.assertRaises(ValueError, f, "SeqXML/corrupt_example1.xml")
+        self.assertRaises(ValueError, f, "SeqXML/corrupt_example2.xml")
 
 
 if __name__ == "__main__":

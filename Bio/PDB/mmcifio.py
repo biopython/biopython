@@ -107,7 +107,9 @@ class MMCIFIO(StructureIO):
         elif hasattr(self, "dic"):
             self._save_dict(fp)
         else:
-            raise ValueError("Use set_structure or set_dict to set a structure or dictionary to write out")
+            raise ValueError(
+                "Use set_structure or set_dict to set a structure or dictionary to write out"
+            )
         if close_file:
             fp.close()
 
@@ -152,10 +154,17 @@ class MMCIFIO(StructureIO):
             # Check the mmCIF dictionary has consistent list sizes
             for i in key_list:
                 val = self.dic[key + "." + i]
-                if (isinstance(sample_val, list) and (isinstance(val, str) or len(val) != n_vals)) or (isinstance(sample_val, str) and isinstance(val, list)):
-                    raise ValueError("Inconsistent list sizes in mmCIF dictionary: " + key + "." + i)
+                if (
+                    isinstance(sample_val, list)
+                    and (isinstance(val, str) or len(val) != n_vals)
+                ) or (isinstance(sample_val, str) and isinstance(val, list)):
+                    raise ValueError(
+                        "Inconsistent list sizes in mmCIF dictionary: " + key + "." + i
+                    )
             # If the value is a single value, write as key-value pairs
-            if isinstance(sample_val, str) or (isinstance(sample_val, list) and len(sample_val) == 1):
+            if isinstance(sample_val, str) or (
+                isinstance(sample_val, list) and len(sample_val) == 1
+            ):
                 m = 0
                 # Find the maximum key length
                 for i in key_list:
@@ -167,7 +176,11 @@ class MMCIFIO(StructureIO):
                         value_no_list = self.dic[key + "." + i]
                     else:
                         value_no_list = self.dic[key + "." + i][0]
-                    out_file.write("{k: <{width}}".format(k=key + "." + i, width=len(key) + m + 4) + self._format_mmcif_col(value_no_list, len(value_no_list)) + "\n")
+                    out_file.write(
+                        "{k: <{width}}".format(k=key + "." + i, width=len(key) + m + 4)
+                        + self._format_mmcif_col(value_no_list, len(value_no_list))
+                        + "\n"
+                    )
             # If the value is more than one value, write as keys then a value table
             elif isinstance(sample_val, list):
                 out_file.write("loop_\n")
@@ -179,7 +192,9 @@ class MMCIFIO(StructureIO):
                     for val in self.dic[key + "." + i]:
                         len_val = len(val)
                         # If the value requires quoting it will add 2 characters
-                        if self._requires_quote(val) and not self._requires_newline(val):
+                        if self._requires_quote(val) and not self._requires_newline(
+                            val
+                        ):
                             len_val += 2
                         if len_val > col_widths[i]:
                             col_widths[i] = len_val
@@ -188,10 +203,16 @@ class MMCIFIO(StructureIO):
                 # Write the values as rows
                 for i in range(n_vals):
                     for col in key_list:
-                        out_file.write(self._format_mmcif_col(self.dic[key + "." + col][i], col_widths[col] + 1))
+                        out_file.write(
+                            self._format_mmcif_col(
+                                self.dic[key + "." + col][i], col_widths[col] + 1
+                            )
+                        )
                     out_file.write("\n")
             else:
-                raise ValueError("Invalid type in mmCIF dictionary: " + str(type(sample_val)))
+                raise ValueError(
+                    "Invalid type in mmCIF dictionary: " + str(type(sample_val))
+                )
             out_file.write("#\n")
 
     def _format_mmcif_col(self, val, col_width):
@@ -224,7 +245,15 @@ class MMCIFIO(StructureIO):
 
     def _requires_quote(self, val):
         # Technically the words should be case-insensitive
-        if " " in val or "'" in val or '"' in val or val[0] in ["_", "#", "$", "[", "]", ";"] or val.startswith("data_") or val.startswith("save_") or val in ["loop_", "stop_", "global_"]:
+        if (
+            " " in val
+            or "'" in val
+            or '"' in val
+            or val[0] in ["_", "#", "$", "[", "]", ";"]
+            or val.startswith("data_")
+            or val.startswith("save_")
+            or val in ["loop_", "stop_", "global_"]
+        ):
             return True
         else:
             return False
@@ -286,7 +315,9 @@ class MMCIFIO(StructureIO):
                     # Check if the molecule changes within the chain
                     # This will always increment for the first residue in a
                     # chain due to the starting values above
-                    if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
+                    if residue_type != prev_residue_type or (
+                        residue_type == "HETATM" and resname != prev_resname
+                    ):
                         entity_id += 1
                     prev_residue_type = residue_type
                     prev_resname = resname
@@ -303,12 +334,16 @@ class MMCIFIO(StructureIO):
                             if element == "":
                                 element = "?"
                             atom_dict["_atom_site.type_symbol"].append(element)
-                            atom_dict["_atom_site.label_atom_id"].append(atom.get_name().strip())
+                            atom_dict["_atom_site.label_atom_id"].append(
+                                atom.get_name().strip()
+                            )
                             altloc = atom.get_altloc()
                             if altloc == " ":
                                 altloc = "."
                             atom_dict["_atom_site.label_alt_id"].append(altloc)
-                            atom_dict["_atom_site.label_comp_id"].append(resname.strip())
+                            atom_dict["_atom_site.label_comp_id"].append(
+                                resname.strip()
+                            )
                             atom_dict["_atom_site.label_asym_id"].append(label_asym_id)
                             # The entity ID should be the same for similar chains
                             # However this is non-trivial to calculate so we write "?"
@@ -319,8 +354,12 @@ class MMCIFIO(StructureIO):
                             atom_dict["_atom_site.Cartn_x"].append("%.3f" % coord[0])
                             atom_dict["_atom_site.Cartn_y"].append("%.3f" % coord[1])
                             atom_dict["_atom_site.Cartn_z"].append("%.3f" % coord[2])
-                            atom_dict["_atom_site.occupancy"].append(str(atom.get_occupancy()))
-                            atom_dict["_atom_site.B_iso_or_equiv"].append(str(atom.get_bfactor()))
+                            atom_dict["_atom_site.occupancy"].append(
+                                str(atom.get_occupancy())
+                            )
+                            atom_dict["_atom_site.B_iso_or_equiv"].append(
+                                str(atom.get_bfactor())
+                            )
                             atom_dict["_atom_site.auth_seq_id"].append(resseq)
                             atom_dict["_atom_site.auth_asym_id"].append(chain_id)
                             atom_dict["_atom_site.pdbx_PDB_model_num"].append(model_n)

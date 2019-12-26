@@ -8,7 +8,6 @@
 """Tests for general functionality of the KGML modules."""
 
 # Builtins
-from __future__ import with_statement
 import os
 import unittest
 
@@ -134,7 +133,7 @@ class KGMLPathwayTest(unittest.TestCase):
         # modifying the reaction colours for each ortholog entry
         with open(p[1].infilename) as f:
             pathway = read(f)
-            orthologs = [e for e in pathway.orthologs]
+            orthologs = list(pathway.orthologs)
             # Use Biopython's ColorSpiral to generate colours
             cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
                              jitter=0.03)
@@ -168,7 +167,7 @@ class KGMLPathwayTest(unittest.TestCase):
         # modifying the alpha channel for each ortholog entry
         with open(p[1].infilename) as f:
             pathway = read(f)
-            orthologs = [e for e in pathway.orthologs]
+            orthologs = list(pathway.orthologs)
             # Use Biopython's ColorSpiral to generate colours
             cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
                              jitter=0.03)

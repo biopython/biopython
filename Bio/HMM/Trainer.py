@@ -106,6 +106,7 @@ class AbstractTrainer(object):
 
         See estimate_params for a description of the formula used for
         calculation.
+
         """
         # get an ordered list of all items
         all_ordered = sorted(counts)
@@ -130,8 +131,10 @@ class AbstractTrainer(object):
 
                 # keep adding while we have the same first letter or until
                 # we get to the end of the ordered list
-                while (cur_position < len(all_ordered) and
-                       all_ordered[cur_position][0] == cur_item[0]):
+                while (
+                    cur_position < len(all_ordered)
+                    and all_ordered[cur_position][0] == cur_item[0]
+                ):
                     cur_letter_counts += counts[all_ordered[cur_position]]
                     cur_position += 1
             # otherwise we've already got the total counts for this letter
@@ -172,8 +175,7 @@ class BaumWelchTrainer(AbstractTrainer):
         """
         AbstractTrainer.__init__(self, markov_model)
 
-    def train(self, training_seqs, stopping_criteria,
-              dp_method=ScaledDPAlgorithms):
+    def train(self, training_seqs, stopping_criteria, dp_method=ScaledDPAlgorithms):
         """Estimate the parameters using training sequences.
 
         The algorithm for this is taken from Durbin et al. p64, so this
@@ -209,20 +211,17 @@ class BaumWelchTrainer(AbstractTrainer):
                 all_probabilities.append(seq_prob)
 
                 # update the counts for transitions and emissions
-                transition_count = self.update_transitions(transition_count,
-                                                           training_seq,
-                                                           forward_var,
-                                                           backward_var,
-                                                           seq_prob)
-                emission_count = self.update_emissions(emission_count,
-                                                       training_seq,
-                                                       forward_var,
-                                                       backward_var,
-                                                       seq_prob)
+                transition_count = self.update_transitions(
+                    transition_count, training_seq, forward_var, backward_var, seq_prob
+                )
+                emission_count = self.update_emissions(
+                    emission_count, training_seq, forward_var, backward_var, seq_prob
+                )
 
             # update the markov model with the new probabilities
-            ml_transitions, ml_emissions = \
-                self.estimate_params(transition_count, emission_count)
+            ml_transitions, ml_emissions = self.estimate_params(
+                transition_count, emission_count
+            )
             self._markov_model.transition_prob = ml_transitions
             self._markov_model.emission_prob = ml_emissions
 
@@ -234,8 +233,9 @@ class BaumWelchTrainer(AbstractTrainer):
                 # XXX log likelihoods are negatives -- am I calculating
                 # the change properly, or should I use the negatives...
                 # I'm not sure at all if this is right.
-                log_likelihood_change = abs(abs(cur_log_likelihood) -
-                                            abs(prev_log_likelihood))
+                log_likelihood_change = abs(
+                    abs(cur_log_likelihood) - abs(prev_log_likelihood)
+                )
 
                 # check whether we have completed enough iterations to have
                 # a good estimation
@@ -248,8 +248,14 @@ class BaumWelchTrainer(AbstractTrainer):
 
         return self._markov_model
 
-    def update_transitions(self, transition_counts, training_seq,
-                           forward_vars, backward_vars, training_seq_prob):
+    def update_transitions(
+        self,
+        transition_counts,
+        training_seq,
+        forward_vars,
+        backward_vars,
+        training_seq_prob,
+    ):
         """Add the contribution of a new training sequence to the transitions.
 
         Arguments:
@@ -264,6 +270,7 @@ class BaumWelchTrainer(AbstractTrainer):
 
         This calculates A_{kl} (the estimated transition counts from state
         k to state l) using formula 3.20 in Durbin et al.
+
         """
         # set up the transition and emission probabilities we are using
         transitions = self._markov_model.transition_prob
@@ -287,17 +294,23 @@ class BaumWelchTrainer(AbstractTrainer):
                     # the probability of getting the emission at the next pos
                     emm_value = emissions[(l, training_seq.emissions[i + 1])]
 
-                    estimated_counts += (forward_value * trans_value *
-                                         emm_value * backward_value)
+                    estimated_counts += (
+                        forward_value * trans_value * emm_value * backward_value
+                    )
 
                 # update the transition approximation
-                transition_counts[(k, l)] += (float(estimated_counts) /
-                                              training_seq_prob)
+                transition_counts[(k, l)] += float(estimated_counts) / training_seq_prob
 
         return transition_counts
 
-    def update_emissions(self, emission_counts, training_seq,
-                         forward_vars, backward_vars, training_seq_prob):
+    def update_emissions(
+        self,
+        emission_counts,
+        training_seq,
+        forward_vars,
+        backward_vars,
+        training_seq_prob,
+    ):
         """Add the contribution of a new training sequence to the emissions.
 
         Arguments:
@@ -312,6 +325,7 @@ class BaumWelchTrainer(AbstractTrainer):
 
         This calculates E_{k}(b) (the estimated emission probability for
         emission letter b from state k) using formula 3.21 in Durbin et al.
+
         """
         # loop over the possible combinations of state path letters
         for k in training_seq.states.alphabet.letters:
@@ -324,12 +338,10 @@ class BaumWelchTrainer(AbstractTrainer):
                     # emission at the position is the same as b
                     if training_seq.emissions[i] == b:
                         # f_{k}(i) b_{k}(i)
-                        expected_times += (forward_vars[(k, i)] *
-                                           backward_vars[(k, i)])
+                        expected_times += forward_vars[(k, i)] * backward_vars[(k, i)]
 
                 # add to E_{k}(b)
-                emission_counts[(k, b)] += (float(expected_times) /
-                                            training_seq_prob)
+                emission_counts[(k, b)] += float(expected_times) / training_seq_prob
 
         return emission_counts
 
@@ -360,14 +372,15 @@ class KnownStateTrainer(AbstractTrainer):
         emission_counts = self._markov_model.get_blank_emissions()
 
         for training_seq in training_seqs:
-            emission_counts = self._count_emissions(training_seq,
-                                                    emission_counts)
-            transition_counts = self._count_transitions(training_seq.states,
-                                                        transition_counts)
+            emission_counts = self._count_emissions(training_seq, emission_counts)
+            transition_counts = self._count_transitions(
+                training_seq.states, transition_counts
+            )
 
         # update the markov model from the counts
-        ml_transitions, ml_emissions = self.estimate_params(transition_counts,
-                                                            emission_counts)
+        ml_transitions, ml_emissions = self.estimate_params(
+            transition_counts, emission_counts
+        )
         self._markov_model.transition_prob = ml_transitions
         self._markov_model.emission_prob = ml_emissions
 
@@ -389,8 +402,9 @@ class KnownStateTrainer(AbstractTrainer):
             try:
                 emission_counts[(cur_state, cur_emission)] += 1
             except KeyError:
-                raise KeyError("Unexpected emission (%s, %s)"
-                               % (cur_state, cur_emission))
+                raise KeyError(
+                    "Unexpected emission (%s, %s)" % (cur_state, cur_emission)
+                )
         return emission_counts
 
     def _count_transitions(self, state_seq, transition_counts):
@@ -409,7 +423,8 @@ class KnownStateTrainer(AbstractTrainer):
             try:
                 transition_counts[(cur_state, next_state)] += 1
             except KeyError:
-                raise KeyError("Unexpected transition (%s, %s)" %
-                               (cur_state, next_state))
+                raise KeyError(
+                    "Unexpected transition (%s, %s)" % (cur_state, next_state)
+                )
 
         return transition_counts

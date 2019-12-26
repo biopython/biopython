@@ -1,7 +1,9 @@
 # Copyright (C) 2013 by Ben Morris (ben@bendmorris.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes to support Comparative Data Analysis Ontology (CDAO)."""
 
@@ -2879,7 +2881,7 @@ root = ET.fromstring(cdao_owl)
 for node_type in "ObjectProperty", "Class", "DatatypeProperty":
     for element in root.findall("{http://www.w3.org/2002/07/owl#}%s" % node_type):
         obo = element.attrib[
-            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"].split("/")[-1]
-        cdao = element.find(
-            "{http://www.w3.org/2000/01/rdf-schema#}label").text
+            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"
+        ].split("/")[-1]
+        cdao = element.find("{http://www.w3.org/2000/01/rdf-schema#}label").text
         cdao_elements[cdao] = obo

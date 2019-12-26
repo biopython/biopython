@@ -5,7 +5,6 @@
 # package.
 """Bio.SearchIO object to model search results from a single query."""
 
-from __future__ import print_function
 
 from copy import deepcopy
 from itertools import chain
@@ -181,7 +180,7 @@ class QueryResult(_BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new QueryResult class
     # from this one
-    _NON_STICKY_ATTRS = ("_items", "__alt_hit_ids", )
+    _NON_STICKY_ATTRS = ("_items", "__alt_hit_ids")
 
     def __init__(self, hits=(), id=None, hit_key_function=None):
         """Initialize a QueryResult object.
@@ -392,8 +391,9 @@ class QueryResult(_BaseSearchObject):
         # case we want to use the hit's query ID as the query ID
         if qid is not None:
             if hqid != qid:
-                raise ValueError("Expected Hit with query ID %r, found %r "
-                                 "instead." % (qid, hqid))
+                raise ValueError(
+                    "Expected Hit with query ID %r, found %r instead." % (qid, hqid)
+                )
         else:
             self.id = hqid
         # same thing with descriptions
@@ -401,8 +401,10 @@ class QueryResult(_BaseSearchObject):
         hqdesc = hit.query_description
         if qdesc is not None:
             if hqdesc != qdesc:
-                raise ValueError("Expected Hit with query description %r, "
-                                 "found %r instead." % (qdesc, hqdesc))
+                raise ValueError(
+                    "Expected Hit with query description %r, found %r instead."
+                    % (qdesc, hqdesc)
+                )
         else:
             self.description = hqdesc
 
@@ -448,20 +450,21 @@ class QueryResult(_BaseSearchObject):
 
     # properties #
     id = optionalcascade("_id", "query_id", """QueryResult ID string""")
-    description = optionalcascade("_description", "query_description",
-                                  """QueryResult description""")
+    description = optionalcascade(
+        "_description", "query_description", """QueryResult description"""
+    )
 
     @property
     def hsps(self):
         """Access the HSP objects contained in the QueryResult."""
         return sorted(
-            (hsp for hsp in chain(*self.hits)),
-            key=lambda hsp: hsp.output_index)
+            (hsp for hsp in chain(*self.hits)), key=lambda hsp: hsp.output_index
+        )
 
     @property
     def fragments(self):
         """Access the HSPFragment objects contained in the QueryResult."""
-        return [frag for frag in chain(*self.hsps)]
+        return list(chain(*self.hsps))
 
     # public methods #
     def absorb(self, hit):
@@ -507,8 +510,10 @@ class QueryResult(_BaseSearchObject):
         if hit_key not in self and all(pid not in self for pid in hit.id_all[1:]):
             self[hit_key] = hit
         else:
-            raise ValueError("The ID or alternative IDs of Hit %r exists in "
-                             "this QueryResult." % hit_key)
+            raise ValueError(
+                "The ID or alternative IDs of Hit %r exists in this QueryResult."
+                % hit_key
+            )
 
     def hit_filter(self, func=None):
         """Create new QueryResult object whose Hit objects pass the filter function.
@@ -779,4 +784,5 @@ def _hit_key_func(hit):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

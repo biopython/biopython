@@ -24,10 +24,9 @@ class fff_rec(object):
         """Extract a subset of the record (treating it like an array)."""
         if isinstance(index, slice):
             return self.data[index]
-        elif (isinstance(index, tuple) or isinstance(index, list)) \
-        and len(index) == 2:
+        elif (isinstance(index, tuple) or isinstance(index, list)) and len(index) == 2:
             # Not sure if this is needed anymore:
-            return self.data[index[0]:index[1]]
+            return self.data[index[0] : index[1]]
         else:
             return self.data[index]
 

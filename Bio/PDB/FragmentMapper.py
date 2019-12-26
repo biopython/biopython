@@ -42,7 +42,6 @@ The library files can be found in directory 'fragment_data'.
 
 """
 
-from __future__ import print_function
 
 import numpy
 
@@ -299,7 +298,7 @@ class FragmentMapper(object):
                     else:
                         # fragment
                         index = i - self.edge
-                        assert(index >= 0)
+                        assert index >= 0
                         fd[res] = mflist[index]
             except PDBException as why:
                 if why == "CHAINBREAK":

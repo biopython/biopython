@@ -145,9 +145,11 @@ class Hmmer2TextParser(object):
             if self.line.find("no hits") > -1:
                 break
 
-            if self.line.startswith("Sequence") or \
-               self.line.startswith("Model") or \
-               self.line.startswith("-------- "):
+            if (
+                self.line.startswith("Sequence")
+                or self.line.startswith("Model")
+                or self.line.startswith("-------- ")
+            ):
                 continue
 
             fields = self.line.split()
@@ -173,17 +175,22 @@ class Hmmer2TextParser(object):
         # so store Hit objects separately first
         unordered_hits = {}
         while self.read_next():
-            if self.line.startswith("Alignments") or \
-               self.line.startswith("Histogram") or \
-               self.line == "//":
+            if (
+                self.line.startswith("Alignments")
+                or self.line.startswith("Histogram")
+                or self.line == "//"
+            ):
                 break
-            if self.line.startswith("Model") or \
-               self.line.startswith("Sequence") or \
-               self.line.startswith("--------"):
+            if (
+                self.line.startswith("Model")
+                or self.line.startswith("Sequence")
+                or self.line.startswith("--------")
+            ):
                 continue
 
-            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl,\
-                score, evalue = self.line.split()
+            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl, score, evalue = (
+                self.line.split()
+            )
 
             frag = HSPFragment(id_, self.qresult.id)
             frag.alphabet = generic_protein
@@ -271,7 +278,7 @@ class Hmmer2TextParser(object):
                 line_len = len(seq)
                 if not self.read_next(rstrip=False):
                     break
-                consensus += self.line[19 + pad:19 + pad + line_len]
+                consensus += self.line[19 + pad : 19 + pad + line_len]
                 # If there's no consensus sequence, hmmer2 doesn't
                 # bother to put spaces here, so add extra padding
                 extra_padding = len(hmmseq) - len(consensus)
@@ -356,4 +363,5 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

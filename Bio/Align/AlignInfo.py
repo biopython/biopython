@@ -11,7 +11,6 @@ functions which return summary type information about alignments should
 be put into classes in this module.
 """
 
-from __future__ import print_function
 
 import math
 import sys

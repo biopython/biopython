@@ -9,7 +9,6 @@
 # and *.aln where we have not requested an explicit name?
 """Tests for Clustalw tool."""
 
-from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
 

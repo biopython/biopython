@@ -63,8 +63,9 @@ def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
     detectedPPMCol = datamap[detectedNuc + ".P"] + 1
 
     # Make a list of the data lines involving the detected
-    if str(toResNum) in peaklist.residue_dict(detectedNuc) \
-    and str(originResNum) in peaklist.residue_dict(detectedNuc):
+    if (str(toResNum) in peaklist.residue_dict(detectedNuc)) and (
+        str(originResNum) in peaklist.residue_dict(detectedNuc)
+    ):
         detectedList = peaklist.residue_dict(detectedNuc)[str(toResNum)]
         originList = peaklist.residue_dict(detectedNuc)[str(originResNum)]
         returnLine = detectedList[0]

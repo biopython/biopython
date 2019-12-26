@@ -1,7 +1,9 @@
 # Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Base classes for Bio.Phylo objects.
 
@@ -22,17 +24,22 @@ from Bio import _utils
 # NB: On Python 2, repr() and str() are specified to return byte strings, not
 # unicode. On Python 3, it's the opposite. Horrible.
 import sys
+
 if sys.version_info[0] < 3:
+
     def as_string(s):
         """Encode string to UTF-8."""
         if isinstance(s, str):
             return s.encode("utf-8")
         return str(s)
+
+
 else:
     as_string = str
 
 
 # General tree-traversal algorithms
+
 
 def _level_traverse(root, get_children):
     """Traverse a tree in breadth-first (level) order (PRIVATE)."""
@@ -45,22 +52,26 @@ def _level_traverse(root, get_children):
 
 def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children) (PRIVATE)."""
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def dfs(elem):
         yield elem
         for v in get_children(elem):
             for u in dfs(v):
                 yield u
+
     for elem in dfs(root):
         yield elem
 
 
 def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent) (PRIVATE)."""
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def dfs(elem):
         for v in get_children(elem):
             for u in dfs(v):
                 yield u
         yield elem
+
     for elem in dfs(root):
         yield elem
 
@@ -70,31 +81,34 @@ def _sorted_attrs(elem):
     singles = []
     lists = []
     # Sort attributes for consistent results
-    for attrname, child in sorted(elem.__dict__.items(),
-                                  key=lambda kv: kv[0]):
+    for attrname, child in sorted(elem.__dict__.items(), key=lambda kv: kv[0]):
         if child is None:
             continue
         if isinstance(child, list):
             lists.extend(child)
         else:
             singles.append(child)
-    return (x for x in singles + lists
-            if isinstance(x, TreeElement))
+    return (x for x in singles + lists if isinstance(x, TreeElement))
 
 
 # Factory functions to generalize searching for clades/nodes
 
+
 def _identity_matcher(target):
     """Match a node to the target object by identity (PRIVATE)."""
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def match(node):
-        return (node is target)
+        return node is target
+
     return match
 
 
 def _class_matcher(target_cls):
     """Match a node if it's an instance of the given class (PRIVATE)."""
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def match(node):
         return isinstance(node, target_cls)
+
     return match
 
 
@@ -104,6 +118,7 @@ def _string_matcher(target):
             # Avoid triggering specialized or recursive magic methods
             return node.name == target
         return as_string(node) == target
+
     return match
 
 
@@ -120,14 +135,15 @@ def _attribute_matcher(kwargs):
     match each of the corresponding values -- think 'and', not 'or', for
     multiple keys.
     """
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def match(node):
         if "terminal" in kwargs:
             # Special case: restrict to internal/external/any nodes
             kwa_copy = kwargs.copy()
             pattern = kwa_copy.pop("terminal")
-            if (pattern is not None and
-                (not hasattr(node, "is_terminal") or
-                    node.is_terminal() != pattern)):
+            if pattern is not None and (
+                not hasattr(node, "is_terminal") or node.is_terminal() != pattern
+            ):
                 return False
         else:
             kwa_copy = kwargs
@@ -137,26 +153,30 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, str):
-                return (isinstance(target, str) and
-                        re.match(pattern + "$", target))
+                return isinstance(target, basestring) and re.match(
+                    pattern + "$", target
+                )
             if isinstance(pattern, bool):
-                return (pattern == bool(target))
+                return pattern == bool(target)
             if isinstance(pattern, int):
-                return (pattern == target)
+                return pattern == target
             if pattern is None:
-                return (target is None)
+                return target is None
             raise TypeError("invalid query type: %s" % type(pattern))
         return True
+
     return match
 
 
 def _function_matcher(matcher_func):
     """Safer attribute lookup -- returns False instead of raising an error (PRIVATE)."""
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def match(node):
         try:
             return matcher_func(node)
         except (LookupError, AttributeError, ValueError, TypeError):
             return False
+
     return match
 
 
@@ -183,8 +203,9 @@ def _object_matcher(obj):
         return _attribute_matcher(obj)
     if callable(obj):
         return _function_matcher(obj)
-    raise ValueError("%s (type %s) is not a valid type for comparison."
-                     % (obj, type(obj)))
+    raise ValueError(
+        "%s (type %s) is not a valid type for comparison." % (obj, type(obj))
+    )
 
 
 def _combine_matchers(target, kwargs, require_spec):
@@ -196,15 +217,16 @@ def _combine_matchers(target, kwargs, require_spec):
     if not target:
         if not kwargs:
             if require_spec:
-                raise ValueError("you must specify a target object or keyword "
-                                 "arguments.")
+                raise ValueError(
+                    "you must specify a target object or keyword arguments."
+                )
             return lambda x: True
         return _attribute_matcher(kwargs)
     match_obj = _object_matcher(target)
     if not kwargs:
         return match_obj
     match_kwargs = _attribute_matcher(kwargs)
-    return (lambda x: match_obj(x) and match_kwargs(x))
+    return lambda x: match_obj(x) and match_kwargs(x)
 
 
 def _combine_args(first, *rest):
@@ -219,15 +241,19 @@ def _combine_args(first, *rest):
     # didn't notice the inconsistency until after Biopython 1.55. I can think
     # of cases where either style is more convenient, so let's support both
     # (for backward compatibility and consistency between methods).
-    if hasattr(first, "__iter__") and not (isinstance(first, TreeElement) or
-                                           isinstance(first, type) or
-                                           isinstance(first, str) or
-                                           isinstance(first, dict)):
+    if hasattr(first, "__iter__") and not (
+        isinstance(first, TreeElement)
+        or isinstance(first, type)
+        or isinstance(first, str)
+        or isinstance(first, dict)
+    ):
         # terminals is an iterable of targets
         if rest:
-            raise ValueError("Arguments must be either a single list of "
-                             "targets, or separately specified targets "
-                             "(e.g. foo(t1, t2, t3)), but not both.")
+            raise ValueError(
+                "Arguments must be either a single list of "
+                "targets, or separately specified targets "
+                "(e.g. foo(t1, t2, t3)), but not both."
+            )
         return first
     # terminals is a single target -- wrap in a container
     return itertools.chain([first], rest)
@@ -235,22 +261,26 @@ def _combine_args(first, *rest):
 
 # Class definitions
 
+
 class TreeElement(object):
     """Base class for all Bio.Phylo classes."""
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
+        # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
-                return ("%s='%s'"
-                        % (key, _utils.trim_str(as_string(val), 60, "...")))
+                return "%s='%s'" % (key, _utils.trim_str(as_string(val), 60, "..."))
             return "%s=%s" % (key, val)
-        return ("%s(%s)"
-                % (self.__class__.__name__,
-                   ", ".join(pair_as_kwarg_string(key, val)
-                             for key, val in sorted(self.__dict__.items())
-                             if val is not None and
-                             type(val) in (str, int, float, bool, str))))
+
+        return "%s(%s)" % (
+            self.__class__.__name__,
+            ", ".join(
+                pair_as_kwarg_string(key, val)
+                for key, val in sorted(self.__dict__.items())
+                if val is not None and type(val) in (str, int, float, bool, unicode)
+            ),
+        )
 
     __str__ = __repr__
 
@@ -272,14 +302,17 @@ class TreeMixin(object):
         :returns: generator of all elements for which ``filter_func`` is True.
 
         """
-        order_opts = {"preorder": _preorder_traverse,
-                      "postorder": _postorder_traverse,
-                      "level": _level_traverse}
+        order_opts = {
+            "preorder": _preorder_traverse,
+            "postorder": _postorder_traverse,
+            "level": _level_traverse,
+        }
         try:
             order_func = order_opts[order]
         except KeyError:
-            raise ValueError("Invalid order '%s'; must be one of: %s"
-                             % (order, tuple(order_opts)))
+            raise ValueError(
+                "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
+            )
 
         if follow_attrs:
             get_children = _sorted_attrs
@@ -301,8 +334,7 @@ class TreeMixin(object):
         except StopIteration:
             return None
 
-    def find_elements(self, target=None, terminal=None, order="preorder",
-                      **kwargs):
+    def find_elements(self, target=None, terminal=None, order="preorder", **kwargs):
         """Find all tree elements matching the given attributes.
 
         The arbitrary keyword arguments indicate the attribute name of the
@@ -348,8 +380,7 @@ class TreeMixin(object):
         is_matching_elem = _combine_matchers(target, kwargs, False)
         return self._filter_search(is_matching_elem, order, True)
 
-    def find_clades(self, target=None, terminal=None, order="preorder",
-                    **kwargs):
+    def find_clades(self, target=None, terminal=None, order="preorder", **kwargs):
         """Find each clade containing a matching element.
 
         That is, find each element as with find_elements(), but return the
@@ -359,17 +390,20 @@ class TreeMixin(object):
             depth-first (preorder) by default.
 
         """
+        # This comment stops black style adding a blank line here, which causes flake8 D202.
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop("clades")
             found = elem.find_any(target, **kwargs)
             elem.clades = orig_clades
-            return (found is not None)
+            return found is not None
+
         if terminal is None:
             is_matching_elem = match_attrs
         else:
+
             def is_matching_elem(elem):
-                return ((elem.is_terminal() == terminal) and
-                        match_attrs(elem))
+                return (elem.is_terminal() == terminal) and match_attrs(elem)
+
         return self._filter_search(is_matching_elem, order, False)
 
     def get_path(self, target=None, **kwargs):
@@ -428,8 +462,7 @@ class TreeMixin(object):
          - If any target is not found in this tree, raises a ValueError
 
         """
-        paths = [self.get_path(t)
-                 for t in _combine_args(targets, *more_targets)]
+        paths = [self.get_path(t) for t in _combine_args(targets, *more_targets)]
         # Validation -- otherwise izip throws a spooky error below
         for p, t in zip(paths, targets):
             if p is None:
@@ -485,8 +518,11 @@ class TreeMixin(object):
         If only one target is specified, the other is the root of this tree.
         """
         if target2 is None:
-            return sum(n.branch_length for n in self.get_path(target1)
-                       if n.branch_length is not None)
+            return sum(
+                n.branch_length
+                for n in self.get_path(target1)
+                if n.branch_length is not None
+            )
         mrca = self.common_ancestor(target1, target2)
         return mrca.distance(target1) + mrca.distance(target2)
 
@@ -499,12 +535,16 @@ class TreeMixin(object):
         """
         # Root can be trifurcating
         if isinstance(self, Tree) and len(self.root) == 3:
-            return (self.root.clades[0].is_bifurcating() and
-                    self.root.clades[1].is_bifurcating() and
-                    self.root.clades[2].is_bifurcating())
+            return (
+                self.root.clades[0].is_bifurcating()
+                and self.root.clades[1].is_bifurcating()
+                and self.root.clades[2].is_bifurcating()
+            )
         if len(self.root) == 2:
-            return (self.root.clades[0].is_bifurcating() and
-                    self.root.clades[1].is_bifurcating())
+            return (
+                self.root.clades[0].is_bifurcating()
+                and self.root.clades[1].is_bifurcating()
+            )
         if len(self.root) == 0:
             return True
         return False
@@ -563,8 +603,7 @@ class TreeMixin(object):
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
-        return sum(node.branch_length
-                   for node in self.find_clades(branch_length=True))
+        return sum(node.branch_length for node in self.find_clades(branch_length=True))
 
     # Tree manipulation methods
 
@@ -576,8 +615,7 @@ class TreeMixin(object):
         """
         path = self.get_path(target, **kwargs)
         if not path:
-            raise ValueError("couldn't collapse %s in this tree"
-                             % (target or kwargs))
+            raise ValueError("couldn't collapse %s in this tree" % (target or kwargs))
         if len(path) == 1:
             parent = self.root
         else:
@@ -645,8 +683,7 @@ class TreeMixin(object):
         Deepest clades are last by default. Use ``reverse=True`` to sort clades
         deepest-to-shallowest.
         """
-        self.root.clades.sort(key=lambda c: c.count_terminals(),
-                              reverse=reverse)
+        self.root.clades.sort(key=lambda c: c.count_terminals(), reverse=reverse)
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
 
@@ -682,7 +719,7 @@ class TreeMixin(object):
                 # If we're not at the root, collapse this parent
                 child = parent.clades[0]
                 if child.branch_length is not None:
-                    child.branch_length += (parent.branch_length or 0.0)
+                    child.branch_length += parent.branch_length or 0.0
                 if len(path) < 3:
                     grandparent = self.root
                 else:
@@ -708,8 +745,7 @@ class TreeMixin(object):
         clade_cls = type(self.root)
         base_name = self.root.name or "n"
         for i in range(n):
-            clade = clade_cls(name=base_name + str(i),
-                              branch_length=branch_length)
+            clade = clade_cls(name=base_name + str(i), branch_length=branch_length)
             self.root.clades.append(clade)
 
 
@@ -765,8 +801,9 @@ class Tree(TreeElement, TreeMixin):
         elif hasattr(taxa, "__iter__"):
             taxa = list(taxa)
         else:
-            raise TypeError("taxa argument must be integer (# taxa) or "
-                            "iterable of taxon names.")
+            raise TypeError(
+                "taxa argument must be integer (# taxa) or iterable of taxon names."
+            )
         rtree = cls()
         terminals = [rtree.root]
         while len(terminals) < len(taxa):
@@ -776,8 +813,7 @@ class Tree(TreeElement, TreeMixin):
             if branch_stdev:
                 # Add some noise to the branch lengths
                 for nt in newterms:
-                    nt.branch_length = max(0,
-                                           random.gauss(branch_length, branch_stdev))
+                    nt.branch_length = max(0, random.gauss(branch_length, branch_stdev))
             terminals.remove(newsplit)
             terminals.extend(newterms)
         # Distribute taxon labels randomly
@@ -798,6 +834,7 @@ class Tree(TreeElement, TreeMixin):
         save this information when you write this tree as 'phyloxml'.
         """
         from Bio.Phylo.PhyloXML import Phylogeny
+
         return Phylogeny.from_tree(self, **kwargs)
 
     # XXX Py3 Compatibility: In Python 3.0+, **kwargs can be replaced with the
@@ -837,15 +874,18 @@ class Tree(TreeElement, TreeMixin):
         outgroup_branch_length = kwargs.get("outgroup_branch_length")
         if outgroup_branch_length is not None:
             if not (0 <= outgroup_branch_length <= prev_blen):
-                raise ValueError("outgroup_branch_length must be between 0 "
-                                 "and the original length of the branch "
-                                 "leading to the outgroup.")
+                raise ValueError(
+                    "outgroup_branch_length must be between 0 "
+                    "and the original length of the branch "
+                    "leading to the outgroup."
+                )
 
         if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup
             outgroup.branch_length = outgroup_branch_length or 0.0
             new_root = self.root.__class__(
-                branch_length=self.root.branch_length, clades=[outgroup])
+                branch_length=self.root.branch_length, clades=[outgroup]
+            )
             # The first branch reversal (see the upcoming loop) is modified
             if len(outgroup_path) == 1:
                 # No nodes between the original root and outgroup to rearrange.
@@ -856,8 +896,10 @@ class Tree(TreeElement, TreeMixin):
                 parent = outgroup_path.pop(-2)
                 # First iteration of reversing the path to the outgroup
                 parent.clades.pop(parent.clades.index(outgroup))
-                (prev_blen, parent.branch_length) = (parent.branch_length,
-                                                     prev_blen - outgroup.branch_length)
+                (prev_blen, parent.branch_length) = (
+                    parent.branch_length,
+                    prev_blen - outgroup.branch_length,
+                )
                 new_root.clades.insert(0, parent)
                 new_parent = parent
         else:
@@ -932,14 +974,15 @@ class Tree(TreeElement, TreeMixin):
                 break
         else:
             raise ValueError("Somehow, failed to find the midpoint!")
-        self.root_with_outgroup(outgroup_node,
-                                outgroup_branch_length=outgroup_branch_length)
+        self.root_with_outgroup(
+            outgroup_node, outgroup_branch_length=outgroup_branch_length
+        )
 
     # Method assumed by TreeMixin
 
     def is_terminal(self):
         """Check if the root of this tree is terminal."""
-        return (not self.root.clades)
+        return not self.root.clades
 
     # Convention from SeqRecord and Alignment classes
 
@@ -956,6 +999,7 @@ class Tree(TreeElement, TreeMixin):
         if format_spec:
             from Bio._py3k import StringIO
             from Bio.Phylo import _io
+
             handle = StringIO()
             _io.write([self], handle, format_spec)
             return handle.getvalue()
@@ -1025,8 +1069,15 @@ class Clade(TreeElement, TreeMixin):
 
     """
 
-    def __init__(self, branch_length=None, name=None, clades=None,
-                 confidence=None, color=None, width=None):
+    def __init__(
+        self,
+        branch_length=None,
+        name=None,
+        clades=None,
+        confidence=None,
+        color=None,
+        width=None,
+    ):
         """Define parameters for the Clade tree."""
         self.branch_length = branch_length
         self.name = name
@@ -1042,7 +1093,7 @@ class Clade(TreeElement, TreeMixin):
 
     def is_terminal(self):
         """Check if this is a terminal (leaf) node."""
-        return (not self.clades)
+        return not self.clades
 
     # Sequence-type behavior methods
 
@@ -1072,6 +1123,7 @@ class Clade(TreeElement, TreeMixin):
         Clade instances to always be considered True.
         """
         return True
+
     # Python 2:
     __nonzero__ = __bool__
 
@@ -1153,14 +1205,14 @@ class BranchColor(object):
         "gold": (255, 215, 0),
         "tan": (210, 180, 140),
         "brown": (165, 42, 42),
-        }
+    }
 
     def __init__(self, red, green, blue):
         """Initialize BranchColor for a tree."""
         for color in (red, green, blue):
-            assert (isinstance(color, int) and
-                    0 <= color <= 255
-                    ), "Color values must be integers between 0 and 255."
+            assert (
+                isinstance(color, int) and 0 <= color <= 255
+            ), "Color values must be integers between 0 and 255."
         self.red = red
         self.green = green
         self.blue = blue
@@ -1172,10 +1224,11 @@ class BranchColor(object):
         The string format is the same style used in HTML and CSS, such as
         '#FF8000' for an RGB value of (255, 128, 0).
         """
-        assert (isinstance(hexstr, str) and
-                hexstr.startswith("#") and
-                len(hexstr) == 7
-                ), "need a 24-bit hexadecimal string, e.g. #000000"
+        assert (
+            isinstance(hexstr, str)
+            and hexstr.startswith("#")
+            and len(hexstr) == 7
+        ), "need a 24-bit hexadecimal string, e.g. #000000"
 
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
         return cls(*[int("0x" + cc, base=16) for cc in RGB])
@@ -1214,8 +1267,12 @@ class BranchColor(object):
 
     def __repr__(self):
         """Preserve the standard RGB order when representing this object."""
-        return ("%s(red=%d, green=%d, blue=%d)"
-                % (self.__class__.__name__, self.red, self.green, self.blue))
+        return "%s(red=%d, green=%d, blue=%d)" % (
+            self.__class__.__name__,
+            self.red,
+            self.green,
+            self.blue,
+        )
 
     def __str__(self):
         """Show the color's RGB values."""

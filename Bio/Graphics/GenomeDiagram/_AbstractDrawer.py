@@ -33,7 +33,6 @@ like SeqFeatures.
 """
 
 # ReportLab imports
-from __future__ import print_function
 
 from Bio._py3k import range
 
@@ -103,9 +102,9 @@ def _stroke_and_fill_colors(color, border):
     return strokecolor, color
 
 
-def draw_box(point1, point2,
-             color=colors.lightgreen, border=None, colour=None,
-             **kwargs):
+def draw_box(
+    point1, point2, color=colors.lightgreen, border=None, colour=None, **kwargs
+):
     """Draw a box.
 
     Arguments:
@@ -129,15 +128,18 @@ def draw_box(point1, point2,
     strokecolor, color = _stroke_and_fill_colors(color, border)
 
     x1, y1, x2, y2 = min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)
-    return Polygon([x1, y1, x2, y1, x2, y2, x1, y2],
-                   strokeColor=strokecolor,
-                   fillColor=color,
-                   strokewidth=0,
-                   **kwargs)
+    return Polygon(
+        [x1, y1, x2, y1, x2, y2, x1, y2],
+        strokeColor=strokecolor,
+        fillColor=color,
+        strokewidth=0,
+        **kwargs
+    )
 
 
-def draw_cut_corner_box(point1, point2, corner=0.5,
-                        color=colors.lightgreen, border=None, **kwargs):
+def draw_cut_corner_box(
+    point1, point2, corner=0.5, color=colors.lightgreen, border=None, **kwargs
+):
     """Draw a box with the corners cut off."""
     x1, y1 = point1
     x2, y2 = point2
@@ -154,25 +156,37 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
     x_corner = min(boxheight * 0.5 * corner, boxwidth * 0.5)
     y_corner = min(boxheight * 0.5 * corner, boxheight * 0.5)
 
-    points = [x1, y1 + y_corner,
-              x1, y2 - y_corner,
-              x1 + x_corner, y2,
-              x2 - x_corner, y2,
-              x2, y2 - y_corner,
-              x2, y1 + y_corner,
-              x2 - x_corner, y1,
-              x1 + x_corner, y1]
-    return Polygon(deduplicate(points),
-                   strokeColor=strokecolor,
-                   strokeWidth=1,
-                   strokeLineJoin=1,  # 1=round
-                   fillColor=color,
-                   **kwargs)
+    points = [
+        x1,
+        y1 + y_corner,
+        x1,
+        y2 - y_corner,
+        x1 + x_corner,
+        y2,
+        x2 - x_corner,
+        y2,
+        x2,
+        y2 - y_corner,
+        x2,
+        y1 + y_corner,
+        x2 - x_corner,
+        y1,
+        x1 + x_corner,
+        y1,
+    ]
+    return Polygon(
+        deduplicate(points),
+        strokeColor=strokecolor,
+        strokeWidth=1,
+        strokeLineJoin=1,  # 1=round
+        fillColor=color,
+        **kwargs
+    )
 
 
-def draw_polygon(list_of_points,
-                 color=colors.lightgreen, border=None, colour=None,
-                 **kwargs):
+def draw_polygon(
+    list_of_points, color=colors.lightgreen, border=None, colour=None, **kwargs
+):
     """Draw polygon.
 
     Arguments:
@@ -195,16 +209,26 @@ def draw_polygon(list_of_points,
         xy_list.append(x)
         xy_list.append(y)
 
-    return Polygon(deduplicate(xy_list),
-                   strokeColor=strokecolor,
-                   fillColor=color,
-                   strokewidth=0,
-                   **kwargs)
+    return Polygon(
+        deduplicate(xy_list),
+        strokeColor=strokecolor,
+        fillColor=color,
+        strokewidth=0,
+        **kwargs
+    )
 
 
-def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
-               shaft_height_ratio=0.4, head_length_ratio=0.5, orientation="right",
-               colour=None, **kwargs):
+def draw_arrow(
+    point1,
+    point2,
+    color=colors.lightgreen,
+    border=None,
+    shaft_height_ratio=0.4,
+    head_length_ratio=0.5,
+    orientation="right",
+    colour=None,
+    **kwargs
+):
     """Draw an arrow.
 
     Returns a closed path object representing an arrow enclosed by the
@@ -238,8 +262,9 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     elif orientation == "left":
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
     else:
-        raise ValueError("Invalid orientation %s, should be 'left' or 'right'"
-                         % repr(orientation))
+        raise ValueError(
+            "Invalid orientation %s, should be 'left' or 'right'" % repr(orientation)
+        )
 
     # We define boxheight and boxwidth accordingly, and calculate the shaft
     # height from these.  We also ensure that the maximum head length is
@@ -256,22 +281,33 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     headbase = boxwidth - headlength
     midheight = 0.5 * boxheight
 
-    points = [x1, y1 + shafttop,
-              x1 + headbase, y1 + shafttop,
-              x1 + headbase, y2,
-              x2, y1 + midheight,
-              x1 + headbase, y1,
-              x1 + headbase, y1 + shaftbase,
-              x1, y1 + shaftbase]
+    points = [
+        x1,
+        y1 + shafttop,
+        x1 + headbase,
+        y1 + shafttop,
+        x1 + headbase,
+        y2,
+        x2,
+        y1 + midheight,
+        x1 + headbase,
+        y1,
+        x1 + headbase,
+        y1 + shaftbase,
+        x1,
+        y1 + shaftbase,
+    ]
 
-    return Polygon(deduplicate(points),
-                   strokeColor=strokecolor,
-                   # strokeWidth=max(1, int(boxheight/40.)),
-                   strokeWidth=1,
-                   # default is mitre/miter which can stick out too much:
-                   strokeLineJoin=1,  # 1=round
-                   fillColor=color,
-                   **kwargs)
+    return Polygon(
+        deduplicate(points),
+        strokeColor=strokecolor,
+        # strokeWidth=max(1, int(boxheight/40.)),
+        strokeWidth=1,
+        # default is mitre/miter which can stick out too much:
+        strokeLineJoin=1,  # 1=round
+        fillColor=color,
+        **kwargs
+    )
 
 
 def deduplicate(points):
@@ -319,20 +355,25 @@ def intermediate_points(start, end, graph_data):
     """
     newdata = []  # data in form (X0, X1, val)
     # add first block
-    newdata.append((start,
-                    graph_data[0][0] + (graph_data[1][0] - graph_data[0][0]) / 2.,
-                    graph_data[0][1]))
+    newdata.append(
+        (
+            start,
+            graph_data[0][0] + (graph_data[1][0] - graph_data[0][0]) / 2.0,
+            graph_data[0][1],
+        )
+    )
     # add middle set
     for index in range(1, len(graph_data) - 1):
         lastxval, lastyval = graph_data[index - 1]
         xval, yval = graph_data[index]
         nextxval, nextyval = graph_data[index + 1]
-        newdata.append((lastxval + (xval - lastxval) / 2.,
-                        xval + (nextxval - xval) / 2., yval))
+        newdata.append(
+            (lastxval + (xval - lastxval) / 2.0, xval + (nextxval - xval) / 2.0, yval)
+        )
     # add last block
-    newdata.append((xval + (nextxval - xval) / 2.,
-                    end, graph_data[-1][1]))
+    newdata.append((xval + (nextxval - xval) / 2.0, end, graph_data[-1][1]))
     return newdata
+
 
 ################################################################################
 # CLASSES
@@ -361,9 +402,22 @@ class AbstractDrawer(object):
 
     """
 
-    def __init__(self, parent, pagesize="A3", orientation="landscape",
-                 x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0, cross_track_links=None):
+    def __init__(
+        self,
+        parent,
+        pagesize="A3",
+        orientation="landscape",
+        x=0.05,
+        y=0.05,
+        xl=None,
+        xr=None,
+        yt=None,
+        yb=None,
+        start=None,
+        end=None,
+        tracklines=0,
+        cross_track_links=None,
+    ):
         """Create the object.
 
         Arguments:
@@ -392,13 +446,13 @@ class AbstractDrawer(object):
            feature A, track B, feature B) to be linked.
 
         """
-        self._parent = parent   # The calling Diagram object
+        self._parent = parent  # The calling Diagram object
 
         # Perform 'administrative' tasks of setting up the page
-        self.set_page_size(pagesize, orientation)   # Set drawing size
-        self.set_margins(x, y, xl, xr, yt, yb)      # Set page margins
+        self.set_page_size(pagesize, orientation)  # Set drawing size
+        self.set_margins(x, y, xl, xr, yt, yb)  # Set page margins
         self.set_bounds(start, end)  # Set limits on what will be drawn
-        self.tracklines = tracklines    # Set flags
+        self.tracklines = tracklines  # Set flags
         if cross_track_links is None:
             cross_track_links = []
         else:
@@ -414,7 +468,7 @@ class AbstractDrawer(object):
          - orientation   String: 'landscape' or 'portrait'
 
         """
-        if isinstance(pagesize, str):     # A string, so translate
+        if isinstance(pagesize, str):  # A string, so translate
             pagesize = page_sizes(pagesize)
         elif isinstance(pagesize, tuple):  # A tuple, so don't translate
             pagesize = pagesize
@@ -453,10 +507,16 @@ class AbstractDrawer(object):
 
         # Set page limits, center and height/width
         self.x0, self.y0 = self.pagesize[0] * xmargin_l, self.pagesize[1] * ymargin_btm
-        self.xlim, self.ylim = self.pagesize[0] * (1 - xmargin_r), self.pagesize[1] * (1 - ymargin_top)
+        self.xlim, self.ylim = (
+            self.pagesize[0] * (1 - xmargin_r),
+            self.pagesize[1] * (1 - ymargin_top),
+        )
         self.pagewidth = self.xlim - self.x0
         self.pageheight = self.ylim - self.y0
-        self.xcenter, self.ycenter = self.x0 + self.pagewidth / 2., self.y0 + self.pageheight / 2.
+        self.xcenter, self.ycenter = (
+            self.x0 + self.pagewidth / 2.0,
+            self.y0 + self.pageheight / 2.0,
+        )
 
     def set_bounds(self, start, end):
         """Set start and end points for the drawing as a whole.
@@ -472,7 +532,7 @@ class AbstractDrawer(object):
             start, end = end, start
 
         if start is None or start < 0:  # Check validity of passed args and
-            start = 0   # default to 0
+            start = 0  # default to 0
         if end is None or end < 0:
             end = high + 1  # default to track range top limit
 

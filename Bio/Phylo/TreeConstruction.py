@@ -1,7 +1,9 @@
 # Copyright (C) 2013 by Yanbo Ye (yeyanbo289@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes and methods for tree construction."""
 
@@ -106,21 +108,23 @@ class _Matrix(object):
             self.matrix = matrix
         else:
             # check if all elements are numbers
-            if (isinstance(matrix, list) and
-                all(isinstance(l, list) for l in matrix) and
-                all(_is_numeric(n) for n in [item for sublist in matrix
-                                             for item in sublist])):
+            if (
+                isinstance(matrix, list)
+                and all(isinstance(l, list) for l in matrix)
+                and all(
+                    _is_numeric(n)
+                    for n in [item for sublist in matrix for item in sublist]
+                )
+            ):
                 # check if the same length with names
                 if len(matrix) == len(names):
                     # check if is lower triangle format
                     if [len(m) for m in matrix] == list(range(1, len(self) + 1)):
                         self.matrix = matrix
                     else:
-                        raise ValueError(
-                            "'matrix' should be in lower triangle format")
+                        raise ValueError("'matrix' should be in lower triangle format")
                 else:
-                    raise ValueError(
-                        "'names' and 'matrix' should be the same size")
+                    raise ValueError("'names' and 'matrix' should be the same size")
             else:
                 raise TypeError("'matrix' should be a list of numerical lists")
 
@@ -150,7 +154,9 @@ class _Matrix(object):
             # check index
             if index > len(self) - 1:
                 raise IndexError("Index out of range.")
-            return [self.matrix[index][i] for i in range(0, index)] + [self.matrix[i][index] for i in range(index, len(self))]
+            return [self.matrix[index][i] for i in range(0, index)] + [
+                self.matrix[i][index] for i in range(index, len(self))
+            ]
         # Handle double indexing
         elif len(item) == 2:
             row_index = None
@@ -289,15 +295,18 @@ class _Matrix(object):
 
     def __repr__(self):
         """Return Matrix as a string."""
-        return self.__class__.__name__ \
-            + "(names=%s, matrix=%s)" \
-            % tuple(map(repr, (self.names, self.matrix)))
+        return self.__class__.__name__ + "(names=%s, matrix=%s)" % tuple(
+            map(repr, (self.names, self.matrix))
+        )
 
     def __str__(self):
         """Get a lower triangular matrix string."""
         matrix_string = "\n".join(
-            [self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
-             for i in range(0, len(self))])
+            [
+                self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
+                for i in range(0, len(self))
+            ]
+        )
         matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
         return matrix_string
 
@@ -340,13 +349,11 @@ class DistanceMatrix(_Matrix):
         handle.write("    {0}\n".format(len(self.names)))
         # Phylip needs space-separated, vertically aligned columns
         name_width = max(12, max(map(len, self.names)) + 1)
-        value_fmts = ("{" + str(x) + ":.4f}"
-                      for x in range(1, len(self.matrix) + 1))
+        value_fmts = ("{" + str(x) + ":.4f}" for x in range(1, len(self.matrix) + 1))
         row_fmt = "{0:" + str(name_width) + "s}" + "  ".join(value_fmts) + "\n"
         for i, (name, values) in enumerate(zip(self.names, self.matrix)):
             # Mirror the matrix values across the diagonal
-            mirror_values = (self.matrix[j][i]
-                             for j in range(i + 1, len(self.matrix)))
+            mirror_values = (self.matrix[j][i] for j in range(i + 1, len(self.matrix)))
             fields = itertools.chain([name], values, mirror_values)
             handle.write(row_fmt.format(*fields))
 
@@ -423,26 +430,41 @@ class DistanceCalculator(object):
     dna_alphabet = ["A", "T", "C", "G"]
 
     # BLAST nucleic acid scoring matrix
-    blastn = [[5],
-              [-4, 5],
-              [-4, -4, 5],
-              [-4, -4, -4, 5]]
+    blastn = [[5], [-4, 5], [-4, -4, 5], [-4, -4, -4, 5]]
 
     # transition/transversion scoring matrix
-    trans = [[6],
-             [-5, 6],
-             [-5, -1, 6],
-             [-1, -5, -5, 6]]
+    trans = [[6], [-5, 6], [-5, -1, 6], [-1, -5, -5, 6]]
 
-    protein_alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L",
-                        "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y",
-                        "Z"]
+    protein_alphabet = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "K",
+        "L",
+        "M",
+        "N",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+    ]
 
     # matrices available
     dna_matrices = {"blastn": blastn, "trans": trans}
     protein_models = MatrixInfo.available_matrices
-    protein_matrices = {name: getattr(MatrixInfo, name)
-                        for name in protein_models}
+    protein_matrices = {name: getattr(MatrixInfo, name) for name in protein_models}
 
     dna_models = list(dna_matrices.keys())
 
@@ -461,14 +483,15 @@ class DistanceCalculator(object):
         if model == "identity":
             self.scoring_matrix = None
         elif model in self.dna_models:
-            self.scoring_matrix = _Matrix(self.dna_alphabet,
-                                          self.dna_matrices[model])
+            self.scoring_matrix = _Matrix(self.dna_alphabet, self.dna_matrices[model])
         elif model in self.protein_models:
             self.scoring_matrix = self._build_protein_matrix(
-                self.protein_matrices[model])
+                self.protein_matrices[model]
+            )
         else:
-            raise ValueError("Model not supported. Available models: " +
-                             ", ".join(self.models))
+            raise ValueError(
+                "Model not supported. Available models: " + ", ".join(self.models)
+            )
 
     def _pairwise(self, seq1, seq2):
         """Calculate pairwise distance from two sequences (PRIVATE).
@@ -487,11 +510,15 @@ class DistanceCalculator(object):
                 if l1 in self.skip_letters or l2 in self.skip_letters:
                     continue
                 if l1 not in self.scoring_matrix.names:
-                    raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'"
-                                     % (l1, seq1.id, i))
+                    raise ValueError(
+                        "Bad alphabet '%s' in sequence '%s' at position '%s'"
+                        % (l1, seq1.id, i)
+                    )
                 if l2 not in self.scoring_matrix.names:
-                    raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'"
-                                     % (l2, seq2.id, i))
+                    raise ValueError(
+                        "Bad alphabet '%s' in sequence '%s' at position '%s'"
+                        % (l2, seq2.id, i)
+                    )
                 max_score1 += self.scoring_matrix[l1, l1]
                 max_score2 += self.scoring_matrix[l2, l2]
                 score += self.scoring_matrix[l1, l2]
@@ -499,9 +526,11 @@ class DistanceCalculator(object):
             max_score = max(max_score1, max_score2)
         else:
             # Score by character identity, not skipping any special letters
-            score = sum(l1 == l2
-                        for l1, l2 in zip(seq1, seq2)
-                        if l1 not in self.skip_letters and l2 not in self.skip_letters)
+            score = sum(
+                l1 == l2
+                for l1, l2 in zip(seq1, seq2)
+                if l1 not in self.skip_letters and l2 not in self.skip_letters
+            )
             max_score = len(seq1)
         if max_score == 0:
             return 1  # max possible scaled distance
@@ -605,15 +634,21 @@ class DistanceTreeConstructor(TreeConstructor):
 
     def __init__(self, distance_calculator=None, method="nj"):
         """Initialize the class."""
-        if (distance_calculator is None or isinstance(distance_calculator, DistanceCalculator)):
+        if distance_calculator is None or isinstance(
+            distance_calculator, DistanceCalculator
+        ):
             self.distance_calculator = distance_calculator
         else:
             raise TypeError("Must provide a DistanceCalculator object.")
         if isinstance(method, str) and method in self.methods:
             self.method = method
         else:
-            raise TypeError("Bad method: " + method +
-                            ". Available methods: " + ", ".join(self.methods))
+            raise TypeError(
+                "Bad method: "
+                + method
+                + ". Available methods: "
+                + ", ".join(self.methods)
+            )
 
     def build_tree(self, msa):
         """Construct and return a Tree, Neighbor Joining or UPGMA."""
@@ -671,14 +706,12 @@ class DistanceTreeConstructor(TreeConstructor):
             if clade1.is_terminal():
                 clade1.branch_length = min_dist * 1.0 / 2
             else:
-                clade1.branch_length = min_dist * \
-                    1.0 / 2 - self._height_of(clade1)
+                clade1.branch_length = min_dist * 1.0 / 2 - self._height_of(clade1)
 
             if clade2.is_terminal():
                 clade2.branch_length = min_dist * 1.0 / 2
             else:
-                clade2.branch_length = min_dist * \
-                    1.0 / 2 - self._height_of(clade2)
+                clade2.branch_length = min_dist * 1.0 / 2 - self._height_of(clade2)
 
             # update node list
             clades[min_j] = inner_clade
@@ -764,8 +797,9 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
             # assign branch length
-            clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i] -
-                                    node_dist[min_j]) / 2.0
+            clade1.branch_length = (
+                dm[min_i, min_j] + node_dist[min_i] - node_dist[min_j]
+            ) / 2.0
             clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
 
             # update node list
@@ -776,8 +810,9 @@ class DistanceTreeConstructor(TreeConstructor):
             # set the distances of new node at the index of min_j
             for k in range(0, len(dm)):
                 if k != min_i and k != min_j:
-                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] -
-                                    dm[min_i, min_j]) / 2.0
+                    dm[min_j, k] = (
+                        dm[min_i, k] + dm[min_j, k] - dm[min_i, min_j]
+                    ) / 2.0
 
             dm.names[min_j] = "Inner" + str(inner_count)
             del dm[min_i]
@@ -805,6 +840,7 @@ class DistanceTreeConstructor(TreeConstructor):
         else:
             height = height + max(self._height_of(c) for c in clade.clades)
         return height
+
 
 # #################### Tree Scoring and Searching Classes #####################
 
@@ -978,6 +1014,7 @@ class NNITreeSearcher(TreeSearcher):
                     clade.clades.insert(0, left)
         return neighbors
 
+
 # ######################## Parsimony Classes ##########################
 
 
@@ -1018,7 +1055,8 @@ class ParsimonyScorer(Scorer):
         alignment.sort()
         if not all(t.name == a.id for t, a in zip(terms, alignment)):
             raise ValueError(
-                "Taxon names of the input tree should be the same with the alignment.")
+                "Taxon names of the input tree should be the same with the alignment."
+            )
         # term_align = dict(zip(terms, alignment))
         score = 0
         for i in range(len(alignment[0])):
@@ -1067,10 +1105,8 @@ class ParsimonyScorer(Scorer):
                         min_l = inf
                         min_r = inf
                         for n in range(length):
-                            sl = self.matrix[
-                                alphabet[m], alphabet[n]] + left_score[n]
-                            sr = self.matrix[
-                                alphabet[m], alphabet[n]] + right_score[n]
+                            sl = self.matrix[alphabet[m], alphabet[n]] + left_score[n]
+                            sr = self.matrix[alphabet[m], alphabet[n]] + right_score[n]
                             if min_l > sl:
                                 min_l = sl
                             if min_r > sr:
@@ -1166,7 +1202,6 @@ class ParsimonyTreeConstructor(TreeConstructor):
         # if starting_tree is none,
         # create a upgma tree with 'identity' scoring matrix
         if self.starting_tree is None:
-            dtc = DistanceTreeConstructor(DistanceCalculator("identity"),
-                                          "upgma")
+            dtc = DistanceTreeConstructor(DistanceCalculator("identity"), "upgma")
             self.starting_tree = dtc.build_tree(alignment)
         return self.searcher.search(self.starting_tree, alignment)

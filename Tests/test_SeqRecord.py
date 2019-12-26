@@ -9,6 +9,7 @@ Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
 import unittest
+import sys
 
 from Bio import SeqIO
 from Bio.Alphabet import generic_dna, generic_protein
@@ -142,13 +143,34 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(expected.lstrip(), str(self.record))
 
     def test_repr(self):
-        expected = "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), " \
-                   "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
+        expected = (
+            "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), "
+            "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
+        )
         self.assertEqual(expected, repr(self.record))
 
     def test_format(self):
         expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
         self.assertEqual(expected, self.record.format("fasta"))
+
+    def test_format_str(self):
+        expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
+        self.assertEqual(expected, "{:fasta}".format(self.record))
+
+    if sys.version_info[0] >= 3:
+        def test_format_str_binary(self):
+            with self.assertRaisesRegex(
+                ValueError,
+                "Binary format sff cannot be used with SeqRecord format method"
+            ):
+                "{:sff}".format(self.record)
+
+    def test_format_spaces(self):
+        rec = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+                        id="TestID", name="TestName", description="TestDescr")
+        rec.description = "TestDescr     with5spaces"
+        expected = ">TestID TestDescr     with5spaces\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
+        self.assertEqual(expected, rec.format("fasta"))
 
     def test_upper(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", str(self.record.lower().upper().seq))

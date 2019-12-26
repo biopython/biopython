@@ -53,8 +53,9 @@ class ChainSelector(object):
             # skip HETATMS
             return 0
         if icode != " ":
-            warnings.warn("WARNING: Icode %s at position %s"
-                          % (icode, resseq), BiopythonWarning)
+            warnings.warn(
+                "WARNING: Icode %s at position %s" % (icode, resseq), BiopythonWarning
+            )
         if self.start <= resseq <= self.end:
             return 1
         return 0

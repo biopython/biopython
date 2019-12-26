@@ -26,8 +26,17 @@ class Atom(object):
     B factor and positions.
     """
 
-    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
-                 element=None):
+    def __init__(
+        self,
+        name,
+        coord,
+        bfactor,
+        occupancy,
+        altloc,
+        fullname,
+        serial_number,
+        element=None,
+    ):
         """Initialize Atom object.
 
         :param name: atom name (eg. "CA"). Note that spaces are normally stripped.
@@ -181,12 +190,17 @@ class Atom(object):
                     putative_element = self.name[0]
 
             if putative_element.capitalize() in IUPACData.atom_weights:
-                msg = "Used element %r for Atom (name=%s) with given element %r" \
-                      % (putative_element, self.name, element)
+                msg = "Used element %r for Atom (name=%s) with given element %r" % (
+                    putative_element,
+                    self.name,
+                    element,
+                )
                 element = putative_element
             else:
-                msg = "Could not assign element %r for Atom (name=%s) with given element %r" \
-                      % (putative_element, self.name, element)
+                msg = (
+                    "Could not assign element %r for Atom (name=%s) with given element %r"
+                    % (putative_element, self.name, element)
+                )
                 element = ""
             warnings.warn(msg, PDBConstructionWarning)
 

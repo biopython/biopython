@@ -16,10 +16,12 @@ from struct import pack, unpack
 import warnings
 
 from Bio import Alphabet, BiopythonWarning
+from Bio._utils import _read_header
 from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
+from Bio.File import as_handle
 
 
 _seq_types = {
@@ -27,13 +29,10 @@ _seq_types = {
     1: Alphabet.generic_dna,
     2: Alphabet.generic_dna,
     3: Alphabet.generic_rna,
-    4: Alphabet.generic_protein
+    4: Alphabet.generic_protein,
 }
 
-_seq_topologies = {
-    0: 'linear',
-    1: 'circular'
-}
+_seq_topologies = {0: "linear", 1: "circular"}
 
 
 def _read(handle, length):
@@ -50,8 +49,8 @@ def _read_pstring(handle):
     A Pascal string comprises a single byte giving the length of the string
     followed by as many bytes.
     """
-    length = unpack('>B', _read(handle, 1))[0]
-    return unpack('%ds' % length, _read(handle, length))[0].decode('ASCII')
+    length = unpack(">B", _read(handle, 1))[0]
+    return unpack("%ds" % length, _read(handle, length))[0].decode("ASCII")
 
 
 def _read_pstring_as_integer(handle):
@@ -92,23 +91,23 @@ def _parse_feature_description(desc, qualifiers):
     GenBank-like qualifiers, separated by carriage returns (CR, 0x0D).
     """
     # Split the field's value in CR-separated lines, skipping empty lines
-    for line in [x for x in desc.split('\x0D') if len(x) > 0]:
+    for line in [x for x in desc.split("\x0D") if len(x) > 0]:
         # Is it a qualifier="value" line?
         m = match('^([^=]+)="([^"]+)"?$', line)
         if m:
             # Store the qualifier as provided
             qual, value = m.groups()
             qualifiers[qual] = [value]
-        elif '"' not in line:   # Reject ill-formed qualifiers
+        elif '"' not in line:  # Reject ill-formed qualifiers
             # Store the entire line as a generic note qualifier
-            qualifiers['note'] = [line]
+            qualifiers["note"] = [line]
 
 
 def _read_feature(handle, record):
     """Read a single sequence feature."""
     name = _read_pstring(handle)
     desc = _read_pstring(handle)
-    type = _read_pstring(handle) or 'misc_feature'
+    type = _read_pstring(handle) or "misc_feature"
     start = _read_pstring_as_integer(handle)
     end = _read_pstring_as_integer(handle)
 
@@ -117,7 +116,7 @@ def _read_feature(handle, record):
     # byte 2 tells whether to display the feature;
     # byte 4 tells whether to draw an arrow when displaying the feature;
     # meaning of byte 3 is unknown.
-    (forward, display, arrow) = unpack('>BBxB', _read(handle, 4))
+    (forward, display, arrow) = unpack(">BBxB", _read(handle, 4))
     if forward:
         strand = 1
     else:
@@ -136,7 +135,7 @@ def _read_feature(handle, record):
     location = FeatureLocation(start - 1, end, strand=strand)
     qualifiers = {}
     if name:
-        qualifiers['label'] = [name]
+        qualifiers["label"] = [name]
     _parse_feature_description(desc, qualifiers)
     feature = SeqFeature(location, type=type, qualifiers=qualifiers)
     record.features.append(feature)
@@ -156,41 +155,47 @@ def XdnaIterator(handle):
     # Biopython's SeqRecord has no such concept of a sequence origin as far
     # as I know, so we ignore that value. SerialCloner has no such concept
     # either and always generates files with a neg_length of zero.
-    header = _read(handle, 112)
-    (version, type, topology, length, neg_length, com_length) = unpack('>BBB25xII60xI12x', header)
-    if version != 0:
-        raise ValueError("Unsupported XDNA version")
-    if type not in _seq_types:
-        raise ValueError("Unknown sequence type")
 
-    # Read actual sequence and comment found in all XDNA files
-    sequence = _read(handle, length).decode('ASCII')
-    comment = _read(handle, com_length).decode('ASCII')
+    with as_handle(handle, "rb") as handle:
 
-    # Try to derive a name from the first "word" of the comment
-    name = comment.split(' ')[0]
+        header = _read_header(handle, 112)
+        (version, type, topology, length, neg_length, com_length) = unpack(
+            ">BBB25xII60xI12x", header
+        )
+        if version != 0:
+            raise ValueError("Unsupported XDNA version")
+        if type not in _seq_types:
+            raise ValueError("Unknown sequence type")
 
-    # Create record object
-    record = SeqRecord(Seq(sequence, _seq_types[type]),
-                       description=comment, name=name, id=name)
-    if topology in _seq_topologies:
-        record.annotations['topology'] = _seq_topologies[topology]
+        # Read actual sequence and comment found in all XDNA files
+        sequence = _read(handle, length).decode("ASCII")
+        comment = _read(handle, com_length).decode("ASCII")
 
-    if len(handle.read(1)) == 1:
-        # This is an XDNA file with an optional annotation section.
+        # Try to derive a name from the first "word" of the comment
+        name = comment.split(" ")[0]
 
-        # Skip the overhangs as I don't know how to represent
-        # them in the SeqRecord model.
-        _read_overhang(handle)  # right-side overhang
-        _read_overhang(handle)  # left-side overhang
+        # Create record object
+        record = SeqRecord(
+            Seq(sequence, _seq_types[type]), description=comment, name=name, id=name
+        )
+        if topology in _seq_topologies:
+            record.annotations["topology"] = _seq_topologies[topology]
 
-        # Read the features
-        num_features = unpack('>B', _read(handle, 1))[0]
-        while num_features > 0:
-            _read_feature(handle, record)
-            num_features -= 1
+        if len(handle.read(1)) == 1:
+            # This is an XDNA file with an optional annotation section.
 
-    yield record
+            # Skip the overhangs as I don't know how to represent
+            # them in the SeqRecord model.
+            _read_overhang(handle)  # right-side overhang
+            _read_overhang(handle)  # left-side overhang
+
+            # Read the features
+            num_features = unpack(">B", _read(handle, 1))[0]
+            while num_features > 0:
+                _read_feature(handle, record)
+                num_features -= 1
+
+        yield record
 
 
 class XdnaWriter(SequenceWriter):
@@ -221,7 +226,7 @@ class XdnaWriter(SequenceWriter):
         else:
             seqtype = 0
 
-        if record.annotations.get('topology', 'linear') == 'circular':
+        if record.annotations.get("topology", "linear") == "circular":
             topology = 1
         else:
             topology = 0
@@ -232,54 +237,67 @@ class XdnaWriter(SequenceWriter):
         if record.description.startswith(record.id):
             comment = record.description
         else:
-            comment = '{} {}'.format(record.id, record.description)
+            comment = "{} {}".format(record.id, record.description)
 
         # Write header
-        self.handle.write(pack('>BBB25xII60xI11xB',
-                               0,   # version
-                               seqtype, topology, len(record),
-                               0,   # negative length
-                               len(comment),
-                               255  # end of header
-                               ))
+        self.handle.write(
+            pack(
+                ">BBB25xII60xI11xB",
+                0,  # version
+                seqtype,
+                topology,
+                len(record),
+                0,  # negative length
+                len(comment),
+                255,  # end of header
+            )
+        )
 
         # Actual sequence and comment
-        self.handle.write(str(record.seq).encode('ASCII'))
-        self.handle.write(comment.encode('ASCII'))
+        self.handle.write(str(record.seq).encode("ASCII"))
+        self.handle.write(comment.encode("ASCII"))
 
-        self.handle.write(pack('>B', 0))    # Annotation section marker
-        self._write_pstring('0')            # right-side overhang
-        self._write_pstring('0')            # left-side overhand
+        self.handle.write(pack(">B", 0))  # Annotation section marker
+        self._write_pstring("0")  # right-side overhang
+        self._write_pstring("0")  # left-side overhand
 
         # Write features
         # We must skip features with fuzzy locations as they cannot be
         # represented in the Xdna format
-        features = [f for f in record.features if type(f.location.start) == ExactPosition and type(f.location.end) == ExactPosition]
+        features = [
+            f
+            for f in record.features
+            if type(f.location.start) == ExactPosition
+            and type(f.location.end) == ExactPosition
+        ]
         drop = len(record.features) - len(features)
         if drop > 0:
-            warnings.warn("Dropping {} features with fuzzy locations".format(drop),
-                          BiopythonWarning)
+            warnings.warn(
+                "Dropping {} features with fuzzy locations".format(drop),
+                BiopythonWarning,
+            )
 
         # We also cannot store more than 255 features as the number of
         # features is stored on a single byte...
         if len(features) > 255:
             drop = len(features) - 255
-            warnings.warn("Too many features, dropping the last {}".format(drop),
-                          BiopythonWarning)
+            warnings.warn(
+                "Too many features, dropping the last {}".format(drop), BiopythonWarning
+            )
             features = features[:255]
 
-        self.handle.write(pack('>B', len(features)))
+        self.handle.write(pack(">B", len(features)))
         for feature in features:
-            self._write_pstring(feature.qualifiers.get('label', [''])[0])
+            self._write_pstring(feature.qualifiers.get("label", [""])[0])
 
-            description = ''
+            description = ""
             for qname in feature.qualifiers:
-                if qname in ('label', 'translation'):
+                if qname in ("label", "translation"):
                     continue
 
                 for val in feature.qualifiers[qname]:
                     if len(description) > 0:
-                        description = description + '\x0D'
+                        description = description + "\x0D"
                     description = description + '%s="%s"' % (qname, val)
             self._write_pstring(description)
 
@@ -294,12 +312,13 @@ class XdnaWriter(SequenceWriter):
             self._write_pstring(str(start))
             self._write_pstring(str(end))
 
-            self.handle.write(pack('>BBBB', strand, 1, 0, 1))
-            self._write_pstring('127,127,127')
+            self.handle.write(pack(">BBBB", strand, 1, 0, 1))
+            self._write_pstring("127,127,127")
 
         if self._has_truncated_strings:
-            warnings.warn("Some annotations were truncated to 255 characters",
-                          BiopythonWarning)
+            warnings.warn(
+                "Some annotations were truncated to 255 characters", BiopythonWarning
+            )
 
         return 1
 
@@ -308,5 +327,5 @@ class XdnaWriter(SequenceWriter):
         if len(s) > 255:
             self._has_truncated_strings = True
             s = s[:255]
-        self.handle.write(pack('>B', len(s)))
-        self.handle.write(s.encode('ASCII'))
+        self.handle.write(pack(">B", len(s)))
+        self.handle.write(s.encode("ASCII"))

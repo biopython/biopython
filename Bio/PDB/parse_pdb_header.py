@@ -13,7 +13,6 @@ Emerged from the Columba database project www.columba-db.de, original author
 Kristian Rother.
 """
 
-from __future__ import print_function
 
 import re
 
@@ -63,8 +62,21 @@ def _format_date(pdb_date):
     else:
         century = 1900
     date = str(century + year) + "-"
-    all_months = ["xxx", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                  "Aug", "Sep", "Oct", "Nov", "Dec"]
+    all_months = [
+        "xxx",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
     month = str(all_months.index(pdb_date[3:6]))
     if len(month) == 1:
         month = "0" + month
@@ -133,16 +145,17 @@ def _parse_remark_465(line):
     if line:
         # Note that line has been stripped.
         assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
-    pattern = re.compile(r"""
-                (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
-                 [A-Z]{1,3})                  # Or only residue name with
-                                              # 1 (RNA) to 3 letters
-                \s ([A-Za-z0-9])              # A single character chain
-                \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed
-                                              # by an optional insertion code
-                                              # (Hetero-flags make no sense in
-                                              # context with missing res)
-                """, re.VERBOSE)
+    pattern = re.compile(
+        r"""
+        (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
+            [A-Z]{1,3})               # Or only residue name with 1 (RNA) to 3 letters
+        \s ([A-Za-z0-9])              # A single character chain
+        \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed by an optional
+                                      # insertion code (Hetero-flags make no sense in
+                                      # context with missing res)
+        """,
+        re.VERBOSE,
+    )
     match = pattern.match(line)
     if match is None:
         return None
@@ -177,9 +190,11 @@ def _parse_pdb_header_list(header):
         "structure_reference": "unknown",
         "journal_reference": "unknown",
         "author": "",
-        "compound": {"1": {"misc": ""}}, "source": {"1": {"misc": ""}},
+        "compound": {"1": {"misc": ""}},
+        "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
-        "missing_residues": []}
+        "missing_residues": [],
+    }
 
     dict["structure_reference"] = _get_references(header)
     dict["journal_reference"] = _get_journal(header)

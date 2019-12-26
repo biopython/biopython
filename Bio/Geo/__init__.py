@@ -41,10 +41,12 @@ def parse(handle):
             record = Record.Record()
             record.entity_type, record.entity_id = _read_key_value(line)
         elif c == "!":
-            if line in ("!Sample_table_begin",
-                        "!Sample_table_end",
-                        "!Platform_table_begin",
-                        "!Platform_table_end"):
+            if line in (
+                "!Sample_table_begin",
+                "!Sample_table_end",
+                "!Platform_table_begin",
+                "!Platform_table_end",
+            ):
                 continue
             key, value = _read_key_value(line)
             if key in record.entity_attributes:

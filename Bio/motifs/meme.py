@@ -5,7 +5,6 @@
 # as part of this package.
 """Module for the support of MEME motif format."""
 
-from __future__ import print_function
 
 from Bio import Seq
 from Bio import motifs
@@ -161,7 +160,7 @@ def __read_datafile(record, handle):
             break
     else:
         raise ValueError(
-            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with "
             "minimal MEME files (MEME databases) which are not supported yet.")
     try:
         line = next(handle)

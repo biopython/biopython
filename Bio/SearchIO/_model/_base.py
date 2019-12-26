@@ -41,11 +41,13 @@ class _BaseHSP(_BaseSearchObject):
         """Print the alignment header info (PRIVATE)."""
         lines = []
         # set query id line
-        qid_line = trim_str("      Query: %s %s" %
-                            (self.query_id, self.query_description), 80, "...")
+        qid_line = trim_str(
+            "      Query: %s %s" % (self.query_id, self.query_description), 80, "..."
+        )
         # set hit id line
-        hid_line = trim_str("        Hit: %s %s" %
-                            (self.hit_id, self.hit_description), 80, "...")
+        hid_line = trim_str(
+            "        Hit: %s %s" % (self.hit_id, self.hit_description), 80, "..."
+        )
         lines.append(qid_line)
         lines.append(hid_line)
 
@@ -62,9 +64,7 @@ class _BaseHSP(_BaseSearchObject):
         except ValueError:
             qstrand = self.query_strand_all[0]
             hstrand = self.hit_strand_all[0]
-        lines.append("Query range: [%s:%s] (%r)" % (query_start, query_end,
-                     qstrand))
-        lines.append("  Hit range: [%s:%s] (%r)" % (hit_start, hit_end,
-                     hstrand))
+        lines.append("Query range: [%s:%s] (%r)" % (query_start, query_end, qstrand))
+        lines.append("  Hit range: [%s:%s] (%r)" % (hit_start, hit_end, hstrand))
 
         return "\n".join(lines)

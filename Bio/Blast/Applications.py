@@ -28,7 +28,6 @@ Camacho et al. BLAST+: architecture and applications
 BMC Bioinformatics 2009, 10:421
 https://doi.org/10.1186/1471-2105-10-421
 """
-from __future__ import print_function
 
 from Bio.Application import _Option, AbstractCommandline, _Switch
 
@@ -639,10 +638,14 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     """Use composition-based statistics for blastp, blastx, or tblastn:
 
                     D or d: default (equivalent to 2 )
+
                     0 or F or f: no composition-based statistics
+
                     1: Composition-based statistics as in NAR 29:2994-3005, 2001
+
                     2 or T or t : Composition-based score adjustment as in
                     Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+
                     3: Composition-based score adjustment as in
                     Bioinformatics 21:902-911, 2005, unconditionally
 
@@ -715,14 +718,17 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     "Minimum score for words to be added to the BLAST lookup table (float).",
                     equate=False),
             _Option(["-comp_based_stats", "comp_based_stats"],
-                    """Use composition-based statistics (string, default 2, i.e. True).
+                    r"""Use composition-based statistics (string, default 2, i.e. True).
 
                     0, F or f: no composition-based statistics
+
                     1: Composition-based statistics as in NAR 29:2994-3005, 2001
+
                     2, T or t, D or d : Composition-based score adjustment as in
-                       Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+
                     3: Composition-based score adjustment as in Bioinformatics 21:902-911,
-                       2005, unconditionally
+                    2005, unconditionally
 
                     Note that only tblastn supports values of 1 and 3.""",
                     checker_function=lambda value: value in "0Ft12TtDd3",
@@ -732,7 +738,9 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     """Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+
+                    Default is "12 2.2 2.5"
+                    """,
                     equate=False),
             # Extension options:
             _Switch(["-ungapped", "ungapped"],
@@ -805,7 +813,8 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
                     """Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                    Default is "12 2.2 2.5"
+                    """,
                     equate=False),
         ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -968,14 +977,15 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
         self.parameters = [
             # Query filtering options:
             _Option(["-seg", "seg"],
-                    """Filter query sequence with SEG (string).
+                    r"""Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                    Default is "12 2.2 2.5"
+                    """,
                     equate=False),
             # Restrict search or results:
             _Option(["-culling_limit", "culling_limit"],
-                    """Hit culling limit (integer).
+                    r"""Hit culling limit (integer).
 
                     If the query range of a hit is enveloped by that of at
                     least this many higher-scoring hits, delete the hit.
@@ -984,14 +994,14 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     """,
                     equate=False),
             _Option(["-best_hit_overhang", "best_hit_overhang"],
-                    """Best Hit algorithm overhang value (recommended value: 0.1)
+                    r"""Best Hit algorithm overhang value (recommended value: 0.1)
 
                     Float between 0.0 and 0.5 inclusive.
 
                     Incompatible with: culling_limit.""",
                     equate=False),
             _Option(["-best_hit_score_edge", "best_hit_score_edge"],
-                    """Best Hit algorithm score edge value (recommended value: 0.1)
+                    r"""Best Hit algorithm score edge value (recommended value: 0.1)
 
                     Float between 0.0 and 0.5 inclusive.
 
@@ -999,11 +1009,13 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     equate=False),
             # General search options:
             _Option(["-comp_based_stats", "comp_based_stats"],
-                    """Use composition-based statistics.
+                    r"""Use composition-based statistics.
 
                     D or d: default (equivalent to 0 )
+
                     0 or F or f: Simplified Composition-based statistics as in
-                                 Bioinformatics 15:1000-1011, 1999
+                    Bioinformatics 15:1000-1011, 1999
+
                     1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
 
                     Default = 0.
@@ -1012,7 +1024,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     equate=False),
             # Misc options:
             _Switch(["-use_sw_tback", "use_sw_tback"],
-                    "Compute locally optimal Smith-Waterman alignments?"),
+                    r"Compute locally optimal Smith-Waterman alignments?"),
         ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
@@ -1049,7 +1061,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
         self.parameters = [
             # Input query options:
             _Option(["-strand", "strand"],
-                    """Query strand(s) to search against database/subject.
+                    r"""Query strand(s) to search against database/subject.
 
                     Values allowed are "both" (default), "minus", "plus".""",
                     checker_function=lambda value: value in ["both",
@@ -1058,22 +1070,24 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     equate=False),
             # Input query options:
             _Option(["-query_gencode", "query_gencode"],
-                    "Genetic code to use to translate query (integer, default 1).",
+                    r"Genetic code to use to translate query (integer, default 1).",
                     equate=False),
             # Query filtering options:
             _Option(["-seg", "seg"],
-                    """Filter query sequence with SEG (string).
+                    r"""Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                    Default is "12 2.2 2.5" """,
                     equate=False),
             # General search options:
             _Option(["-comp_based_stats", "comp_based_stats"],
-                    """Use composition-based statistics.
+                    r"""Use composition-based statistics.
 
                     D or d: default (equivalent to 0 )
+
                     0 or F or f: Simplified Composition-based statistics as in
-                                 Bioinformatics 15:1000-1011, 1999
+                    Bioinformatics 15:1000-1011, 1999
+
                     1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
 
                     Default = 0.
@@ -1082,10 +1096,10 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     equate=False),
             # Extension options:
             _Switch(["-ungapped", "ungapped"],
-                    "Perform ungapped alignment only?"),
+                    r"Perform ungapped alignment only?"),
             # Miscellaneous options:
             _Switch(["-use_sw_tback", "use_sw_tback"],
-                    "Compute locally optimal Smith-Waterman alignments?"),
+                    r"Compute locally optimal Smith-Waterman alignments?"),
         ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
@@ -1174,6 +1188,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     """Use composition-based statistics (string, default 2, i.e. True).
 
                     0, F or f: no composition-based statistics.
+
                     2, T or t, D or d : Composition-based score adjustment as in
                     Bioinformatics 21:902-911, 2005, conditioned on sequence properties
 

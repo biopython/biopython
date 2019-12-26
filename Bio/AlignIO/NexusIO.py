@@ -14,7 +14,6 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from __future__ import print_function
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
@@ -49,14 +48,16 @@ def NexusIterator(handle, seq_count=None):
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
 
     if seq_count and seq_count != len(n.unaltered_taxlabels):
-        raise ValueError("Found %i sequences, but seq_count=%i"
-                         % (len(n.unaltered_taxlabels), seq_count))
+        raise ValueError(
+            "Found %i sequences, but seq_count=%i"
+            % (len(n.unaltered_taxlabels), seq_count)
+        )
 
     # TODO - Can we extract any annotation too?
-    records = (SeqRecord(n.matrix[new_name], id=new_name,
-                         name=old_name, description="")
-               for old_name, new_name
-               in zip(n.unaltered_taxlabels, n.taxlabels))
+    records = (
+        SeqRecord(n.matrix[new_name], id=new_name, name=old_name, description="")
+        for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
+    )
     # All done
     yield MultipleSeqAlignment(records, n.alphabet)
 
@@ -113,9 +114,10 @@ class NexusWriter(AlignmentWriter):
         columns = alignment.get_alignment_length()
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
-        minimal_record = "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; " \
-                         + "format datatype=%s; end;"  \
-                         % self._classify_alphabet_for_nexus(alignment._alphabet)
+        minimal_record = (
+            "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=%s; end;"
+            % self._classify_alphabet_for_nexus(alignment._alphabet)
+        )
         n = Nexus.Nexus(minimal_record)
         n.alphabet = alignment._alphabet
         for record in alignment:
@@ -123,7 +125,7 @@ class NexusWriter(AlignmentWriter):
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
-            interleave = (columns > 1000)
+            interleave = columns > 1000
         n.write_nexus_data(self.handle, interleave=interleave)
 
     def _classify_alphabet_for_nexus(self, alphabet):
@@ -150,4 +152,5 @@ class NexusWriter(AlignmentWriter):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

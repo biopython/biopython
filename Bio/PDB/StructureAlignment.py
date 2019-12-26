@@ -7,7 +7,6 @@
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
-from __future__ import print_function
 
 from Bio.Data import SCOPData
 
@@ -82,7 +81,7 @@ class StructureAlignment(object):
         """Test if aa in sequence fits aa in structure (PRIVATE)."""
         resname = r1.get_resname()
         resname = SCOPData.protein_letters_3to1[resname]
-        assert(aa1 == resname)
+        assert aa1 == resname
 
     def get_maps(self):
         """Map residues between the structures.

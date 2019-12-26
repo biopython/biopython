@@ -50,14 +50,15 @@
 # This future import will apply to all the doctests too:
 """Tests for Tutorial module."""
 
-from __future__ import print_function
-from Bio._py3k import _universal_read_mode
-
 import unittest
 import doctest
 import os
 import sys
 import warnings
+
+from lib2to3 import refactor
+from lib2to3.pgen2.tokenize import TokenError
+
 from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 
 # This is the same mechanism used for run_tests.py --offline
@@ -74,19 +75,16 @@ if "--offline" in sys.argv:
 
 warnings.simplefilter("ignore", BiopythonExperimentalWarning)
 
-if sys.version_info[0] >= 3:
-    from lib2to3 import refactor
-    from lib2to3.pgen2.tokenize import TokenError
-    fixers = refactor.get_fixers_from_package("lib2to3.fixes")
-    fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
-    rt = refactor.RefactoringTool(fixers)
-    assert rt.refactor_docstring(
-        ">>> print(2+2)\n4\n", "example1") == \
-        ">>> print(2+2)\n4\n"
-    assert rt.refactor_docstring(
-        '>>> print("Two plus two is", 2+2)\n'
-        "Two plus two is 4\n", "example2") == \
-        '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
+fixers = refactor.get_fixers_from_package("lib2to3.fixes")
+fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
+rt = refactor.RefactoringTool(fixers)
+assert rt.refactor_docstring(
+    ">>> print(2+2)\n4\n", "example1") == \
+    ">>> print(2+2)\n4\n"
+assert rt.refactor_docstring(
+    '>>> print("Two plus two is", 2+2)\n'
+    "Two plus two is 4\n", "example2") == \
+    '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
 
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")
@@ -142,7 +140,7 @@ def extract_doctests(latex_filename):
     base_name = os.path.splitext(os.path.basename(latex_filename))[0]
     deps = ""
     folder = ""
-    with open(latex_filename, _universal_read_mode) as handle:
+    with open(latex_filename) as handle:
         line_number = 0
         lines = []
         name = None
@@ -213,12 +211,10 @@ for latex in files:
             missing_deps.update(missing)
             continue
 
-        if sys.version_info[0] >= 3:
-            example = ">>> from __future__ import print_function\n" + example
-            try:
-                example = rt.refactor_docstring(example, name)
-            except TokenError:
-                raise ValueError("Problem with %s:\n%s" % (name, example))
+        try:
+            example = rt.refactor_docstring(example, name)
+        except TokenError:
+            raise ValueError("Problem with %s:\n%s" % (name, example))
 
         def funct(n, d, f):
             global tutorial_base

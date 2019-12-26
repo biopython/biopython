@@ -7,7 +7,6 @@
 # package.
 """Common utility functions for various Bio submodules."""
 
-from __future__ import print_function
 
 import os
 
@@ -44,6 +43,22 @@ def read_forward(handle):
         # them, return the line
         if (not line) or (line and line.strip()):
             return line
+
+
+def _read_header(handle, length):
+    """Read the specified number of characters from the given handle.
+
+    Raise a ValueError("Empty file.") if the length of data read is zero. The
+    reason for having a separate function for the header is it enables raising
+    an empty file error if the length of the data read is zero. This might
+    not always be the case later in the file.
+    """
+    data = handle.read(length)
+    if not data:
+        raise ValueError("Empty file.")
+    if len(data) < length:
+        raise ValueError("Improper header, cannot read %d bytes from handle" % length)
+    return data
 
 
 def trim_str(string, max_len, concat_char):
