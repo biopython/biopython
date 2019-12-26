@@ -681,7 +681,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def startDocument(self):
         """Start the XML document."""
         self.write(
-            u'<?xml version="1.0"?>\n'
+            '<?xml version="1.0"?>\n'
             '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
             '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n'
         )
@@ -752,7 +752,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def characters(self, content):
         """Replace quotes and apostrophe."""
         content = escape(str(content))
-        for a, b in ((u'"', u"&quot;"), (u"'", u"&apos;")):
+        for a, b in (('"', "&quot;"), ("'", "&apos;")):
             content = content.replace(a, b)
         self.write(content)
 

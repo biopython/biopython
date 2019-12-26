@@ -18,10 +18,12 @@ from Bio.SearchIO import parse
 TEST_DIR = "Blast"
 FMT = "blast-xml"
 
-REFERENCE = (u"Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, "
-             u"Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "
-             u'"Gapped BLAST and PSI-BLAST: a new generation of protein database '
-             u'search programs", Nucleic Acids Res. 25:3389-3402.')
+REFERENCE = (
+    "Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, "
+    "Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "
+    '"Gapped BLAST and PSI-BLAST: a new generation of protein database '
+    'search programs", Nucleic Acids Res. 25:3389-3402.'
+)
 
 
 def get_file(filename):

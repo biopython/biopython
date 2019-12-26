@@ -685,12 +685,7 @@ class GenBankWriter(_InsdcWriter):
                 )
 
         if len(locus.split()) > 1:
-            # locus could be unicode, and u'with space' versus 'with space'
-            # causes trouble with doctests, so
-            tmp = repr(locus)
-            if tmp.startswith("u'") and tmp.endswith("'"):
-                tmp = tmp[1:]
-            raise ValueError("Invalid whitespace in %s for LOCUS line" % tmp)
+            raise ValueError("Invalid whitespace in %r for LOCUS line" % locus)
         if len(record) > 99999999999:
             # As of the GenBank release notes 229.0, the locus line can be
             # any length. However, long locus lines may not be compatible
