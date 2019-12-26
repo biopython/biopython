@@ -29,7 +29,6 @@ from Bio.Seq import UnknownSeq
 
 from Bio._py3k import _is_int_or_long
 from Bio._py3k import range
-from Bio._py3k import basestring
 
 from Bio.SeqFeature import UnknownPosition
 
@@ -470,7 +469,7 @@ class DatabaseLoader(object):
                         for name in names:
                             # Want to ignore complex things like ClassCDE
                             # entries
-                            if isinstance(name, basestring):
+                            if isinstance(name, str):
                                 species_names.append((name_class, name))
                 except KeyError:
                     # OtherNames isn't always present,

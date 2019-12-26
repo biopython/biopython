@@ -42,8 +42,6 @@ from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
 from Bio._py3k import _is_int_or_long
-from Bio._py3k import basestring
-
 
 # NOTE
 # ====
@@ -561,7 +559,7 @@ class GenBankWriter(_InsdcWriter):
             "NOV",
             "DEC",
         ]
-        if not isinstance(date, basestring) or len(date) != 11:
+        if not isinstance(date, str) or len(date) != 11:
             return default
         try:
             datetime(int(date[-4:]), months.index(date[3:6]) + 1, int(date[0:2]))
@@ -920,7 +918,7 @@ class GenBankWriter(_InsdcWriter):
                 lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
         if "comment" in record.annotations:
             comment = record.annotations["comment"]
-            if isinstance(comment, basestring):
+            if isinstance(comment, str):
                 lines += comment.split("\n")
             elif isinstance(comment, (list, tuple)):
                 lines += list(comment)
@@ -1364,7 +1362,7 @@ class EmblWriter(_InsdcWriter):
         # A single (long) string is perhaps the most natural of all.
         # This means we may need to deal with line wrapping.
         comment = record.annotations["comment"]
-        if isinstance(comment, basestring):
+        if isinstance(comment, str):
             lines = comment.split("\n")
         elif isinstance(comment, (list, tuple)):
             lines = comment

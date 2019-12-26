@@ -36,7 +36,6 @@ import warnings
 from functools import reduce
 
 from Bio._py3k import map
-from Bio._py3k import basestring
 
 from Bio import BiopythonDeprecationWarning
 warnings.warn("Bio.Crystal has been deprecated, and we intend to remove it"
@@ -180,7 +179,7 @@ class Chain(object):
                 self.data[index] = value.data
             elif isinstance(value, type(self.data)):
                 self.data[index] = value
-            elif isinstance(value, basestring):
+            elif isinstance(value, str):
                 self.data[index] = Chain(value).data
             else:
                 raise TypeError

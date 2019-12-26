@@ -24,7 +24,6 @@ acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
 chemically modified residues.
 """
 
-from Bio._py3k import basestring
 from Bio._py3k import _universal_read_mode
 
 from copy import copy
@@ -95,7 +94,7 @@ class SeqMapIndex(dict):
            converted into a Residues instance.
 
         """
-        if isinstance(residues, basestring):
+        if isinstance(residues, str):
             residues = Residues(residues)
 
         pdbid = residues.pdbid

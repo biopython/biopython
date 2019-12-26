@@ -8,7 +8,6 @@
 Derived from the help page for RAxML version 7.3 by Alexandros Stamatakis, but
 should work for any version 7.X (and probably earlier for most options).
 """
-from Bio._py3k import basestring
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -152,7 +151,7 @@ class RaxmlCommandline(AbstractCommandline):
                         tree passed via '-t', only allowed for GAMMA-based models
                         of rate heterogeneity.
                         """,
-                checker_function=(lambda x: isinstance(x, basestring) and len(x) == 1),
+                checker_function=(lambda x: isinstance(x, str) and len(x) == 1),
                 equate=False,
             ),
             _Option(

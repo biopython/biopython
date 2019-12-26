@@ -14,7 +14,6 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 
 from Bio._py3k import zip
 from Bio._py3k import range
-from Bio._py3k import basestring
 
 from functools import reduce
 import copy
@@ -703,7 +702,7 @@ class Nexus(object):
                 self.filename = getattr(fp, "name", "Unknown_nexus_file")
         except (TypeError, IOError, AttributeError):
             # 2. Assume we have a string from a fh.read()
-            if isinstance(input, basestring):
+            if isinstance(input, str):
                 file_contents = input
                 self.filename = "input_string"
             else:

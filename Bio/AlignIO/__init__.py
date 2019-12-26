@@ -128,8 +128,6 @@ same length.
 """
 
 
-from Bio._py3k import basestring
-
 # TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
@@ -205,7 +203,7 @@ def write(alignments, handle, format):
     from Bio import SeqIO
 
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
@@ -353,7 +351,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     from Bio import SeqIO
 
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")

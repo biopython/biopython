@@ -29,7 +29,6 @@ import json
 import csv
 import numpy as np
 
-from Bio._py3k import basestring
 from Bio._py3k import _is_int_or_long
 from Bio import BiopythonParserWarning
 
@@ -289,7 +288,7 @@ class PlateRecord(object):
         array or matrix objects.
         """
         # Well identifier access
-        if isinstance(index, basestring):
+        if isinstance(index, str):
             try:
                 return self._wells[index]
             except KeyError:
@@ -372,7 +371,7 @@ class PlateRecord(object):
             )
 
     def __setitem__(self, key, value):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         self._is_well(value)
         # Provided key and well ID should be the same
@@ -386,7 +385,7 @@ class PlateRecord(object):
         self._update()
 
     def __delitem__(self, key):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         del self._wells[key]
 

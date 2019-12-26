@@ -23,8 +23,6 @@ import contextlib
 import itertools
 import platform
 
-from Bio._py3k import basestring
-
 try:
     from collections import UserDict as _dict_base
 except ImportError:
@@ -109,7 +107,7 @@ def as_handle(handleish, mode="r", **kwargs):
             # handleish isn't path-like, and it remains unchanged -- we'll yield it below
             pass
 
-    if isinstance(handleish, basestring):
+    if isinstance(handleish, str):
         if sys.version_info[0] >= 3 and "U" in mode:
             mode = mode.replace("U", "")
         if "encoding" in kwargs:

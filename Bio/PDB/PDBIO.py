@@ -5,7 +5,6 @@
 
 """Output of PDB files."""
 
-from Bio._py3k import basestring
 
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -226,7 +225,7 @@ class PDBIO(StructureIO):
         Typically select is a subclass of L{Select}.
         """
         get_atom_line = self._get_atom_line
-        if isinstance(file, basestring):
+        if isinstance(file, str):
             fp = open(file, "w")
             close_file = 1
         else:
