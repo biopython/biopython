@@ -153,7 +153,7 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, str):
-                return isinstance(target, basestring) and re.match(
+                return isinstance(target, str) and re.match(
                     pattern + "$", target
                 )
             if isinstance(pattern, bool):
@@ -278,7 +278,7 @@ class TreeElement(object):
             ", ".join(
                 pair_as_kwarg_string(key, val)
                 for key, val in sorted(self.__dict__.items())
-                if val is not None and type(val) in (str, int, float, bool, unicode)
+                if val is not None and type(val) in (str, int, float, bool, str)
             ),
         )
 
