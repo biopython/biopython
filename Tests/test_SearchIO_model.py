@@ -163,8 +163,8 @@ class QueryResultCases(unittest.TestCase):
         # len() should return the number of hits contained
         self.assertEqual(3, len(self.qresult))
 
-    def test_nonzero(self):
-        """Test QueryResult.__nonzero__."""
+    def test_bool(self):
+        """Test QueryResult.__bool__."""
         # nonzero should return true only if the qresult has hits
         self.assertTrue(self.qresult)
         blank_qresult = QueryResult()

@@ -161,8 +161,8 @@ class Seq(object):
     def __hash__(self):
         """Hash for comparison.
 
-        See the __cmp__ documentation - this has changed from past
-        versions of Biopython!
+        See Seq object comparison documentation - this has changed
+        from past versions of Biopython!
         """
         # TODO - remove this warning in a future release
         warnings.warn(

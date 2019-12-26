@@ -311,13 +311,9 @@ class HSP(_BaseHSP):
         """Return number of HSPs items."""
         return len(self._items)
 
-    # Python 3:
     def __bool__(self):
         """Return True if it has HSPs."""
         return bool(self._items)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __str__(self):
         """Return a human readable summary of the HSP object."""

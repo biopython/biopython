@@ -466,7 +466,6 @@ class SeqFeature(object):
             gap=gap,
         )
 
-    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -480,9 +479,6 @@ class SeqFeature(object):
         length is zero (in order to better match normal python behaviour)!
         """
         return True
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __len__(self):
         """Return the length of the region where the feature is located.

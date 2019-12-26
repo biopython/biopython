@@ -941,14 +941,6 @@ class PairwiseAlignment(object):
         self.score = score
         self.path = path
 
-    # For Python2 only
-    def __cmp__(self, other):
-        if self.path < other.path:
-            return -1
-        if self.path > other.path:
-            return +1
-        return 0
-
     def __eq__(self, other):
         return self.path == other.path
 
