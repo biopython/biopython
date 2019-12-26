@@ -17,23 +17,12 @@ About capitalization:
 
 """
 
-import sys
+from xml.etree import ElementTree
 
 from Bio._py3k import basestring
 from Bio._py3k import unicode
 
 from Bio.Phylo import PhyloXML as PX
-
-# For speed try to use cElementTree rather than ElementTree
-try:
-    if (3, 0) <= sys.version_info[:2] <= (3, 1):
-        # Workaround for bug in python 3.0 and 3.1,
-        # see http://bugs.python.org/issue9257
-        from xml.etree import ElementTree as ElementTree
-    else:
-        from xml.etree import cElementTree as ElementTree
-except ImportError:
-    from xml.etree import ElementTree as ElementTree
 
 
 # Recognize the phyloXML namespace when parsing
@@ -58,7 +47,7 @@ for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
 # Tell ElementTree how to write to text handles
-DEFAULT_ENCODING = "unicode" if sys.version_info[0] >= 3 else "utf-8"
+DEFAULT_ENCODING = "unicode"
 
 
 class PhyloXMLError(Exception):

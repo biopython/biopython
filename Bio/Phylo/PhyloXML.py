@@ -723,10 +723,7 @@ class Confidence(PhyloElement):
         return other.__div__(self.value)
 
     def __truediv__(self, other):
-        """Rational-style division in Py3.0+.
-
-        Also active in Py2.5+ with __future__.division import.
-        """
+        """Rational-style division in Py3.0+."""
         return self.value / other
 
     def __rtruediv__(self, other):
@@ -734,10 +731,7 @@ class Confidence(PhyloElement):
         return other / self.value
 
     def __floordiv__(self, other):
-        """C-style and old-style division in Py3.0+.
-
-        Also active in Py2.5+ with __future__.division import.
-        """
+        """C-style and old-style division in Py3.0+."""
         return self.value.__floordiv__(other)
 
     def __rfloordiv__(self, other):

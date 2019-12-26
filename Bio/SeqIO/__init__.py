@@ -628,11 +628,7 @@ def parse(handle, format, alphabet=None):
 
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
     ...     print("%s %s" % (record.id, record.seq))
     Alpha ACCGGATGTA
@@ -1088,11 +1084,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     For example, going from a filename to a handle:
 
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> handle = StringIO("")
     >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "fasta")
     3

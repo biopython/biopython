@@ -11,14 +11,9 @@
 
 """Utility code for graphical Xbbtools tool."""
 
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-    import tkFileDialog as filedialog
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import filedialog
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import filedialog
 
 
 class NotePad(tk.Toplevel):

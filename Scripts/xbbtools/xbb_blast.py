@@ -16,16 +16,10 @@ import glob
 import os
 import sys
 
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-    import tkFileDialog as filedialog
-    import tkMessageBox as messagebox
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import filedialog
-    from tkinter import messagebox
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import filedialog
+from tkinter import messagebox
 
 
 from xbb_utils import NotePad

@@ -15,11 +15,7 @@
 import os
 import tempfile
 import threading
-
-try:
-    import tkMessageBox as messagebox  # Python 2
-except ImportError:
-    from tkinter import messagebox  # Python 3
+from tkinter import messagebox
 
 from Bio.Blast.Applications import (
     NcbiblastnCommandline,

@@ -30,6 +30,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Peter Cock
+- Sujan Dulal
 
 20 December 2019: Biopython 1.76
 ================================

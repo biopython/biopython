@@ -767,11 +767,7 @@ class TestOtherFunctions(unittest.TestCase):
     def test_print_matrix(self):
         """``print_matrix`` prints nested lists as nice matrices."""
         import sys
-
-        try:  # Python 2
-            from StringIO import StringIO
-        except ImportError:  # Python 3
-            from io import StringIO
+        from io import StringIO
         out = StringIO()
         sys.stdout = out
         pairwise2.print_matrix([[0.0, -1.0, -1.5, -2.0], [-1.0, 4.0, 3.0, 2.5],

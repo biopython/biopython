@@ -20,12 +20,7 @@ _InMemoryIndex  An in-memory Index class.
 import os
 import array
 import shelve
-
-
-try:
-    import cPickle as pickle  # Only available under Python 2
-except ImportError:
-    import pickle  # Python 3
+import pickle
 
 import warnings
 from Bio import BiopythonDeprecationWarning

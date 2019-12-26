@@ -22,13 +22,6 @@ It runs as a standalone application.
 from Bio.Seq import translate, transcribe, back_transcribe
 from Bio.Data import CodonTable
 
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-
 
 main_window = tk.Tk()
 main_window.title("Greetings from Biopython")

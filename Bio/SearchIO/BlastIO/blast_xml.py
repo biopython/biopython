@@ -8,26 +8,13 @@
 """Bio.SearchIO parser for BLAST+ XML output formats."""
 # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
 
-import sys
 import re
 import warnings
 from itertools import chain
+from xml.etree import ElementTree
 from xml.sax.saxutils import XMLGenerator, escape
 
 from Bio import BiopythonParserWarning
-
-# For speed try to use cElementTree rather than ElementTree
-try:
-    if (3, 0) <= sys.version_info[:2] <= (3, 1):
-        # Workaround for bug in python 3.0 and 3.1,
-        # see http://bugs.python.org/issue9257
-        from xml.etree import ElementTree as ElementTree
-    else:
-        from xml.etree import cElementTree as ElementTree
-except ImportError:
-    from xml.etree import ElementTree as ElementTree
-
-
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment

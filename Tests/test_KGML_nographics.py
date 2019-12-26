@@ -8,7 +8,6 @@
 """Tests for general functionality of the KGML parser and pathway model."""
 
 # Builtins
-from __future__ import with_statement
 import os
 import unittest
 import tempfile

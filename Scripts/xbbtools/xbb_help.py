@@ -11,12 +11,8 @@
 
 """Help code for graphical Xbbtools tool."""
 
-try:  # Python 2
-    import Tkinter as tk
-    import ScrolledText as scrolledtext
-except ImportError:  # Python 3
-    import tkinter as tk
-    from tkinter import scrolledtext
+import tkinter as tk
+from tkinter import scrolledtext
 
 
 class xbbtools_help(tk.Toplevel):

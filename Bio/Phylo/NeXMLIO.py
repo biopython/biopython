@@ -11,25 +11,14 @@
 See: http://www.nexml.org
 """
 
-
-from Bio._py3k import StringIO
+from io import StringIO
+from xml.dom import minidom
+from xml.etree import ElementTree
 
 from Bio.Phylo import NeXML
-from xml.dom import minidom
-import sys
+
 from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 
-
-# For speed try to use cElementTree rather than ElementTree
-try:
-    if (3, 0) <= sys.version_info[:2] <= (3, 1):
-        # Workaround for bug in python 3.0 and 3.1,
-        # see http://bugs.python.org/issue9257
-        from xml.etree import ElementTree as ElementTree
-    else:
-        from xml.etree import cElementTree as ElementTree
-except ImportError:
-    from xml.etree import ElementTree as ElementTree
 
 NAMESPACES = {
     "xsi": "http://www.w3.org/2001/XMLSchema-instance",

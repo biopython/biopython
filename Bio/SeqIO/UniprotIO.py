@@ -16,7 +16,7 @@ The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 
 """
-import sys
+from xml.etree import ElementTree
 
 from Bio import Seq
 from Bio import SeqFeature
@@ -25,17 +25,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.File import as_handle
 from Bio._py3k import StringIO
 
-
-# For speed try to use cElementTree rather than ElementTree
-try:
-    if (3, 0) <= sys.version_info[:2] <= (3, 1):
-        # Workaround for bug in python 3.0 and 3.1,
-        # see http://bugs.python.org/issue9257
-        from xml.etree import ElementTree as ElementTree
-    else:
-        from xml.etree import cElementTree as ElementTree
-except ImportError:
-    from xml.etree import ElementTree as ElementTree
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"

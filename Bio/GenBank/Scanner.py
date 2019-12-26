@@ -1866,7 +1866,7 @@ class GenBankScanner(InsdcScanner):
                         consumer.origin_name(line)
                 if line.startswith("TSA "):
                     line = line[3:].strip()
-                    consumer.tgs(line)
+                    consumer.tsa(line)
                 if line.startswith("WGS "):
                     line = line[3:].strip()
                     consumer.wgs(line)

@@ -8,7 +8,6 @@
 """Tests for general functionality of the KGML modules."""
 
 # Builtins
-from __future__ import with_statement
 import os
 import unittest
 
