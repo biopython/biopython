@@ -165,7 +165,7 @@ class QueryResultCases(unittest.TestCase):
 
     def test_bool(self):
         """Test QueryResult.__bool__."""
-        # nonzero should return true only if the qresult has hits
+        # should return true only if the qresult has hits
         self.assertTrue(self.qresult)
         blank_qresult = QueryResult()
         self.assertFalse(blank_qresult)
@@ -811,8 +811,8 @@ class HitCases(unittest.TestCase):
         # len() on Hit objects should return how many hsps it has
         self.assertEqual(3, len(self.hit))
 
-    def test_nonzero(self):
-        """Test Hit.__nonzero__."""
+    def test_bool(self):
+        """Test Hit.__bool__."""
         # bool() on Hit objects should return True only if hsps is filled
         # which is always true
         self.assertTrue(self.hit)
