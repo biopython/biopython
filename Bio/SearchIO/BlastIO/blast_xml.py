@@ -20,7 +20,7 @@ from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-_empty_bytes_string = as_bytes("")
+_empty_bytes_string = b""
 
 __all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
 
@@ -558,8 +558,8 @@ class BlastXmlIndexer(SearchIndexer):
     """Indexer class for BLAST XML output."""
 
     _parser = BlastXmlParser
-    qstart_mark = as_bytes("<Iteration>")
-    qend_mark = as_bytes("</Iteration>")
+    qstart_mark = "<Iteration>"
+    qend_mark = b"</Iteration>"
     block_size = 16384
 
     def __init__(self, filename, **kwargs):
@@ -573,7 +573,7 @@ class BlastXmlIndexer(SearchIndexer):
         """Iterate over BlastXmlIndexer yields qstart_id, start_offset, block's length."""
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
-        blast_id_mark = as_bytes("Query_")
+        blast_id_mark = "Query_"
         block_size = self.block_size
         handle = self._handle
         handle.seek(0)
@@ -624,7 +624,7 @@ class BlastXmlIndexer(SearchIndexer):
                 qstart_desc = as_bytes(self._fallback["description"])
                 qstart_id = as_bytes(self._fallback["id"])
             if qstart_id.startswith(blast_id_mark):
-                qstart_id = qstart_desc.split(as_bytes(" "), 1)[0]
+                qstart_id = qstart_desc.split(b" ", 1)[0]
             yield qstart_id.decode(), start_offset, len(block)
             counter += 1
 
