@@ -7,7 +7,7 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -426,7 +426,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
+                yield qresult_key.decode(), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 break
