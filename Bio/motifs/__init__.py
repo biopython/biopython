@@ -14,7 +14,6 @@ Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
 
-
 def create(instances, alphabet=None):
     """Create a Motif object."""
     instances = Instances(instances, alphabet)
@@ -177,7 +176,8 @@ class Instances(list):
             if self.length is None:
                 self.length = len(instance)
             elif self.length != len(instance):
-                message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
+                message = "All instances should have the same length (%d found, %d expected)" % (
+                len(instance), self.length)
                 raise ValueError(message)
             try:
                 a = instance.alphabet
@@ -290,7 +290,8 @@ class Motif(object):
         elif mask is None:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
-            raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
+            raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif",
+                             (len(mask), self.length))
         elif isinstance(mask, str):
             self.__mask = []
             for char in mask:
@@ -592,4 +593,5 @@ def write(motifs, format):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)
