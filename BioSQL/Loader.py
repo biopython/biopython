@@ -18,7 +18,6 @@ classes in this module directly. Rather, call the load() method on
 a database object.
 """
 # standard modules
-
 from time import gmtime, strftime
 
 # biopython
@@ -26,9 +25,6 @@ from Bio import Alphabet
 from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
 from Bio.Seq import UnknownSeq
-
-from Bio._py3k import _is_int_or_long
-
 from Bio.SeqFeature import UnknownPosition
 
 
@@ -558,7 +554,7 @@ class DatabaseLoader(object):
             ) = self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
             left_value = parent_right_value
             right_value = parent_right_value + 1
-            assert _is_int_or_long(parent_taxon_id), repr(parent_taxon_id)
+            assert isinstance(parent_taxon_id, int), repr(parent_taxon_id)
         else:
             # we have reached the top of the lineage but no current taxonomy
             # id has been found
