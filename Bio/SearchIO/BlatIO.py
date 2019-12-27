@@ -181,8 +181,8 @@ HSP and HSPFragment documentation for more details on these properties.
 """
 import re
 from math import log
+from wheel.util import as_bytes
 
-from Bio._py3k import _as_bytes
 from Bio._py3k import zip
 
 from Bio.Alphabet import generic_dna
@@ -196,7 +196,7 @@ __all__ = ("BlatPslParser", "BlatPslIndexer", "BlatPslWriter")
 # precompile regex patterns
 _PTR_ROW_CHECK = r"^\d+\s+\d+\s+\d+\s+\d+"
 _RE_ROW_CHECK = re.compile(_PTR_ROW_CHECK)
-_RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
+_RE_ROW_CHECK_IDX = re.compile(as_bytes(_PTR_ROW_CHECK))
 
 
 def _list_from_csv(csv_string, caster=None):

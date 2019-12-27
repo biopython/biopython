@@ -228,7 +228,7 @@ For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
-
+from wheel.util import as_bytes
 
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
@@ -238,8 +238,6 @@ from Bio.SeqRecord import SeqRecord
 import struct
 import sys
 import re
-
-from Bio._py3k import _as_bytes
 
 _null = b"\0"
 _sff = b".sff"
@@ -1212,8 +1210,8 @@ class SffWriter(SequenceWriter):
             # return 0
             raise ValueError("Must have at least one sequence")
         try:
-            self._key_sequence = _as_bytes(record.annotations["flow_key"])
-            self._flow_chars = _as_bytes(record.annotations["flow_chars"])
+            self._key_sequence = as_bytes(record.annotations["flow_key"])
+            self._flow_chars = as_bytes(record.annotations["flow_chars"])
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
             raise ValueError("Missing SFF flow information")
@@ -1243,7 +1241,7 @@ class SffWriter(SequenceWriter):
         self._index_start = handle.tell()  # need for header
         # XML...
         if self._xml is not None:
-            xml = _as_bytes(self._xml)
+            xml = as_bytes(self._xml)
         else:
             from Bio import __version__
 
@@ -1252,7 +1250,7 @@ class SffWriter(SequenceWriter):
                 "<!-- This XML and index block attempts to mimic Roche SFF files -->\n"
             )
             xml += "<!-- This file may be a combination of multiple SFF files etc -->\n"
-            xml = _as_bytes(xml)
+            xml = as_bytes(xml)
         xml_len = len(xml)
         # Write to the file...
         fmt = ">I4BLL"
@@ -1377,9 +1375,9 @@ class SffWriter(SequenceWriter):
         This assumes the header has been done.
         """
         # Basics
-        name = _as_bytes(record.id)
+        name = as_bytes(record.id)
         name_len = len(name)
-        seq = _as_bytes(str(record.seq).upper())
+        seq = as_bytes(str(record.seq).upper())
         seq_len = len(seq)
         # Qualities
         try:
@@ -1390,9 +1388,9 @@ class SffWriter(SequenceWriter):
         try:
             flow_values = record.annotations["flow_values"]
             flow_index = record.annotations["flow_index"]
-            if self._key_sequence != _as_bytes(
+            if self._key_sequence != as_bytes(
                 record.annotations["flow_key"]
-            ) or self._flow_chars != _as_bytes(record.annotations["flow_chars"]):
+            ) or self._flow_chars != as_bytes(record.annotations["flow_chars"]):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
             raise ValueError("Missing SFF flow information for %s" % record.id)

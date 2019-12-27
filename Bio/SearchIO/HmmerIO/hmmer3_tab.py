@@ -6,8 +6,8 @@
 """Bio.SearchIO parser for HMMER table output format."""
 
 from itertools import chain
+from wheel.util import as_bytes
 
-from Bio._py3k import _as_bytes
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -156,8 +156,8 @@ class Hmmer3TabIndexer(SearchIndexer):
         handle.seek(0)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        header_mark = _as_bytes("#")
-        split_mark = _as_bytes(" ")
+        header_mark = as_bytes("#")
+        split_mark = as_bytes(" ")
         # set line with initial mock value, to emulate header
         line = header_mark
 
@@ -204,8 +204,8 @@ class Hmmer3TabIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        qresult_raw = _as_bytes("")
-        split_mark = _as_bytes(" ")
+        qresult_raw = as_bytes("")
+        split_mark = as_bytes(" ")
 
         while True:
             line = handle.readline()

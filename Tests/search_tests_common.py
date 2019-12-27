@@ -10,13 +10,15 @@
 import os
 import gzip
 import unittest
+
+from wheel.util import as_bytes
+
 try:
     import sqlite3
 except ImportError:
     sqlite3 = None
 
 from Bio import SearchIO
-from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
 
@@ -28,7 +30,7 @@ class CheckRaw(unittest.TestCase):
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using keyword arguments, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
-        raw = _as_bytes(raw)
+        raw = as_bytes(raw)
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
         new = idx.get_raw(id)

@@ -7,7 +7,8 @@
 
 import re
 
-from Bio._py3k import _as_bytes
+from wheel.util import as_bytes
+
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -405,15 +406,15 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     """Indexer class for HMMER plain text output."""
 
     _parser = Hmmer3TextParser
-    qresult_start = _as_bytes("Query: ")
-    qresult_end = _as_bytes("//")
+    qresult_start = as_bytes("Query: ")
+    qresult_end = as_bytes("//")
 
     def __iter__(self):
         """Iterate over Hmmer3TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(_QRE_ID_LEN_PTN))
+        regex_id = re.compile(as_bytes(_QRE_ID_LEN_PTN))
 
         while True:
             line = read_forward(handle)

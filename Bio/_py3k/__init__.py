@@ -59,17 +59,6 @@ if sys.version_info[0] >= 3:
             return s.decode()
         return s
 
-    def _as_bytes(s):
-        """Turn byte string or unicode string into a bytes string (PRIVATE).
-
-        The Python 2 version returns a (byte) string.
-        """
-        if isinstance(s, bytes):
-            return s
-        # Assume it is a unicode string
-        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-        return codecs.latin_1_encode(s)[0]
-
     def _is_int_or_long(i):
         """Check if the value is an integer (PRIVATE).
 
@@ -139,10 +128,6 @@ else:
         if isinstance(s, (bytes, bytearray)):
             return str(s)
         return s
-
-    def _as_bytes(s):
-        """Turn a (byte) string or a unicode string into a (byte) string (PRIVATE)."""
-        return str(s)
 
     def _is_int_or_long(i):
         """Check if the value is an integer or long (PRIVATE)."""

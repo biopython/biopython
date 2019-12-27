@@ -17,8 +17,9 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 
 import warnings
 
+from wheel.util import as_bytes
+
 from Bio._py3k import StringIO
-from Bio._py3k import _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
@@ -158,7 +159,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ("CMD", "Put"),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(_urlencode(query))
+    message = as_bytes(_urlencode(query))
 
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
@@ -190,7 +191,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ("CMD", "Get"),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(_urlencode(query))
+    message = as_bytes(_urlencode(query))
 
     # Poll NCBI until the results are ready.
     # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo

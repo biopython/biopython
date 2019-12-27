@@ -337,9 +337,9 @@ class DataHandler(object):
             from io import StringIO
 
             if isinstance(handle, StringIO):
-                from Bio._py3k import _as_bytes
+                from wheel.util import as_bytes
 
-                handle = BytesIO(_as_bytes(handle.read()))
+                handle = BytesIO(as_bytes(handle.read()))
         try:
             self.parser.ParseFile(handle)
         except expat.ExpatError as e:

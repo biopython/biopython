@@ -13,9 +13,9 @@ import gzip
 import os
 from random import shuffle
 
-from Bio._utils import as_string
+from wheel.util import as_bytes
 
-from Bio._py3k import _as_bytes
+from Bio._utils import as_string
 
 from Bio import bgzf
 
@@ -130,7 +130,7 @@ class BgzfTests(unittest.TestCase):
             # Seems gzip can return bytes even if mode="r",
             # perhaps a bug in Python 3.2?
             if "b" in mode:
-                old = _as_bytes(old)
+                old = as_bytes(old)
             else:
                 old = as_string(old)
             h.close()
@@ -159,7 +159,7 @@ class BgzfTests(unittest.TestCase):
             # Seems gzip can return bytes even if mode="r",
             # perhaps a bug in Python 3.2?
             if "b" in mode:
-                old = _as_bytes(old)
+                old = as_bytes(old)
             else:
                 old = as_string(old)
             h.close()
