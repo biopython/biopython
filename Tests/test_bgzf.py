@@ -13,7 +13,9 @@ import gzip
 import os
 from random import shuffle
 
-from Bio._py3k import _as_bytes, _as_string
+from Bio._utils import as_string
+
+from Bio._py3k import _as_bytes
 
 from Bio import bgzf
 
@@ -130,7 +132,7 @@ class BgzfTests(unittest.TestCase):
             if "b" in mode:
                 old = _as_bytes(old)
             else:
-                old = _as_string(old)
+                old = as_string(old)
             h.close()
 
             for cache in [1, 10]:
@@ -159,7 +161,7 @@ class BgzfTests(unittest.TestCase):
             if "b" in mode:
                 old = _as_bytes(old)
             else:
-                old = _as_string(old)
+                old = as_string(old)
             h.close()
 
             for cache in [1, 10]:

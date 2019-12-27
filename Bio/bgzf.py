@@ -221,7 +221,9 @@ import sys
 import zlib
 import struct
 
-from Bio._py3k import _as_bytes, _as_string
+from Bio._utils import as_string
+
+from Bio._py3k import _as_bytes
 from Bio._py3k import open as _open
 
 
@@ -446,7 +448,7 @@ def _load_bgzf_block(handle, text_mode=False):
     if expected_crc != crc:
         raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
     if text_mode:
-        return block_size, _as_string(data)
+        return block_size, as_string(data)
     else:
         return block_size, data
 
