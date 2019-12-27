@@ -27,10 +27,13 @@ from itertools import chain
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
-from Bio._py3k import _is_int_or_long, _as_string
+from Bio._py3k import _is_int_or_long
 
 
 # Pathway
+from Bio._utils import as_string
+
+
 class Pathway(object):
     """Represents a KGML pathway from KEGG.
 
@@ -87,7 +90,7 @@ class Pathway(object):
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
-        rough_xml = header + _as_string(ET.tostring(self.element, "utf-8"))
+        rough_xml = header + as_string(ET.tostring(self.element, "utf-8"))
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
 

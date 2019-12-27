@@ -78,8 +78,6 @@ if sys.version_info[0] >= 3:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_encode(s)[0]
 
-    _as_string = _as_unicode
-
     def _is_int_or_long(i):
         """Check if the value is an integer (PRIVATE).
 
@@ -159,8 +157,6 @@ else:
     def _as_bytes(s):
         """Turn a (byte) string or a unicode string into a (byte) string (PRIVATE)."""
         return str(s)
-
-    _as_string = _as_bytes
 
     def _is_int_or_long(i):
         """Check if the value is an integer or long (PRIVATE)."""

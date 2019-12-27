@@ -18,13 +18,13 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 import warnings
 
 from Bio._py3k import StringIO
-from Bio._py3k import _as_string, _as_bytes
+from Bio._py3k import _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
 from Bio import BiopythonWarning
-
+from Bio._utils import as_string
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
@@ -222,7 +222,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
                            message,
                            {"User-Agent": "BiopythonClient"})
         handle = _urlopen(request)
-        results = _as_string(handle.read())
+        results = as_string(handle.read())
 
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
@@ -248,7 +248,7 @@ def _parse_qblast_ref_page(handle):
     The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is probably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
-    s = _as_string(handle.read())
+    s = as_string(handle.read())
     i = s.find("RID =")
     if i == -1:
         rid = None

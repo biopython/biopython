@@ -6,9 +6,17 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Common utility functions for various Bio submodules."""
-
-
+import codecs
 import os
+
+
+def as_string(s):
+    """Turn byte string or unicode string into a unicode string (PRIVATE)."""
+    if isinstance(s, str):
+        return s
+    # Assume it is a bytes string
+    # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+    return codecs.latin_1_decode(s)[0]
 
 
 def iterlen(items):
