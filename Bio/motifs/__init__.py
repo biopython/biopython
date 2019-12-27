@@ -14,9 +14,6 @@ Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
 
-from Bio._py3k import range
-
-
 def create(instances, alphabet=None):
     """Create a Motif object."""
     instances = Instances(instances, alphabet)
@@ -594,4 +591,5 @@ def write(motifs, format):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

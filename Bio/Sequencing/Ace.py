@@ -55,8 +55,6 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
 
-from Bio._py3k import zip
-
 
 class rd(object):
     """RD (reads), store a read with its name, sequence etc.

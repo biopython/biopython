@@ -41,8 +41,6 @@ This Python file is intended to be used via the scripts in
 """
 
 
-from Bio._py3k import input as _input
-
 import os
 import itertools
 import time
@@ -654,7 +652,7 @@ class DictionaryBuilder(object):
                 "\n The rebase files are missing or more than one month old."
                 "\n Would you like to update them before proceeding?(y/n)"
             )
-            r = _input(" update [n] >>> ")
+            r = input(" update [n] >>> ")
             if r in ["y", "yes", "Y", "Yes"]:
                 get_files()
                 print("\n Update complete. Creating the dictionaries.\n")

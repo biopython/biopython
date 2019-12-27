@@ -81,8 +81,6 @@ Example output::
 
 import re
 
-from Bio._py3k import range
-
 
 class PrintFormat(object):
     """PrintFormat allow the printing of results of restriction analysis."""
