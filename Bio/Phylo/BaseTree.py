@@ -11,8 +11,6 @@ All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
 """
 
-from Bio._py3k import filter, zip
-
 import collections
 import copy
 import itertools

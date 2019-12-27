@@ -40,7 +40,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     # Code for Python 3
-    from builtins import open, filter, input
+    from builtins import open, input
 
     import codecs
 
@@ -134,7 +134,6 @@ else:
     from __builtin__ import open
 
     # Import Python3 like iterator functions:
-    from future_builtins import filter
     from __builtin__ import raw_input as input
 
     _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing

@@ -10,8 +10,6 @@ from copy import deepcopy
 from itertools import chain
 from collections import OrderedDict
 
-from Bio._py3k import filter
-
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 
