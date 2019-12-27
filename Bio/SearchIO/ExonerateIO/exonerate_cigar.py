@@ -7,8 +7,6 @@
 
 import re
 
-from Bio._py3k import _bytes_to_string
-
 from ._base import _BaseExonerateParser, _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
 
@@ -100,7 +98,7 @@ class ExonerateCigarIndexer(ExonerateVulgarIndexer):
         # get line, check if it's a vulgar line, and get query ID
         line = handle.readline()
         assert line.startswith(self._query_mark), line
-        id = re.search(_RE_CIGAR, _bytes_to_string(line))
+        id = re.search(_RE_CIGAR, line.decode())
         return id.group(1)
 
 
