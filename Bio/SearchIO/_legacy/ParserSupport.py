@@ -24,7 +24,7 @@ Functions:
 """
 
 import sys
-from Bio._py3k import StringIO
+from io import StringIO
 
 
 class AbstractParser(object):

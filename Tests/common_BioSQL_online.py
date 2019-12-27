@@ -9,7 +9,7 @@ import unittest
 import tempfile
 import time
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio._py3k import zip
 
 # Hide annoying warnings from things like bonds in GenBank features,

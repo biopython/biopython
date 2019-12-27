@@ -533,11 +533,7 @@ class TestPrintOutputs(unittest.TestCase):
     """Class to test various print outputs."""
 
     import sys
-
-    try:  # Python 2
-        from StringIO import StringIO
-    except ImportError:  # Python 3
-        from io import StringIO
+    from io import StringIO
 
     def test_supplier(self):
         """Test output of supplier list for different enzyme types."""

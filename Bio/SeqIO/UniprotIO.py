@@ -23,7 +23,7 @@ from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 from Bio.File import as_handle
-from Bio._py3k import StringIO
+from io import StringIO
 
 
 NS = "{http://uniprot.org/uniprot}"

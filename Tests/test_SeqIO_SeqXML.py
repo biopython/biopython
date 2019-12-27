@@ -10,7 +10,7 @@ import sys
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio._py3k import StringIO
+from io import StringIO
 
 
 def assert_equal_records(testCase, record_a, record_b):
