@@ -125,8 +125,6 @@ class BgzfTests(unittest.TestCase):
             else:
                 h = open(old_file, mode)
             old = h.read()
-            # Seems gzip can return bytes even if mode="r",
-            # perhaps a bug in Python 3.2?
             if "b" in mode:
                 old = as_bytes(old)
             else:
