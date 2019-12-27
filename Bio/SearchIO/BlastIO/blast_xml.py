@@ -558,7 +558,7 @@ class BlastXmlIndexer(SearchIndexer):
     """Indexer class for BLAST XML output."""
 
     _parser = BlastXmlParser
-    qstart_mark = "<Iteration>"
+    qstart_mark = b"<Iteration>"
     qend_mark = b"</Iteration>"
     block_size = 16384
 
@@ -573,7 +573,7 @@ class BlastXmlIndexer(SearchIndexer):
         """Iterate over BlastXmlIndexer yields qstart_id, start_offset, block's length."""
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
-        blast_id_mark = "Query_"
+        blast_id_mark = b"Query_"
         block_size = self.block_size
         handle = self._handle
         handle.seek(0)
