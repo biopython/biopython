@@ -8,8 +8,6 @@
 import re
 from itertools import chain
 
-from Bio._py3k import _bytes_to_string
-
 
 from Bio.Alphabet import generic_protein
 
@@ -508,7 +506,7 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
                 break
             if not line:
                 raise StopIteration
-        qid, desc = _parse_hit_or_query_line(_bytes_to_string(line))
+        qid, desc = _parse_hit_or_query_line(line.decode())
 
         return qid
 
