@@ -17,7 +17,6 @@ import itertools
 import unittest
 
 from Bio._py3k import StringIO
-from Bio._py3k import zip
 
 from Bio import SeqIO
 from Bio import Phylo

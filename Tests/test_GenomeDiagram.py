@@ -9,8 +9,6 @@ import os
 import unittest
 import math
 
-from Bio._py3k import zip
-
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError

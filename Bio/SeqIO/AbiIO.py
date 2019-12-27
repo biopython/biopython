@@ -31,7 +31,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from Bio._py3k import _bytes_to_string
-from Bio._py3k import zip
 
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number

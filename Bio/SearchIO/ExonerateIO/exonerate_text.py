@@ -9,7 +9,6 @@ import re
 from itertools import chain
 
 from Bio._py3k import _bytes_to_string
-from Bio._py3k import zip
 
 
 from Bio.Alphabet import generic_protein

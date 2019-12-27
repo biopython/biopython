@@ -32,7 +32,6 @@ To do this under Python 3:
 Instead, we can do this under either Python 2 or 3:
 
     from Bio._py3k import open
-    from Bio._py3k import zip
 
 Once we drop support for Python 2, the whole of Bio._py3k will
 go away.

@@ -183,7 +183,6 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._py3k import zip
 
 from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
