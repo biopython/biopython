@@ -309,7 +309,7 @@ class TreeTests(unittest.TestCase):
             (
                 "Hirschweg, Winterthur, Switzerland",
                 "Nagoya, Aichi, Japan",
-                "ETH Z\xfcrich",
+                "ETH Zürich",
                 "San Diego"
             ),
             (47.481277, 35.155904, 47.376334, 32.880933),

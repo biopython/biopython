@@ -57,10 +57,7 @@ class TestDetailedRead(unittest.TestCase):
     if not (sys.platform == "win32" and sys.version_info[0] >= 3):
         def test_unicode_characters_desc(self):
             """Test special unicode characters in the description."""
-            self.assertEqual(
-                self.records["rna"][2].description,
-                "\u00E5\u00C5\u00FC\u00F6\u00D6\u00DF\u00F8\u00E4\u00A2\u00A3$\u20AC\u9999\u80A0"
-            )
+            self.assertEqual(self.records["rna"][2].description, "åÅüöÖßøä¢£$€香肠")
 
     def test_full_characters_set_read(self):
         """Read full characters set for each type."""
