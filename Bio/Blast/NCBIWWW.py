@@ -17,15 +17,13 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 
 import warnings
 
-from wheel.util import as_bytes
-
 from Bio._py3k import StringIO
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
 from Bio import BiopythonWarning
-from Bio._utils import as_string
+from Bio._utils import as_string, as_bytes
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 

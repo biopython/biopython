@@ -337,7 +337,7 @@ class DataHandler(object):
             from io import StringIO
 
             if isinstance(handle, StringIO):
-                from wheel.util import as_bytes
+                from Bio._utils import as_bytes
 
                 handle = BytesIO(as_bytes(handle.read()))
         try:

@@ -7,9 +7,7 @@
 
 import re
 
-from wheel.util import as_bytes
-
-from Bio._utils import read_forward
+from Bio._utils import read_forward, as_bytes
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 

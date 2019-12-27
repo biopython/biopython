@@ -33,8 +33,8 @@ http://soapy.sourceforge.net/
 
 
 import time
-from wheel.util import as_bytes
 
+from Bio._utils import as_bytes
 from Bio._py3k import _binary_to_string_handle
 
 # Importing these functions with leading underscore as not intended for reuse

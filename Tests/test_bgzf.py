@@ -13,9 +13,7 @@ import gzip
 import os
 from random import shuffle
 
-from wheel.util import as_bytes
-
-from Bio._utils import as_string
+from Bio._utils import as_bytes, as_string
 
 from Bio import bgzf
 

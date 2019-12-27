@@ -6,8 +6,8 @@
 """Bio.SearchIO parser for HMMER table output format."""
 
 from itertools import chain
-from wheel.util import as_bytes
 
+from Bio._utils import as_bytes
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment

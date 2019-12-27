@@ -14,12 +14,11 @@ from itertools import chain
 from xml.etree import ElementTree
 from xml.sax.saxutils import XMLGenerator, escape
 
+from Bio._utils import as_bytes
 from Bio import BiopythonParserWarning
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
-from wheel.util import as_bytes
 
 _empty_bytes_string = as_bytes("")
 

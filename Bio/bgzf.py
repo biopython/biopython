@@ -221,9 +221,7 @@ import sys
 import zlib
 import struct
 
-from wheel.util import as_bytes
-
-from Bio._utils import as_string
+from Bio._utils import as_string, as_bytes
 
 from Bio._py3k import open as _open
 

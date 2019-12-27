@@ -11,7 +11,7 @@ import os
 import gzip
 import unittest
 
-from wheel.util import as_bytes
+from Bio._utils import as_bytes
 
 try:
     import sqlite3

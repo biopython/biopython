@@ -228,8 +228,7 @@ For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
-from wheel.util import as_bytes
-
+from Bio._utils import as_bytes
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
 from Bio.File import as_handle

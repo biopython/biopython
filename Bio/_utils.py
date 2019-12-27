@@ -10,6 +10,15 @@ import codecs
 import os
 
 
+def as_bytes(s):
+    """Turn byte string or unicode string into a bytes string."""
+    if isinstance(s, bytes):
+        return s
+    # Assume it is a unicode string
+    # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+    return codecs.latin_1_encode(s)[0]
+
+
 def as_string(s):
     """Turn byte string or unicode string into a unicode string (PRIVATE)."""
     if isinstance(s, str):

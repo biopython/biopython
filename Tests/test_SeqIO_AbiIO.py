@@ -9,7 +9,7 @@ import unittest
 
 from os.path import join, basename
 
-from wheel.util import as_bytes
+from Bio._utils import as_bytes
 
 from Bio import SeqIO
 

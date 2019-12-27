@@ -7,9 +7,8 @@
 
 import re
 
-from wheel.util import as_bytes
-
 from Bio._py3k import zip
+from Bio._utils import as_bytes
 
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
