@@ -59,14 +59,6 @@ if sys.version_info[0] >= 3:
             return s.decode()
         return s
 
-    def _as_unicode(s):
-        """Turn byte string or unicode string into a unicode string (PRIVATE)."""
-        if isinstance(s, str):
-            return s
-        # Assume it is a bytes string
-        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-        return codecs.latin_1_decode(s)[0]
-
     def _as_bytes(s):
         """Turn byte string or unicode string into a bytes string (PRIVATE).
 
@@ -147,12 +139,6 @@ else:
         if isinstance(s, (bytes, bytearray)):
             return str(s)
         return s
-
-    def _as_unicode(s):
-        """If s is a (byte) string, convert to a unicode string (PRIVATE)."""
-        if isinstance(s, str):
-            return s
-        return s.decode()
 
     def _as_bytes(s):
         """Turn a (byte) string or a unicode string into a (byte) string (PRIVATE)."""
