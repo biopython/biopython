@@ -12,7 +12,7 @@ import os
 
 from io import BytesIO
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio import Entrez
 
 if os.name == "java":
@@ -5806,7 +5806,7 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
     def test_truncated_xml(self):
         """Test error handling for a truncated XML declaration."""
         from Bio.Entrez.Parser import CorruptedXMLError
-        from Bio._py3k import StringIO
+        from io import StringIO
         truncated_xml = """<?xml version="1.0"?>
         <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
         <GBSet><GBSeq><GBSeq_locus>

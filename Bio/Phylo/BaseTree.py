@@ -995,7 +995,7 @@ class Tree(TreeElement, TreeMixin):
 
         """
         if format_spec:
-            from Bio._py3k import StringIO
+            from io import StringIO
             from Bio.Phylo import _io
 
             handle = StringIO()
@@ -1112,7 +1112,6 @@ class Clade(TreeElement, TreeMixin):
         """Return the number of clades directy under the root."""
         return len(self.clades)
 
-    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -1121,9 +1120,6 @@ class Clade(TreeElement, TreeMixin):
         Clade instances to always be considered True.
         """
         return True
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __str__(self):
         """Return name of the class instance."""

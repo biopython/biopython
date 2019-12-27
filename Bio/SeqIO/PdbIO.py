@@ -12,7 +12,7 @@ import shutil
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.File import as_handle

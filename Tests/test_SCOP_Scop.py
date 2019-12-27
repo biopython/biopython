@@ -9,7 +9,7 @@
 
 
 import unittest
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio.SCOP import Scop, cmp_sccs, parse_domain
 

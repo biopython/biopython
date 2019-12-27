@@ -289,13 +289,9 @@ class QueryResult(_BaseSearchObject):
         """Return the number of items."""
         return len(self._items)
 
-    # Python 3:
     def __bool__(self):
         """Return True if there are items."""
         return bool(self._items)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""

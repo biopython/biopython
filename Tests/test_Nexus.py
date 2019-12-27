@@ -16,7 +16,7 @@ import os.path
 import unittest
 import tempfile
 import sys
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
 from Bio.SeqRecord import SeqRecord

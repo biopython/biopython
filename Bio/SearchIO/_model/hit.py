@@ -155,13 +155,9 @@ class Hit(_BaseSearchObject):
         """Return number of hsps."""
         return len(self.hsps)
 
-    # Python 3:
     def __bool__(self):
         """Return True if there are hsps."""
         return bool(self.hsps)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __contains__(self, hsp):
         """Return True if hsp in items."""

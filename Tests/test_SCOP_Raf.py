@@ -8,7 +8,7 @@
 import unittest
 
 from Bio.SCOP import Raf
-from Bio._py3k import StringIO
+from io import StringIO
 
 
 class RafTests(unittest.TestCase):

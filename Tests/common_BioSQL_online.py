@@ -9,7 +9,7 @@ import unittest
 import tempfile
 import time
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
