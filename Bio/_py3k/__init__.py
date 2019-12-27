@@ -6,27 +6,6 @@
 # package.
 """Python 3 compatibility tools (PRIVATE).
 
-There is no similar option for range yet, other than::
-
-    input = raw_input
-
-or:
-
-    from __builtin__ import raw_input as input
-
-Under Python 3 these imports need to be removed. Also, deliberate
-importing of built in functions like open changes from Python 2::
-
-    from __builtin__ import open
-
-To do this under Python 3:
-
-    from builtins import open
-
-Instead, we can do this under either Python 2 or 3:
-
-    from Bio._py3k import open
-
 Once we drop support for Python 2, the whole of Bio._py3k will
 go away.
 """
@@ -40,7 +19,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     # Code for Python 3
-    from builtins import open, input
+    from builtins import input
 
     import codecs
 
@@ -130,9 +109,6 @@ def raise_from(value, from_value):
 """)
 
 else:
-    # Python 2 code
-    from __builtin__ import open
-
     # Import Python3 like iterator functions:
     from __builtin__ import raw_input as input
 
