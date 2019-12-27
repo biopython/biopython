@@ -18,9 +18,6 @@ import sys
 
 
 if sys.version_info[0] >= 3:
-    # Code for Python 3
-    from builtins import input
-
     import codecs
 
     _bytes_to_string = lambda b: b.decode()  # bytes to unicode string
@@ -109,9 +106,6 @@ def raise_from(value, from_value):
 """)
 
 else:
-    # Import Python3 like iterator functions:
-    from __builtin__ import raw_input as input
-
     _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing
     _string_to_bytes = lambda s: str(s)  # str (or unicode) to bytes string
 
