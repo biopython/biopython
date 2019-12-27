@@ -53,8 +53,6 @@ if sys.version_info[0] >= 3:
 
     import codecs
 
-    _string_to_bytes = lambda s: s.encode()  # unicode string to bytes
-
     def _bytes_bytearray_to_str(s):
         """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
         if isinstance(s, (bytes, bytearray)):
@@ -145,8 +143,6 @@ else:
     from future_builtins import zip, map, filter
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
-
-    _string_to_bytes = lambda s: str(s)  # str (or unicode) to bytes string
 
     def _bytes_bytearray_to_str(s):
         """If s is bytes or bytearray, convert to a string (PRIVATE)."""
