@@ -164,10 +164,10 @@ class UndoHandle(object):
 
     def __init__(self, handle):
         """Initialize the class."""
-        warnings.warn("The UndoHandle class has been deprecated, and was "
-                      "moved to Bio/SearchIO/_legacy/ParserSupport.py "
-                      "(which is the only module in Biopython still using "
-                      "UndoHandle.")
+        raise Exception("The UndoHandle class has been deprecated, and was "
+                        "moved to Bio/SearchIO/_legacy/ParserSupport.py "
+                        "(which is the only module in Biopython still using "
+                        "UndoHandle.")
 
 
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
