@@ -456,7 +456,6 @@ class BgzfReader(object):
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
     in an example BAM file,
 
-    >>> from builtins import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
