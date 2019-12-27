@@ -274,7 +274,7 @@ class _IndexedSeqFileProxy:
     def get(self, offset):
         """Return parsed object for this entry."""
         # Most file formats with self contained records can be handled by
-        # parsing StringIO(_bytes_to_string(self.get_raw(offset)))
+        # parsing StringIO(self.get_raw(offset).decode())
         raise NotImplementedError("Subclass should implement this")
 
     def get_raw(self, offset):

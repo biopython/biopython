@@ -9,7 +9,7 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -559,7 +559,7 @@ class BlastTabIndexer(SearchIndexer):
             iterfunc = self._qresult_index_commented
 
         for key, offset, length in iterfunc():
-            yield _bytes_to_string(key), offset, length
+            yield key.decode(), offset, length
 
     def _qresult_index_commented(self):
         """Indexer for commented BLAST tabular files (PRIVATE)."""

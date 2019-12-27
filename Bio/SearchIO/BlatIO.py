@@ -182,7 +182,7 @@ HSP and HSPFragment documentation for more details on these properties.
 import re
 from math import log
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 
 from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
@@ -587,17 +587,13 @@ class BlatPslIndexer(SearchIndexer):
                 curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield _bytes_to_string(
-                        qresult_key
-                    ), start_offset, end_offset - start_offset
+                    yield qresult_key.decode(), start_offset, end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
             line = handle.readline()
             if not line:
-                yield _bytes_to_string(
-                    qresult_key
-                ), start_offset, end_offset - start_offset
+                yield qresult_key.decode(), start_offset, end_offset - start_offset
                 break
 
     def get_raw(self, offset):
