@@ -27,8 +27,6 @@ import warnings
 import collections
 from collections.abc import Iterable as _Iterable
 
-from Bio._py3k import range
-
 from Bio import BiopythonWarning
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC

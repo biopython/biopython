@@ -10,7 +10,6 @@ import unittest
 import math
 
 from Bio._py3k import zip
-from Bio._py3k import range
 
 
 # Do we have ReportLab?  Raise error if not present.

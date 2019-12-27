@@ -34,8 +34,6 @@ like SeqFeatures.
 
 # ReportLab imports
 
-from Bio._py3k import range
-
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.graphics.shapes import Polygon

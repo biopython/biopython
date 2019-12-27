@@ -13,7 +13,6 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 
 from Bio._py3k import zip
-from Bio._py3k import range
 
 from functools import reduce
 import copy

@@ -37,8 +37,6 @@ for reading and writing. Older versions did nothing special with a dot/period.
 
 import string
 
-from Bio._py3k import range
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment

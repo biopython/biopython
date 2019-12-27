@@ -87,7 +87,6 @@ import warnings
 
 from Bio._py3k import zip
 from Bio._py3k import filter
-from Bio._py3k import range
 
 import re
 import itertools

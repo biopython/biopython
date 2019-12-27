@@ -9,8 +9,6 @@ from Bio.Seq import Seq
 import re
 import math
 
-from Bio._py3k import range
-
 from Bio import motifs
 
 

@@ -14,12 +14,10 @@ are all iterator based)::
 
 There is no similar option for range yet, other than::
 
-    range = xrange
     input = raw_input
 
 or:
 
-    from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
 Under Python 3 these imports need to be removed. Also, deliberate
@@ -49,7 +47,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     # Code for Python 3
-    from builtins import open, zip, map, filter, range, input
+    from builtins import open, zip, map, filter, input
 
     import codecs
 
@@ -144,7 +142,6 @@ else:
 
     # Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
-    from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
     _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing

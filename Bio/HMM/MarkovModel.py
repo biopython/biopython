@@ -14,8 +14,6 @@ import random
 # TODO - Take advantage of defaultdict once Python 2.4 is dead?
 # from collections import defaultdict
 
-from Bio._py3k import range
-
 from Bio.Seq import MutableSeq
 
 

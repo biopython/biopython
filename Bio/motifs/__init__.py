@@ -14,8 +14,6 @@ Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
 
-from Bio._py3k import range
-
 
 def create(instances, alphabet=None):
     """Create a Motif object."""
