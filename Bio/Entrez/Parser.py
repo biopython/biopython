@@ -331,15 +331,13 @@ class DataHandler(object):
             # Should avoid a possible Segmentation Fault, see:
             # http://bugs.python.org/issue4877
             raise IOError("Can't parse a closed handle")
-        if sys.version_info[0] >= 3:
-            # Another nasty hack to cope with a unicode StringIO handle
-            # since the Entrez XML parser expects binary data (bytes)
-            from io import StringIO
+        # TODO: method should fail if user passes unicode handle
+        from io import StringIO
 
-            if isinstance(handle, StringIO):
-                from Bio._utils import as_bytes
+        if isinstance(handle, StringIO):
+            from Bio._utils import as_bytes
 
-                handle = BytesIO(as_bytes(handle.read()))
+            handle = BytesIO(as_bytes(handle.read()))
         try:
             self.parser.ParseFile(handle)
         except expat.ExpatError as e:
