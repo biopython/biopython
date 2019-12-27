@@ -90,7 +90,7 @@ class Pathway(object):
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
-        rough_xml = header + as_string(ET.tostring(self.element, "utf-8"))
+        rough_xml = header + ET.tostring(self.element, "utf-8")
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
 
