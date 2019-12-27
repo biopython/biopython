@@ -6,12 +6,6 @@
 # package.
 """Python 3 compatibility tools (PRIVATE).
 
-We used to have lines like this under Python 2 in order to use
-iterator based zip, map and filter (in Python 3 these functions
-are all iterator based)::
-
-    from future_builtins import zip
-
 There is no similar option for range yet, other than::
 
     input = raw_input
@@ -46,7 +40,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     # Code for Python 3
-    from builtins import open, zip, map, filter, input
+    from builtins import open, filter, input
 
     import codecs
 
@@ -140,7 +134,7 @@ else:
     from __builtin__ import open
 
     # Import Python3 like iterator functions:
-    from future_builtins import zip, map, filter
+    from future_builtins import filter
     from __builtin__ import raw_input as input
 
     _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing
