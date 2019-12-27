@@ -292,8 +292,8 @@ then this sort of annotation information is much easier to deal with.
 
 \subsection{Modifying data}
 
-In the previous section, we demonstrated how to extract data from a 
-\verb|SeqRecord|. Another common task is to alter this data. The attributes 
+In the previous section, we demonstrated how to extract data from a
+\verb|SeqRecord|. Another common task is to alter this data. The attributes
 of a \verb|SeqRecord| can be modified directly, for example:
 
 %doctest examples
@@ -308,10 +308,10 @@ of a \verb|SeqRecord| can be modified directly, for example:
 'new_id'
 \end{minted}
 
-Note, if you want to change the way FASTA is output when written to a file 
-(see Section~\ref{sec:writing-sequence-files}), then you should modify both 
-the \verb|id| and \verb|description| attributes. To ensure the correct 
-behaviour, it is best to include the \verb|id| plus a space at the start of 
+Note, if you want to change the way FASTA is output when written to a file
+(see Section~\ref{sec:writing-sequence-files}), then you should modify both
+the \verb|id| and \verb|description| attributes. To ensure the correct
+behaviour, it is best to include the \verb|id| plus a space at the start of
 the desired \verb|description|:
 
 %doctest examples
@@ -1307,7 +1307,7 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 
 \begin{minted}{python}
 from Bio import SeqIO
-from StringIO import StringIO
+from io import StringIO
 
 records = SeqIO.parse("ls_orchid.gbk", "genbank")
 out_handle = StringIO()

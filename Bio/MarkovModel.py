@@ -75,7 +75,7 @@ class MarkovModel(object):
 
     def __str__(self):
         """Create a string representation of the MarkovModel object."""
-        from Bio._py3k import StringIO
+        from io import StringIO
         handle = StringIO()
         save(self, handle)
         handle.seek(0)

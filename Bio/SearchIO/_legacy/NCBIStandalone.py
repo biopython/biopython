@@ -26,7 +26,7 @@ wrappers for these under Bio.Blast.Applications (see the tutorial).
 import sys
 import re
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.SearchIO._legacy.ParserSupport import (
     AbstractParser,
     AbstractConsumer,

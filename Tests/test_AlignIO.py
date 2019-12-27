@@ -10,7 +10,7 @@ import unittest
 import warnings
 
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align import AlignInfo, MultipleSeqAlignment

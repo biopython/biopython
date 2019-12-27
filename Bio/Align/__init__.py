@@ -337,7 +337,7 @@ class MultipleSeqAlignment(object):
         See also the alignment's format() method.
         """
         if format_spec:
-            from Bio._py3k import StringIO
+            from io import StringIO
             from Bio import AlignIO
             handle = StringIO()
             AlignIO.write([self], handle, format_spec)

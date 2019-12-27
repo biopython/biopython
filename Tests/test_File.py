@@ -12,7 +12,7 @@ import unittest
 
 from Bio import bgzf
 from Bio import File
-from Bio._py3k import StringIO
+from io import StringIO
 
 data = """This
 is

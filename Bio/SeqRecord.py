@@ -768,7 +768,7 @@ class SeqRecord(object):
                 )
 
         # Harder case, make a temp handle instead
-        from Bio._py3k import StringIO
+        from io import StringIO
 
         handle = StringIO()
         SeqIO.write(self, handle, format_spec)

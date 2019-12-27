@@ -997,7 +997,7 @@ class Tree(TreeElement, TreeMixin):
 
         """
         if format_spec:
-            from Bio._py3k import StringIO
+            from io import StringIO
             from Bio.Phylo import _io
 
             handle = StringIO()

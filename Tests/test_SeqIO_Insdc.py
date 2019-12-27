@@ -6,7 +6,7 @@
 """Tests for SeqIO Insdc module."""
 
 import unittest
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio import SeqIO
 from Bio.Alphabet import generic_dna

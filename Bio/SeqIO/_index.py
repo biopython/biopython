@@ -29,7 +29,7 @@ re-indexing the file for use another time.
 
 import re
 from io import BytesIO
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio._py3k import _bytes_to_string
 
 from Bio import SeqIO

@@ -74,7 +74,7 @@ class MafftCommandline(AbstractCommandline):
     use StringIO to turn the string into a handle::
 
         stdout, stderr = mafft_cline()
-        from StringIO import StringIO
+        from io import StringIO
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "fasta")
 

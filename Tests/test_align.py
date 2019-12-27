@@ -19,10 +19,9 @@ Right now we've got tests for:
 # standard library
 import os
 import unittest
+from io import StringIO
 
 # biopython
-from Bio._py3k import StringIO
-
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
