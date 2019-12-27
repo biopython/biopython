@@ -20,8 +20,6 @@ import sys
 if sys.version_info[0] >= 3:
     import codecs
 
-    _string_to_bytes = lambda s: s.encode()  # unicode string to bytes
-
     def _bytes_bytearray_to_str(s):
         """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
         if isinstance(s, (bytes, bytearray)):
@@ -105,7 +103,6 @@ def raise_from(value, from_value):
 """)
 
 else:
-    _string_to_bytes = lambda s: str(s)  # str (or unicode) to bytes string
 
     def _bytes_bytearray_to_str(s):
         """If s is bytes or bytearray, convert to a string (PRIVATE)."""
