@@ -159,12 +159,6 @@ class _FileIterator(object):
     def __next__(self):
         return self.func(self)
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Return next item, a Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __del__(self):
         self.stream.close()
         try:

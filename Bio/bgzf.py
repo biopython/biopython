@@ -691,12 +691,6 @@ class BgzfReader(object):
             raise StopIteration
         return line
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         """Iterate over the lines in the BGZF file."""
         return self

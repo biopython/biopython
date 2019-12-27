@@ -18,8 +18,6 @@ database, and is compatible with the BioSQL standards.
 import os
 import sys
 
-from Bio._py3k import _universal_read_mode
-from Bio._py3k import _bytes_bytearray_to_str as bytearray_to_str
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -315,7 +313,7 @@ class DBServer(object):
 
         # read the file with all comment lines removed
         sql = ""
-        with open(sql_file, _universal_read_mode) as sql_handle:
+        with open(sql_file) as sql_handle:
             for line in sql_handle:
                 if line.startswith("--"):  # don't include comment lines
                     pass
@@ -661,20 +659,27 @@ class MysqlConnectorAdaptor(Adaptor):
     mysql-connector-python in release 2.0.0 of the package.
     """
 
+    @staticmethod
+    def _bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
+        if isinstance(s, (bytes, bytearray)):
+            return s.decode()
+        return s
+
     def execute_one(self, sql, args=None):
         """Execute sql that returns 1 record, and return the record."""
         out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
-        return tuple(bytearray_to_str(v) for v in out)
+        return tuple(self._bytearray_to_str(v) for v in out)
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
         out = super(MysqlConnectorAdaptor, self).execute_and_fetch_col0(sql, args)
-        return [bytearray_to_str(column) for column in out]
+        return [self._bytearray_to_str(column) for column in out]
 
     def execute_and_fetchall(self, sql, args=None):
         """Return a list of tuples of all rows."""
         out = super(MysqlConnectorAdaptor, self).execute_and_fetchall(sql, args)
-        return [tuple(bytearray_to_str(v) for v in o) for o in out]
+        return [tuple(self._bytearray_to_str(v) for v in o) for o in out]
 
 
 _interface_specific_adaptors = {

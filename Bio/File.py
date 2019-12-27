@@ -180,11 +180,6 @@ class UndoHandle(object):
             raise StopIteration
         return next
 
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def readlines(self, *args, **keywds):
         """Read all the lines from the file as a list of strings."""
         lines = self._saved + self._handle.readlines(*args, **keywds)
