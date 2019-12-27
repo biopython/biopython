@@ -222,6 +222,7 @@ import zlib
 import struct
 
 from Bio._py3k import _as_bytes, _as_string
+from builtins import open as _open
 
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
@@ -533,7 +534,7 @@ class BgzfReader(object):
                 raise ValueError(
                     "Must use read mode (default), not write or append mode"
                 )
-            handle = open(filename, "rb")
+            handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
         if self._text:
             self._newline = "\n"
@@ -742,7 +743,7 @@ class BgzfWriter(object):
                 raise NotImplementedError("Append mode is not implemented yet")
                 # handle = _open(filename, "ab")
             else:
-                handle = open(filename, "wb")
+                handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
         self._handle = handle
         self._buffer = b""
