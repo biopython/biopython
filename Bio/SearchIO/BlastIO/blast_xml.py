@@ -19,7 +19,7 @@ from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 
 _empty_bytes_string = _as_bytes("")
 
@@ -626,7 +626,7 @@ class BlastXmlIndexer(SearchIndexer):
                 qstart_id = _as_bytes(self._fallback["id"])
             if qstart_id.startswith(blast_id_mark):
                 qstart_id = qstart_desc.split(_as_bytes(" "), 1)[0]
-            yield _bytes_to_string(qstart_id), start_offset, len(block)
+            yield qstart_id.decode(), start_offset, len(block)
             counter += 1
 
     def _parse(self, handle):

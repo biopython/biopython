@@ -7,7 +7,7 @@
 
 from itertools import chain
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -182,7 +182,7 @@ class Hmmer3TabIndexer(SearchIndexer):
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
                     yield (
-                        _bytes_to_string(qresult_key),
+                        qresult_key.decode(),
                         start_offset,
                         adj_end - start_offset,
                     )
@@ -192,7 +192,7 @@ class Hmmer3TabIndexer(SearchIndexer):
             line = handle.readline()
             if not line:
                 yield (
-                    _bytes_to_string(qresult_key),
+                    qresult_key.decode(),
                     start_offset,
                     end_offset - start_offset,
                 )

@@ -7,7 +7,7 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -349,12 +349,12 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
+                yield qresult_key.decode(), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 # HACK: since hmmsearch can only have one query result
                 if is_hmmsearch:
-                    yield _bytes_to_string(qresult_key), start_offset, 0
+                    yield qresult_key.decode(), start_offset, 0
                 break
 
             line = read_forward(handle)
