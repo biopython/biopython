@@ -10,7 +10,7 @@ import unittest
 from os.path import join, basename
 
 from Bio import SeqIO
-from Bio._py3k import _as_bytes
+
 
 test_data = {
     "data_empty": {
@@ -233,7 +233,7 @@ class TestAbi(unittest.TestCase):
     def test_file_type(self):
         """Test if filetype is ABIF."""
         for trace in test_data:
-            self.assertEqual(test_data[trace]["handle"].read(4), _as_bytes("ABIF"))
+            self.assertEqual(test_data[trace]["handle"].read(4), b"ABIF")
 
     def test_seqrecord(self):
         """Test if the extracted seqrecords data are equal to expected values."""
