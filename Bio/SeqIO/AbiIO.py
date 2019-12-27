@@ -30,7 +30,6 @@ from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio._py3k import _bytes_to_string
 from Bio._py3k import zip
 
 # dictionary for determining which tags goes into SeqRecord annotation
@@ -346,7 +345,7 @@ def _get_string_tag(opt_bytes_value, default=None):
     if opt_bytes_value is None:
         return default
     try:
-        return _bytes_to_string(opt_bytes_value)
+        return opt_bytes_value.decode()
     except UnicodeDecodeError:
         # If we are in this 'except' block, a .decode call must have been
         # attempted, and so we must be on Python 3, which means opt_bytes_value
@@ -401,7 +400,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
 
             # PBAS2 is base-called sequence, only available in 3530
             if key == "PBAS2":
-                seq = _bytes_to_string(tag_data)
+                seq = tag_data.decode()
                 ambigs = "KYWMRS"
                 if alphabet is None:
                     if set(seq).intersection(ambigs):
@@ -410,7 +409,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
                         alphabet = unambiguous_dna
             # PCON2 is quality values of base-called sequence
             elif key == "PCON2":
-                qual = [ord(val) for val in _bytes_to_string(tag_data)]
+                qual = [ord(val) for val in tag_data.decode()]
             # SMPL1 is sample id entered before sequencing run, it must be
             # a string.
             elif key == "SMPL1":
@@ -494,10 +493,10 @@ def _abi_parse_header(header, handle):
         )
         index += 1
         # only parse desired dirs
-        key = _bytes_to_string(dir_entry[0])
+        key = dir_entry[0].decode()
         key += str(dir_entry[1])
 
-        tag_name = _bytes_to_string(dir_entry[0])
+        tag_name = dir_entry[0].decode()
         tag_number = dir_entry[1]
         elem_code = dir_entry[2]
         elem_num = dir_entry[4]

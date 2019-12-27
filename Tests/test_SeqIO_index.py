@@ -21,7 +21,7 @@ import gzip
 import warnings
 from io import BytesIO
 
-from Bio._py3k import _bytes_to_string, StringIO
+from Bio._py3k import StringIO
 from Bio._py3k import _universal_read_mode
 
 try:
@@ -63,7 +63,7 @@ def gzip_open(filename, format):
     handle = gzip.open(filename)
     data = handle.read()  # bytes!
     handle.close()
-    return StringIO(_bytes_to_string(data))
+    return StringIO(data.decode())
 
 
 if sqlite3:
@@ -569,7 +569,7 @@ class IndexDictTests(unittest.TestCase):
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:
-                handle = StringIO(_bytes_to_string(raw))
+                handle = StringIO(raw.decode())
             if format == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
@@ -598,7 +598,7 @@ class IndexDictTests(unittest.TestCase):
                 http://www.uniprot.org/support/docs/uniprot.xsd">
                 %s
                 </uniprot>
-                """ % _bytes_to_string(raw)
+                """ % raw.decode()
                 handle = StringIO(raw)
                 rec2 = SeqIO.read(handle, format, alphabet)
             else:
