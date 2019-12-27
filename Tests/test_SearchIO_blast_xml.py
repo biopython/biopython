@@ -19,7 +19,7 @@ TEST_DIR = "Blast"
 FMT = "blast-xml"
 
 REFERENCE = (
-    "Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, "
+    "Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, "
     "Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "
     '"Gapped BLAST and PSI-BLAST: a new generation of protein database '
     'search programs", Nucleic Acids Res. 25:3389-3402.'
