@@ -176,8 +176,7 @@ class Instances(list):
             if self.length is None:
                 self.length = len(instance)
             elif self.length != len(instance):
-                message = "All instances should have the same length (%d found, %d expected)" % (
-                len(instance), self.length)
+                message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
                 raise ValueError(message)
             try:
                 a = instance.alphabet
@@ -290,8 +289,7 @@ class Motif(object):
         elif mask is None:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
-            raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif",
-                             (len(mask), self.length))
+            raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
         elif isinstance(mask, str):
             self.__mask = []
             for char in mask:
