@@ -15,7 +15,6 @@ class, used in the Bio.AlignIO module.
 
 import sys  # Only needed to check if we are using Python 2 or 3
 
-from Bio._py3k import raise_from
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
@@ -338,7 +337,7 @@ class MultipleSeqAlignment(object):
         See also the alignment's format() method.
         """
         if format_spec:
-            from Bio._py3k import StringIO
+            from io import StringIO
             from Bio import AlignIO
             handle = StringIO()
             AlignIO.write([self], handle, format_spec)
@@ -941,14 +940,6 @@ class PairwiseAlignment(object):
         self.score = score
         self.path = path
 
-    # For Python2 only
-    def __cmp__(self, other):
-        if self.path < other.path:
-            return -1
-        if self.path > other.path:
-            return +1
-        return 0
-
     def __eq__(self, other):
         return self.path == other.path
 
@@ -1355,7 +1346,7 @@ class PairwiseAlignments(object):
             try:
                 alignment = next(self)
             except StopIteration:
-                raise_from(IndexError("index out of range"), None)
+                raise IndexError("index out of range") from None
         return alignment
 
     def __iter__(self):

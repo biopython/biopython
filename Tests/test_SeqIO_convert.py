@@ -12,7 +12,7 @@ from Bio.Seq import UnknownSeq
 from Bio import SeqIO
 from Bio.SeqIO import QualityIO
 from Bio.SeqIO._convert import _converter as converter_dict
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.Alphabet import generic_nucleotide, generic_dna
 
 

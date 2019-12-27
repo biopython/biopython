@@ -305,7 +305,7 @@ with SeqIO and AlignIO:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Phylo
->>> from StringIO import StringIO
+>>> from io import StringIO
 >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
 >>> tree = Phylo.read(handle, "newick")
 \end{minted}

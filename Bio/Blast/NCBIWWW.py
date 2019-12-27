@@ -17,7 +17,7 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 
 import warnings
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request

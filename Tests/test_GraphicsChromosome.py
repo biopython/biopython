@@ -15,7 +15,7 @@ Graphics.DisplayRepresentation classes.
 import os
 import sys
 import random
-from Bio._py3k import StringIO
+from io import StringIO
 import unittest
 
 import warnings

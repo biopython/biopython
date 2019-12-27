@@ -17,7 +17,7 @@ import unittest
 import warnings
 
 from Bio._py3k import HTTPError
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio import MissingExternalDependencyError
 from Bio import BiopythonWarning
