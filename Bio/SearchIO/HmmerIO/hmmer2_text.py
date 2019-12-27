@@ -321,22 +321,22 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
-    qresult_start = _as_bytes("Query")
+    qresult_start = b"Query"
     # qresults_ends for hmmpfam and hmmsearch
     # need to anticipate both since hmmsearch have different query end mark
-    qresult_end = _as_bytes("//")
+    qresult_end = b"//"
 
     def __iter__(self):
         """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(r"Query\s*(?:sequence|HMM)?:\s*(.*)"))
+        regex_id = re.compile(br"Query\s*(?:sequence|HMM)?:\s*(.*)")
 
         # determine flag for hmmsearch
         is_hmmsearch = False
         line = read_forward(handle)
-        if line.startswith(_as_bytes("hmmsearch")):
+        if line.startswith(b"hmmsearch"):
             is_hmmsearch = True
 
         while True:

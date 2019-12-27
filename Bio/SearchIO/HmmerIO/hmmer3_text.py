@@ -405,8 +405,8 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     """Indexer class for HMMER plain text output."""
 
     _parser = Hmmer3TextParser
-    qresult_start = _as_bytes("Query: ")
-    qresult_end = _as_bytes("//")
+    qresult_start = b"Query: "
+    qresult_end = b"//"
 
     def __iter__(self):
         """Iterate over Hmmer3TextIndexer; yields query results' key, offsets, 0."""
