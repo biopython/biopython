@@ -113,11 +113,13 @@ import time
 import warnings
 
 # Importing these functions with leading underscore as not intended for reuse
+from wheel.util import as_bytes
+
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
 
-from Bio._py3k import _binary_to_string_handle, _as_bytes
+from Bio._py3k import _binary_to_string_handle
 
 
 email = None
@@ -563,7 +565,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     for i in range(max_tries):
         try:
             if post:
-                handle = _urlopen(cgi, data=_as_bytes(options))
+                handle = _urlopen(cgi, data=as_bytes(options))
             else:
                 handle = _urlopen(cgi)
         except _URLError as exception:
