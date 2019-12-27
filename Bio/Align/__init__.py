@@ -15,7 +15,6 @@ class, used in the Bio.AlignIO module.
 
 import sys  # Only needed to check if we are using Python 2 or 3
 
-from Bio._py3k import raise_from
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
@@ -1347,7 +1346,7 @@ class PairwiseAlignments(object):
             try:
                 alignment = next(self)
             except StopIteration:
-                raise_from(IndexError("index out of range"), None)
+                raise IndexError("index out of range") from None
         return alignment
 
     def __iter__(self):
