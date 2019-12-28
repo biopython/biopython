@@ -307,7 +307,7 @@ class TestCluster(unittest.TestCase):
                      mask=mask, weight=weight,
                      transpose=False, npass=100, method="a", dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^mask has incorrect rank 1 \\(expected 2\\)$"):
+            "^mask has incorrect rank 1 \\(expected 2\\)$"):
             kcluster(data, nclusters=nclusters,
                      mask=numpy.zeros(3), weight=weight,
                      transpose=False, npass=100, method="a", dist="e")
