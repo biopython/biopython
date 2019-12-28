@@ -1766,8 +1766,7 @@ class TestCluster(unittest.TestCase):
                        data=data, mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100,
                        dist="Pearson")
-        message = "^unknown dist function specified " \
-                  "\\(should be one of 'ebcauxsk'\\)$"
+        message = "^unknown dist function specified \\(should be one of 'ebcauxsk'\\)$"
         with self.assertRaisesRegex(ValueError, message):
             somcluster(clusterids=clusterids, celldata=celldata,
                        data=data, mask=mask, weight=weight,
