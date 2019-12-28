@@ -538,7 +538,7 @@ class TestCluster(unittest.TestCase):
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError, "^data is not contiguous$"):
-            clusterdistance(data=data[:,::2], mask=mask, weight=weight,
+            clusterdistance(data=data[:, ::2], mask=mask, weight=weight,
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError,
@@ -558,7 +558,7 @@ class TestCluster(unittest.TestCase):
                             weight=weight, index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError, "^mask is not contiguous$"):
-            clusterdistance(data=data, mask=mask[:,::2], weight=weight,
+            clusterdistance(data=data, mask=mask[:, ::2], weight=weight,
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError, "^unexpected format.$"):
@@ -731,7 +731,7 @@ class TestCluster(unittest.TestCase):
                         distancematrix=None)
         tree = Tree()
         with self.assertRaisesRegex(ValueError,
-	        "^neither data nor distancematrix was given$"):
+                "^neither data nor distancematrix was given$"):
             treecluster(tree, data=None, mask=mask, weight=weight,
                         transpose=False, method="a", dist="e",
                         distancematrix=None)
@@ -758,7 +758,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import Node, Tree
 
-        nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5), Node(3,-2, 0.6)]
+        nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5), Node(3, -2, 0.6)]
         indices = numpy.zeros(4, numpy.int32)
         tree = Tree(nodes)
         with self.assertRaisesRegex(ValueError,
@@ -778,7 +778,6 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,
                 "^order array has incorrect size 6 \\(expected 4\\)$"):
             tree.sort(indices, numpy.zeros(6))
-
 
     def test_tree(self):
         if TestCluster.module == "Bio.Cluster":
@@ -1698,7 +1697,7 @@ class TestCluster(unittest.TestCase):
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(RuntimeError, "^data is not contiguous$"):
             somcluster(clusterids=clusterids, celldata=celldata,
-                       data=data[:,::2], mask=mask, weight=weight,
+                       data=data[:, ::2], mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(RuntimeError, "^mask is None$"):
             somcluster(clusterids=clusterids, celldata=celldata,
@@ -1722,7 +1721,7 @@ class TestCluster(unittest.TestCase):
                        dist="e")
         with self.assertRaisesRegex(RuntimeError, "^mask is not contiguous$"):
             somcluster(clusterids=clusterids, celldata=celldata,
-                       data=data, mask=mask[:,::2], weight=weight,
+                       data=data, mask=mask[:, ::2], weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(RuntimeError, "^unexpected format.$"):
             somcluster(clusterids=clusterids, celldata=celldata,
@@ -1850,14 +1849,14 @@ class TestCluster(unittest.TestCase):
                             [1, 1, 1]], numpy.int32)
         weight = numpy.array([2.0, 1.0, 0.5])
         with self.assertRaisesRegex(ValueError, "^data matrix is empty$"):
-            distancematrix(data[:0,:], mask=mask, weight=weight)
+            distancematrix(data[:0, :], mask=mask, weight=weight)
         with self.assertRaisesRegex(ValueError,
                 "^mask has incorrect rank 1 \\(expected 2\\)$"):
             distancematrix(data, mask=numpy.zeros(3), weight=weight)
         with self.assertRaisesRegex(ValueError,
                 "^mask has incorrect dimensions \\(4 x 3, expected 9 x 3\\)$"):
-            distancematrix(data, mask=mask[:4,:], weight=weight,
-                           transpose=False, dist='c',
+            distancematrix(data, mask=mask[:4, :], weight=weight,
+                           transpose=False, dist="c",
                            distancematrix=[])
         with self.assertRaisesRegex(ValueError,
                 "^incorrect rank 2 \\(expected 1\\)$"):
@@ -1865,7 +1864,7 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,
                 "^weight has incorrect size 4 \\(expected 3\\)$"):
             distancematrix(data, mask=mask, weight=numpy.zeros(4),
-                           transpose=False, dist='c', distancematrix=[])
+                           transpose=False, dist="c", distancematrix=[])
 
     def test_kmedoids_arguments(self):
         # Test if incorrect arguments are caught by the C code
