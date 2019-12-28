@@ -50,7 +50,7 @@ from Bio._py3k import urlretrieve as _urlretrieve
 from Bio._py3k import urlcleanup as _urlcleanup
 
 
-class PDBList(object):
+class PDBList:
     """Quick access to the structure lists on the PDB or its mirrors.
 
     This class provides quick access to the structure lists on the

@@ -16,7 +16,7 @@ import sys  # for checking if Python 2
 from Bio.Alphabet import single_letter_alphabet
 
 
-class AlignmentIterator(object):
+class AlignmentIterator:
     """Base class for building MultipleSeqAlignment iterators.
 
     You should write a next() method to return Aligment
@@ -79,7 +79,7 @@ class AlignmentIterator(object):
         return iter(self.__next__, None)
 
 
-class AlignmentWriter(object):
+class AlignmentWriter:
     """Base class for building MultipleSeqAlignment writers.
 
     You should write a write_alignment() method.

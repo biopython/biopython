@@ -14,7 +14,7 @@ from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
 
-class StructureAlignment(object):
+class StructureAlignment:
     """Class to align two structures based on an alignment of their sequences."""
 
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):

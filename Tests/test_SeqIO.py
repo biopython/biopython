@@ -74,7 +74,7 @@ test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 
-class ForwardOnlyHandle(object):
+class ForwardOnlyHandle:
     """Mimic a network handle without seek and tell methods etc."""
 
     def __init__(self, handle):

@@ -583,7 +583,7 @@ def pca(data):
     return columnmean, coordinates, pc, eigenvalues
 
 
-class Record(object):
+class Record:
     """Store gene expression data.
 
     A Record stores the gene expression data and related information contained

@@ -12,7 +12,7 @@ from functools import reduce
 
 
 # TODO - Subclass graph?
-class MultiGraph(object):
+class MultiGraph:
     """A directed multigraph abstraction with labeled edges."""
 
     def __init__(self, nodes=()):

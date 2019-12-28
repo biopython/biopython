@@ -32,7 +32,7 @@ from ._Feature import Feature
 import re
 
 
-class FeatureSet(object):
+class FeatureSet:
     """FeatureSet object."""
 
     def __init__(self, set_id=None, name=None, parent=None):

@@ -88,7 +88,7 @@ def UniprotIterator(
                 elem.clear()
 
 
-class Parser(object):
+class Parser:
     """Parse a UniProt XML entry to a SeqRecord.
 
     return_raw_comments=True to get back the complete comment field in XML format

@@ -17,7 +17,7 @@ from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
 
 
-class Atom(object):
+class Atom:
     """Define Atom class.
 
     The Atom object stores atom name (both with and without spaces),

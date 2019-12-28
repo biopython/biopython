@@ -95,7 +95,7 @@ def read(handle):
     return record
 
 
-class Record(object):
+class Record:
     """Hold information from a GenePop record.
 
     Members:

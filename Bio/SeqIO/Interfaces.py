@@ -18,7 +18,7 @@ from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
 
-class SequenceIterator(object):
+class SequenceIterator:
     """Base class for building SeqRecord iterators.
 
     You should write a __next__ method to return SeqRecord  objects.  You may
@@ -88,7 +88,7 @@ def _clean(text):
     return text.replace("\n", " ").replace("\r", " ")
 
 
-class SequenceWriter(object):
+class SequenceWriter:
     """Base class for building SeqRecord writers.
 
     Interlaced file formats (e.g. Clustal) should subclass directly.

@@ -139,7 +139,7 @@ def is_palindrome(sequence):
     return str(sequence) == str(sequence.reverse_complement())
 
 
-class newenzyme(object):
+class newenzyme:
     """Construct the attributes of the enzyme corresponding to 'name'."""
 
     def __init__(cls, name):
@@ -287,7 +287,7 @@ class newenzyme(object):
         return
 
 
-class TypeCompiler(object):
+class TypeCompiler:
     """Build the different types possible for Restriction Enzymes."""
 
     def __init__(self):
@@ -384,7 +384,7 @@ Used REBASE emboss files version {} ({}).
 )
 
 
-class DictionaryBuilder(object):
+class DictionaryBuilder:
     """Builds ``Restriction_Dictionary.py`` from Rebase files.
 
     If the emboss files used for the construction need to be updated this

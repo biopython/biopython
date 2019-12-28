@@ -242,7 +242,7 @@ class Instances(list):
         return instances
 
 
-class Motif(object):
+class Motif:
     """A class representing sequence motifs."""
 
     def __init__(self, alphabet=None, instances=None, counts=None):

@@ -148,7 +148,7 @@ def _open_for_random_access(filename):
     return handle
 
 
-class UndoHandle(object):
+class UndoHandle:
     """A Python handle that adds functionality for saving lines.
 
     Saves lines in a LIFO fashion.
@@ -253,7 +253,7 @@ class UndoHandle(object):
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 # for indexing
 
-class _IndexedSeqFileProxy(object):
+class _IndexedSeqFileProxy:
     """Base class for file format specific random access (PRIVATE).
 
     This is subclasses in both Bio.SeqIO for indexing as SeqRecord

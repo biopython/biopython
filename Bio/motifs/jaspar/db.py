@@ -70,7 +70,7 @@ from Bio.motifs import jaspar, matrix
 JASPAR_DFLT_COLLECTION = "CORE"
 
 
-class JASPAR5(object):
+class JASPAR5:
     """Class representing a JASPAR5 database.
 
     Class representing a JASPAR5 DB. The methods within are loosely based

@@ -40,7 +40,7 @@ _PROGRAM = "HHSUITE"
 MAX_READ_UNTIL = 5000
 
 
-class Hhsuite2TextParser(object):
+class Hhsuite2TextParser:
     """Parser for the HHSUITE version 2 and 3 text output."""
 
     def __init__(self, handle):

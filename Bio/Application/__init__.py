@@ -97,7 +97,7 @@ class ApplicationError(_ProcessCalledError):
                % (self.returncode, self.cmd, self.stdout, self.stderr)
 
 
-class AbstractCommandline(object):
+class AbstractCommandline:
     r"""Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
@@ -529,7 +529,7 @@ class AbstractCommandline(object):
         return stdout_str, stderr_str
 
 
-class _AbstractParameter(object):
+class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.

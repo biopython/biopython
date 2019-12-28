@@ -260,7 +260,7 @@ def _combine_args(first, *rest):
 # Class definitions
 
 
-class TreeElement(object):
+class TreeElement:
     """Base class for all Bio.Phylo classes."""
 
     def __repr__(self):
@@ -283,7 +283,7 @@ class TreeElement(object):
     __str__ = __repr__
 
 
-class TreeMixin(object):
+class TreeMixin:
     """Methods for Tree- and Clade-based classes.
 
     This lets ``Tree`` and ``Clade`` support the same traversal and searching
@@ -1152,7 +1152,7 @@ class Clade(TreeElement, TreeMixin):
     color = property(_get_color, _set_color, doc="Branch color.")
 
 
-class BranchColor(object):
+class BranchColor:
     """Indicates the color of a clade when rendered graphically.
 
     The color should be interpreted by client code (e.g. visualization

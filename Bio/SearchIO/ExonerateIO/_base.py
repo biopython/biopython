@@ -310,7 +310,7 @@ def _parse_hit_or_query_line(line):
     return id, desc
 
 
-class _BaseExonerateParser(object):
+class _BaseExonerateParser:
     """Abstract iterator for exonerate format."""
 
     _ALN_MARK = None

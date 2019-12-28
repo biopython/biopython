@@ -76,7 +76,7 @@ def _calculate_to_transitions(trans_probs):
     return transitions
 
 
-class MarkovModelBuilder(object):
+class MarkovModelBuilder:
     """Interface to build up a Markov Model.
 
     This class is designed to try to separate the task of specifying the
@@ -461,7 +461,7 @@ class MarkovModelBuilder(object):
             )
 
 
-class HiddenMarkovModel(object):
+class HiddenMarkovModel:
     """Represent a hidden markov model that can be used for state estimation."""
 
     def __init__(

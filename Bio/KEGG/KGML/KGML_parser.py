@@ -73,7 +73,7 @@ def parse(handle, debug=0):
             elem.clear()
 
 
-class KGMLParser(object):
+class KGMLParser:
     """Parses a KGML XML Pathway entry into a Pathway object.
 
     Example: Read and parse large metabolism file

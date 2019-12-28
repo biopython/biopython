@@ -76,7 +76,7 @@ class AlignmentColumn(list):
         self[1] = column_unit.column
 
 
-class ColumnUnit(object):
+class ColumnUnit:
     """Define a container for the details of each sequence alignment."""
 
     def __init__(self, unit, column, kind):

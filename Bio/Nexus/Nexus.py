@@ -65,7 +65,7 @@ class NexusError(Exception):
     pass
 
 
-class CharBuffer(object):
+class CharBuffer:
     """Helps reading NEXUS-words and characters from a buffer (semi-PRIVATE).
 
     This class is not intended for public use (any more).
@@ -176,7 +176,7 @@ class CharBuffer(object):
         return "".join(self.buffer)
 
 
-class StepMatrix(object):
+class StepMatrix:
     """Calculate a stepmatrix for weighted parsimony.
 
     See :
@@ -574,7 +574,7 @@ def _replace_parenthesized_ambigs(seq, rev_ambig_values):
     return seq
 
 
-class Commandline(object):
+class Commandline:
     """Represent a commandline as command and options."""
 
     def __init__(self, line, title):
@@ -615,7 +615,7 @@ class Commandline(object):
                     raise NexusError("Incorrect formatting in line: %s" % line)
 
 
-class Block(object):
+class Block:
     """Represent a NEXUS block with block name and list of commandlines."""
 
     def __init__(self, title=None):
@@ -624,7 +624,7 @@ class Block(object):
         self.commandlines = []
 
 
-class Nexus(object):
+class Nexus:
     """Create the Nexus class, main class for the management of Nexus files."""
 
     def __init__(self, input=None):

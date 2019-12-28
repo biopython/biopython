@@ -18,7 +18,7 @@ from numpy import dot, sqrt, array, matrix, inner, zeros
 from .qcprotmodule import FastCalcRMSDAndRotation
 
 
-class QCPSuperimposer(object):
+class QCPSuperimposer:
     """Quaternion Characteristic Polynomial (QCP) Superimposer.
 
     QCPSuperimposer finds the best rotation and translation to put

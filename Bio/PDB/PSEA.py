@@ -87,7 +87,7 @@ def annotate(m, ss_seq):
     # os.system("rm "+fname)
 
 
-class PSEA(object):
+class PSEA:
     """Define PSEA class.
 
     PSEA object is a wrapper to PSEA program for secondary structure assignment.

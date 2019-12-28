@@ -30,7 +30,7 @@ from reportlab.lib import colors
 from ._Graph import GraphData
 
 
-class GraphSet(object):
+class GraphSet:
     """Graph Set.
 
     Attributes:

@@ -20,7 +20,7 @@ __all__ = ("Hmmer2TextParser", "Hmmer2TextIndexer")
 _HSP_ALIGN_LINE = re.compile(r"(\S+):\s+domain (\d+) of (\d+)")
 
 
-class _HitPlaceholder(object):
+class _HitPlaceholder:
     def createHit(self, hsp_list):
         hit = Hit(hsp_list)
         hit.id_ = self.id_
@@ -32,7 +32,7 @@ class _HitPlaceholder(object):
         return hit
 
 
-class Hmmer2TextParser(object):
+class Hmmer2TextParser:
     """Iterator for the HMMER 2.0 text output."""
 
     def __init__(self, handle):

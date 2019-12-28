@@ -19,7 +19,7 @@ from Bio import BiopythonWarning
 _hydrogen = re.compile("[123 ]*H.*")
 
 
-class ChainSelector(object):
+class ChainSelector:
     """Only accepts residues with right chainid, between start and end.
 
     Remove hydrogens, waters and ligands. Only use model 0 by default.

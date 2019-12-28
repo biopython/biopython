@@ -8,7 +8,7 @@
 """Code to interact with the primersearch program from EMBOSS."""
 
 
-class InputRecord(object):
+class InputRecord:
     """Represent the input file into the primersearch program.
 
     This makes it easy to add primer information and write it out to the
@@ -33,7 +33,7 @@ class InputRecord(object):
                                  second_primer_seq))
 
 
-class OutputRecord(object):
+class OutputRecord:
     """Represent the information from a primersearch job.
 
     amplifiers is a dictionary where the keys are the primer names and
@@ -45,7 +45,7 @@ class OutputRecord(object):
         self.amplifiers = {}
 
 
-class Amplifier(object):
+class Amplifier:
     """Represent a single amplification from a primer."""
 
     def __init__(self):

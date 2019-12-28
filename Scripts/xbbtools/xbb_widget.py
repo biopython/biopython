@@ -29,7 +29,7 @@ from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
 
 
-class xbb_widget(object):
+class xbb_widget:
     """Main XBBtools window."""
 
     def __init__(self, parent=None):

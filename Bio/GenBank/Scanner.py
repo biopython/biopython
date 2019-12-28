@@ -38,7 +38,7 @@ from Bio.Alphabet import generic_protein
 from Bio import BiopythonParserWarning
 
 
-class InsdcScanner(object):
+class InsdcScanner:
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
 
     The International Nucleotide Sequence Database Collaboration (INSDC)

@@ -266,7 +266,7 @@ def _get_aln_slice_coords(parsed_hsp):
     return start, stop
 
 
-class FastaM10Parser(object):
+class FastaM10Parser:
     """Parser for Bill Pearson's FASTA suite's -m 10 output."""
 
     def __init__(self, handle, __parse_hit_table=False):

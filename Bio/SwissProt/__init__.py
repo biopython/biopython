@@ -26,7 +26,7 @@ class SwissProtParserError(ValueError):
         self.line = line
 
 
-class Record(object):
+class Record:
     """Holds information from a SwissProt record.
 
     Attributes:
@@ -110,7 +110,7 @@ class Record(object):
         self.sequence = ""
 
 
-class Reference(object):
+class Reference:
     """Holds information from one reference in a SwissProt entry.
 
     Attributes:

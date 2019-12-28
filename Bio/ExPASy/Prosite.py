@@ -58,7 +58,7 @@ def read(handle):
     return record
 
 
-class Record(object):
+class Record:
     """Holds information from a Prosite record.
 
     Main attributes:

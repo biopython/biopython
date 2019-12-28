@@ -378,7 +378,7 @@ def intermediate_points(start, end, graph_data):
 ################################################################################
 
 
-class AbstractDrawer(object):
+class AbstractDrawer:
     """Abstract Drawer.
 
     Attributes:

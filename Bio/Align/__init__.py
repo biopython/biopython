@@ -26,7 +26,7 @@ from Bio.Align import _aligners
 # https://github.com/biopython/biopython/pull/2007
 
 
-class MultipleSeqAlignment(object):
+class MultipleSeqAlignment:
     """Represents a classical multiple sequence alignment (MSA).
 
     By this we mean a collection of sequences (usually shown as rows) which
@@ -914,7 +914,7 @@ class MultipleSeqAlignment(object):
             self._records.sort(key=key, reverse=reverse)
 
 
-class PairwiseAlignment(object):
+class PairwiseAlignment:
     """Represents a pairwise sequence alignment.
 
     Internally, the pairwise alignment is stored as the path through
@@ -1301,7 +1301,7 @@ class PairwiseAlignment(object):
         return tuple(segments1), tuple(segments2)
 
 
-class PairwiseAlignments(object):
+class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
 
     This class also supports indexing, which is fast for increasing indices,

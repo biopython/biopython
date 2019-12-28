@@ -451,7 +451,7 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
-class BgzfReader(object):
+class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
@@ -722,7 +722,7 @@ class BgzfReader(object):
         self.close()
 
 
-class BgzfWriter(object):
+class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):

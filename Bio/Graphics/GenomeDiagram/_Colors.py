@@ -25,7 +25,7 @@ http://www.reportlab.com
 from reportlab.lib import colors
 
 
-class ColorTranslator(object):
+class ColorTranslator:
     """Class providing methods for translating representations of color into.
 
     Examples

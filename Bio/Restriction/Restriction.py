@@ -144,7 +144,7 @@ matching = {
 DNA = Seq
 
 
-class FormattedSeq(object):
+class FormattedSeq:
     """A linear or ciruclar sequence object for restriction analysis.
 
     Translates a Bio.Seq into a formatted sequence to be used with Restriction.

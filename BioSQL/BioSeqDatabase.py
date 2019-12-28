@@ -154,7 +154,7 @@ def open_database(driver="MySQLdb", **kwargs):
     return server
 
 
-class DBServer(object):
+class DBServer:
     """Represents a BioSQL database continaing namespaces (sub-databases).
 
     This acts like a Python dictionary, giving access to each namespace
@@ -353,7 +353,7 @@ class DBServer(object):
         return self.adaptor.close()
 
 
-class _CursorWrapper(object):
+class _CursorWrapper:
     """A wraper for mysql.connector resolving bytestring representations."""
 
     def __init__(self, real_cursor):
@@ -391,7 +391,7 @@ class _CursorWrapper(object):
         return self._convert_tuple(tuple_)
 
 
-class Adaptor(object):
+class Adaptor:
     """High level wrapper for a database connection and cursor.
 
     Most database calls in BioSQL are done indirectly though this adaptor
@@ -699,7 +699,7 @@ _allowed_lookups = {
 }
 
 
-class BioSeqDatabase(object):
+class BioSeqDatabase:
     """Represents a namespace (sub-database) within the BioSQL database.
 
     i.e. One row in the biodatabase table, and all all rows in the bioentry

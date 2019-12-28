@@ -93,7 +93,7 @@ class _RestrictedDict(dict):
             self[key] = value
 
 
-class SeqRecord(object):
+class SeqRecord:
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:

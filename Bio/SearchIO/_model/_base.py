@@ -9,7 +9,7 @@
 from Bio._utils import getattr_str, trim_str
 
 
-class _BaseSearchObject(object):
+class _BaseSearchObject:
     """Abstract class for SearchIO objects."""
 
     _NON_STICKY_ATTRS = ()
