@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2008-2010 by Michiel de Hoon.  All rights reserved.
 # Revisions copyright 2009-2016 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
