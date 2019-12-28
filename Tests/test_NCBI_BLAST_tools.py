@@ -282,7 +282,7 @@ class CheckCompleteArgList(unittest.TestCase):
                                  shell=(sys.platform != "win32"))
         stdoutdata, stderrdata = child.communicate()
         self.assertEqual(stderrdata, "",
-                         "%s\n%s" % (str(cline), stderrdata))
+                         "{}\n{}".format(str(cline), stderrdata))
         names_in_tool = set()
         while stdoutdata:
             index = stdoutdata.find("[")

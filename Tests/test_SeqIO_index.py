@@ -727,7 +727,7 @@ for filename1, format, alphabet in tests:
 
         def funct(fn, fmt, alpha, c):
             f = lambda x: x.simple_check(fn, fmt, alpha, c)  # noqa: E731
-            f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
+            f.__doc__ = f"Index {fmt} file {fn} defaults"
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
                 % (format, filename2.replace("/", "_").replace(".", "_")),
@@ -736,7 +736,7 @@ for filename1, format, alphabet in tests:
 
         def funct(fn, fmt, alpha, c):
             f = lambda x: x.key_check(fn, fmt, alpha, c)  # noqa: E731
-            f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
+            f.__doc__ = f"Index {fmt} file {fn} with key function"
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
                 % (format, filename2.replace("/", "_").replace(".", "_")),
@@ -745,7 +745,7 @@ for filename1, format, alphabet in tests:
 
         def funct(fn, fmt, alpha, c):
             f = lambda x: x.get_raw_check(fn, fmt, alpha, c)  # noqa: E731
-            f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
+            f.__doc__ = f"Index {fmt} file {fn} get_raw"
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
                 % (format, filename2.replace("/", "_").replace(".", "_")),

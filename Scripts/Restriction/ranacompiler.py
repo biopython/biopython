@@ -354,7 +354,7 @@ class TypeCompiler:
                     return type.__new__(cls, "type%i" % n, ty, dct)
 
                 def __init__(cls):
-                    super(klass, cls).__init__("type%i" % n, ty, dct)
+                    super().__init__("type%i" % n, ty, dct)
 
             yield klass()
             n += 1
@@ -463,9 +463,9 @@ class DictionaryBuilder:
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict(  # noqa: C404
-                    [(k, v) for k, v in tydct.items() if k in commonattr]
-                )
+                tydct = {  # noqa: C404
+                    k: v for k, v in tydct.items() if k in commonattr
+                }
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__["suppl"]:
@@ -577,7 +577,7 @@ class DictionaryBuilder:
                 "\n\t the name Restriction_Dictionary.old."
             )
             print("\n " + "*" * 78 + " \n")
-        except IOError:
+        except OSError:
             print("\n " + "*" * 78 + " \n")
             print(
                 "\n\t WARNING : Impossible to install the new dictionary."
@@ -1002,7 +1002,7 @@ class DictionaryBuilder:
                     dna = Seq(enzymedict[other][0], generic_dna)
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
-                    sense = "(?=(?P<{}>{})|{})".format(other, sense1, sense2)
+                    sense = f"(?=(?P<{other}>{sense1})|{sense2})"
                     antisense = "(?=(?P<{}_as>{}|{}))".format(
                         other, antisense1, antisense2
                     )

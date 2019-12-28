@@ -153,11 +153,11 @@ def compare_attrs(obj_a, obj_b, attrs):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
                 assert str(val_a.seq) == str(val_b.seq), \
-                    "%s: %r vs %r" % (attr, val_a, val_b)
+                    f"{attr}: {val_a!r} vs {val_b!r}"
             elif isinstance(val_a, list) and isinstance(val_b, list):
                 for seq_a, seq_b in zip(val_a, val_b):
                     assert str(seq_a.seq) == str(seq_b.seq), \
-                        "%s: %r vs %r" % (attr, seq_a, seq_b)
+                        f"{attr}: {seq_a!r} vs {seq_b!r}"
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
@@ -165,15 +165,15 @@ def compare_attrs(obj_a, obj_b, attrs):
             values_a = sorted(val_a.values())
             keys_b = sorted(val_b)
             values_b = sorted(val_b.values())
-            assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
-            assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
+            assert keys_a == keys_b, f"{attr}: {keys_a!r} vs {keys_b!r}"
+            assert values_a == values_b, "{}: {!r} vs {!r}".format(attr, values_a,
                                                            values_b)
         # if it's an alphabet, check the class names as alphabets are instances
         elif attr == "_alphabet":
             alph_a = val_a.__class__.__name__
             alph_b = val_b.__class__.__name__
-            assert alph_a == alph_b, "%s: %r vs %r" % (attr, alph_a, alph_b)
+            assert alph_a == alph_b, f"{attr}: {alph_a!r} vs {alph_b!r}"
         else:
-            assert val_a == val_b, "%s: %r vs %r" % (attr, val_a, val_b)
+            assert val_a == val_b, f"{attr}: {val_a!r} vs {val_b!r}"
 
     return True

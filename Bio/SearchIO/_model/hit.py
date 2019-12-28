@@ -145,7 +145,7 @@ class Hit(_BaseSearchObject):
 
     def __repr__(self):
         """Return string representation of Hit object."""
-        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, len(self))
+        return "Hit(id={!r}, query_id={!r}, {!r} hsps)".format(self.id, self.query_id, len(self))
 
     def __iter__(self):
         """Iterate over hsps."""
@@ -183,7 +183,7 @@ class Hit(_BaseSearchObject):
 
         # set attributes lines
         for key, value in sorted(self.attributes.items()):
-            lines.append(" %s: %s" % (key, value))
+            lines.append(f" {key}: {value}")
 
         # set dbxrefs line
         if self.dbxrefs:
@@ -215,13 +215,13 @@ class Hit(_BaseSearchObject):
                 # query region
                 query_start = getattr_str(hsp, "query_start")
                 query_end = getattr_str(hsp, "query_end")
-                query_range = "[%s:%s]" % (query_start, query_end)
+                query_range = f"[{query_start}:{query_end}]"
                 # max column length is 18
                 query_range = trim_str(query_range, 15, "~]")
                 # hit region
                 hit_start = getattr_str(hsp, "hit_start")
                 hit_end = getattr_str(hsp, "hit_end")
-                hit_range = "[%s:%s]" % (hit_start, hit_end)
+                hit_range = f"[{hit_start}:{hit_end}]"
                 hit_range = trim_str(hit_range, 21, "~]")
                 # append the hsp row
                 lines.append(

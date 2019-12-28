@@ -388,8 +388,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
 
         # TODO: As of Python 3.3, can write "yield from i" instead. See PEP380.
         # For loop imposes some overhead... wait until we drop Python 2.7 to fix it.
-        for a in i:
-            yield a
+        yield from i
 
 
 def read(handle, format, seq_count=None, alphabet=None):

@@ -154,7 +154,7 @@ def main():
     stats = align(sys.argv[1:3])
     print(
         "\n".join(
-            "%s: %s" % (attr, getattr(stats, attr))
+            "{}: {}".format(attr, getattr(stats, attr))
             for attr in ("matches", "mismatches", "gaps", "extensions")
         )
     )

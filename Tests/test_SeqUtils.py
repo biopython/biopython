@@ -71,7 +71,7 @@ class SeqUtilsTests(unittest.TestCase):
                 # TODO - Use any cds_start option if/when added to deal with the met
                 a = "M" + str(seq[3:].translate(table))
                 b = feature.qualifiers["translation"][0] + "*"
-                self.assertEqual(a, b, "%r vs %r" % (a, b))
+                self.assertEqual(a, b, f"{a!r} vs {b!r}")
                 records.append(SeqRecord(seq, id=feature.qualifiers["protein_id"][0],
                                          description=feature.qualifiers["product"][0]))
 

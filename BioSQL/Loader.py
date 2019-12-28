@@ -107,7 +107,7 @@ class DatabaseLoader:
         id_results = self.adaptor.execute_and_fetchall(sql, fields)
         # something is wrong
         if len(id_results) > 1:
-            raise ValueError("Multiple term ids for %s: %r" % (name, id_results))
+            raise ValueError(f"Multiple term ids for {name}: {id_results!r}")
         elif len(id_results) == 1:
             return id_results[0][0]
         else:
@@ -432,7 +432,7 @@ class DatabaseLoader:
             if len(taxonomic_record) == 1:
                 assert taxonomic_record[0]["TaxId"] == str(
                     ncbi_taxon_id
-                ), "%s versus %s" % (taxonomic_record[0]["TaxId"], ncbi_taxon_id)
+                ), "{} versus {}".format(taxonomic_record[0]["TaxId"], ncbi_taxon_id)
 
                 (
                     parent_taxon_id,

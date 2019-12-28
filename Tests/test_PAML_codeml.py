@@ -492,7 +492,7 @@ class ModTest(unittest.TestCase):
                 params = results["pairwise"][seq1][seq2]
                 self.assertEqual(len(params), 7,
                                  version_msg + ": wrong number of parsed parameters" +
-                                 " for %s-%s" % (seq1, seq2))
+                                 f" for {seq1}-{seq2}")
                 for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
                     self.assertTrue(param in params, version_msg +
                                     ": '%s' not in parsed parameters"

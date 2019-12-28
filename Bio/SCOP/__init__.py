@@ -153,7 +153,7 @@ def parse_domain(str):
 
 
 def _open_scop_file(scop_dir_path, version, filetype):
-    filename = "dir.%s.scop.txt_%s" % (filetype, version)
+    filename = f"dir.{filetype}.scop.txt_{version}"
     handle = open(os.path.join(scop_dir_path, filename))
     return handle
 
@@ -488,7 +488,7 @@ class Scop:
 
         for p in self._sunidDict.values():
             for c in p.children:
-                cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
+                cur.execute(f"INSERT INTO hie VALUES ({p.sunid},{c.sunid})")
 
     def write_cla_sql(self, handle):
         """Write CLA data to SQL database."""
@@ -784,7 +784,7 @@ class Astral:
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-e100m-%s-%s.id" % (
+                filename = "{}-e100m-{}-{}.id".format(
                     file_prefix,
                     astralEv_to_file[id],
                     self.version,
@@ -803,7 +803,7 @@ class Astral:
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
+                filename = f"{file_prefix}-bib-{id}-{self.version}.id"
                 filename = os.path.join(self.path, filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]

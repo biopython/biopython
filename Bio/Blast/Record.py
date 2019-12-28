@@ -87,7 +87,7 @@ class Description:
 
     def __str__(self):
         """Return the description as a string."""
-        return "%-66s %5s  %s" % (self.title, self.score, self.e)
+        return f"{self.title:<66} {self.score:>5}  {self.e}"
 
 
 class DescriptionExt(Description):
@@ -128,7 +128,7 @@ class DescriptionExtItem:
 
     def __str__(self):
         """Return the description identifier and title as a string."""
-        return "%s %s" % (self.id, self.title)
+        return f"{self.id} {self.title}"
 
 
 class Alignment:
@@ -230,7 +230,7 @@ class HSP:
 
     def __str__(self):
         """Return the BLAST HSP as a formatted string."""
-        lines = ["Score %s (%s bits), expectation %s, alignment length %s" % (
+        lines = ["Score {} ({} bits), expectation {}, alignment length {}".format(
             fmt_(self.score, "%i"),
             fmt_(self.bits, "%i"),
             fmt_(self.expect, "%0.1e"),
@@ -239,12 +239,12 @@ class HSP:
         if self.align_length is None:
             return "\n".join(lines)
         if self.align_length < 50:
-            lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
+            lines.append("Query:{} {} {}".format(str(self.query_start).rjust(8),
                                              str(self.query),
                                              str(self.query_end)))
             lines.append("               %s"
                          % (str(self.match)))
-            lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
+            lines.append("Sbjct:{} {} {}".format(str(self.sbjct_start).rjust(8),
                                              str(self.sbjct),
                                              str(self.sbjct_end)))
         else:

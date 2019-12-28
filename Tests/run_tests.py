@@ -197,7 +197,7 @@ def main(argv):
     test_path = sys.path[0] or "."
     source_path = os.path.abspath("%s/.." % test_path)
     sys.path.insert(1, source_path)
-    build_path = os.path.abspath("%s/../build/lib.%s-%s" % (
+    build_path = os.path.abspath("{}/../build/lib.{}-{}".format(
         test_path, distutils.util.get_platform(), sys.version[:3]))
     if os.access(build_path, os.F_OK):
         sys.path.insert(1, build_path)
@@ -249,7 +249,7 @@ def main(argv):
             args[arg_num] = args[arg_num][:-3]
 
     print("Python version: %s" % sys.version)
-    print("Operating system: %s %s" % (os.name, sys.platform))
+    print(f"Operating system: {os.name} {sys.platform}")
 
     # run the tests
     runner = TestRunner(args, verbosity)
@@ -341,7 +341,7 @@ class TestRunner(unittest.TextTestRunner):
                     return True
                 except ImportError as e:
                     sys.stderr.write("FAIL, ImportError\n")
-                    result.stream.write("ERROR while importing %s: %s\n" % (name, e))
+                    result.stream.write(f"ERROR while importing {name}: {e}\n")
                     result.printErrors()
                     return False
                 suite = doctest.DocTestSuite(module,

@@ -352,7 +352,7 @@ class _IndexedSeqFileDict(_dict_base):
         """Create a string representation of the File object."""
         # TODO - How best to handle the __str__ for SeqIO and SearchIO?
         if self:
-            return "{%r : %s(...), ...}" % (list(self.keys())[0], self._obj_repr)
+            return "{{{!r} : {}(...), ...}}".format(list(self.keys())[0], self._obj_repr)
         else:
             return "{}"
 
@@ -419,7 +419,7 @@ class _IndexedSeqFileDict(_dict_base):
         else:
             key2 = record.id
         if key != key2:
-            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+            raise ValueError(f"Key did not match ({key} vs {key2})")
         return record
 
     def get(self, k, d=None):
@@ -801,7 +801,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         else:
             key2 = record.id
         if key != key2:
-            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+            raise ValueError(f"Key did not match ({key} vs {key2})")
         return record
 
     def get(self, k, d=None):

@@ -103,7 +103,7 @@ def SwissIterator(handle):
                 if len(cross_reference) < 2:
                     continue
                 database, accession = cross_reference[:2]
-                dbxref = "%s:%s" % (database, accession)
+                dbxref = f"{database}:{accession}"
                 if dbxref not in record.dbxrefs:
                     record.dbxrefs.append(dbxref)
             annotations = record.annotations

@@ -104,7 +104,7 @@ class MafWriter(SequentialAlignmentWriter):
         try:
             anno = " ".join(
                 [
-                    "%s=%s" % (x, y)
+                    f"{x}={y}"
                     for x, y in alignment._annotations.items()
                     if x in ("score", "pass")
                 ]
@@ -112,7 +112,7 @@ class MafWriter(SequentialAlignmentWriter):
         except AttributeError:
             anno = "score=0.00"
 
-        self.handle.write("a %s\n" % (anno,))
+        self.handle.write(f"a {anno}\n")
 
         recs_out = 0
 
@@ -238,7 +238,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                 records = []
             else:
                 raise ValueError(
-                    "Error parsing alignment - unexpected line:\n%s" % (line,)
+                    f"Error parsing alignment - unexpected line:\n{line}"
                 )
         elif line.startswith("a"):
             # start a bundle of records
@@ -397,7 +397,7 @@ class MafIndex:
             # example: /home/bli/src/biopython/Tests/MAF/ucsc_mm9_chr10.maf
             mafpath = os.path.abspath(self._maf_file)
         self._con.execute(
-            "INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" % (mafpath,)
+            f"INSERT INTO meta_data (key, value) VALUES ('filename', '{mafpath}');"
         )
         self._con.execute(
             "CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);"
@@ -725,7 +725,7 @@ class MafIndex:
             # https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops
             else:
                 raise ValueError(
-                    "Did not find %s in alignment bundle" % (self._target_seqname,)
+                    f"Did not find {self._target_seqname} in alignment bundle"
                 )
 
             # the true, chromosome/contig/etc position in the target seqname
@@ -829,7 +829,7 @@ class MafIndex:
 
     def __repr__(self):
         """Return a string representation of the index."""
-        return "MafIO.MafIndex(%r, target_seqname=%r)" % (
+        return "MafIO.MafIndex({!r}, target_seqname={!r})".format(
             self._maf_fp.name,
             self._target_seqname,
         )

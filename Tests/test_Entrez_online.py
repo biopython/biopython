@@ -247,7 +247,7 @@ class EntrezOnlineCase(unittest.TestCase):
             oldloc = locale.setlocale(locale.LC_ALL)
             locale.setlocale(locale.LC_ALL, "C")
         except locale.Error as err:
-            self.skipTest("Cannot set locale: {}".format(err))
+            self.skipTest(f"Cannot set locale: {err}")
         try:
             handle = Entrez.efetch(db="gds", id="200079209")
             self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)

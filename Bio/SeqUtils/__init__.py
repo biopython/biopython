@@ -398,7 +398,7 @@ def molecular_weight(
             tmp_type = "DNA"  # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
             raise ValueError(
-                "seq_type=%r contradicts %s from seq alphabet" % (seq_type, tmp_type)
+                f"seq_type={seq_type!r} contradicts {tmp_type} from seq alphabet"
             )
         seq_type = tmp_type
     elif isinstance(seq, str):
@@ -437,7 +437,7 @@ def molecular_weight(
         if circular:
             weight -= water
     except KeyError as e:
-        raise ValueError("%s is not a valid unambiguous letter for %s" % (e, seq_type))
+        raise ValueError(f"{e} is not a valid unambiguous letter for {seq_type}")
 
     if seq_type in ("DNA", "RNA") and double_stranded:
         seq = str(Seq(seq).complement())
@@ -488,7 +488,7 @@ def six_frame_translations(seq, genetic_code=1):
 
     # create header
     if length > 20:
-        short = "%s ... %s" % (seq[:10], seq[-10:])
+        short = "{} ... {}".format(seq[:10], seq[-10:])
     else:
         short = seq
     header = "GC_Frame: "

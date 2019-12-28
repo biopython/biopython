@@ -406,8 +406,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             order = np.argsort(np.append(pos_positions, neg_positions))
             chunk_positions = chunk_positions[order]
             chunk_scores = chunk_scores[order]
-            for pos, score in zip(chunk_positions, chunk_scores):
-                yield pos, score
+            yield from zip(chunk_positions, chunk_scores)
 
     @property
     def max(self):

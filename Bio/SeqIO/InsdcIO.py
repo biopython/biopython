@@ -281,7 +281,7 @@ def _insdc_location_string(location, rec_length):
         # CompoundFeatureLocation
         if location.strand == -1:
             # Special case, put complement outside the join/order/... and reverse order
-            return "complement(%s(%s))" % (
+            return "complement({}({}))".format(
                 location.operator,
                 ",".join(
                     _insdc_location_string_ignoring_strand_and_subfeatures(
@@ -291,7 +291,7 @@ def _insdc_location_string(location, rec_length):
                 ),
             )
         else:
-            return "%s(%s)" % (
+            return "{}({})".format(
                 location.operator,
                 ",".join(_insdc_location_string(p, rec_length) for p in parts),
             )
@@ -332,7 +332,7 @@ class _InsdcWriter(SequentialSequenceWriter):
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if value is None:
             # Value-less entry like /pseudo
-            self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
+            self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
             return
 
         if type(value) == str:
@@ -349,9 +349,9 @@ class _InsdcWriter(SequentialSequenceWriter):
             else:
                 quote = True
         if quote:
-            line = '%s/%s="%s"' % (self.QUALIFIER_INDENT_STR, key, value)
+            line = f'{self.QUALIFIER_INDENT_STR}/{key}="{value}"'
         else:
-            line = "%s/%s=%s" % (self.QUALIFIER_INDENT_STR, key, value)
+            line = f"{self.QUALIFIER_INDENT_STR}/{key}={value}"
         if len(line) <= self.MAX_WIDTH:
             self.handle.write(line + "\n")
             return
@@ -502,13 +502,13 @@ class GenBankWriter(_InsdcWriter):
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             if tag:
                 warnings.warn(
-                    "Annotation %r too long for %r line" % (text, tag), BiopythonWarning
+                    f"Annotation {text!r} too long for {tag!r} line", BiopythonWarning
                 )
             else:
                 # Can't give such a precise warning
                 warnings.warn("Annotation %r too long" % text, BiopythonWarning)
         self.handle.write(
-            "%s%s\n" % (tag.ljust(self.HEADER_WIDTH), text.replace("\n", " "))
+            "{}{}\n".format(tag.ljust(self.HEADER_WIDTH), text.replace("\n", " "))
         )
 
     def _write_multi_line(self, tag, text):
@@ -751,7 +751,7 @@ class GenBankWriter(_InsdcWriter):
 
         assert len(units) == 2
         assert len(division) == 3
-        line = "LOCUS       %s %s    %s %s %s %s\n" % (
+        line = "LOCUS       {} {}    {} {} {} {}\n".format(
             name_length,
             units,
             mol_type.ljust(7),
@@ -902,15 +902,15 @@ class GenBankWriter(_InsdcWriter):
                     padding = len(subkey) if len(subkey) > padding else padding
             # Construct output
             for key, data in comment.items():
-                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_START))
+                lines.append(f"##{key}{self.STRUCTURED_COMMENT_START}")
                 for subkey, subdata in data.items():
                     spaces = " " * (padding - len(subkey))
                     lines.append(
-                        "{0}{1}{2}{3}".format(
+                        "{}{}{}{}".format(
                             subkey, spaces, self.STRUCTURED_COMMENT_DELIM, subdata
                         )
                     )
-                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
+                lines.append(f"##{key}{self.STRUCTURED_COMMENT_END}")
         if "comment" in record.annotations:
             comment = record.annotations["comment"]
             if isinstance(comment, str):
@@ -992,7 +992,7 @@ class GenBankWriter(_InsdcWriter):
 
         self._write_single_line("ACCESSION", accession)
         if gi != ".":
-            self._write_single_line("VERSION", "%s  GI:%s" % (acc_with_version, gi))
+            self._write_single_line("VERSION", f"{acc_with_version}  GI:{gi}")
         else:
             self._write_single_line("VERSION", "%s" % acc_with_version)
 
@@ -1142,7 +1142,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write((" %s" % data[index : index + self.LETTERS_PER_BLOCK]))
+                handle.write(" %s" % data[index : index + self.LETTERS_PER_BLOCK])
             handle.write(
                 str((line_number + 1) * self.LETTERS_PER_LINE).rjust(
                     self.POSITION_PADDING

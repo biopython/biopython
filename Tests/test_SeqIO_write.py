@@ -165,10 +165,10 @@ for (records, descr, errs) in test_records:
         # Assume no errors expected...
         def funct(records, format, descr):
             f = lambda x: x.check(records, format)  # noqa: E731
-            f.__doc__ = "%s for %s" % (format, descr)
+            f.__doc__ = f"{format} for {descr}"
             return f
         setattr(WriterTests,
-                "test_%s_%s" % (format, descr.replace(" ", "_")),
+                "test_{}_{}".format(format, descr.replace(" ", "_")),
                 funct(records, format, descr))
         # Replace the method with an error specific one?
         for err_formats, err_type, err_msg in errs:
@@ -179,10 +179,10 @@ for (records, descr, errs) in test_records:
                         format,
                         err_type,
                         err_msg)
-                    f.__doc__ = "%s for %s" % (format, descr)
+                    f.__doc__ = f"{format} for {descr}"
                     return f
                 setattr(WriterTests,
-                        "test_%s_%s" % (format, descr.replace(" ", "_")),
+                        "test_{}_{}".format(format, descr.replace(" ", "_")),
                         funct_e(records, format, descr, err_type, err_msg))
                 break
         del funct

@@ -312,7 +312,7 @@ class AbstractCommandline:
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
-        answer = "%s(cmd=%r" % (self.__class__.__name__, self.program_name)
+        answer = f"{self.__class__.__name__}(cmd={self.program_name!r}"
         for parameter in self.parameters:
             if parameter.is_set:
                 if isinstance(parameter, _Switch):
@@ -609,9 +609,9 @@ class _Option(_AbstractParameter):
         else:
             v = str(self.value)
         if self.equate:
-            return "%s=%s " % (self.names[0], v)
+            return "{}={} ".format(self.names[0], v)
         else:
-            return "%s %s " % (self.names[0], v)
+            return "{} {} ".format(self.names[0], v)
 
 
 class _Switch(_AbstractParameter):

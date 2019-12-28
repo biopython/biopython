@@ -177,7 +177,7 @@ class PDBIO(StructureIO):
                 )
             else:
                 raise TypeError(
-                    "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
+                    "Invalid occupancy {!r} in atom {!r}".format(occupancy, atom.get_full_id())
                 )
 
         args = (

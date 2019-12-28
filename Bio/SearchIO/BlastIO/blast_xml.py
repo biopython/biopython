@@ -240,8 +240,7 @@ class BlastXmlParser:
 
     def __iter__(self):
         """Iterate over BlastXmlParser object yields query results."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _parse_preamble(self):
         """Parse all tag data prior to the first query result (PRIVATE)."""
@@ -350,7 +349,7 @@ class BlastXmlParser:
                             )
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
-                            hit.description = "%s %s" % (hit.id, hit.description)
+                            hit.description = f"{hit.id} {hit.description}"
                             hit.id = hit.blast_id
                             # and change the hit_id of the HSPs contained
                             for hsp in hit:
@@ -701,7 +700,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def endElement(self, name):
         """End and XML element of the given name."""
         XMLGenerator.endElement(self, name)
-        self.write(u"\n")
+        self.write("\n")
 
     def startParent(self, name, attrs=None):
         """Start an XML element which has children.
@@ -716,7 +715,7 @@ class _BlastXmlGenerator(XMLGenerator):
             attrs = {}
         self.startElement(name, attrs, children=True)
         self._level += self._increment
-        self.write(u"\n")
+        self.write("\n")
         # append the element name, so we can end it later
         self._parent_stack.append(name)
 
@@ -814,7 +813,7 @@ class BlastXmlWriter:
                 # ensure attrs that is not present is optional
                 if elem not in _DTD_OPT:
                     raise ValueError(
-                        "Element %r (attribute %r) not found" % (elem, attr)
+                        f"Element {elem!r} (attribute {attr!r}) not found"
                     )
             else:
                 # custom element-attribute mapping, for fallback values
@@ -838,11 +837,11 @@ class BlastXmlWriter:
             except AttributeError:
                 if elem not in _DTD_OPT:
                     raise ValueError(
-                        "Element %s (attribute %s) not found" % (elem, attr)
+                        f"Element {elem} (attribute {attr}) not found"
                     )
             else:
                 if elem == "BlastOutput_version":
-                    content = "%s %s" % (qresult.program.upper(), qresult.version)
+                    content = "{} {}".format(qresult.program.upper(), qresult.version)
                 elif qresult.blast_id:
                     if elem == "BlastOutput_query-ID":
                         content = qresult.blast_id
@@ -910,7 +909,7 @@ class BlastXmlWriter:
                 hit_id = hit.blast_id
                 hit_desc = " >".join(
                     [
-                        "{} {}".format(x, y)
+                        f"{x} {y}"
                         for x, y in zip(hit.id_all, hit.description_all)
                     ]
                 )
@@ -918,7 +917,7 @@ class BlastXmlWriter:
                 hit_id = hit.id
                 hit_desc = hit.description + " >".join(
                     [
-                        "{} {}".format(x, y)
+                        f"{x} {y}"
                         for x, y in zip(hit.id_all[1:], hit.description_all[1:])
                     ]
                 )
@@ -945,7 +944,7 @@ class BlastXmlWriter:
                 except AttributeError:
                     if elem not in _DTD_OPT:
                         raise ValueError(
-                            "Element %s (attribute %s) not found" % (elem, attr)
+                            f"Element {elem} (attribute {attr}) not found"
                         )
                 else:
                     xml.simpleElement(elem, str(content))

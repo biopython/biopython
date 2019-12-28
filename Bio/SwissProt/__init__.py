@@ -491,7 +491,7 @@ def _read_rc(reference, value):
             reference.comments.append(comment)
         else:
             comment = reference.comments[-1]
-            comment = "%s %s" % (comment, col)
+            comment = f"{comment} {col}"
             reference.comments[-1] = comment
     return unread
 
@@ -603,7 +603,7 @@ def _read_ft(record, line):
         assert not from_res and not to_res, line
         name, from_res, to_res, old_description, old_ft_id = record.features[-1]
         del record.features[-1]
-        description = ("%s %s" % (old_description, description)).strip()
+        description = (f"{old_description} {description}").strip()
 
         # special case -- VARSPLIC, reported by edvard@farmasi.uit.no
         if name == "VARSPLIC":

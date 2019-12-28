@@ -313,7 +313,7 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        s = "<Polypeptide start=%s end=%s>" % (start, end)
+        s = f"<Polypeptide start={start} end={end}>"
         return s
 
 

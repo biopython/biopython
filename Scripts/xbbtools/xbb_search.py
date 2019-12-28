@@ -58,7 +58,7 @@ class DNAsearch:
         for i in s:
             r = self.alphabet.get(i, i)
             if len(r) > 1:
-                rx = "%s[%s]" % (rx, r)
+                rx = f"{rx}[{r}]"
             else:
                 rx += r
         return rx

@@ -31,13 +31,13 @@ def compare_reference(old_r, new_r):
     of the BioSQL table structure.
     """
     assert old_r.title == new_r.title, \
-        "%s vs %s" % (old_r.title, new_r.title)
+        f"{old_r.title} vs {new_r.title}"
     assert old_r.authors == new_r.authors, \
-        "%s vs %s" % (old_r.authors, new_r.authors)
+        f"{old_r.authors} vs {new_r.authors}"
     assert old_r.journal == new_r.journal, \
-        "%s vs %s" % (old_r.journal, new_r.journal)
+        f"{old_r.journal} vs {new_r.journal}"
     assert old_r.medline_id == new_r.medline_id, \
-        "%s vs %s" % (old_r.medline_id, new_r.medline_id)
+        f"{old_r.medline_id} vs {new_r.medline_id}"
 
     if old_r.pubmed_id and new_r.pubmed_id:
         assert old_r.pubmed_id == new_r.pubmed_id
@@ -50,7 +50,7 @@ def compare_reference(old_r, new_r):
     # Looking at the tables, I *think* the current schema does not
     # allow us to store a reference comment.  Must confirm this.
     assert old_r.comment == new_r.comment or new_r.comment == "", \
-        "%r vs %r" % (old_r.comment, new_r.comment)
+        f"{old_r.comment!r} vs {new_r.comment!r}"
 
     # TODO - assert old_r.consrtm == new_r.consrtm
     # Looking at the tables, I *think* the current schema does not
@@ -76,16 +76,16 @@ def compare_feature(old_f, new_f):
     assert isinstance(new_f, SeqFeature)
 
     assert old_f.type == new_f.type, \
-        "%s -> %s" % (old_f.type, new_f.type)
+        f"{old_f.type} -> {new_f.type}"
 
     assert old_f.strand == new_f.strand, \
-        "%s -> %s" % (old_f.strand, new_f.strand)
+        f"{old_f.strand} -> {new_f.strand}"
 
     assert old_f.ref == new_f.ref, \
-        "%s -> %s" % (old_f.ref, new_f.ref)
+        f"{old_f.ref} -> {new_f.ref}"
 
     assert old_f.ref_db == new_f.ref_db, \
-        "%s -> %s" % (old_f.ref_db, new_f.ref_db)
+        f"{old_f.ref_db} -> {new_f.ref_db}"
 
     # TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
     assert old_f.id == new_f.id or new_f.id == "<unknown id>"
@@ -99,12 +99,12 @@ def compare_feature(old_f, new_f):
     assert old_f.location.start == new_f.location.start \
         or (isinstance(old_f.location.start, UnknownPosition) and
             isinstance(new_f.location.start, UnknownPosition)), \
-        "%s -> %s" % (old_f.location.start,
+        "{} -> {}".format(old_f.location.start,
                       new_f.location.start)
     assert old_f.location.end == new_f.location.end \
         or (isinstance(old_f.location.end, UnknownPosition) and
             isinstance(new_f.location.end, UnknownPosition)), \
-        "%s -> %s" % (old_f.location.end,
+        "{} -> {}".format(old_f.location.end,
                       new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \
@@ -134,21 +134,21 @@ def compare_feature(old_f, new_f):
             elif isinstance(new_f.qualifiers[key], list):
                 # Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
-                    "%s -> %s" % (repr(old_f.qualifiers[key]),
+                    "{} -> {}".format(repr(old_f.qualifiers[key]),
                                   repr(new_f.qualifiers[key]))
             else:
                 raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:
             # Should both be lists of strings...
             assert old_f.qualifiers[key] == new_f.qualifiers[key], \
-                "%s -> %s" % (old_f.qualifiers[key], new_f.qualifiers[key])
+                "{} -> {}".format(old_f.qualifiers[key], new_f.qualifiers[key])
     return True
 
 
 def compare_sequence(old, new):
     """Compare two Seq or DBSeq objects."""
     assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
-    assert str(old) == str(new), "%s vs %s" % (old, new)
+    assert str(old) == str(new), f"{old} vs {new}"
 
     if isinstance(old, UnknownSeq):
         assert isinstance(new, UnknownSeq)
@@ -181,9 +181,9 @@ def compare_sequence(old, new):
         for j in indices:
             expected = s[i:j]
             assert expected == str(old[i:j]), \
-                "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
+                "Slice {} vs {}".format(repr(expected), repr(old[i:j]))
             assert expected == str(new[i:j]), \
-                "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
+                "Slice {} vs {}".format(repr(expected), repr(new[i:j]))
             # Slicing with step of 1 should make no difference.
             # Slicing with step 3 might be useful for codons.
             for step in [1, 3]:

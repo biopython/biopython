@@ -94,7 +94,7 @@ class NextOrf:
             "\\1\n",
             seq,
         )
-        return ">%s\n%s" % (header, seq)
+        return f">{header}\n{seq}"
 
     def Gc(self, seq):
         d = {}
@@ -134,7 +134,7 @@ class NextOrf:
             nall += n
 
         gcall = 100.0 * gcall / nall
-        res = "%.1f%%, %.1f%%, %.1f%%, %.1f%%" % (gcall, gc[0], gc[1], gc[2])
+        res = "{:.1f}%, {:.1f}%, {:.1f}%, {:.1f}%".format(gcall, gc[0], gc[1], gc[2])
         return res
 
     def GetOrfCoordinates(self, seq):
@@ -186,7 +186,7 @@ class NextOrf:
                             start_site = start_site + f - 1
                         if codon == "XXX":
                             stop = start_site + 3 * (
-                                (int((stop - 1) - start_site) // 3)
+                                int((stop - 1) - start_site) // 3
                             )
                         s = seq[start_site - 1 : stop]
                         CDS.append((start_site, stop, length, s, strand * f))
@@ -222,7 +222,7 @@ class NextOrf:
                     n - start + 1,
                 )
             if self.options["gc"]:
-                head = "%s:%s" % (head, self.Gc2(subs))
+                head = "{}:{}".format(head, self.Gc2(subs))
 
             if out == "aa":
                 orf = subs.translate(table=self.genetic_code)
@@ -254,7 +254,7 @@ def help():
     #    print("")
     print("\nNCBI's Codon Tables:")
     for key, table in CodonTable.ambiguous_dna_by_id.items():
-        print("\t%s %s" % (key, table._codon_table.names[0]))
+        print("\t{} {}".format(key, table._codon_table.names[0]))
     print("\ne.g.")
     print("./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas")
     sys.exit(0)

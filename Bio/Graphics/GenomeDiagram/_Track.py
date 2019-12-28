@@ -268,7 +268,7 @@ class Track:
         if not verbose:  # Return the short description
             return "%s" % self  # Use __str__ method instead
         else:  # Return the long description
-            outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
+            outstr = [f"\n<{self.__class__}: {self.name}>"]
             outstr.append("%d sets" % len(self._sets))
             for key in self._sets:
                 outstr.append("set: %s" % self._sets[key])
@@ -280,6 +280,6 @@ class Track:
 
     def __str__(self):
         """Return a formatted string with information about the Track."""
-        outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
+        outstr = [f"\n<{self.__class__}: {self.name}>"]
         outstr.append("%d sets" % len(self._sets))
         return "\n".join(outstr)

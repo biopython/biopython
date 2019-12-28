@@ -57,12 +57,12 @@ def compare_record(old, new, expect_minor_diffs=False):
         # Jython didn't like us comparing the string of very long
         # UnknownSeq object (out of heap memory error)
         if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%s vs %s" % (repr(old.seq), repr(new.seq)))
+            raise ValueError("{} vs {}".format(repr(old.seq), repr(new.seq)))
     elif str(old.seq).upper() != str(new.seq).upper():
         if len(old.seq) < 200:
-            raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
+            raise ValueError(f"'{old.seq}' vs '{new.seq}'")
         else:
-            raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
+            raise ValueError("'{}...' vs '{}...'".format(old.seq[:100], new.seq[:100]))
     if old.features and new.features:
         if not compare_features(old.features, new.features):
             return False
@@ -100,7 +100,7 @@ def compare_record(old, new, expect_minor_diffs=False):
             for r1, r2 in zip(old.annotations[key], new.annotations[key]):
                 assert r1.title == r2.title
                 assert r1.authors == r2.authors, \
-                    "Old: '%s'\nNew: '%s'" % (r1.authors, r2.authors)
+                    f"Old: '{r1.authors}'\nNew: '{r2.authors}'"
                 assert r1.journal == r2.journal
                 if r1.consrtm and r2.consrtm:
                     # Not held in EMBL files
@@ -129,19 +129,19 @@ def compare_records(old_list, new_list, expect_minor_diffs=False):
 def compare_feature(old, new):
     """Check two SeqFeatures agree."""
     if old.type != new.type:
-        raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
+        raise ValueError("Type {} versus {}".format(repr(old.type), repr(new.type)))
     if old.location.nofuzzy_start != new.location.nofuzzy_start \
             or old.location.nofuzzy_end != new.location.nofuzzy_end:
         raise ValueError("%s versus %s:\n%s\nvs:\n%s"
                          % (old.location, new.location, repr(old), repr(new)))
     if old.strand is not None and old.strand != new.strand:
-        raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different strand:\n{}\nvs:\n{}".format(repr(old), repr(new)))
     if old.ref != new.ref:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref:\n{}\nvs:\n{}".format(repr(old), repr(new)))
     if old.ref_db != new.ref_db:
-        raise ValueError("Different ref_db:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref_db:\n{}\nvs:\n{}".format(repr(old), repr(new)))
     if old.location_operator != new.location_operator:
-        raise ValueError("Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different location_operator:\n{}\nvs:\n{}".format(repr(old), repr(new)))
     if old.location.start != new.location.start \
             or str(old.location.start) != str(new.location.start):
         raise ValueError("Start %s versus %s:\n%s\nvs:\n%s"
@@ -1083,7 +1083,7 @@ class NC_000932(unittest.TestCase):
                 pro = nuc.translate(table=self.table, cds=True)
             except TranslationError as e:
                 print(e)
-                print("%r, %r, %r" % (r.id, nuc, self.table))
+                print(f"{r.id!r}, {nuc!r}, {self.table!r}")
                 print(f)
                 raise
             if pro[-1] == "*":

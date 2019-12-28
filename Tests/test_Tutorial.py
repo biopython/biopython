@@ -214,7 +214,7 @@ for latex in files:
         try:
             example = rt.refactor_docstring(example, name)
         except TokenError:
-            raise ValueError("Problem with %s:\n%s" % (name, example))
+            raise ValueError(f"Problem with {name}:\n{example}")
 
         def funct(n, d, f):
             global tutorial_base
@@ -224,7 +224,7 @@ for latex in files:
                 method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
                     % (n, p, d)
             else:
-                method.__doc__ = "%s\n\n%s\n" % (n, d)
+                method.__doc__ = f"{n}\n\n{d}\n"
             method._folder = f
             return method
 

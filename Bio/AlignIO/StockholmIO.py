@@ -222,10 +222,10 @@ class StockholmWriter(SequentialAlignmentWriter):
         if alignment.column_annotations:
             for k, v in sorted(alignment.column_annotations.items()):
                 if k in self.pfam_gc_mapping:
-                    self.handle.write("#=GC %s %s\n" % (self.pfam_gc_mapping[k], v))
+                    self.handle.write("#=GC {} {}\n".format(self.pfam_gc_mapping[k], v))
                 elif k in self.pfam_gr_mapping:
                     self.handle.write(
-                        "#=GC %s %s\n" % (self.pfam_gr_mapping[k] + "_cons", v)
+                        "#=GC {} {}\n".format(self.pfam_gr_mapping[k] + "_cons", v)
                     )
                 else:
                     # It doesn't follow the PFAM standards, but should we record
@@ -249,12 +249,12 @@ class StockholmWriter(SequentialAlignmentWriter):
         seq_name = seq_name.replace(" ", "_")
 
         if "start" in record.annotations and "end" in record.annotations:
-            suffix = "/%s-%s" % (
+            suffix = "/{}-{}".format(
                 str(record.annotations["start"]),
                 str(record.annotations["end"]),
             )
             if seq_name[-len(suffix) :] != suffix:
-                seq_name = "%s/%s-%s" % (
+                seq_name = "{}/{}-{}".format(
                     seq_name,
                     str(record.annotations["start"]),
                     str(record.annotations["end"]),
@@ -263,7 +263,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         if seq_name in self._ids_written:
             raise ValueError("Duplicate record identifier: %s" % seq_name)
         self._ids_written.append(seq_name)
-        self.handle.write("%s %s\n" % (seq_name, str(record.seq)))
+        self.handle.write("{} {}\n".format(seq_name, str(record.seq)))
 
         # The recommended placement for GS lines (per sequence annotation)
         # is above the alignment (as a header block) or just below the
@@ -283,17 +283,17 @@ class StockholmWriter(SequentialAlignmentWriter):
                 % (seq_name, self.clean(record.annotations["accession"]))
             )
         elif record.id:
-            self.handle.write("#=GS %s AC %s\n" % (seq_name, self.clean(record.id)))
+            self.handle.write("#=GS {} AC {}\n".format(seq_name, self.clean(record.id)))
 
         # DE = description
         if record.description:
             self.handle.write(
-                "#=GS %s DE %s\n" % (seq_name, self.clean(record.description))
+                "#=GS {} DE {}\n".format(seq_name, self.clean(record.description))
             )
 
         # DE = database links
         for xref in record.dbxrefs:
-            self.handle.write("#=GS %s DR %s\n" % (seq_name, self.clean(xref)))
+            self.handle.write("#=GS {} DR {}\n".format(seq_name, self.clean(xref)))
 
         # GS = other per sequence annotation
         for key, value in record.annotations.items():

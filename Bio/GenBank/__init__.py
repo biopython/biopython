@@ -70,7 +70,7 @@ _between_location = r"\d+\^\d+"
 
 _within_position = r"\(\d+\.\d+\)"
 _re_within_position = re.compile(_within_position)
-_within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
+_within_location = r"([<>]?\d+|{})\.\.([<>]?\d+|{})".format(
     _within_position,
     _within_position,
 )
@@ -81,7 +81,7 @@ assert re.compile(_within_location).match("(13.19)..(20.28)")
 
 _oneof_position = r"one\-of\(\d+(,\d+)+\)"
 _re_oneof_position = re.compile(_oneof_position)
-_oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
+_oneof_location = fr"([<>]?\d+|{_oneof_position})\.\.([<>]?\d+|{_oneof_position})"
 assert _re_oneof_position.match("one-of(6,9)")
 assert re.compile(_oneof_location).match("one-of(6,9)..101")
 assert re.compile(_oneof_location).match("one-of(6,9)..one-of(101,104)")
@@ -95,9 +95,9 @@ assert _re_oneof_position.match("one-of(3,6,9)")
 _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(
-    r"^(join|order|bond)\(%s(,%s)*\)$" % (_simple_location, _simple_location)
+    fr"^(join|order|bond)\({_simple_location}(,{_simple_location})*\)$"
 )
-_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" % (
+_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?({}|{}|{}|{}|{})".format(
     _pair_location,
     _solo_location,
     _between_location,
@@ -105,7 +105,7 @@ _complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)
     _oneof_location,
 )
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
-_possibly_complemented_complex_location = r"(%s|complement\(%s\))" % (
+_possibly_complemented_complex_location = r"({}|complement\({}\))".format(
     _complex_location,
     _complex_location,
 )
@@ -435,8 +435,7 @@ def _split_compound_loc(compound_loc):
             yield compound_loc
     else:
         # Easy case
-        for part in compound_loc.split(","):
-            yield part
+        yield from compound_loc.split(",")
 
 
 class Iterator:

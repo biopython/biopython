@@ -85,7 +85,7 @@ class DB_Index:
                             "AARRGGGG %d %d %s %s"
                             % (start, stop, type(start), type(stop))
                         )
-                        print("%s %s" % (id, acc))
+                        print(f"{id} {acc}")
 
             db.close()
 
@@ -248,7 +248,7 @@ class DB_Index:
 
         SQ = re.sub("[ \n]", "", SQ)
         if fasta:
-            SQ = ">%s\n%s" % (id, re.sub("(.{60})", "\\1\n", SQ))
+            SQ = ">{}\n{}".format(id, re.sub("(.{60})", "\\1\n", SQ))
         return SQ
 
     def Get_XX(self, id, xx):

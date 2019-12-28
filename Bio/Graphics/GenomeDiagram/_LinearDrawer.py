@@ -1065,9 +1065,9 @@ class LinearDrawer(AbstractDrawer):
             top += self.fragment_lines[fragment][0]
         except Exception:  # Only called if the method screws up big time
             print("We've got a screw-up")
-            print("%s %s" % (self.start, self.end))
+            print(f"{self.start} {self.end}")
             print(self.fragment_bases)
-            print("%r %r" % (x0, x1))
+            print(f"{x0!r} {x1!r}")
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))

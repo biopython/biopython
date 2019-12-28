@@ -224,13 +224,13 @@ class MultipleSeqAlignment:
         """
         if record.seq.__class__.__name__ == "CodonSeq":
             if len(record.seq) <= length:
-                return "%s %s" % (record.seq, record.id)
+                return f"{record.seq} {record.id}"
             else:
                 return "%s...%s %s" \
                     % (record.seq[:length - 3], record.seq[-3:], record.id)
         else:
             if len(record.seq) <= length:
-                return "%s %s" % (record.seq, record.id)
+                return f"{record.seq} {record.id}"
             else:
                 return "%s...%s %s" \
                     % (record.seq[:length - 6], record.seq[-3:], record.id)
@@ -1031,7 +1031,7 @@ class PairwiseAlignment:
         aligned_seq1 += seq1[end1:] + " " * (n - n1)
         aligned_seq2 += seq2[end2:] + " " * (n - n2)
         pattern += " " * n
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_generalized(self):
         seq1 = self.target
@@ -1104,7 +1104,7 @@ class PairwiseAlignment:
         aligned_seq1 = " ".join(aligned_seq1)
         aligned_seq2 = " ".join(aligned_seq2)
         pattern = " ".join(pattern)
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_psl(self):
         query = self.query

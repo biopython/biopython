@@ -6980,17 +6980,17 @@ class LineOneTests(unittest.TestCase):
                 scanner._feed_first_line(consumer, line)
                 t = consumer.data.annotations.get("topology", None)
                 self.assertEqual(
-                    t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                    t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
                 )
                 mt = consumer.data.annotations.get("molecule_type", None)
                 self.assertEqual(
                     mt,
                     mol_type,
-                    "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                    f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
                 )
                 d = consumer.data.annotations.get("data_file_division", None)
                 self.assertEqual(
-                    d, div, "Wrong division %r not %r from %r" % (d, div, line)
+                    d, div, f"Wrong division {d!r} not {div!r} from {line!r}"
                 )
                 if warning_list is None:
                     self.assertEqual(len(caught), 0)
@@ -7052,17 +7052,17 @@ class LineOneTests(unittest.TestCase):
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get("topology", None)
             self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
             )
             mt = consumer.data.annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
             )
             d = consumer.data.annotations.get("data_file_division", None)
             self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
+                d, div, f"Wrong division {d!r} not {div!r} from {line!r}"
             )
 
     def test_first_line_imgt(self):
@@ -7078,17 +7078,17 @@ class LineOneTests(unittest.TestCase):
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get("topology", None)
             self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
             )
             mt = consumer.data.annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
             )
             d = consumer.data.annotations.get("data_file_division", None)
             self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
+                d, div, f"Wrong division {d!r} not {div!r} from {line!r}"
             )
 
 

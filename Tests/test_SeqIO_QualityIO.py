@@ -62,19 +62,19 @@ def compare_record(old, new, truncate=None):
     It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
     """
     if old.id != new.id:
-        raise ValueError("'%s' vs '%s' " % (old.id, new.id))
+        raise ValueError(f"'{old.id}' vs '{new.id}' ")
     if old.description != new.description \
        and (old.id + " " + old.description).strip() != new.description:
-        raise ValueError("'%s' vs '%s' " % (old.description, new.description))
+        raise ValueError(f"'{old.description}' vs '{new.description}' ")
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
     if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
         pass
     elif str(old.seq) != str(new.seq):
         if len(old.seq) < 200:
-            raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
+            raise ValueError(f"'{old.seq}' vs '{new.seq}'")
         else:
-            raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
+            raise ValueError("'{}...' vs '{}...'".format(old.seq[:100], new.seq[:100]))
     if "phred_quality" in old.letter_annotations \
        and "phred_quality" in new.letter_annotations \
        and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"]:
@@ -282,7 +282,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
             # Load the reference output...
-            with open("Quality/%s_as_%s.fastq" % (base_name, out_variant),
+            with open(f"Quality/{base_name}_as_{out_variant}.fastq",
                       _universal_read_mode) as handle:
                 expected = handle.read()
 
@@ -315,10 +315,10 @@ for base_name, variant in tests:
 
     def funct(bn, var):
         f = lambda x: x.simple_check(bn, var)  # noqa: E731
-        f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
+        f.__doc__ = f"Reference conversions of {var} file {bn}"
         return f
 
-    setattr(TestReferenceFastqConversions, "test_%s_%s" % (base_name, variant),
+    setattr(TestReferenceFastqConversions, f"test_{base_name}_{variant}",
             funct(base_name, variant))
     del funct
 
@@ -658,7 +658,7 @@ class MappingTests(unittest.TestCase):
         qual = "".join(chr(33 + q) for q in range(0, 94))
         expected_sol = [min(62, int(round(QualityIO.solexa_quality_from_phred(q))))
                         for q in range(0, 94)]
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
+        in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", BiopythonWarning)
@@ -680,7 +680,7 @@ class MappingTests(unittest.TestCase):
         qual = "".join(chr(64 + q) for q in range(-5, 63))
         expected_phred = [round(QualityIO.phred_quality_from_solexa(q))
                           for q in range(-5, 63)]
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
+        in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
         SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"),
                     out_handle, "fastq-sanger")
@@ -695,7 +695,7 @@ class MappingTests(unittest.TestCase):
         seq = "N" * 94
         qual = "".join(chr(33 + q) for q in range(0, 94))
         expected_phred = [min(62, q) for q in range(0, 94)]
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
+        in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", BiopythonWarning)
@@ -713,7 +713,7 @@ class MappingTests(unittest.TestCase):
         seq = "N" * 63
         qual = "".join(chr(64 + q) for q in range(0, 63))
         expected_phred = list(range(63))
-        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq, qual))
+        in_handle = StringIO(f"@Test\n{seq}\n+\n{qual}")
         out_handle = StringIO()
         SeqIO.write(SeqIO.parse(in_handle, "fastq-illumina"),
                     out_handle, "fastq-sanger")

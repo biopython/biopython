@@ -88,7 +88,7 @@ def AtomIterator(pdb_id, struct):
         else:
             # No gaps
             res_out = [restype(x) for x in residues]
-        record_id = "%s:%s" % (pdb_id, chn_id)
+        record_id = f"{pdb_id}:{chn_id}"
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)
         # if len(structure) > 1 :
@@ -216,8 +216,8 @@ def PdbSeqresIterator(handle):
             record.annotations = {"chain": chn_id}
             if chn_id in metadata:
                 m = metadata[chn_id][0]
-                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-                record.description = "%s:%s %s" % (
+                record.id = record.name = "{}:{}".format(m["pdb_id"], chn_id)
+                record.description = "{}:{} {}".format(
                     m["database"],
                     m["db_acc"],
                     m["db_id_code"],
@@ -225,8 +225,8 @@ def PdbSeqresIterator(handle):
                 for melem in metadata[chn_id]:
                     record.dbxrefs.extend(
                         [
-                            "%s:%s" % (melem["database"], melem["db_acc"]),
-                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                            "{}:{}".format(melem["database"], melem["db_acc"]),
+                            "{}:{}".format(melem["database"], melem["db_id_code"]),
                         ]
                     )
             else:
@@ -425,8 +425,8 @@ def CifSeqresIterator(handle):
             record.annotations = {"chain": chn_id}
             if chn_id in metadata:
                 m = metadata[chn_id][0]
-                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-                record.description = "%s:%s %s" % (
+                record.id = record.name = "{}:{}".format(m["pdb_id"], chn_id)
+                record.description = "{}:{} {}".format(
                     m["database"],
                     m["db_acc"],
                     m["db_id_code"],
@@ -434,8 +434,8 @@ def CifSeqresIterator(handle):
                 for melem in metadata[chn_id]:
                     record.dbxrefs.extend(
                         [
-                            "%s:%s" % (melem["database"], melem["db_acc"]),
-                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                            "{}:{}".format(melem["database"], melem["db_acc"]),
+                            "{}:{}".format(melem["database"], melem["db_id_code"]),
                         ]
                     )
             else:
@@ -520,8 +520,7 @@ def CifAtomIterator(handle):
 
     buffer.seek(0)
     struct = MMCIFParser().get_structure(pdb_id, buffer)
-    for record in AtomIterator(pdb_id, struct):
-        yield record
+    yield from AtomIterator(pdb_id, struct)
 
 
 if __name__ == "__main__":

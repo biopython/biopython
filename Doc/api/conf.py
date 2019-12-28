@@ -246,11 +246,11 @@ def insert_github_link(filename):
         python = filename[:-4].replace(".", "/") + ".py"
     if not os.path.isfile(os.path.join("../../", python)):
         sys.stderr.write(
-            "WARNING: Could not map %s to a Python file, e.g. %s\n" % (filename, python)
+            f"WARNING: Could not map {filename} to a Python file, e.g. {python}\n"
         )
         return
 
-    text = ":github_url: https://github.com/%s/%s/blob/%s/%s\n\n%s" % (
+    text = ":github_url: https://github.com/{}/{}/blob/{}/{}\n\n{}".format(
         html_context["github_user"],
         html_context["github_repo"],
         html_context["github_version"],

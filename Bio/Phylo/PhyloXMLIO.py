@@ -146,7 +146,7 @@ def _split_namespace(tag):
 
 def _ns(tag, namespace=NAMESPACES["phy"]):
     """Format an XML tag with the given namespace (PRIVATE)."""
-    return "{%s}%s" % (namespace, tag)
+    return f"{{{namespace}}}{tag}"
 
 
 def _get_child_as(parent, tag, construct):

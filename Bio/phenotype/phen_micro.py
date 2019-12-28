@@ -527,11 +527,11 @@ class PlateRecord:
         """Return a (truncated) representation of the plate for debugging."""
         if len(self._wells) > 4:
             # Show the last well and the first three
-            return "%s('%s, ..., %s')" % (
+            return "{}('{}, ..., {}')".format(
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "{}['{}']".format(str(self[x].__class__.__name__), self[x].id)
                         for x in sorted(self._wells.keys())[:3]
                     ]
                 ),
@@ -542,11 +542,11 @@ class PlateRecord:
                 ),
             )
         else:
-            return "%s(%s)" % (
+            return "{}({})".format(
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "{}['{}']".format(str(self[x].__class__.__name__), self[x].id)
                         for x in sorted(self._wells.keys())
                     ]
                 ),
@@ -795,13 +795,13 @@ class WellRecord:
         """Return a (truncated) representation of the signals for debugging."""
         if len(self) > 7:
             # Shows the last time point and the first five
-            return "%s('%s, ..., %s')" % (
+            return "{}('{}, ..., {}')".format(
                 self.__class__.__name__,
                 ", ".join([str(x) for x in self.get_raw()[:5]]),
                 str(self.get_raw()[-1]),
             )
         else:
-            return "%s(%s)" % (
+            return "{}({})".format(
                 self.__class__.__name__,
                 ", ".join([str(x) for x in self.get_raw()]),
             )

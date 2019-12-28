@@ -86,7 +86,7 @@ def _readline_and_check_start(handle, start):
     """Read the first line and evaluate that begisn with the correct start (PRIVATE)."""
     line = handle.readline()
     if not line.startswith(start):
-        raise ValueError("I expected %r but got %r" % (start, line))
+        raise ValueError(f"I expected {start!r} but got {line!r}")
     return line
 
 
@@ -135,13 +135,13 @@ def save(mm, handle):
     w("ALPHABET: %s\n" % " ".join(mm.alphabet))
     w("INITIAL:\n")
     for i in range(len(mm.p_initial)):
-        w("  %s: %g\n" % (mm.states[i], mm.p_initial[i]))
+        w("  {}: {:g}\n".format(mm.states[i], mm.p_initial[i]))
     w("TRANSITION:\n")
     for i in range(len(mm.p_transition)):
-        w("  %s: %s\n" % (mm.states[i], " ".join(str(x) for x in mm.p_transition[i])))
+        w("  {}: {}\n".format(mm.states[i], " ".join(str(x) for x in mm.p_transition[i])))
     w("EMISSION:\n")
     for i in range(len(mm.p_emission)):
-        w("  %s: %s\n" % (mm.states[i], " ".join(str(x) for x in mm.p_emission[i])))
+        w("  {}: {}\n".format(mm.states[i], " ".join(str(x) for x in mm.p_emission[i])))
 
 
 # XXX allow them to specify starting points

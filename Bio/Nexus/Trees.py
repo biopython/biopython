@@ -211,8 +211,7 @@ class Tree(Nodes.Chain):
             node = self.root
         for n in self.node(node).succ:
             yield n
-            for sn in self._walk(n):
-                yield sn
+            yield from self._walk(n)
 
     def node(self, node_id):
         """Return the instance of node_id.
@@ -392,7 +391,7 @@ class Tree(Nodes.Chain):
                 print(node)
                 print(self.node(node).succ)
                 for n in self.node(node).succ:
-                    print("%s %s" % (n, self.set_subtree(n)))
+                    print("{} {}".format(n, self.set_subtree(n)))
                 print([self.set_subtree(n) for n in self.node(node).succ])
                 raise
 
@@ -679,7 +678,7 @@ class Tree(Nodes.Chain):
                     if (
                         data.branchlength is not None and data.support is not None
                     ):  # we have blen and suppport
-                        info_string = "%1.2f:%1.5f" % (data.support, data.branchlength)
+                        info_string = f"{data.support:1.2f}:{data.branchlength:1.5f}"
                     elif data.branchlength is not None:  # we have only blen
                         info_string = "0.00000:%1.5f" % (data.branchlength)
                     elif data.support is not None:  # we have only support
@@ -715,7 +714,7 @@ class Tree(Nodes.Chain):
             else:
                 succnodes = ladderize_nodes(self.node(node).succ, ladderize=ladderize)
                 subtrees = [newickize(sn, ladderize=ladderize) for sn in succnodes]
-                return "(%s)%s" % (
+                return "({}){}".format(
                     ",".join(subtrees),
                     make_info_string(self.node(node).data),
                 )

@@ -100,7 +100,7 @@ class JASPAR5:
 
     def __str__(self):
         """Return a string represention of the JASPAR5 DB connection."""
-        return r"%s\@%s:%s" % (self.user, self.host, self.name)
+        return fr"{self.user}\@{self.host}:{self.name}"
 
     def fetch_motif_by_id(self, id):
         """Fetch a single JASPAR motif from the DB by it's JASPAR matrix ID.
@@ -293,7 +293,7 @@ class JASPAR5:
             latest = row[0]
         else:
             warnings.warn("Failed to fetch latest version number for JASPAR "
-                          "motif with base ID '{0}'. "
+                          "motif with base ID '{}'. "
                           "No JASPAR motif with this base ID appears to exist "
                           "in the database.".format(base_id), BiopythonWarning)
 
@@ -315,7 +315,7 @@ class JASPAR5:
             int_id = row[0]
         else:
             warnings.warn("Failed to fetch internal database ID for JASPAR "
-                          "motif with matrix ID '{0}.{1}'. "
+                          "motif with matrix ID '{}.{}'. "
                           "No JASPAR motif with this matrix ID appears to "
                           "exist.".format(base_id, version), BiopythonWarning)
 
@@ -333,7 +333,7 @@ class JASPAR5:
         # we should probably raise an exception
         if not row:
             warnings.warn("Could not fetch JASPAR motif with internal "
-                          "ID = {0}".format(int_id), BiopythonWarning)
+                          "ID = {}".format(int_id), BiopythonWarning)
             return None
 
         base_id = row[0]

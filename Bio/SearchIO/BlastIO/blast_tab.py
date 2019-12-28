@@ -231,8 +231,7 @@ class BlastTabParser:
                 )
             iterfunc = self._parse_qresult
 
-        for qresult in iterfunc():
-            yield qresult
+        yield from iterfunc()
 
     def _prep_fields(self, fields):
         """Validate and format the given fields for use by the parser (PRIVATE)."""
@@ -861,13 +860,13 @@ class BlastTabWriter:
         if not hasattr(qres, "version"):
             program_line = "# %s" % qres.program.upper()
         else:
-            program_line = "# %s %s" % (qres.program.upper(), qres.version)
+            program_line = "# {} {}".format(qres.program.upper(), qres.version)
         comments.append(program_line)
         # description may or may not be None
         if qres.description is None:
             comments.append("# Query: %s" % qres.id)
         else:
-            comments.append("# Query: %s %s" % (qres.id, qres.description))
+            comments.append(f"# Query: {qres.id} {qres.description}")
         # try appending RID line, if present
         try:
             comments.append("# RID: %s" % qres.rid)

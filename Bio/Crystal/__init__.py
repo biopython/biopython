@@ -289,13 +289,13 @@ class Crystal:
     def __repr__(self):
         output = ""
         for key in sorted(self.data):
-            output += "%s : %s\n" % (key, self.data[key])
+            output += "{} : {}\n".format(key, self.data[key])
         return output
 
     def __str__(self):
         output = ""
         for key in sorted(self.data):
-            output += "%s : %s\n" % (key, self.data[key])
+            output += "{} : {}\n".format(key, self.data[key])
         return output
 
     def tostring(self):

@@ -219,7 +219,7 @@ def compare_records(old_list, new_list):
             if str(old.seq).replace("X", "N") == str(new.seq):
                 raise ValueError("X -> N (protein forced into nucleotide?)")
             if len(old.seq) < 200:
-                raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
+                raise ValueError(f"'{old.seq}' vs '{new.seq}'")
             else:
                 raise ValueError("'%s...%s' vs '%s...%s'"
                                  % (old.seq[:60], old.seq[-10:],
@@ -487,7 +487,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         if cline.outfile:
             self.assertEqual(stdout.strip(), "")
             self.assertTrue(os.path.isfile(cline.outfile),
-                            "Missing output file %r from:\n%s" % (cline.outfile, cline))
+                            f"Missing output file {cline.outfile!r} from:\n{cline}")
         else:
             # Don't use this yet... could return stdout handle instead?
             return stdout
@@ -564,7 +564,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(stdout.strip(), "")
         filename = cline.outfile
         self.assertTrue(os.path.isfile(filename),
-                        "Missing output file %r from:\n%s" % (filename, cline))
+                        f"Missing output file {filename!r} from:\n{cline}")
         # Check we can parse the output...
         align = AlignIO.read(filename, "emboss")
         self.assertEqual(len(align), 2)

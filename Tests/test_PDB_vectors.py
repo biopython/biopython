@@ -136,7 +136,7 @@ class VectorTests(unittest.TestCase):
         cangle, caxis = m2rotaxis(m)
         self.assertAlmostEqual(angle, cangle, places=3)
         self.assertTrue(numpy.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
-                        "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
+                        "Want {!r} and {!r} to be almost equal".format(axis.get_array(), caxis.get_array()))
 
 
 if __name__ == "__main__":

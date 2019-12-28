@@ -151,7 +151,7 @@ class CodonAdaptationIndex:
             # some indices may not include stop codons:
             elif codon not in ["TGA", "TAA", "TAG"]:
                 raise TypeError(
-                    "illegal codon in sequence: %s.\n%s" % (codon, self.index)
+                    f"illegal codon in sequence: {codon}.\n{self.index}"
                 )
 
         return math.exp(cai_value / (cai_length - 1.0))
@@ -175,7 +175,7 @@ class CodonAdaptationIndex:
                         self.codon_count[codon] += 1
                     else:
                         raise TypeError(
-                            "illegal codon %s in gene: %s" % (codon, cur_record.id)
+                            f"illegal codon {codon} in gene: {cur_record.id}"
                         )
 
     def print_index(self):
@@ -184,4 +184,4 @@ class CodonAdaptationIndex:
         This just gives the index when the objects is printed.
         """
         for i in sorted(self.index):
-            print("%s\t%.3f" % (i, self.index[i]))
+            print("{}\t{:.3f}".format(i, self.index[i]))

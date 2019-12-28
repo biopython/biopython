@@ -53,8 +53,7 @@ class Hhsuite2TextParser:
 
     def __iter__(self):
         """Iterate over query results - there will only ever be one."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _read_until(self, bool_func, stop_on_blank=True, max_read_until=MAX_READ_UNTIL):
         """Read the file handle until the given function returns True (PRIVATE)."""
@@ -100,7 +99,7 @@ class Hhsuite2TextParser:
         match = re.search(_RE_HIT_BLOCK_DESC, self.line)
         if not match:
             raise RuntimeError(
-                "Unexpected content in HIT_BLOCK_DESC line'{}'".format(self.line)
+                f"Unexpected content in HIT_BLOCK_DESC line'{self.line}'"
             )
         hit_data = {
             "hit_id": match.group(1),

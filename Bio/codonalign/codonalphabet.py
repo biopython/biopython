@@ -29,7 +29,7 @@ class CodonAlphabet(Alphabet):
     name = ""
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.names[0])
+        return "{}({})".format(self.__class__.__name__, self.names[0])
 
 
 def get_codon_alphabet(codon_table, gap_char="-"):

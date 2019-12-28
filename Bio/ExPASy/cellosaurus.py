@@ -121,9 +121,9 @@ class Record(dict):
     def __repr__(self):
         if self["ID"]:
             if self["AC"]:
-                return "%s (%s, %s)" % (self.__class__.__name__, self["ID"], self["AC"])
+                return "{} ({}, {})".format(self.__class__.__name__, self["ID"], self["AC"])
             else:
-                return "%s (%s)" % (self.__class__.__name__, self["ID"])
+                return "{} ({})".format(self.__class__.__name__, self["ID"])
         else:
             return "%s ( )" % (self.__class__.__name__)
 

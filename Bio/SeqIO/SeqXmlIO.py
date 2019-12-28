@@ -83,7 +83,7 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Failed to find seqXMLversion")
         url = "http://www.seqxml.org/%s/seqxml.xsd" % self.seqXMLversion
         if schema != url:
-            raise ValueError("XML Schema '%s' found not consistent with reported seqXML version %s" % (schema, self.seqXMLversion))
+            raise ValueError(f"XML Schema '{schema}' found not consistent with reported seqXML version {self.seqXMLversion}")
         self.endElementNS = self.endSeqXMLElement
         self.startElementNS = self.startEntryElement
 
@@ -141,9 +141,9 @@ class ContentHandler(handler.ContentHandler):
         """Receive a field of an entry element and forward it."""
         namespace, localname = name
         if namespace is not None:
-            raise ValueError("Unexpected namespace '%s' for %s element" % (namespace, localname))
+            raise ValueError(f"Unexpected namespace '{namespace}' for {localname} element")
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for %s element" % (qname, localname))
+            raise RuntimeError(f"Unexpected qname '{qname}' for {localname} element")
         if localname == "species":
             return self.startSpeciesElement(attrs)
         if localname == "description":
@@ -274,7 +274,7 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError("Unexpected data found: '%s'" % self.data)
         self.data = ""
         record = self.records[-1]
-        dbxref = "%s:%s" % (source, ID)
+        dbxref = f"{source}:{ID}"
         if dbxref not in record.dbxrefs:
             record.dbxrefs.append(dbxref)
         self.endElementNS = self.endDBRefElement

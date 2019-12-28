@@ -902,7 +902,7 @@ class _HeaderConsumer:
             # New style way to give the query length in BLAST 2.2.22+ (the C++ code)
             self._header.query_letters = _safe_int(line[7:].strip())
         elif not line.startswith("       "):  # continuation of query_info
-            self._header.query = "%s%s" % (self._header.query, line)
+            self._header.query = f"{self._header.query}{line}"
         else:
             # Hope it is the old style way to give the query length:
             letters, = _re_search(
@@ -1356,7 +1356,7 @@ class _DatabaseReportConsumer:
             self._dr.database_name.append(m.group(1))
         elif self._dr.database_name:
             # This must be a continuation of the previous name.
-            self._dr.database_name[-1] = "%s%s" % (
+            self._dr.database_name[-1] = "{}{}".format(
                 self._dr.database_name[-1],
                 line.strip(),
             )

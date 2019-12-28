@@ -98,7 +98,7 @@ for line in open("gc.prt").readlines():
         s = " " * INDENT + "table={"
         for i in range(64):
             if aa[i] != "*":
-                t = "'%s%s%s': '%s', " % (bases[0][i], bases[1][i], bases[2][i], aa[i])
+                t = "'{}{}{}': '{}', ".format(bases[0][i], bases[1][i], bases[2][i], aa[i])
                 if len(s) + len(t) > 75:
                     print(s.rstrip())
                     s = " " * INDENT2 + t

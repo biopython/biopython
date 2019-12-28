@@ -339,7 +339,7 @@ class align:
 
             self.__name__ = self.function_name
             # Set the doc string.
-            doc = "%s(%s) -> alignments\n" % (
+            doc = "{}({}) -> alignments\n".format(
                 self.__name__, ", ".join(self.param_names))
             if match_doc:
                 doc += "\n%s\n" % match_doc

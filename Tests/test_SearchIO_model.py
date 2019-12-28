@@ -1112,7 +1112,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
                               self.hsp, seq_type, "A")
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr,
-                                  self.hsp, "%s_%s" % (seq_type, attr), 5)
+                                  self.hsp, f"{seq_type}_{attr}", 5)
         self.assertRaises(AttributeError, setattr,
                           self.hsp, "aln", None)
 
@@ -1196,7 +1196,7 @@ class HSPMultipleFragmentCases(unittest.TestCase):
         """Test HSP query and hit id and description setters."""
         for seq_type in ("query", "hit"):
             for attr in ("id", "description"):
-                attr_name = "%s_%s" % (seq_type, attr)
+                attr_name = f"{seq_type}_{attr}"
                 value = getattr(self.hsp, attr_name)
                 if attr == "id":
                     # because we happen to have the same value for
@@ -1256,7 +1256,7 @@ class HSPMultipleFragmentCases(unittest.TestCase):
         for seq_type in ("query", "hit"):
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr,
-                                  self.hsp, "%s_%s" % (seq_type, attr), 5)
+                                  self.hsp, f"{seq_type}_{attr}", 5)
         self.assertRaises(AttributeError, setattr,
                           self.hsp, "aln_all", None)
         self.assertRaises(AttributeError, setattr,
@@ -1276,7 +1276,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         for seq_type in ("query", "hit"):
             self.assertTrue(getattr(fragment, seq_type) is None)
             for attr in ("strand", "frame", "start", "end"):
-                attr_name = "%s_%s" % (seq_type, attr)
+                attr_name = f"{seq_type}_{attr}"
                 self.assertTrue(getattr(fragment, attr_name) is None)
         self.assertTrue(fragment.aln is None)
         self.assertTrue(fragment.alphabet is single_letter_alphabet)
@@ -1472,7 +1472,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit id and description setters."""
         for seq_type in ("query", "hit"):
             for attr in ("id", "description"):
-                attr_name = "%s_%s" % (seq_type, attr)
+                attr_name = f"{seq_type}_{attr}"
                 value = getattr(self.fragment, attr_name)
                 if attr == "id":
                     # because we happen to have the same value for
@@ -1489,7 +1489,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit frame setters."""
         attr = "frame"
         for seq_type in ("query", "hit"):
-            attr_name = "%s_%s" % (seq_type, attr)
+            attr_name = f"{seq_type}_{attr}"
             for value in (-3, -2, -1, 0, 1, 2, 3, None):
                 setattr(self.fragment, attr_name, value)
                 self.assertEqual(value, getattr(self.fragment, attr_name))
@@ -1498,7 +1498,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit frame setters, invalid values."""
         attr = "frame"
         for seq_type in ("query", "hit"):
-            func_name = "_%s_%s_set" % (seq_type, attr)
+            func_name = f"_{seq_type}_{attr}_set"
             func = getattr(self.fragment, func_name)
             for value in ("3", "+3", "-2", "plus"):
                 self.assertRaises(ValueError, func, value)
@@ -1507,7 +1507,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit strand setters."""
         attr = "strand"
         for seq_type in ("query", "hit"):
-            attr_name = "%s_%s" % (seq_type, attr)
+            attr_name = f"{seq_type}_{attr}"
             for value in (-1, 0, 1, None):
                 setattr(self.fragment, attr_name, value)
                 self.assertEqual(value, getattr(self.fragment, attr_name))
@@ -1516,7 +1516,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit strand setters, invalid values."""
         attr = "strand"
         for seq_type in ("query", "hit"):
-            func_name = "_%s_%s_set" % (seq_type, attr)
+            func_name = f"_{seq_type}_{attr}_set"
             func = getattr(self.fragment, func_name)
             for value in (3, "plus", "minus", "-", "+"):
                 self.assertRaises(ValueError, func, value)
@@ -1548,8 +1548,8 @@ class HSPFragmentCases(unittest.TestCase):
     def test_coords_setters_getters(self):
         """Test HSPFragment query and hit coordinate-related setters and getters."""
         for seq_type in ("query", "hit"):
-            attr_start = "%s_%s" % (seq_type, "start")
-            attr_end = "%s_%s" % (seq_type, "end")
+            attr_start = "{}_{}".format(seq_type, "start")
+            attr_end = "{}_{}".format(seq_type, "end")
             setattr(self.fragment, attr_start, 9)
             setattr(self.fragment, attr_end, 99)
             # check for span value
@@ -1565,7 +1565,7 @@ class HSPFragmentCases(unittest.TestCase):
         for seq_type in ("query", "hit"):
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr,
-                                  self.fragment, "%s_%s" % (seq_type, attr), 5)
+                                  self.fragment, f"{seq_type}_{attr}", 5)
 
 
 if __name__ == "__main__":

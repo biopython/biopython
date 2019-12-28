@@ -106,7 +106,7 @@ class TaggingConsumer(AbstractConsumer):
     def _print_name(self, name, data=None):
         if data is None:
             # Write the name of a section.
-            self._handle.write("%s %s\n" % ("*" * self._colwidth, name))
+            self._handle.write("{} {}\n".format("*" * self._colwidth, name))
         else:
             # Write the tag and line.
             self._handle.write(
@@ -215,13 +215,13 @@ def _fails_conditions(
 ):
     if start is not None:
         if line[: len(start)] != start:
-            return "Line does not start with '%s':\n%s" % (start, line)
+            return f"Line does not start with '{start}':\n{line}"
     if end is not None:
         if line.rstrip()[-len(end) :] != end:
-            return "Line does not end with '%s':\n%s" % (end, line)
+            return f"Line does not end with '{end}':\n{line}"
     if contains is not None:
         if contains not in line:
-            return "Line does not contain '%s':\n%s" % (contains, line)
+            return f"Line does not contain '{contains}':\n{line}"
     if blank is not None:
         if blank:
             if not is_blank_line(line):
@@ -231,7 +231,7 @@ def _fails_conditions(
                 return "Expected non-blank line, but got a blank one"
     if has_re is not None:
         if has_re.search(line) is None:
-            return "Line does not match regex '%s':\n%s" % (has_re.pattern, line)
+            return f"Line does not match regex '{has_re.pattern}':\n{line}"
     return None
 
 

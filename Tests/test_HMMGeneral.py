@@ -43,7 +43,7 @@ class LetterAlphabet(Alphabet.Alphabet):
 # -- helper functions
 def test_assertion(name, result, expected):
     """Helper function to test an assertion and print out a reasonable error."""
-    assert result == expected, "Expected %s, got %s for %s" % (expected,
+    assert result == expected, "Expected {}, got {} for {}".format(expected,
                                                                result,
                                                                name)
 
@@ -434,7 +434,7 @@ class AbstractTrainerTest(unittest.TestCase):
 
         for test_result in result_tests:
             assert results[test_result[0]] == test_result[1], \
-                "Got %f, expected %f for %s" % (results[test_result[0]],
+                "Got {:f}, expected {:f} for {}".format(results[test_result[0]],
                                                 test_result[1],
                                                 test_result[0])
 

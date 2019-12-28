@@ -144,7 +144,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
+    url = _BASE_URL + "/entry/{}/{}".format(db, _quote(id))
     if field:
         url += "/" + field
     if format:
@@ -175,7 +175,7 @@ def search_count(db, query):
             "TogoWS search does not officially support database '%s'. "
             "See %s/search/ for options." % (db, _BASE_URL)
         )
-    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+    url = _BASE_URL + "/search/{}/{}/count".format(db, _quote(query))
     handle = _open(url)
     data = handle.read()
     handle.close()
@@ -184,7 +184,7 @@ def search_count(db, query):
     try:
         return int(data.strip())
     except ValueError:
-        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
+        raise ValueError(f"Expected an integer from URL {url}, got: {data!r}")
 
 
 def search_iter(db, query, limit=None, batch=100):
@@ -278,7 +278,7 @@ def search(db, query, offset=None, limit=None, format=None):
             "TogoWS search does not explicitly support database '%s'. "
             "See %s/search/ for options." % (db, _BASE_URL)
         )
-    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
+    url = _BASE_URL + "/search/{}/{}".format(db, _quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -325,7 +325,7 @@ def convert(data, in_format, out_format):
     if [in_format, out_format] not in _convert_formats:
         msg = "\n".join("%s -> %s" % tuple(pair) for pair in _convert_formats)
         raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
-    url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
+    url = _BASE_URL + f"/convert/{in_format}.{out_format}"
     # TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
         # Handle

@@ -290,7 +290,7 @@ class HSP(_BaseHSP):
 
     def __repr__(self):
         """Return string representation of HSP object."""
-        return "%s(hit_id=%r, query_id=%r, %r fragments)" % (
+        return "{}(hit_id={!r}, query_id={!r}, {!r} fragments)".format(
             self.__class__.__name__,
             self.hit_id,
             self.query_id,
@@ -332,7 +332,7 @@ class HSP(_BaseHSP):
             )
         else:
             lines.append(
-                "  Fragments: %s  %s  %s  %s" % ("-" * 3, "-" * 14, "-" * 22, "-" * 22)
+                "  Fragments: {}  {}  {}  {}".format("-" * 3, "-" * 14, "-" * 22, "-" * 22)
             )
             pattern = "%16s  %14s  %22s  %22s"
             lines.append(pattern % ("#", "Span", "Query range", "Hit range"))
@@ -344,13 +344,13 @@ class HSP(_BaseHSP):
                 # query region
                 query_start = getattr_str(block, "query_start")
                 query_end = getattr_str(block, "query_end")
-                query_range = "[%s:%s]" % (query_start, query_end)
+                query_range = f"[{query_start}:{query_end}]"
                 # max column length is 20
                 query_range = trim_str(query_range, 22, "~]")
                 # hit region
                 hit_start = getattr_str(block, "hit_start")
                 hit_end = getattr_str(block, "hit_end")
-                hit_range = "[%s:%s]" % (hit_start, hit_end)
+                hit_range = f"[{hit_start}:{hit_end}]"
                 hit_range = trim_str(hit_range, 22, "~]")
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
@@ -426,7 +426,7 @@ class HSP(_BaseHSP):
     def _get_coords(self, seq_type, coord_type):
         assert seq_type in ("hit", "query")
         assert coord_type in ("start", "end")
-        coord_name = "%s_%s" % (seq_type, coord_type)
+        coord_name = f"{seq_type}_{coord_type}"
         coords = [getattr(frag, coord_name) for frag in self.fragments]
         if None in coords:
             warnings.warn(
@@ -763,7 +763,7 @@ class HSPFragment(_BaseHSP):
             setattr(self, "_%s_features" % seq_type, [])
             # query or hit attributes whose default attribute is None
             for attr in ("strand", "frame", "start", "end"):
-                setattr(self, "%s_%s" % (seq_type, attr), None)
+                setattr(self, f"{seq_type}_{attr}", None)
             # self.query or self.hit
             if eval(seq_type):
                 setattr(self, seq_type, eval(seq_type))
@@ -772,12 +772,12 @@ class HSPFragment(_BaseHSP):
 
     def __repr__(self):
         """Return HSPFragment info; hit id, query id, number of columns."""
-        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
+        info = f"hit_id={self.hit_id!r}, query_id={self.query_id!r}"
         try:
             info += ", %i columns" % len(self)
         except AttributeError:
             pass
-        return "%s(%s)" % (self.__class__.__name__, info)
+        return f"{self.__class__.__name__}({info})"
 
     def __len__(self):
         """Return alignment span."""
@@ -805,7 +805,7 @@ class HSPFragment(_BaseHSP):
             # description, strand, frame
             for attr in ("description", "strand", "frame"):
                 for seq_type in ("hit", "query"):
-                    attr_name = "%s_%s" % (seq_type, attr)
+                    attr_name = f"{seq_type}_{attr}"
                     self_val = getattr(self, attr_name)
                     setattr(obj, attr_name, self_val)
             # alignment annotation should be transferred, since we can compute
@@ -844,10 +844,10 @@ class HSPFragment(_BaseHSP):
                 simil = self.aln_annotation["similarity"]
 
             if self.aln_span <= 67:
-                lines.append("%10s - %s" % ("Query", qseq))
+                lines.append("{:>10} - {}".format("Query", qseq))
                 if simil:
                     lines.append("             %s" % simil)
-                lines.append("%10s - %s" % ("Hit", hseq))
+                lines.append("{:>10} - {}".format("Hit", hseq))
             else:
                 # adjust continuation character length, so we don't display
                 # the same residues twice
@@ -855,10 +855,10 @@ class HSPFragment(_BaseHSP):
                     cont = "~" * 3
                 else:
                     cont = "~" * (self.aln_span - 66)
-                lines.append("%10s - %s%s%s" % ("Query", qseq[:59], cont, qseq[-5:]))
+                lines.append("{:>10} - {}{}{}".format("Query", qseq[:59], cont, qseq[-5:]))
                 if simil:
-                    lines.append("             %s%s%s" % (simil[:59], cont, simil[-5:]))
-                lines.append("%10s - %s%s%s" % ("Hit", hseq[:59], cont, hseq[-5:]))
+                    lines.append("             {}{}{}".format(simil[:59], cont, simil[-5:]))
+                lines.append("{:>10} - {}{}{}".format("Hit", hseq[:59], cont, hseq[-5:]))
 
         return "\n".join(lines)
 

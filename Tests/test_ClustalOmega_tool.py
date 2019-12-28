@@ -100,7 +100,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
                             "Cannot open input file" in str(err) or
                             "Non-zero return code" in str(err), str(err))
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -113,7 +113,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
@@ -127,7 +127,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
             # error for "invalid format".
             self.assertIn("Can't determine format of sequence file", str(err))
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
 #################################################################
 

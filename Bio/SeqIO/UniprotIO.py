@@ -134,7 +134,7 @@ class Parser:
                 ]:  # recommendedName tag are parsed before
                     # use protein fields for name and description
                     for rec_name in protein_element:
-                        ann_key = "%s_%s" % (
+                        ann_key = "{}_{}".format(
                             protein_element.tag.replace(NS, ""),
                             rec_name.tag.replace(NS, ""),
                         )
@@ -150,7 +150,7 @@ class Parser:
         def _parse_gene(element):
             for genename_element in element:
                 if "type" in genename_element.attrib:
-                    ann_key = "gene_%s_%s" % (
+                    ann_key = "gene_{}_{}".format(
                         genename_element.tag.replace(NS, ""),
                         genename_element.attrib["type"],
                     )
@@ -189,7 +189,7 @@ class Parser:
                         if taxon_element.tag == NS + "taxon":
                             append_to_annotations("taxonomy", taxon_element.text)
             if sci_name and com_name:
-                organism_name = "%s (%s)" % (sci_name, com_name)
+                organism_name = f"{sci_name} ({com_name})"
             elif sci_name:
                 organism_name = sci_name
             elif com_name:
@@ -282,7 +282,7 @@ class Parser:
                 for subloc_element in element.getiterator(NS + "subcellularLocation"):
                     for el in subloc_element:
                         if el.text:
-                            ann_key = "comment_%s_%s" % (
+                            ann_key = "comment_{}_{}".format(
                                 element.attrib["type"].replace(" ", ""),
                                 el.tag.replace(NS, ""),
                             )
@@ -322,10 +322,10 @@ class Parser:
                 mass = element.attrib["mass"]
                 method = element.attrib["method"]
                 if start == end == 0:
-                    append_to_annotations(ann_key, "undefined:%s|%s" % (mass, method))
+                    append_to_annotations(ann_key, f"undefined:{mass}|{method}")
                 else:
                     append_to_annotations(
-                        ann_key, "%s..%s:%s|%s" % (start, end, mass, method)
+                        ann_key, f"{start}..{end}:{mass}|{method}"
                     )
             elif element.attrib["type"] == "sequence caution":
                 pass  # not parsed: few information, complex structure
@@ -528,7 +528,7 @@ class Parser:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
                 else:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            seq = "".join((element.text.split()))
+            seq = "".join(element.text.split())
             self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
 
         # ============================================#

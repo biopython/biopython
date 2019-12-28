@@ -139,7 +139,7 @@ class MauveWriter(SequentialAlignmentWriter):
             # Sequence1Entry	1
             # Sequence1Format	FastA
             for i in range(1, count + 1):
-                self.handle.write("#Sequence%sEntry\t%s\n" % (i, i))
+                self.handle.write(f"#Sequence{i}Entry\t{i}\n")
 
         for idx, record in enumerate(alignment):
             self._write_record(record, record_idx=idx)
@@ -159,11 +159,11 @@ class MauveWriter(SequentialAlignmentWriter):
         # We remove the "/{start}-{end}" before writing, as it cannot be part
         # of the produced XMFA file.
         if "start" in record.annotations and "end" in record.annotations:
-            suffix0 = "/%s-%s" % (
+            suffix0 = "/{}-{}".format(
                 str(record.annotations["start"]),
                 str(record.annotations["end"]),
             )
-            suffix1 = "/%s-%s" % (
+            suffix1 = "/{}-{}".format(
                 str(record.annotations["start"] + 1),
                 str(record.annotations["end"]),
             )

@@ -652,7 +652,7 @@ class TestSelf(unittest.TestCase):
         for a in NexusIterator(handle):
             print(a)
             for r in a:
-                print("%r %s %s" % (r.seq, r.name, r.id))
+                print(f"{r.seq!r} {r.name} {r.id}")
         print("Done")
 
     def test_repeated_names_with_taxa(self):
@@ -680,7 +680,7 @@ class TestSelf(unittest.TestCase):
         for a in NexusIterator(handle):
             print(a)
             for r in a:
-                print("%r %s %s" % (r.seq, r.name, r.id))
+                print(f"{r.seq!r} {r.name} {r.id}")
         print("Done")
 
     def test_empty_file_read(self):

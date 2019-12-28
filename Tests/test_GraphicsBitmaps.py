@@ -89,7 +89,7 @@ def real_test():
     # error here.
     except IndexError:
         pass
-    except IOError as err:
+    except OSError as err:
         if "encoder zip not available" in str(err):
             raise MissingExternalDependencyError(
                 "Check zip encoder installed for PIL and ReportLab renderPM")

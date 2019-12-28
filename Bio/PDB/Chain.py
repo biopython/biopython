@@ -164,11 +164,9 @@ class Chain(Entity):
 
     def get_residues(self):
         """Return residues."""
-        for r in self:
-            yield r
+        yield from self
 
     def get_atoms(self):
         """Return atoms from residues."""
         for r in self.get_residues():
-            for a in r:
-                yield a
+            yield from r

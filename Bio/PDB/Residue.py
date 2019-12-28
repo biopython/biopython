@@ -48,7 +48,7 @@ class Residue(Entity):
         atom_id = atom.get_id()
         if self.has_id(atom_id):
             raise PDBConstructionException(
-                "Atom %s defined twice in residue %s" % (atom_id, self)
+                f"Atom {atom_id} defined twice in residue {self}"
             )
         Entity.add(self, atom)
 
@@ -95,8 +95,7 @@ class Residue(Entity):
 
     def get_atoms(self):
         """Return atoms."""
-        for a in self:
-            yield a
+        yield from self
 
     def get_atom(self):
         """Return atom."""
@@ -105,8 +104,7 @@ class Residue(Entity):
             " in a future release of Biopython. Please use `get_atoms` instead.",
             BiopythonDeprecationWarning,
         )
-        for a in self:
-            yield a
+        yield from self
 
 
 class DisorderedResidue(DisorderedEntityWrapper):

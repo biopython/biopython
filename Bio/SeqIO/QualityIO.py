@@ -1478,11 +1478,11 @@ class FastqPhredWriter(SequentialSequenceWriter):
             # The description includes the id at the start
             title = description
         elif description:
-            title = "%s %s" % (id, description)
+            title = f"{id} {description}"
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
+        self.handle.write(f"@{title}\n{seq_str}\n+\n{qualities_str}\n")
 
 
 def as_fastq(record):
@@ -1504,10 +1504,10 @@ def as_fastq(record):
     if description and description.split(None, 1)[0] == id:
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = f"{id} {description}"
     else:
         title = id
-    return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
+    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
 
 
 class QualPhredWriter(SequentialSequenceWriter):
@@ -1581,7 +1581,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                 # The description includes the id at the start
                 title = description
             elif description:
-                title = "%s %s" % (id, description)
+                title = f"{id} {description}"
             else:
                 title = id
         handle.write(">%s\n" % title)
@@ -1634,7 +1634,7 @@ def as_qual(record):
     if description and description.split(None, 1)[0] == id:
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = f"{id} {description}"
     else:
         title = id
     lines = [">%s\n" % title]
@@ -1734,11 +1734,11 @@ class FastqSolexaWriter(SequentialSequenceWriter):
             # The description includes the id at the start
             title = description
         elif description:
-            title = "%s %s" % (id, description)
+            title = f"{id} {description}"
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
+        self.handle.write(f"@{title}\n{seq_str}\n+\n{qualities_str}\n")
 
 
 def as_fastq_solexa(record):
@@ -1760,10 +1760,10 @@ def as_fastq_solexa(record):
         # The description includes the id at the start
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = f"{id} {description}"
     else:
         title = id
-    return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
+    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
 
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
@@ -1818,11 +1818,11 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
             # The description includes the id at the start
             title = description
         elif description:
-            title = "%s %s" % (id, description)
+            title = f"{id} {description}"
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
+        self.handle.write(f"@{title}\n{seq_str}\n+\n{qualities_str}\n")
 
 
 def as_fastq_illumina(record):
@@ -1843,10 +1843,10 @@ def as_fastq_illumina(record):
     if description and description.split(None, 1)[0] == id:
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = f"{id} {description}"
     else:
         title = id
-    return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
+    return f"@{title}\n{seq_str}\n+\n{qualities_str}\n"
 
 
 def PairedFastaQualIterator(
@@ -1939,7 +1939,7 @@ def PairedFastaQualIterator(
             raise ValueError("QUAL file has more entries than the FASTA file.")
         if f_rec.id != q_rec.id:
             raise ValueError(
-                "FASTA and QUAL entries do not match (%s vs %s)." % (f_rec.id, q_rec.id)
+                f"FASTA and QUAL entries do not match ({f_rec.id} vs {q_rec.id})."
             )
         if len(f_rec) != len(q_rec.letter_annotations["phred_quality"]):
             raise ValueError(

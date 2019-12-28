@@ -103,7 +103,7 @@ class Phyloxml(PhyloElement):
 
     def __str__(self):
         """Return name of phylogenies in the object."""
-        return "%s([%s])" % (
+        return "{}([{}])".format(
             self.__class__.__name__,
             ",\n".join(map(str, self.phylogenies)),
         )
@@ -512,7 +512,7 @@ class Accession(PhyloElement):
 
     def __str__(self):
         """Show the class name and an identifying attribute."""
-        return "%s:%s" % (self.source, self.value)
+        return f"{self.source}:{self.value}"
 
 
 class Annotation(PhyloElement):
@@ -819,7 +819,7 @@ class Date(PhyloElement):
     def __str__(self):
         """Show the class name and the human-readable date."""
         if self.unit and self.value is not None:
-            return "%s %s" % (self.value, self.unit)
+            return f"{self.value} {self.unit}"
         if self.desc is not None:
             return self.desc
         return self.__class__.__name__
@@ -955,7 +955,7 @@ class Id(PhyloElement):
     def __str__(self):
         """Return identifier as a string."""
         if self.provider is not None:
-            return "%s:%s" % (self.provider, self.value)
+            return f"{self.provider}:{self.value}"
         return self.value
 
 
@@ -1026,7 +1026,7 @@ class Polygon(PhyloElement):
 
     def __str__(self):
         """Return list of points as a string."""
-        return "%s([%s])" % (self.__class__.__name__, ",\n".join(map(str, self.points)))
+        return "{}([{}])".format(self.__class__.__name__, ",\n".join(map(str, self.points)))
 
 
 class Property(PhyloElement):

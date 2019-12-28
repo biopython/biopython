@@ -131,11 +131,7 @@ class TestZipped(unittest.TestCase):
 
     def test_gzip_fastq(self):
         """Testing FASTQ with gzip."""
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
+        mode = "rt"
         with gzip.open("Quality/example.fastq.gz", mode) as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
         if 3 <= sys.version_info[0]:
@@ -147,11 +143,7 @@ class TestZipped(unittest.TestCase):
 
     def test_gzip_fasta(self):
         """Testing FASTA with gzip."""
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
+        mode = "rt"
         with gzip.open("Fasta/flowers.pro.gz", mode) as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fasta"))))
         if 3 <= sys.version_info[0]:
@@ -164,11 +156,7 @@ class TestZipped(unittest.TestCase):
     def test_gzip_genbank(self):
         """Testing GenBank with gzip."""
         # BGZG files are still GZIP files
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
+        mode = "rt"
         with gzip.open("GenBank/cor6_6.gb.bgz", mode) as handle:
             self.assertEqual(6, len(list(SeqIO.parse(handle, "gb"))))
         if 3 <= sys.version_info[0]:
@@ -266,7 +254,7 @@ class TestSeqIO(unittest.TestCase):
                         messages[format] = str(e)
                     else:
                         self.assertEqual(
-                            str(e), msg, "Wrong error on %s -> %s" % (t_format, format)
+                            str(e), msg, f"Wrong error on {t_format} -> {format}"
                         )
                 else:
                     if not debug:
@@ -302,7 +290,7 @@ class TestSeqIO(unittest.TestCase):
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
                 raise ValueError(
-                    "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
+                    "{}\n\n{}\n\n{}".format(str(e), repr(handle.read()), repr(records))
                 )
 
             self.assertEqual(len(records2), t_count)
@@ -333,19 +321,19 @@ class TestSeqIO(unittest.TestCase):
                     self.assertEqual(
                         PhylipIO.sanitize_name(r1.id, 10),
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
                 elif format == "phylip-relaxed":
                     self.assertEqual(
                         PhylipIO.sanitize_name(r1.id),
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
                 elif format == "clustal":
                     self.assertEqual(
                         r1.id.replace(" ", "_")[:30],
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
                 elif format == "stockholm":
                     r1_id = r1.id.replace(" ", "_")
@@ -357,17 +345,17 @@ class TestSeqIO(unittest.TestCase):
                         if not r1_id.endswith(suffix):
                             r1_id += suffix
 
-                    self.assertEqual(r1_id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+                    self.assertEqual(r1_id, r2.id, f"'{r1.id}' vs '{r2.id}'")
                 elif format == "maf":
                     self.assertEqual(
-                        r1.id.replace(" ", "_"), r2.id, "'%s' vs '%s'" % (r1.id, r2.id)
+                        r1.id.replace(" ", "_"), r2.id, f"'{r1.id}' vs '{r2.id}'"
                     )
                 elif format in ["fasta", "fasta-2line"]:
                     self.assertEqual(r1.id.split()[0], r2.id)
                 elif format == "nib":
                     self.assertEqual(r2.id, "<unknown id>")
                 else:
-                    self.assertEqual(r1.id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+                    self.assertEqual(r1.id, r2.id, f"'{r1.id}' vs '{r2.id}'")
 
             if len(records) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
@@ -382,7 +370,7 @@ class TestSeqIO(unittest.TestCase):
                         self.assertEqual(handle.getvalue(), records[0].format(format))
         if debug:
             self.fail(
-                "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
+                f"Update {t_format} test to use this dict:\nmessages = {messages!r}"
             )
 
     def perform_test(
@@ -587,7 +575,7 @@ class TestSeqIO(unittest.TestCase):
                 self.assertIn(
                     t_format,
                     no_alpha_formats,
-                    "Got %s from %s file" % (repr(base_alpha), t_format),
+                    "Got {} from {} file".format(repr(base_alpha), t_format),
                 )
                 good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
                 bad = []

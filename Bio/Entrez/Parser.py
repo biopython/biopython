@@ -112,7 +112,7 @@ class IntegerElement(int):
             attributes = self.attributes
         except AttributeError:
             return text
-        return "IntegerElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "IntegerElement({}, attributes={})".format(text, repr(attributes))
 
 
 class StringElement(str):
@@ -135,7 +135,7 @@ class StringElement(str):
         attributes = self.attributes
         if not attributes:
             return text
-        return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "StringElement({}, attributes={})".format(text, repr(attributes))
 
 
 class UnicodeElement(str):
@@ -158,7 +158,7 @@ class UnicodeElement(str):
         attributes = self.attributes
         if not attributes:
             return text
-        return "UnicodeElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "UnicodeElement({}, attributes={})".format(text, repr(attributes))
 
 
 class ListElement(list):
@@ -180,7 +180,7 @@ class ListElement(list):
         attributes = self.attributes
         if not attributes:
             return text
-        return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "ListElement({}, attributes={})".format(text, repr(attributes))
 
     def store(self, value):
         """Append an element to the list, checking tags."""
@@ -213,7 +213,7 @@ class DictionaryElement(dict):
         attributes = self.attributes
         if not attributes:
             return text
-        return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "DictElement({}, attributes={})".format(text, repr(attributes))
 
     def store(self, value):
         """Add an entry to the dictionary, checking tags."""
@@ -328,7 +328,7 @@ class DataHandler:
         if hasattr(handle, "closed") and handle.closed:
             # Should avoid a possible Segmentation Fault, see:
             # http://bugs.python.org/issue4877
-            raise IOError("Can't parse a closed handle")
+            raise OSError("Can't parse a closed handle")
         if sys.version_info[0] >= 3:
             # Another nasty hack to cope with a unicode StringIO handle
             # since the Entrez XML parser expects binary data (bytes)
@@ -425,8 +425,7 @@ class DataHandler:
             raise CorruptedXMLError("Premature end of XML stream")
 
         # Send out the remaining records
-        for record in records:
-            yield record
+        yield from records
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""
@@ -618,14 +617,14 @@ class DataHandler:
                 if self.namespace_level[prefix] == 1:
                     attrs = {"xmlns": uri}
         if prefix:
-            key = "%s:%s" % (prefix, name)
+            key = f"{prefix}:{name}"
         else:
             key = name
         # self.allowed_tags is ignored for now. Anyway we know what to do
         # with this tag.
         tag = "<%s" % name
         for key, value in attrs.items():
-            tag += ' %s="%s"' % (key, value)
+            tag += f' {key}="{value}"'
         tag += ">"
         self.data.append(tag)
         self.parser.EndElementHandler = self.endRawElementHandler
@@ -883,14 +882,14 @@ class DataHandler:
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
         path = os.path.join(self.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
@@ -902,14 +901,14 @@ class DataHandler:
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
         path = os.path.join(self.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
@@ -921,8 +920,8 @@ class DataHandler:
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
-        except IOError:
-            warnings.warn("Failed to save %s at %s" % (filename, path))
+        except OSError:
+            warnings.warn(f"Failed to save {filename} at {path}")
         else:
             handle.write(text)
             handle.close()
@@ -933,8 +932,8 @@ class DataHandler:
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
-        except IOError:
-            warnings.warn("Failed to save %s at %s" % (filename, path))
+        except OSError:
+            warnings.warn(f"Failed to save {filename} at {path}")
         else:
             handle.write(text)
             handle.close()
@@ -978,8 +977,8 @@ class DataHandler:
             # the internet instead.
             try:
                 handle = _urlopen(url)
-            except IOError:
-                raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
+            except OSError:
+                raise RuntimeError(f"Failed to access {filename} at {url}") from None
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)

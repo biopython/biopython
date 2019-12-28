@@ -54,11 +54,9 @@ def _preorder_traverse(root, get_children):
     def dfs(elem):
         yield elem
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _postorder_traverse(root, get_children):
@@ -66,12 +64,10 @@ def _postorder_traverse(root, get_children):
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def dfs(elem):
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
         yield elem
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _sorted_attrs(elem):
@@ -202,7 +198,7 @@ def _object_matcher(obj):
     if callable(obj):
         return _function_matcher(obj)
     raise ValueError(
-        "%s (type %s) is not a valid type for comparison." % (obj, type(obj))
+        "{} (type {}) is not a valid type for comparison.".format(obj, type(obj))
     )
 
 
@@ -268,10 +264,10 @@ class TreeElement:
         # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
-                return "%s='%s'" % (key, _utils.trim_str(as_string(val), 60, "..."))
-            return "%s=%s" % (key, val)
+                return "{}='{}'".format(key, _utils.trim_str(as_string(val), 60, "..."))
+            return f"{key}={val}"
 
-        return "%s(%s)" % (
+        return "{}({})".format(
             self.__class__.__name__,
             ", ".join(
                 pair_as_kwarg_string(key, val)
@@ -309,7 +305,7 @@ class TreeMixin:
             order_func = order_opts[order]
         except KeyError:
             raise ValueError(
-                "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
+                "Invalid order '{}'; must be one of: {}".format(order, tuple(order_opts))
             )
 
         if follow_attrs:
@@ -1245,7 +1241,7 @@ class BranchColor:
         '#0cc864'
 
         """
-        return "#%02x%02x%02x" % (self.red, self.green, self.blue)
+        return f"#{self.red:02x}{self.green:02x}{self.blue:02x}"
 
     def to_rgb(self):
         """Return a tuple of RGB values (0 to 255) representing this color.

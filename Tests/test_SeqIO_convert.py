@@ -87,21 +87,21 @@ def compare_record(old, new, truncate=None):
     It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
     """
     if old.id != new.id:
-        raise ValueError("'%s' vs '%s' " % (old.id, new.id))
+        raise ValueError(f"'{old.id}' vs '{new.id}' ")
     if old.description != new.description \
        and (old.id + " " + old.description).strip() != new.description \
        and new.description != "<unknown description>" \
        and new.description != "":
-        raise ValueError("'%s' vs '%s' " % (old.description, new.description))
+        raise ValueError(f"'{old.description}' vs '{new.description}' ")
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
     if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
         pass
     elif str(old.seq) != str(new.seq):
         if len(old.seq) < 200:
-            raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
+            raise ValueError(f"'{old.seq}' vs '{new.seq}'")
         else:
-            raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
+            raise ValueError("'{}...' vs '{}...'".format(old.seq[:100], new.seq[:100]))
     if "phred_quality" in old.letter_annotations \
        and "phred_quality" in new.letter_annotations \
        and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"]:
@@ -188,7 +188,7 @@ for filename, format, alphabet in tests:
 
         def funct(fn, fmt1, fmt2, alpha):
             f = lambda x: x.simple_check(fn, fmt1, fmt2, alpha)  # noqa: E731
-            f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
+            f.__doc__ = f"Convert {fn} from {fmt1} to {fmt2}"
             return f
 
         setattr(ConvertTests, "test_%s_%s_to_%s"
@@ -233,7 +233,7 @@ for filename, format, alphabet in tests:
 
         def funct(fn, fmt1, fmt2, alpha):
             f = lambda x: x.failure_check(fn, fmt1, fmt2, alpha)  # noqa: E731
-            f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
+            f.__doc__ = f"Convert {fn} from {fmt1} to {fmt2}"
             return f
 
         setattr(ConvertTests, "test_%s_%s_to_%s"

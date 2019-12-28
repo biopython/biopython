@@ -112,7 +112,7 @@ def align(
             sys.stderr.write("INFO trying again with the linear model\n")
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
-            raise OSError("%s returned %s" % (" ".join(cmdline), status))
+            raise OSError("{} returned {}".format(" ".join(cmdline), status))
 
     return output_file
 

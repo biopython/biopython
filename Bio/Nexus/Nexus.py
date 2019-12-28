@@ -323,7 +323,7 @@ def _unique_label(previous_labels, label):
             copy_num = 1
             if label_split[-1] != "copy":
                 copy_num = int(label_split[-1][4:]) + 1
-            new_label = "%s.copy%s" % (".".join(label_split[:-1]), copy_num)
+            new_label = "{}.copy{}".format(".".join(label_split[:-1]), copy_num)
             label = new_label
         else:
             label += ".copy"
@@ -400,10 +400,10 @@ def combine(matrices):
 
     # rename taxon sets and character sets and name them with prefix
     for cn, cs in combined.charsets.items():
-        combined.charsets["%s.%s" % (name, cn)] = cs
+        combined.charsets[f"{name}.{cn}"] = cs
         del combined.charsets[cn]
     for tn, ts in combined.taxsets.items():
-        combined.taxsets["%s.%s" % (name, tn)] = ts
+        combined.taxsets[f"{name}.{tn}"] = ts
         del combined.taxsets[tn]
     # previous partitions usually don't make much sense in combined matrix
     # just initiate one new partition parted by single matrices
@@ -434,13 +434,13 @@ def combine(matrices):
             )
         combined.taxlabels.extend(m_only)  # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
-            combined.charsets["%s.%s" % (n, cn)] = [x + combined.nchar for x in cs]
+            combined.charsets[f"{n}.{cn}"] = [x + combined.nchar for x in cs]
         if m.taxsets:
             if not combined.taxsets:
                 combined.taxsets = {}
             # update taxon sets
             combined.taxsets.update(
-                {"%s.%s" % (n, tn): ts for tn, ts in m.taxsets.items()}
+                {f"{n}.{tn}": ts for tn, ts in m.taxsets.items()}
             )
         # update new charpartition
         combined.charpartitions["combined"][n] = list(
@@ -600,7 +600,7 @@ class Commandline:
                     valued_indices = [
                         (n - 1, n, n + 1)
                         for n in range(len(options))
-                        if options[n] == "=" and n != 0 and n != len((options))
+                        if options[n] == "=" and n != 0 and n != len(options)
                     ]
                     indices = []
                     for sl in valued_indices:
@@ -691,7 +691,7 @@ class Nexus:
             with File.as_handle(input, "rU") as fp:
                 file_contents = fp.read()
                 self.filename = getattr(fp, "name", "Unknown_nexus_file")
-        except (TypeError, IOError, AttributeError):
+        except (TypeError, OSError, AttributeError):
             # 2. Assume we have a string from a fh.read()
             if isinstance(input, str):
                 file_contents = input
@@ -1320,7 +1320,7 @@ class Nexus:
             if qualifier.lower() == "vector":
                 raise NexusError("Unsupported VECTOR format in line %s" % (opts))
             elif qualifier.lower() != "standard":
-                raise NexusError("Unknown qualifier %s in line %s" % (qualifier, opts))
+                raise NexusError(f"Unknown qualifier {qualifier} in line {opts}")
         if opts.next_nonwhitespace() != separator:
             raise NexusError("Formatting error in line: %s " % rest)
         return name
@@ -1619,7 +1619,7 @@ class Nexus:
                 fh.write(
                     "charlabels "
                     + ", ".join(
-                        "%s %s" % (k + 1, safename(newcharlabels[k])) for k in clkeys
+                        "{} {}".format(k + 1, safename(newcharlabels[k])) for k in clkeys
                     )
                     + ";\n"
                 )
@@ -1636,7 +1636,7 @@ class Nexus:
                 # to excluded characters
                 seek = 0
                 for p in names:
-                    fh.write("[%s: %s]\n" % (interleave_by_partition, p))
+                    fh.write(f"[{interleave_by_partition}: {p}]\n")
                     if len(newpartition[p]) > 0:
                         for taxon in undelete:
                             fh.write(
@@ -1730,12 +1730,12 @@ class Nexus:
                 cset = [offlist[c] for c in ns if c not in exclude]
                 if cset:
                     setsb.append(
-                        "charset %s = %s" % (safename(n), _compact4nexus(cset))
+                        "charset {} = {}".format(safename(n), _compact4nexus(cset))
                     )
             for n, s in self.taxsets.items():
                 tset = [safename(t, mrbayes=mrbayes) for t in s if t not in delete]
                 if tset:
-                    setsb.append("taxset %s = %s" % (safename(n), " ".join(tset)))
+                    setsb.append("taxset {} = {}".format(safename(n), " ".join(tset)))
         for n, p in self.charpartitions.items():
             if not include_codons and n == CODONPOSITIONS:
                 continue
@@ -1761,7 +1761,7 @@ class Nexus:
                         command,
                         safename(n),
                         ", ".join(
-                            "%s: %s" % (sn, _compact4nexus(newpartition[sn]))
+                            "{}: {}".format(sn, _compact4nexus(newpartition[sn]))
                             for sn in names
                             if sn in newpartition
                         ),
@@ -1836,7 +1836,7 @@ class Nexus:
         with open(filename, "w") as fh:
             fh.write("%d %d\n" % (self.ntax, self.nchar))
             for taxon in self.taxlabels:
-                fh.write("%s %s\n" % (safename(taxon), str(self.matrix[taxon])))
+                fh.write("{} {}\n".format(safename(taxon), str(self.matrix[taxon])))
         return filename
 
     def constant(self, matrix=None, delete=(), exclude=()):

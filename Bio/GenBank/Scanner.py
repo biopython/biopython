@@ -336,7 +336,7 @@ class InsdcScanner:
                     elif value == '"':
                         # One single quote
                         if self.debug:
-                            print("Single quote %s:%s" % (key, value))
+                            print(f"Single quote {key}:{value}")
                         # DO NOT remove the quote...
                         qualifiers.append((key, value))
                     elif value[0] == '"':
@@ -363,7 +363,7 @@ class InsdcScanner:
         except StopIteration:
             # Bummer
             raise ValueError(
-                "Problem with '%s' feature:\n%s" % (feature_key, "\n".join(lines))
+                "Problem with '{}' feature:\n{}".format(feature_key, "\n".join(lines))
             )
 
     def parse_footer(self):
@@ -938,7 +938,7 @@ class EmblScanner(InsdcScanner):
                         "Malformed DR line in EMBL file.", BiopythonParserWarning
                     )
                 else:
-                    consumer.dblink("%s:%s" % (parts[0].strip(), parts[1].strip()))
+                    consumer.dblink("{}:{}".format(parts[0].strip(), parts[1].strip()))
             elif line_type == "RA":
                 # Remove trailing ; at end of authors list
                 consumer.authors(data.rstrip(";"))
@@ -1748,7 +1748,7 @@ class GenBankScanner(InsdcScanner):
                         print("Found comment")
                     comment_list = []
                     structured_comment_dict = OrderedDict()
-                    regex = r"([^#]+){0}$".format(self.STRUCTURED_COMMENT_START)
+                    regex = fr"([^#]+){self.STRUCTURED_COMMENT_START}$"
                     structured_comment_key = re.search(regex, data)
                     if structured_comment_key is not None:
                         structured_comment_key = structured_comment_key.group(1)
@@ -1762,7 +1762,7 @@ class GenBankScanner(InsdcScanner):
                         data = line[self.GENBANK_INDENT :]
                         if line[0 : self.GENBANK_INDENT] == self.GENBANK_SPACER:
                             if self.STRUCTURED_COMMENT_START in data:
-                                regex = r"([^#]+){0}$".format(
+                                regex = r"([^#]+){}$".format(
                                     self.STRUCTURED_COMMENT_START
                                 )
                                 structured_comment_key = re.search(regex, data)
@@ -1777,7 +1777,7 @@ class GenBankScanner(InsdcScanner):
                                 and self.STRUCTURED_COMMENT_DELIM in data
                             ):
                                 match = re.search(
-                                    r"(.+?)\s*{0}\s*(.+)".format(
+                                    r"(.+?)\s*{}\s*(.+)".format(
                                         self.STRUCTURED_COMMENT_DELIM
                                     ),
                                     data,

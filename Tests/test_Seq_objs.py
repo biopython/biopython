@@ -1,4 +1,3 @@
-
 # Copyright 2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -508,22 +507,22 @@ class StringMethodTests(unittest.TestCase):
                     warnings.simplefilter("ignore", BiopythonWarning)
                     self.assertEqual(str(example1) == str(example2),
                                      example1 == example2,
-                                     "Checking %r == %r" % (example1, example2))
+                                     f"Checking {example1!r} == {example2!r}")
                     self.assertEqual(str(example1) != str(example2),
                                      example1 != example2,
-                                     "Checking %r != %r" % (example1, example2))
+                                     f"Checking {example1!r} != {example2!r}")
                     self.assertEqual(str(example1) < str(example2),
                                      example1 < example2,
-                                     "Checking %r < %r" % (example1, example2))
+                                     f"Checking {example1!r} < {example2!r}")
                     self.assertEqual(str(example1) <= str(example2),
                                      example1 <= example2,
-                                     "Checking %r <= %r" % (example1, example2))
+                                     f"Checking {example1!r} <= {example2!r}")
                     self.assertEqual(str(example1) > str(example2),
                                      example1 > example2,
-                                     "Checking %r > %r" % (example1, example2))
+                                     f"Checking {example1!r} > {example2!r}")
                     self.assertEqual(str(example1) >= str(example2),
                                      example1 >= example2,
-                                     "Checking %r >= %r" % (example1, example2))
+                                     f"Checking {example1!r} >= {example2!r}")
 
     def test_str_getitem(self):
         """Check slicing and indexing works like a string."""

@@ -250,7 +250,7 @@ class Record:
 
     def __repr__(self):
         """Represent the UniGene Record object as a string for debugging."""
-        return "<%s> %s %s %s" % (
+        return "<{}> {} {} {}".format(
             self.__class__.__name__,
             self.ID,
             self.symbol,

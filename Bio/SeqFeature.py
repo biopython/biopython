@@ -271,7 +271,7 @@ class SeqFeature:
 
     def __repr__(self):
         """Represent the feature as a string for debugging."""
-        answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
+        answer = "{}({}".format(self.__class__.__name__, repr(self.location))
         if self.type:
             answer += ", type=%s" % repr(self.type)
         if self.location_operator:
@@ -293,7 +293,7 @@ class SeqFeature:
             out += "id: %s\n" % self.id
         out += "qualifiers:\n"
         for qual_key in sorted(self.qualifiers):
-            out += "    Key: %s, Value: %s\n" % (qual_key, self.qualifiers[qual_key])
+            out += "    Key: {}, Value: {}\n".format(qual_key, self.qualifiers[qual_key])
         return out
 
     def _shift(self, offset):
@@ -638,7 +638,7 @@ class Reference:
     def __repr__(self):
         """Represent the Reference object as a string for debugging."""
         # TODO - Update this is __init__ later accpets values
-        return "%s(title=%s, ...)" % (self.__class__.__name__, repr(self.title))
+        return "{}(title={}, ...)".format(self.__class__.__name__, repr(self.title))
 
     def __eq__(self, other):
         """Check if two Reference objects should be considered equal.
@@ -791,13 +791,13 @@ class FeatureLocation:
         elif _is_int_or_long(start):
             self._start = ExactPosition(start)
         else:
-            raise TypeError("start=%r %s" % (start, type(start)))
+            raise TypeError("start={!r} {}".format(start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
         elif _is_int_or_long(end):
             self._end = ExactPosition(end)
         else:
-            raise TypeError("end=%r %s" % (end, type(end)))
+            raise TypeError("end={!r} {}".format(end, type(end)))
         if (
             isinstance(self.start.position, int)
             and isinstance(self.end.position, int)
@@ -834,9 +834,9 @@ class FeatureLocation:
         (zero based counting) which GenBank would call 123..150 (one based
         counting).
         """
-        answer = "[%s:%s]" % (self._start, self._end)
+        answer = f"[{self._start}:{self._end}]"
         if self.ref and self.ref_db:
-            answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
+            answer = f"{self.ref_db}:{self.ref}{answer}"
         elif self.ref:
             answer = self.ref + answer
         # Is ref_db without ref meaningful?
@@ -859,7 +859,7 @@ class FeatureLocation:
             optional += ", ref=%r" % self.ref
         if self.ref_db is not None:
             optional += ", ref_db=%r" % self.ref_db
-        return "%s(%r, %r%s)" % (
+        return "{}({!r}, {!r}{})".format(
             self.__class__.__name__,
             self.start,
             self.end,
@@ -997,11 +997,9 @@ class FeatureLocation:
         [9, 8, 7, 6, 5]
         """
         if self.strand == -1:
-            for i in range(self._end - 1, self._start - 1, -1):
-                yield i
+            yield from range(self._end - 1, self._start - 1, -1)
         else:
-            for i in range(self._start, self._end):
-                yield i
+            yield from range(self._start, self._end)
 
     def __eq__(self, other):
         """Implement equality by comparing all the location attributes."""
@@ -1222,11 +1220,11 @@ class CompoundLocation:
 
     def __str__(self):
         """Return a representation of the CompoundLocation object (with python counting)."""
-        return "%s{%s}" % (self.operator, ", ".join(str(loc) for loc in self.parts))
+        return "{}{{{}}}".format(self.operator, ", ".join(str(loc) for loc in self.parts))
 
     def __repr__(self):
         """Represent the CompoundLocation object as string for debugging."""
-        return "%s(%r, %r)" % (self.__class__.__name__, self.parts, self.operator)
+        return f"{self.__class__.__name__}({self.parts!r}, {self.operator!r})"
 
     def _get_strand(self):
         """Get function for the strand property (PRIVATE)."""
@@ -1320,7 +1318,7 @@ class CompoundLocation:
             if self.operator != other.operator:
                 # Handle join+order -> order as a special case?
                 raise ValueError(
-                    "Mixed operators %s and %s" % (self.operator, other.operator)
+                    f"Mixed operators {self.operator} and {other.operator}"
                 )
             return CompoundLocation(self.parts + other.parts, self.operator)
         elif _is_int_or_long(other):
@@ -1365,8 +1363,7 @@ class CompoundLocation:
     def __iter__(self):
         """Iterate over the parent positions within the CompoundLocation object."""
         for loc in self.parts:
-            for pos in loc:
-                yield pos
+            yield from loc
 
     def __eq__(self, other):
         """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation."""
@@ -1799,7 +1796,7 @@ class WithinPosition(int, AbstractPosition):
 
     def __str__(self):
         """Return a representation of the WithinPosition object (with python counting)."""
-        return "(%s.%s)" % (self._left, self._right)
+        return f"({self._left}.{self._right})"
 
     @property
     def position(self):
@@ -1917,7 +1914,7 @@ class BetweenPosition(int, AbstractPosition):
 
     def __str__(self):
         """Return a representation of the BetweenPosition object (with python counting)."""
-        return "(%s^%s)" % (self._left, self._right)
+        return f"({self._left}^{self._right})"
 
     @property
     def position(self):
@@ -2148,7 +2145,7 @@ class OneOfPosition(int, AbstractPosition):
         """
         if position not in choices:
             raise ValueError(
-                "OneOfPosition: %r should match one of %r" % (position, choices)
+                f"OneOfPosition: {position!r} should match one of {choices!r}"
             )
         obj = int.__new__(cls, position)
         obj.position_choices = choices
@@ -2210,7 +2207,7 @@ class PositionGap:
 
     def __repr__(self):
         """Represent the position gap as a string for debugging."""
-        return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
+        return "{}({})".format(self.__class__.__name__, repr(self.gap_size))
 
     def __str__(self):
         """Return a representation of the PositionGap object (with python counting)."""

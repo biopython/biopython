@@ -963,7 +963,7 @@ def index(filename, format, alphabet=None, key_function=None):
         proxy_class = _FormatToRandomAccess[format]
     except KeyError:
         raise ValueError("Unsupported format %r" % format)
-    repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" % (
+    repr = "SeqIO.index({!r}, {!r}, alphabet={!r}, key_function={!r})".format(
         filename,
         format,
         alphabet,

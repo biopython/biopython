@@ -190,7 +190,7 @@ class FormattedSeq:
 
     def __repr__(self):
         """Represent ``FormattedSeq`` class as a string."""
-        return "FormattedSeq(%s, linear=%s)" % (repr(self[1:]), repr(self.linear))
+        return "FormattedSeq({}, linear={})".format(repr(self[1:]), repr(self.linear))
 
     def __eq__(self, other):
         """Implement equality operator for ``FormattedSeq`` object."""
@@ -2359,7 +2359,7 @@ class Analysis(RestrictionBatch, PrintFormat):
 
     def __repr__(self):
         """Represent ``Analysis`` class as a string."""
-        return "Analysis(%s,%s,%s)" % (repr(self.rb), repr(self.sequence), self.linear)
+        return "Analysis({},{},{})".format(repr(self.rb), repr(self.sequence), self.linear)
 
     def _sub_set(self, wanted):
         """Filter result for keys which are in wanted (PRIVATE).

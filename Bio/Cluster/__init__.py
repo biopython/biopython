@@ -1060,7 +1060,7 @@ class Record:
             while counter < n:
                 for j in index:
                     if clusterids[j] == cluster:
-                        outputfile.write("%s\t%s\n" % (names[j], cluster))
+                        outputfile.write("{}\t{}\n".format(names[j], cluster))
                         sortedindex[counter] = j
                         counter += 1
                 cluster += 1

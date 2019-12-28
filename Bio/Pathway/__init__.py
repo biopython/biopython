@@ -105,7 +105,7 @@ class Reaction:
 
     def __repr__(self):
         """Return a debugging string representation of self."""
-        return "Reaction(%r, %r, %r, %r)" % (
+        return "Reaction({!r}, {!r}, {!r}, {!r})".format(
             self.reactants,
             self.catalysts,
             self.reversible,

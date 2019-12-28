@@ -230,18 +230,15 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.itervalues():  # noqa: B301
-                yield hit
+            yield from self._items.itervalues()
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
+            yield from self._items
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():  # noqa: B301
-                yield item
+            yield from self._items.iteritems()
 
     else:
 
@@ -266,18 +263,15 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.values():
-                yield hit
+            yield from self._items.values()
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
+            yield from self._items
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.items():
-                yield item
+            yield from self._items.items()
 
     def __contains__(self, hit_key):
         """Return True if hit key in items or alternative hit identifiers."""
@@ -295,14 +289,14 @@ class QueryResult(_BaseSearchObject):
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""
-        return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
+        return "QueryResult(id={!r}, {!r} hits)".format(self.id, len(self))
 
     def __str__(self):
         """Return a human readable summary of the QueryResult object."""
         lines = []
 
         # set program and version line
-        lines.append("Program: %s (%s)" % (self.program, self.version))
+        lines.append(f"Program: {self.program} ({self.version})")
 
         # set query id line
         qid_line = "  Query: %s" % self.id
@@ -319,18 +313,18 @@ class QueryResult(_BaseSearchObject):
         if not self.hits:
             lines.append("   Hits: 0")
         else:
-            lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
+            lines.append("   Hits: {}  {}  {}".format("-" * 4, "-" * 5, "-" * 58))
             pattern = "%13s  %5s  %s"
             lines.append(pattern % ("#", "# HSP", "ID + description"))
             lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
-                    hid_line = "%s  %s" % (hit.id, hit.description)
+                    hid_line = f"{hit.id}  {hit.description}"
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, str(len(hit)), hid_line))
                 elif idx > len(self.hits) - 4:
-                    hid_line = "%s  %s" % (hit.id, hit.description)
+                    hid_line = f"{hit.id}  {hit.description}"
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, str(len(hit)), hid_line))
@@ -386,7 +380,7 @@ class QueryResult(_BaseSearchObject):
         if qid is not None:
             if hqid != qid:
                 raise ValueError(
-                    "Expected Hit with query ID %r, found %r instead." % (qid, hqid)
+                    f"Expected Hit with query ID {qid!r}, found {hqid!r} instead."
                 )
         else:
             self.id = hqid

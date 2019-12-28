@@ -65,7 +65,7 @@ def _fastq_generic(in_handle, out_handle, mapping):
         qual = old_qual.translate(mapping)
         if null in qual:
             raise ValueError("Invalid character in quality string")
-        out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+        out_handle.write(f"@{title}\n{seq}\n+\n{qual}\n")
     return count
 
 
@@ -87,7 +87,7 @@ def _fastq_generic2(in_handle, out_handle, mapping, truncate_char, truncate_msg)
             import warnings
 
             warnings.warn(truncate_msg, BiopythonWarning)
-        out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+        out_handle.write(f"@{title}\n{seq}\n+\n{qual}\n")
     return count
 
 
@@ -311,7 +311,7 @@ def _fastq_convert_tab(in_handle, out_handle, alphabet=None):
     count = 0
     for title, seq, qual in FastqGeneralIterator(in_handle):
         count += 1
-        out_handle.write("%s\t%s\n" % (title.split(None, 1)[0], seq))
+        out_handle.write("{}\t{}\n".format(title.split(None, 1)[0], seq))
     return count
 
 

@@ -190,7 +190,7 @@ class Atom:
                     putative_element = self.name[0]
 
             if putative_element.capitalize() in IUPACData.atom_weights:
-                msg = "Used element %r for Atom (name=%s) with given element %r" % (
+                msg = "Used element {!r} for Atom (name={}) with given element {!r}".format(
                     putative_element,
                     self.name,
                     element,
@@ -443,8 +443,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
     # Override parent class __iter__ method
     def __iter__(self):
         """Iterate through disordered atoms."""
-        for i in self.disordered_get_list():
-            yield i
+        yield from self.disordered_get_list()
 
     def __repr__(self):
         """Return disordered atom identifier."""
