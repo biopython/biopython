@@ -83,7 +83,7 @@ class _RestrictedDict(dict):
         ):
             raise TypeError(
                 "We only allow python sequences (lists, tuples or "
-                "strings) of length {0}.".format(self._length)
+                "strings) of length {}.".format(self._length)
             )
         dict.__setitem__(self, key, value)
 
@@ -636,16 +636,16 @@ class SeqRecord:
         """
         lines = []
         if self.id:
-            lines.append("ID: {0}".format(self.id))
+            lines.append("ID: {}".format(self.id))
         if self.name:
-            lines.append("Name: {0}".format(self.name))
+            lines.append("Name: {}".format(self.name))
         if self.description:
-            lines.append("Description: {0}".format(self.description))
+            lines.append("Description: {}".format(self.description))
         if self.dbxrefs:
             lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
-        lines.append("Number of features: {0}".format(len(self.features)))
+        lines.append("Number of features: {}".format(len(self.features)))
         for a in self.annotations:
-            lines.append("/{0}={1}".format(a, str(self.annotations[a])))
+            lines.append("/{}={}".format(a, str(self.annotations[a])))
         if self.letter_annotations:
             lines.append(
                 "Per letter annotation for: " + ", ".join(self.letter_annotations)
@@ -684,7 +684,7 @@ class SeqRecord:
         annotations, letter_annotations and features are not shown (as they
         would lead to a very long string).
         """
-        return "{0}(seq={1!r}, id={2!r}, name={3!r}, description={4!r}, dbxrefs={5!r})".format(
+        return "{}(seq={!r}, id={!r}, name={!r}, description={!r}, dbxrefs={!r})".format(
             self.__class__.__name__,
             self.seq,
             self.id,

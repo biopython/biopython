@@ -103,14 +103,14 @@ def read(handle, strict=True):
             if len(key) != 2:
                 raise ValueError("The key value of a TRANSFAC motif line "
                                  "should have 2 characters: "
-                                 '"{0:s}"'.format(line))
+                                 '"{:s}"'.format(line))
         if len(key_value) == 2:
             value = key_value[1].strip()
             if strict:
                 if not line.partition("  ")[1]:
                     raise ValueError("A TRANSFAC motif line should have 2 "
                                      "spaces between key and value columns: "
-                                     '"{0:s}"'.format(line))
+                                     '"{:s}"'.format(line))
         if key == "VV":
             record.version = value
         elif key in ("P0", "PO"):  # Old TRANSFAC files use PO instead of P0
@@ -133,7 +133,7 @@ def read(handle, strict=True):
                             raise ValueError("A TRANSFAC motif line should "
                                              "have 2 spaces between key and "
                                              "value columns: "
-                                             '"{0:s}"'.format(line))
+                                             '"{:s}"'.format(line))
                 try:
                     i = int(key)
                 except ValueError:
@@ -143,13 +143,13 @@ def read(handle, strict=True):
                         raise ValueError("A TRANSFAC matrix should start with "
                                          '"01" as first row of the matrix, '
                                          'but this matrix uses "00": '
-                                         '"{0:s}"'.format(line))
+                                         '"{:s}"'.format(line))
                 else:
                     length += 1
                 if i != length:
                     raise ValueError("The TRANSFAC matrix row number does not "
                                      "match the position in the matrix: "
-                                     '"{0:s}"'.format(line))
+                                     '"{:s}"'.format(line))
                 if strict:
                     if len(key) == 1:
                         raise ValueError("A TRANSFAC matrix line should have a "
@@ -159,12 +159,12 @@ def read(handle, strict=True):
                     if len(key_value) != 2:
                         raise ValueError("A TRANSFAC matrix line should have "
                                          "a key and a value: "
-                                         '"{0:s}"'.format(line))
+                                         '"{:s}"'.format(line))
                 values = value.split()[:4]
                 if len(values) != 4:
                     raise ValueError("A TRANSFAC matrix line should have a "
                                      "value for each nucleotide "
-                                     '(A, C, G and T): "{0:s}"'.format(line))
+                                     '(A, C, G and T): "{:s}"'.format(line))
                 for c, v in zip("ACGT", values):
                     counts[c].append(float(v))
         if line == "XX":
@@ -181,9 +181,9 @@ def read(handle, strict=True):
                                  '"]": "{0:s}"'.format(index, line))
             index = int(index[1:-1])
             if len(references) != index - 1:
-                raise ValueError('The index "{0:d}" of the TRANSFAC RN line '
+                raise ValueError('The index "{:d}" of the TRANSFAC RN line '
                                  "does not match the current number of seen "
-                                 'references "{1:d}": "{2:s}"'.format(index, len(references) + 1, line))
+                                 'references "{:d}": "{:s}"'.format(index, len(references) + 1, line))
             reference = {key: value}
             references.append(reference)
         elif key == "//":

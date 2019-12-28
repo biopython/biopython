@@ -31,8 +31,7 @@ class Hmmer3TabParser:
             self.line = self.handle.readline()
         # if we have result rows, parse it
         if self.line:
-            for qresult in self._parse_qresult():
-                yield qresult
+            yield from self._parse_qresult()
 
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""

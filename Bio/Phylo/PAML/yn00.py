@@ -67,7 +67,7 @@ class Yn00(Paml):
         """Parse a control file and load the options into the yn00 instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
-            raise IOError("File not found: %r" % ctl_file)
+            raise OSError("File not found: %r" % ctl_file)
         else:
             with open(ctl_file) as ctl_handle:
                 for line in ctl_handle:
@@ -121,7 +121,7 @@ def read(results_file):
     """Parse a yn00 results file."""
     results = {}
     if not os.path.exists(results_file):
-        raise IOError("Results file does not exist.")
+        raise OSError("Results file does not exist.")
     with open(results_file) as handle:
         lines = handle.readlines()
     if not lines:

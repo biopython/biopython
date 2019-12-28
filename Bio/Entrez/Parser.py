@@ -328,7 +328,7 @@ class DataHandler:
         if hasattr(handle, "closed") and handle.closed:
             # Should avoid a possible Segmentation Fault, see:
             # http://bugs.python.org/issue4877
-            raise IOError("Can't parse a closed handle")
+            raise OSError("Can't parse a closed handle")
         if sys.version_info[0] >= 3:
             # Another nasty hack to cope with a unicode StringIO handle
             # since the Entrez XML parser expects binary data (bytes)
@@ -425,8 +425,7 @@ class DataHandler:
             raise CorruptedXMLError("Premature end of XML stream")
 
         # Send out the remaining records
-        for record in records:
-            yield record
+        yield from records
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""
@@ -883,14 +882,14 @@ class DataHandler:
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
         path = os.path.join(self.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
@@ -902,14 +901,14 @@ class DataHandler:
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
         path = os.path.join(self.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except OSError:
             pass
         else:
             return handle
@@ -921,7 +920,7 @@ class DataHandler:
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
-        except IOError:
+        except OSError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
@@ -933,7 +932,7 @@ class DataHandler:
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
-        except IOError:
+        except OSError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
@@ -978,7 +977,7 @@ class DataHandler:
             # the internet instead.
             try:
                 handle = _urlopen(url)
-            except IOError:
+            except OSError:
                 raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
             text = handle.read()
             handle.close()

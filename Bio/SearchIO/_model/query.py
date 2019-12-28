@@ -230,18 +230,15 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.itervalues():  # noqa: B301
-                yield hit
+            yield from self._items.itervalues()
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
+            yield from self._items
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():  # noqa: B301
-                yield item
+            yield from self._items.iteritems()
 
     else:
 
@@ -266,18 +263,15 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.values():
-                yield hit
+            yield from self._items.values()
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
+            yield from self._items
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.items():
-                yield item
+            yield from self._items.items()
 
     def __contains__(self, hit_key):
         """Return True if hit key in items or alternative hit identifiers."""

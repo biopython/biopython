@@ -123,14 +123,14 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             m = _extract_alignment_region(match_seq, match_tags)
         if len(q) != len(m):
             message = """Darn... amino acids vs nucleotide coordinates?
-            tool: {0}
-            query_seq: {1}
-            query_tags: {2}
-            {3} length: {4}
-            match_seq: {5}
-            match_tags: {6}
-            {7} length: {8}
-            handle.name: {9}
+            tool: {}
+            query_seq: {}
+            query_tags: {}
+            {} length: {}
+            match_seq: {}
+            match_tags: {}
+            {} length: {}
+            handle.name: {}
             """.format(
                 tool,
                 query_seq,

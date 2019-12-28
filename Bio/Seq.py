@@ -130,11 +130,11 @@ class Seq:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}'{3!s})".format(
+            return "{}('{}...{}'{!s})".format(
                 self.__class__.__name__, str(self)[:54], str(self)[-3:], a
             )
         else:
-            return "{0}({1!r}{2!s})".format(self.__class__.__name__, self._data, a)
+            return "{}({!r}{!s})".format(self.__class__.__name__, self._data, a)
 
     def __str__(self):
         """Return the full sequence as a python string, use str(my_seq).
@@ -210,7 +210,7 @@ class Seq:
             # other could be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -227,7 +227,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -245,7 +245,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -263,7 +263,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -281,7 +281,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -369,7 +369,7 @@ class Seq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     )
                 )
@@ -403,7 +403,7 @@ class Seq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     )
                 )
@@ -500,7 +500,7 @@ class Seq:
         # Other should be a Seq or a MutableSeq
         if not Alphabet._check_type_compatible([self.alphabet, other_alpha]):
             raise TypeError(
-                "Incompatible alphabets {0!r} and {1!r}".format(
+                "Incompatible alphabets {!r} and {!r}".format(
                     self.alphabet, other_alpha
                 )
             )
@@ -1259,7 +1259,7 @@ class Seq:
                 gap = self.alphabet.gap_char
             elif gap != self.alphabet.gap_char:
                 raise ValueError(
-                    "Gap {0!r} does not match {1!r} from alphabet".format(
+                    "Gap {!r} does not match {!r} from alphabet".format(
                         gap, self.alphabet.gap_char
                     )
                 )
@@ -1353,7 +1353,7 @@ class Seq:
                 gap = self.alphabet.gap_char
             elif gap != self.alphabet.gap_char:
                 raise ValueError(
-                    "Gap {0!r} does not match {1!r} from alphabet".format(
+                    "Gap {!r} does not match {!r} from alphabet".format(
                         gap, self.alphabet.gap_char
                     )
                 )
@@ -1363,7 +1363,7 @@ class Seq:
         else:
             alpha = self.alphabet  # modify!
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, {0!r}".format(gap))
+            raise ValueError("Unexpected gap character, {!r}".format(gap))
         return Seq(str(self).replace(gap, ""), alpha)
 
     def join(self, other):
@@ -1392,7 +1392,7 @@ class Seq:
                 if a != c.alphabet:
                     if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
-                            "Incompatible alphabets {0!r} and {1!r}".format(
+                            "Incompatible alphabets {!r} and {!r}".format(
                                 a, c.alphabet
                             )
                         )
@@ -1496,7 +1496,7 @@ class UnknownSeq(Seq):
             a = ""
         else:
             a = ", alphabet=%r" % self.alphabet
-        return "UnknownSeq({0}{1!s}, character={2!r})".format(
+        return "UnknownSeq({}{!s}, character={!r})".format(
             self._length, a, self._character
         )
 
@@ -1978,7 +1978,7 @@ class UnknownSeq(Seq):
                 if a != c.alphabet:
                     if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
-                            "Incompatible alphabets {0!r} and {1!r}".format(
+                            "Incompatible alphabets {!r} and {!r}".format(
                                 a, c.alphabet
                             )
                         )
@@ -2055,11 +2055,11 @@ class MutableSeq:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}'{3!s})".format(
+            return "{}('{}...{}'{!s})".format(
                 self.__class__.__name__, str(self[:54]), str(self[-3:]), a
             )
         else:
-            return "{0}('{1}'{2!s})".format(self.__class__.__name__, str(self), a)
+            return "{}('{}'{!s})".format(self.__class__.__name__, str(self), a)
 
     def __str__(self):
         """Return the full sequence as a python string.
@@ -2107,7 +2107,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -2126,7 +2126,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -2146,7 +2146,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -2166,7 +2166,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -2186,7 +2186,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     ),
                     BiopythonWarning,
@@ -2269,7 +2269,7 @@ class MutableSeq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     )
                 )
@@ -2299,7 +2299,7 @@ class MutableSeq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
+                    "Incompatible alphabets {!r} and {!r}".format(
                         self.alphabet, other.alphabet
                     )
                 )
@@ -2827,15 +2827,15 @@ def _translate_str(
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
             raise CodonTable.TranslationError(
-                "First codon '{0}' is not a start codon".format(sequence[:3])
+                "First codon '{}' is not a start codon".format(sequence[:3])
             )
         if n % 3 != 0:
             raise CodonTable.TranslationError(
-                "Sequence length {0} is not a multiple of three".format(n)
+                "Sequence length {} is not a multiple of three".format(n)
             )
         if str(sequence[-3:]).upper() not in stop_codons:
             raise CodonTable.TranslationError(
-                "Final codon '{0}' is not a stop codon".format(sequence[-3:])
+                "Final codon '{}' is not a stop codon".format(sequence[-3:])
             )
         # Don't translate the stop symbol, and manually translate the M
         sequence = sequence[3:-3]
@@ -2875,7 +2875,7 @@ def _translate_str(
                 amino_acids.append(gap)
             else:
                 raise CodonTable.TranslationError(
-                    "Codon '{0}' is invalid".format(codon)
+                    "Codon '{}' is invalid".format(codon)
                 )
     return "".join(amino_acids)
 

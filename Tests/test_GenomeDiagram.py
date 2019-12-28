@@ -306,7 +306,7 @@ class LabelTest(unittest.TestCase):
                 # Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2
                 # must be string, not None
                 renderPM = None
-            except IOError:
+            except OSError:
                 # Probably a library problem, e.g.
                 # IOError: encoder zip not available
                 renderPM = None

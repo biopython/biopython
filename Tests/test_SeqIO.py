@@ -131,11 +131,7 @@ class TestZipped(unittest.TestCase):
 
     def test_gzip_fastq(self):
         """Testing FASTQ with gzip."""
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
+        mode = "rt"
         with gzip.open("Quality/example.fastq.gz", mode) as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
         if 3 <= sys.version_info[0]:
@@ -147,11 +143,7 @@ class TestZipped(unittest.TestCase):
 
     def test_gzip_fasta(self):
         """Testing FASTA with gzip."""
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
+        mode = "rt"
         with gzip.open("Fasta/flowers.pro.gz", mode) as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fasta"))))
         if 3 <= sys.version_info[0]:
@@ -164,11 +156,7 @@ class TestZipped(unittest.TestCase):
     def test_gzip_genbank(self):
         """Testing GenBank with gzip."""
         # BGZG files are still GZIP files
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
+        mode = "rt"
         with gzip.open("GenBank/cor6_6.gb.bgz", mode) as handle:
             self.assertEqual(6, len(list(SeqIO.parse(handle, "gb"))))
         if 3 <= sys.version_info[0]:

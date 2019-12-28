@@ -211,8 +211,7 @@ class Tree(Nodes.Chain):
             node = self.root
         for n in self.node(node).succ:
             yield n
-            for sn in self._walk(n):
-                yield sn
+            yield from self._walk(n)
 
     def node(self, node_id):
         """Return the instance of node_id.

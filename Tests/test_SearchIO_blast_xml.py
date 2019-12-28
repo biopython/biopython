@@ -3210,8 +3210,8 @@ class BlastXmlSpecialCases(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", BiopythonParserWarning)
             qresult = next(qresults)
-            self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
-                             " {1}".format(exp_warning, len(w)))
+            self.assertEqual(exp_warning, len(w), "Expected {} warning(s), got"
+                             " {}".format(exp_warning, len(w)))
 
         self.assertEqual(qresult.blast_id, "Query_1")
         hit1 = qresult[0]
@@ -3231,8 +3231,8 @@ class BlastXmlSpecialCases(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", BiopythonParserWarning)
             qresult = next(qresults)
-            self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
-                             " {1}".format(exp_warning, len(w)))
+            self.assertEqual(exp_warning, len(w), "Expected {} warning(s), got"
+                             " {}".format(exp_warning, len(w)))
 
         self.assertEqual(qresult.blast_id, "Query_1")
         hit1 = qresult[0]
@@ -3252,8 +3252,8 @@ class BlastXmlSpecialCases(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", BiopythonParserWarning)
             qresult = next(qresults)
-            self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
-                             " {1}".format(exp_warning, len(w)))
+            self.assertEqual(exp_warning, len(w), "Expected {} warning(s), got"
+                             " {}".format(exp_warning, len(w)))
 
         self.assertEqual(qresult.id, "Query_1")
         self.assertEqual(qresult.description, "gi|347972582|ref|XM_309352.4| Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds")

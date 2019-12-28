@@ -345,7 +345,7 @@ class DistanceMatrix(_Matrix):
                 open in text mode.
 
         """
-        handle.write("    {0}\n".format(len(self.names)))
+        handle.write("    {}\n".format(len(self.names)))
         # Phylip needs space-separated, vertically aligned columns
         name_width = max(12, max(map(len, self.names)) + 1)
         value_fmts = ("{" + str(x) + ":.4f}" for x in range(1, len(self.matrix) + 1))
