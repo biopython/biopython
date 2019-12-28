@@ -206,7 +206,7 @@ class AlphabetEncoder:
     def __repr__(self):
         """Represent the alphabet encoder class as a string for debugging."""
         return "{}({!r}, {!r})".format(self.__class__.__name__, self.alphabet,
-                               self.new_letters)
+                                       self.new_letters)
 
     def contains(self, other):
         """Test if the other alphabet is contained in this one (OBSOLETE?).

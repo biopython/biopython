@@ -167,7 +167,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             values_b = sorted(val_b.values())
             assert keys_a == keys_b, f"{attr}: {keys_a!r} vs {keys_b!r}"
             assert values_a == values_b, "{}: {!r} vs {!r}".format(attr, values_a,
-                                                           values_b)
+                                                                   values_b)
         # if it's an alphabet, check the class names as alphabets are instances
         elif attr == "_alphabet":
             alph_a = val_a.__class__.__name__

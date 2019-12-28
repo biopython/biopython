@@ -100,12 +100,12 @@ def compare_feature(old_f, new_f):
         or (isinstance(old_f.location.start, UnknownPosition) and
             isinstance(new_f.location.start, UnknownPosition)), \
         "{} -> {}".format(old_f.location.start,
-                      new_f.location.start)
+                          new_f.location.start)
     assert old_f.location.end == new_f.location.end \
         or (isinstance(old_f.location.end, UnknownPosition) and
             isinstance(new_f.location.end, UnknownPosition)), \
         "{} -> {}".format(old_f.location.end,
-                      new_f.location.end)
+                          new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \
         isinstance(new_f.location, CompoundLocation)
@@ -135,7 +135,7 @@ def compare_feature(old_f, new_f):
                 # Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
                     "{} -> {}".format(repr(old_f.qualifiers[key]),
-                                  repr(new_f.qualifiers[key]))
+                                      repr(new_f.qualifiers[key]))
             else:
                 raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:

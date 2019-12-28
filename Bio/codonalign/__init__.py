@@ -558,7 +558,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     warnings.warn("start codon of {} ({} {}) does not "
                                   "correspond to {} "
                                   "({})".format(pro.id, aa, aa_num,
-                                                 nucl.id, this_codon),
+                                                nucl.id, this_codon),
                                   BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {}! Please "

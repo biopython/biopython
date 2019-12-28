@@ -181,7 +181,7 @@ class NCBICodonTable(CodonTable):
     def __repr__(self):
         """Represent the NCBI codon table class as a string for debugging."""
         return "{}(id={!r}, names={!r}, ...)".format(self.__class__.__name__,
-                                             self.id, self.names)
+                                                     self.id, self.names)
 
 
 class NCBICodonTableDNA(NCBICodonTable):

@@ -230,7 +230,7 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            yield from self._items.itervalues()
+            yield from self._items.values()
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
@@ -238,7 +238,7 @@ class QueryResult(_BaseSearchObject):
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            yield from self._items.iteritems()
+            yield from self._items.items()
 
     else:
 

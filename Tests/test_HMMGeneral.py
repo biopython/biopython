@@ -44,8 +44,8 @@ class LetterAlphabet(Alphabet.Alphabet):
 def test_assertion(name, result, expected):
     """Helper function to test an assertion and print out a reasonable error."""
     assert result == expected, "Expected {}, got {} for {}".format(expected,
-                                                               result,
-                                                               name)
+                                                                   result,
+                                                                   name)
 
 
 class TrainingSequenceTest(unittest.TestCase):
@@ -435,8 +435,8 @@ class AbstractTrainerTest(unittest.TestCase):
         for test_result in result_tests:
             assert results[test_result[0]] == test_result[1], \
                 "Got {:f}, expected {:f} for {}".format(results[test_result[0]],
-                                                test_result[1],
-                                                test_result[0])
+                                                        test_result[1],
+                                                        test_result[0])
 
     def test_log_likelihood(self):
         """Calculate log likelihood."""
