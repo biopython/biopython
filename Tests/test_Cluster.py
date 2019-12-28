@@ -307,23 +307,23 @@ class TestCluster(unittest.TestCase):
                      mask=mask, weight=weight,
                      transpose=False, npass=100, method="a", dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^mask has incorrect rank 1 \(expected 2\)$"):
+                "^mask has incorrect rank 1 \\(expected 2\\)$"):
             kcluster(data, nclusters=nclusters,
                      mask=numpy.zeros(3), weight=weight,
                      transpose=False, npass=100, method="a", dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^mask has incorrect dimensions 4 x 3 \(expected 4 x 5\)$"):
+                "^mask has incorrect dimensions 4 x 3 \\(expected 4 x 5\\)$"):
             kcluster(data, nclusters=nclusters,
-                     mask=numpy.zeros((4,3), numpy.int32), weight=weight,
+                     mask=numpy.zeros((4, 3), numpy.int32), weight=weight,
                      transpose=False, npass=100, method="a", dist="e",
                      clusterid=clusterid)
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
+                "^incorrect rank 2 \\(expected 1\\)$"):
             kcluster(data, nclusters=nclusters,
-                     mask=mask, weight=numpy.zeros((2,2)),
+                     mask=mask, weight=numpy.zeros((2, 2)),
                      transpose=False, npass=100, method="a", dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^weight has incorrect size 3 \(expected 5\)$"):
+                "^weight has incorrect size 3 \\(expected 5\\)$"):
             kcluster(data, nclusters=nclusters,
                      mask=mask, weight=numpy.zeros(3),
                      transpose=False, npass=100, method="a", dist="e",
@@ -339,7 +339,7 @@ class TestCluster(unittest.TestCase):
                      transpose=False, npass=100, method="a", dist="e",
                      clusterid=clusterid)
         with self.assertRaisesRegex(ValueError,
-                "^incorrect size \(3, expected 4\)$"):
+                "^incorrect size \\(3, expected 4\\)$"):
             kcluster(data, nclusters=nclusters, mask=mask, weight=weight,
                      transpose=False, npass=0, method="a", dist="e",
                      clusterid=clusterid[:3])
@@ -523,7 +523,7 @@ class TestCluster(unittest.TestCase):
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError,
-                "^data matrix has incorrect rank 1 \(expected 2\)$"):
+                "^data matrix has incorrect rank 1 \\(expected 2\\)$"):
             clusterdistance(data=numpy.zeros(3), mask=mask, weight=weight,
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
@@ -547,14 +547,14 @@ class TestCluster(unittest.TestCase):
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(ValueError,
-                "mask has incorrect rank 1 \(expected 2\)"):
+                "mask has incorrect rank 1 \\(expected 2\\)"):
             clusterdistance(data=data, mask=numpy.zeros(3), weight=weight,
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError,
                 "^mask has incorrect data type$"):
             clusterdistance(data=data,
-                            mask=numpy.ones((2,2), dtype=numpy.int16),
+                            mask=numpy.ones((2, 2), dtype=numpy.int16),
                             weight=weight, index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError, "^mask is not contiguous$"):
@@ -566,8 +566,8 @@ class TestCluster(unittest.TestCase):
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
-            clusterdistance(data=data, mask=mask, weight=numpy.zeros((2,2)),
+                "^incorrect rank 2 \\(expected 1\\)$"):
+            clusterdistance(data=data, mask=mask, weight=numpy.zeros((2, 2)),
                             index1=c1, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError,
@@ -581,9 +581,9 @@ class TestCluster(unittest.TestCase):
                             index1=None, index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
+                "^incorrect rank 2 \\(expected 1\\)$"):
             clusterdistance(data=data, mask=mask, weight=weight,
-                            index1=numpy.zeros((2,2)), index2=c2, dist="e",
+                            index1=numpy.zeros((2, 2)), index2=c2, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError,
                 "^argument has incorrect data type$"):
@@ -595,9 +595,9 @@ class TestCluster(unittest.TestCase):
                             index1=c1, index2=None, dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
+                "^incorrect rank 2 \\(expected 1\\)$"):
             clusterdistance(data=data, mask=mask, weight=weight,
-                            index1=c1, index2=numpy.zeros((2,2)), dist="e",
+                            index1=c1, index2=numpy.zeros((2, 2)), dist="e",
                             method="a", transpose=False)
         with self.assertRaisesRegex(RuntimeError,
                 "^argument has incorrect data type$"):
@@ -742,11 +742,11 @@ class TestCluster(unittest.TestCase):
                         distancematrix=None)
         with self.assertRaisesRegex(RuntimeError,
                 "^data matrix has incorrect data type$"):
-            treecluster(tree, data=numpy.zeros((3,3), numpy.int32), mask=mask,
+            treecluster(tree, data=numpy.zeros((3, 3), numpy.int32), mask=mask,
                         weight=weight, transpose=False, method="a", dist="e",
                         distancematrix=None)
         with self.assertRaisesRegex(RuntimeError,
-                "^data matrix has incorrect rank 1 \(expected 2\)$"):
+                "^data matrix has incorrect rank 1 \\(expected 2\\)$"):
             treecluster(tree, data=numpy.zeros(3), mask=mask, weight=weight,
                         transpose=False, method="a", dist="e",
                         distancematrix=None)
@@ -758,7 +758,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import Node, Tree
 
-        nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5), Node(3,-2,0.6)]
+        nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5), Node(3,-2, 0.6)]
         indices = numpy.zeros(4, numpy.int32)
         tree = Tree(nodes)
         with self.assertRaisesRegex(ValueError,
@@ -770,13 +770,13 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "^unexpected format.$"):
             tree.sort(indices, "nothing")
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
-            tree.sort(indices, numpy.zeros((5,5)))
+                "^incorrect rank 2 \\(expected 1\\)$"):
+            tree.sort(indices, numpy.zeros((5, 5)))
         with self.assertRaisesRegex(ValueError,
-                "^order array has incorrect size 2 \(expected 4\)$"):
+                "^order array has incorrect size 2 \\(expected 4\\)$"):
             tree.sort(indices, numpy.zeros(2))
         with self.assertRaisesRegex(ValueError,
-                "^order array has incorrect size 6 \(expected 4\)$"):
+                "^order array has incorrect size 6 \\(expected 4\\)$"):
             tree.sort(indices, numpy.zeros(6))
 
 
@@ -1646,7 +1646,7 @@ class TestCluster(unittest.TestCase):
                        data=data, mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 1 \(expected 2\)$"):
+                "^incorrect rank 1 \\(expected 2\\)$"):
             somcluster(clusterids=numpy.ones(nitems, numpy.int32),
                        celldata=celldata, data=data, mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
@@ -1656,7 +1656,7 @@ class TestCluster(unittest.TestCase):
                        celldata=celldata, data=data, mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^array has 3 columns \(expected 2\)$"):
+                "^array has 3 columns \\(expected 2\\)$"):
             somcluster(clusterids=numpy.ones((nitems, 3), numpy.int32),
                        celldata=celldata, data=data, mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
@@ -1684,11 +1684,11 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,
                 "^data matrix has incorrect data type$"):
             somcluster(clusterids=clusterids, celldata=celldata,
-                       data=numpy.zeros((4,5), dtype=numpy.int16),
+                       data=numpy.zeros((4, 5), dtype=numpy.int16),
                        mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(RuntimeError,
-                "^data matrix has incorrect rank 1 \(expected 2\)$"):
+                "^data matrix has incorrect rank 1 \\(expected 2\\)$"):
             somcluster(clusterids=clusterids, celldata=celldata,
                        data=numpy.zeros(4), mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
@@ -1710,7 +1710,7 @@ class TestCluster(unittest.TestCase):
                        data=data, mask=[None], weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^mask has incorrect rank 1 \(expected 2\)$"):
+                "^mask has incorrect rank 1 \\(expected 2\\)$"):
             somcluster(clusterids=clusterids, celldata=celldata,
                        data=data, mask=numpy.array([1, 1, 1]), weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="e")
@@ -1729,9 +1729,9 @@ class TestCluster(unittest.TestCase):
                        data=data, mask=mask, weight=None,
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 3 \(expected 1\)$"):
+                "^incorrect rank 3 \\(expected 1\\)$"):
             somcluster(clusterids=clusterids, celldata=celldata,
-                       data=data, mask=mask, weight=numpy.zeros((2,2,2)),
+                       data=data, mask=mask, weight=numpy.zeros((2, 2, 2)),
                        transpose=False, inittau=0.02, niter=100, dist="e")
         with self.assertRaisesRegex(RuntimeError,
                 "^array has incorrect data type$"):
@@ -1751,7 +1751,7 @@ class TestCluster(unittest.TestCase):
                        dist="Pearson")
         with self.assertRaisesRegex(ValueError,
                 "^unknown dist function specified "
-                "\(should be one of 'ebcauxsk'\)$"):
+                "\\(should be one of 'ebcauxsk'\\)$"):
             somcluster(clusterids=clusterids, celldata=celldata,
                        data=data, mask=mask, weight=weight,
                        transpose=False, inittau=0.02, niter=100, dist="X")
@@ -1852,18 +1852,18 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^data matrix is empty$"):
             distancematrix(data[:0,:], mask=mask, weight=weight)
         with self.assertRaisesRegex(ValueError,
-                "^mask has incorrect rank 1 \(expected 2\)$"):
+                "^mask has incorrect rank 1 \\(expected 2\\)$"):
             distancematrix(data, mask=numpy.zeros(3), weight=weight)
         with self.assertRaisesRegex(ValueError,
-                "^mask has incorrect dimensions \(4 x 3, expected 9 x 3\)$"):
+                "^mask has incorrect dimensions \\(4 x 3, expected 9 x 3\\)$"):
             distancematrix(data, mask=mask[:4,:], weight=weight,
                            transpose=False, dist='c',
                            distancematrix=[])
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
-            distancematrix(data, mask=mask, weight=numpy.zeros((2,2)))
+                "^incorrect rank 2 \\(expected 1\\)$"):
+            distancematrix(data, mask=mask, weight=numpy.zeros((2, 2)))
         with self.assertRaisesRegex(ValueError,
-                "^weight has incorrect size 4 \(expected 3\)$"):
+                "^weight has incorrect size 4 \\(expected 3\\)$"):
             distancematrix(data, mask=mask, weight=numpy.zeros(4),
                            transpose=False, dist='c', distancematrix=[])
 
@@ -1883,10 +1883,10 @@ class TestCluster(unittest.TestCase):
             kmedoids([], nclusters=2, npass=1000, clusterid=clusterid)
         with self.assertRaisesRegex(ValueError,
                 "^distance matrix is not square.$"):
-            kmedoids(numpy.zeros((2,3)), npass=1000)
+            kmedoids(numpy.zeros((2, 3)), npass=1000)
         with self.assertRaisesRegex(ValueError,
-                "^distance matrix has incorrect rank 3 \(expected 1 or 2\)$"):
-            kmedoids(numpy.zeros((2,3,4)), npass=1000)
+                "^distance matrix has incorrect rank 3 \\(expected 1 or 2\\)$"):
+            kmedoids(numpy.zeros((2, 3, 4)), npass=1000)
 
     def test_distancematrix_kmedoids(self):
         if TestCluster.module == "Bio.Cluster":
@@ -2055,17 +2055,17 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import pca
 
-        data = numpy.zeros((4,2))
+        data = numpy.zeros((4, 2))
         columnmean = numpy.zeros(2)
-        pc = numpy.zeros((2,2), dtype="d")
-        coordinates = numpy.zeros((4,2), dtype="d")
+        pc = numpy.zeros((2, 2), dtype="d")
+        coordinates = numpy.zeros((4, 2), dtype="d")
         eigenvalues = numpy.zeros(2, dtype="d")
 
         with self.assertRaisesRegex(RuntimeError,
                 "^data matrix has unexpected format.$"):
             pca([None], columnmean, coordinates, pc, eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
-                "^data matrix has incorrect rank 1 \(expected 2\)$"):
+                "^data matrix has incorrect rank 1 \\(expected 2\\)$"):
             pca(numpy.zeros(3), columnmean, coordinates, pc, eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
                 "^data matrix has incorrect data type$"):
@@ -2074,8 +2074,8 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "^unexpected format.$"):
             pca(data, "nothing", coordinates, pc, eigenvalues)
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
-            pca(data, numpy.zeros((2,2)), coordinates, pc, eigenvalues)
+                "^incorrect rank 2 \\(expected 1\\)$"):
+            pca(data, numpy.zeros((2, 2)), coordinates, pc, eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
                 "^array has incorrect data type$"):
             pca(data, numpy.ones(3, dtype=numpy.int16),
@@ -2084,7 +2084,7 @@ class TestCluster(unittest.TestCase):
                 "^data matrix has unexpected format.$"):
             pca(data, columnmean, [None], pc, eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
-                "^data matrix has incorrect rank 1 \(expected 2\)$"):
+                "^data matrix has incorrect rank 1 \\(expected 2\\)$"):
             pca(data, columnmean, numpy.zeros(3), pc, eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
                 "^data matrix has incorrect data type$"):
@@ -2094,7 +2094,7 @@ class TestCluster(unittest.TestCase):
                 "^data matrix has unexpected format.$"):
             pca(data, columnmean, coordinates, [None], eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
-                "^data matrix has incorrect rank 1 \(expected 2\)$"):
+                "^data matrix has incorrect rank 1 \\(expected 2\\)$"):
             pca(data, columnmean, coordinates, numpy.zeros(3), eigenvalues)
         with self.assertRaisesRegex(RuntimeError,
                 "^data matrix has incorrect data type$"):
@@ -2103,8 +2103,8 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "^unexpected format.$"):
             pca(data, columnmean, coordinates, pc, "nothing")
         with self.assertRaisesRegex(ValueError,
-                "^incorrect rank 2 \(expected 1\)$"):
-            pca(data, columnmean, coordinates, pc, numpy.zeros((2,2)))
+                "^incorrect rank 2 \\(expected 1\\)$"):
+            pca(data, columnmean, coordinates, pc, numpy.zeros((2, 2)))
         with self.assertRaisesRegex(RuntimeError,
                 "^array has incorrect data type$"):
             pca(data, columnmean, coordinates, pc,
