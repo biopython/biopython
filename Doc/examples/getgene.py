@@ -41,7 +41,7 @@ import sys
 from dbm import gnu as gdbm
 
 
-class DB_Index(object):
+class DB_Index:
     """A class to index a SwissProt/TrEMBL database file for fast retrieval."""
 
     def __init__(self, open=True):

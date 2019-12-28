@@ -90,7 +90,7 @@ def write(trees, handle, plain=False, **kwargs):
 # Input
 
 
-class Parser(object):
+class Parser:
     """Parse a CDAO tree given a file handle."""
 
     def __init__(self, handle=None):
@@ -255,7 +255,7 @@ class Parser(object):
 # Output
 
 
-class Writer(object):
+class Writer:
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     prefixes = RDF_NAMESPACES

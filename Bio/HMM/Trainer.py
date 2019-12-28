@@ -26,7 +26,7 @@ import math
 from .DynamicProgramming import ScaledDPAlgorithms
 
 
-class TrainingSequence(object):
+class TrainingSequence:
     """Hold a training sequence with emissions and optionally, a state path."""
 
     def __init__(self, emissions, state_path):
@@ -46,7 +46,7 @@ class TrainingSequence(object):
         self.states = state_path
 
 
-class AbstractTrainer(object):
+class AbstractTrainer:
     """Provide generic functionality needed in all trainers."""
 
     def __init__(self, markov_model):

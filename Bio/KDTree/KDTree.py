@@ -17,7 +17,7 @@ from numpy import array, empty
 from Bio.KDTree import _CKDTree
 
 
-class KDTree(object):
+class KDTree:
     """KD tree implementation in C++, SWIG python wrapper.
 
     The KD tree data structure can be used for all kinds of searches that

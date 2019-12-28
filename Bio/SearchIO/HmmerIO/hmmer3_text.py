@@ -34,7 +34,7 @@ _HRE_ANNOT_LINE = re.compile(r"^(\s+)(.+)\s(\w+)")
 _HRE_ID_LINE = re.compile(r"^(\s+\S+\s+[0-9-]+ )(.+?)(\s+[0-9-]+)")
 
 
-class Hmmer3TextParser(object):
+class Hmmer3TextParser:
     """Parser for the HMMER 3.0 text output."""
 
     def __init__(self, handle):

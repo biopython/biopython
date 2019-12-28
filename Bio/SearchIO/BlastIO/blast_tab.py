@@ -207,7 +207,7 @@ def _augment_blast_hsp(hsp, attr):
         hsp.gap_pct = hsp.gap_num / float(hsp.aln_span) * 100
 
 
-class BlastTabParser(object):
+class BlastTabParser:
     """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
@@ -683,7 +683,7 @@ class BlastTabIndexer(SearchIndexer):
         return qresult_raw
 
 
-class BlastTabWriter(object):
+class BlastTabWriter:
     """Writer for blast-tab output format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):

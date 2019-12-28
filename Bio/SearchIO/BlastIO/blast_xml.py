@@ -230,7 +230,7 @@ def _extract_ids_and_descs(raw_id, raw_desc):
     return (ids, descs, blast_gen_id)
 
 
-class BlastXmlParser(object):
+class BlastXmlParser:
     """Parser for the BLAST XML format."""
 
     def __init__(self, handle, use_raw_query_ids=False, use_raw_hit_ids=False):
@@ -757,7 +757,7 @@ class _BlastXmlGenerator(XMLGenerator):
         self.write(content)
 
 
-class BlastXmlWriter(object):
+class BlastXmlWriter:
     """Stream-based BLAST+ XML Writer."""
 
     def __init__(self, handle, use_raw_query_ids=True, use_raw_hit_ids=True):

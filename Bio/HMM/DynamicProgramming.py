@@ -12,7 +12,7 @@ algorithms that can be used generally.
 """
 
 
-class AbstractDPAlgorithms(object):
+class AbstractDPAlgorithms:
     """An abstract class to calculate forward and backward probabilities.
 
     This class should not be instantiated directly, but should be used

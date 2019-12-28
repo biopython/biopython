@@ -129,7 +129,7 @@ class SeqMapIndex(dict):
         return seqMap
 
 
-class SeqMap(object):
+class SeqMap:
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
 
     This is a list like object; You can find the location of particular residues
@@ -292,7 +292,7 @@ class SeqMap(object):
             )
 
 
-class Res(object):
+class Res:
     """A single residue mapping from a RAF record.
 
     Attributes:

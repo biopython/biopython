@@ -18,7 +18,7 @@ class NexusError(Exception):
     pass
 
 
-class StandardData(object):
+class StandardData:
     """Create a StandardData iterable object.
 
     Each coding specifies t [type] => (std [standard], multi [multistate] or

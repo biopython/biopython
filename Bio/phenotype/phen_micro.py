@@ -55,7 +55,7 @@ _measurements = "measurements"
 #
 
 
-class PlateRecord(object):
+class PlateRecord:
     """PlateRecord object for storing Phenotype Microarray plates data.
 
     A PlateRecord stores all the wells of a particular phenotype
@@ -581,7 +581,7 @@ class PlateRecord(object):
         return "\n".join(lines)
 
 
-class WellRecord(object):
+class WellRecord:
     """WellRecord stores all time course signals of a phenotype Microarray well.
 
     The single time points and signals can be accessed iterating on the
@@ -1187,7 +1187,7 @@ def _toOPM(plate):
     return d
 
 
-class JsonWriter(object):
+class JsonWriter:
     """Class to write PM Json format files."""
 
     def __init__(self, plates):

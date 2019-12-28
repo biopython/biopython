@@ -60,7 +60,7 @@ SynonymousCodons = {
 }
 
 
-class CodonAdaptationIndex(object):
+class CodonAdaptationIndex:
     """A codon adaptation index (CAI) implementation.
 
     Implements the codon adaptation index (CAI) described by Sharp and

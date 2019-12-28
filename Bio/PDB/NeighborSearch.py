@@ -15,7 +15,7 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
 
-class NeighborSearch(object):
+class NeighborSearch:
     """Class for neighbor searching.
 
     This class can be used for two related purposes:
@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     from numpy.random import random
 
-    class Atom(object):
+    class Atom:
         """Define atom class for testing."""
 
         def __init__(self):

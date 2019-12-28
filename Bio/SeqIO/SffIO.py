@@ -909,7 +909,7 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     return raw
 
 
-class _AddTellHandle(object):
+class _AddTellHandle:
     """Wrapper for handles which do not support the tell method (PRIVATE).
 
     Intended for use with things like network handles where tell (and reverse

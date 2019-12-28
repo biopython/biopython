@@ -82,7 +82,7 @@ Example output::
 import re
 
 
-class PrintFormat(object):
+class PrintFormat:
     """PrintFormat allow the printing of results of restriction analysis."""
 
     ConsoleWidth = 80

@@ -18,7 +18,7 @@ from Bio.Seq import Seq, reverse_complement, translate
 from Bio.SeqUtils import GC
 
 
-class xbb_translations(object):
+class xbb_translations:
     """A class for doing translations."""
 
     def __init__(self):

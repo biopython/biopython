@@ -31,7 +31,7 @@ RAINBOW_COLORS = {
 }
 
 
-class ChromosomeCounts(object):
+class ChromosomeCounts:
     """Represent a chromosome with count information.
 
     This is used to display information about counts along a chromosome.

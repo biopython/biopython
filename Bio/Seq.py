@@ -64,7 +64,7 @@ _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
-class Seq(object):
+class Seq:
     """Read-only sequence object (essentially a string with an alphabet).
 
     Like normal python strings, our basic sequence object is immutable.
@@ -1998,7 +1998,7 @@ class UnknownSeq(Seq):
         return Seq(temp_data, a)
 
 
-class MutableSeq(object):
+class MutableSeq:
     """An editable sequence object (with an alphabet).
 
     Unlike normal python strings and our basic sequence object (the Seq class)

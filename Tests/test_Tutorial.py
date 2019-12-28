@@ -177,7 +177,7 @@ def extract_doctests(latex_filename):
     # yield "dummy", ">>> 2 + 2\n5\n"
 
 
-class TutorialDocTestHolder(object):
+class TutorialDocTestHolder:
     """Python doctests extracted from the Biopython Tutorial."""
 
     pass

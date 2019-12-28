@@ -273,7 +273,7 @@ def _replace_wspace(text):
     return text
 
 
-class Parser(object):
+class Parser:
     """Methods for parsing all phyloXML nodes from an XML stream.
 
     To minimize memory use, the tree of ElementTree parsing events is cleared
@@ -720,7 +720,7 @@ def _handle_simple(tag):
     return wrapped
 
 
-class Writer(object):
+class Writer:
     """Methods for serializing a PhyloXML object to XML."""
 
     def __init__(self, phyloxml):

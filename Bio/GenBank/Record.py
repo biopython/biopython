@@ -96,7 +96,7 @@ def _indent_genbank(information, indent):
     return output_info
 
 
-class Record(object):
+class Record:
     """Hold GenBank information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
@@ -494,7 +494,7 @@ class Record(object):
         return output
 
 
-class Reference(object):
+class Reference:
     """Hold information from a GenBank reference.
 
     Attributes:
@@ -605,7 +605,7 @@ class Reference(object):
         return output
 
 
-class Feature(object):
+class Feature:
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
@@ -636,7 +636,7 @@ class Feature(object):
         return output
 
 
-class Qualifier(object):
+class Qualifier:
     """Hold information about a qualifier in a GenBank feature.
 
     Attributes:

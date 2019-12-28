@@ -33,7 +33,7 @@ _ELEM_FRAG = {
 }
 
 
-class InterproscanXmlParser(object):
+class InterproscanXmlParser:
     """Parser for the InterProScan XML format."""
 
     def __init__(self, handle):

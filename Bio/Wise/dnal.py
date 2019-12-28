@@ -80,7 +80,7 @@ def _get_coords(filename):
     )  # returns [(start0, end0), (start1, end1)]
 
 
-class Statistics(object):
+class Statistics:
     """Calculate statistics from an ALB report."""
 
     def __init__(self, filename, match, mismatch, gap, extension):

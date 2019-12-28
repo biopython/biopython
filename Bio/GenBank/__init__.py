@@ -439,7 +439,7 @@ def _split_compound_loc(compound_loc):
             yield part
 
 
-class Iterator(object):
+class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).
 
     This class is likely to be deprecated in a future release of Biopython.
@@ -499,7 +499,7 @@ class LocationParserError(Exception):
 _cleaner = FeatureValueCleaner()
 
 
-class FeatureParser(object):
+class FeatureParser:
     """Parse GenBank files into Seq + Feature objects (OBSOLETE).
 
     Direct use of this class is discouraged, and may be deprecated in
@@ -535,7 +535,7 @@ class FeatureParser(object):
         return _consumer.data
 
 
-class RecordParser(object):
+class RecordParser:
     """Parse GenBank files into Record objects (OBSOLETE).
 
     Direct use of this class is discouraged, and may be deprecated in
@@ -565,7 +565,7 @@ class RecordParser(object):
         return _consumer.data
 
 
-class _BaseGenBankConsumer(object):
+class _BaseGenBankConsumer:
     """Abstract GenBank consumer providing useful general functions (PRIVATE).
 
     This just helps to eliminate some duplication in things that most

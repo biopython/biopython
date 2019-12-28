@@ -10,7 +10,7 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 import numpy
 
 
-class StructureDecoder(object):
+class StructureDecoder:
     """Class to pass the data from mmtf-python into a Biopython data structure."""
 
     def __init__(self):

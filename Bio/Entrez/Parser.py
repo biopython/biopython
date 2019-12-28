@@ -279,7 +279,7 @@ class ValidationError(ValueError):
         )
 
 
-class DataHandler(object):
+class DataHandler:
     """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez

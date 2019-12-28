@@ -27,7 +27,7 @@ Protein20Random = 0.05
 Nucleotide4Random = 0.25
 
 
-class SummaryInfo(object):
+class SummaryInfo:
     """Calculate summary info about the alignment.
 
     This class should be used to caclculate information summarizing the
@@ -680,7 +680,7 @@ class SummaryInfo(object):
         return self.alignment[:, col]
 
 
-class PSSM(object):
+class PSSM:
     """Represent a position specific score matrix.
 
     This class is meant to make it easy to access the info within a PSSM

@@ -33,7 +33,7 @@ def fmt_(value, format_spec="%s", default_str="<unknown>"):
     return format_spec % value
 
 
-class Header(object):
+class Header:
     """Saves information from a blast header.
 
     Members:
@@ -66,7 +66,7 @@ class Header(object):
         self.database_letters = None
 
 
-class Description(object):
+class Description:
     """Stores information about one hit in the descriptions section.
 
     Members:
@@ -110,7 +110,7 @@ class DescriptionExt(Description):
         self.items.append(item)
 
 
-class DescriptionExtItem(object):
+class DescriptionExtItem:
     """Stores information about one record in hit description for BLASTXML version 2.
 
     Members:
@@ -131,7 +131,7 @@ class DescriptionExtItem(object):
         return "%s %s" % (self.id, self.title)
 
 
-class Alignment(object):
+class Alignment:
     """Stores information about one hit in the alignments section.
 
     Members:
@@ -158,7 +158,7 @@ class Alignment(object):
         return "\n           ".join(lines)
 
 
-class HSP(object):
+class HSP:
     """Stores information about one hsp in an alignment hit.
 
     Members:
@@ -264,7 +264,7 @@ class HSP(object):
         return "\n".join(lines)
 
 
-class MultipleAlignment(object):
+class MultipleAlignment:
     """Holds information about a multiple alignment.
 
     Members:
@@ -315,7 +315,7 @@ class MultipleAlignment(object):
         return generic
 
 
-class Round(object):
+class Round:
     """Holds information from a PSI-BLAST round.
 
     Members:
@@ -335,7 +335,7 @@ class Round(object):
         self.multiple_alignment = None
 
 
-class DatabaseReport(object):
+class DatabaseReport:
     """Holds information about a database report.
 
     Members:
@@ -360,7 +360,7 @@ class DatabaseReport(object):
         self.ka_params_gap = (None, None, None)
 
 
-class Parameters(object):
+class Parameters:
     """Holds information about the parameters.
 
     Members:

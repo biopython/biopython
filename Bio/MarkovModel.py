@@ -61,7 +61,7 @@ VERY_SMALL_NUMBER = 1E-300
 LOG0 = numpy.log(VERY_SMALL_NUMBER)
 
 
-class MarkovModel(object):
+class MarkovModel:
     """Create a state-emitting MarkovModel object."""
 
     def __init__(self, states, alphabet,

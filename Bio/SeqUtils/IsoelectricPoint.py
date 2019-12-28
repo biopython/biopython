@@ -37,7 +37,7 @@ pKnterminal = {
 charged_aas = ("K", "R", "H", "D", "E", "C", "Y")
 
 
-class IsoelectricPoint(object):
+class IsoelectricPoint:
     """A class for calculating the IEP or charge at given pH of a protein.
 
     Parameters

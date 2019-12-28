@@ -35,7 +35,7 @@ _modeError = ParserError("You're trying to open an Affymetrix v4"
 # pp = pprint.PrettyPrinter(indent=4)
 
 
-class Record(object):
+class Record:
     """Stores the information in a cel file.
 
     Example usage:

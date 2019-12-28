@@ -31,7 +31,7 @@ class ProteinX(Alphabet.ProteinAlphabet):
 proteinX = ProteinX()
 
 
-class MissingTable(object):
+class MissingTable:
     def __init__(self, table):
         self._table = table
 
@@ -55,7 +55,7 @@ def makeTableX(table):
     )
 
 
-class NextOrf(object):
+class NextOrf:
     def __init__(self, file, options):
         self.options = options
         self.file = file

@@ -254,7 +254,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
             break
 
 
-class MafIndex(object):
+class MafIndex:
     """Index for a MAF file.
 
     The index is a sqlite3 database that is built upon creation of the object

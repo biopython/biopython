@@ -402,7 +402,7 @@ def _create_hsp(hid, qid, psl):
     return hsp
 
 
-class BlatPslParser(object):
+class BlatPslParser:
     """Parser for the BLAT PSL format."""
 
     def __init__(self, handle, pslx=False):
@@ -625,7 +625,7 @@ class BlatPslIndexer(SearchIndexer):
         return qresult_raw
 
 
-class BlatPslWriter(object):
+class BlatPslWriter:
     """Writer for the blat-psl format."""
 
     def __init__(self, handle, header=False, pslx=False):

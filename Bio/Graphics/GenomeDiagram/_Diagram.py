@@ -43,7 +43,7 @@ def _first_defined(*args):
     return None
 
 
-class Diagram(object):
+class Diagram:
     """Diagram container.
 
     Arguments:

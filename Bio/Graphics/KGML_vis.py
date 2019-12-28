@@ -95,7 +95,7 @@ def get_temp_imagefilename(url):
     return fname
 
 
-class KGMLCanvas(object):
+class KGMLCanvas:
     """Reportlab Canvas-based representation of a KGML pathway map."""
 
     def __init__(

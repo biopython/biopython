@@ -30,7 +30,7 @@ from ._GraphSet import GraphSet
 _grey = colors.Color(0.6, 0.6, 0.6)
 
 
-class Track(object):
+class Track:
     """Track.
 
     Attributes:

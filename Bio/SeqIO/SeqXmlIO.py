@@ -334,7 +334,7 @@ class ContentHandler(handler.ContentHandler):
             self.data += data
 
 
-class SeqXmlIterator(object):
+class SeqXmlIterator:
     """Breaks seqXML file into SeqRecords.
 
     Assumes valid seqXML please validate beforehand.

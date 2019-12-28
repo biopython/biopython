@@ -20,7 +20,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.MaxEntropy.")
 
 
-class MaxEntropy(object):
+class MaxEntropy:
     """Hold information for a Maximum Entropy classifier.
 
     Members:
