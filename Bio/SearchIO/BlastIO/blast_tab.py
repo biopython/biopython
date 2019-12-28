@@ -593,7 +593,6 @@ class BlastTabIndexer(SearchIndexer):
         start_offset = 0
         qresult_key = None
         key_idx = self._key_idx
-        tab_char = b"\t"
 
         while True:
             # get end offset here since we only know a qresult ends after
@@ -603,10 +602,10 @@ class BlastTabIndexer(SearchIndexer):
             line = handle.readline()
 
             if qresult_key is None:
-                qresult_key = line.split(tab_char)[key_idx]
+                qresult_key = line.split(b"\t")[key_idx]
             else:
                 try:
-                    curr_key = line.split(tab_char)[key_idx]
+                    curr_key = line.split(b"\t")[key_idx]
                 except IndexError:
                     curr_key = b""
 
@@ -633,7 +632,6 @@ class BlastTabIndexer(SearchIndexer):
         handle = self._handle
         handle.seek(offset)
         qresult_raw = b""
-        tab_char = b"\t"
         key_idx = self._key_idx
         qresult_key = None
 
@@ -641,10 +639,10 @@ class BlastTabIndexer(SearchIndexer):
             line = handle.readline()
             # get the key if the first line (qresult key)
             if qresult_key is None:
-                qresult_key = line.split(tab_char)[key_idx]
+                qresult_key = line.split(b"\t")[key_idx]
             else:
                 try:
-                    curr_key = line.split(tab_char)[key_idx]
+                    curr_key = line.split(b"\t")[key_idx]
                 except IndexError:
                     curr_key = b""
                 # only break when qresult is finished (key is different)
