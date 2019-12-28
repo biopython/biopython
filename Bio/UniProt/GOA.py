@@ -24,8 +24,6 @@ http://geneontology.org/docs/gene-product-information-gpi-format/
 
 import copy
 
-from Bio._py3k import zip
-
 # GAF: GO Annotation Format
 #
 # GAF version 2.0

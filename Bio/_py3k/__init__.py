@@ -6,36 +6,6 @@
 # package.
 """Python 3 compatibility tools (PRIVATE).
 
-We used to have lines like this under Python 2 in order to use
-iterator based zip, map and filter (in Python 3 these functions
-are all iterator based)::
-
-    from future_builtins import zip
-
-There is no similar option for range yet, other than::
-
-    range = xrange
-    input = raw_input
-
-or:
-
-    from __builtin__ import xrange as range
-    from __builtin__ import raw_input as input
-
-Under Python 3 these imports need to be removed. Also, deliberate
-importing of built in functions like open changes from Python 2::
-
-    from __builtin__ import open
-
-To do this under Python 3:
-
-    from builtins import open
-
-Instead, we can do this under either Python 2 or 3:
-
-    from Bio._py3k import open
-    from Bio._py3k import zip
-
 Once we drop support for Python 2, the whole of Bio._py3k will
 go away.
 """
@@ -48,9 +18,6 @@ import sys
 
 
 if sys.version_info[0] >= 3:
-    # Code for Python 3
-    from builtins import open, zip, map, filter, range, input
-
     import codecs
 
     def _bytes_bytearray_to_str(s):
@@ -115,13 +82,6 @@ def raise_from(value, from_value):
 """)
 
 else:
-    # Python 2 code
-    from __builtin__ import open
-
-    # Import Python3 like iterator functions:
-    from future_builtins import zip, map, filter
-    from __builtin__ import xrange as range
-    from __builtin__ import raw_input as input
 
     def _bytes_bytearray_to_str(s):
         """If s is bytes or bytearray, convert to a string (PRIVATE)."""

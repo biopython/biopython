@@ -4,8 +4,6 @@
 
 """Common code for SeqRecord object tests."""
 
-from Bio._py3k import range
-
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition

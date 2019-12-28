@@ -35,8 +35,6 @@ import copy
 import warnings
 from functools import reduce
 
-from Bio._py3k import map
-
 from Bio import BiopythonDeprecationWarning
 warnings.warn("Bio.Crystal has been deprecated, and we intend to remove it"
               " in a future release of Biopython. Please use Bio.PDB instead"

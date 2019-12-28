@@ -182,7 +182,6 @@ HSP and HSPFragment documentation for more details on these properties.
 import re
 from math import log
 
-from Bio._py3k import zip
 from Bio._utils import as_bytes
 
 from Bio.Alphabet import generic_dna

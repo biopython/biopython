@@ -10,7 +10,6 @@ import os
 import unittest
 import warnings
 
-from Bio._py3k import range
 from io import StringIO
 from Bio._py3k import _universal_read_mode
 from io import BytesIO

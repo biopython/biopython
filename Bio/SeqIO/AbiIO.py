@@ -30,8 +30,6 @@ from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio._py3k import zip
-
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number
 # if a tag entry needs to be added, just add its key and its key

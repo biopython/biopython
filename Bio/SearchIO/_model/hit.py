@@ -8,8 +8,6 @@
 
 from itertools import chain
 
-from Bio._py3k import filter
-
 from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import allitems, optionalcascade
 

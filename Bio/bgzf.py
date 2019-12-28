@@ -221,9 +221,8 @@ import sys
 import zlib
 import struct
 
-from Bio._utils import as_string, as_bytes
-
-from Bio._py3k import open as _open
+from Bio._utils import _as_bytes, _as_string
+from builtins import open as _open
 
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'

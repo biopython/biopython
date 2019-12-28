@@ -13,7 +13,6 @@ from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
 from Bio import _py3k
-from Bio._py3k import zip, range
 
 
 def _is_numeric(x):

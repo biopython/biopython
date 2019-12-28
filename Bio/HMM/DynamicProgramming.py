@@ -11,8 +11,6 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
-from Bio._py3k import range
-
 
 class AbstractDPAlgorithms(object):
     """An abstract class to calculate forward and backward probabilities.

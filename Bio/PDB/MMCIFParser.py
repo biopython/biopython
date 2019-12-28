@@ -10,7 +10,6 @@ import numpy
 import warnings
 
 from Bio.File import as_handle
-from Bio._py3k import range
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
