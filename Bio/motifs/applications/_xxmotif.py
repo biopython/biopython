@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012 by Christian Brueffer.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
