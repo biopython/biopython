@@ -99,7 +99,7 @@ class DescriptionExt(Description):
 
     def __init__(self):
         """Initialize the class."""
-        super(DescriptionExt, self).__init__()
+        super().__init__()
 
         self.items = []
 

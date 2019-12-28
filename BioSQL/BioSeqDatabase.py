@@ -668,17 +668,17 @@ class MysqlConnectorAdaptor(Adaptor):
 
     def execute_one(self, sql, args=None):
         """Execute sql that returns 1 record, and return the record."""
-        out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
+        out = super().execute_one(sql, args)
         return tuple(self._bytearray_to_str(v) for v in out)
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
-        out = super(MysqlConnectorAdaptor, self).execute_and_fetch_col0(sql, args)
+        out = super().execute_and_fetch_col0(sql, args)
         return [self._bytearray_to_str(column) for column in out]
 
     def execute_and_fetchall(self, sql, args=None):
         """Return a list of tuples of all rows."""
-        out = super(MysqlConnectorAdaptor, self).execute_and_fetchall(sql, args)
+        out = super().execute_and_fetchall(sql, args)
         return [tuple(self._bytearray_to_str(v) for v in o) for o in out]
 
 

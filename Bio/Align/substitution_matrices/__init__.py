@@ -70,7 +70,7 @@ class Array(numpy.ndarray):
                 shape = (n, n)
             else:  # dims is None
                 raise ValueError("data is an empty dictionary")
-            obj = super(Array, cls).__new__(cls, shape, dtype)
+            obj = super().__new__(cls, shape, dtype)
             if dims == 1:
                 for i, key in enumerate(alphabet):
                     obj[i] = data.get(letter, 0.0)
@@ -112,7 +112,7 @@ class Array(numpy.ndarray):
                     raise ValueError("data shape has inconsistent shape "
                                      "(expected (%s), found (%s))"
                                      % (shape, data.shape))
-        obj = super(Array, cls).__new__(cls, shape, dtype)
+        obj = super().__new__(cls, shape, dtype)
         if data is None:
             obj[:] = 0.0
         else:
@@ -211,8 +211,7 @@ class Array(numpy.ndarray):
         else:
             outputs = (None,) * ufunc.nout
 
-        raw_results = super(Array, self).__array_ufunc__(ufunc, method,
-                                                         *args, **kwargs)
+        raw_results = super().__array_ufunc__(ufunc, method, *args, **kwargs)
         if raw_results is NotImplemented:
             return NotImplemented
 
