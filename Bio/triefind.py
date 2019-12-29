@@ -29,9 +29,13 @@ import re
 
 from Bio import BiopythonDeprecationWarning
 import warnings
-warnings.warn("This module has been deprecated. We encourage users to switch "
-              "to alternative libraries implementing a trie data structure, "
-              "for example pygtrie.", BiopythonDeprecationWarning)
+
+warnings.warn(
+    "This module has been deprecated. We encourage users to switch "
+    "to alternative libraries implementing a trie data structure, "
+    "for example pygtrie.",
+    BiopythonDeprecationWarning,
+)
 
 
 def match(string, trie):
@@ -42,7 +46,7 @@ def match(string, trie):
     """
     longest = None
     for i in range(len(string)):
-        substr = string[:i + 1]
+        substr = string[: i + 1]
         if not trie.has_prefix(substr):
             break
         if substr in trie:
@@ -58,7 +62,7 @@ def match_all(string, trie):
     """
     matches = []
     for i in range(len(string)):
-        substr = string[:i + 1]
+        substr = string[: i + 1]
         if not trie.has_prefix(substr):
             break
         if substr in trie:
@@ -72,7 +76,7 @@ def find(string, trie):
     Returns a list of tuples (key, start, end).
     """
     results = []
-    start = 0     # index to start the search
+    start = 0  # index to start the search
     while start < len(string):
         # Look for a match.
         keys = match_all(string[start:], trie)
@@ -96,15 +100,16 @@ def find_words(string, trie):
     _boundary_re = re.compile(r"[%s]+" % re.escape(DEFAULT_BOUNDARY_CHARS))
 
     results = []
-    start = 0     # index of word boundary
+    start = 0  # index of word boundary
     while start < len(string):
         # Look for a match.
         keys = match_all(string[start:], trie)
         for key in keys:
             length = len(key)
             # Make sure it ends at a boundary.
-            if start + length == len(string) or \
-               _boundary_re.match(string[start + length]):
+            if start + length == len(string) or _boundary_re.match(
+                string[start + length]
+            ):
                 results.append((key, start, start + length))
         # Move forward to the next boundary.
         m = _boundary_re.search(string, start)
