@@ -9,12 +9,15 @@ from Bio import BiopythonExperimentalWarning
 
 
 import warnings
-warnings.warn("Bio.Align.substitution_matrices is an experimental module "
-              "which may still undergo significant changes. In particular, "
-              "the location of this module may change, and the Array class "
-              "defined in this module may be moved to other existing or new "
-              "modules in Biopython.",
-              BiopythonExperimentalWarning)
+
+warnings.warn(
+    "Bio.Align.substitution_matrices is an experimental module "
+    "which may still undergo significant changes. In particular, "
+    "the location of this module may change, and the Array class "
+    "defined in this module may be moved to other existing or new "
+    "modules in Biopython.",
+    BiopythonExperimentalWarning,
+)
 
 
 class Array(numpy.ndarray):
@@ -55,9 +58,10 @@ class Array(numpy.ndarray):
                                 single_letters = False
                             alphabet.append(letter)
                     else:
-                        raise ValueError("data array should be 1- or 2- "
-                                         "dimensional (found %d dimensions) "
-                                         "in key" % dims)
+                        raise ValueError(
+                            "data array should be 1- or 2- dimensional "
+                            "(found %d dimensions) in key" % dims
+                        )
             alphabet = sorted(set(alphabet))
             if single_letters:
                 alphabet = "".join(alphabet)
@@ -65,7 +69,7 @@ class Array(numpy.ndarray):
                 alphabet = tuple(alphabet)
             n = len(alphabet)
             if dims == 1:
-                shape = (n, )
+                shape = (n,)
             elif dims == 2:
                 shape = (n, n)
             else:  # dims is None
@@ -92,7 +96,7 @@ class Array(numpy.ndarray):
                 dims = 1
             elif dims not in (1, 2):
                 raise ValueError("dims should be 1 or 2 (found %s)" % str(dims))
-            shape = (n, ) * dims
+            shape = (n,) * dims
         else:
             if dims is None:
                 shape = data.shape
@@ -103,15 +107,17 @@ class Array(numpy.ndarray):
                     if shape[0] != shape[1]:
                         raise ValueError("data array is not square")
                 else:
-                    raise ValueError("data array should be 1- or 2- "
-                                     "dimensional (found %d dimensions) "
-                                     % dims)
+                    raise ValueError(
+                        "data array should be 1- or 2- dimensional "
+                        "(found %d dimensions) " % dims
+                    )
             else:
-                shape = (n, ) * dims
+                shape = (n,) * dims
                 if data.shape != shape:
-                    raise ValueError("data shape has inconsistent shape "
-                                     "(expected (%s), found (%s))"
-                                     % (shape, data.shape))
+                    raise ValueError(
+                        "data shape has inconsistent shape (expected (%s), found (%s))"
+                        % (shape, data.shape)
+                    )
         obj = super().__new__(cls, shape, dtype)
         if data is None:
             obj[:] = 0.0
@@ -293,7 +299,11 @@ class Array(numpy.ndarray):
             return tuple(self)
         elif dims == 2:
             n1, n2 = self.shape
-            return tuple(numpy.ndarray.__getitem__(self, (i1, i2)) for i2 in range(n2) for i1 in range(n1))
+            return tuple(
+                numpy.ndarray.__getitem__(self, (i1, i2))
+                for i2 in range(n2)
+                for i1 in range(n1)
+            )
         else:
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
