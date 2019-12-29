@@ -193,8 +193,9 @@ class SummaryInfo:
             # Get the (un-gapped version of) the sequence's alphabet
             alt = Alphabet._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__):
-                raise ValueError("Alignment contains a sequence with \
-                                an incompatible alphabet.")
+                raise ValueError(
+                    "Alignment contains a sequence with an incompatible alphabet."
+                )
 
         # Check the ambiguous character we are going to use in the consensus
         # is in the alphabet's list of valid letters (if defined).
@@ -497,9 +498,10 @@ class SummaryInfo:
             chars_to_ignore = []
 
         if start < 0 or end > len(self.alignment[0].seq):
-            raise ValueError("Start (%s) and end (%s) are not in the \
-                    range %s to %s"
-                             % (start, end, 0, len(self.alignment[0].seq)))
+            raise ValueError(
+                "Start (%s) and end (%s) are not in the range %s to %s"
+                % (start, end, 0, len(self.alignment[0].seq))
+            )
         # determine random expected frequencies, if necessary
         random_expected = None
         if not e_freq_table:
