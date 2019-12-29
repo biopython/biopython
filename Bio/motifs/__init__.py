@@ -354,9 +354,8 @@ class Motif:
             if sorted(self.alphabet) != ["A", "C", "G", "T"]:
                 # TODO - Should this be a ValueError?
                 raise Exception(
-                    "Setting the background to a single value only "
-                    "works for DNA motifs (in which case the value "
-                    "is interpreted as the GC content"
+                    "Setting the background to a single value only works for DNA motifs"
+                    " (in which case the value is interpreted as the GC content)"
                 )
             self._background["A"] = (1.0 - value) / 2.0
             self._background["C"] = value / 2.0
