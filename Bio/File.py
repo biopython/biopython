@@ -490,7 +490,7 @@ class _IndexedSeqFileDict(_dict_base):
         Python dictionaries provide this method for modifying data in the
         dictionary. This class mimics the dictionary interface but is read only.
         """
-        raise NotImplementedError("An indexed a sequence file doesn't " "support this.")
+        raise NotImplementedError("An indexed a sequence file doesn't support this.")
 
     def copy(self):
         """Would copy a dictionary, but not implemented.
@@ -498,7 +498,7 @@ class _IndexedSeqFileDict(_dict_base):
         Python dictionaries provide this method for modifying data in the
         dictionary. This class mimics the dictionary interface but is read only.
         """
-        raise NotImplementedError("An indexed a sequence file doesn't " "support this.")
+        raise NotImplementedError("An indexed a sequence file doesn't support this.")
 
     def close(self):
         """Close the file handle being used to read the data.
@@ -547,7 +547,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             from Bio import MissingPythonDependencyError
 
             raise MissingPythonDependencyError(
-                "Requires sqlite3, which is " "included Python 2.5+"
+                "Requires sqlite3, which is included Python 2.5+"
             )
         if filenames is not None:
             filenames = list(filenames)  # In case it was a generator
@@ -622,7 +622,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             self._filenames = [
                 row[0]
                 for row in con.execute(
-                    "SELECT name FROM file_data " "ORDER BY file_number;"
+                    "SELECT name FROM file_data ORDER BY file_number;"
                 ).fetchall()
             ]
             if filenames_relative_to_index:
@@ -765,7 +765,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         # print("About to index %i entries" % count)
         try:
             con.execute(
-                "CREATE UNIQUE INDEX IF NOT EXISTS " "key_index ON offset_data(key);"
+                "CREATE UNIQUE INDEX IF NOT EXISTS key_index ON offset_data(key);"
             )
         except _IntegrityError as err:
             self._proxies = random_access_proxies
