@@ -97,13 +97,6 @@ from urllib.parse import urlencode, quote
 from urllib.error import URLError, HTTPError
 
 
-def raise_from(value, from_value):
-    try:
-        raise value from from_value
-    finally:
-        value = None
-
-
 if sys.platform == "win32":
     # Can't use commands.getoutput on Python 2, Unix only/broken:
     # http://bugs.python.org/issue15073
