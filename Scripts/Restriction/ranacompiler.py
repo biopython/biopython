@@ -463,9 +463,7 @@ class DictionaryBuilder:
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = {  # noqa: C404
-                    k: v for k, v in tydct.items() if k in commonattr
-                }
+                tydct = {k: v for k, v in tydct.items() if k in commonattr}
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__["suppl"]:

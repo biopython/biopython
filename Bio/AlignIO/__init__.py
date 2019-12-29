@@ -386,8 +386,6 @@ def parse(handle, format, seq_count=None, alphabet=None):
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-        # TODO: As of Python 3.3, can write "yield from i" instead. See PEP380.
-        # For loop imposes some overhead... wait until we drop Python 2.7 to fix it.
         yield from i
 
 
