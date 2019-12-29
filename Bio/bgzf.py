@@ -221,7 +221,7 @@ import sys
 import zlib
 import struct
 
-from Bio._utils import _as_bytes, _as_string
+from Bio._utils import as_bytes, as_string
 from builtins import open as _open
 
 
