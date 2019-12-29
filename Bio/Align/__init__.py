@@ -586,8 +586,8 @@ class MultipleSeqAlignment:
         # private _append method
         if expected_length is not None and len(record) != expected_length:
             # TODO - Use the following more helpful error, but update unit tests
-            # raise ValueError("New sequence is not of length %i" \
-            #                 % self.get_alignment_length())
+            # raise ValueError("New sequence is not of length %i"
+            #                  % self.get_alignment_length())
             raise ValueError("Sequences must all be the same length")
 
         # Using not self.alphabet.contains(record.seq.alphabet) needs fixing
