@@ -91,11 +91,8 @@ def _binary_to_string_handle(handle):
 # This is to avoid the deprecation warning from open(filename, "rU")
 _universal_read_mode = "r"  # text mode does universal new lines
 
-# On Python 3, this will be a unicode StringIO
-from io import StringIO
-
 # On Python 3 urllib, urllib2, and urlparse were merged:
-from urllib.request import urlopen, Request, urlretrieve, urlparse, urlcleanup
+from urllib.request import urlopen, Request, urlparse, urlcleanup
 from urllib.parse import urlencode, quote
 from urllib.error import URLError, HTTPError
 
