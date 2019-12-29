@@ -560,7 +560,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     for i in range(max_tries):
         try:
             if post:
-                handle = urlopen(cgi, data=options.encode('utf8'))
+                handle = urlopen(cgi, data=options.encode("utf8"))
             else:
                 handle = urlopen(cgi)
         except HTTPError as exception:
@@ -587,10 +587,10 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
             break
 
     subtype = handle.headers.get_content_subtype()
-    if subtype == 'plain':
+    if subtype == "plain":
         url = handle.url
         return io.TextIOWrapper(handle, encoding="utf8")
-    elif subtype == 'xml':
+    elif subtype == "xml":
         return handle
     else:  # unknown subtype; probably binary
         return handle

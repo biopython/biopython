@@ -318,7 +318,7 @@ class DataHandler:
         """Set up the parser and let it parse the XML results."""
         # Expat's parser.ParseFile function only accepts binary data;
         # see also the comment below for Entrez.parse.
-        if handle.read(0) != b'':
+        if handle.read(0) != b"":
             raise TypeError("file should be opened in binary mode")
         try:
             self.parser.ParseFile(handle)
@@ -364,7 +364,7 @@ class DataHandler:
         # this, and to be consistent with parser.ParseFile (which is used in
         # the Entrez.read function above), we require the handle to be in
         # binary mode here as well.
-        if handle.read(0) != b'':
+        if handle.read(0) != b"":
             raise TypeError("file should be opened in binary mode")
         BLOCK = 1024
         while True:
