@@ -265,7 +265,7 @@ class Motif:
         self.name = ""
         if counts is not None and instances is not None:
             raise Exception(
-                ValueError, "Specify either instances or counts, " "don't specify both"
+                ValueError, "Specify either instances or counts, don't specify both"
             )
         elif counts is not None:
             try:
