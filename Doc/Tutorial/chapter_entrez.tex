@@ -336,7 +336,7 @@ KEYWORDS    .
 SOURCE      chloroplast Selenipedium aequinoctiale
   ORGANISM  Selenipedium aequinoctiale
             Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
-            Spermatophyta; Magnoliophyta; Liliopsida; Asparagales; Orchidaceae;
+            Spermatophyta; Magnoliopsida; Liliopsida; Asparagales; Orchidaceae;
             Cypripedioideae; Selenipedium.
 REFERENCE   1  (bases 1 to 1302)
   AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A., Endara,L.,
@@ -617,7 +617,7 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = open("Homo_sapiens.xml")
+>>> handle = open("Homo_sapiens.xml", "b")
 >>> records = Entrez.parse(handle)
 >>> for record in records:
 ...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
@@ -677,7 +677,7 @@ The first case occurs if, for example, you try to parse a Fasta file as if it we
 %doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("NC_005816.fna") # a Fasta file
+>>> handle = open("NC_005816.fna", "rb") # a Fasta file
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
   ...
@@ -748,7 +748,7 @@ In this file, for some reason the tag \verb|<DocsumList>| (and several others) a
 %doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("einfo3.xml")
+>>> handle = open("einfo3.xml", "rb")
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
   ...
@@ -759,7 +759,7 @@ Optionally, you can instruct the parser to skip such tags instead of raising a V
 %doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("einfo3.xml")
+>>> handle = open("einfo3.xml", "rb")
 >>> record = Entrez.read(handle, validate=False)
 >>> handle.close()
 \end{minted}
@@ -1359,7 +1359,7 @@ We can get the lineage directly from this record:
 \begin{minted}{pycon}
 >>> records[0]["Lineage"]
 'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
- Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
+ Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliopsida;
  Liliopsida; Asparagales; Orchidaceae'
 \end{minted}
 

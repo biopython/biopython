@@ -111,13 +111,10 @@ Functions:
 
 import time
 import warnings
-
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
-from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
-
-from Bio._py3k import _binary_to_string_handle, _as_bytes
+import io
+from urllib.error import URLError, HTTPError
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 
 email = None
@@ -563,14 +560,13 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     for i in range(max_tries):
         try:
             if post:
-                handle = _urlopen(cgi, data=_as_bytes(options))
+                handle = urlopen(cgi, data=options.encode('utf8'))
             else:
-                handle = _urlopen(cgi)
-        except _URLError as exception:
+                handle = urlopen(cgi)
+        except HTTPError as exception:
             # Reraise if the final try fails
             if i >= max_tries - 1:
                 raise
-
             # Reraise if the exception is triggered by a HTTP 4XX error
             # indicating some kind of bad request, UNLESS it's specifically a
             # 429 "Too Many Requests" response. NCBI seems to sometimes
@@ -579,20 +575,25 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
             # higher up in this function in place), so the best we can do is
             # treat them as a serverside error and try again after sleeping
             # for a bit.
-            if (
-                isinstance(exception, _HTTPError)
-                and exception.code // 100 == 4
-                and exception.code != 429
-            ):
+            if exception.code // 100 == 4 and exception.code != 429:
                 raise
-
-            # Treat everything else as a transient error and try again after a
-            # brief delay.
+        except URLError as exception:
+            # Reraise if the final try fails
+            if i >= max_tries - 1:
+                raise
+            # Treat as a transient error and try again after a brief delay:
             time.sleep(sleep_between_tries)
         else:
             break
 
-    return _binary_to_string_handle(handle)
+    subtype = handle.headers.get_content_subtype()
+    if subtype == 'plain':
+        url = handle.url
+        return io.TextIOWrapper(handle, encoding="utf8")
+    elif subtype == 'xml':
+        return handle
+    else:  # unknown subtype; probably binary
+        return handle
 
 
 _open.previous = 0
@@ -636,8 +637,8 @@ E-utilities.""",
 
 def _encode_options(ecitmatch, params):
     # Open a handle to Entrez.
-    options = _urlencode(params, doseq=True)
-    # _urlencode encodes pipes, which NCBI expects in ECitMatch
+    options = urlencode(params, doseq=True)
+    # urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
         options = options.replace("%7C", "|")
     return options
