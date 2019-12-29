@@ -295,8 +295,8 @@ class JASPAR5:
         """Get the latest version number for the given base_id (PRIVATE)."""
         cur = self.dbh.cursor()
         cur.execute(
-            """select VERSION from MATRIX where BASE_id = %s
-                       order by VERSION desc limit 1""",
+            "select VERSION from MATRIX where BASE_id = %s order by VERSION"
+            " desc limit 1",
             (base_id,),
         )
 
@@ -323,8 +323,7 @@ class JASPAR5:
         """
         cur = self.dbh.cursor()
         cur.execute(
-            """select id from MATRIX where BASE_id = %s
-                       and VERSION = %s""",
+            "select id from MATRIX where BASE_id = %s and VERSION = %s",
             (base_id, version),
         )
 
@@ -348,8 +347,7 @@ class JASPAR5:
         """Fetch basic motif information (PRIVATE)."""
         cur = self.dbh.cursor()
         cur.execute(
-            """select BASE_ID, VERSION, COLLECTION, NAME from MATRIX
-                       where id = %s""",
+            "select BASE_ID, VERSION, COLLECTION, NAME from MATRIX where id = %s",
             (int_id,),
         )
 
@@ -378,11 +376,7 @@ class JASPAR5:
         motif = jaspar.Motif(matrix_id, name, collection=collection, counts=counts)
 
         # fetch species
-        cur.execute(
-            """select TAX_ID from MATRIX_SPECIES
-                       where id = %s""",
-            (int_id,),
-        )
+        cur.execute("select TAX_ID from MATRIX_SPECIES where id = %s", (int_id,))
         tax_ids = []
         rows = cur.fetchall()
         for row in rows:
@@ -409,11 +403,7 @@ class JASPAR5:
         motif.acc = accs
 
         # fetch remaining annotation as tags from the ANNOTATION table
-        cur.execute(
-            """select TAG, VAL from MATRIX_ANNOTATION
-                       where id = %s""",
-            (int_id,),
-        )
+        cur.execute("select TAG, VAL from MATRIX_ANNOTATION where id = %s", (int_id,))
         rows = cur.fetchall()
         for row in rows:
             attr = row[0]
@@ -433,10 +423,8 @@ class JASPAR5:
             elif attr == "comment":
                 motif.comment = val
             else:
-                """
-                TODO If we were to implement additional abitrary tags
-                motif.tag(attr, val)
-                """
+                # TODO If we were to implement additional abitrary tags
+                # motif.tag(attr, val)
                 pass
 
         return motif
@@ -453,8 +441,7 @@ class JASPAR5:
             base_counts = []
 
             cur.execute(
-                """select val from MATRIX_DATA where ID = %s
-                           and row = %s order by col""",
+                "select val from MATRIX_DATA where ID = %s and row = %s order by col",
                 (int_id, base),
             )
 
