@@ -62,7 +62,7 @@ try:
     import MySQLdb as mdb
 except ImportError:
     raise MissingPythonDependencyError(
-        "Install MySQLdb if you want to use " "Bio.motifs.jaspar.db"
+        "Install MySQLdb if you want to use Bio.motifs.jaspar.db"
     )
 
 from Bio.motifs import jaspar, matrix
@@ -359,7 +359,7 @@ class JASPAR5:
         # we should probably raise an exception
         if not row:
             warnings.warn(
-                "Could not fetch JASPAR motif with internal " "ID = {0}".format(int_id),
+                "Could not fetch JASPAR motif with internal ID = {0}".format(int_id),
                 BiopythonWarning,
             )
             return None
