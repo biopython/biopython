@@ -17,13 +17,14 @@ from ._TCoffee import TCoffeeCommandline
 from ._MSAProbs import MSAProbsCommandline
 
 # Make this explicit, then they show up in the API docs
-__all__ = ("MuscleCommandline",
-           "ClustalwCommandline",
-           "ClustalOmegaCommandline",
-           "PrankCommandline",
-           "MafftCommandline",
-           "DialignCommandline",
-           "ProbconsCommandline",
-           "TCoffeeCommandline",
-           "MSAProbsCommandline",
-           )
+__all__ = (
+    "MuscleCommandline",
+    "ClustalwCommandline",
+    "ClustalOmegaCommandline",
+    "PrankCommandline",
+    "MafftCommandline",
+    "DialignCommandline",
+    "ProbconsCommandline",
+    "TCoffeeCommandline",
+    "MSAProbsCommandline",
+)
