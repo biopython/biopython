@@ -29,8 +29,12 @@ class XMSScanner:
         nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
 
         for column in node.getElementsByTagName("column"):
-            [nucleotide_counts[nucleotide].append(float(nucleotide_count))
-             for nucleotide, nucleotide_count in zip(["A", "C", "G", "T"], self.get_acgt(column))]
+            [
+                nucleotide_counts[nucleotide].append(float(nucleotide_count))
+                for nucleotide, nucleotide_count in zip(
+                    ["A", "C", "G", "T"], self.get_acgt(column)
+                )
+            ]
 
         motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
         motif.name = motif_name
