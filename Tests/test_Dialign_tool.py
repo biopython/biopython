@@ -18,7 +18,7 @@ dialign_exe = None
 if sys.platform == "win32":
     raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("dialign2-2")
     if "not found" not in output and "dialign2-2" in output.lower():
         dialign_exe = "dialign2-2"

@@ -17,7 +17,7 @@ mafft_exe = None
 if sys.platform == "win32":
     raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("mafft -help")
     if "not found" not in output and "MAFFT" in output:
         mafft_exe = "mafft"

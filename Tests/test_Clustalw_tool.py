@@ -61,7 +61,7 @@ if sys.platform == "win32":
             if clustalw_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     # Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
     # command, but this does cause them to quit cleanly.  Otherwise they prompt
     # the user for input (causing a lock up).
