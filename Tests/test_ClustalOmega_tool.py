@@ -29,8 +29,7 @@ try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not clustalo_exe:
