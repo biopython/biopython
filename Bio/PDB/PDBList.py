@@ -43,8 +43,6 @@ import shutil
 import re
 import sys
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import _as_string
 from urllib.request import urlopen
 from urllib.request import urlretrieve
 from urllib.request import urlcleanup
@@ -139,7 +137,7 @@ class PDBList:
             for line in handle:
                 pdb = line.strip()
                 assert len(pdb) == 4
-                answer.append(_as_string(pdb))
+                answer.append(pdb.decode())
         return answer
 
     def get_recent_changes(self):
@@ -176,7 +174,7 @@ class PDBList:
             print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(urlopen(url)) as handle:
             all_entries = [
-                _as_string(line[:4]) for line in handle.readlines()[2:] if len(line) > 4
+                line[:4].decode() for line in handle.readlines()[2:] if len(line) > 4
             ]
         return all_entries
 
@@ -213,7 +211,7 @@ class PDBList:
                     continue
                 pdb = line.split()[2]
                 assert len(pdb) == 4
-                obsolete.append(_as_string(pdb))
+                obsolete.append(pdb.decode())
         return obsolete
 
     def retrieve_pdb_file(

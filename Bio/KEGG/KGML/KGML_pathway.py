@@ -27,8 +27,6 @@ from itertools import chain
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
-from Bio._py3k import _as_string
-
 
 # Pathway
 class Pathway:
@@ -87,7 +85,7 @@ class Pathway:
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
-        rough_xml = header + _as_string(ET.tostring(self.element, "utf-8"))
+        rough_xml = header + ET.tostring(self.element, "utf-8").decode()
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
 

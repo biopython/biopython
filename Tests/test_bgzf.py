@@ -13,7 +13,7 @@ import gzip
 import os
 from random import shuffle
 
-from Bio._py3k import _as_bytes, _as_string
+from Bio._py3k import _as_bytes
 
 from Bio import bgzf
 
@@ -128,7 +128,9 @@ class BgzfTests(unittest.TestCase):
             if "b" in mode:
                 old = _as_bytes(old)
             else:
-                old = _as_string(old)
+                if isinstance(old, bytes):
+                    import codecs
+                    old = codecs.latin_1_decode(old)[0]
             h.close()
 
             for cache in [1, 10]:
@@ -157,7 +159,9 @@ class BgzfTests(unittest.TestCase):
             if "b" in mode:
                 old = _as_bytes(old)
             else:
-                old = _as_string(old)
+                if isinstance(old, bytes):
+                    import codecs
+                    old = codecs.latin_1_decode(old)[0]
             h.close()
 
             for cache in [1, 10]:
