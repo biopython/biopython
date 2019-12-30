@@ -26,27 +26,6 @@ def _bytes_bytearray_to_str(s):
     return s
 
 
-def _as_unicode(s):
-    """Turn byte string or unicode string into a unicode string (PRIVATE)."""
-    if isinstance(s, str):
-        return s
-    # Assume it is a bytes string
-    # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-    return codecs.latin_1_decode(s)[0]
-
-
-def _as_bytes(s):
-    """Turn byte string or unicode string into a bytes string (PRIVATE).
-
-    The Python 2 version returns a (byte) string.
-    """
-    if isinstance(s, bytes):
-        return s
-    # Assume it is a unicode string
-    # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-    return codecs.latin_1_encode(s)[0]
-
-
 import io
 import locale
 

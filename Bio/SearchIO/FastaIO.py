@@ -107,7 +107,6 @@ The following object attributes are provided:
 
 import re
 
-from Bio._py3k import _as_bytes
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -122,7 +121,7 @@ _RE_FLAVS = re.compile(r"t?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search")
 # regex for sequence ID and length ~ deals with both \n and \r\n
 _PTR_ID_DESC_SEQLEN = r">>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\s*$"
 _RE_ID_DESC_SEQLEN = re.compile(_PTR_ID_DESC_SEQLEN)
-_RE_ID_DESC_SEQLEN_IDX = re.compile(_as_bytes(_PTR_ID_DESC_SEQLEN))
+_RE_ID_DESC_SEQLEN_IDX = re.compile(_PTR_ID_DESC_SEQLEN.encode())
 # regex for qresult, hit, or hsp attribute value
 _RE_ATTR = re.compile(r"^; [a-z]+(_[ \w-]+):\s+(.*)$")
 # regex for capturing excess start and end sequences in alignments

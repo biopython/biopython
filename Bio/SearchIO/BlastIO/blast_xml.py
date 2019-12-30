@@ -19,8 +19,6 @@ from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from Bio._py3k import _as_bytes
-
 __all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
 
 
@@ -617,8 +615,8 @@ class BlastXmlIndexer(SearchIndexer):
             except AttributeError:
                 # use the fallback values
                 assert re.search(re_desc_end, block)
-                qstart_desc = _as_bytes(self._fallback["description"])
-                qstart_id = _as_bytes(self._fallback["id"])
+                qstart_desc = self._fallback["description"].encode()
+                qstart_id = self._fallback["id"].encode()
             if qstart_id.startswith(blast_id_mark):
                 qstart_id = qstart_desc.split(b" ", 1)[0]
             yield qstart_id.decode(), start_offset, len(block)
