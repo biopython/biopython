@@ -112,7 +112,10 @@ def parse(handle):
             record.comments += line
             primer = None
         elif line.startswith("#"):
-            if line.strip() != "#                      Start  Len   Tm     GC%   Sequence":
+            if (
+                line.strip()
+                != "#                      Start  Len   Tm     GC%   Sequence"
+            ):
                 record.comments += line
         elif not line.strip():
             pass
