@@ -47,9 +47,6 @@ def _as_bytes(s):
     return codecs.latin_1_encode(s)[0]
 
 
-_as_string = _as_unicode
-
-
 import io
 import locale
 
