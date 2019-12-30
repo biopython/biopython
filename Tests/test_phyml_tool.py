@@ -24,12 +24,7 @@ try:
     output = getoutput(exe_name + " --version")
     if "not found" not in output and ("20" in output or "PhyML" in output):
         phyml_exe = exe_name
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
-    # Python 2.6 or 2.7 on Windows XP:
-    # WindowsError: [Error 2] The system cannot find the file specified
-    # Python 3.3 or 3.4 on Windows XP:
-    # FileNotFoundError: [WinError 2] The system cannot find the file specified
+except FileNotFoundError:
     pass
 
 if not phyml_exe:

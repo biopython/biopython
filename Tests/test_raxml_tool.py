@@ -18,8 +18,7 @@ try:
     output = getoutput("raxmlHPC -v")
     if "not found" not in output and "This is RAxML" in output:
         raxml_exe = "raxmlHPC"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not raxml_exe:
