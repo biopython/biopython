@@ -15,7 +15,7 @@ from Bio.PDB import PDBParser, ResidueDepth
 from Bio import MissingExternalDependencyError
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
-from Bio._py3k import getoutput
+from subprocess import getoutput
 msms_exe = None
 try:
     output = getoutput("msms -h")

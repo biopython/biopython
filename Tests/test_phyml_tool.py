@@ -9,7 +9,7 @@ import sys
 import os
 import unittest
 
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline

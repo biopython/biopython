@@ -14,7 +14,7 @@ from Bio import MissingExternalDependencyError
 
 raxml_exe = None
 try:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("raxmlHPC -v")
     if "not found" not in output and "This is RAxML" in output:
         raxml_exe = "raxmlHPC"

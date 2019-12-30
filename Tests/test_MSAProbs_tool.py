@@ -14,7 +14,7 @@ from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Align.Applications import MSAProbsCommandline
 from Bio.Application import ApplicationError
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 #################################################################
 

@@ -43,7 +43,7 @@ if sys.platform == "win32":
             if bwa_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("bwa")
 
     # Since "not found" may be in another language, try and be sure this is

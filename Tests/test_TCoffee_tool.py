@@ -18,7 +18,7 @@ if sys.platform == "win32":
     raise MissingExternalDependencyError(
         "Testing TCOFFEE on Windows not supported yet")
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("t_coffee -version")
     if "not found" not in output \
        and ("t_coffee" in output.lower()
