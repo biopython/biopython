@@ -129,7 +129,7 @@ class EntrezOnlineCase(unittest.TestCase):
         """Test Entrez into SeqIO.read from URL."""
         handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb",
                                retmode="text")
-        url = handle.buffer.url
+        url = handle.url
         self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
         self.assertIn(URL_TOOL, url)
         self.assertIn(URL_EMAIL, url)
@@ -145,7 +145,7 @@ class EntrezOnlineCase(unittest.TestCase):
         """Test Entrez into Medline.read from URL."""
         handle = Entrez.efetch(db="pubmed", id="19304878", rettype="medline",
                                retmode="text")
-        url = handle.buffer.url
+        url = handle.url
         self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
         self.assertIn(URL_TOOL, url)
         self.assertIn(URL_EMAIL, url)
@@ -237,7 +237,7 @@ class EntrezOnlineCase(unittest.TestCase):
             "author_name": "mann bj", "key": "citation_1"
         }
         handle = Entrez.ecitmatch(db="pubmed", bdata=[citation])
-        url = handle.buffer.url
+        url = handle.url
         self.assertIn("retmode=xml", url)
         result = handle.read()
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
@@ -248,7 +248,7 @@ class EntrezOnlineCase(unittest.TestCase):
         """Test correct handling of encodings in Entrez.efetch."""
         # See issue #1402 in case any encoding issues occur
         handle = Entrez.efetch(db="gds", id="200079209")
-        url = handle.buffer.url
+        url = handle.url
         self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
         self.assertIn(URL_TOOL, url)
         self.assertIn(URL_EMAIL, url)

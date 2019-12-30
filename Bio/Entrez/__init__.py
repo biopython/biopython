@@ -589,11 +589,9 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     subtype = handle.headers.get_content_subtype()
     if subtype == "plain":
         url = handle.url
-        return io.TextIOWrapper(handle, encoding="utf8")
-    elif subtype == "xml":
-        return handle
-    else:  # unknown subtype; probably binary
-        return handle
+        handle = io.TextIOWrapper(handle, encoding="utf8")
+        handle.url = url
+    return handle
 
 
 _open.previous = 0
