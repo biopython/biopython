@@ -1174,7 +1174,7 @@ class Est2GenomeCommandline(_EmbossCommandLine):
             _Option(["-splice", "splice"], "Use donor and acceptor splice sites."),
             _Option(
                 ["-mode", "mode"],
-                "This determines the comparion mode. 'both', 'forward' " "'reverse'",
+                "This determines the comparion mode. 'both', 'forward', or 'reverse'",
             ),
             _Option(
                 ["-best", "best"],
