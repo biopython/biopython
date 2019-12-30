@@ -23,6 +23,11 @@ in this case a remote network connection, and provides methods like
 also "What the heck is a handle?" in the Biopython Tutorial and
 Cookbook: http://biopython.org/DIST/docs/tutorial/Tutorial.html
 http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+The handle returned by these functions can be either in text mode or
+in binary mode, depending on the data requested and the results
+returned by NCBI Entrez. Typically, XML data will be in binary mode
+while other data will be in text mode, as required by the downstream
+parser to parse the data.
 
 Unlike a handle to a file on disk from the ``open(filename)`` function,
 which has a ``.name`` attribute giving the filename, the handles from
@@ -79,6 +84,7 @@ Functions:
       input citation strings.
 
     - read         Parses the XML results returned by any of the above functions.
+      Alternatively, the XML data can be read from a file opened in binary mode.
       Typical usage is:
 
           >>> from Bio import Entrez
@@ -461,6 +467,19 @@ def read(handle, validate=True, escape=False):
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
 
+    The handle must be in binary mode. This allows the parser to detect the
+    encoding from the XML file, and to use it to convert all text in the XML
+    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
+    Entrez will automatically return XML data in binary mode. For files,
+    please use mode "rb" when opening the file, as in
+
+        >>> from Bio import Entrez
+        >>> handle = open("Entrez/esearch1.xml", "rb")  # opened in binary mode
+        >>> record = Entrez.read(handle)
+        >>> print(record['QueryTranslation'])
+        biopython[All Fields]
+        >>> handle.close()
+
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
     are not represented in the DTD. If validate is False, the parser will
@@ -498,6 +517,22 @@ def parse(handle, validate=True, escape=False):
     Most XML files returned by NCBI's Entrez Utilities can be parsed by
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
+
+    The handle must be in binary mode. This allows the parser to detect the
+    encoding from the XML file, and to use it to convert all text in the XML
+    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
+    Entrez will automatically return XML data in binary mode. For files,
+    please use mode "rb" when opening the file, as in
+
+        >>> from Bio import Entrez
+        >>> handle = open("Entrez/pubmed1.xml", "rb")  # opened in binary mode
+        >>> records = Entrez.parse(handle)
+        >>> for record in records:
+        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...
+        Social justice (San Francisco, Calif.)
+        Biochimica et biophysica acta
+        >>> handle.close()
 
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
