@@ -24,23 +24,19 @@ class Structure(Entity):
 
     def get_models(self):
         """Return models."""
-        for m in self:
-            yield m
+        yield from self
 
     def get_chains(self):
         """Return chains from models."""
         for m in self.get_models():
-            for c in m:
-                yield c
+            yield from m
 
     def get_residues(self):
         """Return residues from chains."""
         for c in self.get_chains():
-            for r in c:
-                yield r
+            yield from c
 
     def get_atoms(self):
         """Return atoms from residue."""
         for r in self.get_residues():
-            for a in r:
-                yield a
+            yield from r

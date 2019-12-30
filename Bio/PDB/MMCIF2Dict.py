@@ -121,7 +121,6 @@ class MMCIF2Dict(dict):
                     token_buffer.append(line)
                 yield "\n".join(token_buffer)
             else:
-                for token in self._splitline(line.strip()):
-                    yield token
+                yield from self._splitline(line.strip())
         if empty:
             raise ValueError("Empty file.")

@@ -997,11 +997,9 @@ class FeatureLocation:
         [9, 8, 7, 6, 5]
         """
         if self.strand == -1:
-            for i in range(self._end - 1, self._start - 1, -1):
-                yield i
+            yield from range(self._end - 1, self._start - 1, -1)
         else:
-            for i in range(self._start, self._end):
-                yield i
+            yield from range(self._start, self._end)
 
     def __eq__(self, other):
         """Implement equality by comparing all the location attributes."""
@@ -1365,8 +1363,7 @@ class CompoundLocation:
     def __iter__(self):
         """Iterate over the parent positions within the CompoundLocation object."""
         for loc in self.parts:
-            for pos in loc:
-                yield pos
+            yield from loc
 
     def __eq__(self, other):
         """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation."""

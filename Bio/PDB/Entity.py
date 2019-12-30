@@ -51,8 +51,7 @@ class Entity:
 
     def __iter__(self):
         """Iterate over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     # Generic id-based comparison methods considers all parents as well as children
     # Works for all Entities - Atoms have comparable custom operators
@@ -228,8 +227,7 @@ class Entity:
 
     def get_iterator(self):
         """Return iterator over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     def get_list(self):
         """Return a copy of the list of children."""

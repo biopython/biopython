@@ -240,8 +240,7 @@ class BlastXmlParser:
 
     def __iter__(self):
         """Iterate over BlastXmlParser object yields query results."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _parse_preamble(self):
         """Parse all tag data prior to the first query result (PRIVATE)."""
