@@ -142,9 +142,8 @@ We recommend using the pre-compiled binary wheels available on PyPI using::
 
     pip install biopython
 
-However, if you need to compile Biopython yourself, the following are
-required at compile time - unless you are using Jython (support for which is
-deprecated).
+However, if you need to compile Biopython yourself, the following are required
+at compile time:
 
 - Python including development header files like ``python.h``, which on Linux
   are often not installed by default (trying looking for and installing a
@@ -167,8 +166,8 @@ Now change directory to the Biopython source code folder and run::
     python setup.py test
     sudo python setup.py install
 
-Substitute ``python`` with your specific version, for example ``python3``,
-``pypy`` or ``jython``.
+Substitute ``python`` with your specific version if required, for example
+``python3``, or ``pypy3``.
 
 To exlude tests that require an internet connection (and which may take a long
 time), use the ``--offline`` option::
