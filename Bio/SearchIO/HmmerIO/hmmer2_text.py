@@ -7,7 +7,6 @@
 
 import re
 
-from Bio._py3k import _as_bytes
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment

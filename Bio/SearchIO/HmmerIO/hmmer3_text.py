@@ -7,7 +7,6 @@
 
 import re
 
-from Bio._py3k import _as_bytes
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -412,7 +411,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(_QRE_ID_LEN_PTN))
+        regex_id = re.compile(_QRE_ID_LEN_PTN.encode())
 
         while True:
             line = read_forward(handle)

@@ -221,7 +221,6 @@ import sys
 import zlib
 import struct
 
-from Bio._py3k import _as_bytes
 from builtins import open as _open
 
 
@@ -783,7 +782,8 @@ class BgzfWriter:
     def write(self, data):
         """Write method for the class."""
         # TODO - Check bytes vs unicode
-        data = _as_bytes(data)
+        if isinstance(data, str):
+            data = data.encode()
         # block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:

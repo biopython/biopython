@@ -13,8 +13,6 @@ import gzip
 import os
 from random import shuffle
 
-from Bio._py3k import _as_bytes
-
 from Bio import bgzf
 
 
@@ -126,7 +124,9 @@ class BgzfTests(unittest.TestCase):
                 h = open(old_file, mode)
             old = h.read()
             if "b" in mode:
-                old = _as_bytes(old)
+                if isinstance(old, str):
+                    import codecs
+                    old = codecs.latin_1_encode(old)[0]
             else:
                 if isinstance(old, bytes):
                     import codecs
@@ -157,7 +157,9 @@ class BgzfTests(unittest.TestCase):
             # Seems gzip can return bytes even if mode="r",
             # perhaps a bug in Python 3.2?
             if "b" in mode:
-                old = _as_bytes(old)
+                if isinstance(old, str):
+                    import codecs
+                    old = codecs.latin_1_encode(old)[0]
             else:
                 if isinstance(old, bytes):
                     import codecs

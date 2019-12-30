@@ -33,7 +33,7 @@ http://soapy.sourceforge.net/
 
 
 import time
-from Bio._py3k import _binary_to_string_handle, _as_bytes
+from Bio._py3k import _binary_to_string_handle
 
 # Importing these functions with leading underscore as not intended for reuse
 from urllib.request import urlopen
@@ -354,7 +354,7 @@ def _open(url, post=None):
 
     # print(url)
     if post:
-        handle = urlopen(url, _as_bytes(post))
+        handle = urlopen(url, post.encode())
     else:
         handle = urlopen(url)
 
