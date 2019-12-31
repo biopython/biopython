@@ -5,8 +5,6 @@
 
 """Tests for Muscle tool."""
 
-from Bio._py3k import _universal_read_mode
-
 import os
 import sys
 import subprocess
@@ -383,7 +381,7 @@ class SimpleAlignTest(unittest.TestCase):
         child.stdout.close()
         child.stderr.close()
         del child
-        handle = open(output_html, _universal_read_mode)
+        handle = open(output_html)
         html = handle.read().strip().upper()
         handle.close()
         self.assertTrue(html.startswith("<HTML"))
