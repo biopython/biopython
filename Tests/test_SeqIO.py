@@ -133,18 +133,32 @@ class TestZipped(unittest.TestCase):
         """Testing FASTQ with gzip."""
         with gzip.open("Quality/example.fastq.gz", "rt") as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
+        with gzip.open("Quality/example.fastq.gz") as handle:
+            with self.assertRaisesRegex(
+                ValueError, "Is this handle in binary mode not text mode"
+            ):
+                list(SeqIO.parse(handle, "fastq"))
 
     def test_gzip_fasta(self):
         """Testing FASTA with gzip."""
         with gzip.open("Fasta/flowers.pro.gz", "rt") as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fasta"))))
+        with gzip.open("Fasta/flowers.pro.gz") as handle:
+            with self.assertRaisesRegex(
+                ValueError, "Is this handle in binary mode not text mode"
+            ):
+                list(SeqIO.parse(handle, "fasta"))
 
     def test_gzip_genbank(self):
         """Testing GenBank with gzip."""
         # BGZG files are still GZIP files
         with gzip.open("GenBank/cor6_6.gb.bgz", "rt") as handle:
             self.assertEqual(6, len(list(SeqIO.parse(handle, "gb"))))
-
+        with gzip.open("GenBank/cor6_6.gb.bgz") as handle:
+            with self.assertRaisesRegex(
+                ValueError, "Is this handle in binary mode not text mode"
+            ):
+                list(SeqIO.parse(handle, "gb"))
 
 class TestSeqIO(unittest.TestCase):
     def setUp(self):
