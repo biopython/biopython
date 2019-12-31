@@ -49,9 +49,9 @@ else:
     # Since "not found" may be in another language, try and be sure this is
     # really the bwa tool's output
     bwa_found = False
-    if "not found" not in output and "bwa" in output \
-            and "alignment via Burrows-Wheeler transformation" in output:
-        bwa_exe = "bwa"
+    if "not found" not in output and "not recognized" not in output:
+        if "bwa" in output and "alignment via Burrows-Wheeler transformation" in output:
+            bwa_exe = "bwa"
     skip_aln_tests = False
     aln_output = getoutput("bwa aln")
     if "unrecognized" in aln_output:

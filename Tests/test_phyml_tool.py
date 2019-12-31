@@ -22,8 +22,9 @@ phyml_exe = None
 exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
 try:
     output = getoutput(exe_name + " --version")
-    if "not found" not in output and ("20" in output or "PhyML" in output):
-        phyml_exe = exe_name
+    if "not found" not in output and "not recognized" not in output:
+        if "20" in output or "PhyML" in output:
+            phyml_exe = exe_name
 except FileNotFoundError:
     pass
 

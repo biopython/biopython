@@ -16,8 +16,9 @@ raxml_exe = None
 try:
     from subprocess import getoutput
     output = getoutput("raxmlHPC -v")
-    if "not found" not in output and "This is RAxML" in output:
-        raxml_exe = "raxmlHPC"
+    if "not found" not in output and "not recognized" not in output:
+        if "This is RAxML" in output:
+            raxml_exe = "raxmlHPC"
 except FileNotFoundError:
     pass
 

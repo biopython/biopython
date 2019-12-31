@@ -20,8 +20,9 @@ if sys.platform == "win32":
 else:
     from subprocess import getoutput
     output = getoutput("probcons")
-    if "not found" not in output and "probcons" in output.lower():
-        probcons_exe = "probcons"
+    if "not found" not in output and "not recognized" not in output:
+        if "probcons" in output.lower():
+            probcons_exe = "probcons"
 
 if not probcons_exe:
     raise MissingExternalDependencyError(

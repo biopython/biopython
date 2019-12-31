@@ -20,10 +20,9 @@ if sys.platform == "win32":
 else:
     from subprocess import getoutput
     output = getoutput("t_coffee -version")
-    if "not found" not in output \
-       and ("t_coffee" in output.lower()
-            or "t-coffee" in output.lower()):
-        t_coffee_exe = "t_coffee"
+    if "not found" not in output and "not recognized" not in output:
+        if "t_coffee" in output.lower() or "t-coffee" in output.lower():
+            t_coffee_exe = "t_coffee"
 
 if not t_coffee_exe:
     raise MissingExternalDependencyError(
