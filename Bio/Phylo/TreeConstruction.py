@@ -12,12 +12,11 @@ import copy
 from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
-from Bio import _py3k
 
 
 def _is_numeric(x):
     """Return True if is numeric."""
-    return _py3k._is_int_or_long(x) or isinstance(x, (float, complex))
+    return isinstance(x, (float, complex, int))
 
 
 class _Matrix:

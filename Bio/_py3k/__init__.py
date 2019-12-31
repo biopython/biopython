@@ -50,14 +50,6 @@ def _as_bytes(s):
 _as_string = _as_unicode
 
 
-def _is_int_or_long(i):
-    """Check if the value is an integer (PRIVATE).
-
-    Note there are no longs on Python 3.
-    """
-    return isinstance(i, int)
-
-
 import io
 import locale
 
