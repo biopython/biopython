@@ -37,7 +37,7 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 # Importing these functions with leading underscore as not intended for reuse
 from urllib.request import urlopen as _urlopen
-from Bio._py3k import quote as _quote
+from urllib.parse import quote as _quote
 
 
 # Constant
