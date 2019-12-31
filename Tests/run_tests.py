@@ -232,12 +232,12 @@ def main(argv):
             import requires_internet
             requires_internet.check.available = False
             # Monkey patch for urlopen()
-            import Bio._py3k
+            import urllib
 
             def dummy_urlopen(url):
                 raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
 
-            Bio._py3k.urlopen = dummy_urlopen
+            urllib.urlopen = dummy_urlopen
 
         if opt == "-v" or opt == "--verbose":
             verbosity = 2

@@ -45,7 +45,7 @@ import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
 
 # Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
 
 # The following four classes are used to add a member .attributes to integers,

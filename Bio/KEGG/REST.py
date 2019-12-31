@@ -29,7 +29,7 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 """
 
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen as _urlopen
 from Bio._py3k import _binary_to_string_handle
 
 

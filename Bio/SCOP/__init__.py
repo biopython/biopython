@@ -943,7 +943,7 @@ def _open(cgi, params=None, get=1):
     that describes whether a GET should be used.
 
     """
-    from Bio._py3k import urlopen, urlencode
+    from urllib.request import urlopen, urlencode
 
     # Open a handle to SCOP.
     if params is None:

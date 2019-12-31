@@ -113,7 +113,7 @@ import time
 import warnings
 
 # Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
 

@@ -32,7 +32,7 @@ except ImportError:
 
     raise MissingPythonDependencyError("Install pillow if you want to use KGML_vis.")
 
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen as _urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 

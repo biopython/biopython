@@ -503,7 +503,7 @@ class Motif:
             'color4': '',
 
         """
-        from Bio._py3k import urlopen, urlencode, Request
+        from urllib.request import urlopen, urlencode, Request
 
         if set(self.alphabet) == set("ACDEFGHIKLMNPQRSTVWY"):
             alpha = "alphabet_protein"
