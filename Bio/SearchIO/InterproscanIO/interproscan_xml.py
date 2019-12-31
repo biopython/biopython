@@ -43,8 +43,7 @@ class InterproscanXmlParser:
 
     def __iter__(self):
         """Iterate qresults."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _parse_header(self):
         """Parse the header for the InterProScan version (PRIVATE)."""
