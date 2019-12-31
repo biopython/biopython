@@ -462,8 +462,7 @@ class Writer:
             for predicate, obj in edge_attributes:
                 yield (nUri(edge_uri), predicate, obj)
 
-        for stmt in statements:
-            yield stmt
+        yield from statements
 
         try:
             clade_attributes = clade.attributes
@@ -475,5 +474,4 @@ class Writer:
 
         if not clade.is_terminal():
             for new_clade in clade.clades:
-                for stmt in self.process_clade(new_clade, parent=clade, root=False):
-                    yield stmt
+                yield from self.process_clade(new_clade, parent=clade, root=False)

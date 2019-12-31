@@ -443,8 +443,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
     # Override parent class __iter__ method
     def __iter__(self):
         """Iterate through disordered atoms."""
-        for i in self.disordered_get_list():
-            yield i
+        yield from self.disordered_get_list()
 
     def __repr__(self):
         """Return disordered atom identifier."""

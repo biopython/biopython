@@ -45,8 +45,7 @@ class Hmmer3TextParser:
 
     def __iter__(self):
         """Iterate over query results."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _read_until(self, bool_func):
         """Read the file handle until the given function returns True (PRIVATE)."""

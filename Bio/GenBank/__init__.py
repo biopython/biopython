@@ -435,8 +435,7 @@ def _split_compound_loc(compound_loc):
             yield compound_loc
     else:
         # Easy case
-        for part in compound_loc.split(","):
-            yield part
+        yield from compound_loc.split(",")
 
 
 class Iterator:
