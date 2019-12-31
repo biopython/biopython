@@ -31,7 +31,7 @@ class GeneralTests(unittest.TestCase):
         """Test parsing closed handle fails gracefully."""
         handle = open("Entrez/einfo1.xml", "rb")
         handle.close()
-        self.assertRaises(IOError, Entrez.read, handle)
+        self.assertRaises(ValueError, Entrez.read, handle)
 
     def test_bytes_handle(self):
         """Test parsing a handle opened in binary mode."""
