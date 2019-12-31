@@ -68,14 +68,14 @@ else:
     output = getoutput("clustalw2 --version")
     # Since "not found" may be in another language, try and be sure this is
     # really the clustalw tool's output
-    if "not found" not in output and "CLUSTAL" in output \
-       and "Multiple Sequence Alignments" in output:
-        clustalw_exe = "clustalw2"
+    if "not found" not in output and "not recognized" not in output:
+        if "CLUSTAL" in output and "Multiple Sequence Alignments" in output:
+            clustalw_exe = "clustalw2"
     if not clustalw_exe:
         output = getoutput("clustalw --version")
-        if "not found" not in output and "CLUSTAL" in output \
-           and "Multiple Sequence Alignments" in output:
-            clustalw_exe = "clustalw"
+        if "not found" not in output and "not recognized" not in output:
+            if "CLUSTAL" in output and "Multiple Sequence Alignments" in output:
+                clustalw_exe = "clustalw"
 
 if not clustalw_exe:
     raise MissingExternalDependencyError(
