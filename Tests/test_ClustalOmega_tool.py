@@ -11,7 +11,7 @@ import sys
 import os
 import unittest
 
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
@@ -29,8 +29,7 @@ try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not clustalo_exe:

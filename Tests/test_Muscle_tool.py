@@ -49,13 +49,13 @@ if sys.platform == "win32":
         if muscle_exe:
             break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("muscle -version")
     # Since "not found" may be in another language, try and be sure this is
     # really the MUSCLE tool's output
-    if "not found" not in output and "MUSCLE" in output \
-       and "Edgar" in output:
-        muscle_exe = "muscle"
+    if "not found" not in output and "not recognized" not in output:
+        if "MUSCLE" in output and "Edgar" in output:
+            muscle_exe = "muscle"
 
 if not muscle_exe:
     raise MissingExternalDependencyError(

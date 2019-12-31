@@ -17,10 +17,11 @@ mafft_exe = None
 if sys.platform == "win32":
     raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("mafft -help")
-    if "not found" not in output and "MAFFT" in output:
-        mafft_exe = "mafft"
+    if "not found" not in output and "not recognized" not in output:
+        if "MAFFT" in output:
+            mafft_exe = "mafft"
 if not mafft_exe:
     raise MissingExternalDependencyError(
         "Install MAFFT if you want to use the Bio.Align.Applications wrapper.")

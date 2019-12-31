@@ -24,13 +24,6 @@ from io import StringIO
 
 from Bio._py3k import _universal_read_mode
 
-try:
-    # Defined on Python 3
-    FileNotFoundError
-except NameError:
-    # Python 2 does not have this,
-    FileNotFoundError = IOError
-
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToRandomAccess
