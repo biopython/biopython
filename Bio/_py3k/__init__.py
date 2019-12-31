@@ -92,7 +92,7 @@ def _binary_to_string_handle(handle):
 _universal_read_mode = "r"  # text mode does universal new lines
 
 # On Python 3 urllib, urllib2, and urlparse were merged:
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError
 
 
 if sys.platform == "win32":

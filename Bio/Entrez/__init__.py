@@ -115,7 +115,7 @@ import warnings
 # Importing these functions with leading underscore as not intended for reuse
 from urllib.request import urlopen as _urlopen
 from urllib.parse import urlencode as _urlencode
-from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
+from urllib.error import URLError as _URLError, HTTPError as _HTTPError
 
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
