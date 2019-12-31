@@ -600,7 +600,7 @@ class Commandline:
                     valued_indices = [
                         (n - 1, n, n + 1)
                         for n in range(len(options))
-                        if options[n] == "=" and n != 0 and n != len((options))
+                        if options[n] == "=" and n != 0 and n != len(options)
                     ]
                     indices = []
                     for sl in valued_indices:
@@ -691,7 +691,7 @@ class Nexus:
             with File.as_handle(input, "rU") as fp:
                 file_contents = fp.read()
                 self.filename = getattr(fp, "name", "Unknown_nexus_file")
-        except (TypeError, IOError, AttributeError):
+        except (TypeError, OSError, AttributeError):
             # 2. Assume we have a string from a fh.read()
             if isinstance(input, str):
                 file_contents = input

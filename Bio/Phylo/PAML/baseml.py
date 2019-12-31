@@ -33,7 +33,7 @@ class Baseml(Paml):
         Paml.__init__(self, alignment, working_dir, out_file)
         if tree is not None:
             if not os.path.exists(tree):
-                raise IOError("The specified tree file does not exist.")
+                raise FileNotFoundError("The specified tree file does not exist.")
         self.tree = tree
         self.ctl_file = "baseml.ctl"
         self._options = {
@@ -104,7 +104,7 @@ class Baseml(Paml):
         """Parse a control file and load the options into the Baseml instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
-            raise IOError("File not found: %r" % ctl_file)
+            raise FileNotFoundError("File not found: %r" % ctl_file)
         else:
             with open(ctl_file) as ctl_handle:
                 for line in ctl_handle:
@@ -177,7 +177,7 @@ class Baseml(Paml):
         if self.tree is None:
             raise ValueError("Tree file not specified.")
         if not os.path.exists(self.tree):
-            raise IOError("The specified tree file does not exist.")
+            raise FileNotFoundError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
             return read(self.out_file)
@@ -188,7 +188,7 @@ def read(results_file):
     """Parse a BASEML results file."""
     results = {}
     if not os.path.exists(results_file):
-        raise IOError("Results file does not exist.")
+        raise FileNotFoundError("Results file does not exist.")
     with open(results_file) as handle:
         lines = handle.readlines()
     if not lines:

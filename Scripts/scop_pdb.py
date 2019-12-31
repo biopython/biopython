@@ -157,7 +157,7 @@ def main():
                         seqMap.getAtoms(f, out_handle)
                     finally:
                         f.close()
-                except (IOError, KeyError, RuntimeError) as e:
+                except (OSError, KeyError, RuntimeError) as e:
                     sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
             finally:
                 out_handle.close()

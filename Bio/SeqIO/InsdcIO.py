@@ -1142,7 +1142,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write((" %s" % data[index : index + self.LETTERS_PER_BLOCK]))
+                handle.write(" %s" % data[index : index + self.LETTERS_PER_BLOCK])
             handle.write(
                 str((line_number + 1) * self.LETTERS_PER_LINE).rjust(
                     self.POSITION_PADDING

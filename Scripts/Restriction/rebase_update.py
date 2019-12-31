@@ -46,7 +46,7 @@ def get_files():
         try:
             urlretrieve(file, filename)
             urlcleanup()
-        except IOError as e:
+        except OSError as e:
             print(e)
             print(
                 "Download of Rebase files failed. Please download the files "

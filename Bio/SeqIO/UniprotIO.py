@@ -528,7 +528,7 @@ class Parser:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
                 else:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            seq = "".join((element.text.split()))
+            seq = "".join(element.text.split())
             self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
 
         # ============================================#

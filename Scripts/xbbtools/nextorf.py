@@ -186,7 +186,7 @@ class NextOrf:
                             start_site = start_site + f - 1
                         if codon == "XXX":
                             stop = start_site + 3 * (
-                                (int((stop - 1) - start_site) // 3)
+                                int((stop - 1) - start_site) // 3
                             )
                         s = seq[start_site - 1 : stop]
                         CDS.append((start_site, stop, length, s, strand * f))
