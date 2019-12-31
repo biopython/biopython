@@ -47,7 +47,7 @@ import sys
 from Bio._py3k import _as_string
 from urllib.request import urlopen as _urlopen
 from urllib.request import urlretrieve as _urlretrieve
-from Bio._py3k import urlcleanup as _urlcleanup
+from urllib.request import urlcleanup as _urlcleanup
 
 
 class PDBList:
