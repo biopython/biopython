@@ -20,7 +20,7 @@ import warnings
 from io import StringIO
 from Bio._py3k import _as_string, _as_bytes
 from urllib.request import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
+from urllib.parse import urlencode as _urlencode
 from urllib.request import Request as _Request
 
 from Bio import BiopythonWarning

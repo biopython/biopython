@@ -7,7 +7,7 @@
 
 # Importing these functions with leading underscore as not intended for reuse
 from urllib.request import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
+from urllib.parse import urlencode as _urlencode
 
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
