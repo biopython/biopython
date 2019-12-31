@@ -160,6 +160,7 @@ class TestZipped(unittest.TestCase):
             ):
                 list(SeqIO.parse(handle, "gb"))
 
+
 class TestSeqIO(unittest.TestCase):
     def setUp(self):
         self.addTypeEqualityFunc(SeqRecord, self.compare_record)
