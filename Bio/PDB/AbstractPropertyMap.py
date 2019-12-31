@@ -8,7 +8,7 @@
 """Class that maps (chain_id, residue_id) to a residue property."""
 
 
-class AbstractPropertyMap(object):
+class AbstractPropertyMap:
     """Define base class, map holder of residue properties."""
 
     def __init__(self, property_dict, property_keys, property_list):

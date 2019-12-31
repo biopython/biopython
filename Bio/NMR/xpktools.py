@@ -8,7 +8,7 @@
 HEADERLEN = 6
 
 
-class XpkEntry(object):
+class XpkEntry:
     """Provide dictonary access to single entry from nmrview .xpk file.
 
     This class is suited for handling single lines of non-header data
@@ -54,7 +54,7 @@ class XpkEntry(object):
             pass
 
 
-class Peaklist(object):
+class Peaklist:
     """Provide access to header lines and data from a nmrview xpk file.
 
     Header file lines and file data are available as attributes.

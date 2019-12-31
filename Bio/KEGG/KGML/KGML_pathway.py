@@ -31,7 +31,7 @@ from Bio._py3k import _is_int_or_long, _as_string
 
 
 # Pathway
-class Pathway(object):
+class Pathway:
     """Represents a KGML pathway from KEGG.
 
     Specifies graph information for the pathway map, as described in
@@ -264,7 +264,7 @@ class Pathway(object):
 
 
 # Entry
-class Entry(object):
+class Entry:
     """Represent an Entry from KGML.
 
     Each Entry element is a node in the pathway graph, as described in
@@ -424,7 +424,7 @@ class Entry(object):
 
 
 # Component
-class Component(object):
+class Component:
     """An Entry subelement used to represents a complex node.
 
     A subelement of the Entry element, used when the Entry is a complex
@@ -462,7 +462,7 @@ class Component(object):
 
 
 # Graphics
-class Graphics(object):
+class Graphics:
     """An Entry subelement used to represents the visual representation.
 
     A subelement of Entry, specifying its visual representation, as
@@ -658,7 +658,7 @@ class Graphics(object):
 
 
 # Reaction
-class Reaction(object):
+class Reaction:
     """A specific chemical reaction with substrates and products.
 
     This describes a specific chemical reaction between one or more
@@ -782,7 +782,7 @@ class Reaction(object):
 
 
 # Relation
-class Relation(object):
+class Relation:
     """A relationship between to products, KOs, or protein and compound.
 
     This describes a relationship between two products, KOs, or protein

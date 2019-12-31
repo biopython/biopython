@@ -61,7 +61,7 @@ VERY_SMALL_NUMBER = 1E-300
 LOG0 = numpy.log(VERY_SMALL_NUMBER)
 
 
-class MarkovModel(object):
+class MarkovModel:
     """Create a state-emitting MarkovModel object."""
 
     def __init__(self, states, alphabet,
@@ -75,7 +75,7 @@ class MarkovModel(object):
 
     def __str__(self):
         """Create a string representation of the MarkovModel object."""
-        from Bio._py3k import StringIO
+        from io import StringIO
         handle = StringIO()
         save(self, handle)
         handle.seek(0)

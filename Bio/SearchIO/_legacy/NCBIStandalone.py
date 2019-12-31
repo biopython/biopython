@@ -26,7 +26,7 @@ wrappers for these under Bio.Blast.Applications (see the tutorial).
 import sys
 import re
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.SearchIO._legacy.ParserSupport import (
     AbstractParser,
     AbstractConsumer,
@@ -76,7 +76,7 @@ class ShortQueryBlastError(Exception):
     pass
 
 
-class _Scanner(object):
+class _Scanner:
     """Scan BLAST output from blastall or blastpgp.
 
     Tested with blastall and blastpgp v2.0.10, v2.0.11
@@ -876,7 +876,7 @@ class PSIBlastParser(AbstractParser):
         return self._consumer.data
 
 
-class _HeaderConsumer(object):
+class _HeaderConsumer:
     def start_header(self):
         self._header = Record.Header()
 
@@ -937,7 +937,7 @@ class _HeaderConsumer(object):
         self._header.query = self._header.query.rstrip()
 
 
-class _DescriptionConsumer(object):
+class _DescriptionConsumer:
     def start_descriptions(self):
         self._descriptions = []
         self._model_sequences = []
@@ -1024,7 +1024,7 @@ class _DescriptionConsumer(object):
         return dh
 
 
-class _AlignmentConsumer(object):
+class _AlignmentConsumer:
     # This is a little bit tricky.  An alignment can either be a
     # pairwise alignment or a multiple alignment.  Since it's difficult
     # to know a-priori which one the blast record will contain, I'm going
@@ -1189,7 +1189,7 @@ class _AlignmentConsumer(object):
             pass
 
 
-class _HSPConsumer(object):
+class _HSPConsumer:
     def start_hsp(self):
         self._hsp = Record.HSP()
 
@@ -1346,7 +1346,7 @@ class _HSPConsumer(object):
         pass
 
 
-class _DatabaseReportConsumer(object):
+class _DatabaseReportConsumer:
     def start_database_report(self):
         self._dr = Record.DatabaseReport()
 
@@ -1395,7 +1395,7 @@ class _DatabaseReportConsumer(object):
         pass
 
 
-class _ParametersConsumer(object):
+class _ParametersConsumer:
     def start_parameters(self):
         self._params = Record.Parameters()
 
@@ -1718,7 +1718,7 @@ class _PSIBlastConsumer(
         self.data.__dict__.update(self._params.__dict__)
 
 
-class Iterator(object):
+class Iterator:
     """Iterates over a file of multiple BLAST results.
 
     Methods:
@@ -1792,12 +1792,6 @@ class Iterator(object):
         if self._parser is not None:
             return self._parser.parse(StringIO(data))
         return data
-
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def __iter__(self):
         return iter(self.__next__, None)

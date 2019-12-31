@@ -85,10 +85,6 @@ Notes about the diverses class of the restriction enzyme implementation::
 
 import warnings
 
-from Bio._py3k import zip
-from Bio._py3k import filter
-from Bio._py3k import range
-
 import re
 import itertools
 
@@ -148,7 +144,7 @@ matching = {
 DNA = Seq
 
 
-class FormattedSeq(object):
+class FormattedSeq:
     """A linear or ciruclar sequence object for restriction analysis.
 
     Translates a Bio.Seq into a formatted sequence to be used with Restriction.
@@ -281,7 +277,7 @@ class RestrictionType(type):
             raise ValueError("Problem with hyphen in %s as enzyme name" % repr(name))
         # 2011/11/26 - Nobody knows what this call was supposed to accomplish,
         # but all unit tests seem to pass without it.
-        # super(RestrictionType, cls).__init__(cls, name, bases, dct)
+        # super().__init__(cls, name, bases, dct)
         try:
             cls.compsite = re.compile(cls.compsite)
         except AttributeError:

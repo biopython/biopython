@@ -24,7 +24,7 @@ name_wrap = [0, "", (" ", "$", 1, 1), ("-", "$", 1, 1)]
 id_wrap = _default_wrap
 
 
-class Record(object):
+class Record:
     """Holds info from a KEGG Gene record.
 
     Attributes:

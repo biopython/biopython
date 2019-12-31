@@ -10,9 +10,6 @@ from copy import deepcopy
 from itertools import chain
 from collections import OrderedDict
 
-from Bio._py3k import filter
-from Bio._py3k import basestring
-
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 
@@ -292,13 +289,9 @@ class QueryResult(_BaseSearchObject):
         """Return the number of items."""
         return len(self._items)
 
-    # Python 3:
     def __bool__(self):
         """Return True if there are items."""
         return bool(self._items)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""
@@ -380,7 +373,7 @@ class QueryResult(_BaseSearchObject):
     def __setitem__(self, hit_key, hit):
         """Add an item of key hit_key and value hit."""
         # only accept string keys
-        if not isinstance(hit_key, basestring):
+        if not isinstance(hit_key, str):
             raise TypeError("QueryResult object keys must be a string.")
         # hit must be a Hit object
         if not isinstance(hit, Hit):

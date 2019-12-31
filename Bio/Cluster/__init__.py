@@ -583,7 +583,7 @@ def pca(data):
     return columnmean, coordinates, pc, eigenvalues
 
 
-class Record(object):
+class Record:
     """Store gene expression data.
 
     A Record stores the gene expression data and related information contained
@@ -1140,6 +1140,8 @@ def __check_data(data):
         data = numpy.array(data, dtype="d")
     if data.ndim != 2:
         raise ValueError("data should be 2-dimensional")
+    if numpy.isnan(data).any():
+        raise ValueError("data contains NaN values")
     return data
 
 
@@ -1155,10 +1157,13 @@ def __check_mask(mask, shape):
 def __check_weight(weight, ndata):
     if weight is None:
         return numpy.ones(ndata, dtype="d")
-    elif isinstance(weight, numpy.ndarray):
-        return numpy.require(weight, dtype="d", requirements="C")
+    if isinstance(weight, numpy.ndarray):
+        weight = numpy.require(weight, dtype="d", requirements="C")
     else:
-        return numpy.array(weight, dtype="d")
+        weight = numpy.array(weight, dtype="d")
+    if numpy.isnan(weight).any():
+        raise ValueError("weight contains NaN values")
+    return weight
 
 
 def __check_initialid(initialid, npass, nitems):
@@ -1186,27 +1191,28 @@ def __check_index(index):
 def __check_distancematrix(distancematrix):
     if distancematrix is None:
         return distancematrix
-    elif isinstance(distancematrix, numpy.ndarray):
+    if isinstance(distancematrix, numpy.ndarray):
         distancematrix = numpy.require(distancematrix, dtype="d", requirements="C")
-        return distancematrix
     else:
         try:
             distancematrix = numpy.array(distancematrix, dtype="d")
         except ValueError:
-            pass
-        else:
-            return distancematrix
-        n = len(distancematrix)
-        d = [None] * n
-        for i, row in enumerate(distancematrix):
-            if isinstance(row, numpy.ndarray):
-                row = numpy.require(row, dtype="d", requirements="C")
-            else:
-                row = numpy.array(row, dtype="d")
-            if row.ndim != 1:
-                raise ValueError("row %d is not one-dimensional" % i)
-            m = len(row)
-            if m != i:
-                raise ValueError("row %d has incorrect size (%d, expected %d)" % (m, i))
-            d[i] = row
-        return d
+            n = len(distancematrix)
+            d = [None] * n
+            for i, row in enumerate(distancematrix):
+                if isinstance(row, numpy.ndarray):
+                    row = numpy.require(row, dtype="d", requirements="C")
+                else:
+                    row = numpy.array(row, dtype="d")
+                if row.ndim != 1:
+                    raise ValueError("row %d is not one-dimensional" % i)
+                m = len(row)
+                if m != i:
+                    raise ValueError("row %d has incorrect size (%d, expected %d)" % (m, i))
+                if numpy.isnan(row).any():
+                    raise ValueError("distancematrix contains NaN values")
+                d[i] = row
+            return d
+    if numpy.isnan(distancematrix).any():
+        raise ValueError("distancematrix contains NaN values")
+    return distancematrix

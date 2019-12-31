@@ -11,8 +11,6 @@
 
 import sys
 
-from Bio._py3k import basestring
-
 
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
@@ -20,7 +18,7 @@ class NexusError(Exception):
     pass
 
 
-class StandardData(object):
+class StandardData:
     """Create a StandardData iterable object.
 
     Each coding specifies t [type] => (std [standard], multi [multistate] or
@@ -33,7 +31,7 @@ class StandardData(object):
         self._current_pos = 0
 
         # Enforce string data requirement
-        if not isinstance(data, basestring):
+        if not isinstance(data, str):
             raise NexusError(
                 "The coding data given to a StandardData object should be a string"
             )
@@ -105,12 +103,6 @@ class StandardData(object):
         else:
             self._current_pos += 1
             return return_coding
-
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def raw(self):
         """Return the full coding as a python list."""

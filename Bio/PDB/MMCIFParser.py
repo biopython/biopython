@@ -10,7 +10,6 @@ import numpy
 import warnings
 
 from Bio.File import as_handle
-from Bio._py3k import range
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -18,7 +17,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
-class MMCIFParser(object):
+class MMCIFParser:
     """Parse a mmCIF file and return a Structure object."""
 
     def __init__(self, structure_builder=None, QUIET=False):
@@ -226,7 +225,7 @@ class MMCIFParser(object):
             pass  # no cell found, so just ignore
 
 
-class FastMMCIFParser(object):
+class FastMMCIFParser:
     """Parse an MMCIF file and return a Structure object."""
 
     def __init__(self, structure_builder=None, QUIET=False):

@@ -46,11 +46,11 @@ import sys
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import _as_string
 from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlretrieve as _urlretrieve
+from urllib.request import urlretrieve as _urlretrieve
 from Bio._py3k import urlcleanup as _urlcleanup
 
 
-class PDBList(object):
+class PDBList:
     """Quick access to the structure lists on the PDB or its mirrors.
 
     This class provides quick access to the structure lists on the

@@ -20,7 +20,7 @@ The latest HIE file can be found `elsewhere at SCOP
 # TODO - Update the above URLs
 
 
-class Record(object):
+class Record:
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:

@@ -19,9 +19,7 @@ from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
-from Bio._py3k import _as_bytes, _bytes_to_string, unicode
-
-_empty_bytes_string = _as_bytes("")
+from Bio._py3k import _as_bytes
 
 __all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
 
@@ -230,7 +228,7 @@ def _extract_ids_and_descs(raw_id, raw_desc):
     return (ids, descs, blast_gen_id)
 
 
-class BlastXmlParser(object):
+class BlastXmlParser:
     """Parser for the BLAST XML format."""
 
     def __init__(self, handle, use_raw_query_ids=False, use_raw_hit_ids=False):
@@ -559,8 +557,8 @@ class BlastXmlIndexer(SearchIndexer):
     """Indexer class for BLAST XML output."""
 
     _parser = BlastXmlParser
-    qstart_mark = _as_bytes("<Iteration>")
-    qend_mark = _as_bytes("</Iteration>")
+    qstart_mark = b"<Iteration>"
+    qend_mark = b"</Iteration>"
     block_size = 16384
 
     def __init__(self, filename, **kwargs):
@@ -574,19 +572,17 @@ class BlastXmlIndexer(SearchIndexer):
         """Iterate over BlastXmlIndexer yields qstart_id, start_offset, block's length."""
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
-        blast_id_mark = _as_bytes("Query_")
+        blast_id_mark = b"Query_"
         block_size = self.block_size
         handle = self._handle
         handle.seek(0)
         re_desc = re.compile(
-            _as_bytes(
-                r"<Iteration_query-ID>(.*?)"
-                r"</Iteration_query-ID>\s+?"
-                "<Iteration_query-def>"
-                "(.*?)</Iteration_query-def>"
-            )
+            b"<Iteration_query-ID>(.*?)"
+            br"</Iteration_query-ID>\s+?"
+            b"<Iteration_query-def>"
+            b"(.*?)</Iteration_query-def>"
         )
-        re_desc_end = re.compile(_as_bytes(r"</Iteration_query-def>"))
+        re_desc_end = re.compile(b"</Iteration_query-def>")
         counter = 0
 
         while True:
@@ -611,7 +607,7 @@ class BlastXmlIndexer(SearchIndexer):
                     assert qstart_mark not in line, line
                     block.append(line)
                 assert line.rstrip().endswith(qend_mark), line
-                block = _empty_bytes_string.join(block)
+                block = b"".join(block)
             assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
             assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
             # Now we have a full <Iteration>...</Iteration> block, find the ID
@@ -625,8 +621,8 @@ class BlastXmlIndexer(SearchIndexer):
                 qstart_desc = _as_bytes(self._fallback["description"])
                 qstart_id = _as_bytes(self._fallback["id"])
             if qstart_id.startswith(blast_id_mark):
-                qstart_id = qstart_desc.split(_as_bytes(" "), 1)[0]
-            yield _bytes_to_string(qstart_id), start_offset, len(block)
+                qstart_id = qstart_desc.split(b" ", 1)[0]
+            yield qstart_id.decode(), start_offset, len(block)
             counter += 1
 
     def _parse(self, handle):
@@ -681,7 +677,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def startDocument(self):
         """Start the XML document."""
         self.write(
-            u'<?xml version="1.0"?>\n'
+            '<?xml version="1.0"?>\n'
             '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
             '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n'
         )
@@ -751,13 +747,13 @@ class _BlastXmlGenerator(XMLGenerator):
 
     def characters(self, content):
         """Replace quotes and apostrophe."""
-        content = escape(unicode(content))
-        for a, b in ((u'"', u"&quot;"), (u"'", u"&apos;")):
+        content = escape(str(content))
+        for a, b in (('"', "&quot;"), ("'", "&apos;")):
             content = content.replace(a, b)
         self.write(content)
 
 
-class BlastXmlWriter(object):
+class BlastXmlWriter:
     """Stream-based BLAST+ XML Writer."""
 
     def __init__(self, handle, use_raw_query_ids=True, use_raw_hit_ids=True):

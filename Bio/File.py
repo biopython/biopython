@@ -23,8 +23,6 @@ import contextlib
 import itertools
 import platform
 
-from Bio._py3k import basestring
-
 try:
     from collections import UserDict as _dict_base
 except ImportError:
@@ -109,7 +107,7 @@ def as_handle(handleish, mode="r", **kwargs):
             # handleish isn't path-like, and it remains unchanged -- we'll yield it below
             pass
 
-    if isinstance(handleish, basestring):
+    if isinstance(handleish, str):
         if sys.version_info[0] >= 3 and "U" in mode:
             mode = mode.replace("U", "")
         if "encoding" in kwargs:
@@ -150,7 +148,7 @@ def _open_for_random_access(filename):
     return handle
 
 
-class UndoHandle(object):
+class UndoHandle:
     """A Python handle that adds functionality for saving lines.
 
     Saves lines in a LIFO fashion.
@@ -181,11 +179,6 @@ class UndoHandle(object):
         if not next:
             raise StopIteration
         return next
-
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def readlines(self, *args, **keywds):
         """Read all the lines from the file as a list of strings."""
@@ -260,7 +253,7 @@ class UndoHandle(object):
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 # for indexing
 
-class _IndexedSeqFileProxy(object):
+class _IndexedSeqFileProxy:
     """Base class for file format specific random access (PRIVATE).
 
     This is subclasses in both Bio.SeqIO for indexing as SeqRecord
@@ -281,7 +274,7 @@ class _IndexedSeqFileProxy(object):
     def get(self, offset):
         """Return parsed object for this entry."""
         # Most file formats with self contained records can be handled by
-        # parsing StringIO(_bytes_to_string(self.get_raw(offset)))
+        # parsing StringIO(self.get_raw(offset).decode())
         raise NotImplementedError("Subclass should implement this")
 
     def get_raw(self, offset):

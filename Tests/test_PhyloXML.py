@@ -305,14 +305,17 @@ class TreeTests(unittest.TestCase):
         eth_zurich = tree.clade[0, 2].distributions[0]
         san_diego = tree.clade[1].distributions[0]
         for dist, desc, lati, longi, alti in zip(
-                (hirschweg, nagoya, eth_zurich, san_diego),
-                ("Hirschweg, Winterthur, Switzerland",
-                    "Nagoya, Aichi, Japan",
-                    u"ETH Z\xfcrich",
-                    "San Diego"),
-                (47.481277, 35.155904, 47.376334, 32.880933),
-                (8.769303, 136.915863, 8.548108, -117.217543),
-                (472, 10, 452, 104)):
+            (hirschweg, nagoya, eth_zurich, san_diego),
+            (
+                "Hirschweg, Winterthur, Switzerland",
+                "Nagoya, Aichi, Japan",
+                "ETH Zürich",
+                "San Diego"
+            ),
+            (47.481277, 35.155904, 47.376334, 32.880933),
+            (8.769303, 136.915863, 8.548108, -117.217543),
+            (472, 10, 452, 104),
+        ):
             self.assertTrue(isinstance(dist, PX.Distribution))
             self.assertEqual(dist.desc, desc)
             point = dist.points[0]

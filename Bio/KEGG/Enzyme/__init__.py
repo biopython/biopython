@@ -31,7 +31,7 @@ id_wrap = _default_wrap
 struct_wrap = _struct_wrap
 
 
-class Record(object):
+class Record:
     """Holds info from a KEGG Enzyme record.
 
     Attributes:

@@ -7,7 +7,7 @@
 import sys
 import os
 import unittest
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
 from Bio.Align.Applications import ProbconsCommandline
 

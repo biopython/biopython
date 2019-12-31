@@ -21,7 +21,7 @@ import numpy
 import numpy.linalg
 
 
-class LogisticRegression(object):
+class LogisticRegression:
     """Holds information necessary to do logistic regression classification.
 
     Attributes:

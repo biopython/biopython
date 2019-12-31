@@ -20,7 +20,7 @@ Functions:
 
 from xml.etree import ElementTree
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio.KEGG.KGML.KGML_pathway import Component, Entry, Graphics
 from Bio.KEGG.KGML.KGML_pathway import Pathway, Reaction, Relation
@@ -73,7 +73,7 @@ def parse(handle, debug=0):
             elem.clear()
 
 
-class KGMLParser(object):
+class KGMLParser:
     """Parses a KGML XML Pathway entry into a Pathway object.
 
     Example: Read and parse large metabolism file

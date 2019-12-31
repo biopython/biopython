@@ -14,8 +14,6 @@ import random
 # TODO - Take advantage of defaultdict once Python 2.4 is dead?
 # from collections import defaultdict
 
-from Bio._py3k import range
-
 from Bio.Seq import MutableSeq
 
 
@@ -78,7 +76,7 @@ def _calculate_to_transitions(trans_probs):
     return transitions
 
 
-class MarkovModelBuilder(object):
+class MarkovModelBuilder:
     """Interface to build up a Markov Model.
 
     This class is designed to try to separate the task of specifying the
@@ -463,7 +461,7 @@ class MarkovModelBuilder(object):
             )
 
 
-class HiddenMarkovModel(object):
+class HiddenMarkovModel:
     """Represent a hidden markov model that can be used for state estimation."""
 
     def __init__(

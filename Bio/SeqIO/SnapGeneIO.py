@@ -58,10 +58,6 @@ class _PacketIterator:
 
         return (type, length, data)
 
-    # Python2 compatibility
-    def next(self):
-        return self.__next__()
-
 
 def _parse_dna_packet(length, data, record):
     """Parse a DNA sequence packet.

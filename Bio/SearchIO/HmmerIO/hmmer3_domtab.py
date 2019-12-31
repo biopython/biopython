@@ -203,7 +203,7 @@ class Hmmer3DomtabHmmqueryIndexer(Hmmer3TabIndexer):
     _query_id_idx = 3
 
 
-class Hmmer3DomtabHmmhitWriter(object):
+class Hmmer3DomtabHmmhitWriter:
     """HMMER domain table writer using hit coordinates.
 
     Writer for hmmer3-domtab output format which writes hit coordinates

@@ -48,7 +48,7 @@ class TranslationError(Exception):
     pass
 
 
-class CodonTable(object):
+class CodonTable:
     """A codon-table, or genetic code."""
 
     nucleotide_alphabet = Alphabet.generic_nucleotide
@@ -350,7 +350,7 @@ assert list_ambiguous_codons(["TGA", "TAA", "TAG"],
 #  'L'
 
 
-class AmbiguousForwardTable(object):
+class AmbiguousForwardTable:
     """Forward table for translation of ambiguous nucleotide sequences."""
 
     def __init__(self, forward_table, ambiguous_nucleotide, ambiguous_protein):

@@ -20,8 +20,6 @@ Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 """
 
 
-from Bio._py3k import range
-
 import numpy
 
 

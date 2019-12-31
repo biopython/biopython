@@ -6,8 +6,6 @@
 """Tests for SeqIO module."""
 
 
-from Bio._py3k import basestring
-
 import gzip
 import sys
 import unittest
@@ -76,7 +74,7 @@ test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 
-class ForwardOnlyHandle(object):
+class ForwardOnlyHandle:
     """Mimic a network handle without seek and tell methods etc."""
 
     def __init__(self, handle):
@@ -494,9 +492,9 @@ class TestSeqIO(unittest.TestCase):
                         self.failureException("Expected a Seq or UnknownSeq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
-                self.assertIsInstance(record.id, basestring)
-                self.assertIsInstance(record.name, basestring)
-                self.assertIsInstance(record.description, basestring)
+                self.assertIsInstance(record.id, str)
+                self.assertIsInstance(record.name, str)
+                self.assertIsInstance(record.description, str)
                 self.assertTrue(record.id)
 
                 if "accessions" in record.annotations:

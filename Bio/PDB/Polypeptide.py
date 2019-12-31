@@ -50,8 +50,6 @@ In this case the selenomethionines (the first and also seventh and sixth from
 last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
-from Bio._py3k import basestring
-
 import warnings
 
 from Bio.Alphabet import generic_protein
@@ -198,7 +196,7 @@ def is_aa(residue, standard=False):
     False
     """
     # TODO - What about special cases like XXX, can they appear in PDB files?
-    if not isinstance(residue, basestring):
+    if not isinstance(residue, str):
         residue = residue.get_resname()
     residue = residue.upper()
     if standard:
@@ -319,7 +317,7 @@ class Polypeptide(list):
         return s
 
 
-class _PPBuilder(object):
+class _PPBuilder:
     """Base class to extract polypeptides.
 
     It checks if two consecutive residues in a chain are connected.

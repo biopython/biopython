@@ -9,8 +9,6 @@ from Bio.Seq import Seq
 import re
 import math
 
-from Bio._py3k import range
-
 from Bio import motifs
 
 
@@ -22,10 +20,24 @@ class Motif(motifs.Motif):
     file, a 'jaspar' format file or a JASPAR database).
     """
 
-    def __init__(self, matrix_id, name, alphabet="ACGT", instances=None,
-                 counts=None, collection=None, tf_class=None, tf_family=None,
-                 species=None, tax_group=None, acc=None, data_type=None,
-                 medline=None, pazar_id=None, comment=None):
+    def __init__(
+        self,
+        matrix_id,
+        name,
+        alphabet="ACGT",
+        instances=None,
+        counts=None,
+        collection=None,
+        tf_class=None,
+        tf_family=None,
+        species=None,
+        tax_group=None,
+        acc=None,
+        data_type=None,
+        medline=None,
+        pazar_id=None,
+        comment=None,
+    ):
         """Construct a JASPAR Motif instance."""
         motifs.Motif.__init__(self, alphabet, instances, counts)
         self.name = name
@@ -38,7 +50,7 @@ class Motif(motifs.Motif):
         # taxonomy IDs.
         self.species = species
         self.tax_group = tax_group
-        self.acc = acc              # May have multiple so acc is a list.
+        self.acc = acc  # May have multiple so acc is a list.
         self.data_type = data_type
         self.medline = medline
         self.pazar_id = pazar_id
@@ -227,9 +239,7 @@ def _read_sites(handle):
         instances.append(instance)
 
     instances = motifs.Instances(instances, alphabet)
-    motif = Motif(
-        matrix_id=None, name=None, alphabet=alphabet, instances=instances
-    )
+    motif = Motif(matrix_id=None, name=None, alphabet=alphabet, instances=instances)
     motif.mask = "*" * motif.length
     record = Record()
     record.append(motif)
@@ -291,8 +301,7 @@ def _read_jaspar(handle):
             counts[letter] = [float(x) for x in words]
             row_count += 1
             if row_count == 4:
-                record.append(Motif(identifier, name, alphabet=alphabet,
-                                    counts=counts))
+                record.append(Motif(identifier, name, alphabet=alphabet, counts=counts))
                 identifier = None
                 name = None
                 counts = {}
@@ -302,8 +311,7 @@ def _read_jaspar(handle):
             counts[nucleotides[row_count]] = [float(x) for x in words]
             row_count += 1
             if row_count == 4:
-                record.append(Motif(identifier, name, alphabet=alphabet,
-                                    counts=counts))
+                record.append(Motif(identifier, name, alphabet=alphabet, counts=counts))
                 identifier = None
                 name = None
                 counts = {}
@@ -325,8 +333,7 @@ def calculate_pseudocounts(motif):
     # number of instances.
     total = 0
     for i in range(motif.length):
-        total += sum(float(motif.counts[letter][i])
-                     for letter in alphabet)
+        total += sum(float(motif.counts[letter][i]) for letter in alphabet)
 
     avg_nb_instances = total / motif.length
     sq_nb_instances = math.sqrt(avg_nb_instances)

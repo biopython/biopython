@@ -14,7 +14,7 @@
 import warnings
 import unittest
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 try:
     from numpy import array

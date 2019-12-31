@@ -59,7 +59,7 @@ from Bio._py3k import _is_int_or_long
 from Bio.Seq import MutableSeq, reverse_complement
 
 
-class SeqFeature(object):
+class SeqFeature:
     """Represent a Sequence Feature on an object.
 
     Attributes:
@@ -466,7 +466,6 @@ class SeqFeature(object):
             gap=gap,
         )
 
-    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -480,9 +479,6 @@ class SeqFeature(object):
         length is zero (in order to better match normal python behaviour)!
         """
         return True
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __len__(self):
         """Return the length of the region where the feature is located.
@@ -596,7 +592,7 @@ class SeqFeature(object):
 
 
 # TODO -- Will this hold PubMed and Medline information decently?
-class Reference(object):
+class Reference:
     """Represent a Generic Reference object.
 
     Attributes:
@@ -670,7 +666,7 @@ class Reference(object):
 # --- Handling feature locations
 
 
-class FeatureLocation(object):
+class FeatureLocation:
     """Specify the location of a feature along a sequence.
 
     The FeatureLocation is used for simple continuous features, which can
@@ -1146,7 +1142,7 @@ class FeatureLocation(object):
         return f_seq
 
 
-class CompoundLocation(object):
+class CompoundLocation:
     """For handling joins etc where a feature location has several parts."""
 
     def __init__(self, parts, operator="join"):
@@ -1564,7 +1560,7 @@ class CompoundLocation(object):
         return f_seq
 
 
-class AbstractPosition(object):
+class AbstractPosition:
     """Abstract base class representing a position."""
 
     def __repr__(self):
@@ -2205,7 +2201,7 @@ class OneOfPosition(int, AbstractPosition):
         )
 
 
-class PositionGap(object):
+class PositionGap:
     """Simple class to hold information about a gap between positions."""
 
     def __init__(self, gap_size):

@@ -17,10 +17,7 @@ Journal article:
 """
 
 import re
-import sys
 import warnings
-
-from Bio._py3k import basestring
 
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
@@ -88,7 +85,7 @@ class Phyloxml(PhyloElement):
         """Get a phylogeny by index or name."""
         if isinstance(index, (int, slice)):
             return self.phylogenies[index]
-        if not isinstance(index, basestring):
+        if not isinstance(index, str):
             raise KeyError("can't use %s as an index" % type(index))
         for tree in self.phylogenies:
             if tree.name == index:
@@ -788,12 +785,6 @@ class Confidence(PhyloElement):
     def __int__(self):
         """Return integer value of Confidence object."""
         return int(self.value)
-
-    if sys.version_info[0] < 3:
-
-        def __long__(self):
-            """Return long value of Confidence object."""
-            return long(self.value)  # noqa : F821
 
 
 class Date(PhyloElement):

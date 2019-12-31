@@ -9,8 +9,6 @@
 """Represent a Sequence Record, a sequence with annotation."""
 
 
-from Bio._py3k import basestring
-
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
@@ -95,7 +93,7 @@ class _RestrictedDict(dict):
             self[key] = value
 
 
-class SeqRecord(object):
+class SeqRecord:
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
@@ -195,12 +193,12 @@ class SeqRecord(object):
         You can create a 'blank' SeqRecord object, and then populate the
         attributes later.
         """
-        if id is not None and not isinstance(id, basestring):
+        if id is not None and not isinstance(id, str):
             # Lots of existing code uses id=None... this may be a bad idea.
             raise TypeError("id argument should be a string")
-        if not isinstance(name, basestring):
+        if not isinstance(name, str):
             raise TypeError("name argument should be a string")
-        if not isinstance(description, basestring):
+        if not isinstance(description, str):
             raise TypeError("description argument should be a string")
         self._seq = seq
         self.id = id
@@ -770,7 +768,7 @@ class SeqRecord(object):
                 )
 
         # Harder case, make a temp handle instead
-        from Bio._py3k import StringIO
+        from io import StringIO
 
         handle = StringIO()
         SeqIO.write(self, handle, format_spec)
@@ -818,10 +816,6 @@ class SeqRecord(object):
     # See github issue 929 for related discussion.
     __hash__ = None
 
-    # Note Python 3 does not use __cmp__ and there is no need to
-    # define __cmp__ on Python 2 as have all of  _lt__ etc defined.
-
-    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -836,9 +830,6 @@ class SeqRecord(object):
         object behaviour)!
         """
         return True
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1212,15 +1203,15 @@ class SeqRecord(object):
             answer = SeqRecord(self.seq.toseq().reverse_complement())
         else:
             answer = SeqRecord(self.seq.reverse_complement())
-        if isinstance(id, basestring):
+        if isinstance(id, str):
             answer.id = id
         elif id:
             answer.id = self.id
-        if isinstance(name, basestring):
+        if isinstance(name, str):
             answer.name = name
         elif name:
             answer.name = self.name
-        if isinstance(description, basestring):
+        if isinstance(description, str):
             answer.description = description
         elif description:
             answer.description = self.description
@@ -1321,15 +1312,15 @@ class SeqRecord(object):
                 table=table, stop_symbol=stop_symbol, to_stop=to_stop, cds=cds, gap=gap
             )
         )
-        if isinstance(id, basestring):
+        if isinstance(id, str):
             answer.id = id
         elif id:
             answer.id = self.id
-        if isinstance(name, basestring):
+        if isinstance(name, str):
             answer.name = name
         elif name:
             answer.name = self.name
-        if isinstance(description, basestring):
+        if isinstance(description, str):
             answer.description = description
         elif description:
             answer.description = self.description

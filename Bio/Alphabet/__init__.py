@@ -26,7 +26,7 @@ warnings.warn("We intend to remove or replace Bio.Alphabet in 2020, "
               PendingDeprecationWarning)
 
 
-class Alphabet(object):
+class Alphabet:
     """Generic alphabet base class.
 
     This class is used as a base class for other types of alphabets.
@@ -185,7 +185,7 @@ class ThreeLetterProtein(Alphabet):
 # (These are Decorator classes)
 
 
-class AlphabetEncoder(object):
+class AlphabetEncoder:
     """A class to construct a new, extended alphabet from an existing one."""
 
     def __init__(self, alphabet, new_letters):

@@ -13,7 +13,7 @@ Returns a BlastTableRec instance
 import sys
 
 
-class BlastTableEntry(object):
+class BlastTableEntry:
     """Container for Blast Table Entry, the field values from the table."""
 
     def __init__(self, in_rec):
@@ -31,7 +31,7 @@ class BlastTableEntry(object):
         self.bit_score = float(bt_fields[11])
 
 
-class BlastTableRec(object):
+class BlastTableRec:
     """Container for Blast Table record, list of Blast Table Entries."""
 
     def __init__(self):
@@ -56,7 +56,7 @@ reader_keywords = {"BLASTP": "version",
                    "Fields": "fields"}
 
 
-class BlastTableReader(object):
+class BlastTableReader:
     """Reader for the output of blastpgp."""
 
     def __init__(self, handle):
@@ -91,11 +91,6 @@ class BlastTableReader(object):
         self._lookahead = inline
         self._in_header = 1
         return self.table_record
-
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def _consume_entry(self, inline):
         current_entry = BlastTableEntry(inline)

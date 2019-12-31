@@ -31,7 +31,7 @@ class TreeError(Exception):
     pass
 
 
-class NodeData(object):
+class NodeData:
     """Store tree-relevant data associated with nodes (e.g. branches or otus)."""
 
     def __init__(self, taxon=None, branchlength=0.0, support=None, comment=None):

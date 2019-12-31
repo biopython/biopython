@@ -13,7 +13,7 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
 
 import re
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio.Phylo import Newick
 
@@ -89,7 +89,7 @@ def _get_comment(clade):
         return ""
 
 
-class Parser(object):
+class Parser:
     """Parse a Newick tree given a file handle.
 
     Based on the parser in ``Bio.Nexus.Trees``.
@@ -250,7 +250,7 @@ class Parser(object):
 # Output
 
 
-class Writer(object):
+class Writer:
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):

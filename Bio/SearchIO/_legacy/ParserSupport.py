@@ -24,10 +24,10 @@ Functions:
 """
 
 import sys
-from Bio._py3k import StringIO
+from io import StringIO
 
 
-class AbstractParser(object):
+class AbstractParser:
     """Base class for other parsers."""
 
     def parse(self, handle):
@@ -45,7 +45,7 @@ class AbstractParser(object):
         return retval
 
 
-class AbstractConsumer(object):
+class AbstractConsumer:
     """Base class for other Consumers.
 
     Derive Consumers from this class and implement appropriate

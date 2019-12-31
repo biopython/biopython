@@ -14,7 +14,7 @@ from copy import copy
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
-class Entity(object):
+class Entity:
     """Basic container object for PDB heirachy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
@@ -309,7 +309,7 @@ class Entity(object):
         return shallow
 
 
-class DisorderedEntityWrapper(object):
+class DisorderedEntityWrapper:
     """Wrapper class to group equivalent Entities.
 
     This class is a simple wrapper class that groups a number of equivalent

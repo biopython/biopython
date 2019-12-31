@@ -248,7 +248,7 @@ from Bio import BiopythonWarning
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 
-class align(object):
+class align:
     """Provide functions that do alignments.
 
     Alignment functions are called as:
@@ -270,7 +270,7 @@ class align(object):
     ``help(pairwise2.align.localds)`` at the Python prompt.
     """
 
-    class alignment_function(object):
+    class alignment_function:
         """Callable class which impersonates an alignment function.
 
         The constructor takes the name of the function.  This class
@@ -1030,7 +1030,7 @@ def rint(x, precision=_PRECISION):
     return int(x * precision + 0.5)
 
 
-class identity_match(object):
+class identity_match:
     """Create a match function for use in an alignment.
 
     match and mismatch are the scores to give when two residues are equal
@@ -1049,7 +1049,7 @@ class identity_match(object):
         return self.mismatch
 
 
-class dictionary_match(object):
+class dictionary_match:
     """Create a match function for use in an alignment.
 
     Attributes:
@@ -1073,7 +1073,7 @@ class dictionary_match(object):
         return self.score_dict[(charA, charB)]
 
 
-class affine_penalty(object):
+class affine_penalty:
     """Create a gap function for use in an alignment."""
 
     def __init__(self, open, extend, penalize_extend_when_opening=0):

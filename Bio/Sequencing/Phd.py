@@ -35,7 +35,7 @@ CKEYWORDS = [
 ]
 
 
-class Record(object):
+class Record:
     """Hold information from a PHD file."""
 
     def __init__(self):

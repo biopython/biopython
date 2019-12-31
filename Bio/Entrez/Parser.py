@@ -47,9 +47,6 @@ from xml.sax.saxutils import escape
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
-from Bio._py3k import unicode
-from Bio._py3k import raise_from as _raise_from
-
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
@@ -141,12 +138,12 @@ class StringElement(str):
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
 
-class UnicodeElement(unicode):
+class UnicodeElement(str):
     """NCBI Entrez XML element mapped to a unicode string."""
 
     def __new__(cls, value, tag, attributes, key=None):
         """Create a UnicodeElement."""
-        self = unicode.__new__(cls, value)
+        self = str.__new__(cls, value)
         self.tag = tag
         if key is None:
             self.key = tag
@@ -157,7 +154,7 @@ class UnicodeElement(unicode):
 
     def __repr__(self):
         """Return a string representation of the object."""
-        text = unicode.__repr__(self)
+        text = str.__repr__(self)
         attributes = self.attributes
         if not attributes:
             return text
@@ -282,7 +279,7 @@ class ValidationError(ValueError):
         )
 
 
-class DataHandler(object):
+class DataHandler:
     """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez
@@ -348,11 +345,11 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, so we can be sure that
                 # we are parsing XML data. Most likely, the XML file is
                 # corrupted.
-                _raise_from(CorruptedXMLError(e), None)
+                raise CorruptedXMLError(e) from None
             else:
                 # We have not seen the initial <!xml declaration, so probably
                 # the input data is not in XML format.
-                _raise_from(NotXMLError(e), None)
+                raise NotXMLError(e) from None
         try:
             return self.record
         except AttributeError:
@@ -360,18 +357,15 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, and expat didn't notice
                 # any errors, so self.record should be defined. If not, this is
                 # a bug.
-                _raise_from(
-                    RuntimeError(
-                        "Failed to parse the XML file correctly, possibly due to a bug "
-                        "in Bio.Entrez. Please contact the Biopython developers via "
-                        "the mailing list or GitHub for assistance."
-                    ),
-                    None,
-                )
+                raise RuntimeError(
+                    "Failed to parse the XML file correctly, possibly due to a bug "
+                    "in Bio.Entrez. Please contact the Biopython developers via "
+                    "the mailing list or GitHub for assistance."
+                ) from None
             else:
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
-                _raise_from(NotXMLError("XML declaration not found"), None)
+                raise NotXMLError("XML declaration not found") from None
 
     def parse(self, handle):
         """Parse the XML in the given file handle."""
@@ -386,11 +380,11 @@ class DataHandler(object):
                     # We saw the initial <!xml declaration, so we can be sure
                     # that we are parsing XML data. Most likely, the XML file
                     # is corrupted.
-                    _raise_from(CorruptedXMLError(e), None)
+                    raise CorruptedXMLError(e) from None
                 else:
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
-                    _raise_from(NotXMLError(e), None)
+                    raise NotXMLError(e) from None
             try:
                 records = self.record
             except AttributeError:
@@ -398,18 +392,16 @@ class DataHandler(object):
                     # We saw the initial <!xml declaration, and expat
                     # didn't notice any errors, so self.record should be
                     # defined. If not, this is a bug.
-                    _raise_from(
-                        RuntimeError(
-                            "Failed to parse the XML file correctly, possibly due to a "
-                            "bug in Bio.Entrez. Please contact the Biopython "
-                            "developers via the mailing list or GitHub for assistance."
-                        ),
-                        None,
-                    )
+
+                    raise RuntimeError(
+                        "Failed to parse the XML file correctly, possibly due to a "
+                        "bug in Bio.Entrez. Please contact the Biopython "
+                        "developers via the mailing list or GitHub for assistance."
+                    ) from None
                 else:
                     # We did not see the initial <!xml declaration, so
                     # probably the input data is not in XML format.
-                    _raise_from(NotXMLError("XML declaration not found"), None)
+                    raise NotXMLError("XML declaration not found") from None
 
             if not isinstance(records, list):
                 raise ValueError(
@@ -987,9 +979,7 @@ class DataHandler(object):
             try:
                 handle = _urlopen(url)
             except IOError:
-                _raise_from(
-                    RuntimeError("Failed to access %s at %s" % (filename, url)), None
-                )
+                raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
@@ -1028,14 +1018,14 @@ class DataHandler(object):
             # Trying os.makedirs first and then checking for os.path.isdir avoids
             # a race condition.
             if not os.path.isdir(self.local_dtd_dir):
-                _raise_from(exception, None)
+                raise exception from None
         # Create XSD local directory
         self.local_xsd_dir = os.path.join(self.directory, "Bio", "Entrez", "XSDs")
         try:
             os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
         except OSError as exception:
             if not os.path.isdir(self.local_xsd_dir):
-                _raise_from(exception, None)
+                raise exception from None
 
     @property
     def directory(self):

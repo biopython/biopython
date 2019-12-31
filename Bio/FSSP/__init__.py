@@ -44,7 +44,7 @@ alignments_rec = re.compile(" *[0-9]+ +-{0,1}[0-9]+")
 equiv_title = re.compile("## +EQUIVALENCES")
 
 
-class FSSPHeader(object):
+class FSSPHeader:
     """Store the FSSP file header's properties."""
 
     def __init__(self):
@@ -73,7 +73,7 @@ class FSSPHeader(object):
                     setattr(self, i, inline.split()[1])
 
 
-class PosAlign(object):
+class PosAlign:
     """Store the position alignments, AminoAcid plus Structure."""
 
     def __init__(self, inStr):
@@ -103,7 +103,7 @@ class PosAlign(object):
         return outstring
 
 
-class FSSPSumRec(object):
+class FSSPSumRec:
     """Store the summary records from SUMMARY Section of file."""
 
     def __init__(self, in_str):
@@ -145,7 +145,7 @@ class FSSPSumRec(object):
         return self.raw
 
 
-class FSSPAlignRec(object):
+class FSSPAlignRec:
     """Store the Alignment records from ALIGNMENTS section of file."""
 
     def __init__(self, in_fff_rec):

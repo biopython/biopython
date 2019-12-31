@@ -12,10 +12,6 @@ Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
 
-from Bio._py3k import zip
-from Bio._py3k import range
-from Bio._py3k import basestring
-
 from functools import reduce
 import copy
 import math
@@ -69,7 +65,7 @@ class NexusError(Exception):
     pass
 
 
-class CharBuffer(object):
+class CharBuffer:
     """Helps reading NEXUS-words and characters from a buffer (semi-PRIVATE).
 
     This class is not intended for public use (any more).
@@ -103,12 +99,6 @@ class CharBuffer(object):
             return self.buffer.pop(0)
         else:
             return None
-
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def next_nonwhitespace(self):
         """Check for next non whitespace character in NEXUS file."""
@@ -186,7 +176,7 @@ class CharBuffer(object):
         return "".join(self.buffer)
 
 
-class StepMatrix(object):
+class StepMatrix:
     """Calculate a stepmatrix for weighted parsimony.
 
     See :
@@ -584,7 +574,7 @@ def _replace_parenthesized_ambigs(seq, rev_ambig_values):
     return seq
 
 
-class Commandline(object):
+class Commandline:
     """Represent a commandline as command and options."""
 
     def __init__(self, line, title):
@@ -625,7 +615,7 @@ class Commandline(object):
                     raise NexusError("Incorrect formatting in line: %s" % line)
 
 
-class Block(object):
+class Block:
     """Represent a NEXUS block with block name and list of commandlines."""
 
     def __init__(self, title=None):
@@ -634,7 +624,7 @@ class Block(object):
         self.commandlines = []
 
 
-class Nexus(object):
+class Nexus:
     """Create the Nexus class, main class for the management of Nexus files."""
 
     def __init__(self, input=None):
@@ -703,7 +693,7 @@ class Nexus(object):
                 self.filename = getattr(fp, "name", "Unknown_nexus_file")
         except (TypeError, IOError, AttributeError):
             # 2. Assume we have a string from a fh.read()
-            if isinstance(input, basestring):
+            if isinstance(input, str):
                 file_contents = input
                 self.filename = "input_string"
             else:

@@ -35,9 +35,6 @@ import copy
 import warnings
 from functools import reduce
 
-from Bio._py3k import map
-from Bio._py3k import basestring
-
 from Bio import BiopythonDeprecationWarning
 warnings.warn("Bio.Crystal has been deprecated, and we intend to remove it"
               " in a future release of Biopython. Please use Bio.PDB instead"
@@ -66,7 +63,7 @@ def validate_key(key):
         raise CrystalError("chain label should contain one letter")
 
 
-class Hetero(object):
+class Hetero:
     """Class to support the PDB hetero codes.
 
     Supports only the 3 alphanumeric code.
@@ -104,7 +101,7 @@ class Hetero(object):
         return len(self.data)
 
 
-class Chain(object):
+class Chain:
     """Class representing a sequence of Hetero elements."""
 
     def __init__(self, residues=""):
@@ -180,7 +177,7 @@ class Chain(object):
                 self.data[index] = value.data
             elif isinstance(value, type(self.data)):
                 self.data[index] = value
-            elif isinstance(value, basestring):
+            elif isinstance(value, str):
                 self.data[index] = Chain(value).data
             else:
                 raise TypeError
@@ -260,7 +257,7 @@ class Chain(object):
         return self
 
 
-class Crystal(object):
+class Crystal:
     """Represents a dictionary of labeled chains from the same structure."""
 
     def __init__(self, data=None):

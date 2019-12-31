@@ -14,9 +14,6 @@ Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
 
 
-from Bio._py3k import range
-
-
 def create(instances, alphabet=None):
     """Create a Motif object."""
     instances = Instances(instances, alphabet)
@@ -74,30 +71,39 @@ def parse(handle, format, strict=True):
     format = format.lower()
     if format == "alignace":
         from Bio.motifs import alignace
+
         return alignace.read(handle)
     elif format == "meme":
         from Bio.motifs import meme
+
         return meme.read(handle)
     elif format == "minimal":
         from Bio.motifs import minimal
+
         return minimal.read(handle)
     elif format == "clusterbuster":
         from Bio.motifs import clusterbuster
+
         return clusterbuster.read(handle)
     elif format in ("pfm-four-columns", "pfm-four-rows"):
         from Bio.motifs import pfm
+
         return pfm.read(handle, format)
     elif format == "xms":
         from Bio.motifs import xms
+
         return xms.read(handle)
     elif format == "mast":
         from Bio.motifs import mast
+
         return mast.read(handle)
     elif format == "transfac":
         from Bio.motifs import transfac
+
         return transfac.read(handle, strict)
     elif format in ("pfm", "sites", "jaspar"):
         from Bio.motifs import jaspar
+
         return jaspar.read(handle, format)
     else:
         raise ValueError("Unknown format %s" % format)
@@ -167,6 +173,7 @@ class Instances(list):
     def __init__(self, instances=None, alphabet=None):
         """Initialize the class."""
         from Bio.Seq import Seq
+
         try:
             # Received an old-style alphabet
             alphabet = alphabet.letters
@@ -179,7 +186,10 @@ class Instances(list):
             if self.length is None:
                 self.length = len(instance)
             elif self.length != len(instance):
-                message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
+                message = (
+                    "All instances should have the same length (%d found, %d expected)"
+                    % (len(instance), self.length)
+                )
                 raise ValueError(message)
             try:
                 a = instance.alphabet
@@ -231,7 +241,7 @@ class Instances(list):
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                if str(instance) == str(sequence[pos:pos + self.length]):
+                if str(instance) == str(sequence[pos : pos + self.length]):
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
@@ -245,17 +255,18 @@ class Instances(list):
         return instances
 
 
-class Motif(object):
+class Motif:
     """A class representing sequence motifs."""
 
     def __init__(self, alphabet=None, instances=None, counts=None):
         """Initialize the class."""
         from . import matrix
+
         self.name = ""
         if counts is not None and instances is not None:
-            raise Exception(ValueError,
-                            "Specify either instances or counts, "
-                            "don't specify both")
+            raise Exception(
+                ValueError, "Specify either instances or counts, don't specify both"
+            )
         elif counts is not None:
             try:
                 alphabet = alphabet.letters
@@ -292,7 +303,10 @@ class Motif(object):
         elif mask is None:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
-            raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
+            raise ValueError(
+                "The length (%d) of the mask is inconsistent with the length (%d) of the motif",
+                (len(mask), self.length),
+            )
         elif isinstance(mask, str):
             self.__mask = []
             for char in mask:
@@ -301,7 +315,9 @@ class Motif(object):
                 elif char == " ":
                     self.__mask.append(0)
                 else:
-                    raise ValueError("Mask should contain only '*' or ' ' and not a '%s'" % char)
+                    raise ValueError(
+                        "Mask should contain only '*' or ' ' and not a '%s'" % char
+                    )
             self.__mask = tuple(self.__mask)
         else:
             self.__mask = tuple(int(bool(c)) for c in mask)
@@ -337,9 +353,10 @@ class Motif(object):
         else:
             if sorted(self.alphabet) != ["A", "C", "G", "T"]:
                 # TODO - Should this be a ValueError?
-                raise Exception("Setting the background to a single value only "
-                                "works for DNA motifs (in which case the value "
-                                "is interpreted as the GC content")
+                raise Exception(
+                    "Setting the background to a single value only works for DNA motifs"
+                    " (in which case the value is interpreted as the GC content)"
+                )
             self._background["A"] = (1.0 - value) / 2.0
             self._background["C"] = value / 2.0
             self._background["G"] = value / 2.0
@@ -394,23 +411,26 @@ class Motif(object):
             instances = self.instances.reverse_complement()
             res = Motif(alphabet=alphabet, instances=instances)
         else:  # has counts
-            counts = {"A": self.counts["T"][::-1],
-                      "C": self.counts["G"][::-1],
-                      "G": self.counts["C"][::-1],
-                      "T": self.counts["A"][::-1],
-                      }
+            counts = {
+                "A": self.counts["T"][::-1],
+                "C": self.counts["G"][::-1],
+                "G": self.counts["C"][::-1],
+                "T": self.counts["A"][::-1],
+            }
             res = Motif(alphabet=alphabet, counts=counts)
         res.__mask = self.__mask[::-1]
-        res.background = {"A": self.background["T"],
-                          "C": self.background["G"],
-                          "G": self.background["C"],
-                          "T": self.background["A"],
-                          }
-        res.pseudocounts = {"A": self.pseudocounts["T"],
-                            "C": self.pseudocounts["G"],
-                            "G": self.pseudocounts["C"],
-                            "T": self.pseudocounts["A"],
-                            }
+        res.background = {
+            "A": self.background["T"],
+            "C": self.background["G"],
+            "G": self.background["C"],
+            "T": self.background["A"],
+        }
+        res.pseudocounts = {
+            "A": self.pseudocounts["T"],
+            "C": self.pseudocounts["G"],
+            "G": self.pseudocounts["C"],
+            "T": self.pseudocounts["A"],
+        }
         return res
 
     @property
@@ -496,45 +516,45 @@ class Motif(object):
 
         frequencies = self.format("transfac")
         url = "http://weblogo.threeplusone.com/create.cgi"
-        values = {"sequences": frequencies,
-                  "format": format.lower(),
-                  "stack_width": "medium",
-                  "stacks_per_line": "40",
-                  "alphabet": alpha,
-                  "ignore_lower_case": True,
-                  "unit_name": "bits",
-                  "first_index": "1",
-                  "logo_start": "1",
-                  "logo_end": str(self.length),
-                  "composition": "comp_auto",
-                  "percentCG": "",
-                  "scale_width": True,
-                  "show_errorbars": True,
-                  "logo_title": "",
-                  "logo_label": "",
-                  "show_xaxis": True,
-                  "xaxis_label": "",
-                  "show_yaxis": True,
-                  "yaxis_label": "",
-                  "yaxis_scale": "auto",
-                  "yaxis_tic_interval": "1.0",
-                  "show_ends": True,
-                  "show_fineprint": True,
-                  "color_scheme": "color_auto",
-                  "symbols0": "",
-                  "symbols1": "",
-                  "symbols2": "",
-                  "symbols3": "",
-                  "symbols4": "",
-                  "color0": "",
-                  "color1": "",
-                  "color2": "",
-                  "color3": "",
-                  "color4": "",
-                  }
+        values = {
+            "sequences": frequencies,
+            "format": format.lower(),
+            "stack_width": "medium",
+            "stacks_per_line": "40",
+            "alphabet": alpha,
+            "ignore_lower_case": True,
+            "unit_name": "bits",
+            "first_index": "1",
+            "logo_start": "1",
+            "logo_end": str(self.length),
+            "composition": "comp_auto",
+            "percentCG": "",
+            "scale_width": True,
+            "show_errorbars": True,
+            "logo_title": "",
+            "logo_label": "",
+            "show_xaxis": True,
+            "xaxis_label": "",
+            "show_yaxis": True,
+            "yaxis_label": "",
+            "yaxis_scale": "auto",
+            "yaxis_tic_interval": "1.0",
+            "show_ends": True,
+            "show_fineprint": True,
+            "color_scheme": "color_auto",
+            "symbols0": "",
+            "symbols1": "",
+            "symbols2": "",
+            "symbols3": "",
+            "symbols4": "",
+            "color0": "",
+            "color1": "",
+            "color2": "",
+            "color3": "",
+            "color4": "",
+        }
 
-        values.update(
-            {k: "" if v is False else str(v) for k, v in kwds.items()})
+        values.update({k: "" if v is False else str(v) for k, v in kwds.items()})
         data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)
@@ -554,14 +574,17 @@ class Motif(object):
         """
         if format in ("pfm", "jaspar"):
             from Bio.motifs import jaspar
+
             motifs = [self]
             return jaspar.write(motifs, format)
         elif format == "transfac":
             from Bio.motifs import transfac
+
             motifs = [self]
             return transfac.write(motifs)
         elif format == "clusterbuster":
             from Bio.motifs import clusterbuster
+
             motifs = [self]
             return clusterbuster.write(motifs)
         else:
@@ -581,12 +604,15 @@ def write(motifs, format):
     format = format.lower()
     if format in ("pfm", "jaspar"):
         from Bio.motifs import jaspar
+
         return jaspar.write(motifs, format)
     elif format == "transfac":
         from Bio.motifs import transfac
+
         return transfac.write(motifs)
     elif format == "clusterbuster":
         from Bio.motifs import clusterbuster
+
         return clusterbuster.write(motifs)
     else:
         raise ValueError("Unknown format type %s" % format)
@@ -594,4 +620,5 @@ def write(motifs, format):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

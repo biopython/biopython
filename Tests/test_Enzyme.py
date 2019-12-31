@@ -10,7 +10,7 @@ import os
 import unittest
 
 from Bio.ExPASy import Enzyme
-from Bio._py3k import StringIO
+from io import StringIO
 
 
 class TestEnzyme(unittest.TestCase):

@@ -107,7 +107,7 @@ The following object attributes are provided:
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -266,7 +266,7 @@ def _get_aln_slice_coords(parsed_hsp):
     return start, stop
 
 
-class FastaM10Parser(object):
+class FastaM10Parser:
     """Parser for Bill Pearson's FASTA suite's -m 10 output."""
 
     def __init__(self, handle, __parse_hit_table=False):
@@ -550,7 +550,7 @@ class FastaM10Indexer(SearchIndexer):
 
             if not line.startswith(query_mark) and query_mark in line:
                 regx = re.search(_RE_ID_DESC_SEQLEN_IDX, line)
-                qresult_key = _bytes_to_string(regx.group(1))
+                qresult_key = regx.group(1).decode()
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:

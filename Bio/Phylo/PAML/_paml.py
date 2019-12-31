@@ -19,7 +19,7 @@ class PamlError(EnvironmentError):
     """
 
 
-class Paml(object):
+class Paml:
     """Base class for wrapping PAML commands."""
 
     def __init__(self, alignment=None, working_dir=None, out_file=None):

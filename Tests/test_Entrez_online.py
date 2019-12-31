@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -260,7 +259,7 @@ class EntrezOnlineCase(unittest.TestCase):
             if sys.version_info[0] < 3:
                 result = result.decode("UTF8")
             # Use of Unicode double quotation marks U+201C and U+201D
-            expected_result = u"“field of injury”"
+            expected_result = "“field of injury”"
             self.assertEqual(result[342:359], expected_result)
             handle.close()
         finally:

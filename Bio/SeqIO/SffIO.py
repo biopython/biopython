@@ -239,7 +239,7 @@ import struct
 import sys
 import re
 
-from Bio._py3k import _bytes_to_string, _as_bytes
+from Bio._py3k import _as_bytes
 
 _null = b"\0"
 _sff = b".sff"
@@ -348,8 +348,8 @@ def _sff_file_header(handle):
         raise ValueError(
             "Index offset %i but index length %i" % (index_offset, index_length)
         )
-    flow_chars = _bytes_to_string(handle.read(number_of_flows_per_read))
-    key_sequence = _bytes_to_string(handle.read(key_length))
+    flow_chars = handle.read(number_of_flows_per_read).decode()
+    key_sequence = handle.read(key_length).decode()
     # According to the spec, the header_length field should be the total number
     # of bytes required by this set of header fields, and should be equal to
     # "31 + number_of_flows_per_read + key_length" rounded up to the next value
@@ -433,7 +433,7 @@ def _sff_do_slow_index(handle):
                 % (read_header_length, data)
             )
         # now the name and any padding (remainder of header)
-        name = _bytes_to_string(handle.read(name_length))
+        name = handle.read(name_length).decode()
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
             import warnings
@@ -600,7 +600,7 @@ def ReadRocheXmlManifest(handle):
     if not xml_offset or not xml_size:
         raise ValueError("No XML manifest found")
     handle.seek(xml_offset)
-    return _bytes_to_string(handle.read(xml_size))
+    return handle.read(xml_size).decode()
 
 
 # This is a generator function!
@@ -645,7 +645,7 @@ def _sff_read_roche_index(handle):
             if more == _flag:
                 break
         assert data[-1:] == _flag, data[-1:]
-        name = _bytes_to_string(data[:-6])
+        name = data[:-6].decode()
         off4, off3, off2, off1, off0 = struct.unpack(fmt, data[-6:-1])
         offset = off0 + 255 * off1 + 65025 * off2 + 16581375 * off3
         if off4:
@@ -701,7 +701,7 @@ def _sff_read_seq_record(
             "Malformed read header, says length is %i" % read_header_length
         )
     # now the name and any padding (remainder of header)
-    name = _bytes_to_string(handle.read(name_length))
+    name = handle.read(name_length).decode()
     padding = read_header_length - read_header_size - name_length
     if handle.read(padding).count(_null) != padding:
         import warnings
@@ -717,7 +717,7 @@ def _sff_read_seq_record(
     flow_values = handle.read(read_flow_size)  # unpack later if needed
     temp_fmt = ">%iB" % seq_len  # used for flow index and quals
     flow_index = handle.read(seq_len)  # unpack later if needed
-    seq = _bytes_to_string(handle.read(seq_len))  # TODO - Use bytes in Seq?
+    seq = handle.read(seq_len).decode()  # TODO - Use bytes in Seq?
     quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
     # now any padding...
     padding = (read_flow_size + seq_len * 3) % 8
@@ -909,7 +909,7 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     return raw
 
 
-class _AddTellHandle(object):
+class _AddTellHandle:
     """Wrapper for handles which do not support the tell method (PRIVATE).
 
     Intended for use with things like network handles where tell (and reverse

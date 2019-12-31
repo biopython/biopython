@@ -24,7 +24,6 @@ acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
 chemically modified residues.
 """
 
-from Bio._py3k import basestring
 from Bio._py3k import _universal_read_mode
 
 from copy import copy
@@ -95,7 +94,7 @@ class SeqMapIndex(dict):
            converted into a Residues instance.
 
         """
-        if isinstance(residues, basestring):
+        if isinstance(residues, str):
             residues = Residues(residues)
 
         pdbid = residues.pdbid
@@ -130,7 +129,7 @@ class SeqMapIndex(dict):
         return seqMap
 
 
-class SeqMap(object):
+class SeqMap:
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
 
     This is a list like object; You can find the location of particular residues
@@ -293,7 +292,7 @@ class SeqMap(object):
             )
 
 
-class Res(object):
+class Res:
     """A single residue mapping from a RAF record.
 
     Attributes:

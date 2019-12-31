@@ -222,7 +222,7 @@ import zlib
 import struct
 
 from Bio._py3k import _as_bytes, _as_string
-from Bio._py3k import open as _open
+from builtins import open as _open
 
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
@@ -451,7 +451,7 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
-class BgzfReader(object):
+class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
@@ -690,12 +690,6 @@ class BgzfReader(object):
             raise StopIteration
         return line
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         """Iterate over the lines in the BGZF file."""
         return self
@@ -728,7 +722,7 @@ class BgzfReader(object):
         self.close()
 
 
-class BgzfWriter(object):
+class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):

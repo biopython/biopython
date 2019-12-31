@@ -11,7 +11,7 @@
 from functools import reduce
 
 
-class Graph(object):
+class Graph:
     """A directed graph abstraction with labeled edges."""
 
     def __init__(self, nodes=()):
