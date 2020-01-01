@@ -35,7 +35,6 @@ written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
 with parsing the DTD, and the other half with the XML itself.
 """
-import sys
 import os
 import warnings
 from collections import Counter
@@ -44,13 +43,11 @@ from io import BytesIO
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlparse as _urlparse
+from urllib.request import urlopen, urlparse
+
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
-
 
 class NoneElement:
     """NCBI Entrez XML element mapped to None."""
@@ -319,25 +316,10 @@ class DataHandler:
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
-        # HACK: remove Bio._py3k handle conversion, since the Entrez XML parser
-        # expects binary data
-        if handle.__class__.__name__ == "EvilHandleHack":
-            handle = handle._handle
-        if handle.__class__.__name__ == "TextIOWrapper":
-            handle = handle.buffer
-        if hasattr(handle, "closed") and handle.closed:
-            # Should avoid a possible Segmentation Fault, see:
-            # http://bugs.python.org/issue4877
-            raise IOError("Can't parse a closed handle")
-        if sys.version_info[0] >= 3:
-            # Another nasty hack to cope with a unicode StringIO handle
-            # since the Entrez XML parser expects binary data (bytes)
-            from io import StringIO
-
-            if isinstance(handle, StringIO):
-                from Bio._py3k import _as_bytes
-
-                handle = BytesIO(_as_bytes(handle.read()))
+        # Expat's parser.ParseFile function only accepts binary data;
+        # see also the comment below for Entrez.parse.
+        if handle.read(0) != b"":
+            raise TypeError("file should be opened in binary mode")
         try:
             self.parser.ParseFile(handle)
         except expat.ExpatError as e:
@@ -369,12 +351,27 @@ class DataHandler:
 
     def parse(self, handle):
         """Parse the XML in the given file handle."""
+        # The handle should have been opened in binary mode; data read from
+        # the handle are then bytes. Expat will pick up the encoding from the
+        # XML declaration (or assume UTF-8 if it is missing), and use this
+        # encoding to convert the binary data to a string before giving it to
+        # characterDataHandler.
+        # While parser.ParseFile only accepts binary data, parser.Parse accepts
+        # both binary data and strings. However, a file in text mode may have
+        # been opened with an encoding different from the encoding specified in
+        # the XML declaration at the top of the file. If so, the data in the
+        # file will have been decoded with an incorrect encoding. To avoid
+        # this, and to be consistent with parser.ParseFile (which is used in
+        # the Entrez.read function above), we require the handle to be in
+        # binary mode here as well.
+        if handle.read(0) != b"":
+            raise TypeError("file should be opened in binary mode")
         BLOCK = 1024
         while True:
-            # Read in another block of the file...
-            text = handle.read(BLOCK)
+            # Read in another block of data from the file.
+            data = handle.read(BLOCK)
             try:
-                self.parser.Parse(text, False)
+                self.parser.Parse(data, False)
             except expat.ExpatError as e:
                 if self.parser.StartElementHandler:
                     # We saw the initial <!xml declaration, so we can be sure
@@ -409,7 +406,7 @@ class DataHandler:
                     "instead of Entrez.parse"
                 )
 
-            if not text:
+            if not data:
                 break
 
             while len(records) >= 2:
@@ -473,7 +470,7 @@ class DataHandler:
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
-            handle = _urlopen(schema)
+            handle = urlopen(schema)
             text = handle.read()
             self.save_xsd_file(os.path.basename(schema), text)
             handle.close()
@@ -947,7 +944,7 @@ class DataHandler:
         we try to download it. If new DTDs become available from NCBI,
         putting them in Bio/Entrez/DTDs will allow the parser to see them.
         """
-        urlinfo = _urlparse(systemId)
+        urlinfo = urlparse(systemId)
         # Following attribute requires Python 2.5+
         # if urlinfo.scheme=='http':
         if urlinfo[0] in ["http", "https", "ftp"]:
@@ -976,7 +973,7 @@ class DataHandler:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
             try:
-                handle = _urlopen(url)
+                handle = urlopen(url)
             except IOError:
                 raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
             text = handle.read()
