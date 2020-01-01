@@ -4,22 +4,23 @@
 Entrez (\url{https://www.ncbi.nlm.nih.gov/Web/Search/entrezfs.html}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a Python script.
 
 The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities (also known as EUtils), consisting of eight tools that are described in detail on NCBI's page at \url{https://www.ncbi.nlm.nih.gov/books/NBK25501/}.
-Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
+Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that NCBI's guidelines for responsible data access are being followed.
 
 The output returned by the Entrez Programming Utilities is typically in XML format. To parse such output, you have several options:
 \begin{enumerate}
   \item Use \verb+Bio.Entrez+'s parser to parse the XML output into a Python object;
-  \item Use the DOM (Document Object Model) parser in Python's standard library;
-  \item Use the SAX (Simple API for XML) parser in Python's standard library;
+  \item Use one of the XML parsers available in Python's standard library;
   \item Read the XML output as raw text, and parse it by string searching and manipulation.
 \end{enumerate}
-For the DOM and SAX parsers, see the Python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
+See the Python documentation for a description of the XML parsers in Python's standard library. Here, we discuss the parser in Biopython's \verb+Bio.Entrez+ module. This parser can be used to parse data as provided through \verb+Bio.Entrez+'s programmatic access functions to Entrez, but can also be used to parse XML data from NCBI Entrez that are stored in a file. In the latter case, the XML file should be opened in binary mode (e.g. \verb+open("myfile.xml", "rb")+) for the XML parser in \verb+Bio.Entrez+ to work correctly.
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
 Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will show a warning message with the name and URL of the missing DTD file. The parser will proceed to access the missing DTD file through the internet, allowing the parsing of the XML file to continue.  However, the parser is much faster if the DTD file is available locally. For this purpose, please download the DTD file from the URL in the warning message and place it in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files.  If you don't have write access to this directory, you can also place the DTD file in \verb+~/.biopython/Bio/Entrez/DTDs+, where \verb+~+ represents your home directory. Since this directory is read before the directory \verb+...site-packages/Bio/Entrez/DTDs+, you can also put newer versions of DTD files there if the ones in \verb+...site-packages/Bio/Entrez/DTDs+ become outdated. Alternatively, if you installed Biopython from source, you can add the DTD file to the source code's \verb+Bio/Entrez/DTDs+ directory, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
 
 The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
+
+The functions in \verb+Bio.Entrez+ for programmatic access to Entrez return data either in binary format or in text format, depending on the type of data requested. In most cases, these functions return data in text format by decoding the data obtained from NCBI Entrez to Python strings under the assumption that the encoding is UTF-8. However, XML data are returned in binary format. The reason for this is that the encoding is specified in the XML document itself, which means that we won't know the correct encoding to use until we start parsing the file. \verb+Bio.Entrez+'s parser therefore accepts data in binary format, extracts the encoding from the XML, and uses it to decode all text in the XML document to Python strings, ensuring that all text (in particular in languages other than English) are interpreted correctly. This is also the reason why you should open an XML file a binary mode when you want to use \verb+Bio.Entrez+'s parser to parse the file.
 
 \section{Entrez Guidelines}
 \label{sec:entrez-guidelines}
