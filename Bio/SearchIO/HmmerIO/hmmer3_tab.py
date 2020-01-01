@@ -7,7 +7,6 @@
 
 from itertools import chain
 
-from Bio._py3k import _as_bytes
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -32,8 +31,7 @@ class Hmmer3TabParser:
             self.line = self.handle.readline()
         # if we have result rows, parse it
         if self.line:
-            for qresult in self._parse_qresult():
-                yield qresult
+            yield from self._parse_qresult()
 
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
@@ -156,8 +154,8 @@ class Hmmer3TabIndexer(SearchIndexer):
         handle.seek(0)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        header_mark = _as_bytes("#")
-        split_mark = _as_bytes(" ")
+        header_mark = b"#"
+        split_mark = b" "
         # set line with initial mock value, to emulate header
         line = header_mark
 
@@ -204,8 +202,8 @@ class Hmmer3TabIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        qresult_raw = _as_bytes("")
-        split_mark = _as_bytes(" ")
+        qresult_raw = b""
+        split_mark = b" "
 
         while True:
             line = handle.readline()

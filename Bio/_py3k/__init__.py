@@ -16,166 +16,71 @@ go away.
 
 import sys
 
+import codecs
 
-if sys.version_info[0] >= 3:
-    import codecs
 
-    def _bytes_bytearray_to_str(s):
-        """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
-        if isinstance(s, (bytes, bytearray)):
-            return s.decode()
-        return s
-
-    def _as_unicode(s):
-        """Turn byte string or unicode string into a unicode string (PRIVATE)."""
-        if isinstance(s, str):
-            return s
-        # Assume it is a bytes string
-        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-        return codecs.latin_1_decode(s)[0]
-
-    def _as_bytes(s):
-        """Turn byte string or unicode string into a bytes string (PRIVATE).
-
-        The Python 2 version returns a (byte) string.
-        """
-        if isinstance(s, bytes):
-            return s
-        # Assume it is a unicode string
-        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-        return codecs.latin_1_encode(s)[0]
-
-    _as_string = _as_unicode
-
-    def _is_int_or_long(i):
-        """Check if the value is an integer (PRIVATE).
-
-        Note there are no longs on Python 3.
-        """
-        return isinstance(i, int)
-
-    import io
-    import locale
-
-    # Python 3.4 onwards, the standard library wrappers should work:
-    def _binary_to_string_handle(handle):
-        """Treat a binary (bytes) handle like a text (unicode) handle (PRIVATE)."""
-        try:
-            # If this is a network handle from urllib,
-            # the HTTP headers may tell us the encoding.
-            encoding = handle.headers.get_content_charset()
-        except AttributeError:
-            encoding = None
-        if encoding is None:
-            # The W3C recommendation is:
-            # When no explicit charset parameter is provided by the sender,
-            # media subtypes of the "text" type are defined to have a default
-            # charset value of "ISO-8859-1" when received via HTTP.
-            # "ISO-8859-1" is also known as 'latin-1'
-            # See the following for more detail:
-            # https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1
-            encoding = "latin-1"
-        wrapped = io.TextIOWrapper(io.BufferedReader(handle), encoding=encoding)
-        try:
-            # If wrapping an online handle, this is nice to have:
-            wrapped.url = handle.url
-        except AttributeError:
-            pass
-        return wrapped
-
-    # This is to avoid the deprecation warning from open(filename, "rU")
-    _universal_read_mode = "r"  # text mode does universal new lines
-
-    # On Python 3, this will be a unicode StringIO
-    from io import StringIO
-
-    # On Python 3 urllib, urllib2, and urlparse were merged:
-    from urllib.request import urlopen, Request, urlretrieve, urlparse, urlcleanup
-    from urllib.parse import urlencode, quote
-    from urllib.error import URLError, HTTPError
-
-    exec("""\
-def raise_from(value, from_value):
-    try:
-        raise value from from_value
-    finally:
-        value = None
-""")
-
-else:
-
-    def _bytes_bytearray_to_str(s):
-        """If s is bytes or bytearray, convert to a string (PRIVATE)."""
-        if isinstance(s, (bytes, bytearray)):
-            return str(s)
-        return s
-
-    def _as_unicode(s):
-        """If s is a (byte) string, convert to a unicode string (PRIVATE)."""
-        if isinstance(s, str):
-            return s
+def _bytes_bytearray_to_str(s):
+    """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
+    if isinstance(s, (bytes, bytearray)):
         return s.decode()
+    return s
 
-    def _as_bytes(s):
-        """Turn a (byte) string or a unicode string into a (byte) string (PRIVATE)."""
-        return str(s)
 
-    _as_string = _as_bytes
+def _as_unicode(s):
+    """Turn byte string or unicode string into a unicode string (PRIVATE)."""
+    if isinstance(s, str):
+        return s
+    # Assume it is a bytes string
+    # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+    return codecs.latin_1_decode(s)[0]
 
-    def _is_int_or_long(i):
-        """Check if the value is an integer or long (PRIVATE)."""
-        return isinstance(i, (int, long))
 
-    def _binary_to_string_handle(handle):
-        """Treat a binary handle like a text handle (PRIVATE)."""
-        return handle
+def _as_bytes(s):
+    """Turn byte string or unicode string into a bytes string (PRIVATE).
 
-    # This private variable is set to "r" on Python 3 for text
-    # mode which include universal readlines mode
-    _universal_read_mode = "rU"
+    The Python 2 version returns a (byte) string.
+    """
+    if isinstance(s, bytes):
+        return s
+    # Assume it is a unicode string
+    # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+    return codecs.latin_1_encode(s)[0]
 
-    # On Python 2 this will be a (bytes) string based handle.
-    # Note this doesn't work as it is unicode based:
-    # from io import StringIO
+
+_as_string = _as_unicode
+
+
+import io
+import locale
+
+# Python 3.4 onwards, the standard library wrappers should work:
+def _binary_to_string_handle(handle):
+    """Treat a binary (bytes) handle like a text (unicode) handle (PRIVATE)."""
     try:
-        from cStringIO import StringIO
-    except ImportError:
-        from StringIO import StringIO
+        # If this is a network handle from urllib,
+        # the HTTP headers may tell us the encoding.
+        encoding = handle.headers.get_content_charset()
+    except AttributeError:
+        encoding = None
+    if encoding is None:
+        # The W3C recommendation is:
+        # When no explicit charset parameter is provided by the sender,
+        # media subtypes of the "text" type are defined to have a default
+        # charset value of "ISO-8859-1" when received via HTTP.
+        # "ISO-8859-1" is also known as 'latin-1'
+        # See the following for more detail:
+        # https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1
+        encoding = "latin-1"
+    wrapped = io.TextIOWrapper(io.BufferedReader(handle), encoding=encoding)
+    try:
+        # If wrapping an online handle, this is nice to have:
+        wrapped.url = handle.url
+    except AttributeError:
+        pass
+    return wrapped
 
-    # Under urllib.request on Python 3:
-    from urllib2 import urlopen, Request
-    from urllib import urlretrieve, urlcleanup
-    from urlparse import urlparse
 
-    # Under urllib.parse on Python 3:
-    from urllib import urlencode, quote
-
-    # Under urllib.error on Python 3:
-    from urllib2 import URLError, HTTPError
-
-    def raise_from(value, from_value):
-        raise value
-
-
-if sys.platform == "win32":
-    # Can't use commands.getoutput on Python 2, Unix only/broken:
-    # http://bugs.python.org/issue15073
-    # Can't use subprocess.getoutput on Python 3, Unix only/broken:
-    # http://bugs.python.org/issue10197
-    def getoutput(cmd):
-        import subprocess
-        child = subprocess.Popen(cmd,
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.STDOUT,
-                                 universal_newlines=True,
-                                 shell=False)
-        stdout, stderr = child.communicate()
-        # Remove trailing \n to match the Unix function,
-        return stdout.rstrip("\n")
-elif sys.version_info[0] >= 3:
-    # Use subprocess.getoutput on Python 3,
-    from subprocess import getoutput
-else:
-    # Use commands.getoutput on Python 2,
-    from commands import getoutput
+# On Python 3 urllib, urllib2, and urlparse were merged:
+from urllib.request import urlopen, Request, urlparse, urlcleanup
+from urllib.parse import urlencode, quote
+from urllib.error import URLError, HTTPError

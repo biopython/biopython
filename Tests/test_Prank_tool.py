@@ -37,10 +37,11 @@ if sys.platform == "win32":
         if prank_exe:
             break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("prank")
-    if "not found" not in output and "prank" in output.lower():
-        prank_exe = "prank"
+    if "not found" not in output and "not recognized" not in output:
+        if "prank" in output.lower():
+            prank_exe = "prank"
 if not prank_exe:
     raise MissingExternalDependencyError(
         "Install PRANK if you want to use the Bio.Align.Applications wrapper.")

@@ -422,8 +422,7 @@ class DataHandler:
             raise CorruptedXMLError("Premature end of XML stream")
 
         # Send out the remaining records
-        for record in records:
-            yield record
+        yield from records
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""

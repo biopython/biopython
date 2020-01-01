@@ -277,7 +277,7 @@ class RestrictionType(type):
             raise ValueError("Problem with hyphen in %s as enzyme name" % repr(name))
         # 2011/11/26 - Nobody knows what this call was supposed to accomplish,
         # but all unit tests seem to pass without it.
-        # super(RestrictionType, cls).__init__(cls, name, bases, dct)
+        # super().__init__(cls, name, bases, dct)
         try:
             cls.compsite = re.compile(cls.compsite)
         except AttributeError:

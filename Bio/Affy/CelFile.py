@@ -23,7 +23,7 @@ class ParserError(ValueError):
 
     def __init__(self, *args):
         """Initialise class."""
-        super(ParserError, self).__init__(*args)
+        super().__init__(*args)
 
 
 _modeError = ParserError("You're trying to open an Affymetrix v4"

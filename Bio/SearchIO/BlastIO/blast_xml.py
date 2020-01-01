@@ -21,8 +21,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from Bio._py3k import _as_bytes
 
-_empty_bytes_string = _as_bytes("")
-
 __all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
 
 
@@ -242,8 +240,7 @@ class BlastXmlParser:
 
     def __iter__(self):
         """Iterate over BlastXmlParser object yields query results."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _parse_preamble(self):
         """Parse all tag data prior to the first query result (PRIVATE)."""
@@ -559,8 +556,8 @@ class BlastXmlIndexer(SearchIndexer):
     """Indexer class for BLAST XML output."""
 
     _parser = BlastXmlParser
-    qstart_mark = _as_bytes("<Iteration>")
-    qend_mark = _as_bytes("</Iteration>")
+    qstart_mark = b"<Iteration>"
+    qend_mark = b"</Iteration>"
     block_size = 16384
 
     def __init__(self, filename, **kwargs):
@@ -574,19 +571,17 @@ class BlastXmlIndexer(SearchIndexer):
         """Iterate over BlastXmlIndexer yields qstart_id, start_offset, block's length."""
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
-        blast_id_mark = _as_bytes("Query_")
+        blast_id_mark = b"Query_"
         block_size = self.block_size
         handle = self._handle
         handle.seek(0)
         re_desc = re.compile(
-            _as_bytes(
-                r"<Iteration_query-ID>(.*?)"
-                r"</Iteration_query-ID>\s+?"
-                "<Iteration_query-def>"
-                "(.*?)</Iteration_query-def>"
-            )
+            b"<Iteration_query-ID>(.*?)"
+            br"</Iteration_query-ID>\s+?"
+            b"<Iteration_query-def>"
+            b"(.*?)</Iteration_query-def>"
         )
-        re_desc_end = re.compile(_as_bytes(r"</Iteration_query-def>"))
+        re_desc_end = re.compile(b"</Iteration_query-def>")
         counter = 0
 
         while True:
@@ -611,7 +606,7 @@ class BlastXmlIndexer(SearchIndexer):
                     assert qstart_mark not in line, line
                     block.append(line)
                 assert line.rstrip().endswith(qend_mark), line
-                block = _empty_bytes_string.join(block)
+                block = b"".join(block)
             assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
             assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
             # Now we have a full <Iteration>...</Iteration> block, find the ID
@@ -625,7 +620,7 @@ class BlastXmlIndexer(SearchIndexer):
                 qstart_desc = _as_bytes(self._fallback["description"])
                 qstart_id = _as_bytes(self._fallback["id"])
             if qstart_id.startswith(blast_id_mark):
-                qstart_id = qstart_desc.split(_as_bytes(" "), 1)[0]
+                qstart_id = qstart_desc.split(b" ", 1)[0]
             yield qstart_id.decode(), start_offset, len(block)
             counter += 1
 

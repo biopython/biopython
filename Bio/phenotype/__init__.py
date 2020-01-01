@@ -186,9 +186,7 @@ def parse(handle, format):
             i = iterator_generator(fp)
         else:
             raise ValueError("Unknown format '%s'" % format)
-        # This imposes some overhead... wait until we drop Python 2.4 to fix it
-        for r in i:
-            yield r
+        yield from i
 
 
 def read(handle, format):

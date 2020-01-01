@@ -10,12 +10,15 @@ and position-specific scoring matrices.
 
 import math
 import platform
+
 try:
     import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.motifs.matrix.")
+        "Install NumPy if you want to use Bio.motifs.matrix."
+    )
 
 from Bio.Seq import Seq
 
@@ -28,8 +31,9 @@ def _calculate(score_dict, sequence, m):
     # Create the numpy arrays here; the C module then does not rely on numpy
     # Use a float32 for the scores array to save space
     scores = np.empty(n - m + 1, np.float32)
-    logodds = np.array([[score_dict[letter][i] for letter in "ACGT"]
-                        for i in range(m)], float)
+    logodds = np.array(
+        [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)], float
+    )
     _pwm.calculate(sequence, logodds, scores)
     return scores
 
@@ -155,7 +159,7 @@ class GenericPositionMatrix(dict):
             except ValueError:
                 # On Python 2.5 or older that was handled in C code,
                 # and failed on Windows XP 32bit
-                maximum = - 1E400
+                maximum = -1e400
             for letter in self.alphabet:
                 count = self[letter][i]
                 if count > maximum:
@@ -174,7 +178,7 @@ class GenericPositionMatrix(dict):
             except ValueError:
                 # On Python 2.5 or older that was handled in C code,
                 # and failed on Windows XP 32bit
-                minimum = 1E400
+                minimum = 1e400
             for letter in self.alphabet:
                 count = self[letter][i]
                 if count < minimum:
@@ -210,8 +214,10 @@ class GenericPositionMatrix(dict):
         }
         sequence = ""
         for i in range(self.length):
+
             def get(nucleotide):
                 return self[nucleotide][i]
+
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
             # Follow the Cavener rules:
@@ -332,7 +338,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                         except ValueError:
                             # On Python 2.5 or older that was handled in C code,
                             # and failed on Windows XP 32bit
-                            logodds = - 1E400
+                            logodds = -1e400
                 else:
                     p = self[letter][i]
                     if p > 0:
@@ -360,8 +366,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if sorted(self.alphabet) != ["A", "C", "G", "T"]:
-            raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
-                             % self.alphabet)
+            raise ValueError(
+                "PSSM has wrong alphabet: %s - Use only with DNA motifs" % self.alphabet
+            )
 
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
@@ -375,7 +382,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         else:
             return scores
 
-    def search(self, sequence, threshold=0.0, both=True, chunksize=10**6):
+    def search(self, sequence, threshold=0.0, both=True, chunksize=10 ** 6):
         """Find hits with PWM score above given threshold.
 
         A generator function, returning found hits in the given sequence
@@ -388,7 +395,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         if both:
             rc = self.reverse_complement()
         for chunk_start in chunk_starts:
-            subseq = sequence[chunk_start:chunk_start + chunksize + motif_l - 1]
+            subseq = sequence[chunk_start : chunk_start + chunksize + motif_l - 1]
             pos_scores = self.calculate(subseq)
             pos_ind = pos_scores >= threshold
             pos_positions = np.where(pos_ind)[0] + chunk_start
@@ -406,8 +413,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             order = np.argsort(np.append(pos_positions, neg_positions))
             chunk_positions = chunk_positions[order]
             chunk_scores = chunk_scores[order]
-            for pos, score in zip(chunk_positions, chunk_scores):
-                yield pos, score
+            yield from zip(chunk_positions, chunk_scores)
 
     @property
     def max(self):
@@ -510,8 +516,8 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
     def dist_pearson_at(self, other, offset):
         """Return the similarity score based on pearson correlation at the given offset."""
         letters = self.alphabet
-        sx = 0.0   # \sum x
-        sy = 0.0   # \sum y
+        sx = 0.0  # \sum x
+        sy = 0.0  # \sum y
         sxx = 0.0  # \sum x^2
         sxy = 0.0  # \sum x \cdot y
         syy = 0.0  # \sum y^2
@@ -536,6 +542,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
     def distribution(self, background=None, precision=10 ** 3):
         """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
+
         if background is None:
             background = dict.fromkeys(self.alphabet, 1.0)
         else:

@@ -9,7 +9,7 @@ import sys
 import os
 import unittest
 
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline
@@ -22,14 +22,10 @@ phyml_exe = None
 exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
 try:
     output = getoutput(exe_name + " --version")
-    if "not found" not in output and ("20" in output or "PhyML" in output):
-        phyml_exe = exe_name
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
-    # Python 2.6 or 2.7 on Windows XP:
-    # WindowsError: [Error 2] The system cannot find the file specified
-    # Python 3.3 or 3.4 on Windows XP:
-    # FileNotFoundError: [WinError 2] The system cannot find the file specified
+    if "not found" not in output and "not recognized" not in output:
+        if "20" in output or "PhyML" in output:
+            phyml_exe = exe_name
+except FileNotFoundError:
     pass
 
 if not phyml_exe:

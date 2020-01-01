@@ -54,8 +54,6 @@ Classes:
 
 from collections import OrderedDict
 
-from Bio._py3k import _is_int_or_long
-
 from Bio.Seq import MutableSeq, reverse_complement
 
 
@@ -788,13 +786,13 @@ class FeatureLocation:
         # TODO - Check 0 <= start <= end (<= length of reference)
         if isinstance(start, AbstractPosition):
             self._start = start
-        elif _is_int_or_long(start):
+        elif isinstance(start, int):
             self._start = ExactPosition(start)
         else:
             raise TypeError("start=%r %s" % (start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
-        elif _is_int_or_long(end):
+        elif isinstance(end, int):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
@@ -908,7 +906,7 @@ class FeatureLocation:
         """
         if isinstance(other, FeatureLocation):
             return CompoundLocation([self, other])
-        elif _is_int_or_long(other):
+        elif isinstance(other, int):
             return self._shift(other)
         else:
             # This will allow CompoundLocation's __radd__ to be called:
@@ -916,7 +914,7 @@ class FeatureLocation:
 
     def __radd__(self, other):
         """Add a feature locationanother FeatureLocation object to the left."""
-        if _is_int_or_long(other):
+        if isinstance(other, int):
             return self._shift(other)
         else:
             return NotImplemented
@@ -961,7 +959,7 @@ class FeatureLocation:
         >>> [i for i in range(15) if i in loc]
         [5, 6, 7, 8, 9]
         """
-        if not _is_int_or_long(value):
+        if not isinstance(value, int):
             raise ValueError(
                 "Currently we only support checking for integer "
                 "positions being within a FeatureLocation."
@@ -997,11 +995,9 @@ class FeatureLocation:
         [9, 8, 7, 6, 5]
         """
         if self.strand == -1:
-            for i in range(self._end - 1, self._start - 1, -1):
-                yield i
+            yield from range(self._end - 1, self._start - 1, -1)
         else:
-            for i in range(self._start, self._end):
-                yield i
+            yield from range(self._start, self._end)
 
     def __eq__(self, other):
         """Implement equality by comparing all the location attributes."""
@@ -1323,7 +1319,7 @@ class CompoundLocation:
                     "Mixed operators %s and %s" % (self.operator, other.operator)
                 )
             return CompoundLocation(self.parts + other.parts, self.operator)
-        elif _is_int_or_long(other):
+        elif isinstance(other, int):
             return self._shift(other)
         else:
             raise NotImplementedError
@@ -1332,7 +1328,7 @@ class CompoundLocation:
         """Add a feature to the left."""
         if isinstance(other, FeatureLocation):
             return CompoundLocation([other] + self.parts, self.operator)
-        elif _is_int_or_long(other):
+        elif isinstance(other, int):
             return self._shift(other)
         else:
             raise NotImplementedError
@@ -1365,8 +1361,7 @@ class CompoundLocation:
     def __iter__(self):
         """Iterate over the parent positions within the CompoundLocation object."""
         for loc in self.parts:
-            for pos in loc:
-                yield pos
+            yield from loc
 
     def __eq__(self, other):
         """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation."""

@@ -10,7 +10,7 @@
 import getopt
 import sys
 
-from Bio._py3k import urlretrieve as _urlretrieve
+from urllib.request import urlretrieve as _urlretrieve
 
 from Bio.SCOP import Raf, Cla
 

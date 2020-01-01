@@ -285,7 +285,7 @@ class RelaxedPhylipWriter(PhylipWriter):
             id_width = 1
         else:
             id_width = max((len(s.id.strip()) for s in alignment)) + 1
-        super(RelaxedPhylipWriter, self).write_alignment(alignment, id_width)
+        super().write_alignment(alignment, id_width)
 
 
 class RelaxedPhylipIterator(PhylipIterator):
