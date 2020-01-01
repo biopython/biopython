@@ -383,7 +383,7 @@ class TestUniprot(unittest.TestCase):
 
     def test_F2CXE6(self):
         """Compare SwissProt text and uniprot XML versions of F2CXE6."""
-        # This evil record has a semi-colon in the genem name,
+        # This evil record has a semi-colon in the gene name,
         # GN   Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};
         # <gene><name type="primary" evidence="3">HvPIP2;8</name></gene>
         old = SeqIO.read("SwissProt/F2CXE6.txt", "swiss")

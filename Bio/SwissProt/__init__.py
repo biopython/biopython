@@ -60,10 +60,10 @@ class Record:
 
     Examples
     --------
-    >>> import Bio.SwissProt as sp
+    >>> from Bio import SwissProt
     >>> example_filename = "SwissProt/sp008"
     >>> with open(example_filename) as handle:
-    ...     records = sp.parse(handle)
+    ...     records = SwissProt.parse(handle)
     ...     for record in records:
     ...         print(record.entry_name)
     ...         print(",".join(record.accessions))

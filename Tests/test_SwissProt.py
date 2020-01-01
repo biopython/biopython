@@ -55,7 +55,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[0].references), 1)
         self.assertEqual(record.references[0].references[0], ("MEDLINE", "96299740"))
 
-        # Check the two parsers agree on the essentials
+        # Check that the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
@@ -1530,6 +1530,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
+
+    def test_ft_line(self):
+        """Parsing SwissProt file O23729, which has a new-style FT line."""
+        filename = "O23729.txt"
+        datafile = os.path.join("SwissProt", filename)
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
 
 if __name__ == "__main__":
