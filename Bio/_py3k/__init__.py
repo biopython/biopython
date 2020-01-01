@@ -50,14 +50,6 @@ def _as_bytes(s):
 _as_string = _as_unicode
 
 
-def _is_int_or_long(i):
-    """Check if the value is an integer (PRIVATE).
-
-    Note there are no longs on Python 3.
-    """
-    return isinstance(i, int)
-
-
 import io
 import locale
 
@@ -87,9 +79,6 @@ def _binary_to_string_handle(handle):
         pass
     return wrapped
 
-
-# This is to avoid the deprecation warning from open(filename, "rU")
-_universal_read_mode = "r"  # text mode does universal new lines
 
 # On Python 3 urllib, urllib2, and urlparse were merged:
 from urllib.request import urlopen, Request, urlparse, urlcleanup

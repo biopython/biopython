@@ -974,6 +974,7 @@ class DataHandler:
             # the internet instead.
             try:
                 handle = urlopen(url)
+
             except OSError:
                 raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
             text = handle.read()
