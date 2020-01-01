@@ -67,9 +67,7 @@ VERBOSITY = 0
 
 # Following modules have historic failures. If you fix one of these
 # please remove here!
-EXCLUDE_DOCTEST_MODULES = [
-    ]
-
+EXCLUDE_DOCTEST_MODULES = []
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
