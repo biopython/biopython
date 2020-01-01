@@ -879,14 +879,14 @@ class DataHandler:
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except FileNotFoundError:
+        except IOError:
             pass
         else:
             return handle
         path = os.path.join(self.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except FileNotFoundError:
+        except IOError:
             pass
         else:
             return handle
@@ -898,14 +898,14 @@ class DataHandler:
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except FileNotFoundError:
+        except IOError:
             pass
         else:
             return handle
         path = os.path.join(self.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except FileNotFoundError:
+        except IOError:
             pass
         else:
             return handle
@@ -917,7 +917,7 @@ class DataHandler:
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
-        except OSError:
+        except IOError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
@@ -929,7 +929,7 @@ class DataHandler:
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
-        except OSError:
+        except IOError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
@@ -974,7 +974,7 @@ class DataHandler:
             # the internet instead.
             try:
                 handle = urlopen(url)
-            except OSError:
+            except IOError:
                 raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
             text = handle.read()
             handle.close()
