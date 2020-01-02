@@ -227,7 +227,7 @@ class FeatureTable(SeqFeature):
                     includes the feature identifier code (FTId) as a qualifier,
                     it is stored as the attribute ID of the FeatureTable object.
 
-    """
+    """  # noqa: RST201, RST203, RST301
 
 
 def parse(handle):
@@ -681,7 +681,7 @@ def _read_ft(record, line):
         if line[13:21] == "        ":  # new-style FT line
             location = line[21:80].rstrip()
             try:
-                isoform_id, location = location.split(':')
+                isoform_id, location = location.split(":")
             except ValueError:
                 isoform_id = None
             try:
@@ -695,7 +695,7 @@ def _read_ft(record, line):
             to_res = line[21:27].lstrip()
             isoform_id = None
             description = line[34:75].rstrip()
-            qualifiers = {'description': description}
+            qualifiers = {"description": description}
         if from_res == "?":
             from_res = UnknownPosition()
         elif from_res.startswith("?"):
@@ -735,7 +735,7 @@ def _read_ft(record, line):
             feature.id = description[6:].rstrip(".")
             return
         # this line is a continuation of the description of the previous feature
-        old_description = feature.qualifiers['description']
+        old_description = feature.qualifiers["description"]
         if old_description.endswith("-"):
             description = "%s%s" % (old_description, description)
         else:
@@ -764,7 +764,7 @@ def _read_ft(record, line):
                 second_seq = second_seq.replace(" ", "")
                 # reassemble the description
                 description = first_seq + " -> " + second_seq + extra_info
-        feature.qualifiers['description'] = description
+        feature.qualifiers["description"] = description
     else:  # new-style FT line
         if line[21] == "/":
             qualifier_type, value = line[22:].rstrip().split("=", 1)
@@ -812,6 +812,7 @@ def _read_ft(record, line):
                 # reassemble the description
                 description = first_seq + " -> " + second_seq + extra_info
         feature.qualifiers[key] = description
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

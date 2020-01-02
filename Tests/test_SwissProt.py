@@ -375,7 +375,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.entry_name, "NDOA_PSEU8")
         self.assertEqual(record.accessions, ["P0A186", "O07829", "P23082", "Q52123"])
         self.assertEqual(record.organism_classification, ["Bacteria", "Proteobacteria"])
-        self.assertEqual(record.seqinfo, (104, 11446, '475625DCC3EDCD41'))
+        self.assertEqual(record.seqinfo, (104, 11446, "475625DCC3EDCD41"))
 
         self.assertEqual(len(record.features), 7)
         feature = record.features[0]
@@ -2181,9 +2181,9 @@ class TestSwissProt(unittest.TestCase):
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "PSBL_ORYSJ")
-        self.assertEqual(record.accessions, ['P60137', 'O47030', 'P12166', 'P12167', 'Q34007'])
+        self.assertEqual(record.accessions, ["P60137", "O47030", "P12166", "P12167", "Q34007"])
         self.assertEqual(record.organism_classification, ["Eukaryota", "Viridiplantae", "Streptophyta", "Embryophyta", "Tracheophyta", "Spermatophyta", "Magnoliopsida", "Liliopsida", "Poales", "Poaceae", "BOP clade", "Oryzoideae", "Oryzeae", "Oryzinae", "Oryza", "Oryza sativa"])
-        self.assertEqual(record.seqinfo, (38, 4497, '55537AEC50D25E8D'))
+        self.assertEqual(record.seqinfo, (38, 4497, "55537AEC50D25E8D"))
 
         self.assertEqual(len(record.features), 2)
         feature = record.features[0]
