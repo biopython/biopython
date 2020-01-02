@@ -16,6 +16,7 @@ Functions:
 
 """
 
+# flake8: noqa
 
 from Bio.SeqFeature import (
     SeqFeature,
@@ -227,7 +228,7 @@ class FeatureTable(SeqFeature):
                     includes the feature identifier code (FTId) as a qualifier,
                     it is stored as the attribute ID of the FeatureTable object.
 
-    """  # noqa: RST201, RST203, RST301
+    """
 
 
 def parse(handle):
