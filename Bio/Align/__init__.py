@@ -13,7 +13,6 @@ class, used in the Bio.AlignIO module.
 
 """
 
-import sys  # Only needed to check if we are using Python 2 or 3
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
@@ -1292,32 +1291,15 @@ class PairwiseAlignment:
         """
         segments1 = []
         segments2 = []
-        if sys.version_info[0] > 2:
-            i1, i2 = self.path[0]
-            for node in self.path[1:]:
-                j1, j2 = node
-                if j1 > i1 and j2 > i2:
-                    segment1 = (i1, j1)
-                    segment2 = (i2, j2)
-                    segments1.append(segment1)
-                    segments2.append(segment2)
-                i1, i2 = j1, j2
-        else:
-            # Python 2: convert all long ints to ints to be consistent
-            # with the doctests
-            i1, i2 = self.path[0]
-            i1 = int(i1)
-            i2 = int(i2)
-            for node in self.path[1:]:
-                j1, j2 = node
-                j1 = int(j1)
-                j2 = int(j2)
-                if j1 > i1 and j2 > i2:
-                    segment1 = (i1, j1)
-                    segment2 = (i2, j2)
-                    segments1.append(segment1)
-                    segments2.append(segment2)
-                i1, i2 = j1, j2
+        i1, i2 = self.path[0]
+        for node in self.path[1:]:
+            j1, j2 = node
+            if j1 > i1 and j2 > i2:
+                segment1 = (i1, j1)
+                segment2 = (i2, j2)
+                segments1.append(segment1)
+                segments2.append(segment2)
+            i1, i2 = j1, j2
         return tuple(segments1), tuple(segments2)
 
 
