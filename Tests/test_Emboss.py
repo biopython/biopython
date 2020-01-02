@@ -663,7 +663,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Setup,
         query = "DVCTGKALCDPVTQNIKTYPVKIENLRVMI"
         out_file = "Emboss/temp_test4.water"
-        in_file = "SwissProt/sp004"
+        in_file = "SwissProt/P0A186.txt"
         self.assertTrue(os.path.isfile(in_file))
         if os.path.isfile(out_file):
             os.remove(out_file)
