@@ -81,9 +81,15 @@ class AbstractPropertyMap:
 
         Examples
         --------
+        >>> entity_property_list = [
+        ...     ('entity_1', 'property_1'),
+        ...     ('entity_2', 'property_2')
+        ... ]
+        >>> map = AbstractPropertyMap({}, [], entity_property_list)
         >>> for (res, property) in iter(map):
         ...     print(res, property)
-        ...
+        entity_1 property_1
+        entity_2 property_2
 
         """
         for i in range(0, len(self.property_list)):
