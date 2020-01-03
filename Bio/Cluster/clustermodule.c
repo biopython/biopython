@@ -2440,9 +2440,18 @@ PyInit__cluster(void)
     if (module == NULL) return NULL;
 
     Py_INCREF(&PyTreeType);
+    if (PyModule_AddObject(module, "Tree", (PyObject*) &PyTreeType) < 0) {
+        Py_DECREF(module);
+        Py_DECREF(&PyTreeType);
+        return NULL;
+    }
+
     Py_INCREF(&PyNodeType);
-    PyModule_AddObject(module, "Tree", (PyObject*) &PyTreeType);
-    PyModule_AddObject(module, "Node", (PyObject*) &PyNodeType);
+    if (PyModule_AddObject(module, "Node", (PyObject*) &PyNodeType) < 0) {
+        Py_DECREF(module);
+        Py_DECREF(&PyNodeType);
+        return NULL;
+    }
 
     return module;
 }
