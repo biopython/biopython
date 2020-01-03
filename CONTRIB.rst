@@ -107,6 +107,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Frederic Sapet <https://github.com/FredericBGA>
 - Frederic Sohm <fsms at domain users.sourceforge.net>
 - Frederik Gwinner
+- Fredric Johansson <https://github.com/fredricj>
 - Fábio Madeira <https://github.com/biomadeira>
 - Gaetan Lehman <gaetan.lehmann at domain jouy.inra.fr>
 - Gavin E Crooks <https://github.com/gecrooks>
