@@ -338,7 +338,7 @@ class PDBList:
         try:
             _urlcleanup()
             _urlretrieve(url, filename)
-        except IOError:
+        except OSError:
             print("Desired structure doesn't exists")
         else:
             with gzip.open(filename, "rb") as gz:
@@ -469,7 +469,7 @@ class PDBList:
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
-                outfile.writelines((x + "\n" for x in entries))
+                outfile.writelines(x + "\n" for x in entries)
 
     def download_obsolete_entries(self, listfile=None, file_format=None):
         """Retrieve all obsolete PDB entries not present in local obsolete PDB copy.
@@ -492,7 +492,7 @@ class PDBList:
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
-                outfile.writelines((x + "\n" for x in entries))
+                outfile.writelines(x + "\n" for x in entries)
 
     def get_seqres_file(self, savefile="pdb_seqres.txt"):
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""

@@ -700,7 +700,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def endElement(self, name):
         """End and XML element of the given name."""
         XMLGenerator.endElement(self, name)
-        self.write(u"\n")
+        self.write("\n")
 
     def startParent(self, name, attrs=None):
         """Start an XML element which has children.
@@ -715,7 +715,7 @@ class _BlastXmlGenerator(XMLGenerator):
             attrs = {}
         self.startElement(name, attrs, children=True)
         self._level += self._increment
-        self.write(u"\n")
+        self.write("\n")
         # append the element name, so we can end it later
         self._parent_stack.append(name)
 
