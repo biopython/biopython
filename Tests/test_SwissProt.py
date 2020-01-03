@@ -2575,6 +2575,17 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
 
+    def test_P0CK95(self):
+        """Parsing SwissProt file P0CK95.txt."""
+        filename = "P0CK95.txt"
+        datafile = os.path.join("SwissProt", filename)
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
+        # Check the simple variant
+        self.assertEqual(record.features[5].qualifiers["note"], "N -> G (in strain: O15:H- / 83/39 /ETEC)")
+        # Check a FT where the 2nd line starts with /
+        self.assertEqual(record.features[6].qualifiers["note"], "DGTPLPEFYSE -> EGELPKFFSD (in strain: O15:H- / 83/39 / ETEC)")
+
     def test_ft_line(self):
         """Parsing SwissProt file O23729, which has a new-style FT line."""
         filename = "O23729.txt"
