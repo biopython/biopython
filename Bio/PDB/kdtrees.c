@@ -67,9 +67,7 @@ Point_init(Point *self, PyObject *args, PyObject *kwds)
 static PyObject*
 Point_repr(Point* self)
 {
-    const char string[64];
-    sprintf(string, "%ld: %g", self->index, self->radius);
-    return PyUnicode_FromFormat(string);
+    return PyUnicode_FromFormat("%ld: %g", self->index, self->radius);
 }
 
 static char Point_index__doc__[] =
@@ -167,9 +165,8 @@ Neighbor_init(Neighbor *self, PyObject *args, PyObject *kwds)
 static PyObject*
 Neighbor_repr(Neighbor* self)
 {
-    const char string[64];
-    sprintf(string, "(%ld, %ld): %g", self->index1, self->index2, self->radius);
-    return PyUnicode_FromFormat(string);
+    return PyUnicode_FromFormat("(%ld, %ld): %g",
+                                self->index1, self->index2, self->radius);
 }
 
 static char Neighbor_index1__doc__[] =
