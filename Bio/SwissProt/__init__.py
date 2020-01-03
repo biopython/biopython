@@ -361,9 +361,18 @@ def _read(handle):
             record.organelle = record.organelle.rstrip()
             for reference in record.references:
                 reference.authors = " ".join(reference.authors).rstrip(";")
-                reference.title = " ".join(reference.title).rstrip(";")
-                if reference.title.startswith('"') and reference.title.endswith('"'):
-                    reference.title = reference.title[1:-1]  # remove quotes
+                if reference.title:
+                    title = reference.title[0]
+                    for fragment in reference.title[1:]:
+                        if not title.endswith("-"):
+                            title += " "
+                        title += fragment
+                    title = title.rstrip(";")
+                    if title.startswith('"') and title.endswith('"'):
+                        title = title[1:-1]  # remove quotes
+                else:
+                    title = ""
+                reference.title = title
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
@@ -742,9 +751,9 @@ def _read_ft(record, line):
         else:
             description = "%s %s" % (old_description, description)
 
-        if feature.type == "VARSPLIC":  # VARSPLIC is a special case
+        if feature.type in ("VARSPLIC", "VAR_SEQ"):  # special case
             # Remove unwanted spaces in sequences.
-            # During line carryover, the sequences in VARSPLIC can get
+            # During line carryover, the sequences in VARSPLIC/VAR_SEQ can get
             # mangled with unwanted spaces like:
             # 'DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPC LPTH'
             # We want to check for this case and correct it as it happens.
@@ -796,7 +805,7 @@ def _read_ft(record, line):
             description = "%s %s" % (old_description, description)
         if feature.type == "VAR_SEQ":  # see VARSPLIC above
             try:
-                first_seq, second_seq = value.split(" -> ")
+                first_seq, second_seq = description.split(" -> ")
             except ValueError:
                 pass
             else:

@@ -294,7 +294,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[6].references), 1)
         self.assertEqual(record.references[6].references[0], ("MEDLINE", "95122474"))
         self.assertEqual(record.references[7].authors, "GAO L., GU X.B., YU D.S., YU R.K., ZENG G.")
-        self.assertEqual(record.references[7].title, "Association of a 14-3-3 protein with CMP-NeuAc:GM1 alpha 2,3- sialyltransferase.")
+        self.assertEqual(record.references[7].title, "Association of a 14-3-3 protein with CMP-NeuAc:GM1 alpha 2,3-sialyltransferase.")
         self.assertEqual(len(record.references[7].references), 1)
         self.assertEqual(record.references[7].references[0], ("MEDLINE", "96280718"))
         self.assertEqual(record.references[8].authors, "MCCONNELL J.E., ARMSTRONG J.F., BARD J.B.")
@@ -1554,7 +1554,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references), 6)
 
         self.assertEqual(record.references[0].authors, "Blondel O., Gastineau M., Dahmoune Y., Langlois M., Fischmeister R.")
-        self.assertEqual(record.references[0].title, "Cloning, expression, and pharmacology of four human 5- hydroxytryptamine receptor isoforms produced by alternative splicing in the carboxyl terminus.")
+        self.assertEqual(record.references[0].title, "Cloning, expression, and pharmacology of four human 5-hydroxytryptamine receptor isoforms produced by alternative splicing in the carboxyl terminus.")
         self.assertEqual(len(record.references[0].references), 1)
         self.assertEqual(record.references[0].references[0], ("PubMed", "9603189"))
         self.assertEqual(record.references[1].authors, "Van den Wyngaert I., Gommeren W., Jurzak M., Verhasselt P., Gordon R., Leysen J., Luyten W., Bender E.")
@@ -1576,6 +1576,272 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[5].references), 2)
         self.assertEqual(record.references[5].references[0], ("MEDLINE", "95385798"))
         self.assertEqual(record.references[5].references[1], ("PubMed", "7656980"))
+
+        # Check the two parsers agree on the essentials
+        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.description, record.description)
+        self.assertEqual(seq_record.name, record.entry_name)
+        self.assertIn(seq_record.id, record.accessions)
+
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
+
+        # With the SequenceParser
+        records = list(SeqIO.parse(datafile, "swiss"))
+
+        self.assertEqual(len(records), 1)
+        self.assertTrue(isinstance(records[0], SeqRecord))
+
+        # Check matches what we got earlier without the iterator:
+        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].description, seq_record.description)
+        self.assertEqual(records[0].name, seq_record.name)
+        self.assertEqual(records[0].id, seq_record.id)
+
+        # With the RecordParser
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
+
+        self.assertEqual(len(records), 1)
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
+
+        # Check matches what we got earlier without the iterator:
+        self.assertEqual(records[0].sequence, record.sequence)
+        self.assertEqual(records[0].description, record.description)
+        self.assertEqual(records[0].entry_name, record.entry_name)
+        self.assertEqual(records[0].accessions, record.accessions)
+
+    def test_Q13639(self):
+        """Parsing SwissProt file Q13639."""
+        filename = "Q13639.txt"
+        # this is a more recent version of the file sp010 above
+
+        datafile = os.path.join("SwissProt", filename)
+
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
+
+        self.assertTrue(isinstance(seq_record, SeqRecord))
+
+        self.assertEqual(seq_record.id, "Q13639")
+        self.assertEqual(seq_record.name, "5HT4R_HUMAN")
+        self.assertEqual(seq_record.description, "RecName: Full=5-hydroxytryptamine receptor 4; Short=5-HT-4; Short=5-HT4; AltName: Full=Serotonin receptor 4;")
+        self.assertEqual(repr(seq_record.seq), "Seq('MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIK...SDT', ProteinAlphabet())")
+
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
+
+        # test a couple of things on the record -- this is not exhaustive
+        self.assertEqual(record.entry_name, "5HT4R_HUMAN")
+        self.assertEqual(record.accessions, ["Q13639", "Q96KH9", "Q96KI0", "Q9H199", "Q9NY73", "Q9UBM6", "Q9UBT4", "Q9UE22", "Q9UE23", "Q9UQR6"])
+        self.assertEqual(record.organism_classification, ["Eukaryota", "Metazoa", "Chordata", "Craniata", "Vertebrata", "Euteleostomi", "Mammalia", "Eutheria", "Euarchontoglires", "Primates", "Haplorrhini", "Catarrhini", "Hominidae", "Homo"])
+        self.assertEqual(record.seqinfo, (388, 43761, "7FCFEC60E7BDF560"))
+
+        self.assertEqual(len(record.features), 26)
+        feature = record.features[0]
+        self.assertEqual(feature.type, "CHAIN")
+        self.assertEqual(feature.location.start, 0)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "5-hydroxytryptamine receptor 4.")
+        self.assertEqual(feature.id, "PRO_0000068965")
+        feature = record.features[1]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 0)
+        self.assertEqual(feature.location.end, 19)
+        self.assertEqual(feature.qualifiers["description"], "Extracellular (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[2]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 19)
+        self.assertEqual(feature.location.end, 40)
+        self.assertEqual(feature.qualifiers["description"], "1 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[3]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 40)
+        self.assertEqual(feature.location.end, 58)
+        self.assertEqual(feature.qualifiers["description"], "Cytoplasmic (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[4]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 58)
+        self.assertEqual(feature.location.end, 79)
+        self.assertEqual(feature.qualifiers["description"], "2 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[5]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 79)
+        self.assertEqual(feature.location.end, 93)
+        self.assertEqual(feature.qualifiers["description"], "Extracellular (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[6]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 93)
+        self.assertEqual(feature.location.end, 116)
+        self.assertEqual(feature.qualifiers["description"], "3 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[7]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 116)
+        self.assertEqual(feature.location.end, 137)
+        self.assertEqual(feature.qualifiers["description"], "Cytoplasmic (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[8]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 137)
+        self.assertEqual(feature.location.end, 158)
+        self.assertEqual(feature.qualifiers["description"], "4 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[9]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 158)
+        self.assertEqual(feature.location.end, 192)
+        self.assertEqual(feature.qualifiers["description"], "Extracellular (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[10]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 192)
+        self.assertEqual(feature.location.end, 213)
+        self.assertEqual(feature.qualifiers["description"], "5 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[11]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 213)
+        self.assertEqual(feature.location.end, 260)
+        self.assertEqual(feature.qualifiers["description"], "Cytoplasmic (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[12]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 260)
+        self.assertEqual(feature.location.end, 281)
+        self.assertEqual(feature.qualifiers["description"], "6 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[13]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 281)
+        self.assertEqual(feature.location.end, 294)
+        self.assertEqual(feature.qualifiers["description"], "Extracellular (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[14]
+        self.assertEqual(feature.type, "TRANSMEM")
+        self.assertEqual(feature.location.start, 294)
+        self.assertEqual(feature.location.end, 315)
+        self.assertEqual(feature.qualifiers["description"], "7 (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[15]
+        self.assertEqual(feature.type, "TOPO_DOM")
+        self.assertEqual(feature.location.start, 315)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "Cytoplasmic (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[16]
+        self.assertEqual(feature.type, "LIPID")
+        self.assertEqual(feature.location.start, 328)
+        self.assertEqual(feature.location.end, 329)
+        self.assertEqual(feature.qualifiers["description"], "S-palmitoyl cysteine (By similarity).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[17]
+        self.assertEqual(feature.type, "CARBOHYD")
+        self.assertEqual(feature.location.start, 6)
+        self.assertEqual(feature.location.end, 7)
+        self.assertEqual(feature.qualifiers["description"], "N-linked (GlcNAc...) (Potential).")
+        self.assertEqual(feature.id, None)
+        feature = record.features[18]
+        self.assertEqual(feature.type, "DISULFID")
+        self.assertEqual(feature.location.start, 92)
+        self.assertEqual(feature.location.end, 184)
+        self.assertEqual(feature.qualifiers["description"], "By similarity.")
+        self.assertEqual(feature.id, None)
+        feature = record.features[19]
+        self.assertEqual(feature.type, "VAR_SEQ")
+        self.assertEqual(feature.location.start, 168)
+        self.assertEqual(feature.location.end, 169)
+        self.assertEqual(feature.qualifiers["description"], "L -> LERSLNQGLGQDFHA (in isoform 5-HT4(F)).")
+        self.assertEqual(feature.id, "VSP_001845")
+        feature = record.features[20]
+        self.assertEqual(feature.type, "VAR_SEQ")
+        self.assertEqual(feature.location.start, 358)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SSGTETDRRNFGIRKRRLTKPS (in isoform 5-HT4(D)).")
+        self.assertEqual(feature.id, "VSP_001847")
+        feature = record.features[21]
+        self.assertEqual(feature.type, "VAR_SEQ")
+        self.assertEqual(feature.location.start, 358)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SGCSPVSSFLLLFCNRPVPV (in isoform 5-HT4(E)).")
+        self.assertEqual(feature.id, "VSP_001846")
+        feature = record.features[22]
+        self.assertEqual(feature.type, "VAR_SEQ")
+        self.assertEqual(feature.location.start, 359)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "DAVECGGQWESQCHPPATSPLVAAQPSDT -> YTVLHRGHHQELEKLPIHNDPESLESCF (in isoform 5-HT4(A)).")
+        self.assertEqual(feature.id, "VSP_001849")
+        feature = record.features[23]
+        self.assertEqual(feature.type, "VAR_SEQ")
+        self.assertEqual(feature.location.start, 359)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "DAVECGGQWESQCHPPATSPLVAAQPSDT -> F (in isoform 5-HT4(C)).")
+        self.assertEqual(feature.id, "VSP_001848")
+        feature = record.features[24]
+        self.assertEqual(feature.type, "VAR_SEQ")
+        self.assertEqual(feature.location.start, 359)
+        self.assertEqual(feature.location.end, 388)
+        self.assertEqual(feature.qualifiers["description"], "Missing (in isoform 5-HT4(G)).")
+        self.assertEqual(feature.id, "VSP_001850")
+        feature = record.features[25]
+        self.assertEqual(feature.type, "VARIANT")
+        self.assertEqual(feature.location.start, 371)
+        self.assertEqual(feature.location.end, 372)
+        self.assertEqual(feature.qualifiers["description"], "C -> Y (in dbSNP:rs34826744).")
+        self.assertEqual(feature.id, "VAR_049364")
+        self.assertEqual(len(record.references), 8)
+
+        self.assertEqual(record.references[0].authors, "Blondel O., Gastineau M., Dahmoune Y., Langlois M., Fischmeister R.")
+        self.assertEqual(record.references[0].title, "Cloning, expression, and pharmacology of four human 5-hydroxytryptamine 4 receptor isoforms produced by alternative splicing in the carboxyl terminus.")
+        self.assertEqual(len(record.references[0].references), 2)
+        self.assertEqual(record.references[0].references[0], ("MEDLINE", "98264328"))
+        self.assertEqual(record.references[0].references[1], ("PubMed", "9603189"))
+        self.assertEqual(record.references[1].authors, "Van den Wyngaert I., Gommeren W., Jurzak M., Verhasselt P., Gordon R., Leysen J., Luyten W., Bender E.")
+        self.assertEqual(record.references[1].title, "Cloning and expression of 5-HT4 receptor species and splice variants.")
+        self.assertEqual(len(record.references[1].references), 0)
+        self.assertEqual(record.references[2].authors, "Claeysen S., Faye P., Sebben M., Lemaire S., Bockaert J., Dumuis A.")
+        self.assertEqual(record.references[2].title, "Cloning and expression of human 5-HT4S receptors. Effect of receptor density on their coupling to adenylyl cyclase.")
+        self.assertEqual(len(record.references[2].references), 2)
+        self.assertEqual(record.references[2].references[0], ("MEDLINE", "98012006"))
+        self.assertEqual(record.references[2].references[1], ("PubMed", "9351641"))
+        self.assertEqual(record.references[3].authors, "Claeysen S., Sebben M., Becamel C., Bockaert J., Dumuis A.")
+        self.assertEqual(record.references[3].title, "Novel brain-specific 5-HT4 receptor splice variants show marked constitutive activity: role of the C-terminal intracellular domain.")
+        self.assertEqual(len(record.references[3].references), 2)
+        self.assertEqual(record.references[3].references[0], ("MEDLINE", "99238795"))
+        self.assertEqual(record.references[3].references[1], ("PubMed", "10220570"))
+        self.assertEqual(record.references[4].authors, "Vilaro M.T., Domenech T., Palacios J.M., Mengod G.")
+        self.assertEqual(record.references[4].title, "Cloning and characterization of multiple human 5-HT4 receptor variants including a novel variant that lacks the alternatively spliced C-terminal exon.")
+        self.assertEqual(record.references[4].location, "Submitted (SEP-2000) to the EMBL/GenBank/DDBJ databases.")
+        self.assertEqual(len(record.references[4].comments), 1)
+        self.assertEqual(record.references[4].comments[0], ("TISSUE", "Hippocampus"))
+        self.assertEqual(len(record.references[4].positions), 1)
+        self.assertEqual(record.references[4].positions[0], "NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A); 5-HT4(E) AND 5-HT4(G)).")
+        self.assertEqual(len(record.references[4].references), 0)
+        self.assertEqual(len(record.references[5].positions), 1)
+        self.assertEqual(record.references[5].positions[0], "NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 5-HT4(B)).")
+        self.assertEqual(len(record.references[5].references), 2)
+        self.assertEqual(record.references[5].references[0], ("PubMed", "15489334"))
+        self.assertEqual(record.references[5].references[1], ("DOI", "10.1101/gr.2596504"))
+        self.assertEqual(record.references[5].authors, "The MGC Project Team")
+        self.assertEqual(record.references[5].title, "The status, quality, and expansion of the NIH full-length cDNA project: the Mammalian Gene Collection (MGC).")
+        self.assertEqual(record.references[5].location, "Genome Res. 14:2121-2127(2004).")
+        self.assertEqual(record.references[6].authors, "Bender E., Pindon A., van Oers I., Zhang Y.B., Gommeren W., Verhasselt P., Jurzak M., Leysen J., Luyten W.")
+        self.assertEqual(record.references[6].title, "Structure of the human serotonin 5-HT4 receptor gene and cloning of a novel 5-HT4 splice variant.")
+        self.assertEqual(len(record.references[6].references), 3)
+        self.assertEqual(record.references[6].references[0], ("MEDLINE", "20110418"))
+        self.assertEqual(record.references[6].references[1], ("PubMed", "10646498"))
+        self.assertEqual(record.references[6].references[2], ("DOI", "10.1046/j.1471-4159.2000.740478.x"))
+        self.assertEqual(record.references[7].authors, "Ullmer C., Schmuck K., Kalkman H.O., Luebbert H.")
+        self.assertEqual(record.references[7].title, "Expression of serotonin receptor mRNAs in blood vessels.")
+        self.assertEqual(len(record.references[7].references), 3)
+        self.assertEqual(record.references[7].references[0], ("MEDLINE", "95385798"))
+        self.assertEqual(record.references[7].references[1], ("PubMed", "7656980"))
+        self.assertEqual(record.references[7].references[2], ("DOI", "10.1016/0014-5793(95)00828-W"))
 
         # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
