@@ -776,28 +776,38 @@ def _read_ft(record, line):
                 description = first_seq + " -> " + second_seq + extra_info
         feature.qualifiers["description"] = description
     else:  # new-style FT line
-        if line[21] == "/":
-            qualifier_type, value = line[22:].rstrip().split("=", 1)
+        value = line[21:].rstrip()
+        if value.startswith("/id="):
+            qualifier_type = "id"
+            value = value[4:]
+            assert value.startswith('"')
+            assert value.endswith('"')
+            feature.id = value[1:-1]
+            return
+        elif value.startswith("/evidence="):
+            value = value[10:]
             assert value.startswith('"')
             if value.endswith('"'):
                 value = value[1:-1]
             else:  # continues on the next line
                 value = value[1:]
-            if qualifier_type == "id":
-                feature.id = value
-                return
-            if qualifier_type == "evidence":
-                assert "evidence" not in feature.qualifiers
-                feature.qualifiers["evidence"] = value
-                return
-            if qualifier_type == "note":
-                assert "note" not in feature.qualifiers
-                feature.qualifiers["note"] = value
-                return
+            assert "evidence" not in feature.qualifiers
+            feature.qualifiers["evidence"] = value
+            return
+        elif value.startswith("/note="):
+            value = value[6:]
+            assert value.startswith('"')
+            if value.endswith('"'):
+                value = value[1:-1]
+            else:  # continues on the next line
+                value = value[1:]
+            assert "note" not in feature.qualifiers
+            feature.qualifiers["note"] = value
+            return
         # this line is a continuation of the description of the previous feature
         keys = list(feature.qualifiers.keys())
         key = keys[-1]
-        description = line[21:].rstrip().rstrip('"')
+        description = value.rstrip('"')
         old_description = feature.qualifiers[key]
         if key == "evidence" or old_description.endswith("-"):
             description = "%s%s" % (old_description, description)
