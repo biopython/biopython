@@ -9,7 +9,7 @@
 
 import unittest
 from io import StringIO
-from Bio._py3k import HTTPError
+from urllib.error import HTTPError
 
 # We want to test these:
 from Bio import TogoWS

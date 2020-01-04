@@ -29,7 +29,7 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 """
 
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen
 from Bio._py3k import _binary_to_string_handle
 
 
@@ -41,7 +41,7 @@ def _q(op, arg1, arg2=None, arg3=None):
         args = "%s/%s/%s" % (op, arg1, arg2)
     else:
         args = "%s/%s" % (op, arg1)
-    resp = _urlopen(URL % (args))
+    resp = urlopen(URL % (args))
 
     if "image" == arg2:
         return resp

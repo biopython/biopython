@@ -32,7 +32,7 @@ except ImportError:
 
     raise MissingPythonDependencyError("Install pillow if you want to use KGML_vis.")
 
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
@@ -85,7 +85,7 @@ def get_temp_imagefilename(url):
     Create a new temporary file to hold the image file at the passed URL
     and return the filename.
     """
-    img = _urlopen(url).read()
+    img = urlopen(url).read()
     im = Image.open(BytesIO(img))
     # im.transpose(Image.FLIP_TOP_BOTTOM)
     f = tempfile.NamedTemporaryFile(delete=False, suffix=".png")

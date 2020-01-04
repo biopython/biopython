@@ -17,7 +17,7 @@ import inspect
 import os
 import warnings
 
-from Bio._py3k import urlopen
+from urllib.request import urlopen
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 

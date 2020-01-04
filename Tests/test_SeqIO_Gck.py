@@ -13,7 +13,7 @@ import unittest
 from zipfile import ZipFile
 
 from Bio import SeqIO, MissingExternalDependencyError
-from Bio._py3k import urlopen, HTTPError
+from urllib.request import urlopen, HTTPError
 import requires_internet
 
 
