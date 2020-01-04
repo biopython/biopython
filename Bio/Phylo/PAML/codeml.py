@@ -96,7 +96,8 @@ class Codeml(Paml):
 
         Check that the file exists and that the lines in the file are valid.
         Then update each CODEML options to the new option if supplied or None
-        if not supplied. Otherwise raise an exception."""
+        if not supplied. Otherwise raise an exception.
+        """
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
@@ -125,7 +126,8 @@ class Codeml(Paml):
                                     site_classes[n] = int(site_classes[n])
                                 except ValueError:
                                     raise TypeError(
-                                        "Invalid site class: %s" % site_classes[n])
+                                        "Invalid site class: %s"
+                                        % site_classes[n])
                             temp_options["NSsites"] = site_classes
                         elif option not in self._options:
                             raise KeyError("Invalid option: %s" % option)
@@ -194,7 +196,8 @@ def read(results_file):
     """Parse a CODEML results file.
 
     Check that the file exists and is not empty. Return the results
-    if there are any. Otherwise raise an exception."""
+    if there are any. Otherwise raise an exception.
+    """
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
