@@ -20,7 +20,6 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 
-import string  # for maketrans only
 import array
 import sys
 import warnings
@@ -54,10 +53,7 @@ def _maketrans(complement_mapping):
     after = "".join(complement_mapping.values())
     before += before.lower()
     after += after.lower()
-    if sys.version_info[0] == 3:
-        return str.maketrans(before, after)
-    else:
-        return string.maketrans(before, after)
+    return str.maketrans(before, after)
 
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
@@ -216,11 +212,6 @@ class Seq:
                     BiopythonWarning,
                 )
         return str(self) == str(other)
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # Require this method for Python 2 but not needed on Python 3
-        return not self == other
 
     def __lt__(self, other):
         """Implement the less-than operand."""
@@ -2029,12 +2020,8 @@ class MutableSeq:
 
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         """Initialize the class."""
-        if sys.version_info[0] == 3:
-            self.array_indicator = "u"
-        else:
-            self.array_indicator = "c"
         if isinstance(data, str):  # TODO - What about unicode?
-            self.data = array.array(self.array_indicator, data)
+            self.data = array.array("u", data)
         elif isinstance(data, (Seq, int, float)):
             raise TypeError(
                 "The sequence data given to a MutableSeq object "
@@ -2115,11 +2102,6 @@ class MutableSeq:
             if isinstance(other, MutableSeq):
                 return self.data == other.data
         return str(self) == str(other)
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # Seem to require this method for Python 2 but not needed on Python 3?
-        return not (self == other)
 
     def __lt__(self, other):
         """Implement the less-than operand."""
@@ -2243,7 +2225,7 @@ class MutableSeq:
             elif isinstance(value, type(self.data)):
                 self.data[index] = value
             else:
-                self.data[index] = array.array(self.array_indicator, str(value))
+                self.data[index] = array.array("u", str(value))
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -2613,7 +2595,7 @@ class MutableSeq:
         mixed = d.copy()  # We're going to edit this to be mixed case!
         mixed.update((x.lower(), y.lower()) for x, y in d.items())
         self.data = [mixed[_] for _ in self.data]
-        self.data = array.array(self.array_indicator, self.data)
+        self.data = array.array("u", self.data)
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
