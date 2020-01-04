@@ -152,6 +152,7 @@ class FeatureTable(SeqFeature):
 
     This is a subclass of SeqFeature, defined in Bio.SeqFeature, where the
     attributes are used as follows:
+
      - ``location``: location of the feature on the canonical or isoform
        sequence; the location is stored as an instance of FeatureLocation,
        defined in Bio.SeqFeature, with the ref attribute set to the isoform
