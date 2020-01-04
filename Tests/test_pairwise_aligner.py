@@ -1948,8 +1948,8 @@ class TestOverflowError(unittest.TestCase):
         alignments = aligner.align(seq1, seq2)
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
-                   2147483647,  # on 32-bit systems
-                   9223372036854775807,)  # on 64-bit systems
+            2147483647,  # on 32-bit systems
+            9223372036854775807,)  # on 64-bit systems
         with self.assertRaisesRegex(OverflowError, message):
             n = len(alignments)
         # confirm that we can still pull out individual alignments
