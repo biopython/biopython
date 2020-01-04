@@ -353,9 +353,18 @@ def _read(handle):
             record.organelle = record.organelle.rstrip()
             for reference in record.references:
                 reference.authors = " ".join(reference.authors).rstrip(";")
-                reference.title = " ".join(reference.title).rstrip(";")
-                if reference.title.startswith('"') and reference.title.endswith('"'):
-                    reference.title = reference.title[1:-1]  # remove quotes
+                if reference.title:
+                    title = reference.title[0]
+                    for fragment in reference.title[1:]:
+                        if not title.endswith("-"):
+                            title += " "
+                        title += fragment
+                    title = title.rstrip(";")
+                    if title.startswith('"') and title.endswith('"'):
+                        title = title[1:-1]  # remove quotes
+                else:
+                    title = ""
+                reference.title = title
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
@@ -734,9 +743,9 @@ def _read_ft(record, line):
         else:
             description = "%s %s" % (old_description, description)
 
-        if feature.type == "VARSPLIC":  # VARSPLIC is a special case
+        if feature.type in ("VARSPLIC", "VAR_SEQ"):  # special case
             # Remove unwanted spaces in sequences.
-            # During line carryover, the sequences in VARSPLIC can get
+            # During line carryover, the sequences in VARSPLIC/VAR_SEQ can get
             # mangled with unwanted spaces like:
             # 'DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPC LPTH'
             # We want to check for this case and correct it as it happens.
@@ -759,28 +768,38 @@ def _read_ft(record, line):
                 description = first_seq + " -> " + second_seq + extra_info
         feature.qualifiers["description"] = description
     else:  # new-style FT line
-        if line[21] == "/":
-            qualifier_type, value = line[22:].rstrip().split("=", 1)
+        value = line[21:].rstrip()
+        if value.startswith("/id="):
+            qualifier_type = "id"
+            value = value[4:]
+            assert value.startswith('"')
+            assert value.endswith('"')
+            feature.id = value[1:-1]
+            return
+        elif value.startswith("/evidence="):
+            value = value[10:]
             assert value.startswith('"')
             if value.endswith('"'):
                 value = value[1:-1]
             else:  # continues on the next line
                 value = value[1:]
-            if qualifier_type == "id":
-                feature.id = value
-                return
-            if qualifier_type == "evidence":
-                assert "evidence" not in feature.qualifiers
-                feature.qualifiers["evidence"] = value
-                return
-            if qualifier_type == "note":
-                assert "note" not in feature.qualifiers
-                feature.qualifiers["note"] = value
-                return
+            assert "evidence" not in feature.qualifiers
+            feature.qualifiers["evidence"] = value
+            return
+        elif value.startswith("/note="):
+            value = value[6:]
+            assert value.startswith('"')
+            if value.endswith('"'):
+                value = value[1:-1]
+            else:  # continues on the next line
+                value = value[1:]
+            assert "note" not in feature.qualifiers
+            feature.qualifiers["note"] = value
+            return
         # this line is a continuation of the description of the previous feature
         keys = list(feature.qualifiers.keys())
         key = keys[-1]
-        description = line[21:].rstrip().rstrip('"')
+        description = value.rstrip('"')
         old_description = feature.qualifiers[key]
         if key == "evidence" or old_description.endswith("-"):
             description = "%s%s" % (old_description, description)
@@ -788,7 +807,7 @@ def _read_ft(record, line):
             description = "%s %s" % (old_description, description)
         if feature.type == "VAR_SEQ":  # see VARSPLIC above
             try:
-                first_seq, second_seq = value.split(" -> ")
+                first_seq, second_seq = description.split(" -> ")
             except ValueError:
                 pass
             else:
