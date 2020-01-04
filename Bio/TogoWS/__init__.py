@@ -36,8 +36,8 @@ import time
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 # Importing these functions with leading underscore as not intended for reuse
-from urllib.request import urlopen as _urlopen
-from urllib.parse import quote as _quote
+from urllib.request import urlopen
+from urllib.parse import quote
 
 
 # Constant
@@ -144,7 +144,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
+    url = _BASE_URL + "/entry/%s/%s" % (db, quote(id))
     if field:
         url += "/" + field
     if format:
@@ -175,7 +175,7 @@ def search_count(db, query):
             "TogoWS search does not officially support database '%s'. "
             "See %s/search/ for options." % (db, _BASE_URL)
         )
-    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+    url = _BASE_URL + "/search/%s/%s/count" % (db, quote(query))
     handle = _open(url)
     data = handle.read()
     handle.close()
@@ -278,7 +278,7 @@ def search(db, query, offset=None, limit=None, format=None):
             "TogoWS search does not explicitly support database '%s'. "
             "See %s/search/ for options." % (db, _BASE_URL)
         )
-    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
+    url = _BASE_URL + "/search/%s/%s" % (db, quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -354,9 +354,9 @@ def _open(url, post=None):
 
     # print(url)
     if post:
-        handle = _urlopen(url, _as_bytes(post))
+        handle = urlopen(url, _as_bytes(post))
     else:
-        handle = _urlopen(url)
+        handle = urlopen(url)
 
     # We now trust TogoWS to have set an HTTP error code, that
     # suffices for my current unit tests. Previously we would
