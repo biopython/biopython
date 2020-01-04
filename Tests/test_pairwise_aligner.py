@@ -9,6 +9,7 @@
 
 import os
 import unittest
+import array
 
 from Bio import Align
 from Bio import SeqIO
@@ -1859,7 +1860,6 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score("AAA", "AA&")
 
     def test_aligner_array_errors(self):
-        import array
         aligner = Align.PairwiseAligner()
         self.assertEqual(aligner.alphabet, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         s1 = "GGG"
