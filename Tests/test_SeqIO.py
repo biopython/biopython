@@ -1880,24 +1880,24 @@ class TestSeqIO(unittest.TestCase):
         )
 
     def test_swiss4(self):
-        sequences = ["TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYAT...RVMIDLS"]
-        ids = ["P23082"]
-        names = ["NDOA_PSEPU"]
-        lengths = [103]
+        sequences = ["MTVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYA...RVMIDLS"]
+        ids = ["P0A186"]
+        names = ["NDOA_PSEU8"]
+        lengths = [104]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp004",
+            "SwissProt/P0A186.txt",
             1,
             ids,
             names,
@@ -2161,25 +2161,24 @@ class TestSeqIO(unittest.TestCase):
         )
 
     def test_swiss14(self):
-        sequences = ["TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN"]
-        ids = ["P12166"]
-        names = ["PSBL_ORYSA"]
-        lengths = [37]
+        sequences = ["MTQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN"]
+        ids = ["P60137"]
+        names = ["PSBL_ORYSJ"]
+        lengths = [38]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "seqxml": "ncbiTaxID should be of type string or int",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp014",
+            "SwissProt/P60137.txt",
             1,
             ids,
             names,

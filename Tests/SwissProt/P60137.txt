@@ -1,0 +1,99 @@
+ID   PSBL_ORYSJ              Reviewed;          38 AA.
+AC   P60137; O47030; P12166; P12167; Q34007;
+DT   28-NOV-2003, integrated into UniProtKB/Swiss-Prot.
+DT   28-NOV-2003, sequence version 1.
+DT   11-DEC-2019, entry version 88.
+DE   RecName: Full=Photosystem II reaction center protein L {ECO:0000255|HAMAP-Rule:MF_01317};
+DE            Short=PSII-L {ECO:0000255|HAMAP-Rule:MF_01317};
+GN   Name=psbL {ECO:0000255|HAMAP-Rule:MF_01317};
+GN   OrderedLocusNames=LOC_Osp1g00500;
+OS   Oryza sativa subsp. japonica (Rice).
+OG   Plastid; Chloroplast.
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliopsida; Liliopsida; Poales; Poaceae; BOP clade;
+OC   Oryzoideae; Oryzeae; Oryzinae; Oryza; Oryza sativa.
+OX   NCBI_TaxID=39947;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=cv. Nipponbare;
+RX   PubMed=2770692; DOI=10.1007/bf02464880;
+RA   Hiratsuka J., Shimada H., Whittier R., Ishibashi T., Sakamoto M., Mori M.,
+RA   Kondo C., Honji Y., Sun C.-R., Meng B.-Y., Li Y.-Q., Kanno A.,
+RA   Nishizawa Y., Hirai A., Shinozaki K., Sugiura M.;
+RT   "The complete sequence of the rice (Oryza sativa) chloroplast genome:
+RT   intermolecular recombination between distinct tRNA genes accounts for a
+RT   major plastid DNA inversion during the evolution of the cereals.";
+RL   Mol. Gen. Genet. 217:185-194(1989).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=cv. Nipponbare;
+RX   PubMed=15122023; DOI=10.1104/pp.103.031245;
+RA   Tang J., Xia H., Cao M., Zhang X., Zeng W., Hu S., Tong W., Wang J.,
+RA   Wang J., Yu J., Yang H., Zhu L.;
+RT   "A comparison of rice chloroplast genomes.";
+RL   Plant Physiol. 135:412-420(2004).
+CC   -!- FUNCTION: One of the components of the core complex of photosystem II
+CC       (PSII). PSII is a light-driven water:plastoquinone oxidoreductase that
+CC       uses light energy to abstract electrons from H(2)O, generating O(2) and
+CC       a proton gradient subsequently used for ATP formation. It consists of a
+CC       core antenna complex that captures photons, and an electron transfer
+CC       chain that converts photonic excitation into a charge separation. This
+CC       subunit is found at the monomer-monomer interface and is required for
+CC       correct PSII assembly and/or dimerization. {ECO:0000255|HAMAP-
+CC       Rule:MF_01317}.
+CC   -!- SUBUNIT: PSII is composed of 1 copy each of membrane proteins PsbA,
+CC       PsbB, PsbC, PsbD, PsbE, PsbF, PsbH, PsbI, PsbJ, PsbK, PsbL, PsbM, PsbT,
+CC       PsbX, PsbY, PsbZ, Ycf12, at least 3 peripheral proteins of the oxygen-
+CC       evolving complex and a large number of cofactors. It forms dimeric
+CC       complexes. {ECO:0000255|HAMAP-Rule:MF_01317}.
+CC   -!- SUBCELLULAR LOCATION: Plastid, chloroplast thylakoid membrane
+CC       {ECO:0000255|HAMAP-Rule:MF_01317}; Single-pass membrane protein
+CC       {ECO:0000255|HAMAP-Rule:MF_01317}.
+CC   -!- SIMILARITY: Belongs to the PsbL family. {ECO:0000255|HAMAP-
+CC       Rule:MF_01317}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; X15901; CAA33963.1; -; Genomic_DNA.
+DR   EMBL; AY522330; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   PIR; JQ0241; F2RZL.
+DR   RefSeq; NP_039401.1; NC_001320.1.
+DR   SMR; P60137; -.
+DR   STRING; 4530.OS03T0667201-00; -.
+DR   PaxDb; P60137; -.
+DR   EnsemblPlants; Os03t0667201-00; Os03t0667201-00; Os03g0667201.
+DR   GeneID; 3131418; -.
+DR   Gramene; Os03t0667201-00; Os03t0667201-00; Os03g0667201.
+DR   KEGG; osa:3131418; -.
+DR   eggNOG; ENOG410J8NQ; Eukaryota.
+DR   eggNOG; ENOG410XVDD; LUCA.
+DR   InParanoid; P60137; -.
+DR   KO; K02713; -.
+DR   OrthoDB; 1638606at2759; -.
+DR   Proteomes; UP000059680; Chloroplast.
+DR   ExpressionAtlas; P60137; differential.
+DR   Genevisible; P60137; OS.
+DR   GO; GO:0009535; C:chloroplast thylakoid membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0016021; C:integral component of membrane; IEA:UniProtKB-KW.
+DR   GO; GO:0009539; C:photosystem II reaction center; IEA:InterPro.
+DR   GO; GO:0009536; C:plastid; IC:Gramene.
+DR   GO; GO:0015979; P:photosynthesis; IEA:UniProtKB-UniRule.
+DR   HAMAP; MF_01317; PSII_PsbL; 1.
+DR   InterPro; IPR003372; PSII_PsbL.
+DR   InterPro; IPR037266; PSII_PsbL_sf.
+DR   Pfam; PF02419; PsbL; 1.
+DR   SUPFAM; SSF161017; SSF161017; 1.
+PE   3: Inferred from homology;
+KW   Chloroplast; Membrane; Photosynthesis; Photosystem II; Plastid;
+KW   Reaction center; Reference proteome; Thylakoid; Transmembrane;
+KW   Transmembrane helix.
+FT   CHAIN           1..38
+FT                   /note="Photosystem II reaction center protein L"
+FT                   /id="PRO_0000219754"
+FT   TRANSMEM        17..37
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255|HAMAP-Rule:MF_01317"
+SQ   SEQUENCE   38 AA;  4497 MW;  55537AEC50D25E8D CRC64;
+     MTQSNPNEQN VELNRTSLYW GLLLIFVLAV LFSNYFFN
+//

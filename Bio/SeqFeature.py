@@ -47,6 +47,7 @@ Classes:
  - BeforePosition - Specify the position as being found before some base.
  - AfterPosition - Specify the position as being found after some base.
  - OneOfPosition - Specify a position where the location can be multiple positions.
+ - UncertainPosition - Specify a specific position which is uncertain.
  - UnknownPosition - Represents missing information like '?' in UniProt.
 
 """

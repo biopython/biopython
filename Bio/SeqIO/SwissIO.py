@@ -56,18 +56,6 @@ def _make_position(location_string, offset=0):
     raise NotImplementedError("Cannot parse location '%s'" % location_string)
 
 
-def _make_seqfeature(name, from_res, to_res, description, ft_id):
-    """Construct SeqFeature from feature data from parser (PRIVATE)."""
-    loc = SeqFeature.FeatureLocation(
-        _make_position(from_res, -1), _make_position(to_res, 0)
-    )
-    if not ft_id:
-        ft_id = "<unknown id>"  # The default in SeqFeature object
-    return SeqFeature.SeqFeature(
-        loc, type=name, id=ft_id, qualifiers={"description": description}
-    )
-
-
 def SwissIterator(handle):
     """Break up a Swiss-Prot/UniProt file into SeqRecord objects.
 
@@ -96,7 +84,7 @@ def SwissIterator(handle):
                 id=swiss_record.accessions[0],
                 name=swiss_record.entry_name,
                 description=swiss_record.description,
-                features=[_make_seqfeature(*f) for f in swiss_record.features],
+                features=swiss_record.features,
             )
             record.description = swiss_record.description
             for cross_reference in swiss_record.cross_references:
