@@ -102,7 +102,8 @@ class Codeml(Paml):
 
         Check that the file exists and that the lines in the file are valid.
         Then update each CODEML options to the new option if supplied or None
-        if not supplied. Otherwise raise an exception."""
+        if not supplied. Otherwise raise an exception.
+        """
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise FileNotFoundError(f"File not found: {ctl_file!r}")
@@ -202,7 +203,8 @@ def read(results_file):
     """Parse a CODEML results file.
 
     Check that the file exists and is not empty. Return the results
-    if there are any. Otherwise raise an exception."""
+    if there are any. Otherwise raise an exception.
+    """
     results = {}
     if not os.path.exists(results_file):
         raise FileNotFoundError("Results file does not exist.")
