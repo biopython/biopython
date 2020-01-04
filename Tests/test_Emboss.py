@@ -44,7 +44,7 @@ if "EMBOSS_ROOT" in os.environ:
             "$EMBOSS_ROOT=%r which does not exist!" % path)
     del path
 if sys.platform != "win32":
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     for name in exes_wanted:
         # This will "just work" if installed on the path as normal on Unix
         output = getoutput("%s -help" % name)
@@ -663,7 +663,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Setup,
         query = "DVCTGKALCDPVTQNIKTYPVKIENLRVMI"
         out_file = "Emboss/temp_test4.water"
-        in_file = "SwissProt/sp004"
+        in_file = "SwissProt/P0A186.txt"
         self.assertTrue(os.path.isfile(in_file))
         if os.path.isfile(out_file):
             os.remove(out_file)

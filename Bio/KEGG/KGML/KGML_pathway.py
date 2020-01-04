@@ -27,7 +27,7 @@ from itertools import chain
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
-from Bio._py3k import _is_int_or_long, _as_string
+from Bio._py3k import _as_string
 
 
 # Pathway
@@ -94,7 +94,7 @@ class Pathway:
     def add_entry(self, entry):
         """Add an Entry element to the pathway."""
         # We insist that the node ID is an integer
-        if not _is_int_or_long(entry.id):
+        if not isinstance(entry.id, int):
             raise TypeError(
                 "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
             )
@@ -103,7 +103,7 @@ class Pathway:
 
     def remove_entry(self, entry):
         """Remove an Entry element from the pathway."""
-        if not _is_int_or_long(entry.id):
+        if not isinstance(entry.id, int):
             raise TypeError(
                 "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
             )
@@ -115,7 +115,7 @@ class Pathway:
     def add_reaction(self, reaction):
         """Add a Reaction element to the pathway."""
         # We insist that the node ID is an integer and corresponds to an entry
-        if not _is_int_or_long(reaction.id):
+        if not isinstance(reaction.id, int):
             raise ValueError(
                 "Node ID must be an integer, got %s (%s)"
                 % (type(reaction.id), reaction.id)
@@ -129,7 +129,7 @@ class Pathway:
 
     def remove_reaction(self, reaction):
         """Remove a Reaction element from the pathway."""
-        if not _is_int_or_long(reaction.id):
+        if not isinstance(reaction.id, int):
             raise TypeError(
                 "Node ID must be an integer, got %s (%s)"
                 % (type(reaction.id), reaction.id)

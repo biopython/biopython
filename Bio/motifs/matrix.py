@@ -1,7 +1,10 @@
 # Copyright 2013 by Michiel de Hoon.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Support for various forms of sequence motif matrices.
 
 Implementation of frequency (count) matrices, position-weight matrices,
@@ -413,8 +416,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             order = np.argsort(np.append(pos_positions, neg_positions))
             chunk_positions = chunk_positions[order]
             chunk_scores = chunk_scores[order]
-            for pos, score in zip(chunk_positions, chunk_scores):
-                yield pos, score
+            yield from zip(chunk_positions, chunk_scores)
 
     @property
     def max(self):

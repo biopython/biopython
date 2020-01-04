@@ -54,11 +54,9 @@ def _preorder_traverse(root, get_children):
     def dfs(elem):
         yield elem
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _postorder_traverse(root, get_children):
@@ -66,12 +64,10 @@ def _postorder_traverse(root, get_children):
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def dfs(elem):
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
         yield elem
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _sorted_attrs(elem):

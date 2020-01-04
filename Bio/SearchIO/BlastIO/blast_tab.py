@@ -231,8 +231,7 @@ class BlastTabParser:
                 )
             iterfunc = self._parse_qresult
 
-        for qresult in iterfunc():
-            yield qresult
+        yield from iterfunc()
 
     def _prep_fields(self, fields):
         """Validate and format the given fields for use by the parser (PRIVATE)."""

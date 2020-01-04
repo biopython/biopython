@@ -29,7 +29,6 @@ import json
 import csv
 import numpy as np
 
-from Bio._py3k import _is_int_or_long
 from Bio import BiopythonParserWarning
 
 # Private csv headers - hardcoded because this are supposedly never changed
@@ -723,7 +722,7 @@ class WellRecord:
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
 
-        elif _is_int_or_long(time) or isinstance(time, float):
+        elif isinstance(time, int) or isinstance(time, float):
             return self._interpolate(time)
 
         raise ValueError("Invalid index")

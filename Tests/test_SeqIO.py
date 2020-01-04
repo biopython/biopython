@@ -131,52 +131,34 @@ class TestZipped(unittest.TestCase):
 
     def test_gzip_fastq(self):
         """Testing FASTQ with gzip."""
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
-        with gzip.open("Quality/example.fastq.gz", mode) as handle:
+        with gzip.open("Quality/example.fastq.gz", "rt") as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
-        if 3 <= sys.version_info[0]:
-            with gzip.open("Quality/example.fastq.gz") as handle:
-                with self.assertRaisesRegex(
-                    ValueError, "Is this handle in binary mode not text mode"
-                ):
-                    list(SeqIO.parse(handle, "fastq"))
+        with gzip.open("Quality/example.fastq.gz") as handle:
+            with self.assertRaisesRegex(
+                ValueError, "Is this handle in binary mode not text mode"
+            ):
+                list(SeqIO.parse(handle, "fastq"))
 
     def test_gzip_fasta(self):
         """Testing FASTA with gzip."""
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
-        with gzip.open("Fasta/flowers.pro.gz", mode) as handle:
+        with gzip.open("Fasta/flowers.pro.gz", "rt") as handle:
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fasta"))))
-        if 3 <= sys.version_info[0]:
-            with gzip.open("Fasta/flowers.pro.gz") as handle:
-                with self.assertRaisesRegex(
-                    ValueError, "Is this handle in binary mode not text mode"
-                ):
-                    list(SeqIO.parse(handle, "fasta"))
+        with gzip.open("Fasta/flowers.pro.gz") as handle:
+            with self.assertRaisesRegex(
+                ValueError, "Is this handle in binary mode not text mode"
+            ):
+                list(SeqIO.parse(handle, "fasta"))
 
     def test_gzip_genbank(self):
         """Testing GenBank with gzip."""
         # BGZG files are still GZIP files
-        if sys.version_info >= (3,):
-            mode = "rt"
-        else:
-            # Workaround for bug https://bugs.python.org/issue30012
-            mode = "r"  # implicitly text mode, rejects making explicit
-        with gzip.open("GenBank/cor6_6.gb.bgz", mode) as handle:
+        with gzip.open("GenBank/cor6_6.gb.bgz", "rt") as handle:
             self.assertEqual(6, len(list(SeqIO.parse(handle, "gb"))))
-        if 3 <= sys.version_info[0]:
-            with gzip.open("GenBank/cor6_6.gb.bgz") as handle:
-                with self.assertRaisesRegex(
-                    ValueError, "Is this handle in binary mode not text mode"
-                ):
-                    list(SeqIO.parse(handle, "gb"))
+        with gzip.open("GenBank/cor6_6.gb.bgz") as handle:
+            with self.assertRaisesRegex(
+                ValueError, "Is this handle in binary mode not text mode"
+            ):
+                list(SeqIO.parse(handle, "gb"))
 
 
 class TestSeqIO(unittest.TestCase):
@@ -1898,24 +1880,24 @@ class TestSeqIO(unittest.TestCase):
         )
 
     def test_swiss4(self):
-        sequences = ["TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYAT...RVMIDLS"]
-        ids = ["P23082"]
-        names = ["NDOA_PSEPU"]
-        lengths = [103]
+        sequences = ["MTVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYA...RVMIDLS"]
+        ids = ["P0A186"]
+        names = ["NDOA_PSEU8"]
+        lengths = [104]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp004",
+            "SwissProt/P0A186.txt",
             1,
             ids,
             names,
@@ -2179,25 +2161,24 @@ class TestSeqIO(unittest.TestCase):
         )
 
     def test_swiss14(self):
-        sequences = ["TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN"]
-        ids = ["P12166"]
-        names = ["PSBL_ORYSA"]
-        lengths = [37]
+        sequences = ["MTQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN"]
+        ids = ["P60137"]
+        names = ["PSBL_ORYSJ"]
+        lengths = [38]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).",
-            "seqxml": "ncbiTaxID should be of type string or int",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp014",
+            "SwissProt/P60137.txt",
             1,
             ids,
             names,

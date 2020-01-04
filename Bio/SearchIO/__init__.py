@@ -313,9 +313,7 @@ def parse(handle, format=None, **kwargs):
     # and start iterating
     with as_handle(handle, "rU", **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
-
-        for qresult in generator:
-            yield qresult
+        yield from generator
 
 
 def read(handle, format=None, **kwargs):

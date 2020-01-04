@@ -50,14 +50,6 @@ def _as_bytes(s):
 _as_string = _as_unicode
 
 
-def _is_int_or_long(i):
-    """Check if the value is an integer (PRIVATE).
-
-    Note there are no longs on Python 3.
-    """
-    return isinstance(i, int)
-
-
 import io
 import locale
 
@@ -88,32 +80,7 @@ def _binary_to_string_handle(handle):
     return wrapped
 
 
-# This is to avoid the deprecation warning from open(filename, "rU")
-_universal_read_mode = "r"  # text mode does universal new lines
-
-
-
-if sys.platform == "win32":
-    # Can't use commands.getoutput on Python 2, Unix only/broken:
-    # http://bugs.python.org/issue15073
-    # Can't use subprocess.getoutput on Python 3, Unix only/broken:
-    # http://bugs.python.org/issue10197
-    def getoutput(cmd):
-        import subprocess
-
-        child = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            universal_newlines=True,
-            shell=False,
-        )
-        stdout, stderr = child.communicate()
-        # Remove trailing \n to match the Unix function,
-        return stdout.rstrip("\n")
-
-
-else:
-    # Use subprocess.getoutput on Python 3,
-    from subprocess import getoutput
+# On Python 3 urllib, urllib2, and urlparse were merged:
+from urllib.request import urlopen, Request, urlparse, urlcleanup
+from urllib.parse import urlencode, quote
+from urllib.error import URLError, HTTPError
