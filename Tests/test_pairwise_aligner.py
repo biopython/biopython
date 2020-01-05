@@ -8,8 +8,8 @@
 """Tests for pairwise aligner module."""
 
 import os
-import sys
 import unittest
+import array
 
 from Bio import Align
 from Bio import SeqIO
@@ -1849,51 +1849,44 @@ class TestArgumentErrors(unittest.TestCase):
 
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence has unexpected format$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", 3)
-        self.assertEqual("sequence has unexpected format",
-                         str(context_manager.exception))
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence has zero length$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "")
-        self.assertEqual("sequence has zero length",
-                         str(context_manager.exception))
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence contains letters not in the alphabet$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "AA&")
-        self.assertEqual("sequence contains letters not in the alphabet",
-                         str(context_manager.exception))
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
         self.assertEqual(aligner.alphabet, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         s1 = "GGG"
-        if sys.version_info[0] >= 3:
-            # on python2, array.array buffer support is broken
-            import array
-            s2 = array.array("i", [6, 0, 6])
-            score = aligner.score(s1, s2)
-            self.assertAlmostEqual(score, 2.0)
-            s2 = array.array("f", [1.0, 0.0, 1.0])
-            with self.assertRaises(ValueError) as context_manager:
-                aligner.score(s1, s2)
-            self.assertEqual("sequence has incorrect data type 'f'",
-                             str(context_manager.exception))
-            s1 = array.array("i", [1, 5, 6])
-            s2 = array.array("i", [1, 8, 6])
-            s2a = array.array("i", [1, 8, -6])
-            s2b = array.array("i", [1, 28, 6])
-            aligner.match = 3.0
-            aligner.mismatch = -2.0
-            aligner.gap_score = -10.0
-            score = aligner.score(s1, s2)
-            self.assertAlmostEqual(score, 4.0)
-            # the following two are valid as we are using match/mismatch scores
-            # instead of a substitution matrix:
-            score = aligner.score(s1, s2a)
-            # negative number is interpreted as an unknown character, and
-            # gets a zero score:
-            self.assertAlmostEqual(score, 1.0)
-            score = aligner.score(s1, s2b)
-            self.assertAlmostEqual(score, 4.0)
+        s2 = array.array("i", [6, 0, 6])
+        score = aligner.score(s1, s2)
+        self.assertAlmostEqual(score, 2.0)
+        s2 = array.array("f", [1.0, 0.0, 1.0])
+        message = "^sequence has incorrect data type 'f'$"
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.score(s1, s2)
+        s1 = array.array("i", [1, 5, 6])
+        s2 = array.array("i", [1, 8, 6])
+        s2a = array.array("i", [1, 8, -6])
+        s2b = array.array("i", [1, 28, 6])
+        aligner.match = 3.0
+        aligner.mismatch = -2.0
+        aligner.gap_score = -10.0
+        score = aligner.score(s1, s2)
+        self.assertAlmostEqual(score, 4.0)
+        # the following two are valid as we are using match/mismatch scores
+        # instead of a substitution matrix:
+        score = aligner.score(s1, s2a)
+        # negative number is interpreted as an unknown character, and
+        # gets a zero score:
+        self.assertAlmostEqual(score, 1.0)
+        score = aligner.score(s1, s2b)
+        self.assertAlmostEqual(score, 4.0)
         try:
             import numpy
         except ImportError:
@@ -1904,15 +1897,13 @@ class TestArgumentErrors(unittest.TestCase):
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
         s2 = numpy.array([1.0, 0.0, 1.0])
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence has incorrect data type 'd'$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
-        self.assertEqual("sequence has incorrect data type 'd'",
-                         str(context_manager.exception))
         s2 = numpy.zeros((3, 2), numpy.int32)
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence has incorrect rank \\(2 expected 1\\)$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
-        self.assertEqual("sequence has incorrect rank (2 expected 1)",
-                         str(context_manager.exception))
         s1 = numpy.array([1, 5, 6], numpy.int32)
         s2 = numpy.array([1, 8, 6], numpy.int32)
         s2a = numpy.array([1, 8, -6], numpy.int32)
@@ -1936,14 +1927,12 @@ class TestArgumentErrors(unittest.TestCase):
         aligner.substitution_matrix = m
         score = aligner.score(s1, s2)  # no ValueError
         self.assertAlmostEqual(score, 10.0)
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence item 2 is negative \\(-6\\)$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2a)
-        self.assertEqual("sequence item 2 is negative (-6)",
-                         str(context_manager.exception))
-        with self.assertRaises(ValueError) as context_manager:
+        message = "^sequence item 1 is out of bound \\(28, should be < 10\\)$"
+        with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2b)
-        self.assertEqual("sequence item 1 is out of bound (28, should be < 10)",
-                         str(context_manager.exception))
 
 
 class TestOverflowError(unittest.TestCase):
@@ -1958,14 +1947,11 @@ class TestOverflowError(unittest.TestCase):
         seq2 = str(record.seq)
         alignments = aligner.align(seq1, seq2)
         self.assertAlmostEqual(alignments.score, 1286.0)
-        with self.assertRaises(OverflowError) as context_manager:
+        message = "^number of optimal alignments is larger than (%d|%d)$" % (
+            2147483647,  # on 32-bit systems
+            9223372036854775807,)  # on 64-bit systems
+        with self.assertRaisesRegex(OverflowError, message):
             n = len(alignments)
-        message = "number of optimal alignments is larger than %d"
-        self.assertIn(str(context_manager.exception),
-                      [message % 2147483647,  # on 32-bit systems
-                       message % 9223372036854775807,  # on 64-bit systems
-                       ]
-                      )
         # confirm that we can still pull out individual alignments
         alignment = alignments[0]
         self.assertEqual(str(alignment), """\
