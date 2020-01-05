@@ -32,6 +32,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Deepak Khatri
 - Peter Cock
+- Sergio Valqui
 - Sujan Dulal (first contribution)
 
 20 December 2019: Biopython 1.76
