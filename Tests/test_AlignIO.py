@@ -6,9 +6,6 @@
 """Tests for AlignIO module."""
 
 
-# flake8: noqa
-
-
 import unittest
 import warnings
 
