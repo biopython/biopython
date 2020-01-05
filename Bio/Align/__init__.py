@@ -13,6 +13,9 @@ class, used in the Bio.AlignIO module.
 
 """
 
+# flake8: noqa
+
+
 import warnings
 
 from Bio import BiopythonDeprecationWarning
