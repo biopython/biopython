@@ -132,7 +132,7 @@ class TestAlignIO_reading(unittest.TestCase):
             # Try writing just one Alignment (not a list)
             handle = StringIO()
             AlignIO.write(alignments[0:1], handle, fmt)
-            self.assertEqual(handle.getvalue(), alignments[0].format(fmt))
+            self.assertEqual(handle.getvalue(), format(alignments[0], fmt))
 
     def check_iterator_for_loop_handle(self, path, fmt, length, m=None):
         # Try using the iterator with a for loop and a handle

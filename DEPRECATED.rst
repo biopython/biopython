@@ -505,8 +505,8 @@ You can also continue to use handles with ``Bio.SeqIO`` if you want to.
 Bio.Align.FormatConvert
 -----------------------
 Declared obsolete in Release 1.48, deprecated in Release 1.51, and
-removed in Release 1.55 final. Please use Bio.AlignIO or the Alignment
-object's format method instead.
+removed in Release 1.55 final. Instead, please use Bio.AlignIO or call the
+format built-in function on the Alignment object.
 
 Bio.Emboss.Primer
 -----------------
@@ -798,6 +798,8 @@ Bio.Align
 ---------
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
 deprecated in Release 1.57 and removed in Release 1.69.
+The format method of the MultipleSeqAlignment class and the PairwiseAlignment
+class were deprecated in Release 1.76.
 
 Bio.Align.Generic
 -----------------

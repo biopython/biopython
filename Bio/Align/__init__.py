@@ -13,7 +13,9 @@ class, used in the Bio.AlignIO module.
 
 """
 
+import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
@@ -308,7 +310,20 @@ class MultipleSeqAlignment:
         # return "%s(%s, %s)" \
         #       % (self.__class__, repr(self._records), repr(self._alphabet))
 
-    def format(self, format):
+    def format(self, format_spec):
+        """Return the alignment as a string in the specified file format (DEPRECATED).
+
+        This method is deprecated; instead of alignment.format(format_spec),
+        please use format(alignment, format_spec).
+        """
+        warnings.warn("""\
+alignment.format has been deprecated, and we intend to remove it in a future
+release of Biopython. Instead of alignment.format(format_spec), please use
+format(alignment, format_spec).
+""", BiopythonDeprecationWarning)
+        return self.__format__(format_spec)
+
+    def __format__(self, format_spec):
         """Return the alignment as a string in the specified file format.
 
         The format should be a lower case string supported as an output
@@ -324,7 +339,7 @@ class MultipleSeqAlignment:
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
-        >>> print(align.format("fasta"))
+        >>> print(format(align, "fasta"))
         >Alpha
         ACTGCTAGCTAG
         >Beta
@@ -332,26 +347,12 @@ class MultipleSeqAlignment:
         >Gamma
         ACTGCTAGATAG
         <BLANKLINE>
-        >>> print(align.format("phylip"))
+        >>> print(format(align, "phylip"))
          3 12
         Alpha      ACTGCTAGCT AG
         Beta       ACT-CTAGCT AG
         Gamma      ACTGCTAGAT AG
         <BLANKLINE>
-
-        For Python 2.6, 3.0 or later see also the built in format() function.
-        """
-        # See also the __format__ added for Python 2.6 / 3.0, PEP 3101
-        # See also the SeqRecord class and its format() method using Bio.SeqIO
-        return self.__format__(format)
-
-    def __format__(self, format_spec):
-        """Return the alignment as a string in the specified file format.
-
-        This method supports the python format() function added in
-        Python 2.6/3.0.  The format_spec should be a lower case
-        string supported by Bio.AlignIO as an output file format.
-        See also the alignment's format() method.
         """
         if format_spec:
             from io import StringIO
@@ -976,35 +977,36 @@ class PairwiseAlignment:
     def __ge__(self, other):
         return self.path >= other.path
 
+    def _convert_sequence_string(self, sequence):
+        if isinstance(sequence, str):
+            return sequence
+        if isinstance(sequence, Seq):
+            return str(sequence)
+        try:  # check if target is a SeqRecord
+            sequence = sequence.seq
+        except AttributeError:
+            pass
+        else:
+            return str(sequence)
+        try:
+            view = memoryview(sequence)
+        except TypeError:
+            pass
+        else:
+            if view.format == "c":
+                return str(sequence)
+        return None
+
     def __format__(self, format_spec):
+        """Create a human-readable representation of the alignment."""
         if format_spec == "psl":
             return self._format_psl()
-        return str(self)
-
-    def __str__(self):
-        if isinstance(self.query, str) and isinstance(self.target, str):
-            return self.format()
-        else:
+        seq1 = self._convert_sequence_string(self.target)
+        if seq1 is None:
             return self._format_generalized()
-
-    def format(self):
-        """Create a human-readable representation of the alignment."""
-        query = self.query
-        target = self.target
-        try:
-            # check if query is a SeqRecord
-            query = query.seq
-        except AttributeError:
-            # query is a Seq object or a plain string
-            pass
-        try:
-            # check if target is a SeqRecord
-            target = target.seq
-        except AttributeError:
-            # target is a Seq object or a plain string
-            pass
-        seq1 = str(target)
-        seq2 = str(query)
+        seq2 = self._convert_sequence_string(self.query)
+        if seq2 is None:
+            return self._format_generalized()
         n1 = len(seq1)
         n2 = len(seq2)
         aligned_seq1 = ""
@@ -1228,6 +1230,22 @@ class PairwiseAlignment:
         ]
         line = "\t".join(words) + "\n"
         return line
+
+    def format(self):
+        """Create a human-readable representation of the alignment (DEPRECATED).
+
+        This method is deprecated; instead of alignment.format(), please use
+        format(alignment).
+        """
+        warnings.warn("""\
+alignment.format has been deprecated, and we intend to remove it in a future
+release of Biopython. Instead of alignment.format(), please use
+format(alignment).
+""", BiopythonDeprecationWarning)
+        return self.__format__(None)
+
+    def __str__(self):
+        return self.__format__(None)
 
     @property
     def aligned(self):
