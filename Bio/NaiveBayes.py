@@ -28,7 +28,6 @@ Functions:
 
 """
 
-from __future__ import print_function
 
 try:
     import numpy
@@ -47,7 +46,7 @@ def _contents(items):
     return counts
 
 
-class NaiveBayes(object):
+class NaiveBayes:
     """Hold information for a NaiveBayes classifier.
 
     Attributes:

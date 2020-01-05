@@ -141,38 +141,8 @@ file for other options.
 
   \item \emph{What is going wrong with my print commands?} \\
   This tutorial now uses the Python 3 style print \emph{function}.
-  As of Biopython 1.62, we support both Python 2 and Python 3.
-  The most obvious language difference is the print \emph{statement}
-  in Python 2 became a print \emph{function} in Python 3.
-
-  For example, this will only work under Python 2:
-
-\begin{minted}{pycon}
->>> print "Hello World!"
-Hello World!
-\end{minted}
-
-  If you try that on Python 3 you'll get a \verb|SyntaxError|.
-  Under Python 3 you must write:
-
-%doctest
-\begin{minted}{pycon}
->>> print("Hello World!")
-Hello World!
-\end{minted}
-
-  Surprisingly that will also work on Python 2 -- but only for simple
-  examples printing one thing. In general you need to add this magic
-  line to the start of your Python scripts to use the print function
-  under Python 2.6 and 2.7:
-
-\begin{minted}{python}
-from __future__ import print_function
-\end{minted}
-
-  If you forget to add this magic import, under Python 2 you'll see
-  extra brackets produced by trying to use the print function when
-  Python 2 is interpreting it as a print statement and a tuple.
+  As of Biopython 1.62, we supported both Python 2 and Python 3.
+  As of Biopython 1.77, we only support Python 3.
 
   \item \emph{How do I find out what version of Biopython I have installed?} \\
   Use this:

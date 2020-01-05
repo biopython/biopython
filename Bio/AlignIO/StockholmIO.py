@@ -169,7 +169,6 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
-from __future__ import print_function
 
 from collections import OrderedDict
 

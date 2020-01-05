@@ -56,7 +56,7 @@ Now that you've got some idea of what it is like to interact with the Biopython 
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{https://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{https://images.google.com/images?q=lady\%20slipper\%20orchid}{Google Image Search}).
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{https://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{https://google.com/search?q=lady slipper orchids&tbm=isch}{Google Image Search}).
 
 Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So let's suppose we're thinking about writing a funding proposal to do a molecular study of Lady Slipper evolution, and would like to see what kind of research has already been done and how we can add to that.
 
@@ -98,6 +98,7 @@ It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print(seq_record.id)
     print(repr(seq_record.seq))
@@ -124,6 +125,7 @@ Now let's load the GenBank file \href{https://raw.githubusercontent.com/biopytho
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(seq_record.id)
     print(repr(seq_record.seq))

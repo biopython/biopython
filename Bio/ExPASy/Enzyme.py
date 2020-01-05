@@ -81,31 +81,32 @@ class Record(dict):
         self["AN"] = []
         self["CA"] = ""
         self["CF"] = ""
-        self["CC"] = []   # one comment per line
+        self["CC"] = []  # one comment per line
         self["PR"] = []
         self["DR"] = []
 
     def __repr__(self):
         if self["ID"]:
             if self["DE"]:
-                return "%s (%s, %s)" % (self.__class__.__name__,
-                                        self["ID"], self["DE"])
+                return "%s (%s, %s)" % (self.__class__.__name__, self["ID"], self["DE"])
             else:
-                return "%s (%s)" % (self.__class__.__name__,
-                                    self["ID"])
+                return "%s (%s)" % (self.__class__.__name__, self["ID"])
         else:
             return "%s ( )" % (self.__class__.__name__)
 
     def __str__(self):
-        output = ["ID: " + self["ID"],
-                  "DE: " + self["DE"],
-                  "AN: " + repr(self["AN"]),
-                  "CA: '" + self["CA"] + "'",
-                  "CF: " + self["CF"],
-                  "CC: " + repr(self["CC"]),
-                  "PR: " + repr(self["PR"]),
-                  "DR: %d Records" % len(self["DR"])]
+        output = [
+            "ID: " + self["ID"],
+            "DE: " + self["DE"],
+            "AN: " + repr(self["AN"]),
+            "CA: '" + self["CA"] + "'",
+            "CF: " + self["CF"],
+            "CC: " + repr(self["CC"]),
+            "PR: " + repr(self["PR"]),
+            "DR: %d Records" % len(self["DR"]),
+        ]
         return "\n".join(output)
+
 
 # Everything below is private
 

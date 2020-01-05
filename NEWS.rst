@@ -8,21 +8,18 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.76
+(In progress, not yet released): Biopython 1.77
 ===============================================
 
-This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
-also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
+This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
+tested on PyPy3.6.1 v7.1.1-beta0.
 
-Note we intend to drop Python 2.7 support in early 2020.
+**We have dropped support for Python 2 now.**
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
-
-``PDBParser`` and ``PDBIO`` now support PQR format file parsing and input/
-output.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
@@ -33,8 +30,55 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Chris Rands
+- Deepak Khatri
+- Peter Cock
+- Sujan Dulal (first contribution)
+
+20 December 2019: Biopython 1.76
+================================
+
+This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
+also been tested on PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
+
+We intend this to be our final release supporting Python 2.7 and 3.5.
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+
+``PDBParser`` and ``PDBIO`` now support PQR format file parsing and input/
+output.
+
+In addition to the mainstream ``x86_64`` aka ``AMD64`` CPU architecture, we
+now also test every contribution on the ``ARM64``, ``ppc64le``, and ``s390x``
+CPUs under Linux thanks to Travis CI. Further post-release testing done by
+Debian and other packagers and distributors of Biopython also covers these
+CPUs.
+
+``Bio.motifs.PositionSpecificScoringMatrix.search()`` method has been
+re-written: it now applies ``.calculate()`` to chunks of the sequence
+to maintain a low memory footprint for long sequences.
+
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite. There has been further work to follow the Python
+PEP8, PEP257 and best practice standard coding style, and more of the code
+style has been reformatted with the ``black`` tool.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Andrey Raspopov
+- Chris Daley (first contribution)
+- Chris Rands
 - Artemi Bendandi (first contribution)
 - Christian Brueffer
+- Deepak Khatri
+- Ilya Flyamer (first contribution)
+- Jakub Lipinski (first contribution)
+- Michael R. Crusoe (first contribution)
+- Michiel de Hoon
 - Peter Cock
 - Chris Daley (first contribution)
 - Michiel de Hoon

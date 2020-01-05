@@ -337,11 +337,8 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 making up each alignment as SeqRecords.
 """
 
-from __future__ import print_function
 
 import sys
-
-from Bio._py3k import basestring
 
 # TODO
 # - define policy on reading aligned sequences with gaps in
@@ -526,7 +523,7 @@ def write(sequences, handle, format):
     from Bio import AlignIO
 
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
@@ -629,11 +626,7 @@ def parse(handle, format, alphabet=None):
 
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
     ...     print("%s %s" % (record.id, record.seq))
     Alpha ACCGGATGTA
@@ -648,7 +641,7 @@ def parse(handle, format, alphabet=None):
     from Bio import AlignIO
 
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
@@ -949,9 +942,9 @@ def index(filename, format, alphabet=None, key_function=None):
 
     """
     # Try and give helpful error messages:
-    if not isinstance(filename, basestring):
+    if not isinstance(filename, str):
         raise TypeError("Need a filename (not a handle)")
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
@@ -1034,15 +1027,15 @@ def index_db(
 
     """
     # Try and give helpful error messages:
-    if not isinstance(index_filename, basestring):
+    if not isinstance(index_filename, str):
         raise TypeError("Need a string for the index filename")
-    if isinstance(filenames, basestring):
+    if isinstance(filenames, str):
         # Make the API a little more friendly, and more similar
         # to Bio.SeqIO.index(...) for indexing just one file.
         filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
         raise TypeError("Need a list of filenames (as strings), or one filename")
-    if format is not None and not isinstance(format, basestring):
+    if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
@@ -1089,11 +1082,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     For example, going from a filename to a handle:
 
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> handle = StringIO("")
     >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "fasta")
     3

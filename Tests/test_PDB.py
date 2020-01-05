@@ -11,7 +11,6 @@
 # package.
 
 """Unit tests for the Bio.PDB module."""
-from __future__ import print_function
 
 from copy import deepcopy
 import os
@@ -19,7 +18,7 @@ import sys
 import tempfile
 import unittest
 import warnings
-from Bio._py3k import StringIO
+from io import StringIO
 
 try:
     import numpy
@@ -650,14 +649,10 @@ class ParseReal(unittest.TestCase):
     def test_empty(self):
         """Parse an empty file."""
         parser = PDBParser()
-        filenumber, filename = tempfile.mkstemp()
-        os.close(filenumber)
-        try:
-            struct = parser.get_structure("MT", filename)
-            # Structure has no children (models)
-            self.assertFalse(len(struct))
-        finally:
-            os.remove(filename)
+        handle = StringIO()
+        with self.assertRaises(ValueError) as context_manager:
+            struct = parser.get_structure("MT", handle)
+        self.assertEqual(str(context_manager.exception), "Empty file.")
 
     def test_residue_sort(self):
         """Sorting atoms in residues."""

@@ -14,7 +14,7 @@ from copy import copy
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
-class Entity(object):
+class Entity:
     """Basic container object for PDB heirachy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
@@ -51,8 +51,7 @@ class Entity(object):
 
     def __iter__(self):
         """Iterate over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     # Generic id-based comparison methods considers all parents as well as children
     # Works for all Entities - Atoms have comparable custom operators
@@ -228,8 +227,7 @@ class Entity(object):
 
     def get_iterator(self):
         """Return iterator over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     def get_list(self):
         """Return a copy of the list of children."""
@@ -309,7 +307,7 @@ class Entity(object):
         return shallow
 
 
-class DisorderedEntityWrapper(object):
+class DisorderedEntityWrapper:
     """Wrapper class to group equivalent Entities.
 
     This class is a simple wrapper class that groups a number of equivalent

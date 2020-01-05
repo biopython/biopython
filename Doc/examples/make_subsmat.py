@@ -7,7 +7,6 @@
 
 """Example of generating a substitution matrix from an alignment."""
 
-from __future__ import print_function
 
 # Biopython
 from Bio import SubsMat

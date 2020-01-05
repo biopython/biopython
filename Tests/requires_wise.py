@@ -10,7 +10,7 @@
 import sys
 
 from Bio import MissingExternalDependencyError
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 
 if sys.platform == "win32":

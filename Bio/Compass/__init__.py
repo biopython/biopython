@@ -93,7 +93,7 @@ def parse(handle):
             break
 
 
-class Record(object):
+class Record:
     """Hold information from one compass hit.
 
     Ali1 is the query, Ali2 the hit.

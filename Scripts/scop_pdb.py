@@ -6,12 +6,11 @@
 # as part of this package.
 """Extract SCOP domain ATOM and HETATOM records from PDB."""
 
-from __future__ import print_function
 
 import getopt
 import sys
 
-from Bio._py3k import urlretrieve as _urlretrieve
+from urllib.request import urlretrieve as _urlretrieve
 
 from Bio.SCOP import Raf, Cla
 
@@ -158,7 +157,7 @@ def main():
                         seqMap.getAtoms(f, out_handle)
                     finally:
                         f.close()
-                except (IOError, KeyError, RuntimeError) as e:
+                except (OSError, KeyError, RuntimeError) as e:
                     sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
             finally:
                 out_handle.close()

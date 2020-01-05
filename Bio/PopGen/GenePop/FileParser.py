@@ -32,7 +32,7 @@ def read(fname):
     return record
 
 
-class FileRecord(object):
+class FileRecord:
     """Hold information from a GenePop record.
 
     Attributes:

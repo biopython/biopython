@@ -16,8 +16,7 @@ import os
 import itertools
 import unittest
 
-from Bio._py3k import StringIO
-from Bio._py3k import zip
+from io import StringIO
 
 from Bio import SeqIO
 from Bio import Phylo
@@ -53,7 +52,7 @@ if sys.platform == "win32":
             if fasttree_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     # Website uses 'FastTree', Nate's system had 'fasttree'
     likely_exes = ["FastTree", "fasttree"]
     for filename in likely_exes:

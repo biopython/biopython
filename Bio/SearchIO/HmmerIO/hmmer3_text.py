@@ -7,7 +7,7 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -34,7 +34,7 @@ _HRE_ANNOT_LINE = re.compile(r"^(\s+)(.+)\s(\w+)")
 _HRE_ID_LINE = re.compile(r"^(\s+\S+\s+[0-9-]+ )(.+?)(\s+[0-9-]+)")
 
 
-class Hmmer3TextParser(object):
+class Hmmer3TextParser:
     """Parser for the HMMER 3.0 text output."""
 
     def __init__(self, handle):
@@ -45,8 +45,7 @@ class Hmmer3TextParser(object):
 
     def __iter__(self):
         """Iterate over query results."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _read_until(self, bool_func):
         """Read the file handle until the given function returns True (PRIVATE)."""
@@ -405,8 +404,8 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     """Indexer class for HMMER plain text output."""
 
     _parser = Hmmer3TextParser
-    qresult_start = _as_bytes("Query: ")
-    qresult_end = _as_bytes("//")
+    qresult_start = b"Query: "
+    qresult_end = b"//"
 
     def __iter__(self):
         """Iterate over Hmmer3TextIndexer; yields query results' key, offsets, 0."""
@@ -426,7 +425,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
+                yield qresult_key.decode(), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 break

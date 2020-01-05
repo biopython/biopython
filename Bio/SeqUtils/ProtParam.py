@@ -45,7 +45,6 @@ Other public methods are:
 
 """
 
-from __future__ import print_function
 
 import sys
 from Bio.SeqUtils import ProtParamData  # Local
@@ -56,7 +55,7 @@ from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
 
 
-class ProteinAnalysis(object):
+class ProteinAnalysis:
     """Class containing methods for protein analysis.
 
     The constructor takes two arguments.

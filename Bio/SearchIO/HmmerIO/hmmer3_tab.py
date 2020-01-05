@@ -7,7 +7,6 @@
 
 from itertools import chain
 
-from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -16,7 +15,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 __all__ = ("Hmmer3TabParser", "Hmmer3TabIndexer", "Hmmer3TabWriter")
 
 
-class Hmmer3TabParser(object):
+class Hmmer3TabParser:
     """Parser for the HMMER table format."""
 
     def __init__(self, handle):
@@ -32,8 +31,7 @@ class Hmmer3TabParser(object):
             self.line = self.handle.readline()
         # if we have result rows, parse it
         if self.line:
-            for qresult in self._parse_qresult():
-                yield qresult
+            yield from self._parse_qresult()
 
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
@@ -156,8 +154,8 @@ class Hmmer3TabIndexer(SearchIndexer):
         handle.seek(0)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        header_mark = _as_bytes("#")
-        split_mark = _as_bytes(" ")
+        header_mark = b"#"
+        split_mark = b" "
         # set line with initial mock value, to emulate header
         line = header_mark
 
@@ -182,7 +180,7 @@ class Hmmer3TabIndexer(SearchIndexer):
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
                     yield (
-                        _bytes_to_string(qresult_key),
+                        qresult_key.decode(),
                         start_offset,
                         adj_end - start_offset,
                     )
@@ -192,7 +190,7 @@ class Hmmer3TabIndexer(SearchIndexer):
             line = handle.readline()
             if not line:
                 yield (
-                    _bytes_to_string(qresult_key),
+                    qresult_key.decode(),
                     start_offset,
                     end_offset - start_offset,
                 )
@@ -204,8 +202,8 @@ class Hmmer3TabIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        qresult_raw = _as_bytes("")
-        split_mark = _as_bytes(" ")
+        qresult_raw = b""
+        split_mark = b" "
 
         while True:
             line = handle.readline()
@@ -223,7 +221,7 @@ class Hmmer3TabIndexer(SearchIndexer):
         return qresult_raw
 
 
-class Hmmer3TabWriter(object):
+class Hmmer3TabWriter:
     """Writer for hmmer3-tab output format."""
 
     def __init__(self, handle):

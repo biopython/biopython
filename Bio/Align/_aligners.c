@@ -1698,29 +1698,116 @@ typedef struct {
     PyObject* query_gap_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
-    char mapping[256];
+    signed char mapping[128];
 } Aligner;
 
 
-static Py_ssize_t set_alphabet_ascii_uppercase(Aligner* self) {
-    PyObject* alphabet;
-    const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const Py_ssize_t n = strlen(letters);
-
-#if PY_MAJOR_VERSION < 3
-    alphabet = PyString_FromString(letters);
-#else
-    alphabet = PyUnicode_FromString(letters);
-#endif
-    if (!alphabet) {
-        PyErr_SetString(PyExc_ValueError, "failed to initialize alphabet");
+static Py_ssize_t
+set_alphabet(Aligner* self, PyObject* alphabet)
+{
+    Py_ssize_t size;
+    if (alphabet == NULL) {
+        const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        size = strlen(letters);
+        alphabet = PyUnicode_FromString(letters);
+        if (!alphabet) {
+            PyErr_SetString(PyExc_ValueError, "failed to initialize alphabet");
+            return -1;
+        }
+    }
+    else if (alphabet == Py_None) {
+        if (self->alphabet) {
+            Py_DECREF(self->alphabet);
+            self->alphabet = NULL;
+        }
         return 0;
+    }
+    else if (PyUnicode_Check(alphabet)) {
+        if (PyUnicode_READY(alphabet) == -1) return 0;
+        size = PyUnicode_GET_LENGTH(alphabet);
+        if (size == 0) {
+            PyErr_SetString(PyExc_ValueError, "alphabet has zero length");
+            return 0;
+        }
+        if (PyUnicode_KIND(alphabet) == PyUnicode_1BYTE_KIND) {
+            int i;
+            /* don't set self->mapping until we are sure there are no
+             * problems with the alphabet; define temporary storage: */
+            signed char mapping[128];
+            const char* characters = PyUnicode_DATA(alphabet);
+            for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
+            for (i = 0; i < size; i++) {
+                int j = characters[i];
+                if (j < 0 || j >= 128) break;
+                if (mapping[j] != MISSING_LETTER) {
+                    PyErr_Format(PyExc_ValueError,
+                                 "alphabet contains '%c' more than once",
+                                 characters[i]);
+                    return 0;
+                }
+                mapping[j] = i;
+            }
+            if (i < size) {
+                /* alphabet is not an ASCII string; cannot use mapping */
+                *(self->mapping) = UNMAPPED;
+            }
+            else {
+                /* alphabet is an ASCII string; use mapping for speed */
+                memcpy(self->mapping, mapping, 128);
+            }
+        }
+        Py_INCREF(alphabet);
+    }
+    else {
+        /* alphabet is not a string; cannot use mapping */
+        int i, j;
+        PyObject* item;
+        const char* character;
+        Py_ssize_t k;
+        PyObject* sequence;
+        signed char mapping[128];
+        sequence = PySequence_Fast(alphabet,
+            "alphabet should support the sequence protocol (e.g.,\n"
+            "strings, lists, and tuples can be valid alphabets).");
+        if (!sequence) return -1;
+        size = PySequence_Fast_GET_SIZE(sequence);
+        for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
+        for (i = 0; i < size; i++) {
+            item = PySequence_Fast_GET_ITEM(sequence, i);
+            if (!PyUnicode_Check(item)) break;
+            if (PyUnicode_READY(item) == -1) {
+                Py_DECREF(sequence);
+                return -1;
+            }
+            k = PyUnicode_GET_LENGTH(item);
+            if (k != 1) break;
+            if (PyUnicode_KIND(item) != PyUnicode_1BYTE_KIND) break;
+            character = PyUnicode_DATA(alphabet);
+            j = *character;
+            if (j < 0 || j >= 128) break;
+            if (mapping[j] != MISSING_LETTER) {
+                PyErr_Format(PyExc_ValueError,
+                             "alphabet contains '%c' more than once",
+                             *character);
+                return 0;
+            }
+            mapping[j] = i;
+        }
+        if (i < size) {
+            /* alphabet is not an ASCII string; cannot use mapping */
+            *(self->mapping) = UNMAPPED;
+        }
+        else {
+            /* alphabet is an ASCII string; use mapping for speed */
+            memcpy(self->mapping, mapping, 128);
+        }
+        Py_DECREF(sequence);
+        Py_INCREF(alphabet);
     }
     Py_XDECREF(self->alphabet);
     self->alphabet = alphabet;
-    return n;
+    return size;
 }
-
 
 static int
 Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
@@ -1728,8 +1815,8 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     int i, j;
     Py_ssize_t n;
     self->alphabet = NULL;
-    n = set_alphabet_ascii_uppercase(self);
-    if (n == 0) return -1;
+    n = set_alphabet(self, NULL);
+    if (n < 0) return -1;
     self->mode = Global;
     self->match = 1.0;
     self->mismatch = 0.0;
@@ -1751,7 +1838,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.obj = NULL;
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
-    for (i = 0; i < 256; i++) self->mapping[i] = MISSING_LETTER;
+    for (i = 0; i < 128; i++) self->mapping[i] = MISSING_LETTER;
     i = (int)'A';
     for (j = 0; j < n; i++, j++) self->mapping[i] = j;
     i = (int)'a';
@@ -1877,13 +1964,7 @@ Aligner_get_mode(Aligner* self, void* closure)
 static int
 Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
 {
-#if PY_MAJOR_VERSION >= 3
     if (PyUnicode_Check(value)) {
-#else
-    char* mode;
-    if (PyString_Check(value)) {
-#endif
-#if PY_MAJOR_VERSION >= 3
         if (PyUnicode_CompareWithASCIIString(value, "global") == 0) {
             self->mode = Global;
             return 0;
@@ -1892,17 +1973,6 @@ Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
             self->mode = Local;
             return 0;
         }
-#else
-        mode = PyString_AsString(value);
-        if (strcmp(mode, "global") == 0) {
-            self->mode = Global;
-            return 0;
-        }
-        if (strcmp(mode, "local") == 0) {
-            self->mode = Local;
-            return 0;
-        }
-#endif
     }
     PyErr_SetString(PyExc_ValueError,
                     "invalid mode (expected 'global' or 'local'");
@@ -1929,7 +1999,7 @@ Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
         return -1;
     }
     if (self->substitution_matrix.obj) {
-        if (!set_alphabet_ascii_uppercase(self)) return -1;
+        if (set_alphabet(self, NULL) < 0) return -1;
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->match = match;
@@ -1956,7 +2026,7 @@ Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
         return -1;
     }
     if (self->substitution_matrix.obj) {
-        if (!set_alphabet_ascii_uppercase(self)) return -1;
+        if (set_alphabet(self, NULL) < 0) return -1;
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->mismatch = mismatch;
@@ -2024,42 +2094,17 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
     }
     alphabet = PyObject_GetAttrString(values, "alphabet");
     if (alphabet) {
-        int i;
-        char* mapping = self->mapping;
-#if PY_MAJOR_VERSION > 2
-        if (PyUnicode_Check(alphabet)) {
-            const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
-            if (characters) {
-#else
-        char* characters;
-        if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
-#endif
-                for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
-                for (i = 0; i < size; i++) {
-                    int j = characters[i];
-                    mapping[j] = i;
-                }
-#if PY_MAJOR_VERSION > 2
-            }
-            else {
-                Py_DECREF(alphabet);
-                PyBuffer_Release(&view);
-                return -1;
-            }
-#endif
-        }
-        else {
-            PyErr_Clear();
-            *mapping = UNMAPPED;
-        }
-        Py_XDECREF(self->alphabet);
-        self->alphabet = alphabet;
-    }
-    else {
+        size = set_alphabet(self, alphabet);
+        Py_DECREF(alphabet);
+    } else {
         /* Set a substitution matrix without setting an alphabet; useful
          * when aligning integers. */
         PyErr_Clear();
-        if (!set_alphabet_ascii_uppercase(self)) return -1;
+        size = set_alphabet(self, NULL);
+    }
+    if (size < 0) {
+        PyBuffer_Release(&view);
+        return -1;
     }
     if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
     self->substitution_matrix = view;
@@ -2079,77 +2124,12 @@ Aligner_get_alphabet(Aligner* self, void* closure)
 static int
 Aligner_set_alphabet(Aligner* self, PyObject* alphabet, void* closure)
 {
-    int i, j;
-    Py_ssize_t size = -1;
-    char* mapping = self->mapping;
     if (self->substitution_matrix.obj) {
         PyErr_SetString(PyExc_AttributeError,
             "can't set alphabet if a substitution matrix is used");
         return -1;
     }
-    if (alphabet == Py_None) {
-        if (self->alphabet) {
-            Py_DECREF(self->alphabet);
-            self->alphabet = NULL;
-        }
-        return 0;
-    }
-#if PY_MAJOR_VERSION > 2
-    if (PyUnicode_Check(alphabet)) {
-        const char* characters = PyUnicode_AsUTF8AndSize(alphabet, &size);
-        if (characters) {
-#else
-    {
-        char* characters;
-        if (PyString_AsStringAndSize(alphabet, &characters, &size) != -1) {
-#endif
-            for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
-            for (i = 0; i < size; i++) {
-                j = characters[i];
-                mapping[j] = i;
-            }
-        }
-#if PY_MAJOR_VERSION > 2
-        else (*mapping) = UNMAPPED;
-    }
-#endif
-    else {
-        PyObject* item;
-#if PY_MAJOR_VERSION > 2
-        const char* character;
-#else
-        char* character;
-#endif
-        Py_ssize_t k;
-        PyObject* sequence;
-        PyErr_Clear();
-        sequence = PySequence_Fast(alphabet,
-            "alphabet should support the sequence protocol (e.g.,\n"
-            "strings, lists, and tuples can be valid alphabets).");
-        if (!sequence) return -1;
-        size = PySequence_Fast_GET_SIZE(sequence);
-        for (i = 0; i < 256; i++) mapping[i] = MISSING_LETTER;
-        for (i = 0; i < size; i++) {
-            item = PySequence_Fast_GET_ITEM(sequence, i);
-#if PY_MAJOR_VERSION > 2
-            character = PyUnicode_AsUTF8AndSize(item, &k);
-#else
-            if (PyString_AsStringAndSize(item, &character, &k) == -1) break;
-#endif
-            if (k != 1) break;
-            j = *character;
-            mapping[j] = i;
-        }
-        PyErr_Clear();
-        if (i < size) (*mapping) = UNMAPPED;
-        Py_DECREF(sequence);
-    }
-#if PY_MAJOR_VERSION < 3
-    }
-#endif
-    Py_INCREF(alphabet);
-    Py_XDECREF(self->alphabet);
-    self->alphabet = alphabet;
+    if (set_alphabet(self, alphabet) < 0) return -1;
     return 0;
 }
 
@@ -3797,11 +3777,7 @@ Aligner_get_algorithm(Aligner* self, void* closure)
         default:
             break;
     }
-#if PY_MAJOR_VERSION >= 3
     return PyUnicode_FromString(s);
-#else
-    return PyString_FromString(s);
-#endif
 }
 
 static PyGetSetDef Aligner_getset[] = {
@@ -6283,7 +6259,8 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 }
 
 static int*
-convert_sequence_to_ints(const char mapping[], Py_ssize_t n, const char s[])
+convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
+                         const char s[])
 {
     char c;
     Py_ssize_t i;
@@ -6375,14 +6352,10 @@ sequence_converter(PyObject* argument, void* pointer)
     Py_ssize_t n;
     int index;
     int* indices;
-#if PY_MAJOR_VERSION < 3
-    char* s;
-#else
     const char* s;
-#endif
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
-    char* mapping;
+    signed char* mapping;
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
@@ -6395,29 +6368,17 @@ sequence_converter(PyObject* argument, void* pointer)
     mapping = aligner->mapping;
     if (*mapping == UNMAPPED) {
         if (!convert_objects_to_ints(view, aligner->alphabet, argument)) return 0;
-#if PY_MAJOR_VERSION < 3
-        return 1;
-#else
         return Py_CLEANUP_SUPPORTED;
-#endif
     }
     
-#if PY_MAJOR_VERSION > 2
     s = PyUnicode_AsUTF8AndSize(argument, &n);
     if (s) {
-#else
-    if (PyString_AsStringAndSize(argument, &s, &n) != -1) {
-#endif
         indices = convert_sequence_to_ints(aligner->mapping, n, s);
         if (!indices) return 0;
         view->buf = indices;
         view->itemsize = 1;
         view->len = n;
-#if PY_MAJOR_VERSION < 3
-        return 1;
-#else
         return Py_CLEANUP_SUPPORTED;
-#endif
     }
     PyErr_Clear();
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
@@ -6482,11 +6443,7 @@ sequence_converter(PyObject* argument, void* pointer)
                      "sequence has incorrect data type '%s'", view->format);
         return 0;
     }
-#if PY_MAJOR_VERSION < 3
-    return 1;
-#else
     return Py_CLEANUP_SUPPORTED;
-#endif
 }
  
 static const char Aligner_score__doc__[] = "calculates the alignment score";
@@ -6512,15 +6469,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB))
-#if PY_MAJOR_VERSION < 3
-    {
-        if (bA.obj != (PyObject*)self) sequence_converter(NULL, &bA);
-        if (bB.obj != (PyObject*)self) sequence_converter(NULL, &bB);
-#endif
         return NULL;
-#if PY_MAJOR_VERSION < 3
-    }
-#endif
 
     sA = bA.buf;
     nA = bA.len / bA.itemsize;
@@ -6611,15 +6560,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&", kwlist,
                                     sequence_converter, &bA,
                                     sequence_converter, &bB))
-#if PY_MAJOR_VERSION < 3
-    {
-        if (bA.obj != (PyObject*)self) sequence_converter(NULL, &bA);
-        if (bB.obj != (PyObject*)self) sequence_converter(NULL, &bB);
-#endif
         return NULL;
-#if PY_MAJOR_VERSION < 3
-    }
-#endif
 
     sA = bA.buf;
     nA = bA.len / bA.itemsize;
@@ -6744,55 +6685,17 @@ static PyTypeObject AlignerType = {
 };
 
 
-#if PY_MAJOR_VERSION < 3
-/* Only needed for python2 with PyPy */
-
-static char add_buffer_protocol_flag__doc__[] =
-"Hack to add the Py_TPFLAGS_HAVE_NEWBUFFER flag to the Array class\n"
-"(needed for python2 but missing in PyPy).\n"
-"Don't use unless you know what you are doing.\n";
-
-static PyObject*
-add_buffer_protocol_flag(PyObject* self, PyObject* args)
-{
-    PyTypeObject* type;
-    if (!PyArg_ParseTuple(args, "O!", &PyType_Type, &type)) return NULL;
-    if (strcmp(type->tp_name, "Array") != 0) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Should be applied to the Array type only");
-        return NULL;
-    }
-    type->tp_flags |= Py_TPFLAGS_HAVE_NEWBUFFER;
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-#endif
-
 /* Module definition */
-
-static PyMethodDef _aligners_methods[] = {
-#if PY_MAJOR_VERSION < 3
-    {"add_buffer_protocol_flag",
-     (PyCFunction) add_buffer_protocol_flag,
-     METH_VARARGS | METH_KEYWORDS,
-     add_buffer_protocol_flag__doc__
-    },
-#endif
-    {NULL, NULL, 0, NULL}
-};
-
 
 static char _aligners__doc__[] =
 "C extension module implementing pairwise alignment algorithms";
-
-#if PY_MAJOR_VERSION >= 3
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "_aligners",
         _aligners__doc__,
         -1,
-        _aligners_methods,
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -6801,30 +6704,15 @@ static struct PyModuleDef moduledef = {
 
 PyObject *
 PyInit__aligners(void)
-
-#else
-
-void
-init_aligners(void)
-#endif
 {
     PyObject* module;
     AlignerType.tp_new = PyType_GenericNew;
 
     if (PyType_Ready(&AlignerType) < 0 || PyType_Ready(&PathGenerator_Type) < 0)
-#if PY_MAJOR_VERSION >= 3
-      return NULL;
-#else
-      return;
-#endif
+        return NULL;
 
-#if PY_MAJOR_VERSION >= 3
     module = PyModule_Create(&moduledef);
     if (!module) return NULL;
-#else
-    module = Py_InitModule3("_aligners", _aligners_methods, _aligners__doc__);
-    if (!module) return;
-#endif
 
     Py_INCREF(&AlignerType);
     /* Reference to AlignerType will be stolen by PyModule_AddObject
@@ -6833,14 +6721,8 @@ init_aligners(void)
                            "PairwiseAligner", (PyObject*) &AlignerType) < 0) {
         Py_DECREF(&AlignerType);
         Py_DECREF(module);
-#if PY_MAJOR_VERSION >= 3
-          return NULL;
-#else
-          return;
-#endif
+        return NULL;
     }
 
-#if PY_MAJOR_VERSION >= 3
     return module;
-#endif
 }

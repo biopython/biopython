@@ -77,7 +77,6 @@ the annotation attribute of each record::
 
 """
 
-from __future__ import print_function
 
 import re
 from Bio.Seq import Seq
@@ -109,7 +108,7 @@ class MauveWriter(SequentialAlignmentWriter):
 
     def __init__(self, *args, **kwargs):
         """Initialize."""
-        super(MauveWriter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._wrote_header = False
         self._wrote_first = False
 

@@ -158,8 +158,8 @@ which you can copy and paste to get started:
 import unittest
 from Bio import Biospam
 
-class BiospamTestAddition(unittest.TestCase):
 
+class BiospamTestAddition(unittest.TestCase):
     def test_addition1(self):
         result = Biospam.addition(2, 3)
         self.assertEqual(result, 5)
@@ -168,8 +168,8 @@ class BiospamTestAddition(unittest.TestCase):
         result = Biospam.addition(9, -1)
         self.assertEqual(result, 8)
 
-class BiospamTestDivision(unittest.TestCase):
 
+class BiospamTestDivision(unittest.TestCase):
     def test_division1(self):
         result = Biospam.division(3.0, 2.0)
         self.assertAlmostEqual(result, 1.5)
@@ -180,7 +180,7 @@ class BiospamTestDivision(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
 \end{minted}
 
@@ -205,7 +205,7 @@ These are the key points of \verb|unittest|-based tests:
   \item At the end of the test script, you can use
 \begin{minted}{python}
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
 \end{minted}
         to execute the tests when the script is run by itself (rather than
@@ -233,8 +233,8 @@ OK
 import unittest
 from Bio import Biospam
 
-class BiospamTestAddition(unittest.TestCase):
 
+class BiospamTestAddition(unittest.TestCase):
     def test_addition1(self):
         """An addition test"""
         result = Biospam.addition(2, 3)
@@ -245,8 +245,8 @@ class BiospamTestAddition(unittest.TestCase):
         result = Biospam.addition(9, -1)
         self.assertEqual(result, 8)
 
-class BiospamTestDivision(unittest.TestCase):
 
+class BiospamTestDivision(unittest.TestCase):
     def test_division1(self):
         """Now let's check division"""
         result = Biospam.division(3.0, 2.0)
@@ -259,7 +259,7 @@ class BiospamTestDivision(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
 \end{minted}
 
@@ -289,7 +289,7 @@ if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
     doctest_suite = doctest.DocTestSuite(Biospam)
     suite = unittest.TestSuite((unittest_suite, doctest_suite))
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
     runner.run(suite)
 \end{minted}
 
@@ -322,29 +322,31 @@ of \verb|run_tests.py| looks as follows:
 # Following modules have historic failures. If you fix one of these
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-    'Bio.PDB',
-    'Bio.PDB.AbstractPropertyMap',
-    'Bio.Phylo.Applications._Fasttree',
-    'Bio.Phylo._io',
-    'Bio.Phylo.TreeConstruction',
-    'Bio.Phylo._utils',
+    "Bio.PDB",
+    "Bio.PDB.AbstractPropertyMap",
+    "Bio.Phylo.Applications._Fasttree",
+    "Bio.Phylo._io",
+    "Bio.Phylo.TreeConstruction",
+    "Bio.Phylo._utils",
 ]
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
 ONLINE_DOCTEST_MODULES = [
-    'Bio.Entrez',
-    'Bio.ExPASy',
-    'Bio.TogoWS',
-    ]
+    "Bio.Entrez",
+    "Bio.ExPASy",
+    "Bio.TogoWS",
+]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
-    EXCLUDE_DOCTEST_MODULES.extend([
-        ``Bio.Affy.CelFile'',
-        ``Bio.Cluster'',
-        ...
-    ])
+    EXCLUDE_DOCTEST_MODULES.extend(
+        [
+            "Bio.Affy.CelFile",
+            "Bio.Cluster",
+            # ...
+        ]
+    )
 \end{minted}
 
 Note that we regard doctests primarily as documentation, so you should

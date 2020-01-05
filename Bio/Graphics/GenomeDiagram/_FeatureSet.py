@@ -24,7 +24,6 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-from __future__ import print_function
 
 # GenomeDiagram
 from ._Feature import Feature
@@ -33,7 +32,7 @@ from ._Feature import Feature
 import re
 
 
-class FeatureSet(object):
+class FeatureSet:
     """FeatureSet object."""
 
     def __init__(self, set_id=None, name=None, parent=None):

@@ -31,7 +31,7 @@ Weighting Functions:
 import numpy
 
 
-class kNN(object):
+class kNN:
     """Holds information necessary to do nearest neighbors classification.
 
     Attribues:

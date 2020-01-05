@@ -20,7 +20,6 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-from __future__ import print_function
 
 from reportlab.lib import colors
 
@@ -31,7 +30,7 @@ from ._GraphSet import GraphSet
 _grey = colors.Color(0.6, 0.6, 0.6)
 
 
-class Track(object):
+class Track:
     """Track.
 
     Attributes:

@@ -1,0 +1,160 @@
+ID   ACFD_ECOLI              Reviewed;        1520 AA.
+AC   P0CK95; Q2M9M2; Q46837; Q46838; Q6BF58;
+DT   08-MAR-2011, integrated into UniProtKB/Swiss-Prot.
+DT   08-MAR-2011, sequence version 1.
+DT   11-DEC-2019, entry version 53.
+DE   RecName: Full=Putative lipoprotein AcfD homolog;
+DE   Flags: Precursor;
+GN   Name=yghJ; OrderedLocusNames=b4466, JW5925; ORFNames=ECK2968;
+OS   Escherichia coli (strain K12).
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacterales;
+OC   Enterobacteriaceae; Escherichia.
+OX   NCBI_TaxID=83333;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / MG1655 / ATCC 47076;
+RX   PubMed=9278503; DOI=10.1126/science.277.5331.1453;
+RA   Blattner F.R., Plunkett G. III, Bloch C.A., Perna N.T., Burland V.,
+RA   Riley M., Collado-Vides J., Glasner J.D., Rode C.K., Mayhew G.F.,
+RA   Gregor J., Davis N.W., Kirkpatrick H.A., Goeden M.A., Rose D.J., Mau B.,
+RA   Shao Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1462(1997).
+RN   [2]
+RP   SEQUENCE REVISION.
+RX   PubMed=16397293; DOI=10.1093/nar/gkj405;
+RA   Riley M., Abe T., Arnaud M.B., Berlyn M.K.B., Blattner F.R.,
+RA   Chaudhuri R.R., Glasner J.D., Horiuchi T., Keseler I.M., Kosuge T.,
+RA   Mori H., Perna N.T., Plunkett G. III, Rudd K.E., Serres M.H., Thomas G.H.,
+RA   Thomson N.R., Wishart D., Wanner B.L.;
+RT   "Escherichia coli K-12: a cooperatively developed annotation snapshot
+RT   -- 2005.";
+RL   Nucleic Acids Res. 34:1-9(2006).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=K12 / W3110 / ATCC 27325 / DSM 5911;
+RX   PubMed=16738553; DOI=10.1038/msb4100049;
+RA   Hayashi K., Morooka N., Yamamoto Y., Fujita K., Isono K., Choi S.,
+RA   Ohtsubo E., Baba T., Wanner B.L., Mori H., Horiuchi T.;
+RT   "Highly accurate genome sequences of Escherichia coli K-12 strains MG1655
+RT   and W3110.";
+RL   Mol. Syst. Biol. 2:E1-E5(2006).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1321-1520.
+RC   STRAIN=O15:H- / 83/39 / ETEC;
+RA   Tauschek M., Gorrell R.J., Strugnell R.A., Robins-Browne R.M.;
+RT   "Identification of a type II protein secretory pathway required for the
+RT   secretion of heat-labile enterotoxin by enterotoxigenic Escherichia coli.";
+RL   Submitted (SEP-2001) to the EMBL/GenBank/DDBJ databases.
+CC   -!- FUNCTION: Involved in a type II secretion system (T2SS, formerly
+CC       general secretion pathway, GSP) for the export of folded proteins
+CC       across the outer membrane. {ECO:0000305}.
+CC   -!- SUBCELLULAR LOCATION: Cell inner membrane {ECO:0000255|PROSITE-
+CC       ProRule:PRU00303}; Lipid-anchor {ECO:0000255|PROSITE-ProRule:PRU00303}.
+CC   -!- MISCELLANEOUS: In many other E.coli strains this gene is part of a type
+CC       II secretion system, but in MG1655 the locus is missing a number of
+CC       genes. {ECO:0000305}.
+CC   -!- SIMILARITY: To V.cholerae AcfD (VC_0845). {ECO:0000305}.
+CC   -!- SEQUENCE CAUTION:
+CC       Sequence=AAA69140.1; Type=Frameshift; Evidence={ECO:0000305};
+CC       Sequence=AAA69141.1; Type=Frameshift; Evidence={ECO:0000305};
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; U28377; AAA69141.1; ALT_FRAME; Genomic_DNA.
+DR   EMBL; U28377; AAA69140.1; ALT_FRAME; Genomic_DNA.
+DR   EMBL; U00096; AAT48156.1; -; Genomic_DNA.
+DR   EMBL; AP009048; BAE77034.1; -; Genomic_DNA.
+DR   EMBL; AF426313; AAL60194.1; -; Genomic_DNA.
+DR   RefSeq; WP_001034469.1; NZ_LN832404.1.
+DR   RefSeq; YP_026189.1; NC_000913.3.
+DR   BioGrid; 4262979; 9.
+DR   STRING; 511145.b4466; -.
+DR   MEROPS; M98.001; -.
+DR   jPOST; P0CK95; -.
+DR   PaxDb; P0CK95; -.
+DR   PRIDE; P0CK95; -.
+DR   EnsemblBacteria; AAT48156; AAT48156; b4466.
+DR   EnsemblBacteria; BAE77034; BAE77034; BAE77034.
+DR   GeneID; 2847716; -.
+DR   KEGG; ecj:JW5925; -.
+DR   KEGG; eco:b4466; -.
+DR   PATRIC; fig|1411691.4.peg.3758; -.
+DR   eggNOG; ENOG4105F88; Bacteria.
+DR   eggNOG; ENOG410XS21; LUCA.
+DR   KO; K10939; -.
+DR   BioCyc; EcoCyc:G7541-MONOMER; -.
+DR   PRO; PR:P0CK95; -.
+DR   Proteomes; UP000000318; Chromosome.
+DR   Proteomes; UP000000625; Chromosome.
+DR   GO; GO:0005886; C:plasma membrane; IEA:UniProtKB-SubCell.
+DR   Gene3D; 1.10.390.30; -; 1.
+DR   InterPro; IPR025385; DUF4092.
+DR   InterPro; IPR035423; M60-like_N.
+DR   InterPro; IPR042279; Pep_M60_3.
+DR   InterPro; IPR031161; Peptidase_M60_dom.
+DR   Pfam; PF13322; DUF4092; 1.
+DR   Pfam; PF17291; M60-like_N; 1.
+DR   Pfam; PF13402; Peptidase_M60; 1.
+DR   SMART; SM01276; M60-like; 1.
+DR   PROSITE; PS51723; PEPTIDASE_M60; 1.
+DR   PROSITE; PS51257; PROKAR_LIPOPROTEIN; 1.
+PE   3: Inferred from homology;
+KW   Cell inner membrane; Cell membrane; Lipoprotein; Membrane; Palmitate;
+KW   Reference proteome; Signal.
+FT   SIGNAL          1..23
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00303"
+FT   CHAIN           24..1520
+FT                   /note="Putative lipoprotein AcfD homolog"
+FT                   /id="PRO_0000020619"
+FT   DOMAIN          1081..1381
+FT                   /note="Peptidase M60"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU01060"
+FT   LIPID           24
+FT                   /note="N-palmitoyl cysteine"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00303"
+FT   LIPID           24
+FT                   /note="S-diacylglycerol cysteine"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00303"
+FT   VARIANT         1358
+FT                   /note="N -> G (in strain: O15:H- / 83/39 /ETEC)"
+FT   VARIANT         1392..1402
+FT                   /note="DGTPLPEFYSE -> EGELPKFFSD (in strain: O15:H- / 83/39
+FT                   / ETEC)"
+FT   VARIANT         1423..1428
+FT                   /note="EVSNDK -> DVGDKT (in strain: O15:H- / 83/39 / ETEC)"
+FT   VARIANT         1498
+FT                   /note="D -> K (in strain: O15:H- / 83/39 /ETEC)"
+FT   VARIANT         1511
+FT                   /note="Q -> K (in strain: O15:H- / 83/39 /ETEC)"
+FT   VARIANT         1519
+FT                   /note="A -> V (in strain: O15:H- / 83/39 /ETEC)"
+SQ   SEQUENCE   1520 AA;  167246 MW;  C835E4953471A7B3 CRC64;
+     MNKKFKYKKS LLAAILSATL LAGCDGGGSG SSSDTPPVDS GTGSLPEVKP DPTPNPEPTP
+     EPTPDPEPTP EPIPDPEPTP EPEPEPVPTK TGYLTLGGSQ RVTGATCNGE SSDGFTFKPG
+     EDVTCVAGNT TIATFNTQSE AARSLRAVEK VSFSLEDAQE LAGSDDKKSN AVSLVTSSNS
+     CPANTEQVCL TFSSVIESKR FDSLYKQIDL APEEFKKLVN EEVENNAATD KAPSTHTSPV
+     VPVTTPGTKP DLNASFVSAN AEQFYQYQPT EIILSEGRLV DSQGYGVAGV NYYTNSGRGV
+     TGENGEFSFS WGETISFGID TFELGSVRGN KSTIALTELG DEVRGANIDQ LIHRYSTTGQ
+     NNTRVVPDDV RKVFAEYPNV INEIINLSLS NGATLGEGEQ VVNLPNEFIE QFNTGQAKEI
+     DTAICAKTDG CNEARWFSLT TRNVNDGQIQ GVINKLWGVD TNYKSVSKFH VFHDSTNFYG
+     STGNARGQAV VNISNAAFPI LMARNDKNYW LAFGEKRAWD KNELAYITEA PSLVEPENVT
+     RDTATFNLPF ISLGQVGEGK LMVIGNPHYN SILRCPNGYS WNGGVNKDGQ CTLNSDPDDM
+     KNFMENVLRY LSDDKWKPDA KASMTVGTNL DTVYFKRHGQ VTGNSAAFDF HPDFAGISVE
+     HLSSYGDLDP QEMPLLILNG FEYVTQVGND PYAIPLRADT SKPKLTQQDV TDLIAYLNKG
+     GSVLIMENVM SNLKEESASG FVRLLDAAGL SMALNKSVVN NDPQGYPNRV RQQRATGIWV
+     YERYPAVDGA LPYTIDSKTG EVKWKYQVEN KPDDKPKLEV ASWLEDVDGK QETRYAFIDE
+     ADHKTEDSLK AAKEKIFAAF PGLKECTNPA YHYEVNCLEY RPGTGVPVTG GMYVPQYTQL
+     SLNADTAKAM VQAADLGTNI QRLYQHELYF RTNGRKGERL SSVDLERLYQ NMSVWLWNDT
+     SYRYEEGKND ELGFKTFTEF LNCYANDAYA GGTKCSADLK KSLVDNNMIY GDGSSKAGMM
+     NPSYPLNYME KPLTRLMLGR SWWDLNIKVD VEKYPGAVSE EGQNVTETIS LYSNPTKWFA
+     GNMQSTGLWA PAQKEVTIKS NANVPVTVTV ALADDLTGRE KHEVALNRPP RVTKTYSLDA
+     SGTVKFKVPY GGLIYIKGNS STNESASFTF TGVVKAPFYK DGAWKNDLNS PAPLGELESD
+     AFVYTTPKKN LNASNYTGGL EQFANDLDTF ASSMNDFYGR DSEDGKHRMF TYKNLPGHKH
+     RFTNDVQISI GDAHSGYPVM NSSFSPNSTT LPTTPLNDWL IWHEVGHNAA ETPLTVPGAT
+     EVANNVLALY MQDRYLGKMN RVADDITVAP EYLEESNNQA WARGGAGDRL LMYAQLKEWA
+     EKNFDIKKWY PDGTPLPEFY SEREGMKGWN LFQLMHRKAR GDEVSNDKFG GKNYCAESNG
+     NAADTLMLCA SWVAQTDLSE FFKKWNPGAN AYQLPGASEM SFEGGVSQSA YNTLASLDLP
+     KPEQGPETIN QVTEHKMSAE
+//

@@ -4,10 +4,9 @@
 
 """Tests for seq module."""
 
-from __future__ import print_function
 import array
 import copy
-import sys
+import unittest
 import warnings
 
 from Bio import BiopythonWarning
@@ -19,21 +18,6 @@ from Bio.Data.IUPACData import (ambiguous_dna_complement,
                                 ambiguous_dna_values, ambiguous_rna_values)
 from Bio.Data.CodonTable import TranslationError, standard_dna_table
 from Bio.Seq import MutableSeq
-
-# Remove unittest2 import after dropping support for Python 2
-if sys.version_info[0] < 3:
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
-else:
-    import unittest
-
-if sys.version_info[0] == 3:
-    array_indicator = "u"
-else:
-    array_indicator = "c"
 
 test_seqs = [
     Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
@@ -623,8 +607,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertIsInstance(mutable_s, MutableSeq,
                               "Converting Seq to mutable")
 
-        array_seq = MutableSeq(array.array(array_indicator,
-                                           "TCAAAAGGATGCATCATG"),
+        array_seq = MutableSeq(array.array("u", "TCAAAAGGATGCATCATG"),
                                IUPAC.ambiguous_dna)
         self.assertIsInstance(array_seq, MutableSeq,
                               "Creating MutableSeq using array")
@@ -767,7 +750,7 @@ class TestMutableSeq(unittest.TestCase):
                                     IUPAC.ambiguous_dna),
                          self.mutable_s, "Set slice with MutableSeq")
 
-        self.mutable_s[1:3] = array.array(array_indicator, "GAT")
+        self.mutable_s[1:3] = array.array("u", "GAT")
         self.assertEqual(MutableSeq("TGATTAAAGGATGCATCATG",
                                     IUPAC.ambiguous_dna),
                          self.mutable_s, "Set slice with array")
@@ -830,12 +813,12 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_complement(self):
         self.mutable_s.complement()
-        self.assertEqual(str("AGTTTTCCTACGTAGTAC"), str(self.mutable_s))
+        self.assertEqual("AGTTTTCCTACGTAGTAC", str(self.mutable_s))
 
     def test_complement_rna(self):
         seq = Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna)
         seq.complement()
-        self.assertEqual(str("UACuuuGAC"), str(seq))
+        self.assertEqual("UACuuuGAC", str(seq))
 
     def test_complement_mixed_aphabets(self):
         seq = Seq.MutableSeq("AUGaaaCTG")
@@ -950,7 +933,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_complement(self):
         self.s.complement()
-        self.assertEqual(str("??????"), str(self.s))
+        self.assertEqual("??????", str(self.s))
 
     def test_complement_of_protein(self):
         """Check reverse complement fails on a protein."""

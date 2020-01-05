@@ -22,11 +22,8 @@ from Bio import ExPASy
 
 # In order to check any sequences returned
 from Bio import SeqIO
-from Bio._py3k import StringIO
 from Bio.SeqUtils.CheckSum import seguid
-
-from Bio.File import UndoHandle
-from Bio._py3k import _as_string
+from Bio.SwissProt import SwissProtParserError
 
 import requires_internet
 requires_internet.check()
@@ -41,11 +38,14 @@ class ExPASyTests(unittest.TestCase):
     def test_get_sprot_raw(self):
         """Bio.ExPASy.get_sprot_raw("O23729")."""
         identifier = "O23729"
-        # This is to catch an error page from our proxy:
-        handle = UndoHandle(ExPASy.get_sprot_raw(identifier))
-        if _as_string(handle.peekline()).startswith("<!DOCTYPE HTML"):
-            raise IOError
-        record = SeqIO.read(handle, "swiss")
+        handle = ExPASy.get_sprot_raw(identifier)
+        try:
+            record = SeqIO.read(handle, "swiss")
+        except SwissProtParserError as e:
+            # This is to catch an error page from our proxy
+            if (str(e) == "Failed to find ID in first line" and
+                    e.line.startswith("<!DOCTYPE HTML")):
+                raise OSError from None
         handle.close()
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)

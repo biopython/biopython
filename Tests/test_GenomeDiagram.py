@@ -4,14 +4,10 @@
 # as part of this package.
 """Tests for GenomeDiagram general functionality."""
 
-from __future__ import print_function
 
 import os
 import unittest
 import math
-
-from Bio._py3k import zip
-from Bio._py3k import range
 
 
 # Do we have ReportLab?  Raise error if not present.
@@ -73,16 +69,12 @@ def apply_to_window(sequence, window_size, function, step=None):
     sequence of length window_size (stepped by step), calculated by the passed
     function.  Returned positions are the midpoint of each window.
 
-    Arguments:
-
     - sequence - Bio.Seq.Seq object.
     - window_size - an integer describing the length of sequence to consider.
     - step - an integer describing the step to take between windows
       (default = window_size//2).
     - function - Method or function that accepts a Bio.Seq.Seq object
       as its sole argument and returns a single value.
-
-    apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
     """
     seqlen = len(sequence)      # Total length of sequence to be used
     if step is None:    # No step specified, so use half window-width or 1 if larger
@@ -314,9 +306,9 @@ class LabelTest(unittest.TestCase):
                 # Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2
                 # must be string, not None
                 renderPM = None
-            except IOError:
+            except OSError:
                 # Probably a library problem, e.g.
-                # IOError: encoder zip not available
+                # OSError: encoder zip not available
                 renderPM = None
         if circular:
             # Circular diagram

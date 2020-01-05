@@ -7,7 +7,6 @@
 
 """Query PubMed and print MEDLINE format results."""
 
-from __future__ import print_function
 
 import sys
 import getopt

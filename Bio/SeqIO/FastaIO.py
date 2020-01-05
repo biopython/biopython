@@ -14,7 +14,6 @@
 You are expected to use this module via the Bio.SeqIO functions.
 """
 
-from __future__ import print_function
 
 from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
@@ -351,7 +350,7 @@ class FastaTwoLineWriter(FastaWriter):
             handle.close()
 
         """
-        super(FastaTwoLineWriter, self).__init__(
+        super().__init__(
             handle, wrap=None, record2title=record2title
         )
 

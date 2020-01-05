@@ -19,7 +19,6 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
-from __future__ import print_function
 
 import os
 import tempfile
@@ -191,7 +190,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
                     if full_id in self.naccess_atom_dict:
                         asa = self.naccess_atom_dict[full_id]
                         property_dict[full_id] = asa
-                        property_keys.append((full_id))
+                        property_keys.append(full_id)
                         property_list.append((atom, asa))
                         atom.xtra["EXP_NACCESS"] = asa
         AbstractAtomPropertyMap.__init__(

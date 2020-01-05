@@ -11,16 +11,11 @@
 
 """BLAST code for graphical Xbbtools tool."""
 
-from __future__ import print_function
 
 import os
 import tempfile
 import threading
-
-try:
-    import tkMessageBox as messagebox  # Python 2
-except ImportError:
-    from tkinter import messagebox  # Python 3
+from tkinter import messagebox
 
 from Bio.Blast.Applications import (
     NcbiblastnCommandline,
@@ -31,7 +26,7 @@ from Bio.Blast.Applications import (
 )
 
 
-class BlastDisplayer(object):
+class BlastDisplayer:
     """A class for running and displaying a BLAST search."""
 
     def __init__(self, command_data, text_id=None):

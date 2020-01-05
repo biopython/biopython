@@ -5,14 +5,10 @@
 # package.
 """Bio.SearchIO object to model search results from a single query."""
 
-from __future__ import print_function
 
 from copy import deepcopy
 from itertools import chain
 from collections import OrderedDict
-
-from Bio._py3k import filter
-from Bio._py3k import basestring
 
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
@@ -234,18 +230,15 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.itervalues():  # noqa: B301
-                yield hit
+            yield from self._items.itervalues()  # noqa: B301
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
+            yield from self._items
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():  # noqa: B301
-                yield item
+            yield from self._items.iteritems()  # noqa: B301
 
     else:
 
@@ -270,18 +263,15 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.values():
-                yield hit
+            yield from self._items.values()
 
         def iterhit_keys(self):
             """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
+            yield from self._items
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.items():
-                yield item
+            yield from self._items.items()
 
     def __contains__(self, hit_key):
         """Return True if hit key in items or alternative hit identifiers."""
@@ -293,13 +283,9 @@ class QueryResult(_BaseSearchObject):
         """Return the number of items."""
         return len(self._items)
 
-    # Python 3:
     def __bool__(self):
         """Return True if there are items."""
         return bool(self._items)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""
@@ -381,7 +367,7 @@ class QueryResult(_BaseSearchObject):
     def __setitem__(self, hit_key, hit):
         """Add an item of key hit_key and value hit."""
         # only accept string keys
-        if not isinstance(hit_key, basestring):
+        if not isinstance(hit_key, str):
             raise TypeError("QueryResult object keys must be a string.")
         # hit must be a Hit object
         if not isinstance(hit, Hit):

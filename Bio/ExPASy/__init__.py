@@ -17,12 +17,13 @@ Functions:
 """
 
 # Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen
 from Bio._py3k import _binary_to_string_handle
 
 
-def get_prodoc_entry(id,
-                     cgi="https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry"):
+def get_prodoc_entry(
+    id, cgi="https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry"
+):
     """Get a text handle to a PRODOC entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
@@ -40,11 +41,12 @@ def get_prodoc_entry(id,
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
     """
-    return _binary_to_string_handle(_urlopen("%s?%s" % (cgi, id)))
+    return _binary_to_string_handle(urlopen("%s?%s" % (cgi, id)))
 
 
-def get_prosite_entry(id,
-                      cgi="https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry"):
+def get_prosite_entry(
+    id, cgi="https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry"
+):
     """Get a text handle to a PROSITE entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
@@ -62,7 +64,7 @@ def get_prosite_entry(id,
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
     """
-    return _binary_to_string_handle(_urlopen("%s?%s" % (cgi, id)))
+    return _binary_to_string_handle(urlopen("%s?%s" % (cgi, id)))
 
 
 def get_prosite_raw(id, cgi=None):
@@ -90,7 +92,7 @@ def get_prosite_raw(id, cgi=None):
 
     """
     url = "https://prosite.expasy.org/%s.txt" % id
-    return _binary_to_string_handle(_urlopen(url))
+    return _binary_to_string_handle(urlopen(url))
 
 
 def get_sprot_raw(id):
@@ -118,4 +120,4 @@ def get_sprot_raw(id):
 
     """  # noqa: W291
     url = "http://www.uniprot.org/uniprot/%s.txt" % id
-    return _binary_to_string_handle(_urlopen(url))
+    return _binary_to_string_handle(urlopen(url))

@@ -24,14 +24,13 @@ the diagram: http://www.reportlab.com
 """
 
 # ReportLab imports
-from __future__ import print_function
 
 from reportlab.lib import colors
 
 from ._Graph import GraphData
 
 
-class GraphSet(object):
+class GraphSet:
     """Graph Set.
 
     Attributes:

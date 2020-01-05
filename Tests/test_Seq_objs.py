@@ -1,11 +1,9 @@
-
 # Copyright 2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """Unittests for the Seq objects."""
-from __future__ import print_function
 
 import warnings
 import unittest

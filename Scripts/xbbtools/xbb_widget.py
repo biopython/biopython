@@ -11,20 +11,13 @@
 
 """Widget code for graphical Xbbtools tool."""
 
-from __future__ import print_function
 
 import re
 import sys
 import time
-
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-    import tkFileDialog as filedialog
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import filedialog
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import filedialog
 
 from Bio.Data import CodonTable
 from Bio.SeqIO.FastaIO import SimpleFastaParser
@@ -36,7 +29,7 @@ from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
 
 
-class xbb_widget(object):
+class xbb_widget:
     """Main XBBtools window."""
 
     def __init__(self, parent=None):
@@ -429,7 +422,7 @@ class xbb_widget(object):
         )
 
     def blast(self):
-        """Set-up and start BLASTing."""
+        """Initialize and start BLASTing."""
         seq = self.get_selection_or_sequence()
         self.blaster = BlastIt(seq, self.parent)
 
@@ -493,7 +486,7 @@ class xbb_widget(object):
         w.tag_remove("sel", stop, "end")
 
     def search(self):
-        """Set-up and start search process."""
+        """Initialize and start search process."""
         seq = self.get_selection_or_sequence()
         XDNAsearch(seq, master=self.sequence_id, highlight=1)
 

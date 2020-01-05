@@ -9,7 +9,7 @@ import os
 import unittest
 import tempfile
 
-# from Bio._py3k import StringIO
+# from io import StringIO
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree

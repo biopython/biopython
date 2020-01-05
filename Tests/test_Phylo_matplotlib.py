@@ -7,7 +7,7 @@
 
 import unittest
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio import Phylo
 
 # Check for any missing dependencies at the top level so we can skip

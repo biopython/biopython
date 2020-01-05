@@ -52,7 +52,6 @@ Or,
 Note these examples only show the first 50 bases to keep the output short.
 """
 
-from __future__ import print_function
 
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord

@@ -23,7 +23,7 @@ them to a file.
 
 import os
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio import MissingPythonDependencyError
 
@@ -90,7 +90,7 @@ def write(trees, handle, plain=False, **kwargs):
 # Input
 
 
-class Parser(object):
+class Parser:
     """Parse a CDAO tree given a file handle."""
 
     def __init__(self, handle=None):
@@ -255,7 +255,7 @@ class Parser(object):
 # Output
 
 
-class Writer(object):
+class Writer:
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     prefixes = RDF_NAMESPACES
@@ -462,8 +462,7 @@ class Writer(object):
             for predicate, obj in edge_attributes:
                 yield (nUri(edge_uri), predicate, obj)
 
-        for stmt in statements:
-            yield stmt
+        yield from statements
 
         try:
             clade_attributes = clade.attributes
@@ -475,5 +474,4 @@ class Writer(object):
 
         if not clade.is_terminal():
             for new_clade in clade.clades:
-                for stmt in self.process_clade(new_clade, parent=clade, root=False):
-                    yield stmt
+                yield from self.process_clade(new_clade, parent=clade, root=False)

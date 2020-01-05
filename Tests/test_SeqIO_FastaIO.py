@@ -5,10 +5,9 @@
 # as part of this package.
 """Tests for Bio.SeqIO.FastaIO module."""
 
-from __future__ import print_function
 
 import unittest
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator

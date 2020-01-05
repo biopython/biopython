@@ -11,7 +11,6 @@ This API follows the same semantics as Biopython's ``SeqIO`` and
 ``AlignIO``.
 """
 
-from __future__ import print_function
 
 from Bio import File
 from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, NeXMLIO
@@ -47,8 +46,7 @@ def parse(file, format, **kwargs):
 
     """
     with File.as_handle(file, "r") as fp:
-        for tree in getattr(supported_formats[format], "parse")(fp, **kwargs):
-            yield tree
+        yield from getattr(supported_formats[format], "parse")(fp, **kwargs)
 
 
 def read(file, format, **kwargs):

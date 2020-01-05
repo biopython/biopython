@@ -5,12 +5,9 @@
 
 """Generate output for PAML tests."""
 
-from __future__ import print_function
 
 import os.path
 import sys
-
-from Bio._py3k import range
 
 
 VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7", "4_8", "4_9a",

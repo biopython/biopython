@@ -78,14 +78,11 @@ Example output::
 
 """  # noqa: W291
 
-from __future__ import print_function
 
 import re
 
-from Bio._py3k import range
 
-
-class PrintFormat(object):
+class PrintFormat:
     """PrintFormat allow the printing of results of restriction analysis."""
 
     ConsoleWidth = 80

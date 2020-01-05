@@ -29,8 +29,6 @@ import json
 import csv
 import numpy as np
 
-from Bio._py3k import basestring
-from Bio._py3k import _is_int_or_long
 from Bio import BiopythonParserWarning
 
 # Private csv headers - hardcoded because this are supposedly never changed
@@ -56,7 +54,7 @@ _measurements = "measurements"
 #
 
 
-class PlateRecord(object):
+class PlateRecord:
     """PlateRecord object for storing Phenotype Microarray plates data.
 
     A PlateRecord stores all the wells of a particular phenotype
@@ -289,7 +287,7 @@ class PlateRecord(object):
         array or matrix objects.
         """
         # Well identifier access
-        if isinstance(index, basestring):
+        if isinstance(index, str):
             try:
                 return self._wells[index]
             except KeyError:
@@ -372,7 +370,7 @@ class PlateRecord(object):
             )
 
     def __setitem__(self, key, value):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         self._is_well(value)
         # Provided key and well ID should be the same
@@ -386,7 +384,7 @@ class PlateRecord(object):
         self._update()
 
     def __delitem__(self, key):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         del self._wells[key]
 
@@ -582,7 +580,7 @@ class PlateRecord(object):
         return "\n".join(lines)
 
 
-class WellRecord(object):
+class WellRecord:
     """WellRecord stores all time course signals of a phenotype Microarray well.
 
     The single time points and signals can be accessed iterating on the
@@ -724,7 +722,7 @@ class WellRecord(object):
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
 
-        elif _is_int_or_long(time) or isinstance(time, float):
+        elif isinstance(time, int) or isinstance(time, float):
             return self._interpolate(time)
 
         raise ValueError("Invalid index")
@@ -1188,7 +1186,7 @@ def _toOPM(plate):
     return d
 
 
-class JsonWriter(object):
+class JsonWriter:
     """Class to write PM Json format files."""
 
     def __init__(self, plates):

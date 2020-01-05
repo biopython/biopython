@@ -11,8 +11,6 @@ All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
 """
 
-from Bio._py3k import basestring, filter, unicode, zip
-
 import collections
 import copy
 import itertools
@@ -29,7 +27,7 @@ if sys.version_info[0] < 3:
 
     def as_string(s):
         """Encode string to UTF-8."""
-        if isinstance(s, unicode):
+        if isinstance(s, str):
             return s.encode("utf-8")
         return str(s)
 
@@ -56,11 +54,9 @@ def _preorder_traverse(root, get_children):
     def dfs(elem):
         yield elem
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _postorder_traverse(root, get_children):
@@ -68,12 +64,10 @@ def _postorder_traverse(root, get_children):
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def dfs(elem):
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
         yield elem
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _sorted_attrs(elem):
@@ -152,8 +146,8 @@ def _attribute_matcher(kwargs):
             if not hasattr(node, key):
                 return False
             target = getattr(node, key)
-            if isinstance(pattern, basestring):
-                return isinstance(target, basestring) and re.match(
+            if isinstance(pattern, str):
+                return isinstance(target, str) and re.match(
                     pattern + "$", target
                 )
             if isinstance(pattern, bool):
@@ -197,7 +191,7 @@ def _object_matcher(obj):
         return _identity_matcher(obj)
     if isinstance(obj, type):
         return _class_matcher(obj)
-    if isinstance(obj, basestring):
+    if isinstance(obj, str):
         return _string_matcher(obj)
     if isinstance(obj, dict):
         return _attribute_matcher(obj)
@@ -244,7 +238,7 @@ def _combine_args(first, *rest):
     if hasattr(first, "__iter__") and not (
         isinstance(first, TreeElement)
         or isinstance(first, type)
-        or isinstance(first, basestring)
+        or isinstance(first, str)
         or isinstance(first, dict)
     ):
         # terminals is an iterable of targets
@@ -262,14 +256,14 @@ def _combine_args(first, *rest):
 # Class definitions
 
 
-class TreeElement(object):
+class TreeElement:
     """Base class for all Bio.Phylo classes."""
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
         # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
-            if isinstance(val, basestring):
+            if isinstance(val, str):
                 return "%s='%s'" % (key, _utils.trim_str(as_string(val), 60, "..."))
             return "%s=%s" % (key, val)
 
@@ -278,14 +272,14 @@ class TreeElement(object):
             ", ".join(
                 pair_as_kwarg_string(key, val)
                 for key, val in sorted(self.__dict__.items())
-                if val is not None and type(val) in (str, int, float, bool, unicode)
+                if val is not None and type(val) in (str, int, float, bool, str)
             ),
         )
 
     __str__ = __repr__
 
 
-class TreeMixin(object):
+class TreeMixin:
     """Methods for Tree- and Clade-based classes.
 
     This lets ``Tree`` and ``Clade`` support the same traversal and searching
@@ -997,7 +991,7 @@ class Tree(TreeElement, TreeMixin):
 
         """
         if format_spec:
-            from Bio._py3k import StringIO
+            from io import StringIO
             from Bio.Phylo import _io
 
             handle = StringIO()
@@ -1114,7 +1108,6 @@ class Clade(TreeElement, TreeMixin):
         """Return the number of clades directy under the root."""
         return len(self.clades)
 
-    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -1123,9 +1116,6 @@ class Clade(TreeElement, TreeMixin):
         Clade instances to always be considered True.
         """
         return True
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __str__(self):
         """Return name of the class instance."""
@@ -1140,7 +1130,7 @@ class Clade(TreeElement, TreeMixin):
     def _set_color(self, arg):
         if arg is None or isinstance(arg, BranchColor):
             self._color = arg
-        elif isinstance(arg, basestring):
+        elif isinstance(arg, str):
             if arg in BranchColor.color_names:
                 # Known color name
                 self._color = BranchColor.from_name(arg)
@@ -1158,7 +1148,7 @@ class Clade(TreeElement, TreeMixin):
     color = property(_get_color, _set_color, doc="Branch color.")
 
 
-class BranchColor(object):
+class BranchColor:
     """Indicates the color of a clade when rendered graphically.
 
     The color should be interpreted by client code (e.g. visualization
@@ -1225,7 +1215,7 @@ class BranchColor(object):
         '#FF8000' for an RGB value of (255, 128, 0).
         """
         assert (
-            isinstance(hexstr, basestring)
+            isinstance(hexstr, str)
             and hexstr.startswith("#")
             and len(hexstr) == 7
         ), "need a 24-bit hexadecimal string, e.g. #000000"

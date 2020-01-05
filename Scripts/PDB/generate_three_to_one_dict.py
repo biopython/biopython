@@ -11,14 +11,13 @@ Download and parse PDB Chemical Component Dictionary,
 then write out dict for to_one_letter_code.
 """
 
-from __future__ import print_function
 
 import gzip
 import inspect
 import os
 import warnings
 
-from Bio._py3k import urlopen
+from urllib.request import urlopen
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 

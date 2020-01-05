@@ -12,16 +12,14 @@ import copy
 from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
-from Bio import _py3k
-from Bio._py3k import zip, range
 
 
 def _is_numeric(x):
     """Return True if is numeric."""
-    return _py3k._is_int_or_long(x) or isinstance(x, (float, complex))
+    return isinstance(x, (float, complex, int))
 
 
-class _Matrix(object):
+class _Matrix:
     """Base class for distance matrix or scoring matrix.
 
     Accepts a list of names and a lower triangular matrix.::
@@ -362,7 +360,7 @@ class DistanceMatrix(_Matrix):
 _DistanceMatrix = DistanceMatrix
 
 
-class DistanceCalculator(object):
+class DistanceCalculator:
     """Class to calculate the distance matrix from a DNA or Protein.
 
     Multiple Sequence Alignment(MSA) and the given name of the
@@ -562,7 +560,7 @@ class DistanceCalculator(object):
         return protein_matrix
 
 
-class TreeConstructor(object):
+class TreeConstructor:
     """Base class for all tree constructor."""
 
     def build_tree(self, msa):
@@ -845,7 +843,7 @@ class DistanceTreeConstructor(TreeConstructor):
 # #################### Tree Scoring and Searching Classes #####################
 
 
-class Scorer(object):
+class Scorer:
     """Base class for all tree scoring methods."""
 
     def get_score(self, tree, alignment):
@@ -856,7 +854,7 @@ class Scorer(object):
         raise NotImplementedError("Method not implemented!")
 
 
-class TreeSearcher(object):
+class TreeSearcher:
     """Base class for all tree searching methods."""
 
     def search(self, starting_tree, alignment):

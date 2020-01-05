@@ -14,7 +14,7 @@ from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Align.Applications import MSAProbsCommandline
 from Bio.Application import ApplicationError
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 #################################################################
 
@@ -26,8 +26,7 @@ try:
     output = getoutput("msaprobs -version")
     if output.startswith("MSAPROBS version"):
         msaprobs_exe = "msaprobs"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not msaprobs_exe:

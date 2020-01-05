@@ -14,16 +14,10 @@ Usage:
 python check_output.py <name of file to parse>
 """
 # standard modules
-from __future__ import print_function
-
 import sys
 import os
 import gzip
-
-try:
-    from StringIO import StringIO  # Python 2
-except ImportError:
-    from io import StringIO  # Python 3
+from io import StringIO
 
 # biopython
 from Bio import GenBank

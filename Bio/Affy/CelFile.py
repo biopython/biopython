@@ -7,7 +7,6 @@
 
 """Reading information from Affymetrix CEL files version 3 and 4."""
 
-from __future__ import print_function
 
 import struct
 
@@ -24,7 +23,7 @@ class ParserError(ValueError):
 
     def __init__(self, *args):
         """Initialise class."""
-        super(ParserError, self).__init__(*args)
+        super().__init__(*args)
 
 
 _modeError = ParserError("You're trying to open an Affymetrix v4"
@@ -36,7 +35,7 @@ _modeError = ParserError("You're trying to open an Affymetrix v4"
 # pp = pprint.PrettyPrinter(indent=4)
 
 
-class Record(object):
+class Record:
     """Stores the information in a cel file.
 
     Example usage:

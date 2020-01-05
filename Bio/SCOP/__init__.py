@@ -46,7 +46,6 @@ Functions:
 
 """
 
-from __future__ import print_function
 
 import os
 import re
@@ -159,7 +158,7 @@ def _open_scop_file(scop_dir_path, version, filetype):
     return handle
 
 
-class Scop(object):
+class Scop:
     """The entire SCOP hierarchy.
 
     root -- The root node of the hierarchy
@@ -539,7 +538,7 @@ class Scop(object):
             )
 
 
-class Node(object):
+class Node:
     """A node in the Scop hierarchy.
 
     Attributes:
@@ -718,7 +717,7 @@ class Domain(Node):
         return rec
 
 
-class Astral(object):
+class Astral:
     """Representation of the ASTRAL database.
 
     Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
@@ -944,7 +943,7 @@ def _open(cgi, params=None, get=1):
     that describes whether a GET should be used.
 
     """
-    from Bio._py3k import urlopen, urlencode
+    from urllib.request import urlopen, urlencode
 
     # Open a handle to SCOP.
     if params is None:

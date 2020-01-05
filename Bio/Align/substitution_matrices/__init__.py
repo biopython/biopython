@@ -6,19 +6,18 @@ import numpy
 
 from Bio import File
 from Bio import BiopythonExperimentalWarning
-from Bio._py3k import raise_from
 
-# These two can be removed once we drop python2:
-import sys
-import platform
 
 import warnings
-warnings.warn("Bio.Align.substitution_matrices is an experimental module "
-              "which may still undergo significant changes. In particular, "
-              "the location of this module may change, and the Array class "
-              "defined in this module may be moved to other existing or new "
-              "modules in Biopython.",
-              BiopythonExperimentalWarning)
+
+warnings.warn(
+    "Bio.Align.substitution_matrices is an experimental module "
+    "which may still undergo significant changes. In particular, "
+    "the location of this module may change, and the Array class "
+    "defined in this module may be moved to other existing or new "
+    "modules in Biopython.",
+    BiopythonExperimentalWarning,
+)
 
 
 class Array(numpy.ndarray):
@@ -59,9 +58,10 @@ class Array(numpy.ndarray):
                                 single_letters = False
                             alphabet.append(letter)
                     else:
-                        raise ValueError("data array should be 1- or 2- "
-                                         "dimensional (found %d dimensions) "
-                                         "in key" % dims)
+                        raise ValueError(
+                            "data array should be 1- or 2- dimensional "
+                            "(found %d dimensions) in key" % dims
+                        )
             alphabet = sorted(set(alphabet))
             if single_letters:
                 alphabet = "".join(alphabet)
@@ -69,12 +69,12 @@ class Array(numpy.ndarray):
                 alphabet = tuple(alphabet)
             n = len(alphabet)
             if dims == 1:
-                shape = (n, )
+                shape = (n,)
             elif dims == 2:
                 shape = (n, n)
             else:  # dims is None
                 raise ValueError("data is an empty dictionary")
-            obj = super(Array, cls).__new__(cls, shape, dtype)
+            obj = super().__new__(cls, shape, dtype)
             if dims == 1:
                 for i, key in enumerate(alphabet):
                     obj[i] = data.get(letter, 0.0)
@@ -95,8 +95,8 @@ class Array(numpy.ndarray):
             if dims is None:
                 dims = 1
             elif dims not in (1, 2):
-                raise ValueError("dims should be 1 or 2 (found %d)" % dims)
-            shape = (n, ) * dims
+                raise ValueError("dims should be 1 or 2 (found %s)" % str(dims))
+            shape = (n,) * dims
         else:
             if dims is None:
                 shape = data.shape
@@ -107,16 +107,18 @@ class Array(numpy.ndarray):
                     if shape[0] != shape[1]:
                         raise ValueError("data array is not square")
                 else:
-                    raise ValueError("data array should be 1- or 2- "
-                                     "dimensional (found %d dimensions) "
-                                     % dims)
+                    raise ValueError(
+                        "data array should be 1- or 2- dimensional "
+                        "(found %d dimensions) " % dims
+                    )
             else:
-                shape = (n, ) * dims
+                shape = (n,) * dims
                 if data.shape != shape:
-                    raise ValueError("data shape has inconsistent shape "
-                                     "(expected (%s), found (%s))"
-                                     % (shape, data.shape))
-        obj = super(Array, cls).__new__(cls, shape, dtype)
+                    raise ValueError(
+                        "data shape has inconsistent shape (expected (%s), found (%s))"
+                        % (shape, data.shape)
+                    )
+        obj = super().__new__(cls, shape, dtype)
         if data is None:
             obj[:] = 0.0
         else:
@@ -137,14 +139,14 @@ class Array(numpy.ndarray):
                     try:
                         index = self._alphabet.index(index)
                     except ValueError:
-                        raise_from(IndexError("'%s'" % index), None)
+                        raise IndexError("'%s'" % index) from None
                 indices.append(index)
             key = tuple(indices)
         elif isinstance(key, str):
             try:
                 key = self._alphabet.index(key)
             except ValueError:
-                raise_from(IndexError("'%s'" % key), None)
+                raise IndexError("'%s'" % key) from None
         return key
 
     def __getitem__(self, key):
@@ -215,8 +217,7 @@ class Array(numpy.ndarray):
         else:
             outputs = (None,) * ufunc.nout
 
-        raw_results = super(Array, self).__array_ufunc__(ufunc, method,
-                                                         *args, **kwargs)
+        raw_results = super().__array_ufunc__(ufunc, method, *args, **kwargs)
         if raw_results is NotImplemented:
             return NotImplemented
 
@@ -298,7 +299,11 @@ class Array(numpy.ndarray):
             return tuple(self)
         elif dims == 2:
             n1, n2 = self.shape
-            return tuple(numpy.ndarray.__getitem__(self, (i1, i2)) for i2 in range(n2) for i1 in range(n1))
+            return tuple(
+                numpy.ndarray.__getitem__(self, (i1, i2))
+                for i2 in range(n2)
+                for i1 in range(n1)
+            )
         else:
             raise RuntimeError("array has unexpected shape %s" % self.shape)
 
@@ -408,15 +413,6 @@ class Array(numpy.ndarray):
             assert text.endswith(")")
             text = text[:-1] + ",\n         alphabet='%s')" % self._alphabet
         return text
-
-
-if sys.version_info[0] < 3 and platform.python_implementation() == "PyPy":
-    # For python2 on PyPy, subclassing from a numpy array, which supports the
-    # buffer protocol, loses the Py_TPFLAGS_HAVE_NEWBUFFER flag on tp_flags on
-    # the class type, although the subclass still supports the buffer protocol.
-    # Adding this flag by hand here, as a temporary hack until we drop python2.
-    from .. import _aligners
-    _aligners.add_buffer_protocol_flag(Array)
 
 
 def read(handle, dtype=float):

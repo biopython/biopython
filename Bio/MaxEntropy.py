@@ -10,7 +10,6 @@ Uses Improved Iterative Scaling.
 """
 # TODO Define terminology
 
-from __future__ import print_function
 from functools import reduce
 
 try:
@@ -21,7 +20,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.MaxEntropy.")
 
 
-class MaxEntropy(object):
+class MaxEntropy:
     """Hold information for a Maximum Entropy classifier.
 
     Members:

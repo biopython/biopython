@@ -12,7 +12,7 @@ import shutil
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.File import as_handle
@@ -283,28 +283,16 @@ def PdbAtomIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
 
-    from Bio.File import UndoHandle
-
     with as_handle(handle, "rU") as handle:
-        undo_handle = UndoHandle(handle)
-        firstline = undo_handle.peekline()
-        # check if file is empty
-        if not firstline:
-            raise ValueError("Empty file.")
-
-        # Deduce the PDB ID from the PDB header
-        # ENH: or filename?
-        if firstline.startswith("HEADER"):
-            pdb_id = firstline[62:66]
-        else:
+        struct = PDBParser().get_structure(None, handle)
+        pdb_id = struct.header["idcode"]
+        if not pdb_id:
             warnings.warn(
-                "First line is not a 'HEADER'; can't determine PDB ID. "
-                "Line: %r" % firstline,
+                "'HEADER' line not found; can't determine PDB ID.",
                 BiopythonParserWarning,
             )
             pdb_id = "????"
 
-        struct = PDBParser().get_structure(pdb_id, undo_handle)
         for record in AtomIterator(pdb_id, struct):
             # The PDB header was loaded as a dictionary, so let's reuse it all
             record.annotations.update(struct.header)
@@ -380,19 +368,11 @@ def CifSeqresIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
-    from Bio.File import UndoHandle
-
     with as_handle(handle, "rU") as handle:
-
-        undo_handle = UndoHandle(handle)
-
-        # check if file is empty
-        if not undo_handle.peekline():
-            raise ValueError("Empty file.")
 
         chains = collections.defaultdict(list)
         metadata = collections.defaultdict(list)
-        records = MMCIF2Dict(undo_handle)
+        records = MMCIF2Dict(handle)
 
         # Explicitly convert records to list (See #1533).
         # If an item is not present, use an empty list
@@ -513,12 +493,10 @@ def CifAtomIterator(handle):
     from Bio.PDB.MMCIFParser import MMCIFParser
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
-    # The PdbAtomIterator uses UndoHandle to peek at the first line and get the
-    # PDB ID. The equivalent for mmCIF is the _entry.id field. AFAIK, the mmCIF
-    # format does not constrain the order of fields, so we need to parse the
-    # entire file using MMCIF2Dict. We copy the contents of the handle into a
-    # StringIO buffer first, so that both MMCIF2Dict and MMCIFParser can
-    # consume the handle.
+    # We use MMCIF2Dict to find the _entry.id field. AFAIK, the mmCIF format
+    # does not constrain the order of fields, so we need to parse the entire
+    # file. We copy the contents of the handle into a StringIO buffer first,
+    # so that both MMCIF2Dict and MMCIFParser can consume the handle.
     buffer = StringIO()
     with as_handle(handle, "rU") as handle:
         shutil.copyfileobj(handle, buffer)
@@ -542,8 +520,7 @@ def CifAtomIterator(handle):
 
     buffer.seek(0)
     struct = MMCIFParser().get_structure(pdb_id, buffer)
-    for record in AtomIterator(pdb_id, struct):
-        yield record
+    yield from AtomIterator(pdb_id, struct)
 
 
 if __name__ == "__main__":

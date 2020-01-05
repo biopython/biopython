@@ -202,11 +202,7 @@ yields a distance matrix
 \end{minted}
 which can be rewritten as
 \begin{minted}{python}
-[array([], dtype=float64),
- array([ 16.]),
- array([ 64.,  16.]),
- array([  1.,   9.,  49.])
-]
+[array([], dtype=float64), array([16.0]), array([64.0, 16.0]), array([1.0, 9.0, 49.0])]
 \end{minted}
 This corresponds to the distance matrix:
 $$
@@ -370,9 +366,7 @@ The matrix containing the distances between the items; this matrix can be specif
 \begin{itemize}
 \item as a 2D Numerical Python array (in which only the left-lower part of the array will be accessed):
 \begin{minted}{python}
-distance = array([[0.0, 1.1, 2.3],
-                  [1.1, 0.0, 4.5],
-                  [2.3, 4.5, 0.0]])
+distance = array([[0.0, 1.1, 2.3], [1.1, 0.0, 4.5], [2.3, 4.5, 0.0]])
 \end{minted}
 \item as a 1D Numerical Python array containing consecutively the distances in the left-lower part of the distance matrix:
 \begin{minted}{python}
@@ -380,10 +374,7 @@ distance = array([1.1, 2.3, 4.5])
 \end{minted}
 \item as a list containing the rows of the left-lower part of the distance matrix:
 \begin{minted}{python}
-distance = [array([]|,
-            array([1.1]),
-            array([2.3, 4.5])
-           ]
+distance = [array([]), array([1.1]), array([2.3, 4.5])]
 \end{minted}
 \end{itemize}
 These three expressions correspond to the same distance matrix.
@@ -576,9 +567,7 @@ The distance matrix, which can be specified in three ways:
 \begin{itemize}
 \item as a 2D Numerical Python array (in which only the left-lower part of the array will be accessed):
 \begin{minted}{python}
-distance = array([[0.0, 1.1, 2.3],
-                  [1.1, 0.0, 4.5],
-                  [2.3, 4.5, 0.0]])
+distance = array([[0.0, 1.1, 2.3], [1.1, 0.0, 4.5], [2.3, 4.5, 0.0]])
 \end{minted}
 \item as a 1D Numerical Python array containing consecutively the distances in the left-lower part of the distance matrix:
 \begin{minted}{python}
@@ -586,9 +575,7 @@ distance = array([1.1, 2.3, 4.5])
 \end{minted}
 \item as a list containing the rows of the left-lower part of the distance matrix:
 \begin{minted}{python}
-distance = [array([]),
-            array([1.1]),
-            array([2.3, 4.5])
+distance = [array([]), array([1.1]), array([2.3, 4.5])]
 \end{minted}
 \end{itemize}
 These three expressions correspond to the same distance matrix.

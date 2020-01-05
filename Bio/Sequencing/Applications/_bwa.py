@@ -5,9 +5,6 @@
 
 """Command line wrapper for bwa."""
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 from Bio.Application import _StaticArgument
 
@@ -365,7 +362,7 @@ class BwaSampeCommandline(AbstractCommandline):
             _Option(
                 ["-r", "r"],
                 "Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",
-                checker_function=lambda x: isinstance(x, basestring),
+                checker_function=lambda x: isinstance(x, str),
                 equate=False,
             ),
         ]
@@ -564,7 +561,7 @@ class BwaMemCommandline(AbstractCommandline):
                     equate=False),
             _Option(["-R", "R"],
                     "Complete read group header line. 't' can be used in STR and will be converted to a TAB in the output SAM. The read group ID will be attached to every read in the output. An example is '@RG\tID:foo\tSM:bar'. [null]",
-                    checker_function=lambda x: isinstance(x, basestring),
+                    checker_function=lambda x: isinstance(x, str),
                     equate=False),
             _Option(["-T", "T"],
                     "Don't output alignment with score lower than INT. This option only affects output. [30]",

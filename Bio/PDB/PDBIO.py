@@ -5,7 +5,6 @@
 
 """Output of PDB files."""
 
-from Bio._py3k import basestring
 
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -22,7 +21,7 @@ _PQR_ATOM_FORMAT_STRING = (
 )
 
 
-class Select(object):
+class Select:
     """Select everything for PDB output (for use as a base class).
 
     Default selection (everything) during writing - can be used as base class
@@ -53,7 +52,7 @@ class Select(object):
 _select = Select()
 
 
-class StructureIO(object):
+class StructureIO:
     """Base class to derive structure file format writers from."""
 
     def __init__(self):
@@ -287,7 +286,7 @@ class PDBIO(StructureIO):
         Typically select is a subclass of L{Select}.
         """
         get_atom_line = self._get_atom_line
-        if isinstance(file, basestring):
+        if isinstance(file, str):
             fp = open(file, "w")
             close_file = 1
         else:

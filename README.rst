@@ -82,26 +82,16 @@ We currently recommend using Python 3.8 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 -- see http://www.python.org
+- Python 3.6, 3.7, 3.8 -- see http://www.python.org
 
-  Python 3 is the primary development platform for Biopython. We will drop
-  support for Python 2.7 in early 2020, in line with the end-of-life or
-  sunset date for Python 2.7 itself.
-
-- PyPy2.7 or PyPy3.5 v7.1.1 -- see http://www.pypy.org
+- PyPy3.5 v7.1.1 -- see http://www.pypy.org
 
   Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
   currently missing under PyPy), everything should work. Older versions
   of PyPy mostly work too.
 
-- Jython 2.7 -- see http://www.jython.org
-
-  We have decided to deprecate support for Jython, but aside from
-  ``Bio.Restriction``, modules with C code, or dependent on SQLite3 or NumPy,
-  everything should work. There are some known issues with test failures
-  which have not yet been resolved.
-
-Biopython 1.68 was our final release to support Python 2.6.
+Biopython 1.68 was our final release to support Python 2.6, while Biopython
+1.76 was our final release to support Python 2.7.
 
 
 Optional Dependencies
@@ -135,15 +125,11 @@ other optional Python dependencies, which can be installed later if needed:
 
 - MySQL Connector/Python, see http://dev.mysql.com/downloads/connector/python/
   This package is used by ``BioSQL`` to access a MySQL database, and is
-  supported on Python 2 and 3 and PyPy too.
+  supported on PyPy too.
 
 - mysqlclient, see https://github.com/PyMySQL/mysqlclient-python (optional)
   This is a fork of the older MySQLdb and is used by ``BioSQL`` to access a
-  MySQL database. It is supported by Python 2.7, Python 3.5 and above, PyPy 2,
-  and PyPy 3.
-
-Note that some of these libraries are not available for PyPy or Jython,
-and not all are available for Python 3 yet either.
+  MySQL database. It is supported by PyPy.
 
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
@@ -156,9 +142,8 @@ We recommend using the pre-compiled binary wheels available on PyPI using::
 
     pip install biopython
 
-However, if you need to compile Biopython yourself, the following are
-required at compile time - unless you are using Jython (support for which is
-deprecated).
+However, if you need to compile Biopython yourself, the following are required
+at compile time:
 
 - Python including development header files like ``python.h``, which on Linux
   are often not installed by default (trying looking for and installing a
@@ -181,8 +166,8 @@ Now change directory to the Biopython source code folder and run::
     python setup.py test
     sudo python setup.py install
 
-Substitute ``python`` with your specific version, for example ``python3``,
-``pypy`` or ``jython``.
+Substitute ``python`` with your specific version if required, for example
+``python3``, or ``pypy3``.
 
 To exlude tests that require an internet connection (and which may take a long
 time), use the ``--offline`` option::

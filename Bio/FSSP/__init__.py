@@ -19,7 +19,6 @@ Functions
     :mult_align: returns a Biopython alignment object.
 
 """
-from __future__ import print_function
 
 import re
 
@@ -35,7 +34,7 @@ header_records = {
     "author": re.compile("^AUTHOR"),
     "source": re.compile("^SOURCE"),
     "seqlength": re.compile("^SEQLENGTH"),
-    "nalign": re.compile("^NALIGN")
+    "nalign": re.compile("^NALIGN"),
 }
 
 summary_title = re.compile("## +SUMMARY")
@@ -45,7 +44,7 @@ alignments_rec = re.compile(" *[0-9]+ +-{0,1}[0-9]+")
 equiv_title = re.compile("## +EQUIVALENCES")
 
 
-class FSSPHeader(object):
+class FSSPHeader:
     """Store the FSSP file header's properties."""
 
     def __init__(self):
@@ -68,13 +67,13 @@ class FSSPHeader(object):
                 elif i == "compnd" or i == "author":
                     setattr(self, i, inline.split()[1:])
                 elif i == "source" or i == "header":
-                    attr = inline[inline.find(" ") + 1:].strip()
+                    attr = inline[inline.find(" ") + 1 :].strip()
                     setattr(self, i, attr)
                 else:
                     setattr(self, i, inline.split()[1])
 
 
-class PosAlign(object):
+class PosAlign:
     """Store the position alignments, AminoAcid plus Structure."""
 
     def __init__(self, inStr):
@@ -104,7 +103,7 @@ class PosAlign(object):
         return outstring
 
 
-class FSSPSumRec(object):
+class FSSPSumRec:
     """Store the summary records from SUMMARY Section of file."""
 
     def __init__(self, in_str):
@@ -146,7 +145,7 @@ class FSSPSumRec(object):
         return self.raw
 
 
-class FSSPAlignRec(object):
+class FSSPAlignRec:
     """Store the Alignment records from ALIGNMENTS section of file."""
 
     def __init__(self, in_fff_rec):
@@ -292,8 +291,7 @@ def read_fssp(fssp_handle):
 
     # Outer loop: process everything up to the EQUIVALENCES title record
     while not equiv_title.match(curline):
-        while (not alignments_title.match(curline) and
-               not equiv_title.match(curline)):
+        while not alignments_title.match(curline) and not equiv_title.match(curline):
             curline = fssp_handle.readline()
         if not alignments_title.match(curline):
             if equiv_title.match(curline):
@@ -311,7 +309,7 @@ def read_fssp(fssp_handle):
         while alignments_rec.match(curline):
             align_rec = FSSPAlignRec(fff_rec(curline))
             key = align_rec.chain_id + align_rec.res_name + str(align_rec.pdb_res_num)
-            align_list = curline[fssp_rec.align.start_aa_list:].strip().split()
+            align_list = curline[fssp_rec.align.start_aa_list :].strip().split()
             if key not in align_dict:
                 align_dict[key] = align_rec
             align_dict[key].add_align_list(align_list)

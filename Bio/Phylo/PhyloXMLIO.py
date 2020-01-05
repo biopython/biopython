@@ -17,23 +17,9 @@ About capitalization:
 
 """
 
-import sys
-
-from Bio._py3k import basestring
-from Bio._py3k import unicode
+from xml.etree import ElementTree
 
 from Bio.Phylo import PhyloXML as PX
-
-# For speed try to use cElementTree rather than ElementTree
-try:
-    if (3, 0) <= sys.version_info[:2] <= (3, 1):
-        # Workaround for bug in python 3.0 and 3.1,
-        # see http://bugs.python.org/issue9257
-        from xml.etree import ElementTree as ElementTree
-    else:
-        from xml.etree import cElementTree as ElementTree
-except ImportError:
-    from xml.etree import ElementTree as ElementTree
 
 
 # Recognize the phyloXML namespace when parsing
@@ -58,7 +44,7 @@ for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
 
 # Tell ElementTree how to write to text handles
-DEFAULT_ENCODING = "unicode" if sys.version_info[0] >= 3 else "utf-8"
+DEFAULT_ENCODING = "unicode"
 
 
 class PhyloXMLError(Exception):
@@ -173,7 +159,7 @@ def _get_child_as(parent, tag, construct):
         return construct(child)
 
 
-def _get_child_text(parent, tag, construct=unicode):
+def _get_child_text(parent, tag, construct=str):
     """Find a child node by tag; pass its text through a constructor (PRIVATE).
 
     Returns None if no matching child is found.
@@ -191,7 +177,7 @@ def _get_children_as(parent, tag, construct):
     return [construct(child) for child in parent.findall(_ns(tag))]
 
 
-def _get_children_text(parent, tag, construct=unicode):
+def _get_children_text(parent, tag, construct=str):
     """Find child nodes by tag; pass each node's text through a constructor (PRIVATE).
 
     Returns an empty list if no matching child is found.
@@ -287,7 +273,7 @@ def _replace_wspace(text):
     return text
 
 
-class Parser(object):
+class Parser:
     """Methods for parsing all phyloXML nodes from an XML stream.
 
     To minimize memory use, the tree of ElementTree parsing events is cleared
@@ -681,10 +667,10 @@ class Parser(object):
 def _serialize(value):
     """Convert a Python primitive to a phyloXML-compatible Unicode string (PRIVATE)."""
     if isinstance(value, float):
-        return unicode(value).upper()
+        return str(value).upper()
     elif isinstance(value, bool):
-        return unicode(value).lower()
-    return unicode(value)
+        return str(value).lower()
+    return str(value)
 
 
 def _clean_attrib(obj, attrs):
@@ -704,7 +690,7 @@ def _handle_complex(tag, attribs, subnodes, has_text=False):
         """Wrap nodes and subnodes as elements."""
         elem = ElementTree.Element(tag, _clean_attrib(obj, attribs))
         for subn in subnodes:
-            if isinstance(subn, basestring):
+            if isinstance(subn, str):
                 # singular object: method and attribute names are the same
                 if getattr(obj, subn) is not None:
                     elem.append(getattr(self, subn)(getattr(obj, subn)))
@@ -734,7 +720,7 @@ def _handle_simple(tag):
     return wrapped
 
 
-class Writer(object):
+class Writer:
     """Methods for serializing a PhyloXML object to XML."""
 
     def __init__(self, phyloxml):

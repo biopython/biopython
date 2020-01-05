@@ -5,12 +5,9 @@
 # as part of this package.
 
 """Code for dealing with Codon Alignments."""
-from __future__ import print_function
 
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
-
-from Bio._py3k import zip
 
 from Bio.Alphabet import _get_base_alphabet
 from Bio.SeqRecord import SeqRecord

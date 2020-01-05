@@ -15,7 +15,6 @@ Bio.Wise.psw is for protein Smith-Waterman alignments
 Bio.Wise.dnal is for Smith-Waterman DNA alignments
 """
 
-from __future__ import print_function
 
 import os
 import re
@@ -77,7 +76,7 @@ class AlignmentColumn(list):
         self[1] = column_unit.column
 
 
-class ColumnUnit(object):
+class ColumnUnit:
     """Define a container for the details of each sequence alignment."""
 
     def __init__(self, unit, column, kind):

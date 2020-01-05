@@ -12,7 +12,6 @@
 
 """Find next open reading frame in sequence data."""
 
-from __future__ import print_function
 
 import re
 import sys
@@ -32,7 +31,7 @@ class ProteinX(Alphabet.ProteinAlphabet):
 proteinX = ProteinX()
 
 
-class MissingTable(object):
+class MissingTable:
     def __init__(self, table):
         self._table = table
 
@@ -56,7 +55,7 @@ def makeTableX(table):
     )
 
 
-class NextOrf(object):
+class NextOrf:
     def __init__(self, file, options):
         self.options = options
         self.file = file
@@ -187,7 +186,7 @@ class NextOrf(object):
                             start_site = start_site + f - 1
                         if codon == "XXX":
                             stop = start_site + 3 * (
-                                (int((stop - 1) - start_site) // 3)
+                                int((stop - 1) - start_site) // 3
                             )
                         s = seq[start_site - 1 : stop]
                         CDS.append((start_site, stop, length, s, strand * f))

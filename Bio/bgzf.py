@@ -101,11 +101,7 @@ gzip
 Notice that the open function has been replaced. You can "fix" this if you
 need to by importing the built-in open function:
 
->>> try:
-...     from __builtin__ import open # Python 2
-... except ImportError:
-...     from builtins import open # Python 3
-...
+>>> from builtins import open
 
 However, what we recommend instead is to use the explicit namespace, e.g.
 
@@ -220,14 +216,13 @@ NC_000932.1
 
 """
 
-from __future__ import print_function
 
 import sys
 import zlib
 import struct
 
 from Bio._py3k import _as_bytes, _as_string
-from Bio._py3k import open as _open
+from builtins import open as _open
 
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
@@ -329,11 +324,7 @@ def BgzfBlocks(handle):
     decompressed length of the blocks contents (limited to 65536 in
     BGZF), as an iterator - one tuple per BGZF block.
 
-    >>> try:
-    ...     from __builtin__ import open # Python 2
-    ... except ImportError:
-    ...     from builtins import open # Python 3
-    ...
+    >>> from builtins import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
@@ -460,17 +451,13 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
-class BgzfReader(object):
+class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
     in an example BAM file,
 
-    >>> try:
-    ...     from __builtin__ import open # Python 2
-    ... except ImportError:
-    ...     from builtins import open # Python 3
-    ...
+    >>> from builtins import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
@@ -703,12 +690,6 @@ class BgzfReader(object):
             raise StopIteration
         return line
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         """Iterate over the lines in the BGZF file."""
         return self
@@ -741,7 +722,7 @@ class BgzfReader(object):
         self.close()
 
 
-class BgzfWriter(object):
+class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):

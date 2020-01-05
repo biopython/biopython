@@ -42,7 +42,7 @@ id_file = "short_list.txt"
 output_file = "short_list.sff"
 
 with open(id_file) as id_handle:
-    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
+    wanted = set(line.rstrip("\n").split(None, 1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
 
 records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
@@ -71,7 +71,7 @@ output_file = "short_list.fastq"
 
 with open(id_file) as id_handle:
     # Taking first word on each line as an identifer
-    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
+    wanted = set(line.rstrip("\n").split(None, 1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
 
 with open(input_file) as in_handle:
@@ -151,15 +151,17 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
-original_rec = SeqIO.read("NC_005816.gb","genbank")
+original_rec = SeqIO.read("NC_005816.gb", "genbank")
 
 with open("shuffled.fasta", "w") as output_handle:
     for i in range(30):
         nuc_list = list(original_rec.seq)
         random.shuffle(nuc_list)
-        shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
-                                 id="Shuffled%i" % (i+1),
-                                 description="Based on %s" % original_rec.id)
+        shuffled_rec = SeqRecord(
+            Seq("".join(nuc_list), original_rec.seq.alphabet),
+            id="Shuffled%i" % (i + 1),
+            description="Based on %s" % original_rec.id,
+        )
         out_handle.write(shuffled_rec.format("fasta"))
 \end{minted}
 
@@ -172,15 +174,21 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
+
 def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
-    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet),
-                     id=new_id, description="Based on %s" % original_rec.id)
+    return SeqRecord(
+        Seq("".join(nuc_list), record.seq.alphabet),
+        id=new_id,
+        description="Based on %s" % original_rec.id,
+    )
 
-original_rec = SeqIO.read("NC_005816.gb","genbank")
-shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1))
-                 for i in range(30))
+
+original_rec = SeqIO.read("NC_005816.gb", "genbank")
+shuffled_recs = (
+    make_shuffle_record(original_rec, "Shuffled%i" % (i + 1)) for i in range(30)
+)
 SeqIO.write(shuffled_recs, "shuffled.fasta", "fasta")
 \end{minted}
 
@@ -204,11 +212,15 @@ use the default table and add a prefix to the identifier:
 
 \begin{minted}{python}
 from Bio.SeqRecord import SeqRecord
+
+
 def make_protein_record(nuc_record):
     """Returns a new SeqRecord with the translated sequence (default table)."""
-    return SeqRecord(seq = nuc_record.seq.translate(cds=True), \
-                     id = "trans_" + nuc_record.id, \
-                     description = "translation of CDS, using default table")
+    return SeqRecord(
+        seq=nuc_record.seq.translate(cds=True),
+        id="trans_" + nuc_record.id,
+        description="translation of CDS, using default table",
+    )
 \end{minted}
 
 We can then use this function to turn the input nucleotide records into protein
@@ -217,8 +229,11 @@ is with a generator expression:
 
 \begin{minted}{python}
 from Bio import SeqIO
-proteins = (make_protein_record(nuc_rec) for nuc_rec in \
-            SeqIO.parse("coding_sequences.fasta", "fasta"))
+
+proteins = (
+    make_protein_record(nuc_rec)
+    for nuc_rec in SeqIO.parse("coding_sequences.fasta", "fasta")
+)
 SeqIO.write(proteins, "translations.fasta", "fasta")
 \end{minted}
 
@@ -238,6 +253,7 @@ of the \verb|SeqRecord| object (added in Biopython 1.55):
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 records = (rec.upper() for rec in SeqIO.parse("mixed.fas", "fasta"))
 count = SeqIO.write(records, "upper.fas", "fasta")
 print("Converted %i records to upper case" % count)
@@ -267,6 +283,7 @@ as a list of \verb|SeqRecord| objects, sort the list, and save it:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
 records.sort(key=lambda r: len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
@@ -279,6 +296,7 @@ reverse argument:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
 records.sort(key=lambda r: -len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
@@ -292,9 +310,11 @@ to sort by length. This can be solved using the
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 # Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in
-                     SeqIO.parse("ls_orchid.fasta", "fasta"))
+len_and_ids = sorted(
+    (len(rec), rec.id) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+)
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
@@ -320,8 +340,9 @@ in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 from Bio import SeqIO
 
 # Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in
-                     SeqIO.parse("ls_orchid.fasta", "fasta"))
+len_and_ids = sorted(
+    (len(rec), rec.id) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")
+)
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
 
@@ -345,8 +366,10 @@ from Bio import SeqIO
 
 # Get the lengths and ids, and sort on length
 with open("ls_orchid.fasta") as in_handle:
-    len_and_ids = sorted((len(seq), title.split(None, 1)[0]) for
-                         title, seq in SimpleFastaParser(in_handle))
+    len_and_ids = sorted(
+        (len(seq), title.split(None, 1)[0])
+        for title, seq in SimpleFastaParser(in_handle)
+    )
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
 
@@ -385,6 +408,7 @@ First, let's count the reads:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 count = 0
 for rec in SeqIO.parse("SRR020192.fastq", "fastq"):
     count += 1
@@ -395,9 +419,12 @@ print("%i reads" % count)
 
 \begin{minted}{python}
 from Bio import SeqIO
-good_reads = (rec for rec in \
-              SeqIO.parse("SRR020192.fastq", "fastq") \
-              if min(rec.letter_annotations["phred_quality"]) >= 20)
+
+good_reads = (
+    rec
+    for rec in SeqIO.parse("SRR020192.fastq", "fastq")
+    if min(rec.letter_annotations["phred_quality"]) >= 20
+)
 count = SeqIO.write(good_reads, "good_quality.fastq", "fastq")
 print("Saved %i reads" % count)
 \end{minted}
@@ -434,9 +461,12 @@ all the sequences into memory at once), and the \verb|Seq| object's
 
 \begin{minted}{python}
 from Bio import SeqIO
-primer_reads = (rec for rec in \
-                SeqIO.parse("SRR020192.fastq", "fastq") \
-                if rec.seq.startswith("GATGACGGTGT"))
+
+primer_reads = (
+    rec
+    for rec in SeqIO.parse("SRR020192.fastq", "fastq")
+    if rec.seq.startswith("GATGACGGTGT")
+)
 count = SeqIO.write(primer_reads, "with_primer.fastq", "fastq")
 print("Saved %i reads" % count)
 \end{minted}
@@ -451,9 +481,12 @@ letters (the length of our primer):
 
 \begin{minted}{python}
 from Bio import SeqIO
-trimmed_primer_reads = (rec[11:] for rec in \
-                        SeqIO.parse("SRR020192.fastq", "fastq") \
-                        if rec.seq.startswith("GATGACGGTGT"))
+
+trimmed_primer_reads = (
+    rec[11:]
+    for rec in SeqIO.parse("SRR020192.fastq", "fastq")
+    if rec.seq.startswith("GATGACGGTGT")
+)
 count = SeqIO.write(trimmed_primer_reads, "with_primer_trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
 \end{minted}
@@ -469,14 +502,19 @@ define our own trim function:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
+
 def trim_primer(record, primer):
     if record.seq.startswith(primer):
-        return record[len(primer):]
+        return record[len(primer) :]
     else:
         return record
 
-trimmed_reads = (trim_primer(record, "GATGACGGTGT") for record in \
-                 SeqIO.parse("SRR020192.fastq", "fastq"))
+
+trimmed_reads = (
+    trim_primer(record, "GATGACGGTGT")
+    for record in SeqIO.parse("SRR020192.fastq", "fastq")
+)
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
 \end{minted}
@@ -488,18 +526,21 @@ expression.
 
 \begin{minted}{python}
 from Bio import SeqIO
+
+
 def trim_primers(records, primer):
     """Removes perfect primer sequences at start of reads.
 
     This is a generator function, the records argument should
     be a list or iterator returning SeqRecord objects.
     """
-    len_primer = len(primer) #cache this for later
+    len_primer = len(primer)  # cache this for later
     for record in records:
         if record.seq.startswith(primer):
             yield record[len_primer:]
         else:
             yield record
+
 
 original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_primers(original_reads, "GATGACGGTGT")
@@ -524,21 +565,23 @@ not just at the very beginning:
 \begin{minted}{python}
 from Bio import SeqIO
 
+
 def trim_adaptors(records, adaptor):
     """Trims perfect adaptor sequences.
 
     This is a generator function, the records argument should
     be a list or iterator returning SeqRecord objects.
     """
-    len_adaptor = len(adaptor) #cache this for later
+    len_adaptor = len(adaptor)  # cache this for later
     for record in records:
         index = record.seq.find(adaptor)
         if index == -1:
-            #adaptor not found, so won't trim
+            # adaptor not found, so won't trim
             yield record
         else:
-            #trim off the adaptor
-            yield record[index+len_adaptor:]
+            # trim off the adaptor
+            yield record[index + len_adaptor :]
+
 
 original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT")
@@ -560,25 +603,27 @@ length requirement as well:
 \begin{minted}{python}
 from Bio import SeqIO
 
+
 def trim_adaptors(records, adaptor, min_len):
     """Trims perfect adaptor sequences, checks read length.
 
     This is a generator function, the records argument should
     be a list or iterator returning SeqRecord objects.
     """
-    len_adaptor = len(adaptor) #cache this for later
+    len_adaptor = len(adaptor)  # cache this for later
     for record in records:
-        len_record = len(record) #cache this for later
+        len_record = len(record)  # cache this for later
         if len(record) < min_len:
-           #Too short to keep
-           continue
+            # Too short to keep
+            continue
         index = record.seq.find(adaptor)
         if index == -1:
-            #adaptor not found, so won't trim
+            # adaptor not found, so won't trim
             yield record
         elif len_record - index - len_adaptor >= min_len:
-            #after trimming this will still be long enough
-            yield record[index+len_adaptor:]
+            # after trimming this will still be long enough
+            yield record[index + len_adaptor :]
+
 
 original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT", 100)
@@ -651,6 +696,7 @@ FASTQ file:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 SeqIO.convert("solexa.fastq", "fastq-solexa", "standard.fastq", "fastq")
 \end{minted}
 
@@ -660,6 +706,7 @@ PHRED qualities:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 SeqIO.convert("illumina.fastq", "fastq-illumina", "standard.fastq", "fastq")
 \end{minted}
 
@@ -697,6 +744,7 @@ Going from FASTQ to FASTA is easy:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 SeqIO.convert("example.fastq", "fastq", "example.fasta", "fasta")
 \end{minted}
 
@@ -704,6 +752,7 @@ Going from FASTQ to QUAL is also easy:
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 SeqIO.convert("example.fastq", "fastq", "example.qual", "qual")
 \end{minted}
 
@@ -718,8 +767,9 @@ a \verb|SeqRecord| iterator:
 
 \begin{minted}{python}
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
+
 for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")):
-   print(record)
+    print(record)
 \end{minted}
 
 This function will check that the FASTA and QUAL files are consistent (e.g.
@@ -730,6 +780,7 @@ pair of FASTA and QUAL files into a single FASTQ files:
 \begin{minted}{python}
 from Bio import SeqIO
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
+
 with open("example.fasta") as f_handle, open("example.qual") as q_handle:
     records = PairedFastaQualIterator(f_handle, q_handle)
     count = SeqIO.write(records, "temp.fastq", "fastq")
@@ -905,9 +956,11 @@ strand:
 
 \begin{minted}{python}
 from Bio import SeqIO
-record = SeqIO.read("NC_005816.gb","genbank")
+
+record = SeqIO.read("NC_005816.gb", "genbank")
 table = 11
 min_pro_len = 100
+
 
 def find_orfs_with_trans(seq, trans_table, min_protein_length):
     answer = []
@@ -922,23 +975,25 @@ def find_orfs_with_trans(seq, trans_table, min_protein_length):
                 aa_end = trans.find("*", aa_start)
                 if aa_end == -1:
                     aa_end = trans_len
-                if aa_end-aa_start >= min_protein_length:
+                if aa_end - aa_start >= min_protein_length:
                     if strand == 1:
-                        start = frame+aa_start*3
-                        end = min(seq_len,frame+aa_end*3+3)
+                        start = frame + aa_start * 3
+                        end = min(seq_len, frame + aa_end * 3 + 3)
                     else:
-                        start = seq_len-frame-aa_end*3-3
-                        end = seq_len-frame-aa_start*3
-                    answer.append((start, end, strand,
-                                   trans[aa_start:aa_end]))
-                aa_start = aa_end+1
+                        start = seq_len - frame - aa_end * 3 - 3
+                        end = seq_len - frame - aa_start * 3
+                    answer.append((start, end, strand, trans[aa_start:aa_end]))
+                aa_start = aa_end + 1
     answer.sort()
     return answer
 
+
 orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
 for start, end, strand, pro in orf_list:
-    print("%s...%s - length %i, strand %i, %i:%i" \
-          % (pro[:30], pro[-3:], len(pro), strand, start, end))
+    print(
+        "%s...%s - length %i, strand %i, %i:%i"
+        % (pro[:30], pro[-3:], len(pro), strand, start, end)
+    )
 \end{minted}
 
 \noindent And the output:
@@ -1014,12 +1069,15 @@ matplotlib histogram function to display it.
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 sizes = [len(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 
 import pylab
+
 pylab.hist(sizes, bins=20)
-pylab.title("%i orchid sequences\nLengths %i to %i" \
-            % (len(sizes),min(sizes),max(sizes)))
+pylab.title(
+    "%i orchid sequences\nLengths %i to %i" % (len(sizes), min(sizes), max(sizes))
+)
 pylab.xlabel("Sequence length (bp)")
 pylab.ylabel("Count")
 pylab.show()
@@ -1081,9 +1139,12 @@ order. Now we'll take this list of floating point values and plot them with matp
 
 \begin{minted}{python}
 import pylab
+
 pylab.plot(gc_values)
-pylab.title("%i orchid sequences\nGC%% %0.1f to %0.1f" \
-            % (len(gc_values),min(gc_values),max(gc_values)))
+pylab.title(
+    "%i orchid sequences\nGC%% %0.1f to %0.1f"
+    % (len(gc_values), min(gc_values), max(gc_values))
+)
 pylab.xlabel("Genes")
 pylab.ylabel("GC%")
 pylab.show()
@@ -1147,6 +1208,7 @@ the first two from our orchid FASTA file \href{https://raw.githubusercontent.com
 
 \begin{minted}{python}
 from Bio import SeqIO
+
 with open("ls_orchid.fasta") as in_handle:
     record_iterator = SeqIO.parse(in_handle, "fasta")
     rec_one = next(record_iterator)
@@ -1163,9 +1225,13 @@ comprehension:
 window = 7
 seq_one = str(rec_one.seq).upper()
 seq_two = str(rec_two.seq).upper()
-data = [[(seq_one[i:i + window] != seq_two[j:j + window])
-         for j in range(len(seq_one) - window)]
-        for i in range(len(seq_two) - window)]
+data = [
+    [
+        (seq_one[i : i + window] != seq_two[j : j + window])
+        for j in range(len(seq_one) - window)
+    ]
+    for i in range(len(seq_two) - window)
+]
 \end{minted}
 
 Note that we have \emph{not} checked for reverse complement matches here.
@@ -1175,6 +1241,7 @@ white:
 
 \begin{minted}{python}
 import pylab
+
 pylab.gray()
 pylab.imshow(data)
 pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
@@ -1220,16 +1287,18 @@ We start by creating dictionaries mapping the window-sized sub-sequences to loca
 window = 7
 dict_one = {}
 dict_two = {}
-for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
-                            (str(rec_two.seq).upper(), dict_two)]:
-    for i in range(len(seq)-window):
-        section = seq[i:i+window]
+for (seq, section_dict) in [
+    (str(rec_one.seq).upper(), dict_one),
+    (str(rec_two.seq).upper(), dict_two),
+]:
+    for i in range(len(seq) - window):
+        section = seq[i : i + window]
         try:
             section_dict[section].append(i)
         except KeyError:
             section_dict[section] = [i]
-#Now find any sub-sequences found in both sequences
-#(Python 2.3 would require slightly different code here)
+# Now find any sub-sequences found in both sequences
+# (Python 2.3 would require slightly different code here)
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
 \end{minted}
@@ -1247,11 +1316,12 @@ for section in matches:
 \noindent We are now ready to draw the revised dot plot as a scatter plot:
 \begin{minted}{python}
 import pylab
-pylab.cla() #clear any prior graph
+
+pylab.cla()  # clear any prior graph
 pylab.gray()
-pylab.scatter(x,y)
-pylab.xlim(0, len(rec_one)-window)
-pylab.ylim(0, len(rec_two)-window)
+pylab.scatter(x, y)
+pylab.xlim(0, len(rec_one) - window)
+pylab.ylim(0, len(rec_two) - window)
 pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
 pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
 pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
@@ -1300,13 +1370,15 @@ bit of code to only plot the first fifty reads.
 \begin{minted}{python}
 import pylab
 from Bio import SeqIO
-for subfigure in [1,2]:
+
+for subfigure in [1, 2]:
     filename = "SRR001666_%i.fastq" % subfigure
     pylab.subplot(1, 2, subfigure)
-    for i,record in enumerate(SeqIO.parse(filename, "fastq")):
-        if i >= 50 : break #trick!
+    for i, record in enumerate(SeqIO.parse(filename, "fastq")):
+        if i >= 50:
+            break  # trick!
         pylab.plot(record.letter_annotations["phred_quality"])
-    pylab.ylim(0,45)
+    pylab.ylim(0, 45)
     pylab.ylabel("PHRED quality score")
     pylab.xlabel("Position")
 pylab.savefig("SRR001666.png")
@@ -1351,6 +1423,7 @@ Getting ready to calculate summary information about an object is quick to do. L
 
 \begin{minted}{python}
 from Bio.Align import AlignInfo
+
 summary_align = AlignInfo.SummaryInfo(alignment)
 \end{minted}
 
@@ -1421,8 +1494,7 @@ consensus = summary_align.dumb_consensus()
 Now, we want to make the PSSM, but ignore any \verb|N| ambiguity residues when calculating this:
 
 \begin{minted}{python}
-my_pssm = summary_align.pos_specific_score_matrix(consensus,
-                                                  chars_to_ignore = ['N'])
+my_pssm = summary_align.pos_specific_score_matrix(consensus, chars_to_ignore=["N"])
 \end{minted}
 
 Two notes should be made about this:
@@ -1434,8 +1506,7 @@ Two notes should be made about this:
 
 \begin{minted}{python}
 second_seq = alignment.get_seq_by_num(1)
-my_pssm = summary_align.pos_specific_score_matrix(second_seq
-                                                  chars_to_ignore = ['N'])
+my_pssm = summary_align.pos_specific_score_matrix(second_seq, chars_to_ignore=["N"])
 \end{minted}
 
 \end{enumerate}
@@ -1497,8 +1568,7 @@ Well, now that we have an idea what information content is being calculated in B
 First, we need to use our alignment to get an alignment summary object, which we'll assume is called \verb|summary_align| (see section~\ref{sec:summary_info}) for instructions on how to get this. Once we've got this object, calculating the information content for a region is as easy as:
 
 \begin{minted}{python}
-info_content = summary_align.information_content(5, 30,
-                                                 chars_to_ignore = ['N'])
+info_content = summary_align.information_content(5, 30, chars_to_ignore=["N"])
 \end{minted}
 
 Wow, that was much easier then the formula above made it look! The variable \verb|info_content| now contains a float value specifying the information content over the specified region (from 5 to 30 of the alignment). We specifically ignore the ambiguity residue 'N' when calculating the information content, since this value is not included in our alphabet (so we shouldn't be interested in looking at it!).
@@ -1506,11 +1576,7 @@ Wow, that was much easier then the formula above made it look! The variable \ver
 As mentioned above, we can also calculate relative information content by supplying the expected frequencies:
 
 \begin{minted}{python}
-expect_freq = {
-    'A' : .3,
-    'G' : .2,
-    'T' : .3,
-    'C' : .2}
+expect_freq = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 \end{minted}
 
 The expected should not be passed as a raw dictionary, but instead by passed as a \verb|SubsMat.FreqTable| object (see section~\ref{sec:freq_table} for more information about FreqTables). The FreqTable object provides a standard for associating the dictionary with an Alphabet, similar to how the Biopython Seq class works.
@@ -1521,16 +1587,15 @@ To create a FreqTable object, from the frequency dictionary you just need to do:
 from Bio.Alphabet import IUPAC
 from Bio.SubsMat import FreqTable
 
-e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
-                                   IUPAC.unambiguous_dna)
+e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ, IUPAC.unambiguous_dna)
 \end{minted}
 
 Now that we've got that, calculating the relative information content for our region of the alignment is as simple as:
 
 \begin{minted}{python}
-info_content = summary_align.information_content(5, 30,
-                                                 e_freq_table = e_freq_table,
-                                                 chars_to_ignore = ['N'])
+info_content = summary_align.information_content(
+    5, 30, e_freq_table=e_freq_table, chars_to_ignore=["N"]
+)
 \end{minted}
 
 Now, \verb|info_content| will contain the relative information content over the region in relation to the expected frequencies.
@@ -1538,16 +1603,17 @@ Now, \verb|info_content| will contain the relative information content over the 
 The value return is calculated using base 2 as the logarithm base in the formula above. You can modify this by passing the parameter \verb|log_base| as the base you want:
 
 \begin{minted}{python}
-info_content = summary_align.information_content(5, 30, log_base = 10,
-                                                 chars_to_ignore = ['N'])
+info_content = summary_align.information_content(
+    5, 30, log_base=10, chars_to_ignore=["N"]
+)
 \end{minted}
 
 By default nucleotide or amino acid residues with a frequency of 0 in a column are not take into account when the relative information column for that column is computed. If this is not the desired result, you can use \verb|pseudo_count| instead.
 
 \begin{minted}{python}
-info_content = summary_align.information_content(5, 30,
-                                                 chars_to_ignore = ['N'],
-                                                 pseudo_count = 1)
+info_content = summary_align.information_content(
+    5, 30, chars_to_ignore=["N"], pseudo_count=1
+)
 \end{minted}
 
 In this case, the observed frequency $P_{ij}$ of a particular letter $i$ in the $j$-th column is computed as follow :
@@ -1622,13 +1688,33 @@ This information about amino acid replacements is represented as a
 python dictionary which will look something like (the order can vary):
 
 \begin{minted}{python}
-{('R', 'R'): 2079.0, ('R', 'H'): 17.0, ('R', 'K'): 103.0, ('R', 'E'): 2.0,
-('R', 'D'): 2.0, ('H', 'R'): 0, ('D', 'H'): 15.0, ('K', 'K'): 3218.0,
-('K', 'H'): 24.0, ('H', 'K'): 8.0, ('E', 'H'): 15.0, ('H', 'H'): 1235.0,
-('H', 'E'): 18.0, ('H', 'D'): 0, ('K', 'D'): 0, ('K', 'E'): 9.0,
-('D', 'R'): 48.0, ('E', 'R'): 2.0, ('D', 'K'): 1.0, ('E', 'K'): 45.0,
-('K', 'R'): 130.0, ('E', 'D'): 241.0, ('E', 'E'): 3305.0,
-('D', 'E'): 270.0, ('D', 'D'): 2360.0}
+{
+    ("R", "R"): 2079.0,
+    ("R", "H"): 17.0,
+    ("R", "K"): 103.0,
+    ("R", "E"): 2.0,
+    ("R", "D"): 2.0,
+    ("H", "R"): 0,
+    ("D", "H"): 15.0,
+    ("K", "K"): 3218.0,
+    ("K", "H"): 24.0,
+    ("H", "K"): 8.0,
+    ("E", "H"): 15.0,
+    ("H", "H"): 1235.0,
+    ("H", "E"): 18.0,
+    ("H", "D"): 0,
+    ("K", "D"): 0,
+    ("K", "E"): 9.0,
+    ("D", "R"): 48.0,
+    ("E", "R"): 2.0,
+    ("D", "K"): 1.0,
+    ("E", "K"): 45.0,
+    ("K", "R"): 130.0,
+    ("E", "D"): 241.0,
+    ("E", "E"): 3305.0,
+    ("D", "E"): 270.0,
+    ("D", "D"): 2360.0,
+}
 \end{minted}
 
 This information gives us our accepted number of replacements, or how

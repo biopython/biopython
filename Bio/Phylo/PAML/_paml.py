@@ -7,7 +7,6 @@
 
 """Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
 
-from __future__ import print_function
 
 import os
 import subprocess
@@ -20,7 +19,7 @@ class PamlError(EnvironmentError):
     """
 
 
-class Paml(object):
+class Paml:
     """Base class for wrapping PAML commands."""
 
     def __init__(self, alignment=None, working_dir=None, out_file=None):
@@ -31,7 +30,7 @@ class Paml(object):
             self.working_dir = working_dir
         if alignment is not None:
             if not os.path.exists(alignment):
-                raise IOError("The specified alignment file does not exist.")
+                raise FileNotFoundError("The specified alignment file does not exist.")
         self.alignment = alignment
         self.out_file = out_file
         self._options = {}  # will be set in subclasses
@@ -99,7 +98,7 @@ class Paml(object):
         if self.alignment is None:
             raise ValueError("Alignment file not specified.")
         if not os.path.exists(self.alignment):
-            raise IOError("The specified alignment file does not exist.")
+            raise FileNotFoundError("The specified alignment file does not exist.")
         if self.out_file is None:
             raise ValueError("Output file not specified.")
         if self.working_dir is None:
@@ -117,7 +116,7 @@ class Paml(object):
             ctl_file = self.ctl_file
         else:
             if not os.path.exists(ctl_file):
-                raise IOError("The specified control file does not exist.")
+                raise FileNotFoundError("The specified control file does not exist.")
         if verbose:
             result_code = subprocess.call([command, ctl_file])
         else:
@@ -132,6 +131,6 @@ class Paml(object):
             )
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError(
+            raise OSError(
                 "The %s process was killed (return code %i)." % (command, result_code)
             )

@@ -6,9 +6,6 @@
 # package.
 """Command line wrapper for the multiple sequence alignment program MSAProbs."""
 
-from __future__ import print_function
-
-
 from Bio.Application import _Argument, _Option, _Switch, AbstractCommandline
 
 
@@ -45,37 +42,48 @@ class MSAProbsCommandline(AbstractCommandline):
         """Initialize the class."""
         # order of parameters is the same as in msaprobs -help
         self.parameters = [
-            _Option(["-o", "--outfile", "outfile"],
-                    "specify the output file name (STDOUT by default)",
-                    filename=True,
-                    equate=False),
-            _Option(["-num_threads", "numthreads"],
-                    "specify the number of threads used, and otherwise detect automatically",
-                    checker_function=lambda x: isinstance(x, int)),
-            _Switch(["-clustalw", "clustalw"],
-                    "use CLUSTALW output format instead of FASTA format"),
-            _Option(["-c", "consistency"],
-                    "use 0 <= REPS <= 5 (default: 2) passes of consistency transformation",
-                    checker_function=lambda x: isinstance(x, int) and 0 <= x <= 5),
-            _Option(["-ir", "--iterative-refinement", "iterative_refinement"],
-                    "use 0 <= REPS <= 1000 (default: 10) passes of iterative-refinement",
-                    checker_function=lambda x: isinstance(x, int) and 0 <= x <= 1000),
-            _Switch(["-v", "verbose"],
-                    "report progress while aligning (default: off)"),
-            _Option(["-annot", "annot"],
-                    "write annotation for multiple alignment to FILENAME",
-                    filename=True),
-            _Switch(["-a", "--alignment-order", "alignment_order"],
-                    "print sequences in alignment order rather than input order (default: off)"),
-            _Option(["-version", "version"],
-                    "print out version of MSAPROBS"),
-            _Argument(["infile"],
-                      "Multiple sequence input file",
-                      filename=True),
+            _Option(
+                ["-o", "--outfile", "outfile"],
+                "specify the output file name (STDOUT by default)",
+                filename=True,
+                equate=False,
+            ),
+            _Option(
+                ["-num_threads", "numthreads"],
+                "specify the number of threads used, and otherwise detect automatically",
+                checker_function=lambda x: isinstance(x, int),
+            ),
+            _Switch(
+                ["-clustalw", "clustalw"],
+                "use CLUSTALW output format instead of FASTA format",
+            ),
+            _Option(
+                ["-c", "consistency"],
+                "use 0 <= REPS <= 5 (default: 2) passes of consistency transformation",
+                checker_function=lambda x: isinstance(x, int) and 0 <= x <= 5,
+            ),
+            _Option(
+                ["-ir", "--iterative-refinement", "iterative_refinement"],
+                "use 0 <= REPS <= 1000 (default: 10) passes of iterative-refinement",
+                checker_function=lambda x: isinstance(x, int) and 0 <= x <= 1000,
+            ),
+            _Switch(["-v", "verbose"], "report progress while aligning (default: off)"),
+            _Option(
+                ["-annot", "annot"],
+                "write annotation for multiple alignment to FILENAME",
+                filename=True,
+            ),
+            _Switch(
+                ["-a", "--alignment-order", "alignment_order"],
+                "print sequences in alignment order rather than input order (default: off)",
+            ),
+            _Option(["-version", "version"], "print out version of MSAPROBS"),
+            _Argument(["infile"], "Multiple sequence input file", filename=True),
         ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

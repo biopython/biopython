@@ -196,9 +196,6 @@ of the format's documentation.
 
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 import sys
 from collections import OrderedDict
 
@@ -316,9 +313,7 @@ def parse(handle, format=None, **kwargs):
     # and start iterating
     with as_handle(handle, "rU", **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
-
-        for qresult in generator:
-            yield qresult
+        yield from generator
 
 
 def read(handle, format=None, **kwargs):
@@ -498,7 +493,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     It only changes the key value used to retrieve the associated QueryResult.
 
     """
-    if not isinstance(filename, basestring):
+    if not isinstance(filename, str):
         raise TypeError("Need a filename (not a handle)")
 
     from Bio.File import _IndexedSeqFileDict
@@ -572,7 +567,7 @@ def index_db(index_filename, filenames=None, format=None, key_function=None, **k
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)
-    if isinstance(filenames, basestring):
+    if isinstance(filenames, str):
         filenames = [filenames]
 
     from Bio.File import _SQLiteManySeqFilesDict

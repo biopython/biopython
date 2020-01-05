@@ -21,7 +21,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
-class StructureBuilder(object):
+class StructureBuilder:
     """Deals with constructing the Structure object.
 
     The StructureBuilder class is used by the PDBParser classes to

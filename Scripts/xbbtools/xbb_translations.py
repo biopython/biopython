@@ -11,7 +11,6 @@
 
 """Translation code for graphical Xbbtools tool."""
 
-from __future__ import print_function
 
 import time
 
@@ -19,7 +18,7 @@ from Bio.Seq import Seq, reverse_complement, translate
 from Bio.SeqUtils import GC
 
 
-class xbb_translations(object):
+class xbb_translations:
     """A class for doing translations."""
 
     def __init__(self):

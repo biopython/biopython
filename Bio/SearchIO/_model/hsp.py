@@ -5,9 +5,6 @@
 # package.
 """Bio.SearchIO objects to model high scoring regions between query and hit."""
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 import warnings
 from operator import ge, le
 
@@ -312,13 +309,9 @@ class HSP(_BaseHSP):
         """Return number of HSPs items."""
         return len(self._items)
 
-    # Python 3:
     def __bool__(self):
         """Return True if it has HSPs."""
         return bool(self._items)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __str__(self):
         """Return a human readable summary of the HSP object."""
@@ -846,7 +839,7 @@ class HSPFragment(_BaseHSP):
             # similarity line
             simil = ""
             if "similarity" in self.aln_annotation and isinstance(
-                self.aln_annotation.get("similarity"), basestring
+                self.aln_annotation.get("similarity"), str
             ):
                 simil = self.aln_annotation["similarity"]
 
@@ -883,7 +876,7 @@ class HSPFragment(_BaseHSP):
         if seq is None:
             return seq  # return immediately if seq is None
         else:
-            if not isinstance(seq, (basestring, SeqRecord)):
+            if not isinstance(seq, (str, SeqRecord)):
                 raise TypeError(
                     "%s sequence must be a string or a SeqRecord object." % seq_type
                 )
@@ -908,7 +901,7 @@ class HSPFragment(_BaseHSP):
             seq.name = seq_name
             seq.features = seq_feats
             seq.seq.alphabet = self.alphabet
-        elif isinstance(seq, basestring):
+        elif isinstance(seq, str):
             seq = SeqRecord(
                 Seq(seq, self.alphabet),
                 id=seq_id,

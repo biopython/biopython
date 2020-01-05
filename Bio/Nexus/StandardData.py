@@ -8,11 +8,8 @@
 # package.
 
 """Objects to represent NEXUS standard data type matrix coding."""
-from __future__ import print_function
 
 import sys
-
-from Bio._py3k import basestring
 
 
 class NexusError(Exception):
@@ -21,7 +18,7 @@ class NexusError(Exception):
     pass
 
 
-class StandardData(object):
+class StandardData:
     """Create a StandardData iterable object.
 
     Each coding specifies t [type] => (std [standard], multi [multistate] or
@@ -34,8 +31,10 @@ class StandardData(object):
         self._current_pos = 0
 
         # Enforce string data requirement
-        if not isinstance(data, basestring):
-            raise NexusError("The coding data given to a StandardData object should be a string")
+        if not isinstance(data, str):
+            raise NexusError(
+                "The coding data given to a StandardData object should be a string"
+            )
 
         # Transfer each coding to a position within a sequence
         multi_coding = False
@@ -71,9 +70,10 @@ class StandardData(object):
                     coding_list["t"] = "uncer"
                     continue
                 elif coding in [")", "}"]:
-                    raise NexusError('Improper character "' + coding +
-                                     '" at position ' + pos +
-                                     " of a coding sequence.")
+                    raise NexusError(
+                        "Improper character %s at position %i of a coding sequence."
+                        % (coding, pos)
+                    )
                 else:
                     coding_list["d"].append(coding)
 
@@ -103,11 +103,6 @@ class StandardData(object):
         else:
             self._current_pos += 1
             return return_coding
-
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def raw(self):
         """Return the full coding as a python list."""

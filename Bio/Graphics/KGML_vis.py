@@ -12,7 +12,6 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-from __future__ import print_function
 
 import os
 import tempfile
@@ -33,7 +32,7 @@ except ImportError:
 
     raise MissingPythonDependencyError("Install pillow if you want to use KGML_vis.")
 
-from Bio._py3k import urlopen as _urlopen
+from urllib.request import urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
@@ -86,7 +85,7 @@ def get_temp_imagefilename(url):
     Create a new temporary file to hold the image file at the passed URL
     and return the filename.
     """
-    img = _urlopen(url).read()
+    img = urlopen(url).read()
     im = Image.open(BytesIO(img))
     # im.transpose(Image.FLIP_TOP_BOTTOM)
     f = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
@@ -96,7 +95,7 @@ def get_temp_imagefilename(url):
     return fname
 
 
-class KGMLCanvas(object):
+class KGMLCanvas:
     """Reportlab Canvas-based representation of a KGML pathway map."""
 
     def __init__(

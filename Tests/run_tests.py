@@ -21,7 +21,6 @@ Command line options::
 By default, all tests are run.
 """
 
-from __future__ import print_function
 
 # standard modules
 import sys
@@ -36,16 +35,7 @@ import gc
 from io import BytesIO
 from pkgutil import iter_modules
 from setuptools import find_packages
-
-
-# Note, we want to be able to call run_tests.py BEFORE
-# Biopython is installed, so we can't use this:
-# from Bio._py3k import StringIO
-try:
-    from StringIO import StringIO  # Python 2 (byte strings)
-except ImportError:
-    from io import StringIO  # Python 3 (unicode strings)
-
+from io import StringIO
 
 try:
     import numpy
@@ -77,10 +67,7 @@ VERBOSITY = 0
 
 # Following modules have historic failures. If you fix one of these
 # please remove here!
-EXCLUDE_DOCTEST_MODULES = [
-    "Bio.PDB",
-    "Bio.PDB.AbstractPropertyMap",
-]
+EXCLUDE_DOCTEST_MODULES = []
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
@@ -143,14 +130,9 @@ try:
     del sqlite3
 except ImportError:
     # Missing on Jython or Python 2.4
+    # Could be missing on self-compiled Python
     EXCLUDE_DOCTEST_MODULES.append("Bio.SeqIO")
     EXCLUDE_DOCTEST_MODULES.append("Bio.SearchIO")
-
-# Skip Bio.Seq doctest under Python 2, see http://bugs.python.org/issue7490
-# Can't easily write exceptions with consistent class name in python 2 and 3
-if sys.version_info[0] == 2:
-    EXCLUDE_DOCTEST_MODULES.append("Bio.Seq")
-    EXCLUDE_DOCTEST_MODULES.append("Bio.Phylo")
 
 
 def find_modules(path):
@@ -158,14 +140,9 @@ def find_modules(path):
     for pkg in find_packages(path):
         modules.add(pkg)
         pkgpath = path + "/" + pkg.replace(".", "/")
-        if sys.version_info < (3, 6):
-            for _, name, ispkg in iter_modules([pkgpath]):
-                if not ispkg:
-                    modules.add(pkg + "." + name)
-        else:
-            for info in iter_modules([pkgpath]):
-                if not info.ispkg:
-                    modules.add(pkg + "." + info.name)
+        for info in iter_modules([pkgpath]):
+            if not info.ispkg:
+                modules.add(pkg + "." + info.name)
     return modules
 
 
@@ -185,9 +162,8 @@ def _have_bug17666():
         "\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC"
         "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
     )
-    if sys.version_info[0] >= 3:
-        import codecs
-        bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
+    import codecs
+    bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
     handle = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
     try:
         data = handle.read()
@@ -253,12 +229,12 @@ def main(argv):
             import requires_internet
             requires_internet.check.available = False
             # Monkey patch for urlopen()
-            import Bio._py3k
+            import urllib
 
             def dummy_urlopen(url):
                 raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
 
-            Bio._py3k.urlopen = dummy_urlopen
+            urllib.urlopen = dummy_urlopen
 
         if opt == "-v" or opt == "--verbose":
             verbosity = 2

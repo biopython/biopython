@@ -25,7 +25,7 @@ from math import log, exp, floor, pi
 import random  # for jitter values
 
 
-class ColorSpiral(object):
+class ColorSpiral:
     """Implement a spiral path through HSV colour space.
 
     This class provides functions for sampling points along a logarithmic

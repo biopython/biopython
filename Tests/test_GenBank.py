@@ -17,7 +17,7 @@ import unittest
 import warnings
 from datetime import datetime
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio import BiopythonWarning
 from Bio import BiopythonParserWarning
@@ -6479,6 +6479,13 @@ class GenBankTests(unittest.TestCase):
             record = SeqIO.read(path, "genbank")
         self.assertEqual(record.annotations["organism"], ".")
         self.assertEqual(record.annotations["taxonomy"], [])
+
+    def test_tsa(self):
+        """Test TSA annotation parsing."""
+        path = "GenBank/tsa_acropora.gb"
+        record = SeqIO.read(path, "genbank")
+        self.assertIn("tsa", record.annotations)
+        self.assertEqual(record.annotations["tsa"], ["GHGH01000001", "GHGH01126539"])
 
     def test_dblink(self):
         """Parse GenBank record with old DBLINK project entry."""

@@ -7,7 +7,6 @@
 # package.
 """Module for the support of MEME minimal motif format."""
 
-from __future__ import print_function
 from Bio import Seq
 from Bio import motifs
 import math
@@ -96,17 +95,22 @@ class Record(list):
 
 # Everything below is private
 
+
 def _read_background(record, handle):
     """Read background letter frequencies (PRIVATE)."""
     for line in handle:
         if line.startswith("Background letter frequencies"):
             break
     else:
-        raise ValueError("Improper input file. File should contain a line starting background frequencies.")
+        raise ValueError(
+            "Improper input file. File should contain a line starting background frequencies."
+        )
     try:
         line = next(handle)
     except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting background frequencies.")
+        raise ValueError(
+            "Unexpected end of stream: Expected to find line starting background frequencies."
+        )
     line = line.strip()
     ls = line.split()
     A, C, G, T = float(ls[1]), float(ls[3]), float(ls[5]), float(ls[7])
@@ -119,7 +123,9 @@ def _read_version(record, handle):
         if line.startswith("MEME version"):
             break
     else:
-        raise ValueError("Improper input file. File should contain a line starting MEME version.")
+        raise ValueError(
+            "Improper input file. File should contain a line starting MEME version."
+        )
     line = line.strip()
     ls = line.split()
     record.version = ls[2]
@@ -131,7 +137,9 @@ def _read_alphabet(record, handle):
         if line.startswith("ALPHABET"):
             break
     else:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'ALPHABET'")
+        raise ValueError(
+            "Unexpected end of stream: Expected to find line starting with 'ALPHABET'"
+        )
     if not line.startswith("ALPHABET= "):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
     line = line.strip().replace("ALPHABET= ", "")

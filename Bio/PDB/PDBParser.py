@@ -5,7 +5,6 @@
 
 """Parser for PDB files."""
 
-from __future__ import print_function
 
 import warnings
 
@@ -30,7 +29,7 @@ from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
 
-class PDBParser(object):
+class PDBParser:
     """Parse a PDB file and return a Structure object."""
 
     def __init__(
@@ -91,7 +90,10 @@ class PDBParser(object):
             self.structure_builder.init_structure(id)
 
             with as_handle(file, mode="rU") as handle:
-                self._parse(handle.readlines())
+                lines = handle.readlines()
+                if not lines:
+                    raise ValueError("Empty file.")
+                self._parse(lines)
 
             self.structure_builder.set_header(self.header)
             # Return the Structure instance

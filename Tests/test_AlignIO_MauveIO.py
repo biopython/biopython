@@ -9,7 +9,7 @@
 import unittest
 import os
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio.AlignIO.MauveIO import MauveIterator, MauveWriter
 from Bio import SeqIO

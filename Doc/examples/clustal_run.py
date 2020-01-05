@@ -12,7 +12,6 @@ and parse the results into an object that can be dealt with easily.
 """
 # standard library
 
-from __future__ import print_function
 
 import sys
 import subprocess

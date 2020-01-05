@@ -43,7 +43,7 @@ def _first_defined(*args):
     return None
 
 
-class Diagram(object):
+class Diagram:
     """Diagram container.
 
     Arguments:
@@ -259,7 +259,7 @@ class Diagram(object):
 
         """
         # The ReportLab drawToString method, which this function used to call,
-        # just used a cStringIO or StringIO handle with the drawToFile method.
+        # just used a StringIO handle with the drawToFile method.
         # In order to put all our complicated file format specific code in one
         # place we just used a StringIO handle here, later a BytesIO handle
         # for Python 3 compatibility.

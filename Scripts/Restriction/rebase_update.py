@@ -14,17 +14,10 @@ The Rebase EMBOSS files are used by ``ranacompiler.py`` to build the updated
 
 """
 
-from __future__ import print_function
 
 import os
 from datetime import date
-
-try:
-    # Python 2
-    from urllib import urlretrieve, urlcleanup
-except ImportError:
-    # Python 3
-    from urllib.request import urlretrieve, urlcleanup
+from urllib.request import urlretrieve, urlcleanup
 
 
 # Rebase ftp location, do not modify these addresses:
@@ -53,7 +46,7 @@ def get_files():
         try:
             urlretrieve(file, filename)
             urlcleanup()
-        except IOError as e:
+        except OSError as e:
             print(e)
             print(
                 "Download of Rebase files failed. Please download the files "

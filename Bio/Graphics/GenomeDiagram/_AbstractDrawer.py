@@ -33,9 +33,6 @@ like SeqFeatures.
 """
 
 # ReportLab imports
-from __future__ import print_function
-
-from Bio._py3k import range
 
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
@@ -381,7 +378,7 @@ def intermediate_points(start, end, graph_data):
 ################################################################################
 
 
-class AbstractDrawer(object):
+class AbstractDrawer:
     """Abstract Drawer.
 
     Attributes:

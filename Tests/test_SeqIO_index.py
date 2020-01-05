@@ -20,16 +20,7 @@ import threading
 import gzip
 import warnings
 from io import BytesIO
-
-from Bio._py3k import _bytes_to_string, StringIO
-from Bio._py3k import _universal_read_mode
-
-try:
-    # Defined on Python 3
-    FileNotFoundError
-except NameError:
-    # Python 2 does not have this,
-    FileNotFoundError = IOError
+from io import StringIO
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
@@ -63,7 +54,7 @@ def gzip_open(filename, format):
     handle = gzip.open(filename)
     data = handle.read()  # bytes!
     handle.close()
-    return StringIO(_bytes_to_string(data))
+    return StringIO(data.decode())
 
 
 if sqlite3:
@@ -569,7 +560,7 @@ class IndexDictTests(unittest.TestCase):
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:
-                handle = StringIO(_bytes_to_string(raw))
+                handle = StringIO(raw.decode())
             if format == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
@@ -598,7 +589,7 @@ class IndexDictTests(unittest.TestCase):
                 http://www.uniprot.org/support/docs/uniprot.xsd">
                 %s
                 </uniprot>
-                """ % _bytes_to_string(raw)
+                """ % raw.decode()
                 handle = StringIO(raw)
                 rec2 = SeqIO.read(handle, format, alphabet)
             else:
@@ -619,7 +610,7 @@ class IndexDictTests(unittest.TestCase):
 
     def test_duplicates_to_dict(self):
         """Index file with duplicate identifiers with Bio.SeqIO.to_dict()."""
-        handle = open("Fasta/dups.fasta", _universal_read_mode)
+        handle = open("Fasta/dups.fasta")
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()

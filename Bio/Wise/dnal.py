@@ -15,14 +15,11 @@ Bio.Wise.psw is for protein Smith-Waterman alignments
 Bio.Wise.dnal is for Smith-Waterman DNA alignments
 """
 
-from __future__ import print_function
 
 import re
 
 # Importing with leading underscore as not intended to be exposed
-from Bio._py3k import getoutput as _getoutput
-from Bio._py3k import zip
-from Bio._py3k import map
+from subprocess import getoutput as _getoutput
 
 from Bio import Wise
 
@@ -83,7 +80,7 @@ def _get_coords(filename):
     )  # returns [(start0, end0), (start1, end1)]
 
 
-class Statistics(object):
+class Statistics:
     """Calculate statistics from an ALB report."""
 
     def __init__(self, filename, match, mismatch, gap, extension):

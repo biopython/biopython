@@ -108,6 +108,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Frederic Sapet <https://github.com/FredericBGA>
 - Frederic Sohm <fsms at domain users.sourceforge.net>
 - Frederik Gwinner
+- Fredric Johansson <https://github.com/fredricj>
 - Fábio Madeira <https://github.com/biomadeira>
 - Gaetan Lehman <gaetan.lehmann at domain jouy.inra.fr>
 - Gavin E Crooks <https://github.com/gecrooks>
@@ -120,6 +121,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <https://github.com/idoerg>
+- Ilya Flyamer <https://github.com/Phlya>
 - Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
@@ -192,6 +194,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
 - Michael Hoffman <https://github.com/michaelmhoffman>
+- Michael R. Crusoe <https://orcid.org/0000-0002-2961-9670>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <https://github.com/mdehoon>
@@ -245,6 +248,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
 - Stuart Nelis <https://github.com/biostu24>
+- Sujan Dulal <https://github.com/Dsujan>
 - Sunhwan Jo <https://github.com/sunhwan>
 - Suresh Panneerselvam <https://github.com/Amrithasuresh>
 - Tarcisio Fedrizzi <https://github.com/hcraT>

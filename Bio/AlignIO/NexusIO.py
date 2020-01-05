@@ -14,7 +14,6 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from __future__ import print_function
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus

@@ -10,7 +10,6 @@ Unless you are writing a new parser or writer for Bio.SeqIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-from __future__ import print_function
 
 import sys  # for checking if Python 2
 
@@ -19,7 +18,7 @@ from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
 
-class SequenceIterator(object):
+class SequenceIterator:
     """Base class for building SeqRecord iterators.
 
     You should write a __next__ method to return SeqRecord  objects.  You may
@@ -52,12 +51,6 @@ class SequenceIterator(object):
         object.
         """
         raise NotImplementedError("The subclass should implement the __next__ method.")
-
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
@@ -95,7 +88,7 @@ def _clean(text):
     return text.replace("\n", " ").replace("\r", " ")
 
 
-class SequenceWriter(object):
+class SequenceWriter:
     """Base class for building SeqRecord writers.
 
     Interlaced file formats (e.g. Clustal) should subclass directly.

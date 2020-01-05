@@ -12,10 +12,8 @@ o Record - All of the information in an GEO record.
 See http://www.ncbi.nlm.nih.gov/geo/
 """
 
-from __future__ import print_function
 
-
-class Record(object):
+class Record:
     """Hold GEO information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
@@ -89,6 +87,6 @@ def out_block(text, prefix=""):
     """Format text in blocks of 80 chars with an additional optional prefix."""
     output = ""
     for j in range(0, len(text), 80):
-        output += "%s%s\n" % (prefix, text[j:j + 80])
+        output += "%s%s\n" % (prefix, text[j : j + 80])
     output += "\n"
     return output

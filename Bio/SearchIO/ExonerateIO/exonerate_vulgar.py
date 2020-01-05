@@ -7,9 +7,6 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._py3k import zip
-
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
 
@@ -179,7 +176,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
     """Indexer class for exonerate vulgar lines."""
 
     _parser = ExonerateVulgarParser
-    _query_mark = _as_bytes("vulgar")
+    _query_mark = b"vulgar"
 
     def get_qresult_id(self, pos):
         """Return the query ID of the nearest vulgar line."""
@@ -188,7 +185,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         # get line, check if it's a vulgar line, and get query ID
         line = handle.readline()
         assert line.startswith(self._query_mark), line
-        id = re.search(_RE_VULGAR, _bytes_to_string(line))
+        id = re.search(_RE_VULGAR, line.decode())
         return id.group(1)
 
     def get_raw(self, offset):
@@ -196,7 +193,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
-        qresult_raw = _as_bytes("")
+        qresult_raw = b""
 
         while True:
             line = handle.readline()

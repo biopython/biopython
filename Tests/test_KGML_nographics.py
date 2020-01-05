@@ -8,7 +8,6 @@
 """Tests for general functionality of the KGML parser and pathway model."""
 
 # Builtins
-from __future__ import with_statement
 import os
 import unittest
 import tempfile
@@ -17,7 +16,7 @@ import tempfile
 from Bio.KEGG.KGML.KGML_parser import read
 
 
-class PathwayData(object):
+class PathwayData:
     """Convenience structure for testing pathway data."""
 
     def __init__(self, infilename, outfilename, element_counts,
