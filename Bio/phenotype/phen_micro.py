@@ -409,9 +409,6 @@ class PlateRecord:
         else:
             return False
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __add__(self, plate):
         """Add another PlateRecord object.
 
@@ -744,9 +741,6 @@ class WellRecord:
             return True
         else:
             return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
     def __add__(self, well):
         """Add another WellRecord object.

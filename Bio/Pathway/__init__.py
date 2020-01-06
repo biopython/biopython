@@ -94,10 +94,6 @@ class Reaction:
             and self.reversible == r.reversible
         )
 
-    def __ne__(self, r):
-        """Return true iff self is not equal to r."""
-        return not self.__eq__(r)
-
     def __hash__(self):
         """Return a hashcode for self."""
         t = tuple(self.species())

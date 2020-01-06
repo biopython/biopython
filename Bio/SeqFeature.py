@@ -656,11 +656,6 @@ class Reference:
             and self.location == other.location
         )
 
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # This is needed for py2, but not for py3.
-        return not self == other
-
 
 # --- Handling feature locations
 
@@ -1011,11 +1006,6 @@ class FeatureLocation:
             and self.ref == other.ref
             and self.ref_db == other.ref_db
         )
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # This is needed for py2, but not for py3.
-        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
@@ -1376,11 +1366,6 @@ class CompoundLocation:
             if self_part != other_part:
                 return False
         return True
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # This is needed for py2, but not for py3.
-        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the CompoundLocation shifted by an offset (PRIVATE)."""
