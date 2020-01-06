@@ -7,7 +7,6 @@
 
 import warnings
 import unittest
-import sys
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
@@ -19,10 +18,8 @@ from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
-if sys.version_info[0] < 3:
-    from string import maketrans
-else:
-    maketrans = str.maketrans
+
+maketrans = str.maketrans
 
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artificial example)
