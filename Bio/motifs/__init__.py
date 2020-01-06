@@ -12,9 +12,11 @@ Bio.motifs contains the core Motif class containing various I/O methods
 as well as methods for motif comparisons and motif searching in sequences.
 It also includes functionality for parsing output from the AlignACE, MEME,
 and MAST programs, as well as files in the TRANSFAC format.
-
-Bio.motifs is replacing the older and now obsolete Bio.Motif module.
 """
+
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 def create(instances, alphabet=None):
@@ -448,7 +450,7 @@ class Motif:
 
     @property
     def degenerate_consensus(self):
-        """Generate degenerate consesnsus sequence.
+        """Return the degenerate consensus sequence.
 
         Following the rules adapted from
         D. R. Cavener: "Comparison of the consensus sequence flanking
@@ -565,33 +567,46 @@ class Motif:
             im = response.read()
             f.write(im)
 
-    def format(self, format):
+    def __format__(self, format_spec):
         """Return a string representation of the Motif in the given format.
 
-        Currently supported fromats:
+        Currently supported formats:
          - clusterbuster: Cluster Buster position frequency matrix format
          - pfm : JASPAR single Position Frequency Matrix
          - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
 
         """
-        if format in ("pfm", "jaspar"):
+        if format_spec in ("pfm", "jaspar"):
             from Bio.motifs import jaspar
 
             motifs = [self]
-            return jaspar.write(motifs, format)
-        elif format == "transfac":
+            return jaspar.write(motifs, format_spec)
+        elif format_spec == "transfac":
             from Bio.motifs import transfac
 
             motifs = [self]
             return transfac.write(motifs)
-        elif format == "clusterbuster":
+        elif format_spec == "clusterbuster":
             from Bio.motifs import clusterbuster
 
             motifs = [self]
             return clusterbuster.write(motifs)
         else:
-            raise ValueError("Unknown format type %s" % format)
+            raise ValueError("Unknown format type %s" % format_spec)
+
+    def format(self, format_spec):
+        """Return a string representation of the Motif in the given format [DEPRECATED].
+
+        This method is deprecated; instead of motif.format(format_spec),
+        please use format(motif, format_spec).
+        """
+        warnings.warn("""\
+Motif.format has been deprecated, and we intend to remove it in a future
+release of Biopython. Instead of motif.format(format_spec), please use
+format(motif, format_spec).
+""", BiopythonDeprecationWarning)
+        return self.__format__(format_spec)
 
 
 def write(motifs, format):
