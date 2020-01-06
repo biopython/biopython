@@ -312,7 +312,7 @@ class MultipleSeqAlignment:
         #       % (self.__class__, repr(self._records), repr(self._alphabet))
 
     def format(self, format_spec):
-        """Return the alignment as a string in the specified file format (DEPRECATED).
+        """Return the alignment as a string in the specified file format [DEPRECATED].
 
         This method is deprecated; instead of alignment.format(format_spec),
         please use format(alignment, format_spec).
