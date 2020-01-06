@@ -1,4 +1,4 @@
-# Copyright 2009-2016 by Peter Cock.  All rights reserved.
+# Copyright 2009-2020 by Peter Cock.  All rights reserved.
 # Based on code contributed and copyright 2009 by Jose Blanca (COMAV-UPV).
 #
 # This code is part of the Biopython distribution and governed by its
@@ -249,31 +249,6 @@ _mft = b".mft"
 _flag = b"\xff"
 
 
-def _check_mode(handle):
-    """Ensure handle not opened in text mode (PRIVATE).
-
-    Ensures mode is not set for Universal new line
-    and ensures mode is binary for Windows
-    """
-    # TODO - Does this need to be stricter under Python 3?
-    mode = ""
-    if hasattr(handle, "mode"):
-        mode = handle.mode
-        if mode == 1:
-            # gzip.open(...) does this, fine
-            return
-        mode = str(mode)
-
-    if mode and "U" in mode.upper():
-        raise ValueError(
-            "SFF files must NOT be opened in universal new "
-            "lines mode. Binary mode is recommended (although "
-            "on Unix the default mode is also fine)."
-        )
-    elif mode and "B" not in mode.upper() and sys.platform == "win32":
-        raise ValueError("SFF files must be opened in binary mode on Windows")
-
-
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
 
@@ -299,7 +274,6 @@ def _sff_file_header(handle):
     'TCAG'
 
     """
-    _check_mode(handle)
     # file header (part one)
     # use big endiean encdoing   >
     # magic_number               I
@@ -317,6 +291,8 @@ def _sff_file_header(handle):
     data = handle.read(31)
     if not data:
         raise ValueError("Empty file.")
+    elif isinstance(data, str):
+        raise ValueError("SFF files must NOT be opened in text mode, binary required.")
     elif len(data) < 31:
         raise ValueError("File too small to hold a valid SFF header.")
     (
@@ -1159,14 +1135,23 @@ class SffWriter(SequenceWriter):
         """Initialize an SFF writer object.
 
         Arguments:
-         - handle - Output handle, ideally in binary write mode.
+         - handle - Output handle, in binary write mode.
          - index - Boolean argument, should we try and write an index?
          - xml - Optional string argument, xml manifest to be recorded
            in the index block (see function ReadRocheXmlManifest for
            reading this data).
 
         """
-        _check_mode(handle)
+        try:
+            # This should fail...
+            handle.write("ERROR - text mode handle\n")
+            raise ValueError(
+                "SFF files must NOT be opened in text mode, binary required."
+            )
+        except TypeError:
+            # Good, we wanted a binary handle:
+            # e.g. TypeError: a bytes-like object is required, not 'str'
+            pass
         self.handle = handle
         self._xml = xml
         if index:
