@@ -379,8 +379,7 @@ def _read(handle):
             # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         else:
-            raise SwissProtParserError("Unknown keyword '%s' found" % key,
-                                       line=line)
+            raise SwissProtParserError("Unknown keyword '%s' found" % key, line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
 
@@ -468,8 +467,7 @@ def _read_dt(record, line):
         elif "LAST ANNOTATION UPDATE" in uprline:
             record.annotation_update = date, version
         else:
-            raise SwissProtParserError("Unrecognised DT (DaTe) line",
-                                       line=line)
+            raise SwissProtParserError("Unrecognised DT (DaTe) line", line=line)
     elif (
         "INTEGRATED INTO" in uprline
         or "SEQUENCE VERSION" in uprline
@@ -725,8 +723,9 @@ def _read_ft(record, line):
             position = int(to_res)
             to_res = ExactPosition(position)
         location = FeatureLocation(from_res, to_res, ref=isoform_id)
-        feature = FeatureTable(location=location, type=name, id=None,
-                               qualifiers=qualifiers)
+        feature = FeatureTable(
+            location=location, type=name, id=None, qualifiers=qualifiers
+        )
         record.features.append(feature)
         return
     # this line is a continuation of the previous feature

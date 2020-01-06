@@ -32,22 +32,38 @@ extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
 #   http://www.chem.qmul.ac.uk/iubmb/newsletter/2009.html#item35
 
 protein_letters_1to3 = {
-    "A": "Ala", "C": "Cys", "D": "Asp",
-    "E": "Glu", "F": "Phe", "G": "Gly", "H": "His",
-    "I": "Ile", "K": "Lys", "L": "Leu", "M": "Met",
-    "N": "Asn", "P": "Pro", "Q": "Gln", "R": "Arg",
-    "S": "Ser", "T": "Thr", "V": "Val", "W": "Trp",
+    "A": "Ala",
+    "C": "Cys",
+    "D": "Asp",
+    "E": "Glu",
+    "F": "Phe",
+    "G": "Gly",
+    "H": "His",
+    "I": "Ile",
+    "K": "Lys",
+    "L": "Leu",
+    "M": "Met",
+    "N": "Asn",
+    "P": "Pro",
+    "Q": "Gln",
+    "R": "Arg",
+    "S": "Ser",
+    "T": "Thr",
+    "V": "Val",
+    "W": "Trp",
     "Y": "Tyr",
 }
-protein_letters_1to3_extended = dict(list(protein_letters_1to3.items()) + list({
-    "B": "Asx", "X": "Xaa", "Z": "Glx", "J": "Xle",
-    "U": "Sec", "O": "Pyl",
-}.items()))
+protein_letters_1to3_extended = dict(
+    list(protein_letters_1to3.items())
+    + list(
+        {"B": "Asx", "X": "Xaa", "Z": "Glx", "J": "Xle", "U": "Sec", "O": "Pyl"}.items()
+    )
+)
 
-protein_letters_3to1 = {x[1]: x[0] for x in
-                        protein_letters_1to3.items()}
-protein_letters_3to1_extended = {x[1]: x[0] for x in
-                                 protein_letters_1to3_extended.items()}
+protein_letters_3to1 = {x[1]: x[0] for x in protein_letters_1to3.items()}
+protein_letters_3to1_extended = {
+    x[1]: x[0] for x in protein_letters_1to3_extended.items()
+}
 
 ambiguous_dna_letters = "GATCRYWSMKHBVDN"
 unambiguous_dna_letters = "GATC"
@@ -83,7 +99,7 @@ ambiguous_dna_values = {
     "B": "CGT",
     "X": "GATC",
     "N": "GATC",
-    }
+}
 ambiguous_rna_values = {
     "A": "A",
     "C": "C",
@@ -101,7 +117,7 @@ ambiguous_rna_values = {
     "B": "CGU",
     "X": "GAUC",
     "N": "GAUC",
-    }
+}
 
 ambiguous_dna_complement = {
     "A": "T",
@@ -120,7 +136,7 @@ ambiguous_dna_complement = {
     "B": "V",
     "X": "X",
     "N": "N",
-    }
+}
 
 ambiguous_rna_complement = {
     "A": "U",
@@ -139,7 +155,7 @@ ambiguous_rna_complement = {
     "B": "V",
     "X": "X",
     "N": "N",
-    }
+}
 
 
 def _make_ranges(mydict):
@@ -148,39 +164,30 @@ def _make_ranges(mydict):
         d[key] = (value, value)
     return d
 
+
 # Mass data taken from PubChem
 
 
 # Average masses of monophosphate deoxy nucleotides
-unambiguous_dna_weights = {
-    "A": 331.2218,
-    "C": 307.1971,
-    "G": 347.2212,
-    "T": 322.2085
-    }
+unambiguous_dna_weights = {"A": 331.2218, "C": 307.1971, "G": 347.2212, "T": 322.2085}
 
 # Monoisotopic masses of monophospate deoxy nucleotides
 monoisotopic_unambiguous_dna_weights = {
     "A": 331.06817,
     "C": 307.056936,
     "G": 347.063084,
-    "T": 322.056602
-    }
+    "T": 322.056602,
+}
 
 unambiguous_dna_weight_ranges = _make_ranges(unambiguous_dna_weights)
 
-unambiguous_rna_weights = {
-    "A": 347.2212,
-    "C": 323.1965,
-    "G": 363.2206,
-    "U": 324.1813
-}
+unambiguous_rna_weights = {"A": 347.2212, "C": 323.1965, "G": 363.2206, "U": 324.1813}
 
 monoisotopic_unambiguous_rna_weights = {
     "A": 347.063084,
     "C": 323.051851,
     "G": 363.057999,
-    "U": 324.035867
+    "U": 324.035867,
 }
 
 unambiguous_rna_weight_ranges = _make_ranges(unambiguous_rna_weights)
@@ -203,13 +210,13 @@ def _make_ambiguous_ranges(mydict, weight_table):
     return range_d, avg_d
 
 
-ambiguous_dna_weight_ranges, avg_ambiguous_dna_weights = \
-               _make_ambiguous_ranges(ambiguous_dna_values,
-                                      unambiguous_dna_weights)
+ambiguous_dna_weight_ranges, avg_ambiguous_dna_weights = _make_ambiguous_ranges(
+    ambiguous_dna_values, unambiguous_dna_weights
+)
 
-ambiguous_rna_weight_ranges, avg_ambiguous_rna_weights = \
-               _make_ambiguous_ranges(ambiguous_rna_values,
-                                      unambiguous_rna_weights)
+ambiguous_rna_weight_ranges, avg_ambiguous_rna_weights = _make_ambiguous_ranges(
+    ambiguous_rna_values, unambiguous_rna_weights
+)
 
 protein_weights = {
     "A": 89.0932,
@@ -233,8 +240,8 @@ protein_weights = {
     "U": 168.0532,
     "V": 117.1463,
     "W": 204.2252,
-    "Y": 181.1885
-    }
+    "Y": 181.1885,
+}
 
 monoisotopic_protein_weights = {
     "A": 89.047678,
@@ -259,7 +266,7 @@ monoisotopic_protein_weights = {
     "V": 117.078979,
     "W": 204.089878,
     "Y": 181.073893,
-    }
+}
 
 extended_protein_values = {
     "A": "A",
@@ -295,9 +302,9 @@ extended_protein_values = {
 
 protein_weight_ranges = _make_ranges(protein_weights)
 
-extended_protein_weight_ranges, avg_extended_protein_weights = \
-               _make_ambiguous_ranges(extended_protein_values,
-                                      protein_weights)
+extended_protein_weight_ranges, avg_extended_protein_weights = _make_ambiguous_ranges(
+    extended_protein_values, protein_weights
+)
 
 
 # For Center of Mass Calculation.
