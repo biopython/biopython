@@ -36,9 +36,13 @@ import warnings
 from functools import reduce
 
 from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.Crystal has been deprecated, and we intend to remove it"
-              " in a future release of Biopython. Please use Bio.PDB instead"
-              " to parse NDB files.", BiopythonDeprecationWarning)
+
+warnings.warn(
+    "Bio.Crystal has been deprecated, and we intend to remove it"
+    " in a future release of Biopython. Please use Bio.PDB instead"
+    " to parse NDB files.",
+    BiopythonDeprecationWarning,
+)
 
 
 class CrystalError(Exception):

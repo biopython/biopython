@@ -147,9 +147,7 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, str):
-                return isinstance(target, str) and re.match(
-                    pattern + "$", target
-                )
+                return isinstance(target, str) and re.match(pattern + "$", target)
             if isinstance(pattern, bool):
                 return pattern == bool(target)
             if isinstance(pattern, int):
@@ -1215,9 +1213,7 @@ class BranchColor:
         '#FF8000' for an RGB value of (255, 128, 0).
         """
         assert (
-            isinstance(hexstr, str)
-            and hexstr.startswith("#")
-            and len(hexstr) == 7
+            isinstance(hexstr, str) and hexstr.startswith("#") and len(hexstr) == 7
         ), "need a 24-bit hexadecimal string, e.g. #000000"
 
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]

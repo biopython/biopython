@@ -121,9 +121,7 @@ class Pathway:
                 % (type(reaction.id), reaction.id)
             )
         if reaction.id not in self.entries:
-            raise ValueError(
-                "Reaction ID %d has no corresponding entry" % reaction.id
-            )
+            raise ValueError("Reaction ID %d has no corresponding entry" % reaction.id)
         reaction._pathway = self  # Let the reaction know about the pathway
         self._reactions[reaction.id] = reaction
 
@@ -170,9 +168,7 @@ class Pathway:
 
     def _setname(self, value):
         if not value.startswith("path:"):
-            raise ValueError(
-                "Pathway name should begin with 'path:', got %s" % value
-            )
+            raise ValueError("Pathway name should begin with 'path:', got %s" % value)
         self._name = value
 
     def _delname(self):

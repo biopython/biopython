@@ -14,8 +14,10 @@ try:
     import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Affy.CelFile")
+        "Install NumPy if you want to use Bio.Affy.CelFile"
+    )
 
 
 class ParserError(ValueError):
@@ -26,9 +28,11 @@ class ParserError(ValueError):
         super().__init__(*args)
 
 
-_modeError = ParserError("You're trying to open an Affymetrix v4"
-                         " CEL file. You have to use a read binary mode,"
-                         " like this: open(filename, 'rb')")
+_modeError = ParserError(
+    "You're trying to open an Affymetrix v4"
+    " CEL file. You have to use a read binary mode,"
+    " like this: open(filename, 'rb')"
+)
 
 # for debugging
 # import pprint
@@ -188,9 +192,11 @@ def read_v4(f):
 
     record.version = preHeadersMap["version"]
     if record.version != 4:
-        raise ParserError("You are trying to parse CEL file version 4. This"
-                          " file violates the structure expected from CEL file"
-                          " version 4")
+        raise ParserError(
+            "You are trying to parse CEL file version 4. This"
+            " file violates the structure expected from CEL file"
+            " version 4"
+        )
     record.GridCornerUL = headersMap["GridCornerUL"]
     record.GridCornerUR = headersMap["GridCornerUR"]
     record.GridCornerLR = headersMap["GridCornerLR"]
@@ -218,7 +224,9 @@ def read_v4(f):
     # data.
     def raiseBadHeader(field, expected):
         actual = int(headersMap[field])
-        message = "The header {field} is expected to be 0, not {value}".format(value=actual, field=field)
+        message = "The header {field} is expected to be 0, not {value}".format(
+            value=actual, field=field
+        )
         if actual != expected:
             raise ParserError(message)
 
@@ -234,7 +242,7 @@ def read_v4(f):
     # the record.AlgorithmParameters repeated in the data section, until an
     # EOF, i.e. b"\x04".
     char = b"\x00"
-    safetyValve = 10**4
+    safetyValve = 10 ** 4
     for i in range(safetyValve):
         char = f.read(1)
         # For debugging
@@ -242,9 +250,11 @@ def read_v4(f):
         if char == b"\x04":
             break
         if i == safetyValve:
-            raise ParserError("Parse Error. The parser expects a short, "
-                              "undocumented binary blob terminating with "
-                              "ASCII EOF, x04")
+            raise ParserError(
+                "Parse Error. The parser expects a short, "
+                "undocumented binary blob terminating with "
+                "ASCII EOF, x04"
+            )
 
     # After that there are precisely 15 bytes padded. Again, undocumented.
     padding = f.read(15)
@@ -263,7 +273,7 @@ def read_v4(f):
 
     b = f.read(structSize * record.NumberCells)
     for i in range(record.NumberCells):
-        binaryFragment = b[i * structSize: (i + 1) * structSize]
+        binaryFragment = b[i * structSize : (i + 1) * structSize]
         intensity, stdevs, npix = structa.unpack(binaryFragment)
         record.intensities[i] = intensity
         record.stdevs[i] = stdevs
@@ -403,4 +413,5 @@ def read_v3(handle):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

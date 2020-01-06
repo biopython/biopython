@@ -601,11 +601,14 @@ class Motif:
         This method is deprecated; instead of motif.format(format_spec),
         please use format(motif, format_spec).
         """
-        warnings.warn("""\
+        warnings.warn(
+            """\
 Motif.format has been deprecated, and we intend to remove it in a future
 release of Biopython. Instead of motif.format(format_spec), please use
 format(motif, format_spec).
-""", BiopythonDeprecationWarning)
+""",
+            BiopythonDeprecationWarning,
+        )
         return self.__format__(format_spec)
 
 

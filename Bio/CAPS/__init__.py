@@ -122,10 +122,11 @@ class CAPSMap:
                     blocked_in.append(i)
 
             if cuts_in != [] and blocked_in != []:
-                self.dcuts.append(DifferentialCutsite(start=cut,
-                                                      enzyme=enzyme,
-                                                      cuts_in=cuts_in,
-                                                      blocked_in=blocked_in))
+                self.dcuts.append(
+                    DifferentialCutsite(
+                        start=cut, enzyme=enzyme, cuts_in=cuts_in, blocked_in=blocked_in
+                    )
+                )
 
     def _digest(self):
         self.dcuts = []

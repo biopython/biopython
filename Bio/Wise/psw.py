@@ -87,7 +87,11 @@ class ColumnUnit:
 
     def __repr__(self):
         """Represent the ColumnUnit object as a string for debugging."""
-        return "ColumnUnit(unit=%r, column=%r, kind=%r)" % (self.unit, self.column, self.kind)
+        return "ColumnUnit(unit=%r, column=%r, kind=%r)" % (
+            self.unit,
+            self.column,
+            self.kind,
+        )
 
 
 _re_unit = re.compile(r"^Unit +([01])- \[ *(-?\d+)- *(-?\d+)\] \[(\w+)\]$")
@@ -137,11 +141,7 @@ def parse(iterable):
     return alignment
 
 
-def align(pair,
-          scores=None,
-          gap_start=None,
-          gap_extension=None,
-          *args, **keywds):
+def align(pair, scores=None, gap_start=None, gap_extension=None, *args, **keywds):
     """Align a pair of DNA files using Wise2 psw."""
     cmdline = _CMDLINE_PSW[:]
     if scores:
@@ -161,6 +161,7 @@ def main():
 
 def _test(*args, **keywds):
     import doctest
+
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 
