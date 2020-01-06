@@ -88,8 +88,8 @@ Bio.motifs
 ``Bio.motifs.mast`` plain-text parsing deprecated in favor of XML parsing as of
 release 1.74. Also affects ``Bio.motifs.read`` and ``Bio.motifs.parse`` for the
 ``mast`` format.
-The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated in
-release 1.77, in favor of a ``__format__`` method that can be used from the
+The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated
+in release 1.77, in favor of a ``__format__`` method that can be used from the
 ``format`` built-in function.
 
 Bio.Restriction.RanaConfig
