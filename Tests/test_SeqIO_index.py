@@ -12,7 +12,6 @@ except ImportError:
     # where we don't expect this to be installed.
     sqlite3 = None
 
-import sys
 import os
 import unittest
 import tempfile
@@ -46,15 +45,11 @@ def add_prefix(key):
 
 
 def gzip_open(filename, format):
-    # At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
-    # insists on giving byte strings (i.e. binary mode)
-    # See http://bugs.python.org/issue13989
-    if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
-        return gzip.open(filename)
-    handle = gzip.open(filename)
-    data = handle.read()  # bytes!
-    handle.close()
-    return StringIO(data.decode())
+    """Open gzip file in either binary or text mode as needed."""
+    if format in SeqIO._BinaryFormats:
+        return gzip.open(filename, "rb")
+    else:
+        return gzip.open(filename, "rt")
 
 
 if sqlite3:
