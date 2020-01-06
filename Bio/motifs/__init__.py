@@ -596,7 +596,7 @@ class Motif:
             raise ValueError("Unknown format type %s" % format_spec)
 
     def format(self, format_spec):
-        """Return a string representation of the Motif in the given format (DEPRECATED).
+        """Return a string representation of the Motif in the given format [DEPRECATED].
 
         This method is deprecated; instead of motif.format(format_spec),
         please use format(motif, format_spec).
