@@ -312,9 +312,8 @@ class IndexDictTests(unittest.TestCase):
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
-            h = gzip_open(filename, format)
-            id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
-            h.close()
+            with gzip_open(filename, format) as handle:
+                id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
@@ -385,9 +384,8 @@ class IndexDictTests(unittest.TestCase):
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
-            h = gzip_open(filename, format)
-            id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
-            h.close()
+            with gzip_open(filename, format) as handle:
+                id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
@@ -499,17 +497,14 @@ class IndexDictTests(unittest.TestCase):
     def get_raw_check(self, filename, format, alphabet, comp):
         # Also checking the key_function here
         if comp:
-            h = gzip.open(filename, "rb")
-            raw_file = h.read()
-            h.close()
-            h = gzip_open(filename, format)
-            id_list = [rec.id.lower() for rec in
-                       SeqIO.parse(h, format, alphabet)]
-            h.close()
+            with gzip.open(filename, "rb") as handle:
+                raw_file = handle.read()
+            with gzip_open(filename, format) as handle:
+                id_list = [rec.id.lower() for rec in
+                           SeqIO.parse(handle, format, alphabet)]
         else:
-            h = open(filename, "rb")
-            raw_file = h.read()
-            h.close()
+            with open(filename, "rb") as handle:
+                raw_file = handle.read()
             id_list = [rec.id.lower() for rec in
                        SeqIO.parse(filename, format, alphabet)]
 
