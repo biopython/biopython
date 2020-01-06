@@ -468,23 +468,15 @@ class IndexDictTests(unittest.TestCase):
             pass
         self.assertEqual(rec_dict.get(chr(0)), None)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
-        if hasattr(dict, "iteritems"):
-            # Python 2.x
-            for key, rec in rec_dict.items():
-                self.assertIn(key, keys)
-                self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertIn(rec.id, ids)
-        else:
-            # Python 3
-            assert not hasattr(rec_dict, "iteritems")
-            for key, rec in rec_dict.items():
-                self.assertIn(key, keys)
-                self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertIn(rec.id, ids)
-            for rec in rec_dict.values():
-                self.assertIn(key, keys)
-                self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertIn(rec.id, ids)
+        assert not hasattr(rec_dict, "iteritems")
+        for key, rec in rec_dict.items():
+            self.assertIn(key, keys)
+            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIn(rec.id, ids)
+        for rec in rec_dict.values():
+            self.assertIn(key, keys)
+            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIn(rec.id, ids)
         # Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
