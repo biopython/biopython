@@ -5,20 +5,15 @@
 
 """Tests the basic functionality of the GEO parsers."""
 
-import sys
-
 import unittest
 
 from Bio import Geo
 
+import builtins
 
-if sys.version_info[0] >= 3:
-    # Python 3 problem: Can't use utf8 on Tests/Geo/soft_ex_*.txt
-    # due to micro (\xb5) and degrees (\xb0) symbols
-    import builtins
 
-    def open(path):
-        return builtins.open(path, encoding="latin")
+def open(path):
+    return builtins.open(path, encoding="latin")
 
 
 class TestGeo(unittest.TestCase):
