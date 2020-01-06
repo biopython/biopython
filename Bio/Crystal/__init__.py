@@ -87,10 +87,6 @@ class Hetero:
     def __eq__(self, other):
         return self.data == other.data
 
-    def __ne__(self, other):
-        """Return true iff self is not equal to other."""
-        return not self.__eq__(other)
-
     def __repr__(self):
         return "%s" % self.data
 
