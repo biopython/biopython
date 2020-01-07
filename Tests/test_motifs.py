@@ -436,18 +436,18 @@ class MotifTestsBasic(unittest.TestCase):
     def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files."""
         output_handle = open(self.TFout, "w")
-        output_handle.write(self.m.format("transfac"))
+        output_handle.write(format(self.m, "transfac"))
         output_handle.close()
 
     def test_format(self):
         self.m.name = "Foo"
-        s1 = self.m.format("pfm")
+        s1 = format(self.m, "pfm")
         expected_pfm = """  1.00   0.00   1.00   0.00  1.00
   0.00   0.00   0.00   0.00  0.00
   0.00   0.00   0.00   0.00  0.00
   0.00   1.00   0.00   1.00  0.00
 """
-        s2 = self.m.format("jaspar")
+        s2 = format(self.m, "jaspar")
         expected_jaspar = """>None Foo
 A [  1.00   0.00   1.00   0.00   1.00]
 C [  0.00   0.00   0.00   0.00   0.00]
@@ -455,7 +455,7 @@ G [  0.00   0.00   0.00   0.00   0.00]
 T [  0.00   1.00   0.00   1.00   0.00]
 """
         self.assertEqual(s2, expected_jaspar)
-        s3 = self.m.format("transfac")
+        s3 = format(self.m, "transfac")
         expected_transfac = """P0      A      C      G      T
 01      1      0      0      0      A
 02      0      0      0      1      T
@@ -466,7 +466,7 @@ XX
 //
 """
         self.assertEqual(s3, expected_transfac)
-        self.assertRaises(ValueError, self.m.format, "foo_bar")
+        self.assertRaises(ValueError, format, self.m, "foo_bar")
 
     def test_reverse_complement(self):
         """Test if motifs can be reverse-complemented."""
@@ -475,7 +475,7 @@ XX
         m = self.m
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = self.m.format("transfac")
+        received_forward = format(self.m, "transfac")
         expected_forward = """\
 P0      A      C      G      T
 01      1      0      0      0      A
@@ -496,7 +496,7 @@ T:   0.17   0.50   0.17   0.50   0.17
 """
         self.assertEqual(str(m.pwm), expected_forward_pwm)
         m = m.reverse_complement()
-        received_reverse = m.format("transfac")
+        received_reverse = format(m, "transfac")
         expected_reverse = """\
 P0      A      C      G      T
 01      0      0      0      1      T
@@ -521,11 +521,11 @@ T:   0.50   0.17   0.50   0.17   0.50
         m = motifs.Motif(counts=counts)
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = m.format("transfac")
+        received_forward = format(m, "transfac")
         self.assertEqual(received_forward, expected_forward)
         self.assertEqual(str(m.pwm), expected_forward_pwm)
         m = m.reverse_complement()
-        received_reverse = m.format("transfac")
+        received_reverse = format(m, "transfac")
         self.assertEqual(received_reverse, expected_reverse)
         self.assertEqual(str(m.pwm), expected_reverse_pwm)
 
