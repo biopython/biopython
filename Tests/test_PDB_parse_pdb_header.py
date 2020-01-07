@@ -13,8 +13,8 @@ try:
     import numpy  # noqa F401
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
 
 from Bio.PDB.parse_pdb_header import parse_pdb_header, _parse_remark_465
 
@@ -28,8 +28,16 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["idcode"], "2XHE")
         self.assertTrue(header["has_missing_residues"])
         self.assertEqual(len(header["missing_residues"]), 142)
-        self.assertIn({"model": None, "res_name": "GLN", "chain": "B", "ssseq": 267, "insertion": None},
-                      header["missing_residues"])
+        self.assertIn(
+            {
+                "model": None,
+                "res_name": "GLN",
+                "chain": "B",
+                "ssseq": 267,
+                "insertion": None,
+            },
+            header["missing_residues"],
+        )
         header = parse_pdb_header("PDB/1A8O.pdb")
         self.assertFalse(header["has_missing_residues"])
         self.assertEqual(header["missing_residues"], [])
@@ -37,16 +45,40 @@ class ParseReal(unittest.TestCase):
     def test_parse_remark_465(self):
         """A UNIT-test for the private function _parse_remark_465."""
         info = _parse_remark_465("GLU B   276")
-        self.assertEqual(info, {"model": None, "res_name": "GLU",
-                                "chain": "B", "ssseq": 276, "insertion": None})
+        self.assertEqual(
+            info,
+            {
+                "model": None,
+                "res_name": "GLU",
+                "chain": "B",
+                "ssseq": 276,
+                "insertion": None,
+            },
+        )
 
         info = _parse_remark_465("2 GLU B   276B")
-        self.assertEqual(info, {"model": 2, "res_name": "GLU",
-                                "chain": "B", "ssseq": 276, "insertion": "B"})
+        self.assertEqual(
+            info,
+            {
+                "model": 2,
+                "res_name": "GLU",
+                "chain": "B",
+                "ssseq": 276,
+                "insertion": "B",
+            },
+        )
 
         info = _parse_remark_465("A 2    11")
-        self.assertEqual(info, {"model": None, "res_name": "A",
-                                "chain": "2", "ssseq": 11, "insertion": None})
+        self.assertEqual(
+            info,
+            {
+                "model": None,
+                "res_name": "A",
+                "chain": "2",
+                "ssseq": 11,
+                "insertion": None,
+            },
+        )
 
     def test_parse_header_line(self):
         """Unit test for parsing and converting fields in HEADER record."""
@@ -54,6 +86,21 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["head"], "structural genomics, unknown function")
         self.assertEqual(header["idcode"], "3EFG")
         self.assertEqual(header["deposition_date"], "2008-09-08")
+
+    def test_parse_title_line(self):
+        """Unit test for correct parsing of multiline title records."""
+        header = parse_pdb_header("PDB/1LCD.pdb")
+        self.assertEqual(
+            header["name"],
+            "structure of the complex of lac repressor headpiece and an 11 "
+            "base-pair half-operator determined by nuclear magnetic resonance "
+            "spectroscopy and restrained molecular dynamics",
+        )
+
+    def test_parse_no_title(self):
+        """Unit test for sensible result with no TITLE line."""
+        header = parse_pdb_header("PDB/occupancy.pdb")
+        self.assertEqual(header["name"], "")
 
     def test_parse_pdb_with_remark_99(self):
         """Tests that parse_pdb_header can identify REMARK 99 ASTRAL entries."""
