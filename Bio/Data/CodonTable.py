@@ -251,8 +251,9 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
                     stops.append(y1 + y2 + y3)
     if stops:
         if possible:
-            raise TranslationError("ambiguous codon %r codes for both"
-                                   " proteins and stop codons" % codon)
+            raise TranslationError(
+                "ambiguous codon %r codes for both proteins and stop codons" % codon
+            )
         # This is a true stop codon - tell the caller about it
         raise KeyError(codon)
     return list(possible)
