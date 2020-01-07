@@ -176,8 +176,8 @@ class BlastParser(_XMLparser):
             self._setup_blast_v2()
         else:
             raise ValueError(
-                "Invalid root node name: %s. Root node should be either BlastOutput or BlastXML2"
-                % name
+                "Invalid root node name: %s. Root node should be either"
+                " BlastOutput or BlastXML2" % name
             )
 
     def _setup_blast_v1(self):
@@ -804,8 +804,8 @@ def parse(handle, debug=0):
         # We are now starting a new XML file
         if not text.startswith(XML_START):
             raise ValueError(
-                "Your XML file did not start with %r... "
-                "but instead %r" % (XML_START, text[:20])
+                "Your XML file did not start with %r... but instead %r"
+                % (XML_START, text[:20])
             )
 
         expat_parser = expat.ParserCreate()
