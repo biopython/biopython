@@ -50,6 +50,9 @@ Functions:
 import os
 import re
 
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
 from . import Des
 from . import Cla
 from . import Hie
@@ -943,8 +946,6 @@ def _open(cgi, params=None, get=1):
     that describes whether a GET should be used.
 
     """
-    from urllib.request import urlopen, urlencode
-
     # Open a handle to SCOP.
     if params is None:
         params = {}

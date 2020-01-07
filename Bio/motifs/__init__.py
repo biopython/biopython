@@ -16,6 +16,9 @@ and MAST programs, as well as files in the TRANSFAC format.
 
 import warnings
 
+from urllib.parse import urlencode
+from urllib.request import urlopen, Request
+
 from Bio import BiopythonDeprecationWarning
 
 
@@ -508,8 +511,6 @@ class Motif:
             'color4': '',
 
         """
-        from urllib.request import urlopen, urlencode, Request
-
         if set(self.alphabet) == set("ACDEFGHIKLMNPQRSTVWY"):
             alpha = "alphabet_protein"
         elif set(self.alphabet) == set("ACGU"):
