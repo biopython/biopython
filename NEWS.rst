@@ -32,6 +32,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Deepak Khatri
 - Peter Cock
+- Rob Miller
 - Sujan Dulal (first contribution)
 
 20 December 2019: Biopython 1.76
@@ -75,7 +76,6 @@ possible, especially the following contributors:
 - Michael R. Crusoe (first contribution)
 - Michiel de Hoon
 - Peter Cock
-- Rob Miller
 - Sergio Valqui
 
 6 November 2019: Biopython 1.75
