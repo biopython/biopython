@@ -466,9 +466,16 @@ class Scop:
             for d in data:
                 if int(d[0]) not in self._sunidDict:
                     n = Domain(scop=self)
-                    n.sunid, n.sid, pdbid, n.residues, n.sccs, n.type, n.description, n.parent = d[
-                        0:8
-                    ]
+                    (
+                        n.sunid,
+                        n.sid,
+                        pdbid,
+                        n.residues,
+                        n.sccs,
+                        n.type,
+                        n.description,
+                        n.parent,
+                    ) = d[0:8]
                     n.residues = Residues.Residues(n.residues)
                     n.residues.pdbid = pdbid
                     n.sunid = int(n.sunid)
