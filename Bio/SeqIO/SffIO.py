@@ -291,24 +291,25 @@ def _sff_file_header(handle):
     data = handle.read(31)
     if not data:
         raise ValueError("Empty file.")
-    elif isinstance(data, str):
-        raise ValueError("SFF files must NOT be opened in text mode, binary required.")
     elif len(data) < 31:
         raise ValueError("File too small to hold a valid SFF header.")
-    (
-        magic_number,
-        ver0,
-        ver1,
-        ver2,
-        ver3,
-        index_offset,
-        index_length,
-        number_of_reads,
-        header_length,
-        key_length,
-        number_of_flows_per_read,
-        flowgram_format,
-    ) = struct.unpack(fmt, data)
+    try:
+        (
+            magic_number,
+            ver0,
+            ver1,
+            ver2,
+            ver3,
+            index_offset,
+            index_length,
+            number_of_reads,
+            header_length,
+            key_length,
+            number_of_flows_per_read,
+            flowgram_format,
+        ) = struct.unpack(fmt, data)
+    except TypeError:
+        raise ValueError("SFF files must NOT be opened in text mode, binary required.")
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
@@ -1143,15 +1144,12 @@ class SffWriter(SequenceWriter):
 
         """
         try:
-            # This should fail...
-            handle.write("ERROR - text mode handle\n")
+            # Confirm we have a binary handle,
+            handle.write(b"")
+        except TypeError:
             raise ValueError(
                 "SFF files must NOT be opened in text mode, binary required."
             )
-        except TypeError:
-            # Good, we wanted a binary handle:
-            # e.g. TypeError: a bytes-like object is required, not 'str'
-            pass
         self.handle = handle
         self._xml = xml
         if index:
