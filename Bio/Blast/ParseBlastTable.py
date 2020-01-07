@@ -50,11 +50,13 @@ class BlastTableRec:
 class BlastTableReader:
     """Reader for the output of blastpgp."""
 
-    reader_keywords = {"BLASTP": "version",
-                       "Iteration": "iteration",
-                       "Query": "query",
-                       "Database": "database",
-                       "Fields": "fields"}
+    reader_keywords = {
+        "BLASTP": "version",
+        "Iteration": "iteration",
+        "Query": "query",
+        "Database": "database",
+        "Fields": "fields",
+    }
 
     def __init__(self, handle):
         """Initialize the class."""

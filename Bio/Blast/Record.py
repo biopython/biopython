@@ -230,37 +230,49 @@ class HSP:
 
     def __str__(self):
         """Return the BLAST HSP as a formatted string."""
-        lines = ["Score %s (%s bits), expectation %s, alignment length %s" % (
-            fmt_(self.score, "%i"),
-            fmt_(self.bits, "%i"),
-            fmt_(self.expect, "%0.1e"),
-            fmt_(self.align_length, "%i"),
-        )]
+        lines = [
+            "Score %s (%s bits), expectation %s, alignment length %s"
+            % (
+                fmt_(self.score, "%i"),
+                fmt_(self.bits, "%i"),
+                fmt_(self.expect, "%0.1e"),
+                fmt_(self.align_length, "%i"),
+            )
+        ]
         if self.align_length is None:
             return "\n".join(lines)
         if self.align_length < 50:
-            lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
-                                             str(self.query),
-                                             str(self.query_end)))
-            lines.append("               %s"
-                         % (str(self.match)))
-            lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
-                                             str(self.sbjct),
-                                             str(self.sbjct_end)))
+            lines.append(
+                "Query:%s %s %s"
+                % (str(self.query_start).rjust(8), str(self.query), str(self.query_end))
+            )
+            lines.append("               %s" % (str(self.match)))
+            lines.append(
+                "Sbjct:%s %s %s"
+                % (str(self.sbjct_start).rjust(8), str(self.sbjct), str(self.sbjct_end))
+            )
         else:
-            lines.append("Query:%s %s...%s %s"
-                         % (str(self.query_start).rjust(8),
-                            str(self.query)[:45],
-                            str(self.query)[-3:],
-                            str(self.query_end)))
-            lines.append("               %s...%s"
-                         % (str(self.match)[:45],
-                            str(self.match)[-3:]))
-            lines.append("Sbjct:%s %s...%s %s"
-                         % (str(self.sbjct_start).rjust(8),
-                            str(self.sbjct)[:45],
-                            str(self.sbjct)[-3:],
-                            str(self.sbjct_end)))
+            lines.append(
+                "Query:%s %s...%s %s"
+                % (
+                    str(self.query_start).rjust(8),
+                    str(self.query)[:45],
+                    str(self.query)[-3:],
+                    str(self.query_end),
+                )
+            )
+            lines.append(
+                "               %s...%s" % (str(self.match)[:45], str(self.match)[-3:])
+            )
+            lines.append(
+                "Sbjct:%s %s...%s %s"
+                % (
+                    str(self.sbjct_start).rjust(8),
+                    str(self.sbjct)[:45],
+                    str(self.sbjct)[-3:],
+                    str(self.sbjct_end),
+                )
+            )
         return "\n".join(lines)
 
 

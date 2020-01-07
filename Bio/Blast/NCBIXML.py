@@ -74,8 +74,10 @@ class _XMLparser(ContentHandler):
         # We don't care about white space in parent tags like Hsp,
         # but that white space doesn't belong to child tags like Hsp_midline
         if self._value.strip():
-            raise ValueError("What should we do with %s before the %s tag?"
-                             % (repr(self._value), name))
+            raise ValueError(
+                "What should we do with %s before the %s tag?"
+                % (repr(self._value), name)
+            )
         self._value = ""
 
     def characters(self, ch):
@@ -119,7 +121,7 @@ class _XMLparser(ContentHandler):
     def _node_method_name(self, name):
         if self._method_name_level == 1:
             return name
-        return "/".join(self._tag[-self._method_name_level:])
+        return "/".join(self._tag[-self._method_name_level :])
 
 
 class BlastParser(_XMLparser):
@@ -173,7 +175,10 @@ class BlastParser(_XMLparser):
         elif name == "BlastXML2":
             self._setup_blast_v2()
         else:
-            raise ValueError("Invalid root node name: %s. Root node should be either BlastOutput or BlastXML2" % name)
+            raise ValueError(
+                "Invalid root node name: %s. Root node should be either BlastOutput or BlastXML2"
+                % name
+            )
 
     def _setup_blast_v1(self):
         self._method_map = {
@@ -309,14 +314,11 @@ class BlastParser(_XMLparser):
         # and <BlastOutput_query-len> were used.  Now they
         # are supplemented/replaced by <Iteration_query-ID>,
         # <Iteration_query-def> and <Iteration_query-len>
-        if not hasattr(self._blast, "query") \
-           or not self._blast.query:
+        if not hasattr(self._blast, "query") or not self._blast.query:
             self._blast.query = self._header.query
-        if not hasattr(self._blast, "query_id") \
-           or not self._blast.query_id:
+        if not hasattr(self._blast, "query_id") or not self._blast.query_id:
             self._blast.query_id = self._header.query_id
-        if not hasattr(self._blast, "query_letters") \
-           or not self._blast.query_letters:
+        if not hasattr(self._blast, "query_letters") or not self._blast.query_letters:
             self._blast.query_letters = self._header.query_letters
 
         # Hack to record the query length as both the query_letters and
@@ -483,8 +485,10 @@ class BlastParser(_XMLparser):
 
     def _set_parameters_gap_extend(self):
         """Gap extension cose (-E) (PRIVATE)."""
-        self._parameters.gap_penalties = (self._parameters.gap_penalties,
-                                          int(self._value))
+        self._parameters.gap_penalties = (
+            self._parameters.gap_penalties,
+            int(self._value),
+        )
 
     def _set_parameters_filter(self):
         """Record filtering options (-F) (PRIVATE)."""
@@ -504,7 +508,9 @@ class BlastParser(_XMLparser):
     def _start_hit(self):
         """Start filling records (PRIVATE)."""
         self._blast.alignments.append(Record.Alignment())
-        self._descr = Record.Description() if self._xml_version == 1 else Record.DescriptionExt()
+        self._descr = (
+            Record.Description() if self._xml_version == 1 else Record.DescriptionExt()
+        )
         self._blast.descriptions.append(self._descr)
         self._blast.multiple_alignment = []
         self._hit = self._blast.alignments[-1]
@@ -774,6 +780,7 @@ def parse(handle, debug=0):
     which strictly speaking wasn't valid XML).
     """
     from xml.parsers import expat
+
     BLOCK = 1024
     MARGIN = 10  # must be at least length of newline + XML start
     XML_START = "<?xml"
@@ -796,9 +803,10 @@ def parse(handle, debug=0):
     while text:
         # We are now starting a new XML file
         if not text.startswith(XML_START):
-            raise ValueError("Your XML file did not start with %r... "
-                             "but instead %r"
-                             % (XML_START, text[:20]))
+            raise ValueError(
+                "Your XML file did not start with %r... "
+                "but instead %r" % (XML_START, text[:20])
+            )
 
         expat_parser = expat.ParserCreate()
         blast_parser = BlastParser(debug)
