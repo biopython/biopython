@@ -19,11 +19,13 @@ https://github.com/biopython/biopython/issues/2046
 
 import warnings
 
-warnings.warn("We intend to remove or replace Bio.Alphabet in 2020, "
-              "ideally avoid using it explicitly in your code. Please "
-              "get in touch if you will be adversely affected by this. "
-              "https://github.com/biopython/biopython/issues/2046",
-              PendingDeprecationWarning)
+warnings.warn(
+    "We intend to remove or replace Bio.Alphabet in 2020, "
+    "ideally avoid using it explicitly in your code. Please "
+    "get in touch if you will be adversely affected by this. "
+    "https://github.com/biopython/biopython/issues/2046",
+    PendingDeprecationWarning,
+)
 
 
 class Alphabet:
@@ -39,7 +41,7 @@ class Alphabet:
 
     """
 
-    size = None     # default to no fixed size for words
+    size = None  # default to no fixed size for words
     letters = None  # default to no fixed alphabet
     # In general, a list-like object. However,
     # assuming letters are single characters, use a
@@ -102,7 +104,7 @@ class SingleLetterAlphabet(Alphabet):
     """Generic alphabet with letters of size one."""
 
     size = 1
-    letters = None   # string of all letters in the alphabet
+    letters = None  # string of all letters in the alphabet
 
 
 single_letter_alphabet = SingleLetterAlphabet()
@@ -167,18 +169,42 @@ class ThreeLetterProtein(Alphabet):
 
     size = 3
     letters = [
-        "Ala", "Asx", "Cys", "Asp", "Glu", "Phe", "Gly", "His", "Ile",
-        "Lys", "Leu", "Met", "Asn", "Pro", "Gln", "Arg", "Ser", "Thr",
-        "Sec", "Val", "Trp", "Xaa", "Tyr", "Glx",
-        ]
+        "Ala",
+        "Asx",
+        "Cys",
+        "Asp",
+        "Glu",
+        "Phe",
+        "Gly",
+        "His",
+        "Ile",
+        "Lys",
+        "Leu",
+        "Met",
+        "Asn",
+        "Pro",
+        "Gln",
+        "Arg",
+        "Ser",
+        "Thr",
+        "Sec",
+        "Val",
+        "Trp",
+        "Xaa",
+        "Tyr",
+        "Glx",
+    ]
 
     def _upper(self):
-        raise NotImplementedError("We don't have an uppercase three letter "
-                                  "protein alphabet.")
+        raise NotImplementedError(
+            "We don't have an uppercase three letter " "protein alphabet."
+        )
 
     def _lower(self):
-        raise NotImplementedError("We don't have a lowercase three letter "
-                                  "protein alphabet.")
+        raise NotImplementedError(
+            "We don't have a lowercase three letter " "protein alphabet."
+        )
+
 
 # ##### Non per-sequence modifications
 
@@ -205,8 +231,7 @@ class AlphabetEncoder:
 
     def __repr__(self):
         """Represent the alphabet encoder class as a string for debugging."""
-        return "%s(%r, %r)" % (self.__class__.__name__, self.alphabet,
-                               self.new_letters)
+        return "%s(%r, %r)" % (self.__class__.__name__, self.alphabet, self.new_letters)
 
     def contains(self, other):
         """Test if the other alphabet is contained in this one (OBSOLETE?).
@@ -218,13 +243,11 @@ class AlphabetEncoder:
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
-        return AlphabetEncoder(self.alphabet._upper(),
-                               self.new_letters.upper())
+        return AlphabetEncoder(self.alphabet._upper(), self.new_letters.upper())
 
     def _lower(self):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
-        return AlphabetEncoder(self.alphabet._lower(),
-                               self.new_letters.lower())
+        return AlphabetEncoder(self.alphabet._lower(), self.new_letters.lower())
 
 
 class Gapped(AlphabetEncoder):
@@ -242,8 +265,9 @@ class Gapped(AlphabetEncoder):
         hierarchy, and attempts to check the gap character.  This fails
         if the other alphabet does not have a gap character!
         """
-        return (other.gap_char == self.gap_char and
-                self.alphabet.contains(other.alphabet))
+        return other.gap_char == self.gap_char and self.alphabet.contains(
+            other.alphabet
+        )
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
@@ -269,8 +293,9 @@ class HasStopCodon(AlphabetEncoder):
         hierarchy, and attempts to check the stop symbol.  This fails
         if the other alphabet does not have a stop symbol!
         """
-        return (other.stop_symbol == self.stop_symbol and
-                self.alphabet.contains(other.alphabet))
+        return other.stop_symbol == self.stop_symbol and self.alphabet.contains(
+            other.alphabet
+        )
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
@@ -299,11 +324,9 @@ def _ungap(alphabet):
     elif isinstance(alphabet, Gapped):
         return alphabet.alphabet
     elif isinstance(alphabet, HasStopCodon):
-        return HasStopCodon(_ungap(alphabet.alphabet),
-                            stop_symbol=alphabet.stop_symbol)
+        return HasStopCodon(_ungap(alphabet.alphabet), stop_symbol=alphabet.stop_symbol)
     elif isinstance(alphabet, AlphabetEncoder):
-        return AlphabetEncoder(_ungap(alphabet.alphabet),
-                               letters=alphabet.letters)
+        return AlphabetEncoder(_ungap(alphabet.alphabet), letters=alphabet.letters)
     else:
         raise NotImplementedError
 
@@ -327,12 +350,14 @@ def _consensus_base_alphabet(alphabets):
             pass
         elif isinstance(common, a.__class__):
             common = a
-        elif (isinstance(a, NucleotideAlphabet) and
-              isinstance(common, NucleotideAlphabet)):
+        elif isinstance(a, NucleotideAlphabet) and isinstance(
+            common, NucleotideAlphabet
+        ):
             # e.g. Give a mix of RNA and DNA alphabets
             common = generic_nucleotide
-        elif (isinstance(a, SingleLetterAlphabet) and
-              isinstance(common, SingleLetterAlphabet)):
+        elif isinstance(a, SingleLetterAlphabet) and isinstance(
+            common, SingleLetterAlphabet
+        ):
             # This is a pretty big mis-match!
             common = single_letter_alphabet
         else:
@@ -410,8 +435,7 @@ def _consensus_alphabet(alphabets):
         # New letters...
         if hasattr(alpha, "new_letters"):
             for letter in alpha.new_letters:
-                if letter not in new_letters and letter != gap \
-                   and letter != stop:
+                if letter not in new_letters and letter != gap and letter != stop:
                     new_letters += letter
 
     alpha = base
