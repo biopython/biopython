@@ -104,19 +104,6 @@ def osx_clang_fix():
 osx_clang_fix()
 
 
-def is_pypy():
-    """Check if running under the PyPy implementation of Python."""
-    import platform
-
-    try:
-        if platform.python_implementation() == "PyPy":
-            return True
-    except AttributeError:
-        # New in Python 2.6
-        pass
-    return False
-
-
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (3, 6):
     sys.stderr.write(
@@ -335,16 +322,6 @@ EXTENSIONS = [
         "Bio.KDTree._CKDTree", ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]
     ),
 ]
-if not is_pypy():
-    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
-    EXTENSIONS.extend(
-        [
-            Extension(
-                "Bio.trie", ["Bio/triemodule.c", "Bio/trie.c"], include_dirs=["Bio"]
-            )
-        ]
-    )
-
 
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
