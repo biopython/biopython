@@ -135,9 +135,7 @@ class Record:
 
 __regex = {
     "names": re.compile(r"Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
-    "threshold": re.compile(
-        r"Threshold of effective gap content in columns: (\S+)"
-    ),
+    "threshold": re.compile(r"Threshold of effective gap content in columns: (\S+)"),
     "lengths": re.compile(
         r"length1=(\S+)\s+filtered_length1=(\S+)"
         r"\s+length2=(\S+)\s+filtered_length2=(\S+)"

@@ -661,8 +661,8 @@ class Nexus:
         self.set = {}  # dict of the set command to set various options
         self.options = {}  # dict of the options command in the data block
         self.codonposset = (
-            None
-        )  # name of the charpartition that defines codon positions
+            None  # name of the charpartition that defines codon positions
+        )
 
         # some defaults
         self.options["gapmode"] = "missing"
