@@ -47,16 +47,10 @@ def line_wrap(text, indent=0, max_len=78, string=False):
         return line + "\n" + line_wrap(rest, indent, max_len, string)
 
 
-print(
-    """
-##########################################################################
-# Start of auto-generated output from Scripts/update_ncbi_codon_table.py #
-##########################################################################
-
-"""[
-        1:
-    ]
-)
+print("##########################################################################")
+print("# Start of auto-generated output from Scripts/update_ncbi_codon_table.py #")
+print("##########################################################################")
+print()
 
 version = ""
 for line in open("gc.prt").readlines():
@@ -123,9 +117,6 @@ for line in open("gc.prt").readlines():
     else:
         raise Exception("Unparsed: " + repr(line))
 
-print(
-    """
-########################################################################
-# End of auto-generated output from Scripts/update_ncbi_codon_table.py #
-########################################################################"""
-)
+print("########################################################################")
+print("# End of auto-generated output from Scripts/update_ncbi_codon_table.py #")
+print("########################################################################")
