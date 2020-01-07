@@ -12,7 +12,7 @@ from __future__ import print_function
 from Bio.PDB.PDBParser import PDBParser
 import unittest
 import warnings
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB.PDBIO import PDBIO
 
