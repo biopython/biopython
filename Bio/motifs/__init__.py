@@ -602,11 +602,9 @@ class Motif:
         please use format(motif, format_spec).
         """
         warnings.warn(
-            """\
-Motif.format has been deprecated, and we intend to remove it in a future
-release of Biopython. Instead of motif.format(format_spec), please use
-format(motif, format_spec).
-""",
+            "Motif.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of motif.format(format_spec), "
+            "please use format(motif, format_spec).",
             BiopythonDeprecationWarning,
         )
         return self.__format__(format_spec)
