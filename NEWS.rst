@@ -16,6 +16,9 @@ tested on PyPy3.6.1 v7.1.1-beta0.
 
 **We have dropped support for Python 2 now.**
 
+The codon tables have been updated to NCBI genetic code table version 4.5,
+which adds Cephalodiscidae mitochondrial as table 33.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
