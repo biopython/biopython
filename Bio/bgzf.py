@@ -216,10 +216,10 @@ NC_000932.1
 
 """
 
-
+import codecs
+import struct
 import sys
 import zlib
-import struct
 
 from builtins import open as _open
 
@@ -445,7 +445,7 @@ def _load_bgzf_block(handle, text_mode=False):
     if expected_crc != crc:
         raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
     if text_mode:
-        import codecs
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return block_size, codecs.latin_1_decode(data)[0]
     else:
         return block_size, data
