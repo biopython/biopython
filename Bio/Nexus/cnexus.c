@@ -107,8 +107,6 @@ static PyMethodDef cNexusMethods[]=
     {NULL,NULL,0,NULL}
 };
 
-#if PY_MAJOR_VERSION >= 3
-
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "cnexus",
@@ -126,12 +124,3 @@ PyInit_cnexus(void)
 {
     return PyModule_Create(&moduledef);
 }
-
-
-#else
-
-PyMODINIT_FUNC initcnexus(void)
-{
-    (void) Py_InitModule("cnexus",cNexusMethods);
-}
-#endif
