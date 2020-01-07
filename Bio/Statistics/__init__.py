@@ -11,5 +11,9 @@ This module is DEPRECATED.
 
 import warnings
 from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.Statistics has been deprecated, and we intend to remove it "
-              "in a future release of Biopython.", BiopythonDeprecationWarning)
+
+warnings.warn(
+    "Bio.Statistics has been deprecated, and we intend to remove it "
+    "in a future release of Biopython.",
+    BiopythonDeprecationWarning,
+)

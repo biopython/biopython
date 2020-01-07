@@ -30,10 +30,6 @@ class MultiGraph:
             and self._label_map == g._label_map
         )
 
-    def __ne__(self, g):
-        """Return true if g is not equal to this graph."""
-        return not self.__eq__(g)
-
     def __repr__(self):
         """Return a unique string representation of this graph."""
         s = "<MultiGraph: "

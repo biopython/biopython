@@ -36,9 +36,13 @@ import warnings
 from functools import reduce
 
 from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.Crystal has been deprecated, and we intend to remove it"
-              " in a future release of Biopython. Please use Bio.PDB instead"
-              " to parse NDB files.", BiopythonDeprecationWarning)
+
+warnings.warn(
+    "Bio.Crystal has been deprecated, and we intend to remove it"
+    " in a future release of Biopython. Please use Bio.PDB instead"
+    " to parse NDB files.",
+    BiopythonDeprecationWarning,
+)
 
 
 class CrystalError(Exception):
@@ -86,10 +90,6 @@ class Hetero:
 
     def __eq__(self, other):
         return self.data == other.data
-
-    def __ne__(self, other):
-        """Return true iff self is not equal to other."""
-        return not self.__eq__(other)
 
     def __repr__(self):
         return "%s" % self.data

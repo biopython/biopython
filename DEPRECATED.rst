@@ -827,9 +827,9 @@ previously available in ``Bio.KDTree`` are provided in a new module
 
 Bio.trie, Bio.triefind
 ----------------------
-These modules were declared obsolete in Release 1.72, and deprecated in
-Release 1.73. We encourage users to switch to alternative libraries
-implementing a trie data structure, for example pygtrie.
+These modules were declared obsolete in Release 1.72, deprecated in Release
+1.73, and removed in Release 1.77. We suggest pygtrie as an alternative library
+implementing a trie data structure.
 
 Bio.Statistics
 --------------

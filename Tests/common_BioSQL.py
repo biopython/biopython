@@ -6,7 +6,6 @@
 import configparser
 import os
 import platform
-import sys
 import tempfile
 import time
 import unittest
@@ -329,11 +328,6 @@ class MultiReadTest(unittest.TestCase):
         self.assertEqual(length, len(list(db.items())))
         self.assertEqual(length, len(list(db.keys())))
         self.assertEqual(length, len(list(db.values())))
-        if sys.version_info[0] == 2:
-            # Check legacy methods for Python 2 as well:
-            self.assertEqual(length, len(list(db.iteritems())))  # noqa: B301
-            self.assertEqual(length, len(list(db.iterkeys())))  # noqa: B301
-            self.assertEqual(length, len(list(db.itervalues())))  # noqa: B301
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)

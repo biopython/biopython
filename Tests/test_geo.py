@@ -5,27 +5,16 @@
 
 """Tests the basic functionality of the GEO parsers."""
 
-import sys
-
 import unittest
 
 from Bio import Geo
-
-
-if sys.version_info[0] >= 3:
-    # Python 3 problem: Can't use utf8 on Tests/Geo/soft_ex_*.txt
-    # due to micro (\xb5) and degrees (\xb0) symbols
-    import builtins
-
-    def open(path):
-        return builtins.open(path, encoding="latin")
 
 
 class TestGeo(unittest.TestCase):
 
     def test_soft_ex_dual(self):
         path = "Geo/soft_ex_dual.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -606,7 +595,7 @@ class TestGeo(unittest.TestCase):
 
     def test_soft_ex_affy(self):
         path = "Geo/soft_ex_affy.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -1053,7 +1042,7 @@ class TestGeo(unittest.TestCase):
 
     def test_GSE16(self):
         path = "Geo/GSE16.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -1236,7 +1225,7 @@ class TestGeo(unittest.TestCase):
 
     def test_soft_ex_platform(self):
         path = "Geo/soft_ex_platform.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "PLATFORM")
@@ -1429,7 +1418,7 @@ class TestGeo(unittest.TestCase):
 
     def test_GSM700(self):
         path = "Geo/GSM700.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -1563,7 +1552,7 @@ class TestGeo(unittest.TestCase):
 
     def test_GSM645(self):
         path = "Geo/GSM645.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -1924,7 +1913,7 @@ class TestGeo(unittest.TestCase):
 
     def test_soft_ex_series(self):
         path = "Geo/soft_ex_series.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SERIES")
@@ -1957,7 +1946,7 @@ class TestGeo(unittest.TestCase):
 
     def test_GSM691(self):
         path = "Geo/GSM691.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -2090,7 +2079,7 @@ class TestGeo(unittest.TestCase):
 
     def test_soft_ex_family(self):
         path = "Geo/soft_ex_family.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "PLATFORM")
@@ -2884,7 +2873,7 @@ class TestGeo(unittest.TestCase):
 
     def test_GSM804(self):
         path = "Geo/GSM804.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -3067,7 +3056,7 @@ class TestGeo(unittest.TestCase):
 
     def test_soft_ex_affy_chp(self):
         path = "Geo/soft_ex_affy_chp.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
@@ -3166,7 +3155,7 @@ class TestGeo(unittest.TestCase):
 
     def test_record_str(self):
         path = "Geo/GSM804.txt"
-        with open(path) as handle:
+        with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(str(record), """GEO Type: SAMPLE
