@@ -7,7 +7,6 @@
 
 import warnings
 import unittest
-import sys
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
@@ -19,10 +18,6 @@ from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
-if sys.version_info[0] < 3:
-    from string import maketrans
-else:
-    maketrans = str.maketrans
 
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artificial example)
@@ -582,12 +577,12 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             # This only does the unambiguous cases
             if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
-                mapping = maketrans("ACGUacgu", "UGCAugca")
+                mapping = str.maketrans("ACGUacgu", "UGCAugca")
             elif any(("T" in str1, "t" in str1, example1.alphabet == generic_dna,
                      example1.alphabet == generic_nucleotide)):
-                mapping = maketrans("ACGTacgt", "TGCAtgca")
+                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
-                mapping = maketrans("CGcg", "GCgc")
+                mapping = str.maketrans("CGcg", "GCgc")
             else:
                 # TODO - look at alphabet?
                 raise ValueError(example1)
@@ -608,12 +603,12 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             # This only does the unambiguous cases
             if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
-                mapping = maketrans("ACGUacgu", "UGCAugca")
+                mapping = str.maketrans("ACGUacgu", "UGCAugca")
             elif any(("T" in str1, "t" in str1, example1.alphabet == generic_dna,
                      example1.alphabet == generic_nucleotide)):
-                mapping = maketrans("ACGTacgt", "TGCAtgca")
+                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
-                mapping = maketrans("CGcg", "GCgc")
+                mapping = str.maketrans("CGcg", "GCgc")
             else:
                 # TODO - look at alphabet?
                 continue
