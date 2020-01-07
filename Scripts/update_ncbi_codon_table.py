@@ -26,8 +26,8 @@ def line_wrap(text, indent=0, max_len=78, string=False):
     """Return a wrapped line if length is larger max_len.
 
     The new parameter 'string' allows to wrap quoted text which is delimited
-    by single quotes. It adds " '" to the end of the line and "'" to the start
-    of the next line.
+    by single quotes. It adds a closing quote to the end of the line and an
+    opening quote to the start of the next line.
     """
     split_len = max_len if not string else max_len - 2
     if len(text) <= max_len:
@@ -37,8 +37,8 @@ def line_wrap(text, indent=0, max_len=78, string=False):
     line, rest = line.rsplit(" ", 1)
     # New:
     if string:
-        line += " '"
-        rest = "'" + rest
+        line += ' "'
+        rest = '"' + rest
     rest = " " * indent + rest + text[split_len:]
     assert len(line) < max_len
     if indent + len(rest) <= max_len:
@@ -85,14 +85,17 @@ for line in open("gc.prt").readlines():
         # Use %r instead of %s to include the quotes of the string!
         print(
             line_wrap(
-                "register_ncbi_table(name=%r," % names[0], indent=INDENT, string=True
+                'register_ncbi_table(name="%s",' % names[0], indent=INDENT, string=True
             )
         )
-        print(" " * INDENT + "alt_name=%r, id=%d," % (names[1], id))
+        print(
+            " " * INDENT
+            + "alt_name=%s, id=%d," % (repr(names[1]).replace("'", '"'), id)
+        )
         s = " " * INDENT + "table={"
         for i in range(64):
             if aa[i] != "*":
-                t = "'%s%s%s': '%s', " % (bases[0][i], bases[1][i], bases[2][i], aa[i])
+                t = '"%s%s%s": "%s", ' % (bases[0][i], bases[1][i], bases[2][i], aa[i])
                 if len(s) + len(t) > 75:
                     print(s.rstrip())
                     s = " " * INDENT2 + t
@@ -104,13 +107,23 @@ for line in open("gc.prt").readlines():
             for i in range(64)
             if start[i] == "*"
         ]
-        print(line_wrap(" " * INDENT + "stop_codons=%r," % codons, indent=INDENT + 13))
+        print(
+            line_wrap(
+                " " * INDENT + "stop_codons=%s," % repr(codons).replace("'", '"'),
+                indent=INDENT + 13,
+            )
+        )
         codons = [
             bases[0][i] + bases[1][i] + bases[2][i]
             for i in range(64)
             if start[i] == "M"
         ]
-        print(line_wrap(" " * INDENT + "start_codons=%r)" % codons, indent=INDENT + 14))
+        print(
+            line_wrap(
+                " " * INDENT + "start_codons=%s)" % repr(codons).replace("'", '"'),
+                indent=INDENT + 14,
+            )
+        )
         print("")
     elif line[:2] == "--" or line in ("\n", "}\n", "Genetic-code-table ::= {\n"):
         pass
