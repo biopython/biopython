@@ -671,11 +671,11 @@ class SingleTableTests(unittest.TestCase):
     def test_table32(self):
         """Check table 32: Balanophoraceae Plastid.
 
-        NOTE: This code has one unambiguous stop codon! TAA codes for either
-        stop or W, dependent on the context.
-        Another note: I guess this is wrong. There is a recent publication
-        that shows that TAA is not a stop codon anymore but only coding for
-        W. So table 32 may change in the near future.
+        In v4.4, TAG and TGA were simple stop codons, while TAA
+        coded for either stop or W, dependent on the context.
+
+        In v4.5, TAA and TGA were just simple stop codons. TAG
+        was not a stop codon any more. TAA was just a stop codon.
         """
         dna_table = unambiguous_dna_by_id[32]
         nuc_table = generic_by_id[32]
@@ -687,9 +687,9 @@ class SingleTableTests(unittest.TestCase):
         self.assertEqual(len(dna_table.start_codons), 7)
         for codon in ("TTG", "CTG", "ATT", "ATC", "ATA", "ATG", "GTG"):
             self.assertIn(codon, dna_table.start_codons)
-        self.assertEqual(len(dna_table.stop_codons), 3)
-        self.assertIn("UAR", amb_rna_table.stop_codons)
-        self.assertEqual(nuc_table.forward_table["UAA"], "W")
+        self.assertEqual(len(dna_table.stop_codons), 2)
+        self.assertIn("URA", amb_rna_table.stop_codons)
+        self.assertNotIn("UAA", nuc_table.forward_table)
 
 
 class ErrorConditions(unittest.TestCase):
