@@ -123,7 +123,7 @@ static PyObject* py_FastCalcRMSDAndRotation(PyObject* self, PyObject* args) {
 	}
 
 	if (i == 50)
-		fprintf(stderr, "\nMore than %d iterations needed!\n", i);
+		PySys_WriteStderr("\nMore than %d iterations needed!\n", i);
 
 	/* the fabs() is to guard against extremely small, but *negative* numbers due to floating point error */
 	rms = sqrt(fabs(2.0 * (E0 - mxEigenV) / len));
