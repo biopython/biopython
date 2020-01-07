@@ -18,9 +18,6 @@ and check for any differences in the old tables.
 
 import re
 
-INDENT = len("register_ncbi_table(")
-INDENT2 = INDENT + len("table={")
-
 
 def line_wrap(text, indent=0, max_len=78, string=False):
     """Return a wrapped line if length is larger max_len.
@@ -83,47 +80,36 @@ for line in open("gc.prt").readlines():
         if len(names) == 1:
             names.append(None)
         # Use %r instead of %s to include the quotes of the string!
-        print(
-            line_wrap(
-                'register_ncbi_table(name="%s",' % names[0], indent=INDENT, string=True
-            )
-        )
-        print(
-            " " * INDENT
-            + "alt_name=%s, id=%d," % (repr(names[1]).replace("'", '"'), id)
-        )
-        s = " " * INDENT + "table={"
+        print("register_ncbi_table(")
+        print(line_wrap('    name="%s",' % names[0], 4, string=True))
+        print(line_wrap("    alt_name=%s," % (repr(names[1]).replace("'", '"'))))
+        print("    id=%d," % id)
+        print("    table={")
+        s = " " * 8
         for i in range(64):
             if aa[i] != "*":
                 t = '"%s%s%s": "%s", ' % (bases[0][i], bases[1][i], bases[2][i], aa[i])
-                if len(s) + len(t) > 75:
+                if len(s) + len(t) > 60:
+                    # keep four per line
                     print(s.rstrip())
-                    s = " " * INDENT2 + t
+                    s = " " * 8 + t
                 else:
                     s += t
-        print("%s}," % s[:-2])  # remove ', ' from last entry before '}'
+        print(s.rstrip())
+        print("    },")
         codons = [
             bases[0][i] + bases[1][i] + bases[2][i]
             for i in range(64)
             if start[i] == "*"
         ]
-        print(
-            line_wrap(
-                " " * INDENT + "stop_codons=%s," % repr(codons).replace("'", '"'),
-                indent=INDENT + 13,
-            )
-        )
+        print("    stop_codons=%s," % repr(codons).replace("'", '"'))
         codons = [
             bases[0][i] + bases[1][i] + bases[2][i]
             for i in range(64)
             if start[i] == "M"
         ]
-        print(
-            line_wrap(
-                " " * INDENT + "start_codons=%s)" % repr(codons).replace("'", '"'),
-                indent=INDENT + 14,
-            )
-        )
+        print("    start_codons=%s," % repr(codons).replace("'", '"'))
+        print(")")
         print("")
     elif line[:2] == "--" or line in ("\n", "}\n", "Genetic-code-table ::= {\n"):
         pass
