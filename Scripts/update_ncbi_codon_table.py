@@ -86,16 +86,22 @@ for line in open("gc.prt").readlines():
         print("    id=%d," % id)
         print("    table={")
         s = " " * 8
+        noqa = False
         for i in range(64):
             if aa[i] != "*":
-                t = '"%s%s%s": "%s", ' % (bases[0][i], bases[1][i], bases[2][i], aa[i])
-                if len(s) + len(t) > 60:
-                    # keep four per line
-                    print(s.rstrip())
-                    s = " " * 8 + t
-                else:
-                    s += t
-        print(s.rstrip())
+                s += '"%s%s%s": "%s", ' % (bases[0][i], bases[1][i], bases[2][i], aa[i])
+            else:
+                # leave a space for stop codons
+                s += " " * 12
+                noqa = True
+            if i % 4 == 3:
+                # Print out in rows of four:
+                if noqa:
+                    s += "  # noqa: E241"
+                print(s.rstrip())
+                s = " " * 8
+                noqa = False
+        assert not s.strip()
         print("    },")
         codons = [
             bases[0][i] + bases[1][i] + bases[2][i]
