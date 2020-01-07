@@ -610,8 +610,7 @@ def register_ncbi_table(name, alt_name, id, table, start_codons, stop_codons):
 # Start of auto-generated output from Scripts/update_ncbi_codon_table.py #
 ##########################################################################
 
-
-# Data from NCBI genetic code table version 4.4
+# Data from NCBI genetic code table version 4.5
 
 register_ncbi_table(name="Standard",
                     alt_name="SGC0", id=1,
@@ -1144,7 +1143,7 @@ register_ncbi_table(name="Balanophoraceae Plastid",
                     alt_name=None, id=32,
                     table={"TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
                            "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
-                           "TAT": "Y", "TAC": "Y", "TAA": "W", "TGT": "C",
+                           "TAT": "Y", "TAC": "Y", "TAG": "W", "TGT": "C",
                            "TGC": "C", "TGG": "W", "CTT": "L", "CTC": "L",
                            "CTA": "L", "CTG": "L", "CCT": "P", "CCC": "P",
                            "CCA": "P", "CCG": "P", "CAT": "H", "CAC": "H",
@@ -1158,10 +1157,30 @@ register_ncbi_table(name="Balanophoraceae Plastid",
                            "GCA": "A", "GCG": "A", "GAT": "D", "GAC": "D",
                            "GAA": "E", "GAG": "E", "GGT": "G", "GGC": "G",
                            "GGA": "G", "GGG": "G"},
-                    stop_codons=["TAA", "TAG", "TGA"],
+                    stop_codons=["TAA", "TGA"],
                     start_codons=["TTG", "CTG", "ATT", "ATC", "ATA", "ATG",
                                   "GTG"])
 
+register_ncbi_table(name="Cephalodiscidae Mitochondrial",
+                    alt_name=None, id=33,
+                    table={"TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+                           "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+                           "TAT": "Y", "TAC": "Y", "TAA": "Y", "TGT": "C",
+                           "TGC": "C", "TGA": "W", "TGG": "W", "CTT": "L",
+                           "CTC": "L", "CTA": "L", "CTG": "L", "CCT": "P",
+                           "CCC": "P", "CCA": "P", "CCG": "P", "CAT": "H",
+                           "CAC": "H", "CAA": "Q", "CAG": "Q", "CGT": "R",
+                           "CGC": "R", "CGA": "R", "CGG": "R", "ATT": "I",
+                           "ATC": "I", "ATA": "I", "ATG": "M", "ACT": "T",
+                           "ACC": "T", "ACA": "T", "ACG": "T", "AAT": "N",
+                           "AAC": "N", "AAA": "K", "AAG": "K", "AGT": "S",
+                           "AGC": "S", "AGA": "S", "AGG": "K", "GTT": "V",
+                           "GTC": "V", "GTA": "V", "GTG": "V", "GCT": "A",
+                           "GCC": "A", "GCA": "A", "GCG": "A", "GAT": "D",
+                           "GAC": "D", "GAA": "E", "GAG": "E", "GGT": "G",
+                           "GGC": "G", "GGA": "G", "GGG": "G"},
+                    stop_codons=["TAG"],
+                    start_codons=["TTG", "CTG", "ATG", "GTG"])
 
 ########################################################################
 # End of auto-generated output from Scripts/update_ncbi_codon_table.py #
