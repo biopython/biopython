@@ -30,10 +30,8 @@ from io import StringIO
 
 class UndoHandle(object):
     """A Python handle that adds functionality for saving lines.
+
     Saves lines in a LIFO fashion.
-    Added methods:
-     - saveline    Save a line to be returned next time.
-     - peekline    Peek at the next line without consuming it.
     """
 
     def __init__(self, handle):
@@ -90,6 +88,7 @@ class UndoHandle(object):
 
     def saveline(self, line):
         """Store a line in the cache memory for later use.
+
         This acts to undo a readline, reflecting the name of the class: UndoHandle.
         """
         if line:
