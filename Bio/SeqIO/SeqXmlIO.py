@@ -14,7 +14,6 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
 
-import sys
 
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
@@ -429,8 +428,8 @@ class SeqXmlWriter(SequentialSequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
-    i.e. an instance or subclass of Bio.Alphapet.RNAAlphabet,
-    Bio.Alphapet.DNAAlphabet or Bio.Alphapet.ProteinAlphabet.
+    i.e. an instance or subclass of Bio.Alphabet.RNAAlphabet,
+    Bio.Alphabet.DNAAlphabet or Bio.Alphabet.ProteinAlphabet.
     """
 
     def __init__(
