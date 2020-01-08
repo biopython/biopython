@@ -14,20 +14,7 @@ go away.
 # this file. This line tells flake8 to ignore it for quality assurance:
 # flake8: noqa
 
-import sys
-
-import codecs
-
-
-def _bytes_bytearray_to_str(s):
-    """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
-    if isinstance(s, (bytes, bytearray)):
-        return s.decode()
-    return s
-
-
 import io
-import locale
 
 # Python 3.4 onwards, the standard library wrappers should work:
 def _binary_to_string_handle(handle):
@@ -54,9 +41,3 @@ def _binary_to_string_handle(handle):
     except AttributeError:
         pass
     return wrapped
-
-
-# On Python 3 urllib, urllib2, and urlparse were merged:
-from urllib.request import urlopen, Request, urlparse, urlcleanup
-from urllib.parse import urlencode, quote
-from urllib.error import URLError, HTTPError
