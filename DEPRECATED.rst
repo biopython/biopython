@@ -835,3 +835,9 @@ Bio.Statistics
 --------------
 This module was declared obsolete in Release 1.74, and deprecated in Release
 1.76.
+
+Bio.File
+--------
+The UndoHandle class was deprecated in Release 1.77, and moved to
+Bio/SearchIO/_legacy/ParserSupport.py, which was the only module in
+Biopython still using this class.
