@@ -38,8 +38,7 @@ consider multiple records an error).  For example, when dealing with PM
 JSON files saved by the opm library.
 
 However, if you just want the first record from a file containing multiple
-record, use the next() function on the iterator (or under Python 2, the
-iterator's next() method):
+record, use the next() function on the iterator:
 
     >>> from Bio import phenotype
     >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
