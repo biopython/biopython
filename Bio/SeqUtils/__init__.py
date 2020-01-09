@@ -112,10 +112,7 @@ def GC_skew(seq, window=100):
 
 def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     """Calculate and plot normal and accumulated GC skew (GRAPHICS !!!)."""
-    try:
-        import Tkinter as tkinter  # Python 2
-    except ImportError:
-        import tkinter  # Python 3
+    import tkinter
 
     yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
     xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
