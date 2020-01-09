@@ -41,7 +41,6 @@ Exceptions:
 """
 
 import re
-import sys  # for checking if Python 2
 
 # other Biopython stuff
 from Bio import SeqFeature
