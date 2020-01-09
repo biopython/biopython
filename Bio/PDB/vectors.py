@@ -297,9 +297,6 @@ class Vector:
         a = self._ar / numpy.array(x)
         return Vector(a)
 
-    # For Python 2:
-    __div__ = __truediv__
-
     def __pow__(self, other):
         """Return VectorxVector (cross product) or Vectorxscalar."""
         if isinstance(other, Vector):

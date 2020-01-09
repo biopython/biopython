@@ -303,7 +303,7 @@ class RestrictionType(type):
         else:
             raise TypeError
 
-    def __div__(cls, other):
+    def __truediv__(cls, other):
         """Override '/' operator to use as search method.
 
         >>> from Bio.Restriction import EcoRI
@@ -314,7 +314,7 @@ class RestrictionType(type):
         """
         return cls.search(other)
 
-    def __rdiv__(cls, other):
+    def __rtruediv__(cls, other):
         """Override division with reversed operands to use as search method.
 
         >>> from Bio.Restriction import EcoRI
@@ -322,20 +322,6 @@ class RestrictionType(type):
         [2]
 
         Returns RE.search(other).
-        """
-        return cls.search(other)
-
-    def __truediv__(cls, other):
-        """Override Python 3 division operator to use as search method.
-
-        Like __div__.
-        """
-        return cls.search(other)
-
-    def __rtruediv__(cls, other):
-        """As __truediv___, with reversed operands.
-
-        Like __rdiv__.
         """
         return cls.search(other)
 
