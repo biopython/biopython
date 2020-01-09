@@ -865,12 +865,8 @@ if __name__ == "__main__":
 
     # Ensure we have binary mode handles
     # (leave stderr as default text mode)
-    if sys.version_info[0] >= 3:
-        stdin = sys.stdin.buffer
-        stdout = sys.stdout.buffer
-    else:
-        stdin = sys.stdin
-        stdout = sys.stdout
+    stdin = sys.stdin.buffer
+    stdout = sys.stdout.buffer
 
     sys.stderr.write("Producing BGZF output from stdin...\n")
     w = BgzfWriter(fileobj=stdout)
@@ -879,6 +875,6 @@ if __name__ == "__main__":
         w.write(data)
         if not data:
             break
-    # Doing close with write an empty BGZF block as EOF marker:
+    # Doing close will write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")
