@@ -744,7 +744,7 @@ class SeqRecord:
         ...
         >>> format(record, "fasta")
         '>YP_025292.1 toxic membrane protein\nMKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF\n'
-        >>> print("Here is {record.id} in FASTA format:\n{record:fasta}")
+        >>> print(f"Here is {record.id} in FASTA format:\n{record:fasta}")
         Here is YP_025292.1 in FASTA format:
         >YP_025292.1 toxic membrane protein
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
