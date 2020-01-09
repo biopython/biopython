@@ -49,7 +49,7 @@ class _RestrictedDict(dict):
     pickled, for example for use in the multiprocessing library, we need to
     be able to pickle the restricted dictionary objects.
 
-    Using the default protocol, which is 0 on Python 2.x,
+    Using the default protocol, which is 3 on Python 3,
 
     >>> import pickle
     >>> y = pickle.loads(pickle.dumps(x))
@@ -58,7 +58,7 @@ class _RestrictedDict(dict):
     >>> y._length
     5
 
-    Using the highest protocol, which is 2 on Python 2.x,
+    Using the highest protocol, which is 4 on Python 3,
 
     >>> import pickle
     >>> z = pickle.loads(pickle.dumps(x, pickle.HIGHEST_PROTOCOL))
@@ -714,7 +714,7 @@ class SeqRecord:
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         <BLANKLINE>
 
-        The python print command automatically appends a new line, meaning
+        The Python print function automatically appends a new line, meaning
         in this example a blank line is shown.  If you look at the string
         representation you can see there is a trailing new line (shown as
         slash n) which is important when writing to a file or if
@@ -724,20 +724,33 @@ class SeqRecord:
         supported by Bio.SeqIO (e.g. some are for multiple sequences only,
         and binary formats are not supported).
         """
-        # See also the __format__ added for Python 2.6 / 3.0, PEP 3101
+        # See also the __format__ method
         # See also the Bio.Align.Generic.Alignment class and its format()
         return self.__format__(format)
 
     def __format__(self, format_spec):
-        """Return the record as a string in the specified file format.
+        r"""Return the record as a string in the specified file format.
 
-        This method supports the python format() function added in
-        Python 2.6/3.0.  The format_spec should be a lower case string
-        supported by Bio.SeqIO as an output file format. See also the
-        SeqRecord's format() method.
+        This method supports the Python format() function and f-strings.
+        The format_spec should be a lower case string supported by
+        Bio.SeqIO as a text output file format. Requesting a binary file
+        format raises a ValueError. e.g.
 
-        Under Python 3 binary formats raise a ValueError, while on
-        Python 2 this will work with a deprecation warning.
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
+        ...                    id="YP_025292.1", name="HokC",
+        ...                    description="toxic membrane protein")
+        ...
+        >>> format(record, "fasta")
+        '>YP_025292.1 toxic membrane protein\nMKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF\n'
+        >>> print("Here is {record.id} in FASTA format:\n{record:fasta}")
+        Here is YP_025292.1 in FASTA format:
+        >YP_025292.1 toxic membrane protein
+        MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+        <BLANKLINE>
+
+        See also the SeqRecord's format() method.
         """
         if not format_spec:
             # Follow python convention and default to using __str__
