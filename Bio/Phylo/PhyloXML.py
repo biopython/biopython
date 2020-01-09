@@ -711,21 +711,13 @@ class Confidence(PhyloElement):
         """Conduct reverse multiplication between values of two Confidence objects."""
         return other * self.value
 
-    def __div__(self, other):
-        """Conduct division between values of two Confidence objects."""
-        return self.value.__div__(other)
-
-    def __rdiv__(self, other):
-        """Conduct revers division between values of two Confidence objects."""
-        return other.__div__(self.value)
-
     def __truediv__(self, other):
-        """Rational-style division in Py3.0+."""
-        return self.value / other
+        """Conduct division between values of two Confidence objects."""
+        return self.value.__truediv__(other)
 
     def __rtruediv__(self, other):
-        """Conduct revers Rational-style division."""
-        return other / self.value
+        """Conduct reverse division between values of two Confidence objects."""
+        return other.__rtruediv__(self.value)
 
     def __floordiv__(self, other):
         """C-style and old-style division in Py3.0+."""
