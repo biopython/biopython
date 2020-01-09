@@ -404,11 +404,8 @@ def to_dict(qresults, key_function=None):
 
     Since Python 3.7, the default dict class maintains key order, meaning
     this dictionary will reflect the order of records given to it. For
-    CPython, this was already implemented in 3.6.
-
-    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
-    than 3.6 (and for other Python older than 3.7) so that you can always
-    assume the record order is preserved.
+    CPython and PyPy, this was already implemented for Python 3.6, so
+    effectively you can always assume the record order is preserved.
     """
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def _default_key_function(rec):
