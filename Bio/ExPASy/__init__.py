@@ -32,7 +32,7 @@ def get_prodoc_entry(
     >>> html = in_handle.read()
     >>> in_handle.close()
     >>> with open("myprodocrecord.html", "w") as out_handle:
-    ...     _ = out_handle.write(html)
+    ...     length = out_handle.write(html)
     ...
     >>> os.remove("myprodocrecord.html")  # tidy up
 
@@ -53,7 +53,7 @@ def get_prosite_entry(
     >>> html = in_handle.read()
     >>> in_handle.close()
     >>> with open("myprositerecord.html", "w") as out_handle:
-    ...     _ = out_handle.write(html)
+    ...     length = out_handle.write(html)
     ...
     >>> os.remove("myprositerecord.html")  # tidy up
 
