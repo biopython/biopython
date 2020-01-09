@@ -404,7 +404,7 @@ def write(motifs):
     """Return the representation of motifs in Cluster Buster position frequency matrix format."""
     lines = []
     for m in motifs:
-        line = ">{0}\n".format(m.name)
+        line = f">{m.name}\n"
         lines.append(line)
         for ACGT_counts in zip(
             m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]

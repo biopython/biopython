@@ -130,7 +130,7 @@ class Seq:
                 self.__class__.__name__, str(self)[:54], str(self)[-3:], a
             )
         else:
-            return "{0}({1!r}{2!s})".format(self.__class__.__name__, self._data, a)
+            return f"{self.__class__.__name__}({self._data!r}{a!s})"
 
     def __str__(self):
         """Return the full sequence as a python string, use str(my_seq).
@@ -206,9 +206,7 @@ class Seq:
             # other could be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
         return str(self) == str(other)
@@ -218,9 +216,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
@@ -236,9 +232,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
@@ -254,9 +248,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
@@ -272,9 +264,7 @@ class Seq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
@@ -357,9 +347,7 @@ class Seq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    )
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
                 )
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -391,9 +379,7 @@ class Seq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    )
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
                 )
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -416,7 +402,7 @@ class Seq:
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(str(self) * other, self.alphabet)
 
@@ -432,7 +418,7 @@ class Seq:
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(str(self) * other, self.alphabet)
 
@@ -451,7 +437,7 @@ class Seq:
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(str(self) * other, self.alphabet)
 
@@ -488,9 +474,7 @@ class Seq:
         # Other should be a Seq or a MutableSeq
         if not Alphabet._check_type_compatible([self.alphabet, other_alpha]):
             raise TypeError(
-                "Incompatible alphabets {0!r} and {1!r}".format(
-                    self.alphabet, other_alpha
-                )
+                f"Incompatible alphabets {self.alphabet!r} and {other_alpha!r}"
             )
         # Return as a string
         return str(other_sequence)
@@ -1351,7 +1335,7 @@ class Seq:
         else:
             alpha = self.alphabet  # modify!
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, {0!r}".format(gap))
+            raise ValueError(f"Unexpected gap character, {gap!r}")
         return Seq(str(self).replace(gap, ""), alpha)
 
     def join(self, other):
@@ -1380,9 +1364,7 @@ class Seq:
                 if a != c.alphabet:
                     if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
-                            "Incompatible alphabets {0!r} and {1!r}".format(
-                                a, c.alphabet
-                            )
+                            f"Incompatible alphabets {a!r} and {c.alphabet!r}"
                         )
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
             elif not isinstance(c, str):
@@ -1484,9 +1466,7 @@ class UnknownSeq(Seq):
             a = ""
         else:
             a = ", alphabet=%r" % self.alphabet
-        return "UnknownSeq({0}{1!s}, character={2!r})".format(
-            self._length, a, self._character
-        )
+        return f"UnknownSeq({self._length}{a!s}, character={self._character!r})"
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1540,7 +1520,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(len(self) * other, self.alphabet)
 
@@ -1556,7 +1536,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(len(self) * other, self.alphabet)
 
@@ -1575,7 +1555,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(len(self) * other, self.alphabet)
 
@@ -1966,9 +1946,7 @@ class UnknownSeq(Seq):
                 if a != c.alphabet:
                     if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
-                            "Incompatible alphabets {0!r} and {1!r}".format(
-                                a, c.alphabet
-                            )
+                            f"Incompatible alphabets {a!r} and {c.alphabet!r}"
                         )
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
                 if not isinstance(c, UnknownSeq):
@@ -2043,7 +2021,7 @@ class MutableSeq:
                 self.__class__.__name__, str(self[:54]), str(self[-3:]), a
             )
         else:
-            return "{0}('{1}'{2!s})".format(self.__class__.__name__, str(self), a)
+            return f"{self.__class__.__name__}('{str(self)}'{a!s})"
 
     def __str__(self):
         """Return the full sequence as a python string.
@@ -2091,9 +2069,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
             if isinstance(other, MutableSeq):
@@ -2105,9 +2081,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
             if isinstance(other, MutableSeq):
@@ -2125,9 +2099,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
             if isinstance(other, MutableSeq):
@@ -2145,9 +2117,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
             if isinstance(other, MutableSeq):
@@ -2165,9 +2135,7 @@ class MutableSeq:
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 warnings.warn(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    ),
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
                     BiopythonWarning,
                 )
             if isinstance(other, MutableSeq):
@@ -2238,9 +2206,7 @@ class MutableSeq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    )
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
                 )
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -2268,9 +2234,7 @@ class MutableSeq:
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
                 raise TypeError(
-                    "Incompatible alphabets {0!r} and {1!r}".format(
-                        self.alphabet, other.alphabet
-                    )
+                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
                 )
             # They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -2301,7 +2265,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(self.data * other, self.alphabet)
 
@@ -2320,7 +2284,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(self.data * other, self.alphabet)
 
@@ -2336,7 +2300,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(
-                "can't multiply {} by non-int type".format(self.__class__.__name__)
+                f"can't multiply {self.__class__.__name__} by non-int type"
             )
         return self.__class__(self.data * other, self.alphabet)
 
@@ -2796,15 +2760,15 @@ def _translate_str(
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
             raise CodonTable.TranslationError(
-                "First codon '{0}' is not a start codon".format(sequence[:3])
+                f"First codon '{sequence[:3]}' is not a start codon"
             )
         if n % 3 != 0:
             raise CodonTable.TranslationError(
-                "Sequence length {0} is not a multiple of three".format(n)
+                f"Sequence length {n} is not a multiple of three"
             )
         if str(sequence[-3:]).upper() not in stop_codons:
             raise CodonTable.TranslationError(
-                "Final codon '{0}' is not a stop codon".format(sequence[-3:])
+                f"Final codon '{sequence[-3:]}' is not a stop codon"
             )
         # Don't translate the stop symbol, and manually translate the M
         sequence = sequence[3:-3]
@@ -2844,7 +2808,7 @@ def _translate_str(
                 amino_acids.append(gap)
             else:
                 raise CodonTable.TranslationError(
-                    "Codon '{0}' is invalid".format(codon)
+                    f"Codon '{codon}' is invalid"
                 )
     return "".join(amino_acids)
 

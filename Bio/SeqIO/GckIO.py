@@ -25,7 +25,7 @@ def _read(handle, length):
     """Read the specified number of bytes from the given handle."""
     data = handle.read(length)
     if len(data) < length:
-        raise ValueError("Cannot read {} bytes from handle".format(length))
+        raise ValueError(f"Cannot read {length} bytes from handle")
     return data
 
 

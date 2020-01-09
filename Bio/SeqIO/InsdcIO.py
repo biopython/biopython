@@ -902,15 +902,13 @@ class GenBankWriter(_InsdcWriter):
                     padding = len(subkey) if len(subkey) > padding else padding
             # Construct output
             for key, data in comment.items():
-                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_START))
+                lines.append(f"##{key}{self.STRUCTURED_COMMENT_START}")
                 for subkey, subdata in data.items():
                     spaces = " " * (padding - len(subkey))
                     lines.append(
-                        "{0}{1}{2}{3}".format(
-                            subkey, spaces, self.STRUCTURED_COMMENT_DELIM, subdata
-                        )
+                        f"{subkey}{spaces}{self.STRUCTURED_COMMENT_DELIM}{subdata}"
                     )
-                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
+                lines.append(f"##{key}{self.STRUCTURED_COMMENT_END}")
         if "comment" in record.annotations:
             comment = record.annotations["comment"]
             if isinstance(comment, str):

@@ -48,7 +48,7 @@ def codeml(vers=None, verbose=False):
             # M2a_rel (NSsites 22) was introduced in PAML 4.6
             if test[0] == "m2a_rel" and int(version.split("_")[1][0]) < 6:
                 continue
-            print("\t{0}".format(version.replace("_", ".")))
+            print(f"\t{version.replace('_', '.')}")
             if test[0] in ["ngene2_mgene02", "ngene2_mgene34"] and \
                version == "4_6":
                 cml.tree = ".".join([cml.tree, "4.6"])
@@ -72,36 +72,36 @@ def baseml(vers=None, verbose=False):
         print(test[0])
         bml = baseml.Baseml()
         for version in versions:
-            print("\t{0}".format(version.replace("_", ".")))
+            print(f"\t{version.replace('_', '.')}")
             if test[1] is not None:
                 for n in test[1]:
                     if (version in ["4_3", "4_4", "4_4c", "4_5"] and
                             test[0] == "nparK" and n in [3, 4]):
                         continue
-                    print("\t\tn = {0}".format(n))
+                    print(f"\t\tn = {n}")
                     ctl_file = (os.path.join("Control_files", "baseml",
-                                "{0}{1}.ctl".format(test[0], n)))
+                                f"{test[0]}{n}.ctl"))
                     bml.read_ctl_file(ctl_file)
                     bml.alignment = alignment
                     bml.tree = tree
-                    out_file = "{0}{1}-{2}.out".format(test[0], n, version)
+                    out_file = f"{test[0]}{n}-{version}.out"
                     bml.out_file = (os.path.join("Results", "baseml", test[0],
                                     out_file))
-                    bin = "baseml{0}".format(version)
+                    bin = f"baseml{version}"
                     bml.run(command=bin, verbose=verbose, parse=False)
             else:
                 if (version in ["4_3", "4_4", "4_4c", "4_5"] and
                         test[0] == "alpha1rho1"):
                     continue
                 ctl_file = (os.path.join("Control_files", "baseml",
-                            "{0}.ctl".format(test[0])))
+                            f"{test[0]}.ctl"))
                 bml.read_ctl_file(ctl_file)
                 bml.alignment = alignment
                 bml.tree = tree
-                out_file = "{0}-{1}.out".format(test[0], version)
+                out_file = f"{test[0]}-{version}.out"
                 bml.out_file = (os.path.join("Results", "baseml", test[0],
                                 out_file))
-                bin = "baseml{0}".format(version)
+                bin = f"baseml{version}"
                 bml.run(command=bin, verbose=verbose, parse=False)
 
 
@@ -116,13 +116,13 @@ def yn00(vers=None, verbose=False):
         print(test)
         yn = yn00.Yn00()
         for version in versions:
-            print("\t{0}".format(version.replace("_", ".")))
+            print(f"\t{version.replace('_', '.')}")
             ctl_file = (os.path.join("Control_files", "yn00",
-                        "{0}.ctl".format(test)))
+                        f"{test}.ctl"))
             yn.read_ctl_file(ctl_file)
-            out_file = "{0}-{1}.out".format(test, version)
+            out_file = f"{test}-{version}.out"
             yn.out_file = os.path.join("Results", "yn00", out_file)
-            bin = "yn00{0}".format(version)
+            bin = f"yn00{version}"
             yn.run(command=bin, verbose=verbose, parse=False)
 
 

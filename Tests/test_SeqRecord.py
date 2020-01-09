@@ -154,14 +154,14 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
 
     def test_format_str(self):
         expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
-        self.assertEqual(expected, "{:fasta}".format(self.record))
+        self.assertEqual(expected, f"{self.record:fasta}")
 
     def test_format_str_binary(self):
         with self.assertRaisesRegex(
             ValueError,
             "Binary format sff cannot be used with SeqRecord format method"
         ):
-            "{:sff}".format(self.record)
+            f"{self.record:sff}"
 
     def test_format_spaces(self):
         rec = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
