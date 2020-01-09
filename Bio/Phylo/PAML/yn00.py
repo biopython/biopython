@@ -16,10 +16,6 @@ from ._paml import Paml
 from . import _parse_yn00
 
 
-# TODO - Restore use of with statement for closing handles automatically
-# after dropping Python 2.4
-
-
 class Yn00Error(EnvironmentError):
     """yn00 failed. Run with verbose=True to view yn00's error message."""
 
