@@ -63,8 +63,7 @@ record.  Alternatively, use this with a handle when downloading a single
 record from the internet.
 
 However, if you just want the first record from a file containing multiple
-record, use the next() function on the iterator (or under Python 2, the
-iterator's next() method):
+record, use the next() function on the iterator:
 
 >>> from Bio import SeqIO
 >>> record = next(SeqIO.parse("Fasta/f002", "fasta"))
@@ -151,9 +150,8 @@ CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
 >>> record_dict.close()
 
 Here the original file and what Biopython would output differ in the line
-wrapping. Also note that under Python 3, the get_raw method will return a
-bytes string, hence the use of decode to turn it into a (unicode) string.
-This is unnecessary on Python 2.
+wrapping. Also note that the get_raw method will return a bytes string,
+hence the use of decode to turn it into a (unicode) string.
 
 Also note that the get_raw method will preserve the newline endings. This
 example FASTQ file uses Unix style endings (b"\n" only),
@@ -873,10 +871,6 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> print(records["EAS54_6_R1_2_1_540_792"].seq)
     TTGGCAGGCCAAGGCCGATGGATCA
     >>> records.close()
-
-    Note that this pseudo dictionary will not support all the methods of a
-    true Python dictionary, for example values() is not defined as in Python 2
-    since this would require loading all of the records into memory at once.
 
     When you call the index function, it will scan through the file, noting
     the location of each record. When you access a particular record via the
