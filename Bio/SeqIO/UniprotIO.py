@@ -71,15 +71,6 @@ def UniprotIterator(
                     " (or XML as a string, but that's deprecated)"
                 )
 
-        if ElementTree is None:
-            from Bio import MissingExternalDependencyError
-
-            raise MissingExternalDependencyError(
-                "No ElementTree module was found. "
-                "Use Python 2.5+, lxml or elementtree if you "
-                "want to use Bio.SeqIO.UniprotIO."
-            )
-
         for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
                 yield Parser(
