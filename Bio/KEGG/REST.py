@@ -29,8 +29,8 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 """
 
+import io
 from urllib.request import urlopen
-from Bio._py3k import _binary_to_string_handle
 
 
 def _q(op, arg1, arg2=None, arg3=None):
@@ -46,7 +46,9 @@ def _q(op, arg1, arg2=None, arg3=None):
     if "image" == arg2:
         return resp
 
-    return _binary_to_string_handle(resp)
+    handle = io.TextIOWrapper(resp, encoding="UTF-8")
+    handle.url = resp.url
+    return handle
 
 
 # http://www.kegg.jp/kegg/rest/keggapi.html

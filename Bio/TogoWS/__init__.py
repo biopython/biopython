@@ -32,10 +32,9 @@ http://soapy.sourceforge.net/
 """
 
 
+import io
 import time
-from Bio._py3k import _binary_to_string_handle
 
-# Importing these functions with leading underscore as not intended for reuse
 from urllib.request import urlopen
 from urllib.parse import quote
 
@@ -327,12 +326,13 @@ def convert(data, in_format, out_format):
         raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
     url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
     # TODO - Should we just accept a string not a handle? What about a filename?
-    if hasattr(data, "read"):
+    try:
         # Handle
-        return _open(url, post=data.read())
-    else:
+        data = data.read()
+    except AttributeError:
         # String
-        return _open(url, post=data)
+        pass
+    return _open(url, post=data)
 
 
 def _open(url, post=None):
@@ -352,7 +352,6 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    # print(url)
     if post:
         handle = urlopen(url, post.encode())
     else:
@@ -361,7 +360,9 @@ def _open(url, post=None):
     # We now trust TogoWS to have set an HTTP error code, that
     # suffices for my current unit tests. Previously we would
     # examine the start of the data returned back.
-    return _binary_to_string_handle(handle)
+    text_handle = io.TextIOWrapper(handle, encoding="UTF-8")
+    text_handle.url = handle.url
+    return text_handle
 
 
 _open.previous = 0

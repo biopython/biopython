@@ -16,9 +16,8 @@ Functions:
 
 """
 
-# Importing these functions with leading underscore as not intended for reuse
+import io
 from urllib.request import urlopen
-from Bio._py3k import _binary_to_string_handle
 
 
 def get_prodoc_entry(
@@ -41,7 +40,7 @@ def get_prodoc_entry(
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
     """
-    return _binary_to_string_handle(urlopen("%s?%s" % (cgi, id)))
+    return _open("%s?%s" % (cgi, id))
 
 
 def get_prosite_entry(
@@ -64,7 +63,7 @@ def get_prosite_entry(
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
     """
-    return _binary_to_string_handle(urlopen("%s?%s" % (cgi, id)))
+    return _open("%s?%s" % (cgi, id))
 
 
 def get_prosite_raw(id, cgi=None):
@@ -91,8 +90,7 @@ def get_prosite_raw(id, cgi=None):
     HTTPError: ... Error 404: Not Found
 
     """
-    url = "https://prosite.expasy.org/%s.txt" % id
-    return _binary_to_string_handle(urlopen(url))
+    return _open("https://prosite.expasy.org/%s.txt" % id)
 
 
 def get_sprot_raw(id):
@@ -119,5 +117,12 @@ def get_sprot_raw(id):
     HTTPError: ... Error 404: 
 
     """  # noqa: W291
-    url = "http://www.uniprot.org/uniprot/%s.txt" % id
-    return _binary_to_string_handle(urlopen(url))
+    return _open("http://www.uniprot.org/uniprot/%s.txt" % id)
+
+
+def _open(url):
+    """Open URL and convert to text assuming UTF-8 encoding (PRIVATE)."""
+    handle = urlopen(url)
+    text_handle = io.TextIOWrapper(handle, encoding="UTF-8")
+    text_handle.url = handle.url
+    return text_handle
