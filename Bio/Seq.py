@@ -1,7 +1,7 @@
 # Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005, 2010 by M de Hoon.
-# Copyright 2007-2018 by Peter Cock.
+# Copyright 2007-2020 by Peter Cock.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -296,9 +296,6 @@ class Seq:
         >>> my_seq[5]
         'A'
         """
-        # Note since Python 2.0, __getslice__ is deprecated
-        # and __getitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Return a single letter as a string
             return self._data[index]
@@ -2194,9 +2191,6 @@ class MutableSeq:
         >>> my_seq[5]
         'A'
         """
-        # Note since Python 2.0, __getslice__ is deprecated
-        # and __getitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Return a single letter as a string
             return self.data[index]
@@ -2212,9 +2206,6 @@ class MutableSeq:
         >>> my_seq
         MutableSeq('TCTCGACGTCG')
         """
-        # Note since Python 2.0, __setslice__ is deprecated
-        # and __setitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Replacing a single letter with a new string
             self.data[index] = value
@@ -2235,10 +2226,6 @@ class MutableSeq:
         >>> my_seq
         MutableSeq('CTCGACGTCG')
         """
-        # Note since Python 2.0, __delslice__ is deprecated
-        # and __delitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
-
         # Could be deleting a single letter, or a slice
         del self.data[index]
 
