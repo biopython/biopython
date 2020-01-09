@@ -52,7 +52,7 @@ class TestDetailedRead(unittest.TestCase):
             self.records["dna"][2].description,
             'some special characters in the description\n<tag> "quoted string"'
         )
-    if not sys.platform == "win32":
+    if sys.platform != "win32":
         def test_unicode_characters_desc(self):
             """Test special unicode characters in the description."""
             self.assertEqual(self.records["rna"][2].description, "åÅüöÖßøä¢£$€香肠")
