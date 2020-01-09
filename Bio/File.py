@@ -23,22 +23,7 @@ import contextlib
 import itertools
 import platform
 
-try:
-    from collections import UserDict as _dict_base
-except ImportError:
-    from UserDict import DictMixin as _dict_base
-
-# Ordered dict is a language feature from Python 3.7 onwards.
-# CPython 3.6 also already has ordered dicts.
-# PyPy has always had ordered dicts.
-if (
-    sys.version_info >= (3, 7)
-    or platform.python_implementation() == "PyPy"
-    or (sys.version_info == (3, 6) and platform.python_implementation() == "CPython")
-):
-    _dict = dict
-else:
-    from collections import OrderedDict as _dict
+from collections import UserDict as _dict_base
 
 try:
     from sqlite3 import dbapi2 as _sqlite
@@ -329,7 +314,7 @@ class _IndexedSeqFileDict(_dict_base):
             offset_iter = ((key_function(k), o, l) for (k, o, l) in random_access_proxy)
         else:
             offset_iter = random_access_proxy
-        offsets = _dict()
+        offsets = {}
         for key, offset, length in offset_iter:
             # Note - we don't store the length because I want to minimise the
             # memory requirements. With the SQLite backend the length is kept

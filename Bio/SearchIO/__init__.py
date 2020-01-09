@@ -197,18 +197,10 @@ of the format's documentation.
 """
 
 import sys
-from collections import OrderedDict
 
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
-
-
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
-    _dict = dict
 
 
 __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
@@ -425,7 +417,7 @@ def to_dict(qresults, key_function=None):
     if key_function is None:
         key_function = _default_key_function
 
-    qdict = _dict()
+    qdict = {}
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:

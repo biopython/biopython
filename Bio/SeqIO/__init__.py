@@ -406,12 +406,6 @@ from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 from . import XdnaIO
 
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
-    _dict = dict
-
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
 #
@@ -819,7 +813,7 @@ def to_dict(sequences, key_function=None):
     if key_function is None:
         key_function = _default_key_function
 
-    d = _dict()
+    d = {}
     for record in sequences:
         key = key_function(record)
         if key in d:
