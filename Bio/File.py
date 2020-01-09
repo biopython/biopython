@@ -109,7 +109,7 @@ def as_handle(handleish, mode="r", **kwargs):
             pass
 
     if isinstance(handleish, str):
-        if sys.version_info[0] >= 3 and "U" in mode:
+        if "U" in mode:
             mode = mode.replace("U", "")
         if "encoding" in kwargs:
             with codecs.open(handleish, mode, **kwargs) as fp:
