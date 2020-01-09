@@ -16,7 +16,6 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 import os
-import sys
 
 from Bio import BiopythonDeprecationWarning
 
@@ -175,7 +174,7 @@ class DBServer:
         self.module = module
         if module_name is None:
             module_name = module.__name__
-        if module_name == "mysql.connector" and sys.version_info[0] == 3:
+        if module_name == "mysql.connector":
             wrap_cursor = True
         else:
             wrap_cursor = False

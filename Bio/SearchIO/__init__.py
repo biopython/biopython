@@ -307,7 +307,7 @@ def parse(handle, format=None, **kwargs):
 
     # HACK: force BLAST XML decoding to use utf-8
     handle_kwargs = {}
-    if format == "blast-xml" and sys.version_info[0] > 2:
+    if format == "blast-xml":
         handle_kwargs["encoding"] = "utf-8"
 
     # and start iterating
