@@ -10,9 +10,6 @@ Unless you are writing a new parser or writer for Bio.AlignIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-
-import sys  # for checking if Python 2
-
 from Bio.Alphabet import single_letter_alphabet
 
 
