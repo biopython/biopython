@@ -624,7 +624,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     subtype = handle.headers.get_content_subtype()
     if subtype == "plain":
         url = handle.url
-        handle = io.TextIOWrapper(handle, encoding="utf8")
+        handle = io.TextIOWrapper(handle, encoding="UTF-8")
         handle.url = url
     return handle
 

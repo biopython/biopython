@@ -13,31 +13,3 @@ go away.
 # From the point of view of pep8 and flake8, there are lots of issues with
 # this file. This line tells flake8 to ignore it for quality assurance:
 # flake8: noqa
-
-import io
-
-# Python 3.4 onwards, the standard library wrappers should work:
-def _binary_to_string_handle(handle):
-    """Treat a binary (bytes) handle like a text (unicode) handle (PRIVATE)."""
-    try:
-        # If this is a network handle from urllib,
-        # the HTTP headers may tell us the encoding.
-        encoding = handle.headers.get_content_charset()
-    except AttributeError:
-        encoding = None
-    if encoding is None:
-        # The W3C recommendation is:
-        # When no explicit charset parameter is provided by the sender,
-        # media subtypes of the "text" type are defined to have a default
-        # charset value of "ISO-8859-1" when received via HTTP.
-        # "ISO-8859-1" is also known as 'latin-1'
-        # See the following for more detail:
-        # https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1
-        encoding = "latin-1"
-    wrapped = io.TextIOWrapper(io.BufferedReader(handle), encoding=encoding)
-    try:
-        # If wrapping an online handle, this is nice to have:
-        wrapped.url = handle.url
-    except AttributeError:
-        pass
-    return wrapped
