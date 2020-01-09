@@ -237,7 +237,7 @@ class XdnaWriter(SequenceWriter):
         if record.description.startswith(record.id):
             comment = record.description
         else:
-            comment = "{} {}".format(record.id, record.description)
+            comment = f"{record.id} {record.description}"
 
         # Write header
         self.handle.write(
@@ -273,7 +273,7 @@ class XdnaWriter(SequenceWriter):
         drop = len(record.features) - len(features)
         if drop > 0:
             warnings.warn(
-                "Dropping {} features with fuzzy locations".format(drop),
+                f"Dropping {drop} features with fuzzy locations",
                 BiopythonWarning,
             )
 
@@ -282,7 +282,7 @@ class XdnaWriter(SequenceWriter):
         if len(features) > 255:
             drop = len(features) - 255
             warnings.warn(
-                "Too many features, dropping the last {}".format(drop), BiopythonWarning
+                f"Too many features, dropping the last {drop}", BiopythonWarning
             )
             features = features[:255]
 

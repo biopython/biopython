@@ -1000,10 +1000,8 @@ class DictionaryBuilder:
                     dna = Seq(enzymedict[other][0], generic_dna)
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
-                    sense = "(?=(?P<{}>{})|{})".format(other, sense1, sense2)
-                    antisense = "(?=(?P<{}_as>{}|{}))".format(
-                        other, antisense1, antisense2
-                    )
+                    sense = f"(?=(?P<{other}>{sense1})|{sense2})"
+                    antisense = f"(?=(?P<{other}_as>{antisense1}|{antisense2}))"
                     reg = sense + "|" + antisense
                     line[1] = line[1] + "|" + enzymedict[other][0]
                     line[-1] = reg

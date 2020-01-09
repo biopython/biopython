@@ -636,16 +636,16 @@ class SeqRecord:
         """
         lines = []
         if self.id:
-            lines.append("ID: {0}".format(self.id))
+            lines.append(f"ID: {self.id}")
         if self.name:
-            lines.append("Name: {0}".format(self.name))
+            lines.append(f"Name: {self.name}")
         if self.description:
-            lines.append("Description: {0}".format(self.description))
+            lines.append(f"Description: {self.description}")
         if self.dbxrefs:
             lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
-        lines.append("Number of features: {0}".format(len(self.features)))
+        lines.append(f"Number of features: {len(self.features)}")
         for a in self.annotations:
-            lines.append("/{0}={1}".format(a, str(self.annotations[a])))
+            lines.append(f"/{a}={str(self.annotations[a])}")
         if self.letter_annotations:
             lines.append(
                 "Per letter annotation for: " + ", ".join(self.letter_annotations)

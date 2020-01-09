@@ -73,40 +73,40 @@ class Motif(motifs.Motif):
 
         We choose to provide only the filled metadata information.
         """
-        tf_name_str = "TF name\t{0}\n".format(self.name)
-        matrix_id_str = "Matrix ID\t{0}\n".format(self.matrix_id)
+        tf_name_str = f"TF name\t{self.name}\n"
+        matrix_id_str = f"Matrix ID\t{self.matrix_id}\n"
         the_string = "".join([tf_name_str, matrix_id_str])
         if self.collection:
-            collection_str = "Collection\t{0}\n".format(self.collection)
+            collection_str = f"Collection\t{self.collection}\n"
             the_string = "".join([the_string, collection_str])
         if self.tf_class:
-            tf_class_str = "TF class\t{0}\n".format(self.tf_class)
+            tf_class_str = f"TF class\t{self.tf_class}\n"
             the_string = "".join([the_string, tf_class_str])
         if self.tf_family:
-            tf_family_str = "TF family\t{0}\n".format(self.tf_family)
+            tf_family_str = f"TF family\t{self.tf_family}\n"
             the_string = "".join([the_string, tf_family_str])
         if self.species:
-            species_str = "Species\t{0}\n".format(",".join(self.species))
+            species_str = f"Species\t{','.join(self.species)}\n"
             the_string = "".join([the_string, species_str])
         if self.tax_group:
-            tax_group_str = "Taxonomic group\t{0}\n".format(self.tax_group)
+            tax_group_str = f"Taxonomic group\t{self.tax_group}\n"
             the_string = "".join([the_string, tax_group_str])
         if self.acc:
-            acc_str = "Accession\t{0}\n".format(self.acc)
+            acc_str = f"Accession\t{self.acc}\n"
             the_string = "".join([the_string, acc_str])
         if self.data_type:
-            data_type_str = "Data type used\t{0}\n".format(self.data_type)
+            data_type_str = f"Data type used\t{self.data_type}\n"
             the_string = "".join([the_string, data_type_str])
         if self.medline:
-            medline_str = "Medline\t{0}\n".format(self.medline)
+            medline_str = f"Medline\t{self.medline}\n"
             the_string = "".join([the_string, medline_str])
         if self.pazar_id:
-            pazar_id_str = "PAZAR ID\t{0}\n".format(self.pazar_id)
+            pazar_id_str = f"PAZAR ID\t{self.pazar_id}\n"
             the_string = "".join([the_string, pazar_id_str])
         if self.comment:
-            comment_str = "Comments\t{0}\n".format(self.comment)
+            comment_str = f"Comments\t{self.comment}\n"
             the_string = "".join([the_string, comment_str])
-        matrix_str = "Matrix:\n{0}\n\n".format(self.counts)
+        matrix_str = f"Matrix:\n{self.counts}\n\n"
         the_string = "".join([the_string, matrix_str])
         return the_string
 
@@ -175,8 +175,8 @@ def write(motifs, format):
         motif = motifs[0]
         counts = motif.counts
         for letter in letters:
-            terms = ["{0:6.2f}".format(value) for value in counts[letter]]
-            line = "{0}\n".format(" ".join(terms))
+            terms = [f"{value:6.2f}" for value in counts[letter]]
+            line = f"{' '.join(terms)}\n"
             lines.append(line)
     elif format == "jaspar":
         for m in motifs:
@@ -185,11 +185,11 @@ def write(motifs, format):
                 matrix_id = m.matrix_id
             except AttributeError:
                 matrix_id = None
-            line = ">{0} {1}\n".format(matrix_id, m.name)
+            line = f">{matrix_id} {m.name}\n"
             lines.append(line)
             for letter in letters:
-                terms = ["{0:6.2f}".format(value) for value in counts[letter]]
-                line = "{0} [{1}]\n".format(letter, " ".join(terms))
+                terms = [f"{value:6.2f}" for value in counts[letter]]
+                line = f"{letter} [{' '.join(terms)}]\n"
                 lines.append(line)
     else:
         raise ValueError("Unknown JASPAR format %s" % format)

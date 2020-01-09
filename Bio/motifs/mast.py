@@ -112,18 +112,18 @@ def __make_diagram(record, sequence_tree):
         return str(sequence_length)
     if record.strand_handling == "combine":
         motif_strs = [
-            "[{}{}]".format("-" if hit_ele.get("rc") == "y" else "+", hit_motif.name)
+            f"[{'-' if hit_ele.get('rc') == 'y' else '+'}{hit_motif.name}]"
             for hit_ele, hit_motif in zip(hit_eles, hit_motifs)
         ]
     elif record.strand_handling == "unstranded":
         motif_strs = [
-            "[{}]".format(hit_motif.name)
+            f"[{hit_motif.name}]"
             for hit_ele, hit_motif in zip(hit_eles, hit_motifs)
         ]
     else:
         # TODO - more strand_handling possibilities?
         raise Exception(
-            "Strand handling option {} not parsable".format(record.strand_handling)
+            f"Strand handling option {record.strand_handling} not parsable"
         )
     tail_length = (
         sequence_length - int(hit_eles[-1].get("pos")) - hit_motifs[-1].length + 1

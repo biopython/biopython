@@ -99,7 +99,7 @@ class Hhsuite2TextParser:
         match = re.search(_RE_HIT_BLOCK_DESC, self.line)
         if not match:
             raise RuntimeError(
-                "Unexpected content in HIT_BLOCK_DESC line'{}'".format(self.line)
+                f"Unexpected content in HIT_BLOCK_DESC line'{self.line}'"
             )
         hit_data = {
             "hit_id": match.group(1),
@@ -146,9 +146,7 @@ class Hhsuite2TextParser:
                 except KeyError:
                     # We trigger warnings here as it's not a big enough problem to crash, but indicates something unexpected.
                     warnings.warn(
-                        "HHsuite parser: unable to extract {} from line: {}".format(
-                            key, line
-                        )
+                        f"HHsuite parser: unable to extract {key} from line: {line}"
                     )
 
     def _parse_hit_match_block(self, hit_match_data):

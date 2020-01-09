@@ -116,13 +116,13 @@ def clear_output():
 def apply_operation():
     """Do the selected operation."""
     codon_table = codon_list.get(codon_list.curselection())
-    print("Code: {}".format(codon_table))
+    print(f"Code: {codon_table}")
 
     seq = "".join(input_text.get(1.0, tk.END).split())
-    print("Input sequence: {}".format(seq))
+    print(f"Input sequence: {seq}")
 
     operation = transform_var.get()
-    print("Operation: {}".format(operation))
+    print(f"Operation: {operation}")
 
     if operation == "transcribe":
         result = transcribe(seq)
@@ -135,7 +135,7 @@ def apply_operation():
 
     output_text.delete(1.0, tk.END)
     output_text.insert(tk.END, result)
-    print("Result: {}".format(result))
+    print(f"Result: {result}")
     return
 
 

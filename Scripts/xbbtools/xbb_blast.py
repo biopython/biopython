@@ -93,7 +93,7 @@ class BlastIt:
                     title="Please locate your BLAST program folder:"
                 )
                 self.blast_path += os.sep
-                if os.system("{}blastn -version".format(self.blast_path)):
+                if os.system(f"{self.blast_path}blastn -version"):
                     messagebox.showerror(
                         "xbb tools",
                         "Wrong folder or missing BLAST"

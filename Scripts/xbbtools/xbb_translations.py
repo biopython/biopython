@@ -79,7 +79,7 @@ class xbb_translations:
         protein += (((length - (abs(frame) - 1)) % 3) + 2) * " "
         if frame < 0:
             protein = protein[::-1]
-        res = self.header_nice("Frame {} translation".format(frame), seq)
+        res = self.header_nice(f"Frame {frame} translation", seq)
         for i in range(0, length, 60):
             subseq = seq[i : i + 60]
             p = i // 3

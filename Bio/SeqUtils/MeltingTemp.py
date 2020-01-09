@@ -1127,7 +1127,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     elif rna == 1:
         return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc, nn_table=RNA_NN2)
     else:
-        raise ValueError("rna={0} not supported".format(rna))
+        raise ValueError(f"rna={rna} not supported")
 
 
 if __name__ == "__main__":

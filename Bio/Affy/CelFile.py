@@ -224,9 +224,7 @@ def read_v4(f):
     # data.
     def raiseBadHeader(field, expected):
         actual = int(headersMap[field])
-        message = "The header {field} is expected to be 0, not {value}".format(
-            value=actual, field=field
-        )
+        message = f"The header {field} is expected to be 0, not {actual}"
         if actual != expected:
             raise ParserError(message)
 

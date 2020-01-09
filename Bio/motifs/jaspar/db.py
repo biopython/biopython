@@ -357,7 +357,7 @@ class JASPAR5:
         # we should probably raise an exception
         if not row:
             warnings.warn(
-                "Could not fetch JASPAR motif with internal ID = {0}".format(int_id),
+                f"Could not fetch JASPAR motif with internal ID = {int_id}",
                 BiopythonWarning,
             )
             return None
