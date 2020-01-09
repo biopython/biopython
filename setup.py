@@ -80,7 +80,6 @@ def osx_clang_fix():
     # see http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011240.html
     if sys.platform != "darwin":
         return
-    # see also Bio/_py3k/__init__.py (which we can't use in setup.py)
     if sys.version_info[0] >= 3:
         from subprocess import getoutput
     else:
@@ -299,7 +298,6 @@ PACKAGES = [
     "Bio.UniGene",
     "Bio.UniProt",
     "Bio.Wise",
-    "Bio._py3k",
     # Other top level packages,
     "BioSQL",
 ]
