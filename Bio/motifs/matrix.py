@@ -157,12 +157,7 @@ class GenericPositionMatrix(dict):
         """Return the consensus sequence."""
         sequence = ""
         for i in range(self.length):
-            try:
-                maximum = float("-inf")
-            except ValueError:
-                # On Python 2.5 or older that was handled in C code,
-                # and failed on Windows XP 32bit
-                maximum = -1e400
+            maximum = -math.inf
             for letter in self.alphabet:
                 count = self[letter][i]
                 if count > maximum:
@@ -176,12 +171,7 @@ class GenericPositionMatrix(dict):
         """Return the anticonsensus sequence."""
         sequence = ""
         for i in range(self.length):
-            try:
-                minimum = float("inf")
-            except ValueError:
-                # On Python 2.5 or older that was handled in C code,
-                # and failed on Windows XP 32bit
-                minimum = 1e400
+            minimum = math.inf
             for letter in self.alphabet:
                 count = self[letter][i]
                 if count < minimum:
@@ -335,19 +325,13 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = math.log(p / b, 2)
                     else:
-                        # TODO - Ensure this has unittest coverage!
-                        try:
-                            logodds = float("-inf")
-                        except ValueError:
-                            # On Python 2.5 or older that was handled in C code,
-                            # and failed on Windows XP 32bit
-                            logodds = -1e400
+                        logodds = -math.inf
                 else:
                     p = self[letter][i]
                     if p > 0:
-                        logodds = float("inf")
+                        logodds = math.inf
                     else:
-                        logodds = float("nan")
+                        logodds = math.nan
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
         return pssm
