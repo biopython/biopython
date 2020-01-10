@@ -16,34 +16,6 @@ from random import shuffle
 from Bio import bgzf
 
 
-def _have_bug17666():
-    """Debug function to check if Python's gzip is broken (PRIVATE).
-
-    Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
-    3.2.4 and 3.3.1 only.
-    """
-    from io import BytesIO
-
-    h = gzip.GzipFile(fileobj=BytesIO(bgzf._bgzf_eof))
-    try:
-        data = h.read()
-        h.close()
-        assert not data, "Should be zero length, not %i" % len(data)
-        return False
-    except TypeError as err:
-        # TypeError: integer argument expected, got 'tuple'
-        return True
-
-
-if _have_bug17666():
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Your Python has a broken gzip library, see "
-        "http://bugs.python.org/issue17666 for details"
-    )
-
-
 class BgzfTests(unittest.TestCase):
     def setUp(self):
         self.temp_file = "temp.bgzf"
