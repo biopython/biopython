@@ -46,8 +46,7 @@ class CodonAlignment(MultipleSeqAlignment):
         for rec in self:
             if not isinstance(rec.seq, CodonSeq):
                 raise TypeError(
-                    "CodonSeq objects are expected in each "
-                    "SeqRecord in CodonAlignment"
+                    "CodonSeq objects are expected in each SeqRecord in CodonAlignment"
                 )
 
         if self.get_alignment_length() % 3 != 0:
@@ -141,8 +140,7 @@ class CodonAlignment(MultipleSeqAlignment):
                 return CodonAlignment(merged, alphabet=alpha)
             else:
                 raise TypeError(
-                    "Only CodonAlignment with the same CodonAlphabet can be "
-                    "combined."
+                    "Only CodonAlignment with the same CodonAlphabet can be combined."
                 )
         elif isinstance(other, MultipleSeqAlignment):
             if len(self) != len(other):
@@ -271,7 +269,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
     if len(set(codon_aln_len)) != 1:
         raise RuntimeError(
-            "CodonAlignment object for mktest should be of" " equal length."
+            "CodonAlignment object for mktest should be of equal length."
         )
     codon_num = codon_aln_len[0] // 3
     # prepare codon_dict (taking stop codon as an extra amino acid)
