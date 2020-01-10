@@ -355,7 +355,7 @@ class SeqXmlIterator:
         self.parser.setContentHandler(content_handler)
         self.parser.setFeature(handler.feature_namespaces, True)
         try:
-            handle = open(stream_or_path, 'rb')
+            handle = open(stream_or_path, "rb")
         except TypeError:  # not a path, assume we received a stream
             # Make sure we got a binary handle. If we got a text handle, then
             # the parser will still run but unicode characters will be garbled
