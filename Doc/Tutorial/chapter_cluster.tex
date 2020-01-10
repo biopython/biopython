@@ -705,17 +705,11 @@ For example, you can use
 \end{minted}
 to open a gzipped file, or
 \begin{minted}{pycon}
->>> from urllib.request import urlopen # Python 3 only
+>>> from urllib.request import urlopen
 >>> from io import TextIOWrapper
 >>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
 \end{minted}
 to open a file stored on the Internet before calling \verb|read|.
-
-Note for Python 2 this can be done by using:
-\begin{minted}{pycon}
->>> from urllib import urlopen # Python 2 only
->>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt")
-\end{minted}
 
 The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. In this file format, rows represent genes and columns represent samples or observations. For a simple time course, a minimal input file would look like this:
 
