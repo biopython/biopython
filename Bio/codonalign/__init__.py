@@ -79,7 +79,7 @@ def build(
 
     # check the type of object of pro_align
     if not isinstance(pro_align, MultipleSeqAlignment):
-        raise TypeError("the first argument should be a MultipleSeqAlignment " "object")
+        raise TypeError("the first argument should be a MultipleSeqAlignment object")
     # check the alphabet of pro_align
     for pro in pro_align:
         if not isinstance(_get_base_alphabet(pro.seq.alphabet), ProteinAlphabet):
@@ -116,7 +116,7 @@ def build(
             corr_method = 0
         else:
             raise TypeError(
-                "Nucl Sequences Error, Unknown type to assign " "correspondence method"
+                "Nucl Sequences Error, Unknown type to assign correspondence method"
             )
     else:
         if not isinstance(corr_dict, dict):
@@ -136,14 +136,13 @@ def build(
                 pass
             else:
                 raise TypeError(
-                    "Nucl Sequences Error, Unknown type of " "Nucleotide Records!"
+                    "Nucl Sequences Error, Unknown type of Nucleotide Records!"
                 )
             corr_method = 2
         else:
             raise RuntimeError(
-                "Number of items in corr_dict ({0}) is less "
-                "than number of protein records "
-                "({1})".format(len(corr_dict), pro_num)
+                "Number of items in corr_dict ({0}) is less than number of protein "
+                "records ({1})".format(len(corr_dict), pro_num)
             )
 
     # set up pro-nucl correspondence based on corr_method
@@ -248,9 +247,7 @@ def _get_aa_regex(codon_table, stop="*", unknown="X"):
     from Bio.Data.CodonTable import CodonTable
 
     if not isinstance(codon_table, CodonTable):
-        raise TypeError(
-            "Input table is not a instance of " "Bio.Data.CodonTable object"
-        )
+        raise TypeError("Input table is not a instance of Bio.Data.CodonTable object")
     aa2codon = {}
     for codon, aa in codon_table.forward_table.items():
         aa2codon.setdefault(aa, []).append(codon)
@@ -278,7 +275,7 @@ def _check_corr(
 
     if not isinstance(pro, SeqRecord) or not isinstance(nucl, SeqRecord):
         raise TypeError(
-            "_check_corr accepts two SeqRecord object. Please " "check your input."
+            "_check_corr accepts two SeqRecord object. Please check your input."
         )
 
     def get_alpha(alpha):
@@ -401,7 +398,7 @@ def _check_corr(
                         break
                 if qcodon == -1:
                     warnings.warn(
-                        "first frameshift detection failed for " "{0}".format(nucl.id),
+                        "first frameshift detection failed for {0}".format(nucl.id),
                         BiopythonWarning,
                     )
             # check anchors in the middle
@@ -419,7 +416,7 @@ def _check_corr(
                     qcodon = None
                 elif qcodon == -1:
                     warnings.warn(
-                        "middle frameshift detection failed for " "{0}".format(nucl.id),
+                        "middle frameshift detection failed for {0}".format(nucl.id),
                         BiopythonWarning,
                     )
             # check the last anchor
@@ -462,7 +459,7 @@ def _check_corr(
                         break
                 if qcodon == -1:
                     warnings.warn(
-                        "last frameshift detection failed for " "{0}".format(nucl.id),
+                        "last frameshift detection failed for {0}".format(nucl.id),
                         BiopythonWarning,
                     )
             # try global match

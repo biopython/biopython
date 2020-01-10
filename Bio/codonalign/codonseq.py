@@ -126,10 +126,8 @@ class CodonSeq(Seq):
         """Get the index codon from the sequence."""
         if len({i % 3 for i in self.rf_table}) != 1:
             raise RuntimeError(
-                "frameshift detected. "
-                "CodonSeq object is not able to deal "
-                "with codon sequence with frameshift. "
-                "Please use normal slice option."
+                "frameshift detected. CodonSeq object is not able to deal with "
+                "codon sequence with frameshift. Please use normal slice option."
             )
         if isinstance(index, int):
             if index != -1:
@@ -208,9 +206,8 @@ class CodonSeq(Seq):
                 amino_acids.append(codon_table.forward_table[codon])
             except KeyError:
                 raise RuntimeError(
-                    "Unknown codon detected ({0}). Did you "
-                    "forget to specify the ungap_seq "
-                    "argument?".format(codon)
+                    "Unknown codon detected ({0}). Did you forget to specify the "
+                    "ungap_seq argument?".format(codon)
                 )
         return "".join(amino_acids)
 
@@ -280,7 +277,7 @@ class CodonSeq(Seq):
                 )
             alpha = _ungap(self.alphabet)
         elif not gap:
-            raise ValueError("Gap character not given and not defined in " "alphabet")
+            raise ValueError("Gap character not given and not defined in alphabet")
         else:
             alpha = self.alphabet  # modify!
         if len(gap) != 1 or not isinstance(gap, str):
@@ -374,9 +371,7 @@ def cal_dn_ds(
     if cfreq is None:
         cfreq = "F3x4"
     elif cfreq is not None and method != "ML":
-        raise RuntimeError(
-            "cfreq can only be specified when you " "are using ML method"
-        )
+        raise RuntimeError("cfreq can only be specified when you are using ML method")
     if cfreq not in ("F1x4", "F3x4", "F61"):
         import warnings
 
@@ -501,8 +496,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     """
     if not isinstance(codon1, str) or not isinstance(codon2, str):
         raise TypeError(
-            "_count_diff_NG86 accepts string object "
-            "to represent codon ({0}, {1} "
+            "_count_diff_NG86 accepts string object to represent codon ({0}, {1} "
             "detected)".format(type(codon1), type(codon2))
         )
     if len(codon1) != 3 or len(codon2) != 3:
@@ -516,14 +510,12 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     base_tuple = ("A", "C", "G", "T")
     if not all(i in base_tuple for i in codon1):
         raise RuntimeError(
-            "Unrecognized character detected in codon1 {0} "
-            "(Codons consist of "
+            "Unrecognized character detected in codon1 {0} (Codons consist of "
             "A, T, C or G)".format(codon1)
         )
     if not all(i in base_tuple for i in codon2):
         raise RuntimeError(
-            "Unrecognized character detected in codon2 {0} "
-            "(Codons consist of "
+            "Unrecognized character detected in codon2 {0} (Codons consist of "
             "A, T, C or G)".format(codon2)
         )
     if codon1 == codon2:
@@ -675,7 +667,7 @@ def _get_codon_fold(codon_table):
                 fold += "4"
             else:
                 raise RuntimeError(
-                    "Unknown Error, cannot assign the " "position to a fold"
+                    "Unknown Error, cannot assign the position to a fold"
                 )
             codon_base_lst[i] = b
         return fold
@@ -926,8 +918,8 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table=default_codon_ta
     """
     if len(codon_lst1) != len(codon_lst2):
         raise RuntimeError(
-            "Length of two codon_lst should be the same "
-            "(%d and %d detected)" % (len(codon_lst1), len(codon_lst2))
+            "Length of two codon_lst should be the same (%d and %d detected)"
+            % (len(codon_lst1), len(codon_lst2))
         )
     else:
         length = len(codon_lst1)
@@ -989,8 +981,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
     """
     if not isinstance(codon1, str) or not isinstance(codon2, str):
         raise TypeError(
-            "_count_diff_YN00 accepts string object "
-            "to represent codon ({0}, {1} "
+            "_count_diff_YN00 accepts string object to represent codon ({0}, {1} "
             "detected)".format(type(codon1), type(codon2))
         )
     if len(codon1) != 3 or len(codon2) != 3:
@@ -1010,14 +1001,12 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
     base_tuple = ("A", "C", "G", "T")
     if not all(i in base_tuple for i in codon1):
         raise RuntimeError(
-            "Unrecognized character detected in codon1 {0} "
-            "(Codons consist of "
+            "Unrecognized character detected in codon1 {0} (Codons consist of "
             "A, T, C or G)".format(codon1)
         )
     if not all(i in base_tuple for i in codon2):
         raise RuntimeError(
-            "Unrecognized character detected in codon2 {0} "
-            "(Codons consist of "
+            "Unrecognized character detected in codon2 {0} (Codons consist of "
             "A, T, C or G)".format(codon2)
         )
     if codon1 == codon2:
