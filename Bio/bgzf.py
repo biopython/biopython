@@ -214,6 +214,37 @@ you want to index BGZF compressed sequence files:
 >>> print(record.id)
 NC_000932.1
 
+Text Mode
+---------
+
+Like the standard library gzip.open(...), the BGZF code defaults to opening
+files in binary mode.
+
+You can request the file be opened in text mode, but beware that this is hard
+coded to the simple "latin1" (aka "iso-8859-1") encoding (which includes all
+the ASCII characters), which works well with most Western European languages.
+However, it is not fully compatible with the more widely used UTF-8 encoding.
+
+In variable width encodings like UTF-8, some single characters in the unicode
+text output are represented by multiple bytes in the raw binary form. This is
+problematic with BGZF, as we cannot always decode each block in isolation - a
+single unicode character could be split over two blocks. This can even happen
+with fixed width unicode encodings, as the BGZF block size is not fixed.
+
+Therefore, this module is currently restricted to only support single byte
+unicode encodings, such as ASCII, "latin1" (which is a superset of ASCII), or
+potentially other character maps (not implemented).
+
+Furthermore, unlike the default text mode on Python 3, we do not attempt to
+implement univeral new line mode. This transforms the various operating system
+new line conventions like Windows (CR LF or "\r\n"), Unix (just LF, "\n"), or
+old Macs (just CR, "\r"), into just LF ("\n"). Here we have the same problem -
+is "\r" at the end of a block an incomplete Windows style new line?
+
+Instead, you will get the CR ("\r") and LF ("\n") characters as is.
+
+If your data is in UTF-8 or any other incompatible encoding, you must use
+binary mode, and decode the appropriate fragments yourself.
 """
 
 import codecs
@@ -233,7 +264,15 @@ _bytes_BC = b"BC"
 
 
 def open(filename, mode="rb"):
-    """Open a BGZF file for reading, writing or appending."""
+    r"""Open a BGZF file for reading, writing or appending.
+
+    If text mode is requested, in order to avoid multi-byte characters, this is
+    hard coded to use the "latin1" encoding, and "\r" and "\n" are passed as is
+    (without implementing universal new line mode).
+
+    If your data is in UTF-8 or any other incompatible encoding, you must use
+    binary mode, and decode the appropriate fragments yourself.
+    """
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
     elif "w" in mode.lower() or "a" in mode.lower():
