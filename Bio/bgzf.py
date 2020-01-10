@@ -247,7 +247,6 @@ If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
 
-import codecs
 import struct
 import sys
 import zlib
@@ -485,7 +484,8 @@ def _load_bgzf_block(handle, text_mode=False):
         raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
     if text_mode:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
-        return block_size, codecs.latin_1_decode(data)[0]
+        # (i.e. ASCII), but critically is a single byte encoding
+        return block_size, data.decode("latin-1")
     else:
         return block_size, data
 
@@ -822,7 +822,12 @@ class BgzfWriter:
         """Write method for the class."""
         # TODO - Check bytes vs unicode
         if isinstance(data, str):
-            data = data.encode()
+            # When reading we can't cope with multi-byte characters
+            # being split between BGZF blocks, so we restrict to a
+            # single byte encoding - like ASCII or latin-1.
+            # On output we could probably allow any encoding, as we
+            # don't care about spliting unicode characters between blocks
+            data = data.encode("latin-1")
         # block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
