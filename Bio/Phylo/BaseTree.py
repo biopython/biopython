@@ -19,22 +19,6 @@ import re
 
 from Bio import _utils
 
-# NB: On Python 2, repr() and str() are specified to return byte strings, not
-# unicode. On Python 3, it's the opposite. Horrible.
-import sys
-
-if sys.version_info[0] < 3:
-
-    def as_string(s):
-        """Encode string to UTF-8."""
-        if isinstance(s, str):
-            return s.encode("utf-8")
-        return str(s)
-
-
-else:
-    as_string = str
-
 
 # General tree-traversal algorithms
 
@@ -111,7 +95,7 @@ def _string_matcher(target):
         if isinstance(node, (Clade, Tree)):
             # Avoid triggering specialized or recursive magic methods
             return node.name == target
-        return as_string(node) == target
+        return str(node) == target
 
     return match
 
@@ -262,7 +246,7 @@ class TreeElement:
         # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
-                return "%s='%s'" % (key, _utils.trim_str(as_string(val), 60, "..."))
+                return "%s='%s'" % (key, _utils.trim_str(str(val), 60, "..."))
             return "%s=%s" % (key, val)
 
         return "%s(%s)" % (
@@ -473,7 +457,7 @@ class TreeMixin:
 
     def count_terminals(self):
         """Count the number of terminal (leaf) nodes within this tree."""
-        return _utils.iterlen(self.find_clades(terminal=True))
+        return sum(1 for clade in self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):  # noqa: D402
         """Create a mapping of tree clades to depths (by branch length).
@@ -1026,7 +1010,7 @@ class Tree(TreeElement, TreeMixin):
                 # Avoid infinite recursion or special formatting from str()
                 objstr = repr(obj)
             else:
-                objstr = as_string(obj)
+                objstr = str(obj)
             textlines.append(TAB * indent + objstr)
             indent += 1
             for attr in obj.__dict__:
