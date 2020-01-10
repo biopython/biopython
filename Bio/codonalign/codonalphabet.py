@@ -10,6 +10,7 @@ alphabet for CodonSeq class.
 """
 
 import copy
+
 try:
     from itertools import izip
 except ImportError:
@@ -57,12 +58,17 @@ def compare_codon_alphabet(codon_alphabet_1, codon_alphabet_2):
     """
     for codon_alphabet in [codon_alphabet_1, codon_alphabet_2]:
         if not isinstance(codon_alphabet, CodonAlphabet):
-            raise TypeError("Only CodonAlphabet object accepted."
-                            "{} is provided.".format(object(codon_alphabet)))
-    return (set(codon_alphabet_1.letters) == set(codon_alphabet_2.letters) and
-            codon_alphabet_1.gap_char == codon_alphabet_2.gap_char)
+            raise TypeError(
+                "Only CodonAlphabet object accepted."
+                "{} is provided.".format(object(codon_alphabet))
+            )
+    return (
+        set(codon_alphabet_1.letters) == set(codon_alphabet_2.letters)
+        and codon_alphabet_1.gap_char == codon_alphabet_2.gap_char
+    )
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()
