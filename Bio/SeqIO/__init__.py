@@ -493,6 +493,7 @@ _BinaryFormats = [
     "seqxml",
     "snapgene",
     "nib",
+    "seqxml",
     "xdna",
 ]
 
