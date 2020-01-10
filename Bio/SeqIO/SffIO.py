@@ -1147,7 +1147,7 @@ class SffWriter(SequenceWriter):
         except TypeError:
             raise ValueError(
                 "SFF files must NOT be opened in text mode, binary required."
-            )
+            ) from None
         self.handle = handle
         self._xml = xml
         if index:
