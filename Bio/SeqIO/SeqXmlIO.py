@@ -355,7 +355,7 @@ class SeqXmlIterator:
         self.parser.setContentHandler(content_handler)
         self.parser.setFeature(handler.feature_namespaces, True)
         try:
-            handle = open(stream_or_path)
+            handle = open(stream_or_path, 'rb')
         except TypeError:  # not a path, assume we received a stream
             self.handle = stream_or_path
             self.should_close_handle = False
