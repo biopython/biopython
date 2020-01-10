@@ -387,12 +387,21 @@ where the alignment occurs.
             to this function into forms appropriate for _align.
             """
             keywds = keywds.copy()
+            #print(args)
+            args = args + (len(self.param_names) - len(args)) * (None,)
+            #print(args)
 
             # Replace possible "keywords" with arguments:
             for key in keywds.copy():
+                # print(key)
                 if key in self.param_names:
                     _index = self.param_names.index(key)
-                    args = args[:_index] + (keywds[key],) + args[_index:]
+                    #print(_index)
+                    args = args[:_index] + (keywds[key],) + args[_index+1:]
+                    #args[_index] = keywds[key]
+                    print(args)
+                    args = tuple(arg for arg in args if arg)
+                    #if key not in ('sequenceA', 'sequenceB'):
                     del keywds[key]
                 elif key not in ("penalize_extend_when_opening",
                                  "penalize_end_gaps",
@@ -407,6 +416,8 @@ where the alignment occurs.
                 raise TypeError("%s takes exactly %d argument (%d given)"
                                 % (self.function_name, len(self.param_names),
                                    len(args)))
+            # print(args)
+            # print(keywds)
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
@@ -464,6 +475,7 @@ where the alignment occurs.
                 keywds["penalize_end_gaps"] = tuple([value] * 2)
             else:
                 assert n == 2
+            # print(keywds)
             return keywds
 
         def __call__(self, *args, **keywds):
