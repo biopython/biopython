@@ -443,6 +443,11 @@ class SeqXmlWriter(SequentialSequenceWriter):
         self, handle, source=None, source_version=None, species=None, ncbiTaxId=None
     ):
         """Create Object and start the xml generator."""
+        try:
+            handle.write(b"")
+        except TypeError:
+            raise ValueError("SeqXML files must be opened in binary mode.")
+
         SequentialSequenceWriter.__init__(self, handle)
 
         self.xml_generator = XMLGenerator(handle, "utf-8")
