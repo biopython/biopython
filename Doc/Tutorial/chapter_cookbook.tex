@@ -1298,7 +1298,6 @@ for (seq, section_dict) in [
         except KeyError:
             section_dict[section] = [i]
 # Now find any sub-sequences found in both sequences
-# (Python 2.3 would require slightly different code here)
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
 \end{minted}

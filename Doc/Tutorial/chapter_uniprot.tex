@@ -13,30 +13,27 @@ In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the
 
 To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. There are several ways to do so, depending on where and how the Swiss-Prot record is stored:
 \begin{itemize}
+
 \item Open a Swiss-Prot file locally:
 \begin{minted}{pycon}
 >>> handle = open("myswissprotfile.dat")
 \end{minted} 
+
 \item Open a gzipped Swiss-Prot file:
 \begin{minted}{pycon}
 >>> import gzip
 >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 \end{minted}
+
 \item Open a Swiss-Prot file over the internet:
-%--doctest . internet
 \begin{minted}{pycon}
->>> from urllib.request import urlopen # Python 3 only
+>>> from urllib.request import urlopen
 >>> from io import TextIOWrapper
->>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"))
+>>> url = "https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"
+>>> handle = TextIOWrapper(urlopen(url))
 \end{minted}
 to open the file stored on the Internet before calling \verb|read|.
 
-Note for Python 2 this can be done by using:
-%--doctest . internet
-\begin{minted}{pycon}
->>> from urllib import urlopen #Python 2 only
->>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt")
-\end{minted}
 \item Open a Swiss-Prot file over the internet from the ExPASy database
 (see section \ref{sec:expasy_swissprot}):
 \begin{minted}{pycon}

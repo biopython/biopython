@@ -91,7 +91,7 @@ If you are interested in using Tox, you could start with the example
 
 \begin{minted}{text}
 [tox]
-envlist = py27,pypy,py36,py37
+envlist = pypy,py36,py37
 
 [testenv]
 changedir = Tests
@@ -101,9 +101,9 @@ deps =
     reportlab
 \end{minted}
 
-Using the template above, executing \texttt{tox} will test your Biopython code against
-Python 2.7, PyPy, Python 3.6 and Python3.7. It assumes that those
-Pythons' executables are named accordingly: ``python2.7`` for Python 2.7, and so on.
+Using the template above, executing \texttt{tox} will test your Biopython
+code against PyPy, Python 3.6 and Python3.7. It assumes that those Pythons'
+executables are named accordingly: ``python3.7`` for Python 3.7, and so on.
 
 
 \section{Writing tests}
