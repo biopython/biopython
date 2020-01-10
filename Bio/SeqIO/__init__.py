@@ -404,12 +404,6 @@ from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 from . import XdnaIO
 
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
-    _dict = dict
-
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
 #
@@ -765,11 +759,8 @@ def to_dict(sequences, key_function=None):
 
     Since Python 3.7, the default dict class maintains key order, meaning
     this dictionary will reflect the order of records given to it. For
-    CPython, this was already implemented in 3.6.
-
-    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
-    than 3.6 (and for other Python older than 3.7) so that you can always
-    assume the record order is preserved.
+    CPython and PyPy, this was already implemented for Python 3.6, so
+    effectively you can always assume the record order is preserved.
 
     Example usage, defaulting to using the record.id as key:
 
@@ -817,7 +808,7 @@ def to_dict(sequences, key_function=None):
     if key_function is None:
         key_function = _default_key_function
 
-    d = _dict()
+    d = {}
     for record in sequences:
         key = key_function(record)
         if key in d:

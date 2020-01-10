@@ -197,18 +197,10 @@ of the format's documentation.
 """
 
 import sys
-from collections import OrderedDict
 
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
-
-
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
-    _dict = dict
 
 
 __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
@@ -412,11 +404,8 @@ def to_dict(qresults, key_function=None):
 
     Since Python 3.7, the default dict class maintains key order, meaning
     this dictionary will reflect the order of records given to it. For
-    CPython, this was already implemented in 3.6.
-
-    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
-    than 3.6 (and for other Python older than 3.7) so that you can always
-    assume the record order is preserved.
+    CPython and PyPy, this was already implemented for Python 3.6, so
+    effectively you can always assume the record order is preserved.
     """
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def _default_key_function(rec):
@@ -425,7 +414,7 @@ def to_dict(qresults, key_function=None):
     if key_function is None:
         key_function = _default_key_function
 
-    qdict = _dict()
+    qdict = {}
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:
