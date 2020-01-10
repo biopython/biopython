@@ -357,6 +357,13 @@ class SeqXmlIterator:
         try:
             handle = open(stream_or_path, 'rb')
         except TypeError:  # not a path, assume we received a stream
+            # Make sure we got a binary handle. If we got a text handle, then
+            # the parser will still run but unicode characters will be garbled
+            # if the text handle was opened with a different encoding than the
+            # one specified in the XML file. With a binary handle, the correct
+            # encoding is picked up by the parser from the XML file.
+            if stream_or_path.read(0) != b"":
+                raise TypeError("SeqXML files should be opened in binary mode") from None
             self.handle = stream_or_path
             self.should_close_handle = False
         else:  # we received a path
