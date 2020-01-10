@@ -11,30 +11,6 @@
 import os
 
 
-def iterlen(items):
-    """Count the number of items in an iterable.
-
-    If the argument supports len(items), and some iterators do, then
-    this returns len(items). Otherwise it will scan over the entries
-    in order to count them.
-
-    Exhausts a generator, but doesn't require creating a full list.
-
-    >>> iterlen("abcde")
-    5
-    >>> iterlen(iter("abcde"))
-    5
-
-    """
-    try:
-        # e.g. Under Python 2, the xrange iterator defines __len__
-        return len(items)
-    except TypeError:
-        for i, x in enumerate(items):
-            count = i
-        return count + 1
-
-
 def read_forward(handle):
     """Read through whitespaces, return the first non-whitespace line."""
     while True:
