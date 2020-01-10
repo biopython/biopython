@@ -117,21 +117,19 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_by_line(self, old_file, new_file, old_gzip=False):
-        for mode in ["r", "rb"]:
-            if old_gzip:
-                h = gzip.open(old_file, mode)
-            else:
-                h = open(old_file, mode)
-            old = h.read()
+        if old_gzip:
+            with gzip.open(old_file) as handle:
+                old = handle.read()
+        else:
+            with open(old_file, "rb") as handle:
+                old = handle.read()
+        for mode in ["rb", "r"]:
             if "b" in mode:
-                if isinstance(old, str):
-                    import codecs
-                    old = codecs.latin_1_encode(old)[0]
+                assert isinstance(old, bytes)
             else:
-                if isinstance(old, bytes):
-                    import codecs
-                    old = codecs.latin_1_decode(old)[0]
-            h.close()
+                # BGZF text mode is hard coded as latin1
+                # and does not do universal new line mode
+                old = old.decode("latin1")
 
             for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
@@ -148,23 +146,19 @@ class BgzfTests(unittest.TestCase):
                 self.assertEqual(old, new)
 
     def check_by_char(self, old_file, new_file, old_gzip=False):
-        for mode in ["r", "rb"]:
-            if old_gzip:
-                h = gzip.open(old_file, mode)
-            else:
-                h = open(old_file, mode)
-            old = h.read()
-            # Seems gzip can return bytes even if mode="r",
-            # perhaps a bug in Python 3.2?
+        if old_gzip:
+            with gzip.open(old_file) as handle:
+                old = handle.read()
+        else:
+            with open(old_file, "rb") as handle:
+                old = handle.read()
+        for mode in ["rb", "r"]:
             if "b" in mode:
-                if isinstance(old, str):
-                    import codecs
-                    old = codecs.latin_1_encode(old)[0]
+                assert isinstance(old, bytes)
             else:
-                if isinstance(old, bytes):
-                    import codecs
-                    old = codecs.latin_1_decode(old)[0]
-            h.close()
+                # BGZF text mode is hard coded as latin1
+                # and does not do universal new line mode
+                old = old.decode("latin1")
 
             for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
