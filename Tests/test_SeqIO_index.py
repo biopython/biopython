@@ -30,11 +30,6 @@ from seq_tests_common import compare_record
 
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
-try:
-    from test_bgzf import _have_bug17666
-    do_bgzf = _have_bug17666()
-except MissingPythonDependencyError:
-    do_bgzf = False
 
 CUR_DIR = os.getcwd()
 
@@ -694,7 +689,7 @@ tests = [
 for filename1, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename1, None)]
-    if do_bgzf and os.path.isfile(filename1 + ".bgz"):
+    if os.path.isfile(filename1 + ".bgz"):
         tasks.append((filename1 + ".bgz", "bgzf"))
     for filename2, comp in tasks:
 
