@@ -71,11 +71,11 @@ class AffyTest(unittest.TestCase):
             global message
             try:
                 numpy.testing.assert_allclose(record.intensities,
-                    [[234.0, 170.0, 22177.0, 164.0, 22104.0],
-                     [188.0, 188.0, 21871.0, 168.0, 21883.0],
-                     [188.0, 193.0, 21455.0, 198.0, 21300.0],
-                     [188.0, 182.0, 21438.0, 188.0, 20945.0],
-                     [193.0, 20370.0, 174.0, 20605.0, 168.0]])
+                                              [[234.0, 170.0, 22177.0, 164.0, 22104.0],
+                                               [188.0, 188.0, 21871.0, 168.0, 21883.0],
+                                               [188.0, 193.0, 21455.0, 198.0, 21300.0],
+                                               [188.0, 182.0, 21438.0, 188.0, 20945.0],
+                                               [193.0, 20370.0, 174.0, 20605.0, 168.0]])
                 message = None
             except AssertionError as err:
                 message = str(err)
@@ -83,11 +83,11 @@ class AffyTest(unittest.TestCase):
                 self.fail(message)
             try:
                 numpy.testing.assert_allclose(record.stdevs,
-                    [[24.0, 34.5, 2669.0, 19.7, 3661.2],
-                     [29.8, 29.8, 2795.9, 67.9, 2792.4],
-                     [29.8, 88.7, 2976.5, 62.0, 2914.5],
-                     [29.8, 76.2, 2759.5, 49.2, 2762.0],
-                     [38.8, 2611.8, 26.6, 2810.7, 24.1]])
+                                              [[24.0, 34.5, 2669.0, 19.7, 3661.2],
+                                               [29.8, 29.8, 2795.9, 67.9, 2792.4],
+                                               [29.8, 88.7, 2976.5, 62.0, 2914.5],
+                                               [29.8, 76.2, 2759.5, 49.2, 2762.0],
+                                               [38.8, 2611.8, 26.6, 2810.7, 24.1]])
                 message = None
             except AssertionError as err:
                 message = str(err)
@@ -95,11 +95,11 @@ class AffyTest(unittest.TestCase):
                 self.fail(message)
             try:
                 numpy.testing.assert_array_equal(record.npix,
-                    [[25, 25, 25, 25, 25],
-                     [25, 25, 25, 25, 25],
-                     [25, 25, 25, 25, 25],
-                     [25, 25, 25, 25, 25],
-                     [25, 25, 25, 25, 25]])
+                                                 [[25, 25, 25, 25, 25],
+                                                  [25, 25, 25, 25, 25],
+                                                  [25, 25, 25, 25, 25],
+                                                  [25, 25, 25, 25, 25],
+                                                  [25, 25, 25, 25, 25]])
                 message = None
             except AssertionError as err:
                 message = str(err)
@@ -109,8 +109,8 @@ class AffyTest(unittest.TestCase):
             try:
                 numpy.testing.assert_array_equal(record.mask,
                     [[False, False, False, False, False],
-                     [False, False, False, True , True ],
-                     [False, False, False, False, True ],
+                     [False, False, False, True , True],
+                     [False, False, False, False, True],
                      [False, False, False, False, False],
                      [False, False, False, False, False]])
                 message = None
@@ -121,11 +121,11 @@ class AffyTest(unittest.TestCase):
             self.assertEqual(record.noutliers, 3)
             try:
                 numpy.testing.assert_array_equal(record.outliers,
-                    [[False, False, False, False, False],
-                     [False, True , True , False, False],
-                     [False, False, False, False, False],
-                     [False, True , False, False, False],
-                     [False, False, False, False, False]])
+                                                 [[False, False, False, False, False],
+                                                  [False, True , True , False, False],
+                                                  [False, False, False, False, False],
+                                                  [False, True , False, False, False],
+                                                  [False, False, False, False, False]])
                 message = None
             except AssertionError as err:
                 message = str(err)
@@ -134,19 +134,17 @@ class AffyTest(unittest.TestCase):
             self.assertEqual(record.nmodified, 3)
             try:
                 numpy.testing.assert_allclose(record.modified,
-                    [[0.0, 0.0, 0.0,     0.0,   0.0],
-                     [0.0, 0.0, 0.0,   189.0, 220.0],
-                     [0.0, 0.0, 0.0, 21775.0,   0.0],
-                     [0.0, 0.0, 0.0,     0.0,   0.0],
-                     [0.0, 0.0, 0.0,     0.0,   0.0]])
+                                                 [[0.0, 0.0, 0.0, 0.0, 0.0],
+                                                  [0.0, 0.0, 0.0, 189.0, 220.0],
+                                                  [0.0, 0.0, 0.0, 21775.0, 0.0],
+                                                  [0.0, 0.0, 0.0, 0.0, 0.0],
+                                                  [0.0, 0.0, 0.0, 0.0, 0.0]])
                 message = None
             except AssertionError as err:
                 message = str(err)
             if message is not None:
                 self.fail(message)
 
-
-    # tests the new Affymetrix v4 parser
     def testAffy4(self):
         with open(self.affy4, "rb") as f:
             record = CelFile.read(f)
