@@ -309,10 +309,10 @@ def _read_v3(handle):
             record.npix = numpy.zeros((record.nrows, record.ncols), int)
         elif line.startswith(b"[MASKS]"):
             section = "MASKS"
-            record.mask = numpy.zeros((record.nrows, record.ncols))
+            record.mask = numpy.zeros((record.nrows, record.ncols), bool)
         elif line.startswith(b"[OUTLIERS]"):
             section = "OUTLIERS"
-            record.outliers = numpy.zeros((record.nrows, record.ncols))
+            record.outliers = numpy.zeros((record.nrows, record.ncols), bool)
         elif line.startswith(b"[MODIFIED]"):
             section = "MODIFIED"
             record.modified = numpy.zeros((record.nrows, record.ncols))
@@ -349,22 +349,23 @@ def _read_v3(handle):
                     values = {}
                     for parameter in parameters:
                         key, value = parameter.split(b":", 1)
-                        if key in (b"Percentile",
-                                   b"CellMargin",
-                                   b"FullFeatureWidth",
-                                   b"FullFeatureHeight",
-                                   b"PoolWidthExtenstion",
-                                   b"PoolHeightExtension"):
+                        key = key.decode("ascii")
+                        if key in ("Percentile",
+                                   "CellMargin",
+                                   "FullFeatureWidth",
+                                   "FullFeatureHeight",
+                                   "PoolWidthExtenstion",
+                                   "PoolHeightExtension"):
                             values[key] = int(value)
-                        elif key in (b"OutlierHigh",
-                                     b"OutlierLow",
-                                     b"StdMult"):
+                        elif key in ("OutlierHigh",
+                                     "OutlierLow",
+                                     "StdMult"):
                             values[key] = float(value)
-                        elif key in (b"FixedCellSize",
-                                     b"IgnoreOutliersInShiftRows",
-                                     b"FeatureExtraction",
-                                     b"UseSubgrids",
-                                     b"RandomizePixels"):
+                        elif key in ("FixedCellSize",
+                                     "IgnoreOutliersInShiftRows",
+                                     "FeatureExtraction",
+                                     "UseSubgrids",
+                                     "RandomizePixels"):
                             if value == b"TRUE":
                                 value = True
                             elif value == b"FALSE":
@@ -372,8 +373,8 @@ def _read_v3(handle):
                             else:
                                 raise ValueError("Unexpected boolean value")
                             values[key] = value
-                        elif key in (b"AlgVersion",
-                                     b"ErrorBasis"):
+                        elif key in ("AlgVersion",
+                                     "ErrorBasis"):
                             values[key] = value.decode("ascii")
                         else:
                             raise ValueError("Unexpected tag in AlgorithmParameters")
@@ -407,7 +408,7 @@ def _read_v3(handle):
                     words = line.split()
                     y = int(words[0])
                     x = int(words[1])
-                    record.mask[x, y] = int(1)
+                    record.mask[x, y] = True
             elif section == "OUTLIERS":
                 if line.startswith(b"NumberCells="):
                     key, value = line.split(b"=", 1)
@@ -421,7 +422,7 @@ def _read_v3(handle):
                     words = line.split()
                     y = int(words[0])
                     x = int(words[1])
-                    record.outliers[x, y] = int(1)
+                    record.outliers[x, y] = True
             elif section == "MODIFIED":
                 if line.startswith(b"NumberCells="):
                     key, value = line.split(b"=", 1)
