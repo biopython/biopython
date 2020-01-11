@@ -125,12 +125,12 @@ def read(handle, version=None):
     data = handle.read(4)
     if not data:
         raise ValueError("Empty file.")
-    if data == b'[CEL':
+    if data == b"[CEL":
         # Version 3 format. Continue to read the header here before passing
         # control to _read_v3 to avoid having to seek to the beginning of
         # the file.
         data += next(handle)
-        if data.strip() != b'[CEL]':
+        if data.strip() != b"[CEL]":
             raise ValueError("Failed to parse Affy Version 3 CEL file.")
         line = next(handle)
         keyword, value = line.split(b"=", 1)
@@ -151,16 +151,14 @@ def read(handle, version=None):
 
 # read Affymetrix files version 4.
 def read_v4(f):
-    """Read verion 4 Affymetrix CEL file, and return a Record object (DEPRECATED).
-    """
+    "Read version 4 Affymetrix CEL file, and return a Record object (DEPRECATED)."
     raise Exception("The read_v4 function in Bio.Affy.CelFile is deprecated."
                     "Instead, please use the read function in Bio.Affy.CelFile "
                     "specifying version=4.")
 
 
 def read_v3(handle):
-    """Read version 3 Affymetrix CEL file, and return a Record object (DEPRECATED).
-    """
+    "Read version 3 Affymetrix CEL file, and return a Record object (DEPRECATED)."
     raise Exception("The read_v3 function in Bio.Affy.CelFile is deprecated."
                     "Instead, please use the read function in Bio.Affy.CelFile "
                     "specifying version=3.")
@@ -357,28 +355,28 @@ def _read_v3(handle):
                                    b"FullFeatureHeight",
                                    b"PoolWidthExtenstion",
                                    b"PoolHeightExtension"):
-                           values[key] = int(value)
+                            values[key] = int(value)
                         elif key in (b"OutlierHigh",
                                      b"OutlierLow",
                                      b"StdMult"):
-                           values[key] = float(value)
+                            values[key] = float(value)
                         elif key in (b"FixedCellSize",
                                      b"IgnoreOutliersInShiftRows",
                                      b"FeatureExtraction",
                                      b"UseSubgrids",
                                      b"RandomizePixels"):
-                           if value == b'TRUE':
-                               value = True
-                           elif value == b'FALSE':
-                               value = False
-                           else:
-                               raise ValueError("Unexpected boolean value")
-                           values[key] = value
+                            if value == b"TRUE":
+                                value = True
+                            elif value == b"FALSE":
+                                value = False
+                            else:
+                                raise ValueError("Unexpected boolean value")
+                            values[key] = value
                         elif key in (b"AlgVersion",
                                      b"ErrorBasis"):
-                           values[key] = value.decode("ascii")
+                            values[key] = value.decode("ascii")
                         else:
-                               raise ValueError("Unexpected tag in AlgorithmParameters")
+                            raise ValueError("Unexpected tag in AlgorithmParameters")
                     record.AlgorithmParameters = values
             elif section == "INTENSITY":
                 if line.startswith(b"NumberCells="):
