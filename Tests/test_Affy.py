@@ -32,9 +32,9 @@ class AffyTest(unittest.TestCase):
     def tearDown(self):
         os.remove(self.affy4Bad)
 
-    # tests the old Affymetrix v3 parser
+    # tests the Affymetrix v3 parser
     def testAffy3(self):
-        with open(self.affy3, "rb") as f:
+        with open(self.affy3, "r") as f:
             record = CelFile.read(f)
             self.assertTrue(len(record.DatHeader) > 0)
             self.assertEqual(record.intensities.shape, (5, 5))
@@ -47,7 +47,19 @@ class AffyTest(unittest.TestCase):
             self.assertEqual(record.GridCornerUR, (3570, 107))
             self.assertEqual(record.GridCornerLR, (3597, 3470))
             self.assertEqual(record.GridCornerLL, (234, 3492))
-            self.assertEqual(record.DatHeader, b"[11..65533]  1g_A9AF:CLS=3684 RWS=3684 XIN=1  YIN=1  VE=30        2.0 08/23/07 11:23:24 50205880  M10      Tgondii_SNP1.1sq          570  25356.509766  3.500000  1.5600  6")
+            self.assertEqual(record.DatHeader["filename"], "1g_A9AF")
+            self.assertEqual(record.DatHeader["CLS"], 3684)
+            self.assertEqual(record.DatHeader["RWS"], 3684)
+            self.assertEqual(record.DatHeader["XIN"], 1)
+            self.assertEqual(record.DatHeader["YIN"], 1)
+            self.assertEqual(record.DatHeader["VE"], 30)
+            self.assertAlmostEqual(record.DatHeader["laser-power"], 2.0)
+            self.assertEqual(record.DatHeader["scan-date"], "08/23/07")
+            self.assertEqual(record.DatHeader["scan-time"], "11:23:24")
+            self.assertEqual(record.DatHeader["scanner-id"], "50205880")
+            self.assertEqual(record.DatHeader["scanner-type"], "M10")
+            self.assertEqual(record.DatHeader["array-type"], "Tgondii_SNP1.1sq")
+            self.assertEqual(record.DatHeader["image-orientation"], 6)
             self.assertEqual(record.Algorithm, "Percentile")
             self.assertEqual(len(record.AlgorithmParameters), 16)
             self.assertEqual(record.AlgorithmParameters["Percentile"], 75)
@@ -201,8 +213,8 @@ class AffyTest(unittest.TestCase):
 
     def testAffyWrongModeReadV3(self):
         with self.assertRaises(ValueError):
-            with open(self.affy4, "rt") as f:
-                record = CelFile.read(f, version=4)
+            with open(self.affy3, "rb") as f:
+                record = CelFile.read(f, version=3)
 
     def testAffyWrongModeReadV4(self):
         with self.assertRaises(ValueError):

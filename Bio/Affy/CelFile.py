@@ -34,7 +34,7 @@ class Record:
     Example usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "rb") as handle:
+    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
@@ -99,7 +99,7 @@ def read(handle, version=None):
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "rb") as handle:
+    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
     ...     record = CelFile.read(handle)
     ...
     >>> record.version == 3
@@ -119,22 +119,22 @@ def read(handle, version=None):
     try:
         data = handle.read(0)
     except AttributeError:
-        raise ValueError("handle should be a file handle or a file name") from None
-    if data != b"":
-        raise ValueError("CEL files should be opened in binary mode")
+        raise ValueError("handle should be a file handle") from None
     data = handle.read(4)
     if not data:
         raise ValueError("Empty file.")
     if data == b"[CEL":
+        raise ValueError("CEL file in version 3 format should be opened in text mode")
+    if data == "[CEL":
         # Version 3 format. Continue to read the header here before passing
         # control to _read_v3 to avoid having to seek to the beginning of
         # the file.
         data += next(handle)
-        if data.strip() != b"[CEL]":
+        if data.strip() != "[CEL]":
             raise ValueError("Failed to parse Affy Version 3 CEL file.")
         line = next(handle)
-        keyword, value = line.split(b"=", 1)
-        if keyword != b"Version":
+        keyword, value = line.split("=", 1)
+        if keyword != "Version":
             raise ValueError("Failed to parse Affy Version 3 CEL file.")
         version = int(value)
         if version != 3:
@@ -142,7 +142,9 @@ def read(handle, version=None):
         return _read_v3(handle)
     try:
         magicNumber = struct.unpack("<i", data)
-    except Exception:
+    except TypeError:
+        raise ValueError("CEL file in version 4 format should be opened in binary mode")
+    except struct.error:
         raise ValueError("Failed to read magic number from Affy Version 4 CEL file") from None
     if magicNumber != (64, ):
         raise ValueError("Incorrect magic number in Affy Version 4 CEL file")
@@ -296,60 +298,118 @@ def _read_v3(handle):
     record.version = 3
     section = ""
     for line in handle:
-        line = line.rstrip(b"\r\n")
+        line = line.rstrip("\r\n")
         if not line:
             continue
         # Set current section
-        if line.startswith(b"[HEADER]"):
+        if line.startswith("[HEADER]"):
             section = "HEADER"
-        elif line.startswith(b"[INTENSITY]"):
+        elif line.startswith("[INTENSITY]"):
             section = "INTENSITY"
             record.intensities = numpy.zeros((record.nrows, record.ncols))
             record.stdevs = numpy.zeros((record.nrows, record.ncols))
             record.npix = numpy.zeros((record.nrows, record.ncols), int)
-        elif line.startswith(b"[MASKS]"):
+        elif line.startswith("[MASKS]"):
             section = "MASKS"
             record.mask = numpy.zeros((record.nrows, record.ncols), bool)
-        elif line.startswith(b"[OUTLIERS]"):
+        elif line.startswith("[OUTLIERS]"):
             section = "OUTLIERS"
             record.outliers = numpy.zeros((record.nrows, record.ncols), bool)
-        elif line.startswith(b"[MODIFIED]"):
+        elif line.startswith("[MODIFIED]"):
             section = "MODIFIED"
             record.modified = numpy.zeros((record.nrows, record.ncols))
-        elif line.startswith(b"["):
+        elif line.startswith("["):
             raise ParserError("Unknown section found in version 3 CEL file") from None
         else:  # read the data in a section
             if section == "HEADER":
                 # Set record.ncols and record.nrows, remaining data goes into
                 # record.header dict
-                key, value = line.split(b"=", 1)
-                if key == b"Cols":
+                key, value = line.split("=", 1)
+                if key == "Cols":
                     record.ncols = int(value)
-                elif key == b"Rows":
+                elif key == "Rows":
                     record.nrows = int(value)
-                elif key == b"GridCornerUL":
+                elif key == "GridCornerUL":
                     x, y = value.split()
                     record.GridCornerUL = (int(x), int(y))
-                elif key == b"GridCornerUR":
+                elif key == "GridCornerUR":
                     x, y = value.split()
                     record.GridCornerUR = (int(x), int(y))
-                elif key == b"GridCornerLR":
+                elif key == "GridCornerLR":
                     x, y = value.split()
                     record.GridCornerLR = (int(x), int(y))
-                elif key == b"GridCornerLL":
+                elif key == "GridCornerLL":
                     x, y = value.split()
                     record.GridCornerLL = (int(x), int(y))
-                elif key == b"DatHeader":
-                    # line contains binary data; don't decode
-                    record.DatHeader = value
-                elif key == b"Algorithm":
-                    record.Algorithm = value.decode("ascii")
-                elif key == b"AlgorithmParameters":
-                    parameters = value.split(b";")
+                elif key == "DatHeader":
+                    # not sure if all parameters here are interpreted correctly
+                    record.DatHeader = {}
+                    index = line.find(":")
+                    _, filename = line[:index].split()
+                    record.DatHeader["filename"] = filename
+                    index += 1
+                    field = line[index:index+9]
+                    assert field[:4] == "CLS="
+                    assert field[8] == " "
+                    record.DatHeader["CLS"] = int(field[4:8])
+                    index += 9
+                    field = line[index:index+9]
+                    assert field[:4] == "RWS="
+                    assert field[8] == " "
+                    record.DatHeader["RWS"] = int(field[4:8])
+                    index += 9
+                    field = line[index:index+7]
+                    assert field[:4] == "XIN="
+                    assert field[6] == " "
+                    record.DatHeader["XIN"] = int(field[4:6])
+                    index += 7
+                    field = line[index:index+7]
+                    assert field[:4] == "YIN="
+                    assert field[6] == " "
+                    record.DatHeader["YIN"] = int(field[4:6])
+                    index += 7
+                    field = line[index:index+6]
+                    assert field[:3] == "VE="
+                    assert field[5] == " "
+                    record.DatHeader["VE"] = int(field[3:5])
+                    index += 6
+                    field = line[index:index+7]
+                    assert field[6] == " "
+                    temperature = field[:6].strip()
+                    if temperature:
+                        record.DatHeader["temperature"] = int(temperature)
+                    else:
+                        record.DatHeader["temperature"] = None
+                    index += 7
+                    field = line[index:index+4]
+                    assert field.endswith(" ")
+                    record.DatHeader["laser-power"] = float(field)
+                    index += 4
+                    field = line[index:index+18]
+                    assert field[8] == " "
+                    record.DatHeader["scan-date"] = field[:8]
+                    assert field[17] == " "
+                    record.DatHeader["scan-time"] = field[9:17]
+                    index += 18
+                    field = line[index:]
+                    subfields = field.split(" \x14 ")
+                    assert len(subfields) == 12
+                    subfield = subfields[0]
+                    try:
+                        scanner_id, scanner_type = subfield.split()
+                    except ValueError:
+                        scanner_id = subfield.strip()
+                    record.DatHeader["scanner-id"] = scanner_id
+                    record.DatHeader["scanner-type"] = scanner_type
+                    record.DatHeader["array-type"] = subfields[2]
+                    record.DatHeader["image-orientation"] = int(subfields[11])
+                elif key == "Algorithm":
+                    record.Algorithm = value
+                elif key == "AlgorithmParameters":
+                    parameters = value.split(";")
                     values = {}
                     for parameter in parameters:
-                        key, value = parameter.split(b":", 1)
-                        key = key.decode("ascii")
+                        key, value = parameter.split(":", 1)
                         if key in ("Percentile",
                                    "CellMargin",
                                    "FullFeatureWidth",
@@ -366,26 +426,26 @@ def _read_v3(handle):
                                      "FeatureExtraction",
                                      "UseSubgrids",
                                      "RandomizePixels"):
-                            if value == b"TRUE":
+                            if value == "TRUE":
                                 value = True
-                            elif value == b"FALSE":
+                            elif value == "FALSE":
                                 value = False
                             else:
                                 raise ValueError("Unexpected boolean value")
                             values[key] = value
                         elif key in ("AlgVersion",
                                      "ErrorBasis"):
-                            values[key] = value.decode("ascii")
+                            values[key] = value
                         else:
                             raise ValueError("Unexpected tag in AlgorithmParameters")
                     record.AlgorithmParameters = values
             elif section == "INTENSITY":
-                if line.startswith(b"NumberCells="):
-                    key, value = line.split(b"=", 1)
+                if line.startswith("NumberCells="):
+                    key, value = line.split("=", 1)
                     record.NumberCells = int(value)
-                elif line.startswith(b"CellHeader="):
-                    key, value = line.split(b"=", 1)
-                    if value.split() != [b"X", b"Y", b"MEAN", b"STDV", b"NPIXELS"]:
+                elif line.startswith("CellHeader="):
+                    key, value = line.split("=", 1)
+                    if value.split() != ["X", "Y", "MEAN", "STDV", "NPIXELS"]:
                         raise ParserError("Unexpected CellHeader in INTENSITY "
                                           "section CEL version 3 file")
                 else:
@@ -396,12 +456,12 @@ def _read_v3(handle):
                     record.stdevs[x, y] = float(words[3])
                     record.npix[x, y] = int(words[4])
             elif section == "MASKS":
-                if line.startswith(b"NumberCells="):
-                    key, value = line.split(b"=", 1)
+                if line.startswith("NumberCells="):
+                    key, value = line.split("=", 1)
                     record.nmask = int(value)
-                elif line.startswith(b"CellHeader="):
-                    key, value = line.split(b"=", 1)
-                    if value.split() != [b"X", b"Y"]:
+                elif line.startswith("CellHeader="):
+                    key, value = line.split("=", 1)
+                    if value.split() != ["X", "Y"]:
                         raise ParserError("Unexpected CellHeader in MASKS "
                                           "section in CEL version 3 file")
                 else:
@@ -410,12 +470,12 @@ def _read_v3(handle):
                     x = int(words[1])
                     record.mask[x, y] = True
             elif section == "OUTLIERS":
-                if line.startswith(b"NumberCells="):
-                    key, value = line.split(b"=", 1)
+                if line.startswith("NumberCells="):
+                    key, value = line.split("=", 1)
                     record.noutliers = int(value)
-                elif line.startswith(b"CellHeader="):
-                    key, value = line.split(b"=", 1)
-                    if value.split() != [b"X", b"Y"]:
+                elif line.startswith("CellHeader="):
+                    key, value = line.split("=", 1)
+                    if value.split() != ["X", "Y"]:
                         raise ParserError("Unexpected CellHeader in OUTLIERS "
                                           "section in CEL version 3 file")
                 else:
@@ -424,12 +484,12 @@ def _read_v3(handle):
                     x = int(words[1])
                     record.outliers[x, y] = True
             elif section == "MODIFIED":
-                if line.startswith(b"NumberCells="):
-                    key, value = line.split(b"=", 1)
+                if line.startswith("NumberCells="):
+                    key, value = line.split("=", 1)
                     record.nmodified = int(value)
-                elif line.startswith(b"CellHeader="):
-                    key, value = line.split(b"=", 1)
-                    if value.split() != [b"X", b"Y", b"ORIGMEAN"]:
+                elif line.startswith("CellHeader="):
+                    key, value = line.split("=", 1)
+                    if value.split() != ["X", "Y", "ORIGMEAN"]:
                         raise ParserError("Unexpected CellHeader in MODIFIED "
                                           "section in CEL version 3 file")
                 else:
