@@ -9,9 +9,6 @@ import os
 import unittest
 import math
 
-from Bio._py3k import zip
-from Bio._py3k import range
-
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
@@ -309,9 +306,9 @@ class LabelTest(unittest.TestCase):
                 # Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2
                 # must be string, not None
                 renderPM = None
-            except IOError:
+            except OSError:
                 # Probably a library problem, e.g.
-                # IOError: encoder zip not available
+                # OSError: encoder zip not available
                 renderPM = None
         if circular:
             # Circular diagram

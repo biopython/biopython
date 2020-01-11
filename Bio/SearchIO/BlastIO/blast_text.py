@@ -20,7 +20,7 @@ from Bio.SearchIO._legacy import NCBIStandalone
 __all__ = ("BlastTextParser",)
 
 
-class BlastTextParser(object):
+class BlastTextParser:
     """Parser for the BLAST text format."""
 
     def __init__(self, handle):

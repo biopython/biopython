@@ -31,7 +31,7 @@ class TreeError(Exception):
     pass
 
 
-class NodeData(object):
+class NodeData:
     """Store tree-relevant data associated with nodes (e.g. branches or otus)."""
 
     def __init__(self, taxon=None, branchlength=0.0, support=None, comment=None):
@@ -211,8 +211,7 @@ class Tree(Nodes.Chain):
             node = self.root
         for n in self.node(node).succ:
             yield n
-            for sn in self._walk(n):
-                yield sn
+            yield from self._walk(n)
 
     def node(self, node_id):
         """Return the instance of node_id.

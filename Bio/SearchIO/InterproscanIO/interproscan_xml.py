@@ -33,7 +33,7 @@ _ELEM_FRAG = {
 }
 
 
-class InterproscanXmlParser(object):
+class InterproscanXmlParser:
     """Parser for the InterProScan XML format."""
 
     def __init__(self, handle):
@@ -43,8 +43,7 @@ class InterproscanXmlParser(object):
 
     def __iter__(self):
         """Iterate qresults."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _parse_header(self):
         """Parse the header for the InterProScan version (PRIVATE)."""

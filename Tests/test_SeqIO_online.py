@@ -45,7 +45,7 @@ class ExPASyTests(unittest.TestCase):
             # This is to catch an error page from our proxy
             if (str(e) == "Failed to find ID in first line" and
                     e.line.startswith("<!DOCTYPE HTML")):
-                raise IOError from None
+                raise OSError from None
         handle.close()
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)

@@ -88,11 +88,7 @@ if sqlite3:
                               "mm9.chr10")
 
         def test_old_file_not_found(self):
-            # TODO: Switch to FileNotFoundError once we drop Python 2 support
-            # Under Python 2, we expect IOError.
-            # Under Python 3, we expect FileNotFoundError which is a subclass
-            # of OSError, and that has IOError as an alias so this works.
-            self.assertRaises(IOError,
+            self.assertRaises(FileNotFoundError,
                               MafIndex,
                               "MAF/ucsc_mm9_chr11.mafindex",
                               "MAF/ucsc_mm9_chr11.maf",
@@ -139,11 +135,11 @@ if sqlite3:
 
         def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
-            self.assertEquals(len(idx), 48)
+            self.assertEqual(len(idx), 48)
 
         def test_good_big(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
-            self.assertEquals(len(idx), 983)
+            self.assertEqual(len(idx), 983)
 
         def test_bundle_without_target(self):
             self.assertRaises(ValueError,

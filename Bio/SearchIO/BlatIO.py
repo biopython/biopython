@@ -182,9 +182,6 @@ HSP and HSPFragment documentation for more details on these properties.
 import re
 from math import log
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._py3k import zip
-
 from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -196,7 +193,7 @@ __all__ = ("BlatPslParser", "BlatPslIndexer", "BlatPslWriter")
 # precompile regex patterns
 _PTR_ROW_CHECK = r"^\d+\s+\d+\s+\d+\s+\d+"
 _RE_ROW_CHECK = re.compile(_PTR_ROW_CHECK)
-_RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
+_RE_ROW_CHECK_IDX = re.compile(_PTR_ROW_CHECK.encode())
 
 
 def _list_from_csv(csv_string, caster=None):
@@ -403,7 +400,7 @@ def _create_hsp(hid, qid, psl):
     return hsp
 
 
-class BlatPslParser(object):
+class BlatPslParser:
     """Parser for the BLAT PSL format."""
 
     def __init__(self, handle, pslx=False):
@@ -588,17 +585,13 @@ class BlatPslIndexer(SearchIndexer):
                 curr_key = cols[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield _bytes_to_string(
-                        qresult_key
-                    ), start_offset, end_offset - start_offset
+                    yield qresult_key.decode(), start_offset, end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
             line = handle.readline()
             if not line:
-                yield _bytes_to_string(
-                    qresult_key
-                ), start_offset, end_offset - start_offset
+                yield qresult_key.decode(), start_offset, end_offset - start_offset
                 break
 
     def get_raw(self, offset):
@@ -626,7 +619,7 @@ class BlatPslIndexer(SearchIndexer):
         return qresult_raw
 
 
-class BlatPslWriter(object):
+class BlatPslWriter:
     """Writer for the blat-psl format."""
 
     def __init__(self, handle, header=False, pslx=False):
@@ -739,15 +732,15 @@ class BlatPslWriter(object):
                 line.append(hsp.hit_start)
                 line.append(hsp.hit_end)
                 line.append(len(hsp))
-                line.append(",".join((str(x) for x in block_sizes)) + ",")
-                line.append(",".join((str(x) for x in qstarts)) + ",")
-                line.append(",".join((str(x) for x in hstarts)) + ",")
+                line.append(",".join(str(x) for x in block_sizes) + ",")
+                line.append(",".join(str(x) for x in qstarts) + ",")
+                line.append(",".join(str(x) for x in hstarts) + ",")
 
                 if self.pslx:
-                    line.append(",".join((str(x.seq) for x in hsp.query_all)) + ",")
-                    line.append(",".join((str(x.seq) for x in hsp.hit_all)) + ",")
+                    line.append(",".join(str(x.seq) for x in hsp.query_all) + ",")
+                    line.append(",".join(str(x.seq) for x in hsp.hit_all) + ",")
 
-                qresult_lines.append("\t".join((str(x) for x in line)))
+                qresult_lines.append("\t".join(str(x) for x in line))
 
         return "\n".join(qresult_lines) + "\n"
 

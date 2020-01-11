@@ -13,7 +13,7 @@ See http://www.ncbi.nlm.nih.gov/geo/
 """
 
 
-class Record(object):
+class Record:
     """Hold GEO information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are

@@ -13,37 +13,7 @@ import gzip
 import os
 from random import shuffle
 
-from Bio._py3k import _as_bytes, _as_string
-
 from Bio import bgzf
-
-
-def _have_bug17666():
-    """Debug function to check if Python's gzip is broken (PRIVATE).
-
-    Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
-    3.2.4 and 3.3.1 only.
-    """
-    from io import BytesIO
-
-    h = gzip.GzipFile(fileobj=BytesIO(bgzf._bgzf_eof))
-    try:
-        data = h.read()
-        h.close()
-        assert not data, "Should be zero length, not %i" % len(data)
-        return False
-    except TypeError as err:
-        # TypeError: integer argument expected, got 'tuple'
-        return True
-
-
-if _have_bug17666():
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Your Python has a broken gzip library, see "
-        "http://bugs.python.org/issue17666 for details"
-    )
 
 
 class BgzfTests(unittest.TestCase):
@@ -57,9 +27,8 @@ class BgzfTests(unittest.TestCase):
             os.remove(self.temp_file)
 
     def rewrite(self, compressed_input_file, output_file):
-        h = gzip.open(compressed_input_file, "rb")
-        data = h.read()
-        h.close()
+        with gzip.open(compressed_input_file, "rb") as h:
+            data = h.read()
 
         with bgzf.BgzfWriter(output_file, "wb") as h:
             h.write(data)
@@ -69,9 +38,8 @@ class BgzfTests(unittest.TestCase):
         # Context manager should call close(),
         # Gives empty BGZF block as BAM EOF marker
 
-        h = gzip.open(output_file)
-        new_data = h.read()
-        h.close()
+        with gzip.open(output_file) as h:
+            new_data = h.read()
 
         # Check the decompressed files agree
         self.assertTrue(new_data, "Empty BGZF file?")
@@ -79,12 +47,12 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(data, new_data)
 
     def check_blocks(self, old_file, new_file):
-        h = open(old_file, "rb")
-        old = list(bgzf.BgzfBlocks(h))
-        h.close()
-        h = open(new_file, "rb")
-        new = list(bgzf.BgzfBlocks(h))
-        h.close()
+        with open(old_file, "rb") as h:
+            old = list(bgzf.BgzfBlocks(h))
+
+        with open(new_file, "rb") as h:
+            new = list(bgzf.BgzfBlocks(h))
+
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
@@ -119,27 +87,26 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_by_line(self, old_file, new_file, old_gzip=False):
-        for mode in ["r", "rb"]:
-            if old_gzip:
-                h = gzip.open(old_file, mode)
-            else:
-                h = open(old_file, mode)
-            old = h.read()
-            # Seems gzip can return bytes even if mode="r",
-            # perhaps a bug in Python 3.2?
+        if old_gzip:
+            with gzip.open(old_file) as handle:
+                old = handle.read()
+        else:
+            with open(old_file, "rb") as handle:
+                old = handle.read()
+        for mode in ["rb", "r"]:
             if "b" in mode:
-                old = _as_bytes(old)
+                assert isinstance(old, bytes)
             else:
-                old = _as_string(old)
-            h.close()
+                # BGZF text mode is hard coded as latin1
+                # and does not do universal new line mode
+                old = old.decode("latin1")
 
             for cache in [1, 10]:
-                h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
-                if "b" in mode:
-                    new = b"".join(line for line in h)
-                else:
-                    new = "".join(line for line in h)
-                h.close()
+                with bgzf.BgzfReader(new_file, mode, max_cache=cache) as h:
+                    if "b" in mode:
+                        new = b"".join(line for line in h)
+                    else:
+                        new = "".join(line for line in h)
 
                 self.assertEqual(len(old), len(new))
                 self.assertEqual(
@@ -148,19 +115,19 @@ class BgzfTests(unittest.TestCase):
                 self.assertEqual(old, new)
 
     def check_by_char(self, old_file, new_file, old_gzip=False):
-        for mode in ["r", "rb"]:
-            if old_gzip:
-                h = gzip.open(old_file, mode)
-            else:
-                h = open(old_file, mode)
-            old = h.read()
-            # Seems gzip can return bytes even if mode="r",
-            # perhaps a bug in Python 3.2?
+        if old_gzip:
+            with gzip.open(old_file) as handle:
+                old = handle.read()
+        else:
+            with open(old_file, "rb") as handle:
+                old = handle.read()
+        for mode in ["rb", "r"]:
             if "b" in mode:
-                old = _as_bytes(old)
+                assert isinstance(old, bytes)
             else:
-                old = _as_string(old)
-            h.close()
+                # BGZF text mode is hard coded as latin1
+                # and does not do universal new line mode
+                old = old.decode("latin1")
 
             for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
@@ -186,13 +153,11 @@ class BgzfTests(unittest.TestCase):
 
     def check_random(self, filename):
         """Check BGZF random access by reading blocks in forward & reverse order."""
-        h = gzip.open(filename, "rb")
-        old = h.read()
-        h.close()
+        with gzip.open(filename, "rb") as h:
+            old = h.read()
 
-        h = open(filename, "rb")
-        blocks = list(bgzf.BgzfBlocks(h))
-        h.close()
+        with open(filename, "rb") as h:
+            blocks = list(bgzf.BgzfBlocks(h))
 
         # Forward, using explicit open/close
         new = b""

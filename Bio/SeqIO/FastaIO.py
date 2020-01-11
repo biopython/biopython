@@ -350,7 +350,7 @@ class FastaTwoLineWriter(FastaWriter):
             handle.close()
 
         """
-        super(FastaTwoLineWriter, self).__init__(
+        super().__init__(
             handle, wrap=None, record2title=record2title
         )
 

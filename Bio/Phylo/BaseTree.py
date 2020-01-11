@@ -11,8 +11,6 @@ All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
 """
 
-from Bio._py3k import filter, zip
-
 import collections
 import copy
 import itertools
@@ -20,22 +18,6 @@ import random
 import re
 
 from Bio import _utils
-
-# NB: On Python 2, repr() and str() are specified to return byte strings, not
-# unicode. On Python 3, it's the opposite. Horrible.
-import sys
-
-if sys.version_info[0] < 3:
-
-    def as_string(s):
-        """Encode string to UTF-8."""
-        if isinstance(s, str):
-            return s.encode("utf-8")
-        return str(s)
-
-
-else:
-    as_string = str
 
 
 # General tree-traversal algorithms
@@ -56,11 +38,9 @@ def _preorder_traverse(root, get_children):
     def dfs(elem):
         yield elem
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _postorder_traverse(root, get_children):
@@ -68,12 +48,10 @@ def _postorder_traverse(root, get_children):
     # This comment stops black style adding a blank line here, which causes flake8 D202.
     def dfs(elem):
         for v in get_children(elem):
-            for u in dfs(v):
-                yield u
+            yield from dfs(v)
         yield elem
 
-    for elem in dfs(root):
-        yield elem
+    yield from dfs(root)
 
 
 def _sorted_attrs(elem):
@@ -117,7 +95,7 @@ def _string_matcher(target):
         if isinstance(node, (Clade, Tree)):
             # Avoid triggering specialized or recursive magic methods
             return node.name == target
-        return as_string(node) == target
+        return str(node) == target
 
     return match
 
@@ -153,9 +131,7 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, str):
-                return isinstance(target, str) and re.match(
-                    pattern + "$", target
-                )
+                return isinstance(target, str) and re.match(pattern + "$", target)
             if isinstance(pattern, bool):
                 return pattern == bool(target)
             if isinstance(pattern, int):
@@ -262,7 +238,7 @@ def _combine_args(first, *rest):
 # Class definitions
 
 
-class TreeElement(object):
+class TreeElement:
     """Base class for all Bio.Phylo classes."""
 
     def __repr__(self):
@@ -270,7 +246,7 @@ class TreeElement(object):
         # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
-                return "%s='%s'" % (key, _utils.trim_str(as_string(val), 60, "..."))
+                return "%s='%s'" % (key, _utils.trim_str(str(val), 60, "..."))
             return "%s=%s" % (key, val)
 
         return "%s(%s)" % (
@@ -285,7 +261,7 @@ class TreeElement(object):
     __str__ = __repr__
 
 
-class TreeMixin(object):
+class TreeMixin:
     """Methods for Tree- and Clade-based classes.
 
     This lets ``Tree`` and ``Clade`` support the same traversal and searching
@@ -481,7 +457,7 @@ class TreeMixin(object):
 
     def count_terminals(self):
         """Count the number of terminal (leaf) nodes within this tree."""
-        return _utils.iterlen(self.find_clades(terminal=True))
+        return sum(1 for clade in self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):  # noqa: D402
         """Create a mapping of tree clades to depths (by branch length).
@@ -1034,7 +1010,7 @@ class Tree(TreeElement, TreeMixin):
                 # Avoid infinite recursion or special formatting from str()
                 objstr = repr(obj)
             else:
-                objstr = as_string(obj)
+                objstr = str(obj)
             textlines.append(TAB * indent + objstr)
             indent += 1
             for attr in obj.__dict__:
@@ -1154,7 +1130,7 @@ class Clade(TreeElement, TreeMixin):
     color = property(_get_color, _set_color, doc="Branch color.")
 
 
-class BranchColor(object):
+class BranchColor:
     """Indicates the color of a clade when rendered graphically.
 
     The color should be interpreted by client code (e.g. visualization
@@ -1221,9 +1197,7 @@ class BranchColor(object):
         '#FF8000' for an RGB value of (255, 128, 0).
         """
         assert (
-            isinstance(hexstr, str)
-            and hexstr.startswith("#")
-            and len(hexstr) == 7
+            isinstance(hexstr, str) and hexstr.startswith("#") and len(hexstr) == 7
         ), "need a 24-bit hexadecimal string, e.g. #000000"
 
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]

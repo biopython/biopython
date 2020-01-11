@@ -520,8 +520,7 @@ def CifAtomIterator(handle):
 
     buffer.seek(0)
     struct = MMCIFParser().get_structure(pdb_id, buffer)
-    for record in AtomIterator(pdb_id, struct):
-        yield record
+    yield from AtomIterator(pdb_id, struct)
 
 
 if __name__ == "__main__":

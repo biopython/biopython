@@ -23,18 +23,28 @@ from io import StringIO
 try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
+
     del dot
     from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+
     del svd, det
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
 
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select, MMCIFParser, MMCIFIO
+from Bio.PDB import (
+    PDBParser,
+    PPBuilder,
+    CaPPBuilder,
+    PDBIO,
+    Select,
+    MMCIFParser,
+    MMCIFIO,
+)
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
@@ -64,7 +74,9 @@ class A_ExceptionTest(unittest.TestCase):
             p.get_structure("example", "PDB/a_structure.pdb")
 
             self.assertEqual(len(w), 14)
-            for wrn, msg in zip(w, [
+            for wrn, msg in zip(
+                w,
+                [
                     # Expected warning messages:
                     "Used element 'N' for Atom (name=N) with given element ''",
                     "Used element 'C' for Atom (name=CA) with given element ''",
@@ -79,8 +91,9 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 16, ' ') redefined at line 135.",
                     "Residue (' ', 80, ' ') redefined at line 633.",
                     "Residue (' ', 81, ' ') redefined at line 646.",
-                    "Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 902."
-            ]):
+                    "Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 902.",
+                ],
+            ):
                 self.assertIn(msg, str(wrn))
 
     def test_2_strict(self):
@@ -88,8 +101,12 @@ class A_ExceptionTest(unittest.TestCase):
         parser = PDBParser(PERMISSIVE=False)
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
-            self.assertRaises(PDBConstructionException,
-                              parser.get_structure, "example", "PDB/a_structure.pdb")
+            self.assertRaises(
+                PDBConstructionException,
+                parser.get_structure,
+                "example",
+                "PDB/a_structure.pdb",
+            )
             self.assertEqual(len(w), 4, w)
 
     def test_3_bad_xyz(self):
@@ -98,8 +115,9 @@ class A_ExceptionTest(unittest.TestCase):
         parser = PDBParser(PERMISSIVE=False)
         s = parser.get_structure("example", StringIO(data))
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
-        self.assertRaises(PDBConstructionException,
-                          parser.get_structure, "example", StringIO(data))
+        self.assertRaises(
+            PDBConstructionException, parser.get_structure, "example", StringIO(data)
+        )
 
     def test_4_occupancy(self):
         """Parse file with missing occupancy."""
@@ -115,8 +133,9 @@ class A_ExceptionTest(unittest.TestCase):
         self.assertEqual(atoms["C"].get_occupancy(), 0.0)
 
         strict = PDBParser(PERMISSIVE=False)
-        self.assertRaises(PDBConstructionException,
-                          strict.get_structure, "test", "PDB/occupancy.pdb")
+        self.assertRaises(
+            PDBConstructionException, strict.get_structure, "test", "PDB/occupancy.pdb"
+        )
 
 
 class HeaderTests(unittest.TestCase):
@@ -135,7 +154,7 @@ class HeaderTests(unittest.TestCase):
             "journal": "AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849",
             "journal_reference": "t.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ",
             "keywords": "capsid, core protein, hiv, c-terminal domain, viral protein",
-            "name": " hiv capsid c-terminal domain",
+            "name": "hiv capsid c-terminal domain",
             "release_date": "1998-10-14",
             "structure_method": "x-ray diffraction",
         }
@@ -153,7 +172,7 @@ class HeaderTests(unittest.TestCase):
             "journal": "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
             "journal_reference": "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
             "keywords": "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
-            "name": " 3d structure of alzheimer's abeta(1-42) fibrils",
+            "name": "3d structure of alzheimer's abeta(1-42) fibrils",
             "release_date": "2005-11-22",
             "structure_method": "solution nmr",
         }
@@ -181,9 +200,11 @@ class ParseTest(unittest.TestCase):
         s = pp.get_sequence()
         self.assertTrue(isinstance(s, Seq))
         self.assertEqual(s.alphabet, generic_protein)
-        self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
-                         "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
-                         str(s))
+        self.assertEqual(
+            "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
+            "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
+            str(s),
+        )
 
     def test_ca_ca(self):
         """Extract polypeptides using CA-CA."""
@@ -198,9 +219,11 @@ class ParseTest(unittest.TestCase):
         s = pp.get_sequence()
         self.assertTrue(isinstance(s, Seq))
         self.assertEqual(s.alphabet, generic_protein)
-        self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
-                         "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
-                         str(s))
+        self.assertEqual(
+            "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
+            "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
+            str(s),
+        )
 
     def test_structure(self):
         """Verify the structure of the parsed example PDB file."""
@@ -222,188 +245,208 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(len(m1), 4)
         # Deconstruct this data structure to check each chain
         chain_data = [  # chain_id, chain_len, [(residue_id, residue_len), ...]
-            ("A", 86, [((" ", 0, " "), 1),
-                       ((" ", 2, " "), 11),
-                       ((" ", 3, " "), 6, 1),  # disordered
-                       ((" ", 4, " "), 4),
-                       ((" ", 5, " "), 6),
-                       ((" ", 6, " "), 9),
-                       ((" ", 7, " "), 4),
-                       ((" ", 8, " "), 4),
-                       ((" ", 9, " "), 4),
-                       ((" ", 10, " "), 6, ["GLY", "SER"]),  # point mut
-                       ((" ", 11, " "), 7),
-                       ((" ", 12, " "), 6),
-                       ((" ", 13, " "), 7),
-                       ((" ", 14, " "), 4, ["ALA", "GLY"]),  # point mut
-                       ((" ", 15, " "), 8, 3),  # disordered
-                       ((" ", 16, " "), 11, ["ARG", "TRP"]),  # point mut
-                       ((" ", 17, " "), 6),
-                       ((" ", 18, " "), 6),
-                       ((" ", 19, " "), 6),
-                       ((" ", 20, " "), 8),
-                       ((" ", 21, " "), 14),
-                       ((" ", 22, " "), 4),
-                       ((" ", 23, " "), 14),
-                       ((" ", 24, " "), 6),
-                       ((" ", 25, " "), 4),
-                       ((" ", 26, " "), 8),
-                       ((" ", 27, " "), 6),
-                       ((" ", 28, " "), 9, 5),  # disordered
-                       ((" ", 29, " "), 7),
-                       ((" ", 30, " "), 12),
-                       ((" ", 31, " "), 6),
-                       ((" ", 32, " "), 4),
-                       ((" ", 33, " "), 11),
-                       ((" ", 34, " "), 7),
-                       ((" ", 35, " "), 6),
-                       ((" ", 36, " "), 9),
-                       ((" ", 37, " "), 8),
-                       ((" ", 38, " "), 9),
-                       ((" ", 39, " "), 6),
-                       ((" ", 40, " "), 14),
-                       ((" ", 41, " "), 6),
-                       ((" ", 42, " "), 4),
-                       ((" ", 43, " "), 9),
-                       ((" ", 44, " "), 11),
-                       ((" ", 45, " "), 6, 1),  # disordered
-                       ((" ", 46, " "), 8),
-                       ((" ", 47, " "), 10),
-                       ((" ", 48, " "), 11),
-                       ((" ", 49, " "), 6),
-                       ((" ", 50, " "), 4),
-                       ((" ", 51, " "), 5),
-                       ((" ", 52, " "), 5),
-                       ((" ", 53, " "), 7),
-                       ((" ", 54, " "), 4),
-                       ((" ", 55, " "), 8),
-                       ((" ", 56, " "), 7),
-                       ((" ", 57, " "), 7),
-                       ((" ", 58, " "), 6),
-                       ((" ", 59, " "), 4),
-                       ((" ", 60, " "), 9),
-                       ((" ", 61, " "), 8),
-                       ((" ", 62, " "), 11),
-                       ((" ", 63, " "), 6),
-                       ((" ", 64, " "), 6),
-                       ((" ", 65, " "), 6),
-                       ((" ", 66, " "), 7),
-                       ((" ", 67, " "), 10),
-                       ((" ", 68, " "), 4),
-                       ((" ", 69, " "), 14),
-                       ((" ", 70, " "), 6),
-                       ((" ", 71, " "), 4),
-                       ((" ", 72, " "), 4),
-                       ((" ", 73, " "), 4),
-                       ((" ", 74, " "), 8, 3),  # disordered
-                       ((" ", 75, " "), 8),
-                       ((" ", 76, " "), 12),
-                       ((" ", 77, " "), 6),
-                       ((" ", 78, " "), 6),
-                       ((" ", 79, " "), 4, 4),  # disordered
-                       ((" ", 80, " "), 4, ["GLY", "SER"]),  # point mut
-                       ((" ", 81, " "), 8, ["ASN", "LYS"]),  # point mut
-                       ((" ", 82, " "), 6),
-                       ((" ", 83, " "), 9),
-                       ((" ", 84, " "), 12),
-                       ((" ", 85, " "), 11),
-                       ((" ", 86, " "), 6),
-                       ]),
-            ("B", 11, [((" ", 44, " "), 11),
-                       (("H_SEP", 45, " "), 10),  # Phosphoserine
-                       ((" ", 46, " "), 8),
-                       ((" ", 47, " "), 10),
-                       ((" ", 48, " "), 11),
-                       ((" ", 49, " "), 6),
-                       ((" ", 50, " "), 4),
-                       ((" ", 51, " "), 5),
-                       ((" ", 51, "A"), 5),
-                       ((" ", 52, " "), 7),
-                       (("W", 0, " "), 1),
-                       ]),
-            ("C", 5, [(("W", 0, " "), 1),
-                      (("H_NAG", 1, " "), 14),
-                      (("H_NAG", 2, " "), 14),
-                      (("H_NAG", 4, " "), 14),
-                      (("H_NAG", 3, " "), 14),
-                      ]),
-            (" ", 76, [(("W", 1, " "), 1),
-                       (("W", 2, " "), 1),
-                       (("W", 3, " "), 1),
-                       (("W", 4, " "), 1),
-                       (("W", 5, " "), 1),
-                       (("W", 6, " "), 1),
-                       (("W", 7, " "), 1),
-                       (("W", 8, " "), 1),
-                       (("W", 9, " "), 1),
-                       (("W", 10, " "), 1),
-                       (("W", 11, " "), 1),
-                       (("W", 12, " "), 1),
-                       (("W", 13, " "), 1),
-                       (("W", 14, " "), 1),
-                       (("W", 15, " "), 1),
-                       (("W", 16, " "), 1),
-                       (("W", 17, " "), 1),
-                       (("W", 18, " "), 1),
-                       (("W", 19, " "), 1),
-                       (("W", 20, " "), 1),
-                       (("W", 21, " "), 1),
-                       (("W", 22, " "), 1),
-                       (("W", 23, " "), 1),
-                       (("W", 24, " "), 1),
-                       (("W", 25, " "), 1),
-                       (("W", 26, " "), 1),
-                       (("W", 27, " "), 1),
-                       (("W", 28, " "), 1),
-                       (("W", 29, " "), 1),
-                       (("W", 30, " "), 1),
-                       (("W", 31, " "), 1),
-                       (("W", 32, " "), 1),
-                       (("W", 33, " "), 1),
-                       (("W", 34, " "), 1),
-                       (("W", 35, " "), 1),
-                       (("W", 36, " "), 1),
-                       (("W", 37, " "), 1),
-                       (("W", 38, " "), 1),
-                       (("W", 39, " "), 1),
-                       (("W", 40, " "), 1),
-                       (("W", 41, " "), 1),
-                       (("W", 42, " "), 1),
-                       (("W", 43, " "), 1),
-                       (("W", 44, " "), 1),
-                       (("W", 45, " "), 1),
-                       (("W", 46, " "), 1),
-                       (("W", 47, " "), 1),
-                       (("W", 48, " "), 1),
-                       (("W", 49, " "), 1),
-                       (("W", 50, " "), 1),
-                       (("W", 51, " "), 1),
-                       (("W", 52, " "), 1),
-                       (("W", 53, " "), 1),
-                       (("W", 54, " "), 1),
-                       (("W", 55, " "), 1),
-                       (("W", 56, " "), 1),
-                       (("W", 57, " "), 1),
-                       (("W", 58, " "), 1),
-                       (("W", 59, " "), 1),
-                       (("W", 60, " "), 1),
-                       (("W", 61, " "), 1),
-                       (("W", 62, " "), 1),
-                       (("W", 63, " "), 1),
-                       (("W", 64, " "), 1),
-                       (("W", 65, " "), 1),
-                       (("W", 66, " "), 1),
-                       (("W", 67, " "), 1),
-                       (("W", 68, " "), 1),
-                       (("W", 69, " "), 1),
-                       (("W", 70, " "), 1),
-                       (("W", 71, " "), 1),
-                       (("W", 72, " "), 1),
-                       (("W", 73, " "), 1),
-                       (("W", 74, " "), 1),
-                       (("W", 75, " "), 1),
-                       (("W", 77, " "), 1),
-                       ])
+            (
+                "A",
+                86,
+                [
+                    ((" ", 0, " "), 1),
+                    ((" ", 2, " "), 11),
+                    ((" ", 3, " "), 6, 1),  # disordered
+                    ((" ", 4, " "), 4),
+                    ((" ", 5, " "), 6),
+                    ((" ", 6, " "), 9),
+                    ((" ", 7, " "), 4),
+                    ((" ", 8, " "), 4),
+                    ((" ", 9, " "), 4),
+                    ((" ", 10, " "), 6, ["GLY", "SER"]),  # point mut
+                    ((" ", 11, " "), 7),
+                    ((" ", 12, " "), 6),
+                    ((" ", 13, " "), 7),
+                    ((" ", 14, " "), 4, ["ALA", "GLY"]),  # point mut
+                    ((" ", 15, " "), 8, 3),  # disordered
+                    ((" ", 16, " "), 11, ["ARG", "TRP"]),  # point mut
+                    ((" ", 17, " "), 6),
+                    ((" ", 18, " "), 6),
+                    ((" ", 19, " "), 6),
+                    ((" ", 20, " "), 8),
+                    ((" ", 21, " "), 14),
+                    ((" ", 22, " "), 4),
+                    ((" ", 23, " "), 14),
+                    ((" ", 24, " "), 6),
+                    ((" ", 25, " "), 4),
+                    ((" ", 26, " "), 8),
+                    ((" ", 27, " "), 6),
+                    ((" ", 28, " "), 9, 5),  # disordered
+                    ((" ", 29, " "), 7),
+                    ((" ", 30, " "), 12),
+                    ((" ", 31, " "), 6),
+                    ((" ", 32, " "), 4),
+                    ((" ", 33, " "), 11),
+                    ((" ", 34, " "), 7),
+                    ((" ", 35, " "), 6),
+                    ((" ", 36, " "), 9),
+                    ((" ", 37, " "), 8),
+                    ((" ", 38, " "), 9),
+                    ((" ", 39, " "), 6),
+                    ((" ", 40, " "), 14),
+                    ((" ", 41, " "), 6),
+                    ((" ", 42, " "), 4),
+                    ((" ", 43, " "), 9),
+                    ((" ", 44, " "), 11),
+                    ((" ", 45, " "), 6, 1),  # disordered
+                    ((" ", 46, " "), 8),
+                    ((" ", 47, " "), 10),
+                    ((" ", 48, " "), 11),
+                    ((" ", 49, " "), 6),
+                    ((" ", 50, " "), 4),
+                    ((" ", 51, " "), 5),
+                    ((" ", 52, " "), 5),
+                    ((" ", 53, " "), 7),
+                    ((" ", 54, " "), 4),
+                    ((" ", 55, " "), 8),
+                    ((" ", 56, " "), 7),
+                    ((" ", 57, " "), 7),
+                    ((" ", 58, " "), 6),
+                    ((" ", 59, " "), 4),
+                    ((" ", 60, " "), 9),
+                    ((" ", 61, " "), 8),
+                    ((" ", 62, " "), 11),
+                    ((" ", 63, " "), 6),
+                    ((" ", 64, " "), 6),
+                    ((" ", 65, " "), 6),
+                    ((" ", 66, " "), 7),
+                    ((" ", 67, " "), 10),
+                    ((" ", 68, " "), 4),
+                    ((" ", 69, " "), 14),
+                    ((" ", 70, " "), 6),
+                    ((" ", 71, " "), 4),
+                    ((" ", 72, " "), 4),
+                    ((" ", 73, " "), 4),
+                    ((" ", 74, " "), 8, 3),  # disordered
+                    ((" ", 75, " "), 8),
+                    ((" ", 76, " "), 12),
+                    ((" ", 77, " "), 6),
+                    ((" ", 78, " "), 6),
+                    ((" ", 79, " "), 4, 4),  # disordered
+                    ((" ", 80, " "), 4, ["GLY", "SER"]),  # point mut
+                    ((" ", 81, " "), 8, ["ASN", "LYS"]),  # point mut
+                    ((" ", 82, " "), 6),
+                    ((" ", 83, " "), 9),
+                    ((" ", 84, " "), 12),
+                    ((" ", 85, " "), 11),
+                    ((" ", 86, " "), 6),
+                ],
+            ),
+            (
+                "B",
+                11,
+                [
+                    ((" ", 44, " "), 11),
+                    (("H_SEP", 45, " "), 10),  # Phosphoserine
+                    ((" ", 46, " "), 8),
+                    ((" ", 47, " "), 10),
+                    ((" ", 48, " "), 11),
+                    ((" ", 49, " "), 6),
+                    ((" ", 50, " "), 4),
+                    ((" ", 51, " "), 5),
+                    ((" ", 51, "A"), 5),
+                    ((" ", 52, " "), 7),
+                    (("W", 0, " "), 1),
+                ],
+            ),
+            (
+                "C",
+                5,
+                [
+                    (("W", 0, " "), 1),
+                    (("H_NAG", 1, " "), 14),
+                    (("H_NAG", 2, " "), 14),
+                    (("H_NAG", 4, " "), 14),
+                    (("H_NAG", 3, " "), 14),
+                ],
+            ),
+            (
+                " ",
+                76,
+                [
+                    (("W", 1, " "), 1),
+                    (("W", 2, " "), 1),
+                    (("W", 3, " "), 1),
+                    (("W", 4, " "), 1),
+                    (("W", 5, " "), 1),
+                    (("W", 6, " "), 1),
+                    (("W", 7, " "), 1),
+                    (("W", 8, " "), 1),
+                    (("W", 9, " "), 1),
+                    (("W", 10, " "), 1),
+                    (("W", 11, " "), 1),
+                    (("W", 12, " "), 1),
+                    (("W", 13, " "), 1),
+                    (("W", 14, " "), 1),
+                    (("W", 15, " "), 1),
+                    (("W", 16, " "), 1),
+                    (("W", 17, " "), 1),
+                    (("W", 18, " "), 1),
+                    (("W", 19, " "), 1),
+                    (("W", 20, " "), 1),
+                    (("W", 21, " "), 1),
+                    (("W", 22, " "), 1),
+                    (("W", 23, " "), 1),
+                    (("W", 24, " "), 1),
+                    (("W", 25, " "), 1),
+                    (("W", 26, " "), 1),
+                    (("W", 27, " "), 1),
+                    (("W", 28, " "), 1),
+                    (("W", 29, " "), 1),
+                    (("W", 30, " "), 1),
+                    (("W", 31, " "), 1),
+                    (("W", 32, " "), 1),
+                    (("W", 33, " "), 1),
+                    (("W", 34, " "), 1),
+                    (("W", 35, " "), 1),
+                    (("W", 36, " "), 1),
+                    (("W", 37, " "), 1),
+                    (("W", 38, " "), 1),
+                    (("W", 39, " "), 1),
+                    (("W", 40, " "), 1),
+                    (("W", 41, " "), 1),
+                    (("W", 42, " "), 1),
+                    (("W", 43, " "), 1),
+                    (("W", 44, " "), 1),
+                    (("W", 45, " "), 1),
+                    (("W", 46, " "), 1),
+                    (("W", 47, " "), 1),
+                    (("W", 48, " "), 1),
+                    (("W", 49, " "), 1),
+                    (("W", 50, " "), 1),
+                    (("W", 51, " "), 1),
+                    (("W", 52, " "), 1),
+                    (("W", 53, " "), 1),
+                    (("W", 54, " "), 1),
+                    (("W", 55, " "), 1),
+                    (("W", 56, " "), 1),
+                    (("W", 57, " "), 1),
+                    (("W", 58, " "), 1),
+                    (("W", 59, " "), 1),
+                    (("W", 60, " "), 1),
+                    (("W", 61, " "), 1),
+                    (("W", 62, " "), 1),
+                    (("W", 63, " "), 1),
+                    (("W", 64, " "), 1),
+                    (("W", 65, " "), 1),
+                    (("W", 66, " "), 1),
+                    (("W", 67, " "), 1),
+                    (("W", 68, " "), 1),
+                    (("W", 69, " "), 1),
+                    (("W", 70, " "), 1),
+                    (("W", 71, " "), 1),
+                    (("W", 72, " "), 1),
+                    (("W", 73, " "), 1),
+                    (("W", 74, " "), 1),
+                    (("W", 75, " "), 1),
+                    (("W", 77, " "), 1),
+                ],
+            ),
         ]
 
         for c_idx, chn in enumerate(chain_data):
@@ -419,8 +462,9 @@ class ParseTest(unittest.TestCase):
                 disorder_lvl = residue.is_disordered()
                 if disorder_lvl == 1:
                     # Check the number of disordered atoms
-                    disordered_count = sum(1 for atom in residue
-                                           if atom.is_disordered())
+                    disordered_count = sum(
+                        1 for atom in residue if atom.is_disordered()
+                    )
                     if disordered_count:
                         self.assertEqual(disordered_count, res[2])
                 elif disorder_lvl == 2:
@@ -442,10 +486,13 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(chain.level, "C")
         self.assertEqual(len(chain), 1)
         self.assertEqual(" ".join(residue.resname for residue in chain), "PCA")
-        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "N CA CB CG DA OE C O CA  ")
-        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
-                         "N C C C D O C O CA")
+        self.assertEqual(
+            " ".join(atom.name for atom in chain.get_atoms()),
+            "N CA CB CG DA OE C O CA  ",
+        )
+        self.assertEqual(
+            " ".join(atom.element for atom in chain.get_atoms()), "N C C C D O C O CA"
+        )
         # Second model
         model = structure[1]
         self.assertEqual(model.id, 1)
@@ -455,76 +502,82 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(chain.id, "A")
         self.assertEqual(chain.level, "C")
         self.assertEqual(len(chain), 86)
-        self.assertEqual(" ".join(residue.resname for residue in chain),
-                         "CYS ARG CYS GLY SER GLN GLY GLY GLY SER THR CYS "
-                         "PRO GLY LEU ARG CYS CYS SER ILE TRP GLY TRP CYS "
-                         "GLY ASP SER GLU PRO TYR CYS GLY ARG THR CYS GLU "
-                         "ASN LYS CYS TRP SER GLY GLU ARG SER ASP HIS ARG "
-                         "CYS GLY ALA ALA VAL GLY ASN PRO PRO CYS GLY GLN "
-                         "ASP ARG CYS CYS SER VAL HIS GLY TRP CYS GLY GLY "
-                         "GLY ASN ASP TYR CYS SER GLY GLY ASN CYS GLN TYR "
-                         "ARG CYS")
+        self.assertEqual(
+            " ".join(residue.resname for residue in chain),
+            "CYS ARG CYS GLY SER GLN GLY GLY GLY SER THR CYS "
+            "PRO GLY LEU ARG CYS CYS SER ILE TRP GLY TRP CYS "
+            "GLY ASP SER GLU PRO TYR CYS GLY ARG THR CYS GLU "
+            "ASN LYS CYS TRP SER GLY GLU ARG SER ASP HIS ARG "
+            "CYS GLY ALA ALA VAL GLY ASN PRO PRO CYS GLY GLN "
+            "ASP ARG CYS CYS SER VAL HIS GLY TRP CYS GLY GLY "
+            "GLY ASN ASP TYR CYS SER GLY GLY ASN CYS GLN TYR "
+            "ARG CYS",
+        )
 
-        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "C N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG N "
-                         "CA C O N CA C O CB OG N CA C O CB CG CD OE1 NE2 N CA "
-                         "C O N CA C O N CA C O N CA C O CB OG N CA C O CB OG1 "
-                         "CG2 N CA C O CB SG N CA C O CB CG CD N CA C O N CA C "
-                         "O CB CG CD1 CD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA "
-                         "C O CB SG N CA C O CB SG N CA C O CB OG N CA C O CB "
-                         "CG1 CG2 CD1 N CA C O CB CG CD1 CD2 NE1 CE2 CE3 CZ2 "
-                         "CZ3 CH2 N CA C O N CA C O CB CG CD1 CD2 NE1 CE2 CE3 "
-                         "CZ2 CZ3 CH2 N CA C O CB SG N CA C O N CA C O CB CG "
-                         "OD1 OD2 N CA C O CB OG N CA C O CB CG CD OE1 OE2 N "
-                         "CA C O CB CG CD N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH "
-                         "N CA C O CB SG N CA C O N CA C O CB CG CD NE CZ NH1 "
-                         "NH2 N CA C O CB OG1 CG2 N CA C O CB SG N CA C O CB "
-                         "CG CD OE1 OE2 N CA C O CB CG OD1 ND2 N CA C O CB CG "
-                         "CD CE NZ N CA C O CB SG N CA C O CB CG CD1 CD2 NE1 "
-                         "CE2 CE3 CZ2 CZ3 CH2 N CA C O CB OG N CA C O N CA C "
-                         "O CB CG CD OE1 OE2 N CA C O CB CG CD NE CZ NH1 NH2 "
-                         "N CA C O CB OG N CA C O CB CG OD1 OD2 N CA C O CB "
-                         "CG ND1 CD2 CE1 NE2 N CA C O CB CG CD NE CZ NH1 NH2 "
-                         "N CA C O CB SG N CA C O N CA C O CB N CA C O CB N "
-                         "CA C O CB CG1 CG2 N CA C O N CA C O CB CG OD1 ND2 "
-                         "N CA C O CB CG CD N CA C O CB CG CD N CA C O CB SG "
-                         "N CA C O N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
-                         "OD1 OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
-                         "SG N CA C O CB SG N CA C O CB OG N CA C O CB CG1 CG2 "
-                         "N CA C O CB CG ND1 CD2 CE1 NE2 N CA C O N CA C O CB "
-                         "CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG N "
-                         "CA C O N CA C O N CA C O CA N C O CB CG OD1 ND2 N CA "
-                         "C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ "
-                         "OH N CA C O CB SG N CA C O CB OG N CA C O N CA C O N "
-                         "CA C O CB CG OD1 ND2 N CA C O CB SG N CA C O CB CG "
-                         "CD OE1 NE2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH N CA "
-                         "C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG")
+        self.assertEqual(
+            " ".join(atom.name for atom in chain.get_atoms()),
+            "C N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG N "
+            "CA C O N CA C O CB OG N CA C O CB CG CD OE1 NE2 N CA "
+            "C O N CA C O N CA C O N CA C O CB OG N CA C O CB OG1 "
+            "CG2 N CA C O CB SG N CA C O CB CG CD N CA C O N CA C "
+            "O CB CG CD1 CD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA "
+            "C O CB SG N CA C O CB SG N CA C O CB OG N CA C O CB "
+            "CG1 CG2 CD1 N CA C O CB CG CD1 CD2 NE1 CE2 CE3 CZ2 "
+            "CZ3 CH2 N CA C O N CA C O CB CG CD1 CD2 NE1 CE2 CE3 "
+            "CZ2 CZ3 CH2 N CA C O CB SG N CA C O N CA C O CB CG "
+            "OD1 OD2 N CA C O CB OG N CA C O CB CG CD OE1 OE2 N "
+            "CA C O CB CG CD N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH "
+            "N CA C O CB SG N CA C O N CA C O CB CG CD NE CZ NH1 "
+            "NH2 N CA C O CB OG1 CG2 N CA C O CB SG N CA C O CB "
+            "CG CD OE1 OE2 N CA C O CB CG OD1 ND2 N CA C O CB CG "
+            "CD CE NZ N CA C O CB SG N CA C O CB CG CD1 CD2 NE1 "
+            "CE2 CE3 CZ2 CZ3 CH2 N CA C O CB OG N CA C O N CA C "
+            "O CB CG CD OE1 OE2 N CA C O CB CG CD NE CZ NH1 NH2 "
+            "N CA C O CB OG N CA C O CB CG OD1 OD2 N CA C O CB "
+            "CG ND1 CD2 CE1 NE2 N CA C O CB CG CD NE CZ NH1 NH2 "
+            "N CA C O CB SG N CA C O N CA C O CB N CA C O CB N "
+            "CA C O CB CG1 CG2 N CA C O N CA C O CB CG OD1 ND2 "
+            "N CA C O CB CG CD N CA C O CB CG CD N CA C O CB SG "
+            "N CA C O N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
+            "OD1 OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
+            "SG N CA C O CB SG N CA C O CB OG N CA C O CB CG1 CG2 "
+            "N CA C O CB CG ND1 CD2 CE1 NE2 N CA C O N CA C O CB "
+            "CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG N "
+            "CA C O N CA C O N CA C O CA N C O CB CG OD1 ND2 N CA "
+            "C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ "
+            "OH N CA C O CB SG N CA C O CB OG N CA C O N CA C O N "
+            "CA C O CB CG OD1 ND2 N CA C O CB SG N CA C O CB CG "
+            "CD OE1 NE2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH N CA "
+            "C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG",
+        )
 
-        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
-                         "C N C C O C C C N C N N N C C O C S N C C O N C C O "
-                         "C O N C C O C C C O N N C C O N C C O N C C O N C C "
-                         "O C O N C C O C O C N C C O C S N C C O C C C N C C "
-                         "O N C C O C C C C N C C O C C C N C N N N C C O C S "
-                         "N C C O C S N C C O C O N C C O C C C C N C C O C C "
-                         "C C N C C C C C N C C O N C C O C C C C N C C C C C "
-                         "N C C O C S N C C O N C C O C C O O N C C O C O N C "
-                         "C O C C C O O N C C O C C C N C C O C C C C C C C O "
-                         "N C C O C S N C C O N C C O C C C N C N N N C C O C "
-                         "O C N C C O C S N C C O C C C O O N C C O C C O N N "
-                         "C C O C C C C N N C C O C S N C C O C C C C N C C C "
-                         "C C N C C O C O N C C O N C C O C C C O O N C C O C "
-                         "C C N C N N N C C O C O N C C O C C O O N C C O C C "
-                         "N C C N N C C O C C C N C N N N C C O C S N C C O N "
-                         "C C O C N C C O C N C C O C C C N C C O N C C O C C "
-                         "O N N C C O C C C N C C O C C C N C C O C S N C C O "
-                         "N C C O C C C O N N C C O C C O O N C C O C C C N C "
-                         "N N N C C O C S N C C O C S N C C O C O N C C O C C "
-                         "C N C C O C C N C C N N C C O N C C O C C C C N C C "
-                         "C C C N C C O C S N C C O N C C O N C C O C N C O C "
-                         "C O N N C C O C C O O N C C O C C C C C C C O N C C "
-                         "O C S N C C O C O N C C O N C C O N C C O C C O N N "
-                         "C C O C S N C C O C C C O N N C C O C C C C C C C O "
-                         "N C C O C C C N C N N N C C O C S")
+        self.assertEqual(
+            " ".join(atom.element for atom in chain.get_atoms()),
+            "C N C C O C C C N C N N N C C O C S N C C O N C C O "
+            "C O N C C O C C C O N N C C O N C C O N C C O N C C "
+            "O C O N C C O C O C N C C O C S N C C O C C C N C C "
+            "O N C C O C C C C N C C O C C C N C N N N C C O C S "
+            "N C C O C S N C C O C O N C C O C C C C N C C O C C "
+            "C C N C C C C C N C C O N C C O C C C C N C C C C C "
+            "N C C O C S N C C O N C C O C C O O N C C O C O N C "
+            "C O C C C O O N C C O C C C N C C O C C C C C C C O "
+            "N C C O C S N C C O N C C O C C C N C N N N C C O C "
+            "O C N C C O C S N C C O C C C O O N C C O C C O N N "
+            "C C O C C C C N N C C O C S N C C O C C C C N C C C "
+            "C C N C C O C O N C C O N C C O C C C O O N C C O C "
+            "C C N C N N N C C O C O N C C O C C O O N C C O C C "
+            "N C C N N C C O C C C N C N N N C C O C S N C C O N "
+            "C C O C N C C O C N C C O C C C N C C O N C C O C C "
+            "O N N C C O C C C N C C O C C C N C C O C S N C C O "
+            "N C C O C C C O N N C C O C C O O N C C O C C C N C "
+            "N N N C C O C S N C C O C S N C C O C O N C C O C C "
+            "C N C C O C C N C C N N C C O N C C O C C C C N C C "
+            "C C C N C C O C S N C C O N C C O N C C O C N C O C "
+            "C O N N C C O C C O O N C C O C C C C C C C O N C C "
+            "O C S N C C O C O N C C O N C C O N C C O C C O N N "
+            "C C O C S N C C O C C C O N N C C O C C C C C C C O "
+            "N C C O C C C N C N N N C C O C S",
+        )
 
     def test_pdbio_write_truncated(self):
         """Test parsing of truncated lines."""
@@ -539,7 +592,16 @@ class ParseTest(unittest.TestCase):
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
             with open(filename, "rU") as handle:
                 record_set = {l[0:6] for l in handle}
-            record_set -= {"ATOM  ", "HETATM", "MODEL ", "ENDMDL", "TER\n", "TER   ", "END\n", "END   "}
+            record_set -= {
+                "ATOM  ",
+                "HETATM",
+                "MODEL ",
+                "ENDMDL",
+                "TER\n",
+                "TER   ",
+                "END\n",
+                "END   ",
+            }
             self.assertEqual(record_set, set())
         finally:
             os.remove(filename)
@@ -567,21 +629,39 @@ class ParseTest(unittest.TestCase):
             special = [a for a in ("N", "CA", "C", "O") if a in old]
             len_special = len(special)
             # Placed N, CA, C, O first?
-            self.assertEqual(new[:len_special], special,
-                             "Sorted residue did not place N, CA, C, "
-                             "O first: %s" % new)
+            self.assertEqual(
+                new[:len_special],
+                special,
+                "Sorted residue did not place N, CA, C, O first: %s" % new,
+            )
             # Placed everyone else alphabetically?
-            self.assertEqual(new[len_special:], sorted(new[len_special:]),
-                             "After N, CA, C, O order Should be "
-                             "alphabetical: %s" % new)
+            self.assertEqual(
+                new[len_special:],
+                sorted(new[len_special:]),
+                "After N, CA, C, O order Should be alphabetical: %s" % new,
+            )
         # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
         residues = list(struct[1]["B"]) + [struct[1]["A"][44]]
-        self.assertEqual([("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
-                         ["A 44 ", "B 44 ", "B 46 ", "B 47 ", "B 48 ", "B 49 ", "B 50 ",
-                          "B 51 ", "B 51A", "B 52 ", "BH_SEP45 ", "BW0 "])
+        self.assertEqual(
+            [("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
+            [
+                "A 44 ",
+                "B 44 ",
+                "B 46 ",
+                "B 47 ",
+                "B 48 ",
+                "B 49 ",
+                "B 50 ",
+                "B 51 ",
+                "B 51A",
+                "B 52 ",
+                "BH_SEP45 ",
+                "BW0 ",
+            ],
+        )
         # DisorderedAtom
         atoms = [a.altloc for a in sorted(struct[1]["A"][74]["OD1"])]
         self.assertEqual(atoms, ["A", "B"])
@@ -608,7 +688,9 @@ class ParseTest(unittest.TestCase):
         # residues with same ID string should not be equal if the parent is not equal
         res1, res2, res3 = residues[0], residues[-1], struct2[1]["A"][44]
         self.assertEqual(res1.id, res2.id)
-        self.assertEqual(res2, res3)  # Equality of identical residues with different structure ID
+        self.assertEqual(
+            res2, res3
+        )  # Equality of identical residues with different structure ID
         self.assertFalse(res1 == res2)
         self.assertGreater(res1, res2)
         self.assertGreaterEqual(res1, res2)
@@ -617,7 +699,9 @@ class ParseTest(unittest.TestCase):
 
         # atom should not be equal if the parent is not equal
         atom1, atom2, atom3 = res1["CA"], res2["CA"], res3["CA"]
-        self.assertEqual(atom2, atom3)  # Equality of identical atoms with different structure ID
+        self.assertEqual(
+            atom2, atom3
+        )  # Equality of identical atoms with different structure ID
         self.assertGreater(atom1, atom2)
         self.assertGreaterEqual(atom1, atom2)
         self.assertGreaterEqual(atom2, atom3)
@@ -666,10 +750,16 @@ class ParseReal(unittest.TestCase):
                 if a in old:
                     special.append(a)
             special_len = len(special)
-            self.assertEqual(new[0:special_len], special,
-                             "Sorted residue did not place N, CA, C, O first: %s" % new)
-            self.assertEqual(new[special_len:], sorted(new[special_len:]),
-                             "After N, CA, C, O should be alphabet: %s" % new)
+            self.assertEqual(
+                new[0:special_len],
+                special,
+                "Sorted residue did not place N, CA, C, O first: %s" % new,
+            )
+            self.assertEqual(
+                new[special_len:],
+                sorted(new[special_len:]),
+                "After N, CA, C, O should be alphabet: %s" % new,
+            )
 
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
@@ -690,8 +780,11 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
-            self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
-                             "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
+            self.assertEqual(
+                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
+                "NANPDCKTILKALGPGATLEEMMTACQG",
+                str(s),
+            )
             # ==========================================================
             # Now try strict version with only standard amino acids
             # Should ignore MSE 151 at start, and then break the chain
@@ -736,89 +829,96 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(chain.id, "A")
         self.assertEqual(chain.level, "C")
         self.assertEqual(len(chain), 158)
-        self.assertEqual(" ".join(residue.resname for residue in chain),
-                         "MSE ASP ILE ARG GLN GLY PRO LYS GLU PRO PHE ARG "
-                         "ASP TYR VAL ASP ARG PHE TYR LYS THR LEU ARG ALA "
-                         "GLU GLN ALA SER GLN GLU VAL LYS ASN TRP MSE THR "
-                         "GLU THR LEU LEU VAL GLN ASN ALA ASN PRO ASP CYS "
-                         "LYS THR ILE LEU LYS ALA LEU GLY PRO GLY ALA THR "
-                         "LEU GLU GLU MSE MSE THR ALA CYS GLN GLY HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
-                         "HOH HOH")
-        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "N CA C O CB CG SE CE N CA C O CB CG OD1 OD2 N CA "
-                         "C O CB CG1 CG2 CD1 N CA C O CB CG CD NE CZ NH1 "
-                         "NH2 N CA C O CB CG CD OE1 NE2 N CA C O N CA C O "
-                         "CB CG CD N CA C O CB CG CD CE NZ N CA C O CB CG "
-                         "CD OE1 OE2 N CA C O CB CG CD N CA C O CB CG CD1 "
-                         "CD2 CE1 CE2 CZ N CA C O CB CG CD NE CZ NH1 NH2 N "
-                         "CA C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 "
-                         "CE2 CZ OH N CA C O CB CG1 CG2 N CA C O CB CG OD1 "
-                         "OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
-                         "CG CD1 CD2 CE1 CE2 CZ N CA C O CB CG CD1 CD2 CE1 "
-                         "CE2 CZ OH N CA C O CB CG CD CE NZ N CA C O CB "
-                         "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
-                         "NE CZ NH1 NH2 N CA C O CB N CA C O CB CG CD OE1 "
-                         "OE2 N CA C O CB CG CD OE1 NE2 N CA C O CB N CA C "
-                         "O CB OG N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
-                         "CD OE1 OE2 N CA C O CB CG1 CG2 N CA C O CB CG CD "
-                         "CE NZ N CA C O CB CG OD1 ND2 N CA C O CB CG CD1 "
-                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB CG SE CE "
-                         "N CA C O CB OG1 CG2 N CA C O CB CG CD OE1 OE2 N "
-                         "CA C O CB OG1 CG2 N CA C O CB CG CD1 CD2 N CA C "
-                         "O CB CG CD1 CD2 N CA C O CB CG1 CG2 N CA C O CB "
-                         "CG CD OE1 NE2 N CA C O CB CG OD1 ND2 N CA C O CB "
-                         "N CA C O CB CG OD1 ND2 N CA C O CB CG CD N CA C "
-                         "O CB CG OD1 OD2 N CA C O CB SG N CA C O CB CG CD "
-                         "CE NZ N CA C O CB OG1 CG2 N CA C O CB CG1 CG2 "
-                         "CD1 N CA C O CB CG CD1 CD2 N CA C O CB CG CD CE "
-                         "NZ N CA C O CB N CA C O CB CG CD1 CD2 N CA C O N "
-                         "CA C O CB CG CD N CA C O N CA C O CB N CA C O CB "
-                         "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
-                         "OE1 OE2 N CA C O CB CG CD OE1 OE2 N CA C O CB CG "
-                         "SE CE N CA C O CB CG SE CE N CA C O CB OG1 CG2 N "
-                         "CA C O CB N CA C O CB SG N CA C O CB CG CD OE1 "
-                         "NE2 N CA C O OXT O O O O O O O O O O O O O O O O "
-                         "O O O O O O O O O O O O O O O O O O O O O O O O "
-                         "O O O O O O O O O O O O O O O O O O O O O O O O "
-                         "O O O O O O O O O O O O O O O O O O O O O O O O")
-        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
-                         "N C C O C C SE C N C C O C C O O N C C O C C C C "
-                         "N C C O C C C N C N N N C C O C C C O N N C C O "
-                         "N C C O C C C N C C O C C C C N N C C O C C C O "
-                         "O N C C O C C C N C C O C C C C C C C N C C O C "
-                         "C C N C N N N C C O C C O O N C C O C C C C C C "
-                         "C O N C C O C C C N C C O C C O O N C C O C C C "
-                         "N C N N N C C O C C C C C C C N C C O C C C C C "
-                         "C C O N C C O C C C C N N C C O C O C N C C O C "
-                         "C C C N C C O C C C N C N N N C C O C N C C O C "
-                         "C C O O N C C O C C C O N N C C O C N C C O C O "
-                         "N C C O C C C O N N C C O C C C O O N C C O C C "
-                         "C N C C O C C C C N N C C O C C O N N C C O C C "
-                         "C C N C C C C C N C C O C C SE C N C C O C O C N "
-                         "C C O C C C O O N C C O C O C N C C O C C C C N "
-                         "C C O C C C C N C C O C C C N C C O C C C O N N "
-                         "C C O C C O N N C C O C N C C O C C O N N C C O "
-                         "C C C N C C O C C O O N C C O C S N C C O C C C "
-                         "C N N C C O C O C N C C O C C C C N C C O C C C "
-                         "C N C C O C C C C N N C C O C N C C O C C C C N "
-                         "C C O N C C O C C C N C C O N C C O C N C C O C "
-                         "O C N C C O C C C C N C C O C C C O O N C C O C "
-                         "C C O O N C C O C C SE C N C C O C C SE C N C C "
-                         "O C O C N C C O C N C C O C S N C C O C C C O N "
-                         "N C C O O O O O O O O O O O O O O O O O O O O O "
-                         "O O O O O O O O O O O O O O O O O O O O O O O O "
-                         "O O O O O O O O O O O O O O O O O O O O O O O O "
-                         "O O O O O O O O O O O O O O O O O O O O O")
+        self.assertEqual(
+            " ".join(residue.resname for residue in chain),
+            "MSE ASP ILE ARG GLN GLY PRO LYS GLU PRO PHE ARG "
+            "ASP TYR VAL ASP ARG PHE TYR LYS THR LEU ARG ALA "
+            "GLU GLN ALA SER GLN GLU VAL LYS ASN TRP MSE THR "
+            "GLU THR LEU LEU VAL GLN ASN ALA ASN PRO ASP CYS "
+            "LYS THR ILE LEU LYS ALA LEU GLY PRO GLY ALA THR "
+            "LEU GLU GLU MSE MSE THR ALA CYS GLN GLY HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+            "HOH HOH",
+        )
+        self.assertEqual(
+            " ".join(atom.name for atom in chain.get_atoms()),
+            "N CA C O CB CG SE CE N CA C O CB CG OD1 OD2 N CA "
+            "C O CB CG1 CG2 CD1 N CA C O CB CG CD NE CZ NH1 "
+            "NH2 N CA C O CB CG CD OE1 NE2 N CA C O N CA C O "
+            "CB CG CD N CA C O CB CG CD CE NZ N CA C O CB CG "
+            "CD OE1 OE2 N CA C O CB CG CD N CA C O CB CG CD1 "
+            "CD2 CE1 CE2 CZ N CA C O CB CG CD NE CZ NH1 NH2 N "
+            "CA C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 "
+            "CE2 CZ OH N CA C O CB CG1 CG2 N CA C O CB CG OD1 "
+            "OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
+            "CG CD1 CD2 CE1 CE2 CZ N CA C O CB CG CD1 CD2 CE1 "
+            "CE2 CZ OH N CA C O CB CG CD CE NZ N CA C O CB "
+            "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
+            "NE CZ NH1 NH2 N CA C O CB N CA C O CB CG CD OE1 "
+            "OE2 N CA C O CB CG CD OE1 NE2 N CA C O CB N CA C "
+            "O CB OG N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
+            "CD OE1 OE2 N CA C O CB CG1 CG2 N CA C O CB CG CD "
+            "CE NZ N CA C O CB CG OD1 ND2 N CA C O CB CG CD1 "
+            "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB CG SE CE "
+            "N CA C O CB OG1 CG2 N CA C O CB CG CD OE1 OE2 N "
+            "CA C O CB OG1 CG2 N CA C O CB CG CD1 CD2 N CA C "
+            "O CB CG CD1 CD2 N CA C O CB CG1 CG2 N CA C O CB "
+            "CG CD OE1 NE2 N CA C O CB CG OD1 ND2 N CA C O CB "
+            "N CA C O CB CG OD1 ND2 N CA C O CB CG CD N CA C "
+            "O CB CG OD1 OD2 N CA C O CB SG N CA C O CB CG CD "
+            "CE NZ N CA C O CB OG1 CG2 N CA C O CB CG1 CG2 "
+            "CD1 N CA C O CB CG CD1 CD2 N CA C O CB CG CD CE "
+            "NZ N CA C O CB N CA C O CB CG CD1 CD2 N CA C O N "
+            "CA C O CB CG CD N CA C O N CA C O CB N CA C O CB "
+            "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
+            "OE1 OE2 N CA C O CB CG CD OE1 OE2 N CA C O CB CG "
+            "SE CE N CA C O CB CG SE CE N CA C O CB OG1 CG2 N "
+            "CA C O CB N CA C O CB SG N CA C O CB CG CD OE1 "
+            "NE2 N CA C O OXT O O O O O O O O O O O O O O O O "
+            "O O O O O O O O O O O O O O O O O O O O O O O O "
+            "O O O O O O O O O O O O O O O O O O O O O O O O "
+            "O O O O O O O O O O O O O O O O O O O O O O O O",
+        )
+        self.assertEqual(
+            " ".join(atom.element for atom in chain.get_atoms()),
+            "N C C O C C SE C N C C O C C O O N C C O C C C C "
+            "N C C O C C C N C N N N C C O C C C O N N C C O "
+            "N C C O C C C N C C O C C C C N N C C O C C C O "
+            "O N C C O C C C N C C O C C C C C C C N C C O C "
+            "C C N C N N N C C O C C O O N C C O C C C C C C "
+            "C O N C C O C C C N C C O C C O O N C C O C C C "
+            "N C N N N C C O C C C C C C C N C C O C C C C C "
+            "C C O N C C O C C C C N N C C O C O C N C C O C "
+            "C C C N C C O C C C N C N N N C C O C N C C O C "
+            "C C O O N C C O C C C O N N C C O C N C C O C O "
+            "N C C O C C C O N N C C O C C C O O N C C O C C "
+            "C N C C O C C C C N N C C O C C O N N C C O C C "
+            "C C N C C C C C N C C O C C SE C N C C O C O C N "
+            "C C O C C C O O N C C O C O C N C C O C C C C N "
+            "C C O C C C C N C C O C C C N C C O C C C O N N "
+            "C C O C C O N N C C O C N C C O C C O N N C C O "
+            "C C C N C C O C C O O N C C O C S N C C O C C C "
+            "C N N C C O C O C N C C O C C C C N C C O C C C "
+            "C N C C O C C C C N N C C O C N C C O C C C C N "
+            "C C O N C C O C C C N C C O N C C O C N C C O C "
+            "O C N C C O C C C C N C C O C C C O O N C C O C "
+            "C C O O N C C O C C SE C N C C O C C SE C N C C "
+            "O C O C N C C O C N C C O C S N C C O C C C O N "
+            "N C C O O O O O O O O O O O O O O O O O O O O O "
+            "O O O O O O O O O O O O O O O O O O O O O O O O "
+            "O O O O O O O O O O O O O O O O O O O O O O O O "
+            "O O O O O O O O O O O O O O O O O O O O O",
+        )
 
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
+        # comment for D202 flake8 vs black disagreement
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 3)
             for idx, model in enumerate(struct):
@@ -854,7 +954,6 @@ class ParseReal(unittest.TestCase):
 
 
 class WriteTest(unittest.TestCase):
-
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
@@ -1059,8 +1158,12 @@ class WriteTest(unittest.TestCase):
 
     def test_mmcifio_multimodel(self):
         """Write a multi-model, multi-chain mmCIF file."""
-        pdb_struct = self.parser.get_structure("1SSU_mod_pdb", self.mmcif_multimodel_pdb_file)
-        mmcif_struct = self.mmcif_parser.get_structure("1SSU_mod_mmcif", self.mmcif_multimodel_mmcif_file)
+        pdb_struct = self.parser.get_structure(
+            "1SSU_mod_pdb", self.mmcif_multimodel_pdb_file
+        )
+        mmcif_struct = self.mmcif_parser.get_structure(
+            "1SSU_mod_mmcif", self.mmcif_multimodel_mmcif_file
+        )
         io = MMCIFIO()
         for struct in [pdb_struct, mmcif_struct]:
             io.set_structure(struct)
@@ -1071,7 +1174,9 @@ class WriteTest(unittest.TestCase):
                 struct_in = self.mmcif_parser.get_structure("1SSU_mod_in", filename)
                 self.assertEqual(len(struct_in), 2)
                 self.assertEqual(len(struct_in[1]), 2)
-                self.assertEqual(round(float(struct_in[1]["B"][1]["N"].get_coord()[0]), 3), 6.259)
+                self.assertEqual(
+                    round(float(struct_in[1]["B"][1]["N"].get_coord()[0]), 3), 6.259
+                )
             finally:
                 os.remove(filename)
 
@@ -1107,7 +1212,9 @@ class Exposure(unittest.TestCase):
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(0, len(residues[1].xtra))
         self.assertEqual(3, len(residues[2].xtra))
-        self.assertAlmostEqual(0.81250973133184456, residues[2].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertAlmostEqual(
+            0.81250973133184456, residues[2].xtra["EXP_CB_PCB_ANGLE"]
+        )
         self.assertEqual(14, residues[2].xtra["EXP_HSE_A_D"])
         self.assertEqual(14, residues[2].xtra["EXP_HSE_A_U"])
         self.assertEqual(3, len(residues[3].xtra))
@@ -1116,7 +1223,9 @@ class Exposure(unittest.TestCase):
         self.assertEqual(16, residues[3].xtra["EXP_HSE_A_U"])
         # ...
         self.assertEqual(3, len(residues[-2].xtra))
-        self.assertAlmostEqual(0.77124014456278489, residues[-2].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertAlmostEqual(
+            0.77124014456278489, residues[-2].xtra["EXP_CB_PCB_ANGLE"]
+        )
         self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_D"])
         self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_U"])
         self.assertEqual(0, len(residues[-1].xtra))
@@ -1188,22 +1297,70 @@ class Atom_Element(unittest.TestCase):
         self.assertEqual("MG", atoms[0].element)
 
     def test_hydrogens(self):
-
         def quick_assign(fullname):
-            return Atom.Atom(fullname.strip(), None, None, None, None,
-                             fullname, None).element
+            return Atom.Atom(
+                fullname.strip(), None, None, None, None, fullname, None
+            ).element
 
         pdb_elements = {
-            "H": (" H  ", " HA ", " HB ", " HD1", " HD2", " HE ", " HE1", " HE2",
-                  " HE3", " HG ", " HG1", " HH ", " HH2", " HZ ", " HZ2", " HZ3",
-                  "1H  ", "1HA ", "1HB ", "1HD ", "1HD1", "1HD2", "1HE ", "1HE2",
-                  "1HG ", "1HG1", "1HG2", "1HH1", "1HH2", "1HZ ", "2H  ", "2HA ",
-                  "2HB ", "2HD ", "2HD1", "2HD2", "2HE ", "2HE2", "2HG ", "2HG1",
-                  "2HG2", "2HH1", "2HH2", "2HZ ", "3H  ", "3HB ", "3HD1", "3HD2",
-                  "3HE ", "3HG1", "3HG2", "3HZ ", "HE21"),
+            "H": (
+                " H  ",
+                " HA ",
+                " HB ",
+                " HD1",
+                " HD2",
+                " HE ",
+                " HE1",
+                " HE2",
+                " HE3",
+                " HG ",
+                " HG1",
+                " HH ",
+                " HH2",
+                " HZ ",
+                " HZ2",
+                " HZ3",
+                "1H  ",
+                "1HA ",
+                "1HB ",
+                "1HD ",
+                "1HD1",
+                "1HD2",
+                "1HE ",
+                "1HE2",
+                "1HG ",
+                "1HG1",
+                "1HG2",
+                "1HH1",
+                "1HH2",
+                "1HZ ",
+                "2H  ",
+                "2HA ",
+                "2HB ",
+                "2HD ",
+                "2HD1",
+                "2HD2",
+                "2HE ",
+                "2HE2",
+                "2HG ",
+                "2HG1",
+                "2HG2",
+                "2HH1",
+                "2HH2",
+                "2HZ ",
+                "3H  ",
+                "3HB ",
+                "3HD1",
+                "3HD2",
+                "3HE ",
+                "3HG1",
+                "3HG2",
+                "3HZ ",
+                "HE21",
+            ),
             "O": (" OH ",),  # noqa: E741
             "C": (" CH2",),
-            "N": (" NH1", " NH2")
+            "N": (" NH1", " NH2"),
         }
 
         for element, atom_names in pdb_elements.items():
@@ -1216,11 +1373,12 @@ class Atom_Element(unittest.TestCase):
 
 
 class IterationTests(unittest.TestCase):
-
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            self.struc = PDBParser(PERMISSIVE=True).get_structure("X", "PDB/a_structure.pdb")
+            self.struc = PDBParser(PERMISSIVE=True).get_structure(
+                "X", "PDB/a_structure.pdb"
+            )
 
     def test_get_chains(self):
         """Yields chains from different models separately."""
@@ -1234,17 +1392,19 @@ class IterationTests(unittest.TestCase):
 
     def test_get_atoms(self):
         """Yields all atoms from the structure, excluding duplicates and ALTLOCs which are not parsed."""
-        atoms = ["%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
+        atoms = [
+            "%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()
+        ]
         self.assertEqual(len(atoms), 835)
 
 
 class ChangingIdTests(unittest.TestCase):
-
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             self.struc = PDBParser(PERMISSIVE=True).get_structure(
-                "X", "PDB/a_structure.pdb")
+                "X", "PDB/a_structure.pdb"
+            )
 
     def test_change_model_id(self):
         """Change the id of a model."""
@@ -1297,8 +1457,7 @@ class ChangingIdTests(unittest.TestCase):
 
         # Generate the original full id.
         original_id = atom.get_full_id()
-        self.assertEqual(original_id,
-                         ("X", 0, "A", ("H_PCA", 1, " "), ("N", " ")))
+        self.assertEqual(original_id, ("X", 0, "A", ("H_PCA", 1, " "), ("N", " ")))
         residue = next(iter(self.struc.get_residues()))
 
         # Make sure the full id was in fact cached,
@@ -1317,8 +1476,7 @@ class ChangingIdTests(unittest.TestCase):
 
         # Generate the original full id.
         original_id = atom.get_full_id()
-        self.assertEqual(original_id,
-                         ("X", 0, "A", ("H_PCA", 1, " "), ("N", " ")))
+        self.assertEqual(original_id, ("X", 0, "A", ("H_PCA", 1, " "), ("N", " ")))
         residue = next(iter(self.struc.get_residues()))
 
         # Make sure the full id was in fact cached,
@@ -1331,6 +1489,7 @@ class ChangingIdTests(unittest.TestCase):
         new_id = atom.get_full_id()
         self.assertNotEqual(original_id, new_id)
         self.assertEqual(new_id, ("X", 0, "Q", ("H_PCA", 1, " "), ("N", " ")))
+
 
 # class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
@@ -1349,12 +1508,12 @@ class ChangingIdTests(unittest.TestCase):
 
 
 class TransformTests(unittest.TestCase):
-
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             self.s = PDBParser(PERMISSIVE=True).get_structure(
-                "X", "PDB/a_structure.pdb")
+                "X", "PDB/a_structure.pdb"
+            )
         self.m = self.s.get_list()[0]
         self.c = self.m.get_list()[0]
         self.r = self.c.get_list()[0]
@@ -1413,12 +1572,12 @@ class PDBParserTests(unittest.TestCase):
 
 
 class CopyTests(unittest.TestCase):
-
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             self.s = PDBParser(PERMISSIVE=True).get_structure(
-                "X", "PDB/a_structure.pdb")
+                "X", "PDB/a_structure.pdb"
+            )
         self.m = self.s.get_list()[0]
         self.c = self.m.get_list()[0]
         self.r = self.c.get_list()[0]
@@ -1450,7 +1609,7 @@ def will_it_float(s):
     try:
         return float(s)
     except ValueError:
-        return(s)
+        return s
 
 
 class DsspTests(unittest.TestCase):
@@ -1484,8 +1643,7 @@ class DsspTests(unittest.TestCase):
         # that actual h-bonds are typically determined by an energetic
         # threshold.
         for val in dssp.values():
-            hb_indices |= {
-                val[5] + x for x in (val[6], val[8], val[10], val[12])}
+            hb_indices |= {val[5] + x for x in (val[6], val[8], val[10], val[12])}
 
         # Check if all h-bond partner indices were successfully parsed.
         self.assertEqual((dssp_indices & hb_indices), hb_indices)
@@ -1510,7 +1668,9 @@ class DsspTests(unittest.TestCase):
                     xtra_list_ref = list(map(will_it_float, xtra_list_ref))
                     # The xtra attribute is a dict.
                     # To compare with the pre-comouted values first sort according to keys:
-                    xtra_itemts = sorted(res.xtra.items(), key=lambda s: s[0])  # noqa: E731
+                    xtra_itemts = sorted(
+                        res.xtra.items(), key=lambda s: s[0]
+                    )  # noqa: E731
                     # Then extract the list of xtra values for the residue
                     # and convert to floats where possible:
                     xtra_list = [t[1] for t in xtra_itemts]

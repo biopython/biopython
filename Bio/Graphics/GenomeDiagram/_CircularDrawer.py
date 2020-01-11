@@ -19,8 +19,6 @@ from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Poly
 from reportlab.lib import colors
 from reportlab.graphics.shapes import ArcPath
 
-from Bio._py3k import range
-
 # GenomeDiagram imports
 from ._AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
 from ._AbstractDrawer import _stroke_and_fill_colors

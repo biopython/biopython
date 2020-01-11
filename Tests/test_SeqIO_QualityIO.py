@@ -10,9 +10,7 @@ import os
 import unittest
 import warnings
 
-from Bio._py3k import range
 from io import StringIO
-from Bio._py3k import _universal_read_mode
 from io import BytesIO
 
 from Bio import BiopythonWarning, BiopythonParserWarning
@@ -139,7 +137,7 @@ class TestFastqErrors(unittest.TestCase):
         if not formats:
             formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
         for format in formats:
-            handle = open(filename, _universal_read_mode)
+            handle = open(filename)
             records = SeqIO.parse(handle, format)
             for i in range(good_count):
                 record = next(records)  # Make sure no errors!
@@ -148,7 +146,7 @@ class TestFastqErrors(unittest.TestCase):
             handle.close()
 
     def check_general_fails(self, filename, good_count):
-        handle = open(filename, _universal_read_mode)
+        handle = open(filename)
         tuples = QualityIO.FastqGeneralIterator(handle)
         for i in range(good_count):
             title, seq, qual = next(tuples)  # Make sure no errors!
@@ -156,7 +154,7 @@ class TestFastqErrors(unittest.TestCase):
         handle.close()
 
     def check_general_passes(self, filename, record_count):
-        handle = open(filename, _universal_read_mode)
+        handle = open(filename)
         tuples = QualityIO.FastqGeneralIterator(handle)
         # This "raw" parser doesn't check the ASCII characters which means
         # certain invalid FASTQ files will get parsed without errors.
@@ -283,8 +281,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
             # Load the reference output...
-            with open("Quality/%s_as_%s.fastq" % (base_name, out_variant),
-                      _universal_read_mode) as handle:
+            with open("Quality/%s_as_%s.fastq" % (base_name, out_variant)) as handle:
                 expected = handle.read()
 
             with warnings.catch_warnings():

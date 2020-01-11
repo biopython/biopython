@@ -9,8 +9,6 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -207,7 +205,7 @@ def _augment_blast_hsp(hsp, attr):
         hsp.gap_pct = hsp.gap_num / float(hsp.aln_span) * 100
 
 
-class BlastTabParser(object):
+class BlastTabParser:
     """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
@@ -233,8 +231,7 @@ class BlastTabParser(object):
                 )
             iterfunc = self._parse_qresult
 
-        for qresult in iterfunc():
-            yield qresult
+        yield from iterfunc()
 
     def _prep_fields(self, fields):
         """Validate and format the given fields for use by the parser (PRIVATE)."""
@@ -559,7 +556,7 @@ class BlastTabIndexer(SearchIndexer):
             iterfunc = self._qresult_index_commented
 
         for key, offset, length in iterfunc():
-            yield _bytes_to_string(key), offset, length
+            yield key.decode(), offset, length
 
     def _qresult_index_commented(self):
         """Indexer for commented BLAST tabular files (PRIVATE)."""
@@ -569,9 +566,9 @@ class BlastTabIndexer(SearchIndexer):
         # mark of a new query
         query_mark = None
         # mark of the query's ID
-        qid_mark = _as_bytes("# Query: ")
+        qid_mark = b"# Query: "
         # mark of the last line
-        end_mark = _as_bytes("# BLAST processed")
+        end_mark = b"# BLAST processed"
 
         while True:
             end_offset = handle.tell()
@@ -595,7 +592,6 @@ class BlastTabIndexer(SearchIndexer):
         start_offset = 0
         qresult_key = None
         key_idx = self._key_idx
-        tab_char = _as_bytes("\t")
 
         while True:
             # get end offset here since we only know a qresult ends after
@@ -605,12 +601,12 @@ class BlastTabIndexer(SearchIndexer):
             line = handle.readline()
 
             if qresult_key is None:
-                qresult_key = line.split(tab_char)[key_idx]
+                qresult_key = line.split(b"\t")[key_idx]
             else:
                 try:
-                    curr_key = line.split(tab_char)[key_idx]
+                    curr_key = line.split(b"\t")[key_idx]
                 except IndexError:
-                    curr_key = _as_bytes("")
+                    curr_key = b""
 
                 if curr_key != qresult_key:
                     yield qresult_key, start_offset, end_offset - start_offset
@@ -634,8 +630,7 @@ class BlastTabIndexer(SearchIndexer):
         """Return the raw bytes string of a single QueryResult from a noncommented file (PRIVATE)."""
         handle = self._handle
         handle.seek(offset)
-        qresult_raw = _as_bytes("")
-        tab_char = _as_bytes("\t")
+        qresult_raw = b""
         key_idx = self._key_idx
         qresult_key = None
 
@@ -643,12 +638,12 @@ class BlastTabIndexer(SearchIndexer):
             line = handle.readline()
             # get the key if the first line (qresult key)
             if qresult_key is None:
-                qresult_key = line.split(tab_char)[key_idx]
+                qresult_key = line.split(b"\t")[key_idx]
             else:
                 try:
-                    curr_key = line.split(tab_char)[key_idx]
+                    curr_key = line.split(b"\t")[key_idx]
                 except IndexError:
-                    curr_key = _as_bytes("")
+                    curr_key = b""
                 # only break when qresult is finished (key is different)
                 if curr_key != qresult_key:
                     break
@@ -661,8 +656,8 @@ class BlastTabIndexer(SearchIndexer):
         """Return the bytes raw string of a single QueryResult from a commented file (PRIVATE)."""
         handle = self._handle
         handle.seek(offset)
-        qresult_raw = _as_bytes("")
-        end_mark = _as_bytes("# BLAST processed")
+        qresult_raw = b""
+        end_mark = b"# BLAST processed"
 
         # query mark is the line marking a new query
         # something like '# TBLASTN 2.2.25+'
@@ -683,7 +678,7 @@ class BlastTabIndexer(SearchIndexer):
         return qresult_raw
 
 
-class BlastTabWriter(object):
+class BlastTabWriter:
     """Writer for blast-tab output format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):

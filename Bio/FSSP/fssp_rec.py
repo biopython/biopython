@@ -5,7 +5,7 @@
 """A superclass for reading [f]ixed-column type [f]lat-[f]ile records."""
 
 
-class fff_rec(object):
+class fff_rec:
     """Define superclass for reading fixed-column type flat-file records."""
 
     def __init__(self, inrec=""):
@@ -31,7 +31,7 @@ class fff_rec(object):
             return self.data[index]
 
 
-class align(object):
+class align:
     """Definition of the align section in a FSSP file."""
 
     abs_res_num = (0, 4)

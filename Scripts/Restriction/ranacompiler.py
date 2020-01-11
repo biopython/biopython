@@ -41,8 +41,6 @@ This Python file is intended to be used via the scripts in
 """
 
 
-from Bio._py3k import input as _input
-
 import os
 import itertools
 import time
@@ -141,7 +139,7 @@ def is_palindrome(sequence):
     return str(sequence) == str(sequence.reverse_complement())
 
 
-class newenzyme(object):
+class newenzyme:
     """Construct the attributes of the enzyme corresponding to 'name'."""
 
     def __init__(cls, name):
@@ -289,7 +287,7 @@ class newenzyme(object):
         return
 
 
-class TypeCompiler(object):
+class TypeCompiler:
     """Build the different types possible for Restriction Enzymes."""
 
     def __init__(self):
@@ -356,7 +354,7 @@ class TypeCompiler(object):
                     return type.__new__(cls, "type%i" % n, ty, dct)
 
                 def __init__(cls):
-                    super(klass, cls).__init__("type%i" % n, ty, dct)
+                    super().__init__("type%i" % n, ty, dct)
 
             yield klass()
             n += 1
@@ -386,7 +384,7 @@ Used REBASE emboss files version {} ({}).
 )
 
 
-class DictionaryBuilder(object):
+class DictionaryBuilder:
     """Builds ``Restriction_Dictionary.py`` from Rebase files.
 
     If the emboss files used for the construction need to be updated this
@@ -465,9 +463,7 @@ class DictionaryBuilder(object):
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict(  # noqa: C404
-                    [(k, v) for k, v in tydct.items() if k in commonattr]
-                )
+                tydct = {k: v for k, v in tydct.items() if k in commonattr}
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__["suppl"]:
@@ -579,7 +575,7 @@ class DictionaryBuilder(object):
                 "\n\t the name Restriction_Dictionary.old."
             )
             print("\n " + "*" * 78 + " \n")
-        except IOError:
+        except OSError:
             print("\n " + "*" * 78 + " \n")
             print(
                 "\n\t WARNING : Impossible to install the new dictionary."
@@ -654,7 +650,7 @@ class DictionaryBuilder(object):
                 "\n The rebase files are missing or more than one month old."
                 "\n Would you like to update them before proceeding?(y/n)"
             )
-            r = _input(" update [n] >>> ")
+            r = input(" update [n] >>> ")
             if r in ["y", "yes", "Y", "Yes"]:
                 get_files()
                 print("\n Update complete. Creating the dictionaries.\n")

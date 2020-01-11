@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2008-2010 by Michiel de Hoon.  All rights reserved.
 # Revisions copyright 2009-2016 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -10,9 +9,8 @@ import unittest
 import sys
 import os
 
-from io import BytesIO
+from io import BytesIO, StringIO
 
-from io import StringIO
 from Bio import Entrez
 
 if os.name == "java":
@@ -32,34 +30,45 @@ class GeneralTests(unittest.TestCase):
         """Test parsing closed handle fails gracefully."""
         handle = open("Entrez/einfo1.xml", "rb")
         handle.close()
-        self.assertRaises(IOError, Entrez.read, handle)
+        self.assertRaises(ValueError, Entrez.read, handle)
 
-    def test_bytes_handle(self):
+    def test_read_bytes_handle(self):
+        """Test reading a handle opened in binary mode."""
+        with open("Entrez/pubmed1.xml", "rb") as handle:
+            record = Entrez.read(handle)
+        self.assertEqual(len(record), 2)
+        self.assertIn("MedlineCitation", record[0])
+
+    def test_parse_bytes_handle(self):
         """Test parsing a handle opened in binary mode."""
-        with open("Entrez/einfo1.xml", "rb") as handle:
-            record = Entrez.read(handle)
-        self.assertIn("DbList", record)
+        with open("Entrez/pubmed1.xml", "rb") as handle:
+            records = Entrez.parse(handle)
+            n = 0
+            for record in records:
+                self.assertIn("MedlineCitation", record)
+                n += 1
+        self.assertEqual(n, 2)
 
-    def test_text_handle(self):
+    def test_read_text_handle(self):
+        """Test reading a handle opened in text mode."""
+        message = "^file should be opened in binary mode$"
+        with open("Entrez/pubmed1.xml", "rt") as handle:
+            with self.assertRaisesRegex(TypeError, message):
+                Entrez.read(handle)
+
+    def test_parse_text_handle(self):
         """Test parsing a handle opened in text mode."""
+        message = "^file should be opened in binary mode$"
         with open("Entrez/einfo1.xml", "rt") as handle:
-            record = Entrez.read(handle)
-        self.assertIn("DbList", record)
+            records = Entrez.parse(handle)
+            with self.assertRaisesRegex(TypeError, message):
+                next(records)
 
     def test_BytesIO(self):
-        """Test parsing a BytesIO handle (bytes not unicode)."""
+        """Test parsing a BytesIO handle (bytes not string)."""
         with open("Entrez/einfo1.xml", "rb") as in_handle:
             data = in_handle.read()
         handle = BytesIO(data)
-        record = Entrez.read(handle)
-        self.assertIn("DbList", record)
-        handle.close()
-
-    def test_StringIO(self):
-        """Test parsing a StringIO handle (unicode not bytes)."""
-        with open("Entrez/einfo1.xml", "rt") as in_handle:
-            data = in_handle.read()
-        handle = StringIO(data)
         record = Entrez.read(handle)
         self.assertIn("DbList", record)
         handle.close()
@@ -5806,12 +5815,12 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
     def test_truncated_xml(self):
         """Test error handling for a truncated XML declaration."""
         from Bio.Entrez.Parser import CorruptedXMLError
-        from io import StringIO
-        truncated_xml = """<?xml version="1.0"?>
+        from io import BytesIO
+        truncated_xml = b"""<?xml version="1.0"?>
         <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
         <GBSet><GBSeq><GBSeq_locus>
         """
-        handle = StringIO()
+        handle = BytesIO()
         handle.write(truncated_xml)
         handle.seek(0)
         records = Entrez.parse(handle)

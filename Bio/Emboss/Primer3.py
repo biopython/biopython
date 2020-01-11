@@ -23,7 +23,7 @@ function to iterate over the retsults.
 # --- primer3
 
 
-class Record(object):
+class Record:
     """Represent information from a primer3 run finding primers.
 
     Members:
@@ -40,7 +40,7 @@ class Record(object):
         self.primers = []
 
 
-class Primers(object):
+class Primers:
     """A primer set designed by Primer3.
 
     Members:
@@ -112,7 +112,10 @@ def parse(handle):
             record.comments += line
             primer = None
         elif line.startswith("#"):
-            if line.strip() != "#                      Start  Len   Tm     GC%   Sequence":
+            if (
+                line.strip()
+                != "#                      Start  Len   Tm     GC%   Sequence"
+            ):
                 record.comments += line
         elif not line.strip():
             pass

@@ -132,7 +132,7 @@ class TestAlignIO_reading(unittest.TestCase):
             # Try writing just one Alignment (not a list)
             handle = StringIO()
             AlignIO.write(alignments[0:1], handle, fmt)
-            self.assertEqual(handle.getvalue(), alignments[0].format(fmt))
+            self.assertEqual(handle.getvalue(), format(alignments[0], fmt))
 
     def check_iterator_for_loop_handle(self, path, fmt, length, m=None):
         # Try using the iterator with a for loop and a handle
@@ -760,11 +760,11 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator_next_and_list(path, "emboss", 5)
         self.check_iterator_next_for_loop(path, "emboss", 5)
         self.check_read_fails(path, "emboss")
-        self.assertEquals(alignments[0].get_alignment_length(), 145)
-        self.assertEquals(alignments[1].get_alignment_length(), 13)
-        self.assertEquals(alignments[2].get_alignment_length(), 18)
-        self.assertEquals(alignments[3].get_alignment_length(), 10)
-        self.assertEquals(alignments[4].get_alignment_length(), 10)
+        self.assertEqual(alignments[0].get_alignment_length(), 145)
+        self.assertEqual(alignments[1].get_alignment_length(), 13)
+        self.assertEqual(alignments[2].get_alignment_length(), 18)
+        self.assertEqual(alignments[3].get_alignment_length(), 10)
+        self.assertEqual(alignments[4].get_alignment_length(), 10)
         self.check_alignment_rows(
             alignments[0],
             [("HBA_HUMAN", "LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLS...SKY"),

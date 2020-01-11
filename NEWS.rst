@@ -29,9 +29,12 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Chris Rands
+- Deepak Khatri
 - Kai Blin
 - Peter Cock
-- Sujan Dulal
+- Rob Miller
+- Sujan Dulal (first contribution)
 
 20 December 2019: Biopython 1.76
 ================================
@@ -64,9 +67,11 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrey Raspopov
 - Chris Daley (first contribution)
 - Chris Rands
 - Christian Brueffer
+- Deepak Khatri
 - Ilya Flyamer (first contribution)
 - Jakub Lipinski (first contribution)
 - Michael R. Crusoe (first contribution)
@@ -248,7 +253,7 @@ possible, especially the following contributors:
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
-- Deepak Khatri
+- Deepak Khatri (first contribution)
 - Gert Hulselmans
 - Jared Andrews
 - Jens Thomas (first contribution)
@@ -261,7 +266,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Peter Kerpedjiev
 - Ralf Stephan
-- Rob Miller
+- Rob Miller (first contribution)
 - Sergio Valqui
 - Victor Lin
 - Wibowo 'Bow' Arindrarto

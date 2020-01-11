@@ -6,14 +6,13 @@
 """Unit tests for the Bio.Phylo module."""
 
 import os
-import sys
 import unittest
 import tempfile
 
 from io import StringIO
 
 from Bio import Phylo
-from Bio.Phylo import PhyloXML, NewickIO
+from Bio.Phylo import PhyloXML
 
 
 # Example Newick and Nexus files
@@ -55,13 +54,9 @@ class IOTests(unittest.TestCase):
 
     def test_unicode_exception(self):
         """Read a Newick file with a unicode byte order mark (BOM)."""
-        if sys.version_info[0] < 3:
-            self.assertRaises(NewickIO.NewickError, Phylo.read, EX_NEWICK_BOM, "newick")
-        else:
-            # Must specify the encoding on Windows
-            with open(EX_NEWICK_BOM, encoding="utf-8") as handle:
-                tree = Phylo.read(handle, "newick")
-            self.assertEqual(len(tree.get_terminals()), 3)
+        with open(EX_NEWICK_BOM, encoding="utf-8") as handle:
+            tree = Phylo.read(handle, "newick")
+        self.assertEqual(len(tree.get_terminals()), 3)
 
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
@@ -149,12 +144,8 @@ class IOTests(unittest.TestCase):
         """Try writing phyloxml to a binary handle; fail on Py3."""
         trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
         with tempfile.NamedTemporaryFile(mode="wb") as out_handle:
-            if sys.version_info[0] < 3:
-                count = Phylo.write(trees, out_handle, "phyloxml")
-                self.assertEqual(13, count)
-            else:
-                self.assertRaises(TypeError, Phylo.write,
-                                  trees, out_handle, "phyloxml")
+            self.assertRaises(TypeError, Phylo.write,
+                              trees, out_handle, "phyloxml")
 
     def test_convert_phyloxml_text(self):
         """Write phyloxml to a text handle."""

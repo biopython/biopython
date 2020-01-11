@@ -95,8 +95,7 @@ class Residue(Entity):
 
     def get_atoms(self):
         """Return atoms."""
-        for a in self:
-            yield a
+        yield from self
 
     def get_atom(self):
         """Return atom."""
@@ -105,8 +104,7 @@ class Residue(Entity):
             " in a future release of Biopython. Please use `get_atoms` instead.",
             BiopythonDeprecationWarning,
         )
-        for a in self:
-            yield a
+        yield from self
 
 
 class DisorderedResidue(DisorderedEntityWrapper):

@@ -132,7 +132,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
     raise StopIteration
 
 
-class _FileIterator(object):
+class _FileIterator:
     """Return an iterator which crawls over a stream of lines with a function (PRIVATE).
 
     The generator function is expected to yield a tuple, while
@@ -158,12 +158,6 @@ class _FileIterator(object):
 
     def __next__(self):
         return self.func(self)
-
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Return next item, a Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def __del__(self):
         self.stream.close()
@@ -207,7 +201,7 @@ class _GenePopCommandline(AbstractCommandline):
         self.set_parameter("input", "InputFile=" + fname)
 
 
-class GenePopController(object):
+class GenePopController:
     """Define a class to interface with the GenePop program."""
 
     def __init__(self, genepop_dir=None):

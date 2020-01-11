@@ -1,7 +1,7 @@
 # Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005, 2010 by M de Hoon.
-# Copyright 2007-2018 by Peter Cock.
+# Copyright 2007-2020 by Peter Cock.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -20,14 +20,11 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 
-import string  # for maketrans only
 import array
 import sys
 import warnings
 import collections
 from collections.abc import Iterable as _Iterable
-
-from Bio._py3k import range
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
@@ -56,17 +53,14 @@ def _maketrans(complement_mapping):
     after = "".join(complement_mapping.values())
     before += before.lower()
     after += after.lower()
-    if sys.version_info[0] == 3:
-        return str.maketrans(before, after)
-    else:
-        return string.maketrans(before, after)
+    return str.maketrans(before, after)
 
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
-class Seq(object):
+class Seq:
     """Read-only sequence object (essentially a string with an alphabet).
 
     Like normal python strings, our basic sequence object is immutable.
@@ -219,11 +213,6 @@ class Seq(object):
                 )
         return str(self) == str(other)
 
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # Require this method for Python 2 but not needed on Python 3
-        return not self == other
-
     def __lt__(self, other):
         """Implement the less-than operand."""
         if hasattr(other, "alphabet"):
@@ -307,9 +296,6 @@ class Seq(object):
         >>> my_seq[5]
         'A'
         """
-        # Note since Python 2.0, __getslice__ is deprecated
-        # and __getitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Return a single letter as a string
             return self._data[index]
@@ -2000,7 +1986,7 @@ class UnknownSeq(Seq):
         return Seq(temp_data, a)
 
 
-class MutableSeq(object):
+class MutableSeq:
     """An editable sequence object (with an alphabet).
 
     Unlike normal python strings and our basic sequence object (the Seq class)
@@ -2031,12 +2017,8 @@ class MutableSeq(object):
 
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         """Initialize the class."""
-        if sys.version_info[0] == 3:
-            self.array_indicator = "u"
-        else:
-            self.array_indicator = "c"
         if isinstance(data, str):  # TODO - What about unicode?
-            self.data = array.array(self.array_indicator, data)
+            self.data = array.array("u", data)
         elif isinstance(data, (Seq, int, float)):
             raise TypeError(
                 "The sequence data given to a MutableSeq object "
@@ -2117,11 +2099,6 @@ class MutableSeq(object):
             if isinstance(other, MutableSeq):
                 return self.data == other.data
         return str(self) == str(other)
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # Seem to require this method for Python 2 but not needed on Python 3?
-        return not (self == other)
 
     def __lt__(self, other):
         """Implement the less-than operand."""
@@ -2214,9 +2191,6 @@ class MutableSeq(object):
         >>> my_seq[5]
         'A'
         """
-        # Note since Python 2.0, __getslice__ is deprecated
-        # and __getitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Return a single letter as a string
             return self.data[index]
@@ -2232,9 +2206,6 @@ class MutableSeq(object):
         >>> my_seq
         MutableSeq('TCTCGACGTCG')
         """
-        # Note since Python 2.0, __setslice__ is deprecated
-        # and __setitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Replacing a single letter with a new string
             self.data[index] = value
@@ -2245,7 +2216,7 @@ class MutableSeq(object):
             elif isinstance(value, type(self.data)):
                 self.data[index] = value
             else:
-                self.data[index] = array.array(self.array_indicator, str(value))
+                self.data[index] = array.array("u", str(value))
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -2255,10 +2226,6 @@ class MutableSeq(object):
         >>> my_seq
         MutableSeq('CTCGACGTCG')
         """
-        # Note since Python 2.0, __delslice__ is deprecated
-        # and __delitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
-
         # Could be deleting a single letter, or a slice
         del self.data[index]
 
@@ -2615,7 +2582,7 @@ class MutableSeq(object):
         mixed = d.copy()  # We're going to edit this to be mixed case!
         mixed.update((x.lower(), y.lower()) for x, y in d.items())
         self.data = [mixed[_] for _ in self.data]
-        self.data = array.array(self.array_indicator, self.data)
+        self.data = array.array("u", self.data)
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.

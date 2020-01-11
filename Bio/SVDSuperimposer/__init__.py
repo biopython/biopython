@@ -24,7 +24,7 @@ except ImportError:
     )
 
 
-class SVDSuperimposer(object):
+class SVDSuperimposer:
     """Class to run SVD alignment.
 
     SVDSuperimposer finds the best rotation and translation to put

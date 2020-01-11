@@ -17,7 +17,7 @@ from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
 
 
-class Atom(object):
+class Atom:
     """Define Atom class.
 
     The Atom object stores atom name (both with and without spaces),
@@ -443,8 +443,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
     # Override parent class __iter__ method
     def __iter__(self):
         """Iterate through disordered atoms."""
-        for i in self.disordered_get_list():
-            yield i
+        yield from self.disordered_get_list()
 
     def __repr__(self):
         """Return disordered atom identifier."""

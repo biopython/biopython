@@ -21,7 +21,7 @@ import numpy
 import numpy.linalg
 
 
-class LogisticRegression(object):
+class LogisticRegression:
     """Holds information necessary to do logistic regression classification.
 
     Attributes:
@@ -100,7 +100,7 @@ def train(xs, ys, update_fn=None, typecode=None):
         delta = numpy.linalg.solve(XtWX, Xtyp)
         if numpy.fabs(stepsize - 1.0) > 0.001:
             delta *= stepsize
-        beta += delta                 # Update beta.
+        beta += delta  # Update beta.
     else:
         raise RuntimeError("Didn't converge.")
 

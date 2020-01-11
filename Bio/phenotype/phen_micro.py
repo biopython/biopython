@@ -29,7 +29,6 @@ import json
 import csv
 import numpy as np
 
-from Bio._py3k import _is_int_or_long
 from Bio import BiopythonParserWarning
 
 # Private csv headers - hardcoded because this are supposedly never changed
@@ -55,7 +54,7 @@ _measurements = "measurements"
 #
 
 
-class PlateRecord(object):
+class PlateRecord:
     """PlateRecord object for storing Phenotype Microarray plates data.
 
     A PlateRecord stores all the wells of a particular phenotype
@@ -410,9 +409,6 @@ class PlateRecord(object):
         else:
             return False
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __add__(self, plate):
         """Add another PlateRecord object.
 
@@ -581,7 +577,7 @@ class PlateRecord(object):
         return "\n".join(lines)
 
 
-class WellRecord(object):
+class WellRecord:
     """WellRecord stores all time course signals of a phenotype Microarray well.
 
     The single time points and signals can be accessed iterating on the
@@ -723,7 +719,7 @@ class WellRecord(object):
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
 
-        elif _is_int_or_long(time) or isinstance(time, float):
+        elif isinstance(time, int) or isinstance(time, float):
             return self._interpolate(time)
 
         raise ValueError("Invalid index")
@@ -745,9 +741,6 @@ class WellRecord(object):
             return True
         else:
             return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
     def __add__(self, well):
         """Add another WellRecord object.
@@ -1187,7 +1180,7 @@ def _toOPM(plate):
     return d
 
 
-class JsonWriter(object):
+class JsonWriter:
     """Class to write PM Json format files."""
 
     def __init__(self, plates):

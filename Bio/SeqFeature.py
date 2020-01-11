@@ -47,6 +47,7 @@ Classes:
  - BeforePosition - Specify the position as being found before some base.
  - AfterPosition - Specify the position as being found after some base.
  - OneOfPosition - Specify a position where the location can be multiple positions.
+ - UncertainPosition - Specify a specific position which is uncertain.
  - UnknownPosition - Represents missing information like '?' in UniProt.
 
 """
@@ -54,12 +55,10 @@ Classes:
 
 from collections import OrderedDict
 
-from Bio._py3k import _is_int_or_long
-
 from Bio.Seq import MutableSeq, reverse_complement
 
 
-class SeqFeature(object):
+class SeqFeature:
     """Represent a Sequence Feature on an object.
 
     Attributes:
@@ -592,7 +591,7 @@ class SeqFeature(object):
 
 
 # TODO -- Will this hold PubMed and Medline information decently?
-class Reference(object):
+class Reference:
     """Represent a Generic Reference object.
 
     Attributes:
@@ -657,16 +656,11 @@ class Reference(object):
             and self.location == other.location
         )
 
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # This is needed for py2, but not for py3.
-        return not self == other
-
 
 # --- Handling feature locations
 
 
-class FeatureLocation(object):
+class FeatureLocation:
     """Specify the location of a feature along a sequence.
 
     The FeatureLocation is used for simple continuous features, which can
@@ -788,13 +782,13 @@ class FeatureLocation(object):
         # TODO - Check 0 <= start <= end (<= length of reference)
         if isinstance(start, AbstractPosition):
             self._start = start
-        elif _is_int_or_long(start):
+        elif isinstance(start, int):
             self._start = ExactPosition(start)
         else:
             raise TypeError("start=%r %s" % (start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
-        elif _is_int_or_long(end):
+        elif isinstance(end, int):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
@@ -908,7 +902,7 @@ class FeatureLocation(object):
         """
         if isinstance(other, FeatureLocation):
             return CompoundLocation([self, other])
-        elif _is_int_or_long(other):
+        elif isinstance(other, int):
             return self._shift(other)
         else:
             # This will allow CompoundLocation's __radd__ to be called:
@@ -916,7 +910,7 @@ class FeatureLocation(object):
 
     def __radd__(self, other):
         """Add a feature locationanother FeatureLocation object to the left."""
-        if _is_int_or_long(other):
+        if isinstance(other, int):
             return self._shift(other)
         else:
             return NotImplemented
@@ -961,7 +955,7 @@ class FeatureLocation(object):
         >>> [i for i in range(15) if i in loc]
         [5, 6, 7, 8, 9]
         """
-        if not _is_int_or_long(value):
+        if not isinstance(value, int):
             raise ValueError(
                 "Currently we only support checking for integer "
                 "positions being within a FeatureLocation."
@@ -997,11 +991,9 @@ class FeatureLocation(object):
         [9, 8, 7, 6, 5]
         """
         if self.strand == -1:
-            for i in range(self._end - 1, self._start - 1, -1):
-                yield i
+            yield from range(self._end - 1, self._start - 1, -1)
         else:
-            for i in range(self._start, self._end):
-                yield i
+            yield from range(self._start, self._end)
 
     def __eq__(self, other):
         """Implement equality by comparing all the location attributes."""
@@ -1014,11 +1006,6 @@ class FeatureLocation(object):
             and self.ref == other.ref
             and self.ref_db == other.ref_db
         )
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # This is needed for py2, but not for py3.
-        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
@@ -1142,7 +1129,7 @@ class FeatureLocation(object):
         return f_seq
 
 
-class CompoundLocation(object):
+class CompoundLocation:
     """For handling joins etc where a feature location has several parts."""
 
     def __init__(self, parts, operator="join"):
@@ -1323,7 +1310,7 @@ class CompoundLocation(object):
                     "Mixed operators %s and %s" % (self.operator, other.operator)
                 )
             return CompoundLocation(self.parts + other.parts, self.operator)
-        elif _is_int_or_long(other):
+        elif isinstance(other, int):
             return self._shift(other)
         else:
             raise NotImplementedError
@@ -1332,7 +1319,7 @@ class CompoundLocation(object):
         """Add a feature to the left."""
         if isinstance(other, FeatureLocation):
             return CompoundLocation([other] + self.parts, self.operator)
-        elif _is_int_or_long(other):
+        elif isinstance(other, int):
             return self._shift(other)
         else:
             raise NotImplementedError
@@ -1365,8 +1352,7 @@ class CompoundLocation(object):
     def __iter__(self):
         """Iterate over the parent positions within the CompoundLocation object."""
         for loc in self.parts:
-            for pos in loc:
-                yield pos
+            yield from loc
 
     def __eq__(self, other):
         """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation."""
@@ -1380,11 +1366,6 @@ class CompoundLocation(object):
             if self_part != other_part:
                 return False
         return True
-
-    def __ne__(self, other):
-        """Implement the not-equal operand."""
-        # This is needed for py2, but not for py3.
-        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the CompoundLocation shifted by an offset (PRIVATE)."""
@@ -1560,7 +1541,7 @@ class CompoundLocation(object):
         return f_seq
 
 
-class AbstractPosition(object):
+class AbstractPosition:
     """Abstract base class representing a position."""
 
     def __repr__(self):
@@ -2201,7 +2182,7 @@ class OneOfPosition(int, AbstractPosition):
         )
 
 
-class PositionGap(object):
+class PositionGap:
     """Simple class to hold information about a gap between positions."""
 
     def __init__(self, gap_size):

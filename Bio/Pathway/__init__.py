@@ -38,7 +38,7 @@ from functools import reduce
 from Bio.Pathway.Rep.MultiGraph import MultiGraph, bf_search, df_search
 
 
-class Reaction(object):
+class Reaction:
     """Abstraction for a biochemical transformation.
 
     This class represents a (potentially reversible) biochemical
@@ -94,10 +94,6 @@ class Reaction(object):
             and self.reversible == r.reversible
         )
 
-    def __ne__(self, r):
-        """Return true iff self is not equal to r."""
-        return not self.__eq__(r)
-
     def __hash__(self):
         """Return a hashcode for self."""
         t = tuple(self.species())
@@ -152,7 +148,7 @@ class Reaction(object):
         return list(self.reactants)
 
 
-class System(object):
+class System:
     """Abstraction for a collection of reactions.
 
     This class is used in the Bio.Pathway framework to represent an arbitrary
@@ -230,7 +226,7 @@ class System(object):
         return (species, reactions, stoch)
 
 
-class Interaction(object):
+class Interaction:
     """An arbitrary interaction between any number of species.
 
     This class definition is intended solely as a minimal wrapper interface that should
@@ -257,7 +253,7 @@ class Interaction(object):
         return "<" + str(self.data) + ">"
 
 
-class Network(object):
+class Network:
     """A set of species that are explicitly linked by interactions.
 
     The network is a directed multigraph with labeled edges. The nodes in the graph

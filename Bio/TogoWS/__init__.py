@@ -32,12 +32,11 @@ http://soapy.sourceforge.net/
 """
 
 
+import io
 import time
-from Bio._py3k import _binary_to_string_handle, _as_bytes
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import quote as _quote
+from urllib.request import urlopen
+from urllib.parse import quote
 
 
 # Constant
@@ -144,7 +143,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
+    url = _BASE_URL + "/entry/%s/%s" % (db, quote(id))
     if field:
         url += "/" + field
     if format:
@@ -175,7 +174,7 @@ def search_count(db, query):
             "TogoWS search does not officially support database '%s'. "
             "See %s/search/ for options." % (db, _BASE_URL)
         )
-    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+    url = _BASE_URL + "/search/%s/%s/count" % (db, quote(query))
     handle = _open(url)
     data = handle.read()
     handle.close()
@@ -278,7 +277,7 @@ def search(db, query, offset=None, limit=None, format=None):
             "TogoWS search does not explicitly support database '%s'. "
             "See %s/search/ for options." % (db, _BASE_URL)
         )
-    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
+    url = _BASE_URL + "/search/%s/%s" % (db, quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -327,12 +326,13 @@ def convert(data, in_format, out_format):
         raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
     url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
     # TODO - Should we just accept a string not a handle? What about a filename?
-    if hasattr(data, "read"):
+    try:
         # Handle
-        return _open(url, post=data.read())
-    else:
+        data = data.read()
+    except AttributeError:
         # String
-        return _open(url, post=data)
+        pass
+    return _open(url, post=data)
 
 
 def _open(url, post=None):
@@ -352,16 +352,17 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    # print(url)
     if post:
-        handle = _urlopen(url, _as_bytes(post))
+        handle = urlopen(url, post.encode())
     else:
-        handle = _urlopen(url)
+        handle = urlopen(url)
 
     # We now trust TogoWS to have set an HTTP error code, that
     # suffices for my current unit tests. Previously we would
     # examine the start of the data returned back.
-    return _binary_to_string_handle(handle)
+    text_handle = io.TextIOWrapper(handle, encoding="UTF-8")
+    text_handle.url = handle.url
+    return text_handle
 
 
 _open.previous = 0

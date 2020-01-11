@@ -68,9 +68,7 @@ def read(handle):
             break
         record.loci_list.append(line)
     else:
-        raise ValueError(
-            "No population data found, file probably not GenePop related"
-        )
+        raise ValueError("No population data found, file probably not GenePop related")
     record.populations.append([])
     for line in handle:
         line = line.rstrip()
@@ -95,7 +93,7 @@ def read(handle):
     return record
 
 
-class Record(object):
+class Record:
     """Hold information from a GenePop record.
 
     Members:

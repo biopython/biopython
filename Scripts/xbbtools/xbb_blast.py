@@ -26,7 +26,7 @@ from xbb_utils import NotePad
 import xbb_blastbg
 
 
-class BlastIt(object):
+class BlastIt:
     """Local BLAST integration for xbbtools."""
 
     nin, pin = [], []

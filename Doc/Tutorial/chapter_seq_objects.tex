@@ -186,8 +186,7 @@ If you really do just need a plain string, for example to write to a file, or in
 
 Since calling \verb|str()| on a \verb|Seq| object returns the full sequence as a string,
 you often don't actually have to do this conversion explicitly.
-Python does this automatically in the print function
-(and the print statement under Python 2):
+Python does this automatically in the print function:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -768,7 +767,7 @@ Just like the normal Python string, the \verb|Seq| object is ``read only'', or i
 \end{minted}
 
 Observe what happens if you try to edit the sequence:
-%TODO - This is not a doctest as Python 2.4 output omits the object name.
+%cont-doctest
 \begin{minted}{pycon}
 >>> my_seq[5] = "G"
 Traceback (most recent call last):

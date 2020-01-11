@@ -757,7 +757,7 @@ store any additional information about the motif:
 %cont-doctest
 \begin{minted}{pycon}
 >>> motif = record[0]
->>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
+>>> motif.degenerate_consensus # Using the Bio.motifs.Motif property
 Seq('SRACAGGTGKYG')
 >>> motif["ID"] # Using motif as a dictionary
 'motif1'
@@ -865,10 +865,10 @@ in a string and saving it in a file:
 \section{Writing motifs}
 
 Speaking of exporting, let's look at export functions in general.
-We can use the \verb+format+ method to write the motif in the simple JASPAR \verb+pfm+ format:
+We can use the \verb+format+ built-in function to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
 \begin{minted}{pycon}
->>> print(arnt.format("pfm"))
+>>> print(format(arnt, "pfm"))
   4.00  19.00   0.00   0.00   0.00   0.00
  16.00   0.00  20.00   0.00   0.00   0.00
   0.00   1.00   0.00  20.00   0.00  20.00
@@ -876,7 +876,7 @@ We can use the \verb+format+ method to write the motif in the simple JASPAR \ver
 \end{minted}
 Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
 \begin{minted}{pycon}
->>> print(arnt.format("jaspar"))
+>>> print(format(arnt, "jaspar"))
 >MA0004.1  Arnt
 A [  4.00  19.00   0.00   0.00   0.00   0.00]
 C [ 16.00   0.00  20.00   0.00   0.00   0.00]
@@ -888,7 +888,7 @@ To write the motif in a TRANSFAC-like matrix format, use
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(m.format("transfac"))
+>>> print(format(m, "transfac"))
 P0      A      C      G      T
 01      3      0      0      4      W
 02      7      0      0      0      A
@@ -1285,9 +1285,6 @@ C:   0.80   0.00   1.00   0.00   0.00   0.00
 G:   0.00   0.05   0.00   1.00   0.00   1.00
 T:   0.00   0.00   0.00   0.00   1.00   0.00
 <BLANKLINE>
-\end{minted}
-%Can't use next bit in doctest, Windows Python 2.5 and 2.6 put -1.$ not -inf
-\begin{minted}{pycon}
 >>> print(motif.pssm)
         0      1      2      3      4      5
 A:  -0.32   1.93   -inf   -inf   -inf   -inf
@@ -1320,10 +1317,6 @@ A: 3.00
 C: 3.00
 G: 3.00
 T: 3.00
-\end{minted}
-%Can't use this in doctest, Windows Python 2.5 and 2.6 give G/1 as 0.13 not 0.12
-%TODO - Check why...
-\begin{minted}{pycon}
 >>> print(motif.pwm)
         0      1      2      3      4      5
 A:   0.22   0.69   0.09   0.09   0.09   0.09

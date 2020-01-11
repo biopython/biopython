@@ -341,7 +341,7 @@ def _make_dssp_dict(handle):
                 O_NH_2_relidx = int(l[72 + shift : 78 + shift])
                 O_NH_2_energy = float(l[79 + shift : 83 + shift])
 
-                acc = int((l[34 + shift : 38 + shift]))
+                acc = int(l[34 + shift : 38 + shift])
                 phi = float(l[103 + shift : 109 + shift])
                 psi = float(l[109 + shift : 115 + shift])
             else:

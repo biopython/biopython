@@ -6,8 +6,8 @@
 """Code for calling and parsing ScanProsite from ExPASy."""
 
 # Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
+from urllib.request import urlopen
+from urllib.parse import urlencode
 
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
@@ -54,9 +54,9 @@ def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
     for key, value in keywords.items():
         if value is not None:
             parameters[key] = value
-    command = _urlencode(parameters)
+    command = urlencode(parameters)
     url = "%s/cgi-bin/prosite/PSScan.cgi?%s" % (mirror, command)
-    handle = _urlopen(url)
+    handle = urlopen(url)
     return handle
 
 

@@ -16,10 +16,7 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 import os
-import sys
 
-from Bio._py3k import _universal_read_mode
-from Bio._py3k import _bytes_bytearray_to_str as bytearray_to_str
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -156,7 +153,7 @@ def open_database(driver="MySQLdb", **kwargs):
     return server
 
 
-class DBServer(object):
+class DBServer:
     """Represents a BioSQL database continaing namespaces (sub-databases).
 
     This acts like a Python dictionary, giving access to each namespace
@@ -177,7 +174,7 @@ class DBServer(object):
         self.module = module
         if module_name is None:
             module_name = module.__name__
-        if module_name == "mysql.connector" and sys.version_info[0] == 3:
+        if module_name == "mysql.connector":
             wrap_cursor = True
         else:
             wrap_cursor = False
@@ -315,7 +312,7 @@ class DBServer(object):
 
         # read the file with all comment lines removed
         sql = ""
-        with open(sql_file, _universal_read_mode) as sql_handle:
+        with open(sql_file) as sql_handle:
             for line in sql_handle:
                 if line.startswith("--"):  # don't include comment lines
                     pass
@@ -355,7 +352,7 @@ class DBServer(object):
         return self.adaptor.close()
 
 
-class _CursorWrapper(object):
+class _CursorWrapper:
     """A wraper for mysql.connector resolving bytestring representations."""
 
     def __init__(self, real_cursor):
@@ -393,7 +390,7 @@ class _CursorWrapper(object):
         return self._convert_tuple(tuple_)
 
 
-class Adaptor(object):
+class Adaptor:
     """High level wrapper for a database connection and cursor.
 
     Most database calls in BioSQL are done indirectly though this adaptor
@@ -661,20 +658,27 @@ class MysqlConnectorAdaptor(Adaptor):
     mysql-connector-python in release 2.0.0 of the package.
     """
 
+    @staticmethod
+    def _bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
+        if isinstance(s, (bytes, bytearray)):
+            return s.decode()
+        return s
+
     def execute_one(self, sql, args=None):
         """Execute sql that returns 1 record, and return the record."""
-        out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
-        return tuple(bytearray_to_str(v) for v in out)
+        out = super().execute_one(sql, args)
+        return tuple(self._bytearray_to_str(v) for v in out)
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
-        out = super(MysqlConnectorAdaptor, self).execute_and_fetch_col0(sql, args)
-        return [bytearray_to_str(column) for column in out]
+        out = super().execute_and_fetch_col0(sql, args)
+        return [self._bytearray_to_str(column) for column in out]
 
     def execute_and_fetchall(self, sql, args=None):
         """Return a list of tuples of all rows."""
-        out = super(MysqlConnectorAdaptor, self).execute_and_fetchall(sql, args)
-        return [tuple(bytearray_to_str(v) for v in o) for o in out]
+        out = super().execute_and_fetchall(sql, args)
+        return [tuple(self._bytearray_to_str(v) for v in o) for o in out]
 
 
 _interface_specific_adaptors = {
@@ -694,7 +698,7 @@ _allowed_lookups = {
 }
 
 
-class BioSeqDatabase(object):
+class BioSeqDatabase:
     """Represents a namespace (sub-database) within the BioSQL database.
 
     i.e. One row in the biodatabase table, and all all rows in the bioentry

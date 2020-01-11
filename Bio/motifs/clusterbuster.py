@@ -49,8 +49,12 @@ def read(handle):
                 matrix_columns = line.split()
 
                 if len(matrix_columns) == 4:
-                    [nucleotide_counts[nucleotide].append(float(nucleotide_count))
-                     for nucleotide, nucleotide_count in zip(["A", "C", "G", "T"], matrix_columns)]
+                    [
+                        nucleotide_counts[nucleotide].append(float(nucleotide_count))
+                        for nucleotide, nucleotide_count in zip(
+                            ["A", "C", "G", "T"], matrix_columns
+                        )
+                    ]
 
     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
     motif.name = motif_name
@@ -65,8 +69,12 @@ def write(motifs):
     for m in motifs:
         line = ">{0}\n".format(m.name)
         lines.append(line)
-        for ACGT_counts in zip(m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]):
-            lines.append("{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts))
+        for ACGT_counts in zip(
+            m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
+        ):
+            lines.append(
+                "{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts)
+            )
 
     # Finished; glue the lines together.
     text = "".join(lines)

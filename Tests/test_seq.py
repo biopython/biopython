@@ -813,12 +813,12 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_complement(self):
         self.mutable_s.complement()
-        self.assertEqual(str("AGTTTTCCTACGTAGTAC"), str(self.mutable_s))
+        self.assertEqual("AGTTTTCCTACGTAGTAC", str(self.mutable_s))
 
     def test_complement_rna(self):
         seq = Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna)
         seq.complement()
-        self.assertEqual(str("UACuuuGAC"), str(seq))
+        self.assertEqual("UACuuuGAC", str(seq))
 
     def test_complement_mixed_aphabets(self):
         seq = Seq.MutableSeq("AUGaaaCTG")
@@ -933,7 +933,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_complement(self):
         self.s.complement()
-        self.assertEqual(str("??????"), str(self.s))
+        self.assertEqual("??????", str(self.s))
 
     def test_complement_of_protein(self):
         """Check reverse complement fails on a protein."""

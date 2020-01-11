@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Biopython Sphinx documentation build configuration file.
 
 After generating ``*.rst`` files from the source code, this

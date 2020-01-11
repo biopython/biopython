@@ -6,13 +6,11 @@
 import configparser
 import os
 import platform
-import sys
 import tempfile
 import time
 import unittest
 
 from io import StringIO
-from Bio._py3k import zip
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
@@ -330,11 +328,6 @@ class MultiReadTest(unittest.TestCase):
         self.assertEqual(length, len(list(db.items())))
         self.assertEqual(length, len(list(db.keys())))
         self.assertEqual(length, len(list(db.values())))
-        if sys.version_info[0] == 2:
-            # Check legacy methods for Python 2 as well:
-            self.assertEqual(length, len(list(db.iteritems())))  # noqa: B301
-            self.assertEqual(length, len(list(db.iterkeys())))  # noqa: B301
-            self.assertEqual(length, len(list(db.itervalues())))  # noqa: B301
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -1148,7 +1141,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check("swiss", "SwissProt/sp001")
         self.check("swiss", "SwissProt/sp002")
         self.check("swiss", "SwissProt/sp003")
-        self.check("swiss", "SwissProt/sp004")
+        self.check("swiss", "SwissProt/P0A186.txt")
         self.check("swiss", "SwissProt/sp005")
         self.check("swiss", "SwissProt/sp006")
         self.check("swiss", "SwissProt/sp007")
@@ -1158,7 +1151,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check("swiss", "SwissProt/sp011")
         self.check("swiss", "SwissProt/sp012")
         self.check("swiss", "SwissProt/sp013")
-        self.check("swiss", "SwissProt/sp014")
+        self.check("swiss", "SwissProt/P60137.txt")
         self.check("swiss", "SwissProt/sp015")
         self.check("swiss", "SwissProt/sp016")
         self.check("swiss", "Registry/EDD_RAT.dat")

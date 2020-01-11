@@ -7,7 +7,6 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -20,7 +19,7 @@ __all__ = ("Hmmer2TextParser", "Hmmer2TextIndexer")
 _HSP_ALIGN_LINE = re.compile(r"(\S+):\s+domain (\d+) of (\d+)")
 
 
-class _HitPlaceholder(object):
+class _HitPlaceholder:
     def createHit(self, hsp_list):
         hit = Hit(hsp_list)
         hit.id_ = self.id_
@@ -32,7 +31,7 @@ class _HitPlaceholder(object):
         return hit
 
 
-class Hmmer2TextParser(object):
+class Hmmer2TextParser:
     """Iterator for the HMMER 2.0 text output."""
 
     def __init__(self, handle):
@@ -321,22 +320,22 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
-    qresult_start = _as_bytes("Query")
+    qresult_start = b"Query"
     # qresults_ends for hmmpfam and hmmsearch
     # need to anticipate both since hmmsearch have different query end mark
-    qresult_end = _as_bytes("//")
+    qresult_end = b"//"
 
     def __iter__(self):
         """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(r"Query\s*(?:sequence|HMM)?:\s*(.*)"))
+        regex_id = re.compile(br"Query\s*(?:sequence|HMM)?:\s*(.*)")
 
         # determine flag for hmmsearch
         is_hmmsearch = False
         line = read_forward(handle)
-        if line.startswith(_as_bytes("hmmsearch")):
+        if line.startswith(b"hmmsearch"):
             is_hmmsearch = True
 
         while True:
@@ -349,12 +348,12 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
+                yield qresult_key.decode(), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 # HACK: since hmmsearch can only have one query result
                 if is_hmmsearch:
-                    yield _bytes_to_string(qresult_key), start_offset, 0
+                    yield qresult_key.decode(), start_offset, 0
                 break
 
             line = read_forward(handle)

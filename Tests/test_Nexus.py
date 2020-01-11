@@ -17,7 +17,6 @@ import unittest
 import tempfile
 import sys
 from io import StringIO
-from Bio._py3k import range
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
 from Bio.SeqRecord import SeqRecord

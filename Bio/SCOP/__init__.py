@@ -50,6 +50,9 @@ Functions:
 import os
 import re
 
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
 from . import Des
 from . import Cla
 from . import Hie
@@ -158,7 +161,7 @@ def _open_scop_file(scop_dir_path, version, filetype):
     return handle
 
 
-class Scop(object):
+class Scop:
     """The entire SCOP hierarchy.
 
     root -- The root node of the hierarchy
@@ -538,7 +541,7 @@ class Scop(object):
             )
 
 
-class Node(object):
+class Node:
     """A node in the Scop hierarchy.
 
     Attributes:
@@ -717,7 +720,7 @@ class Domain(Node):
         return rec
 
 
-class Astral(object):
+class Astral:
     """Representation of the ASTRAL database.
 
     Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
@@ -943,8 +946,6 @@ def _open(cgi, params=None, get=1):
     that describes whether a GET should be used.
 
     """
-    from Bio._py3k import urlopen, urlencode
-
     # Open a handle to SCOP.
     if params is None:
         params = {}

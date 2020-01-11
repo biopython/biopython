@@ -29,7 +29,7 @@ from reportlab.graphics.widgetbase import TypedPropertyCollection
 from Bio.Graphics import _write
 
 
-class DistributionPage(object):
+class DistributionPage:
     """Display a grouping of distributions on a page.
 
     This organizes Distributions, and will display them nicely
@@ -139,7 +139,7 @@ class DistributionPage(object):
         pass
 
 
-class BarChartDistribution(object):
+class BarChartDistribution:
     """Display the distribution of values as a bunch of bars."""
 
     def __init__(self, display_info=None):
@@ -241,7 +241,7 @@ class BarChartDistribution(object):
         return new_x_start, new_x_end, new_y_start, new_y_end
 
 
-class LineDistribution(object):
+class LineDistribution:
     """Display the distribution of values as connected lines.
 
     This distribution displays the change in values across the object as

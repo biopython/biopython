@@ -22,7 +22,7 @@ from Bio.Seq import reverse_complement
 import xbb_widget
 
 
-class DNAsearch(object):
+class DNAsearch:
     """Class to search a DNA sequence."""
 
     def __init__(self):

@@ -37,8 +37,6 @@ for reading and writing. Older versions did nothing special with a dot/period.
 
 import string
 
-from Bio._py3k import range
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -286,8 +284,8 @@ class RelaxedPhylipWriter(PhylipWriter):
         if len(alignment) == 0:
             id_width = 1
         else:
-            id_width = max((len(s.id.strip()) for s in alignment)) + 1
-        super(RelaxedPhylipWriter, self).write_alignment(alignment, id_width)
+            id_width = max(len(s.id.strip()) for s in alignment) + 1
+        super().write_alignment(alignment, id_width)
 
 
 class RelaxedPhylipIterator(PhylipIterator):

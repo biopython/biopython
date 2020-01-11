@@ -40,7 +40,7 @@ _PROGRAM = "HHSUITE"
 MAX_READ_UNTIL = 5000
 
 
-class Hhsuite2TextParser(object):
+class Hhsuite2TextParser:
     """Parser for the HHSUITE version 2 and 3 text output."""
 
     def __init__(self, handle):
@@ -53,8 +53,7 @@ class Hhsuite2TextParser(object):
 
     def __iter__(self):
         """Iterate over query results - there will only ever be one."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _read_until(self, bool_func, stop_on_blank=True, max_read_until=MAX_READ_UNTIL):
         """Read the file handle until the given function returns True (PRIVATE)."""

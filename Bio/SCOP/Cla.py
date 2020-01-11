@@ -20,7 +20,7 @@ The latest CLA file can be found
 from . import Residues
 
 
-class Record(object):
+class Record:
     """Holds information for one SCOP domain.
 
     Attributes:

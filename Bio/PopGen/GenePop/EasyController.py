@@ -13,7 +13,7 @@ from .Controller import GenePopController
 from Bio.PopGen import GenePop
 
 
-class EasyController(object):
+class EasyController:
     """Define a class for an easier interface with the GenePop program."""
 
     def __init__(self, fname, genepop_dir=None):

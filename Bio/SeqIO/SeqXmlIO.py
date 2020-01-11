@@ -14,7 +14,6 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
 
-import sys
 
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
@@ -334,7 +333,7 @@ class ContentHandler(handler.ContentHandler):
             self.data += data
 
 
-class SeqXmlIterator(object):
+class SeqXmlIterator:
     """Breaks seqXML file into SeqRecords.
 
     Assumes valid seqXML please validate beforehand.
@@ -356,8 +355,15 @@ class SeqXmlIterator(object):
         self.parser.setContentHandler(content_handler)
         self.parser.setFeature(handler.feature_namespaces, True)
         try:
-            handle = open(stream_or_path)
+            handle = open(stream_or_path, "rb")
         except TypeError:  # not a path, assume we received a stream
+            # Make sure we got a binary handle. If we got a text handle, then
+            # the parser will still run but unicode characters will be garbled
+            # if the text handle was opened with a different encoding than the
+            # one specified in the XML file. With a binary handle, the correct
+            # encoding is picked up by the parser from the XML file.
+            if stream_or_path.read(0) != b"":
+                raise TypeError("SeqXML files should be opened in binary mode") from None
             self.handle = stream_or_path
             self.should_close_handle = False
         else:  # we received a path
@@ -424,25 +430,24 @@ class SeqXmlIterator(object):
             self.handle.close()
         raise StopIteration
 
-    if sys.version_info[0] < 3:  # python2
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
 
 class SeqXmlWriter(SequentialSequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
-    i.e. an instance or subclass of Bio.Alphapet.RNAAlphabet,
-    Bio.Alphapet.DNAAlphabet or Bio.Alphapet.ProteinAlphabet.
+    i.e. an instance or subclass of Bio.Alphabet.RNAAlphabet,
+    Bio.Alphabet.DNAAlphabet or Bio.Alphabet.ProteinAlphabet.
     """
 
     def __init__(
         self, handle, source=None, source_version=None, species=None, ncbiTaxId=None
     ):
         """Create Object and start the xml generator."""
+        try:
+            handle.write(b"")
+        except TypeError:
+            raise ValueError("SeqXML files must be opened in binary mode.")
+
         SequentialSequenceWriter.__init__(self, handle)
 
         self.xml_generator = XMLGenerator(handle, "utf-8")

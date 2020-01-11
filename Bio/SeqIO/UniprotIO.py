@@ -71,15 +71,6 @@ def UniprotIterator(
                     " (or XML as a string, but that's deprecated)"
                 )
 
-        if ElementTree is None:
-            from Bio import MissingExternalDependencyError
-
-            raise MissingExternalDependencyError(
-                "No ElementTree module was found. "
-                "Use Python 2.5+, lxml or elementtree if you "
-                "want to use Bio.SeqIO.UniprotIO."
-            )
-
         for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
                 yield Parser(
@@ -88,7 +79,7 @@ def UniprotIterator(
                 elem.clear()
 
 
-class Parser(object):
+class Parser:
     """Parse a UniProt XML entry to a SeqRecord.
 
     return_raw_comments=True to get back the complete comment field in XML format
@@ -528,7 +519,7 @@ class Parser(object):
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
                 else:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            seq = "".join((element.text.split()))
+            seq = "".join(element.text.split())
             self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
 
         # ============================================#

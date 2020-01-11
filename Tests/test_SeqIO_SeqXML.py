@@ -10,7 +10,7 @@ import sys
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from io import StringIO
+from io import BytesIO
 
 
 def assert_equal_records(testCase, record_a, record_b):
@@ -53,11 +53,9 @@ class TestDetailedRead(unittest.TestCase):
             'some special characters in the description\n<tag> "quoted string"'
         )
 
-    # TODO - Fix this failure under Windows with Python 3.1 and 3.2
-    if not (sys.platform == "win32" and sys.version_info[0] >= 3):
-        def test_unicode_characters_desc(self):
-            """Test special unicode characters in the description."""
-            self.assertEqual(self.records["rna"][2].description, "åÅüöÖßøä¢£$€香肠")
+    def test_unicode_characters_desc(self):
+        """Test special unicode characters in the description."""
+        self.assertEqual(self.records["rna"][2].description, "åÅüöÖßøä¢£$€香肠")
 
     def test_full_characters_set_read(self):
         """Read full characters set for each type."""
@@ -171,7 +169,7 @@ class TestReadAndWrite(unittest.TestCase):
 
     def _write_parse_and_compare(self, read1_records):
 
-        handle = StringIO()
+        handle = BytesIO()
 
         SeqIO.write(read1_records, handle, "seqxml")
 
@@ -188,26 +186,27 @@ class TestReadAndWrite(unittest.TestCase):
         record = SeqIO.read("SwissProt/sp016", "swiss")
         self.assertEqual(record.annotations["organism"], "Homo sapiens (Human)")
         self.assertEqual(record.annotations["ncbi_taxid"], ["9606"])
-        handle = StringIO()
+        handle = BytesIO()
         SeqIO.write(record, handle, "seqxml")
         handle.seek(0)
         output = handle.getvalue()
-        self.assertIn("Homo sapiens (Human)", output)
-        self.assertIn("9606", output)
-        if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"/>' in output:
+        text = output.decode("UTF-8")
+        self.assertIn("Homo sapiens (Human)", text)
+        self.assertIn("9606", text)
+        if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"/>' in text:
             # Good, but don't get this (do we?)
             pass
-        elif '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>' in output:
+        elif '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>' in text:
             # Not as concise, but fine (seen on C Python)
             pass
-        elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"></species>' in output:
+        elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"></species>' in text:
             # Jython uses a different order
             pass
-        elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"/>' in output:
+        elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"/>' in text:
             # This would be fine too, but don't get this (do we?)
             pass
         else:
-            raise ValueError("Mising expected <species> tag: %r" % output)
+            raise ValueError("Mising expected <species> tag: %r" % text)
 
 
 class TestReadCorruptFiles(unittest.TestCase):

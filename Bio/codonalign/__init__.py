@@ -9,8 +9,6 @@
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
 
-from Bio._py3k import zip
-
 from Bio.Alphabet import _get_base_alphabet
 from Bio.SeqRecord import SeqRecord
 

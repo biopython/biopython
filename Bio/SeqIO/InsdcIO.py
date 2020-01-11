@@ -41,8 +41,6 @@ from Bio import Alphabet
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
-from Bio._py3k import _is_int_or_long
-
 # NOTE
 # ====
 # The "brains" for parsing GenBank, EMBL and IMGT files (and any
@@ -344,7 +342,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         # self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
             # Try to mimic unwritten rules about when quotes can be left out:
-            if _is_int_or_long(value) or key in self.FTQUAL_NO_QUOTE:
+            if isinstance(value, int) or key in self.FTQUAL_NO_QUOTE:
                 quote = False
             else:
                 quote = True
@@ -1144,7 +1142,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write((" %s" % data[index : index + self.LETTERS_PER_BLOCK]))
+                handle.write(" %s" % data[index : index + self.LETTERS_PER_BLOCK])
             handle.write(
                 str((line_number + 1) * self.LETTERS_PER_LINE).rjust(
                     self.POSITION_PADDING

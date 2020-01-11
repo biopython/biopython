@@ -27,11 +27,9 @@ from itertools import chain
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
-from Bio._py3k import _is_int_or_long, _as_string
-
 
 # Pathway
-class Pathway(object):
+class Pathway:
     """Represents a KGML pathway from KEGG.
 
     Specifies graph information for the pathway map, as described in
@@ -87,14 +85,14 @@ class Pathway(object):
                 "<!-- Created by KGML_Pathway.py %s -->" % time.asctime(),
             ]
         )
-        rough_xml = header + _as_string(ET.tostring(self.element, "utf-8"))
+        rough_xml = header + ET.tostring(self.element, "utf-8").decode()
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
 
     def add_entry(self, entry):
         """Add an Entry element to the pathway."""
         # We insist that the node ID is an integer
-        if not _is_int_or_long(entry.id):
+        if not isinstance(entry.id, int):
             raise TypeError(
                 "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
             )
@@ -103,7 +101,7 @@ class Pathway(object):
 
     def remove_entry(self, entry):
         """Remove an Entry element from the pathway."""
-        if not _is_int_or_long(entry.id):
+        if not isinstance(entry.id, int):
             raise TypeError(
                 "Node ID must be an integer, got %s (%s)" % (type(entry.id), entry.id)
             )
@@ -115,21 +113,19 @@ class Pathway(object):
     def add_reaction(self, reaction):
         """Add a Reaction element to the pathway."""
         # We insist that the node ID is an integer and corresponds to an entry
-        if not _is_int_or_long(reaction.id):
+        if not isinstance(reaction.id, int):
             raise ValueError(
                 "Node ID must be an integer, got %s (%s)"
                 % (type(reaction.id), reaction.id)
             )
         if reaction.id not in self.entries:
-            raise ValueError(
-                "Reaction ID %d has no corresponding entry" % reaction.id
-            )
+            raise ValueError("Reaction ID %d has no corresponding entry" % reaction.id)
         reaction._pathway = self  # Let the reaction know about the pathway
         self._reactions[reaction.id] = reaction
 
     def remove_reaction(self, reaction):
         """Remove a Reaction element from the pathway."""
-        if not _is_int_or_long(reaction.id):
+        if not isinstance(reaction.id, int):
             raise TypeError(
                 "Node ID must be an integer, got %s (%s)"
                 % (type(reaction.id), reaction.id)
@@ -170,9 +166,7 @@ class Pathway(object):
 
     def _setname(self, value):
         if not value.startswith("path:"):
-            raise ValueError(
-                "Pathway name should begin with 'path:', got %s" % value
-            )
+            raise ValueError("Pathway name should begin with 'path:', got %s" % value)
         self._name = value
 
     def _delname(self):
@@ -264,7 +258,7 @@ class Pathway(object):
 
 
 # Entry
-class Entry(object):
+class Entry:
     """Represent an Entry from KGML.
 
     Each Entry element is a node in the pathway graph, as described in
@@ -424,7 +418,7 @@ class Entry(object):
 
 
 # Component
-class Component(object):
+class Component:
     """An Entry subelement used to represents a complex node.
 
     A subelement of the Entry element, used when the Entry is a complex
@@ -462,7 +456,7 @@ class Component(object):
 
 
 # Graphics
-class Graphics(object):
+class Graphics:
     """An Entry subelement used to represents the visual representation.
 
     A subelement of Entry, specifying its visual representation, as
@@ -658,7 +652,7 @@ class Graphics(object):
 
 
 # Reaction
-class Reaction(object):
+class Reaction:
     """A specific chemical reaction with substrates and products.
 
     This describes a specific chemical reaction between one or more
@@ -782,7 +776,7 @@ class Reaction(object):
 
 
 # Relation
-class Relation(object):
+class Relation:
     """A relationship between to products, KOs, or protein and compound.
 
     This describes a relationship between two products, KOs, or protein

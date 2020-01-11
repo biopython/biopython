@@ -14,12 +14,12 @@ from Bio import MissingExternalDependencyError
 
 raxml_exe = None
 try:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("raxmlHPC -v")
-    if "not found" not in output and "This is RAxML" in output:
-        raxml_exe = "raxmlHPC"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+    if "not found" not in output and "not recognized" not in output:
+        if "This is RAxML" in output:
+            raxml_exe = "raxmlHPC"
+except FileNotFoundError:
     pass
 
 if not raxml_exe:

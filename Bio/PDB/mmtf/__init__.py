@@ -24,7 +24,7 @@ def get_from_decoded(decoder):
     return structure_decoder.structure_builder.get_structure()
 
 
-class MMTFParser(object):
+class MMTFParser:
     """Class to get a Biopython structure from a URL or a filename."""
 
     @staticmethod

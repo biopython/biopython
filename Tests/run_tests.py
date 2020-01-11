@@ -67,10 +67,7 @@ VERBOSITY = 0
 
 # Following modules have historic failures. If you fix one of these
 # please remove here!
-EXCLUDE_DOCTEST_MODULES = [
-    "Bio.PDB",
-    "Bio.PDB.AbstractPropertyMap",
-]
+EXCLUDE_DOCTEST_MODULES = []
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
@@ -232,12 +229,12 @@ def main(argv):
             import requires_internet
             requires_internet.check.available = False
             # Monkey patch for urlopen()
-            import Bio._py3k
+            import urllib
 
             def dummy_urlopen(url):
                 raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
 
-            Bio._py3k.urlopen = dummy_urlopen
+            urllib.urlopen = dummy_urlopen
 
         if opt == "-v" or opt == "--verbose":
             verbosity = 2

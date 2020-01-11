@@ -375,8 +375,7 @@ Now, suppose we have a gzip compressed file instead? These are very
 commonly used on Linux. We can use Python's \verb|gzip| module to open
 the compressed file for reading - which gives us a handle object:
 
-%TODO: Can we make the doctest code Python version specific?
-%This doctest fails on Python 2.7 due to https://bugs.python.org/issue30012
+%doctest examples
 \begin{minted}{pycon}
 >>> import gzip
 >>> from Bio import SeqIO
@@ -386,21 +385,13 @@ the compressed file for reading - which gives us a handle object:
 67518
 \end{minted}
 
-Similarly if we had a bzip2 compressed file (sadly the function name isn't
-quite as consistent under Python 2):
-
-%TODO: Can we make the doctest code Python version specific?
+Similarly if we had a bzip2 compressed file:
 
 %doctest examples
 \begin{minted}{pycon}
 >>> import bz2
 >>> from Bio import SeqIO
->>> if hasattr(bz2, "open"):
-...     handle = bz2.open("ls_orchid.gbk.bz2", "rt")  # Python 3
-... else:
-...     handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")  # Python 2
-...
->>> with handle:
+>>> with bz2.open("ls_orchid.gbk.bz2", "rt") as handle:
 ...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 ...
 67518
@@ -610,7 +601,6 @@ we can look at all of the keys we have available:
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{minted}
 
-You can leave out the ``list(...)`` bit if you are still using Python 2.
 Under Python 3 the dictionary methods like ``.keys()`` and ``.values()``
 are iterators rather than lists.
 

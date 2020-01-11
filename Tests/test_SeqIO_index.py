@@ -12,7 +12,6 @@ except ImportError:
     # where we don't expect this to be installed.
     sqlite3 = None
 
-import sys
 import os
 import unittest
 import tempfile
@@ -20,16 +19,7 @@ import threading
 import gzip
 import warnings
 from io import BytesIO
-
-from Bio._py3k import _bytes_to_string, StringIO
-from Bio._py3k import _universal_read_mode
-
-try:
-    # Defined on Python 3
-    FileNotFoundError
-except NameError:
-    # Python 2 does not have this,
-    FileNotFoundError = IOError
+from io import StringIO
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
@@ -40,11 +30,6 @@ from seq_tests_common import compare_record
 
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
-try:
-    from test_bgzf import _have_bug17666
-    do_bgzf = _have_bug17666()
-except MissingPythonDependencyError:
-    do_bgzf = False
 
 CUR_DIR = os.getcwd()
 
@@ -55,15 +40,11 @@ def add_prefix(key):
 
 
 def gzip_open(filename, format):
-    # At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
-    # insists on giving byte strings (i.e. binary mode)
-    # See http://bugs.python.org/issue13989
-    if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
-        return gzip.open(filename)
-    handle = gzip.open(filename)
-    data = handle.read()  # bytes!
-    handle.close()
-    return StringIO(_bytes_to_string(data))
+    """Open gzip file in either binary or text mode as needed."""
+    if format in SeqIO._BinaryFormats:
+        return gzip.open(filename, "rb")
+    else:
+        return gzip.open(filename, "rt")
 
 
 if sqlite3:
@@ -326,9 +307,8 @@ class IndexDictTests(unittest.TestCase):
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
-            h = gzip_open(filename, format)
-            id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
-            h.close()
+            with gzip_open(filename, format) as handle:
+                id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
@@ -399,9 +379,8 @@ class IndexDictTests(unittest.TestCase):
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
-            h = gzip_open(filename, format)
-            id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
-            h.close()
+            with gzip_open(filename, format) as handle:
+                id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
@@ -484,23 +463,15 @@ class IndexDictTests(unittest.TestCase):
             pass
         self.assertEqual(rec_dict.get(chr(0)), None)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
-        if hasattr(dict, "iteritems"):
-            # Python 2.x
-            for key, rec in rec_dict.items():
-                self.assertIn(key, keys)
-                self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertIn(rec.id, ids)
-        else:
-            # Python 3
-            assert not hasattr(rec_dict, "iteritems")
-            for key, rec in rec_dict.items():
-                self.assertIn(key, keys)
-                self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertIn(rec.id, ids)
-            for rec in rec_dict.values():
-                self.assertIn(key, keys)
-                self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertIn(rec.id, ids)
+        assert not hasattr(rec_dict, "iteritems")
+        for key, rec in rec_dict.items():
+            self.assertIn(key, keys)
+            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIn(rec.id, ids)
+        for rec in rec_dict.values():
+            self.assertIn(key, keys)
+            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIn(rec.id, ids)
         # Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
@@ -513,17 +484,14 @@ class IndexDictTests(unittest.TestCase):
     def get_raw_check(self, filename, format, alphabet, comp):
         # Also checking the key_function here
         if comp:
-            h = gzip.open(filename, "rb")
-            raw_file = h.read()
-            h.close()
-            h = gzip_open(filename, format)
-            id_list = [rec.id.lower() for rec in
-                       SeqIO.parse(h, format, alphabet)]
-            h.close()
+            with gzip.open(filename, "rb") as handle:
+                raw_file = handle.read()
+            with gzip_open(filename, format) as handle:
+                id_list = [rec.id.lower() for rec in
+                           SeqIO.parse(handle, format, alphabet)]
         else:
-            h = open(filename, "rb")
-            raw_file = h.read()
-            h.close()
+            with open(filename, "rb") as handle:
+                raw_file = handle.read()
             id_list = [rec.id.lower() for rec in
                        SeqIO.parse(filename, format, alphabet)]
 
@@ -569,7 +537,7 @@ class IndexDictTests(unittest.TestCase):
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:
-                handle = StringIO(_bytes_to_string(raw))
+                handle = StringIO(raw.decode())
             if format == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
@@ -598,7 +566,7 @@ class IndexDictTests(unittest.TestCase):
                 http://www.uniprot.org/support/docs/uniprot.xsd">
                 %s
                 </uniprot>
-                """ % _bytes_to_string(raw)
+                """ % raw.decode()
                 handle = StringIO(raw)
                 rec2 = SeqIO.read(handle, format, alphabet)
             else:
@@ -619,7 +587,7 @@ class IndexDictTests(unittest.TestCase):
 
     def test_duplicates_to_dict(self):
         """Index file with duplicate identifiers with Bio.SeqIO.to_dict()."""
-        handle = open("Fasta/dups.fasta", _universal_read_mode)
+        handle = open("Fasta/dups.fasta")
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()
@@ -721,7 +689,7 @@ tests = [
 for filename1, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename1, None)]
-    if do_bgzf and os.path.isfile(filename1 + ".bgz"):
+    if os.path.isfile(filename1 + ".bgz"):
         tasks.append((filename1 + ".bgz", "bgzf"))
     for filename2, comp in tasks:
 

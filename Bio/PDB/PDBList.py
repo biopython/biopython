@@ -43,14 +43,12 @@ import shutil
 import re
 import sys
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import _as_string
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlretrieve as _urlretrieve
-from Bio._py3k import urlcleanup as _urlcleanup
+from urllib.request import urlopen
+from urllib.request import urlretrieve
+from urllib.request import urlcleanup
 
 
-class PDBList(object):
+class PDBList:
     """Quick access to the structure lists on the PDB or its mirrors.
 
     This class provides quick access to the structure lists on the
@@ -134,12 +132,12 @@ class PDBList(object):
         Used by get_recent_changes. Typical contents of the list files parsed
         by this method is now very simply - one PDB name per line.
         """
-        with contextlib.closing(_urlopen(url)) as handle:
+        with contextlib.closing(urlopen(url)) as handle:
             answer = []
             for line in handle:
                 pdb = line.strip()
                 assert len(pdb) == 4
-                answer.append(_as_string(pdb))
+                answer.append(pdb.decode())
         return answer
 
     def get_recent_changes(self):
@@ -174,9 +172,9 @@ class PDBList(object):
         url = self.pdb_server + "/pub/pdb/derived_data/index/entries.idx"
         if self._verbose:
             print("Retrieving index file. Takes about 27 MB.")
-        with contextlib.closing(_urlopen(url)) as handle:
+        with contextlib.closing(urlopen(url)) as handle:
             all_entries = [
-                _as_string(line[:4]) for line in handle.readlines()[2:] if len(line) > 4
+                line[:4].decode() for line in handle.readlines()[2:] if len(line) > 4
             ]
         return all_entries
 
@@ -204,7 +202,7 @@ class PDBList(object):
 
         """
         url = self.pdb_server + "/pub/pdb/data/status/obsolete.dat"
-        with contextlib.closing(_urlopen(url)) as handle:
+        with contextlib.closing(urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
             # to include an assert to check for mis-reading the data.
             obsolete = []
@@ -213,7 +211,7 @@ class PDBList(object):
                     continue
                 pdb = line.split()[2]
                 assert len(pdb) == 4
-                obsolete.append(_as_string(pdb))
+                obsolete.append(pdb.decode())
         return obsolete
 
     def retrieve_pdb_file(
@@ -336,9 +334,9 @@ class PDBList(object):
         if self._verbose:
             print("Downloading PDB structure '%s'..." % pdb_code)
         try:
-            _urlcleanup()
-            _urlretrieve(url, filename)
-        except IOError:
+            urlcleanup()
+            urlretrieve(url, filename)
+        except OSError:
             print("Desired structure doesn't exists")
         else:
             with gzip.open(filename, "rb") as gz:
@@ -469,7 +467,7 @@ class PDBList(object):
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
-                outfile.writelines((x + "\n" for x in entries))
+                outfile.writelines(x + "\n" for x in entries)
 
     def download_obsolete_entries(self, listfile=None, file_format=None):
         """Retrieve all obsolete PDB entries not present in local obsolete PDB copy.
@@ -492,14 +490,14 @@ class PDBList(object):
         # Write the list
         if listfile:
             with open(listfile, "w") as outfile:
-                outfile.writelines((x + "\n" for x in entries))
+                outfile.writelines(x + "\n" for x in entries)
 
     def get_seqres_file(self, savefile="pdb_seqres.txt"):
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""
         if self._verbose:
             print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + "/pub/pdb/derived_data/pdb_seqres.txt"
-        _urlretrieve(url, savefile)
+        urlretrieve(url, savefile)
 
 
 if __name__ == "__main__":

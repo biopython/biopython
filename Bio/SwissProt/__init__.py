@@ -17,6 +17,17 @@ Functions:
 """
 
 
+from Bio.SeqFeature import (
+    SeqFeature,
+    FeatureLocation,
+    ExactPosition,
+    BeforePosition,
+    AfterPosition,
+    UncertainPosition,
+    UnknownPosition,
+)
+
+
 class SwissProtParserError(ValueError):
     """An error occurred while parsing a SwissProt file."""
 
@@ -26,7 +37,7 @@ class SwissProtParserError(ValueError):
         self.line = line
 
 
-class Record(object):
+class Record:
     """Holds information from a SwissProt record.
 
     Attributes:
@@ -60,10 +71,10 @@ class Record(object):
 
     Examples
     --------
-    >>> import Bio.SwissProt as sp
+    >>> from Bio import SwissProt
     >>> example_filename = "SwissProt/sp008"
     >>> with open(example_filename) as handle:
-    ...     records = sp.parse(handle)
+    ...     records = SwissProt.parse(handle)
     ...     for record in records:
     ...         print(record.entry_name)
     ...         print(",".join(record.accessions))
@@ -110,7 +121,7 @@ class Record(object):
         self.sequence = ""
 
 
-class Reference(object):
+class Reference:
     """Holds information from one reference in a SwissProt entry.
 
     Attributes:
@@ -134,6 +145,83 @@ class Reference(object):
         self.authors = []
         self.title = []
         self.location = []
+
+
+class FeatureTable(SeqFeature):
+    """Stores feature annotations for specific regions of the sequence.
+
+    This is a subclass of SeqFeature, defined in Bio.SeqFeature, where the
+    attributes are used as follows:
+
+     - ``location``: location of the feature on the canonical or isoform
+       sequence; the location is stored as an instance of FeatureLocation,
+       defined in Bio.SeqFeature, with the ref attribute set to the isoform
+       ID referring to the canonical or isoform sequence on which the feature
+       is defined
+     - ``id``: unique and stable identifier (FTId), only provided for features
+       belonging to the types CARBOHYD, CHAIN, PEPTIDE, PROPEP, VARIANT, or
+       VAR_SEQ
+     - ``type``: indicates the type of feature, as defined by the UniProt
+       Knowledgebase documentation:
+
+        - ACT_SITE: amino acid(s) involved in the activity of an enzyme
+        - BINDING:  binding site for any chemical group
+        - CARBOHYD: glycosylation site; an FTId identifier to the GlyConnect
+          database is provided if annotated there
+        - CA_BIND:  calcium-binding region
+        - CHAIN:    polypeptide chain in the mature protein
+        - COILED:   coiled-coil region
+        - COMPBIAS: compositionally biased region
+        - CONFLICT: different sources report differing sequences
+        - CROSSLNK: posttransationally formed amino acid bond
+        - DISULFID: disulfide bond
+        - DNA_BIND: DNA-binding region
+        - DOMAIN:   domain, defined as a specific combination of secondary
+          structures organized into a characteristic three-dimensional
+          structure or fold
+        - INIT_MET: initiator methionine
+        - INTRAMEM: region located in a membrane without crossing it
+        - HELIX:    alpha-, 3(10)-, or pi-helix secondary structure
+        - LIPID:    covalent binding of a lipid moiety
+        - METAL:    binding site for a metal ion
+        - MOD_RES:  posttranslational modification (PTM) of a residue,
+          annotated by the controlled vocabulary defined by the ptmlist.txt
+          document on the UniProt website
+        - MOTIF:    short sequence motif of biological interest
+        - MUTAGEN:  site experimentally altered by mutagenesis
+        - NON_CONS: non-consecutive residues
+        - NON_STD:  non-standard amino acid
+        - NON_TER:  the residue at an extremity of the sequence is not the
+          terminal residue
+        - NP_BIND:  nucleotide phosphate-binding region
+        - PEPTIDE:  released active mature polypeptide
+        - PROPEP:   any processed propeptide
+        - REGION:   region of interest in the sequence
+        - REPEAT:   internal sequence repetition
+        - SIGNAL:   signal sequence (prepeptide)
+        - SITE:     amino-acid site of interest not represented by another
+          feature key
+        - STRAND:   beta-strand secondary structure; either a hydrogen-bonded
+          extended beta strand or a residue in an isolated beta-bridge
+        - TOPO_DOM: topological domain
+        - TRANSIT:  transit peptide (mitochondrion, chloroplast, thylakoid,
+          cyanelle, peroxisome, etc.)
+        - TRANSMEM: transmembrane region
+        - TURN:     H-bonded turn (3-, 4-, or 5-turn)
+        - UNSURE:   uncertainties in the sequence
+        - VARIANT:  sequence variant; an FTId is provided for protein sequence
+          variants of Hominidae (great apes and humans)
+        - VAR_SEQ:  sequence variant produced by alternative splicing,
+          alternative promoter usage, alternative initiation, or ribosomal
+          frameshifting
+        - ZN_FING:  zinc finger region
+
+     - qualifiers   A dictionary of additional information, which may include
+       the feature evidence and free-text notes. While SwissProt includes the
+       feature identifier code (FTId) as a qualifier, it is stored as the
+       attribute ID of the FeatureTable object.
+
+    """
 
 
 def parse(handle):
@@ -266,9 +354,18 @@ def _read(handle):
             record.organelle = record.organelle.rstrip()
             for reference in record.references:
                 reference.authors = " ".join(reference.authors).rstrip(";")
-                reference.title = " ".join(reference.title).rstrip(";")
-                if reference.title.startswith('"') and reference.title.endswith('"'):
-                    reference.title = reference.title[1:-1]  # remove quotes
+                if reference.title:
+                    title = reference.title[0]
+                    for fragment in reference.title[1:]:
+                        if not title.endswith("-"):
+                            title += " "
+                        title += fragment
+                    title = title.rstrip(";")
+                    if title.startswith('"') and title.endswith('"'):
+                        title = title[1:-1]  # remove quotes
+                else:
+                    title = ""
+                reference.title = title
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
@@ -282,8 +379,7 @@ def _read(handle):
             # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         else:
-            raise SwissProtParserError("Unknown keyword '%s' found" % key,
-                                       line=line)
+            raise SwissProtParserError("Unknown keyword '%s' found" % key, line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
 
@@ -371,8 +467,7 @@ def _read_dt(record, line):
         elif "LAST ANNOTATION UPDATE" in uprline:
             record.annotation_update = date, version
         else:
-            raise SwissProtParserError("Unrecognised DT (DaTe) line",
-                                       line=line)
+            raise SwissProtParserError("Unrecognised DT (DaTe) line", line=line)
     elif (
         "INTEGRATED INTO" in uprline
         or "SEQUENCE VERSION" in uprline
@@ -582,39 +677,83 @@ def _read_kw(record, value):
 
 
 def _read_ft(record, line):
-    line = line[5:]  # get rid of junk in front
-    name = line[0:8].rstrip()
-    try:
-        from_res = int(line[9:15])
-    except ValueError:
-        from_res = line[9:15].lstrip()
-    try:
-        to_res = int(line[16:22])
-    except ValueError:
-        to_res = line[16:22].lstrip()
-    # if there is a feature_id (FTId), store it away
-    if line[29:35] == r"/FTId=":
-        ft_id = line[35:70].rstrip()[:-1]
-        description = ""
-    else:
-        ft_id = ""
-        description = line[29:70].rstrip()
-    if not name:  # is continuation of last one
-        assert not from_res and not to_res, line
-        name, from_res, to_res, old_description, old_ft_id = record.features[-1]
-        del record.features[-1]
-        description = ("%s %s" % (old_description, description)).strip()
+    name = line[5:13].rstrip()
+    if name:
+        if line[13:21] == "        ":  # new-style FT line
+            location = line[21:80].rstrip()
+            try:
+                isoform_id, location = location.split(":")
+            except ValueError:
+                isoform_id = None
+            try:
+                from_res, to_res = location.split("..")
+            except ValueError:
+                from_res = location
+                to_res = ""
+            qualifiers = {}
+        else:  # old-style FT line
+            from_res = line[14:20].lstrip()
+            to_res = line[21:27].lstrip()
+            isoform_id = None
+            description = line[34:75].rstrip()
+            qualifiers = {"description": description}
+        if from_res == "?":
+            from_res = UnknownPosition()
+        elif from_res.startswith("?"):
+            position = int(from_res[1:]) - 1  # Python zero-based counting
+            from_res = UncertainPosition(position)
+        elif from_res.startswith("<"):
+            position = int(from_res[1:]) - 1  # Python zero-based counting
+            from_res = BeforePosition(position)
+        else:
+            position = int(from_res) - 1  # Python zero-based counting
+            from_res = ExactPosition(position)
+        if to_res == "":
+            position = from_res + 1
+            to_res = ExactPosition(position)
+        elif to_res == "?":
+            to_res = UnknownPosition()
+        elif to_res.startswith("?"):
+            position = int(to_res[1:])
+            to_res = UncertainPosition(position)
+        elif to_res.startswith(">"):
+            position = int(to_res[1:])
+            to_res = AfterPosition(position)
+        else:
+            position = int(to_res)
+            to_res = ExactPosition(position)
+        location = FeatureLocation(from_res, to_res, ref=isoform_id)
+        feature = FeatureTable(
+            location=location, type=name, id=None, qualifiers=qualifiers
+        )
+        record.features.append(feature)
+        return
+    # this line is a continuation of the previous feature
+    feature = record.features[-1]
+    if line[5:34] == "                             ":  # old-style FT line
+        description = line[34:75].rstrip()
+        if description.startswith("/FTId="):
+            # store the FTId as the feature ID
+            feature.id = description[6:].rstrip(".")
+            return
+        # this line is a continuation of the description of the previous feature
+        old_description = feature.qualifiers["description"]
+        if old_description.endswith("-"):
+            description = "%s%s" % (old_description, description)
+        else:
+            description = "%s %s" % (old_description, description)
 
-        # special case -- VARSPLIC, reported by edvard@farmasi.uit.no
-        if name == "VARSPLIC":
+        if feature.type in ("VARSPLIC", "VAR_SEQ"):  # special case
             # Remove unwanted spaces in sequences.
-            # During line carryover, the sequences in VARSPLIC can get mangled
-            # with unwanted spaces like:
+            # During line carryover, the sequences in VARSPLIC/VAR_SEQ can get
+            # mangled with unwanted spaces like:
             # 'DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPC LPTH'
             # We want to check for this case and correct it as it happens.
-            descr_cols = description.split(" -> ")
-            if len(descr_cols) == 2:
-                first_seq, second_seq = descr_cols
+            try:
+                first_seq, second_seq = description.split(" -> ")
+            except ValueError:
+                pass
+            else:
                 extra_info = ""
                 # we might have more information at the end of the
                 # second sequence, which should be in parenthesis
@@ -627,7 +766,64 @@ def _read_ft(record, line):
                 second_seq = second_seq.replace(" ", "")
                 # reassemble the description
                 description = first_seq + " -> " + second_seq + extra_info
-    record.features.append((name, from_res, to_res, description, ft_id))
+        feature.qualifiers["description"] = description
+    else:  # new-style FT line
+        value = line[21:].rstrip()
+        if value.startswith("/id="):
+            qualifier_type = "id"
+            value = value[4:]
+            assert value.startswith('"')
+            assert value.endswith('"')
+            feature.id = value[1:-1]
+            return
+        elif value.startswith("/evidence="):
+            value = value[10:]
+            assert value.startswith('"')
+            if value.endswith('"'):
+                value = value[1:-1]
+            else:  # continues on the next line
+                value = value[1:]
+            assert "evidence" not in feature.qualifiers
+            feature.qualifiers["evidence"] = value
+            return
+        elif value.startswith("/note="):
+            value = value[6:]
+            assert value.startswith('"')
+            if value.endswith('"'):
+                value = value[1:-1]
+            else:  # continues on the next line
+                value = value[1:]
+            assert "note" not in feature.qualifiers
+            feature.qualifiers["note"] = value
+            return
+        # this line is a continuation of the description of the previous feature
+        keys = list(feature.qualifiers.keys())
+        key = keys[-1]
+        description = value.rstrip('"')
+        old_description = feature.qualifiers[key]
+        if key == "evidence" or old_description.endswith("-"):
+            description = "%s%s" % (old_description, description)
+        else:
+            description = "%s %s" % (old_description, description)
+        if feature.type == "VAR_SEQ":  # see VARSPLIC above
+            try:
+                first_seq, second_seq = description.split(" -> ")
+            except ValueError:
+                pass
+            else:
+                extra_info = ""
+                # we might have more information at the end of the
+                # second sequence, which should be in parenthesis
+                extra_info_pos = second_seq.find(" (")
+                if extra_info_pos != -1:
+                    extra_info = second_seq[extra_info_pos:]
+                    second_seq = second_seq[:extra_info_pos]
+                # now clean spaces out of the first and second string
+                first_seq = first_seq.replace(" ", "")
+                second_seq = second_seq.replace(" ", "")
+                # reassemble the description
+                description = first_seq + " -> " + second_seq + extra_info
+        feature.qualifiers[key] = description
 
 
 if __name__ == "__main__":

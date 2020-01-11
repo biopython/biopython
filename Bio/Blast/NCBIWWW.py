@@ -18,10 +18,10 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 import warnings
 
 from io import StringIO
-from Bio._py3k import _as_string, _as_bytes
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
-from Bio._py3k import Request as _Request
+
+from urllib.request import urlopen
+from urllib.parse import urlencode
+from urllib.request import Request
 
 from Bio import BiopythonWarning
 
@@ -158,16 +158,16 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ("CMD", "Put"),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(_urlencode(query))
+    message = urlencode(query).encode()
 
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = _Request(url_base,
-                       message,
-                       {"User-Agent": "BiopythonClient"})
-    handle = _urlopen(request)
+    request = Request(url_base,
+                      message,
+                      {"User-Agent": "BiopythonClient"})
+    handle = urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
@@ -190,7 +190,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ("CMD", "Get"),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(_urlencode(query))
+    message = urlencode(query).encode()
 
     # Poll NCBI until the results are ready.
     # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
@@ -218,11 +218,11 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             # Wasn't a quick return, must wait at least a minute
             delay = 60
 
-        request = _Request(url_base,
-                           message,
-                           {"User-Agent": "BiopythonClient"})
-        handle = _urlopen(request)
-        results = _as_string(handle.read())
+        request = Request(url_base,
+                          message,
+                          {"User-Agent": "BiopythonClient"})
+        handle = urlopen(request)
+        results = handle.read().decode()
 
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
@@ -248,7 +248,7 @@ def _parse_qblast_ref_page(handle):
     The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is probably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
-    s = _as_string(handle.read())
+    s = handle.read().decode()
     i = s.find("RID =")
     if i == -1:
         rid = None

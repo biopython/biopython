@@ -26,7 +26,7 @@ from Bio.Blast.Applications import (
 )
 
 
-class BlastDisplayer(object):
+class BlastDisplayer:
     """A class for running and displaying a BLAST search."""
 
     def __init__(self, command_data, text_id=None):

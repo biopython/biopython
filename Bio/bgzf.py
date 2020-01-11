@@ -214,15 +214,45 @@ you want to index BGZF compressed sequence files:
 >>> print(record.id)
 NC_000932.1
 
+Text Mode
+---------
+
+Like the standard library gzip.open(...), the BGZF code defaults to opening
+files in binary mode.
+
+You can request the file be opened in text mode, but beware that this is hard
+coded to the simple "latin1" (aka "iso-8859-1") encoding (which includes all
+the ASCII characters), which works well with most Western European languages.
+However, it is not fully compatible with the more widely used UTF-8 encoding.
+
+In variable width encodings like UTF-8, some single characters in the unicode
+text output are represented by multiple bytes in the raw binary form. This is
+problematic with BGZF, as we cannot always decode each block in isolation - a
+single unicode character could be split over two blocks. This can even happen
+with fixed width unicode encodings, as the BGZF block size is not fixed.
+
+Therefore, this module is currently restricted to only support single byte
+unicode encodings, such as ASCII, "latin1" (which is a superset of ASCII), or
+potentially other character maps (not implemented).
+
+Furthermore, unlike the default text mode on Python 3, we do not attempt to
+implement univeral new line mode. This transforms the various operating system
+new line conventions like Windows (CR LF or "\r\n"), Unix (just LF, "\n"), or
+old Macs (just CR, "\r"), into just LF ("\n"). Here we have the same problem -
+is "\r" at the end of a block an incomplete Windows style new line?
+
+Instead, you will get the CR ("\r") and LF ("\n") characters as is.
+
+If your data is in UTF-8 or any other incompatible encoding, you must use
+binary mode, and decode the appropriate fragments yourself.
 """
 
-
+import codecs
+import struct
 import sys
 import zlib
-import struct
 
-from Bio._py3k import _as_bytes, _as_string
-from Bio._py3k import open as _open
+from builtins import open as _open
 
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
@@ -234,7 +264,15 @@ _bytes_BC = b"BC"
 
 
 def open(filename, mode="rb"):
-    """Open a BGZF file for reading, writing or appending."""
+    r"""Open a BGZF file for reading, writing or appending.
+
+    If text mode is requested, in order to avoid multi-byte characters, this is
+    hard coded to use the "latin1" encoding, and "\r" and "\n" are passed as is
+    (without implementing universal new line mode).
+
+    If your data is in UTF-8 or any other incompatible encoding, you must use
+    binary mode, and decode the appropriate fragments yourself.
+    """
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
     elif "w" in mode.lower() or "a" in mode.lower():
@@ -446,12 +484,13 @@ def _load_bgzf_block(handle, text_mode=False):
     if expected_crc != crc:
         raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
     if text_mode:
-        return block_size, _as_string(data)
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        return block_size, codecs.latin_1_decode(data)[0]
     else:
         return block_size, data
 
 
-class BgzfReader(object):
+class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
@@ -690,12 +729,6 @@ class BgzfReader(object):
             raise StopIteration
         return line
 
-    if sys.version_info[0] < 3:
-
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         """Iterate over the lines in the BGZF file."""
         return self
@@ -728,7 +761,7 @@ class BgzfReader(object):
         self.close()
 
 
-class BgzfWriter(object):
+class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
@@ -788,7 +821,8 @@ class BgzfWriter(object):
     def write(self, data):
         """Write method for the class."""
         # TODO - Check bytes vs unicode
-        data = _as_bytes(data)
+        if isinstance(data, str):
+            data = data.encode()
         # block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
@@ -870,12 +904,8 @@ if __name__ == "__main__":
 
     # Ensure we have binary mode handles
     # (leave stderr as default text mode)
-    if sys.version_info[0] >= 3:
-        stdin = sys.stdin.buffer
-        stdout = sys.stdout.buffer
-    else:
-        stdin = sys.stdin
-        stdout = sys.stdout
+    stdin = sys.stdin.buffer
+    stdout = sys.stdout.buffer
 
     sys.stderr.write("Producing BGZF output from stdin...\n")
     w = BgzfWriter(fileobj=stdout)
@@ -884,6 +914,6 @@ if __name__ == "__main__":
         w.write(data)
         if not data:
             break
-    # Doing close with write an empty BGZF block as EOF marker:
+    # Doing close will write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")
