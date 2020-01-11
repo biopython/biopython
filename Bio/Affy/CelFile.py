@@ -100,7 +100,7 @@ def read(handle, version=None):
 
     >>> from Bio.Affy import CelFile
     >>> with open("Affy/affy_v3_example.CEL", "rb") as handle:
-    ...     record = CelFile.read_v3(handle)
+    ...     record = CelFile.read(handle)
     ...
     >>> record.version == 3
     True
