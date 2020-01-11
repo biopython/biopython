@@ -7156,6 +7156,25 @@ class OutputTests(unittest.TestCase):
         out_lines = out_handle.readlines()
         self.assertEqual(out_lines[0], invalid_line)
 
+    def test_write_tsa_data_divison(self):
+        """Make sure we don't kill the TSA data_file_division for TSA files."""
+        with open("GenBank/tsa_acropora.gb", "r") as infile:
+            rec = SeqIO.read(infile, "genbank")
+            infile.seek(0)
+            first_line = infile.readline()
+
+        outfile = StringIO()
+        SeqIO.write([rec], outfile, "genbank")
+        outfile.seek(0)
+        first_line_written = outfile.readline()
+
+        # ideally, we'd be able to compare these directly, but we also
+        # break the "units" field at the moment, so use split instead
+        original_division = first_line.split()[-2]
+        written_division = first_line_written.split()[-2]
+
+        self.assertEqual(original_division, written_division)
+
 
 class GenBankScannerTests(unittest.TestCase):
     """GenBank Scanner tests, test parsing gbk and embl files."""

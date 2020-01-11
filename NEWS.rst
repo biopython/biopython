@@ -31,6 +31,7 @@ possible, especially the following contributors:
 
 - Chris Rands
 - Deepak Khatri
+- Kai Blin
 - Peter Cock
 - Rob Miller
 - Sujan Dulal (first contribution)

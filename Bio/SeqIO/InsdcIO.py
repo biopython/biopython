@@ -591,6 +591,7 @@ class GenBankWriter(_InsdcWriter):
             "HTC",
             "ENV",
             "CON",
+            "TSA",
         ]:
             # Good, already GenBank style
             #    PRI - primate sequences
@@ -612,6 +613,7 @@ class GenBankWriter(_InsdcWriter):
             #    HTC - HTC sequences (high throughput cDNA sequences)
             #    ENV - Environmental sampling sequences
             #    CON - Constructed sequences
+            #    TSA - Transcriptome Shotgun Assembly
             #
             # (plus UNK for unknown)
             pass
