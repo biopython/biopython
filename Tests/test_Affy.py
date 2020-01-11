@@ -120,11 +120,11 @@ class AffyTest(unittest.TestCase):
             self.assertEqual(record.nmask, 3)
             try:
                 numpy.testing.assert_array_equal(record.mask,
-                    [[False, False, False, False, False],
-                     [False, False, False, True , True],
-                     [False, False, False, False, True],
-                     [False, False, False, False, False],
-                     [False, False, False, False, False]])
+                                                 [[False, False, False, False, False],
+                                                  [False, False, False, True , True],
+                                                  [False, False, False, False, True],
+                                                  [False, False, False, False, False],
+                                                  [False, False, False, False, False]])
                 message = None
             except AssertionError as err:
                 message = str(err)
@@ -146,11 +146,11 @@ class AffyTest(unittest.TestCase):
             self.assertEqual(record.nmodified, 3)
             try:
                 numpy.testing.assert_allclose(record.modified,
-                                                 [[0.0, 0.0, 0.0, 0.0, 0.0],
-                                                  [0.0, 0.0, 0.0, 189.0, 220.0],
-                                                  [0.0, 0.0, 0.0, 21775.0, 0.0],
-                                                  [0.0, 0.0, 0.0, 0.0, 0.0],
-                                                  [0.0, 0.0, 0.0, 0.0, 0.0]])
+                                              [[0.0, 0.0, 0.0, 0.0, 0.0],
+                                               [0.0, 0.0, 0.0, 189.0, 220.0],
+                                               [0.0, 0.0, 0.0, 21775.0, 0.0],
+                                               [0.0, 0.0, 0.0, 0.0, 0.0],
+                                               [0.0, 0.0, 0.0, 0.0, 0.0]])
                 message = None
             except AssertionError as err:
                 message = str(err)
