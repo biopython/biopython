@@ -17,7 +17,7 @@ except ImportError:
 
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Affy.CelFile"
-    )
+    ) from None
 
 
 class ParserError(ValueError):
@@ -28,24 +28,13 @@ class ParserError(ValueError):
         super().__init__(*args)
 
 
-_modeError = ParserError(
-    "You're trying to open an Affymetrix v4"
-    " CEL file. You have to use a read binary mode,"
-    " like this: open(filename, 'rb')"
-)
-
-# for debugging
-# import pprint
-# pp = pprint.PrettyPrinter(indent=4)
-
-
 class Record:
     """Stores the information in a cel file.
 
     Example usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
+    >>> with open("Affy/affy_v3_example.CEL", "rb") as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
@@ -94,88 +83,105 @@ class Record:
         self.modified = None
 
 
-def read(handle):
+def read(handle, version=None):
     """Read Affymetrix CEL file and return Record object.
 
-    CEL files version 3 and 4 are supported, and the parser attempts version detection.
+    CEL files format versions 3 and 4 are supported.
+    Please specify the CEL file format as 3 or 4 if known for the version
+    argument. If the version number is not specified, the parser will attempt
+    to detect the version from the file contents.
+
+    The Record object returned by this function stores the intensities from
+    the CEL file in record.intensities.
+    Currently, record.mask and record.outliers are not set in when parsing
+    version 4 CEL files.
 
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v4_example.CEL", "rb") as handle:
-    ...     c = CelFile.read(handle)
+    >>> with open("Affy/affy_v3_example.CEL", "rb") as handle:
+    ...     record = CelFile.read_v3(handle)
     ...
-    >>> c.version == 4
+    >>> record.version == 3
     True
+    >>> print("%i by %i array" % record.intensities.shape)
+    5 by 5 array
+
+    >>> with open("Affy/affy_v4_example.CEL", "rb") as handle:
+    ...     record = CelFile.read(handle, version=4)
+    ...
+    >>> record.version == 4
+    True
+    >>> print("%i by %i array" % record.intensities.shape)
+    5 by 5 array
 
     """
-    # If we fail to read the magic number, then it will remain None, and thus
-    # we will invoke read_v3 (if mode is not strict), or raise IOError if mode
-    # is strict.
-    magicNumber = None
-    # We check if the handle is a file-like object. If it isn't, and the mode
-    # is strict, we raise an error. If it isn't and the mode isn't strict, we
-    # continue (perhaps somebody has got a CEL-file-like iterable, which used
-    # to work with previous versions of biopython and we don't want to maintain
-    # backwards compatibility).
     try:
-        mode = handle.mode
-        # By definition an Affymetrix v4 CEL file has 64 as the first 4 bytes.
-        # Note that we use little-endian irrespective of the platform, again by
-        # definition.
-        position = handle.tell()
-        magicNumber = struct.unpack("<i", handle.read(4))[0]
-    except (AttributeError, TypeError):
-        pass
-    except UnicodeDecodeError:
-        raise _modeError
-    finally:
-        try:
-            # reset the offset, to avoid breaking either v3 or v4.
-            handle.seek(position)
-        except AttributeError:
-            pass
-    if magicNumber != 64:
-        return read_v3(handle)
-
-    else:
-        return read_v4(handle)
+        data = handle.read(0)
+    except AttributeError:
+        raise ValueError("handle should be a file handle or a file name") from None
+    if data != b"":
+        raise ValueError("CEL files should be opened in binary mode")
+    data = handle.read(4)
+    if not data:
+        raise ValueError("Empty file.")
+    if data == b'[CEL':
+        # Version 3 format. Continue to read the header here before passing
+        # control to _read_v3 to avoid having to seek to the beginning of
+        # the file.
+        data += next(handle)
+        if data.strip() != b'[CEL]':
+            raise ValueError("Failed to parse Affy Version 3 CEL file.")
+        line = next(handle)
+        keyword, value = line.split(b"=", 1)
+        if keyword != b"Version":
+            raise ValueError("Failed to parse Affy Version 3 CEL file.")
+        version = int(value)
+        if version != 3:
+            raise ValueError("Incorrect version number in Affy Version 3 CEL file.")
+        return _read_v3(handle)
+    try:
+        magicNumber = struct.unpack("<i", data)
+    except Exception:
+        raise ValueError("Failed to read magic number from Affy Version 4 CEL file") from None
+    if magicNumber != (64, ):
+        raise ValueError("Incorrect magic number in Affy Version 4 CEL file")
+    return _read_v4(handle)
 
 
 # read Affymetrix files version 4.
 def read_v4(f):
-    """Read verion 4 Affymetrix CEL file, returns corresponding Record object.
-
-    Most importantly record.intensities correspond to intensities from the CEL
-    file.
-
-    record.mask and record.outliers are not set.
-
-    Example Usage:
-
-    >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v4_example.CEL", "rb") as handle:
-    ...     c = CelFile.read_v4(handle)
-    ...
-    >>> c.version == 4
-    True
-    >>> print("%i by %i array" % c.intensities.shape)
-    5 by 5 array
-
+    """Read verion 4 Affymetrix CEL file, and return a Record object (DEPRECATED).
     """
+    raise Exception("The read_v4 function in Bio.Affy.CelFile is deprecated."
+                    "Instead, please use the read function in Bio.Affy.CelFile "
+                    "specifying version=4.")
+
+
+def read_v3(handle):
+    """Read version 3 Affymetrix CEL file, and return a Record object (DEPRECATED).
+    """
+    raise Exception("The read_v3 function in Bio.Affy.CelFile is deprecated."
+                    "Instead, please use the read function in Bio.Affy.CelFile "
+                    "specifying version=3.")
+
+
+def _read_v4(f):
     # We follow the documentation here:
     # http://www.affymetrix.com/estore/support/developer/powertools/changelog/gcos-agcc/cel.html.affx
     record = Record()
-    preHeaders = ["magic", "version", "columns", "rows", "cellNo", "headerLen"]
+    preHeaders = ["version", "columns", "rows", "cellNo", "headerLen"]
     preHeadersMap = {}
     headersMap = {}
 
-    # load pre-headers
+    # Load pre-headers. The magic number was already parsed in the read
+    # function calling _read_v4.
+    preHeadersMap["magic"] = 64
     try:
         for name in preHeaders:
             preHeadersMap[name] = struct.unpack("<i", f.read(4))[0]
-    except UnicodeDecodeError:
-        raise _modeError
+    except struct.error:
+        raise ParserError("Failed to parse CEL version 4 file") from None
 
     char = f.read(preHeadersMap["headerLen"])
     header = char.decode("ascii", "ignore")
@@ -184,19 +190,10 @@ def read_v4(f):
             header = header.split("=")
             headersMap[header[0]] = "=".join(header[1:])
 
-    # for debugging
-    # pp.pprint("preHeadersMap")
-    # pp.pprint(preHeadersMap)
-    # pp.pprint("headersMap")
-    # pp.pprint(headersMap)
-
     record.version = preHeadersMap["version"]
     if record.version != 4:
-        raise ParserError(
-            "You are trying to parse CEL file version 4. This"
-            " file violates the structure expected from CEL file"
-            " version 4"
-        )
+        raise ParserError("Incorrect version number in CEL version 4 file")
+
     record.GridCornerUL = headersMap["GridCornerUL"]
     record.GridCornerUR = headersMap["GridCornerUR"]
     record.GridCornerLR = headersMap["GridCornerLR"]
@@ -292,122 +289,155 @@ def read_v4(f):
     return record
 
 
-def read_v3(handle):
-    """Read version 3 Affymetrix CEL file, and return corresponding Record object.
-
-    Example Usage:
-
-    >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
-    ...     c = CelFile.read_v3(handle)
-    ...
-    >>> c.version == 3
-    True
-
-    """
+def _read_v3(handle):
     # Needs error handling.
     # Needs to know the chip design.
     record = Record()
+    # The version number was already obtained when the read function calling
+    # _read_v3 parsed the CEL section.
+    record.version = 3
     section = ""
     for line in handle:
-        if not line.strip():
+        line = line.rstrip(b"\r\n")
+        if not line:
             continue
         # Set current section
-        if line[:5] == "[CEL]":
-            section = "CEL"
-        elif line[:8] == "[HEADER]":
+        if line.startswith(b"[HEADER]"):
             section = "HEADER"
-        elif line[:11] == "[INTENSITY]":
+        elif line.startswith(b"[INTENSITY]"):
             section = "INTENSITY"
             record.intensities = numpy.zeros((record.nrows, record.ncols))
             record.stdevs = numpy.zeros((record.nrows, record.ncols))
             record.npix = numpy.zeros((record.nrows, record.ncols), int)
-        elif line[:7] == "[MASKS]":
+        elif line.startswith(b"[MASKS]"):
             section = "MASKS"
             record.mask = numpy.zeros((record.nrows, record.ncols))
-        elif line[:10] == "[OUTLIERS]":
+        elif line.startswith(b"[OUTLIERS]"):
             section = "OUTLIERS"
             record.outliers = numpy.zeros((record.nrows, record.ncols))
-        elif line[:10] == "[MODIFIED]":
+        elif line.startswith(b"[MODIFIED]"):
             section = "MODIFIED"
             record.modified = numpy.zeros((record.nrows, record.ncols))
-        elif line[0] == "[":
-            # This would be an unknown section
-            section = ""
-        elif section == "CEL":
-            keyword, value = line.split("=", 1)
-            if keyword == "Version":
-                record.version = int(value)
-        elif section == "HEADER":
-            # Set record.ncols and record.nrows, remaining data goes into
-            # record.header dict
-            keyword, value = line.split("=", 1)
-            if keyword == "Cols":
-                record.ncols = int(value)
-            elif keyword == "Rows":
-                record.nrows = int(value)
-            elif keyword == "GridCornerUL":
-                x, y = value.split()
-                record.GridCornerUL = (int(x), int(y))
-            elif keyword == "GridCornerUR":
-                x, y = value.split()
-                record.GridCornerUR = (int(x), int(y))
-            elif keyword == "GridCornerLR":
-                x, y = value.split()
-                record.GridCornerLR = (int(x), int(y))
-            elif keyword == "GridCornerLL":
-                x, y = value.split()
-                record.GridCornerLL = (int(x), int(y))
-            elif keyword == "DatHeader":
-                record.DatHeader = value.strip("\n\r")
-            elif keyword == "Algorithm":
-                record.Algorithm = value.strip("\n\r")
-            elif keyword == "AlgorithmParameters":
-                record.AlgorithmParameters = value.strip("\n\r")
-        elif section == "INTENSITY":
-            if "NumberCells" in line:
-                record.NumberCells = int(line.split("=", 1)[1])
-            elif "CellHeader" in line:
-                pass
-            else:
-                words = line.split()
-                y = int(words[0])
-                x = int(words[1])
-                record.intensities[x, y] = float(words[2])
-                record.stdevs[x, y] = float(words[3])
-                record.npix[x, y] = int(words[4])
-        elif section == "MASKS":
-            if "NumberCells" in line:
-                record.nmask = int(line.split("=", 1)[1])
-            elif "CellHeader" in line:
-                pass
-            else:
-                words = line.split()
-                y = int(words[0])
-                x = int(words[1])
-                record.mask[x, y] = int(1)
-        elif section == "OUTLIERS":
-            if "NumberCells" in line:
-                record.noutliers = int(line.split("=", 1)[1])
-            elif "CellHeader" in line:
-                pass
-            else:
-                words = line.split()
-                y = int(words[0])
-                x = int(words[1])
-                record.outliers[x, y] = int(1)
-        elif section == "MODIFIED":
-            if "NumberCells" in line:
-                record.nmodified = int(line.split("=", 1)[1])
-            elif "CellHeader" in line:
-                pass
-            else:
-                words = line.split()
-                y = int(words[0])
-                x = int(words[1])
-                record.modified[x, y] = float(words[2])
-        else:
-            continue
+        elif line.startswith(b"["):
+            raise ParserError("Unknown section found in version 3 CEL file") from None
+        else:  # read the data in a section
+            if section == "HEADER":
+                # Set record.ncols and record.nrows, remaining data goes into
+                # record.header dict
+                key, value = line.split(b"=", 1)
+                if key == b"Cols":
+                    record.ncols = int(value)
+                elif key == b"Rows":
+                    record.nrows = int(value)
+                elif key == b"GridCornerUL":
+                    x, y = value.split()
+                    record.GridCornerUL = (int(x), int(y))
+                elif key == b"GridCornerUR":
+                    x, y = value.split()
+                    record.GridCornerUR = (int(x), int(y))
+                elif key == b"GridCornerLR":
+                    x, y = value.split()
+                    record.GridCornerLR = (int(x), int(y))
+                elif key == b"GridCornerLL":
+                    x, y = value.split()
+                    record.GridCornerLL = (int(x), int(y))
+                elif key == b"DatHeader":
+                    # line contains binary data; don't decode
+                    record.DatHeader = value
+                elif key == b"Algorithm":
+                    record.Algorithm = value.decode("ascii")
+                elif key == b"AlgorithmParameters":
+                    parameters = value.split(b";")
+                    values = {}
+                    for parameter in parameters:
+                        key, value = parameter.split(b":", 1)
+                        if key in (b"Percentile",
+                                   b"CellMargin",
+                                   b"FullFeatureWidth",
+                                   b"FullFeatureHeight",
+                                   b"PoolWidthExtenstion",
+                                   b"PoolHeightExtension"):
+                           values[key] = int(value)
+                        elif key in (b"OutlierHigh",
+                                     b"OutlierLow",
+                                     b"StdMult"):
+                           values[key] = float(value)
+                        elif key in (b"FixedCellSize",
+                                     b"IgnoreOutliersInShiftRows",
+                                     b"FeatureExtraction",
+                                     b"UseSubgrids",
+                                     b"RandomizePixels"):
+                           if value == b'TRUE':
+                               value = True
+                           elif value == b'FALSE':
+                               value = False
+                           else:
+                               raise ValueError("Unexpected boolean value")
+                           values[key] = value
+                        elif key in (b"AlgVersion",
+                                     b"ErrorBasis"):
+                           values[key] = value.decode("ascii")
+                        else:
+                               raise ValueError("Unexpected tag in AlgorithmParameters")
+                    record.AlgorithmParameters = values
+            elif section == "INTENSITY":
+                if line.startswith(b"NumberCells="):
+                    key, value = line.split(b"=", 1)
+                    record.NumberCells = int(value)
+                elif line.startswith(b"CellHeader="):
+                    key, value = line.split(b"=", 1)
+                    if value.split() != [b"X", b"Y", b"MEAN", b"STDV", b"NPIXELS"]:
+                        raise ParserError("Unexpected CellHeader in INTENSITY "
+                                          "section CEL version 3 file")
+                else:
+                    words = line.split()
+                    y = int(words[0])
+                    x = int(words[1])
+                    record.intensities[x, y] = float(words[2])
+                    record.stdevs[x, y] = float(words[3])
+                    record.npix[x, y] = int(words[4])
+            elif section == "MASKS":
+                if line.startswith(b"NumberCells="):
+                    key, value = line.split(b"=", 1)
+                    record.nmask = int(value)
+                elif line.startswith(b"CellHeader="):
+                    key, value = line.split(b"=", 1)
+                    if value.split() != [b"X", b"Y"]:
+                        raise ParserError("Unexpected CellHeader in MASKS "
+                                          "section in CEL version 3 file")
+                else:
+                    words = line.split()
+                    y = int(words[0])
+                    x = int(words[1])
+                    record.mask[x, y] = int(1)
+            elif section == "OUTLIERS":
+                if line.startswith(b"NumberCells="):
+                    key, value = line.split(b"=", 1)
+                    record.noutliers = int(value)
+                elif line.startswith(b"CellHeader="):
+                    key, value = line.split(b"=", 1)
+                    if value.split() != [b"X", b"Y"]:
+                        raise ParserError("Unexpected CellHeader in OUTLIERS "
+                                          "section in CEL version 3 file")
+                else:
+                    words = line.split()
+                    y = int(words[0])
+                    x = int(words[1])
+                    record.outliers[x, y] = int(1)
+            elif section == "MODIFIED":
+                if line.startswith(b"NumberCells="):
+                    key, value = line.split(b"=", 1)
+                    record.nmodified = int(value)
+                elif line.startswith(b"CellHeader="):
+                    key, value = line.split(b"=", 1)
+                    if value.split() != [b"X", b"Y", b"ORIGMEAN"]:
+                        raise ParserError("Unexpected CellHeader in MODIFIED "
+                                          "section in CEL version 3 file")
+                else:
+                    words = line.split()
+                    y = int(words[0])
+                    x = int(words[1])
+                    record.modified[x, y] = float(words[2])
     return record
 
 

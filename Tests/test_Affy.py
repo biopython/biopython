@@ -16,38 +16,9 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Affy.CelFile")
+        "Install NumPy if you want to use Bio.Affy.CelFile") from None
 
 from Bio.Affy import CelFile
-
-
-def testRecordV4(record):
-    assert(record.intensities.shape == (5, 5))
-    assert(record.intensities.shape == record.stdevs.shape)
-    assert(record.intensities.shape == record.npix.shape)
-    assert(record.ncols == 5)
-    assert(record.nrows == 5)
-    numpy.testing.assert_allclose(record.intensities,
-                                  [[0., 1., 2., 3., 4.],
-                                   [5., 6., 7., 8., 9.],
-                                   [10., 11., 12., 13., 14.],
-                                   [15., 16., 17., 18., 19.],
-                                   [20., 21., 22., 23., 24.]])
-    numpy.testing.assert_allclose(record.stdevs,
-                                  [[0., -1., -2., -3., -4.],
-                                   [-5., -6., -7., -8., -9.],
-                                   [-10., -11., -12., -13., -14.],
-                                   [-15., -16., -17., -18., -19.],
-                                   [-20., -21., -22., -23., -24.]])
-    numpy.testing.assert_allclose(record.npix,
-                                  [[9, 9, 9, 9, 9],
-                                   [9, 9, 9, 9, 9],
-                                   [9, 9, 9, 9, 9],
-                                   [9, 9, 9, 9, 9],
-                                   [9, 9, 9, 9, 9]])
-    assert(len(record.AlgorithmParameters) == 329)
-    assert(len(record.GridCornerUL) == 7)
-    assert(record.AlgorithmParameters[-3:] == "169")
 
 
 class AffyTest(unittest.TestCase):
@@ -61,69 +32,93 @@ class AffyTest(unittest.TestCase):
     def tearDown(self):
         os.remove(self.affy4Bad)
 
-    # tests if the code is backwards compatible
-    def testAffyStrict(self):
-        record = CelFile.read("hello")
-        assert record.DatHeader is None
-
     # tests the old Affymetrix v3 parser
     def testAffy3(self):
-        with open(self.affy3, "r") as f:
+        with open(self.affy3, "rb") as f:
             record = CelFile.read(f)
-            assert(len(record.DatHeader) > 0)
-            assert(record.intensities.shape == (5, 5))
-            assert(record.intensities.shape == record.stdevs.shape)
-            assert(record.intensities.shape == record.npix.shape)
-            assert(record.ncols == 5)
-            assert(record.nrows == 5)
+            self.assertTrue(len(record.DatHeader) > 0)
+            self.assertEqual(record.intensities.shape, (5, 5))
+            self.assertEqual(record.intensities.shape, record.stdevs.shape)
+            self.assertEqual(record.intensities.shape, record.npix.shape)
+            self.assertEqual(record.ncols, 5)
+            self.assertEqual(record.nrows, 5)
 
     def testAffy3Backwards(self):
         # tests the old Affymetrix v3 parser
-        with open(self.affy3, "r") as f:
-            lines = f.readlines()
-        record = CelFile.read_v3(lines)
+        with open(self.affy3, "rb") as f:
+            record = CelFile.read(f, version=3)
 
-        assert(len(record.DatHeader) > 0)
-        assert(record.intensities.shape == (5, 5))
-        assert(record.intensities.shape == record.stdevs.shape)
-        assert(record.intensities.shape == record.npix.shape)
-        assert(record.ncols == 5)
-        assert(record.nrows == 5)
+        self.assertTrue(len(record.DatHeader) > 0)
+        self.assertEqual(record.intensities.shape, (5, 5))
+        self.assertEqual(record.intensities.shape, record.stdevs.shape)
+        self.assertEqual(record.intensities.shape, record.npix.shape)
+        self.assertEqual(record.ncols, 5)
+        self.assertEqual(record.nrows, 5)
 
     # tests the new Affymetrix v4 parser
     def testAffy4(self):
         with open(self.affy4, "rb") as f:
             record = CelFile.read(f)
-            testRecordV4(record)
+        self.assertEqual(record.intensities.shape, (5, 5))
+        self.assertEqual(record.intensities.shape, record.stdevs.shape)
+        self.assertEqual(record.intensities.shape, record.npix.shape)
+        self.assertEqual(record.ncols, 5)
+        self.assertEqual(record.nrows, 5)
+        global message
+        try:
+            numpy.testing.assert_allclose(record.intensities,
+                                          [[0., 1., 2., 3., 4.],
+                                           [5., 6., 7., 8., 9.],
+                                           [10., 11., 12., 13., 14.],
+                                           [15., 16., 17., 18., 19.],
+                                           [20., 21., 22., 23., 24.]])
+            message = None
+        except AssertionError as err:
+            message = str(err)
+        if message is not None:
+            self.fail(message)
+        try:
+            numpy.testing.assert_allclose(record.stdevs,
+                                          [[0., -1., -2., -3., -4.],
+                                           [-5., -6., -7., -8., -9.],
+                                           [-10., -11., -12., -13., -14.],
+                                           [-15., -16., -17., -18., -19.],
+                                           [-20., -21., -22., -23., -24.]])
+            message = None
+        except AssertionError as err:
+            message = str(err)
+        if message is not None:
+            self.fail(message)
+        try:
+            numpy.testing.assert_allclose(record.npix,
+                                          [[9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9]])
+            message = None
+        except AssertionError as err:
+            message = str(err)
+        if message is not None:
+            self.fail(message)
+        self.assertEqual(len(record.AlgorithmParameters), 329)
+        self.assertEqual(len(record.GridCornerUL), 7)
+        self.assertEqual(record.AlgorithmParameters[-3:], "169")
 
     def testAffyBadHeader(self):
         with self.assertRaises(CelFile.ParserError):
             with open(self.affy4Bad, "rb") as f:
                 record = CelFile.read(f)
 
-    def testAffyWrongModeReadV4(self):
-        try:
-            with open(self.affy4, "r") as f:
-                record = CelFile.read_v4(f)
-        except CelFile.ParserError:
-            if int(sys.version[0]) >= 3:
-                return  # As expected in pyhthon 3
-            else:
-                raise AssertionError("Expected CelFile.ParserError in python3")
-        # the code just works in python 2
-        testRecordV4(record)
+    def testAffyWrongModeReadV3(self):
+        with self.assertRaises(ValueError):
+            with open(self.affy4, "rt") as f:
+                record = CelFile.read(f, version=4)
 
-    def testAffyWrongModeRead(self):
-        try:
-            with open(self.affy4, "r") as f:
-                record = CelFile.read(f)
-        except CelFile.ParserError:
-            if int(sys.version[0]) >= 3:
-                return  # As expected in pyhthon 3
-            else:
-                raise AssertionError("Expected CelFile.ParserError in python3")
-        # the code just works in python 2
-        testRecordV4(record)
+    def testAffyWrongModeReadV4(self):
+        with self.assertRaises(ValueError):
+            with open(self.affy4, "rt") as f:
+                record = CelFile.read(f, version=4)
 
     # Writes a small example Affymetrix V4 CEL File
     def writeExampleV4(self, f, bad=False):
