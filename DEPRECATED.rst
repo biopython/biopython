@@ -178,7 +178,8 @@ Iterator .next() methods
 The .next() method defined for any Biopython iterator is deprecated as of
 Biopython 1.63 under Python 2 (and not present on Python 3). Please replace
 my_iterator.next() with next(my_iterator) using the new built-in function
-next() instead.
+next() instead. Python 2 support and the remaining next methods were removed
+in release 1.77.
 
 Bio.SVDSuperimposer
 -------------------
