@@ -4,7 +4,6 @@ import os
 import string
 import numpy
 
-from Bio import File
 from Bio import BiopythonExperimentalWarning
 
 
@@ -417,17 +416,23 @@ class Array(numpy.ndarray):
 
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
+    try:
+        fp = open(handle)
+        lines = fp.readlines()
+    except TypeError:
+        fp = handle
+        try:
+            lines = fp.readlines()
+        except Exception as e:
+            raise e from None
+        finally:
+            fp.close()
     header = []
-    with File.as_handle(handle) as fp:
-        for line in fp:
-            if not line.startswith("#"):
-                break
-            header.append(line[1:].strip())
-        row = line.split()
-        rows = [row]
-        for line in fp:
-            row = line.split()
-            rows.append(row)
+    for i, line in enumerate(lines):
+        if not line.startswith("#"):
+            break
+        header.append(line[1:].strip())
+    rows = [line.split() for line in lines[i:]]
     if len(rows[0]) == len(rows[1]) == 2:
         alphabet = [key for key, value in rows]
         for key in alphabet:

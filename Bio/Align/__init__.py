@@ -602,10 +602,8 @@ format(alignment, format_spec).
         # to avoid calling it repeatedly for __init__ and extend, hence this
         # private _append method
         if expected_length is not None and len(record) != expected_length:
-            # TODO - Use the following more helpful error, but update unit tests
-            # raise ValueError("New sequence is not of length %i"
-            #                  % self.get_alignment_length())
-            raise ValueError("Sequences must all be the same length")
+            raise ValueError("New sequence is not of length %i"
+                             % self.get_alignment_length())
 
         # Using not self.alphabet.contains(record.seq.alphabet) needs fixing
         # for AlphabetEncoders (e.g. gapped versus ungapped).
@@ -1512,8 +1510,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def __setattr__(self, key, value):
         if key not in dir(_aligners.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes
-            message = "'PairwiseAligner' object has no attribute '%s'" % key
-            raise AttributeError(message)
+            raise AttributeError("PairwiseAligner object has no attribute '%s'"
+                                 % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):

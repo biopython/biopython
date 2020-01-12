@@ -324,7 +324,7 @@ class SummaryInfo:
                     raise ValueError(
                         "Residues %s, %s not found in alphabet %s"
                         % (residue1, residue2, self.alignment._alphabet)
-                    )
+                    ) from None
 
         return start_dict
 
@@ -444,7 +444,7 @@ class SummaryInfo:
                         raise ValueError(
                             "Residue %s not found in alphabet %s"
                             % (this_residue, self.alignment._alphabet)
-                        )
+                        ) from None
 
             pssm_info.append((left_seq[residue_num], score_dict))
 
@@ -524,9 +524,8 @@ class SummaryInfo:
             elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
                 random_expected = Nucleotide4Random
             else:
-                errstr = "Error in alphabet: not Nucleotide or Protein, "
-                errstr += "supply expected frequencies"
-                raise ValueError(errstr)
+                raise ValueError("Error in alphabet: not Nucleotide or "
+                                 "Protein, supply expected frequencies")
             del base_alpha
         elif not isinstance(e_freq_table, FreqTable.FreqTable):
             raise ValueError("e_freq_table should be a FreqTable object")
@@ -615,7 +614,7 @@ class SummaryInfo:
                 raise ValueError(
                     "Residue %s not found in alphabet %s"
                     % (record.seq[residue_num], self.alignment._alphabet)
-                )
+                ) from None
 
         if e_freq_table:
             if not isinstance(e_freq_table, FreqTable.FreqTable):
