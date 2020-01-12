@@ -319,7 +319,7 @@ def _read_v3(handle):
             section = "MODIFIED"
             record.modified = numpy.zeros((record.nrows, record.ncols))
         elif line.startswith("["):
-            raise ParserError("Unknown section found in version 3 CEL file") from None
+            raise ParserError("Unknown section found in version 3 CEL file")
         else:  # read the data in a section
             if section == "HEADER":
                 # Set record.ncols and record.nrows, remaining data goes into
