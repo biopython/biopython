@@ -1512,8 +1512,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def __setattr__(self, key, value):
         if key not in dir(_aligners.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes
-            message = "'PairwiseAligner' object has no attribute '%s'" % key
-            raise AttributeError(message)
+            raise AttributeError("PairwiseAligner object has no attribute '%s'"
+                                 % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):
