@@ -126,8 +126,8 @@ class Seq:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}'{3!s})".format(
-                self.__class__.__name__, str(self)[:54], str(self)[-3:], a
+            return (
+                f"{self.__class__.__name__}('{str(self)[:54]}...{str(self)[-3:]}'{a!s})"
             )
         else:
             return f"{self.__class__.__name__}({self._data!r}{a!s})"
@@ -222,9 +222,8 @@ class Seq:
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) < str(other)
         raise TypeError(
-            "'<' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'<' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __le__(self, other):
@@ -238,9 +237,8 @@ class Seq:
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) <= str(other)
         raise TypeError(
-            "'<=' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'<=' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __gt__(self, other):
@@ -254,9 +252,8 @@ class Seq:
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) > str(other)
         raise TypeError(
-            "'>' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'>' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __ge__(self, other):
@@ -270,9 +267,8 @@ class Seq:
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) >= str(other)
         raise TypeError(
-            "'>=' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'>=' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __len__(self):
@@ -401,9 +397,7 @@ class Seq:
         Seq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other, self.alphabet)
 
     def __rmul__(self, other):
@@ -417,9 +411,7 @@ class Seq:
         Seq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other, self.alphabet)
 
     def __imul__(self, other):
@@ -436,9 +428,7 @@ class Seq:
         Seq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other, self.alphabet)
 
     def tomutable(self):  # Needed?  Or use a function?
@@ -1231,9 +1221,8 @@ class Seq:
                 gap = self.alphabet.gap_char
             elif gap != self.alphabet.gap_char:
                 raise ValueError(
-                    "Gap {0!r} does not match {1!r} from alphabet".format(
-                        gap, self.alphabet.gap_char
-                    )
+                    f"Gap {gap!r} does not match {self.alphabet.gap_char!r}"
+                    " from alphabet"
                 )
 
         protein = _translate_str(
@@ -1325,9 +1314,8 @@ class Seq:
                 gap = self.alphabet.gap_char
             elif gap != self.alphabet.gap_char:
                 raise ValueError(
-                    "Gap {0!r} does not match {1!r} from alphabet".format(
-                        gap, self.alphabet.gap_char
-                    )
+                    f"Gap {gap!r} does not match {self.alphabet.gap_char!r}"
+                    " from alphabet"
                 )
             alpha = Alphabet._ungap(self.alphabet)
         elif not gap:
@@ -1519,9 +1507,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(len(self) * other, self.alphabet)
 
     def __rmul__(self, other):
@@ -1535,9 +1521,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(len(self) * other, self.alphabet)
 
     def __imul__(self, other):
@@ -1554,9 +1538,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(len(self) * other, self.alphabet)
 
     def __getitem__(self, index):
@@ -2017,8 +1999,8 @@ class MutableSeq:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}'{3!s})".format(
-                self.__class__.__name__, str(self[:54]), str(self[-3:]), a
+            return (
+                f"{self.__class__.__name__}('{str(self[:54])}...{str(self[-3:])}'{a!s})"
             )
         else:
             return f"{self.__class__.__name__}('{str(self)}'{a!s})"
@@ -2089,9 +2071,8 @@ class MutableSeq:
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) < str(other)
         raise TypeError(
-            "'<' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'<' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __le__(self, other):
@@ -2107,9 +2088,8 @@ class MutableSeq:
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) <= str(other)
         raise TypeError(
-            "'<=' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'<=' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __gt__(self, other):
@@ -2125,9 +2105,8 @@ class MutableSeq:
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) > str(other)
         raise TypeError(
-            "'>' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'>' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __ge__(self, other):
@@ -2143,9 +2122,8 @@ class MutableSeq:
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) >= str(other)
         raise TypeError(
-            "'>=' not supported between instances of '{}' and '{}'".format(
-                type(self).__name__, type(other).__name__
-            )
+            f"'>=' not supported between instances of '{type(self).__name__}'"
+            f" and '{type(other).__name__}'"
         )
 
     def __len__(self):
@@ -2264,9 +2242,7 @@ class MutableSeq:
         MutableSeq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self.data * other, self.alphabet)
 
     def __rmul__(self, other):
@@ -2283,9 +2259,7 @@ class MutableSeq:
         MutableSeq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self.data * other, self.alphabet)
 
     def __imul__(self, other):
@@ -2299,9 +2273,7 @@ class MutableSeq:
         MutableSeq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type"
-            )
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self.data * other, self.alphabet)
 
     def append(self, c):
@@ -2743,17 +2715,14 @@ def _translate_str(
         c = dual_coding[0]
         if to_stop:
             raise ValueError(
-                "You cannot use 'to_stop=True' with this table "
-                "as it contains {} codon(s) which can be both "
-                " STOP and an  amino acid (e.g. '{}' -> '{}' or "
-                "STOP).".format(len(dual_coding), c, forward_table[c])
+                "You cannot use 'to_stop=True' with this table as it contains"
+                f" {len(dual_coding)} codon(s) which can be both  STOP and an"
+                f" amino acid (e.g. '{c}' -> '{forward_table[c]}' or STOP)."
             )
         warnings.warn(
-            "This table contains {} codon(s) which code(s) for both "
-            "STOP and an amino acid (e.g. '{}' -> '{}' or STOP). "
-            "Such codons will be translated as amino acid.".format(
-                len(dual_coding), c, forward_table[c]
-            ),
+            f"This table contains {len(dual_coding)} codon(s) which code(s) for"
+            f" both STOP and an amino acid (e.g. '{c}' -> '{forward_table[c]}'"
+            " or STOP). Such codons will be translated as amino acid.",
             BiopythonWarning,
         )
 
@@ -2807,9 +2776,7 @@ def _translate_str(
                 # Gapped translation
                 amino_acids.append(gap)
             else:
-                raise CodonTable.TranslationError(
-                    f"Codon '{codon}' is invalid"
-                )
+                raise CodonTable.TranslationError(f"Codon '{codon}' is invalid")
     return "".join(amino_acids)
 
 
