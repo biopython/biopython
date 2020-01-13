@@ -438,24 +438,21 @@ def read(handle, format, seq_count=None, alphabet=None):
     """
     iterator = parse(handle, format, seq_count, alphabet)
     try:
-        first = next(iterator)
+        alignment = next(iterator)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(iterator)
         raise ValueError("More than one record found in handle")
+    except StopIteration:
+        pass
     if seq_count:
-        if len(first) != seq_count:
+        if len(alignment) != seq_count:
             raise RuntimeError(
                 "More sequences found in alignment than specified in seq_count: %s."
                 % seq_count
             )
-    return first
+    return alignment
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

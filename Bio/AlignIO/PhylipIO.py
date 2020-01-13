@@ -205,7 +205,7 @@ class PhylipIterator(AlignmentIterator):
             number_of_seqs = int(parts[0])
             length_of_seqs = int(parts[1])
         except ValueError:
-            raise ValueError("First line should have two integers")
+            raise ValueError("First line should have two integers") from None
 
         assert self._is_header(line)
 
@@ -385,7 +385,7 @@ class SequentialPhylipIterator(PhylipIterator):
             number_of_seqs = int(parts[0])
             length_of_seqs = int(parts[1])
         except ValueError:
-            raise ValueError("First line should have two integers")
+            raise ValueError("First line should have two integers") from None
 
         assert self._is_header(line)
 

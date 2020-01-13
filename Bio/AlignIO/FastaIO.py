@@ -346,7 +346,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                 try:
                     key, value = [s.strip() for s in line[2:].split(" ", 1)]
                 except ValueError:
-                    raise ValueError("Bad line: %r" % line)
+                    raise ValueError("Bad line: %r" % line) from None
             if state == state_QUERY_HEADER:
                 header_tags[key] = value
             elif state == state_ALIGN_HEADER:

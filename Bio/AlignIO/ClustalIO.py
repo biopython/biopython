@@ -28,7 +28,7 @@ class ClustalWriter(SequentialAlignmentWriter):
             # This doubles as a check for an alignment object
             raise ValueError("Non-empty sequences are required")
 
-        # Old versions of the parser in Bio.Clustalw used a ._version property,
+        # Old versions of the parser in Bio.Clustalw used a ._version property
         try:
             version = str(alignment._version)
         except AttributeError:
@@ -50,11 +50,12 @@ class ClustalWriter(SequentialAlignmentWriter):
 
         if "clustal_consensus" in alignment.column_annotations:
             star_info = alignment.column_annotations["clustal_consensus"]
-        elif hasattr(alignment, "_star_info"):
-            # This was originally stored by Bio.Clustalw as ._star_info
-            star_info = alignment._star_info
         else:
-            star_info = None
+            try:
+                # This was originally stored by Bio.Clustalw as ._star_info
+                star_info = alignment._star_info
+            except AttributeError:
+                star_info = None
 
         # keep displaying sequences until we reach the end
         while cur_char != max_length:
@@ -168,7 +169,7 @@ class ClustalIterator(AlignmentIterator):
                     except ValueError:
                         raise ValueError(
                             "Could not parse line, bad sequence number:\n%s" % line
-                        )
+                        ) from None
                     if len(fields[1].replace("-", "")) != letters:
                         raise ValueError(
                             "Could not parse line, invalid sequence number:\n%s" % line
@@ -255,7 +256,7 @@ class ClustalIterator(AlignmentIterator):
                     except ValueError:
                         raise ValueError(
                             "Could not parse line, bad sequence number:\n%s" % line
-                        )
+                        ) from None
                     if len(seqs[i].replace("-", "")) != letters:
                         raise ValueError(
                             "Could not parse line, invalid sequence number:\n%s" % line
