@@ -36,6 +36,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
+- Artemi Bendandi <https://github.com/artbendandi>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
 - Bartek Wilczynski <bartek at domain rezolwenta.eu.org>
@@ -165,6 +166,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Konrad Förstner <https://github.com/konrad>
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
 - Konstantin Vdovkin <https://github.com/rtf_const>
+- Konstantinos Zisis <https://github.com/zisikons>
 - Kozo Nishida <https://github.com/kozo2>
 - Kristian Davidsen <https://github.com/krdav>
 - Kristian Rother <https://github.com/krother>

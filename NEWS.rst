@@ -52,6 +52,10 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+
+``PDBParser`` and ``PDBIO`` now support PQR format file parsing and input/
+output.
+
 In addition to the mainstream ``x86_64`` aka ``AMD64`` CPU architecture, we
 now also test every contribution on the ``ARM64``, ``ppc64le``, and ``s390x``
 CPUs under Linux thanks to Travis CI. Further post-release testing done by
@@ -73,6 +77,7 @@ possible, especially the following contributors:
 - Andrey Raspopov
 - Chris Daley (first contribution)
 - Chris Rands
+- Artemi Bendandi (first contribution)
 - Christian Brueffer
 - Deepak Khatri
 - Ilya Flyamer (first contribution)
@@ -80,7 +85,11 @@ possible, especially the following contributors:
 - Michael R. Crusoe (first contribution)
 - Michiel de Hoon
 - Peter Cock
+- Chris Daley (first contribution)
+- Michiel de Hoon
+- Jakub Lipinski (first contribution)
 - Sergio Valqui
+- Konstantinos Zisis (first contribution)
 
 6 November 2019: Biopython 1.75
 ===============================
