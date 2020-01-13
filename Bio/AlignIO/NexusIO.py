@@ -82,23 +82,20 @@ class NexusWriter(AlignmentWriter):
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
-            first_alignment = next(align_iter)
+            alignment = next(align_iter)
         except StopIteration:
-            first_alignment = None
-        if first_alignment is None:
             # Nothing to write!
             return 0
 
         # Check there is only one alignment...
         try:
-            second_alignment = next(align_iter)
-        except StopIteration:
-            second_alignment = None
-        if second_alignment is not None:
+            next(align_iter)
             raise ValueError("We can only write one Alignment to a Nexus file.")
+        except StopIteration:
+            pass
 
         # Good.  Actually write the single alignment,
-        self.write_alignment(first_alignment)
+        self.write_alignment(alignment)
         return 1  # we only support writing one alignment!
 
     def write_alignment(self, alignment, interleave=None):

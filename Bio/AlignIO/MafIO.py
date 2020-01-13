@@ -354,7 +354,7 @@ class MafIndex:
             return records_found
 
         except (_sqlite.OperationalError, _sqlite.DatabaseError) as err:
-            raise ValueError("Problem with SQLite database: %s" % err)
+            raise ValueError("Problem with SQLite database: %s" % err) from None
 
     def __make_new_index(self):
         """Read MAF file and generate SQLite index (PRIVATE)."""
@@ -572,7 +572,7 @@ class MafIndex:
                 raise TypeError(
                     "Exon coordinates must be integers "
                     "(start=%d, end=%d)" % (exonstart, exonend)
-                )
+                ) from None
 
             # https://www.sqlite.org/lang_expr.html
             # -----
@@ -705,7 +705,7 @@ class MafIndex:
                         raise ValueError(
                             "No strand information for target seqname (%s)"
                             % self._target_seqname
-                        )
+                        ) from None
                     # length including gaps (i.e. alignment length)
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
