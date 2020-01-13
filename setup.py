@@ -29,9 +29,6 @@ import os
 try:
     from setuptools import setup
     from setuptools import Command
-    from setuptools.command.install import install
-    from setuptools.command.build_py import build_py
-    from setuptools.command.build_ext import build_ext
     from setuptools import Extension
 except ImportError:
     sys.exit(
@@ -48,7 +45,6 @@ if "bdist_wheel" in sys.argv:
             "for bdist_wheel to work. Try running: pip install wheel"
         )
 
-_CHECKED = None
 
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (3, 6):
@@ -57,64 +53,6 @@ if sys.version_info[:2] < (3, 6):
         "Python %d.%d detected.\n" % sys.version_info[:2]
     )
     sys.exit(1)
-
-
-def check_dependencies_once():
-    """Check dependencies, will cache and re-use the result."""
-    # Call check_dependencies, but cache the result for subsequent
-    # calls.
-    global _CHECKED
-    if _CHECKED is None:
-        _CHECKED = check_dependencies()
-    return _CHECKED
-
-
-def check_dependencies():
-    """Return whether the installation should continue."""
-    # There should be some way for the user to tell specify not to
-    # check dependencies.  For example, it probably should not if
-    # the user specified "-q".  However, I'm not sure where
-    # distutils stores that information.  Also, install has a
-    # --force option that gets saved in self.user_options.  It
-    # means overwrite previous installations.  If the user has
-    # forced an installation, should we also ignore dependencies?
-
-    # Currently there are no compile time dependencies
-    return True
-
-
-class install_biopython(install):
-    """Override the standard install to check for dependencies.
-
-    This will just run the normal install, and then print warning messages
-    if packages are missing.
-    """
-
-    def run(self):
-        """Run the installation."""
-        if check_dependencies_once():
-            # Run the normal install.
-            install.run(self)
-
-
-class build_py_biopython(build_py):
-    """Biopython builder."""
-
-    def run(self):
-        """Run the build."""
-        if not check_dependencies_once():
-            return
-        build_py.run(self)
-
-
-class build_ext_biopython(build_ext):
-    """Biopython extension builder."""
-
-    def run(self):
-        """Run the build."""
-        if not check_dependencies_once():
-            return
-        build_ext.run(self)
 
 
 class test_biopython(Command):
@@ -313,12 +251,7 @@ setup(
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    cmdclass={
-        "install": install_biopython,
-        "build_py": build_py_biopython,
-        "build_ext": build_ext_biopython,
-        "test": test_biopython,
-    },
+    cmdclass={"test": test_biopython},
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
     include_package_data=True,  # done via MANIFEST.in under setuptools
