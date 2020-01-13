@@ -27,10 +27,6 @@ import sys
 import subprocess
 import re
 
-from subprocess import CalledProcessError as _ProcessCalledError
-
-from Bio import File
-
 
 # Use this regular expression to test the property names are going to
 # be valid as Python properties or arguments
@@ -81,7 +77,7 @@ _reserved_names = [
 _local_reserved_names = ["set_parameter"]
 
 
-class ApplicationError(_ProcessCalledError):
+class ApplicationError(subprocess.CalledProcessError):
     """Raised when an application returns a non-zero exit status.
 
     The exit status will be stored in the returncode attribute, similarly
@@ -238,7 +234,7 @@ class AbstractCommandline:
         try:
             parameters = self.parameters
         except AttributeError:
-            raise AttributeError("Subclass should have defined self.parameters")
+            raise AttributeError("Subclass should have defined self.parameters") from None
         # Create properties for each parameter at run time
         aliases = set()
         for p in parameters:
