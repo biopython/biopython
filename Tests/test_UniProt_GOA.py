@@ -92,9 +92,14 @@ class GoaTests(unittest.TestCase):
         # Check values of first record
         self.assertEqual(recs[0]["DB_Object_ID"], "A2P2R3")
         self.assertEqual(recs[0]["DB_Object_Symbol"], "YMR084W")
-        self.assertEqual(recs[0]["DB_Object_Name"], ["Putative glutamine--fructose"
-                                                     "-6-phosphate aminotransferase"
-                                                     " [isomerizing]"])
+        self.assertEqual(
+            recs[0]["DB_Object_Name"],
+            [
+                "Putative glutamine--fructose"
+                "-6-phosphate aminotransferase"
+                " [isomerizing]"
+            ],
+        )
         self.assertEqual(recs[0]["DB_Object_Synonym"], ["YM084_YEAST", "YMR084W"])
         self.assertEqual(recs[0]["DB_Object_Type"], "protein")
         self.assertEqual(recs[0]["Taxon"], "taxon:559292")
@@ -124,9 +129,11 @@ class GoaTests(unittest.TestCase):
             for rec in GOA.gafiterator(handle):
                 recs.append(rec)
                 # Filtering
-                if GOA.record_has(rec, taxon_id) and \
-                        GOA.record_has(rec, evidence) and \
-                        GOA.record_has(rec, synonym):
+                if (
+                    GOA.record_has(rec, taxon_id)
+                    and GOA.record_has(rec, evidence)
+                    and GOA.record_has(rec, synonym)
+                ):
                     filtered.append(rec)
 
         # Check number of filtered records
