@@ -276,21 +276,14 @@ for line in open("Bio/__init__.py"):
     if line.startswith("__version__"):
         exec(line.strip())
 
-# We now load in our reStructuredText README.rst file to pass
-# explicitly in the metadata since at time of writing PyPI
-# did not do this for us.
+# We now load in our reStructuredText README.rst file to pass explicitly in the
+# metadata, since at time of writing PyPI did not do this for us.
 #
-# Without declaring an encoding, if there was a problematic
-# character in the file, it would work on Python 2 but might
-# fail on Python 3 depending on the user's locale. By explicitly
-# checking ASCII (could use latin1 or UTF8 if needed later),
-# if any invalid character does appear in our README, this will
-# fail and alert us immediately on either platform.
-with open("README.rst", "rb") as handle:
-    # Only Python 3's open has an encoding argument.
-    # Opening in binary and doing decoding like this to work
-    # on both Python 2 and 3.
-    readme_rst = handle.read().decode("ascii")
+# Must make encoding explicit to avoid any conflict with the local default.
+# Currently keeping README as ASCII (might switch to UTF8 later if needed).
+# If any invalid character does appear in README, this will fail and alert us.
+with open("README.rst", encoding="ascii") as handle:
+    readme_rst = handle.read()
 
 setup(
     name="biopython",
