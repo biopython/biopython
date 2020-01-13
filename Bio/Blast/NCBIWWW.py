@@ -308,4 +308,4 @@ def _parse_qblast_ref_page(handle):
         return rid, int(rtoe)
     except ValueError:
         raise ValueError("A non-integer RTOE found in "
-                         "the 'please wait' page, %s" % repr(rtoe))
+                         "the 'please wait' page, %s" % repr(rtoe)) from None
