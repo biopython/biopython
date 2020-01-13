@@ -50,56 +50,6 @@ if "bdist_wheel" in sys.argv:
 
 _CHECKED = None
 
-
-def osx_clang_fix():
-    """Add clang switch to ignore unused arguments to avoid OS X compile error.
-
-    This is a hack to cope with Apple shipping a version of Python compiled
-    with the -mno-fused-madd argument which clang from XCode 5.1 does not
-    support::
-
-        $ cc -v
-        Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
-        Target: x86_64-apple-darwin13.2.0
-        Thread model: posix
-
-        $ which python-config
-        /Library/Frameworks/Python.framework/Versions/Current/bin/python-config
-
-        $ python-config --cflags
-        -I/Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
-        -I/Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
-        -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk
-        -fno-strict-aliasing -Wno-long-double -no-cpp-precomp -mno-fused-madd
-        -fno-common -dynamic -DNDEBUG -g -O3
-
-    We can avoid the clang compilation error with -Qunused-arguments which is
-    (currently) harmless if gcc is being used instead (e.g. compiling Biopython
-    against a locally compiled Python rather than the Apple provided Python).
-    """
-    # see http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011240.html
-    if sys.platform != "darwin":
-        return
-    from subprocess import getoutput
-    from distutils.ccompiler import new_compiler
-    from distutils.sysconfig import customize_compiler
-
-    # The compiler test should be made on the actual compiler that'll be used
-    compiler = new_compiler()
-    customize_compiler(compiler)
-    cc = getoutput("{} -v".format(compiler.compiler[0]))
-    if "gcc" in cc or "clang" not in cc:
-        return
-    for flag in ["CFLAGS", "CPPFLAGS"]:
-        if flag not in os.environ:
-            os.environ[flag] = "-Qunused-arguments"
-        elif "-Qunused-arguments" not in os.environ[flag]:
-            os.environ[flag] += " -Qunused-arguments"
-
-
-osx_clang_fix()
-
-
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (3, 6):
     sys.stderr.write(
