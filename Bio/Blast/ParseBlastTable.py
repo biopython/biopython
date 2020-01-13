@@ -10,8 +10,6 @@ Currently only supports the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 
-import sys
-
 
 class BlastTableEntry:
     """Container for Blast Table Entry, the field values from the table."""
@@ -49,15 +47,14 @@ class BlastTableRec:
         self.entries.append(entry)
 
 
-reader_keywords = {"BLASTP": "version",
-                   "Iteration": "iteration",
-                   "Query": "query",
-                   "Database": "database",
-                   "Fields": "fields"}
-
-
 class BlastTableReader:
     """Reader for the output of blastpgp."""
+
+    reader_keywords = {"BLASTP": "version",
+                       "Iteration": "iteration",
+                       "Query": "query",
+                       "Database": "database",
+                       "Fields": "fields"}
 
     def __init__(self, handle):
         """Initialize the class."""
@@ -97,9 +94,9 @@ class BlastTableReader:
         self.table_record.add_entry(current_entry)
 
     def _consume_header(self, inline):
-        for keyword in reader_keywords:
+        for keyword in self.reader_keywords:
             if keyword in inline:
-                return self._Parse("_parse_%s" % reader_keywords[keyword], inline)
+                return self._Parse("_parse_%s" % self.reader_keywords[keyword], inline)
 
     def _parse_version(self, inline):
         program, version, date = inline.split()[1:]
