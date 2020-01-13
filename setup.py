@@ -80,10 +80,7 @@ def osx_clang_fix():
     # see http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011240.html
     if sys.platform != "darwin":
         return
-    if sys.version_info[0] >= 3:
-        from subprocess import getoutput
-    else:
-        from commands import getoutput
+    from subprocess import getoutput
     from distutils.ccompiler import new_compiler
     from distutils.sysconfig import customize_compiler
 
