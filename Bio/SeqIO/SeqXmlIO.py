@@ -183,7 +183,7 @@ class ContentHandler(handler.ContentHandler):
                     ncbiTaxID = value
                 else:
                     raise ValueError(
-                        "Unexpected attribute '%s' found in species tag", key
+                        "Unexpected attribute '%s' found in species tag" % key
                     )
             else:
                 raise ValueError(
@@ -283,7 +283,7 @@ class ContentHandler(handler.ContentHandler):
                     ID = value
                 else:
                     raise ValueError(
-                        "Unexpected attribute '%s' found for DBRef element", key
+                        "Unexpected attribute '%s' found for DBRef element" % key
                     )
             else:
                 raise ValueError(
