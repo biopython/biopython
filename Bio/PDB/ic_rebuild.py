@@ -24,7 +24,7 @@ except ImportError:
     )
 
 from Bio.PDB.PDBExceptions import PDBException
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.File import as_handle
 from Bio.PDB.PDBIO import PDBIO
 
