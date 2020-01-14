@@ -36,9 +36,9 @@ def read(handle):
         __read_scores(record, line)
     except StopIteration:
         if not record:
-            raise ValueError("No record found in handle")
+            raise ValueError("No record found in handle") from None
         else:
-            raise ValueError("Unexpected end of stream.")
+            raise ValueError("Unexpected end of stream.") from None
     for line in handle:
         if not line.strip():  # skip empty lines
             continue
@@ -49,7 +49,7 @@ def read(handle):
             line = next(handle)
             __read_hit_alignment(record, line)
         except StopIteration:
-            raise ValueError("Unexpected end of stream.")
+            raise ValueError("Unexpected end of stream.") from None
     return record
 
 
@@ -73,7 +73,7 @@ def parse(handle):
             line = next(handle)
             __read_scores(record, line)
         except StopIteration:
-            raise ValueError("Unexpected end of stream.")
+            raise ValueError("Unexpected end of stream.") from None
         for line in handle:
             if not line.strip():
                 continue
@@ -87,7 +87,7 @@ def parse(handle):
                 line = next(handle)
                 __read_hit_alignment(record, line)
             except StopIteration:
-                raise ValueError("Unexpected end of stream.")
+                raise ValueError("Unexpected end of stream.") from None
         else:
             yield record
             break
