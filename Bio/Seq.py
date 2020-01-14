@@ -133,22 +133,7 @@ class Seq:
             return "{0}({1!r}{2!s})".format(self.__class__.__name__, self._data, a)
 
     def __str__(self):
-        """Return the full sequence as a python string, use str(my_seq).
-
-        Note that Biopython 1.44 and earlier would give a truncated
-        version of repr(my_seq) for str(my_seq).  If you are writing code
-        which need to be backwards compatible with really old Biopython,
-        you should continue to use my_seq.tostring() as follows::
-
-            try:
-                # The old way, removed in Biopython 1.73
-                as_string = seq_obj.tostring()
-            except AttributeError:
-                # The new way, needs Biopython 1.45 or later.
-                # Don't use this on Biopython 1.44 or older as truncates
-                as_string = str(seq_obj)
-
-        """
+        """Return the full sequence as a python string, use str(my_seq)."""
         return self._data
 
     def __hash__(self):
@@ -2046,13 +2031,7 @@ class MutableSeq:
             return "{0}('{1}'{2!s})".format(self.__class__.__name__, str(self), a)
 
     def __str__(self):
-        """Return the full sequence as a python string.
-
-        Note that Biopython 1.44 and earlier would give a truncated
-        version of repr(my_seq) for str(my_seq).  If you are writing code
-        which needs to be backwards compatible with old Biopython, you
-        should continue to use my_seq.tostring() rather than str(my_seq).
-        """
+        """Return the full sequence as a python string."""
         # See test_GAQueens.py for an historic usage of a non-string alphabet!
         return "".join(self.data)
 
