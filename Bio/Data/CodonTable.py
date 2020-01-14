@@ -456,7 +456,7 @@ class AmbiguousForwardTable:
             )
         except KeyError:
             self._cache[codon] = KeyError
-            raise KeyError(codon)  # stop codon
+            raise KeyError(codon) from None  # stop codon
         except TranslationError:
             self._cache[codon] = TranslationError
             raise TranslationError(codon)  # does not code
