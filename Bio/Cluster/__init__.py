@@ -20,7 +20,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Please install numpy if you want to use Bio.Cluster. "
-        "See http://www.numpy.org/")
+        "See http://www.numpy.org/") from None
 
 from . import _cluster
 
@@ -1205,12 +1205,12 @@ def __check_distancematrix(distancematrix):
                 else:
                     row = numpy.array(row, dtype="d")
                 if row.ndim != 1:
-                    raise ValueError("row %d is not one-dimensional" % i)
+                    raise ValueError("row %d is not one-dimensional" % i) from None
                 m = len(row)
                 if m != i:
-                    raise ValueError("row %d has incorrect size (%d, expected %d)" % (m, i))
+                    raise ValueError("row %d has incorrect size (%d, expected %d)" % (m, i)) from None
                 if numpy.isnan(row).any():
-                    raise ValueError("distancematrix contains NaN values")
+                    raise ValueError("distancematrix contains NaN values") from None
                 d[i] = row
             return d
     if numpy.isnan(distancematrix).any():
