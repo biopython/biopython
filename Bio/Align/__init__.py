@@ -315,14 +315,12 @@ class MultipleSeqAlignment:
         """Return the alignment as a string in the specified file format [DEPRECATED].
 
         This method is deprecated; instead of alignment.format(format_spec),
-        please use format(alignment, format_spec).
+        please use format(alignment, format_spec) or an f-string.
         """
         warnings.warn(
-            """\
-alignment.format has been deprecated, and we intend to remove it in a future
-release of Biopython. Instead of alignment.format(format_spec), please use
-format(alignment, format_spec).
-""",
+            "alignment.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of alignment.format(format_spec), "
+            "please use format(alignment, format_spec) or an f-string.",
             BiopythonDeprecationWarning,
         )
         return self.__format__(format_spec)
@@ -1239,14 +1237,12 @@ class PairwiseAlignment:
         """Create a human-readable representation of the alignment (DEPRECATED).
 
         This method is deprecated; instead of alignment.format(), please use
-        format(alignment).
+        format(alignment) or an f-string.
         """
         warnings.warn(
-            """\
-alignment.format has been deprecated, and we intend to remove it in a future
-release of Biopython. Instead of alignment.format(), please use
-format(alignment).
-""",
+            "alignment.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of alignment.format(), please use "
+            "format(alignment) or an f-string.",
             BiopythonDeprecationWarning,
         )
         return self.__format__(None)
