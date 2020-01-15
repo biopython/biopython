@@ -317,11 +317,14 @@ class MultipleSeqAlignment:
         This method is deprecated; instead of alignment.format(format_spec),
         please use format(alignment, format_spec).
         """
-        warnings.warn("""\
+        warnings.warn(
+            """\
 alignment.format has been deprecated, and we intend to remove it in a future
 release of Biopython. Instead of alignment.format(format_spec), please use
 format(alignment, format_spec).
-""", BiopythonDeprecationWarning)
+""",
+            BiopythonDeprecationWarning,
+        )
         return self.__format__(format_spec)
 
     def __format__(self, format_spec):
@@ -1238,11 +1241,14 @@ class PairwiseAlignment:
         This method is deprecated; instead of alignment.format(), please use
         format(alignment).
         """
-        warnings.warn("""\
+        warnings.warn(
+            """\
 alignment.format has been deprecated, and we intend to remove it in a future
 release of Biopython. Instead of alignment.format(), please use
 format(alignment).
-""", BiopythonDeprecationWarning)
+""",
+            BiopythonDeprecationWarning,
+        )
         return self.__format__(None)
 
     def __str__(self):
@@ -1512,8 +1518,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def __setattr__(self, key, value):
         if key not in dir(_aligners.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes
-            raise AttributeError("PairwiseAligner object has no attribute '%s'"
-                                 % key)
+            raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):

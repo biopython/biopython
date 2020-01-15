@@ -188,7 +188,7 @@ class StructureBuilder:
         element=None,
         pqr_charge=None,
         radius=None,
-        is_pqr=False
+        is_pqr=False,
     ):
         """Create a new Atom object.
 
@@ -229,12 +229,27 @@ class StructureBuilder:
                 )
         if not is_pqr:
             self.atom = Atom(
-                name, coord, b_factor, occupancy, altloc, fullname, serial_number, element
+                name,
+                coord,
+                b_factor,
+                occupancy,
+                altloc,
+                fullname,
+                serial_number,
+                element,
             )
         elif is_pqr:
             self.atom = Atom(
-                name, coord, None, None, altloc, fullname, serial_number,
-                element, pqr_charge, radius
+                name,
+                coord,
+                None,
+                None,
+                altloc,
+                fullname,
+                serial_number,
+                element,
+                pqr_charge,
+                radius,
             )
         if altloc != " ":
             # The atom is disordered

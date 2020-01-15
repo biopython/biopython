@@ -402,7 +402,9 @@ class SeqXmlIterator:
             # one specified in the XML file. With a binary handle, the correct
             # encoding is picked up by the parser from the XML file.
             if stream_or_path.read(0) != b"":
-                raise TypeError("SeqXML files should be opened in binary mode") from None
+                raise TypeError(
+                    "SeqXML files should be opened in binary mode"
+                ) from None
             self.handle = stream_or_path
             self.should_close_handle = False
         else:  # we received a path

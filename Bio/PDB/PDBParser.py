@@ -33,8 +33,12 @@ class PDBParser:
     """Parse a PDB file and return a Structure object."""
 
     def __init__(
-        self, PERMISSIVE=True, get_header=False, structure_builder=None, QUIET=False,
-        is_pqr=False
+        self,
+        PERMISSIVE=True,
+        get_header=False,
+        structure_builder=None,
+        QUIET=False,
+        is_pqr=False,
     ):
         """Create a PDBParser object.
 
@@ -229,14 +233,16 @@ class PDBParser:
                     try:
                         pqr_charge = float(line[54:62])
                     except Exception:
-                        self._handle_PDB_exception("Invalid or missing charge",
-                                                   global_line_counter)
+                        self._handle_PDB_exception(
+                            "Invalid or missing charge", global_line_counter
+                        )
                         pqr_charge = None  # Rather than arbitrary zero or one
                     try:
                         radius = float(line[62:70])
                     except Exception:
-                        self._handle_PDB_exception("Invalid or missing radius",
-                                                   global_line_counter)
+                        self._handle_PDB_exception(
+                            "Invalid or missing radius", global_line_counter
+                        )
                         radius = None
                     if radius is not None and radius < 0:
                         # In permissive mode raise fatal exception.
@@ -298,7 +304,7 @@ class PDBParser:
                             element,
                             pqr_charge,
                             radius,
-                            self.is_pqr
+                            self.is_pqr,
                         )
                     except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)
