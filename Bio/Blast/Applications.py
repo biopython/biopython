@@ -77,28 +77,23 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             _Switch(["-show_gis", "show_gis"], "Show NCBI GIs in deflines?"),
             _Option(
                 ["-num_descriptions", "num_descriptions"],
-                """Number of database sequences to show one-line descriptions for.
-
-                    Integer argument (at least zero). Default is 500.
-                    See also num_alignments.""",
+                "Number of database sequences to show one-line descriptions for.\n\n"
+                "Integer argument (at least zero). Default is 500. "
+                "See also num_alignments.",
                 equate=False,
             ),
             _Option(
                 ["-num_alignments", "num_alignments"],
-                """Number of database sequences to show num_alignments for.
-
-                    Integer argument (at least zero). Default is 200.
-                    See also num_alignments.""",
+                "Number of database sequences to show num_alignments for.\n\n"
+                "Integer argument (at least zero). Default is 200. "
+                "See also num_alignments.",
                 equate=False,
             ),
             _Option(
                 ["-line_length", "line_length"],
-                """Line length for formatting alignments (integer, at least 1, default 60).
-
-                    Not applicable for outfmt > 4.
-
-                    Added in BLAST+ 2.2.30.
-                    """,
+                "Line length for formatting alignments "
+                "(integer, at least 1, default 60).\n\n"
+                "Not applicable for outfmt > 4. Added in BLAST+ 2.2.30.",
                 equate=False,
             ),
             _Switch(
@@ -150,7 +145,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             ),  # Should this be required?
             _Option(
                 ["-query_loc", "query_loc"],
-                "Location on the query sequence (Format: start-stop)",
+                "Location on the query sequence (Format: start-stop).",
                 equate=False,
             ),
             # General search options:
@@ -158,9 +153,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-evalue", "evalue"], "Expectation value cutoff.", equate=False),
             _Option(
                 ["-word_size", "word_size"],
-                """Word size for wordfinder algorithm.
-
-                    Integer. Minimum 2.""",
+                "Word size for wordfinder algorithm.\n\nInteger. Minimum 2.",
                 equate=False,
             ),
             # BLAST-2-Sequences options:
@@ -170,7 +163,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             # Query filtering options
             _Option(
                 ["-soft_masking", "soft_masking"],
-                "Apply filtering locations as soft masks (Boolean, Default = true)",
+                "Apply filtering locations as soft masks (Boolean, Default = true).",
                 equate=False,
             ),
             _Switch(
@@ -180,34 +173,31 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             # Restrict search or results
             _Option(
                 ["-gilist", "gilist"],
-                """Restrict search of database to list of GI's.
-
-                    Incompatible with: negative_gilist, seqidlist, negative_seqidlist,
-                    remote, subject, subject_loc""",
+                "Restrict search of database to list of GI's.\n\n"
+                "Incompatible with: negative_gilist, seqidlist, negative_seqidlist, "
+                "remote, subject, subject_loc",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-negative_gilist", "negative_gilist"],
-                """Restrict search of database to everything except the listed GIs.
-
-                    Incompatible with: gilist, seqidlist, remote, subject, subject_loc""",
+                "Restrict search of database to everything except the listed GIs.\n\n"
+                "Incompatible with: gilist, seqidlist, remote, subject, subject_loc",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-seqidlist", "seqidlist"],
-                """Restrict search of database to list of SeqID's.
-
-                    Incompatible with: gilist, negative_gilist, remote, subject, subject_loc""",
+                "Restrict search of database to list of SeqID's.\n\n"
+                "Incompatible with: gilist, negative_gilist, remote, subject, "
+                "subject_loc",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-negative_seqidlist", "negative_seqidlist"],
-                """Restrict search of database to everything except the listed SeqID's.
-
-                    Incompatible with: gilist, seqidlist, remote, subject, subject_loc""",
+                "Restrict search of database to everything except listed SeqID's.\n\n"
+                "Incompatible with: gilist, seqidlist, remote, subject, subject_loc",
                 filename=True,
                 equate=False,
             ),
@@ -218,10 +208,8 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             ),
             _Option(
                 ["-qcov_hsp_perc", "qcov_hsp_perc"],
-                """Percent query coverage per hsp (float, 0 to 100).
-
-                    Added in BLAST+ 2.2.30.
-                    """,
+                "Percent query coverage per hsp (float, 0 to 100).\n\n"
+                "Added in BLAST+ 2.2.30.",
                 equate=False,
             ),
             _Option(
@@ -242,22 +230,21 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             ),
             _Option(
                 ["-max_hsps_per_subject", "max_hsps_per_subject"],
-                "Override max number of HSPs per subject saved for ungapped searches (integer).",
+                "Override max number of HSPs per subject saved for ungapped searches "
+                "(integer).",
                 equate=False,
             ),
             _Option(
                 ["-max_hsps", "max_hsps"],
-                "Set max number of HSPs saved per subject sequence (default 0 means no limit).",
+                "Set max number of HSPs saved per subject sequence\n\n"
+                "Ddefault 0 means no limit.",
                 equate=False,
             ),
             _Switch(["-sum_statistics", "sum_statistics"], "Use sum statistics."),
             # Is -sum_stats a BLAST+ bug, why not use -sum_statistics switch?
             _Option(
                 ["-sum_stats", "sum_stats"],
-                """Use sum statistics (boolean).
-
-                    Added in BLAST+ 2.2.30.
-                    """,
+                "Use sum statistics (boolean).\n\nAdded in BLAST+ 2.2.30.",
                 equate=False,
             ),
             # Extension options
@@ -278,40 +265,37 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             ),
             _Option(
                 ["-window_size", "window_size"],
-                "Multiple hits window size, use 0 to specify 1-hit algorithm (integer).",
+                "Multiple hits window size, use 0 to specify 1-hit algorithm "
+                "(integer).",
                 equate=False,
             ),
             # Search strategy options
             _Option(
                 ["-import_search_strategy", "import_search_strategy"],
-                """Search strategy to use.
-
-                    Incompatible with: export_search_strategy""",
+                "Search strategy to use.\n\n"
+                "Incompatible with: export_search_strategy",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-export_search_strategy", "export_search_strategy"],
-                """File name to record the search strategy used.
-
-                    Incompatible with: import_search_strategy""",
+                "File name to record the search strategy used.\n\n"
+                "Incompatible with: import_search_strategy",
                 filename=True,
                 equate=False,
             ),
             # Miscellaneous options
             _Option(
                 ["-num_threads", "num_threads"],
-                """Number of threads to use in the BLAST search (integer, at least one).
-
-                    Default is one.
-                    Incompatible with: remote""",
+                "Number of threads to use in the BLAST search.\n\n"
+                "Integer, at least one. Default is one. Incompatible with: remote",
                 equate=False,
             ),
             _Switch(
                 ["-remote", "remote"],
-                """Execute search remotely?
-
-                    Incompatible with: gilist, negative_gilist, subject_loc, num_threads, ...""",
+                "Execute search remotely?\n\n"
+                "Incompatible with: gilist, negative_gilist, subject_loc, "
+                "num_threads, ...",
             ),
         ]
         try:
@@ -359,53 +343,42 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
             # BLAST-2-Sequences options:
             _Option(
                 ["-subject", "subject"],
-                """Subject sequence(s) to search.
-
-                    Incompatible with: db, gilist, seqidlist, negative_gilist,
-                    negative_seqidlist, db_soft_mask, db_hard_mask
-
-                    See also subject_loc.""",
+                "Subject sequence(s) to search.\n\n"
+                "Incompatible with: db, gilist, seqidlist, negative_gilist, "
+                "negative_seqidlist, db_soft_mask, db_hard_mask\n\n"
+                "See also subject_loc.",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-subject_loc", "subject_loc"],
-                """Location on the subject sequence (Format: start-stop).
-
-                    Incompatible with: db, gilist, seqidlist, negative_gilist,
-                    negative_seqidlist, db_soft_mask, db_hard_mask, remote.
-
-                    See also subject.""",
+                "Location on the subject sequence (Format: start-stop).\n\n"
+                "Incompatible with: db, gilist, seqidlist, negative_gilist, "
+                "negative_seqidlist, db_soft_mask, db_hard_mask, remote.\n\n"
+                "See also subject.",
                 equate=False,
             ),
             # Restrict search or results:
             _Option(
                 ["-culling_limit", "culling_limit"],
-                """Hit culling limit (integer).
-
-                    If the query range of a hit is enveloped by that of at
-                    least this many higher-scoring hits, delete the hit.
-
-                    Incompatible with: best_hit_overhang, best_hit_score_edge.
-                    """,
+                "Hit culling limit (integer).\n\n"
+                "If the query range of a hit is enveloped by that of at "
+                "least this many higher-scoring hits, delete the hit.\n\n"
+                "Incompatible with: best_hit_overhang, best_hit_score_edge.",
                 equate=False,
             ),
             _Option(
                 ["-best_hit_overhang", "best_hit_overhang"],
-                """Best Hit algorithm overhang value (float, recommended value: 0.1)
-
-                    Float between 0.0 and 0.5 inclusive.
-
-                    Incompatible with: culling_limit.""",
+                "Best Hit algorithm overhang value (float, recommended value: 0.1)\n\n"
+                "Float between 0.0 and 0.5 inclusive. "
+                "Incompatible with: culling_limit.",
                 equate=False,
             ),
             _Option(
                 ["-best_hit_score_edge", "best_hit_score_edge"],
-                """Best Hit algorithm score edge value (float, recommended value: 0.1)
-
-                    Float between 0.0 and 0.5 inclusive.
-
-                    Incompatible with: culling_limit.""",
+                "Best Hit algorithm score edge value (float).\n\n"
+                "Float between 0.0 and 0.5 inclusive. Recommended value: 0.1\n\n"
+                "Incompatible with: culling_limit.",
                 equate=False,
             ),
         ]
@@ -442,20 +415,16 @@ class _NcbiblastMain2SeqCommandline(_Ncbiblast2SeqCommandline):
             # Restrict search or results:
             _Option(
                 ["-db_soft_mask", "db_soft_mask"],
-                """Filtering algorithm for soft masking (integer).
-
-                    Filtering algorithm ID to apply to the BLAST database as soft masking.
-
-                    Incompatible with: db_hard_mask, subject, subject_loc""",
+                "Filtering algorithm for soft masking (integer).\n\n"
+                "Filtering algorithm ID to apply to BLAST database as soft masking. "
+                "Incompatible with: db_hard_mask, subject, subject_loc",
                 equate=False,
             ),
             _Option(
                 ["-db_hard_mask", "db_hard_mask"],
-                """Filtering algorithm for hard masking (integer).
-
-                    Filtering algorithm ID to apply to the BLAST database as hard masking.
-
-                    Incompatible with: db_soft_mask, subject, subject_loc""",
+                "Filtering algorithm for hard masking (integer).\n\n"
+                "Filtering algorithm ID to apply to BLAST database as hard masking. "
+                "Incompatible with: db_soft_mask, subject, subject_loc",
                 equate=False,
             ),
         ]
@@ -515,23 +484,21 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
             ),
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                """Use composition-based statistics (string, default 2, i.e. True).
-
-                    0, F or f: no composition-based statistics
-                    2, T or t, D or d : Composition-based score adjustment as in
-                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-
-                    Note that tblastn also supports values of 1 and 3.""",
+                "Use composition-based statistics (string, default 2, i.e. True).\n\n"
+                "0, F or f: no composition-based statistics\n\n"
+                "2, T or t, D or d : Composition-based score adjustment as in "
+                "Bioinformatics 21:902-911, 2005, conditioned on sequence "
+                "properties\n\n"
+                "Note that tblastn also supports values of 1 and 3.",
                 checker_function=lambda value: value in "0Ft2TtDd",
                 equate=False,
             ),
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                """Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable\n'
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # Extension options:
@@ -574,19 +541,17 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
             # Input query options:
             _Option(
                 ["-strand", "strand"],
-                """Query strand(s) to search against database/subject.
-
-                    Values allowed are "both" (default), "minus", "plus".""",
+                "Query strand(s) to search against database/subject.\n\n"
+                'Values allowed are "both" (default), "minus", "plus".',
                 checker_function=lambda value: value in ["both", "minus", "plus"],
                 equate=False,
             ),
             # General search options:
             _Option(
                 ["-task", "task"],
-                """Task to execute (string, default 'megablast')
-
-                    Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast'
-                    (the default), or 'vecscreen'.""",
+                "Task to execute (string, default 'megablast')\n\n"
+                "Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast' "
+                "(the default), or 'vecscreen'.",
                 checker_function=lambda value: value
                 in ["blastn", "blastn-short", "dc-megablast", "megablast", "vecscreen"],
                 equate=False,
@@ -614,11 +579,9 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
             # Query filtering options:
             _Option(
                 ["-dust", "dust"],
-                """Filter query sequence with DUST (string).
-
-                    Format: 'yes', 'level window linker', or 'no' to disable.
-                    Default = '20 64 1'.
-                    """,
+                "Filter query sequence with DUST (string).\n\n"
+                "Format: 'yes', 'level window linker', or 'no' to disable.\n\n"
+                "Default = '20 64 1'.",
                 equate=False,
             ),
             _Option(
@@ -645,21 +608,18 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
             # Discontiguous MegaBLAST options
             _Option(
                 ["-template_type", "template_type"],
-                """Discontiguous MegaBLAST template type (string).
-
-                    Allowed values: 'coding', 'coding_and_optimal' or 'optimal'
-                    Requires: template_length.""",
+                "Discontiguous MegaBLAST template type (string).\n\n"
+                "Allowed values: 'coding', 'coding_and_optimal' or 'optimal'.\n"
+                "Requires: template_length.",
                 checker_function=lambda value: value
                 in ["coding", "coding_and_optimal", "optimal"],
                 equate=False,
             ),
             _Option(
                 ["-template_length", "template_length"],
-                """Discontiguous MegaBLAST template length (integer).
-
-                    Allowed values: 16, 18, 21
-
-                    Requires: template_type.""",
+                "Discontiguous MegaBLAST template length (integer).\n\n"
+                "Allowed values: 16, 18, 21.\n\n"
+                "Requires: template_type.",
                 checker_function=lambda value: value in [16, 18, 21, "16", "18", "21"],
                 equate=False,
             ),
@@ -677,12 +637,9 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
             _Switch(["-ungapped", "ungapped"], "Perform ungapped alignment only?"),
             _Option(
                 ["-off_diagonal_range", "off_diagonal_range"],
-                """Number of off-diagonals to search for the 2nd hit (integer).
-
-                    Expects a positive integer, or 0 (default) to turn off.
-
-                    Added in BLAST 2.2.23+
-                    """,
+                "Number of off-diagonals to search for the 2nd hit (integer).\n\n"
+                "Expects a positive integer, or 0 (default) to turn off."
+                "Added in BLAST 2.2.23+",
                 equate=False,
             ),
         ]
@@ -728,9 +685,8 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
             ),
             _Option(
                 ["-strand", "strand"],
-                """Query strand(s) to search against database/subject.
-
-                    Values allowed are "both" (default), "minus", "plus".""",
+                "Query strand(s) to search against database/subject.\n\n"
+                'Values allowed are "both" (default), "minus", "plus".',
                 checker_function=lambda value: value in ["both", "minus", "plus"],
                 equate=False,
             ),
@@ -743,18 +699,16 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
             # General search options:
             _Option(
                 ["-frame_shift_penalty", "frame_shift_penalty"],
-                """Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).
-
-                    This was removed in BLAST 2.2.27+""",
+                "Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).\n\n"
+                "This was removed in BLAST 2.2.27+",
                 equate=False,
             ),
             _Option(
                 ["-max_intron_length", "max_intron_length"],
-                """Maximum intron length (integer).
-
-                    Length of the largest intron allowed in a translated nucleotide
-                    sequence when linking multiple distinct alignments (a negative
-                    value disables linking). Default zero.""",
+                "Maximum intron length (integer).\n\n"
+                "Length of the largest intron allowed in a translated nucleotide "
+                "sequence when linking multiple distinct alignments (a negative "
+                "value disables linking). Default zero.",
                 equate=False,
             ),
             _Option(
@@ -769,32 +723,26 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
             ),
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                """Use composition-based statistics for blastp, blastx, or tblastn:
-
-                    D or d: default (equivalent to 2 )
-
-                    0 or F or f: no composition-based statistics
-
-                    1: Composition-based statistics as in NAR 29:2994-3005, 2001
-
-                    2 or T or t : Composition-based score adjustment as in
-                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-
-                    3: Composition-based score adjustment as in
-                    Bioinformatics 21:902-911, 2005, unconditionally
-
-                    For programs other than tblastn, must either be absent or be D, F or 0
-                    Default = 2.
-                    """,
+                "Use composition-based statistics for blastp, blastx, or tblastn.\n\n"
+                "D or d: default (equivalent to 2 )\n\n"
+                "0 or F or f: no composition-based statistics\n\n"
+                "1: Composition-based statistics as in NAR 29:2994-3005, 2001\n\n"
+                "2 or T or t : Composition-based score adjustment as in "
+                "Bioinformatics 21:902-911, 2005, conditioned on sequence "
+                "properties\n\n"
+                "3: Composition-based score adjustment as in Bioinformatics "
+                "21:902-911, 2005, unconditionally.\n\n"
+                "For programs other than tblastn, must either be absent or be "
+                "D, F or 0\n\n"
+                "Default = 2.",
                 equate=False,
             ),
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                """Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable.'
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # Extension options:
@@ -842,18 +790,16 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
             ),
             _Option(
                 ["-frame_shift_penalty", "frame_shift_penalty"],
-                """Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).
-
-                    This was removed in BLAST 2.2.27+""",
+                "Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).\n\n"
+                "This was removed in BLAST 2.2.27+",
                 equate=False,
             ),
             _Option(
                 ["-max_intron_length", "max_intron_length"],
-                """Maximum intron length (integer).
-
-                    Length of the largest intron allowed in a translated nucleotide
-                    sequence when linking multiple distinct alignments (a negative
-                    value disables linking). Default zero.""",
+                "Maximum intron length (integer).\n\n"
+                "Length of the largest intron allowed in a translated nucleotide "
+                "sequence when linking multiple distinct alignments (a negative "
+                "value disables linking). Default zero.",
                 equate=False,
             ),
             _Option(
@@ -868,31 +814,23 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
             ),
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                r"""Use composition-based statistics (string, default 2, i.e. True).
-
-                    0, F or f: no composition-based statistics
-
-                    1: Composition-based statistics as in NAR 29:2994-3005, 2001
-
-                    2, T or t, D or d : Composition-based score adjustment as in
-                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-
-                    3: Composition-based score adjustment as in Bioinformatics 21:902-911,
-                    2005, unconditionally
-
-                    Note that only tblastn supports values of 1 and 3.""",
+                "Use composition-based statistics (string, default 2, i.e. True).\n\n"
+                "0, F or f: no composition-based statistics\n\n"
+                "1: Composition-based statistics as in NAR 29:2994-3005, 2001\n\n"
+                "2, T or t, D or d : Composition-based score adjustment as in "
+                "Bioinformatics 21:902-911, 2005, conditioned on sequence properties\n\n"
+                "3: Composition-based score adjustment as in Bioinformatics 21:902-911, "
+                "2005, unconditionally\n\n"
+                "Note that only tblastn supports values of 1 and 3.",
                 checker_function=lambda value: value in "0Ft12TtDd3",
                 equate=False,
             ),
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                """Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-
-                    Default is "12 2.2 2.5"
-                    """,
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable.\n\n'
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # Extension options:
@@ -905,9 +843,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
             # PSI-TBLASTN options:
             _Option(
                 ["-in_pssm", "in_pssm"],
-                """PSI-BLAST checkpoint file
-
-                    Incompatible with: remote, query""",
+                "PSI-BLAST checkpoint file.\n\nIncompatible with: remote, query",
                 filename=True,
                 equate=False,
             ),
@@ -939,9 +875,8 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
             # Input query options:
             _Option(
                 ["-strand", "strand"],
-                """Query strand(s) to search against database/subject.
-
-                    Values allowed are "both" (default), "minus", "plus".""",
+                "Query strand(s) to search against database/subject.\n\n"
+                'Values allowed are "both" (default), "minus", "plus".',
                 checker_function=lambda value: value in ["both", "minus", "plus"],
                 equate=False,
             ),
@@ -959,11 +894,10 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
             ),
             _Option(
                 ["-max_intron_length", "max_intron_length"],
-                """Maximum intron length (integer).
-
-                    Length of the largest intron allowed in a translated nucleotide
-                    sequence when linking multiple distinct alignments (a negative
-                    value disables linking). Default zero.""",
+                "Maximum intron length (integer).\n\n"
+                "Length of the largest intron allowed in a translated nucleotide "
+                "sequence when linking multiple distinct alignments (a negative "
+                "value disables linking). Default zero.",
                 equate=False,
             ),
             _Option(
@@ -979,11 +913,9 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                """Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5"
-                    """,
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable.\n\n'
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
         ]
@@ -1024,24 +956,20 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                """Use composition-based statistics (string, default 2, i.e. True).
-
-                    0, F or f: no composition-based statistics
-                    2, T or t, D or d : Composition-based score adjustment
-                    as in Bioinformatics 21:902-911, 2005, conditioned on
-                    sequence properties
-
-                    Note that tblastn also supports values of 1 and 3.""",
+                "Use composition-based statistics (string, default 2, i.e. True).\n\n"
+                "0, F or f: no composition-based statistics\n\n"
+                "2, T or t, D or d : Composition-based score adjustment as in "
+                "Bioinformatics 21:902-911, 2005, conditioned on sequence properties\n\n"
+                "Note that tblastn also supports values of 1 and 3.",
                 checker_function=lambda value: value in "0Ft2TtDd",
                 equate=False,
             ),
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                """Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable. '
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # Extension options:
@@ -1058,10 +986,8 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             # PSI-BLAST options:
             _Option(
                 ["-num_iterations", "num_iterations"],
-                """Number of iterations to perform (integer, at least one).
-
-                    Default is one.
-                    Incompatible with: remote""",
+                "Number of iterations to perform (integer, at least one).\n\n"
+                "Default is one. Incompatible with: remote",
                 equate=False,
             ),
             _Option(
@@ -1082,42 +1008,35 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Switch(
                 ["-save_each_pssm", "save_each_pssm"],
-                """Save PSSM after each iteration
-
-                    File name is given in -save_pssm or -save_ascii_pssm options.
-                    """,
+                "Save PSSM after each iteration\n\n"
+                "File name is given in -save_pssm or -save_ascii_pssm options.",
             ),
             _Option(
                 ["-in_msa", "in_msa"],
-                """File name of multiple sequence alignment to restart PSI-BLAST.
-
-                    Incompatible with: in_pssm, query""",
+                "File name of multiple sequence alignment to restart PSI-BLAST.\n\n"
+                "Incompatible with: in_pssm, query",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-msa_master_idx", "msa_master_idx"],
-                """Index of sequence to use as master in MSA.
-
-                    Index (1-based) of sequence to use as the master in the
-                    multiple sequence alignment. If not specified, the first
-                    sequence is used.""",
+                "Index of sequence to use as master in MSA.\n\n"
+                "Index (1-based) of sequence to use as the master in the multiple "
+                "sequence alignment. If not specified, the first sequence is used.",
                 equate=False,
             ),
             _Option(
                 ["-in_pssm", "in_pssm"],
-                """PSI-BLAST checkpoint file.
-
-                    Incompatible with: in_msa, query, phi_pattern""",
+                "PSI-BLAST checkpoint file.\n\n"
+                "Incompatible with: in_msa, query, phi_pattern",
                 filename=True,
                 equate=False,
             ),
             # PSSM engine options:
             _Option(
                 ["-pseudocount", "pseudocount"],
-                """Pseudo-count value used when constructing PSSM.
-
-                    Integer. Default is zero.""",
+                "Pseudo-count value used when constructing PSSM.\n\n"
+                "Integer. Default is zero.",
                 equate=False,
             ),
             _Option(
@@ -1127,18 +1046,16 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Switch(
                 ["-ignore_msa_master", "ignore_msa_master"],
-                """Ignore the master sequence when creating PSSM
-
-                    Requires: in_msa
-                    Incompatible with: msa_master_idx, in_pssm, query, query_loc, phi_pattern
-                    """,
+                "Ignore the master sequence when creating PSSM.\n\n"
+                "Requires: in_msa\n"
+                "Incompatible with: msa_master_idx, in_pssm, query, query_loc, "
+                "phi_pattern",
             ),
             # PHI-BLAST options:
             _Option(
                 ["-phi_pattern", "phi_pattern"],
-                """File name containing pattern to search.
-
-                    Incompatible with: in_pssm""",
+                "File name containing pattern to search.\n\n"
+                "Incompatible with: in_pssm",
                 filename=True,
                 equate=False,
             ),
@@ -1190,64 +1107,51 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                r"""Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5"
-                    """,
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable.'
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # Restrict search or results:
             _Option(
                 ["-culling_limit", "culling_limit"],
-                r"""Hit culling limit (integer).
-
-                    If the query range of a hit is enveloped by that of at
-                    least this many higher-scoring hits, delete the hit.
-
-                    Incompatible with: best_hit_overhang, best_hit_score_edge.
-                    """,
+                "Hit culling limit (integer).\n\n"
+                "If the query range of a hit is enveloped by that of at "
+                "least this many higher-scoring hits, delete the hit. "
+                "Incompatible with: best_hit_overhang, best_hit_score_edge.",
                 equate=False,
             ),
             _Option(
                 ["-best_hit_overhang", "best_hit_overhang"],
-                r"""Best Hit algorithm overhang value (recommended value: 0.1)
-
-                    Float between 0.0 and 0.5 inclusive.
-
-                    Incompatible with: culling_limit.""",
+                "Best Hit algorithm overhang value (recommended value: 0.1).\n\n"
+                "Float between 0.0 and 0.5 inclusive. "
+                "Incompatible with: culling_limit.",
                 equate=False,
             ),
             _Option(
                 ["-best_hit_score_edge", "best_hit_score_edge"],
-                r"""Best Hit algorithm score edge value (recommended value: 0.1)
-
-                    Float between 0.0 and 0.5 inclusive.
-
-                    Incompatible with: culling_limit.""",
+                "Best Hit algorithm score edge value (recommended value: 0.1).\n\n"
+                "Float between 0.0 and 0.5 inclusive. "
+                "Incompatible with: culling_limit.",
                 equate=False,
             ),
             # General search options:
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                r"""Use composition-based statistics.
-
-                    D or d: default (equivalent to 0 )
-
-                    0 or F or f: Simplified Composition-based statistics as in
-                    Bioinformatics 15:1000-1011, 1999
-
-                    1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
-
-                    Default = 0.
-                    """,
+                "Use composition-based statistics.\n\n"
+                "D or d: default (equivalent to 0)\n\n"
+                "0 or F or f: Simplified Composition-based statistics as in "
+                "Bioinformatics 15:1000-1011, 1999\n\n"
+                "1 or T or t: Composition-based statistics as in NAR 29:2994-3005, "
+                "2001\n\n"
+                "Default = 0.",
                 checker_function=lambda value: value in "Dd0Ff1Tt",
                 equate=False,
             ),
             # Misc options:
             _Switch(
                 ["-use_sw_tback", "use_sw_tback"],
-                r"Compute locally optimal Smith-Waterman alignments?",
+                "Compute locally optimal Smith-Waterman alignments?",
             ),
         ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
@@ -1286,50 +1190,44 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
             # Input query options:
             _Option(
                 ["-strand", "strand"],
-                r"""Query strand(s) to search against database/subject.
-
-                    Values allowed are "both" (default), "minus", "plus".""",
+                "Query strand(s) to search against database/subject.\n\n"
+                'Values allowed are "both" (default), "minus", "plus".',
                 checker_function=lambda value: value in ["both", "minus", "plus"],
                 equate=False,
             ),
             # Input query options:
             _Option(
                 ["-query_gencode", "query_gencode"],
-                r"Genetic code to use to translate query (integer, default 1).",
+                "Genetic code to use to translate query (integer, default 1).",
                 equate=False,
             ),
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                r"""Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5" """,
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable. '
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # General search options:
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                r"""Use composition-based statistics.
-
-                    D or d: default (equivalent to 0 )
-
-                    0 or F or f: Simplified Composition-based statistics as in
-                    Bioinformatics 15:1000-1011, 1999
-
-                    1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
-
-                    Default = 0.
-                    """,
+                "Use composition-based statistics.\n\n"
+                "D or d: default (equivalent to 0)\n\n"
+                "0 or F or f: Simplified Composition-based statistics as in "
+                "Bioinformatics 15:1000-1011, 1999\n\n"
+                "1 or T or t: Composition-based statistics as in NAR 29:2994-3005, "
+                "2001\n\n"
+                "Default = 0.",
                 checker_function=lambda value: value in "Dd0Ff1Tt",
                 equate=False,
             ),
             # Extension options:
-            _Switch(["-ungapped", "ungapped"], r"Perform ungapped alignment only?"),
+            _Switch(["-ungapped", "ungapped"], "Perform ungapped alignment only?"),
             # Miscellaneous options:
             _Switch(
                 ["-use_sw_tback", "use_sw_tback"],
-                r"Compute locally optimal Smith-Waterman alignments?",
+                "Compute locally optimal Smith-Waterman alignments?",
             ),
         ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
@@ -1369,7 +1267,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
             # Input options
             _Option(
                 ["-rid", "rid"],
-                "BLAST Request ID (RID), not compatible with archive arg",
+                "BLAST Request ID (RID), not compatible with archive arg.",
                 equate=False,
             ),
             _Option(
@@ -1381,7 +1279,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
             # Restrict search or results
             _Option(
                 ["-max_target_seqs", "max_target_seqs"],
-                "Maximum number of aligned sequences to keep",
+                "Maximum number of aligned sequences to keep.",
                 checker_function=lambda value: value >= 1,
                 equate=False,
             ),
@@ -1424,30 +1322,26 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Option(
                 ["-comp_based_stats", "comp_based_stats"],
-                """Use composition-based statistics (string, default 2, i.e. True).
-
-                    0, F or f: no composition-based statistics.
-
-                    2, T or t, D or d : Composition-based score adjustment as in
-                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-
-                    Note that tblastn also supports values of 1 and 3.""",
+                "Use composition-based statistics (string, default 2, i.e. True).\n\n"
+                "0, F or f: no composition-based statistics.\n\n"
+                "2, T or t, D or d : Composition-based score adjustment as in "
+                "Bioinformatics 21:902-911, 2005, conditioned on sequence properties\n\n"
+                "Note that tblastn also supports values of 1 and 3.",
                 checker_function=lambda value: value in "0Ft2TtDd",
                 equate=False,
             ),
             # Query filtering options:
             _Option(
                 ["-seg", "seg"],
-                """Filter query sequence with SEG (string).
-
-                    Format: "yes", "window locut hicut", or "no" to disable.
-                    Default is "12 2.2 2.5""",
+                "Filter query sequence with SEG (string).\n\n"
+                'Format: "yes", "window locut hicut", or "no" to disable. '
+                'Default is "12 2.2 2.5"',
                 equate=False,
             ),
             # Extension options:
             _Option(
                 ["-gap_trigger", "gap_trigger"],
-                "Number of bits to trigger gapping Default = 22",
+                "Number of bits to trigger gapping. Default = 22.",
                 equate=False,
             ),
             # Miscellaneous options:
@@ -1458,9 +1352,8 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
             # PSI-BLAST options
             _Option(
                 ["-num_iterations", "num_iterations"],
-                """Number of iterations to perform. (integer >=1, Default is 1)
-
-                    Incompatible with: remote""",
+                "Number of iterations to perform. (integer >=1, Default is 1).\n\n"
+                "Incompatible with: remote",
                 equate=False,
             ),
             _Option(
@@ -1481,10 +1374,8 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Switch(
                 ["-save_each_pssm", "save_each_pssm"],
-                """Save PSSM after each iteration
-
-                    File name is given in -save_pssm or -save_ascii_pssm options.
-                    """,
+                "Save PSSM after each iteration.\n\n"
+                "File name is given in -save_pssm or -save_ascii_pssm options.",
             ),
             # PSSM engine options
             _Option(
@@ -1494,9 +1385,8 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Option(
                 ["-domain_inclusion_ethresh", "domain_inclusion_ethresh"],
-                """E-value inclusion threshold for alignments with conserved domains.
-
-                    (float, Default is 0.05)""",
+                "E-value inclusion threshold for alignments with conserved domains.\n\n"
+                "(float, Default is 0.05)",
                 equate=False,
             ),
             _Option(
@@ -1512,9 +1402,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
             ),
             _Switch(
                 ["-show_domain_hits", "show_domain_hits"],
-                """Show domain hits?
-
-                    Incompatible with:  remote, subject""",
+                "Show domain hits?\n\nIncompatible with: remote, subject",
             ),
         ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -1566,20 +1454,20 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             # makeblastdb specific options
             _Option(
                 ["-dbtype", "dbtype"],
-                "Molecule type of target db ('nucl' or 'prot')",
+                "Molecule type of target db ('nucl' or 'prot').",
                 equate=False,
                 is_required=True,
                 checker_function=lambda x: x == "nucl" or x == "prot",
             ),
             _Option(
                 ["-in", "input_file"],
-                "Input file/database name",
+                "Input file/database name.",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-input_type", "input_type"],
-                "Type of the data specified in input_file. "
+                "Type of the data specified in input_file.\n\n"
                 "Default = 'fasta'. Added in BLAST 2.2.26.",
                 filename=False,
                 equate=False,
@@ -1587,14 +1475,14 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-title", "title"],
-                "Title for BLAST database",
+                "Title for BLAST database.",
                 filename=False,
                 equate=False,
             ),
             _Switch(
                 ["-parse_seqids", "parse_seqids"],
-                "Option to parse seqid for FASTA input if set, for all "
-                "other input types seqids are parsed automatically",
+                "Option to parse seqid for FASTA input if set.\n\n"
+                "For all other input types, seqids are parsed automatically",
             ),
             _Switch(
                 ["-hash_index", "hash_index"], "Create index of sequence hash values."
@@ -1603,21 +1491,21 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
                 ["-mask_data", "mask_data"],
                 "Comma-separated list of input files containing masking "
                 "data as produced by NCBI masking applications "
-                "(e.g. dustmasker, segmasker, windowmasker)",
+                "(e.g. dustmasker, segmasker, windowmasker).",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-mask_id", "mask_id"],
                 "Comma-separated list of strings to uniquely identify the "
-                "masking algorithm",
+                "masking algorithm.",
                 filename=False,
                 equate=False,
             ),
             _Option(
                 ["-mask_desc", "mask_desc"],
                 "Comma-separated list of free form strings to describe "
-                "the masking algorithm details",
+                "the masking algorithm details.",
                 filename=False,
                 equate=False,
             ),
@@ -1630,26 +1518,26 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-max_file_sz", "max_file_sz"],
-                "Maximum file size for BLAST database files. Default = '1GB'",
+                "Maximum file size for BLAST database files. Default = '1GB'.",
                 filename=False,
                 equate=False,
             ),
             _Option(
                 ["-logfile", "logfile"],
-                "File to which the program log should be redirected",
+                "File to which the program log should be redirected.",
                 filename=True,
                 equate=False,
             ),
             _Option(
                 ["-taxid", "taxid"],
-                "Taxonomy ID to assign to all sequences",
+                "Taxonomy ID to assign to all sequences.",
                 filename=False,
                 equate=False,
                 checker_function=lambda x: type(x)(int(x)) == x,
             ),
             _Option(
                 ["-taxid_map", "taxid_map"],
-                "Text file mapping sequence IDs to taxonomy IDs. "
+                "Text file mapping sequence IDs to taxonomy IDs.\n\n"
                 "Format:<SequenceId> <TaxonomyId><newline>",
                 filename=True,
                 equate=False,
