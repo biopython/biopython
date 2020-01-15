@@ -18,6 +18,7 @@ Functions:
 
 import io
 from urllib.request import urlopen
+from urllib.error import HTTPError
 
 
 def get_prodoc_entry(
@@ -30,9 +31,7 @@ def get_prodoc_entry(
     >>> in_handle = ExPASy.get_prodoc_entry('PDOC00001')
     >>> html = in_handle.read()
     >>> in_handle.close()
-    ...
     >>> with open("myprodocrecord.html", "w") as out_handle:
-    ...     # Python2/3 docstring workaround: Revise for 'Python 3 only'
     ...     _ = out_handle.write(html)
     ...
     >>> os.remove("myprodocrecord.html")  # tidy up
@@ -53,9 +52,7 @@ def get_prosite_entry(
     >>> in_handle = ExPASy.get_prosite_entry('PS00001')
     >>> html = in_handle.read()
     >>> in_handle.close()
-    ...
     >>> with open("myprositerecord.html", "w") as out_handle:
-    ...     # Python 2/3 docstring workaround: Revise for 'Python 3 only'
     ...     _ = out_handle.write(html)
     ...
     >>> os.remove("myprositerecord.html")  # tidy up
@@ -80,17 +77,22 @@ def get_prosite_raw(id, cgi=None):
     >>> print(record.accession)
     PS00001
 
-    For a non-existing key, ExPASy returns an error:
+    This function raises a ValueError if the identifier does not exist:
 
-    >>> # Python 2/3 docstring workaround: Revise for 'Python 3 only'
-    >>> try:
-    ...    handle = ExPASy.get_prosite_raw("does_not_exist")
-    ... except Exception as e:
-    ...    print('HTTPError: %s' %e)
-    HTTPError: ... Error 404: Not Found
+    >>> handle = ExPASy.get_prosite_raw("DOES_NOT_EXIST")
+    Traceback (most recent call last):
+        ...
+    ValueError: Failed to find entry 'DOES_NOT_EXIST' on ExPASy
 
     """
-    return _open("https://prosite.expasy.org/%s.txt" % id)
+    try:
+        handle = _open("https://prosite.expasy.org/%s.txt" % id)
+    except HTTPError as exception:
+        if exception.code == 404:
+            raise ValueError("Failed to find entry '%s' on ExPASy" % id) from None
+        else:
+            raise
+    return handle
 
 
 def get_sprot_raw(id):
@@ -107,17 +109,22 @@ def get_sprot_raw(id):
     >>> print(record.entry_name)
     CHS3_BROFI
 
-    For a non-existing identifier, UniProt returns an error:
+    This function raises a ValueError if the identifier does not exist:
 
-    >>> # Python2/3 docstring workaround: Revise for 'Python 3 only'
-    >>> try:
-    ...    ExPASy.get_sprot_raw("DOES_NOT_EXIST")
-    ... except Exception as e:
-    ...    print('HTTPError: %s' %e)
-    HTTPError: ... Error 404: 
+    >>> ExPASy.get_sprot_raw("DOES_NOT_EXIST")
+    Traceback (most recent call last):
+        ...
+    ValueError: Failed to find SwissProt entry 'DOES_NOT_EXIST'
 
-    """  # noqa: W291
-    return _open("http://www.uniprot.org/uniprot/%s.txt" % id)
+    """
+    try:
+        handle = _open("http://www.uniprot.org/uniprot/%s.txt" % id)
+    except HTTPError as exception:
+        if exception.code == 404:
+            raise ValueError("Failed to find SwissProt entry '%s'" % id) from None
+        else:
+            raise
+    return handle
 
 
 def _open(url):
