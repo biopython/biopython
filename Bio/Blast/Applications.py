@@ -1630,7 +1630,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-max_file_sz", "max_file_sz"],
-                "Maximum file size for BLAST database files. " "Default = '1GB'",
+                "Maximum file size for BLAST database files. Default = '1GB'",
                 filename=False,
                 equate=False,
             ),
@@ -1684,10 +1684,10 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             raise ValueError("Option gi_mask requires parse_seqids to be set.")
         if self.gi_mask_name and not (self.mask_data and self.gi_mask):
             raise ValueError(
-                "Option gi_mask_name requires mask_data and " "gi_mask to be set."
+                "Option gi_mask_name requires mask_data and gi_mask to be set."
             )
         if self.taxid_map and not self.parse_seqids:
-            raise ValueError("Option taxid_map requires parse_seqids " "to be set.")
+            raise ValueError("Option taxid_map requires parse_seqids to be set.")
         AbstractCommandline._validate(self)
 
 
