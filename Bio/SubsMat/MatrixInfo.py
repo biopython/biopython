@@ -37,8 +37,7 @@ available_matrices = ["benner6", "benner22", "benner74", "blosum100",
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/benner6.cmp
-def _temp():
-    return {
+benner6 = {
         ("W", "F"): -1.6, ("L", "R"): -3.2, ("I", "I"): 4.4, ("Q", "Q"): 5.3,
         ("W", "N"): -4.4, ("V", "I"): 3.9, ("H", "T"): -1.7, ("H", "P"): -0.4,
         ("W", "V"): -4.8, ("Q", "E"): 2.1, ("W", "R"): 2.0, ("Q", "A"): -1.7,
@@ -92,15 +91,11 @@ def _temp():
         ("L", "I"): 2.4, ("I", "S"): -1.2, ("D", "S"): -0.4, ("L", "S"): -1.5,
         ("I", "H"): -3.7, ("F", "D"): -5.7, ("D", "C"): -3.7, ("F", "H"): 0.1,
         ("D", "G"): 0.8, ("F", "L"): 2.4
-        }
-
-
-benner6 = _temp()
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/benner22.cmp
-def _temp():
-    return {
+benner22 = {
         ("W", "F"): 0.5, ("L", "R"): -2.9, ("I", "I"): 4.2, ("Q", "Q"): 4.2,
         ("W", "N"): -5.2, ("V", "I"): 3.6, ("H", "T"): -1.1, ("H", "P"): -0.4,
         ("W", "V"): -4.5, ("Q", "E"): 1.7, ("W", "R"): -1.1, ("Q", "A"): -0.9,
@@ -154,17 +149,14 @@ def _temp():
         ("L", "I"): 2.7, ("I", "S"): -1.4, ("D", "S"): 0.1, ("L", "S"): -2.1,
         ("I", "H"): -3.2, ("F", "D"): -5.4, ("D", "C"): -3.7, ("F", "H"): 0.3,
         ("D", "G"): 0.7, ("F", "L"): 2.2
-        }
+}
 
 
-benner22 = _temp()
-del _temp
 assert benner6 != benner22
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/benner74.cmp
-def _temp():
-    return {
+benner74 = {
         ("W", "F"): 3.0, ("L", "R"): -2.4, ("I", "I"): 4.0, ("Q", "Q"): 3.0,
         ("W", "N"): -4.0, ("V", "I"): 3.2, ("H", "T"): -0.5, ("H", "P"): -1.0,
         ("W", "V"): -2.9, ("Q", "E"): 1.7, ("W", "R"): -1.6, ("Q", "A"): -0.3,
@@ -218,16 +210,11 @@ def _temp():
         ("L", "I"): 2.8, ("I", "S"): -1.8, ("D", "S"): 0.4, ("L", "S"): -2.2,
         ("I", "H"): -2.3, ("F", "D"): -4.7, ("D", "C"): -3.2, ("F", "H"): 0.0,
         ("D", "G"): 0.2, ("F", "L"): 2.1
-        }
-
-
-benner74 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum100.cmp
-def _temp():
-    return {
+blosum100 = {
         ("W", "F"): 0, ("L", "R"): -4, ("S", "P"): -2, ("V", "T"): -1,
         ("Q", "Q"): 7, ("N", "A"): -2, ("Z", "Y"): -4, ("W", "R"): -4,
         ("Q", "A"): -1, ("S", "D"): -1, ("H", "H"): 9, ("S", "H"): -2,
@@ -297,16 +284,11 @@ def _temp():
         ("Z", "N"): -1, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 4,
         ("F", "D"): -5, ("X", "Y"): -3, ("Z", "R"): -1, ("F", "H"): -2,
         ("B", "F"): -5, ("F", "L"): 0, ("X", "Q"): -2, ("B", "B"): 4
-        }
-
-
-blosum100 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum30.cmp
-def _temp():
-    return {
+blosum30 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -1, ("V", "T"): 1,
         ("Q", "Q"): 8, ("N", "A"): 0, ("Z", "Y"): -2, ("W", "R"): 0,
         ("Q", "A"): 1, ("S", "D"): 0, ("H", "H"): 14, ("S", "H"): -1,
@@ -376,16 +358,11 @@ def _temp():
         ("Z", "N"): -1, ("X", "A"): 0, ("B", "R"): -2, ("B", "N"): 4,
         ("F", "D"): -5, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -3,
         ("B", "F"): -3, ("F", "L"): 2, ("X", "Q"): 0, ("B", "B"): 5
-        }
-
-
-blosum30 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum35.cmp
-def _temp():
-    return {
+blosum35 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -2, ("V", "T"): 1,
         ("Q", "Q"): 7, ("N", "A"): -1, ("Z", "Y"): -1, ("W", "R"): 0,
         ("Q", "A"): 0, ("S", "D"): -1, ("H", "H"): 12, ("S", "H"): -1,
@@ -455,16 +432,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): 0, ("B", "R"): -1, ("B", "N"): 4,
         ("F", "D"): -3, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -3,
         ("B", "F"): -2, ("F", "L"): 2, ("X", "Q"): -1, ("B", "B"): 5
-        }
-
-
-blosum35 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum40.cmp
-def _temp():
-    return {
+blosum40 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -1, ("V", "T"): 1,
         ("Q", "Q"): 8, ("N", "A"): -1, ("Z", "Y"): -2, ("W", "R"): -2,
         ("Q", "A"): 0, ("S", "D"): 0, ("H", "H"): 13, ("S", "H"): -1,
@@ -534,16 +506,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): 0, ("B", "R"): -1, ("B", "N"): 4,
         ("F", "D"): -4, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -3, ("F", "L"): 2, ("X", "Q"): -1, ("B", "B"): 5
-        }
-
-
-blosum40 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum45.cmp
-def _temp():
-    return {
+blosum45 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -1, ("Z", "Y"): -2, ("W", "R"): -2,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 10, ("S", "H"): -1,
@@ -613,16 +580,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): 0, ("B", "R"): -1, ("B", "N"): 4,
         ("F", "D"): -4, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -3, ("F", "L"): 1, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum45 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum50.cmp
-def _temp():
-    return {
+blosum50 = {
         ("W", "F"): 1, ("L", "R"): -3, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 7, ("N", "A"): -1, ("Z", "Y"): -2, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 10, ("S", "H"): -1,
@@ -692,16 +654,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -1, ("B", "N"): 4,
         ("F", "D"): -5, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -1,
         ("B", "F"): -4, ("F", "L"): 1, ("X", "Q"): -1, ("B", "B"): 5
-        }
-
-
-blosum50 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum55.cmp
-def _temp():
-    return {
+blosum55 = {
         ("W", "F"): 1, ("L", "R"): -3, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 7, ("N", "A"): -1, ("Z", "Y"): -2, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 10, ("S", "H"): -1,
@@ -771,16 +728,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -1, ("B", "N"): 4,
         ("F", "D"): -5, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -1,
         ("B", "F"): -4, ("F", "L"): 1, ("X", "Q"): -1, ("B", "B"): 5
-        }
-
-
-blosum55 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum60.cmp
-def _temp():
-    return {
+blosum60 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 5, ("N", "A"): -1, ("Z", "Y"): -2, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 7, ("S", "H"): -1,
@@ -850,16 +802,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): 0, ("B", "R"): -1, ("B", "N"): 3,
         ("F", "D"): -3, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -1,
         ("B", "F"): -3, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum60 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum62.cmp
-def _temp():
-    return {
+blosum62 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 5, ("N", "A"): -2, ("Z", "Y"): -2, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 8, ("S", "H"): -1,
@@ -929,16 +876,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): 0, ("B", "R"): -1, ("B", "N"): 3,
         ("F", "D"): -3, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -1,
         ("B", "F"): -3, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum62 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum65.cmp
-def _temp():
-    return {
+blosum65 = {
         ("W", "F"): 1, ("L", "R"): -2, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -2, ("Z", "Y"): -2, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 8, ("S", "H"): -1,
@@ -1008,16 +950,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -1, ("B", "N"): 3,
         ("F", "D"): -4, ("X", "Y"): -1, ("Z", "R"): 0, ("F", "H"): -1,
         ("B", "F"): -3, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum65 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum70.cmp
-def _temp():
-    return {
+blosum70 = {
         ("W", "F"): 1, ("L", "R"): -3, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -2, ("Z", "Y"): -2, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 8, ("S", "H"): -1,
@@ -1087,16 +1024,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -1, ("B", "N"): 3,
         ("F", "D"): -4, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -1,
         ("B", "F"): -4, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum70 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum75.cmp
-def _temp():
-    return {
+blosum75 = {
         ("W", "F"): 1, ("L", "R"): -3, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -2, ("Z", "Y"): -3, ("W", "R"): -3,
         ("Q", "A"): -1, ("S", "D"): -1, ("H", "H"): 8, ("S", "H"): -1,
@@ -1166,16 +1098,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -1, ("B", "N"): 3,
         ("F", "D"): -4, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -4, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum75 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum80.cmp
-def _temp():
-    return {
+blosum80 = {
         ("W", "F"): 0, ("L", "R"): -3, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -2, ("Z", "Y"): -3, ("W", "R"): -4,
         ("Q", "A"): -1, ("S", "D"): -1, ("H", "H"): 8, ("S", "H"): -1,
@@ -1245,16 +1172,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 4,
         ("F", "D"): -4, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -4, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum80 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum85.cmp
-def _temp():
-    return {
+blosum85 = {
         ("W", "F"): 0, ("L", "R"): -3, ("S", "P"): -1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -2, ("Z", "Y"): -3, ("W", "R"): -4,
         ("Q", "A"): -1, ("S", "D"): -1, ("H", "H"): 8, ("S", "H"): -1,
@@ -1324,16 +1246,11 @@ def _temp():
         ("Z", "N"): -1, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 4,
         ("F", "D"): -4, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -4, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum85 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum90.cmp
-def _temp():
-    return {
+blosum90 = {
         ("W", "F"): 0, ("L", "R"): -3, ("S", "P"): -2, ("V", "T"): -1,
         ("Q", "Q"): 7, ("N", "A"): -2, ("Z", "Y"): -3, ("W", "R"): -4,
         ("Q", "A"): -1, ("S", "D"): -1, ("H", "H"): 8, ("S", "H"): -2,
@@ -1403,16 +1320,11 @@ def _temp():
         ("Z", "N"): -1, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 4,
         ("F", "D"): -5, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -4, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum90 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum95.cmp
-def _temp():
-    return {
+blosum95 = {
         ("W", "F"): 0, ("L", "R"): -3, ("S", "P"): -2, ("V", "T"): -1,
         ("Q", "Q"): 7, ("N", "A"): -2, ("Z", "Y"): -4, ("W", "R"): -4,
         ("Q", "A"): -1, ("S", "D"): -1, ("H", "H"): 9, ("S", "H"): -2,
@@ -1482,16 +1394,11 @@ def _temp():
         ("Z", "N"): -1, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 4,
         ("F", "D"): -5, ("X", "Y"): -2, ("Z", "R"): -1, ("F", "H"): -2,
         ("B", "F"): -5, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-blosum95 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/feng.cmp
-def _temp():
-    return {
+feng = {
         ("W", "F"): 3, ("L", "R"): 2, ("I", "I"): 6, ("Q", "Q"): 6,
         ("W", "N"): 0, ("V", "I"): 5, ("H", "T"): 2, ("H", "P"): 3,
         ("W", "V"): 3, ("Q", "E"): 4, ("W", "R"): 2, ("Q", "A"): 3,
@@ -1545,16 +1452,11 @@ def _temp():
         ("L", "I"): 5, ("I", "S"): 2, ("D", "S"): 3, ("L", "S"): 2,
         ("I", "H"): 1, ("F", "D"): 1, ("D", "C"): 1, ("F", "H"): 2,
         ("D", "G"): 4, ("F", "L"): 4
-        }
-
-
-feng = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/fitch.cmp
-def _temp():
-    return {
+fitch = {
         ("W", "F"): 2, ("U", "I"): 1, ("W", "T"): 0, ("R", "R"): 3,
         ("N", "M"): 1, ("U", "M"): 2, ("U", "O"): 1, ("N", "A"): 2,
         ("U", "A"): 1, ("N", "C"): 1, ("U", "C"): 1, ("N", "E"): 2,
@@ -1598,16 +1500,11 @@ def _temp():
         ("V", "R"): 1, ("L", "I"): 1, ("V", "I"): 1, ("R", "M"): 2,
         ("Y", "W"): 1, ("M", "E"): 2, ("V", "U"): 2, ("W", "Q"): 0,
         ("U", "U"): 3, ("V", "O"): 1, ("F", "F"): 3
-        }
-
-
-fitch = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/genetic.cmp
-def _temp():
-    return {
+genetic = {
         ("W", "F"): 0.0, ("L", "R"): -0.4, ("I", "I"): 4.1, ("Q", "Q"): 5.5,
         ("W", "N"): -3.0, ("V", "I"): 1.0, ("H", "T"): -1.8, ("H", "P"): 0.7,
         ("W", "V"): -2.1, ("Q", "E"): 2.0, ("W", "R"): 1.8, ("Q", "A"): -2.1,
@@ -1661,16 +1558,11 @@ def _temp():
         ("L", "I"): 1.2, ("I", "S"): -0.5, ("D", "S"): -2.1, ("L", "S"): -1.2,
         ("I", "H"): -1.8, ("F", "D"): -1.7, ("D", "C"): -1.6, ("F", "H"): -1.1,
         ("D", "G"): 1.1, ("F", "L"): 2.2
-        }
-
-
-genetic = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/gonnet.cmp
-def _temp():
-    return {
+gonnet = {
         ("W", "F"): 3.6, ("L", "R"): -2.2, ("I", "I"): 4.0, ("Q", "Q"): 2.7,
         ("W", "N"): -3.6, ("V", "I"): 3.1, ("H", "T"): -0.3, ("H", "P"): -1.1,
         ("W", "V"): -2.6, ("Q", "E"): 1.7, ("W", "R"): -1.6, ("Q", "A"): -0.2,
@@ -1724,11 +1616,7 @@ def _temp():
         ("L", "I"): 2.8, ("I", "S"): -1.8, ("D", "S"): 0.5, ("L", "S"): -2.1,
         ("I", "H"): -2.2, ("F", "D"): -4.5, ("D", "C"): -3.2, ("F", "H"): -0.1,
         ("D", "G"): 0.1, ("F", "L"): 2.0
-        }
-
-
-gonnet = _temp()
-del _temp
+}
 
 
 # from https://www.genome.jp/dbget-bin/www_bget?aaindex:GRAR740104,
@@ -1736,8 +1624,7 @@ del _temp
 # as per original reference now available at
 # https://web.archive.org/web/19991111011852/http://www.embl-heidelberg.de:80/~vogt/matrices/grant.cmp
 # which was found to have incorrect amino acid characters (issue 308)
-def _temp():
-    return {
+grant = {
         ("A", "A"): 215, ("C", "A"): 20, ("C", "C"): 215, ("C", "D"): 61,
         ("C", "N"): 76, ("C", "R"): 35, ("D", "A"): 89, ("D", "D"): 215,
         ("D", "N"): 192, ("D", "R"): 119, ("E", "A"): 108, ("E", "C"): 45,
@@ -1791,16 +1678,11 @@ def _temp():
         ("Y", "L"): 179, ("Y", "M"): 179, ("Y", "N"): 72, ("Y", "P"): 105,
         ("Y", "Q"): 116, ("Y", "R"): 138, ("Y", "S"): 71, ("Y", "T"): 123,
         ("Y", "W"): 178, ("Y", "Y"): 215
-        }
-
-
-grant = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/ident.cmp
-def _temp():
-    return {
+ident = {
         ("W", "F"): -1, ("L", "R"): -1, ("I", "I"): 6, ("Q", "Q"): 6,
         ("W", "N"): -1, ("V", "I"): -1, ("H", "T"): -1, ("H", "P"): -1,
         ("W", "V"): -1, ("Q", "E"): -1, ("W", "R"): -1, ("Q", "A"): -1,
@@ -1854,16 +1736,11 @@ def _temp():
         ("L", "I"): -1, ("I", "S"): -1, ("D", "S"): -1, ("L", "S"): -1,
         ("I", "H"): -1, ("F", "D"): -1, ("D", "C"): -1, ("F", "H"): -1,
         ("D", "G"): -1, ("F", "L"): -1
-        }
-
-
-ident = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/johnson.cmp
-def _temp():
-    return {
+johnson = {
         ("W", "F"): 3.4, ("S", "P"): -1.0, ("N", "M"): -3.7, ("Q", "Q"): 9.0,
         ("N", "A"): -1.4, ("N", "E"): -0.7, ("W", "V"): -4.9, ("Q", "E"): 2.4,
         ("L", "H"): -4.2, ("W", "R"): -3.8, ("Q", "A"): -0.6, ("S", "D"): -0.2,
@@ -1917,16 +1794,11 @@ def _temp():
         ("I", "E"): -4.8, ("P", "M"): -9.8, ("M", "K"): -1.9, ("K", "F"): -5.6,
         ("I", "A"): -2.2, ("P", "I"): -5.7, ("R", "R"): 10.0, ("L", "I"): 2.6,
         ("F", "D"): -7.0, ("D", "C"): -9.7
-        }
-
-
-johnson = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/levin.cmp
-def _temp():
-    return {
+levin = {
         ("W", "F"): 0, ("L", "R"): -1, ("S", "P"): 0, ("I", "I"): 2,
         ("Q", "Q"): 2, ("N", "A"): 0, ("H", "T"): 0, ("N", "E"): 0,
         ("H", "P"): 0, ("W", "V"): 0, ("Q", "E"): 1, ("W", "R"): 0,
@@ -1980,16 +1852,11 @@ def _temp():
         ("F", "P"): -1, ("L", "I"): 0, ("W", "D"): -1, ("F", "T"): -1,
         ("K", "K"): 2, ("I", "H"): -1, ("F", "D"): -1, ("F", "H"): -1,
         ("D", "G"): 0, ("F", "L"): 0
-        }
-
-
-levin = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/mclach.cmp
-def _temp():
-    return {
+mclach = {
         ("N", "I"): 1, ("K", "V"): 2, ("S", "P"): 3, ("N", "M"): 2,
         ("L", "V"): 5, ("N", "A"): 3, ("H", "T"): 4, ("N", "E"): 4,
         ("Q", "Y"): 1, ("H", "P"): 3, ("W", "V"): 2, ("H", "L"): 2,
@@ -2043,16 +1910,11 @@ def _temp():
         ("D", "S"): 3, ("D", "W"): 0, ("M", "I"): 5, ("D", "K"): 3,
         ("N", "C"): 1, ("E", "C"): 0, ("D", "C"): 1, ("D", "G"): 3,
         ("F", "L"): 5, ("W", "F"): 6
-        }
-
-
-mclach = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/miyata.cmp
-def _temp():
-    return {
+miyata = {
         ("W", "F"): 0.14, ("L", "R"): -1.37, ("S", "P"): 0.69, ("I", "I"): 1.25,
         ("Q", "Q"): 1.25, ("N", "A"): -0.53, ("H", "T"): -0.07, ("N", "E"): 0.4,
         ("H", "P"): -0.9, ("W", "V"): -1.26, ("W", "R"): -1.47, ("Q", "A"): -0.67,
@@ -2106,16 +1968,11 @@ def _temp():
         ("I", "S"): -1.7, ("D", "S"): -0.62, ("Y", "F"): 0.77, ("L", "S"): -1.79,
         ("I", "H"): -1.2, ("F", "D"): -3.02, ("D", "C"): -2.23, ("F", "H"): -1.38,
         ("D", "G"): -1.12, ("F", "L"): 0.62
-        }
-
-
-miyata = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/nwsgappep.cmp
-def _temp():
-    return {
+nwsgappep = {
         ("W", "F"): 1.3, ("S", "P"): 0.4, ("W", "B"): -0.7, ("N", "N"): 1.5,
         ("N", "A"): 0.2, ("N", "E"): 0.5, ("Z", "Y"): -0.6, ("W", "V"): -0.8,
         ("L", "B"): -0.5, ("W", "R"): 1.4, ("Q", "A"): 0.2, ("S", "D"): 0.2,
@@ -2180,16 +2037,11 @@ def _temp():
         ("Q", "L"): -0.1, ("Z", "F"): -0.7, ("Z", "B"): 0.6, ("Z", "N"): 0.4,
         ("Z", "V"): -0.2, ("F", "D"): -1.0, ("Z", "R"): 0.2, ("D", "C"): -0.5,
         ("B", "B"): 1.1
-        }
-
-
-nwsgappep = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam120.cmp
-def _temp():
-    return {
+pam120 = {
         ("W", "F"): -1, ("L", "R"): -4, ("S", "P"): 1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): -1, ("Z", "Y"): -5, ("W", "R"): 1,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 7, ("S", "H"): -2,
@@ -2259,16 +2111,11 @@ def _temp():
         ("Z", "N"): 0, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 3,
         ("F", "D"): -7, ("X", "Y"): -3, ("Z", "R"): -1, ("F", "H"): -3,
         ("B", "F"): -5, ("F", "L"): 0, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-pam120 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam180.cmp
-def _temp():
-    return {
+pam180 = {
         ("W", "F"): 0, ("L", "R"): -4, ("S", "P"): 1, ("V", "T"): 0,
         ("Q", "Q"): 6, ("N", "A"): 0, ("Z", "Y"): -6, ("W", "R"): 2,
         ("Q", "A"): -1, ("S", "D"): 0, ("H", "H"): 8, ("S", "H"): -2,
@@ -2338,16 +2185,11 @@ def _temp():
         ("Z", "N"): 1, ("X", "A"): -1, ("B", "R"): -2, ("B", "N"): 3,
         ("F", "D"): -8, ("X", "Y"): -3, ("Z", "R"): 0, ("F", "H"): -3,
         ("B", "F"): -6, ("F", "L"): 1, ("X", "Q"): -1, ("B", "B"): 4
-        }
-
-
-pam180 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam250.cmp
-def _temp():
-    return {
+pam250 = {
         ("W", "F"): 0, ("L", "R"): -3, ("S", "P"): 1, ("V", "T"): 0,
         ("Q", "Q"): 4, ("N", "A"): 0, ("Z", "Y"): -4, ("W", "R"): 2,
         ("Q", "A"): 0, ("S", "D"): 0, ("H", "H"): 6, ("S", "H"): -1,
@@ -2417,16 +2259,11 @@ def _temp():
         ("Z", "N"): 1, ("X", "A"): 0, ("B", "R"): -1, ("B", "N"): 2,
         ("F", "D"): -6, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -4, ("F", "L"): 2, ("X", "Q"): -1, ("B", "B"): 3
-        }
-
-
-pam250 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam30.cmp
-def _temp():
-    return {
+pam30 = {
         ("W", "F"): -4, ("L", "R"): -8, ("S", "P"): -2, ("V", "T"): -3,
         ("Q", "Q"): 8, ("N", "A"): -4, ("Z", "Y"): -9, ("W", "R"): -2,
         ("Q", "A"): -4, ("S", "D"): -4, ("H", "H"): 9, ("S", "H"): -6,
@@ -2496,16 +2333,11 @@ def _temp():
         ("Z", "N"): -3, ("X", "A"): -3, ("B", "R"): -7, ("B", "N"): 6,
         ("F", "D"): -15, ("X", "Y"): -7, ("Z", "R"): -4, ("F", "H"): -6,
         ("B", "F"): -10, ("F", "L"): -3, ("X", "Q"): -5, ("B", "B"): 6
-        }
-
-
-pam30 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam300.cmp
-def _temp():
-    return {
+pam300 = {
         ("W", "F"): 1, ("L", "R"): -3, ("S", "P"): 1, ("V", "T"): 0,
         ("Q", "Q"): 4, ("N", "A"): 0, ("Z", "Y"): -5, ("W", "R"): 3,
         ("Q", "A"): 0, ("S", "D"): 0, ("H", "H"): 7, ("S", "H"): -1,
@@ -2575,16 +2407,11 @@ def _temp():
         ("Z", "N"): 1, ("X", "A"): 0, ("B", "R"): 0, ("B", "N"): 2,
         ("F", "D"): -6, ("X", "Y"): -2, ("Z", "R"): 0, ("F", "H"): -2,
         ("B", "F"): -5, ("F", "L"): 3, ("X", "Q"): 0, ("B", "B"): 3
-        }
-
-
-pam300 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam60.cmp
-def _temp():
-    return {
+pam60 = {
         ("W", "F"): -3, ("L", "R"): -6, ("S", "P"): 0, ("V", "T"): -1,
         ("Q", "Q"): 7, ("N", "A"): -2, ("Z", "Y"): -7, ("W", "R"): 0,
         ("Q", "A"): -3, ("S", "D"): -2, ("H", "H"): 8, ("S", "H"): -4,
@@ -2654,16 +2481,11 @@ def _temp():
         ("Z", "N"): -1, ("X", "A"): -2, ("B", "R"): -5, ("B", "N"): 5,
         ("F", "D"): -11, ("X", "Y"): -5, ("Z", "R"): -2, ("F", "H"): -4,
         ("B", "F"): -8, ("F", "L"): -1, ("X", "Q"): -3, ("B", "B"): 5
-        }
-
-
-pam60 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/pam90.cmp
-def _temp():
-    return {
+pam90 = {
         ("W", "F"): -2, ("L", "R"): -5, ("S", "P"): 0, ("V", "T"): -1,
         ("Q", "Q"): 6, ("N", "A"): -1, ("Z", "Y"): -6, ("W", "R"): 0,
         ("Q", "A"): -2, ("S", "D"): -1, ("H", "H"): 8, ("S", "H"): -3,
@@ -2728,16 +2550,11 @@ def _temp():
         ("B", "R"): -3, ("B", "N"): 4, ("F", "D"): -8, ("Z", "R"): -1,
         ("F", "H"): -3, ("B", "F"): -6, ("F", "L"): 0, ("V", "Y"): -4,
         ("B", "B"): 4
-        }
-
-
-pam90 = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/rao.cmp
-def _temp():
-    return {
+rao = {
         ("W", "F"): 11, ("S", "P"): 10, ("N", "M"): 6, ("Q", "Q"): 16,
         ("N", "A"): 9, ("N", "E"): 10, ("W", "V"): 11, ("Q", "E"): 11,
         ("L", "H"): 10, ("W", "R"): 7, ("Q", "A"): 11, ("S", "D"): 10,
@@ -2791,16 +2608,11 @@ def _temp():
         ("I", "E"): 4, ("P", "M"): 2, ("M", "K"): 8, ("K", "F"): 6,
         ("I", "A"): 9, ("P", "I"): 3, ("R", "R"): 16, ("L", "I"): 10,
         ("F", "D"): 4, ("D", "C"): 8
-        }
-
-
-rao = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/risler.cmp
-def _temp():
-    return {
+risler = {
         ("W", "F"): -0.9, ("S", "P"): -0.3, ("N", "M"): 0.0, ("Q", "Q"): 2.2,
         ("N", "A"): 1.3, ("N", "E"): 1.4, ("W", "V"): -0.7, ("Q", "E"): 2.1,
         ("L", "H"): -0.9, ("W", "R"): -0.8, ("Q", "A"): 1.8, ("S", "D"): 0.7,
@@ -2854,16 +2666,11 @@ def _temp():
         ("I", "E"): 1.5, ("P", "M"): -1.2, ("M", "K"): 0.4, ("K", "F"): 0.1,
         ("I", "A"): 1.7, ("P", "I"): -0.6, ("R", "R"): 2.2, ("L", "I"): 2.1,
         ("F", "D"): -0.3, ("D", "C"): -1.7
-        }
-
-
-risler = _temp()
-del _temp
+}
 
 
 # http://www.embl-heidelberg.de/~vogt/matrices/str.cmp
-def _temp():
-    return {
+structure = {
         ("W", "F"): 2, ("L", "R"): -3, ("I", "I"): 6, ("Q", "Q"): 6,
         ("W", "N"): -5, ("V", "I"): 2, ("H", "T"): -2, ("H", "P"): -3,
         ("W", "V"): -4, ("Q", "E"): 2, ("W", "R"): -2, ("Q", "A"): 0,
@@ -2917,8 +2724,4 @@ def _temp():
         ("L", "I"): 2, ("I", "S"): -3, ("D", "S"): 0, ("L", "S"): -4,
         ("I", "H"): -5, ("F", "D"): -5, ("D", "C"): -7, ("F", "H"): -2,
         ("D", "G"): -1, ("F", "L"): 2
-        }
-
-
-structure = _temp()
-del _temp
+}
