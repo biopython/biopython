@@ -905,7 +905,7 @@ class _HeaderConsumer:
             self._header.query = "%s%s" % (self._header.query, line)
         else:
             # Hope it is the old style way to give the query length:
-            letters, = _re_search(
+            (letters,) = _re_search(
                 r"([0-9,]+) letters",
                 line,
                 "I could not find the number of letters in line\n%s" % line,
@@ -1371,13 +1371,13 @@ class _DatabaseReportConsumer:
         )
 
     def num_letters_in_database(self, line):
-        letters, = _get_cols(
+        (letters,) = _get_cols(
             line, (-1,), ncols=6, expected={2: "letters", 4: "database:"}
         )
         self._dr.num_letters_in_database.append(_safe_int(letters))
 
     def num_sequences_in_database(self, line):
-        sequences, = _get_cols(
+        (sequences,) = _get_cols(
             line, (-1,), ncols=6, expected={2: "sequences", 4: "database:"}
         )
         self._dr.num_sequences_in_database.append(_safe_int(sequences))
@@ -1412,56 +1412,56 @@ class _ParametersConsumer:
 
     def num_hits(self, line):
         if "1st pass" in line:
-            x, = _get_cols(line, (-4,), ncols=11, expected={2: "Hits"})
+            (x,) = _get_cols(line, (-4,), ncols=11, expected={2: "Hits"})
             self._params.num_hits = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=6, expected={2: "Hits"})
+            (x,) = _get_cols(line, (-1,), ncols=6, expected={2: "Hits"})
             self._params.num_hits = _safe_int(x)
 
     def num_sequences(self, line):
         if "1st pass" in line:
-            x, = _get_cols(line, (-4,), ncols=9, expected={2: "Sequences:"})
+            (x,) = _get_cols(line, (-4,), ncols=9, expected={2: "Sequences:"})
             self._params.num_sequences = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=4, expected={2: "Sequences:"})
+            (x,) = _get_cols(line, (-1,), ncols=4, expected={2: "Sequences:"})
             self._params.num_sequences = _safe_int(x)
 
     def num_extends(self, line):
         if "1st pass" in line:
-            x, = _get_cols(line, (-4,), ncols=9, expected={2: "extensions:"})
+            (x,) = _get_cols(line, (-4,), ncols=9, expected={2: "extensions:"})
             self._params.num_extends = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=4, expected={2: "extensions:"})
+            (x,) = _get_cols(line, (-1,), ncols=4, expected={2: "extensions:"})
             self._params.num_extends = _safe_int(x)
 
     def num_good_extends(self, line):
         if "1st pass" in line:
-            x, = _get_cols(line, (-4,), ncols=10, expected={3: "extensions:"})
+            (x,) = _get_cols(line, (-4,), ncols=10, expected={3: "extensions:"})
             self._params.num_good_extends = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=5, expected={3: "extensions:"})
+            (x,) = _get_cols(line, (-1,), ncols=5, expected={3: "extensions:"})
             self._params.num_good_extends = _safe_int(x)
 
     def num_seqs_better_e(self, line):
-        self._params.num_seqs_better_e, = _get_cols(
+        (self._params.num_seqs_better_e,) = _get_cols(
             line, (-1,), ncols=7, expected={2: "sequences"}
         )
         self._params.num_seqs_better_e = _safe_int(self._params.num_seqs_better_e)
 
     def hsps_no_gap(self, line):
-        self._params.hsps_no_gap, = _get_cols(
+        (self._params.hsps_no_gap,) = _get_cols(
             line, (-1,), ncols=9, expected={3: "better", 7: "gapping:"}
         )
         self._params.hsps_no_gap = _safe_int(self._params.hsps_no_gap)
 
     def hsps_prelim_gapped(self, line):
-        self._params.hsps_prelim_gapped, = _get_cols(
+        (self._params.hsps_prelim_gapped,) = _get_cols(
             line, (-1,), ncols=9, expected={4: "gapped", 6: "prelim"}
         )
         self._params.hsps_prelim_gapped = _safe_int(self._params.hsps_prelim_gapped)
 
     def hsps_prelim_gapped_attempted(self, line):
-        self._params.hsps_prelim_gapped_attempted, = _get_cols(
+        (self._params.hsps_prelim_gapped_attempted,) = _get_cols(
             line, (-1,), ncols=10, expected={4: "attempted", 7: "prelim"}
         )
         self._params.hsps_prelim_gapped_attempted = _safe_int(
@@ -1469,31 +1469,31 @@ class _ParametersConsumer:
         )
 
     def hsps_gapped(self, line):
-        self._params.hsps_gapped, = _get_cols(
+        (self._params.hsps_gapped,) = _get_cols(
             line, (-1,), ncols=6, expected={3: "gapped"}
         )
         self._params.hsps_gapped = _safe_int(self._params.hsps_gapped)
 
     def query_length(self, line):
-        self._params.query_length, = _get_cols(
+        (self._params.query_length,) = _get_cols(
             line.lower(), (-1,), ncols=4, expected={0: "length", 2: "query:"}
         )
         self._params.query_length = _safe_int(self._params.query_length)
 
     def database_length(self, line):
-        self._params.database_length, = _get_cols(
+        (self._params.database_length,) = _get_cols(
             line.lower(), (-1,), ncols=4, expected={0: "length", 2: "database:"}
         )
         self._params.database_length = _safe_int(self._params.database_length)
 
     def effective_hsp_length(self, line):
-        self._params.effective_hsp_length, = _get_cols(
+        (self._params.effective_hsp_length,) = _get_cols(
             line, (-1,), ncols=4, expected={1: "HSP", 2: "length:"}
         )
         self._params.effective_hsp_length = _safe_int(self._params.effective_hsp_length)
 
     def effective_query_length(self, line):
-        self._params.effective_query_length, = _get_cols(
+        (self._params.effective_query_length,) = _get_cols(
             line, (-1,), ncols=5, expected={1: "length", 3: "query:"}
         )
         self._params.effective_query_length = _safe_int(
@@ -1501,7 +1501,7 @@ class _ParametersConsumer:
         )
 
     def effective_database_length(self, line):
-        self._params.effective_database_length, = _get_cols(
+        (self._params.effective_database_length,) = _get_cols(
             line.lower(), (-1,), ncols=5, expected={1: "length", 3: "database:"}
         )
         self._params.effective_database_length = _safe_int(
@@ -1509,7 +1509,7 @@ class _ParametersConsumer:
         )
 
     def effective_search_space(self, line):
-        self._params.effective_search_space, = _get_cols(
+        (self._params.effective_search_space,) = _get_cols(
             line, (-1,), ncols=4, expected={1: "search"}
         )
         self._params.effective_search_space = _safe_int(
@@ -1517,7 +1517,7 @@ class _ParametersConsumer:
         )
 
     def effective_search_space_used(self, line):
-        self._params.effective_search_space_used, = _get_cols(
+        (self._params.effective_search_space_used,) = _get_cols(
             line, (-1,), ncols=5, expected={1: "search", 3: "used:"}
         )
         self._params.effective_search_space_used = _safe_int(
@@ -1532,9 +1532,11 @@ class _ParametersConsumer:
     def threshold(self, line):
         if line[:2] == "T:":
             # Assume its an old style line like "T: 123"
-            self._params.threshold, = _get_cols(line, (1,), ncols=2, expected={0: "T:"})
+            (self._params.threshold,) = _get_cols(
+                line, (1,), ncols=2, expected={0: "T:"}
+            )
         elif line[:28] == "Neighboring words threshold:":
-            self._params.threshold, = _get_cols(
+            (self._params.threshold,) = _get_cols(
                 line,
                 (3,),
                 ncols=4,
@@ -1546,11 +1548,11 @@ class _ParametersConsumer:
 
     def window_size(self, line):
         if line[:2] == "A:":
-            self._params.window_size, = _get_cols(
+            (self._params.window_size,) = _get_cols(
                 line, (1,), ncols=2, expected={0: "A:"}
             )
         elif line[:25] == "Window for multiple hits:":
-            self._params.window_size, = _get_cols(
+            (self._params.window_size,) = _get_cols(
                 line, (4,), ncols=5, expected={0: "Window", 2: "multiple", 3: "hits:"}
             )
         else:
