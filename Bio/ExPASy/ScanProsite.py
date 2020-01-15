@@ -70,7 +70,7 @@ def read(handle):
     return record
 
 
-# The classess below are considered private
+# The classes below are considered private
 
 
 class Parser(ExpatParser):
