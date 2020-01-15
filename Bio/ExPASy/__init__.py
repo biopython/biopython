@@ -28,9 +28,9 @@ def get_prodoc_entry(
 
     >>> from Bio import ExPASy
     >>> import os
-    >>> in_handle = ExPASy.get_prodoc_entry('PDOC00001')
-    >>> html = in_handle.read()
-    >>> in_handle.close()
+    >>> with ExPASy.get_prodoc_entry('PDOC00001') as in_handle:
+    ...     html = in_handle.read()
+    ...
     >>> with open("myprodocrecord.html", "w") as out_handle:
     ...     length = out_handle.write(html)
     ...
@@ -49,9 +49,9 @@ def get_prosite_entry(
 
     >>> from Bio import ExPASy
     >>> import os
-    >>> in_handle = ExPASy.get_prosite_entry('PS00001')
-    >>> html = in_handle.read()
-    >>> in_handle.close()
+    >>> with ExPASy.get_prosite_entry('PS00001') as in_handle:
+    ...     html = in_handle.read()
+    ...
     >>> with open("myprositerecord.html", "w") as out_handle:
     ...     length = out_handle.write(html)
     ...
@@ -71,9 +71,9 @@ def get_prosite_raw(id, cgi=None):
 
     >>> from Bio import ExPASy
     >>> from Bio.ExPASy import Prosite
-    >>> handle = ExPASy.get_prosite_raw('PS00001')
-    >>> record = Prosite.read(handle)
-    >>> handle.close()
+    >>> with ExPASy.get_prosite_raw('PS00001') as handle:
+    ...     record = Prosite.read(handle)
+    ...
     >>> print(record.accession)
     PS00001
 
@@ -103,9 +103,9 @@ def get_sprot_raw(id):
 
     >>> from Bio import ExPASy
     >>> from Bio import SwissProt
-    >>> handle = ExPASy.get_sprot_raw("O23729")
-    >>> record = SwissProt.read(handle)
-    >>> handle.close()
+    >>> with ExPASy.get_sprot_raw("O23729") as handle:
+    ...     record = SwissProt.read(handle)
+    ...
     >>> print(record.entry_name)
     CHS3_BROFI
 
