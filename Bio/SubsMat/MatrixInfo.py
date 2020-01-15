@@ -13,6 +13,8 @@ You can view an archive copy of this webpage from 1999 here;
 https://web.archive.org/web/19991014010917/http://www.embl-heidelberg.de/%7Evogt/matrices/mlist1.html
 """
 
+# The data rich dictionaries do not lend themselves to black style, turn it off:
+# fmt: off
 
 # a list of all available substitution matrices
 available_matrices = ["benner6", "benner22", "benner74", "blosum100",
