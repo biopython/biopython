@@ -524,8 +524,10 @@ class SummaryInfo:
             elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
                 random_expected = Nucleotide4Random
             else:
-                raise ValueError("Error in alphabet: not Nucleotide or "
-                                 "Protein, supply expected frequencies")
+                raise ValueError(
+                    "Error in alphabet: not Nucleotide or "
+                    "Protein, supply expected frequencies"
+                )
             del base_alpha
         elif not isinstance(e_freq_table, FreqTable.FreqTable):
             raise ValueError("e_freq_table should be a FreqTable object")

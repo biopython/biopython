@@ -234,7 +234,9 @@ class AbstractCommandline:
         try:
             parameters = self.parameters
         except AttributeError:
-            raise AttributeError("Subclass should have defined self.parameters") from None
+            raise AttributeError(
+                "Subclass should have defined self.parameters"
+            ) from None
         # Create properties for each parameter at run time
         aliases = set()
         for p in parameters:

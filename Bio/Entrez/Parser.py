@@ -49,6 +49,7 @@ from urllib.request import urlopen, urlparse
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
 
+
 class NoneElement:
     """NCBI Entrez XML element mapped to None."""
 
@@ -973,7 +974,9 @@ class DataHandler:
             try:
                 handle = urlopen(url)
             except OSError:
-                raise RuntimeError("Failed to access %s at %s" % (filename, url)) from None
+                raise RuntimeError(
+                    "Failed to access %s at %s" % (filename, url)
+                ) from None
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
