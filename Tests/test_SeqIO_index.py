@@ -472,14 +472,6 @@ class IndexDictTests(unittest.TestCase):
             self.assertIn(key, keys)
             self.assertTrue(isinstance(rec, SeqRecord))
             self.assertIn(rec.id, ids)
-        # Check the following fail
-        self.assertRaises(NotImplementedError, rec_dict.popitem)
-        self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
-        self.assertRaises(NotImplementedError, rec_dict.pop, chr(0), chr(1))
-        self.assertRaises(NotImplementedError, rec_dict.clear)
-        self.assertRaises(NotImplementedError, rec_dict.__setitem__, "X", None)
-        self.assertRaises(NotImplementedError, rec_dict.copy)
-        self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
 
     def get_raw_check(self, filename, format, alphabet, comp):
         # Also checking the key_function here
