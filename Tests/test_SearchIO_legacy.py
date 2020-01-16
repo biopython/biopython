@@ -10,7 +10,6 @@ import string
 import unittest
 
 from io import StringIO
-from Bio import File
 
 
 import warnings
@@ -18,6 +17,66 @@ from Bio import BiopythonWarning
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonWarning)
     from Bio.SearchIO._legacy import ParserSupport
+
+
+class UndoHandleTests(unittest.TestCase):
+    """Tests for the UndoHandle."""
+
+    def test_one(self):
+        """First test."""
+        data = """\
+This
+is
+a multi-line
+file"""
+        h = ParserSupport.UndoHandle(StringIO(data))
+        self.assertEqual(h.readline(), "This\n")
+        self.assertEqual(h.peekline(), "is\n")
+        self.assertEqual(h.readline(), "is\n")
+        # TODO - Meaning of saveline lacking \n?
+        h.saveline("saved\n")
+        self.assertEqual(h.peekline(), "saved\n")
+        h.saveline("another\n")
+        self.assertEqual(h.readline(), "another\n")
+        self.assertEqual(h.readline(), "saved\n")
+        # Test readlines after saveline
+        h.saveline("saved again\n")
+        lines = h.readlines()
+        self.assertEqual(len(lines), 3)
+        self.assertEqual(lines[0], "saved again\n")
+        self.assertEqual(lines[1], "a multi-line\n")
+        self.assertEqual(lines[2], "file")  # no trailing \n
+        # should be empty now
+        self.assertEqual(h.readline(), "")
+        h.saveline("save after empty\n")
+        self.assertEqual(h.readline(), "save after empty\n")
+        self.assertEqual(h.readline(), "")
+
+    def test_read(self):
+        """Test read method."""
+        h = ParserSupport.UndoHandle(StringIO("some text"))
+        h.saveline("more text")
+        self.assertEqual(h.read(), "more textsome text")
+
+    def test_undohandle_read_block(self):
+        """Test reading in blocks."""
+        data = """\
+This
+is
+a multi-line
+file"""
+        for block in [1, 2, 10]:
+            s = StringIO(data)
+            h = ParserSupport.UndoHandle(s)
+            h.peekline()
+            new = ""
+            while True:
+                tmp = h.read(block)
+                if not tmp:
+                    break
+                new += tmp
+            self.assertEqual(data, new)
+            h.close()
 
 
 class TestParserSupport(unittest.TestCase):
@@ -55,7 +114,7 @@ class TestParserSupport(unittest.TestCase):
         data = """\
 This
 file"""
-        h = File.UndoHandle(StringIO(data))
+        h = ParserSupport.UndoHandle(StringIO(data))
         safe_readline = ParserSupport.safe_readline
         self.assertEqual(safe_readline(h), "This\n")
         self.assertEqual(safe_readline(h), "file")
@@ -66,7 +125,7 @@ file"""
         data = """\
 This
 file"""
-        h = File.UndoHandle(StringIO(data))
+        h = ParserSupport.UndoHandle(StringIO(data))
         self.assertEqual(safe_peekline(h), "This\n")
         h.readline()
         self.assertEqual(safe_peekline(h), "file")
@@ -86,7 +145,7 @@ GTAEVI
 
 
 """
-        h = File.UndoHandle(StringIO(data))
+        h = ParserSupport.UndoHandle(StringIO(data))
         lines = []
         rac = ParserSupport.read_and_call
         rac(h, lines.append)
@@ -106,7 +165,7 @@ MAKLEITLKRSVIGRPEDQRVTVRTLGLKKTNQTVVHEDNAAIRGMINKVSHLVSVKEQ
 MKLHELKPSEGSRKTRNRVGRGIGSGNGKTAGKGHKGQNARSGGGVRPGFEGGQMPLFQRLPKRGFTNIN
 RKEYAVVNLDKLNGFAEGTEVTPELLLETGVISKLNAGVKILGNGKLEKKLTVKANKFSASAKEAVEAAG
 GTAEVI"""
-        h = File.UndoHandle(StringIO(data))
+        h = ParserSupport.UndoHandle(StringIO(data))
         lines = []
         arac = ParserSupport.attempt_read_and_call
         self.assertTrue(arac(h, lines.append, contains="RIBOSOMAL PROTEIN"))
