@@ -43,9 +43,9 @@ class FeatureValueCleaner:
         if key_name in self._to_process:
             try:
                 cleaner = getattr(self, "_clean_%s" % key_name)
-                value = cleaner(value)
             except AttributeError:
-                raise AssertionError("No function to clean key: %s" % key_name)
+                raise AssertionError("No function to clean key: %s" % key_name) from None
+            value = cleaner(value)
         return value
 
     def _clean_translation(self, value):

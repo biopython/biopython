@@ -11,9 +11,8 @@ Classes:
  - Feature - Hold the information in a Feature Table.
  - Qualifier - Qualifiers on a Feature.
 
-17-MAR-2009: added support for WGS and WGS_SCAFLD lines.  Ying Huang & Iddo Friedberg
 """
-# local stuff
+
 import Bio.GenBank
 
 

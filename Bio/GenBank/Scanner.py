@@ -30,7 +30,9 @@ Feature Table Documentation:
 
 import warnings
 import re
+import sys
 from collections import OrderedDict
+
 from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -364,7 +366,7 @@ class InsdcScanner:
             # Bummer
             raise ValueError(
                 "Problem with '%s' feature:\n%s" % (feature_key, "\n".join(lines))
-            )
+            ) from None
 
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
@@ -1003,7 +1005,7 @@ class EmblScanner(InsdcScanner):
                     # TODO - Record the checksum etc?
             return
         except StopIteration:
-            raise ValueError("Problem in misc lines before sequence")
+            raise ValueError("Problem in misc lines before sequence") from None
 
 
 class _ImgtScanner(EmblScanner):
@@ -1520,7 +1522,6 @@ class GenBankScanner(InsdcScanner):
             consumer.locus(splitline[1])
             # Provide descriptive error message if the sequence is too long
             # for python to handle
-            import sys
 
             if int(splitline[2]) > sys.maxsize:
                 raise ValueError(
@@ -1844,7 +1845,7 @@ class GenBankScanner(InsdcScanner):
                     # Read in next line
                     line = next(line_iter)
         except StopIteration:
-            raise ValueError("Problem in header")
+            raise ValueError("Problem in header") from None
 
     def _feed_misc_lines(self, consumer, lines):
         # Deals with a few misc lines between the features and the sequence
@@ -1896,4 +1897,4 @@ class GenBankScanner(InsdcScanner):
                     consumer.contig_location(contig_location)
             return
         except StopIteration:
-            raise ValueError("Problem in misc lines before sequence")
+            raise ValueError("Problem in misc lines before sequence") from None

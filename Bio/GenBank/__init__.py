@@ -337,7 +337,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             elif int(s) == expected_seq_length and e == "1":
                 pos = _pos(s)
             else:
-                raise ValueError("Invalid between location %s" % repr(loc_str))
+                raise ValueError("Invalid between location %s" % repr(loc_str)) from None
             return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
@@ -1226,7 +1226,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 except ValueError as err:
                     print(location_line)
                     print(part)
-                    raise err
+                    raise
                 # loc will be a list of one or two FeatureLocation items.
                 locs.extend(loc)
             # Historically a join on the reverse strand has been represented
@@ -1697,18 +1697,15 @@ def read(handle):
     """
     iterator = parse(handle)
     try:
-        first = next(iterator)
+        record = next(iterator)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(iterator)
         raise ValueError("More than one record found in handle")
-    return first
+    except StopIteration:
+        pass
+    return record
 
 
 if __name__ == "__main__":
