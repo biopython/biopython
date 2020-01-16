@@ -67,7 +67,6 @@ def as_handle(handleish, mode="r", **kwargs):
     >>> os.remove("seqs.fasta")  # tidy up
 
     """
-
     try:
         with open(handleish, mode, **kwargs) as fp:
             yield fp
