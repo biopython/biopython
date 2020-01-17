@@ -62,8 +62,9 @@ def parse(handle):
         try:
             handle = StringIO(handle)
         except TypeError:
-            raise TypeError("An XML-containing handle or an XML string must "
-                            "be provided") from None
+            raise TypeError(
+                "An XML-containing handle or an XML string must be provided"
+            ) from None
     # Parse XML and return each Pathway
     for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
         if event == "end" and elem.tag == "pathway":
