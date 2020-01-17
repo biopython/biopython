@@ -309,17 +309,17 @@ def read(handle):
     ...
     6.2.1.25 benzoate---CoA ligase
     """
-    iterator = parse(handle)
+    records = parse(handle)
     try:
-        record = next(iterator)
+        record = next(records)
     except StopIteration:
         raise ValueError("No records found in handle") from None
     try:
-        next(iterator)
+        next(records)
         raise ValueError("More than one record found in handle")
     except StopIteration:
         pass
-    return first
+    return record
 
 
 if __name__ == "__main__":
