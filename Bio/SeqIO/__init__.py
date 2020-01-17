@@ -730,7 +730,7 @@ def read(handle, format, alphabet=None):
         raise ValueError("More than one record found in handle")
     except StopIteration:
         pass
-    return first
+    return record
 
 
 def to_dict(sequences, key_function=None):
