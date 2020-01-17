@@ -3,13 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for the FSSP module."""
+"""Tests for the FSSP module (DEPRECATED)."""
 
 import os
 import unittest
+import warnings
 
-from Bio import FSSP
-from Bio.FSSP import FSSPTools
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    # modules to be tested
+    from Bio import FSSP
+    from Bio.FSSP import FSSPTools
 
 
 class TestGeo(unittest.TestCase):

@@ -3,7 +3,7 @@
 # as part of this package.
 #
 
-"""Parser for FSSP files, used in a database of protein fold classifications.
+"""Parser for FSSP files, used in a database of protein fold classifications (DEPRECATED).
 
 This is a module to handle FSSP files. For now it parses only the header,
 summary and alignment sections.
@@ -21,8 +21,18 @@ Functions
 """
 
 import re
+import warnings
 
 from . import fssp_rec
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "Bio.FSSP has been deprecated, and we intend to remove it"
+    " in a future release of Biopython. Please contact the Biopython"
+    " developers if you need this module.",
+    BiopythonDeprecationWarning
+)
 
 
 fff_rec = fssp_rec.fff_rec

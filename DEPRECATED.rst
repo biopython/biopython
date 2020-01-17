@@ -842,3 +842,7 @@ Bio.File
 The UndoHandle class was deprecated in Release 1.77, and moved to
 Bio/SearchIO/_legacy/ParserSupport.py, which was the only module in
 Biopython still using this class.
+
+Bio.FSSP
+-----------
+Deprecated in release 1.77.
