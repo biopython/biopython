@@ -38,15 +38,10 @@ class XpkEntry:
         """Initialize the class."""
         # Holds all fields from input line in a dictionary
         # keys are data labels from the .xpk header
-        self.fields = {}
-
         datlist = entry.split()
         headlist = headline.split()
 
-        i = 0
-        for i in range(len(datlist) - 1):
-            self.fields[headlist[i]] = datlist[i + 1]
-        i = i + 1
+        self.fields = dict(zip(headlist, datlist[1:]))
 
         try:
             self.fields["entrynum"] = datlist[0]
@@ -144,8 +139,7 @@ class Peaklist:
 
         # Cast the data lines into the xpentry class
         self.dict = {}
-        for i in range(len(self.data)):
-            line = self.data[i]
+        for line in self.data:
             ind = XpkEntry(line, self.datalabels).fields[index + ".L"]
             key = ind.split(".")[0]
 
@@ -158,16 +152,14 @@ class Peaklist:
 
             maxres = max([maxres, res])
             minres = min([minres, res])
+            res = str(res)
 
-            if str(res) in self.dict:
+            try:
                 # Append additional data to list under same key
-                templst = self.dict[str(res)]
-                templst.append(line)
-                self.dict[str(res)] = templst
-
-            else:
+                self.dict[res].append(line)
+            except KeyError:
                 # This is a new residue, start a new list
-                self.dict[str(res)] = [line]  # Use [] for list type
+                self.dict[res] = [line]  # Use [] for list type
 
         self.dict["maxres"] = maxres
         self.dict["minres"] = minres
@@ -220,8 +212,6 @@ def _find_start_entry(line, n):
     """
     # This function is used by replace_entry
 
-    infield = 0  # A flag that indicates that the counter is in a field
-
     if n == 1:
         return 0  # Special case
 
@@ -232,22 +222,22 @@ def _find_start_entry(line, n):
     # Initialize variables according to whether the first character
     #  is a space or a character
     if line[0] == " ":
-        infield = 0
+        infield = False
         field = 0
     else:
-        infield = 1
+        infield = True
         field = 1
 
     while c < leng and field < n:
         if infield:
-            if line[c] == " " and not (line[c - 1] == " "):
-                infield = 0
+            if line[c] == " " and line[c - 1] != " ":
+                infield = False
             else:
-                if not line[c] == " ":
-                    infield = 1
-                    field = field + 1
+                if line[c] != " ":
+                    infield = True
+                    field += 1
 
-        c = c + 1
+        c += 1
 
     return c - 1
 
@@ -288,21 +278,22 @@ def data_table(fn_list, datalabel, keyatom):
     res = minr
     while res <= maxr:  # s.t. res numbers
         count = 0
-        line = str(res)
+        key = str(res)
+        line = key
         for dictionary in dict_list:  # s.t. dictionaries
             label = label_line_list[count]
-            if str(res) in dictionary:
+            if key in dictionary:
                 line = (
                     line
                     + "\t"
-                    + XpkEntry(dictionary[str(res)][0], label).fields[datalabel]
+                    + XpkEntry(dictionary[key][0], label).fields[datalabel]
                 )
             else:
-                line = line + "\t" + "*"
-            count = count + 1
-        line = line + "\n"
+                line += "\t*"
+            count += 1
+        line += "\n"
         outlist.append(line)
-        res = res + 1
+        res += 1
 
     return outlist
 
@@ -313,8 +304,8 @@ def _read_dicts(fn_list, keyatom):
     datalabel_list = []
     for fn in fn_list:
         peaklist = Peaklist(fn)
-        dict = peaklist.residue_dict(keyatom)
-        dict_list.append(dict)
+        dictionary = peaklist.residue_dict(keyatom)
+        dict_list.append(dictionary)
         datalabel_list.append(peaklist.datalabels)
 
     return [dict_list, datalabel_list]
