@@ -928,8 +928,9 @@ angle=calc\_dihedral(vector1,~vector2,~vector3,~vector4)
 
 \subsubsection*{How do I determine atom-atom contacts?}
 
-Use \texttt{NeighborSearch}. This uses a KD tree data structure coded
-in C++ behind the screens, so it's pretty darn fast (see \texttt{Bio.KDTree}).
+Use \texttt{NeighborSearch}. This uses a \textit{k}-d tree data structure
+implemented in C, so it's pretty darn fast (see the \texttt{KDTree} class in
+\texttt{Bio.PDB.kdtrees}).
 
 
 \subsubsection*{How do I extract polypeptides from a \texttt{Structure} object?}
