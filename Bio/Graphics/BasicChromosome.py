@@ -46,7 +46,7 @@ from Bio.Graphics import _write
 from Bio.Graphics.GenomeDiagram import _Colors
 
 
-_color_trans = _Color.ColorTranslator()
+_color_trans = _Colors.ColorTranslator()
 
 
 class _ChromosomeComponent(Widget):

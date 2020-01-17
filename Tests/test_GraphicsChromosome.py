@@ -27,7 +27,7 @@ try:
     from reportlab.lib import colors
 except ImportError:
     raise MissingPythonDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 # local stuff
 from Bio.SeqFeature import SeqFeature, FeatureLocation
