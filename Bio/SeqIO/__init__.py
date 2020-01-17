@@ -721,12 +721,15 @@ def read(handle, format, alphabet=None):
     to read multiple records from the handle.
     """
     iterator = parse(handle, format, alphabet)
-    first = next(iterator, None)
-    if first is None:
-        raise ValueError("No records found in handle")
-    second = next(iterator, None)
-    if second is not None:
+    try:
+        record = next(iterator)
+    except StopIteration:
+        raise ValueError("No records found in handle") from None
+    try:
+        next(iterator)
         raise ValueError("More than one record found in handle")
+    except StopIteration:
+        pass
     return first
 
 
@@ -1066,7 +1069,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    in_mode = "rb" if in_format in _BinaryFormats else "rU"
+    in_mode = "rb" if in_format in _BinaryFormats else "r"
 
     out_mode = "wb" if out_format in _BinaryFormats else "w"
 
