@@ -94,10 +94,10 @@ def kegg_list(database, org=None):
     #
     #  <database> = pathway | module
     #  <org> = KEGG organism code
-    if isinstance(database, str) and (database in ["pathway", "module"]) and org:
+    if database in ("pathway", "module") and org:
         resp = _q("list", database, org)
     elif isinstance(database, str) and database and org:
-        raise Exception("Invalid database arg for kegg list request.")
+        raise ValueError("Invalid database arg for kegg list request.")
 
     # http://rest.kegg.jp/list/<database>
     #
@@ -115,10 +115,10 @@ def kegg_list(database, org=None):
     #              rpair | rclass | enzyme
     # <org> = KEGG organism code or T number
     else:
-        if isinstance(database, list) and len(database) <= 100:
+        if isinstance(database, list):
+            if len(database) > 100:
+                raise ValueError("Maximum number of databases is 100 for kegg list query")
             database = ("+").join(database)
-        elif isinstance(database, list) and len(database) > 100:
-            raise Exception("Maximuim number of databases is 100 for kegg list query")
         resp = _q("list", database)
 
     return resp
@@ -155,7 +155,7 @@ def kegg_find(database, query, option=None):
     ]:
         resp = _q("find", database, query, option)
     elif option:
-        raise Exception("Invalid option arg for kegg find request.")
+        raise ValueError("Invalid option arg for kegg find request.")
 
     # http://rest.kegg.jp/find/<database>/<query>
     #
@@ -186,7 +186,7 @@ def kegg_get(dbentries, option=None):
     if isinstance(dbentries, list) and len(dbentries) <= 10:
         dbentries = "+".join(dbentries)
     elif isinstance(dbentries, list) and len(dbentries) > 10:
-        raise Exception("Maximum number of dbentries is 10 for kegg get query")
+        raise ValueError("Maximum number of dbentries is 10 for kegg get query")
 
     # http://rest.kegg.jp/get/<dbentries>[/<option>]
     #
@@ -200,7 +200,7 @@ def kegg_get(dbentries, option=None):
     if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml"]:
         resp = _q("get", dbentries, option)
     elif option:
-        raise Exception("Invalid option arg for kegg get request.")
+        raise ValueError("Invalid option arg for kegg get request.")
     else:
         resp = _q("get", dbentries)
 
@@ -245,7 +245,7 @@ def kegg_conv(target_db, source_db, option=None):
     #
     # <option> = turtle | n-triple
     if option and option not in ["turtle", "n-triple"]:
-        raise Exception("Invalid option arg for kegg conv request.")
+        raise ValueError("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
@@ -270,7 +270,7 @@ def kegg_conv(target_db, source_db, option=None):
 
         return resp
     else:
-        raise Exception("Bad argument target_db or source_db for kegg conv request.")
+        raise ValueError("Bad argument target_db or source_db for kegg conv request.")
 
 
 def kegg_link(target_db, source_db, option=None):
@@ -300,7 +300,7 @@ def kegg_link(target_db, source_db, option=None):
     # <option> = turtle | n-triple
 
     if option and option not in ["turtle", "n-triple"]:
-        raise Exception("Invalid option arg for kegg conv request.")
+        raise ValueError("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)

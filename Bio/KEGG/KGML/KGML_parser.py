@@ -26,46 +26,45 @@ from Bio.KEGG.KGML.KGML_pathway import Component, Entry, Graphics
 from Bio.KEGG.KGML.KGML_pathway import Pathway, Reaction, Relation
 
 
-def read(handle, debug=0):
+def read(handle):
     """Parse a single KEGG Pathway from given file handle.
 
     Returns a single Pathway object.  There should be one and only
     one pathway in each file, but there may well be pathological
     examples out there.
     """
-    iterator = parse(handle, debug)
+    pathways = parse(handle)
     try:
-        first = next(iterator)
+        pathway = next(pathways)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No pathways found in handle")
+        raise ValueError("No pathways found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(pathways)
         raise ValueError("More than one pathway found in handle")
-    return first
+    except StopIteration:
+        pass
+    return pathway
 
 
-def parse(handle, debug=0):
+def parse(handle):
     """Return an iterator over Pathway elements.
 
     Arguments:
-     - handle - file handle to a KGML file for parsing
-     - debug - integer for amount of debug information to print
+     - handle - file handle to a KGML file for parsing, or a KGML string
 
     This is a generator for the return of multiple Pathway objects.
 
     """
     # Check handle
-    if not hasattr(handle, "read"):
-        if isinstance(handle, str):
+    try:
+        handle.read(0)
+    except AttributeError:
+        try:
             handle = StringIO(handle)
-        else:
-            exc_txt = "An XML-containing handle or an XML string must be provided"
-            raise Exception(exc_txt)
+        except TypeError:
+            raise TypeError(
+                "An XML-containing handle or an XML string must be provided"
+            ) from None
     # Parse XML and return each Pathway
     for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
         if event == "end" and elem.tag == "pathway":
