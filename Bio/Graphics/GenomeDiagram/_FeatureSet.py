@@ -97,11 +97,9 @@ class FeatureSet:
         passed value.
         """
         for feature in self.features.values():
-            try:
+            if hasattr(track, attr):
                 # If the feature has the attribute, set it to the passed value
                 setattr(feature, attr, value)
-            except AttributeError:
-                pass
 
         # For backwards compatibility, we support both colour and color.
         # As a quick hack, make "colour" set both "colour" and "color".
