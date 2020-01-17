@@ -97,7 +97,7 @@ class FeatureSet:
         passed value.
         """
         for feature in self.features.values():
-            if hasattr(track, attr):
+            if hasattr(feature, attr):
                 # If the feature has the attribute, set it to the passed value
                 setattr(feature, attr, value)
 
