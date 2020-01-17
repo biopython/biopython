@@ -76,7 +76,7 @@ def page_sizes(size):
     try:
         return sizes[size]
     except KeyError:
-        raise ValueError("%s not in list of page sizes" % size)
+        raise ValueError("%s not in list of page sizes" % size) from None
 
 
 def _stroke_and_fill_colors(color, border):

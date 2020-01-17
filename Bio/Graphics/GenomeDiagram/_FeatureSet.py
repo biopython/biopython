@@ -96,12 +96,12 @@ class FeatureSet:
         Set the passed attribute of all features in the set to the
         passed value.
         """
-        changed = 0
         for feature in self.features.values():
-            # If the feature has the attribute, and the value should change
-            if hasattr(feature, attr):
-                if getattr(feature, attr) != value:
-                    setattr(feature, attr, value)  # set it to the passed value
+            try:
+                # If the feature has the attribute, set it to the passed value
+                setattr(feature, attr, value)
+            except AttributeError:
+                pass
 
         # For backwards compatibility, we support both colour and color.
         # As a quick hack, make "colour" set both "colour" and "color".

@@ -149,10 +149,11 @@ class Diagram:
         set_all_tracks(self, attr, value)
         """
         for track in self.tracks.values():
-            if hasattr(track, attr):
+            try:
                 # If the feature has the attribute set it to the passed value
-                if getattr(track, attr) != value:
-                    setattr(track, attr, value)
+                setattr(track, attr, value)
+            except AttributeError:
+                pass
 
     def draw(
         self,

@@ -43,10 +43,10 @@ from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge, ArcPat
 from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write
-from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator as _ColorTranslator
+from Bio.Graphics.GenomeDiagram import _Colors
 
 
-_color_trans = _ColorTranslator()
+_color_trans = _Color.ColorTranslator()
 
 
 class _ChromosomeComponent(Widget):
@@ -85,7 +85,7 @@ class _ChromosomeComponent(Widget):
         try:
             self._sub_components.remove(component)
         except ValueError:
-            raise ValueError("Component %s not found in sub_components." % component)
+            raise ValueError("Component %s not found in sub_components." % component) from None
 
     def draw(self):
         """Draw the specified component."""
