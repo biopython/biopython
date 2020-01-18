@@ -9,8 +9,6 @@
 
 """Objects to represent NEXUS standard data type matrix coding."""
 
-import sys
-
 
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
@@ -99,7 +97,7 @@ class StandardData:
             return_coding = self._data[self._current_pos]
         except IndexError:
             self._current_pos = 0
-            raise StopIteration
+            raise StopIteration from None
         else:
             self._current_pos += 1
             return return_coding
