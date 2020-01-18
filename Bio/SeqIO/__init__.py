@@ -520,7 +520,7 @@ def write(sequences, handle, format):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower():
+    if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(handle, SeqRecord):
@@ -533,10 +533,7 @@ def write(sequences, handle, format):
         # This raised an exception in older versions of Biopython
         sequences = [sequences]
 
-    if format in _BinaryFormats:
-        mode = "wb"
-    else:
-        mode = "w"
+    mode = "wb" if format in _BinaryFormats else "w"
 
     with as_handle(handle, mode) as fp:
         # Map the file format to a writer function/class
@@ -638,11 +635,9 @@ def parse(handle, format, alphabet=None):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower():
+    if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
+    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
     iterator_generator = _FormatToIterator.get(format)
@@ -727,18 +722,15 @@ def read(handle, format, alphabet=None):
     """
     iterator = parse(handle, format, alphabet)
     try:
-        first = next(iterator)
+        record = next(iterator)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(iterator)
         raise ValueError("More than one record found in handle")
-    return first
+    except StopIteration:
+        pass
+    return record
 
 
 def to_dict(sequences, key_function=None):
@@ -934,11 +926,9 @@ def index(filename, format, alphabet=None, key_function=None):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower():
+    if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
+    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
     # Map the file format to a sequence iterator:
@@ -1023,11 +1013,9 @@ def index_db(
         raise TypeError("Need a list of filenames (as strings), or one filename")
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
-    if format and format != format.lower():
+    if format and not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
+    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
     # Map the file format to a sequence iterator:
@@ -1081,15 +1069,9 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    if in_format in _BinaryFormats:
-        in_mode = "rb"
-    else:
-        in_mode = "rU"
+    in_mode = "rb" if in_format in _BinaryFormats else "r"
 
-    if out_format in _BinaryFormats:
-        out_mode = "wb"
-    else:
-        out_mode = "w"
+    out_mode = "wb" if out_format in _BinaryFormats else "w"
 
     # This will check the arguments and issue error messages,
     # after we have opened the file which is a shame.
