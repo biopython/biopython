@@ -612,7 +612,7 @@ class Commandline:
                     for token in token_indices:
                         self.options[options[token].lower()] = None
                 except ValueError:
-                    raise NexusError("Incorrect formatting in line: %s" % line)
+                    raise NexusError("Incorrect formatting in line: %s" % line) from None
 
 
 class Block:
@@ -688,7 +688,7 @@ class Nexus:
         # file-like object.
         # Note we need to add parsing of the path to dir/filename
         try:
-            with File.as_handle(input, "rU") as fp:
+            with File.as_handle(input, "r") as fp:
                 file_contents = fp.read()
                 self.filename = getattr(fp, "name", "Unknown_nexus_file")
         except (TypeError, OSError, AttributeError):
@@ -698,7 +698,7 @@ class Nexus:
                 self.filename = "input_string"
             else:
                 print(input.strip()[:50])
-                raise NexusError("Unrecognized input: %s ..." % input[:100])
+                raise NexusError("Unrecognized input: %s ..." % input[:100]) from None
         file_contents = file_contents.strip()
         if file_contents.startswith("#NEXUS"):
             file_contents = file_contents[6:]
@@ -761,7 +761,7 @@ class Nexus:
             try:
                 getattr(self, "_" + line.command)(line.options)
             except AttributeError:
-                raise NexusError("Unknown command: %s " % line.command)
+                raise NexusError("Unknown command: %s " % line.command) from None
 
     def _title(self, options):
         pass
@@ -1017,9 +1017,9 @@ class Nexus:
                 line = next(lineiter)
             except StopIteration:
                 if taxcount < self.ntax:
-                    raise NexusError("Not enough taxa in matrix.")
+                    raise NexusError("Not enough taxa in matrix.") from None
                 elif taxcount > self.ntax:
-                    raise NexusError("Too many taxa in matrix.")
+                    raise NexusError("Too many taxa in matrix.") from None
                 else:
                     break
             # count the taxa and check for interleaved matrix
@@ -1150,7 +1150,7 @@ class Nexus:
             except NexusError:
                 raise
             except Exception:  # TODO: ValueError?
-                raise NexusError("Format error in line %s." % options)
+                raise NexusError("Format error in line %s." % options) from None
 
     def _utree(self, options):
         """Use 'utree' to denote an unrooted tree (ex: clustalx) (PRIVATE)."""
@@ -1195,7 +1195,7 @@ class Nexus:
                     raise NexusError(
                         "Unable to substitute %s using 'translate' data."
                         % tree.node(n).data.taxon
-                    )
+                    ) from None
         self.trees.append(tree)
 
     def _apply_block_structure(self, title, lines):
@@ -1409,7 +1409,7 @@ class Nexus:
                 elif self.charsets and identifier in self.charsets:
                     return self.charsets[identifier]
                 else:
-                    raise NexusError("Unknown character identifier: %s" % identifier)
+                    raise NexusError("Unknown character identifier: %s" % identifier) from None
             else:
                 if n <= self.nchar:
                     return n - 1
@@ -1428,7 +1428,7 @@ class Nexus:
                 elif self.taxsets and identifier in self.taxsets:
                     return self.taxsets[identifier]
                 else:
-                    raise NexusError("Unknown taxon identifier: %s" % identifier)
+                    raise NexusError("Unknown taxon identifier: %s" % identifier) from None
             else:
                 if n > 0 and n <= self.ntax:
                     return self.taxlabels[n - 1]

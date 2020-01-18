@@ -685,8 +685,11 @@ class Tree(Nodes.Chain):
                         info_string = "%1.2f:0.00000" % (data.support)
                     else:
                         info_string = "0.00:0.00000"
-            if not ignore_comments and hasattr(data, "nodecomment"):
-                info_string = str(data.nodecomment) + info_string
+            if not ignore_comments:
+                try:
+                    info_string = str(data.nodecomment) + info_string
+                except AttributeError:
+                    pass
             return info_string
 
         def ladderize_nodes(nodes, ladderize=None):
@@ -884,7 +887,7 @@ class Tree(Nodes.Chain):
                 smallest = min((len(self.get_taxa(n)), n) for n in succnodes)
                 outgroup = self.get_taxa(smallest[1])
             except Exception:
-                raise TreeError("Error determining outgroup.")
+                raise TreeError("Error determining outgroup.") from None
         else:  # root with user specified outgroup
             self.root_with_outgroup(outgroup)
 

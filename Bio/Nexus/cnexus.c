@@ -31,7 +31,7 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
 
     if (!PyArg_ParseTuple(args, "s", &input))
         return NULL;
-    if (!(scanned=malloc(strlen(input)+1)))
+    if (!(scanned=PyMem_RawMalloc(strlen(input)+1)))
         PyErr_NoMemory();
     scanned_start=scanned;
     for(t=*input;(t=*input);input++)
@@ -66,7 +66,7 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
                 commlevel--;
                 if (commlevel<0) /* error: unmatched ] */
                 {
-                    free(scanned_start);
+                    PyMem_RawFree(scanned_start);
                     return Py_BuildValue("s","]");
                 }
                 continue;
@@ -91,14 +91,14 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
     if (commlevel>0)
     {
         /* error: unmatched [ */
-        free(scanned_start);
+        PyMem_RawFree(scanned_start);
         return Py_BuildValue("s","[");
     }
     else
     {
         *scanned=0; /* end of string */
         cleaninput= Py_BuildValue("s",scanned_start);
-        free(scanned_start);
+        PyMem_RawFree(scanned_start);
         return cleaninput;
     }
 }
