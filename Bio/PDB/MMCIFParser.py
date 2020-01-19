@@ -143,7 +143,7 @@ class MMCIFParser:
             serial_list = None
         except ValueError:
             # Invalid model number (malformed file)
-            raise PDBConstructionException("Invalid model number")
+            raise PDBConstructionException("Invalid model number") from None
         try:
             aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
             aniso_u12 = mmcif_dict["_atom_site_anisotrop.U[1][2]"]
@@ -196,11 +196,11 @@ class MMCIFParser:
             try:
                 tempfactor = float(b_factor_list[i])
             except ValueError:
-                raise PDBConstructionException("Invalid or missing B factor")
+                raise PDBConstructionException("Invalid or missing B factor") from None
             try:
                 occupancy = float(occupancy_list[i])
             except ValueError:
-                raise PDBConstructionException("Invalid or missing occupancy")
+                raise PDBConstructionException("Invalid or missing occupancy") from None
             fieldname = fieldname_list[i]
             if fieldname == "HETATM":
                 if resname == "HOH" or resname == "WAT":
@@ -387,7 +387,7 @@ class FastMMCIFParser:
             serial_list = None
         except ValueError:
             # Invalid model number (malformed file)
-            raise PDBConstructionException("Invalid model number")
+            raise PDBConstructionException("Invalid model number") from None
 
         try:
             aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
@@ -446,12 +446,12 @@ class FastMMCIFParser:
             try:
                 tempfactor = float(b_factor_list[i])
             except ValueError:
-                raise PDBConstructionException("Invalid or missing B factor")
+                raise PDBConstructionException("Invalid or missing B factor") from None
 
             try:
                 occupancy = float(occupancy_list[i])
             except ValueError:
-                raise PDBConstructionException("Invalid or missing occupancy")
+                raise PDBConstructionException("Invalid or missing occupancy") from None
 
             fieldname = fieldname_list[i]
             if fieldname == "HETATM":

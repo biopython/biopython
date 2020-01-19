@@ -288,7 +288,7 @@ def _make_dssp_dict(handle):
     dssp = {}
     start = 0
     keys = []
-    for l in handle.readlines():
+    for l in handle:
         sl = l.split()
         if len(sl) < 2:
             continue
@@ -345,7 +345,7 @@ def _make_dssp_dict(handle):
                 phi = float(l[103 + shift : 109 + shift])
                 psi = float(l[109 + shift : 115 + shift])
             else:
-                raise ValueError(exc)
+                raise ValueError(exc) from None
         res_id = (" ", resseq, icode)
         dssp[(chainid, res_id)] = (
             aa,
@@ -468,7 +468,7 @@ class DSSP(AbstractResiduePropertyMap):
                             res = r
                             break
                 else:
-                    raise KeyError(res_id)
+                    raise KeyError(res_id) from None
 
             # For disordered residues of point mutations, Biopython uses the
             # last one as default, But DSSP takes the first one (alternative

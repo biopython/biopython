@@ -193,7 +193,7 @@ class PDBIO(StructureIO):
                 else:
                     raise TypeError(
                         "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
-                    )
+                    ) from None
 
             args = (
                 record_type,
@@ -228,7 +228,7 @@ class PDBIO(StructureIO):
                                   repr(atom.get_full_id()), BiopythonWarning)
                 else:
                     raise TypeError("Invalid charge %r in atom %r"
-                                    % (pqr_charge, atom.get_full_id()))
+                                    % (pqr_charge, atom.get_full_id())) from None
             try:
                 radius = "%6.4f" % radius
             except TypeError:
@@ -240,7 +240,7 @@ class PDBIO(StructureIO):
                                   repr(atom.get_full_id()), BiopythonWarning)
                 else:
                     raise TypeError("Invalid radius %r in atom %r"
-                                    % (radius, atom.get_full_id()))
+                                    % (radius, atom.get_full_id())) from None
 
             args = (
                 record_type,
