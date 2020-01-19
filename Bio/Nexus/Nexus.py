@@ -688,7 +688,7 @@ class Nexus:
         # file-like object.
         # Note we need to add parsing of the path to dir/filename
         try:
-            with File.as_handle(input, "r") as fp:
+            with File.as_handle(input) as fp:
                 file_contents = fp.read()
                 self.filename = getattr(fp, "name", "Unknown_nexus_file")
         except (TypeError, OSError, AttributeError):
