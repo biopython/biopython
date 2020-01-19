@@ -590,7 +590,7 @@ class ParseTest(unittest.TestCase):
         try:
             io.save(filename)
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
-            with open(filename, "rU") as handle:
+            with open(filename) as handle:
                 record_set = {l[0:6] for l in handle}
             record_set -= {
                 "ATOM  ",

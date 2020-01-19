@@ -43,7 +43,7 @@ def UniprotIterator(
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
 
         # check if file is empty
         if handle.readline() == "":

@@ -103,7 +103,7 @@ class Index(dict):
         """
         dict.__init__(self)
         self.filename = filename
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             position = 0
             while True:
                 line = f.readline()
@@ -121,7 +121,7 @@ class Index(dict):
         """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             f.seek(position)
             line = f.readline()
             record = Record(line)

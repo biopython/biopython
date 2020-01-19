@@ -178,7 +178,7 @@ def parse(handle, format):
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
-    with as_handle(handle, "rU") as fp:
+    with as_handle(handle) as fp:
         # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]

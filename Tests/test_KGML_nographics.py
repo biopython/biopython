@@ -83,7 +83,7 @@ class KGMLPathwayTest(unittest.TestCase):
         """
         for p in self.data:
             # Test opening file
-            with open(p.infilename, "rU") as f:
+            with open(p.infilename) as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
                 self.assertEqual((len(pathway.entries),
@@ -95,7 +95,7 @@ class KGMLPathwayTest(unittest.TestCase):
             with open(p.outfilename, "w") as f:
                 f.write(pathway.get_KGML())
             # Can we read the file we wrote?
-            with open(p.outfilename, "rU") as f:
+            with open(p.outfilename) as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
                 self.assertEqual((len(pathway.entries),

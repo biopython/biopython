@@ -364,7 +364,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     if seq_count is not None and not isinstance(seq_count, int):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
 
-    with as_handle(handle, "rU") as fp:
+    with as_handle(handle) as fp:
         # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
@@ -471,7 +471,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """
     # TODO - Add optimised versions of important conversions
     # For now just off load the work to SeqIO parse/write
-    with as_handle(in_file, "rU") as in_handle:
+    with as_handle(in_file) as in_handle:
         # Don't open the output file until we've checked the input is OK:
         alignments = parse(in_handle, in_format, None, alphabet)
 

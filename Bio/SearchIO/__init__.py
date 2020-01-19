@@ -303,7 +303,7 @@ def parse(handle, format=None, **kwargs):
         handle_kwargs["encoding"] = "utf-8"
 
     # and start iterating
-    with as_handle(handle, "rU", **handle_kwargs) as source_file:
+    with as_handle(handle, **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
         yield from generator
 

@@ -89,7 +89,7 @@ class PDBParser:
             # Make a StructureBuilder instance (pass id of structure as parameter)
             self.structure_builder.init_structure(id)
 
-            with as_handle(file, mode="rU") as handle:
+            with as_handle(file) as handle:
                 lines = handle.readlines()
                 if not lines:
                     raise ValueError("Empty file.")
