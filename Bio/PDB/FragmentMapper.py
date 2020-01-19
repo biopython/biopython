@@ -78,7 +78,7 @@ def _read_fragments(size, length, dir="."):
         flist = []
         # ID of fragment=rank in spec file
         fid = 0
-        for l in fp.readlines():
+        for l in fp:
             # skip comment and blank lines
             if l[0] == "*" or l[0] == "\n":
                 continue
@@ -305,7 +305,7 @@ class FragmentMapper:
                     # Funny polypeptide - skip
                     pass
                 else:
-                    raise PDBException(why)
+                    raise PDBException(why) from None
         return fd
 
     def __contains__(self, res):

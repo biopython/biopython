@@ -12,7 +12,7 @@ except ImportError:
 
     raise MissingPythonDependencyError(
         "Install mmtf to use Bio.PDB.mmtf (e.g. pip install mmtf-python)"
-    )
+    ) from None
 from Bio.PDB.mmtf.DefaultParser import StructureDecoder
 from .mmtfio import MMTFIO
 

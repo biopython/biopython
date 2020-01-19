@@ -67,7 +67,7 @@ from .FragmentMapper import FragmentMapper
 from .Dice import extract
 
 # Fast atom neighbor search
-# Depends on KDTree C++ module
+# Depends on kdtrees C module
 try:
     from .NeighborSearch import NeighborSearch
 except ImportError:

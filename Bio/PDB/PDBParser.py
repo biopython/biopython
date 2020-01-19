@@ -15,7 +15,7 @@ except ImportError:
 
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use the PDB parser."
-    )
+    ) from None
 
 from Bio.File import as_handle
 
@@ -195,7 +195,7 @@ class PDBParser:
                     raise PDBConstructionException(
                         "Invalid or missing coordinate(s) at line %i."
                         % global_line_counter
-                    )
+                    ) from None
                 coord = numpy.array((x, y, z), "f")
 
                 # occupancy & B factor
@@ -392,4 +392,4 @@ class PDBParser:
             )
         else:
             # exceptions are fatal - raise again with new message (including line nr)
-            raise PDBConstructionException(message)
+            raise PDBConstructionException(message) from None
