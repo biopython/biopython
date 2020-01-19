@@ -73,7 +73,7 @@ def SwissIterator(handle):
     Rather than calling it directly, you are expected to use this
     parser via Bio.SeqIO.parse(..., format="swiss") instead.
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         swiss_records = SwissProt.parse(handle)
 
         for swiss_record in swiss_records:

@@ -59,7 +59,7 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     SYK_SYK length 330
 
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
 
         # Skip any file header text before the first record (;; lines)
         while True:

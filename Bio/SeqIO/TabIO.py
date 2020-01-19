@@ -73,7 +73,7 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     gi|45478721|ref|NP_995576.1| length 90
 
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         for line in handle:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!

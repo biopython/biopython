@@ -74,7 +74,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
         """
         # We test rendering of the original KEGG KGML using imported files
         for p in self.data:
-            with open(p.infilename, "rU") as f:
+            with open(p.infilename) as f:
                 pathway = read(f)
                 kgml_map = KGMLCanvas(pathway, import_imagemap=True)
                 kgml_map.draw(p.output_stem + "_importmap.pdf")

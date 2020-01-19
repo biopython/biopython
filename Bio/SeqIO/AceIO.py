@@ -32,7 +32,7 @@ def AceIterator(handle):
     letter_annotations dictionary under the "phred_quality" key.
 
     >>> from Bio import SeqIO
-    >>> with open("Ace/consed_sample.ace", "rU") as handle:
+    >>> with open("Ace/consed_sample.ace") as handle:
     ...     for record in SeqIO.parse(handle, "ace"):
     ...         print("%s %s... %i" % (record.id, record.seq[:10], len(record)))
     ...         print(max(record.letter_annotations["phred_quality"]))
@@ -47,7 +47,7 @@ def AceIterator(handle):
     prevented output of the gapped sequence as FASTQ format.
 
     >>> from Bio import SeqIO
-    >>> with open("Ace/contig1.ace", "rU") as handle:
+    >>> with open("Ace/contig1.ace") as handle:
     ...     for record in SeqIO.parse(handle, "ace"):
     ...         print("%s ...%s..." % (record.id, record.seq[85:95]))
     ...         print(record.letter_annotations["phred_quality"][85:95])
@@ -60,7 +60,7 @@ def AceIterator(handle):
     90
 
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
 
         for ace_contig in Ace.parse(handle):
             # Convert the ACE contig record into a SeqRecord...

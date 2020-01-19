@@ -141,7 +141,7 @@ def PirIterator(handle):
     HLA:HLA01083 length 188
 
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         # Skip any text before the first record (e.g. blank lines, comments)
         while True:
             line = handle.readline()

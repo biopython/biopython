@@ -108,7 +108,7 @@ class KGMLPathwayTest(unittest.TestCase):
         # We test rendering of the original KEGG KGML using only local
         # files.
         for p in self.data:
-            with open(p.infilename, "rU") as f:
+            with open(p.infilename) as f:
                 pathway = read(f)
                 pathway.image = p.pathway_image
                 kgml_map = KGMLCanvas(pathway)

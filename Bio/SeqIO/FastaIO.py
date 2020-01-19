@@ -174,7 +174,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     DELTA
 
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         if title2ids:
             for title, sequence in SimpleFastaParser(handle):
                 id, name, descr = title2ids(title)
@@ -210,7 +210,7 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
     Only the default title to ID/name/description parsing offered
     by the relaxed FASTA parser is offered.
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         for title, sequence in FastaTwoLineParser(handle):
             try:
                 first_word = title.split(None, 1)[0]

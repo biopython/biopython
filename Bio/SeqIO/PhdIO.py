@@ -65,7 +65,7 @@ def PhdIterator(handle):
 
     This uses the Bio.Sequencing.Phd module to do the hard work.
     """
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         phd_records = Phd.parse(handle)
         for phd_record in phd_records:
             # Convert the PHY record into a SeqRecord...

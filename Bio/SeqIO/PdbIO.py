@@ -148,7 +148,7 @@ def PdbSeqresIterator(handle):
 
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         for line in handle:
             empty = False
             rec_name = line[0:6].strip()
@@ -283,7 +283,7 @@ def PdbAtomIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
 
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         struct = PDBParser().get_structure(None, handle)
         pdb_id = struct.header["idcode"]
         if not pdb_id:
@@ -368,7 +368,7 @@ def CifSeqresIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
 
         chains = collections.defaultdict(list)
         metadata = collections.defaultdict(list)
@@ -498,7 +498,7 @@ def CifAtomIterator(handle):
     # file. We copy the contents of the handle into a StringIO buffer first,
     # so that both MMCIF2Dict and MMCIFParser can consume the handle.
     buffer = StringIO()
-    with as_handle(handle, "rU") as handle:
+    with as_handle(handle) as handle:
         shutil.copyfileobj(handle, buffer)
 
     # check if file is empty
