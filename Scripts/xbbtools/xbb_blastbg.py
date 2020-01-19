@@ -15,6 +15,8 @@
 import os
 import tempfile
 import threading
+import subprocess
+
 from tkinter import messagebox
 
 from Bio.Blast.Applications import (
@@ -138,4 +140,6 @@ class BlastWorker(threading.Thread):
 
 
 if __name__ == "__main__":
-    os.system("python xbb_blast.py ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC")
+    subprocess.call(
+        ["python", "xbb_blast.py", "ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC"]
+    )
