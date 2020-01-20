@@ -18,26 +18,26 @@ try:
     from numpy.random import random
 except ImportError:
     from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+
+    raise MissingExternalDependencyError("Install NumPy if you want to use Bio.PDB.")
 
 try:
     from Bio.PDB import kdtrees
 except ImportError:
     from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(
-        "C module Bio.PDB.kdtrees not compiled")
+
+    raise MissingExternalDependencyError("C module Bio.PDB.kdtrees not compiled")
 
 from Bio.PDB.NeighborSearch import NeighborSearch
 
 
 class NeighborTest(unittest.TestCase):
-
     def test_neighbor_search(self):
         """NeighborSearch: Find nearby randomly generated coordinates.
 
         Based on the self test in Bio.PDB.NeighborSearch.
         """
+        # This comment stops black style adding a blank line here, which causes flake8 D202.
         class RandomAtom:
             def __init__(self):
                 self.coord = 100 * random(3)
@@ -61,10 +61,10 @@ class NeighborTest(unittest.TestCase):
 
 class KDTreeTest(unittest.TestCase):
 
-    nr_points = 5000     # number of points used in test
-    bucket_size = 5      # number of points per tree node
-    radius = 0.05        # radius of search (typically 0.05 or so)
-    query_radius = 10    # radius of search
+    nr_points = 5000  # number of points used in test
+    bucket_size = 5  # number of points per tree node
+    radius = 0.05  # radius of search (typically 0.05 or so)
+    query_radius = 10  # radius of search
 
     def test_KDTree_exceptions(self):
         bucket_size = self.bucket_size
@@ -73,7 +73,10 @@ class KDTreeTest(unittest.TestCase):
         coords = random((nr_points, 3)) * 100000000000000
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(coords, bucket_size)
-        self.assertTrue("coordinate values should lie between -1e6 and 1e6" in str(context.exception))
+        self.assertTrue(
+            "coordinate values should lie between -1e6 and 1e6"
+            in str(context.exception)
+        )
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(random((nr_points, 3 - 2)), bucket_size)
         self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
