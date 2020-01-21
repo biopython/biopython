@@ -979,9 +979,7 @@ class DictionaryBuilder:
                     if not bl[2]:
                         print("Anyway, %s is not commercially available.\n" % n)
                     else:
-                        print(
-                            "Unfortunately, %s is commercially " % n + " available.\n"
-                        )
+                        print("Unfortunately, %s is commercially available.\n" % n)
 
                     continue
                 # Hyphens and dots can't be used as a Python name, nor as a
