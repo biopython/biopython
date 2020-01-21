@@ -118,6 +118,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Harry Jubb <https://github.com/harryjubb>
 - Harry Zuzan <iliketobicycle at domain yahoo.ca>
 - Hector Martinez <https://github.com/hmarlo>
+- Hielke Walinga <https://github.com/hwalinga>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <https://github.com/idoerg>
