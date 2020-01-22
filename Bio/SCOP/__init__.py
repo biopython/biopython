@@ -924,7 +924,7 @@ def search(
     disp=None,
     dir=None,
     loc=None,
-    cgi="http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi",
+    cgi="http://scop.mrc-lmb.cam.ac.uk/legacy/search.cgi",
     **keywds
 ):
     """Access SCOP search and return a handle to the results.
