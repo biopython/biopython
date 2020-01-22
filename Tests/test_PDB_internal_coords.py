@@ -20,7 +20,7 @@ except ImportError:
 from Bio.PDB.ic_rebuild import structure_rebuild_test
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.MMCIFParser import MMCIFParser
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio.PDB.SCADIO import write_SCAD
 from Bio.File import as_handle
 
