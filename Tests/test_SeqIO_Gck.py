@@ -33,87 +33,87 @@ class TestGckWithDGVC(unittest.TestCase):
                     "start": 6155,
                     "end": 7013,
                     "strand": 1,
-                    "label": "ampR"
-                    },
+                    "label": "ampR",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5216,
                     "end": 6071,
                     "strand": 1,
-                    "label": "SV40 sti/polyA"
-                    },
+                    "label": "SV40 sti/polyA",
+                },
                 {
                     "type": "misc_feature",
                     "start": 89,
                     "end": 2662,
                     "strand": 1,
-                    "label": "actin5C promoter"
-                    },
+                    "label": "actin5C promoter",
+                },
                 {
                     "type": "CDS",
                     "start": 3722,
                     "end": 4400,
                     "strand": 1,
-                    "label": "chlR"
-                    },
+                    "label": "chlR",
+                },
                 {
                     "type": "CDS",
                     "start": 4722,
                     "end": 5025,
                     "strand": 1,
-                    "label": "ccdB"
-                    },
+                    "label": "ccdB",
+                },
                 {
                     "type": "misc_feature",
                     "start": 3489,
                     "end": 3507,
                     "strand": 1,
-                    "label": "attR1"
-                    },
+                    "label": "attR1",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5175,
                     "end": 5193,
                     "strand": -1,
-                    "label": "attR2"
-                    },
+                    "label": "attR2",
+                },
                 {
                     "type": "misc_feature",
                     "start": 3489,
                     "end": 5193,
                     "strand": 1,
-                    "label": "Gateway cassette"
-                    },
+                    "label": "Gateway cassette",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5192,
                     "end": 5205,
                     "strand": 1,
-                    "label": "triple STOP"
-                    },
+                    "label": "triple STOP",
+                },
                 {
                     "type": "CDS",
                     "start": 2763,
                     "end": 3480,
                     "strand": 1,
-                    "label": "ECFP"
-                    },
+                    "label": "ECFP",
+                },
                 {
                     "type": "misc_feature",
                     "start": 2755,
                     "end": 3482,
                     "strand": 1,
-                    "label": "pACTIN-SV"
-                    },
+                    "label": "pACTIN-SV",
+                },
                 {
                     "type": "misc_feature",
                     "start": 2755,
                     "end": 3482,
                     "strand": 1,
-                    "label": "Construct:  pACTIN-RW-SV"
-                    },
-                ]
-            },
+                    "label": "Construct:  pACTIN-RW-SV",
+                },
+            ],
+        },
         "pPWF": {
             "file": "Drosophila Gateway Vectors GCK/pPWG",
             "name": "Construct:",
@@ -127,144 +127,144 @@ class TestGckWithDGVC(unittest.TestCase):
                     "start": 0,
                     "end": 587,
                     "strand": 1,
-                    "label": "P 5' end"
-                    },
+                    "label": "P 5' end",
+                },
                 {
                     "type": "misc_feature",
                     "start": 9327,
                     "end": 9560,
                     "strand": -1,
-                    "label": "P 3' end"
-                    },
+                    "label": "P 3' end",
+                },
                 {
                     "type": "misc_feature",
                     "start": 1363,
                     "end": 4244,
                     "strand": -1,
-                    "label": "mini-white"
-                    },
+                    "label": "mini-white",
+                },
                 {
                     "type": "CDS",
                     "start": 10466,
                     "end": 11324,
                     "strand": 1,
-                    "label": "ampR"
-                    },
+                    "label": "ampR",
+                },
                 {
                     "type": "misc_feature",
                     "start": 7930,
                     "end": 9314,
                     "strand": 1,
-                    "label": "K10 terminator"
-                    },
+                    "label": "K10 terminator",
+                },
                 {
                     "type": "misc_feature",
                     "start": 4762,
                     "end": 4829,
                     "strand": 1,
-                    "label": "GAGA repeats"
-                    },
+                    "label": "GAGA repeats",
+                },
                 {
                     "type": "misc_feature",
                     "start": 4855,
                     "end": 5177,
                     "strand": 1,
-                    "label": "GAL4 sites"
-                    },
+                    "label": "GAL4 sites",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5279,
                     "end": 5415,
                     "strand": 1,
-                    "label": "P intron"
-                    },
+                    "label": "P intron",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5184,
                     "end": 5279,
                     "strand": 1,
-                    "label": "P promoter"
-                    },
+                    "label": "P promoter",
+                },
                 {
                     "type": "misc_feature",
                     "start": 4762,
                     "end": 5416,
                     "strand": 1,
-                    "label": "UASp promoter"
-                    },
+                    "label": "UASp promoter",
+                },
                 {
                     "type": "misc_feature",
                     "start": 10060,
                     "end": 12092,
                     "strand": 1,
-                    "label": "pUC8"
-                    },
+                    "label": "pUC8",
+                },
                 {
                     "type": "misc_feature",
                     "start": 7106,
                     "end": 7124,
                     "strand": -1,
-                    "label": "attR2"
-                    },
+                    "label": "attR2",
+                },
                 {
                     "type": "CDS",
                     "start": 6653,
                     "end": 6956,
                     "strand": 1,
-                    "label": "ccdB"
-                    },
+                    "label": "ccdB",
+                },
                 {
                     "type": "CDS",
                     "start": 5653,
                     "end": 6331,
                     "strand": 1,
-                    "label": "chlR"
-                    },
+                    "label": "chlR",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5420,
                     "end": 7124,
                     "strand": 1,
-                    "label": "Gateway Cassette"
-                    },
+                    "label": "Gateway Cassette",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5420,
                     "end": 5438,
                     "strand": 1,
-                    "label": "attR1"
-                    },
+                    "label": "attR1",
+                },
                 {
                     "type": "CDS",
                     "start": 7137,
                     "end": 7854,
                     "strand": 1,
-                    "label": "EGFP"
-                    },
+                    "label": "EGFP",
+                },
                 {
                     "type": "misc_feature",
                     "start": 7129,
                     "end": 7856,
                     "strand": 1,
-                    "label": "pACTIN-SV"
-                    },
+                    "label": "pACTIN-SV",
+                },
                 {
                     "type": "misc_feature",
                     "start": 7129,
                     "end": 7856,
                     "strand": 1,
-                    "label": "Construct:  pACTIN-WC-SV"
-                    },
+                    "label": "Construct:  pACTIN-WC-SV",
+                },
                 {
                     "type": "misc_feature",
                     "start": 5416,
                     "end": 7875,
                     "strand": 1,
-                    "label": "Construct:  pPWF"
-                    },
-                ]
-            }
-        }
+                    "label": "Construct:  pPWF",
+                },
+            ],
+        },
+    }
 
     def setUp(self):
         # We are using the files of the Drosophila Gateway Vector Collection
@@ -279,7 +279,9 @@ class TestGckWithDGVC(unittest.TestCase):
                 return
 
             try:
-                src = urlopen("https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip")
+                src = urlopen(
+                    "https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip"
+                )
                 with open("Gck/DGVC_GCK.zip", "wb") as dst:
                     shutil.copyfileobj(src, dst)
                 src.close()
@@ -317,7 +319,6 @@ class TestGckWithDGVC(unittest.TestCase):
 
 
 class TestGckWithArtificialData(unittest.TestCase):
-
     def setUp(self):
         with open("Gck/artificial.gck", "rb") as f:
             self.buffer = f.read()
@@ -348,7 +349,7 @@ class TestGckWithArtificialData(unittest.TestCase):
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
         if isinstance(value, list):
-            mod_buffer[position:position + len(value) - 1] = value
+            mod_buffer[position : position + len(value) - 1] = value
         else:
             mod_buffer[position] = value
         return BytesIO(mod_buffer)
@@ -369,23 +370,28 @@ class TestGckWithArtificialData(unittest.TestCase):
 
         # Change the number of features
         h = self.munge_buffer(0x3B, 0x30)
-        with self.assertRaisesRegexp(ValueError, "Features packet size inconsistent with number of features"):
+        with self.assertRaisesRegexp(
+            ValueError, "Features packet size inconsistent with number of features"
+        ):
             SeqIO.read(h, "gck")
         h.close()
 
         # Change the number of restriction sites
         h = self.munge_buffer(0x137, 0x30)
-        with self.assertRaisesRegexp(ValueError, "Sites packet size inconsistent with number of sites"):
+        with self.assertRaisesRegexp(
+            ValueError, "Sites packet size inconsistent with number of sites"
+        ):
             SeqIO.read(h, "gck")
         h.close()
 
 
 class TestGckWithImproperHeader(unittest.TestCase):
-
     def test_read(self):
         """Read a file with an incomplete header."""
         handle = BytesIO(b"tiny")
-        with self.assertRaisesRegexp(ValueError, "Improper header, cannot read 24 bytes from handle"):
+        with self.assertRaisesRegexp(
+            ValueError, "Improper header, cannot read 24 bytes from handle"
+        ):
             SeqIO.read(handle, "gck")
         handle.close()
 

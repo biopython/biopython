@@ -11,13 +11,16 @@ import warnings
 try:
     import numpy
     from numpy import dot  # Missing on PyPy's micronumpy
+
     del dot
     # We don't need this (?) but Bio.PDB imports it automatically :(
     from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use PDB formats with SeqIO.")
+        "Install NumPy if you want to use PDB formats with SeqIO."
+    )
 
 from Bio import SeqIO
 from Bio import BiopythonParserWarning
@@ -38,6 +41,7 @@ def SeqresTestGenerator(extension, parser):
             The name of the SeqIO parser to use (e.g. ``pdb-atom``).
 
     """
+
     class SeqresTests(unittest.TestCase):
         """Use "parser" to parse sequence records from a structure file.
 
@@ -70,14 +74,17 @@ def SeqresTestGenerator(extension, parser):
             chain = SeqIO.read("PDB/1A8O." + extension, parser)
             self.assertEqual(chain.id, "1A8O:A")
             self.assertEqual(chain.annotations["chain"], "A")
-            self.assertEqual(str(chain.seq),
-                             "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPD"
-                             "CKTILKALGPGATLEEMMTACQG")
+            self.assertEqual(
+                str(chain.seq),
+                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPD"
+                "CKTILKALGPGATLEEMMTACQG",
+            )
 
         def test_seqres_missing(self):
             """Parse a PDB with no SEQRES entries."""
             chains = list(SeqIO.parse("PDB/a_structure." + extension, parser))
             self.assertEqual(len(chains), 0)
+
     return SeqresTests
 
 
@@ -98,6 +105,7 @@ def AtomTestGenerator(extension, parser):
 
     See SeqresTestGenerator for more information.
     """
+
     class AtomTests(unittest.TestCase):
         def test_atom_parse(self):
             """Parse a multi-chain structure by ATOM entries.
@@ -137,9 +145,11 @@ def AtomTestGenerator(extension, parser):
             self.assertEqual(chain.id, "1A8O:A")
             self.assertEqual(chain.annotations["chain"], "A")
             self.assertEqual(chain.annotations["model"], 0)
-            self.assertEqual(str(chain.seq),
-                             "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL"
-                             "KALGPGATLEEMMTACQG")
+            self.assertEqual(
+                str(chain.seq),
+                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL"
+                "KALGPGATLEEMMTACQG",
+            )
 
     return AtomTests
 
@@ -155,7 +165,9 @@ class TestPdbAtom(AtomTestGenerator("pdb", "pdb-atom")):
             chains = list(SeqIO.parse("PDB/1LCD.pdb", "pdb-atom"))
 
         self.assertEqual(len(chains), 1)
-        self.assertEqual(str(chains[0].seq), "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR")
+        self.assertEqual(
+            str(chains[0].seq), "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR"
+        )
 
     def test_atom_read_noheader(self):
         """Read a single-chain PDB without a header by ATOM entries."""
@@ -184,9 +196,10 @@ class TestCifAtom(AtomTestGenerator("cif", "cif-atom")):
             chain = SeqIO.read("PDB/a_structure.cif", "cif-atom")
         self.assertEqual(chain.id, "????:A")
         self.assertEqual(chain.annotations["chain"], "A")
-        self.assertEqual(str(chain.seq),
-                         "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL"
-                         "KALGPGATLEEMMTACQG")
+        self.assertEqual(
+            str(chain.seq),
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL" "KALGPGATLEEMMTACQG",
+        )
 
 
 if __name__ == "__main__":
