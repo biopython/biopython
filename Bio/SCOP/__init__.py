@@ -22,9 +22,9 @@ The SCOP database aims to provide a manually constructed classification of
 all know protein structures into a hierarchy, the main levels of which
 are family, superfamily and fold.
 
-* "SCOP":http://scop.mrc-lmb.cam.ac.uk/scop/
-* "Introduction":http://scop.mrc-lmb.cam.ac.uk/scop/intro.html
-* "SCOP parsable files":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
+* "SCOP":http://scop.mrc-lmb.cam.ac.uk/legacy/
+* "Introduction":http://scop.mrc-lmb.cam.ac.uk/legacy/intro.html
+* "SCOP parsable files":http://scop.mrc-lmb.cam.ac.uk/legacy/parse/
 
 The Scop object in this module represents the entire SCOP classification. It
 can be built from the three SCOP parsable files, modified is so desired, and
@@ -721,7 +721,7 @@ class Domain(Node):
             n = n.getParent()
 
         # Order does not matter in the hierarchy field. For more info, see
-        # http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
+        # http://scop.mrc-lmb.cam.ac.uk/legacy/release-notes.html
         # rec.hierarchy.reverse()
 
         return rec
@@ -931,7 +931,7 @@ def search(
 
     Access search.cgi and return a handle to the results.  See the
     online help file for an explanation of the parameters:
-    http://scop.mrc-lmb.cam.ac.uk/scop/help.html
+    http://scop.mrc-lmb.cam.ac.uk/legacy/help.html
 
     Raises an IOError if there's a network error.
 
