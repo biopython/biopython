@@ -117,7 +117,9 @@ def kegg_list(database, org=None):
     else:
         if isinstance(database, list):
             if len(database) > 100:
-                raise ValueError("Maximum number of databases is 100 for kegg list query")
+                raise ValueError(
+                    "Maximum number of databases is 100 for kegg list query"
+                )
             database = ("+").join(database)
         resp = _q("list", database)
 
