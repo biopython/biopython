@@ -1553,8 +1553,8 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
         specificgaps = (
-            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
-        )  # noqa: E731
+            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
+        )
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
