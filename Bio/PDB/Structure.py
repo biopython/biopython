@@ -61,4 +61,3 @@ class Structure(Entity):
         """
         for chn in self.get_chains():
             chn.internal_to_atom_coordinates()
-

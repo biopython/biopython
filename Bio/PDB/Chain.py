@@ -198,4 +198,3 @@ class Chain(Entity):
                 "Structure %s Chain %s does not have internal coordinates set"
                 % (self.parent.parent, self)
             )
-
