@@ -5506,7 +5506,7 @@ class TestSeqIO(unittest.TestCase):
         for t_format in SeqIO._FormatToIterator:
             if t_format in SeqIO._BinaryFormats:
                 handle = BytesIO()
-                with self.assertRaisesRegexp(ValueError, "Empty file."):
+                with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
             elif t_format in (
                 "uniprot-xml",
@@ -5516,7 +5516,7 @@ class TestSeqIO(unittest.TestCase):
                 "cif-seqres",
             ):
                 handle = StringIO()
-                with self.assertRaisesRegexp(ValueError, "Empty file."):
+                with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
             else:
                 handle = StringIO()

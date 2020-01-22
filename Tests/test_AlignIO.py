@@ -405,7 +405,7 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_msf1(self):
         path = "msf/DOA_prot.msf"
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 "GCG MSF header said alignment length 62, "
                 "but 11 of 12 sequences said Len: 250"
