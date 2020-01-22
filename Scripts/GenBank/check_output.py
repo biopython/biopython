@@ -59,8 +59,8 @@ def write_format(file):
     print("Testing GenBank writing for %s..." % os.path.basename(file))
     # be able to handle gzipped files
     if ".gz" in file:
-        cur_handle = gzip.open(file)
-        compare_handle = gzip.open(file)
+        cur_handle = gzip.open(file, "rb")
+        compare_handle = gzip.open(file, "rb")
     else:
         cur_handle = open(file)
         compare_handle = open(file)
