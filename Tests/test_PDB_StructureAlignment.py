@@ -24,7 +24,7 @@ class StructureAlignTests(unittest.TestCase):
         al_file = "PDB/alignment_file.fa"
         pdb2 = "PDB/1A8O.pdb"
         pdb1 = "PDB/2XHE.pdb"
-        with open(al_file, "r") as handle:
+        with open(al_file) as handle:
             records = AlignIO.read(handle, "fasta")
         p = PDBParser()
         s1 = p.get_structure("1", pdb1)

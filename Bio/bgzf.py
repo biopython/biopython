@@ -116,7 +116,7 @@ This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,
 
 >>> import gzip
->>> handle = gzip.open("GenBank/NC_000932.gb.bgz", "r")
+>>> handle = gzip.open("GenBank/NC_000932.gb.bgz")
 >>> assert 0 == handle.tell()
 >>> line = handle.readline()
 >>> assert 80 == handle.tell()
@@ -129,7 +129,7 @@ be decompressed using gzip,
 We can also access the file using the BGZF reader - but pay
 attention to the file offsets which will be explained below:
 
->>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "r")
+>>> handle = BgzfReader("GenBank/NC_000932.gb.bgz")
 >>> assert 0 == handle.tell()
 >>> print(handle.readline().rstrip())
 LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009

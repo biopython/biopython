@@ -120,7 +120,7 @@ def parse_pdb_header(infile):
     compound.
     """
     header = []
-    with File.as_handle(infile, "r") as f:
+    with File.as_handle(infile) as f:
         for l in f:
             record_type = l[0:6]
             if record_type in ("ATOM  ", "HETATM", "MODEL "):
