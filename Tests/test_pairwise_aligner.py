@@ -2048,12 +2048,12 @@ class TestSequencesAsLists(unittest.TestCase):
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.alphabet = (
-            ["Ala", "Arg", "Asn", "Asp", "Cys"]
-            + ["Gln", "Glu", "Gly", "His", "Ile"]
-            + ["Leu", "Lys", "Met", "Phe", "Pro"]
-            + ["Ser", "Thr", "Trp", "Tyr", "Val"]
-        )
+        # fmt: off
+        aligner.alphabet = [
+            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
+            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
+        ]
+        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -2107,12 +2107,12 @@ Pro Pro Gly --- Ala --- Thr --- ---
         seq2 = ["Pro", "Pro", "Gly", "Ala", "Ala", "Cys", "Thr", "Leu"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.alphabet = (
-            ["Ala", "Arg", "Asn", "Asp", "Cys"]
-            + ["Gln", "Glu", "Gly", "His", "Ile"]
-            + ["Leu", "Lys", "Met", "Phe", "Pro"]
-            + ["Ser", "Thr", "Trp", "Tyr", "Val"]
-        )
+        # fmt: off
+        aligner.alphabet = [
+            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
+            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
+        ]
+        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
