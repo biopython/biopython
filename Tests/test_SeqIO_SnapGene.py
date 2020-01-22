@@ -109,13 +109,13 @@ class TestCorruptedSnapGene(unittest.TestCase):
         """Read a file with missing or invalid cookie packet."""
         # Remove the first packet
         h = BytesIO(self.buffer[19:])
-        with self.assertRaisesRegexp(ValueError, "The file does not start with a SnapGene cookie packet"):
+        with self.assertRaisesRegex(ValueError, "The file does not start with a SnapGene cookie packet"):
             SeqIO.read(h, "snapgene")
         h.close()
 
         # Keep the first packet but destroy the magic cookie
         h = self.munge_buffer(5, [0x4B, 0x41, 0x42, 0x4F, 0x4F, 0x4D])
-        with self.assertRaisesRegexp(ValueError, "The file is not a valid SnapGene file"):
+        with self.assertRaisesRegex(ValueError, "The file is not a valid SnapGene file"):
             SeqIO.read(h, "snapgene")
         h.close()
 
@@ -124,7 +124,7 @@ class TestCorruptedSnapGene(unittest.TestCase):
         # Simulate a missing DNA packet by changing the tag byte to an
         # unknown packet type, so that the parser will skip the packet.
         h = self.munge_buffer(19, 0x80)
-        with self.assertRaisesRegexp(ValueError, "No DNA packet in file"):
+        with self.assertRaisesRegex(ValueError, "No DNA packet in file"):
             SeqIO.read(h, "snapgene")
         h.close()
 
@@ -134,7 +134,7 @@ class TestCorruptedSnapGene(unittest.TestCase):
         buf = bytearray(self.buffer)
         buf.extend(self.buffer[19:1025])    # Append duplicated DNA packet
         h = BytesIO(buf)
-        with self.assertRaisesRegexp(ValueError, "The file contains more than one DNA packet"):
+        with self.assertRaisesRegex(ValueError, "The file contains more than one DNA packet"):
             SeqIO.read(h, "snapgene")
         h.close()
 
@@ -142,13 +142,13 @@ class TestCorruptedSnapGene(unittest.TestCase):
         """Read a file with incomplete packet."""
         # Truncate before the end of the length bytes
         h = BytesIO(self.buffer[3:])
-        with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
+        with self.assertRaisesRegex(ValueError, "Unexpected end of packet"):
             SeqIO.read(h, "snapgene")
         h.close()
 
         # Truncate before the end of the data
         h = BytesIO(self.buffer[10:])
-        with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
+        with self.assertRaisesRegex(ValueError, "Unexpected end of packet"):
             SeqIO.read(h, "snapgene")
         h.close()
 

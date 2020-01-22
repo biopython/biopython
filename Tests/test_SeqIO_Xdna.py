@@ -135,14 +135,14 @@ class TestInvalidXdna(unittest.TestCase):
     def test_unsupported_version(self):
         """Read a file with unexpected version number."""
         h = self.munge_buffer(0, 0x01)  # Change version byte
-        with self.assertRaisesRegexp(ValueError, "Unsupported XDNA version"):
+        with self.assertRaisesRegex(ValueError, "Unsupported XDNA version"):
             SeqIO.read(h, "xdna")
         h.close()
 
     def test_invalid_sequence_type(self):
         """Read a file with an unknown sequence type."""
         h = self.munge_buffer(1, 0x0A)  # Change type byte
-        with self.assertRaisesRegexp(ValueError, "Unknown sequence type"):
+        with self.assertRaisesRegex(ValueError, "Unknown sequence type"):
             SeqIO.read(h, "xdna")
         h.close()
 
@@ -150,13 +150,13 @@ class TestInvalidXdna(unittest.TestCase):
         """Read a file with incorrect length."""
         # Set a length shorter than the actual length of the sequence
         h = self.munge_buffer(29, [0x00, 0x00, 0x00, 0x80])
-        with self.assertRaisesRegexp(ValueError, "invalid literal"):
+        with self.assertRaisesRegex(ValueError, "invalid literal"):
             SeqIO.read(h, "xdna")
         h.close()
 
         # Set a length larger than the actual length of the sequence
         h = self.munge_buffer(29, [0x00, 0x08, 0x00, 0x00])
-        with self.assertRaisesRegexp(ValueError, "Cannot read 2048 bytes from handle"):
+        with self.assertRaisesRegex(ValueError, "Cannot read 2048 bytes from handle"):
             SeqIO.read(h, "xdna")
         h.close()
 
@@ -167,7 +167,7 @@ class TestInvalidXdna(unittest.TestCase):
         # header + length of sequence + length of comment + overhangs
         feature_byte = 112 + 1000 + len("Sample sequence A") + 5
         h = self.munge_buffer(feature_byte, 3)
-        with self.assertRaisesRegexp(ValueError, "Cannot read 1 bytes from handle"):
+        with self.assertRaisesRegex(ValueError, "Cannot read 1 bytes from handle"):
             SeqIO.read(h, "xdna")
         h.close()
 
