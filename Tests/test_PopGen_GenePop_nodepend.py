@@ -137,25 +137,25 @@ class FileParserTest(unittest.TestCase):
             ftemp.close()
             rec = FileParser.read(fname)
             rec.remove_loci_by_position([0], ftemp.name)
-            with open(ftemp.name, "r") as ft:
+            with open(ftemp.name) as ft:
                 ft.seek(0)
                 rec2 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec2.loci_list)
 
             rec.remove_locus_by_position(0, ftemp.name)
-            with open(ftemp.name, "r") as ft:
+            with open(ftemp.name) as ft:
                 ft.seek(0)
                 rec3 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec3.loci_list)
 
             rec.remove_locus_by_name(rec.loci_list[0], ftemp.name)
-            with open(ftemp.name, "r") as ft:
+            with open(ftemp.name) as ft:
                 ft.seek(0)
                 rec4 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec4.loci_list)
 
             rec.remove_loci_by_name([rec.loci_list[0]], ftemp.name)
-            with open(ftemp.name, "r") as ft:
+            with open(ftemp.name) as ft:
                 ft.seek(0)
                 rec5 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec5.loci_list)

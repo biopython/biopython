@@ -74,7 +74,7 @@ def _read_fragments(size, length, dir="."):
     :type dir: string
     """
     filename = (dir + "/" + _FRAGMENT_FILE) % (size, length)
-    with open(filename, "r") as fp:
+    with open(filename) as fp:
         flist = []
         # ID of fragment=rank in spec file
         fid = 0

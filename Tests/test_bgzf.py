@@ -63,7 +63,7 @@ class BgzfTests(unittest.TestCase):
         old = old_line + h.read()
         h.close()
 
-        h = bgzf.BgzfReader(new_file, "r")  # Text mode!
+        h = bgzf.BgzfReader(new_file)  # Text mode!
         new_line = h.readline()
         new = new_line + h.read(len(old))
         h.close()
@@ -78,7 +78,7 @@ class BgzfTests(unittest.TestCase):
             old_line = h.readline()
             old = old_line + h.read()
 
-        with bgzf.BgzfReader(new_file, "r") as h:  # Text mode!
+        with bgzf.BgzfReader(new_file) as h:  # Text mode!
             new_line = h.readline()
             new = new_line + h.read(len(old))
 
@@ -370,7 +370,7 @@ class BgzfTests(unittest.TestCase):
 
         h.close()
 
-        h = bgzf.open(temp_file, "r")  # Text mode!
+        h = bgzf.open(temp_file)  # Text mode!
 
         h.seek(offset)  # i.e. End of first BGZF block
         self.assertEqual(offset1, h.tell())  # Note *not* seek offset

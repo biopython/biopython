@@ -140,7 +140,7 @@ class BwaTestCase(unittest.TestCase):
             cmdline.set_parameter("sai_file", self.saifile1)
             stdout, stderr = cmdline(stdout=self.samfile1)
 
-            with open(self.samfile1, "r") as handle:
+            with open(self.samfile1) as handle:
                 headline = handle.readline()
             self.assertTrue(headline.startswith("@SQ"),
                             "Error generating sam files:\n%s\nOutput starts:%s"
@@ -162,7 +162,7 @@ class BwaTestCase(unittest.TestCase):
             cmdline.set_parameter("read_file2", self.infile2)
             stdout, stderr = cmdline(stdout=self.samfile)
 
-            with open(self.samfile, "r") as handle:
+            with open(self.samfile) as handle:
                 headline = handle.readline()
             self.assertTrue(headline.startswith("@SQ"),
                             "Error generating sam files:\n%s\nOutput starts:%s"
@@ -178,7 +178,7 @@ class BwaTestCase(unittest.TestCase):
             cmdline.set_parameter("read_file2", self.infile2)
             stdout, stderr = cmdline(stdout=self.samfile)
 
-            with open(self.samfile, "r") as handle:
+            with open(self.samfile) as handle:
                 headline = handle.readline()
             self.assertTrue(headline.startswith("@SQ"),
                             "Error generating sam files:\n%s\nOutput starts:%s"

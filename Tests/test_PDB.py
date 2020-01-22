@@ -1658,7 +1658,7 @@ class DsspTests(unittest.TestCase):
         # Now compare the xtra attribute of the pdb object
         # residue by residue with the pre-computed values:
         i = 0
-        with open("PDB/dssp_xtra_Sander.txt", "r") as fh_ref:
+        with open("PDB/dssp_xtra_Sander.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:
@@ -1691,7 +1691,7 @@ class DsspTests(unittest.TestCase):
         trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
         # Then compare the RASA values for each residue with the pre-computed values:
         i = 0
-        with open("PDB/Sander_RASA.txt", "r") as fh_ref:
+        with open("PDB/Sander_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:
@@ -1705,7 +1705,7 @@ class DsspTests(unittest.TestCase):
         m = s[0]
         trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Wilke", "DSSP")
         i = 0
-        with open("PDB/Wilke_RASA.txt", "r") as fh_ref:
+        with open("PDB/Wilke_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:
@@ -1719,7 +1719,7 @@ class DsspTests(unittest.TestCase):
         m = s[0]
         trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Miller", "DSSP")
         i = 0
-        with open("PDB/Miller_RASA.txt", "r") as fh_ref:
+        with open("PDB/Miller_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:

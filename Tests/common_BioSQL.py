@@ -961,7 +961,7 @@ class InDepthLoadTest(unittest.TestCase):
     def test_reload(self):
         """Make sure can't reimport existing records."""
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file, "r")
+        gb_handle = open(gb_file)
         record = next(SeqIO.parse(gb_handle, "gb"))
         gb_handle.close()
         # Should be in database already...

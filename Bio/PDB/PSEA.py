@@ -43,7 +43,7 @@ def psea(pname):
     fname = run_psea(pname)
     start = 0
     ss = ""
-    with open(fname, "r") as fp:
+    with open(fname) as fp:
         for l in fp:
             if l[0:6] == ">p-sea":
                 start = 1

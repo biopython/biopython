@@ -620,7 +620,7 @@ class DiagramTest(unittest.TestCase):
 
     def setUp(self):
         """Test setup, just loads a GenBank file as a SeqRecord."""
-        handle = open(os.path.join("GenBank", "NC_005816.gb"), "r")
+        handle = open(os.path.join("GenBank", "NC_005816.gb"))
         self.record = SeqIO.read(handle, "genbank")
         handle.close()
 

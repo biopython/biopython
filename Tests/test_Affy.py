@@ -34,7 +34,7 @@ class AffyTest(unittest.TestCase):
 
     # tests the Affymetrix v3 parser
     def testAffy3(self):
-        with open(self.affy3, "r") as f:
+        with open(self.affy3) as f:
             record = CelFile.read(f)
             self.assertTrue(len(record.DatHeader) > 0)
             self.assertEqual(record.intensities.shape, (5, 5))

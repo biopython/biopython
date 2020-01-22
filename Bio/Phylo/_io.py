@@ -45,7 +45,7 @@ def parse(file, format, **kwargs):
     True
 
     """
-    with File.as_handle(file, "r") as fp:
+    with File.as_handle(file) as fp:
         yield from getattr(supported_formats[format], "parse")(fp, **kwargs)
 
 

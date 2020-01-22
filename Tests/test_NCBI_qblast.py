@@ -204,7 +204,7 @@ class TestQblast(unittest.TestCase):
             self.assertTrue(found_result)
 
     def test_parse_qblast_ref_page(self):
-        with open("Blast/html_msgid_29_blastx_001.html", "r") as f:
+        with open("Blast/html_msgid_29_blastx_001.html") as f:
             handle = StringIO(f.read())
         self.assertRaises(ValueError, NCBIWWW._parse_qblast_ref_page, handle)
 
