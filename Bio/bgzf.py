@@ -219,7 +219,7 @@ Text Mode
 
 Like the standard library gzip.open(...), the BGZF code, with bgzf.open(...),
 defaults to opening files in binary mode. However, the BgzfReader and
-BgzfWriter classes currently default to "r", intupreted as text mode. Note
+BgzfWriter classes currently default to "r", interpreted as text mode. Note
 that for legacy reasons, gzip.open(..., "r") reads in binary mode, while
 bgzf.open(.., "r") reads in text mode.
 
