@@ -310,8 +310,8 @@ Pairwise sequence aligner with parameters
  AwBw
  |-| 
 zA-Bz
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
     def test_gotoh_local(self):
@@ -353,8 +353,8 @@ Pairwise sequence aligner with parameters
  AwBw
  |-| 
 zA-Bz
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
 
@@ -908,8 +908,8 @@ Pairwise sequence aligner with parameters
 GAT  
 |-|  
 G-TCT
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
 
 
@@ -1075,8 +1075,8 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
 ATAT
 ||. 
 ATT 
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1137,8 +1137,8 @@ AT-T
 ATAT
 ||. 
 ATT 
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary3(self):
@@ -1188,8 +1188,8 @@ ATT
 ATT 
 ||. 
 ATAT
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary4(self):
@@ -1242,8 +1242,8 @@ ATAT
 ATAT
 ||. 
 ATT 
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
@@ -1306,8 +1306,8 @@ AT-T
 ATAT
 ||. 
 ATT 
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary6(self):
@@ -1359,8 +1359,8 @@ ATT
 ATT 
 ||. 
 ATAT
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
 
@@ -1404,8 +1404,8 @@ Pairwise sequence aligner with parameters
 abcde
   |  
   c  
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
 
     def test_align_one_char2(self):
@@ -1447,8 +1447,8 @@ Pairwise sequence aligner with parameters
 abcce
   |  
   c  
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1)
@@ -1458,8 +1458,8 @@ abcce
 abcce
    | 
    c 
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((3, 4),), ((0, 1),)))
 
     def test_align_one_char3(self):
@@ -1816,8 +1816,8 @@ Pairwise sequence aligner with parameters
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||                     
   AABBBAAAACCCCAAAABBBAA            
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -1827,8 +1827,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||  
             AABBBAAAACCCCAAAABBBAA  
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
 
     def test_gap_here_only_local_2(self):
@@ -1879,8 +1879,8 @@ Pairwise sequence aligner with parameters
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||                     
   AABBBAAAACCCCAAAABBBAA            
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
@@ -1890,8 +1890,8 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||  
             AABBBAAAACCCCAAAABBBAA  
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
 
     def test_gap_here_only_local_3(self):
@@ -1943,8 +1943,8 @@ Pairwise sequence aligner with parameters
 TTCCAA
 ||    
 TTGGAA
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -1982,8 +1982,8 @@ Pairwise sequence aligner with parameters
 TTCCAA
 ||    
 TTGGAA
-""",
-        )  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
