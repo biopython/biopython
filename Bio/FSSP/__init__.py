@@ -31,7 +31,7 @@ warnings.warn(
     "Bio.FSSP has been deprecated, and we intend to remove it"
     " in a future release of Biopython. Please contact the Biopython"
     " developers if you need this module.",
-    BiopythonDeprecationWarning
+    BiopythonDeprecationWarning,
 )
 
 

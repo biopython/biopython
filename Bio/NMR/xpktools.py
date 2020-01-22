@@ -284,9 +284,7 @@ def data_table(fn_list, datalabel, keyatom):
             label = label_line_list[count]
             if key in dictionary:
                 line = (
-                    line
-                    + "\t"
-                    + XpkEntry(dictionary[key][0], label).fields[datalabel]
+                    line + "\t" + XpkEntry(dictionary[key][0], label).fields[datalabel]
                 )
             else:
                 line += "\t*"

@@ -499,9 +499,7 @@ def _get_atom_radius(atom, rtype="united"):
     elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("H"):
         return _atomic_radii[15][typekey]
     else:
-        warnings.warn(
-            f"{at_name}:{resname} not in radii library.", BiopythonWarning
-        )
+        warnings.warn(f"{at_name}:{resname} not in radii library.", BiopythonWarning)
         return 0.01
 
 
@@ -547,9 +545,7 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
         for atom in atom_list:
             x, y, z = atom.coord
             radius = _get_atom_radius(atom, rtype="united")
-            pdb_to_xyzr.write(
-                f"{x:6.3f}\t{y:6.3f}\t{z:6.3f}\t{radius:1.2f}\n"
-            )
+            pdb_to_xyzr.write(f"{x:6.3f}\t{y:6.3f}\t{z:6.3f}\t{radius:1.2f}\n")
 
     # make surface
     surface_tmp = tempfile.mktemp()
