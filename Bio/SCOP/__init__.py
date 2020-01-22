@@ -88,19 +88,15 @@ astralEv_to_sql = {10: "e1", 5: "e0_7", 1: "e0", 0.5: "e_0_3", 0.1: "e_1",
 # Turn black code style on
 # fmt: on
 
-try:
-    # See if the cmp function exists (will on Python 2)
-    _cmp = cmp
-except NameError:
 
-    def _cmp(a, b):
-        """Implement cmp(x,y) for Python 3 (PRIVATE).
+def _cmp(a, b):
+    """Implement cmp(x,y) for Python 3 (PRIVATE).
 
-        Based on Python 3 docs which say if you really need the cmp()
-        functionality, you could use the expression (a > b) -  (a < b)
-        as the equivalent for cmp(a, b)
-        """
-        return (a > b) - (a < b)
+    Based on Python 3 docs which say if you really need the cmp()
+    functionality, you could use the expression (a > b) -  (a < b)
+    as the equivalent for cmp(a, b)
+    """
+    return (a > b) - (a < b)
 
 
 def cmp_sccs(sccs1, sccs2):
