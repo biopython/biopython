@@ -73,9 +73,9 @@ class KDTreeTest(unittest.TestCase):
         coords = random((nr_points, 3)) * 100000000000000
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(coords, bucket_size)
-        self.assertTrue(
-            "coordinate values should lie between -1e6 and 1e6"
-            in str(context.exception)
+        self.assertIn(
+            "coordinate values should lie between -1e6 and 1e6",
+            str(context.exception)
         )
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(random((nr_points, 3 - 2)), bucket_size)

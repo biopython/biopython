@@ -25,29 +25,28 @@ class TestPBDListGetList(unittest.TestCase):
 
     def test_get_recent_changes(self):
         """Tests the Bio.PDB.PDBList.get_recent_changes method."""
-        pdblist = PDBList(
-            obsolete_pdb="unimportant"
-        )  # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        pdblist = PDBList(obsolete_pdb="unimportant")
         url = pdblist.pdb_server + "/pub/pdb/data/status/latest/added.pdb"
         entries = pdblist.get_status_list(url)
         self.assertIsNotNone(entries)
 
     def test_get_all_entries(self):
         """Tests the Bio.PDB.PDBList.get_all_entries method."""
-        pdblist = PDBList(
-            obsolete_pdb="unimportant"
-        )  # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        pdblist = PDBList(obsolete_pdb="unimportant")
         entries = pdblist.get_all_entries()
-        # As number of entries constantly grow, test checks if a certain number was exceeded
+        # As number of entries constantly grow, test checks if a certain number was
+        # exceeded
         self.assertTrue(len(entries) > 100000)
 
     def test_get_all_obsolete(self):
         """Tests the Bio.PDB.PDBList.get_all_obsolete method."""
-        pdblist = PDBList(
-            obsolete_pdb="unimportant"
-        )  # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        # obsolete_pdb declared to prevent from creating the "obsolete" directory
+        pdblist = PDBList(obsolete_pdb="unimportant")
         entries = pdblist.get_all_obsolete()
-        # As number of obsolete entries constantly grow, test checks if a certain number was exceeded
+        # As number of obsolete entries constantly grow, test checks if a certain number
+        # was exceeded
         self.assertTrue(len(entries) > 3000)
 
 
