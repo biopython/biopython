@@ -116,7 +116,7 @@ This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,
 
 >>> import gzip
->>> handle = gzip.open("GenBank/NC_000932.gb.bgz", "rb")
+>>> handle = gzip.open("GenBank/NC_000932.gb.bgz", "r")
 >>> assert 0 == handle.tell()
 >>> line = handle.readline()
 >>> assert 80 == handle.tell()
@@ -129,7 +129,7 @@ be decompressed using gzip,
 We can also access the file using the BGZF reader - but pay
 attention to the file offsets which will be explained below:
 
->>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "r")  # the default text mode
+>>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "r")
 >>> assert 0 == handle.tell()
 >>> print(handle.readline().rstrip())
 LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009
@@ -217,11 +217,8 @@ NC_000932.1
 Text Mode
 ---------
 
-Like the standard library gzip.open(...), the BGZF code, with bgzf.open(...),
-defaults to opening files in binary mode. However, the BgzfReader and
-BgzfWriter classes currently default to "r", interpreted as text mode. Note
-that for legacy reasons, gzip.open(..., "r") reads in binary mode, while
-bgzf.open(.., "r") reads in text mode.
+Like the standard library gzip.open(...), the BGZF code defaults to opening
+files in binary mode.
 
 You can request the file be opened in text mode, but beware that this is hard
 coded to the simple "latin1" (aka "iso-8859-1") encoding (which includes all
