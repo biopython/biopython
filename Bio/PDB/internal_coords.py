@@ -2673,7 +2673,7 @@ class AtomKey(object):
                     return 1, 0
                 s0, s1, o0, o1 = s[0], s[1], o[0], o[1]
                 s1d, o1d = s1.isdigit(), o1.isdigit()
-                if "H" == s0 == o0:
+                if ("H" == s0) and ("H" == o0):
                     if (s1 == o1) or (s1d and o1d):
                         return s, o
                     elif s1d:
