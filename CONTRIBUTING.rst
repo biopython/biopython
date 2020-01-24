@@ -34,14 +34,17 @@ with the notable exception of existing module names which are not lower case.
 - http://www.python.org/dev/peps/pep-0008/
 - http://www.python.org/dev/peps/pep-0257/
 
-We use the continuous integration service TravisCI to enforce some of these
-checks, so if you are making a contribution it is best to check this locally.
+We have adopted the code formating tool ``black`` to which automates a lot of
+coding style choices like line breaks and spacing. This applies to all our
+code, except the ``Tests/`` folder which we are still gradually updating.
 
-We use the tool ``flake8`` for code style checks, together with various
-plugins which can be installed as follows::
+We use the tool ``flake8`` for automating our code style checks, together with
+various plugins which can be installed as follows::
 
-    $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes flake8-bugbear flake8-implicit-str-concat
+    $ pip install flake8 flake8-docstrings flake8-black flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes flake8-bugbear flake8-implicit-str-concat
 
+We use the continuous integration service TravisCI to run these ``flake8``
+checks, but it is better to run them locally before making a pull request.
 We currently strongly suggest you then install the ``flake8`` git pre-commit
 hook which will check our basic coding conventions as you work::
 
@@ -58,8 +61,9 @@ using reStructuredText (RST) markup language which allows basic formatting
 like *italics* and **bold** once rendered into HTML webpages for our online
 API documentation.
 
-You can run the reStructuredText checks with the ``restructuredtext-lint``
-tool (also known as ``rst-lint``)::
+We also use reStructuredText for files like ``README.rst``. You can run the
+reStructuredText checks with the ``restructuredtext-lint`` tool (also known as
+``rst-lint``)::
 
     $ pip install restructuredtext_lint
     $ rst-lint --level warning *.rst
@@ -96,8 +100,8 @@ be run, and their results reported on the pull request.
 
 We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
-check Python coding style using the ``flake8`` tool with the ``pydocstyle``
-plugin (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
+check Python coding style using the ``flake8`` tool with lots of plugins, and
+reStructuredText files using ``rst-lint``.
 https://travis-ci.org/biopython/biopython/branches
 
 We use AppVeyor to run most of the tests under Windows (although currently
