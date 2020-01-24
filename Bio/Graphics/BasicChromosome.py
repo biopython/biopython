@@ -85,7 +85,9 @@ class _ChromosomeComponent(Widget):
         try:
             self._sub_components.remove(component)
         except ValueError:
-            raise ValueError("Component %s not found in sub_components." % component) from None
+            raise ValueError(
+                "Component %s not found in sub_components." % component
+            ) from None
 
     def draw(self):
         """Draw the specified component."""

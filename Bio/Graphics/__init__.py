@@ -72,7 +72,9 @@ def _write(drawing, output_file, format, dpi=72):
         # an attribute error...
         drawmethod = formatdict[format.upper()]  # select drawing method
     except (KeyError, AttributeError):
-        raise ValueError("Output format should be one of %s" % ", ".join(formatdict)) from None
+        raise ValueError(
+            "Output format should be one of %s" % ", ".join(formatdict)
+        ) from None
 
     if drawmethod is None:
         # i.e. We wanted renderPM but it isn't installed

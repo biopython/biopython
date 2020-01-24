@@ -23,14 +23,18 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install reportlab if you want to use KGML_vis.") from None
+    raise MissingPythonDependencyError(
+        "Install reportlab if you want to use KGML_vis."
+    ) from None
 
 try:
     from PIL import Image
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install pillow if you want to use KGML_vis.") from None
+    raise MissingPythonDependencyError(
+        "Install pillow if you want to use KGML_vis."
+    ) from None
 
 from urllib.request import urlopen
 
