@@ -6,6 +6,11 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
+
+# Temporarily turn off black formatting so that we can enforce black
+# on all of Bio/ - remove this once pending pull request is merged.
+# fmt: off
+
 """Pairwise sequence alignment using a dynamic programming algorithm.
 
 This provides functions to get global and local alignments between two
