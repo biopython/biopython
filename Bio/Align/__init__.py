@@ -16,7 +16,8 @@ class, used in the Bio.AlignIO module.
 
 import warnings
 
-from Bio import Alphabet, BiopythonDeprecationWarning
+from Bio import Alphabet
+from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
