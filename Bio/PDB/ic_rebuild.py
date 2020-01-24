@@ -7,12 +7,8 @@
 """Convert XYZ Structure to internal coordinates and back, test result."""
 
 import re
-try:
-    from itertools import zip_longest
-except ImportError:
-    from itertools import izip_longest as zip_longest
 
-# import itertools
+from itertools import zip_longest
 
 try:
     import numpy
@@ -32,8 +28,16 @@ from Bio.PDB.Structure import Structure
 from Bio.PDB.internal_coords import IC_Residue, IC_Chain
 from Bio.PDB.PICIO import write_PIC, read_PIC, enumerate_atoms, pdb_date
 
+# for typing
+from typing import Dict, Union, Any
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Residue import Residue
+from Bio.PDB.Model import Model
+from Bio.PDB.Chain import Chain
+from Bio.PDB.Entity import Entity
 
-def structure_rebuild_test(entity, verbose=False):
+
+def structure_rebuild_test(entity, verbose: bool = False) -> Dict:
     """Test rebuild PDB structure from internal coordinates.
 
     :param entity: Biopython Structure, Model or Chain
@@ -55,7 +59,11 @@ def structure_rebuild_test(entity, verbose=False):
     return r
 
 
-def report_IC(entity, reportDict=None, verbose=False):
+def report_IC(
+    entity: Union[Structure, Model, Chain, Residue],
+    reportDict: Dict[str, Any] = None,
+    verbose: bool = False,
+) -> Dict[str, Any]:
     """Generate dict with counts of ic data elements for each entity level.
 
     reportDict entries are:
@@ -88,7 +96,7 @@ def report_IC(entity, reportDict=None, verbose=False):
     try:
         if "A" == entity.level:
             raise PDBException("No IC output at Atom level")
-        elif "R" == entity.level:
+        elif isinstance(entity, Residue):  # "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
                 dlen = len(entity.internal_coord.dihedra)
@@ -98,27 +106,28 @@ def report_IC(entity, reportDict=None, verbose=False):
                     reportDict["dih"] += dlen
                     reportDict["hed"] += hlen
 
-        elif "C" == entity.level:
+        elif isinstance(entity, Chain):  # "C" == entity.level:
             reportDict["chn"] += 1
             reportDict["chn_ids"].append(entity.id)
             for res in entity:
                 reportDict = report_IC(res, reportDict)
 
-        elif "M" == entity.level:
+        elif isinstance(entity, Model):  # "M" == entity.level:
             reportDict["mdl"] += 1
             for chn in entity:
                 reportDict = report_IC(chn, reportDict)
 
-        elif "S" == entity.level:
-            if reportDict["idcode"] is None:
-                reportDict["idcode"] = entity.header.get("idcode", None)
+        elif isinstance(entity, Structure):  # "S" == entity.level:
+            if hasattr(entity, "header"):
+                if reportDict["idcode"] is None:
+                    reportDict["idcode"] = entity.header.get("idcode", None)
 
-            hdr = entity.header.get("head", None)
-            if hdr:
-                reportDict["hdr"] += 1
-            nam = entity.header.get("name", None)
-            if nam:
-                reportDict["hdr"] += 1
+                hdr = entity.header.get("head", None)
+                if hdr:
+                    reportDict["hdr"] += 1
+                nam = entity.header.get("name", None)
+                if nam:
+                    reportDict["hdr"] += 1
             for mdl in entity:
                 reportDict = report_IC(mdl, reportDict)
         else:
@@ -146,7 +155,7 @@ def report_IC(entity, reportDict=None, verbose=False):
     return reportDict
 
 
-def IC_duplicate(entity):
+def IC_duplicate(entity) -> Structure:
     """Duplicate structure entity with IC data, no atom coordinates.
 
     Employs write_PIC(), read_PIC() with StringIO buffer.
@@ -163,12 +172,11 @@ def IC_duplicate(entity):
                 hasInternalCoords = True
                 break
     if not hasInternalCoords:
-        lev = entity.level
-        if "R" == lev:
+        if isinstance(entity, Residue):  # "R" == entity.level:
             # works better at chain level but leave option here
-            if not entity.internal_coord:
-                entity.internal_coord = IC_Residue(entity)
-            entity.internal_coord.dihedra_from_atoms()
+            if not res.internal_coord:
+                res.internal_coord = IC_Residue(entity)
+            res.internal_coord.dihedra_from_atoms()
         else:
             entity.atom_to_internal_coordinates()
 
@@ -177,7 +185,9 @@ def IC_duplicate(entity):
     return read_PIC(sp)
 
 
-def _cmp_atm(r0, r1, a0, a1, verbose, cmpdict):
+def _cmp_atm(
+    r0: Residue, r1: Residue, a0: Atom, a1: Atom, verbose: bool, cmpdict: Dict
+) -> None:
     cmpdict["aCount"] += 1
     if a0 is None:
         if verbose:
@@ -212,7 +222,7 @@ def _cmp_atm(r0, r1, a0, a1, verbose, cmpdict):
             )
 
 
-def _cmp_res(r0, r1, verbose, cmpdict):
+def _cmp_res(r0: Residue, r1: Residue, verbose: bool, cmpdict: Dict) -> None:
     r0id, r0fid, r1fid = r0.id, r0.full_id, r1.full_id
     chn = r0.parent.id
     if chn not in cmpdict["chains"]:
@@ -258,7 +268,11 @@ def _cmp_res(r0, r1, verbose, cmpdict):
                 cmpdict["aCount"] += 1
 
 
-def compare_residues(e0, e1, verbose=False):
+def compare_residues(
+    e0: Union[Structure, Model, Chain],
+    e1: Union[Structure, Model, Chain],
+    verbose: bool = False,
+) -> Dict[str, Any]:
     """Compare full IDs and atom coordinates for 2 Biopython PDB entities.
 
     Skip DNA and HETATMs.
@@ -272,7 +286,7 @@ def compare_residues(e0, e1, verbose=False):
         Full ID match atoms, and Coordinate match atoms; report string;
         error status (bool)
     """
-    cmpdict = {}
+    cmpdict: Dict[str, Any] = {}
     cmpdict["chains"] = []
     cmpdict["residues"] = 0
     cmpdict["rCount"] = 0
@@ -288,9 +302,7 @@ def compare_residues(e0, e1, verbose=False):
 
     for r0, r1 in zip_longest(e0.get_residues(), e1.get_residues()):
         if 2 == r0.is_disordered() == r1.is_disordered():
-            for dr0, dr1 in zip_longest(
-                r0.child_dict.values(), r1.child_dict.values()
-            ):
+            for dr0, dr1 in zip_longest(r0.child_dict.values(), r1.child_dict.values()):
                 _cmp_res(dr0, dr1, verbose, cmpdict)
         else:
             _cmp_res(r0, r1, verbose, cmpdict)
@@ -332,26 +344,29 @@ def compare_residues(e0, e1, verbose=False):
     return cmpdict
 
 
-def write_PDB(entity, file, pdbid=None, chainid=None):
+def write_PDB(
+    entity: Structure, file: str, pdbid: str = None, chainid: str = None
+) -> None:
     """Write PDB file with HEADER and TITLE."""
     enumerate_atoms(entity)
     with as_handle(file, "w") as fp:
         try:
             if "S" == entity.level:
-                if not pdbid:
-                    pdbid = entity.header.get("idcode", None)
-                hdr = entity.header.get("head", None)
-                dd = pdb_date(entity.header.get("deposition_date", None))
+                if hasattr(entity, "header"):
+                    if not pdbid:
+                        pdbid = entity.header.get("idcode", None)
+                    hdr = entity.header.get("head", None)
+                    dd = pdb_date(entity.header.get("deposition_date", None))
 
-                if hdr:
-                    fp.write(
-                        ("HEADER    {:40}{:8}   {:4}\n").format(
-                            hdr.upper(), (dd or ""), (pdbid or "")
+                    if hdr:
+                        fp.write(
+                            ("HEADER    {:40}{:8}   {:4}\n").format(
+                                hdr.upper(), (dd or ""), (pdbid or "")
+                            )
                         )
-                    )
-                nam = entity.header.get("name", None)
-                if nam:
-                    fp.write("TITLE     " + nam.upper() + "\n")
+                    nam = entity.header.get("name", None)
+                    if nam:
+                        fp.write("TITLE     " + nam.upper() + "\n")
                 io = PDBIO()
                 io.set_structure(entity)
                 io.save(fp, preserve_atom_numbering=True)
