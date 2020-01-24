@@ -35,12 +35,12 @@ possible, especially the following contributors:
 - Austin Varela (first contribution)
 - Chris Rands
 - Deepak Khatri
+- Hielke Walinga (first contribution)
 - Kai Blin
 - Peter Cock
 - Rob Miller
 - Sergio Valqui
 - Sujan Dulal (first contribution)
-- Hielke Walinga (first contribution)
 
 20 December 2019: Biopython 1.76
 ================================
