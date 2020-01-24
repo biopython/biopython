@@ -46,12 +46,12 @@ ignore =
 # Folder specific ignores:
 # ========================
 per-file-ignores =
-    Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815,BLK100
+    Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
     Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812,BLK100
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
-    /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815,BLK100
+    /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
     /Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812,BLK100
 
 # =============================
