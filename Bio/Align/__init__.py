@@ -1530,6 +1530,13 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     """
 
     def __init__(self, **kwargs):
+        """Initialize a new PairwiseAligner with the keyword arguments as attributes.
+
+        This function subclasses `_aligners.PairwiseAligner` and loops over all
+        the keyword arguments that are given in the constructor to set them
+        as attributes on the object. This will call the `__setattr__` method to
+        do that.
+        """
         super().__init__()
         for name, value in kwargs.items():
             setattr(self, name, value)
