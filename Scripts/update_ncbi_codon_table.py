@@ -53,7 +53,7 @@ version = ""
 for line in open("gc.prt").readlines():
     if not version and line.startswith("--  Version"):
         version = line.split("Version", 1)[1].strip()
-        print("# Data from NCBI genetic code table version %s\n" % version)
+        print(f"# Data from NCBI genetic code table version {version}\n")
     if line[:2] == " {":
         names = []
         id = None
@@ -81,15 +81,15 @@ for line in open("gc.prt").readlines():
             names.append(None)
         # Use %r instead of %s to include the quotes of the string!
         print("register_ncbi_table(")
-        print(line_wrap('    name="%s",' % names[0], 4, string=True))
+        print(line_wrap(f'    name="{names[0]}",', 4, string=True))
         print(line_wrap("    alt_name=%s," % (repr(names[1]).replace("'", '"'))))
-        print("    id=%d," % id)
+        print(f"    id={id:d},")
         print("    table={")
         s = " " * 8
         noqa = False
         for i in range(64):
             if aa[i] != "*":
-                s += '"%s%s%s": "%s", ' % (bases[0][i], bases[1][i], bases[2][i], aa[i])
+                s += f'"{bases[0][i]}{bases[1][i]}{bases[2][i]}": "{aa[i]}", '
             else:
                 # leave a space for stop codons
                 s += " " * 12

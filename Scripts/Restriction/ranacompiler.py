@@ -78,7 +78,7 @@ def double_quote_repr(value):  # TODO similar not to produce long horizontal lis
     """
     if isinstance(value, str):
         if '"' not in value:
-            return '"%s"' % value
+            return f'"{value}"'
     elif isinstance(value, tuple):
         if len(value) == 1:
             # Need trailing comma
@@ -351,10 +351,10 @@ class TypeCompiler:
                 """Dynamically defined restriction enzyme class."""
 
                 def __new__(cls):
-                    return type.__new__(cls, "type%i" % n, ty, dct)
+                    return type.__new__(cls, f"type{n:d}", ty, dct)
 
                 def __init__(cls):
-                    super().__init__("type%i" % n, ty, dct)
+                    super().__init__(f"type{n:d}", ty, dct)
 
             yield klass()
             n += 1
@@ -672,7 +672,7 @@ class DictionaryBuilder:
                         else:
                             raise NotFoundError
                     except NotFoundError:
-                        print("\nNo %s file found. Upgrade is impossible.\n" % name)
+                        print(f"\nNo {name} file found. Upgrade is impossible.\n")
                         sys.exit()
                     continue
                 pass
@@ -698,18 +698,18 @@ class DictionaryBuilder:
             last[0], last[-1] = last[-1], last[0]
 
         for number in last:
-            files = [(name + ".%s" % number) for name in embossnames]
+            files = [(name + f".{number}") for name in embossnames]
             strmess = "\nLast EMBOSS files found are :\n"
             try:
                 for file in files:
                     if os.path.isfile(os.path.join(base, file)):
-                        strmess += "\t%s.\n" % file
+                        strmess += f"\t{file}.\n"
                     else:
                         raise ValueError
                 print(strmess)
-                emboss_e = open(os.path.join(base, "emboss_e.%s" % number), "r")
-                emboss_r = open(os.path.join(base, "emboss_r.%s" % number), "r")
-                emboss_s = open(os.path.join(base, "emboss_s.%s" % number), "r")
+                emboss_e = open(os.path.join(base, f"emboss_e.{number}"), "r")
+                emboss_r = open(os.path.join(base, f"emboss_r.{number}"), "r")
+                emboss_s = open(os.path.join(base, f"emboss_s.{number}"), "r")
                 return emboss_e, emboss_r, emboss_s
             except ValueError:
                 continue
@@ -977,9 +977,9 @@ class DictionaryBuilder:
                 except OverhangError:  # overhang error
                     n = name  # do not include the enzyme
                     if not bl[2]:
-                        print("Anyway, %s is not commercially available.\n" % n)
+                        print(f"Anyway, {n} is not commercially available.\n")
                     else:
-                        print("Unfortunately, %s is commercially available.\n" % n)
+                        print(f"Unfortunately, {n} is commercially available.\n")
 
                     continue
                 # Hyphens and dots can't be used as a Python name, nor as a
@@ -990,7 +990,7 @@ class DictionaryBuilder:
                     #
                     #   deal with TaqII and its two sites.
                     #
-                    print("\nWARNING : %s has two different sites.\n" % name)
+                    print(f"\nWARNING : {name} has two different sites.\n")
                     other = line[0].replace("-", "_").replace(".", "_")
                     dna = Seq(line[1], generic_dna)
                     sense1 = regex(dna)

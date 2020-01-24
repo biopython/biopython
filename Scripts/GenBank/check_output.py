@@ -41,10 +41,10 @@ def do_comparison(good_record, test_record):
 
         if not good_line:
             if good_line.strip():
-                raise AssertionError("Extra info in Test: `%s`" % test_line)
+                raise AssertionError(f"Extra info in Test: `{test_line}`")
         if not test_line:
             if test_line.strip():
-                raise AssertionError("Extra info in Expected: `%s`" % good_line)
+                raise AssertionError(f"Extra info in Expected: `{good_line}`")
 
         assert test_line == good_line, (
             "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n"
@@ -81,7 +81,7 @@ def write_format(file):
         try:
             do_comparison(compare_record, output_record)
         except AssertionError as msg:
-            print("\tTesting for %s" % cur_record.version)
+            print(f"\tTesting for {cur_record.version}")
             print(msg)
 
     cur_handle.close()

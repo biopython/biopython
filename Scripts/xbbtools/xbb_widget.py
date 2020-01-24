@@ -261,7 +261,7 @@ class xbb_widget:
         """Select subsequence from a to b."""
         w = self.sequence_id
         w.selection_own()
-        w.tag_add("sel", "1.%d" % (a - 1), "1.%d" % b)
+        w.tag_add("sel", "1.%d" % (a - 1), f"1.{b:d}")
         self.count_selection(None)
 
     def get_selection_or_sequence(self):
@@ -302,15 +302,15 @@ class xbb_widget:
             b = int(w.index("sel.last").split(".")[1])
             length = b - a + 1
 
-            self.position_ids["from_id"].configure(text="Start:%d" % a)
-            self.position_ids["to_id"].configure(text="Stop:%d" % b)
-            self.position_ids["length_id"].configure(text="%d nt" % length)
+            self.position_ids["from_id"].configure(text=f"Start:{a:d}")
+            self.position_ids["to_id"].configure(text=f"Stop:{b:d}")
+            self.position_ids["length_id"].configure(text=f"{length:d} nt")
 
-            self.statistics_ids["length_id"].configure(text="Length=%d" % length)
+            self.statistics_ids["length_id"].configure(text=f"Length={length:d}")
             seq = self.get_self_selection()
             for nt in ["A", "C", "G", "T"]:
                 n = seq.count(nt)
-                self.statistics_ids[nt].configure(text="%s=%d" % (nt, n))
+                self.statistics_ids[nt].configure(text=f"{nt}={n:d}")
         except tk.TclError:  # Problem with tag 'sel' when actually selecting
             pass
 
@@ -318,7 +318,7 @@ class xbb_widget:
         """Get position of cursor and display it."""
         x = event.x
         y = event.y
-        pos = self.sequence_id.index("@%d,%d" % (x, y)).split(".")
+        pos = self.sequence_id.index(f"@{x:d},{y:d}").split(".")
         pos = int(pos[1]) + 1
         self.position_ids["id"].configure(text=str(pos))
 
@@ -395,7 +395,7 @@ class xbb_widget:
         aa_seq = re.sub("(.{50})", "\\1\n", str(aa_seq))
         np = NotePad()
         tid = np.text_id()
-        tid.insert("end", ">frame%d\n%s" % (frame, aa_seq))
+        tid.insert("end", f">frame{frame:d}\n{aa_seq}")
 
     def statistics(self):
         """Calculate statistics of sequence and display in new window."""
@@ -515,13 +515,13 @@ class xbb_widget:
                 return
 
         self.sequence_id.focus()
-        self.sequence_id.mark_set("insert", "1.%d" % pos)
+        self.sequence_id.mark_set("insert", f"1.{pos:d}")
 
     def mark(self, start, stop):
         """Mark and put a tag on choosen subsequence from start to stop."""
         self.sequence_id.focus()
-        self.sequence_id.mark_set("insert", "1.%d" % start)
-        self.sequence_id.tag_add("sel", "1.%d" % start, "1.%d" % stop)
+        self.sequence_id.mark_set("insert", f"1.{start:d}")
+        self.sequence_id.tag_add("sel", f"1.{start:d}", f"1.{stop:d}")
 
 
 if __name__ == "__main__":
