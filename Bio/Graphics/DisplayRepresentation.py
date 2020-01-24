@@ -79,7 +79,7 @@ class ChromosomeCounts:
         try:
             self._count_info[segment_name] += count
         except KeyError:
-            raise KeyError("Segment name %s not found." % segment_name)
+            raise KeyError("Segment name %s not found." % segment_name) from None
 
     def scale_segment_value(self, segment_name, scale_value=None):
         """Divide the counts for a segment by some kind of scale value.
@@ -92,7 +92,7 @@ class ChromosomeCounts:
                 self._count_info[segment_name]
             ) / float(scale_value)
         except KeyError:
-            raise KeyError("Segment name %s not found." % segment_name)
+            raise KeyError("Segment name %s not found." % segment_name) from None
 
     def add_label(self, segment_name, label):
         """Add a label to a specific segment.

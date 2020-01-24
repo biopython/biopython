@@ -151,8 +151,7 @@ class Diagram:
         for track in self.tracks.values():
             if hasattr(track, attr):
                 # If the feature has the attribute set it to the passed value
-                if getattr(track, attr) != value:
-                    setattr(track, attr, value)
+                setattr(track, attr, value)
 
     def draw(
         self,

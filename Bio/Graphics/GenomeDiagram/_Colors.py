@@ -152,7 +152,7 @@ class ColorTranslator:
                 except ValueError:
                     raise ValueError(
                         "Expected INT \t INT \t INT \t INT \t string input"
-                    )
+                    ) from None
 
     def get_artemis_colorscheme(self):
         """Return the Artemis color scheme as a dictionary."""
