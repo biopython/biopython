@@ -83,10 +83,14 @@ def _format_comment(text):
 
 
 def _get_comment(clade):
-    if hasattr(clade, "comment") and clade.comment:
-        return _format_comment(str(clade.comment))
+    try:
+        comment = clade.coment
+    except AttributeError:
+        pass
     else:
-        return ""
+        if comment:
+            return _format_comment(str(comment))
+    return ""
 
 
 class Parser:
@@ -239,8 +243,11 @@ class Parser:
             if clade.confidence is not None:
                 clade.name = None
 
-        if hasattr(clade, "parent"):
+        try:
             parent = clade.parent
+        except AttributeError:
+            pass
+        else:
             parent.clades.append(clade)
             del clade.parent
             return parent

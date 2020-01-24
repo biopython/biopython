@@ -288,7 +288,7 @@ class TreeMixin:
         except KeyError:
             raise ValueError(
                 "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
-            )
+            ) from None
 
         if follow_attrs:
             get_children = _sorted_attrs
