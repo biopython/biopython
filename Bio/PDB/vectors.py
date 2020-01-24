@@ -8,7 +8,8 @@
 """Vector class, including rotation-related functions."""
 
 
-import numpy
+import numpy  # type: ignore
+from typing import Tuple
 
 
 def m2rotaxis(m):
@@ -386,7 +387,7 @@ Robert T. Miller 2019
 """
 
 
-def homog_rot_mtx(angle_rads, axis):
+def homog_rot_mtx(angle_rads: float, axis: str) -> numpy.array:
     """Generate a 4x4 single-axis numpy rotation matrix.
 
     :param float angle_rads: the desired rotation angle in radians
@@ -427,7 +428,7 @@ def homog_rot_mtx(angle_rads, axis):
         )
 
 
-def homog_trans_mtx(x, y, z):
+def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
     """Generate a 4x4 numpy translation matrix.
 
     :param x, y, z: translation in each axis
@@ -437,7 +438,7 @@ def homog_trans_mtx(x, y, z):
     )
 
 
-def homog_scale_mtx(scale):
+def homog_scale_mtx(scale: float) -> numpy.array:
     """Generate a 4x4 numpy scaling matrix.
 
     :param float scale: scale multiplier
@@ -448,7 +449,7 @@ def homog_scale_mtx(scale):
     )
 
 
-def _get_azimuth(x, y):
+def _get_azimuth(x: float, y: float) -> float:
     sign = -1.0 if y < 0.0 else 1.0
     return (
         numpy.arctan2(y, x)
@@ -459,7 +460,7 @@ def _get_azimuth(x, y):
     )
 
 
-def get_spherical_coordinates(xyz):
+def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
     """Compute spherical coordinates (r, azimuth, polar_angle) for X,Y,Z point.
 
     :param array xyz: column vector (3 row x 1 column numpy array)
@@ -467,13 +468,13 @@ def get_spherical_coordinates(xyz):
     """
     r = numpy.linalg.norm(xyz)
     if 0 == r:
-        return numpy.array([0, 0, 0])
+        return (0, 0, 0)
     azimuth = _get_azimuth(xyz[0][0], xyz[1][0])
     polar_angle = numpy.arccos(xyz[2][0] / r)
     return (r, azimuth, polar_angle)
 
 
-def coord_space(acs, rev=False):
+def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     """Generate transformation matrix to coordinate space defined by 3 points.
 
     New coordinate space will have:
