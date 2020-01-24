@@ -57,18 +57,16 @@ def SimpleFastaParser(handle):
 
     # Main logic
     # Note, remove trailing whitespace, and any internal spaces
-    # (and any embedded \r which are possible in mangled files
-    # when not opened in universal read lines mode)
     lines = []
     for line in handle:
         if line[0] == ">":
-            yield title, "".join(lines).replace(" ", "").replace("\r", "")
+            yield title, "".join(lines).replace(" ", "")
             lines = []
             title = line[1:].rstrip()
             continue
         lines.append(line.rstrip())
 
-    yield title, "".join(lines).replace(" ", "").replace("\r", "")
+    yield title, "".join(lines).replace(" ", "")
 
 
 def FastaTwoLineParser(handle):
@@ -296,13 +294,11 @@ class FastaWriter(SequentialSequenceWriter):
                 title = id
 
         assert "\n" not in title
-        assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
         data = self._get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
-        assert "\r" not in data
 
         if self.wrap:
             for i in range(0, len(data), self.wrap):
@@ -369,12 +365,10 @@ def as_fasta(record):
     else:
         title = id
     assert "\n" not in title
-    assert "\r" not in title
     lines = [">%s\n" % title]
 
     data = _get_seq_string(record)  # Catches sequence being None
     assert "\n" not in data
-    assert "\r" not in data
     for i in range(0, len(data), 60):
         lines.append(data[i : i + 60] + "\n")
 
@@ -397,11 +391,9 @@ def as_fasta_2line(record):
     else:
         title = id
     assert "\n" not in title
-    assert "\r" not in title
 
     data = _get_seq_string(record)  # Catches sequence being None
     assert "\n" not in data
-    assert "\r" not in data
 
     return ">%s\n%s\n" % (title, data)
 
