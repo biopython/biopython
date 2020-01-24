@@ -37,6 +37,7 @@ possible, especially the following contributors:
 - Kai Blin
 - Peter Cock
 - Rob Miller
+- Sergio Valqui
 - Sujan Dulal (first contribution)
 
 20 December 2019: Biopython 1.76

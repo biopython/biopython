@@ -13,8 +13,8 @@ try:
     from numpy.random import random
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
 
 from Bio.PDB.vectors import Vector
 from Bio.PDB import rotmat, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
@@ -37,18 +37,42 @@ class VectorTests(unittest.TestCase):
 
         self.assertEqual(calc_angle(v1, v2, v3), 1.5707963267948966)
         self.assertEqual(calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
-        self.assertTrue(numpy.array_equal((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
-        self.assertTrue(numpy.array_equal((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0])))
-        self.assertTrue(numpy.array_equal((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0])))
-        self.assertTrue(numpy.array_equal((v1 + v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
-        self.assertTrue(numpy.array_equal((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0])))
-        self.assertTrue(numpy.array_equal((v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0])))
+        self.assertTrue(
+            numpy.array_equal((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0]))
+        )
+        self.assertTrue(
+            numpy.array_equal((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0]))
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                (v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal((v1 + v2).get_array(), numpy.array([0.0, 0.0, 1.0]))
+        )
+        self.assertTrue(
+            numpy.array_equal((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0]))
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                (v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0])
+            )
+        )
         self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
         self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
         self.assertEqual(v1 * v2, 0.0)
-        self.assertTrue(numpy.array_equal((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0])))
-        self.assertTrue(numpy.array_equal((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0])))
-        self.assertTrue(numpy.array_equal((v1 ** (1, 2, 3)).get_array(), numpy.array([0.0, 0.0, 3.0])))
+        self.assertTrue(
+            numpy.array_equal((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0]))
+        )
+        self.assertTrue(
+            numpy.array_equal((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0]))
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                (v1 ** (1, 2, 3)).get_array(), numpy.array([0.0, 0.0, 3.0])
+            )
+        )
         self.assertEqual(v1.norm(), 1.0)
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
@@ -57,7 +81,9 @@ class VectorTests(unittest.TestCase):
     def test_normalization(self):
         """Test Vector normalization."""
         v1 = Vector([2, 0, 0])
-        self.assertTrue(numpy.array_equal(v1.normalized().get_array(), numpy.array([1, 0, 0])))
+        self.assertTrue(
+            numpy.array_equal(v1.normalized().get_array(), numpy.array([1, 0, 0]))
+        )
         # State of v1 should not be affected by `normalized`
         self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([2, 0, 0])))
         v1.normalize()
@@ -71,7 +97,9 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(numpy.allclose(ref[0], [1.0, 0.0, 0.0]))
         self.assertTrue(numpy.allclose(ref[1], [0.0, 0.0, 1.0]))
         self.assertTrue(numpy.allclose(ref[2], [0.0, 1.0, 0.0]))
-        self.assertTrue(numpy.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0]))
+        self.assertTrue(
+            numpy.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0])
+        )
 
     def test_rotmat_90(self):
         """Test regular 90 deg rotation."""
@@ -81,8 +109,14 @@ class VectorTests(unittest.TestCase):
         self.assertTrue(numpy.allclose(rot[0], numpy.array([1.0, 0.0, 0.0])))
         self.assertTrue(numpy.allclose(rot[1], numpy.array([0.0, 0.0, 1.0])))
         self.assertTrue(numpy.allclose(rot[2], numpy.array([0.0, -1.0, 0.0])))
-        self.assertTrue(numpy.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0]))
-        self.assertTrue(numpy.allclose(v1.right_multiply(numpy.transpose(rot)).get_array(), [0.0, 1.0, 0.0]))
+        self.assertTrue(
+            numpy.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0])
+        )
+        self.assertTrue(
+            numpy.allclose(
+                v1.right_multiply(numpy.transpose(rot)).get_array(), [0.0, 1.0, 0.0]
+            )
+        )
 
     def test_rotmat_180(self):
         """Test rotmat when the rotation is 180 deg (singularity)."""
@@ -135,8 +169,10 @@ class VectorTests(unittest.TestCase):
         m = rotaxis(angle, axis)
         cangle, caxis = m2rotaxis(m)
         self.assertAlmostEqual(angle, cangle, places=3)
-        self.assertTrue(numpy.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
-                        "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
+        self.assertTrue(
+            numpy.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
+            "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()),
+        )
 
 
 if __name__ == "__main__":
