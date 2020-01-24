@@ -16,12 +16,10 @@ class, used in the Bio.AlignIO module.
 
 import warnings
 
-from Bio import BiopythonDeprecationWarning
+from Bio import Alphabet, BiopythonDeprecationWarning
+from Bio.Align import _aligners
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
-from Bio import Alphabet
-
-from Bio.Align import _aligners
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
@@ -1509,7 +1507,31 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     -EVL-
     <BLANKLINE>
 
+    You can also set the value of attributes directly during construction
+    of the PairwiseAligner object by providing them as keyword arguemnts:
+
+    >>> aligner = Align.PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
+    >>> for alignment in aligner.align("TACCG", "ACG"):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 6.0:
+    TACCG
+    -||-|
+    -AC-G
+    <BLANKLINE>
+    Score = 6.0:
+    TACCG
+    -|-||
+    -A-CG
+    <BLANKLINE>
+
     """
+
+    def __init__(self, **kwargs):
+        super().__init__()
+        for name, value in kwargs.items():
+            setattr(self, name, value)
 
     def __setattr__(self, key, value):
         if key not in dir(_aligners.PairwiseAligner):
