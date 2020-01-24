@@ -102,6 +102,7 @@ matrix:
   allow_failures:
     - arch: arm64
     - arch: ppc64le
+    - arch: s390x
 
 addons:
   apt:
