@@ -287,8 +287,8 @@ class RestrictionType(type):
             pass
         except Exception:
             raise ValueError(
-                "Problem with regular expression, re.compiled(%s)" % repr(cls.compsite)
-            )
+                "Problem with regular expression, re.compiled(%r)" % cls.compsite
+            ) from None
 
     def __add__(cls, other):
         """Add restriction enzyme to a RestrictionBatch().
@@ -2221,8 +2221,6 @@ class RestrictionBatch(set):
                 return y
             elif isinstance(eval(str(y)), RestrictionType):
                 return eval(y)
-            else:
-                pass
         except (NameError, SyntaxError):
             pass
         raise ValueError("%s is not a RestrictionType" % y.__class__)
@@ -2711,11 +2709,6 @@ AllEnzymes.update(NonComm)
 #   Now, place the enzymes in locals so they can be imported.
 #
 names = [str(x) for x in AllEnzymes]
-try:
-    del x  # noqa
-except NameError:
-    # Scoping changed in Python 3, the variable isn't leaked
-    pass
 locals().update(dict(zip(names, AllEnzymes)))
 __all__ = (
     "FormattedSeq",
