@@ -323,8 +323,8 @@ class FileRecord:
          - fname - file to be created with locus removed
 
         """
-        for i in range(len(self.loci_list)):
-            if self.loci_list[i] == name:
+        for i, locus in enumerate(self.loci_list):
+            if locus == name:
                 self.remove_locus_by_position(i, fname)
                 return
         # If here than locus not existent... Maybe raise exception?
@@ -339,8 +339,8 @@ class FileRecord:
 
         """
         positions = []
-        for i in range(len(self.loci_list)):
-            if self.loci_list[i] in names:
+        for i, locus in enumerate(self.loci_list):
+            if locus in names:
                 positions.append(i)
         self.remove_loci_by_position(positions, fname)
         # If here than locus not existent... Maybe raise exception?
