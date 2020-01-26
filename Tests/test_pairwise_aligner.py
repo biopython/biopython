@@ -2256,6 +2256,37 @@ A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA-CACATGCAAGTCGA-ACGG
         self.assertAlmostEqual(alignment.score, 1286.0)
 
 
+class TestKeywordArgumentsConstructor(unittest.TestCase):
+    def test_confusing_arguments(self):
+        aligner = Align.PairwiseAligner(
+            mode="local",
+            open_gap_score=-0.3,
+            extend_gap_score=-0.1,
+            target_open_gap_score=-0.2,
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.200000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.200000
+  target_right_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
+  mode: local
+""",
+        )
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
