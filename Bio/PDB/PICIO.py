@@ -58,7 +58,7 @@ def read_PIC(file, verbose=False):
     # ^\('(?P<pid>\w*)',\s(?P<mdl>\d+),\s'(?P<chn>\w)',\s\('(?P<het>\s|[\w-]+)',\s(?P<pos>\d+),\s'(?P<icode>\s|\w)'\)\)\s(?P<res>[A-Z]{3})\s(\[(?P<segid>[a-zA-z\s]{4})\])?\s*$
     pdb_ttl_re = re.compile(r"^TITLE\s{5}(?P<ttl>.+)\s*$")
     biop_id_re = re.compile(
-        r"^\('(?P<pid>\w*)',\s(?P<mdl>\d+),\s"
+        r"^\('(?P<pid>[^\s]*)',\s(?P<mdl>\d+),\s"
         r"'(?P<chn>\s|\w)',\s\('(?P<het>\s|[\w\s-]+)"
         r"',\s(?P<pos>-?\d+),\s'(?P<icode>\s|\w)'\)\)"
         r"\s+(?P<res>[\w]{1,3})"
