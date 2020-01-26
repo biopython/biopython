@@ -22,10 +22,13 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBExceptions import PDBException
 
-from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Edron
+from Bio.PDB.internal_coords import IC_Residue, IC_Chain, Edron, AtomKey
+
+from typing import Dict, TextIO
+from Bio.PDB.Structure import Structure
 
 
-def read_PIC(file, verbose=False):
+def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
     """Load Protein Internal Coordinate (.pic) data from file.
 
     PIC file format:
@@ -220,8 +223,16 @@ def read_PIC(file, verbose=False):
                 #    print('Reading pic file', file, 'B-factor line fail: ', aline)
             else:
                 m = Edron.edron_re.match(aline)
-                if m:
+                if m and sb_res is not None:
                     sb_res.internal_coord.load_PIC(m.groupdict())
+                elif m:
+                    print(
+                        "PIC file: ",
+                        file,
+                        " error: no residue info before reading (di/h)edron data: ",
+                        aline,
+                    )
+                    return None
                 elif aline.strip():
                     if verbose:
                         print("Reading PIC file", file, "parse fail on: .", aline, ".")
@@ -285,7 +296,7 @@ def enumerate_atoms(entity):
         _enumerate_entity_atoms(entity)
 
 
-def pdb_date(datestr):
+def pdb_date(datestr: str) -> str:
     """Convert yyyy-mm-dd date to dd-month-yy."""
     if datestr:
         m = re.match(r"(\d{4})-(\d{2})-(\d{2})", datestr)
