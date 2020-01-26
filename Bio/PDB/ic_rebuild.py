@@ -31,7 +31,7 @@ from Bio.PDB.PICIO import write_PIC, read_PIC, enumerate_atoms, pdb_date
 # for typing
 from typing import Dict, Union, Any
 from Bio.PDB.Atom import Atom
-from Bio.PDB.Residue import Residue
+from Bio.PDB.Residue import Residue, DisorderedResidue
 from Bio.PDB.Model import Model
 from Bio.PDB.Chain import Chain
 from Bio.PDB.Entity import Entity
@@ -96,7 +96,7 @@ def report_IC(
     try:
         if "A" == entity.level:
             raise PDBException("No IC output at Atom level")
-        elif isinstance(entity, Residue):  # "R" == entity.level:
+        elif isinstance(entity, Residue) or isinstance(entity, DisorderedResidue):  # "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
                 dlen = len(entity.internal_coord.dihedra)
