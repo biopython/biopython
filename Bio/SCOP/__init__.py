@@ -966,22 +966,27 @@ def _open(cgi, params=None, get=1):
         handle = urlopen(cgi, data=options)
     return handle
 
+
 class SCOPRemote():
     """This class provides access to SCOP2 data.
     For more information, see http://scop.mrc-lmb.cam.ac.uk/about"""
     base_url = "http://scop.mrc-lmb.cam.ac.uk/api/"
+
     def term(self, node):
         """Return biological data about the specified node"""
         query_url = self.base_url + "term/" + node
         return load(urlopen(query_url))
+
     def domains(self, node):
         """Return all "leaves" (domains) that are descendants of this node"""
         query_url = self.base_url + "domains/" + node
         return load(urlopen(query_url))
+
     def ancestry(self, node):
         """Show the lineage of the given node within the SCOP protein graph"""
         query_url = self.base_url + "ancestry/" + node
         return load(urlopen(query_url))
+
     def stats(self):
         """Information on the latest release"""
         query_url = self.base_url + "stats"
