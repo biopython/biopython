@@ -272,7 +272,7 @@ class MafIndex:
         # example: Tests/MAF/ucsc_mm9_chr10.maf
         self._maf_file = maf_file
 
-        self._maf_fp = open(self._maf_file, "r")
+        self._maf_fp = open(self._maf_file)
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):

@@ -14,7 +14,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output001(self):
         """Check output001.m10 file."""
         fasta_file = "Fasta/output001.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 4)
             self.assertEqual(len(alignments[0]), 2)
@@ -83,7 +83,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output002(self):
         """Check output002.m10 file."""
         fasta_file = "Fasta/output002.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 6)
             self.assertEqual(len(alignments[0]), 2)
@@ -205,7 +205,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output003(self):
         """Check output003.m10 file."""
         fasta_file = "Fasta/output003.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 3)
             self.assertEqual(len(alignments[0]), 2)
@@ -248,7 +248,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output004(self):
         """Check output004.m10 file."""
         fasta_file = "Fasta/output004.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 1)
             self.assertEqual(len(alignments[0]), 2)
@@ -277,7 +277,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output005(self):
         """Check output005.m10 file."""
         fasta_file = "Fasta/output005.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 1)
             self.assertEqual(len(alignments[0]), 2)
@@ -306,7 +306,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output006(self):
         """Check output006.m10 file."""
         fasta_file = "Fasta/output006.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 1)
             self.assertEqual(len(alignments[0]), 2)
@@ -337,7 +337,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output007(self):
         """Check output007.m10 file."""
         fasta_file = "Fasta/output007.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 9)
             self.assertEqual(len(alignments[0]), 2)
@@ -466,7 +466,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output008(self):
         """Check output008.m10 file."""
         fasta_file = "Fasta/output008.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 12)
             self.assertEqual(len(alignments[0]), 2)
@@ -827,7 +827,7 @@ class FastaIOTests(unittest.TestCase):
     def test_output009(self):
         """Check output009.m10 file."""
         fasta_file = "Fasta/output009.m10"
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
             alignments = list(FastaIO.FastaM10Iterator(handle))
             self.assertEqual(len(alignments), 7)
             self.assertEqual(len(alignments[0]), 2)

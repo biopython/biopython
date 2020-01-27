@@ -94,7 +94,7 @@ class Peaklist:
 
     def __init__(self, infn):
         """Initialize the class."""
-        with open(infn, "r") as infile:
+        with open(infn) as infile:
 
             # Read in the header lines
             self.firstline = infile.readline().split("\012")[0]
@@ -284,9 +284,7 @@ def data_table(fn_list, datalabel, keyatom):
             label = label_line_list[count]
             if key in dictionary:
                 line = (
-                    line
-                    + "\t"
-                    + XpkEntry(dictionary[key][0], label).fields[datalabel]
+                    line + "\t" + XpkEntry(dictionary[key][0], label).fields[datalabel]
                 )
             else:
                 line += "\t*"

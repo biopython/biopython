@@ -16,12 +16,11 @@ class, used in the Bio.AlignIO module.
 
 import warnings
 
+from Bio import Alphabet
 from Bio import BiopythonDeprecationWarning
+from Bio.Align import _aligners
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
-from Bio import Alphabet
-
-from Bio.Align import _aligners
 
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
@@ -315,13 +314,14 @@ class MultipleSeqAlignment:
         """Return the alignment as a string in the specified file format [DEPRECATED].
 
         This method is deprecated; instead of alignment.format(format_spec),
-        please use format(alignment, format_spec).
+        please use format(alignment, format_spec) or an f-string.
         """
-        warnings.warn("""\
-alignment.format has been deprecated, and we intend to remove it in a future
-release of Biopython. Instead of alignment.format(format_spec), please use
-format(alignment, format_spec).
-""", BiopythonDeprecationWarning)
+        warnings.warn(
+            "alignment.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of alignment.format(format_spec), "
+            "please use format(alignment, format_spec) or an f-string.",
+            BiopythonDeprecationWarning,
+        )
         return self.__format__(format_spec)
 
     def __format__(self, format_spec):
@@ -1236,13 +1236,14 @@ class PairwiseAlignment:
         """Create a human-readable representation of the alignment (DEPRECATED).
 
         This method is deprecated; instead of alignment.format(), please use
-        format(alignment).
+        format(alignment) or an f-string.
         """
-        warnings.warn("""\
-alignment.format has been deprecated, and we intend to remove it in a future
-release of Biopython. Instead of alignment.format(), please use
-format(alignment).
-""", BiopythonDeprecationWarning)
+        warnings.warn(
+            "alignment.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of alignment.format(), please use "
+            "format(alignment) or an f-string.",
+            BiopythonDeprecationWarning,
+        )
         return self.__format__(None)
 
     def __str__(self):
@@ -1507,13 +1508,43 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     -EVL-
     <BLANKLINE>
 
+    You can also set the value of attributes directly during construction
+    of the PairwiseAligner object by providing them as keyword arguemnts:
+
+    >>> aligner = Align.PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
+    >>> for alignment in aligner.align("TACCG", "ACG"):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 6.0:
+    TACCG
+    -||-|
+    -AC-G
+    <BLANKLINE>
+    Score = 6.0:
+    TACCG
+    -|-||
+    -A-CG
+    <BLANKLINE>
+
     """
+
+    def __init__(self, **kwargs):
+        """Initialize a new PairwiseAligner with the keyword arguments as attributes.
+
+        This function subclasses `_aligners.PairwiseAligner` and loops over all
+        the keyword arguments that are given in the constructor to set them
+        as attributes on the object. This will call the `__setattr__` method to
+        do that.
+        """
+        super().__init__()
+        for name, value in kwargs.items():
+            setattr(self, name, value)
 
     def __setattr__(self, key, value):
         if key not in dir(_aligners.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes
-            raise AttributeError("PairwiseAligner object has no attribute '%s'"
-                                 % key)
+            raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):

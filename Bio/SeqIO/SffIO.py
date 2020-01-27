@@ -1371,8 +1371,10 @@ class SffWriter(SequenceWriter):
         try:
             flow_values = record.annotations["flow_values"]
             flow_index = record.annotations["flow_index"]
-            if self._key_sequence != record.annotations["flow_key"].encode()\
-                    or self._flow_chars != record.annotations["flow_chars"].encode():
+            if (
+                self._key_sequence != record.annotations["flow_key"].encode()
+                or self._flow_chars != record.annotations["flow_chars"].encode()
+            ):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
             raise ValueError("Missing SFF flow information for %s" % record.id)

@@ -612,7 +612,9 @@ class Commandline:
                     for token in token_indices:
                         self.options[options[token].lower()] = None
                 except ValueError:
-                    raise NexusError("Incorrect formatting in line: %s" % line) from None
+                    raise NexusError(
+                        "Incorrect formatting in line: %s" % line
+                    ) from None
 
 
 class Block:
@@ -1409,7 +1411,9 @@ class Nexus:
                 elif self.charsets and identifier in self.charsets:
                     return self.charsets[identifier]
                 else:
-                    raise NexusError("Unknown character identifier: %s" % identifier) from None
+                    raise NexusError(
+                        "Unknown character identifier: %s" % identifier
+                    ) from None
             else:
                 if n <= self.nchar:
                     return n - 1
@@ -1428,7 +1432,9 @@ class Nexus:
                 elif self.taxsets and identifier in self.taxsets:
                     return self.taxsets[identifier]
                 else:
-                    raise NexusError("Unknown taxon identifier: %s" % identifier) from None
+                    raise NexusError(
+                        "Unknown taxon identifier: %s" % identifier
+                    ) from None
             else:
                 if n > 0 and n <= self.ntax:
                     return self.taxlabels[n - 1]

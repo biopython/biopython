@@ -153,7 +153,7 @@ def epost(db, **keywds):
 def efetch(db, **keywords):
     """Fetch Entrez results which are returned as a handle.
 
-    EFetch retrieves records in the requested format from a list of one or
+    EFetch retrieves records in the requested format from a list or set of one or
     more UIs or from user's environment.
 
     See the online documentation for an explanation of the parameters:
@@ -187,12 +187,14 @@ def efetch(db, **keywords):
     except KeyError:
         pass
     else:
-        if isinstance(ids, list):
+        try:
             ids = ",".join(ids)
-            variables["id"] = ids
-        elif isinstance(ids, int):
-            ids = str(ids)
-            variables["id"] = ids
+        except TypeError as e:
+            if isinstance(ids, int):
+                ids = str(ids)
+            else:
+                raise e
+        variables["id"] = ids
 
         if ids.count(",") >= 200:
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are

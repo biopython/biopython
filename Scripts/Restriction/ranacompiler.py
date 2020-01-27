@@ -707,9 +707,9 @@ class DictionaryBuilder:
                     else:
                         raise ValueError
                 print(strmess)
-                emboss_e = open(os.path.join(base, "emboss_e.%s" % number), "r")
-                emboss_r = open(os.path.join(base, "emboss_r.%s" % number), "r")
-                emboss_s = open(os.path.join(base, "emboss_s.%s" % number), "r")
+                emboss_e = open(os.path.join(base, "emboss_e.%s" % number))
+                emboss_r = open(os.path.join(base, "emboss_r.%s" % number))
+                emboss_s = open(os.path.join(base, "emboss_s.%s" % number))
                 return emboss_e, emboss_r, emboss_s
             except ValueError:
                 continue
@@ -979,9 +979,7 @@ class DictionaryBuilder:
                     if not bl[2]:
                         print("Anyway, %s is not commercially available.\n" % n)
                     else:
-                        print(
-                            "Unfortunately, %s is commercially " % n + " available.\n"
-                        )
+                        print("Unfortunately, %s is commercially available.\n" % n)
 
                     continue
                 # Hyphens and dots can't be used as a Python name, nor as a

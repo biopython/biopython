@@ -136,7 +136,7 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def check_iterator_for_loop_handle(self, path, fmt, length, m=None):
         # Try using the iterator with a for loop and a handle
-        with open(path, "r") as handle:
+        with open(path) as handle:
             alignments = list(AlignIO.parse(handle, format=fmt))
             self.assertEqual(len(alignments), length)
         if m is not None:
@@ -183,7 +183,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(counter, length)
 
     def check_write_three_times_and_read(self, path, fmt, m):
-        with open(path, "r") as handle:
+        with open(path) as handle:
             data = handle.read()
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)
@@ -405,7 +405,7 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_msf1(self):
         path = "msf/DOA_prot.msf"
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 "GCG MSF header said alignment length 62, "
                 "but 11 of 12 sequences said Len: 250"

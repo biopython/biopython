@@ -357,25 +357,25 @@ class TestGckWithArtificialData(unittest.TestCase):
         """Read a file with incorrect length."""
         # Change the sequence length as indicated in the sequence packet
         h = self.munge_buffer(0x1C, [0x00, 0x00, 0x20, 0x15])
-        with self.assertRaisesRegexp(ValueError, "Conflicting sequence length values"):
+        with self.assertRaisesRegex(ValueError, "Conflicting sequence length values"):
             SeqIO.read(h, "gck")
         h.close()
 
         # Change the sequence length as indicated in the features packet
         h = self.munge_buffer(0x36, [0x00, 0x00, 0x20, 0x15])
-        with self.assertRaisesRegexp(ValueError, "Conflicting sequence length values"):
+        with self.assertRaisesRegex(ValueError, "Conflicting sequence length values"):
             SeqIO.read(h, "gck")
         h.close()
 
         # Change the number of features
         h = self.munge_buffer(0x3B, 0x30)
-        with self.assertRaisesRegexp(ValueError, "Features packet size inconsistent with number of features"):
+        with self.assertRaisesRegex(ValueError, "Features packet size inconsistent with number of features"):
             SeqIO.read(h, "gck")
         h.close()
 
         # Change the number of restriction sites
         h = self.munge_buffer(0x137, 0x30)
-        with self.assertRaisesRegexp(ValueError, "Sites packet size inconsistent with number of sites"):
+        with self.assertRaisesRegex(ValueError, "Sites packet size inconsistent with number of sites"):
             SeqIO.read(h, "gck")
         h.close()
 
@@ -385,7 +385,7 @@ class TestGckWithImproperHeader(unittest.TestCase):
     def test_read(self):
         """Read a file with an incomplete header."""
         handle = BytesIO(b"tiny")
-        with self.assertRaisesRegexp(ValueError, "Improper header, cannot read 24 bytes from handle"):
+        with self.assertRaisesRegex(ValueError, "Improper header, cannot read 24 bytes from handle"):
             SeqIO.read(handle, "gck")
         handle.close()
 

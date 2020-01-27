@@ -118,10 +118,13 @@ class UndoHandle:
 
     def __init__(self, handle):
         """Initialize the class."""
-        raise Exception("The UndoHandle class has been deprecated, and was "
-                        "moved to Bio/SearchIO/_legacy/ParserSupport.py "
-                        "(which is the only module in Biopython still using "
-                        "UndoHandle.")
+        raise Exception(
+            "The UndoHandle class has been deprecated, and was "
+            "moved to Bio/SearchIO/_legacy/ParserSupport.py "
+            "(which is the only module in Biopython still using "
+            "UndoHandle."
+        )
+
 
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 # for indexing
@@ -339,7 +342,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._con = con
         # Check the count...
         try:
-            count, = con.execute(
+            (count,) = con.execute(
                 "SELECT value FROM meta_data WHERE key=?;", ("count",)
             ).fetchone()
             self._length = int(count)
@@ -350,13 +353,13 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             # use MAX(_ROWID_) to obtain the number of sequences in the database
             # using COUNT(key) is quite slow in SQLITE
             # (https://stackoverflow.com/questions/8988915/sqlite-count-slow-on-big-tables)
-            count, = con.execute("SELECT MAX(_ROWID_) FROM offset_data;").fetchone()
+            (count,) = con.execute("SELECT MAX(_ROWID_) FROM offset_data;").fetchone()
             if self._length != int(count):
                 con.close()
                 raise ValueError(
                     "Corrupt database? %i entries not %i" % (int(count), self._length)
                 ) from None
-            self._format, = con.execute(
+            (self._format,) = con.execute(
                 "SELECT value FROM meta_data WHERE key=?;", ("format",)
             ).fetchone()
             if fmt and fmt != self._format:
@@ -365,7 +368,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     "Index file says format %s, not %s" % (self._format, fmt)
                 ) from None
             try:
-                filenames_relative_to_index, = con.execute(
+                (filenames_relative_to_index,) = con.execute(
                     "SELECT value FROM meta_data WHERE key=?;",
                     ("filenames_relative_to_index",),
                 ).fetchone()
@@ -458,9 +461,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         #             "offset INTEGER);")
         con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
         con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);", ("count", -1))
-        con.execute(
-            "INSERT INTO meta_data (key, value) VALUES (?,?);", ("format", fmt)
-        )
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);", ("format", fmt))
         con.execute(
             "INSERT INTO meta_data (key, value) VALUES (?,?);",
             ("filenames_relative_to_index", "True"),

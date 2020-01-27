@@ -7,23 +7,21 @@
 
 """Tests for pairwise aligner module."""
 
+import array
 import os
 import unittest
-import array
 
-from Bio import Align
-from Bio import SeqIO
+from Bio import Align, SeqIO
 
 
 class TestAlignerProperties(unittest.TestCase):
-
     def test_aligner_property_epsilon(self):
         aligner = Align.PairwiseAligner()
-        self.assertAlmostEqual(aligner.epsilon, 1.e-6)
-        aligner.epsilon = 1.e-4
-        self.assertAlmostEqual(aligner.epsilon, 1.e-4)
-        aligner.epsilon = 1.e-8
-        self.assertAlmostEqual(aligner.epsilon, 1.e-8)
+        self.assertAlmostEqual(aligner.epsilon, 1.0e-6)
+        aligner.epsilon = 1.0e-4
+        self.assertAlmostEqual(aligner.epsilon, 1.0e-4)
+        aligner.epsilon = 1.0e-8
+        self.assertAlmostEqual(aligner.epsilon, 1.0e-8)
         with self.assertRaises(TypeError):
             aligner.epsilon = "not a number"
         with self.assertRaises(TypeError):
@@ -48,7 +46,9 @@ class TestAlignerProperties(unittest.TestCase):
             aligner.match_score = "not a number"
         with self.assertRaises(ValueError):
             aligner.mismatch_score = "not a number"
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 3.000000
   mismatch_score: -2.000000
@@ -65,7 +65,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
 
     def test_aligner_property_gapscores(self):
         aligner = Align.PairwiseAligner()
@@ -87,7 +88,9 @@ Pairwise sequence aligner with parameters
         open_score, extend_score = (-1, -2)
         aligner.query_end_open_gap_score = open_score
         aligner.query_end_extend_gap_score = extend_score
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -104,7 +107,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -1.000000
   query_right_extend_gap_score: -2.000000
   mode: global
-""")
+""",
+        )
         self.assertAlmostEqual(aligner.query_end_open_gap_score, open_score)
         self.assertAlmostEqual(aligner.query_end_extend_gap_score, extend_score)
         score = -3
@@ -139,7 +143,9 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(aligner.query_right_gap_score, score)
         self.assertAlmostEqual(aligner.query_right_open_gap_score, score)
         self.assertAlmostEqual(aligner.query_right_extend_gap_score, score)
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -156,7 +162,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -5.000000
   query_right_extend_gap_score: -5.000000
   mode: global
-""")
+""",
+        )
         with self.assertRaises(ValueError):
             aligner.target_gap_score = "wrong"
         with self.assertRaises(ValueError):
@@ -175,13 +182,14 @@ Pairwise sequence aligner with parameters
 
 
 class TestPairwiseGlobal(unittest.TestCase):
-
     def test_needlemanwunsch_simple1(self):
         seq1 = "GAACT"
         seq2 = "GAT"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -198,7 +206,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
         self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -206,20 +215,28 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAACT
 ||--|
 GA--T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 5)), ((0, 2), (2, 3))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAACT
 |-|-|
 G-A-T
-""")
-        self.assertEqual(alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3))))
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+        )
 
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
@@ -229,7 +246,9 @@ G-A-T
         aligner.open_gap_score = -5
         aligner.extend_gap_score = -1
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 0.000000
   mismatch_score: -1.000000
@@ -246,19 +265,21 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -5.000000
   query_right_extend_gap_score: -1.000000
   mode: global
-""")
+""",
+        )
         score = aligner.score("CC", "ACCT")
         self.assertAlmostEqual(score, -7.0)
 
 
 class TestPairwiseLocal(unittest.TestCase):
-
     def test_smithwaterman(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Smith-Waterman")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -275,18 +296,22 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: -0.100000
   mode: local
-""")
+""",
+        )
         score = aligner.score("AwBw", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AwBw", "zABz")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
  AwBw
  |-| 
 zA-Bz
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
     def test_gotoh_local(self):
@@ -295,7 +320,9 @@ zA-Bz
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -312,23 +339,26 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: local
-""")
+""",
+        )
         score = aligner.score("AwBw", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AwBw", "zABz")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
  AwBw
  |-| 
 zA-Bz
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
-
     def test_match_score_open_penalty1(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
@@ -337,7 +367,9 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 2.000000
   mismatch_score: -1.000000
@@ -354,7 +386,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
         seq1 = "AA"
         seq2 = "A"
         score = aligner.score(seq1, seq2)
@@ -363,19 +396,25 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AA
 -|
 -A
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((1, 2),), ((0, 1),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AA
 |-
 A-
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1),), ((0, 1),)))
 
     def test_match_score_open_penalty2(self):
@@ -386,7 +425,9 @@ A-
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.500000
   mismatch_score: 0.000000
@@ -403,7 +444,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
         seq1 = "GAA"
         seq2 = "GA"
         score = aligner.score(seq1, seq2)
@@ -412,19 +454,25 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAA
 |-|
 G-A
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAA
 ||-
 GA-
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
 
     def test_match_score_open_penalty3(self):
@@ -433,7 +481,9 @@ GA-
         aligner.query_open_gap_score = -0.1
         aligner.query_extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -450,7 +500,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
         seq1 = "GAACT"
         seq2 = "GAT"
         score = aligner.score(seq1, seq2)
@@ -459,11 +510,14 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAACT
 ||--|
 GA--T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 5)), ((0, 2), (2, 3))))
 
     def test_match_score_open_penalty4(self):
@@ -473,7 +527,9 @@ GA--T
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -2.000000
@@ -490,7 +546,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
         seq1 = "GCT"
         seq2 = "GATA"
         score = aligner.score(seq1, seq2)
@@ -499,31 +556,38 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 G-CT-
 |--|-
 GA-TA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (2, 3))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GC-T-
 |--|-
 G-ATA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (2, 3))))
 
 
 class TestPairwiseExtendPenalty(unittest.TestCase):
-
     def test_extend_penalty1(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -0.5
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -540,7 +604,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.200000
   query_right_extend_gap_score: -0.500000
   mode: global
-""")
+""",
+        )
         seq1 = "GACT"
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
@@ -549,11 +614,14 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.3)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 |--|
 G--T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((0, 1), (1, 2))))
 
     def test_extend_penalty2(self):
@@ -562,7 +630,9 @@ G--T
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -1.5
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -579,7 +649,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.200000
   query_right_extend_gap_score: -1.500000
   mode: global
-""")
+""",
+        )
         seq1 = "GACT"
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
@@ -588,31 +659,38 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.6)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 -.-|
 -G-T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((1, 2), (3, 4)), ((0, 1), (1, 2))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 0.6)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 |-.-
 G-T-
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
 
 
 class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
-
     def test_penalize_extend_when_opening(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.open_gap_score = -1.7
         aligner.extend_gap_score = -1.5
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -629,7 +707,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -1.700000
   query_right_extend_gap_score: -1.500000
   mode: global
-""")
+""",
+        )
         seq1 = "GACT"
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
@@ -638,16 +717,18 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -1.2)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 |--|
 G--T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((0, 1), (1, 2))))
 
 
 class TestPairwisePenalizeEndgaps(unittest.TestCase):
-
     def test_penalize_end_gaps(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
@@ -656,7 +737,9 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
         end_score = 0.0
         aligner.target_end_gap_score = end_score
         aligner.query_end_gap_score = end_score
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -673,7 +756,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
-""")
+""",
+        )
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         seq1 = "GACT"
         seq2 = "GT"
@@ -683,32 +767,40 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 --.|
 --GT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((2, 4),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 |--|
 G--T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (3, 4)), ((0, 1), (1, 2))))
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GACT
 |.--
 GT--
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
-
     def test_separate_gap_penalties1(self):
         seq1 = "GAT"
         seq2 = "GTCT"
@@ -725,7 +817,9 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         aligner.query_end_open_gap_score = open_score
         aligner.query_end_extend_gap_score = extend_score
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -742,26 +836,33 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.800000
   query_right_extend_gap_score: 0.000000
   mode: local
-""")
+""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 G-AT
 |-.|
 GTCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (1, 3)), ((0, 1), (2, 4))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GA-T
 |.-|
 GTCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (2, 3)), ((0, 2), (3, 4))))
 
     def test_separate_gap_penalties2(self):
@@ -772,7 +873,9 @@ GTCT
         aligner.query_open_gap_score = -0.2
         aligner.query_extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -789,7 +892,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.200000
   query_right_extend_gap_score: 0.000000
   mode: local
-""")
+""",
+        )
         seq1 = "GAT"
         seq2 = "GTCT"
         score = aligner.score(seq1, seq2)
@@ -798,16 +902,18 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.8)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAT  
 |-|  
 G-TCT
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((0, 1), (1, 2))))
 
 
 class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
-
     def test_separate_gap_penalties_with_extension(self):
         seq1 = "GAAT"
         seq2 = "GTCCT"
@@ -822,7 +928,9 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         aligner.query_gap_score = score
         aligner.query_end_gap_score = score
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -839,71 +947,85 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.100000
   query_right_extend_gap_score: -0.100000
   mode: local
-""")
+""",
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 G-AAT
 |-..|
 GTCCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (1, 4)), ((0, 1), (2, 5))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GA-AT
 |.-.|
 GTCCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (2, 4)), ((0, 2), (3, 5))))
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAA-T
 |..-|
 GTCCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 3), (3, 4)), ((0, 3), (4, 5))))
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 G-AAT
 |-..|
 GTCCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 1), (1, 4)), ((0, 1), (2, 5))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GA-AT
 |.-.|
 GTCCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (2, 4)), ((0, 2), (3, 5))))
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 GAA-T
 |..-|
 GTCCT
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 3), (3, 4)), ((0, 3), (4, 5))))
 
 
 class TestPairwiseMatchDictionary(unittest.TestCase):
 
-    match_dict = {
-        ("A", "A"): 1.5,
-        ("A", "T"): 0.5,
-        ("T", "A"): 0.5,
-        ("T", "T"): 1.0
-        }
+    match_dict = {("A", "A"): 1.5, ("A", "T"): 0.5, ("T", "A"): 0.5, ("T", "T"): 1.0}
 
     def test_match_dictionary1(self):
         try:
@@ -927,7 +1049,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         suffix = ">"
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix):-len(suffix)], 16)
+        address = int(line[len(prefix) : -len(suffix)], 16)
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
@@ -947,19 +1069,25 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATAT
 ||. 
 ATT 
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATAT
 ||-|
 AT-T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((0, 2), (2, 3))))
 
     def test_match_dictionary2(self):
@@ -983,7 +1111,7 @@ AT-T
         suffix = ">"
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix):-len(suffix)], 16)
+        address = int(line[len(prefix) : -len(suffix)], 16)
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -1003,11 +1131,14 @@ AT-T
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATAT
 ||. 
 ATT 
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary3(self):
@@ -1031,7 +1162,7 @@ ATT
         suffix = ">"
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix):-len(suffix)], 16)
+        address = int(line[len(prefix) : -len(suffix)], 16)
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -1051,11 +1182,14 @@ ATT
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATT 
 ||. 
 ATAT
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary4(self):
@@ -1082,7 +1216,7 @@ ATAT
         suffix = ">"
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix):-len(suffix)], 16)
+        address = int(line[len(prefix) : -len(suffix)], 16)
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -0.500000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -0.500000")
@@ -1102,19 +1236,25 @@ ATAT
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATAT
 ||. 
 ATT 
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATAT
 ||-|
 AT-T
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (3, 4)), ((0, 2), (2, 3))))
 
     def test_match_dictionary5(self):
@@ -1140,7 +1280,7 @@ AT-T
         suffix = ">"
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix):-len(suffix)], 16)
+        address = int(line[len(prefix) : -len(suffix)], 16)
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -1160,11 +1300,14 @@ AT-T
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATAT
 ||. 
 ATT 
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
     def test_match_dictionary6(self):
@@ -1190,7 +1333,7 @@ ATT
         suffix = ">"
         self.assertTrue(line.startswith(prefix))
         self.assertTrue(line.endswith(suffix))
-        address = int(line[len(prefix):-len(suffix)], 16)
+        address = int(line[len(prefix) : -len(suffix)], 16)
         self.assertEqual(lines[2], "  target_internal_open_gap_score: -1.000000")
         self.assertEqual(lines[3], "  target_internal_extend_gap_score: 0.000000")
         self.assertEqual(lines[4], "  target_left_open_gap_score: -1.000000")
@@ -1210,23 +1353,27 @@ ATT
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATT 
 ||. 
 ATAT
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 3),), ((0, 3),)))
 
 
 class TestPairwiseOneCharacter(unittest.TestCase):
-
     def test_align_one_char1(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -1243,18 +1390,22 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: local
-""")
+""",
+        )
         score = aligner.score("abcde", "c")
         self.assertAlmostEqual(score, 1)
         alignments = aligner.align("abcde", "c")
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 abcde
   |  
   c  
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
 
     def test_align_one_char2(self):
@@ -1263,7 +1414,9 @@ abcde
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -1280,26 +1433,33 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: local
-""")
+""",
+        )
         score = aligner.score("abcce", "c")
         self.assertAlmostEqual(score, 1)
         alignments = aligner.align("abcce", "c")
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 abcce
   |  
   c  
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 abcce
    | 
    c 
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((3, 4),), ((0, 1),)))
 
     def test_align_one_char3(self):
@@ -1308,7 +1468,9 @@ abcce
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -1325,7 +1487,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: global
-""")
+""",
+        )
         seq1 = "abcde"
         seq2 = "c"
         score = aligner.score(seq1, seq2)
@@ -1334,11 +1497,14 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.2)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 abcde
 --|--
 --c--
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((2, 3),), ((0, 1),)))
 
     def test_align_one_char_score3(self):
@@ -1347,7 +1513,9 @@ abcde
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
         self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: 0.000000
@@ -1364,7 +1532,8 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: -0.300000
   query_right_extend_gap_score: -0.100000
   mode: global
-""")
+""",
+        )
         score = aligner.score("abcde", "c")
         self.assertAlmostEqual(score, 0.2)
 
@@ -1383,34 +1552,44 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
+        specificgaps = (
+            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
+        )
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
   query_gap_function: %s
   mode: global
-""" % (nogaps, specificgaps))
-        self.assertEqual(aligner.algorithm,
-                         "Waterman-Smith-Beyer global alignment algorithm")
+"""
+            % (nogaps, specificgaps),
+        )
+        self.assertEqual(
+            aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 --|||||||||||----------|||||||||||--
 --AABBBAAAACC----------CCAAAABBBAA--
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((2, 13), (23, 34)), ((0, 11), (11, 22))))
 
     def test_gap_here_only_2(self):
@@ -1425,42 +1604,55 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
+        specificgaps = (
+            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        )  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
   query_gap_function: %s
   mode: global
-""" % (nogaps, specificgaps))
-        self.assertEqual(aligner.algorithm,
-                         "Waterman-Smith-Beyer global alignment algorithm")
+"""
+            % (nogaps, specificgaps),
+        )
+        self.assertEqual(
+            aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -10)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -10)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 --|||----------......|||||||||||||--
 --AAB----------BBAAAACCCCAAAABBBAA--
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((2, 5), (15, 34)), ((0, 3), (3, 22))))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -10)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 ||.------------......|||||||||||||--
 AAB------------BBAAAACCCCAAAABBBAA--
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 3), (15, 34)), ((0, 3), (3, 22))))
 
     def test_gap_here_only_3(self):
@@ -1474,14 +1666,18 @@ AAB------------BBAAAACCCCAAAABBBAA--
             if n == 1:
                 return -1
             return -10
+
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.match_score = 1
         aligner.mismatch_score = -10
         aligner.target_gap_score = gap_score
-        self.assertEqual(aligner.algorithm,
-                         "Waterman-Smith-Beyer global alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            aligner.algorithm, "Waterman-Smith-Beyer global alignment algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -10.000000
@@ -1493,63 +1689,88 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: global
-""" % gap_score)
+"""
+            % gap_score,
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TT-CC-AA
 ||----||
 TTG--GAA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((0, 2), (4, 6))))
         aligner.query_gap_score = gap_score
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
   query_gap_function: %s
   mode: global
-""" % (gap_score, gap_score))
+"""
+            % (gap_score, gap_score),
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -8.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 4)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -8.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TT-CCAA
 ||-.-||
 TTGG-AA
-""")
-        self.assertEqual(alignment.aligned, (((0, 2), (2, 3), (4, 6)), ((0, 2), (3, 4), (4, 6))))
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (2, 3), (4, 6)), ((0, 2), (3, 4), (4, 6)))
+        )
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTC--CAA
 ||----||
 TT-GG-AA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((0, 2), (4, 6))))
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTCC-AA
 ||-.-||
 TT-GGAA
-""")
-        self.assertEqual(alignment.aligned, (((0, 2), (3, 4), (4, 6)), ((0, 2), (2, 3), (4, 6))))
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 6)), ((0, 2), (2, 3), (4, 6)))
+        )
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TT-CC-AA
 ||----||
 TTG--GAA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((0, 2), (4, 6)), ((0, 2), (4, 6))))
 
     def test_gap_here_only_local_1(self):
@@ -1559,42 +1780,55 @@ TTG--GAA
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
+        specificgaps = (
+            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        )  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
-        self.assertEqual(aligner.algorithm,
-                         "Waterman-Smith-Beyer local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
   query_gap_function: %s
   mode: local
-""" % (nogaps, specificgaps))
+"""
+            % (nogaps, specificgaps),
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||                     
   AABBBAAAACCCCAAAABBBAA            
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||  
             AABBBAAAACCCCAAAABBBAA  
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
 
     def test_gap_here_only_local_2(self):
@@ -1609,42 +1843,55 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
+        specificgaps = (
+            lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        )  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
   query_gap_function: %s
   mode: local
-""" % (nogaps, specificgaps))
-        self.assertEqual(aligner.algorithm,
-                         "Waterman-Smith-Beyer local alignment algorithm")
+"""
+            % (nogaps, specificgaps),
+        )
+        self.assertEqual(
+            aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||||                     
   AABBBAAAACCCCAAAABBBAA            
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((2, 15),), ((0, 13),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                      |||||||||||||  
             AABBBAAAACCCCAAAABBBAA  
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((21, 34),), ((9, 22),)))
 
     def test_gap_here_only_local_3(self):
@@ -1658,14 +1905,18 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             if n == 1:
                 return -1
             return -10
+
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
         aligner.match_score = 1
         aligner.mismatch_score = -10
         aligner.target_gap_score = gap_score
-        self.assertEqual(aligner.algorithm,
-                         "Waterman-Smith-Beyer local alignment algorithm")
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            aligner.algorithm, "Waterman-Smith-Beyer local alignment algorithm"
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -10.000000
@@ -1677,55 +1928,73 @@ Pairwise sequence aligner with parameters
   query_right_open_gap_score: 0.000000
   query_right_extend_gap_score: 0.000000
   mode: local
-""" % gap_score)
+"""
+            % gap_score,
+        )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTCCAA
 ||    
 TTGGAA
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTCCAA
     ||
 TTGGAA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
         aligner.query_gap_score = gap_score
-        self.assertEqual(str(aligner), """\
+        self.assertEqual(
+            str(aligner),
+            """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
   query_gap_function: %s
   mode: local
-""" % (gap_score, gap_score))
+"""
+            % (gap_score, gap_score),
+        )
         alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTCCAA
 ||    
 TTGGAA
-""")  # noqa: W291
+""",  # noqa: W291
+        )
         self.assertEqual(alignment.aligned, (((0, 2),), ((0, 2),)))
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 TTCCAA
     ||
 TTGGAA
-""")
+""",
+        )
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
 
     def test_broken_gap_function(self):
@@ -1735,6 +2004,7 @@ TTGGAA
 
         def gap_score(i, n):
             raise RuntimeError("broken gap function")
+
         aligner = Align.PairwiseAligner()
         aligner.target_gap_score = gap_score
         aligner.query_gap_score = -1
@@ -1778,24 +2048,32 @@ class TestSequencesAsLists(unittest.TestCase):
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
-        aligner.alphabet = ["Ala", "Arg", "Asn", "Asp", "Cys",
-                            "Gln", "Glu", "Gly", "His", "Ile",
-                            "Leu", "Lys", "Met", "Phe", "Pro",
-                            "Ser", "Thr", "Trp", "Tyr", "Val"]
+        # fmt: off
+        aligner.alphabet = [
+            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
+            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
+        ]
+        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(str(alignments[0]), """\
+        self.assertEqual(
+            str(alignments[0]),
+            """\
 Gly Ala --- --- Thr
 ||| ||| --- --- |||
 Gly Ala Ala Cys Thr
-""")
-        self.assertEqual(str(alignments[1]), """\
+""",
+        )
+        self.assertEqual(
+            str(alignments[1]),
+            """\
 Gly --- Ala --- Thr
 ||| --- ||| --- |||
 Gly Ala Ala Cys Thr
-""")
+""",
+        )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
 
@@ -1805,16 +2083,22 @@ Gly Ala Ala Cys Thr
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(str(alignments[0]), """\
+        self.assertEqual(
+            str(alignments[0]),
+            """\
 Pro Pro Gly Ala --- --- Thr --- ---
 --- --- ||| ||| --- --- ||| --- ---
 --- --- Gly Ala Ala Cys Thr Asn Asn
-""")
-        self.assertEqual(str(alignments[1]), """\
+""",
+        )
+        self.assertEqual(
+            str(alignments[1]),
+            """\
 Pro Pro Gly --- Ala --- Thr --- ---
 --- --- ||| --- ||| --- ||| --- ---
 --- --- Gly Ala Ala Cys Thr Asn Asn
-""")
+""",
+        )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
 
@@ -1823,30 +2107,37 @@ Pro Pro Gly --- Ala --- Thr --- ---
         seq2 = ["Pro", "Pro", "Gly", "Ala", "Ala", "Cys", "Thr", "Leu"]
         aligner = Align.PairwiseAligner()
         aligner.mode = "local"
-        aligner.alphabet = ["Ala", "Arg", "Asn", "Asp", "Cys",
-                            "Gln", "Glu", "Gly", "His", "Ile",
-                            "Leu", "Lys", "Met", "Phe", "Pro",
-                            "Ser", "Thr", "Trp", "Tyr", "Val"]
+        # fmt: off
+        aligner.alphabet = [
+            "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His", "Ile",
+            "Leu", "Lys", "Met", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val",
+        ]
+        # fmt: on
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(str(alignments[0]), """\
+        self.assertEqual(
+            str(alignments[0]),
+            """\
 Gly Ala --- --- Thr
 ||| ||| --- --- |||
 Gly Ala Ala Cys Thr
-""")
-        self.assertEqual(str(alignments[1]), """\
+""",
+        )
+        self.assertEqual(
+            str(alignments[1]),
+            """\
 Gly --- Ala --- Thr
 ||| --- ||| --- |||
 Gly Ala Ala Cys Thr
-""")
+""",
+        )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
 
 
 class TestArgumentErrors(unittest.TestCase):
-
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
         message = "^sequence has unexpected format$"
@@ -1936,7 +2227,6 @@ class TestArgumentErrors(unittest.TestCase):
 
 
 class TestOverflowError(unittest.TestCase):
-
     def test_align_overflow_error(self):
         aligner = Align.PairwiseAligner()
         path = os.path.join("Align", "bsubtilis.fa")
@@ -1949,17 +2239,52 @@ class TestOverflowError(unittest.TestCase):
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
             2147483647,  # on 32-bit systems
-            9223372036854775807,)  # on 64-bit systems
+            9223372036854775807,
+        )  # on 64-bit systems
         with self.assertRaisesRegex(OverflowError, message):
             n = len(alignments)
         # confirm that we can still pull out individual alignments
         alignment = alignments[0]
-        self.assertEqual(str(alignment), """\
+        self.assertEqual(
+            str(alignment),
+            """\
 ATTTA-TC-GGA-GAGTTTGATCC-TGGCTCAGGAC--GAACGCTGGCGGC-GTGCCTAAT-ACATGCAAGTCGAG-CGG-A-CAG-AT-GGGA-GCTTGCT-C----CCTGAT-GTTAGC-GGCGGACGGGTGAGTAACAC-GT--GGGTAA-CCTGCCTGTAA-G-ACTGGG--ATAACT-CC-GGGAAACCGG--GGCTAATACCGG-ATGGTTGTTTGAACCGCAT-GGTTCAA-AC-ATAA-AAGGTGG--C-TTCGG-C-TACCACTTA-C-A--G-ATG-GACCC-GC--GGCGCATTAGCTAGTT-GGTGAGG-TAACGGCTCACC-AAGGCGACGATGCG--TAGCC-GA--CCTGAGAGGG-TGATC--GGCCACACTGGGA-CTGAGACACGG-CCCAGACTCCTACGGGAGGCAGCAGTAGGG-AATC-TTCCGCA-A-TGGA-CG-AAAGTC-TGAC-GG-AGCAAC--GCCGCGTG-AGTGAT-GAAGG--TTTTCGGA-TC-GTAAAGCT-CTGTTGTT-AG-GG--A--A-G--A--ACAAGTGCCGTTCGAATAGGGC----GG-TACC-TTGACGGT-ACCTAAC-CAGAA-A-GCCAC-GGCTAACTAC-GTGCCAGCAGCCGCGGTAATACGT-AGG-TGGCAAGCGTTG--TCCGGAATTA-TTGGGCGTAAAG-GGCT-CGCAGGCGGTTTC-TTAAGTCT-GATGTGAAAG-CCCCCGG-CTCAACC-GGGGAGGG--T-CAT-TGGA-AACTGGGG-AA-CTTGAGTGCA--G-AAGAGGAGAGTGG-A-A-TTCCACG-TGTAGCGGTGAAATGCGTAGAGATG-TGGAGGAAC-ACCAG-TGGCGAAGGCGA-CTCTC--TGGT-CTGTAA--CTGACGCTG-AGGA-GCGAAAGCGTGGGGAGCGAA-CAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATGAGT-G-CTAAGTGTT-AGGGGGTT-TCCGCCCCTT-AGTGC-TG-C------AGCTAACGCA-TTAAG-C-ACTCCGCCTGGGGAGTACGGTC-GCAAGACTG--AAA-CTCAAA-GGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAA-GCAACGCGAAGAACCTTACCA-GGTCTTGACATCCTCTGACA-A--T--CCTAGAGATAGGAC--G-T-CCCCTTCGGGGGCAGA--GTGA--CAGGTGG-TGCATGG-TTGTCGTCAGCTCGTGTC-GTGAGA-TGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTA--GTTGCCAGCA--TTCA-GTTG--GGC-A-CTCTAA-GGT-GACTGCC-GGTGAC-AAACC-GGAGGAAGGTGGGGATGACGTCAAA-TCATCATG-CCCCTTAT-GACCT-GGGCTACACACGTGCTACAATGGACAG-A-ACAAAG-GGCA-GCGAAACC--GCGAG-GTT-AAGCC--AATCC-CAC-AAA-T-CTGTTC-TCAGTTC-GGATC-GC-AGTCTGCAACTCGACTGCG--TGAAGCT-GGAATCGCTAGTAATCGC-GGATCAGCA-TGCCG-CGGTGAATACGTTCCCGGGCCTTGTACACACCGCCCGTCACACCAC-GAG-AGT---TTGT-AACACCC-GAAGTC-GGTGAGG-T-AACCTTTTA-GG-AG--C-C--AGCCG-CC---GAAGGTGGGA--CAGATGA-TTGGGGTGAAGTCGTAACAAGGTAG-CCGTATCGGAAGG----TGCGGCT-GGATCACCTCCTTTCTA
 |---|-|--|-|-||||||||||--||||||||-|---|||||||||||||-|-||||||--|||||||||||||--|||-|-|||-|--|--|-|||||||-|----|-|||--|--||--|||||||||||||||||----||--|||-||-|-||||||-|--|-|--|||--||||||-|--||-||||-||--|-|||||||||--||---------|||-|--|-|---|||-||-|-||-|-||-||--|-|||||-|-|-|---||--|-|--|-|||-|-|||-|---||-|-||||||||||--||||-||-||||||||||||-|-|||||||||-|---||||--|---|-|||||||--|||-|--|-|||||||||-|-|||||||||||-||-|||||||||||||||||||||||-|||-|||--||--|||-|-|||--||-||-|-|-|||--|--|||--|--||||||||-|-|||--|||||--||--|||--|--||||||-|-||-||----||-||--|--|-|--|--|-||||----|---||||---|----|--|-|--||||||-|-|||---|-|||||-|-||-||-||||||||-|-|||||||||||||||||||||||--|||-||-||||||||---||-|||||||-|-||||||||||-|-|--||||||||||||--|||||||--|||||||||--||||-||-|||||||-|||-|-----|-|||-||-|-|-||||---||-|||||||-|---|-|-||||-|-|-||-|-|-|||||-|-||||||||||||||||||||||||--||||||||--|||-|-|||||||||||--|-|-|--|||--|-|-||--||||||||--|||--|||||||||||||||||-||-|||||||||||||||||||||||||||||||||||||||--|-|-||---||---|||---||-|--||||-||-||-||-||-|------|||||||||--|||||-|-||-|-|||||||||||||||-|-|||||---|--|||-||||||-|-|||||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||||||||--|||||||||||||----|||-|--|--||-||||||-|||---|-|-||--||||||---|-|--||||--||||||--|||||||-|-|||||||||||||||--||||-|-||||||||||||||||||||||||||||||||||-|||||---|||||||||---|-|--|--|--||--|-|||-||-||--|||||||-|-|||--||||--||||||||||||||||||||||||--||||||||-|||-|||--||||--|||||||||||||||||||||||-|-|-|-||||||-|--|-||||--||--|||||-|---||||---|--||-||--|||-|-|-||-|-|-|||-|-||||--|--||||||||||||||||-|---|||||-|-|||||||||||||||||--|||||||-|-||||--|||||||||||||||||||||||||||||||||||||||||||||--|-|-|||---|||--||-|----|||||--|||-||--|-||||||----||-||--|-|--|-||--|----|----||--|--||--|||-|-||||||||||||||||||||||--|||||--||--||----|||||-|-|||||||||||||---|
 A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA-CACATGCAAGTCGA-ACGGTAACAGGA-AG--AAGCTTGCTTCTTTGC-TGA-CG--AG-TGGCGGACGGGTGAGTAA---TGTCTGGG-AAAC-TGCCTG-A-TGGA--GGGGGATAACTAC-TGG-AAAC-GGTAG-CTAATACCG-CAT---------AAC-G--TCG---CAAGACCA-AAGA-GG-GGGACCTTCGGGCCT-C---TT-GCCATCGGATGTG-CCCAG-ATGG-G-ATTAGCTAGT-AGGTG-GGGTAACGGCTCACCTA-GGCGACGAT-C-CCTAGC-TG-GTC-TGAGAGG-ATGA-CCAG-CCACACTGG-AACTGAGACACGGTCC-AGACTCCTACGGGAGGCAGCAGT-GGGGAAT-ATT--GCACAATGG-GCGCAA-G-CCTGA-TG-CAGC--CATGCCGCGTGTA-TGA-AGAAGGCCTT--CGG-GT-TGTAAAG-TACT-TT---CAGCGGGGAGGAAGGGAGTA-AAGT----T---AATA---CCTTTG-CT-C-ATTGACG-TTACC---CGCAGAAGAAGC-ACCGGCTAACT-CCGTGCCAGCAGCCGCGGTAATACG-GAGGGTG-CAAGCGTT-AATC-GGAATTACT-GGGCGTAAAGCG-C-ACGCAGGCGGTTT-GTTAAGTC-AGATGTGAAA-TCCCC-GGGCTCAACCTGGG-A---ACTGCATCTG-ATA-CTGG--CAAGCTTGAGT-C-TCGTA-GAGG-G-G-GGTAGAATTCCA-GGTGTAGCGGTGAAATGCGTAGAGAT-CTGGAGGAA-TACC-GGTGGCGAAGGCG-GC-C-CCCTGG-AC-G-AAGACTGACGCT-CAGG-TGCGAAAGCGTGGGGAGC-AAACAGGATTAGATACCCTGGTAGTCCACGCCGTAAACGATG--TCGACT---TG--GAGG---TTGT--GCCC-TTGAG-GCGTGGCTTCCGGAGCTAACGC-GTTAAGTCGAC-C-GCCTGGGGAGTACGG-CCGCAAG---GTTAAAACTCAAATG-AATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGA-TGCAACGCGAAGAACCTTACC-TGGTCTTGACATCC----ACAGAACTTTCC-AGAGAT-GGA-TTGGTGCC--TTCGGG---A-ACTGTGAGACAGGTG-CTGCATGGCT-GTCGTCAGCTCGTGT-TGTGA-AATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTT-ATCTT-TTGTTGCCAGC-GGT-C-CG--GCCGG-GAACTC-AAAGG-AGACTGCCAG-TGA-TAAAC-TGGAGGAAGGTGGGGATGACGTCAA-GTCATCATGGCCC-TTA-CGACC-AGGGCTACACACGTGCTACAATGG-C-GCATACAAAGAG--AAGCGA--CCTCGCGAGAG--CAAGC-GGA--CCTCA-TAAAGTGC-GT-CGT-AGT-CCGGAT-TG-GAGTCTGCAACTCGACT-C-CATGAAG-TCGGAATCGCTAGTAATCG-TGGATCAG-AATGCC-ACGGTGAATACGTTCCCGGGCCTTGTACACACCGCCCGTCACACCA-TG-GGAGTGGGTTG-CAA-A---AGAAGT-AGGT-AG-CTTAACCTT---CGGGAGGGCGCTTA-CC-AC-TTTG----TG--ATTCA--TGACT-GGGGTGAAGTCGTAACAAGGTA-ACCGTA--GG--GGAACCTGCGG-TTGGATCACCTCCTT---A
-""")
+""",
+        )
         self.assertAlmostEqual(alignment.score, 1286.0)
+
+
+class TestKeywordArgumentsConstructor(unittest.TestCase):
+    def test_confusing_arguments(self):
+        aligner = Align.PairwiseAligner(
+            mode="local",
+            open_gap_score=-0.3,
+            extend_gap_score=-0.1,
+            target_open_gap_score=-0.2,
+        )
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.200000
+  target_internal_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.200000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.200000
+  target_right_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.300000
+  query_internal_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
+  mode: local
+""",
+        )
 
 
 if __name__ == "__main__":

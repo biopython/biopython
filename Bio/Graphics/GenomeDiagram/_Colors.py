@@ -135,7 +135,7 @@ class ColorTranslator:
             2 \t 255 \t 0 \t 0 \t Red: Information transfer
 
         """
-        with open(filename, "r").readlines() as lines:
+        with open(filename).readlines() as lines:
             for line in lines:
                 data = line.strip().split("\t")
                 try:
@@ -152,7 +152,7 @@ class ColorTranslator:
                 except ValueError:
                     raise ValueError(
                         "Expected INT \t INT \t INT \t INT \t string input"
-                    )
+                    ) from None
 
     def get_artemis_colorscheme(self):
         """Return the Artemis color scheme as a dictionary."""

@@ -185,6 +185,7 @@ class PDBIO(StructureIO):
                     occupancy_str = " " * 6
                     import warnings
                     from Bio import BiopythonWarning
+
                     warnings.warn(
                         "Missing occupancy in atom %s written as blank"
                         % repr(atom.get_full_id()),
@@ -192,7 +193,8 @@ class PDBIO(StructureIO):
                     )
                 else:
                     raise TypeError(
-                        "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
+                        "Invalid occupancy %r in atom %r"
+                        % (occupancy, atom.get_full_id())
                     ) from None
 
             args = (
@@ -224,11 +226,17 @@ class PDBIO(StructureIO):
                     pqr_charge = " " * 7
                     import warnings
                     from Bio import BiopythonWarning
-                    warnings.warn("Missing charge in atom %s written as blank" %
-                                  repr(atom.get_full_id()), BiopythonWarning)
+
+                    warnings.warn(
+                        "Missing charge in atom %s written as blank"
+                        % repr(atom.get_full_id()),
+                        BiopythonWarning,
+                    )
                 else:
-                    raise TypeError("Invalid charge %r in atom %r"
-                                    % (pqr_charge, atom.get_full_id())) from None
+                    raise TypeError(
+                        "Invalid charge %r in atom %r"
+                        % (pqr_charge, atom.get_full_id())
+                    ) from None
             try:
                 radius = "%6.4f" % radius
             except TypeError:
@@ -236,11 +244,16 @@ class PDBIO(StructureIO):
                     radius = " " * 6
                     import warnings
                     from Bio import BiopythonWarning
-                    warnings.warn("Missing radius in atom %s written as blank" %
-                                  repr(atom.get_full_id()), BiopythonWarning)
+
+                    warnings.warn(
+                        "Missing radius in atom %s written as blank"
+                        % repr(atom.get_full_id()),
+                        BiopythonWarning,
+                    )
                 else:
-                    raise TypeError("Invalid radius %r in atom %r"
-                                    % (radius, atom.get_full_id())) from None
+                    raise TypeError(
+                        "Invalid radius %r in atom %r" % (radius, atom.get_full_id())
+                    ) from None
 
             args = (
                 record_type,

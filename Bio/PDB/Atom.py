@@ -40,7 +40,7 @@ class Atom:
         serial_number,
         element=None,
         pqr_charge=None,
-        radius=None
+        radius=None,
     ):
         """Initialize Atom object.
 

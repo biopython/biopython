@@ -44,7 +44,9 @@ class FeatureValueCleaner:
             try:
                 cleaner = getattr(self, "_clean_%s" % key_name)
             except AttributeError:
-                raise AssertionError("No function to clean key: %s" % key_name) from None
+                raise AssertionError(
+                    "No function to clean key: %s" % key_name
+                ) from None
             value = cleaner(value)
         return value
 

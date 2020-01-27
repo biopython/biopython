@@ -85,9 +85,15 @@ class SffRandomAccess(SeqFileRandomAccess):
     def __init__(self, filename, format, alphabet):
         """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
-        header_length, index_offset, index_length, number_of_reads, self._flows_per_read, self._flow_chars, self._key_sequence = SeqIO.SffIO._sff_file_header(
-            self._handle
-        )
+        (
+            header_length,
+            index_offset,
+            index_length,
+            number_of_reads,
+            self._flows_per_read,
+            self._flow_chars,
+            self._key_sequence,
+        ) = SeqIO.SffIO._sff_file_header(self._handle)
 
     def __iter__(self):
         """Load any index block in the file, or build it the slow way (PRIVATE)."""
@@ -96,9 +102,15 @@ class SffRandomAccess(SeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         # Alread did this in __init__ but need handle in right place
-        header_length, index_offset, index_length, number_of_reads, self._flows_per_read, self._flow_chars, self._key_sequence = SeqIO.SffIO._sff_file_header(
-            handle
-        )
+        (
+            header_length,
+            index_offset,
+            index_length,
+            number_of_reads,
+            self._flows_per_read,
+            self._flow_chars,
+            self._key_sequence,
+        ) = SeqIO.SffIO._sff_file_header(handle)
         if index_offset and index_length:
             # There is an index provided, try this the fast way:
             count = 0

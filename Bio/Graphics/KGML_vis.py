@@ -23,14 +23,18 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install reportlab if you want to use KGML_vis.")
+    raise MissingPythonDependencyError(
+        "Install reportlab if you want to use KGML_vis."
+    ) from None
 
 try:
     from PIL import Image
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install pillow if you want to use KGML_vis.")
+    raise MissingPythonDependencyError(
+        "Install pillow if you want to use KGML_vis."
+    ) from None
 
 from urllib.request import urlopen
 
@@ -73,7 +77,7 @@ def color_to_reportlab(color):
             except TypeError:  # Catch pre-2.7 Reportlab
                 raise RuntimeError(
                     "Your reportlab seems to be too old, try 2.7 onwards"
-                )
+                ) from None
     elif isinstance(color, tuple):  # Tuple implies RGB(alpha) tuple
         return colors.Color(*color)
     return color

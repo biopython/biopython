@@ -22,7 +22,7 @@ class TestMauveIO(unittest.TestCase):
     SIMPLE_FA = os.path.join(MAUVE_TEST_DATA_DIR, "simple.fa")
 
     def test_one(self):
-        handle = open(self.SIMPLE_XMFA, "r")
+        handle = open(self.SIMPLE_XMFA)
         ids = []
         for alignment in MauveIterator(handle):
             for record in alignment:
@@ -60,11 +60,11 @@ class TestMauveIO(unittest.TestCase):
                          expected.replace(" ", "").replace("\n", ""))
 
     def test_sequence_positions(self):
-        handle = open(self.SIMPLE_FA, "r")
+        handle = open(self.SIMPLE_FA)
         seqs = list(SeqIO.parse(handle, "fasta"))
         handle.close()
 
-        handle = open(self.SIMPLE_XMFA, "r")
+        handle = open(self.SIMPLE_XMFA)
         aln_list = list(MauveIterator(handle))
         handle.close()
 
@@ -90,7 +90,7 @@ class TestMauveIO(unittest.TestCase):
                     self.assertEqual(expected, actual)
 
     def test_write_read(self):
-        handle = open(self.SIMPLE_XMFA, "r")
+        handle = open(self.SIMPLE_XMFA)
         aln_list = list(MauveIterator(handle))
         handle.close()
 

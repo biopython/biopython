@@ -34,7 +34,7 @@ class Record:
     Example usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
+    >>> with open("Affy/affy_v3_example.CEL") as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
@@ -99,7 +99,7 @@ def read(handle, version=None):
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
+    >>> with open("Affy/affy_v3_example.CEL") as handle:
     ...     record = CelFile.read(handle)
     ...
     >>> record.version == 3
@@ -143,10 +143,14 @@ def read(handle, version=None):
     try:
         magicNumber = struct.unpack("<i", data)
     except TypeError:
-        raise ValueError("CEL file in version 4 format should be opened in binary mode") from None
+        raise ValueError(
+            "CEL file in version 4 format should be opened in binary mode"
+        ) from None
     except struct.error:
-        raise ValueError("Failed to read magic number from Affy Version 4 CEL file") from None
-    if magicNumber != (64, ):
+        raise ValueError(
+            "Failed to read magic number from Affy Version 4 CEL file"
+        ) from None
+    if magicNumber != (64,):
         raise ValueError("Incorrect magic number in Affy Version 4 CEL file")
     return _read_v4(handle)
 
@@ -154,16 +158,20 @@ def read(handle, version=None):
 # read Affymetrix files version 4.
 def read_v4(f):
     """Read version 4 Affymetrix CEL file, and return a Record object (DEPRECATED)."""
-    raise Exception("The read_v4 function in Bio.Affy.CelFile is deprecated."
-                    "Instead, please use the read function in Bio.Affy.CelFile "
-                    "specifying version=4.")
+    raise Exception(
+        "The read_v4 function in Bio.Affy.CelFile is deprecated. "
+        "Instead, please use the read function in Bio.Affy.CelFile "
+        "specifying version=4."
+    )
 
 
 def read_v3(handle):
     """Read version 3 Affymetrix CEL file, and return a Record object (DEPRECATED)."""
-    raise Exception("The read_v3 function in Bio.Affy.CelFile is deprecated."
-                    "Instead, please use the read function in Bio.Affy.CelFile "
-                    "specifying version=3.")
+    raise Exception(
+        "The read_v3 function in Bio.Affy.CelFile is deprecated. "
+        "Instead, please use the read function in Bio.Affy.CelFile "
+        "specifying version=3."
+    )
 
 
 def _read_v4(f):
@@ -408,22 +416,24 @@ def _read_v3(handle):
                     values = {}
                     for parameter in parameters:
                         key, value = parameter.split(":", 1)
-                        if key in ("Percentile",
-                                   "CellMargin",
-                                   "FullFeatureWidth",
-                                   "FullFeatureHeight",
-                                   "PoolWidthExtenstion",
-                                   "PoolHeightExtension"):
+                        if key in (
+                            "Percentile",
+                            "CellMargin",
+                            "FullFeatureWidth",
+                            "FullFeatureHeight",
+                            "PoolWidthExtenstion",
+                            "PoolHeightExtension",
+                        ):
                             values[key] = int(value)
-                        elif key in ("OutlierHigh",
-                                     "OutlierLow",
-                                     "StdMult"):
+                        elif key in ("OutlierHigh", "OutlierLow", "StdMult"):
                             values[key] = float(value)
-                        elif key in ("FixedCellSize",
-                                     "IgnoreOutliersInShiftRows",
-                                     "FeatureExtraction",
-                                     "UseSubgrids",
-                                     "RandomizePixels"):
+                        elif key in (
+                            "FixedCellSize",
+                            "IgnoreOutliersInShiftRows",
+                            "FeatureExtraction",
+                            "UseSubgrids",
+                            "RandomizePixels",
+                        ):
                             if value == "TRUE":
                                 value = True
                             elif value == "FALSE":
@@ -431,8 +441,7 @@ def _read_v3(handle):
                             else:
                                 raise ValueError("Unexpected boolean value")
                             values[key] = value
-                        elif key in ("AlgVersion",
-                                     "ErrorBasis"):
+                        elif key in ("AlgVersion", "ErrorBasis"):
                             values[key] = value
                         else:
                             raise ValueError("Unexpected tag in AlgorithmParameters")
@@ -444,8 +453,10 @@ def _read_v3(handle):
                 elif line.startswith("CellHeader="):
                     key, value = line.split("=", 1)
                     if value.split() != ["X", "Y", "MEAN", "STDV", "NPIXELS"]:
-                        raise ParserError("Unexpected CellHeader in INTENSITY "
-                                          "section CEL version 3 file")
+                        raise ParserError(
+                            "Unexpected CellHeader in INTENSITY "
+                            "section CEL version 3 file"
+                        )
                 else:
                     words = line.split()
                     y = int(words[0])
@@ -460,8 +471,10 @@ def _read_v3(handle):
                 elif line.startswith("CellHeader="):
                     key, value = line.split("=", 1)
                     if value.split() != ["X", "Y"]:
-                        raise ParserError("Unexpected CellHeader in MASKS "
-                                          "section in CEL version 3 file")
+                        raise ParserError(
+                            "Unexpected CellHeader in MASKS "
+                            "section in CEL version 3 file"
+                        )
                 else:
                     words = line.split()
                     y = int(words[0])
@@ -474,8 +487,10 @@ def _read_v3(handle):
                 elif line.startswith("CellHeader="):
                     key, value = line.split("=", 1)
                     if value.split() != ["X", "Y"]:
-                        raise ParserError("Unexpected CellHeader in OUTLIERS "
-                                          "section in CEL version 3 file")
+                        raise ParserError(
+                            "Unexpected CellHeader in OUTLIERS "
+                            "section in CEL version 3 file"
+                        )
                 else:
                     words = line.split()
                     y = int(words[0])
@@ -488,8 +503,10 @@ def _read_v3(handle):
                 elif line.startswith("CellHeader="):
                     key, value = line.split("=", 1)
                     if value.split() != ["X", "Y", "ORIGMEAN"]:
-                        raise ParserError("Unexpected CellHeader in MODIFIED "
-                                          "section in CEL version 3 file")
+                        raise ParserError(
+                            "Unexpected CellHeader in MODIFIED "
+                            "section in CEL version 3 file"
+                        )
                 else:
                     words = line.split()
                     y = int(words[0])
