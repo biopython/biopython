@@ -38,6 +38,10 @@ identifier (sid).
                   'sp' (species), 'px' (domain). Additional node types may
                   be added in the future.
 
+The SCOPRemote object in this module can be used for remote access to SCOP2
+data. It provides methods for accessing data about a node, its ancestors, or
+the domains that descend from it.
+
 This module also provides code to access SCOP over the WWW.
 
 Functions:
