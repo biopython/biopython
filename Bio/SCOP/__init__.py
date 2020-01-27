@@ -971,8 +971,8 @@ class SCOPRemote():
     """This class provides access to SCOP2 data.
 
     For more information, see http://scop.mrc-lmb.cam.ac.uk/about
-
     """
+
     base_url = "http://scop.mrc-lmb.cam.ac.uk/api/"
 
     def term(self, node):
