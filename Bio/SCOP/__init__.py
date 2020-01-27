@@ -964,3 +964,13 @@ def _open(cgi, params=None, get=1):
     else:  # do a POST
         handle = urlopen(cgi, data=options)
     return handle
+
+class SCOPRemote():
+    def term_info(self, term):
+        pass
+    def domains_at_node(self, term):
+        pass
+    def ancestry_of_node(self, term):
+        pass
+    def release_information(self):
+        pass
