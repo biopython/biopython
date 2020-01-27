@@ -581,12 +581,6 @@ class _BaseGenBankConsumer:
     def __init__(self):
         pass
 
-    def _unhandled(self, data):
-        pass
-
-    def __getattr__(self, attr):
-        return self._unhandled
-
     @staticmethod
     def _split_keywords(keyword_string):
         """Split a string of keywords into a nice clean list (PRIVATE)."""
