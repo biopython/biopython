@@ -49,6 +49,7 @@ Functions:
 
 import os
 import re
+from json import load
 
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -966,11 +967,16 @@ def _open(cgi, params=None, get=1):
     return handle
 
 class SCOPRemote():
+    base_url = "http://scop.mrc-lmb.cam.ac.uk/api/"
     def term_info(self, term):
-        pass
+        query_url = self.base_url + "term/" + term
+        return load(urlopen(query_url))
     def domains_at_node(self, term):
-        pass
+        query_url = self.base_url + "domains/" + term
+        return load(urlopen(query_url))
     def ancestry_of_node(self, term):
-        pass
+        query_url = self.base_url + "ancestry/" + term
+        return load(urlopen(query_url))
     def release_information(self):
-        pass
+        query_url = self.base_url + "stats"
+        return load(urlopen(query_url))
