@@ -340,7 +340,7 @@ class _Scanner:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError as err:
                 if str(err) != "Unexpected end of stream.":
-                    raise err
+                    raise
 
             consumer.end_descriptions()
             # Stop processing.
@@ -512,7 +512,7 @@ class _Scanner:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError as err:
                 if str(err) != "Unexpected end of stream.":
-                    raise err
+                    raise
                 # End of File (well, it looks like it with recent versions
                 # of BLAST for multiple queries after the Iterator class
                 # has broken up the whole file into chunks).
@@ -549,7 +549,7 @@ class _Scanner:
             line = safe_peekline(uhandle)
         except ValueError as err:
             if str(err) != "Unexpected end of stream.":
-                raise err
+                raise
             line = ""
         return not line
 
@@ -1057,7 +1057,7 @@ class _AlignmentConsumer:
             try:
                 name, start, seq, end = line.split()
             except ValueError:
-                raise ValueError("I do not understand the line\n%s" % line)
+                raise ValueError("I do not understand the line\n%s" % line) from None
             self._start_index = line.index(start, len(name))
             self._seq_index = line.index(seq, self._start_index + len(start))
             # subtract 1 for the space
@@ -1651,7 +1651,7 @@ class _BlastConsumer(
         try:
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
-            raise ValueError("Found an HSP before an alignment")
+            raise ValueError("Found an HSP before an alignment") from None
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
@@ -1709,7 +1709,7 @@ class _PSIBlastConsumer(
         try:
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
-            raise ValueError("Found an HSP before an alignment")
+            raise ValueError("Found an HSP before an alignment") from None
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
@@ -1742,7 +1742,7 @@ class Iterator:
         except AttributeError:
             raise ValueError(
                 "I expected a file handle or file-like object, got %s" % type(handle)
-            )
+            ) from None
         self._uhandle = UndoHandle(handle)
         self._parser = parser
         self._header = []

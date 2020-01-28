@@ -14,8 +14,7 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio._utils import getattr_str, trim_str
-from Bio.SearchIO._utils import singleitem, allitems, fullcascade, fragcascade
+from Bio.SearchIO._utils import singleitem, allitems, fullcascade, fragcascade, getattr_str
 
 from ._base import _BaseHSP
 
@@ -346,12 +345,12 @@ class HSP(_BaseHSP):
                 query_end = getattr_str(block, "query_end")
                 query_range = "[%s:%s]" % (query_start, query_end)
                 # max column length is 20
-                query_range = trim_str(query_range, 22, "~]")
+                query_range = query_range[:20] + "~]" if len(query_range) > 22 else query_range
                 # hit region
                 hit_start = getattr_str(block, "hit_start")
                 hit_end = getattr_str(block, "hit_end")
                 hit_range = "[%s:%s]" % (hit_start, hit_end)
-                hit_range = trim_str(hit_range, 22, "~]")
+                hit_range = hit_range[:20] + "~]" if len(hit_range) > 22 else hit_range
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
@@ -976,7 +975,9 @@ class HSPFragment(_BaseHSP):
         # length of alignment (gaps included)
         # alignment span can be its own attribute, or computed from
         # query / hit length
-        if not hasattr(self, "_aln_span"):
+        try:
+            self._aln_span
+        except AttributeError:
             if self.query is not None:
                 self._aln_span = len(self.query)
             elif self.hit is not None:
