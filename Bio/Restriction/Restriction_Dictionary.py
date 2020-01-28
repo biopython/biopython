@@ -19,10 +19,6 @@ into steps, using temporary functions to avoid the JVM limits.
 Used REBASE emboss files version 001 (2020).
 
 """
-# Turn black code style off
-# fmt: off
-
-
 rest_dict = {}
 
 rest_dict["AanI"] = {
@@ -19585,6 +19581,9 @@ rest_dict["Zsp2I"] = {
     "suppl": ("I", "V"),
 }
 
+
+# Turn black code style off
+# fmt: off
 
 suppliers = {}
 

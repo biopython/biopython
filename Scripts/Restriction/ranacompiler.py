@@ -487,8 +487,6 @@ class DictionaryBuilder:
         with open(os.path.join(update, "Restriction_Dictionary.py"), "w") as results:
             print("Writing the dictionary containing the new Restriction classes...")
             results.write(start)
-            results.write("# Turn black code style off\n# fmt: off\n")
-            results.write("\n\n")
             results.write("rest_dict = {}\n")
             results.write("\n")
             for name in sorted(classdict):
@@ -501,6 +499,8 @@ class DictionaryBuilder:
                 results.write("}\n\n")
             print("OK.\n")
             print("Writing the dictionary containing the suppliers data...")
+            results.write("\n")
+            results.write("# Turn black code style off\n# fmt: off\n")
             results.write("\n")
             results.write("suppliers = {}\n")
             results.write("\n")
