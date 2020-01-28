@@ -9,7 +9,7 @@ import re
 from collections import OrderedDict
 import warnings
 
-from Bio._utils import read_forward
+from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Alphabet import generic_protein
 

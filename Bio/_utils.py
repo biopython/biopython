@@ -11,16 +11,6 @@
 import os
 
 
-def read_forward(handle):
-    """Read through whitespaces, return the first non-whitespace line."""
-    while True:
-        line = handle.readline()
-        # if line is empty or line has characters and stripping does not remove
-        # them, return the line
-        if (not line) or (line and line.strip()):
-            return line
-
-
 def _read_header(handle, length):
     """Read the specified number of characters from the given handle.
 
@@ -42,18 +32,6 @@ def trim_str(string, max_len, concat_char):
     if len(string) > max_len:
         return string[: max_len - len(concat_char)] + concat_char
     return string
-
-
-def getattr_str(obj, attr, fmt=None, fallback="?"):
-    """Return string of the given object's attribute.
-
-    Defaults to the given fallback value if attribute is not present.
-    """
-    if hasattr(obj, attr):
-        if fmt is not None:
-            return fmt % getattr(obj, attr)
-        return str(getattr(obj, attr))
-    return fallback
 
 
 def find_test_dir(start_dir=None):

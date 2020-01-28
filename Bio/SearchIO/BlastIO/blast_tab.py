@@ -857,10 +857,13 @@ class BlastTabWriter:
         inv_field_map = {v: k for k, v in _LONG_SHORT_MAP.items()}
 
         # try to anticipate qress without version
-        if not hasattr(qres, "version"):
-            program_line = "# %s" % qres.program.upper()
+        program = qres.program.upper()
+        try:
+            version = qres.version
+        except AttributeError:
+            program_line = "# %s" % program
         else:
-            program_line = "# %s %s" % (qres.program.upper(), qres.version)
+            program_line = "# %s %s" % (program, version)
         comments.append(program_line)
         # description may or may not be None
         if qres.description is None:

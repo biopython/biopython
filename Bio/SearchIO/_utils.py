@@ -6,6 +6,30 @@
 """Common SearchIO utility functions."""
 
 
+def getattr_str(obj, attr, fmt=None, fallback="?"):
+    """Return string of the given object's attribute.
+
+    Defaults to the given fallback value if attribute is not present.
+    """
+    try:
+        value = getattr(obj, attr)
+    except AttributeError:
+        return fallback
+    if fmt is None:
+        return str(value)
+    return fmt % value
+
+
+def read_forward(handle):
+    """Read through whitespaces, return the first non-whitespace line."""
+    while True:
+        line = handle.readline()
+        # if line is empty or line has characters and stripping does not remove
+        # them, return the line
+        if (not line) or (line and line.strip()):
+            return line
+
+
 def get_processor(format, mapping):
     """Return the object to process the given format according to the mapping.
 
@@ -21,16 +45,16 @@ def get_processor(format, mapping):
     except KeyError:
         # handle the errors with helpful messages
         if format is None:
-            raise ValueError("Format required (lower case string)")
+            raise ValueError("Format required (lower case string)") from None
         elif not isinstance(format, str):
-            raise TypeError("Need a string for the file format (lower case)")
+            raise TypeError("Need a string for the file format (lower case)") from None
         elif format != format.lower():
-            raise ValueError("Format string %r should be lower case" % format)
+            raise ValueError("Format string %r should be lower case" % format) from None
         else:
             raise ValueError(
                 "Unknown format %r. Supported formats are %r"
                 % (format, "', '".join(mapping))
-            )
+            ) from None
 
     mod_name, obj_name = obj_info
     mod = __import__("Bio.SearchIO.%s" % mod_name, fromlist=[""])

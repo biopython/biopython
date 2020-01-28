@@ -664,16 +664,10 @@ class _BlastXmlGenerator(XMLGenerator):
         # container for names of tags with children
         self._parent_stack = []
         # determine writer method
-        try:
-            # this should work for all platforms except Jython
-            self.write = self._write
-        except AttributeError:
-            # Jython uses self._out.write
-            self.write = self._out.write
 
     def startDocument(self):
         """Start the XML document."""
-        self.write(
+        self._write(
             '<?xml version="1.0"?>\n'
             '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
             '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n'
@@ -698,7 +692,7 @@ class _BlastXmlGenerator(XMLGenerator):
     def endElement(self, name):
         """End and XML element of the given name."""
         XMLGenerator.endElement(self, name)
-        self.write("\n")
+        self._write("\n")
 
     def startParent(self, name, attrs=None):
         """Start an XML element which has children.
@@ -713,7 +707,7 @@ class _BlastXmlGenerator(XMLGenerator):
             attrs = {}
         self.startElement(name, attrs, children=True)
         self._level += self._increment
-        self.write("\n")
+        self._write("\n")
         # append the element name, so we can end it later
         self._parent_stack.append(name)
 
@@ -747,7 +741,7 @@ class _BlastXmlGenerator(XMLGenerator):
         content = escape(str(content))
         for a, b in (('"', "&quot;"), ("'", "&apos;")):
             content = content.replace(a, b)
-        self.write(content)
+        self._write(content)
 
 
 class BlastXmlWriter:

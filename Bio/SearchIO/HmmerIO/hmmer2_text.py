@@ -7,8 +7,8 @@
 
 import re
 
-from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
+from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
