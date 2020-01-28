@@ -51,7 +51,9 @@ class Model(Entity):
         for r in self.get_residues():
             yield from r
 
-    def atom_to_internal_coordinates(self, allBonds=False):
+    def atom_to_internal_coordinates(
+        self, allBonds: bool = False, verbose: bool = False
+    ) -> None:
         """Create/update internal coordinates from Atom X,Y,Z coordinates.
 
         Internal coordinates are bond length, angle and dihedral angles.
@@ -59,14 +61,19 @@ class Model(Entity):
         :param allBonds bool: default False
             include hedra and dihedra for bonds around sidechain rings.
             (not required to capture all atoms)
+        :param verbose bool: default False
+            describe runtime problems
         """
         for chn in self.get_chains():
-            chn.atom_to_internal_coordinates(allBonds)
+            chn.atom_to_internal_coordinates(allBonds, verbose)
 
-    def internal_to_atom_coordinates(self):
+    def internal_to_atom_coordinates(self, verbose: bool = False) -> None:
         """Create/update atom coordinates from internal coordinates.
+
+        :param verbose bool: default False
+            describe runtime problems
 
         :raises Exception: if any chain does not have .pic attribute
         """
         for chn in self.get_chains():
-            chn.internal_to_atom_coordinates()
+            chn.internal_to_atom_coordinates(verbose)
