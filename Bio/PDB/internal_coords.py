@@ -1690,7 +1690,7 @@ class IC_Residue(object):
                     if 2 == Atm.is_disordered() and Atm.disordered_has_id(altloc):
                         Atm.disordered_select(altloc)
                     Atm.set_coord(atm_coords)
-                    ndx = Atm.get_serial_number()
+                    ndx = Atm.get_serial_number() + 1
 
         Res.parent.internal_coord.ndx = ndx
 
