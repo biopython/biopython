@@ -1490,6 +1490,15 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
             self.data.molecule_type = mol_type
 
+    def topology(self, topology):
+        """Validate and record sequence topology (linear or circular as strings)."""
+        if topology:
+            if topology not in ["linear", "circular"]:
+                raise ParserFailureError(
+                    "Unexpected topology %r should be linear or circular" % topology
+                )
+            self.data.topology = topology
+
     def nid(self, content):
         self.data.nid = content
 
