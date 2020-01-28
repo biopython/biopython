@@ -512,7 +512,7 @@ class InsdcScanner:
         This method is intended for use in Bio.SeqIO
         """
         # This is a generator function
-        with as_handle(handle, "r") as handle:
+        with as_handle(handle) as handle:
             while True:
                 record = self.parse(handle, do_features)
                 if record is None:
@@ -547,7 +547,7 @@ class InsdcScanner:
         This method is intended for use in Bio.SeqIO
 
         """
-        with as_handle(handle, "r") as handle:
+        with as_handle(handle) as handle:
             self.set_handle(handle)
             while self.find_start():
                 # Got an EMBL or GenBank record...

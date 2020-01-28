@@ -267,7 +267,7 @@ def make_dssp_dict(filename):
         the DSSP output file
 
     """
-    with open(filename, "r") as handle:
+    with open(filename) as handle:
         return _make_dssp_dict(handle)
 
 

@@ -707,9 +707,9 @@ class DictionaryBuilder:
                     else:
                         raise ValueError
                 print(strmess)
-                emboss_e = open(os.path.join(base, f"emboss_e.{number}"), "r")
-                emboss_r = open(os.path.join(base, f"emboss_r.{number}"), "r")
-                emboss_s = open(os.path.join(base, f"emboss_s.{number}"), "r")
+                emboss_e = open(os.path.join(base, f"emboss_e.{number}"))
+                emboss_r = open(os.path.join(base, f"emboss_r.{number}"))
+                emboss_s = open(os.path.join(base, f"emboss_s.{number}"))
                 return emboss_e, emboss_r, emboss_s
             except ValueError:
                 continue

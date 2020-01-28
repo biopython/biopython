@@ -34,7 +34,7 @@ class Record:
     Example usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
+    >>> with open("Affy/affy_v3_example.CEL") as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
@@ -99,7 +99,7 @@ def read(handle, version=None):
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
+    >>> with open("Affy/affy_v3_example.CEL") as handle:
     ...     record = CelFile.read(handle)
     ...
     >>> record.version == 3

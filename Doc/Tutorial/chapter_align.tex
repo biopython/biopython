@@ -1636,6 +1636,21 @@ The \verb+PairwiseAligner+ object \verb+aligner+
 (see Section~\ref{sec:pairwise-aligner})
 stores the alignment parameters to be used for the pairwise alignments.
 
+These attributes can be set in the constructor of the object or after the object
+is made.
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner = Align.PairwiseAligner(match_score=1.0)
+\end{minted}
+
+Or, equivalently:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.match_score = 1.0
+\end{minted}
+
 Use the \verb+aligner.score+ method to calculate the alignment score between
 two sequences:
 

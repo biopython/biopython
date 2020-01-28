@@ -150,8 +150,8 @@ class EasyController:
         pop_name, freqs, total = info[1][pop_pos]
         allele_freq = {}
         alleles = info[0]
-        for i in range(len(alleles)):
-            allele_freq[alleles[i]] = freqs[i]
+        for i, allele in enumerate(alleles):
+            allele_freq[allele] = freqs[i]
         return total, allele_freq
 
     def get_multilocus_f_stats(self):

@@ -28,7 +28,7 @@ except KeyError:
 db = server.new_database(db_name)
 
 input_file = "/home/hack/install/biopython/Tests/GenBank/cor6_6.gb"
-handle = open(input_file, "r")
+handle = open(input_file)
 parser = GenBank.FeatureParser()
 iterator = GenBank.Iterator(handle, parser)
 

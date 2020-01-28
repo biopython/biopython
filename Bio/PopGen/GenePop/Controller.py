@@ -8,7 +8,6 @@
 import os
 import re
 import shutil
-import sys
 import tempfile
 
 from Bio.Application import AbstractCommandline, _Argument
@@ -63,11 +62,11 @@ def _read_table(f, funs):
     while "===" not in line and "---" not in line and line != "":
         toks = [x for x in line.split(" ") if x != ""]
         parts = []
-        for i in range(len(toks)):
+        for i, tok in enumerate(toks):
             try:
-                parts.append(funs[i](toks[i]))
+                parts.append(funs[i](tok))
             except ValueError:
-                parts.append(toks[i])  # Could not cast
+                parts.append(tok)  # Could not cast
         table.append(tuple(parts))
         line = f.readline().rstrip()
     return table
@@ -97,8 +96,8 @@ def _read_headed_triangle_matrix(f):
                 clean_vals.append(_gp_float(val))
             except ValueError:
                 clean_vals.append(None)
-        for col_pop in range(len(clean_vals)):
-            matrix[(line_pop + 1, col_pop)] = clean_vals[col_pop]
+        for col_pop, clean_val in enumerate(clean_vals):
+            matrix[(line_pop + 1, col_pop)] = clean_val
     return matrix
 
 

@@ -157,7 +157,7 @@ class CodonAdaptationIndex:
         return math.exp(cai_value / (cai_length - 1.0))
 
     def _count_codons(self, fasta_file):
-        with open(fasta_file, "r") as handle:
+        with open(fasta_file) as handle:
 
             # make the codon dictionary local
             self.codon_count = CodonsDict.copy()

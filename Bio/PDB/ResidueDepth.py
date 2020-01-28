@@ -505,7 +505,7 @@ def _get_atom_radius(atom, rtype="united"):
 
 def _read_vertex_array(filename):
     """Read the vertex list into a Numeric array (PRIVATE)."""
-    with open(filename, "r") as fp:
+    with open(filename) as fp:
         vertex_list = []
         for l in fp:
             sl = l.split()

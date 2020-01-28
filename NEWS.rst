@@ -35,6 +35,7 @@ possible, especially the following contributors:
 - Austin Varela (first contribution)
 - Chris Rands
 - Deepak Khatri
+- Hielke Walinga (first contribution)
 - Kai Blin
 - Peter Cock
 - Rob Miller

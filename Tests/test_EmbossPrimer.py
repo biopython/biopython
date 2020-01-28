@@ -31,18 +31,18 @@ class Primer3ParseTest(unittest.TestCase):
         """Make sure that we can use all single target primer3 files."""
         for file in self.test_files:
             # First using read...
-            h = open(file, "r")
+            h = open(file)
             Primer3.read(h)
             h.close()
             # Now using parse...
-            h = open(file, "r")
+            h = open(file)
             self.assertEqual(1, len(list(Primer3.parse(h))))
             h.close()
 
     def test_indepth_regular_parse(self):
         """Make sure we get the data from normal primer3 files okay."""
         regular_file = self.test_files[0]
-        h = open(regular_file, "r")
+        h = open(regular_file)
         primer_info = Primer3.read(h)
         h.close()
 
@@ -67,7 +67,7 @@ class Primer3ParseTest(unittest.TestCase):
     def test_in_depth_single_parse(self):
         """Make sure we get info right from a single primer find."""
         file = self.test_files[1]
-        h = open(file, "r")
+        h = open(file)
         primer_info = Primer3.read(h)
         h.close()
 
@@ -85,7 +85,7 @@ class Primer3ParseTest(unittest.TestCase):
         """Make sure we can parse an internal oligo file correctly."""
         # these files are generated when designing hybridization probes.
         file = self.test_files[4]
-        h = open(file, "r")
+        h = open(file)
         primer_info = Primer3.read(h)
         h.close()
 
@@ -193,14 +193,14 @@ class PrimersearchParseTest(unittest.TestCase):
     def test_simple_parse(self):
         """Make sure that we can parse all primersearch files."""
         for file in self.test_files:
-            h = open(file, "r")
+            h = open(file)
             PrimerSearch.read(h)
             h.close()
 
     def test_in_depth_normal_parse(self):
         """Make sure the output from a simple primersearch file is correct."""
         file = self.test_files[0]
-        h = open(file, "r")
+        h = open(file)
         amp_info = PrimerSearch.read(h)
         h.close()
 

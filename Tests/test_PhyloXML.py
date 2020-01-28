@@ -517,7 +517,7 @@ class WriterTests(unittest.TestCase):
 
     def _rewrite_and_call(self, orig_fname, test_cases):
         """Parse, rewrite and retest a phyloXML example file."""
-        infile = open(orig_fname, "r")
+        infile = open(orig_fname)
         phx = PhyloXMLIO.read(infile)
         infile.close()
         outfile = open(DUMMY, "w")
