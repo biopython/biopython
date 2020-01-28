@@ -182,6 +182,7 @@ class Record:
         self.gi = ""
         self.keywords = []
         self.locus = ""
+        self.molecule_type = ""
         self.nid = ""
         self.organism = ""
         self.origin = ""
