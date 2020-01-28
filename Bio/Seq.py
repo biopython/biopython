@@ -24,7 +24,6 @@ import array
 import sys
 import warnings
 import collections
-from collections.abc import Iterable as _Iterable
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
@@ -909,8 +908,7 @@ class Seq:
     def encode(self, encoding="utf-8", errors="strict"):
         """Return an encoded version of the sequence as a bytes object.
 
-        The Seq object aims to match the interfact of a Python string.
-        (This means on Python 3 it acts like a unicode string.)
+        The Seq object aims to match the interface of a Python string.
 
         This is essentially to save you doing str(my_seq).encode() when
         you need a bytes string, for example for computing a hash:
@@ -1200,7 +1198,7 @@ class Seq:
             if isinstance(table, CodonTable.CodonTable):
                 codon_table = table
             else:
-                raise ValueError("Bad table argument")
+                raise ValueError("Bad table argument") from None
         else:
             # Assume its a table ID
             if self.alphabet == IUPAC.unambiguous_dna:
@@ -1338,7 +1336,8 @@ class Seq:
         Throws error if other is not an iterable and if objects inside of the iterable
         are not Seq or String objects
         """
-        if not isinstance(other, _Iterable):  # doesn't detect single strings
+        if not isinstance(other, collections.abc.Iterable):
+            # doesn't detect single strings
             raise ValueError("Input must be an iterable")
         if isinstance(other, str):
             raise ValueError("Input must be an iterable")
@@ -2765,7 +2764,7 @@ def _translate_str(
                 if cds:
                     raise CodonTable.TranslationError(
                         "Extra in frame stop codon found."
-                    )
+                    ) from None
                 if to_stop:
                     break
                 amino_acids.append(stop_symbol)
@@ -2776,7 +2775,7 @@ def _translate_str(
                 # Gapped translation
                 amino_acids.append(gap)
             else:
-                raise CodonTable.TranslationError(f"Codon '{codon}' is invalid")
+                raise CodonTable.TranslationError(f"Codon '{codon}' is invalid") from None
     return "".join(amino_acids)
 
 
@@ -2889,7 +2888,7 @@ def translate(
             if isinstance(table, CodonTable.CodonTable):
                 codon_table = table
             else:
-                raise ValueError("Bad table argument")
+                raise ValueError("Bad table argument") from None
         return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds, gap=gap)
 
 
