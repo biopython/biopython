@@ -393,6 +393,7 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> numpy.array:
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
     """
+
     cosang = numpy.cos(angle_rads)
     sinang = numpy.sin(angle_rads)
 
@@ -450,13 +451,16 @@ def homog_scale_mtx(scale: float) -> numpy.array:
 
 
 def _get_azimuth(x: float, y: float) -> float:
-    sign = -1.0 if y < 0.0 else 1.0
+    sign_y = -1.0 if y < 0.0 else 1.0
+    sign_x = -1.0 if x < 0.0 else 1.0
     return (
         numpy.arctan2(y, x)
         if (0 != x and 0 != y)
-        else (numpy.pi / 2.0 * sign)  # +/-90 if X=0, Y!=0
+        else (numpy.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
         if 0 != y
-        else 0.0  # 0 if on z-axis
+        else numpy.pi
+        if sign_x < 0.0  # 180 if Y=0, X < 0
+        else 0.0  # 0 if Y=0, X >= 0
     )
 
 
@@ -471,6 +475,7 @@ def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
         return (0, 0, 0)
     azimuth = _get_azimuth(xyz[0][0], xyz[1][0])
     polar_angle = numpy.arccos(xyz[2][0] / r)
+
     return (r, azimuth, polar_angle)
 
 
@@ -487,10 +492,10 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
         (to return from coord_space)
     :returns: 4x4 numpy array, x2 if rev=True
     """
-    dbg = False
-    if dbg:
-        for ac in acs:
-            print(ac.transpose())
+    # dbg = False
+    # if dbg:
+    #    for ac in acs:
+    #        print(ac.transpose())
 
     a0 = acs[0]
     a1 = acs[1]
@@ -504,8 +509,8 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     sc = get_spherical_coordinates(p)
 
     # if dbg:
-    #    print('p', p.transpose())
-    #    print('sc', sc)
+    #    print("p", p.transpose())
+    #    print("sc", sc)
 
     mrz = homog_rot_mtx(-sc[1], "z")  # rotate translated a2 -azimuth about Z
     mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a2 -polar_angle about Y
@@ -515,7 +520,7 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     mt = mry.dot(mrz.dot(tm))
 
     # if dbg:
-    #     print('mt * a2', (mt.dot(a2)).transpose())
+    #    print("mt * a2", (mt.dot(a2)).transpose())
 
     # p = mt @ a0
     p = mt.dot(a0)
