@@ -196,6 +196,7 @@ class Record:
         self.size = ""
         self.source = ""
         self.taxonomy = []
+        self.topology = ""
         self.version = ""
         self.wgs = ""
         self.wgs_scafld = []
