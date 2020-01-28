@@ -48,13 +48,13 @@ def structure_rebuild_test(entity, verbose: bool = False) -> Dict:
         comparison dict from compare_residues()
     """
     sp = StringIO()
-    entity.atom_to_internal_coordinates()
+    entity.atom_to_internal_coordinates(verbose)
     write_PIC(entity, sp)
     sp.seek(0)
     pdb2 = read_PIC(sp)
     if verbose:
         report_IC(pdb2, verbose=True)
-    pdb2.internal_to_atom_coordinates()
+    pdb2.internal_to_atom_coordinates(verbose)
     r = compare_residues(entity, pdb2, verbose=verbose)
     return r
 
