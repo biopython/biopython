@@ -26,7 +26,6 @@ from os.path import basename
 from Bio import BiopythonParserWarning
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -351,7 +350,7 @@ def _get_string_tag(opt_bytes_value, default=None):
         return opt_bytes_value.decode(encoding=sys.getdefaultencoding())
 
 
-def AbiIterator(handle, alphabet=None, trim=False):
+def AbiIterator(argument, alphabet=None, trim=False):
     """Return an iterator for the Abi file format."""
     # raise exception is alphabet is not dna
     if alphabet is not None:
@@ -360,15 +359,16 @@ def AbiIterator(handle, alphabet=None, trim=False):
         if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
             raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
 
-    # raise exception if handle mode is not 'rb'
-    if hasattr(handle, "mode"):
-        if set("rb") != set(handle.mode.lower()):
-            raise ValueError("ABI files has to be opened in 'rb' mode.")
+    try:
+        handle = open(argument, "rb")
+    except TypeError:
+        handle = argument
+        if handle.read(0) != b"":
+            raise ValueError("ABI files has to be opened in 'rb' mode.") from None
 
-    with as_handle(handle, "rb") as handle:
+    try:
 
         # check if input file is a valid Abi file
-        handle.seek(0)
         marker = handle.read(4)
         if not marker:
             # handle empty file gracefully
@@ -463,6 +463,10 @@ def AbiIterator(handle, alphabet=None, trim=False):
             yield record
         else:
             yield _abi_trim(record)
+
+    finally:
+        if handle != argument:
+            handle.close()
 
 
 def _AbiTrimIterator(handle):
