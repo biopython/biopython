@@ -173,7 +173,7 @@ class Chain(Entity):
         for r in self.get_residues():
             yield from r
 
-    def atom_to_internal_coordinates(self, allBonds=False):
+    def atom_to_internal_coordinates(self, allBonds: bool = False, verbose: bool = False) -> None:
         """Create/update internal coordinates from Atom X,Y,Z coordinates.
 
         Internal coordinates are bond length, angle and dihedral angles.
@@ -181,18 +181,22 @@ class Chain(Entity):
         :param allBonds bool: default False
             include hedra and dihedra for bonds around sidechain rings.
             (not required to capture all atoms)
+        :param verbose bool: default False
+            describe runtime problems
         """
         if not self.internal_coord:
             self.internal_coord = IC_Chain(self)
-        self.internal_coord.dihedra_from_atoms(allBonds)
+        self.internal_coord.dihedra_from_atoms(allBonds, verbose)
 
-    def internal_to_atom_coordinates(self):
+    def internal_to_atom_coordinates(self, verbose: bool = False):
         """Create/update atom coordinates from internal coordinates.
 
+        :param verbose bool: default False
+            describe runtime problems
         :raises Exception: if any chain does not have .pic attribute
         """
         if self.internal_coord:
-            self.internal_coord.internal_to_atom_coordinates()
+            self.internal_coord.internal_to_atom_coordinates(verbose)
         else:
             raise Exception(
                 "Structure %s Chain %s does not have internal coordinates set"
