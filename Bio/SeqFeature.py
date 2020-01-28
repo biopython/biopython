@@ -183,7 +183,7 @@ class SeqFeature:
         except AttributeError:
             if self.location is None:
                 if value is not None:
-                    raise ValueError("Can't set strand without a location.")
+                    raise ValueError("Can't set strand without a location.") from None
             else:
                 raise
 
@@ -210,7 +210,7 @@ class SeqFeature:
         except AttributeError:
             if self.location is None:
                 if value is not None:
-                    raise ValueError("Can't set ref without a location.")
+                    raise ValueError("Can't set ref without a location.") from None
             else:
                 raise
 
@@ -2081,7 +2081,7 @@ class OneOfPosition(int, AbstractPosition):
     >>> int(p)
     1888
 
-    Interget comparisons and operators act like using int(p),
+    Integer comparisons and operators act like using int(p),
 
     >>> p == 1888
     True
