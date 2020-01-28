@@ -350,7 +350,7 @@ def _get_string_tag(opt_bytes_value, default=None):
         return opt_bytes_value.decode(encoding=sys.getdefaultencoding())
 
 
-def AbiIterator(argument, alphabet=None, trim=False):
+def AbiIterator(source, alphabet=None, trim=False):
     """Return an iterator for the Abi file format."""
     # raise exception is alphabet is not dna
     if alphabet is not None:
@@ -360,11 +360,11 @@ def AbiIterator(argument, alphabet=None, trim=False):
             raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
 
     try:
-        handle = open(argument, "rb")
+        handle = open(source, "rb")
     except TypeError:
-        handle = argument
+        handle = source
         if handle.read(0) != b"":
-            raise ValueError("ABI files has to be opened in 'rb' mode.") from None
+            raise ValueError("ABI files must be opened in binary mode.") from None
 
     try:
 
@@ -465,7 +465,7 @@ def AbiIterator(argument, alphabet=None, trim=False):
             yield _abi_trim(record)
 
     finally:
-        if handle != argument:
+        if handle != source:
             handle.close()
 
 
