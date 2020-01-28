@@ -273,7 +273,7 @@ class XdnaWriter(SequenceWriter):
         drop = len(record.features) - len(features)
         if drop > 0:
             warnings.warn(
-                f"Dropping {drop} features with fuzzy locations", BiopythonWarning,
+                f"Dropping {drop} features with fuzzy locations", BiopythonWarning
             )
 
         # We also cannot store more than 255 features as the number of

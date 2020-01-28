@@ -179,21 +179,13 @@ class Hmmer3TabIndexer(SearchIndexer):
 
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
-                    yield (
-                        qresult_key.decode(),
-                        start_offset,
-                        adj_end - start_offset,
-                    )
+                    yield (qresult_key.decode(), start_offset, adj_end - start_offset)
                     qresult_key = curr_key
                     start_offset = adj_end
 
             line = handle.readline()
             if not line:
-                yield (
-                    qresult_key.decode(),
-                    start_offset,
-                    end_offset - start_offset,
-                )
+                yield (qresult_key.decode(), start_offset, end_offset - start_offset)
                 break
 
     def get_raw(self, offset):
