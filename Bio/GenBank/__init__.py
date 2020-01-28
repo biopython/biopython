@@ -1411,7 +1411,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     "Could not determine alphabet for seq_type %s" % self._seq_type
                 )
 
-        if not sequence and self.__expected_size:
+        if not sequence and self._expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
         else:
             self.data.seq = Seq(sequence, seq_alphabet)
