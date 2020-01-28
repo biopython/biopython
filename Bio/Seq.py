@@ -2775,7 +2775,9 @@ def _translate_str(
                 # Gapped translation
                 amino_acids.append(gap)
             else:
-                raise CodonTable.TranslationError(f"Codon '{codon}' is invalid") from None
+                raise CodonTable.TranslationError(
+                    f"Codon '{codon}' is invalid"
+                ) from None
     return "".join(amino_acids)
 
 
