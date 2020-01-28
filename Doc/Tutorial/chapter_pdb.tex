@@ -143,14 +143,14 @@ object, ie. directly from the PDB file:
 In order to parse a PQR file, proceed in a similar manner as in the case
 of PDB files:
 
-Create a \texttt{PDBParser} object, using the \texttt{is_pqr} flag:
+Create a \texttt{PDBParser} object, using the \texttt{is\_pqr} flag:
 
 \begin{minted}{pycon}
 >>> from Bio.PDB.PDBParser import PDBParser
 >>> pqr_parser = PDBParser(PERMISSIVE=1, is_pqr=True)
 \end{minted}
 
-The \texttt{is_pqr} flag set to \texttt{True} indicates that the file to be parsed is a PQR file, 
+The \texttt{is\_pqr} flag set to \texttt{True} indicates that the file to be parsed is a PQR file, 
 and that the parser should read the atomic charge and radius fields for each atom entry. Following the same procedure as for PQR files, a Structure object is then produced, and the PQR file is parsed.
 
 \begin{minted}{pycon}
@@ -228,7 +228,7 @@ a chain between a start and end residue.
 
 \subsection{Writing PQR files}
 
-Use the \texttt{PDBIO} class as you would for a PDB file, with the flag \texttt{is_pqr=True}. 
+Use the \texttt{PDBIO} class as you would for a PDB file, with the flag \texttt{is\_pqr=True}. 
 The PDBIO methods can be used in the case of PQR files as well.
 
 Example: writing a PQR file
