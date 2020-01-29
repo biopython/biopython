@@ -96,7 +96,9 @@ def report_IC(
     try:
         if "A" == entity.level:
             raise PDBException("No IC output at Atom level")
-        elif isinstance(entity, Residue) or isinstance(entity, DisorderedResidue):  # "R" == entity.level:
+        elif isinstance(entity, Residue) or isinstance(
+            entity, DisorderedResidue
+        ):  # "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
                 dlen = len(entity.internal_coord.dihedra)
@@ -176,7 +178,7 @@ def IC_duplicate(entity) -> Structure:
             # works better at chain level but leave option here
             if not res.internal_coord:
                 res.internal_coord = IC_Residue(entity)
-            res.internal_coord.dihedra_from_atoms()
+            res.internal_coord.atom_to_internal_coordinates()
         else:
             entity.atom_to_internal_coordinates()
 
