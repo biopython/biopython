@@ -62,7 +62,7 @@ All the different alignment functions are contained in an object
 
 Keywords can be ommitted, so this call is identical:
 
-    >>> alignments = pairwise2.align.globalxx("ACGT", "ACG")
+    >>> alignments = pairwise2.align.globalxx("ACCGT", "ACG")
 
 The result is a list of the alignments between the two strings. Each alignment
 is a named tuple consisting of the two aligned sequences, the score and the
@@ -387,37 +387,21 @@ where the alignment occurs.
             to this function into forms appropriate for _align.
             """
             keywds = keywds.copy()
-            #print(args)
-            args = args + (len(self.param_names) - len(args)) * (None,)
-            #print(args)
 
             # Replace possible "keywords" with arguments:
+            args = args + (len(self.param_names) - len(args)) * (None,)
             for key in keywds.copy():
-                # print(key)
                 if key in self.param_names:
                     _index = self.param_names.index(key)
-                    #print(_index)
-                    args = args[:_index] + (keywds[key],) + args[_index+1:]
-                    #args[_index] = keywds[key]
-                    print(args)
-                    args = tuple(arg for arg in args if arg)
-                    #if key not in ('sequenceA', 'sequenceB'):
+                    args = args[:_index] + (keywds[key],) + args[_index:]
                     del keywds[key]
-                elif key not in ("penalize_extend_when_opening",
-                                 "penalize_end_gaps",
-                                 "align_globally",
-                                 "gap_char",
-                                 "force_generic",
-                                 "score_only",
-                                 "one_alignment_only"):
-                    raise ValueError("unknown parameter %r" % key)
-                    
+            args = tuple(arg for arg in args if arg is not None)
+                
             if len(args) != len(self.param_names):
                 raise TypeError("%s takes exactly %d argument (%d given)"
                                 % (self.function_name, len(self.param_names),
                                    len(args)))
-            # print(args)
-            # print(keywds)
+
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
@@ -475,7 +459,6 @@ where the alignment occurs.
                 keywds["penalize_end_gaps"] = tuple([value] * 2)
             else:
                 assert n == 2
-            # print(keywds)
             return keywds
 
         def __call__(self, *args, **keywds):
