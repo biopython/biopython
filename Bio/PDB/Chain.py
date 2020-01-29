@@ -10,6 +10,8 @@
 from Bio.PDB.Entity import Entity
 from Bio.PDB.internal_coords import IC_Chain
 
+from typing import Optional
+
 
 class Chain(Entity):
     """Define Chain class.
@@ -173,7 +175,9 @@ class Chain(Entity):
         for r in self.get_residues():
             yield from r
 
-    def atom_to_internal_coordinates(self, allBonds: bool = False, verbose: bool = False) -> None:
+    def atom_to_internal_coordinates(
+        self, verbose: bool = False, allBonds: bool = False
+    ) -> None:
         """Create/update internal coordinates from Atom X,Y,Z coordinates.
 
         Internal coordinates are bond length, angle and dihedral angles.
@@ -186,17 +190,29 @@ class Chain(Entity):
         """
         if not self.internal_coord:
             self.internal_coord = IC_Chain(self)
-        self.internal_coord.dihedra_from_atoms(allBonds, verbose)
+        self.internal_coord.atom_to_internal_coordinates(
+            verbose=verbose, allBonds=allBonds
+        )
 
-    def internal_to_atom_coordinates(self, verbose: bool = False):
+    def internal_to_atom_coordinates(
+        self,
+        verbose: bool = False,
+        start: Optional[int] = None,
+        fin: Optional[int] = None,
+    ):
         """Create/update atom coordinates from internal coordinates.
 
+        :param: start, fin lists
+            sequence position, insert code for begin, end of subregion to
+            process
         :param verbose bool: default False
             describe runtime problems
         :raises Exception: if any chain does not have .pic attribute
         """
         if self.internal_coord:
-            self.internal_coord.internal_to_atom_coordinates(verbose)
+            self.internal_coord.internal_to_atom_coordinates(
+                verbose=verbose, start=start, fin=fin
+            )
         else:
             raise Exception(
                 "Structure %s Chain %s does not have internal coordinates set"
