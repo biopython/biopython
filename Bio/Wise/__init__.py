@@ -19,7 +19,6 @@ Bio.Wise.dnal is for Smith-Waterman DNA alignments
 import os
 import sys
 import tempfile
-import subprocess
 
 from Bio import SeqIO
 
@@ -106,8 +105,8 @@ def align(
     if debug:
         sys.stderr.write("%s\n" % cmdline_str)
 
-    status = subprocess.call(cmdline_str, shell=True) >> 8
-
+    status = os.system(cmdline_str, shell=True) >> 8
+    # `status` here will be >1 for error codes >=256
     if status > 1:
         if kbyte != 0:  # possible memory problem; could be None
             sys.stderr.write("INFO trying again with the linear model\n")
