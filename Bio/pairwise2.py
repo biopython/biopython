@@ -77,7 +77,7 @@ You can access each element of an aligment by index or name:
    3.0
    >>> alignments[0].score
    3.0
-   
+
 For a nice printout of an alignment, use the ``format_alignment`` method of
 the module:
 
@@ -333,7 +333,6 @@ class align:
                   "of the gap.  They should return a gap penalty."),
         }
 
-
         def __init__(self, name):
             """Check to make sure the name of the function is reasonable."""
             if name.startswith("global"):
@@ -396,7 +395,7 @@ where the alignment occurs.
                     args = args[:_index] + (keywds[key],) + args[_index:]
                     del keywds[key]
             args = tuple(arg for arg in args if arg is not None)
-                
+
             if len(args) != len(self.param_names):
                 raise TypeError("%s takes exactly %d argument (%d given)"
                                 % (self.function_name, len(self.param_names),
