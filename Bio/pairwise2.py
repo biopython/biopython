@@ -38,31 +38,34 @@ the second indicates the parameters for gap penalties.
 
 The match parameters are::
 
-    CODE  DESCRIPTION
+    CODE  DESCRIPTION & OPTIONAL KEYWORDS
     x     No parameters. Identical characters have score of 1, otherwise 0.
     m     A match score is the score of identical chars, otherwise mismatch
-          score.
+          score. Keywords ``match``, ``mismatch``.
     d     A dictionary returns the score of any pair of characters.
-    c     A callback function returns scores.
+          Keyword ``match_dict``.
+    c     A callback function returns scores. Keyword ``match_fn``.
 
 The gap penalty parameters are::
 
-    CODE  DESCRIPTION
+    CODE  DESCRIPTION & OPTIONAL KEYWORDS
     x     No gap penalties.
     s     Same open and extend gap penalties for both sequences.
+          Keywords ``open``, ``extend``.
     d     The sequences have different open and extend gap penalties.
+          Keywords ``openA``, ``extendA``, ``openB``, ``extendB``.
     c     A callback function returns the gap penalties.
+          Keywords ``gap_A_fn``, ``gap_B_fn``.
 
 All the different alignment functions are contained in an object
 ``align``. For example:
 
     >>> from Bio import pairwise2
-    >>> alignments = pairwise2.align.globalxx(sequenceA="ACCGT",
-    ...                                       sequenceB="ACG")
-
-Keywords can be ommitted, so this call is identical:
-
     >>> alignments = pairwise2.align.globalxx("ACCGT", "ACG")
+
+For better readability, the required arguments can be used with optional keywords:
+
+    >>> alignments = pairwise2.align.globalxx(sequenceA="ACCGT", sequenceB="ACG")
 
 The result is a list of the alignments between the two strings. Each alignment
 is a named tuple consisting of the two aligned sequences, the score and the
@@ -207,6 +210,11 @@ Some examples:
     AC-G-
       Score=5
     <BLANKLINE>
+
+- Note that you can use keywords to increase the readability, e.g.:
+
+    >>> a = pairwise2.align.globalms("ACGT", "ACG", match=2, mismatch=-1, open=-.5,
+    ...                              extend=-.1)
 
 - Depending on the penalties, a gap in one sequence may be followed by a gap in
   the other sequence.If you don't like this behaviour, increase the gap-open
@@ -366,6 +374,12 @@ class align:
             # Set the doc string.
             doc = "%s(%s) -> alignments\n" % (
                 self.__name__, ", ".join(self.param_names))
+            doc += """\
+\nThe following parameters can also be used with optional
+keywords of the same name.\n\n
+sequenceA and sequenceB must be of the same type, either
+strings, lists or Biopython sequence objects.\n
+"""
             if match_doc:
                 doc += "\n%s\n" % match_doc
             if penalty_doc:
@@ -991,8 +1005,8 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
-    Alignment = namedtuple('Alignment',
-                           ('seqA, seqB, score, start, end'))
+    Alignment = namedtuple("Alignment",
+                           ("seqA, seqB, score, start, end"))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:

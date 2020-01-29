@@ -1444,9 +1444,11 @@ they may return different subsets of all valid alignments).
 \texttt{water} (local) and \texttt{needle} (global) from the
 \href{http://emboss.sourceforge.net/}{EMBOSS} suite (see above) and should
 return the same results. The \verb|pairwise2| module has undergone some
-optimization regarding speed and memory consumption recently (Biopython versions \textgreater 1.67) so that for short sequences (global alignments: \textasciitilde 2000 residues, local alignments \textasciitilde 600 residues) it's faster (or equally fast)
-to use \verb|pairwise2| than calling EMBOSS' \texttt{water} or \texttt{needle}
-via the command line tools.
+optimization regarding speed and memory consumption recently (Biopython versions
+\textgreater 1.67) so that for short sequences (global alignments:
+\textasciitilde 2000 residues, local alignments \textasciitilde 600 residues)
+it's faster (or equally fast) to use \verb|pairwise2| than calling EMBOSS' 
+\texttt{water} or \texttt{needle} via the command line tools.
 
 Suppose you want to do a global pairwise alignment between the same two
 hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
@@ -1482,10 +1484,10 @@ alignments). Have a look at one of these alignments:
 >>> len(alignments)
 80
 >>> print(alignments[0]) # doctest:+ELLIPSIS
-('MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', 'MVHL-----T--PEEKSAVTALWGKV----...Y-H', 72.0, 0, 217)
+Alignment(seqA='MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', seqB='MVHL-----T--PEEKSAVTALWGKV----...Y-H', score=72.0, start=0, end=217)
 \end{minted}
 
-Each alignment is a tuple consisting of the two aligned sequences, the score, the
+Each alignment is a named tuple consisting of the two aligned sequences, the score, the
 start and the end positions of the alignment (in global alignments the start is
 always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
 function \verb|format_alignment| for a nicer printout:
@@ -1498,6 +1500,14 @@ MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
 MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
   Score=72
 <BLANKLINE>
+\end{minted}
+
+Since Biopython 1.77 the required parameters can be supplied with  keywords. The
+last example can now also be written as:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> alignments = pairwise2.align.globalxx(sequenceA=seq1.seq, sequenceB=seq2.seq)
 \end{minted}
 
 Better alignments are usually obtained by penalizing gaps: higher costs
@@ -2774,15 +2784,15 @@ ValueError: alphabets are inconsistent
 
 \verb+Bio.Align.substitution_matrices+ includes a parser to read one- and two-dimensional \verb+Array+ objects from file. One-dimensional arrays are represented by a simple two-column format, with the first column containing the key and the second column the corresponding value. For example, the file \verb+hg38.chrom.sizes+ (obtained from UCSC), available in the \verb+Tests/Align+ subdirectory of the Biopython distribution, contains the size in nucleotides of each chromosome in human genome assembly hg38:
 \begin{minted}{text}
-chr1	248956422
-chr2	242193529
-chr3	198295559
-chr4	190214555
+chr1    248956422
+chr2    242193529
+chr3    198295559
+chr4    190214555
 ...
-chrUn_KI270385v1	990
-chrUn_KI270423v1	981
-chrUn_KI270392v1	971
-chrUn_KI270394v1	970
+chrUn_KI270385v1    990
+chrUn_KI270423v1    981
+chrUn_KI270392v1    971
+chrUn_KI270394v1    970
 \end{minted}
 To parse this file, use
 
