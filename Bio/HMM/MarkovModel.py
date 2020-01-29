@@ -672,6 +672,6 @@ class HiddenMarkovModel:
             if prob > 0:
                 log_prob[key] = math.log(log_prob[key])
             else:
-                log_prob[key] = float("-inf")
+                log_prob[key] = -math.inf
 
         return log_prob
