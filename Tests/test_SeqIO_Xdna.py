@@ -32,17 +32,17 @@ class TestXdna(unittest.TestCase):
                     "start": 49,
                     "end": 150,
                     "strand": 1,
-                    "label": "FeatureA"
-                    },
+                    "label": "FeatureA",
+                },
                 {
                     "type": "misc_binding",
                     "start": 499,
                     "end": 700,
                     "strand": -1,
-                    "label": "FeatureB"
-                    }
-                ]
-            },
+                    "label": "FeatureB",
+                },
+            ],
+        },
         "sample-b": {
             "file": "Xdna/sample-b.xdna",
             "name": "Sample",
@@ -57,17 +57,17 @@ class TestXdna(unittest.TestCase):
                     "start": 160,
                     "end": 241,
                     "strand": 1,
-                    "label": "FeatureA"
-                    },
+                    "label": "FeatureA",
+                },
                 {
                     "type": "terminator",
                     "start": 399,
                     "end": 750,
                     "strand": -1,
-                    "label": "FeatureB"
-                    }
-                ]
-            },
+                    "label": "FeatureB",
+                },
+            ],
+        },
         "sample-c": {
             "file": "Xdna/sample-c.xprt",
             "name": "Sample",
@@ -82,18 +82,18 @@ class TestXdna(unittest.TestCase):
                     "start": 10,
                     "end": 11,
                     "strand": 1,
-                    "label": "S11"
-                    },
+                    "label": "S11",
+                },
                 {
                     "type": "misc_binding",
                     "start": 164,
                     "end": 195,
                     "strand": 1,
-                    "label": "RIP1"
-                    }
-                ]
-            }
-        }
+                    "label": "RIP1",
+                },
+            ],
+        },
+    }
 
     def test_read(self):
         """Read sample files."""
@@ -118,7 +118,6 @@ class TestXdna(unittest.TestCase):
 
 
 class TestInvalidXdna(unittest.TestCase):
-
     def setUp(self):
         f = open("Xdna/sample-a.xdna", "rb")
         self.buffer = f.read()
@@ -127,7 +126,7 @@ class TestInvalidXdna(unittest.TestCase):
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
         if isinstance(value, list):
-            mod_buffer[position:position + len(value) - 1] = value
+            mod_buffer[position : position + len(value) - 1] = value
         else:
             mod_buffer[position] = value
         return BytesIO(mod_buffer)
@@ -173,7 +172,6 @@ class TestInvalidXdna(unittest.TestCase):
 
 
 class TestXdnaWriter(unittest.TestCase):
-
     def test_write_sequence_type(self):
         """Write correct sequence type."""
         h = BytesIO()
@@ -181,10 +179,11 @@ class TestXdnaWriter(unittest.TestCase):
         record = SeqRecord(Seq("ACGT"))
 
         for alphabet, expected_byte in [
-                (Alphabet.generic_alphabet, 0),
-                (Alphabet.generic_dna, 1),
-                (Alphabet.generic_rna, 3),
-                (Alphabet.generic_protein, 4)]:
+            (Alphabet.generic_alphabet, 0),
+            (Alphabet.generic_dna, 1),
+            (Alphabet.generic_rna, 3),
+            (Alphabet.generic_protein, 4),
+        ]:
             record.seq.alphabet = alphabet
             h.seek(0, 0)
             SeqIO.write([record], h, "xdna")
@@ -206,19 +205,22 @@ class TestXdnaWriter(unittest.TestCase):
             SeqIO.write([record], h, "xdna")
 
         # Now a record with a fuzzy-located feature
-        feature = SeqFeature(FeatureLocation(BeforePosition(2), 3),
-                             type="misc_feature")
+        feature = SeqFeature(FeatureLocation(BeforePosition(2), 3), type="misc_feature")
         record.features = [feature]
-        with self.assertWarnsRegex(BiopythonWarning, r"Dropping \d+ features with fuzzy locations"):
+        with self.assertWarnsRegex(
+            BiopythonWarning, r"Dropping \d+ features with fuzzy locations"
+        ):
             SeqIO.write([record], h, "xdna")
 
         # Now a record with a feature with a qualifier too long
         qualifiers = {"note": ["x" * 260]}
-        feature = SeqFeature(FeatureLocation(2, 3),
-                             type="misc_feature",
-                             qualifiers=qualifiers)
+        feature = SeqFeature(
+            FeatureLocation(2, 3), type="misc_feature", qualifiers=qualifiers
+        )
         record.features = [feature]
-        with self.assertWarnsRegex(BiopythonWarning, "Some annotations were truncated to 255 characters"):
+        with self.assertWarnsRegex(
+            BiopythonWarning, "Some annotations were truncated to 255 characters"
+        ):
             SeqIO.write([record], h, "xdna")
 
         h.close()
