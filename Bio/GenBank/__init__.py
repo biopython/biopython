@@ -1490,7 +1490,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
             self.data.molecule_type = mol_type
 
-    def topology(self, topology):  # noqa: D402  # flake8 thinks this line is a function signature. It ain't
+    def topology(
+        self, topology
+    ):  # noqa: D402  # flake8 thinks this line is a function signature. It ain't
         """Validate and record sequence topology (linear or circular as strings)."""
         if topology:
             if topology not in ["linear", "circular"]:
