@@ -130,15 +130,17 @@ class IC_Chain:
 
     Methods
     -------
-    assemble_residues(verbose)
+    internal_to_atom_coordinates(verbose, start, fin)
+        Process ic data to Residue/Atom coordinates; calls assemble_residues()
+        followed by coords_to_structure()
+    assemble_residues(verbose, start, fin)
         Generate IC_Residue atom coords from internal coordinates
     coords_to_structure()
-        update Biopython Residue.Atom coords for all Residues with IC_Residue
-        attributes
-    dihedra_from_atoms()
-        Calculate dihedrals, angles, bond lengths for Atom data
-    internal_to_atom_coordinates()
-        Process ic data to Residue/Atom coordinates
+        update Biopython Residue.Atom coords from IC_Residue coords for all
+        Residues with IC_Residue attributes
+    atom_to_internal_coordinates(verbose, allBonds)
+        Calculate dihedrals, angles, bond lengths (internal coordinates) for
+        Atom data
     link_residues()
         Call link_dihedra() on each IC_Residue (needs rprev, rnext set)
     render_dihedra()
@@ -325,15 +327,32 @@ class IC_Chain:
             elif res.internal_coord:
                 res.internal_coord.coords_to_residue()
 
-    def internal_to_atom_coordinates(self, verbose: bool = False) -> None:
-        """Complete process, IC data to Residue/Atom coords."""
-        self.assemble_residues(verbose)  # internal to XYZ coordinates
+    def internal_to_atom_coordinates(
+        self,
+        verbose: bool = False,
+        start: Optional[int] = None,
+        fin: Optional[int] = None,
+    ) -> None:
+        """Complete process, IC data to Residue/Atom coords.
+        
+        :param: start, fin lists
+            sequence position, insert code for begin, end of subregion to
+            process
+        :param verbose bool: default False
+            describe runtime problems
+
+        """
+        self.assemble_residues(
+            verbose=verbose, start=start, fin=fin
+        )  # internal to XYZ coordinates
         self.coords_to_structure()  # promote to BioPython Residue/Atom
 
-    def dihedra_from_atoms(self, allBonds: bool = False, verbose: bool = False) -> None:
+    def atom_to_internal_coordinates(
+        self, verbose: bool = False, allBonds: bool = False
+    ) -> None:
         """Calculate dihedrals, angles, bond lengths for Atom data."""
         for ric in self.ordered_aa_ic_list:
-            ric.dihedra_from_atoms(allBonds, verbose)
+            ric.atom_to_internal_coordinates(verbose=verbose, allBonds=allBonds)
 
     @staticmethod
     def _write_mtx(fp: TextIO, mtx: numpy.array) -> None:
@@ -669,10 +688,10 @@ class IC_Residue(object):
         backbone atoms (N, CA, C, O, CB) will be included.  Currently only
         CYG, YCM and UNK; override at your own risk.  To generate
         sidechain, add appropriate entries to ic_data_sidechains in
-        ic_data.py and support in dihedra_from_atoms()
+        ic_data.py and support in atom_to_internal_coordinates()
     gly_Cbeta: bool default False
         override class variable to True to generate internal coordinates for
-        glycine CB atoms in dihedra_from_atoms().
+        glycine CB atoms in atom_to_internal_coordinates().
 
         `IC_Residue.gly_Cbeta = True`
 
@@ -696,7 +715,7 @@ class IC_Residue(object):
         Convert 1x3 cartesian coords to 4x1 homogeneous coords
     coords_to_residue()
         Convert homogeneous atom_coords to Biopython cartesian Atom coords
-    dihedra_from_atoms()
+    atom_to_internal_coordinates(verbose, allBonds)
         Create hedra and dihedra for atom coordinates
     get_angle()
         Return angle for passed key
@@ -1386,7 +1405,9 @@ class IC_Residue(object):
                     dct[tnlst] = obj(nlst)  # type: ignore
                 dct[tnlst].atoms_updated = False  # type: ignore
 
-    def dihedra_from_atoms(self, allBonds: bool = False, verbose: bool = False) -> None:
+    def atom_to_internal_coordinates(
+        self, verbose: bool = False, allBonds: bool = False
+    ) -> None:
         """Create hedra and dihedra for atom coordinates.
 
         :param allBonds: bool default False
@@ -1443,7 +1464,7 @@ class IC_Residue(object):
         self.link_dihedra(verbose)
 
         if self.gly_Cbeta and "G" == self.lc and sCB not in self.atom_coords:
-            # do here because dihedra_from_atoms() may need
+            # do here because atom_to_internal_coordinates() may need
             self.atom_coords[sCB] = None  # so _gen_edra will complete
 
         for d in self.dihedra.values():
