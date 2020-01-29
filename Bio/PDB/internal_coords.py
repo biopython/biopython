@@ -283,15 +283,23 @@ class IC_Chain:
         for ric in self.ordered_aa_ic_list:
             ric.render_dihedra()
 
-    def assemble_residues(self, start=False, fin=False, verbose=False) -> None:
+    def assemble_residues(
+        self,
+        verbose: bool = False,
+        start: Optional[int] = None,
+        fin: Optional[int] = None,
+    ) -> None:
         """Generate IC_Residue atom coords from internal coordinates.
 
         Filter positions between start and fin if set, find appropriate start
         coordinates for each residue and pass to IC_Residue.assemble()
 
+        :param verbose bool: default False
+            describe runtime problems
         :param: start, fin lists
             sequence position, insert code for begin, end of subregion to
             process
+
         """
         for ric in self.ordered_aa_ic_list:
             if not hasattr(ric, "NCaCKey"):
@@ -300,12 +308,10 @@ class IC_Chain:
                         f"no assembly for {str(ric)} due to missing N, Ca and/or C atoms"
                     )
                 continue
-            respos, resicode = ric.residue.id[1:]
-            if start and (
-                start[0] > respos or (start[0] == respos and start[1] < resicode)
-            ):
+            respos = ric.residue.id[1]
+            if start and start > respos:
                 continue
-            if fin and (fin[0] < respos or (fin[0] == respos and fin[1] > resicode)):
+            if fin and fin < respos:
                 continue
 
             ric.atom_coords = cast(
