@@ -494,14 +494,14 @@ class AbstractCommandline:
             print("About to run: %s" % water_cmd)
             std_output, err_output = water_cmd()
 
-        This functionality is similar to subprocess.check_output() added in
-        Python 2.7. In general if you require more control over running the
-        command, use subprocess directly.
+        This functionality is similar to subprocess.check_output(). In general
+        if you require more control over running the command, use subprocess
+        directly.
 
-        As of Biopython 1.56, when the program called returns a non-zero error
-        level, a custom ApplicationError exception is raised. This includes
-        any stdout and stderr strings captured as attributes of the exception
-        object, since they may be useful for diagnosing what went wrong.
+        When the program called returns a non-zero error level, a custom
+        ApplicationError exception is raised. This includes any stdout and
+        stderr strings captured as attributes of the exception object, since
+        they may be useful for diagnosing what went wrong.
         """
         if not stdout:
             stdout_arg = open(os.devnull, "w")
