@@ -77,7 +77,7 @@ except ImportError:
 from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.PDB.Polypeptide import three_to_one
 
-from Bio.PDB.vectors import homog_rot_mtx, coord_space
+from Bio.PDB.vectors import homog_rot_mtx, coord_space, calc_dihedral, Vector
 from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 
@@ -2507,7 +2507,21 @@ class Dihedron(Edron):
         do4 = mt.dot(acs[3])
 
         dh1r = numpy.rad2deg(numpy.arctan2(do4[1][0], do4[0][0]))
+
         self.dihedral1 = dh1r
+
+        """
+        # for testing
+        bp_dihed = numpy.rad2deg(
+            calc_dihedral(
+                Vector(acs[0][0][0], acs[0][1][0], acs[0][2][0]),
+                Vector(acs[1][0][0], acs[1][1][0], acs[1][2][0]),
+                Vector(acs[2][0][0], acs[2][1][0], acs[2][2][0]),
+                Vector(acs[3][0][0], acs[3][1][0], acs[3][2][0]),
+            )
+        )
+        print("dihed: ", dh1r, " ", bp_dihed)
+        """
 
         a0a1, a0a1a2, a1a2, a1a2a3, a2a3 = Dihedron._get_dadad(acs)
 
