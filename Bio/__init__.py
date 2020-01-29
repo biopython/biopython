@@ -125,7 +125,7 @@ if os.path.exists(os.path.join(_parent_dir, "setup.py")):
         " missing compiled C extensions. We recommend that you"
         " try running your code from outside the source tree."
         " If you are outside the source tree then you have a"
-        " setup.py file in an unexpected directory: {}.".format(_parent_dir),
+        " setup.py file in an unexpected directory: " + _parent_dir,
         BiopythonWarning,
     )
 # See #PR 2007 and issue #1991 for discussion on this warning:

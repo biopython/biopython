@@ -59,8 +59,8 @@ def compare_codon_alphabet(codon_alphabet_1, codon_alphabet_2):
     for codon_alphabet in [codon_alphabet_1, codon_alphabet_2]:
         if not isinstance(codon_alphabet, CodonAlphabet):
             raise TypeError(
-                "Only CodonAlphabet object accepted."
-                "{} is provided.".format(object(codon_alphabet))
+                f"Only CodonAlphabet object accepted.{object(codon_alphabet)}"
+                " is provided."
             )
     return (
         set(codon_alphabet_1.letters) == set(codon_alphabet_2.letters)
