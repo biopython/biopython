@@ -776,7 +776,6 @@ class Confidence(PhyloElement):
         return abs(self.value)
 
     # Explicit coercion to numeric types: float, int
-    # (and under Python 2 only long)
 
     def __float__(self):
         """Return float value of Confidence object."""
