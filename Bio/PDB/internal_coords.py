@@ -1611,13 +1611,15 @@ class IC_Residue(object):
             chainid = "A"
         s += IC_Residue._residue_string(self.residue)
         if 0 == len(self.rprev):
-            try:
-                ts = IC_Residue._pdb_atom_string(self.residue["N"])
-                ts += IC_Residue._pdb_atom_string(self.residue["CA"])
-                ts += IC_Residue._pdb_atom_string(self.residue["C"])
-                s += ts  # only if no exception, have all 3 atoms
-            except KeyError:
-                pass
+            NCaChedron = self.pick_angle("tau")
+            if NCaChedron is not None and NCaChedron.atoms_updated:
+                try:
+                    ts = IC_Residue._pdb_atom_string(self.residue["N"])
+                    ts += IC_Residue._pdb_atom_string(self.residue["CA"])
+                    ts += IC_Residue._pdb_atom_string(self.residue["C"])
+                    s += ts  # only if no exception, have all 3 atoms
+                except KeyError:
+                    pass
 
         base = pdbid + " " + chainid + " "
         for h in sorted(self.hedra.values()):
@@ -1772,8 +1774,8 @@ class IC_Residue(object):
             - string of atom names ('CA') separated by :'s
             - string of [-1, 0, 1]<atom name> separated by :'s, -1 is
               previous residue, 0 is this residue, 1 is next residue
-            - psi, phi, omg, omega, chi1, chi2, chi3
-            - tao (N-CA-C angle) see Richardson1981
+            - psi, phi, omg, omega, chi1, chi2, chi3, chi4, chi5
+            - tau (N-CA-C angle) see Richardson1981
             - except for tuples, no option to access alternate disordered atoms
 
         :return: Matching Hedron, Dihedron, or None.
@@ -1805,9 +1807,12 @@ class IC_Residue(object):
             pCA, pC, sN = rp.rak("CA"), rp.rak("C"), self.rak("N")
             sCA = self.rak("CA")
             rval = rp.dihedra.get((pCA, pC, sN, sCA), None)
-        elif "tao" == angle_key:
+        elif "tau" == angle_key:
             sN, sCA, sC = self.rak("N"), self.rak("CA"), self.rak("C")
             rval = self.hedra.get((sN, sCA, sC), None)
+            if rval is None and 0 != len(self.rprev):
+                rp = self.rprev[0]  # tau in prev residue for all but first
+                rval = rp.hedra.get((sN, sCA, sC), None)
         elif angle_key.startswith("chi"):
             sclist = ic_data_sidechains.get(self.lc, None)
             if sclist is None:
@@ -1821,14 +1826,15 @@ class IC_Residue(object):
 
         return rval
 
-    def get_angle(
-        self, angle_key: Union[EKT, str]
-    ) -> Optional[Union["Hedron", "Dihedron"]]:
+    def get_angle(self, angle_key: Union[EKT, str]) -> Optional[float]:
         """Get dihedron or hedron angle for specified key.
 
         See pick_angle() for key specifications.
         """
-        return self.pick_angle(angle_key)
+        edron = self.pick_angle(angle_key)
+        if edron:
+            return edron.get_angle()
+        return None
 
     def set_angle(self, angle_key: Union[EKT, str], v: float):
         """Set dihedron or hedron angle for specified key.
@@ -2124,6 +2130,8 @@ class Hedron(Edron):
         Create hedron space atom coordinate numpy arrays.
     hedron_from_atoms()
         Compute length, angle, length for hedron from IC_Residue atom coords
+    get_angle()
+        return angle2
     set_angle()
         update angle2 with supplied value
     set_length()
@@ -2318,7 +2326,9 @@ class Dihedron(Edron):
         and a4_pre_rotation
     dihedron_from_atoms()
         Compute dihedral and bond lengths, angles from IC_Residue atom_coords
-    set_dihedral()
+    get_angle()
+        return dihedral1
+    set_angle()
         Store new dihedral angle and update initial_coords accordingly
 
     """
