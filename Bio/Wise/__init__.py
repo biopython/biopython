@@ -105,7 +105,8 @@ def align(
     if debug:
         sys.stderr.write("%s\n" % cmdline_str)
 
-    status = os.system(cmdline_str, shell=True) >> 8
+    status = os.system(cmdline_str) >> 8
+
     # `status` here will be >1 for error codes >=256
     if status > 1:
         if kbyte != 0:  # possible memory problem; could be None
