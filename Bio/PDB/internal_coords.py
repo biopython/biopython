@@ -1719,11 +1719,11 @@ class IC_Residue(object):
                     if 2 == Atm.is_disordered() and Atm.disordered_has_id(altloc):
                         Atm.disordered_select(altloc)
                     Atm.set_coord(atm_coords)
-                    ndx = Atm.get_serial_number() + 1
+                    sn = Atm.get_serial_number()
+                    if sn is not None:
+                        ndx = sn + 1
 
         Res.parent.internal_coord.ndx = ndx
-
-        # print(ak, ac)
 
     def _get_ak_tuple(self, ak_str: str) -> Tuple["AtomKey", ...]:
         """Convert atom pair string to AtomKey tuple.
@@ -2711,6 +2711,9 @@ class AtomKey(object):
             ]
         )
 
+        while len(akl) < 6:
+            akl.append(None)  # add no altloc, occ if not specified
+
         self.akl = tuple(akl)
         self._hash = hash(self.akl)
 
@@ -2859,7 +2862,7 @@ class AtomKey(object):
     def __eq__(self, other: object) -> bool:  # type: ignore
         """Test for equality."""
         if isinstance(other, type(self)):
-            return not self.__ne__(other)
+            return self.akl == other.akl
         else:
             return NotImplemented
 
