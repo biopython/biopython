@@ -10,6 +10,7 @@
 # flake8-commas: C#### (in case installed locally)
 # flake8-black : BLK### (in case installed locally)
 # flake8-pie : PIE### (in case installed locally)
+# flake8-sfs : SFS### (in case installed locally)
 # =================================================
 [flake8]
 doctests = True
@@ -41,6 +42,7 @@ ignore =
     # Optional ignores for local installations:
     # =========================================
     PIE781, # Assigning to temp variable and then returning, not enforcing
+    SFS101,SFS301, # typical string formatting
 
 # ========================
 # Folder specific ignores:
