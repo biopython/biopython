@@ -691,7 +691,6 @@ class QueryResult(_BaseSearchObject):
             raise
 
     def sort(self, key=None, reverse=False, in_place=True):
-        # no cmp argument to make sort more Python 3-like
         """Sort the Hit objects.
 
         :param key: sorting function
