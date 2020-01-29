@@ -307,10 +307,9 @@ class JASPAR5:
             latest = row[0]
         else:
             warnings.warn(
-                "Failed to fetch latest version number for JASPAR "
-                "motif with base ID '{0}'. "
-                "No JASPAR motif with this base ID appears to exist "
-                "in the database.".format(base_id),
+                "Failed to fetch latest version number for JASPAR motif"
+                f" with base ID '{base_id}'. No JASPAR motif with this"
+                " base ID appears to exist in the database.",
                 BiopythonWarning,
             )
 
@@ -334,10 +333,9 @@ class JASPAR5:
             int_id = row[0]
         else:
             warnings.warn(
-                "Failed to fetch internal database ID for JASPAR "
-                "motif with matrix ID '{0}.{1}'. "
-                "No JASPAR motif with this matrix ID appears to "
-                "exist.".format(base_id, version),
+                "Failed to fetch internal database ID for JASPAR motif"
+                f" with matrix ID '{base_id}.{version}'. No JASPAR motif"
+                " with this matrix ID appears to exist.",
                 BiopythonWarning,
             )
 

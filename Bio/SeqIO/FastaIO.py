@@ -111,7 +111,7 @@ def FastaTwoLineParser(handle):
                 raise ValueError(
                     "Expected FASTA record starting with '>' character. "
                     "Perhaps this file is using FASTA line wrapping? "
-                    "Got: '{}'".format(line)
+                    f"Got: '{line}'"
                 )
             title = line[1:].rstrip()
         else:  # sequence line
@@ -119,7 +119,7 @@ def FastaTwoLineParser(handle):
                 raise ValueError(
                     "Two '>' FASTA lines in a row. Missing sequence line "
                     "if this is strict two-line-per-record FASTA format. "
-                    "Have '>{}' and '{}'".format(title, line)
+                    f"Have '>{title}' and '{line}'"
                 )
             yield title, line.strip()
 
@@ -128,7 +128,7 @@ def FastaTwoLineParser(handle):
     elif idx % 2 == 0:  # on a title line
         raise ValueError(
             "Missing sequence line at end of file if this is strict "
-            "two-line-per-record FASTA format. Have title line '{}'".format(line)
+            f"two-line-per-record FASTA format. Have title line '{line}'"
         )
     else:
         assert line[0] != ">", "line[0] == '>' ; this should be impossible!"

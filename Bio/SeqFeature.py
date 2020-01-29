@@ -445,10 +445,10 @@ class SeqFeature:
 
         if start_offset not in [0, 1, 2]:
             raise ValueError(
-                "The start_offset must be 0, 1, or 2. "
-                "The supplied value is {}. Check the value "
-                "of either the codon_start qualifier or "
-                "the start_offset argument".format(start_offset)
+                f"The start_offset must be 0, 1, or 2. "
+                f"The supplied value is {start_offset}. "
+                "Check the value of either the codon_start qualifier "
+                "or the start_offset argument"
             )
 
         feat_seq = self.extract(parent_sequence)[start_offset:]
@@ -798,8 +798,8 @@ class FeatureLocation:
             and self.start > self.end
         ):
             raise ValueError(
-                "End location ({}) must be greater than or equal "
-                "to start location ({})".format(self.end, self.start)
+                f"End location ({self.end}) must be greater than "
+                f"or equal to start location ({self.start})"
             )
         self.strand = strand
         self.ref = ref

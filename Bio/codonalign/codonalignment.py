@@ -151,9 +151,8 @@ class CodonAlignment(MultipleSeqAlignment):
             return self.toMultipleSeqAlignment() + other
         else:
             raise TypeError(
-                "Only CodonAlignment or MultipleSeqAlignment object can be "
-                "added with a CodonAlignment object. "
-                "{} detected.".format(object(other))
+                "Only CodonAlignment or MultipleSeqAlignment object can be"
+                f" added with a CodonAlignment object. {object(other)} detected."
             )
 
     def get_aln_length(self):
@@ -229,8 +228,8 @@ class CodonAlignment(MultipleSeqAlignment):
             ds_tree = ds_constructor.nj(ds_dm)
         else:
             raise RuntimeError(
-                "Unknown tree method ({0}). Only NJ and UPGMA "
-                "are accepted.".format(tree_method)
+                f"Unknown tree method ({tree_method})."
+                " Only NJ and UPGMA are accepted."
             )
         return dn_tree, ds_tree
 
