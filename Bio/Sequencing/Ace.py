@@ -284,10 +284,10 @@ class Contig:
             self.uorc = header[5]
 
 
-def parse(handle):
+def parse(source):
     """Iterate of ACE file contig by contig.
 
-    Argument handle is a file-like object.
+    Argument source is a file-like object or a path to a file.
 
     This function returns an iterator that allows you to iterate
     over the ACE file record by record::
@@ -298,197 +298,209 @@ def parse(handle):
 
     where each record is a Contig object.
     """
-    handle = iter(handle)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("Ace files must be opened in text mode.") from None
 
-    line = ""
-    while True:
-        # at beginning, skip the AS and look for first CO command
-        try:
-            while True:
-                if line.startswith("CO"):
-                    break
-                line = next(handle)
-        except StopIteration:
-            return
-
-        record = Contig(line)
-
-        for line in handle:
-            line = line.strip()
-            if not line:
-                break
-            record.sequence += line
-
-        for line in handle:
-            if line.strip():
-                break
-        if not line.startswith("BQ"):
-            raise ValueError("Failed to find BQ line")
-
-        for line in handle:
-            if not line.strip():
-                break
-            record.quality.extend(int(x) for x in line.split())
-
-        for line in handle:
-            if line.strip():
-                break
-
+    try:
+        line = ""
         while True:
-            if not line.startswith("AF "):
-                break
-            record.af.append(af(line))
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Unexpected end of AF block")
-
-        while True:
-            if line.strip():
-                break
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Unexpected end of file")
-
-        while True:
-            if not line.startswith("BS "):
-                break
-            record.bs.append(bs(line))
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Failed to find end of BS block")
-
-        # now read all the read data
-        # it starts with a 'RD', and then a mandatory QA
-        # then follows an optional DS
-        # CT,RT,WA,WR may or may not be there in unlimited quantity. They might refer to the actual read or contig,
-        # or, if encountered at the end of file, to any previous read or contig. the sort() method deals
-        # with that later.
-        while True:
-
-            # each read must have a rd and qa
+            # at beginning, skip the AS and look for first CO command
             try:
                 while True:
-                    # If I've met the condition, then stop reading the line.
-                    if line.startswith("RD "):
+                    if line.startswith("CO"):
                         break
                     line = next(handle)
             except StopIteration:
-                raise ValueError("Failed to find RD line")
+                return
 
-            record.reads.append(Reads(line))
+            record = Contig(line)
 
             for line in handle:
                 line = line.strip()
                 if not line:
                     break
-                record.reads[-1].rd.sequence += line
+                record.sequence += line
 
             for line in handle:
                 if line.strip():
                     break
-            if not line.startswith("QA "):
-                raise ValueError("Failed to find QA line")
-            record.reads[-1].qa = qa(line)
+            if not line.startswith("BQ"):
+                raise ValueError("Failed to find BQ line")
 
-            # now one ds can follow
+            for line in handle:
+                if not line.strip():
+                    break
+                record.quality.extend(int(x) for x in line.split())
+
             for line in handle:
                 if line.strip():
                     break
-            else:
-                break
 
-            if line.startswith("DS "):
-                record.reads[-1].ds = ds(line)
-                line = ""
-            # the file could just end, or there's some more stuff. In ace files, anything can happen.
-            # the following tags are interspersed between reads and can appear multiple times.
             while True:
-                # something left
+                if not line.startswith("AF "):
+                    break
+                record.af.append(af(line))
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    raise ValueError("Unexpected end of AF block") from None
+
+            while True:
+                if line.strip():
+                    break
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    raise ValueError("Unexpected end of file") from None
+
+            while True:
+                if not line.startswith("BS "):
+                    break
+                record.bs.append(bs(line))
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    raise ValueError("Failed to find end of BS block") from None
+
+            # now read all the read data
+            # it starts with a 'RD', and then a mandatory QA
+            # then follows an optional DS
+            # CT,RT,WA,WR may or may not be there in unlimited quantity.
+            # They might refer to the actual read or contig, or, if
+            # encountered at the end of file, to any previous read or contig.
+            # The sort() method deals with that later.
+            while True:
+
+                # each read must have a rd and qa
                 try:
                     while True:
-                        if line.strip():
+                        # If I've met the condition, then stop reading the line.
+                        if line.startswith("RD "):
                             break
                         line = next(handle)
                 except StopIteration:
-                    # file ends here
-                    break
-                if line.startswith("RT{"):
-                    # now if we're at the end of the file, this rt could
-                    # belong to a previous read, not the actual one.
-                    # we store it here were it appears, the user can sort later.
-                    if record.reads[-1].rt is None:
-                        record.reads[-1].rt = []
-                    for line in handle:
-                        line = line.strip()
-                        # if line=="COMMENT{":
-                        if line.startswith("COMMENT{"):
-                            if line[8:].strip():
-                                # MIRA 3.0.5 would miss the new line out :(
-                                record.reads[-1].rt[-1].comment.append(line[8:])
-                            for line in handle:
-                                line = line.strip()
-                                if line.endswith("C}"):
-                                    break
-                                record.reads[-1].rt[-1].comment.append(line)
-                        elif line == "}":
-                            break
-                        else:
-                            record.reads[-1].rt.append(rt(line))
-                    line = ""
-                elif line.startswith("WR{"):
-                    if record.reads[-1].wr is None:
-                        record.reads[-1].wr = []
-                    for line in handle:
-                        line = line.strip()
-                        if line == "}":
-                            break
-                        record.reads[-1].wr.append(wr(line))
-                    line = ""
-                elif line.startswith("WA{"):
-                    if record.wa is None:
-                        record.wa = []
-                    try:
-                        line = next(handle)
-                    except StopIteration:
-                        raise ValueError("Failed to read WA block")
-                    record.wa.append(wa(line))
-                    for line in handle:
-                        line = line.strip()
-                        if line == "}":
-                            break
-                        record.wa[-1].info.append(line)
-                    line = ""
-                elif line.startswith("CT{"):
-                    if record.ct is None:
-                        record.ct = []
-                    try:
-                        line = next(handle)
-                    except StopIteration:
-                        raise ValueError("Failed to read CT block")
-                    record.ct.append(ct(line))
-                    for line in handle:
-                        line = line.strip()
-                        if line == "COMMENT{":
-                            for line in handle:
-                                line = line.strip()
-                                if line.endswith("C}"):
-                                    break
-                                record.ct[-1].comment.append(line)
-                        elif line == "}":
-                            break
-                        else:
-                            record.ct[-1].info.append(line)
-                    line = ""
+                    raise ValueError("Failed to find RD line") from None
+
+                record.reads.append(Reads(line))
+
+                for line in handle:
+                    line = line.strip()
+                    if not line:
+                        break
+                    record.reads[-1].rd.sequence += line
+
+                for line in handle:
+                    if line.strip():
+                        break
+                if not line.startswith("QA "):
+                    raise ValueError("Failed to find QA line")
+                record.reads[-1].qa = qa(line)
+
+                # now one ds can follow
+                for line in handle:
+                    if line.strip():
+                        break
                 else:
                     break
 
-            if not line.startswith("RD"):  # another read?
-                break
+                if line.startswith("DS "):
+                    record.reads[-1].ds = ds(line)
+                    line = ""
+                # the file could just end, or there's some more stuff.
+                # In ace files, anything can happen.
+                # the following tags are interspersed between reads and can appear multiple times.
+                while True:
+                    # something left
+                    try:
+                        while True:
+                            if line.strip():
+                                break
+                            line = next(handle)
+                    except StopIteration:
+                        # file ends here
+                        break
+                    if line.startswith("RT{"):
+                        # now if we're at the end of the file, this rt could
+                        # belong to a previous read, not the actual one.
+                        # we store it here were it appears, the user can sort later.
+                        if record.reads[-1].rt is None:
+                            record.reads[-1].rt = []
+                        for line in handle:
+                            line = line.strip()
+                            # if line=="COMMENT{":
+                            if line.startswith("COMMENT{"):
+                                if line[8:].strip():
+                                    # MIRA 3.0.5 would miss the new line out :(
+                                    record.reads[-1].rt[-1].comment.append(line[8:])
+                                for line in handle:
+                                    line = line.strip()
+                                    if line.endswith("C}"):
+                                        break
+                                    record.reads[-1].rt[-1].comment.append(line)
+                            elif line == "}":
+                                break
+                            else:
+                                record.reads[-1].rt.append(rt(line))
+                        line = ""
+                    elif line.startswith("WR{"):
+                        if record.reads[-1].wr is None:
+                            record.reads[-1].wr = []
+                        for line in handle:
+                            line = line.strip()
+                            if line == "}":
+                                break
+                            record.reads[-1].wr.append(wr(line))
+                        line = ""
+                    elif line.startswith("WA{"):
+                        if record.wa is None:
+                            record.wa = []
+                        try:
+                            line = next(handle)
+                        except StopIteration:
+                            raise ValueError("Failed to read WA block") from None
+                        record.wa.append(wa(line))
+                        for line in handle:
+                            line = line.strip()
+                            if line == "}":
+                                break
+                            record.wa[-1].info.append(line)
+                        line = ""
+                    elif line.startswith("CT{"):
+                        if record.ct is None:
+                            record.ct = []
+                        try:
+                            line = next(handle)
+                        except StopIteration:
+                            raise ValueError("Failed to read CT block") from None
+                        record.ct.append(ct(line))
+                        for line in handle:
+                            line = line.strip()
+                            if line == "COMMENT{":
+                                for line in handle:
+                                    line = line.strip()
+                                    if line.endswith("C}"):
+                                        break
+                                    record.ct[-1].comment.append(line)
+                            elif line == "}":
+                                break
+                            else:
+                                record.ct[-1].info.append(line)
+                        line = ""
+                    else:
+                        break
 
-        yield record
+                if not line.startswith("RD"):  # another read?
+                    break
+
+            yield record
+
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 class ACEFileRecord:
@@ -507,8 +519,7 @@ class ACEFileRecord:
         rt = []
         wr = []
         # search for tags that aren't in the right position
-        for i in range(len(self.contigs)):
-            c = self.contigs[i]
+        for i, c in enumerate(self.contigs):
             if c.wa:
                 if not self.wa:
                     self.wa = []
@@ -518,8 +529,7 @@ class ACEFileRecord:
                 for x in newcts:
                     self.contigs[i].ct.remove(x)
                 ct.extend(newcts)
-            for j in range(len(c.reads)):
-                r = c.reads[j]
+            for j, r in enumerate(c.reads):
                 if r.rt:
                     newrts = [rt_tag for rt_tag in r.rt if rt_tag.name != r.rd.name]
                     for x in newrts:
@@ -531,16 +541,14 @@ class ACEFileRecord:
                         self.contigs[i].reads[j].wr.remove(x)
                     wr.extend(newwrs)
         # now sort them into their proper place
-        for i in range(len(self.contigs)):
-            c = self.contigs[i]
+        for i, c in enumerate(self.contigs):
             for ct_tag in ct:
                 if ct_tag.name == c.name:
                     if self.contigs[i].ct is None:
                         self.contigs[i].ct = []
                     self.contigs[i].ct.append(ct_tag)
             if rt or wr:
-                for j in range(len(c.reads)):
-                    r = c.reads[j]
+                for j, r in enumerate(c.reads):
                     for rt_tag in rt:
                         if rt_tag.name == r.rd.name:
                             if self.contigs[i].reads[j].rt is None:
@@ -562,7 +570,7 @@ def read(handle):
     try:
         line = next(handle)
     except StopIteration:
-        raise ValueError("Premature end of file")
+        raise ValueError("Premature end of file") from None
 
     # check if the file starts correctly
     if not line.startswith("AS"):
