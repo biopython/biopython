@@ -339,9 +339,8 @@ class DistanceMatrix(_Matrix):
 
         :Parameters:
             handle : file or file-like object
-                A writeable file handle or other object supporting the 'write'
-                method, such as StringIO or sys.stdout. On Python 3, should be
-                open in text mode.
+                A writeable text mode file handle or other object supporting
+                the 'write' method, such as StringIO or sys.stdout.
 
         """
         handle.write(f"    {len(self.names)}\n")
