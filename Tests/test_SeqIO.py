@@ -145,7 +145,7 @@ class TestZipped(unittest.TestCase):
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fasta"))))
         with gzip.open("Fasta/flowers.pro.gz") as handle:
             with self.assertRaisesRegex(
-                ValueError, "Is this handle in binary mode not text mode"
+                ValueError, "Fasta files must be opened in text mode"
             ):
                 list(SeqIO.parse(handle, "fasta"))
 
