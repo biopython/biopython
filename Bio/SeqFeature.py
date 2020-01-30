@@ -445,7 +445,7 @@ class SeqFeature:
 
         if start_offset not in [0, 1, 2]:
             raise ValueError(
-                f"The start_offset must be 0, 1, or 2. "
+                "The start_offset must be 0, 1, or 2. "
                 f"The supplied value is {start_offset}. "
                 "Check the value of either the codon_start qualifier "
                 "or the start_offset argument"
