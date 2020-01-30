@@ -87,9 +87,8 @@ def compare_record(old, new, expect_minor_diffs=False):
             continue
         if key == "molecule_type":
             # EMBL allows e.g. "genomics DNA" where GenBank is limited.
-            common_words = set(old.annotations[key].split()).intersection(
-                new.annotations[key].split()
-            )
+            common_words = set(old.annotations[key].split())
+            common_words = common_words.intersection(new.annotations[key].split())
             if not common_words:
                 raise ValueError(
                     "Annotation mis-match for molecule_type:\n%s\n%s"
