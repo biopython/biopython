@@ -1611,7 +1611,7 @@ class IC_Residue(object):
             chainid = "A"
         s += IC_Residue._residue_string(self.residue)
         if 0 == len(self.rprev):
-            NCaChedron = self.pick_angle("tau")
+            NCaChedron = self.pick_angle(self.NCaCKey[0]) # first tau
             if NCaChedron is not None and NCaChedron.atoms_updated:
                 try:
                     ts = IC_Residue._pdb_atom_string(self.residue["N"])
