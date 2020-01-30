@@ -292,7 +292,7 @@ def parse(source):
     This function returns an iterator that allows you to iterate
     over the ACE file record by record::
 
-        records = parse(handle)
+        records = parse(source)
         for record in records:
             # do something with the record
 
