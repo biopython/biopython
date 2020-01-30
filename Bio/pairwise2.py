@@ -72,14 +72,14 @@ is a named tuple consisting of the two aligned sequences, the score and the
 start and end positions of the alignment:
 
    >>> print(alignments)
-   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3.0, start=0, end=5), ...
+   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3, start=0, end=5), ...
 
 You can access each element of an aligment by index or name:
 
    >>> alignments[0][2]
-   3.0
+   3
    >>> alignments[0].score
-   3.0
+   3
 
 For a nice printout of an alignment, use the ``format_alignment`` method of
 the module:
