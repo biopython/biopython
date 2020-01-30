@@ -224,7 +224,9 @@ class Hit(_BaseSearchObject):
                 query_end = getattr_str(hsp, "query_end")
                 query_range = "[%s:%s]" % (query_start, query_end)
                 # max column length is 18
-                query_range = query_range[:13] + "~]" if len(query_range) > 15 else query_range
+                query_range = (
+                    query_range[:13] + "~]" if len(query_range) > 15 else query_range
+                )
                 # hit region
                 hit_start = getattr_str(hsp, "hit_start")
                 hit_end = getattr_str(hsp, "hit_end")

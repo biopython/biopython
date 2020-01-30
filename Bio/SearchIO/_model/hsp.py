@@ -14,7 +14,13 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio.SearchIO._utils import singleitem, allitems, fullcascade, fragcascade, getattr_str
+from Bio.SearchIO._utils import (
+    singleitem,
+    allitems,
+    fullcascade,
+    fragcascade,
+    getattr_str,
+)
 
 from ._base import _BaseHSP
 
@@ -345,7 +351,9 @@ class HSP(_BaseHSP):
                 query_end = getattr_str(block, "query_end")
                 query_range = "[%s:%s]" % (query_start, query_end)
                 # max column length is 20
-                query_range = query_range[:20] + "~]" if len(query_range) > 22 else query_range
+                query_range = (
+                    query_range[:20] + "~]" if len(query_range) > 22 else query_range
+                )
                 # hit region
                 hit_start = getattr_str(block, "hit_start")
                 hit_end = getattr_str(block, "hit_end")
