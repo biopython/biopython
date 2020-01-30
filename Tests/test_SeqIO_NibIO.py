@@ -9,7 +9,6 @@ from Bio.SeqRecord import SeqRecord
 
 
 class TestNibReaderWriter(unittest.TestCase):
-
     def test_read_even(self):
         handle = open("Nib/test_even.fa")
         record = SeqIO.read(handle, "fasta")
