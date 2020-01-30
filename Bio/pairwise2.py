@@ -402,7 +402,7 @@ where the alignment occurs.
             keywds = keywds.copy()
 
             # Replace possible "keywords" with arguments:
-            args = args + (len(self.param_names) - len(args)) * (None,)
+            args += (len(self.param_names) - len(args)) * (None,)
             for key in keywds.copy():
                 if key in self.param_names:
                     _index = self.param_names.index(key)
@@ -1005,8 +1005,7 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
-    Alignment = namedtuple("Alignment",
-                           ("seqA, seqB, score, start, end"))
+    Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:

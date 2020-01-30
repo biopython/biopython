@@ -83,8 +83,7 @@ class TestPairwiseKeywordUsage(unittest.TestCase):
     def test_keywords(self):
         """Test equality of calls with and without keywords."""
         aligns = pairwise2.align.globalxx("GAACT", "GAT")
-        aligns_kw = pairwise2.align.globalxx(sequenceA="GAACT",
-                                             sequenceB="GAT")
+        aligns_kw = pairwise2.align.globalxx(sequenceA="GAACT", sequenceB="GAT")
         self.assertEqual(aligns, aligns_kw)
 
         aligns = pairwise2.align.globalmx("GAACT", "GAT", 5, -4)
