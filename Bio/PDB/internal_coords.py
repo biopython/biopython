@@ -2436,9 +2436,9 @@ class Dihedron(Edron):
         if hasattr(self, "hedron1"):
             hedron1 = self.hedron1
 
-            if updating:
-                rev = self.reverse
-                hedron2 = self.hedron2
+        if updating and hasattr(self, "hedron1"):
+            rev = self.reverse
+            hedron2 = self.hedron2
         else:
             rev, hedron1, hedron2 = self._set_hedra()
 
@@ -2451,6 +2451,11 @@ class Dihedron(Edron):
                 acount += 1
         if 6 > acount:
             raise MissingAtomError("dihedron: hedra missing atoms: " + str(self))
+
+        if not hedron1.atoms_updated:
+            hedron1.init_pos()
+        if not hedron2.atoms_updated:
+            hedron2.init_pos()
 
         initial = []
 
