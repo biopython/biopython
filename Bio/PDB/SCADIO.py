@@ -52,6 +52,7 @@ def write_SCAD(
     pdbid=None,
     backboneOnly=False,
     includeCode=True,
+    maxPeptideBond=None,
     handle="protein",
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
@@ -86,9 +87,18 @@ def write_SCAD(
     :param includeCode: bool default True
         Include OpenSCAD software (inline below) so output file can be loaded
         into OpenSCAD; if False, output data matrices only
+    :param MaxPeptideBond: Optional[float] default None
+        Override the cut-off in IC_Chain class (default 1.4) for detecting
+        chain breaks.  If your target has chain breaks, pass a large number here
+        to create a very long 'bond' spanning the break.
     :param handle: str, default 'protein'
         name for top level of generated OpenSCAD matrix structure
     """
+
+    if maxPeptideBond is not None:
+        mpbStash = IC_Chain.MaxPeptideBond
+        IC_Chain.MaxPeptideBond = float(maxPeptideBond)
+
     # step one need IC_Residue atom_coords loaded in order to scale
     # so if no internal_coords, initialise from Atom coordinates
     have_IC_Atoms = False
@@ -101,8 +111,8 @@ def write_SCAD(
         if not entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
             have_IC_Atoms = True
-        else:
-            raise PDBException("level not S, M or C: " + str(entity.level))
+    else:
+        raise PDBException("level not S, M or C: " + str(entity.level))
 
     if not have_IC_Atoms and scale is not None:
         # if loaded pic file and need to scale, generate atom coords
@@ -121,11 +131,20 @@ def write_SCAD(
     # (hedron bond lengths have changed if scaled)
     # if not scaling, still need to generate internal coordinate
     # bonds for ring sidechains
-    entity.atom_to_internal_coordinates(allBonds=True)
+    # AllBonds is a class attribute for IC_Residue.atom_to_internal_coordinates
+    # to generate explicit hedra covering all bonds
+
+    allBondsStash = IC_Residue.AllBonds
+    IC_Residue.AllBonds = True
+    entity.atom_to_internal_coordinates()
+    IC_Residue.AllBonds = allBondsStash
 
     # clear initNCaC - want at origin, not match PDB file
-    for chn in entity.get_chains():
-        chn.internal_coord.initNCaC = {}
+    if "C" == entity.level:
+        entity.internal_coord.initNCaC = {}
+    else:
+        for chn in entity.get_chains():
+            chn.internal_coord.initNCaC = {}
 
     # rebuild atom coordinates now starting at origin: in OpenSCAD code, each
     # residue model is transformed to N-Ca-C start position instead of updating
@@ -158,6 +177,9 @@ def write_SCAD(
             raise NotImplementedError("writescad single residue not yet implemented.")
 
         fp.write("\n];\n")
+
+    if maxPeptideBond is not None:
+        IC_Chain.MaxPeptideBond = mpbStash
 
 
 peptide_scad = """
@@ -533,12 +555,11 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
 */
 module hedronDispatch(h,rev=0,scal) {
     // default action is just to pass to hedron()
-    hedron(h, rev, scal, 0, (support ? 1 : 0));
 
+    hedron(h, rev, scal, 0, (support ? 1 : 0));
 
     /*
     // Some examples for special handling for specific hedra below:
-
 
     // caTop needs to be a global variable so hedron() above can see it.
 
@@ -720,7 +741,7 @@ h_atom2state = 7;
 h_atom3state = 8;
 h_bond1state = 9;
 h_bond2state = 10;
-h_chain = 11;
+h_residue = 11;
 h_seqpos = 12;  // residue sequence position for first atom in hedra
 h_class = 13;
 
