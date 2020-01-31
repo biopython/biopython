@@ -14,7 +14,6 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 
 
-from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -53,6 +52,8 @@ def _parse(handle, alphabet):
                 break
             # Remove trailing whitespace, and any internal spaces
             seq_lines.append(line.rstrip().replace(" ", ""))
+        else:
+            line = None
         seq_str = "".join(seq_lines)
         if seq_str.endswith("1"):
             # Remove the optional terminator (digit one)
@@ -69,10 +70,10 @@ def _parse(handle, alphabet):
     assert not line
 
 
-def IgIterator(handle, alphabet=single_letter_alphabet):
+def IgIterator(source, alphabet=single_letter_alphabet):
     """Iterate over IntelliGenetics records (as SeqRecord objects).
 
-    handle - input file
+    source - file-like object opened in text mode, or a path to a file
     alphabet - optional alphabet
 
     The optional free format file header lines (which start with two
@@ -108,8 +109,19 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     SYK_SYK length 330
 
     """
-    with as_handle(handle) as handle:
-        return _parse(handle, alphabet)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("IntelliGenetics files must be opened in text mode.") from None
+
+    try:
+        records = _parse(handle, alphabet)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 if __name__ == "__main__":
