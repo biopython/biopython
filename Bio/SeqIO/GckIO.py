@@ -229,7 +229,8 @@ def GckIterator(source):
             raise ValueError("GCK files must be opened in binary mode.") from None
 
     try:
-        return _parse(handle)
+        records = _parse(handle)
+        yield from records
     finally:
         if handle is not source:
             handle.close()
