@@ -21,19 +21,12 @@ from Bio.SeqRecord import SeqRecord
 
 def _parse(handle, alphabet):
     # Skip any file header text before the first record (;; lines)
-    header = []
     for line in handle:
-        if line.startswith(";;"):
-            header.append(line[2:].rstrip())
-        else:
+        if not line.startswith(";;"):
             break
     else:
-        if header:  # header but no records
-            return
-        else:  # no header and no records
-            raise ValueError("Empty file.")
-    # We could change this generator function into a class,
-    # and save the header as part of the object.
+        # Empty file, or header only
+        return
 
     if line[0] != ";":
         raise ValueError("Records should start with ';' and not:\n%r" % line)
