@@ -40,7 +40,6 @@ description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 """
 
 
-from Bio.File import as_handle
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -49,11 +48,11 @@ import sys
 
 
 # This is a generator function!
-def NibIterator(handle, alphabet=None):
+def NibIterator(source, alphabet=None):
     """Iterate over a nib file and yield a SeqRecord.
 
-        - handle - input file in the nib file format as defined by UCSC.
-          This must be opened in binary mode!
+        - source - a file-like object or a path to a file in the nib file
+          format is defined by UCSC; the file must be opened in binary mode.
         - alphabet - always ignored.
 
     Note that a nib file always contains only one sequence record.
@@ -78,20 +77,25 @@ def NibIterator(handle, alphabet=None):
     """
     if alphabet is not None:
         raise ValueError("Alphabets are ignored.")
-    with as_handle(handle, "rb") as handle:
-        word = handle.read(4)
 
-        # check if file is empty
+    try:
+        handle = open(source, "rb")
+    except TypeError:
+        handle = source
+        if handle.read(0) != b"":
+            raise ValueError("nib files must be opened in binary mode.") from None
+
+    try:
+        word = handle.read(4)
         if not word:
             raise ValueError("Empty file.")
-
         signature = word.hex()
         if signature == "3a3de96b":
             byteorder = "little"  # little-endian
         elif signature == "6be93d3a":
             byteorder = "big"  # big-endian
         else:
-            raise ValueError("unexpected signature in Nib header")
+            raise ValueError("unexpected signature in nib header")
         number = handle.read(4)
         length = int.from_bytes(number, byteorder)
         data = handle.read()
@@ -110,6 +114,9 @@ def NibIterator(handle, alphabet=None):
         sequence = Seq(nucleotides)
         record = SeqRecord(sequence)
         yield record
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 class NibWriter(SequenceWriter):
