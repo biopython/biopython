@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Biopython Sphinx documentation build configuration file.
 
 After generating ``*.rst`` files from the source code, this
@@ -12,7 +11,9 @@ import shutil
 import sys
 import tempfile
 
-from Bio import __version__
+from sphinx.ext import autodoc
+
+from Bio import __version__, Application
 
 # -- General configuration ------------------------------------------------
 
@@ -223,6 +224,8 @@ epub_exclude_files = ["search.html"]
 # -- Options for numpydoc -------------------------------------------------
 
 numpydoc_class_members_toctree = False
+# Prevents the attributes and methods from being shown twice
+numpydoc_show_class_members = False
 
 # -- Magic to run sphinx-apidoc automatically -----------------------------
 
@@ -284,6 +287,31 @@ def run_apidoc(_):
             insert_github_link(f)
 
 
+class BioPythonAPI(autodoc.ClassDocumenter):
+    """Custom Class Documenter for AbstractCommandline classes."""
+
+    def import_object(self):
+        """Import the class."""
+        ret = super().import_object()
+
+        if not issubclass(self.object, Application.AbstractCommandline):
+            return ret
+
+        try:
+            # If the object is an AbstractCommandline we instantiate it.
+            self.object()
+        except TypeError:
+            # Throws if the object is the base AbstractCommandline class
+            pass
+        return ret
+
+
 def setup(app):
     """Over-ride Sphinx setup to trigger sphinx-apidoc."""
     app.connect("builder-inited", run_apidoc)
+
+    def add_documenter(app, env, docnames):
+        app.add_autodocumenter(BioPythonAPI, True)
+
+    # Over-ride autodoc documenter
+    app.connect("env-before-read-docs", add_documenter)

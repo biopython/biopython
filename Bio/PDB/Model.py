@@ -38,17 +38,14 @@ class Model(Entity):
 
     def get_chains(self):
         """Return chains."""
-        for c in self:
-            yield c
+        yield from self
 
     def get_residues(self):
         """Return residues."""
         for c in self.get_chains():
-            for r in c:
-                yield r
+            yield from c
 
     def get_atoms(self):
         """Return atoms."""
         for r in self.get_residues():
-            for a in r:
-                yield a
+            yield from r

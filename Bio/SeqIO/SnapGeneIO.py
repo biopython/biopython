@@ -17,6 +17,7 @@ from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio import Alphabet
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -56,10 +57,6 @@ class _PacketIterator:
             raise ValueError("Unexpected end of packet")
 
         return (type, length, data)
-
-    # Python2 compatibility
-    def next(self):
-        return self.__next__()
 
 
 def _parse_dna_packet(length, data, record):
@@ -261,18 +258,22 @@ def SnapGeneIterator(handle):
     # check if file is empty
     empty = True
 
-    for n, (type, length, data) in enumerate(_PacketIterator(handle)):
-        empty = False
-        if n == 0 and type != 0x09:
-            raise ValueError("The file does not start with a SnapGene cookie packet")
+    with as_handle(handle, "rb") as handle:
 
-        if type in _packet_handlers:
-            _packet_handlers[type](length, data, record)
+        for n, (type, length, data) in enumerate(_PacketIterator(handle)):
+            empty = False
+            if n == 0 and type != 0x09:
+                raise ValueError(
+                    "The file does not start with a SnapGene cookie packet"
+                )
 
-    if empty:
-        raise ValueError("Empty file.")
+            if type in _packet_handlers:
+                _packet_handlers[type](length, data, record)
 
-    if not record.seq:
-        raise ValueError("No DNA packet in file")
+        if empty:
+            raise ValueError("Empty file.")
 
-    yield record
+        if not record.seq:
+            raise ValueError("No DNA packet in file")
+
+        yield record

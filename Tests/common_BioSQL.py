@@ -2,23 +2,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Dealing with storage of biopython objects in a BioSQL relational db."""
-from __future__ import print_function
 
+import configparser
 import os
 import platform
-import sys
 import tempfile
 import time
 import unittest
 
-try:
-    import configparser  # Python 3
-except ImportError:
-    import ConfigParser as configparser  # Python 2
-
-from Bio._py3k import StringIO
-from Bio._py3k import zip
-from Bio._py3k import basestring
+from io import StringIO
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
@@ -336,11 +328,6 @@ class MultiReadTest(unittest.TestCase):
         self.assertEqual(length, len(list(db.items())))
         self.assertEqual(length, len(list(db.keys())))
         self.assertEqual(length, len(list(db.values())))
-        if sys.version_info[0] == 2:
-            # Check legacy methods for Python 2 as well:
-            self.assertEqual(length, len(list(db.iteritems())))  # noqa: B301
-            self.assertEqual(length, len(list(db.iterkeys())))  # noqa: B301
-            self.assertEqual(length, len(list(db.itervalues())))  # noqa: B301
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -470,7 +457,7 @@ class SeqInterfaceTest(unittest.TestCase):
         for feature in test_record.features:
             self.assertTrue(isinstance(feature, SeqFeature))
         # shouldn't cause any errors!
-        self.assertTrue(isinstance(str(test_record), basestring))
+        self.assertTrue(isinstance(str(test_record), str))
         # Confirm can delete annotations etc to test these properties
         del test_record.annotations
         del test_record.dbxrefs
@@ -974,7 +961,7 @@ class InDepthLoadTest(unittest.TestCase):
     def test_reload(self):
         """Make sure can't reimport existing records."""
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file, "r")
+        gb_handle = open(gb_file)
         record = next(SeqIO.parse(gb_handle, "gb"))
         gb_handle.close()
         # Should be in database already...
@@ -1154,7 +1141,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check("swiss", "SwissProt/sp001")
         self.check("swiss", "SwissProt/sp002")
         self.check("swiss", "SwissProt/sp003")
-        self.check("swiss", "SwissProt/sp004")
+        self.check("swiss", "SwissProt/P0A186.txt")
         self.check("swiss", "SwissProt/sp005")
         self.check("swiss", "SwissProt/sp006")
         self.check("swiss", "SwissProt/sp007")
@@ -1164,7 +1151,7 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check("swiss", "SwissProt/sp011")
         self.check("swiss", "SwissProt/sp012")
         self.check("swiss", "SwissProt/sp013")
-        self.check("swiss", "SwissProt/sp014")
+        self.check("swiss", "SwissProt/P60137.txt")
         self.check("swiss", "SwissProt/sp015")
         self.check("swiss", "SwissProt/sp016")
         self.check("swiss", "Registry/EDD_RAT.dat")

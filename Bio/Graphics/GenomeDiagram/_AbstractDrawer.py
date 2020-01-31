@@ -33,9 +33,6 @@ like SeqFeatures.
 """
 
 # ReportLab imports
-from __future__ import print_function
-
-from Bio._py3k import range
 
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
@@ -79,7 +76,7 @@ def page_sizes(size):
     try:
         return sizes[size]
     except KeyError:
-        raise ValueError("%s not in list of page sizes" % size)
+        raise ValueError("%s not in list of page sizes" % size) from None
 
 
 def _stroke_and_fill_colors(color, border):
@@ -381,7 +378,7 @@ def intermediate_points(start, end, graph_data):
 ################################################################################
 
 
-class AbstractDrawer(object):
+class AbstractDrawer:
     """Abstract Drawer.
 
     Attributes:

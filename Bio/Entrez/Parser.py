@@ -35,7 +35,6 @@ written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
 with parsing the DTD, and the other half with the XML itself.
 """
-import sys
 import os
 import warnings
 from collections import Counter
@@ -44,11 +43,7 @@ from io import BytesIO
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlparse as _urlparse
-from Bio._py3k import unicode
-from Bio._py3k import raise_from as _raise_from
+from urllib.request import urlopen, urlparse
 
 
 # The following four classes are used to add a member .attributes to integers,
@@ -141,12 +136,12 @@ class StringElement(str):
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
 
-class UnicodeElement(unicode):
+class UnicodeElement(str):
     """NCBI Entrez XML element mapped to a unicode string."""
 
     def __new__(cls, value, tag, attributes, key=None):
         """Create a UnicodeElement."""
-        self = unicode.__new__(cls, value)
+        self = str.__new__(cls, value)
         self.tag = tag
         if key is None:
             self.key = tag
@@ -157,7 +152,7 @@ class UnicodeElement(unicode):
 
     def __repr__(self):
         """Return a string representation of the object."""
-        text = unicode.__repr__(self)
+        text = str.__repr__(self)
         attributes = self.attributes
         if not attributes:
             return text
@@ -239,7 +234,10 @@ class NotXMLError(ValueError):
 
     def __str__(self):
         """Return a string summary of the exception."""
-        return "Failed to parse the XML data (%s). Please make sure that the input data are in XML format." % self.msg
+        return (
+            "Failed to parse the XML data (%s). Please make sure that the input data "
+            "are in XML format." % self.msg
+        )
 
 
 class CorruptedXMLError(ValueError):
@@ -251,7 +249,10 @@ class CorruptedXMLError(ValueError):
 
     def __str__(self):
         """Return a string summary of the exception."""
-        return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.msg
+        return (
+            "Failed to parse the XML data (%s). Please make sure that the input data "
+            "are not corrupted." % self.msg
+        )
 
 
 class ValidationError(ValueError):
@@ -269,15 +270,18 @@ class ValidationError(ValueError):
 
     def __str__(self):
         """Return a string summary of the exception."""
-        return ("Failed to find tag '%s' in the DTD. To skip all tags that "
-                "are not represented in the DTD, please call Bio.Entrez.read "
-                "or Bio.Entrez.parse with validate=False." % self.name)
+        return (
+            "Failed to find tag '%s' in the DTD. To skip all tags that "
+            "are not represented in the DTD, please call Bio.Entrez.read "
+            "or Bio.Entrez.parse with validate=False." % self.name
+        )
 
 
-class DataHandler(object):
+class DataHandler:
     """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez
+
     global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
     global_xsd_dir = os.path.join(str(Entrez.__path__[0]), "XSDs")
     local_dtd_dir = ""
@@ -313,23 +317,10 @@ class DataHandler(object):
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
-        # HACK: remove Bio._py3k handle conversion, since the Entrez XML parser
-        # expects binary data
-        if handle.__class__.__name__ == "EvilHandleHack":
-            handle = handle._handle
-        if handle.__class__.__name__ == "TextIOWrapper":
-            handle = handle.buffer
-        if hasattr(handle, "closed") and handle.closed:
-            # Should avoid a possible Segmentation Fault, see:
-            # http://bugs.python.org/issue4877
-            raise IOError("Can't parse a closed handle")
-        if sys.version_info[0] >= 3:
-            # Another nasty hack to cope with a unicode StringIO handle
-            # since the Entrez XML parser expects binary data (bytes)
-            from io import StringIO
-            if isinstance(handle, StringIO):
-                from Bio._py3k import _as_bytes
-                handle = BytesIO(_as_bytes(handle.read()))
+        # Expat's parser.ParseFile function only accepts binary data;
+        # see also the comment below for Entrez.parse.
+        if handle.read(0) != b"":
+            raise TypeError("file should be opened in binary mode")
         try:
             self.parser.ParseFile(handle)
         except expat.ExpatError as e:
@@ -337,11 +328,11 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, so we can be sure that
                 # we are parsing XML data. Most likely, the XML file is
                 # corrupted.
-                _raise_from(CorruptedXMLError(e), None)
+                raise CorruptedXMLError(e) from None
             else:
                 # We have not seen the initial <!xml declaration, so probably
                 # the input data is not in XML format.
-                _raise_from(NotXMLError(e), None)
+                raise NotXMLError(e) from None
         try:
             return self.record
         except AttributeError:
@@ -349,30 +340,49 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, and expat didn't notice
                 # any errors, so self.record should be defined. If not, this is
                 # a bug.
-                _raise_from(RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance."), None)
+                raise RuntimeError(
+                    "Failed to parse the XML file correctly, possibly due to a bug "
+                    "in Bio.Entrez. Please contact the Biopython developers via "
+                    "the mailing list or GitHub for assistance."
+                ) from None
             else:
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
-                _raise_from(NotXMLError("XML declaration not found"), None)
+                raise NotXMLError("XML declaration not found") from None
 
     def parse(self, handle):
         """Parse the XML in the given file handle."""
+        # The handle should have been opened in binary mode; data read from
+        # the handle are then bytes. Expat will pick up the encoding from the
+        # XML declaration (or assume UTF-8 if it is missing), and use this
+        # encoding to convert the binary data to a string before giving it to
+        # characterDataHandler.
+        # While parser.ParseFile only accepts binary data, parser.Parse accepts
+        # both binary data and strings. However, a file in text mode may have
+        # been opened with an encoding different from the encoding specified in
+        # the XML declaration at the top of the file. If so, the data in the
+        # file will have been decoded with an incorrect encoding. To avoid
+        # this, and to be consistent with parser.ParseFile (which is used in
+        # the Entrez.read function above), we require the handle to be in
+        # binary mode here as well.
+        if handle.read(0) != b"":
+            raise TypeError("file should be opened in binary mode")
         BLOCK = 1024
         while True:
-            # Read in another block of the file...
-            text = handle.read(BLOCK)
+            # Read in another block of data from the file.
+            data = handle.read(BLOCK)
             try:
-                self.parser.Parse(text, False)
+                self.parser.Parse(data, False)
             except expat.ExpatError as e:
                 if self.parser.StartElementHandler:
                     # We saw the initial <!xml declaration, so we can be sure
                     # that we are parsing XML data. Most likely, the XML file
                     # is corrupted.
-                    _raise_from(CorruptedXMLError(e), None)
+                    raise CorruptedXMLError(e) from None
                 else:
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
-                    _raise_from(NotXMLError(e), None)
+                    raise NotXMLError(e) from None
             try:
                 records = self.record
             except AttributeError:
@@ -380,16 +390,24 @@ class DataHandler(object):
                     # We saw the initial <!xml declaration, and expat
                     # didn't notice any errors, so self.record should be
                     # defined. If not, this is a bug.
-                    _raise_from(RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance."), None)
+
+                    raise RuntimeError(
+                        "Failed to parse the XML file correctly, possibly due to a "
+                        "bug in Bio.Entrez. Please contact the Biopython "
+                        "developers via the mailing list or GitHub for assistance."
+                    ) from None
                 else:
                     # We did not see the initial <!xml declaration, so
                     # probably the input data is not in XML format.
-                    _raise_from(NotXMLError("XML declaration not found"), None)
+                    raise NotXMLError("XML declaration not found") from None
 
             if not isinstance(records, list):
-                raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
+                raise ValueError(
+                    "The XML file does not represent a list. Please use Entrez.read "
+                    "instead of Entrez.parse"
+                )
 
-            if not text:
+            if not data:
                 break
 
             while len(records) >= 2:
@@ -405,8 +423,7 @@ class DataHandler(object):
             raise CorruptedXMLError("Premature end of XML stream")
 
         # Send out the remaining records
-        for record in records:
-            yield record
+        yield from records
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""
@@ -454,7 +471,7 @@ class DataHandler(object):
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
-            handle = _urlopen(schema)
+            handle = urlopen(schema)
             text = handle.read()
             self.save_xsd_file(os.path.basename(schema), text)
             handle.close()
@@ -476,7 +493,9 @@ class DataHandler(object):
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
-                element = DictionaryElement(name, attrs, allowed_tags=None, repeated_tags=None)
+                element = DictionaryElement(
+                    name, attrs, allowed_tags=None, repeated_tags=None
+                )
                 parent = self.element
                 element.parent = parent
                 # For consistency with lists below, store the element here
@@ -491,7 +510,13 @@ class DataHandler(object):
                 del attrs["Name"]
                 allowed_tags = None  # allowed tags are unknown
                 repeated_tags = frozenset(["pubmed", "medline"])
-                element = DictionaryElement(tag, attrs, allowed_tags=allowed_tags, repeated_tags=repeated_tags, key=name)
+                element = DictionaryElement(
+                    tag,
+                    attrs,
+                    allowed_tags=allowed_tags,
+                    repeated_tags=repeated_tags,
+                    key=name,
+                )
                 parent = self.element
                 element.parent = parent
                 # For consistency with lists below, store the element here
@@ -766,29 +791,25 @@ class DataHandler(object):
         if name.upper() == "ERROR":
             self.errors.add(name)
             return
-        if name == "Item" and model == (expat.model.XML_CTYPE_MIXED,
-                                        expat.model.XML_CQUANT_REP,
-                                        None, ((expat.model.XML_CTYPE_NAME,
-                                                expat.model.XML_CQUANT_NONE,
-                                                "Item",
-                                                ()
-                                                ),
-                                               )
-                                        ):
+        if name == "Item" and model == (
+            expat.model.XML_CTYPE_MIXED,
+            expat.model.XML_CQUANT_REP,
+            None,
+            ((expat.model.XML_CTYPE_NAME, expat.model.XML_CQUANT_NONE, "Item", ()),),
+        ):
             # Special case. As far as I can tell, this only occurs in the
             # eSummary DTD.
             self.items.add(name)
             return
         # First, remove ignorable parentheses around declarations
-        while (model[0] in (expat.model.XML_CTYPE_SEQ,
-                            expat.model.XML_CTYPE_CHOICE) and
-               model[1] in (expat.model.XML_CQUANT_NONE,
-                            expat.model.XML_CQUANT_OPT) and
-               len(model[3]) == 1):
+        while (
+            model[0] in (expat.model.XML_CTYPE_SEQ, expat.model.XML_CTYPE_CHOICE)
+            and model[1] in (expat.model.XML_CQUANT_NONE, expat.model.XML_CQUANT_OPT)
+            and len(model[3]) == 1
+        ):
             model = model[3][0]
         # PCDATA declarations correspond to strings
-        if model[0] in (expat.model.XML_CTYPE_MIXED,
-                        expat.model.XML_CTYPE_EMPTY):
+        if model[0] in (expat.model.XML_CTYPE_MIXED, expat.model.XML_CTYPE_EMPTY):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
                 allowed_tags = frozenset(child[2] for child in children)
@@ -797,10 +818,10 @@ class DataHandler(object):
             self.strings[name] = allowed_tags
             return
         # List-type elements
-        if (model[0] in (expat.model.XML_CTYPE_CHOICE,
-                         expat.model.XML_CTYPE_SEQ) and
-            model[1] in (expat.model.XML_CQUANT_PLUS,
-                         expat.model.XML_CQUANT_REP)):
+        if model[0] in (
+            expat.model.XML_CTYPE_CHOICE,
+            expat.model.XML_CTYPE_SEQ,
+        ) and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
@@ -823,20 +844,27 @@ class DataHandler(object):
         def count(model):
             quantifier, key, children = model[1:]
             if key is None:
-                if quantifier in (expat.model.XML_CQUANT_PLUS,
-                                  expat.model.XML_CQUANT_REP):
+                if quantifier in (
+                    expat.model.XML_CQUANT_PLUS,
+                    expat.model.XML_CQUANT_REP,
+                ):
                     for child in children:
                         multiple.append(child[2])
                 else:
                     for child in children:
                         count(child)
             elif key.upper() != "ERROR":
-                if quantifier in (expat.model.XML_CQUANT_NONE,
-                                  expat.model.XML_CQUANT_OPT):
+                if quantifier in (
+                    expat.model.XML_CQUANT_NONE,
+                    expat.model.XML_CQUANT_OPT,
+                ):
                     single.append(key)
-                elif quantifier in (expat.model.XML_CQUANT_PLUS,
-                                    expat.model.XML_CQUANT_REP):
+                elif quantifier in (
+                    expat.model.XML_CQUANT_PLUS,
+                    expat.model.XML_CQUANT_REP,
+                ):
                     multiple.append(key)
+
         count(model)
         if len(single) == 0 and len(multiple) == 1:
             allowed_tags = frozenset(multiple)
@@ -852,14 +880,14 @@ class DataHandler(object):
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except FileNotFoundError:
             pass
         else:
             return handle
         path = os.path.join(self.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except FileNotFoundError:
             pass
         else:
             return handle
@@ -871,14 +899,14 @@ class DataHandler(object):
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except FileNotFoundError:
             pass
         else:
             return handle
         path = os.path.join(self.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
-        except IOError:
+        except FileNotFoundError:
             pass
         else:
             return handle
@@ -890,7 +918,7 @@ class DataHandler(object):
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
-        except IOError:
+        except OSError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
@@ -902,7 +930,7 @@ class DataHandler(object):
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
-        except IOError:
+        except OSError:
             warnings.warn("Failed to save %s at %s" % (filename, path))
         else:
             handle.write(text)
@@ -917,13 +945,11 @@ class DataHandler(object):
         we try to download it. If new DTDs become available from NCBI,
         putting them in Bio/Entrez/DTDs will allow the parser to see them.
         """
-        urlinfo = _urlparse(systemId)
-        # Following attribute requires Python 2.5+
-        # if urlinfo.scheme=='http':
-        if urlinfo[0] in ["http", "https", "ftp"]:
+        urlinfo = urlparse(systemId)
+        if urlinfo.scheme in ["http", "https", "ftp"]:
             # Then this is an absolute path to the DTD.
             url = systemId
-        elif urlinfo[0] == "":
+        elif urlinfo.scheme == "":
             # Then this is a relative path to the DTD.
             # Look at the parent URL to find the full path.
             try:
@@ -937,7 +963,7 @@ class DataHandler(object):
             # urls always have a forward slash, don't use os.path.join
             url = source.rstrip("/") + "/" + systemId
         else:
-            raise ValueError("Unexpected URL scheme %r" % (urlinfo[0]))
+            raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)
@@ -946,9 +972,11 @@ class DataHandler(object):
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
             try:
-                handle = _urlopen(url)
-            except IOError:
-                _raise_from(RuntimeError("Failed to access %s at %s" % (filename, url)), None)
+                handle = urlopen(url)
+            except OSError:
+                raise RuntimeError(
+                    "Failed to access %s at %s" % (filename, url)
+                ) from None
             text = handle.read()
             handle.close()
             self.save_dtd_file(filename, text)
@@ -970,6 +998,7 @@ class DataHandler(object):
         # If user hasn't set a custom cache location, initialize it.
         if self.directory is None:
             import platform
+
             if platform.system() == "Windows":
                 self.directory = os.path.join(os.getenv("APPDATA"), "biopython")
             else:  # Unix/Linux/Mac
@@ -979,21 +1008,10 @@ class DataHandler(object):
             del platform
         # Create DTD local directory
         self.local_dtd_dir = os.path.join(self.directory, "Bio", "Entrez", "DTDs")
-        try:
-            os.makedirs(self.local_dtd_dir)  # use exist_ok=True on Python >= 3.2
-        except OSError as exception:
-            # Check if local_dtd_dir already exists, and that it is a directory.
-            # Trying os.makedirs first and then checking for os.path.isdir avoids
-            # a race condition.
-            if not os.path.isdir(self.local_dtd_dir):
-                _raise_from(exception, None)
+        os.makedirs(self.local_dtd_dir, exist_ok=True)
         # Create XSD local directory
         self.local_xsd_dir = os.path.join(self.directory, "Bio", "Entrez", "XSDs")
-        try:
-            os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
-        except OSError as exception:
-            if not os.path.isdir(self.local_xsd_dir):
-                _raise_from(exception, None)
+        os.makedirs(self.local_xsd_dir, exist_ok=True)
 
     @property
     def directory(self):

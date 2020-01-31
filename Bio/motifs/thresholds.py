@@ -6,7 +6,7 @@
 """Approximate calculation of appropriate thresholds for motif finding."""
 
 
-class ScoreDistribution(object):
+class ScoreDistribution:
     """Class representing approximate score distribution for a given motif.
 
     Utilizes a dynamic programming approach to calculate the distribution of

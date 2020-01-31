@@ -7,7 +7,6 @@
 
 """Vector class, including rotation-related functions."""
 
-from __future__ import print_function
 
 import numpy
 
@@ -249,7 +248,7 @@ def calc_dihedral(v1, v2, v3, v4):
     return angle
 
 
-class Vector(object):
+class Vector:
     """3D vector."""
 
     def __init__(self, x, y=None, z=None):

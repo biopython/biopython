@@ -15,7 +15,8 @@ from Bio.PDB import PDBParser, ResidueDepth
 from Bio import MissingExternalDependencyError
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
-from Bio._py3k import getoutput
+from subprocess import getoutput
+
 msms_exe = None
 try:
     output = getoutput("msms -h")
@@ -26,7 +27,8 @@ except OSError:
 
 if not msms_exe:
     raise MissingExternalDependencyError(
-        "Install MSMS if you want to use it in Biopython.")
+        "Install MSMS if you want to use it in Biopython."
+    )
 
 
 class ResidueDepthTests(unittest.TestCase):
@@ -45,39 +47,40 @@ class ResidueDepthTests(unittest.TestCase):
         self.assertEqual(res_chain, first_100_residues)
 
     def test_ResidueDepth_2XHE(self):
-        self.check_msms("PDB/2XHE.pdb", "HISMETSERLEULYSSERALAVALLYSTHRVALLEUTH"
-                                        "RASNSERLEUARGSERVALALAASPGLYGLYASPTRPL"
-                                        "YSVALLEUVALVALASPLYSPROALALEUARGMETILE"
-                                        "SERGLUCYSALAARGMETSERGLUILELEUASPLEUGL"
-                                        "YVALTHRVALVALGLUASPVALSERLYSGLNARGLYSV"
-                                        "ALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPRO"
-                                        "THRGLUGLUASNLEUASPTYRVALILEARGASPPHEAL"
-                                        "AASPARGTHRPROTHRTYRGLUALAALAHISLEU")
+        self.check_msms(
+            "PDB/2XHE.pdb",
+            "HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSERLEUARGSERVALALAASPGLYGLYASPTR"
+            "PLYSVALLEUVALVALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMETSERGLUILELEUASPL"
+            "EUGLYVALTHRVALVALGLUASPVALSERLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEILE"
+            "GLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHEALAASPARGTHRPROTHRTYRGLUALAALAHI"
+            "SLEU",
+        )
 
     def test_ResidueDepth_2BEG(self):
-        self.check_msms("PDB/2BEG.pdb", "LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGL"
-                                        "YALAILEILEGLYLEUMETVALGLYGLYVALVALILEA"
-                                        "LALEUVALPHEPHEALAGLUASPVALGLYSERASNLYS"
-                                        "GLYALAILEILEGLYLEUMETVALGLYGLYVALVALIL"
-                                        "EALALEUVALPHEPHEALAGLUASPVALGLYSERASNL"
-                                        "YSGLYALAILEILEGLYLEUMETVALGLYGLYVALVAL"
-                                        "ILEALALEUVALPHEPHEALAGLUASPVALGLYSERAS"
-                                        "NLYSGLYALAILEILEGLYLEUMETVALGLYGLY")
+        self.check_msms(
+            "PDB/2BEG.pdb",
+            "LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALIL"
+            "EALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALV"
+            "ALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY"
+            "VALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGL"
+            "YGLY",
+        )
 
     def test_ResidueDepth_1LCD(self):
-        self.check_msms("PDB/1LCD.pdb", "METLYSPROVALTHRLEUTYRASPVALALAGLUTYRAL"
-                                        "AGLYVALSERTYRGLNTHRVALSERARGVALVALASNG"
-                                        "LNALASERHISVALSERALALYSTHRARGGLULYSVAL"
-                                        "GLUALAALAMETALAGLULEUASNTYRILEPROASNAR"
-                                        "G")
+        self.check_msms(
+            "PDB/1LCD.pdb",
+            "METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVALSERTYRGLNTHRVALSERARGVALVALAS"
+            "NGLNALASERHISVALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLULEUASNTYRILEPROA"
+            "SNARG",
+        )
 
     def test_ResidueDepth_1A8O(self):
-        self.check_msms("PDB/1A8O.pdb", "MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGAS"
-                                        "PTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUG"
-                                        "LNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHR"
-                                        "LEULEUVALGLNASNALAASNPROASPCYSLYSTHRIL"
-                                        "ELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUM"
-                                        "SEMSETHRALACYSGLNGLY")
+        self.check_msms(
+            "PDB/1A8O.pdb",
+            "MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGASPTYRVALASPARGPHETYRLYSTHRLEUARGALAGL"
+            "UGLNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHRLEULEUVALGLNASNALAASNPROASPCYSLYST"
+            "HRILELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUMSEMSETHRALACYSGLNGLY",
+        )
 
 
 if __name__ == "__main__":

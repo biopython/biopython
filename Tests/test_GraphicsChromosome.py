@@ -11,12 +11,11 @@ This tests the Graphics.BasicChromosome classes and the
 Graphics.DisplayRepresentation classes.
 """
 # standard library
-from __future__ import print_function
 
 import os
 import sys
 import random
-from Bio._py3k import StringIO
+from io import StringIO
 import unittest
 
 import warnings
@@ -28,7 +27,7 @@ try:
     from reportlab.lib import colors
 except ImportError:
     raise MissingPythonDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 # local stuff
 from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -309,7 +308,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                             for (start, end, strand, label) in features]
             else:
                 # Features as 5-tuples
-                features = [(start, end, strand, label, color)
+                features = [(start, end, strand, label, color)  # noqa: C416
                             for (start, end, strand, label) in features]
 
             # I haven't found a nice source of data for real Arabidopsis

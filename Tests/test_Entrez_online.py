@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -84,7 +83,7 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL."""
-        handle = Entrez.efetch(db="protein", id="15718680,157427902,119703751",
+        handle = Entrez.efetch(db="protein", id={15718680, 157427902, 119703751},
                                retmode="xml")
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
@@ -129,11 +128,12 @@ class EntrezOnlineCase(unittest.TestCase):
         """Test Entrez into SeqIO.read from URL."""
         handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb",
                                retmode="text")
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertIn(URL_TOOL, handle.url)
-        self.assertIn(URL_EMAIL, handle.url)
-        self.assertIn(URL_API_KEY, handle.url)
-        self.assertIn("id=186972394", handle.url)
+        url = handle.url
+        self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
+        self.assertIn(URL_TOOL, url)
+        self.assertIn(URL_EMAIL, url)
+        self.assertIn(URL_API_KEY, url)
+        self.assertIn("id=186972394", url)
         record = SeqIO.read(handle, "genbank")
         handle.close()
         self.assertTrue(isinstance(record, SeqRecord))
@@ -144,11 +144,12 @@ class EntrezOnlineCase(unittest.TestCase):
         """Test Entrez into Medline.read from URL."""
         handle = Entrez.efetch(db="pubmed", id="19304878", rettype="medline",
                                retmode="text")
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertIn(URL_TOOL, handle.url)
-        self.assertIn(URL_EMAIL, handle.url)
-        self.assertIn(URL_API_KEY, handle.url)
-        self.assertIn("id=19304878", handle.url)
+        url = handle.url
+        self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
+        self.assertIn(URL_TOOL, url)
+        self.assertIn(URL_EMAIL, url)
+        self.assertIn(URL_API_KEY, url)
+        self.assertIn("id=19304878", url)
         record = Medline.read(handle)
         handle.close()
         self.assertTrue(isinstance(record, dict))
@@ -235,36 +236,28 @@ class EntrezOnlineCase(unittest.TestCase):
             "author_name": "mann bj", "key": "citation_1"
         }
         handle = Entrez.ecitmatch(db="pubmed", bdata=[citation])
-        self.assertIn("retmode=xml", handle.url)
+        url = handle.url
+        self.assertIn("retmode=xml", url)
         result = handle.read()
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
-        self.assertEquals(result, expected_result)
+        self.assertEqual(result, expected_result)
         handle.close()
 
     def test_efetch_gds_utf8(self):
         """Test correct handling of encodings in Entrez.efetch."""
-        # See issue #1402
-        try:
-            oldloc = locale.setlocale(locale.LC_ALL)
-            locale.setlocale(locale.LC_ALL, "C")
-        except locale.Error as err:
-            self.skipTest("Cannot set locale: {}".format(err))
-        try:
-            handle = Entrez.efetch(db="gds", id="200079209")
-            self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-            self.assertIn(URL_TOOL, handle.url)
-            self.assertIn(URL_EMAIL, handle.url)
-            self.assertIn(URL_API_KEY, handle.url)
-            self.assertIn("id=200079209", handle.url)
-            result = handle.read()
-            if sys.version_info[0] < 3:
-                result = result.decode("UTF8")
-            # Use of Unicode double quotation marks U+201C and U+201D
-            expected_result = u"“field of injury”"
-            self.assertEqual(result[342:359], expected_result)
-            handle.close()
-        finally:
-            locale.setlocale(locale.LC_ALL, oldloc)
+        # See issue #1402 in case any encoding issues occur
+        handle = Entrez.efetch(db="gds", id="200079209")
+        url = handle.url
+        self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
+        self.assertIn(URL_TOOL, url)
+        self.assertIn(URL_EMAIL, url)
+        self.assertIn(URL_API_KEY, url)
+        self.assertIn("id=200079209", url)
+        text = handle.read()
+        # Use of Unicode double quotation marks U+201C and U+201D
+        expected_phrase = "“field of injury”"
+        self.assertEqual(text[342:359], expected_phrase)
+        handle.close()
 
     def test_fetch_xml_schemas(self):
         handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")

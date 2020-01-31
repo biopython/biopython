@@ -8,6 +8,7 @@
 """Code to support writing parsers (DEPRECATED).
 
 Classes:
+ - UndoHandle             File object decorator with support for undo-like operations.
  - AbstractParser         Base class for parsers.
  - AbstractConsumer       Base class of all Consumers.
  - TaggingConsumer        Consumer that tags output with its event.  For debugging
@@ -24,10 +25,107 @@ Functions:
 """
 
 import sys
-from Bio._py3k import StringIO
+from io import StringIO
 
 
-class AbstractParser(object):
+class UndoHandle(object):
+    """A Python handle that adds functionality for saving lines.
+
+    Saves lines in a LIFO fashion.
+    """
+
+    def __init__(self, handle):
+        """Initialize the class."""
+        self._handle = handle
+        self._saved = []
+        try:
+            # If wrapping an online handle, this this is nice to have:
+            self.url = handle.url
+        except AttributeError:
+            pass
+
+    def __iter__(self):
+        """Iterate over the lines in the File."""
+        return self
+
+    def __next__(self):
+        """Return the next line."""
+        next = self.readline()
+        if not next:
+            raise StopIteration
+        return next
+
+    def readlines(self, *args, **keywds):
+        """Read all the lines from the file as a list of strings."""
+        lines = self._saved + self._handle.readlines(*args, **keywds)
+        self._saved = []
+        return lines
+
+    def readline(self, *args, **keywds):
+        """Read the next line from the file as string."""
+        if self._saved:
+            line = self._saved.pop(0)
+        else:
+            line = self._handle.readline(*args, **keywds)
+        return line
+
+    def read(self, size=-1):
+        """Read the File."""
+        if size == -1:
+            saved = "".join(self._saved)
+            self._saved[:] = []
+        else:
+            saved = ""
+            while size > 0 and self._saved:
+                if len(self._saved[0]) <= size:
+                    size = size - len(self._saved[0])
+                    saved = saved + self._saved.pop(0)
+                else:
+                    saved = saved + self._saved[0][:size]
+                    self._saved[0] = self._saved[0][size:]
+                    size = 0
+        return saved + self._handle.read(size)
+
+    def saveline(self, line):
+        """Store a line in the cache memory for later use.
+
+        This acts to undo a readline, reflecting the name of the class: UndoHandle.
+        """
+        if line:
+            self._saved = [line] + self._saved
+
+    def peekline(self):
+        """Return the next line in the file, but do not move forward though the file."""
+        if self._saved:
+            line = self._saved[0]
+        else:
+            line = self._handle.readline()
+            self.saveline(line)
+        return line
+
+    def tell(self):
+        """Return the current position of the file read/write pointer within the File."""
+        return self._handle.tell() - sum(len(line) for line in self._saved)
+
+    def seek(self, *args):
+        """Set the current position at the offset specified."""
+        self._saved = []
+        self._handle.seek(*args)
+
+    def __getattr__(self, attr):
+        """Return File attribute."""
+        return getattr(self._handle, attr)
+
+    def __enter__(self):
+        """Call special method when opening the file using a with-statement."""
+        return self
+
+    def __exit__(self, type, value, traceback):
+        """Call special method when closing the file using a with-statement."""
+        self._handle.close()
+
+
+class AbstractParser:
     """Base class for other parsers."""
 
     def parse(self, handle):
@@ -45,7 +143,7 @@ class AbstractParser(object):
         return retval
 
 
-class AbstractConsumer(object):
+class AbstractConsumer:
     """Base class for other Consumers.
 
     Derive Consumers from this class and implement appropriate
@@ -109,9 +207,14 @@ class TaggingConsumer(AbstractConsumer):
             self._handle.write("%s %s\n" % ("*" * self._colwidth, name))
         else:
             # Write the tag and line.
-            self._handle.write("%-*s: %s\n" % (
-                self._colwidth, name[:self._colwidth],
-                data[:self._maxwidth - self._colwidth - 2].rstrip()))
+            self._handle.write(
+                "%-*s: %s\n"
+                % (
+                    self._colwidth,
+                    name[: self._colwidth],
+                    data[: self._maxwidth - self._colwidth - 2].rstrip(),
+                )
+            )
 
     def __getattr__(self, attr):
         if attr[:6] == "start_" or attr[:4] == "end_":
@@ -205,13 +308,14 @@ def attempt_read_and_call(uhandle, method, **keywds):
     return passed
 
 
-def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
-                      has_re=None):
+def _fails_conditions(
+    line, start=None, end=None, contains=None, blank=None, has_re=None
+):
     if start is not None:
-        if line[:len(start)] != start:
+        if line[: len(start)] != start:
             return "Line does not start with '%s':\n%s" % (start, line)
     if end is not None:
-        if line.rstrip()[-len(end):] != end:
+        if line.rstrip()[-len(end) :] != end:
             return "Line does not end with '%s':\n%s" % (end, line)
     if contains is not None:
         if contains not in line:
@@ -225,8 +329,7 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                 return "Expected non-blank line, but got a blank one"
     if has_re is not None:
         if has_re.search(line) is None:
-            return "Line does not match regex '%s':\n%s" % (
-                has_re.pattern, line)
+            return "Line does not match regex '%s':\n%s" % (has_re.pattern, line)
     return None
 
 

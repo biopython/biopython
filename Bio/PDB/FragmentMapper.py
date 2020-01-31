@@ -42,7 +42,6 @@ The library files can be found in directory 'fragment_data'.
 
 """
 
-from __future__ import print_function
 
 import numpy
 
@@ -75,11 +74,11 @@ def _read_fragments(size, length, dir="."):
     :type dir: string
     """
     filename = (dir + "/" + _FRAGMENT_FILE) % (size, length)
-    with open(filename, "r") as fp:
+    with open(filename) as fp:
         flist = []
         # ID of fragment=rank in spec file
         fid = 0
-        for l in fp.readlines():
+        for l in fp:
             # skip comment and blank lines
             if l[0] == "*" or l[0] == "\n":
                 continue
@@ -98,7 +97,7 @@ def _read_fragments(size, length, dir="."):
     return flist
 
 
-class Fragment(object):
+class Fragment:
     """Represent a polypeptide C-alpha fragment."""
 
     def __init__(self, length, fid):
@@ -242,7 +241,7 @@ def _map_fragment_list(flist, reflist):
     return mapped
 
 
-class FragmentMapper(object):
+class FragmentMapper:
     """Map polypeptides in a model to lists of representative fragments."""
 
     def __init__(self, model, lsize=20, flength=5, fdir="."):
@@ -306,7 +305,7 @@ class FragmentMapper(object):
                     # Funny polypeptide - skip
                     pass
                 else:
-                    raise PDBException(why)
+                    raise PDBException(why) from None
         return fd
 
     def __contains__(self, res):

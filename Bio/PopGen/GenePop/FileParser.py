@@ -32,7 +32,7 @@ def read(fname):
     return record
 
 
-class FileRecord(object):
+class FileRecord:
     """Hold information from a GenePop record.
 
     Attributes:
@@ -120,7 +120,9 @@ class FileRecord(object):
                 break
             self.loci_list.append(line)
         else:
-            raise ValueError("No population data found, file probably not GenePop related")
+            raise ValueError(
+                "No population data found, file probably not GenePop related"
+            )
         # self._after_pop = True
         self.current_pop = 0
         self.current_ind = 0
@@ -321,8 +323,8 @@ class FileRecord(object):
          - fname - file to be created with locus removed
 
         """
-        for i in range(len(self.loci_list)):
-            if self.loci_list[i] == name:
+        for i, locus in enumerate(self.loci_list):
+            if locus == name:
                 self.remove_locus_by_position(i, fname)
                 return
         # If here than locus not existent... Maybe raise exception?
@@ -337,8 +339,8 @@ class FileRecord(object):
 
         """
         positions = []
-        for i in range(len(self.loci_list)):
-            if self.loci_list[i] in names:
+        for i, locus in enumerate(self.loci_list):
+            if locus in names:
                 positions.append(i)
         self.remove_loci_by_position(positions, fname)
         # If here than locus not existent... Maybe raise exception?

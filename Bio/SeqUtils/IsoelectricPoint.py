@@ -25,12 +25,19 @@ http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
 positive_pKs = {"Nterm": 7.5, "K": 10.0, "R": 12.0, "H": 5.98}
 negative_pKs = {"Cterm": 3.55, "D": 4.05, "E": 4.45, "C": 9.0, "Y": 10.0}
 pKcterminal = {"D": 4.55, "E": 4.75}
-pKnterminal = {"A": 7.59, "M": 7.0, "S": 6.93, "P": 8.36, "T": 6.82, "V": 7.44,
-               "E": 7.7}
+pKnterminal = {
+    "A": 7.59,
+    "M": 7.0,
+    "S": 6.93,
+    "P": 8.36,
+    "T": 6.82,
+    "V": 7.44,
+    "E": 7.7,
+}
 charged_aas = ("K", "R", "H", "D", "E", "C", "Y")
 
 
-class IsoelectricPoint(object):
+class IsoelectricPoint:
     """A class for calculating the IEP or charge at given pH of a protein.
 
     Parameters
@@ -80,6 +87,7 @@ class IsoelectricPoint(object):
         self.sequence = str(protein_sequence).upper()
         if not aa_content:
             from Bio.SeqUtils.ProtParam import ProteinAnalysis as _PA
+
             aa_content = _PA(self.sequence).count_amino_acids()
         self.charged_aas_content = self._select_charged(aa_content)
 

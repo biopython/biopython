@@ -22,9 +22,9 @@ The SCOP database aims to provide a manually constructed classification of
 all know protein structures into a hierarchy, the main levels of which
 are family, superfamily and fold.
 
-* "SCOP":http://scop.mrc-lmb.cam.ac.uk/scop/
-* "Introduction":http://scop.mrc-lmb.cam.ac.uk/scop/intro.html
-* "SCOP parsable files":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
+* "SCOP":http://scop.mrc-lmb.cam.ac.uk/legacy/
+* "Introduction":http://scop.mrc-lmb.cam.ac.uk/legacy/intro.html
+* "SCOP parsable files":http://scop.mrc-lmb.cam.ac.uk/legacy/parse/
 
 The Scop object in this module represents the entire SCOP classification. It
 can be built from the three SCOP parsable files, modified is so desired, and
@@ -46,10 +46,12 @@ Functions:
 
 """
 
-from __future__ import print_function
 
 import os
 import re
+
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 from . import Des
 from . import Cla
@@ -58,7 +60,8 @@ from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-
+# Turn black code style off
+# fmt: off
 nodeCodeDict = {"cl": "class", "cf": "fold", "sf": "superfamily",
                 "fa": "family", "dm": "protein", "sp": "species", "px": "domain"}
 
@@ -82,19 +85,18 @@ astralEv_to_sql = {10: "e1", 5: "e0_7", 1: "e0", 0.5: "e_0_3", 0.1: "e_1",
                    0.05: "e_1_3", 0.01: "e_2", 0.005: "e_2_3", 0.001: "e_3",
                    1e-4: "e_4", 1e-5: "e_5", 1e-10: "e_10", 1e-15: "e_15",
                    1e-20: "e_20", 1e-25: "e_25", 1e-50: "e_50"}
+# Turn black code style on
+# fmt: on
 
-try:
-    # See if the cmp function exists (will on Python 2)
-    _cmp = cmp
-except NameError:
-    def _cmp(a, b):
-        """Implement cmp(x,y) for Python 3 (PRIVATE).
 
-        Based on Python 3 docs which say if you really need the cmp()
-        functionality, you could use the expression (a > b) -  (a < b)
-        as the equivalent for cmp(a, b)
-        """
-        return (a > b) - (a < b)
+def _cmp(a, b):
+    """Implement cmp(x,y) for Python 3 (PRIVATE).
+
+    Based on Python 3 docs which say if you really need the cmp()
+    functionality, you could use the expression (a > b) -  (a < b)
+    as the equivalent for cmp(a, b)
+    """
+    return (a > b) - (a < b)
 
 
 def cmp_sccs(sccs1, sccs2):
@@ -135,7 +137,7 @@ def parse_domain(str):
     >d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}
     """
     m = _domain_re.match(str)
-    if (not m):
+    if not m:
         raise ValueError("Domain: " + str)
 
     dom = Domain()
@@ -155,14 +157,21 @@ def _open_scop_file(scop_dir_path, version, filetype):
     return handle
 
 
-class Scop(object):
+class Scop:
     """The entire SCOP hierarchy.
 
     root -- The root node of the hierarchy
     """
 
-    def __init__(self, cla_handle=None, des_handle=None, hie_handle=None,
-                 dir_path=None, db_handle=None, version=None):
+    def __init__(
+        self,
+        cla_handle=None,
+        des_handle=None,
+        hie_handle=None,
+        dir_path=None,
+        db_handle=None,
+        version=None,
+    ):
         """Build the SCOP hierarchy from the SCOP parsable files, or a sql backend.
 
         If no file handles are given, then a Scop object with a single
@@ -179,7 +188,9 @@ class Scop(object):
         self._sidDict = {}
         self._sunidDict = {}
 
-        if all(h is None for h in [cla_handle, des_handle, hie_handle, dir_path, db_handle]):
+        if all(
+            h is None for h in [cla_handle, des_handle, hie_handle, dir_path, db_handle]
+        ):
             return
 
         if dir_path is None and db_handle is None:
@@ -197,9 +208,13 @@ class Scop(object):
                 # open SCOP parseable files
                 if dir_path:
                     if not version:
-                        raise RuntimeError("Need SCOP version to find parsable files in directory")
+                        raise RuntimeError(
+                            "Need SCOP version to find parsable files in directory"
+                        )
                     if cla_handle or des_handle or hie_handle:
-                        raise RuntimeError("Cannot specify SCOP directory and specific files")
+                        raise RuntimeError(
+                            "Cannot specify SCOP directory and specific files"
+                        )
 
                     cla_handle = _open_scop_file(dir_path, version, "cla")
                     des_handle = _open_scop_file(dir_path, version, "des")
@@ -357,8 +372,9 @@ class Scop(object):
                 n.children = children
             else:
                 n = Domain(scop=self)
-                cur.execute("select sid, residues, pdbid from cla where sunid=%s",
-                            sunid)
+                cur.execute(
+                    "select sid, residues, pdbid from cla where sunid=%s", sunid
+                )
 
                 n.sid, n.residues, pdbid = cur.fetchone()
                 n.residues = Residues.Residues(n.residues)
@@ -381,7 +397,9 @@ class Scop(object):
             return None
 
         cur = self.db_handle.cursor()
-        cur.execute("SELECT " + type + " from cla WHERE " + node.type + "=%s", (node.sunid))
+        cur.execute(
+            "SELECT " + type + " from cla WHERE " + node.type + "=%s", (node.sunid)
+        )
         result = cur.fetchone()
         if result is not None:
             return self.getNodeBySunid(result[0])
@@ -409,8 +427,11 @@ class Scop(object):
         cur = self.db_handle.cursor()
 
         if type != "px":
-            cur.execute("SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM \
-            cla,des WHERE cla." + node.type + "=%s AND cla." + type + "=des.sunid", (node.sunid))
+            cur.execute(
+                "SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM "
+                "cla,des WHERE cla." + node.type + "=%s AND cla." + type + "=des.sunid",
+                (node.sunid),
+            )
             data = cur.fetchall()
             for d in data:
                 if int(d[0]) not in self._sunidDict:
@@ -431,15 +452,26 @@ class Scop(object):
                 des_list.append(self._sunidDict[int(d[0])])
 
         else:
-            cur.execute("SELECT cla.sunid,sid,pdbid,residues,cla.sccs,type,description,sp\
-             FROM cla,des where cla.sunid=des.sunid and cla." + node.type + "=%s",
-                        node.sunid)
+            cur.execute(
+                "SELECT cla.sunid,sid,pdbid,residues,cla.sccs,type,description,sp "
+                "FROM cla,des where cla.sunid=des.sunid and cla." + node.type + "=%s",
+                node.sunid,
+            )
 
             data = cur.fetchall()
             for d in data:
                 if int(d[0]) not in self._sunidDict:
                     n = Domain(scop=self)
-                    n.sunid, n.sid, pdbid, n.residues, n.sccs, n.type, n.description, n.parent = d[0:8]
+                    (
+                        n.sunid,
+                        n.sid,
+                        pdbid,
+                        n.residues,
+                        n.sccs,
+                        n.type,
+                        n.description,
+                        n.parent,
+                    ) = d[0:8]
                     n.residues = Residues.Residues(n.residues)
                     n.residues.pdbid = pdbid
                     n.sunid = int(n.sunid)
@@ -455,8 +487,10 @@ class Scop(object):
         cur = handle.cursor()
 
         cur.execute("DROP TABLE IF EXISTS hie")
-        cur.execute("CREATE TABLE hie (parent INT, child INT, PRIMARY KEY (child),\
-        INDEX (parent) )")
+        cur.execute(
+            "CREATE TABLE hie (parent INT, child INT, PRIMARY KEY (child), "
+            "INDEX (parent) )"
+        )
 
         for p in self._sunidDict.values():
             for c in p.children:
@@ -467,34 +501,50 @@ class Scop(object):
         cur = handle.cursor()
 
         cur.execute("DROP TABLE IF EXISTS cla")
-        cur.execute("CREATE TABLE cla (sunid INT, sid CHAR(8), pdbid CHAR(4),\
-        residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT,\
-        dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )")
+        cur.execute(
+            "CREATE TABLE cla (sunid INT, sid CHAR(8), pdbid CHAR(4), "
+            "residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT, "
+            "dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )"
+        )
 
         for n in self._sidDict.values():
             c = n.toClaRecord()
-            cur.execute("INSERT INTO cla VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                        (n.sunid, n.sid, c.residues.pdbid, c.residues, n.sccs,
-                         n.getAscendent("cl").sunid, n.getAscendent("cf").sunid,
-                         n.getAscendent("sf").sunid, n.getAscendent("fa").sunid,
-                         n.getAscendent("dm").sunid, n.getAscendent("sp").sunid,
-                         n.sunid))
+            cur.execute(
+                "INSERT INTO cla VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                (
+                    n.sunid,
+                    n.sid,
+                    c.residues.pdbid,
+                    c.residues,
+                    n.sccs,
+                    n.getAscendent("cl").sunid,
+                    n.getAscendent("cf").sunid,
+                    n.getAscendent("sf").sunid,
+                    n.getAscendent("fa").sunid,
+                    n.getAscendent("dm").sunid,
+                    n.getAscendent("sp").sunid,
+                    n.sunid,
+                ),
+            )
 
     def write_des_sql(self, handle):
         """Write DES data to SQL database."""
         cur = handle.cursor()
 
         cur.execute("DROP TABLE IF EXISTS des")
-        cur.execute("CREATE TABLE des (sunid INT, type CHAR(2), sccs CHAR(10),\
-        description VARCHAR(255),\
-        PRIMARY KEY (sunid) )")
+        cur.execute(
+            "CREATE TABLE des (sunid INT, type CHAR(2), sccs CHAR(10), "
+            "description VARCHAR(255), PRIMARY KEY (sunid) )"
+        )
 
         for n in self._sunidDict.values():
-            cur.execute("INSERT INTO des VALUES (%s,%s,%s,%s)",
-                        (n.sunid, n.type, n.sccs, n.description))
+            cur.execute(
+                "INSERT INTO des VALUES (%s,%s,%s,%s)",
+                (n.sunid, n.type, n.sccs, n.description),
+            )
 
 
-class Node(object):
+class Node:
     """A node in the Scop hierarchy.
 
     Attributes:
@@ -667,21 +717,22 @@ class Domain(Node):
             n = n.getParent()
 
         # Order does not matter in the hierarchy field. For more info, see
-        # http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
+        # http://scop.mrc-lmb.cam.ac.uk/legacy/release-notes.html
         # rec.hierarchy.reverse()
 
         return rec
 
 
-class Astral(object):
+class Astral:
     """Representation of the ASTRAL database.
 
     Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
     as well as clusterings by percent id or evalue.
     """
 
-    def __init__(self, dir_path=None, version=None, scop=None,
-                 astral_file=None, db_handle=None):
+    def __init__(
+        self, dir_path=None, version=None, scop=None, astral_file=None, db_handle=None
+    ):
         """Initialize the astral database.
 
         You must provide either a directory of SCOP files:
@@ -699,8 +750,10 @@ class Astral(object):
 
         """
         if astral_file is None and dir_path is None and db_handle is None:
-            raise RuntimeError("Need either file handle, or (dir_path + version),"
-                               " or database handle to construct Astral")
+            raise RuntimeError(
+                "Need either file handle, or (dir_path + version), "
+                "or database handle to construct Astral"
+            )
         if not scop:
             raise RuntimeError("Must provide a Scop instance to construct")
 
@@ -737,8 +790,11 @@ class Astral(object):
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id],
-                                                  self.version)
+                filename = "%s-e100m-%s-%s.id" % (
+                    file_prefix,
+                    astralEv_to_file[id],
+                    self.version,
+                )
                 filename = os.path.join(self.path, filename)
                 self.EvDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.EvDatasets[id]
@@ -836,37 +892,47 @@ class Astral(object):
         cur.execute("CREATE TABLE astral (sid CHAR(8), seq TEXT, PRIMARY KEY (sid))")
 
         for dom in self.fasta_dict:
-            cur.execute("INSERT INTO astral (sid,seq) values (%s,%s)",
-                        (dom, self.fasta_dict[dom].seq.data))
+            cur.execute(
+                "INSERT INTO astral (sid,seq) values (%s,%s)",
+                (dom, self.fasta_dict[dom].seq.data),
+            )
 
         for i in astralBibIds:
             cur.execute("ALTER TABLE astral ADD (id" + str(i) + " TINYINT)")
 
             for d in self.domainsClusteredById(i):
-                cur.execute("UPDATE astral SET id" + str(i) + "=1  WHERE sid=%s",
-                            d.sid)
+                cur.execute("UPDATE astral SET id" + str(i) + "=1  WHERE sid=%s", d.sid)
 
         for ev in astralEvs:
             cur.execute("ALTER TABLE astral ADD (" + astralEv_to_sql[ev] + " TINYINT)")
 
             for d in self.domainsClusteredByEv(ev):
-                cur.execute("UPDATE astral SET " + astralEv_to_sql[ev] + "=1  WHERE sid=%s",
-                            d.sid)
+                cur.execute(
+                    "UPDATE astral SET " + astralEv_to_sql[ev] + "=1  WHERE sid=%s",
+                    d.sid,
+                )
 
 
-def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
-           cgi="http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi", **keywds):
+def search(
+    pdb=None,
+    key=None,
+    sid=None,
+    disp=None,
+    dir=None,
+    loc=None,
+    cgi="http://scop.mrc-lmb.cam.ac.uk/legacy/search.cgi",
+    **keywds
+):
     """Access SCOP search and return a handle to the results.
 
     Access search.cgi and return a handle to the results.  See the
     online help file for an explanation of the parameters:
-    http://scop.mrc-lmb.cam.ac.uk/scop/help.html
+    http://scop.mrc-lmb.cam.ac.uk/legacy/help.html
 
     Raises an IOError if there's a network error.
 
     """
-    params = {"pdb": pdb, "key": key, "sid": sid, "disp": disp,
-              "dir": dir, "loc": loc}
+    params = {"pdb": pdb, "key": key, "sid": sid, "disp": disp, "dir": dir, "loc": loc}
     variables = {}
     for k, v in params.items():
         if v is not None:
@@ -876,16 +942,13 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
 
 
 def _open(cgi, params=None, get=1):
-    """Open a handle to SCOP, returns an UndoHandle (PRIVATE).
+    """Open a handle to SCOP and return it (PRIVATE).
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  get is a boolean
-    that describes whether a GET should be used.  Does some
-    simple error checking, and will raise an IOError if it encounters one.
+    that describes whether a GET should be used.
 
     """
-    from Bio._py3k import urlopen, urlencode
-
     # Open a handle to SCOP.
     if params is None:
         params = {}
@@ -894,6 +957,6 @@ def _open(cgi, params=None, get=1):
         if options:
             cgi += "?" + options
         handle = urlopen(cgi)
-    else:    # do a POST
+    else:  # do a POST
         handle = urlopen(cgi, data=options)
     return handle

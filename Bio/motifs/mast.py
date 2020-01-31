@@ -5,7 +5,6 @@
 # as part of this package.
 """Module for the support of Motif Alignment and Search Tool (MAST)."""
 
-from __future__ import print_function
 import xml.etree.ElementTree as ET
 
 from Bio.motifs import meme
@@ -57,7 +56,9 @@ def read(handle):
     try:
         xml_tree = ET.parse(handle)
     except ET.ParseError:
-        raise ValueError("Improper MAST XML input file. XML root tag should start with <mast version= ...")
+        raise ValueError(
+            "Improper MAST XML input file. XML root tag should start with <mast version= ..."
+        )
     __read_metadata(record, xml_tree)
     __read_sequences(record, xml_tree)
     return record
@@ -103,32 +104,30 @@ def __make_diagram(record, sequence_tree):
             if not hit_eles:
                 gap = hit_pos - 1
             else:
-                gap = (hit_pos
-                       - int(hit_eles[-1].get("pos"))
-                       - hit_motifs[-1].length)
+                gap = hit_pos - int(hit_eles[-1].get("pos")) - hit_motifs[-1].length
             gaps.append(gap)
             hit_motifs.append(record[int(hit_ele.get("idx"))])
             hit_eles.append(hit_ele)
     if not hit_eles:
         return str(sequence_length)
     if record.strand_handling == "combine":
-        motif_strs = ["[{}{}]".format("-" if hit_ele.get("rc") == "y" else "+",
-                                      hit_motif.name)
-                      for hit_ele, hit_motif in zip(hit_eles, hit_motifs)]
+        motif_strs = [
+            f"[{'-' if hit_ele.get('rc') == 'y' else '+'}{hit_motif.name}]"
+            for hit_ele, hit_motif in zip(hit_eles, hit_motifs)
+        ]
     elif record.strand_handling == "unstranded":
-        motif_strs = ["[{}]".format(hit_motif.name)
-                      for hit_ele, hit_motif in zip(hit_eles, hit_motifs)]
+        motif_strs = [
+            f"[{hit_motif.name}]" for hit_ele, hit_motif in zip(hit_eles, hit_motifs)
+        ]
     else:
         # TODO - more strand_handling possibilities?
-        raise Exception("Strand handling option {} not parsable"
-                        .format(record.strand_handling))
-    tail_length = (sequence_length
-                   - int(hit_eles[-1].get("pos"))
-                   - hit_motifs[-1].length + 1)
-    motifs_with_gaps = ([str(s)
-                         for pair in zip(gaps, motif_strs)
-                         for s in pair] +
-                        [str(tail_length)])
+        raise Exception(f"Strand handling option {record.strand_handling} not parsable")
+    tail_length = (
+        sequence_length - int(hit_eles[-1].get("pos")) - hit_motifs[-1].length + 1
+    )
+    motifs_with_gaps = [str(s) for pair in zip(gaps, motif_strs) for s in pair] + [
+        str(tail_length)
+    ]
     # remove 0-length gaps
     motifs_with_gaps = [s for s in motifs_with_gaps if s != "0"]
     return "-".join(motifs_with_gaps)

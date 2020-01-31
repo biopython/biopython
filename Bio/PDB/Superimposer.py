@@ -7,7 +7,6 @@
 
 """Superimpose two structures."""
 
-from __future__ import print_function
 
 import numpy
 
@@ -15,7 +14,7 @@ from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
 
 
-class Superimposer(object):
+class Superimposer:
     """Rotate/translate one set of atoms on top of another to minimize RMSD."""
 
     def __init__(self):

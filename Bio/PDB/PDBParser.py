@@ -5,7 +5,6 @@
 
 """Parser for PDB files."""
 
-from __future__ import print_function
 
 import warnings
 
@@ -16,7 +15,7 @@ except ImportError:
 
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use the PDB parser."
-    )
+    ) from None
 
 from Bio.File import as_handle
 
@@ -30,11 +29,16 @@ from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
 
-class PDBParser(object):
+class PDBParser:
     """Parse a PDB file and return a Structure object."""
 
     def __init__(
-        self, PERMISSIVE=True, get_header=False, structure_builder=None, QUIET=False
+        self,
+        PERMISSIVE=True,
+        get_header=False,
+        structure_builder=None,
+        QUIET=False,
+        is_pqr=False,
     ):
         """Create a PDBParser object.
 
@@ -53,6 +57,9 @@ class PDBParser(object):
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the PDB file!
+         - is_pqr - Evaluated as a Boolean. Specifies the type of file to be parsed.
+           If false (DEFAULT) a .pdb file format is assumed. Set it to true if you
+           want to parse a .pqr file instead.
 
         """
         # get_header is not used but is left in for API compatibility
@@ -65,6 +72,7 @@ class PDBParser(object):
         self.line_counter = 0
         self.PERMISSIVE = bool(PERMISSIVE)
         self.QUIET = bool(QUIET)
+        self.is_pqr = bool(is_pqr)
 
     # Public methods
 
@@ -85,8 +93,11 @@ class PDBParser(object):
             # Make a StructureBuilder instance (pass id of structure as parameter)
             self.structure_builder.init_structure(id)
 
-            with as_handle(file, mode="rU") as handle:
-                self._parse(handle.readlines())
+            with as_handle(file) as handle:
+                lines = handle.readlines()
+                if not lines:
+                    raise ValueError("Empty file.")
+                self._parse(lines)
 
             self.structure_builder.set_header(self.header)
             # Return the Structure instance
@@ -188,32 +199,57 @@ class PDBParser(object):
                     raise PDBConstructionException(
                         "Invalid or missing coordinate(s) at line %i."
                         % global_line_counter
-                    )
+                    ) from None
                 coord = numpy.array((x, y, z), "f")
+
                 # occupancy & B factor
-                try:
-                    occupancy = float(line[54:60])
-                except Exception:
-                    self._handle_PDB_exception(
-                        "Invalid or missing occupancy", global_line_counter
-                    )
-                    occupancy = None  # Rather than arbitrary zero or one
-                if occupancy is not None and occupancy < 0:
-                    # TODO - Should this be an error in strict mode?
-                    # self._handle_PDB_exception("Negative occupancy",
-                    #                            global_line_counter)
-                    # This uses fixed text so the warning occurs once only:
-                    warnings.warn(
-                        "Negative occupancy in one or more atoms",
-                        PDBConstructionWarning,
-                    )
-                try:
-                    bfactor = float(line[60:66])
-                except Exception:
-                    self._handle_PDB_exception(
-                        "Invalid or missing B factor", global_line_counter
-                    )
-                    bfactor = 0.0  # PDB uses a default of zero if missing
+                if not self.is_pqr:
+                    try:
+                        occupancy = float(line[54:60])
+                    except Exception:
+                        self._handle_PDB_exception(
+                            "Invalid or missing occupancy", global_line_counter
+                        )
+                        occupancy = None  # Rather than arbitrary zero or one
+                    if occupancy is not None and occupancy < 0:
+                        # TODO - Should this be an error in strict mode?
+                        # self._handle_PDB_exception("Negative occupancy",
+                        #                            global_line_counter)
+                        # This uses fixed text so the warning occurs once only:
+                        warnings.warn(
+                            "Negative occupancy in one or more atoms",
+                            PDBConstructionWarning,
+                        )
+                    try:
+                        bfactor = float(line[60:66])
+                    except Exception:
+                        self._handle_PDB_exception(
+                            "Invalid or missing B factor", global_line_counter
+                        )
+                        bfactor = 0.0  # PDB uses a default of zero if missing
+
+                elif self.is_pqr:
+                    # Attempt to parse charge and radius fields
+                    try:
+                        pqr_charge = float(line[54:62])
+                    except Exception:
+                        self._handle_PDB_exception(
+                            "Invalid or missing charge", global_line_counter
+                        )
+                        pqr_charge = None  # Rather than arbitrary zero or one
+                    try:
+                        radius = float(line[62:70])
+                    except Exception:
+                        self._handle_PDB_exception(
+                            "Invalid or missing radius", global_line_counter
+                        )
+                        radius = None
+                    if radius is not None and radius < 0:
+                        # In permissive mode raise fatal exception.
+                        message = "Negative atom radius"
+                        self._handle_PDB_exception(message, global_line_counter)
+                        radius = None
+
                 segid = line[72:76]
                 element = line[76:78].strip().upper()
                 if current_segid != segid:
@@ -239,20 +275,39 @@ class PDBParser(object):
                         )
                     except PDBConstructionException as message:
                         self._handle_PDB_exception(message, global_line_counter)
-                # init atom
-                try:
-                    structure_builder.init_atom(
-                        name,
-                        coord,
-                        bfactor,
-                        occupancy,
-                        altloc,
-                        fullname,
-                        serial_number,
-                        element,
-                    )
-                except PDBConstructionException as message:
-                    self._handle_PDB_exception(message, global_line_counter)
+
+                if not self.is_pqr:
+                    # init atom with pdb fiels
+                    try:
+                        structure_builder.init_atom(
+                            name,
+                            coord,
+                            bfactor,
+                            occupancy,
+                            altloc,
+                            fullname,
+                            serial_number,
+                            element,
+                        )
+                    except PDBConstructionException as message:
+                        self._handle_PDB_exception(message, global_line_counter)
+                elif self.is_pqr:
+                    try:
+                        structure_builder.init_atom(
+                            name,
+                            coord,
+                            pqr_charge,
+                            radius,
+                            altloc,
+                            fullname,
+                            serial_number,
+                            element,
+                            pqr_charge,
+                            radius,
+                            self.is_pqr,
+                        )
+                    except PDBConstructionException as message:
+                        self._handle_PDB_exception(message, global_line_counter)
             elif record_type == "ANISOU":
                 anisou = [
                     float(x)
@@ -343,4 +398,4 @@ class PDBParser(object):
             )
         else:
             # exceptions are fatal - raise again with new message (including line nr)
-            raise PDBConstructionException(message)
+            raise PDBConstructionException(message) from None

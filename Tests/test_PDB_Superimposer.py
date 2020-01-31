@@ -15,8 +15,8 @@ try:
     import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
 
 from Bio.PDB import Superimposer, Selection
 from Bio.PDB import PDBParser
@@ -42,6 +42,8 @@ class SuperimposerTests(unittest.TestCase):
         self.assertTrue(numpy.allclose(sup.rotran[0], numpy.identity(3)))
         self.assertTrue(numpy.allclose(sup.rotran[1], numpy.array([-1.0, -2.0, -3.0])))
         self.assertAlmostEqual(sup.rms, 0.0, places=3)
+        # Turn black code style off
+        # fmt: off
         atom_list = ["N", "C", "C", "O", "C", "C", "SE", "C", "N", "C", "C",
                      "O", "C", "C", "O", "O", "N", "C", "C", "O", "C", "C",
                      "C", "C", "N", "C", "C", "O", "C", "C", "C", "N", "C",
@@ -101,6 +103,8 @@ class SuperimposerTests(unittest.TestCase):
                      "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
                      "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
                      "O", "O", "O", "O", "O", "O"]
+        # Turn black code style on
+        # fmt: on
         sup.apply(moving)
         atom_moved = []
         for aa in moving:

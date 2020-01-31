@@ -7,10 +7,8 @@
 
 """Class that maps (chain_id, residue_id) to a residue property."""
 
-from __future__ import print_function
 
-
-class AbstractPropertyMap(object):
+class AbstractPropertyMap:
     """Define base class, map holder of residue properties."""
 
     def __init__(self, property_dict, property_keys, property_list):
@@ -83,9 +81,15 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
+        >>> entity_property_list = [
+        ...     ('entity_1', 'property_1'),
+        ...     ('entity_2', 'property_2')
+        ... ]
+        >>> map = AbstractPropertyMap({}, [], entity_property_list)
         >>> for (res, property) in iter(map):
         ...     print(res, property)
-        ...
+        entity_1 property_1
+        entity_2 property_2
 
         """
         for i in range(0, len(self.property_list)):

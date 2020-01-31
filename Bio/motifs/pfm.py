@@ -246,8 +246,12 @@ def _read_pfm_four_columns(handle):
                     nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
                     motif_nbr += 1
 
-                [nucleotide_counts[nucleotide].append(float(nucleotide_count))
-                 for nucleotide, nucleotide_count in zip(nucleotide_order, matrix_columns)]
+                [
+                    nucleotide_counts[nucleotide].append(float(nucleotide_count))
+                    for nucleotide, nucleotide_count in zip(
+                        nucleotide_order, matrix_columns
+                    )
+                ]
         else:
             # Empty lines can be separators between motifs.
             if motif_nbr != 0 and motif_nbr_added != motif_nbr:
@@ -330,7 +334,9 @@ def _read_pfm_four_rows(handle):
     record = Record()
 
     name_pattern = re.compile(r"^>\s*(.+)\s*")
-    row_pattern_with_nucleotide_letter = re.compile(r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\s]+)\s*[]]*\s*")
+    row_pattern_with_nucleotide_letter = re.compile(
+        r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\s]+)\s*[]]*\s*"
+    )
     row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\s]+)\s*")
 
     motif_name = None
@@ -342,15 +348,22 @@ def _read_pfm_four_rows(handle):
         line = line.strip()
 
         name_match = name_pattern.match(line)
-        row_match_with_nucleotide_letter = row_pattern_with_nucleotide_letter.match(line)
-        row_match_without_nucleotide_letter = row_pattern_without_nucleotide_letter.match(line)
+        row_match_with_nucleotide_letter = row_pattern_with_nucleotide_letter.match(
+            line
+        )
+        row_match_without_nucleotide_letter = row_pattern_without_nucleotide_letter.match(
+            line
+        )
 
         if name_match:
             motif_name = name_match.group(1)
         elif row_match_with_nucleotide_letter:
             (nucleotide, counts_str) = row_match_with_nucleotide_letter.group(1, 2)
             current_nucleotide_counts = counts_str.split()
-            nucleotide_counts[nucleotide] = [float(current_nucleotide_count) for current_nucleotide_count in current_nucleotide_counts]
+            nucleotide_counts[nucleotide] = [
+                float(current_nucleotide_count)
+                for current_nucleotide_count in current_nucleotide_counts
+            ]
             row_count += 1
             if row_count == 4:
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
@@ -364,8 +377,13 @@ def _read_pfm_four_rows(handle):
                 nucleotide_counts = {}
                 row_count = 0
         elif row_match_without_nucleotide_letter:
-            current_nucleotide_counts = row_match_without_nucleotide_letter.group(1).split()
-            nucleotide_counts[nucleotides[row_count]] = [float(current_nucleotide_count) for current_nucleotide_count in current_nucleotide_counts]
+            current_nucleotide_counts = row_match_without_nucleotide_letter.group(
+                1
+            ).split()
+            nucleotide_counts[nucleotides[row_count]] = [
+                float(current_nucleotide_count)
+                for current_nucleotide_count in current_nucleotide_counts
+            ]
             row_count += 1
             if row_count == 4:
                 motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
@@ -386,10 +404,14 @@ def write(motifs):
     """Return the representation of motifs in Cluster Buster position frequency matrix format."""
     lines = []
     for m in motifs:
-        line = ">{0}\n".format(m.name)
+        line = f">{m.name}\n"
         lines.append(line)
-        for ACGT_counts in zip(m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]):
-            lines.append("{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts))
+        for ACGT_counts in zip(
+            m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
+        ):
+            lines.append(
+                "{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts)
+            )
 
     # Finished; glue the lines together.
     text = "".join(lines)

@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 r"""Use the DSSP program to calculate secondary structure and accessibility.
 
@@ -86,10 +88,9 @@ The dssp data returned for a single residue is a tuple in the form:
 
 """
 
-from __future__ import print_function
 
 import re
-from Bio._py3k import StringIO
+from io import StringIO
 import subprocess
 import warnings
 
@@ -233,7 +234,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-    except OSError:  # TODO: Use FileNotFoundError once drop Python 2
+    except FileNotFoundError:
         if DSSP == "mkdssp":
             raise
         p = subprocess.Popen(
@@ -266,7 +267,7 @@ def make_dssp_dict(filename):
         the DSSP output file
 
     """
-    with open(filename, "r") as handle:
+    with open(filename) as handle:
         return _make_dssp_dict(handle)
 
 
@@ -287,7 +288,7 @@ def _make_dssp_dict(handle):
     dssp = {}
     start = 0
     keys = []
-    for l in handle.readlines():
+    for l in handle:
         sl = l.split()
         if len(sl) < 2:
             continue
@@ -340,11 +341,11 @@ def _make_dssp_dict(handle):
                 O_NH_2_relidx = int(l[72 + shift : 78 + shift])
                 O_NH_2_energy = float(l[79 + shift : 83 + shift])
 
-                acc = int((l[34 + shift : 38 + shift]))
+                acc = int(l[34 + shift : 38 + shift])
                 phi = float(l[103 + shift : 109 + shift])
                 psi = float(l[109 + shift : 115 + shift])
             else:
-                raise ValueError(exc)
+                raise ValueError(exc) from None
         res_id = (" ", resseq, icode)
         dssp[(chainid, res_id)] = (
             aa,
@@ -426,7 +427,7 @@ class DSSP(AbstractResiduePropertyMap):
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
                 dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
-            except OSError:  # TODO: Use FileNotFoundError once drop Python 2
+            except FileNotFoundError:
                 if dssp == "dssp":
                     dssp = "mkdssp"
                 elif dssp == "mkdssp":
@@ -467,7 +468,7 @@ class DSSP(AbstractResiduePropertyMap):
                             res = r
                             break
                 else:
-                    raise KeyError(res_id)
+                    raise KeyError(res_id) from None
 
             # For disordered residues of point mutations, Biopython uses the
             # last one as default, But DSSP takes the first one (alternative

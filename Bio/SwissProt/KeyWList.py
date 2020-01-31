@@ -19,8 +19,6 @@ Functions:
 
 """
 
-from __future__ import print_function
-
 
 class Record(dict):
     """Store information of one keyword or category from the keywords list.

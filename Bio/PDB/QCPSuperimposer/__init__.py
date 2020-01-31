@@ -13,13 +13,12 @@ eg. useful to superimpose crystal structures. QCP stands for
 Quaternion Characteristic Polynomial, which is used in the algorithm.
 """
 
-from __future__ import print_function
 
 from numpy import dot, sqrt, array, matrix, inner, zeros
 from .qcprotmodule import FastCalcRMSDAndRotation
 
 
-class QCPSuperimposer(object):
+class QCPSuperimposer:
     """Quaternion Characteristic Polynomial (QCP) Superimposer.
 
     QCPSuperimposer finds the best rotation and translation to put

@@ -196,22 +196,11 @@ of the format's documentation.
 
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 import sys
-from collections import OrderedDict
 
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
-
-
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
-    _dict = dict
 
 
 __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
@@ -219,53 +208,53 @@ __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
-        "blast-tab": ("BlastIO", "BlastTabParser"),
-        "blast-text": ("BlastIO", "BlastTextParser"),
-        "blast-xml": ("BlastIO", "BlastXmlParser"),
-        "blat-psl": ("BlatIO", "BlatPslParser"),
-        "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),
-        "exonerate-text": ("ExonerateIO", "ExonerateTextParser"),
-        "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarParser"),
-        "fasta-m10": ("FastaIO", "FastaM10Parser"),
-        "hhsuite2-text": ("HHsuiteIO", "Hhsuite2TextParser"),
-        "hhsuite3-text": ("HHsuiteIO", "Hhsuite2TextParser"),
-        "hmmer2-text": ("HmmerIO", "Hmmer2TextParser"),
-        "hmmer3-text": ("HmmerIO", "Hmmer3TextParser"),
-        "hmmer3-tab": ("HmmerIO", "Hmmer3TabParser"),
-        # for hmmer3-domtab, the specific program is part of the format name
-        # as we need it distinguish hit / target coordinates
-        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
-        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
-        "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
-        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+    "blast-tab": ("BlastIO", "BlastTabParser"),
+    "blast-text": ("BlastIO", "BlastTextParser"),
+    "blast-xml": ("BlastIO", "BlastXmlParser"),
+    "blat-psl": ("BlatIO", "BlatPslParser"),
+    "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),
+    "exonerate-text": ("ExonerateIO", "ExonerateTextParser"),
+    "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarParser"),
+    "fasta-m10": ("FastaIO", "FastaM10Parser"),
+    "hhsuite2-text": ("HHsuiteIO", "Hhsuite2TextParser"),
+    "hhsuite3-text": ("HHsuiteIO", "Hhsuite2TextParser"),
+    "hmmer2-text": ("HmmerIO", "Hmmer2TextParser"),
+    "hmmer3-text": ("HmmerIO", "Hmmer3TextParser"),
+    "hmmer3-tab": ("HmmerIO", "Hmmer3TabParser"),
+    # for hmmer3-domtab, the specific program is part of the format name
+    # as we need it distinguish hit / target coordinates
+    "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
+    "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+    "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
+    "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
 }
 
 # dictionary of supported formats for index()
 _INDEXER_MAP = {
-        "blast-tab": ("BlastIO", "BlastTabIndexer"),
-        "blast-xml": ("BlastIO", "BlastXmlIndexer"),
-        "blat-psl": ("BlatIO", "BlatPslIndexer"),
-        "exonerate-cigar": ("ExonerateIO", "ExonerateCigarIndexer"),
-        "exonerate-text": ("ExonerateIO", "ExonerateTextIndexer"),
-        "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarIndexer"),
-        "fasta-m10": ("FastaIO", "FastaM10Indexer"),
-        "hmmer2-text": ("HmmerIO", "Hmmer2TextIndexer"),
-        "hmmer3-text": ("HmmerIO", "Hmmer3TextIndexer"),
-        "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
-        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
-        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
-        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+    "blast-tab": ("BlastIO", "BlastTabIndexer"),
+    "blast-xml": ("BlastIO", "BlastXmlIndexer"),
+    "blat-psl": ("BlatIO", "BlatPslIndexer"),
+    "exonerate-cigar": ("ExonerateIO", "ExonerateCigarIndexer"),
+    "exonerate-text": ("ExonerateIO", "ExonerateTextIndexer"),
+    "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarIndexer"),
+    "fasta-m10": ("FastaIO", "FastaM10Indexer"),
+    "hmmer2-text": ("HmmerIO", "Hmmer2TextIndexer"),
+    "hmmer3-text": ("HmmerIO", "Hmmer3TextIndexer"),
+    "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
+    "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
+    "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+    "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
 }
 
 # dictionary of supported formats for write()
 _WRITER_MAP = {
-        "blast-tab": ("BlastIO", "BlastTabWriter"),
-        "blast-xml": ("BlastIO", "BlastXmlWriter"),
-        "blat-psl": ("BlatIO", "BlatPslWriter"),
-        "hmmer3-tab": ("HmmerIO", "Hmmer3TabWriter"),
-        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitWriter"),
-        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
-        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
+    "blast-tab": ("BlastIO", "BlastTabWriter"),
+    "blast-xml": ("BlastIO", "BlastXmlWriter"),
+    "blat-psl": ("BlatIO", "BlatPslWriter"),
+    "hmmer3-tab": ("HmmerIO", "Hmmer3TabWriter"),
+    "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitWriter"),
+    "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
+    "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
 }
 
 
@@ -310,15 +299,13 @@ def parse(handle, format=None, **kwargs):
 
     # HACK: force BLAST XML decoding to use utf-8
     handle_kwargs = {}
-    if format == "blast-xml" and sys.version_info[0] > 2:
+    if format == "blast-xml":
         handle_kwargs["encoding"] = "utf-8"
 
     # and start iterating
-    with as_handle(handle, "rU", **handle_kwargs) as source_file:
+    with as_handle(handle, **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
-
-        for qresult in generator:
-            yield qresult
+        yield from generator
 
 
 def read(handle, format=None, **kwargs):
@@ -357,22 +344,19 @@ def read(handle, format=None, **kwargs):
     search output file format.
 
     """
-    generator = parse(handle, format, **kwargs)
+    query_results = parse(handle, format, **kwargs)
 
     try:
-        first = next(generator)
+        query_result = next(query_results)
     except StopIteration:
-        raise ValueError("No query results found in handle")
-    else:
-        try:
-            second = next(generator)
-        except StopIteration:
-            second = None
-
-    if second is not None:
+        raise ValueError("No query results found in handle") from None
+    try:
+        next(query_results)
         raise ValueError("More than one query results found in handle")
+    except StopIteration:
+        pass
 
-    return first
+    return query_result
 
 
 def to_dict(qresults, key_function=None):
@@ -417,19 +401,17 @@ def to_dict(qresults, key_function=None):
 
     Since Python 3.7, the default dict class maintains key order, meaning
     this dictionary will reflect the order of records given to it. For
-    CPython, this was already implemented in 3.6.
-
-    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
-    than 3.6 (and for other Python older than 3.7) so that you can always
-    assume the record order is preserved.
+    CPython and PyPy, this was already implemented for Python 3.6, so
+    effectively you can always assume the record order is preserved.
     """
+    # This comment stops black style adding a blank line here, which causes flake8 D202.
     def _default_key_function(rec):
         return rec.id
 
     if key_function is None:
         key_function = _default_key_function
 
-    qdict = _dict()
+    qdict = {}
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:
@@ -497,19 +479,19 @@ def index(filename, format=None, key_function=None, **kwargs):
     It only changes the key value used to retrieve the associated QueryResult.
 
     """
-    if not isinstance(filename, basestring):
+    if not isinstance(filename, str):
         raise TypeError("Need a filename (not a handle)")
 
     from Bio.File import _IndexedSeqFileDict
+
     proxy_class = get_processor(format, _INDEXER_MAP)
-    repr = "SearchIO.index(%r, %r, key_function=%r)" \
-        % (filename, format, key_function)
-    return _IndexedSeqFileDict(proxy_class(filename, **kwargs),
-                               key_function, repr, "QueryResult")
+    repr = "SearchIO.index(%r, %r, key_function=%r)" % (filename, format, key_function)
+    return _IndexedSeqFileDict(
+        proxy_class(filename, **kwargs), key_function, repr, "QueryResult"
+    )
 
 
-def index_db(index_filename, filenames=None, format=None,
-             key_function=None, **kwargs):
+def index_db(index_filename, filenames=None, format=None, key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
      - index_filename - The SQLite filename.
@@ -571,12 +553,17 @@ def index_db(index_filename, filenames=None, format=None,
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)
-    if isinstance(filenames, basestring):
+    if isinstance(filenames, str):
         filenames = [filenames]
 
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = ("SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)"
-            % (index_filename, filenames, format, key_function))
+
+    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" % (
+        index_filename,
+        filenames,
+        format,
+        key_function,
+    )
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
@@ -585,9 +572,9 @@ def index_db(index_filename, filenames=None, format=None,
         else:
             return format in _INDEXER_MAP
 
-    return _SQLiteManySeqFilesDict(index_filename, filenames,
-                                   proxy_factory, format,
-                                   key_function, repr)
+    return _SQLiteManySeqFilesDict(
+        index_filename, filenames, proxy_factory, format, key_function, repr
+    )
 
 
 def write(qresults, handle, format=None, **kwargs):
@@ -638,8 +625,7 @@ def write(qresults, handle, format=None, **kwargs):
     return qresult_count, hit_count, hsp_count, frag_count
 
 
-def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
-            out_kwargs=None):
+def convert(in_file, in_format, out_file, out_format, in_kwargs=None, out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
      - in_file    - Handle to the input file, or the filename as string.
@@ -696,4 +682,5 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

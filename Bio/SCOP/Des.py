@@ -14,7 +14,7 @@ The latest DES file can be found
 """
 
 
-class Record(object):
+class Record:
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:

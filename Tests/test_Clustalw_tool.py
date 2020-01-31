@@ -9,7 +9,6 @@
 # and *.aln where we have not requested an explicit name?
 """Tests for Clustalw tool."""
 
-from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
 
@@ -62,21 +61,21 @@ if sys.platform == "win32":
             if clustalw_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     # Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
     # command, but this does cause them to quit cleanly.  Otherwise they prompt
     # the user for input (causing a lock up).
     output = getoutput("clustalw2 --version")
     # Since "not found" may be in another language, try and be sure this is
     # really the clustalw tool's output
-    if "not found" not in output and "CLUSTAL" in output \
-       and "Multiple Sequence Alignments" in output:
-        clustalw_exe = "clustalw2"
+    if "not found" not in output and "not recognized" not in output:
+        if "CLUSTAL" in output and "Multiple Sequence Alignments" in output:
+            clustalw_exe = "clustalw2"
     if not clustalw_exe:
         output = getoutput("clustalw --version")
-        if "not found" not in output and "CLUSTAL" in output \
-           and "Multiple Sequence Alignments" in output:
-            clustalw_exe = "clustalw"
+        if "not found" not in output and "not recognized" not in output:
+            if "CLUSTAL" in output and "Multiple Sequence Alignments" in output:
+                clustalw_exe = "clustalw"
 
 if not clustalw_exe:
     raise MissingExternalDependencyError(

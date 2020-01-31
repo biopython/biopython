@@ -1,15 +1,12 @@
-
 # Copyright 2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """Unittests for the Seq objects."""
-from __future__ import print_function
 
 import warnings
 import unittest
-import sys
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
@@ -21,10 +18,6 @@ from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
 
-if sys.version_info[0] < 3:
-    from string import maketrans
-else:
-    maketrans = str.maketrans
 
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artificial example)
@@ -480,6 +473,15 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             self.assertEqual(str(example1.lower()), str1.lower())
 
+    def test_str_encode(self):
+        """Check matches the python string encode method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            str1 = str(example1)
+            self.assertEqual(example1.encode("ascii"), str1.encode("ascii"))
+            self.assertEqual(example1.encode(), str1.encode())
+
     def test_str_hash(self):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
@@ -575,12 +577,12 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             # This only does the unambiguous cases
             if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
-                mapping = maketrans("ACGUacgu", "UGCAugca")
+                mapping = str.maketrans("ACGUacgu", "UGCAugca")
             elif any(("T" in str1, "t" in str1, example1.alphabet == generic_dna,
                      example1.alphabet == generic_nucleotide)):
-                mapping = maketrans("ACGTacgt", "TGCAtgca")
+                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
-                mapping = maketrans("CGcg", "GCgc")
+                mapping = str.maketrans("CGcg", "GCgc")
             else:
                 # TODO - look at alphabet?
                 raise ValueError(example1)
@@ -601,12 +603,12 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             # This only does the unambiguous cases
             if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
-                mapping = maketrans("ACGUacgu", "UGCAugca")
+                mapping = str.maketrans("ACGUacgu", "UGCAugca")
             elif any(("T" in str1, "t" in str1, example1.alphabet == generic_dna,
                      example1.alphabet == generic_nucleotide)):
-                mapping = maketrans("ACGTacgt", "TGCAtgca")
+                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
-                mapping = maketrans("CGcg", "GCgc")
+                mapping = str.maketrans("CGcg", "GCgc")
             else:
                 # TODO - look at alphabet?
                 continue

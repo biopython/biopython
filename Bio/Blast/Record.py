@@ -33,7 +33,7 @@ def fmt_(value, format_spec="%s", default_str="<unknown>"):
     return format_spec % value
 
 
-class Header(object):
+class Header:
     """Saves information from a blast header.
 
     Members:
@@ -66,7 +66,7 @@ class Header(object):
         self.database_letters = None
 
 
-class Description(object):
+class Description:
     """Stores information about one hit in the descriptions section.
 
     Members:
@@ -99,7 +99,7 @@ class DescriptionExt(Description):
 
     def __init__(self):
         """Initialize the class."""
-        super(DescriptionExt, self).__init__()
+        super().__init__()
 
         self.items = []
 
@@ -110,7 +110,7 @@ class DescriptionExt(Description):
         self.items.append(item)
 
 
-class DescriptionExtItem(object):
+class DescriptionExtItem:
     """Stores information about one record in hit description for BLASTXML version 2.
 
     Members:
@@ -131,7 +131,7 @@ class DescriptionExtItem(object):
         return "%s %s" % (self.id, self.title)
 
 
-class Alignment(object):
+class Alignment:
     """Stores information about one hit in the alignments section.
 
     Members:
@@ -158,7 +158,7 @@ class Alignment(object):
         return "\n           ".join(lines)
 
 
-class HSP(object):
+class HSP:
     """Stores information about one hsp in an alignment hit.
 
     Members:
@@ -230,41 +230,53 @@ class HSP(object):
 
     def __str__(self):
         """Return the BLAST HSP as a formatted string."""
-        lines = ["Score %s (%s bits), expectation %s, alignment length %s" % (
-            fmt_(self.score, "%i"),
-            fmt_(self.bits, "%i"),
-            fmt_(self.expect, "%0.1e"),
-            fmt_(self.align_length, "%i"),
-        )]
+        lines = [
+            "Score %s (%s bits), expectation %s, alignment length %s"
+            % (
+                fmt_(self.score, "%i"),
+                fmt_(self.bits, "%i"),
+                fmt_(self.expect, "%0.1e"),
+                fmt_(self.align_length, "%i"),
+            )
+        ]
         if self.align_length is None:
             return "\n".join(lines)
         if self.align_length < 50:
-            lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
-                                             str(self.query),
-                                             str(self.query_end)))
-            lines.append("               %s"
-                         % (str(self.match)))
-            lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
-                                             str(self.sbjct),
-                                             str(self.sbjct_end)))
+            lines.append(
+                "Query:%s %s %s"
+                % (str(self.query_start).rjust(8), str(self.query), str(self.query_end))
+            )
+            lines.append("               %s" % (str(self.match)))
+            lines.append(
+                "Sbjct:%s %s %s"
+                % (str(self.sbjct_start).rjust(8), str(self.sbjct), str(self.sbjct_end))
+            )
         else:
-            lines.append("Query:%s %s...%s %s"
-                         % (str(self.query_start).rjust(8),
-                            str(self.query)[:45],
-                            str(self.query)[-3:],
-                            str(self.query_end)))
-            lines.append("               %s...%s"
-                         % (str(self.match)[:45],
-                            str(self.match)[-3:]))
-            lines.append("Sbjct:%s %s...%s %s"
-                         % (str(self.sbjct_start).rjust(8),
-                            str(self.sbjct)[:45],
-                            str(self.sbjct)[-3:],
-                            str(self.sbjct_end)))
+            lines.append(
+                "Query:%s %s...%s %s"
+                % (
+                    str(self.query_start).rjust(8),
+                    str(self.query)[:45],
+                    str(self.query)[-3:],
+                    str(self.query_end),
+                )
+            )
+            lines.append(
+                "               %s...%s" % (str(self.match)[:45], str(self.match)[-3:])
+            )
+            lines.append(
+                "Sbjct:%s %s...%s %s"
+                % (
+                    str(self.sbjct_start).rjust(8),
+                    str(self.sbjct)[:45],
+                    str(self.sbjct)[-3:],
+                    str(self.sbjct_end),
+                )
+            )
         return "\n".join(lines)
 
 
-class MultipleAlignment(object):
+class MultipleAlignment:
     """Holds information about a multiple alignment.
 
     Members:
@@ -315,7 +327,7 @@ class MultipleAlignment(object):
         return generic
 
 
-class Round(object):
+class Round:
     """Holds information from a PSI-BLAST round.
 
     Members:
@@ -335,7 +347,7 @@ class Round(object):
         self.multiple_alignment = None
 
 
-class DatabaseReport(object):
+class DatabaseReport:
     """Holds information about a database report.
 
     Members:
@@ -360,7 +372,7 @@ class DatabaseReport(object):
         self.ka_params_gap = (None, None, None)
 
 
-class Parameters(object):
+class Parameters:
     """Holds information about the parameters.
 
     Members:

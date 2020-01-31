@@ -56,7 +56,7 @@ if sys.platform == "win32":
             if samtools_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     output = getoutput("samtools")
 
     # Since "not found" may be in another language, try and be sure this is

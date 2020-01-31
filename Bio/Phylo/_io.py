@@ -1,7 +1,9 @@
 # Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """I/O function wrappers for phylogenetic tree formats.
 
@@ -9,16 +11,9 @@ This API follows the same semantics as Biopython's ``SeqIO`` and
 ``AlignIO``.
 """
 
-from __future__ import print_function
 
 from Bio import File
-from Bio.Phylo import (
-    BaseTree,
-    NewickIO,
-    NexusIO,
-    PhyloXMLIO,
-    NeXMLIO,
-)
+from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, NeXMLIO
 
 supported_formats = {
     "newick": NewickIO,
@@ -29,6 +24,7 @@ supported_formats = {
 
 try:
     from Bio.Phylo import CDAOIO
+
     supported_formats["cdao"] = CDAOIO
 except ImportError:
     pass
@@ -49,9 +45,8 @@ def parse(file, format, **kwargs):
     True
 
     """
-    with File.as_handle(file, "r") as fp:
-        for tree in getattr(supported_formats[format], "parse")(fp, **kwargs):
-            yield tree
+    with File.as_handle(file) as fp:
+        yield from getattr(supported_formats[format], "parse")(fp, **kwargs)
 
 
 def read(file, format, **kwargs):
@@ -70,8 +65,7 @@ def read(file, format, **kwargs):
     except StopIteration:
         return tree
     else:
-        raise ValueError(
-            "There are multiple trees in this file; use parse() instead.")
+        raise ValueError("There are multiple trees in this file; use parse() instead.")
 
 
 def write(trees, file, format, **kwargs):

@@ -22,14 +22,13 @@ the diagram: http://www.reportlab.com
 """
 
 # ReportLab imports
-from __future__ import print_function
 
 from reportlab.lib import colors
 
 from math import sqrt
 
 
-class GraphData(object):
+class GraphData:
     """Graph Data.
 
     Attributes:

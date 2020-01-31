@@ -20,7 +20,7 @@ The latest CLA file can be found
 from . import Residues
 
 
-class Record(object):
+class Record:
     """Holds information for one SCOP domain.
 
     Attributes:
@@ -47,8 +47,8 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        line = line.rstrip()         # no trailing whitespace
-        columns = line.split("\t")   # separate the tab-delineated cols
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 6:
             raise ValueError("I don't understand the format of %s" % line)
 
@@ -69,8 +69,11 @@ class Record(object):
         s.append(self.sccs)
         s.append(self.sunid)
 
-        s.append(",".join("=".join((key, str(value))) for key, value
-                          in self.hierarchy.items()))
+        s.append(
+            ",".join(
+                "=".join((key, str(value))) for key, value in self.hierarchy.items()
+            )
+        )
 
         return "\t".join(map(str, s)) + "\n"
 
@@ -100,7 +103,7 @@ class Index(dict):
         """
         dict.__init__(self)
         self.filename = filename
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             position = 0
             while True:
                 line = f.readline()
@@ -118,7 +121,7 @@ class Index(dict):
         """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             f.seek(position)
             line = f.readline()
             record = Record(line)

@@ -25,7 +25,7 @@ try:
     del r
 except Exception:
     raise MissingPythonDependencyError(
-        "Install ReportLab if you want to use Bio.Graphics.")
+        "Install ReportLab if you want to use Bio.Graphics.") from None
 try:
     # Skip the test if reportlab is not installed
     from reportlab.graphics import renderPM
@@ -33,7 +33,7 @@ try:
 except Exception:
     raise MissingPythonDependencyError(
         "Install ReportLab's renderPM module if you want to create "
-        "bitmaps with Bio.Graphics.")
+        "bitmaps with Bio.Graphics.") from None
 try:
     # Skip the test if PIL is not installed
     # The preferred PIL import has changed over time:
@@ -45,7 +45,7 @@ try:
 except Exception:
     raise MissingPythonDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
-        "if you want to create bitmaps with Bio.Graphics.")
+        "if you want to create bitmaps with Bio.Graphics.") from None
 
 from reportlab.graphics.renderPM import RenderPMError
 
@@ -89,7 +89,7 @@ def real_test():
     # error here.
     except IndexError:
         pass
-    except IOError as err:
+    except OSError as err:
         if "encoder zip not available" in str(err):
             raise MissingExternalDependencyError(
                 "Check zip encoder installed for PIL and ReportLab renderPM")

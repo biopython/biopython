@@ -21,7 +21,7 @@ class GoaTests(unittest.TestCase):
         """Test GOA GAF file iterator."""
         # Test GAF 2.0
         recs = []
-        with open("UniProt/goa_yeast.gaf", "r") as handle:
+        with open("UniProt/goa_yeast.gaf") as handle:
             for rec in GOA.gafiterator(handle):
                 recs.append(rec)
 
@@ -41,7 +41,7 @@ class GoaTests(unittest.TestCase):
 
         # Test GAF 2.1, it has the same fields as GAF 2.0
         recs = []
-        with open("UniProt/gene_association.goa_yeast.1.gaf", "r") as handle:
+        with open("UniProt/gene_association.goa_yeast.1.gaf") as handle:
             for rec in GOA.gafiterator(handle):
                 recs.append(rec)
 
@@ -62,7 +62,7 @@ class GoaTests(unittest.TestCase):
     def test_gpa_iterator(self):
         """Test GOA GPA file iterator."""
         recs = []
-        with open("UniProt/goa_yeast.gpa.59.gpa", "r") as handle:
+        with open("UniProt/goa_yeast.gpa.59.gpa") as handle:
             for rec in GOA.gpa_iterator(handle):
                 recs.append(rec)
         self.assertEqual(len(recs), 300)
@@ -84,7 +84,7 @@ class GoaTests(unittest.TestCase):
     def test_gpi_iterator(self):
         """Test GOA GPI file iterator."""
         recs = []
-        with open("UniProt/gp_information.goa_yeast.28.gpi", "r") as handle:
+        with open("UniProt/gp_information.goa_yeast.28.gpi") as handle:
             for rec in GOA.gpi_iterator(handle):
                 recs.append(rec)
         self.assertEqual(len(recs), 300)
@@ -92,9 +92,14 @@ class GoaTests(unittest.TestCase):
         # Check values of first record
         self.assertEqual(recs[0]["DB_Object_ID"], "A2P2R3")
         self.assertEqual(recs[0]["DB_Object_Symbol"], "YMR084W")
-        self.assertEqual(recs[0]["DB_Object_Name"], ["Putative glutamine--fructose"
-                                                     "-6-phosphate aminotransferase"
-                                                     " [isomerizing]"])
+        self.assertEqual(
+            recs[0]["DB_Object_Name"],
+            [
+                "Putative glutamine--fructose"
+                "-6-phosphate aminotransferase"
+                " [isomerizing]"
+            ],
+        )
         self.assertEqual(recs[0]["DB_Object_Synonym"], ["YM084_YEAST", "YMR084W"])
         self.assertEqual(recs[0]["DB_Object_Type"], "protein")
         self.assertEqual(recs[0]["Taxon"], "taxon:559292")
@@ -120,13 +125,15 @@ class GoaTests(unittest.TestCase):
         os.close(f_number)
 
         # Open a file and select records as per filter
-        with open("UniProt/goa_yeast.gaf", "r") as handle:
+        with open("UniProt/goa_yeast.gaf") as handle:
             for rec in GOA.gafiterator(handle):
                 recs.append(rec)
                 # Filtering
-                if GOA.record_has(rec, taxon_id) and \
-                        GOA.record_has(rec, evidence) and \
-                        GOA.record_has(rec, synonym):
+                if (
+                    GOA.record_has(rec, taxon_id)
+                    and GOA.record_has(rec, evidence)
+                    and GOA.record_has(rec, synonym)
+                ):
                     filtered.append(rec)
 
         # Check number of filtered records
@@ -141,7 +148,7 @@ class GoaTests(unittest.TestCase):
 
         # Open and read the file containing the filtered records
         recs_ff = []  # Records from filtered file
-        with open(f_filtered, "r") as handle:
+        with open(f_filtered) as handle:
             for rec in GOA.gafiterator(handle):
                 recs_ff.append(rec)
 

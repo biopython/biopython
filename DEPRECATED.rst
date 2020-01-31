@@ -28,8 +28,9 @@ release 1.66 onwards.
 
 Python 2.7
 ----------
-We will drop support for Python 2.7 no later than 2020, in line with the
-end-of-life or sunset date for Python 2.7 itself.
+No longer supported as of Release 1.77 (2020, in line with end-of-life or
+sunset date for Python 2.7 itself), having triggered a warning in prior
+releases.
 
 Python 3.0, 3.1, 3.2
 --------------------
@@ -49,7 +50,7 @@ warning in release 1.74. First supported in release 1.64.
 
 Python 3.5
 ----------
-First supported in release 1.66.
+No longer supported as of Release 1.77. First supported in release 1.66.
 
 Python 3.6
 ----------
@@ -65,6 +66,7 @@ First supported in release 1.75.
 
 Jython
 ------
+No longer supported as of Release 1.77 with the end of Python 2 support.
 Biopython was mostly working under Jython 2.7.0, but support for Jython
 was deprecated as of Release 1.70.
 
@@ -73,17 +75,22 @@ Biopython modules, methods, functions
 
 Bio.Index
 ---------
-Deprecated in release 1.75, was not used anywhere in Biopython.
+Deprecated in release 1.75, removed in release 1.77. Was not used anywhere in
+Biopython.
 
 Bio.Crystal
 -----------
-Declared obsolete in release 1.75, PDB NDB files can be opened with Bio.PDB.
+Declared obsolete in release 1.75, deprecated in release 1.76. PDB NDB files
+can be opened with Bio.PDB.
 
 Bio.motifs
 ----------
 ``Bio.motifs.mast`` plain-text parsing deprecated in favor of XML parsing as of
 release 1.74. Also affects ``Bio.motifs.read`` and ``Bio.motifs.parse`` for the
 ``mast`` format.
+The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated
+in release 1.77, in favor of a ``__format__`` method that can be used from the
+``format`` built-in function.
 
 Bio.Restriction.RanaConfig
 --------------------------
@@ -121,8 +128,8 @@ scikit-learn or TensorFlow instead.
 
 Bio.Phylo.CDAOIO.CDAOError
 --------------------------
-This exception was deprecated as of Release 1.70, and is no longer used
-within Biopython.
+This exception was deprecated as of Release 1.70 as it was no longer used
+within Biopython, and removed in Release 1.75.
 
 Bio.DocSQL
 ----------
@@ -171,7 +178,8 @@ Iterator .next() methods
 The .next() method defined for any Biopython iterator is deprecated as of
 Biopython 1.63 under Python 2 (and not present on Python 3). Please replace
 my_iterator.next() with next(my_iterator) using the new built-in function
-next() instead.
+next() instead. Python 2 support and the remaining next methods were removed
+in release 1.77.
 
 Bio.SVDSuperimposer
 -------------------
@@ -501,8 +509,8 @@ You can also continue to use handles with ``Bio.SeqIO`` if you want to.
 Bio.Align.FormatConvert
 -----------------------
 Declared obsolete in Release 1.48, deprecated in Release 1.51, and
-removed in Release 1.55 final. Please use Bio.AlignIO or the Alignment
-object's format method instead.
+removed in Release 1.55 final. Instead, please use Bio.AlignIO or call the
+format built-in function on the Alignment object.
 
 Bio.Emboss.Primer
 -----------------
@@ -794,6 +802,8 @@ Bio.Align
 ---------
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
 deprecated in Release 1.57 and removed in Release 1.69.
+The format method of the MultipleSeqAlignment class and the PairwiseAlignment
+class were deprecated in Release 1.76.
 
 Bio.Align.Generic
 -----------------
@@ -818,10 +828,21 @@ previously available in ``Bio.KDTree`` are provided in a new module
 
 Bio.trie, Bio.triefind
 ----------------------
-These modules were declared obsolete in Release 1.72, and deprecated in
-Release 1.73. We encourage users to switch to alternative libraries
-implementing a trie data structure, for example pygtrie.
+These modules were declared obsolete in Release 1.72, deprecated in Release
+1.73, and removed in Release 1.77. We suggest pygtrie as an alternative library
+implementing a trie data structure.
 
-Bio.statistics
+Bio.Statistics
 --------------
-This module was declared obsolete in Release 1.74.
+This module was declared obsolete in Release 1.74, and deprecated in Release
+1.76.
+
+Bio.File
+--------
+The UndoHandle class was deprecated in Release 1.77, and moved to
+Bio/SearchIO/_legacy/ParserSupport.py, which was the only module in
+Biopython still using this class.
+
+Bio.FSSP
+-----------
+Deprecated in release 1.77.

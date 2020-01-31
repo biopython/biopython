@@ -43,7 +43,7 @@ def _first_defined(*args):
     return None
 
 
-class Diagram(object):
+class Diagram:
     """Diagram container.
 
     Arguments:
@@ -151,8 +151,7 @@ class Diagram(object):
         for track in self.tracks.values():
             if hasattr(track, attr):
                 # If the feature has the attribute set it to the passed value
-                if getattr(track, attr) != value:
-                    setattr(track, attr, value)
+                setattr(track, attr, value)
 
     def draw(
         self,
@@ -259,10 +258,7 @@ class Diagram(object):
 
         """
         # The ReportLab drawToString method, which this function used to call,
-        # just used a cStringIO or StringIO handle with the drawToFile method.
-        # In order to put all our complicated file format specific code in one
-        # place we just used a StringIO handle here, later a BytesIO handle
-        # for Python 3 compatibility.
+        # originally just used a StringIO handle with the drawToFile method.
         #
         # TODO - Rename this method to include keyword bytes?
         from io import BytesIO

@@ -7,9 +7,6 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._py3k import zip
-
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
 
@@ -17,18 +14,24 @@ __all__ = ("ExonerateVulgarParser", "ExonerateVulgarIndexer")
 
 
 # precompile regex
-_RE_VULGAR = re.compile(r"""^vulgar:\s+
+_RE_VULGAR = re.compile(
+    r"""^vulgar:\s+
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand
         (\d+)(\s+.*)$                         # score, vulgar components
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
-_RE_VCOMP = re.compile(r"""
+_RE_VCOMP = re.compile(
+    r"""
         \s+(\S+) # vulgar label (C/M: codon/match, G: gap, N: ner, 5/3: splice
                  #               site, I: intron, S: split codon, F: frameshift)
         \s+(\d+) # how many residues to advance in query sequence
         \s+(\d+) # how many residues to advance in hit sequence
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
 
 def parse_vulgar_comp(hsp, vulgar_comp):
@@ -89,8 +92,9 @@ def parse_vulgar_comp(hsp, vulgar_comp):
 
         # append to ends if the next comp is not an MCGS block or
         # if it's the last comp
-        if idx == len(vcomps) - 1 or \
-                (label in "MCGS" and vcomps[idx + 1][0] not in "MCGS"):
+        if idx == len(vcomps) - 1 or (
+            label in "MCGS" and vcomps[idx + 1][0] not in "MCGS"
+        ):
             qends.append(qpos)
             hends.append(hpos)
 
@@ -100,8 +104,10 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # switch coordinates if strand is < 0
         if strand < 0:
             # switch the starts and ends
-            hsp[seq_type + "start"], hsp[seq_type + "end"] = \
-                    hsp[seq_type + "end"], hsp[seq_type + "start"]
+            hsp[seq_type + "start"], hsp[seq_type + "end"] = (
+                hsp[seq_type + "end"],
+                hsp[seq_type + "start"],
+            )
             if seq_type == "query_":
                 qstarts, qends = qends, qstarts
             else:
@@ -170,7 +176,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
     """Indexer class for exonerate vulgar lines."""
 
     _parser = ExonerateVulgarParser
-    _query_mark = _as_bytes("vulgar")
+    _query_mark = b"vulgar"
 
     def get_qresult_id(self, pos):
         """Return the query ID of the nearest vulgar line."""
@@ -179,7 +185,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         # get line, check if it's a vulgar line, and get query ID
         line = handle.readline()
         assert line.startswith(self._query_mark), line
-        id = re.search(_RE_VULGAR, _bytes_to_string(line))
+        id = re.search(_RE_VULGAR, line.decode())
         return id.group(1)
 
     def get_raw(self, offset):
@@ -187,7 +193,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
-        qresult_raw = _as_bytes("")
+        qresult_raw = b""
 
         while True:
             line = handle.readline()
@@ -209,4 +215,5 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

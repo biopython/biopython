@@ -1,15 +1,13 @@
 # Copyright 2014 Joe Cora.
 # Revisions copyright 2017 Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Objects to represent NEXUS standard data type matrix coding."""
-from __future__ import print_function
-
-import sys
-
-from Bio._py3k import basestring
 
 
 class NexusError(Exception):
@@ -18,7 +16,7 @@ class NexusError(Exception):
     pass
 
 
-class StandardData(object):
+class StandardData:
     """Create a StandardData iterable object.
 
     Each coding specifies t [type] => (std [standard], multi [multistate] or
@@ -31,8 +29,10 @@ class StandardData(object):
         self._current_pos = 0
 
         # Enforce string data requirement
-        if not isinstance(data, basestring):
-            raise NexusError("The coding data given to a StandardData object should be a string")
+        if not isinstance(data, str):
+            raise NexusError(
+                "The coding data given to a StandardData object should be a string"
+            )
 
         # Transfer each coding to a position within a sequence
         multi_coding = False
@@ -68,9 +68,10 @@ class StandardData(object):
                     coding_list["t"] = "uncer"
                     continue
                 elif coding in [")", "}"]:
-                    raise NexusError('Improper character "' + coding +
-                                     '" at position ' + pos +
-                                     " of a coding sequence.")
+                    raise NexusError(
+                        "Improper character %s at position %i of a coding sequence."
+                        % (coding, pos)
+                    )
                 else:
                     coding_list["d"].append(coding)
 
@@ -96,15 +97,10 @@ class StandardData(object):
             return_coding = self._data[self._current_pos]
         except IndexError:
             self._current_pos = 0
-            raise StopIteration
+            raise StopIteration from None
         else:
             self._current_pos += 1
             return return_coding
-
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
 
     def raw(self):
         """Return the full coding as a python list."""

@@ -8,7 +8,7 @@ import math
 # Cephes Math Library Release 2.0:  April, 1987
 # Copyright 1985, 1987 by Stephen L. Moshier
 # Direct inquiries to 30 Frost Street, Cambridge, MA 02140
-MACHEP = 0.0000001     # the machine roundoff error / tolerance
+MACHEP = 0.0000001  # the machine roundoff error / tolerance
 BIG = 4.503599627370496e15
 BIGINV = 2.22044604925031308085e-16
 

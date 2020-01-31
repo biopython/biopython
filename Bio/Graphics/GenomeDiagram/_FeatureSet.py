@@ -24,7 +24,6 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-from __future__ import print_function
 
 # GenomeDiagram
 from ._Feature import Feature
@@ -33,7 +32,7 @@ from ._Feature import Feature
 import re
 
 
-class FeatureSet(object):
+class FeatureSet:
     """FeatureSet object."""
 
     def __init__(self, set_id=None, name=None, parent=None):
@@ -97,12 +96,10 @@ class FeatureSet(object):
         Set the passed attribute of all features in the set to the
         passed value.
         """
-        changed = 0
         for feature in self.features.values():
-            # If the feature has the attribute, and the value should change
             if hasattr(feature, attr):
-                if getattr(feature, attr) != value:
-                    setattr(feature, attr, value)  # set it to the passed value
+                # If the feature has the attribute, set it to the passed value
+                setattr(feature, attr, value)
 
         # For backwards compatibility, we support both colour and color.
         # As a quick hack, make "colour" set both "colour" and "color".

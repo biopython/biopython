@@ -88,11 +88,7 @@ if sqlite3:
                               "mm9.chr10")
 
         def test_old_file_not_found(self):
-            # TODO: Switch to FileNotFoundError once we drop Python 2 support
-            # Under Python 2, we expect IOError.
-            # Under Python 3, we expect FileNotFoundError which is a subclass
-            # of OSError, and that has IOError as an alias so this works.
-            self.assertRaises(IOError,
+            self.assertRaises(FileNotFoundError,
                               MafIndex,
                               "MAF/ucsc_mm9_chr11.mafindex",
                               "MAF/ucsc_mm9_chr11.maf",
@@ -139,11 +135,11 @@ if sqlite3:
 
         def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
-            self.assertEquals(len(idx), 48)
+            self.assertEqual(len(idx), 48)
 
         def test_good_big(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
-            self.assertEquals(len(idx), 983)
+            self.assertEqual(len(idx), 983)
 
         def test_bundle_without_target(self):
             self.assertRaises(ValueError,
@@ -288,7 +284,7 @@ if sqlite3:
         def test_correct_retrieval_1(self):
             """Correct retrieval of Cnksr3 in mouse."""
             search = self.idx.search((3014742, 3018161), (3015028, 3018644))
-            results = [x for x in search]
+            results = list(search)
 
             self.assertEqual(len(results), 4 + 4)
 
@@ -310,7 +306,7 @@ if sqlite3:
 
         def test_correct_retrieval_2(self):
             search = self.idx.search((3009319, 3021421), (3012566, 3021536))
-            results = [x for x in search]
+            results = list(search)
 
             self.assertEqual(len(results), 6)
 
@@ -335,7 +331,7 @@ if sqlite3:
             https://github.com/biopython/biopython/issues/1083
             """
             search = self.idx.search((3012076, 3012076 + 300), (3012076 + 100, 3012076 + 400))
-            results = [x for x in search]
+            results = list(search)
 
             self.assertEqual(len(results), 2)
 

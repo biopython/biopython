@@ -30,7 +30,6 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 """
 
-from __future__ import print_function
 
 import warnings
 from datetime import datetime
@@ -41,10 +40,6 @@ from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
-
-from Bio._py3k import _is_int_or_long
-from Bio._py3k import basestring
-
 
 # NOTE
 # ====
@@ -347,7 +342,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         # self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
             # Try to mimic unwritten rules about when quotes can be left out:
-            if _is_int_or_long(value) or key in self.FTQUAL_NO_QUOTE:
+            if isinstance(value, int) or key in self.FTQUAL_NO_QUOTE:
                 quote = False
             else:
                 quote = True
@@ -562,7 +557,7 @@ class GenBankWriter(_InsdcWriter):
             "NOV",
             "DEC",
         ]
-        if not isinstance(date, basestring) or len(date) != 11:
+        if not isinstance(date, str) or len(date) != 11:
             return default
         try:
             datetime(int(date[-4:]), months.index(date[3:6]) + 1, int(date[0:2]))
@@ -596,6 +591,7 @@ class GenBankWriter(_InsdcWriter):
             "HTC",
             "ENV",
             "CON",
+            "TSA",
         ]:
             # Good, already GenBank style
             #    PRI - primate sequences
@@ -617,6 +613,7 @@ class GenBankWriter(_InsdcWriter):
             #    HTC - HTC sequences (high throughput cDNA sequences)
             #    ENV - Environmental sampling sequences
             #    CON - Constructed sequences
+            #    TSA - Transcriptome Shotgun Assembly
             #
             # (plus UNK for unknown)
             pass
@@ -688,12 +685,7 @@ class GenBankWriter(_InsdcWriter):
                 )
 
         if len(locus.split()) > 1:
-            # locus could be unicode, and u'with space' versus 'with space'
-            # causes trouble with doctests, so
-            tmp = repr(locus)
-            if tmp.startswith("u'") and tmp.endswith("'"):
-                tmp = tmp[1:]
-            raise ValueError("Invalid whitespace in %s for LOCUS line" % tmp)
+            raise ValueError("Invalid whitespace in %r for LOCUS line" % locus)
         if len(record) > 99999999999:
             # As of the GenBank release notes 229.0, the locus line can be
             # any length. However, long locus lines may not be compatible
@@ -823,7 +815,7 @@ class GenBankWriter(_InsdcWriter):
                 )
             if line[54:55] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 55:\n" + line
+                    "LOCUS line does not contain space at position 55:\n" + line
                 )
             if line[55:63].strip() not in ["", "linear", "circular"]:
                 raise ValueError(
@@ -832,19 +824,19 @@ class GenBankWriter(_InsdcWriter):
                 )
             if line[63:64] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 64:\n" + line
+                    "LOCUS line does not contain space at position 64:\n" + line
                 )
             if line[67:68] != " ":
                 raise ValueError(
-                    "LOCUS line does not contain space at " "position 68:\n" + line
+                    "LOCUS line does not contain space at position 68:\n" + line
                 )
             if line[70:71] != "-":
                 raise ValueError(
-                    "LOCUS line does not contain - at " "position 71 in date:\n" + line
+                    "LOCUS line does not contain - at position 71 in date:\n" + line
                 )
             if line[74:75] != "-":
                 raise ValueError(
-                    "LOCUS line does not contain - at " "position 75 in date:\n" + line
+                    "LOCUS line does not contain - at position 75 in date:\n" + line
                 )
 
             self.handle.write(line)
@@ -910,18 +902,16 @@ class GenBankWriter(_InsdcWriter):
                     padding = len(subkey) if len(subkey) > padding else padding
             # Construct output
             for key, data in comment.items():
-                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_START))
+                lines.append(f"##{key}{self.STRUCTURED_COMMENT_START}")
                 for subkey, subdata in data.items():
                     spaces = " " * (padding - len(subkey))
                     lines.append(
-                        "{0}{1}{2}{3}".format(
-                            subkey, spaces, self.STRUCTURED_COMMENT_DELIM, subdata
-                        )
+                        f"{subkey}{spaces}{self.STRUCTURED_COMMENT_DELIM}{subdata}"
                     )
-                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
+                lines.append(f"##{key}{self.STRUCTURED_COMMENT_END}")
         if "comment" in record.annotations:
             comment = record.annotations["comment"]
-            if isinstance(comment, basestring):
+            if isinstance(comment, str):
                 lines += comment.split("\n")
             elif isinstance(comment, (list, tuple)):
                 lines += list(comment)
@@ -1150,7 +1140,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write((" %s" % data[index : index + self.LETTERS_PER_BLOCK]))
+                handle.write(" %s" % data[index : index + self.LETTERS_PER_BLOCK])
             handle.write(
                 str((line_number + 1) * self.LETTERS_PER_LINE).rjust(
                     self.POSITION_PADDING
@@ -1365,7 +1355,7 @@ class EmblWriter(_InsdcWriter):
         # A single (long) string is perhaps the most natural of all.
         # This means we may need to deal with line wrapping.
         comment = record.annotations["comment"]
-        if isinstance(comment, basestring):
+        if isinstance(comment, str):
             lines = comment.split("\n")
         elif isinstance(comment, (list, tuple)):
             lines = comment

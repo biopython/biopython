@@ -18,7 +18,6 @@ loaded dice is .05 and the probability of switching from loaded to fair is
 .1.
 """
 
-from __future__ import print_function
 
 # standard modules
 import os

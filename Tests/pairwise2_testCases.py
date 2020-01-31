@@ -77,6 +77,22 @@ class TestPairwiseErrorConditions(unittest.TestCase):
             self.assertIn("should not", str(w[-1].message))
 
 
+class TestPairwiseKeywordUsage(unittest.TestCase):
+    """Tests for keyword usage."""
+
+    def test_keywords(self):
+        """Test equality of calls with and without keywords."""
+        aligns = pairwise2.align.globalxx("GAACT", "GAT")
+        aligns_kw = pairwise2.align.globalxx(sequenceA="GAACT", sequenceB="GAT")
+        self.assertEqual(aligns, aligns_kw)
+
+        aligns = pairwise2.align.globalmx("GAACT", "GAT", 5, -4)
+        aligns_kw = pairwise2.align.globalmx(sequenceA="GAACT",
+                                             sequenceB="GAT",
+                                             match=5, mismatch=-4)
+        self.assertEqual(aligns, aligns_kw)
+
+
 class TestPairwiseGlobal(unittest.TestCase):
     """Test some usual global alignments."""
 
@@ -767,11 +783,7 @@ class TestOtherFunctions(unittest.TestCase):
     def test_print_matrix(self):
         """``print_matrix`` prints nested lists as nice matrices."""
         import sys
-
-        try:  # Python 2
-            from StringIO import StringIO
-        except ImportError:  # Python 3
-            from io import StringIO
+        from io import StringIO
         out = StringIO()
         sys.stdout = out
         pairwise2.print_matrix([[0.0, -1.0, -1.5, -2.0], [-1.0, 4.0, 3.0, 2.5],

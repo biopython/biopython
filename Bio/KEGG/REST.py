@@ -1,9 +1,11 @@
 # Copyright 2014 by Kevin Wu.
 # Revisions copyright 2014 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Provides code to access the REST-style KEGG online API.
 
@@ -27,8 +29,8 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 """
 
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import _binary_to_string_handle
+import io
+from urllib.request import urlopen
 
 
 def _q(op, arg1, arg2=None, arg3=None):
@@ -39,12 +41,14 @@ def _q(op, arg1, arg2=None, arg3=None):
         args = "%s/%s/%s" % (op, arg1, arg2)
     else:
         args = "%s/%s" % (op, arg1)
-    resp = _urlopen(URL % (args))
+    resp = urlopen(URL % (args))
 
     if "image" == arg2:
         return resp
 
-    return _binary_to_string_handle(resp)
+    handle = io.TextIOWrapper(resp, encoding="UTF-8")
+    handle.url = resp.url
+    return handle
 
 
 # http://www.kegg.jp/kegg/rest/keggapi.html
@@ -90,10 +94,10 @@ def kegg_list(database, org=None):
     #
     #  <database> = pathway | module
     #  <org> = KEGG organism code
-    if isinstance(database, str) and (database in ["pathway", "module"]) and org:
+    if database in ("pathway", "module") and org:
         resp = _q("list", database, org)
     elif isinstance(database, str) and database and org:
-        raise Exception("Invalid database arg for kegg list request.")
+        raise ValueError("Invalid database arg for kegg list request.")
 
     # http://rest.kegg.jp/list/<database>
     #
@@ -111,10 +115,12 @@ def kegg_list(database, org=None):
     #              rpair | rclass | enzyme
     # <org> = KEGG organism code or T number
     else:
-        if isinstance(database, list) and len(database) <= 100:
+        if isinstance(database, list):
+            if len(database) > 100:
+                raise ValueError(
+                    "Maximum number of databases is 100 for kegg list query"
+                )
             database = ("+").join(database)
-        elif isinstance(database, list) and len(database) > 100:
-            raise Exception("Maximuim number of databases is 100 for kegg list query")
         resp = _q("list", database)
 
     return resp
@@ -144,10 +150,14 @@ def kegg_find(database, query, option=None):
     #
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
-    if (database in ["compound", "drug"] and option in ["formula", "exact_mass", "mol_weight"]):
+    if database in ["compound", "drug"] and option in [
+        "formula",
+        "exact_mass",
+        "mol_weight",
+    ]:
         resp = _q("find", database, query, option)
     elif option:
-        raise Exception("Invalid option arg for kegg find request.")
+        raise ValueError("Invalid option arg for kegg find request.")
 
     # http://rest.kegg.jp/find/<database>/<query>
     #
@@ -178,7 +188,7 @@ def kegg_get(dbentries, option=None):
     if isinstance(dbentries, list) and len(dbentries) <= 10:
         dbentries = "+".join(dbentries)
     elif isinstance(dbentries, list) and len(dbentries) > 10:
-        raise Exception("Maximum number of dbentries is 10 for kegg get query")
+        raise ValueError("Maximum number of dbentries is 10 for kegg get query")
 
     # http://rest.kegg.jp/get/<dbentries>[/<option>]
     #
@@ -192,7 +202,7 @@ def kegg_get(dbentries, option=None):
     if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml"]:
         resp = _q("get", dbentries, option)
     elif option:
-        raise Exception("Invalid option arg for kegg get request.")
+        raise ValueError("Invalid option arg for kegg get request.")
     else:
         resp = _q("get", dbentries)
 
@@ -206,6 +216,7 @@ def kegg_conv(target_db, source_db, option=None):
      - target_db - Target database
      - source_db_or_dbentries - source database or database entries
      - option - Can be "turtle" or "n-triple" (string).
+
     """
     # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #
@@ -236,17 +247,23 @@ def kegg_conv(target_db, source_db, option=None):
     #
     # <option> = turtle | n-triple
     if option and option not in ["turtle", "n-triple"]:
-        raise Exception("Invalid option arg for kegg conv request.")
+        raise ValueError("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
 
-    if target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       (target_db in ["drug", "compound", "glycan"] and
-           source_db in ["pubchem", "glycan"]) or \
-       (target_db in ["pubchem", "glycan"] and
-           source_db in ["drug", "compound", "glycan"]):
+    if (
+        target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        or source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        or (
+            target_db in ["drug", "compound", "glycan"]
+            and source_db in ["pubchem", "glycan"]
+        )
+        or (
+            target_db in ["pubchem", "glycan"]
+            and source_db in ["drug", "compound", "glycan"]
+        )
+    ):
 
         if option:
             resp = _q("conv", target_db, source_db, option)
@@ -255,7 +272,7 @@ def kegg_conv(target_db, source_db, option=None):
 
         return resp
     else:
-        raise Exception("Bad argument target_db or source_db for kegg conv request.")
+        raise ValueError("Bad argument target_db or source_db for kegg conv request.")
 
 
 def kegg_link(target_db, source_db, option=None):
@@ -285,7 +302,7 @@ def kegg_link(target_db, source_db, option=None):
     # <option> = turtle | n-triple
 
     if option and option not in ["turtle", "n-triple"]:
-        raise Exception("Invalid option arg for kegg conv request.")
+        raise ValueError("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)

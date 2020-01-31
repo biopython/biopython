@@ -8,7 +8,6 @@
 """Tests for general functionality of the KGML parser and pathway model."""
 
 # Builtins
-from __future__ import with_statement
 import os
 import unittest
 import tempfile
@@ -17,7 +16,7 @@ import tempfile
 from Bio.KEGG.KGML.KGML_parser import read
 
 
-class PathwayData(object):
+class PathwayData:
     """Convenience structure for testing pathway data."""
 
     def __init__(self, infilename, outfilename, element_counts,
@@ -84,7 +83,7 @@ class KGMLPathwayTest(unittest.TestCase):
         """
         for p in self.data:
             # Test opening file
-            with open(p.infilename, "rU") as f:
+            with open(p.infilename) as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
                 self.assertEqual((len(pathway.entries),
@@ -96,7 +95,7 @@ class KGMLPathwayTest(unittest.TestCase):
             with open(p.outfilename, "w") as f:
                 f.write(pathway.get_KGML())
             # Can we read the file we wrote?
-            with open(p.outfilename, "rU") as f:
+            with open(p.outfilename) as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
                 self.assertEqual((len(pathway.entries),

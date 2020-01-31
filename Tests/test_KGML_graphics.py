@@ -8,7 +8,6 @@
 """Tests for general functionality of the KGML modules."""
 
 # Builtins
-from __future__ import with_statement
 import os
 import unittest
 
@@ -51,7 +50,7 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 
 # The PathwayData class is also imported by the online test module in
 # test_KGML_graphics_online.py
-class PathwayData(object):
+class PathwayData:
     """Convenience structure for testing pathway data."""
 
     def __init__(self, name, element_counts, show_pathway_image=False):
@@ -109,7 +108,7 @@ class KGMLPathwayTest(unittest.TestCase):
         # We test rendering of the original KEGG KGML using only local
         # files.
         for p in self.data:
-            with open(p.infilename, "rU") as f:
+            with open(p.infilename) as f:
                 pathway = read(f)
                 pathway.image = p.pathway_image
                 kgml_map = KGMLCanvas(pathway)
@@ -134,7 +133,7 @@ class KGMLPathwayTest(unittest.TestCase):
         # modifying the reaction colours for each ortholog entry
         with open(p[1].infilename) as f:
             pathway = read(f)
-            orthologs = [e for e in pathway.orthologs]
+            orthologs = list(pathway.orthologs)
             # Use Biopython's ColorSpiral to generate colours
             cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
                              jitter=0.03)
@@ -168,7 +167,7 @@ class KGMLPathwayTest(unittest.TestCase):
         # modifying the alpha channel for each ortholog entry
         with open(p[1].infilename) as f:
             pathway = read(f)
-            orthologs = [e for e in pathway.orthologs]
+            orthologs = list(pathway.orthologs)
             # Use Biopython's ColorSpiral to generate colours
             cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
                              jitter=0.03)

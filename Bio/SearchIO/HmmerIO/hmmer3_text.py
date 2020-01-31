@@ -7,9 +7,8 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
+from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
@@ -34,7 +33,7 @@ _HRE_ANNOT_LINE = re.compile(r"^(\s+)(.+)\s(\w+)")
 _HRE_ID_LINE = re.compile(r"^(\s+\S+\s+[0-9-]+ )(.+?)(\s+[0-9-]+)")
 
 
-class Hmmer3TextParser(object):
+class Hmmer3TextParser:
     """Parser for the HMMER 3.0 text output."""
 
     def __init__(self, handle):
@@ -45,8 +44,7 @@ class Hmmer3TextParser(object):
 
     def __iter__(self):
         """Iterate over query results."""
-        for qresult in self._parse_qresult():
-            yield qresult
+        yield from self._parse_qresult()
 
     def _read_until(self, bool_func):
         """Read the file handle until the given function returns True (PRIVATE)."""
@@ -163,8 +161,7 @@ class Hmmer3TextParser(object):
     def _parse_hit(self, qid, qdesc):
         """Parse a HMMER3 hit block, beginning with the hit table (PRIVATE)."""
         # get to the end of the hit table delimiter and read one more line
-        self._read_until(lambda line:
-                         line.startswith("    ------- ------ -----"))
+        self._read_until(lambda line: line.startswith("    ------- ------ -----"))
         self.line = read_forward(self.handle)
 
         # assume every hit is in inclusion threshold until the inclusion
@@ -181,8 +178,7 @@ class Hmmer3TextParser(object):
                 self.line = read_forward(self.handle)
             # if there are no hits, then there are no hsps
             # so we forward-read until 'Internal pipeline..'
-            elif self.line.startswith("   [No hits detected that satisfy "
-                                      "reporting"):
+            elif self.line.startswith("   [No hits detected that satisfy reporting"):
                 while True:
                     self.line = read_forward(self.handle)
                     if self.line.startswith("Internal pipeline"):
@@ -222,8 +218,9 @@ class Hmmer3TextParser(object):
     def _create_hits(self, hit_attrs, qid, qdesc):
         """Parse a HMMER3 hsp block, beginning with the hsp table (PRIVATE)."""
         # read through until the beginning of the hsp block
-        self._read_until(lambda line: line.startswith("Internal pipeline") or
-                         line.startswith(">>"))
+        self._read_until(
+            lambda line: line.startswith("Internal pipeline") or line.startswith(">>")
+        )
 
         # start parsing the hsp block
         hit_list = []
@@ -233,13 +230,14 @@ class Hmmer3TextParser(object):
                 assert len(hit_attrs) == 0
                 return hit_list
             assert self.line.startswith(">>")
-            hid, hdesc = self.line[len(">> "):].split("  ", 1)
+            hid, hdesc = self.line[len(">> ") :].split("  ", 1)
             hdesc = hdesc.strip()
 
             # read through the hsp table header and move one more line
-            self._read_until(lambda line:
-                             line.startswith(" ---   ------ ----- --------") or
-                             line.startswith("   [No individual domains"))
+            self._read_until(
+                lambda line: line.startswith(" ---   ------ ----- --------")
+                or line.startswith("   [No individual domains")
+            )
             self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit
@@ -247,11 +245,13 @@ class Hmmer3TextParser(object):
             while True:
                 # break out of hsp parsing if there are no hits, it's the last hsp
                 # or it's the start of a new hit
-                if self.line.startswith("   [No targets detected that satisfy") or \
-                   self.line.startswith("   [No individual domains") or \
-                   self.line.startswith("Internal pipeline statistics summary:") or \
-                   self.line.startswith("  Alignments for each domain:") or \
-                   self.line.startswith(">>"):
+                if (
+                    self.line.startswith("   [No targets detected that satisfy")
+                    or self.line.startswith("   [No individual domains")
+                    or self.line.startswith("Internal pipeline statistics summary:")
+                    or self.line.startswith("  Alignments for each domain:")
+                    or self.line.startswith(">>")
+                ):
 
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
@@ -331,8 +331,7 @@ class Hmmer3TextParser(object):
         self.line = read_forward(self.handle)
         dom_counter = 0
         while True:
-            if self.line.startswith(">>") or \
-                    self.line.startswith("Internal pipeline"):
+            if self.line.startswith(">>") or self.line.startswith("Internal pipeline"):
                 return hsp_list
             assert self.line.startswith("  == domain %i" % (dom_counter + 1))
             # alias hsp to local var
@@ -367,9 +366,11 @@ class Hmmer3TextParser(object):
                         aliseq += regx.group(2)
                     assert len(hmmseq) >= len(aliseq)
                 # check for start of new domain
-                elif self.line.startswith("  == domain") or \
-                        self.line.startswith(">>") or \
-                        self.line.startswith("Internal pipeline"):
+                elif (
+                    self.line.startswith("  == domain")
+                    or self.line.startswith(">>")
+                    or self.line.startswith("Internal pipeline")
+                ):
                     frag.aln_annotation = annot
                     if self._meta.get("program") == "hmmscan":
                         frag.hit = hmmseq
@@ -402,15 +403,15 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     """Indexer class for HMMER plain text output."""
 
     _parser = Hmmer3TextParser
-    qresult_start = _as_bytes("Query: ")
-    qresult_end = _as_bytes("//")
+    qresult_start = b"Query: "
+    qresult_end = b"//"
 
     def __iter__(self):
         """Iterate over Hmmer3TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(_QRE_ID_LEN_PTN))
+        regex_id = re.compile(_QRE_ID_LEN_PTN.encode())
 
         while True:
             line = read_forward(handle)
@@ -423,7 +424,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
+                yield qresult_key.decode(), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 break
@@ -432,4 +433,5 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

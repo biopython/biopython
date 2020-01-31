@@ -7,9 +7,8 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
+from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
@@ -20,7 +19,7 @@ __all__ = ("Hmmer2TextParser", "Hmmer2TextIndexer")
 _HSP_ALIGN_LINE = re.compile(r"(\S+):\s+domain (\d+) of (\d+)")
 
 
-class _HitPlaceholder(object):
+class _HitPlaceholder:
     def createHit(self, hsp_list):
         hit = Hit(hsp_list)
         hit.id_ = self.id_
@@ -32,7 +31,7 @@ class _HitPlaceholder(object):
         return hit
 
 
-class Hmmer2TextParser(object):
+class Hmmer2TextParser:
     """Iterator for the HMMER 2.0 text output."""
 
     def __init__(self, handle):
@@ -145,9 +144,11 @@ class Hmmer2TextParser(object):
             if self.line.find("no hits") > -1:
                 break
 
-            if self.line.startswith("Sequence") or \
-               self.line.startswith("Model") or \
-               self.line.startswith("-------- "):
+            if (
+                self.line.startswith("Sequence")
+                or self.line.startswith("Model")
+                or self.line.startswith("-------- ")
+            ):
                 continue
 
             fields = self.line.split()
@@ -173,17 +174,31 @@ class Hmmer2TextParser(object):
         # so store Hit objects separately first
         unordered_hits = {}
         while self.read_next():
-            if self.line.startswith("Alignments") or \
-               self.line.startswith("Histogram") or \
-               self.line == "//":
+            if (
+                self.line.startswith("Alignments")
+                or self.line.startswith("Histogram")
+                or self.line == "//"
+            ):
                 break
-            if self.line.startswith("Model") or \
-               self.line.startswith("Sequence") or \
-               self.line.startswith("--------"):
+            if (
+                self.line.startswith("Model")
+                or self.line.startswith("Sequence")
+                or self.line.startswith("--------")
+            ):
                 continue
 
-            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl,\
-                score, evalue = self.line.split()
+            (
+                id_,
+                domain,
+                seq_f,
+                seq_t,
+                seq_compl,
+                hmm_f,
+                hmm_t,
+                hmm_compl,
+                score,
+                evalue,
+            ) = self.line.split()
 
             frag = HSPFragment(id_, self.qresult.id)
             frag.alphabet = generic_protein
@@ -271,7 +286,7 @@ class Hmmer2TextParser(object):
                 line_len = len(seq)
                 if not self.read_next(rstrip=False):
                     break
-                consensus += self.line[19 + pad:19 + pad + line_len]
+                consensus += self.line[19 + pad : 19 + pad + line_len]
                 # If there's no consensus sequence, hmmer2 doesn't
                 # bother to put spaces here, so add extra padding
                 extra_padding = len(hmmseq) - len(consensus)
@@ -314,22 +329,22 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
-    qresult_start = _as_bytes("Query")
+    qresult_start = b"Query"
     # qresults_ends for hmmpfam and hmmsearch
     # need to anticipate both since hmmsearch have different query end mark
-    qresult_end = _as_bytes("//")
+    qresult_end = b"//"
 
     def __iter__(self):
         """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(r"Query\s*(?:sequence|HMM)?:\s*(.*)"))
+        regex_id = re.compile(br"Query\s*(?:sequence|HMM)?:\s*(.*)")
 
         # determine flag for hmmsearch
         is_hmmsearch = False
         line = read_forward(handle)
-        if line.startswith(_as_bytes("hmmsearch")):
+        if line.startswith(b"hmmsearch"):
             is_hmmsearch = True
 
         while True:
@@ -342,12 +357,12 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
+                yield qresult_key.decode(), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 # HACK: since hmmsearch can only have one query result
                 if is_hmmsearch:
-                    yield _bytes_to_string(qresult_key), start_offset, 0
+                    yield qresult_key.decode(), start_offset, 0
                 break
 
             line = read_forward(handle)
@@ -356,4 +371,5 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

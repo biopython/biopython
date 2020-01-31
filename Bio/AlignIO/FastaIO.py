@@ -20,7 +20,6 @@ Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
 
-from __future__ import print_function
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -56,8 +55,10 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
 
     end += align_stripped.count("-")
     if start < 0 or start >= end or end > len(align_stripped):
-        raise ValueError("Problem with sequence start/stop,\n%s[%i:%i]\n%s"
-                         % (alignment_seq_with_flanking, start, end, annotation))
+        raise ValueError(
+            "Problem with sequence start/stop,\n%s[%i:%i]\n%s"
+            % (alignment_seq_with_flanking, start, end, annotation)
+        )
     return align_stripped[start:end]
 
 
@@ -105,8 +106,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
 
     def build_hsp():
         if not query_tags and not match_tags:
-            raise ValueError("No data for query %r, match %r"
-                             % (query_id, match_id))
+            raise ValueError("No data for query %r, match %r" % (query_id, match_id))
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect")
@@ -122,17 +122,19 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         else:
             m = _extract_alignment_region(match_seq, match_tags)
         if len(q) != len(m):
-            message = """Darn... amino acids vs nucleotide coordinates?
-            tool: {0}
-            query_seq: {1}
-            query_tags: {2}
-            {3} length: {4}
-            match_seq: {5}
-            match_tags: {6}
-            {7} length: {8}
-            handle.name: {9}
-            """.format(tool, query_seq, query_tags, q, len(q), match_seq, match_tags, m, len(m), handle.name)
-            raise ValueError(message)
+            raise ValueError(
+                f"""\
+Darn... amino acids vs nucleotide coordinates?
+tool: {tool}
+query_seq: {query_seq}
+query_tags: {query_tags}
+{q} length: {len(q)}
+match_seq: {match_seq}
+match_tags: {match_tags}
+{m} length: {len(m)}
+handle.name: {handle.name}
+"""
+            )
 
         assert alphabet is not None
         alignment = MultipleSeqAlignment([], alphabet)
@@ -150,11 +152,13 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
 
         # Query
         # =====
-        record = SeqRecord(Seq(q, alphabet),
-                           id=query_id,
-                           name="query",
-                           description=query_descr,
-                           annotations={"original_length": int(query_tags["sq_len"])})
+        record = SeqRecord(
+            Seq(q, alphabet),
+            id=query_id,
+            name="query",
+            description=query_descr,
+            annotations={"original_length": int(query_tags["sq_len"])},
+        )
         # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_tags["al_start"])
         record._al_stop = int(query_tags["al_stop"])
@@ -174,11 +178,13 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
 
         # Match
         # =====
-        record = SeqRecord(Seq(m, alphabet),
-                           id=match_id,
-                           name="match",
-                           description=match_descr,
-                           annotations={"original_length": int(match_tags["sq_len"])})
+        record = SeqRecord(
+            Seq(m, alphabet),
+            id=match_id,
+            name="match",
+            description=match_descr,
+            annotations={"original_length": int(match_tags["sq_len"])},
+        )
         # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_tags["al_start"])
         record._al_stop = int(match_tags["al_stop"])
@@ -216,7 +222,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                 # query >>><<< marker line.
                 yield build_hsp()
             state = state_NONE
-            query_descr = line[line.find(">>>") + 3:].strip()
+            query_descr = line[line.find(">>>") + 3 :].strip()
             query_id = query_descr.split(None, 1)[0]
             match_id = None
             header_tags = {}
@@ -322,14 +328,16 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             else:
                 import warnings
                 from Bio import BiopythonParserWarning
+
                 # Seen in lalign36, specifically version 36.3.4 Apr, 2011
                 # Fixed in version 36.3.5b Oct, 2011(preload8)
-                warnings.warn("Missing colon in line: %r" % line,
-                              BiopythonParserWarning)
+                warnings.warn(
+                    "Missing colon in line: %r" % line, BiopythonParserWarning
+                )
                 try:
                     key, value = [s.strip() for s in line[2:].split(" ", 1)]
                 except ValueError:
-                    raise ValueError("Bad line: %r" % line)
+                    raise ValueError("Bad line: %r" % line) from None
             if state == state_QUERY_HEADER:
                 header_tags[key] = value
             elif state == state_ALIGN_HEADER:
@@ -352,8 +360,8 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             elif line.startswith(" version "):
                 global_tags["version"] = line[9:].strip()
             elif " compares a " in line:
-                global_tags["tool"] = line[:line.find(" compares a ")].strip()
+                global_tags["tool"] = line[: line.find(" compares a ")].strip()
             elif " searches a " in line:
-                global_tags["tool"] = line[:line.find(" searches a ")].strip()
+                global_tags["tool"] = line[: line.find(" searches a ")].strip()
         else:
             pass

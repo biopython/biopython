@@ -50,7 +50,6 @@ in a residue)::
 
 """
 
-from __future__ import print_function
 
 import os
 import tempfile
@@ -500,15 +499,13 @@ def _get_atom_radius(atom, rtype="united"):
     elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("H"):
         return _atomic_radii[15][typekey]
     else:
-        warnings.warn(
-            "{}:{} not in radii library.".format(at_name, resname), BiopythonWarning
-        )
+        warnings.warn(f"{at_name}:{resname} not in radii library.", BiopythonWarning)
         return 0.01
 
 
 def _read_vertex_array(filename):
     """Read the vertex list into a Numeric array (PRIVATE)."""
-    with open(filename, "r") as fp:
+    with open(filename) as fp:
         vertex_list = []
         for l in fp:
             sl = l.split()
@@ -548,9 +545,7 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
         for atom in atom_list:
             x, y, z = atom.coord
             radius = _get_atom_radius(atom, rtype="united")
-            pdb_to_xyzr.write(
-                "{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}\n".format(x, y, z, radius)
-            )
+            pdb_to_xyzr.write(f"{x:6.3f}\t{y:6.3f}\t{z:6.3f}\t{radius:1.2f}\n")
 
     # make surface
     surface_tmp = tempfile.mktemp()

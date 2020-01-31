@@ -87,7 +87,6 @@ Sequence codes and their meanings:
 
 """
 
-from __future__ import print_function
 
 from Bio.Alphabet import (
     single_letter_alphabet,
@@ -95,6 +94,7 @@ from Bio.Alphabet import (
     generic_dna,
     generic_rna,
 )
+from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
@@ -141,54 +141,57 @@ def PirIterator(handle):
     HLA:HLA01083 length 188
 
     """
-    # Skip any text before the first record (e.g. blank lines, comments)
-    while True:
-        line = handle.readline()
-        if line == "":
-            return  # Premature end of file, or just empty?
-        if line[0] == ">":
-            break
-
-    while True:
-        if line[0] != ">":
-            raise ValueError("Records in PIR files should start with '>' character")
-        pir_type = line[1:3]
-        if pir_type not in _pir_alphabets or line[3] != ";":
-            raise ValueError(
-                "Records should start with '>XX;' where XX is a valid sequence type"
-            )
-        identifier = line[4:].strip()
-        description = handle.readline().strip()
-
-        lines = []
-        line = handle.readline()
+    with as_handle(handle) as handle:
+        # Skip any text before the first record (e.g. blank lines, comments)
         while True:
-            if not line:
-                break
+            line = handle.readline()
+            if line == "":
+                return  # Premature end of file, or just empty?
             if line[0] == ">":
                 break
-            # Remove trailing whitespace, and any internal spaces
-            lines.append(line.rstrip().replace(" ", ""))
+
+        while True:
+            if line[0] != ">":
+                raise ValueError("Records in PIR files should start with '>' character")
+            pir_type = line[1:3]
+            if pir_type not in _pir_alphabets or line[3] != ";":
+                raise ValueError(
+                    "Records should start with '>XX;' where XX is a valid sequence type"
+                )
+            identifier = line[4:].strip()
+            description = handle.readline().strip()
+
+            lines = []
             line = handle.readline()
-        seq = "".join(lines)
-        if seq[-1] != "*":
-            # Note the * terminator is present on nucleotide sequences too,
-            # it is not a stop codon!
-            raise ValueError("Sequences in PIR files should include a * terminator!")
+            while True:
+                if not line:
+                    break
+                if line[0] == ">":
+                    break
+                # Remove trailing whitespace, and any internal spaces
+                lines.append(line.rstrip().replace(" ", ""))
+                line = handle.readline()
+            seq = "".join(lines)
+            if seq[-1] != "*":
+                # Note the * terminator is present on nucleotide sequences too,
+                # it is not a stop codon!
+                raise ValueError(
+                    "Sequences in PIR files should include a * terminator!"
+                )
 
-        # Return the record and then continue...
-        record = SeqRecord(
-            Seq(seq[:-1], _pir_alphabets[pir_type]),
-            id=identifier,
-            name=identifier,
-            description=description,
-        )
-        record.annotations["PIR-type"] = pir_type
-        yield record
+            # Return the record and then continue...
+            record = SeqRecord(
+                Seq(seq[:-1], _pir_alphabets[pir_type]),
+                id=identifier,
+                name=identifier,
+                description=description,
+            )
+            record.annotations["PIR-type"] = pir_type
+            yield record
 
-        if not line:
-            return  # StopIteration
-    raise ValueError("Unrecognised PIR record format.")
+            if not line:
+                return  # StopIteration
+        raise ValueError("Unrecognised PIR record format.")
 
 
 class PirWriter(SequentialSequenceWriter):

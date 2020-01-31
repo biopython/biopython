@@ -36,9 +36,9 @@ def read(handle):
         __read_scores(record, line)
     except StopIteration:
         if not record:
-            raise ValueError("No record found in handle")
+            raise ValueError("No record found in handle") from None
         else:
-            raise ValueError("Unexpected end of stream.")
+            raise ValueError("Unexpected end of stream.") from None
     for line in handle:
         if not line.strip():  # skip empty lines
             continue
@@ -49,7 +49,7 @@ def read(handle):
             line = next(handle)
             __read_hit_alignment(record, line)
         except StopIteration:
-            raise ValueError("Unexpected end of stream.")
+            raise ValueError("Unexpected end of stream.") from None
     return record
 
 
@@ -73,7 +73,7 @@ def parse(handle):
             line = next(handle)
             __read_scores(record, line)
         except StopIteration:
-            raise ValueError("Unexpected end of stream.")
+            raise ValueError("Unexpected end of stream.") from None
         for line in handle:
             if not line.strip():
                 continue
@@ -87,13 +87,13 @@ def parse(handle):
                 line = next(handle)
                 __read_hit_alignment(record, line)
             except StopIteration:
-                raise ValueError("Unexpected end of stream.")
+                raise ValueError("Unexpected end of stream.") from None
         else:
             yield record
             break
 
 
-class Record(object):
+class Record:
     """Hold information from one compass hit.
 
     Ali1 is the query, Ali2 the hit.
@@ -133,19 +133,21 @@ class Record(object):
 
 # Everything below is private
 
-__regex = {"names": re.compile(r"Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
-           "threshold": re.compile(r"Threshold of effective gap content in "
-                                   r"columns: (\S+)"),
-           "lengths": re.compile(r"length1=(\S+)\s+filtered_length1=(\S+)"
-                                 r"\s+length2=(\S+)\s+filtered_length2=(\S+)"),
-           "profilewidth": re.compile(r"Nseqs1=(\S+)\s+Neff1=(\S+)\s+Nseqs2="
-                                      r"(\S+)\s+Neff2=(\S+)"),
-           "scores": re.compile(r"Smith-Waterman score = (\S+)\s+Evalue = "
-                                r"(\S+)"),
-           "start": re.compile(r"(\d+)"),
-           "align": re.compile(r"^.{15}(\S+)"),
-           "positive_alignment": re.compile(r"^.{15}(.+)"),
-           }
+__regex = {
+    "names": re.compile(r"Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
+    "threshold": re.compile(r"Threshold of effective gap content in columns: (\S+)"),
+    "lengths": re.compile(
+        r"length1=(\S+)\s+filtered_length1=(\S+)"
+        r"\s+length2=(\S+)\s+filtered_length2=(\S+)"
+    ),
+    "profilewidth": re.compile(
+        r"Nseqs1=(\S+)\s+Neff1=(\S+)\s+Nseqs2=(\S+)\s+Neff2=(\S+)"
+    ),
+    "scores": re.compile(r"Smith-Waterman score = (\S+)\s+Evalue = (\S+)"),
+    "start": re.compile(r"(\d+)"),
+    "align": re.compile(r"^.{15}(\S+)"),
+    "positive_alignment": re.compile(r"^.{15}(.+)"),
+}
 
 
 def __read_names(record, line):
@@ -187,8 +189,7 @@ def __read_profilewidth(record, line):
 
 def __read_scores(record, line):
     if not line.startswith("Smith-Waterman"):
-        raise ValueError("Line does not start with 'Smith-Waterman':\n%s"
-                         % line)
+        raise ValueError("Line does not start with 'Smith-Waterman':\n%s" % line)
     m = __regex["scores"].search(line)
     if m:
         record.sw_score = int(m.group(1))

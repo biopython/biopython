@@ -5,7 +5,6 @@
 
 """Output of PDB files."""
 
-from Bio._py3k import basestring
 
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
@@ -17,9 +16,12 @@ from Bio.Data.IUPACData import atom_weights
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 )
+_PQR_ATOM_FORMAT_STRING = (
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
+)
 
 
-class Select(object):
+class Select:
     """Select everything for PDB output (for use as a base class).
 
     Default selection (everything) during writing - can be used as base class
@@ -50,7 +52,7 @@ class Select(object):
 _select = Select()
 
 
-class StructureIO(object):
+class StructureIO:
     """Base class to derive structure file format writers from."""
 
     def __init__(self):
@@ -98,7 +100,7 @@ class StructureIO(object):
 
 
 class PDBIO(StructureIO):
-    """Write a Structure object (or a subset of a Structure object) as a PDB file.
+    """Write a Structure object (or a subset of a Structure object) as a PDB or PQR file.
 
     Examples
     --------
@@ -115,15 +117,18 @@ class PDBIO(StructureIO):
 
     """
 
-    def __init__(self, use_model_flag=0):
+    def __init__(self, use_model_flag=0, is_pqr=False):
         """Create the PDBIO object.
 
         :param use_model_flag: if 1, force use of the MODEL record in output.
         :type use_model_flag: int
+        :param is_pqr: if True, build PQR file. Otherwise build PDB file.
+        :type is_pqr: Boolean
         """
         self.use_model_flag = use_model_flag
+        self.is_pqr = is_pqr
 
-    # private mathods
+    # private methods
 
     def _get_atom_line(
         self,
@@ -161,45 +166,113 @@ class PDBIO(StructureIO):
 
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
-        bfactor = atom.get_bfactor()
-        occupancy = atom.get_occupancy()
-        try:
-            occupancy_str = "%6.2f" % occupancy
-        except TypeError:
-            if occupancy is None:
-                occupancy_str = " " * 6
-                import warnings
-                from Bio import BiopythonWarning
 
-                warnings.warn(
-                    "Missing occupancy in atom %s written as blank"
-                    % repr(atom.get_full_id()),
-                    BiopythonWarning,
-                )
-            else:
-                raise TypeError(
-                    "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
-                )
+        # PDB Arguments
+        if not self.is_pqr:
+            bfactor = atom.get_bfactor()
+            occupancy = atom.get_occupancy()
 
-        args = (
-            record_type,
-            atom_number,
-            name,
-            altloc,
-            resname,
-            chain_id,
-            resseq,
-            icode,
-            x,
-            y,
-            z,
-            occupancy_str,
-            bfactor,
-            segid,
-            element,
-            charge,
-        )
-        return _ATOM_FORMAT_STRING % args
+        # PQR Arguments
+        else:
+            radius = atom.get_radius()
+            pqr_charge = atom.get_charge()
+
+        if not self.is_pqr:
+            try:
+                occupancy_str = "%6.2f" % occupancy
+            except TypeError:
+                if occupancy is None:
+                    occupancy_str = " " * 6
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing occupancy in atom %s written as blank"
+                        % repr(atom.get_full_id()),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid occupancy %r in atom %r"
+                        % (occupancy, atom.get_full_id())
+                    ) from None
+
+            args = (
+                record_type,
+                atom_number,
+                name,
+                altloc,
+                resname,
+                chain_id,
+                resseq,
+                icode,
+                x,
+                y,
+                z,
+                occupancy_str,
+                bfactor,
+                segid,
+                element,
+                charge,
+            )
+            return _ATOM_FORMAT_STRING % args
+
+        else:
+            # PQR case
+            try:
+                pqr_charge = "%7.4f" % pqr_charge
+            except TypeError:
+                if pqr_charge is None:
+                    pqr_charge = " " * 7
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing charge in atom %s written as blank"
+                        % repr(atom.get_full_id()),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid charge %r in atom %r"
+                        % (pqr_charge, atom.get_full_id())
+                    ) from None
+            try:
+                radius = "%6.4f" % radius
+            except TypeError:
+                if radius is None:
+                    radius = " " * 6
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing radius in atom %s written as blank"
+                        % repr(atom.get_full_id()),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid radius %r in atom %r" % (radius, atom.get_full_id())
+                    ) from None
+
+            args = (
+                record_type,
+                atom_number,
+                name,
+                altloc,
+                resname,
+                chain_id,
+                resseq,
+                icode,
+                x,
+                y,
+                z,
+                pqr_charge,
+                radius,
+                element,
+            )
+
+            return _PQR_ATOM_FORMAT_STRING % args
 
     # Public methods
 
@@ -226,7 +299,7 @@ class PDBIO(StructureIO):
         Typically select is a subclass of L{Select}.
         """
         get_atom_line = self._get_atom_line
-        if isinstance(file, basestring):
+        if isinstance(file, str):
             fp = open(file, "w")
             close_file = 1
         else:

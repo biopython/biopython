@@ -21,7 +21,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
-class StructureBuilder(object):
+class StructureBuilder:
     """Deals with constructing the Structure object.
 
     The StructureBuilder class is used by the PDBParser classes to
@@ -186,6 +186,9 @@ class StructureBuilder(object):
         fullname,
         serial_number=None,
         element=None,
+        pqr_charge=None,
+        radius=None,
+        is_pqr=False,
     ):
         """Create a new Atom object.
 
@@ -197,6 +200,9 @@ class StructureBuilder(object):
          - altloc - string, alternative location specifier
          - fullname - string, atom name including spaces, e.g. " CA "
          - element - string, upper case, e.g. "HG" for mercury
+         - pqr_charge - float, atom charge (PQR format)
+         - radius - float, atom radius (PQR format)
+         - is_pqr - boolean, flag to specify if a .pqr file is being parsed
 
         """
         residue = self.residue
@@ -221,9 +227,30 @@ class StructureBuilder(object):
                     % (duplicate_fullname, fullname, self.line_counter),
                     PDBConstructionWarning,
                 )
-        self.atom = Atom(
-            name, coord, b_factor, occupancy, altloc, fullname, serial_number, element
-        )
+        if not is_pqr:
+            self.atom = Atom(
+                name,
+                coord,
+                b_factor,
+                occupancy,
+                altloc,
+                fullname,
+                serial_number,
+                element,
+            )
+        elif is_pqr:
+            self.atom = Atom(
+                name,
+                coord,
+                None,
+                None,
+                altloc,
+                fullname,
+                serial_number,
+                element,
+                pqr_charge,
+                radius,
+            )
         if altloc != " ":
             # The atom is disordered
             if residue.has_id(name):

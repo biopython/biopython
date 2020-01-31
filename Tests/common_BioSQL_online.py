@@ -2,7 +2,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Test storing biopython objects in a BioSQL relational db."""
-from __future__ import print_function
 
 import os
 import platform
@@ -10,9 +9,7 @@ import unittest
 import tempfile
 import time
 
-from Bio._py3k import StringIO
-from Bio._py3k import zip
-from Bio._py3k import basestring
+from io import StringIO
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!

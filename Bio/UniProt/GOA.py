@@ -21,11 +21,8 @@ gp_information (GPI format) README:
 http://geneontology.org/docs/gene-product-information-gpi-format/
 """
 
-from __future__ import print_function
 
 import copy
-
-from Bio._py3k import zip
 
 # GAF: GO Annotation Format
 #
@@ -187,7 +184,7 @@ def gpi_iterator(handle):
         # return _gpi20iterator(handle)
         raise NotImplementedError("Sorry, parsing GPI version 2 not implemented yet.")
     else:
-        raise ValueError("Unknown GPI version {0}\n".format(inline))
+        raise ValueError(f"Unknown GPI version {inline}\n")
 
 
 def _gpa10iterator(handle):
@@ -245,7 +242,7 @@ def gpa_iterator(handle):
         # sys.stderr.write("gpa 1.0\n")
         return _gpa10iterator(handle)
     else:
-        raise ValueError("Unknown GPA version {0}\n".format(inline))
+        raise ValueError(f"Unknown GPA version {inline}\n")
 
 
 def _gaf20iterator(handle):
@@ -350,7 +347,7 @@ def gafbyproteiniterator(handle):
         # sys.stderr.write("gaf 2.1\n")
         return _gaf20byproteiniterator(handle)
     else:
-        raise ValueError("Unknown GAF version {0}\n".format(inline))
+        raise ValueError(f"Unknown GAF version {inline}\n")
 
 
 def gafiterator(handle):
@@ -402,7 +399,7 @@ def gafiterator(handle):
         # sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
     else:
-        raise ValueError("Unknown GAF version {0}\n".format(inline))
+        raise ValueError(f"Unknown GAF version {inline}\n")
 
 
 def writerec(outrec, handle, fields=GAF20FIELDS):
@@ -421,7 +418,7 @@ def writerec(outrec, handle, fields=GAF20FIELDS):
         else:
             outstr += outrec[field] + "\t"
     outstr += outrec[fields[-1]] + "\n"
-    handle.write("%s" % outstr)
+    handle.write(outstr)
 
 
 def writebyproteinrec(outprotrec, handle, fields=GAF20FIELDS):

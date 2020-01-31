@@ -221,7 +221,7 @@ class TestUniprot(unittest.TestCase):
                           "muscle system."])
         self.assertEqual(seq_record.annotations["comment_induction"],
                          ["Repressed in presence of fatty acids. Repressed "
-                          "3-fold by ""lipid precursors, inositol and "
+                          "3-fold by lipid precursors, inositol and "
                           "choline, and also controlled by regulatory "
                           "factors INO2, INO4 and OPI1."])
         self.assertEqual(seq_record.annotations["comment_interaction_intactId"],
@@ -383,7 +383,7 @@ class TestUniprot(unittest.TestCase):
 
     def test_F2CXE6(self):
         """Compare SwissProt text and uniprot XML versions of F2CXE6."""
-        # This evil record has a semi-colon in the genem name,
+        # This evil record has a semi-colon in the gene name,
         # GN   Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};
         # <gene><name type="primary" evidence="3">HvPIP2;8</name></gene>
         old = SeqIO.read("SwissProt/F2CXE6.txt", "swiss")

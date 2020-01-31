@@ -14,7 +14,6 @@ from Textco BioSoftware, Inc.
 from struct import unpack
 
 from Bio import Alphabet
-from Bio._utils import _read_header
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -24,7 +23,7 @@ def _read(handle, length):
     """Read the specified number of bytes from the given handle."""
     data = handle.read(length)
     if len(data) < length:
-        raise ValueError("Cannot read {} bytes from handle".format(length))
+        raise ValueError(f"Cannot read {length} bytes from handle")
     return data
 
 
@@ -66,19 +65,17 @@ def _read_p4string(handle):
     return data
 
 
-def GckIterator(handle):
-    """Parse a GCK file and return a SeqRecord object.
-
-    Note that a GCK file can only contain one sequence, so this
-    iterator will always return a single record.
-    """
+def _parse(handle):
     # Skip file header
     # GCK files start with a 24-bytes header. Bytes 4 and 8 seem to
     # always be 12, maybe this could act as a magic cookie. Bytes
     # 17-20 and 21-24 contain variable values of unknown meaning.
     # check if file is empty
-    _read_header(handle, 24)
-
+    data = handle.read(24)
+    if not data:
+        raise ValueError("Empty file.")
+    if len(data) < 24:
+        raise ValueError("Improper header, cannot read 24 bytes from handle")
     # Read the actual sequence data
     packet, length = _read_packet(handle)
     # The body of the sequence packet starts with a 32-bit integer
@@ -214,3 +211,26 @@ def GckIterator(handle):
         record.annotations["topology"] = "linear"
 
     yield record
+
+
+def GckIterator(source):
+    """Parse a GCK file and return a SeqRecord object.
+
+    Argument source is a file-like object or a path to a file.
+
+    Note that a GCK file can only contain one sequence, so this
+    iterator will always return a single record.
+    """
+    try:
+        handle = open(source, "rb")
+    except TypeError:
+        handle = source
+        if handle.read(0) != b"":
+            raise ValueError("GCK files must be opened in binary mode.") from None
+
+    try:
+        records = _parse(handle)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()

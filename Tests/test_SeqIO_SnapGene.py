@@ -30,17 +30,17 @@ class TestSnapGene(unittest.TestCase):
                     "start": 499,
                     "end": 700,
                     "strand": 1,
-                    "label": "FeatureB"
-                    },
+                    "label": "FeatureB",
+                },
                 {
                     "type": "promoter",
                     "start": 49,
                     "end": 150,
                     "strand": 1,
-                    "label": "FeatureA"
-                    }
-                ]
-            },
+                    "label": "FeatureA",
+                },
+            ],
+        },
         "sample-b": {
             "file": "SnapGene/sample-e.dna",
             "name": "Sample",
@@ -55,18 +55,18 @@ class TestSnapGene(unittest.TestCase):
                     "start": 399,
                     "end": 750,
                     "strand": -1,
-                    "label": "FeatureB"
-                    },
+                    "label": "FeatureB",
+                },
                 {
                     "type": "rep_origin",
                     "start": 160,
                     "end": 241,
                     "strand": 1,
-                    "label": "FeatureA"
-                    }
-                ]
-            }
-        }
+                    "label": "FeatureA",
+                },
+            ],
+        },
+    }
 
     def test_read(self):
         """Read sample files."""
@@ -91,7 +91,6 @@ class TestSnapGene(unittest.TestCase):
 
 
 class TestCorruptedSnapGene(unittest.TestCase):
-
     def setUp(self):
         f = open("SnapGene/sample-d.dna", "rb")
         self.buffer = f.read()
@@ -100,7 +99,7 @@ class TestCorruptedSnapGene(unittest.TestCase):
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
         if isinstance(value, list):
-            mod_buffer[position:position + len(value) - 1] = value
+            mod_buffer[position : position + len(value) - 1] = value
         else:
             mod_buffer[position] = value
         return BytesIO(mod_buffer)
@@ -109,13 +108,17 @@ class TestCorruptedSnapGene(unittest.TestCase):
         """Read a file with missing or invalid cookie packet."""
         # Remove the first packet
         h = BytesIO(self.buffer[19:])
-        with self.assertRaisesRegexp(ValueError, "The file does not start with a SnapGene cookie packet"):
+        with self.assertRaisesRegex(
+            ValueError, "The file does not start with a SnapGene cookie packet"
+        ):
             SeqIO.read(h, "snapgene")
         h.close()
 
         # Keep the first packet but destroy the magic cookie
         h = self.munge_buffer(5, [0x4B, 0x41, 0x42, 0x4F, 0x4F, 0x4D])
-        with self.assertRaisesRegexp(ValueError, "The file is not a valid SnapGene file"):
+        with self.assertRaisesRegex(
+            ValueError, "The file is not a valid SnapGene file"
+        ):
             SeqIO.read(h, "snapgene")
         h.close()
 
@@ -124,7 +127,7 @@ class TestCorruptedSnapGene(unittest.TestCase):
         # Simulate a missing DNA packet by changing the tag byte to an
         # unknown packet type, so that the parser will skip the packet.
         h = self.munge_buffer(19, 0x80)
-        with self.assertRaisesRegexp(ValueError, "No DNA packet in file"):
+        with self.assertRaisesRegex(ValueError, "No DNA packet in file"):
             SeqIO.read(h, "snapgene")
         h.close()
 
@@ -132,9 +135,11 @@ class TestCorruptedSnapGene(unittest.TestCase):
         """Read a file with supernumerary DNA packet."""
         # Fabricate a file with a duplicated DNA packet
         buf = bytearray(self.buffer)
-        buf.extend(self.buffer[19:1025])    # Append duplicated DNA packet
+        buf.extend(self.buffer[19:1025])  # Append duplicated DNA packet
         h = BytesIO(buf)
-        with self.assertRaisesRegexp(ValueError, "The file contains more than one DNA packet"):
+        with self.assertRaisesRegex(
+            ValueError, "The file contains more than one DNA packet"
+        ):
             SeqIO.read(h, "snapgene")
         h.close()
 
@@ -142,13 +147,13 @@ class TestCorruptedSnapGene(unittest.TestCase):
         """Read a file with incomplete packet."""
         # Truncate before the end of the length bytes
         h = BytesIO(self.buffer[3:])
-        with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
+        with self.assertRaisesRegex(ValueError, "Unexpected end of packet"):
             SeqIO.read(h, "snapgene")
         h.close()
 
         # Truncate before the end of the data
         h = BytesIO(self.buffer[10:])
-        with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
+        with self.assertRaisesRegex(ValueError, "Unexpected end of packet"):
             SeqIO.read(h, "snapgene")
         h.close()
 

@@ -2,9 +2,10 @@
 # Revisions copyright 2010, 2016 by Peter Cock
 # All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.SeqIO support for the "uniprot-xml" file format.
 
@@ -15,25 +16,15 @@ The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 
 """
-import sys
+from xml.etree import ElementTree
 
 from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
-from Bio._py3k import StringIO
+from Bio.File import as_handle
+from io import StringIO
 
-
-# For speed try to use cElementTree rather than ElementTree
-try:
-    if (3, 0) <= sys.version_info[:2] <= (3, 1):
-        # Workaround for bug in python 3.0 and 3.1,
-        # see http://bugs.python.org/issue9257
-        from xml.etree import ElementTree as ElementTree
-    else:
-        from xml.etree import cElementTree as ElementTree
-except ImportError:
-    from xml.etree import ElementTree as ElementTree
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
@@ -52,50 +43,43 @@ def UniprotIterator(
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
-    # check if file is empty
-    if handle.readline() == "":
-        raise ValueError("Empty file.")
+    with as_handle(handle) as handle:
 
-    if isinstance(alphabet, Alphabet.NucleotideAlphabet):
-        raise ValueError("Wrong alphabet %r" % alphabet)
-    if isinstance(alphabet, Alphabet.Gapped):
-        if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
+        # check if file is empty
+        if handle.readline() == "":
+            raise ValueError("Empty file.")
+
+        if isinstance(alphabet, Alphabet.NucleotideAlphabet):
             raise ValueError("Wrong alphabet %r" % alphabet)
+        if isinstance(alphabet, Alphabet.Gapped):
+            if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
+                raise ValueError("Wrong alphabet %r" % alphabet)
 
-    if not hasattr(handle, "read"):
-        if isinstance(handle, str):
-            import warnings
-            from Bio import BiopythonDeprecationWarning
+        if not hasattr(handle, "read"):
+            if isinstance(handle, str):
+                import warnings
+                from Bio import BiopythonDeprecationWarning
 
-            warnings.warn(
-                "Passing an XML-containing handle is recommended",
-                BiopythonDeprecationWarning,
-            )
-            handle = StringIO(handle)
-        else:
-            raise TypeError(
-                "Requires an XML-containing handle"
-                " (or XML as a string, but that's deprecated)"
-            )
+                warnings.warn(
+                    "Passing an XML-containing handle is recommended",
+                    BiopythonDeprecationWarning,
+                )
+                handle = StringIO(handle)
+            else:
+                raise TypeError(
+                    "Requires an XML-containing handle"
+                    " (or XML as a string, but that's deprecated)"
+                )
 
-    if ElementTree is None:
-        from Bio import MissingExternalDependencyError
-
-        raise MissingExternalDependencyError(
-            "No ElementTree module was found. "
-            "Use Python 2.5+, lxml or elementtree if you "
-            "want to use Bio.SeqIO.UniprotIO."
-        )
-
-    for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
-        if event == "end" and elem.tag == NS + "entry":
-            yield Parser(
-                elem, alphabet=alphabet, return_raw_comments=return_raw_comments
-            ).parse()
-            elem.clear()
+        for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
+            if event == "end" and elem.tag == NS + "entry":
+                yield Parser(
+                    elem, alphabet=alphabet, return_raw_comments=return_raw_comments
+                ).parse()
+                elem.clear()
 
 
-class Parser(object):
+class Parser:
     """Parse a UniProt XML entry to a SeqRecord.
 
     return_raw_comments=True to get back the complete comment field in XML format
@@ -535,7 +519,7 @@ class Parser(object):
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
                 else:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            seq = "".join((element.text.split()))
+            seq = "".join(element.text.split())
             self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
 
         # ============================================#
@@ -594,7 +578,7 @@ class Parser(object):
                 pass
 
         # remove duplicate dbxrefs
-        self.ParsedSeqRecord.dbxrefs = sorted(list(set(self.ParsedSeqRecord.dbxrefs)))
+        self.ParsedSeqRecord.dbxrefs = sorted(set(self.ParsedSeqRecord.dbxrefs))
 
         # use first accession as id
         if not self.ParsedSeqRecord.id:

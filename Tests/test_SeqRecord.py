@@ -142,13 +142,26 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(expected.lstrip(), str(self.record))
 
     def test_repr(self):
-        expected = "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), " \
-                   "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
+        expected = (
+            "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), "
+            "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
+        )
         self.assertEqual(expected, repr(self.record))
 
     def test_format(self):
         expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
         self.assertEqual(expected, self.record.format("fasta"))
+
+    def test_format_str(self):
+        expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
+        self.assertEqual(expected, f"{self.record:fasta}")
+
+    def test_format_str_binary(self):
+        with self.assertRaisesRegex(
+            ValueError,
+            "Binary format sff cannot be used with SeqRecord format method"
+        ):
+            f"{self.record:sff}"
 
     def test_format_spaces(self):
         rec = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),

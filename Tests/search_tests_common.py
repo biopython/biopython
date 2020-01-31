@@ -6,7 +6,6 @@
 
 """Common code for SearchIO tests."""
 
-from __future__ import print_function
 
 import os
 import gzip
@@ -17,7 +16,6 @@ except ImportError:
     sqlite3 = None
 
 from Bio import SearchIO
-from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
 
@@ -29,7 +27,7 @@ class CheckRaw(unittest.TestCase):
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using keyword arguments, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
-        raw = _as_bytes(raw)
+        raw = raw.encode()
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
         new = idx.get_raw(id)
@@ -127,8 +125,8 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %i vs %i for " \
-            "%r vs %r" % (len(obj_a), len(obj_b), obj_a, obj_b)
+        assert len(obj_a) == len(obj_b), ("length: %i vs %i for %r vs %r"
+                                          % (len(obj_a), len(obj_b), obj_a, obj_b))
 
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)

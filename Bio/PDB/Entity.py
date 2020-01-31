@@ -1,8 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Base class for Residue, Chain, Model and Structure classes.
 
 It is a simple container class, with list and dictionary like properties.
@@ -13,7 +14,7 @@ from copy import copy
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
-class Entity(object):
+class Entity:
     """Basic container object for PDB heirachy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
@@ -50,8 +51,7 @@ class Entity(object):
 
     def __iter__(self):
         """Iterate over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     # Generic id-based comparison methods considers all parents as well as children
     # Works for all Entities - Atoms have comparable custom operators
@@ -171,8 +171,8 @@ class Entity(object):
         if self.parent:
             if value in self.parent.child_dict:
                 raise ValueError(
-                    "Cannot change id from `{}` to `{}`. The id `{}` is already used "
-                    "for a sibling of this entity.".format(self._id, value, value)
+                    f"Cannot change id from `{self._id}` to `{value}`."
+                    f" The id `{value}` is already used for a sibling of this entity."
                 )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
@@ -227,8 +227,7 @@ class Entity(object):
 
     def get_iterator(self):
         """Return iterator over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     def get_list(self):
         """Return a copy of the list of children."""
@@ -308,7 +307,7 @@ class Entity(object):
         return shallow
 
 
-class DisorderedEntityWrapper(object):
+class DisorderedEntityWrapper:
     """Wrapper class to group equivalent Entities.
 
     This class is a simple wrapper class that groups a number of equivalent

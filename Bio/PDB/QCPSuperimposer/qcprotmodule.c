@@ -37,9 +37,7 @@
  *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  *
  */
-#include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
 #include <Python.h>
 
 static PyObject* py_FastCalcRMSDAndRotation(PyObject* self, PyObject* args) {
@@ -125,7 +123,7 @@ static PyObject* py_FastCalcRMSDAndRotation(PyObject* self, PyObject* args) {
 	}
 
 	if (i == 50)
-		fprintf(stderr, "\nMore than %d iterations needed!\n", i);
+		PySys_WriteStderr("\nMore than %d iterations needed!\n", i);
 
 	/* the fabs() is to guard against extremely small, but *negative* numbers due to floating point error */
 	rms = sqrt(fabs(2.0 * (E0 - mxEigenV) / len));
@@ -241,19 +239,12 @@ static PyMethodDef qcprot_methods[] = {
         {NULL, NULL, 0, NULL} 
 };
 
-#if PY_MAJOR_VERSION >= 3
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT, "qcprotmodule", NULL,
         -1, qcprot_methods, NULL, NULL, NULL, NULL};
 
+
 PyObject * PyInit_qcprotmodule(void) {
         return PyModule_Create(&moduledef);
 }
-#else
-
-void initqcprotmodule(void) {
-        Py_InitModule("qcprotmodule", qcprot_methods);
-}
-
-#endif

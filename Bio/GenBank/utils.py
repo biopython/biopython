@@ -6,7 +6,7 @@
 """Useful utilities for helping in parsing GenBank files."""
 
 
-class FeatureValueCleaner(object):
+class FeatureValueCleaner:
     r"""Provide specialized capabilities for cleaning up values in features.
 
     This class is designed to provide a mechanism to clean up and process
@@ -43,10 +43,11 @@ class FeatureValueCleaner(object):
         if key_name in self._to_process:
             try:
                 cleaner = getattr(self, "_clean_%s" % key_name)
-                value = cleaner(value)
             except AttributeError:
-                raise AssertionError("No function to clean key: %s"
-                                     % key_name)
+                raise AssertionError(
+                    "No function to clean key: %s" % key_name
+                ) from None
+            value = cleaner(value)
         return value
 
     def _clean_translation(self, value):

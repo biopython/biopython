@@ -26,12 +26,10 @@ keys and offsets in an SQLite database - which can be re-used to avoid
 re-indexing the file for use another time.
 """
 
-from __future__ import print_function
 
 import re
 from io import BytesIO
-from Bio._py3k import StringIO
-from Bio._py3k import _bytes_to_string
+from io import StringIO
 
 from Bio import SeqIO
 from Bio import Alphabet
@@ -71,7 +69,7 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
     def get(self, offset):
         """Return SeqRecord."""
         # Should be overridden for binary file formats etc:
-        return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
+        return self._parse(StringIO(self.get_raw(offset).decode()))
 
 
 ####################
@@ -87,9 +85,15 @@ class SffRandomAccess(SeqFileRandomAccess):
     def __init__(self, filename, format, alphabet):
         """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
-        header_length, index_offset, index_length, number_of_reads, self._flows_per_read, self._flow_chars, self._key_sequence = SeqIO.SffIO._sff_file_header(
-            self._handle
-        )
+        (
+            header_length,
+            index_offset,
+            index_length,
+            number_of_reads,
+            self._flows_per_read,
+            self._flow_chars,
+            self._key_sequence,
+        ) = SeqIO.SffIO._sff_file_header(self._handle)
 
     def __iter__(self):
         """Load any index block in the file, or build it the slow way (PRIVATE)."""
@@ -98,9 +102,15 @@ class SffRandomAccess(SeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         # Alread did this in __init__ but need handle in right place
-        header_length, index_offset, index_length, number_of_reads, self._flows_per_read, self._flow_chars, self._key_sequence = SeqIO.SffIO._sff_file_header(
-            handle
-        )
+        (
+            header_length,
+            index_offset,
+            index_length,
+            number_of_reads,
+            self._flows_per_read,
+            self._flow_chars,
+            self._key_sequence,
+        ) = SeqIO.SffIO._sff_file_header(handle)
         if index_offset and index_length:
             # There is an index provided, try this the fast way:
             count = 0
@@ -233,7 +243,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
                 end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
-                    yield _bytes_to_string(id), start_offset, length
+                    yield id.decode(), start_offset, length
                     start_offset = end_offset
                     break
                 else:
@@ -298,7 +308,7 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
                         raise ValueError(
                             "Did not find usable ACCESSION/VERSION/LOCUS lines"
                         )
-                    yield _bytes_to_string(key), start_offset, length
+                    yield key.decode(), start_offset, length
                     start_offset = end_offset
                     break
                 elif line.startswith(accession_marker):
@@ -370,7 +380,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                 line = handle.readline()
                 if marker_re.match(line) or not line:
                     end_offset = handle.tell() - len(line)
-                    yield _bytes_to_string(key), start_offset, length
+                    yield key.decode(), start_offset, length
                     start_offset = end_offset
                     break
                 elif line.startswith(ac_marker) and not setbysv:
@@ -411,7 +421,7 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
                 end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
-                    yield _bytes_to_string(key), start_offset, length
+                    yield key.decode(), start_offset, length
                     start_offset = end_offset
                     break
                 length += len(line)
@@ -465,7 +475,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                     "Did not find <accession> line in bytes %i to %i"
                     % (start_offset, start_offset + length)
                 )
-            yield _bytes_to_string(key), start_offset, length
+            yield key.decode(), start_offset, length
             # Find start of next record
             while not marker_re.match(line) and line:
                 start_offset = handle.tell()
@@ -544,7 +554,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
             while line and not line.startswith(b";"):
                 length += len(line)
                 line = handle.readline()
-            yield _bytes_to_string(key), offset, length
+            yield key.decode(), offset, length
             offset += length
             assert offset + len(line) == handle.tell()
 
@@ -586,7 +596,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 else:
                     raise err
             else:
-                yield _bytes_to_string(key), start_offset, len(line)
+                yield key.decode(), start_offset, len(line)
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""
@@ -659,7 +669,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                     length += len(line)
             if seq_len != qual_len:
                 raise ValueError("Problem with quality section")
-            yield _bytes_to_string(id), start_offset, length
+            yield id.decode(), start_offset, length
             start_offset = end_offset
         # print("EOF")
 

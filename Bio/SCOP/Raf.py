@@ -24,10 +24,6 @@ acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
 chemically modified residues.
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-from Bio._py3k import _universal_read_mode
-
 from copy import copy
 
 from Bio.Data.SCOPData import protein_letters_3to1
@@ -67,7 +63,7 @@ class SeqMapIndex(dict):
         dict.__init__(self)
         self.filename = filename
 
-        with open(self.filename, _universal_read_mode) as f:
+        with open(self.filename) as f:
             position = 0
             while True:
                 line = f.readline()
@@ -82,7 +78,7 @@ class SeqMapIndex(dict):
         """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
-        with open(self.filename, _universal_read_mode) as f:
+        with open(self.filename) as f:
             f.seek(position)
             line = f.readline()
             record = SeqMap(line)
@@ -96,7 +92,7 @@ class SeqMapIndex(dict):
            converted into a Residues instance.
 
         """
-        if isinstance(residues, basestring):
+        if isinstance(residues, str):
             residues = Residues(residues)
 
         pdbid = residues.pdbid
@@ -131,7 +127,7 @@ class SeqMapIndex(dict):
         return seqMap
 
 
-class SeqMap(object):
+class SeqMap:
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
 
     This is a list like object; You can find the location of particular residues
@@ -172,14 +168,14 @@ class SeqMap(object):
         self.version = line[6:10]
 
         # Raf format versions 0.01 and 0.02 are identical for practical purposes
-        if(self.version != "0.01" and self.version != "0.02"):
+        if self.version != "0.01" and self.version != "0.02":
             raise ValueError("Incompatible RAF version: " + self.version)
 
         self.pdb_datestamp = line[14:20]
         self.flags = line[21:27]
 
         for i in range(header_len, len(line), 7):
-            f = line[i:i + 7]
+            f = line[i : i + 7]
             if len(f) != 7:
                 raise ValueError("Corrupt Field: (" + f + ")")
             r = Res()
@@ -287,12 +283,14 @@ class SeqMap(object):
             # for k in resFound:
             #    del resSet[k]
             # print(resSet)
-            raise RuntimeError("Could not find at least one ATOM or HETATM"
-                               " record for each and every residue in this"
-                               " sequence map.")
+            raise RuntimeError(
+                "Could not find at least one ATOM or HETATM"
+                " record for each and every residue in this"
+                " sequence map."
+            )
 
 
-class Res(object):
+class Res:
     """A single residue mapping from a RAF record.
 
     Attributes:

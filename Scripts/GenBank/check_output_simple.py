@@ -16,7 +16,6 @@ Usage:
 
 """
 # standard library
-from __future__ import print_function
 
 import sys
 
@@ -30,7 +29,7 @@ if len(sys.argv) != 2:
 
 parser = GenBank.FeatureParser(debug_level=2)
 
-with open(sys.argv[1], "r") as handle:
+with open(sys.argv[1]) as handle:
 
     iterator = GenBank.Iterator(handle, parser)
 

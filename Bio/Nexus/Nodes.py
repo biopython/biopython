@@ -1,7 +1,10 @@
 # Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Linked list functionality for use in Bio.Nexus.
 
 Provides functionality of a linked list.
@@ -26,7 +29,7 @@ class NodeException(Exception):
     pass
 
 
-class Chain(object):
+class Chain:
     """Stores a list of nodes that are linked together."""
 
     def __init__(self):
@@ -121,7 +124,7 @@ class Chain(object):
                 return [sn] + self.trace(sn, finish)
 
 
-class Node(object):
+class Node:
     """A single node."""
 
     def __init__(self, data=None):

@@ -105,8 +105,8 @@ class NmrTests(unittest.TestCase):
                 outfile.writelines(out_list)  # Write the output lines to the file
 
             # Compare the content of the predicted output file with expected file
-            pre_content = open(self.f_predicted, "r").read()
-            exp_content = open(self.xpk_expected, "r").read()
+            pre_content = open(self.f_predicted).read()
+            exp_content = open(self.xpk_expected).read()
             self.assertEqual(pre_content, exp_content)
 
         finally:

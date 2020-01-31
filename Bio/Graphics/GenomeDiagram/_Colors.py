@@ -22,13 +22,10 @@ http://www.reportlab.com
 """
 
 # ReportLab imports
-from __future__ import print_function
-from Bio._py3k import basestring
-
 from reportlab.lib import colors
 
 
-class ColorTranslator(object):
+class ColorTranslator:
     """Class providing methods for translating representations of color into.
 
     Examples
@@ -113,7 +110,7 @@ class ColorTranslator(object):
             color = self.scheme_color(color)
         elif isinstance(color, colors.Color):
             return color
-        elif isinstance(color, basestring):
+        elif isinstance(color, str):
             # Assume its a named reportlab color like "red".
             color = colors.toColor(color)
         elif isinstance(color, tuple) and isinstance(color[0], float):
@@ -138,7 +135,7 @@ class ColorTranslator(object):
             2 \t 255 \t 0 \t 0 \t Red: Information transfer
 
         """
-        with open(filename, "r").readlines() as lines:
+        with open(filename).readlines() as lines:
             for line in lines:
                 data = line.strip().split("\t")
                 try:
@@ -155,7 +152,7 @@ class ColorTranslator(object):
                 except ValueError:
                     raise ValueError(
                         "Expected INT \t INT \t INT \t INT \t string input"
-                    )
+                    ) from None
 
     def get_artemis_colorscheme(self):
         """Return the Artemis color scheme as a dictionary."""

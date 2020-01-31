@@ -4,14 +4,10 @@
 # as part of this package.
 """Tests for GenomeDiagram general functionality."""
 
-from __future__ import print_function
 
 import os
 import unittest
 import math
-
-from Bio._py3k import zip
-from Bio._py3k import range
 
 
 # Do we have ReportLab?  Raise error if not present.
@@ -73,16 +69,12 @@ def apply_to_window(sequence, window_size, function, step=None):
     sequence of length window_size (stepped by step), calculated by the passed
     function.  Returned positions are the midpoint of each window.
 
-    Arguments:
-
     - sequence - Bio.Seq.Seq object.
     - window_size - an integer describing the length of sequence to consider.
     - step - an integer describing the step to take between windows
       (default = window_size//2).
     - function - Method or function that accepts a Bio.Seq.Seq object
       as its sole argument and returns a single value.
-
-    apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
     """
     seqlen = len(sequence)      # Total length of sequence to be used
     if step is None:    # No step specified, so use half window-width or 1 if larger
@@ -314,9 +306,9 @@ class LabelTest(unittest.TestCase):
                 # Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2
                 # must be string, not None
                 renderPM = None
-            except IOError:
+            except OSError:
                 # Probably a library problem, e.g.
-                # IOError: encoder zip not available
+                # OSError: encoder zip not available
                 renderPM = None
         if circular:
             # Circular diagram
@@ -628,7 +620,7 @@ class DiagramTest(unittest.TestCase):
 
     def setUp(self):
         """Test setup, just loads a GenBank file as a SeqRecord."""
-        handle = open(os.path.join("GenBank", "NC_005816.gb"), "r")
+        handle = open(os.path.join("GenBank", "NC_005816.gb"))
         self.record = SeqIO.read(handle, "genbank")
         handle.close()
 
@@ -643,12 +635,14 @@ class DiagramTest(unittest.TestCase):
 
     def test_str(self):
         """Test diagram's info as string."""
-        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
-                   "\n1 tracks" \
-                   "\nTrack 1: " \
-                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
-                   "\n0 sets" \
-                   "\n"
+        expected = (
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>"
+            "\n1 tracks"
+            "\nTrack 1: "
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>"
+            "\n0 sets"
+            "\n"
+        )
         self.assertEqual(expected, str(self.gdd))
 
     def test_add_track(self):
@@ -679,23 +673,27 @@ class DiagramTest(unittest.TestCase):
     def test_move_track(self):
         """Move a track."""
         self.gdd.move_track(1, 2)
-        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
-                   "\n1 tracks" \
-                   "\nTrack 2: " \
-                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
-                   "\n0 sets" \
-                   "\n"
+        expected = (
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>"
+            "\n1 tracks"
+            "\nTrack 2: "
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>"
+            "\n0 sets"
+            "\n"
+        )
         self.assertEqual(expected, str(self.gdd))
 
     def test_renumber(self):
         """Test renumbering tracks."""
         self.gdd.renumber_tracks(0)
-        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
-                   "\n1 tracks" \
-                   "\nTrack 0: " \
-                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
-                   "\n0 sets" \
-                   "\n"
+        expected = (
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>"
+            "\n1 tracks"
+            "\nTrack 0: "
+            "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>"
+            "\n0 sets"
+            "\n"
+        )
         self.assertEqual(expected, str(self.gdd))
 
     def test_write_arguments(self):

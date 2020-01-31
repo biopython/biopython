@@ -7,9 +7,10 @@
 
 
 import unittest
+import warnings
 
 
-from Bio._py3k import StringIO
+from io import StringIO
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align import AlignInfo, MultipleSeqAlignment
@@ -131,11 +132,11 @@ class TestAlignIO_reading(unittest.TestCase):
             # Try writing just one Alignment (not a list)
             handle = StringIO()
             AlignIO.write(alignments[0:1], handle, fmt)
-            self.assertEqual(handle.getvalue(), alignments[0].format(fmt))
+            self.assertEqual(handle.getvalue(), format(alignments[0], fmt))
 
     def check_iterator_for_loop_handle(self, path, fmt, length, m=None):
         # Try using the iterator with a for loop and a handle
-        with open(path, "r") as handle:
+        with open(path) as handle:
             alignments = list(AlignIO.parse(handle, format=fmt))
             self.assertEqual(len(alignments), length)
         if m is not None:
@@ -182,7 +183,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(counter, length)
 
     def check_write_three_times_and_read(self, path, fmt, m):
-        with open(path, "r") as handle:
+        with open(path) as handle:
             data = handle.read()
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)
@@ -400,6 +401,38 @@ class TestAlignIO_reading(unittest.TestCase):
             alignment,
             [("Aegotheles", "AAAAAGGCATTGTGGTGGGAAT",),
              ("Aerodramus", "?????????TTGTGGTGGGAAT")])
+        self.check_summary_simple(alignment)
+
+    def test_reading_alignments_msf1(self):
+        path = "msf/DOA_prot.msf"
+        with self.assertRaisesRegex(
+                ValueError,
+                "GCG MSF header said alignment length 62, "
+                "but 11 of 12 sequences said Len: 250"
+        ):
+            AlignIO.read(path, "msf")
+
+    def test_reading_alignments_msf2(self):
+        path = "msf/W_prot.msf"
+        with warnings.catch_warnings(record=True) as w:
+            self.check_iterator_for_loop_handle(path, "msf", 1, 11)
+            self.check_iterator_for_loop_filename(path, "msf", 1)
+            self.check_iterator_next(path, "msf", 1)
+            self.check_iterator_next_and_list(path, "msf", 1)
+            self.check_iterator_next_for_loop(path, "msf", 1)
+            alignment = self.check_read(path, "msf", 11, 99)
+        warning_msgs = {str(_.message) for _ in w}
+        self.assertIn(
+            "One of more alignment sequences were truncated and have been gap padded",
+            warning_msgs)
+        self.check_alignment_columns(
+            alignment, ["GGGGGGGGGGG",
+                        "LLLLLLLLLLL",
+                        "TTTTTTTTTTT",
+                        "PPPPPPPPPPP",
+                        "FFFFFFSSSSS",
+                        # ...
+                        "LLLLLL----L"])
         self.check_summary_simple(alignment)
 
     def test_reading_alignments_stockholm1(self):
@@ -727,11 +760,11 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator_next_and_list(path, "emboss", 5)
         self.check_iterator_next_for_loop(path, "emboss", 5)
         self.check_read_fails(path, "emboss")
-        self.assertEquals(alignments[0].get_alignment_length(), 145)
-        self.assertEquals(alignments[1].get_alignment_length(), 13)
-        self.assertEquals(alignments[2].get_alignment_length(), 18)
-        self.assertEquals(alignments[3].get_alignment_length(), 10)
-        self.assertEquals(alignments[4].get_alignment_length(), 10)
+        self.assertEqual(alignments[0].get_alignment_length(), 145)
+        self.assertEqual(alignments[1].get_alignment_length(), 13)
+        self.assertEqual(alignments[2].get_alignment_length(), 18)
+        self.assertEqual(alignments[3].get_alignment_length(), 10)
+        self.assertEqual(alignments[4].get_alignment_length(), 10)
         self.check_alignment_rows(
             alignments[0],
             [("HBA_HUMAN", "LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLS...SKY"),

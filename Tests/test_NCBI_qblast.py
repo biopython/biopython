@@ -16,8 +16,8 @@ Goals:
 import unittest
 import warnings
 
-from Bio._py3k import HTTPError
-from Bio._py3k import StringIO
+from urllib.error import HTTPError
+from io import StringIO
 
 from Bio import MissingExternalDependencyError
 from Bio import BiopythonWarning
@@ -204,7 +204,7 @@ class TestQblast(unittest.TestCase):
             self.assertTrue(found_result)
 
     def test_parse_qblast_ref_page(self):
-        with open("Blast/html_msgid_29_blastx_001.html", "r") as f:
+        with open("Blast/html_msgid_29_blastx_001.html") as f:
             handle = StringIO(f.read())
         self.assertRaises(ValueError, NCBIWWW._parse_qblast_ref_page, handle)
 

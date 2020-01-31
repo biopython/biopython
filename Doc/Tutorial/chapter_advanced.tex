@@ -35,10 +35,9 @@ into \verb|SeqRecord| objects.
 
 \subsection{SubsMat}
 
-This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices. The \verb+SeqMat+ class derives from a dictionary:
-\begin{minted}{python}
-class SeqMat(dict)
-\end{minted}
+This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices.
+
+The \verb+SeqMat+ class derives from a dictionary.
 The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| where i, j are alphabet letters, and n is a value.
 
 \begin{enumerate}
@@ -55,7 +54,7 @@ The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| whe
 
     \item
 \begin{minted}{python}
-__init__(self,data=None,alphabet=None, mat_name='', build_later=0):
+__init__(self, data=None, alphabet=None, mat_name="", build_later=0)
 \end{minted}
 
     \begin{enumerate}
@@ -71,7 +70,7 @@ __init__(self,data=None,alphabet=None, mat_name='', build_later=0):
 
     \item
 \begin{minted}{python}
-entropy(self,obs_freq_mat)
+entropy(self, obs_freq_mat)
 \end{minted}
 
     \begin{enumerate}
@@ -156,7 +155,7 @@ OFM = SubsMat._build_obs_freq_mat(ARM)
 Use:
 
 \begin{minted}{python}
-EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
+EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
 \end{minted}
 
   \begin{enumerate}
@@ -178,7 +177,7 @@ But you can supply your own \verb|exp_freq_table|, if you wish
 Use:
 
 \begin{minted}{python}
-SFM = SubsMat._build_subs_mat(OFM,EFM)
+SFM = SubsMat._build_subs_mat(OFM, EFM)
 \end{minted}
 
   Accepts an OFM, EFM. Provides the division product of the corresponding values.
@@ -187,7 +186,7 @@ SFM = SubsMat._build_subs_mat(OFM,EFM)
 
    Use:
 \begin{minted}{python}
-LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
+LOM = SubsMat._build_log_odds_mat(SFM, logbase=10, factor=10.0, round_digit=1)
 \end{minted}
 
    \begin{enumerate}
@@ -206,8 +205,9 @@ LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
 As most people would want to generate a log-odds matrix, with minimum hassle, SubsMat provides one function which does it all:
 
 \begin{minted}{python}
-make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
-                      factor=10.0,round_digit=0):
+make_log_odds_matrix(
+    acc_rep_mat, exp_freq_table=None, logbase=10, factor=10.0, round_digit=0
+)
 \end{minted}
 
 \begin{enumerate}
@@ -266,7 +266,7 @@ Conversely, the residue frequencies or counts can be passed as a dictionary.
 Example of a count dictionary (3-letter alphabet):
 
 \begin{minted}{python}
-{'A': 35, 'B': 65, 'C': 100}
+{"A": 35, "B": 65, "C": 100}
 \end{minted}
 
 Which means that an expected data count would give a 0.5 frequency
@@ -276,7 +276,7 @@ out of 200 total, sum of A, B and C)
  A frequency dictionary for the same data would be:
 
 \begin{minted}{python}
-{'A': 0.175, 'B': 0.325, 'C': 0.5}
+{"A": 0.175, "B": 0.325, "C": 0.5}
 \end{minted}
 
 Summing up to 1.

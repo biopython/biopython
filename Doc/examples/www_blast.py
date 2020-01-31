@@ -11,12 +11,7 @@ This code is described in great detail in the BLAST section of the Biopython
 documentation.
 """
 # standard library
-from __future__ import print_function
-
-try:
-    from StringIO import StringIO  # Python 2
-except ImportError:
-    from io import StringIO  # Python 3
+from io import StringIO
 
 # biopython
 from Bio import SeqIO

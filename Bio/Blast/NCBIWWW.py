@@ -14,15 +14,14 @@ This module provides code to work with the WWW version of BLAST
 provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 """
 
-from __future__ import print_function
 
 import warnings
 
-from Bio._py3k import StringIO
-from Bio._py3k import _as_string, _as_bytes
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
-from Bio._py3k import Request as _Request
+from io import StringIO
+
+from urllib.request import urlopen
+from urllib.parse import urlencode
+from urllib.request import Request
 
 from Bio import BiopythonWarning
 
@@ -30,22 +29,56 @@ from Bio import BiopythonWarning
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
 
-def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
-           auto_format=None, composition_based_statistics=None,
-           db_genetic_code=None, endpoints=None, entrez_query="(none)",
-           expect=10.0, filter=None, gapcosts=None, genetic_code=None,
-           hitlist_size=50, i_thresh=None, layout=None, lcase_mask=None,
-           matrix_name=None, nucl_penalty=None, nucl_reward=None,
-           other_advanced=None, perc_ident=None, phi_pattern=None,
-           query_file=None, query_believe_defline=None, query_from=None,
-           query_to=None, searchsp_eff=None, service=None, threshold=None,
-           ungapped_alignment=None, word_size=None, short_query=None,
-           alignments=500, alignment_view=None, descriptions=500,
-           entrez_links_new_window=None, expect_low=None, expect_high=None,
-           format_entrez_query=None, format_object=None, format_type="XML",
-           ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
-           template_type=None, template_length=None,
-           ):
+def qblast(
+    program,
+    database,
+    sequence,
+    url_base=NCBI_BLAST_URL,
+    auto_format=None,
+    composition_based_statistics=None,
+    db_genetic_code=None,
+    endpoints=None,
+    entrez_query="(none)",
+    expect=10.0,
+    filter=None,
+    gapcosts=None,
+    genetic_code=None,
+    hitlist_size=50,
+    i_thresh=None,
+    layout=None,
+    lcase_mask=None,
+    matrix_name=None,
+    nucl_penalty=None,
+    nucl_reward=None,
+    other_advanced=None,
+    perc_ident=None,
+    phi_pattern=None,
+    query_file=None,
+    query_believe_defline=None,
+    query_from=None,
+    query_to=None,
+    searchsp_eff=None,
+    service=None,
+    threshold=None,
+    ungapped_alignment=None,
+    word_size=None,
+    short_query=None,
+    alignments=500,
+    alignment_view=None,
+    descriptions=500,
+    entrez_links_new_window=None,
+    expect_low=None,
+    expect_high=None,
+    format_entrez_query=None,
+    format_object=None,
+    format_type="XML",
+    ncbi_gi=None,
+    results_file=None,
+    show_overview=None,
+    megablast=None,
+    template_type=None,
+    template_length=None,
+):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
     Supports all parameters of the old qblast API for Put and Get.
@@ -92,8 +125,10 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     programs = ["blastn", "blastp", "blastx", "tblastn", "tblastx"]
     if program not in programs:
-        raise ValueError("Program specified is %s. Expected one of %s"
-                         % (program, ", ".join(programs)))
+        raise ValueError(
+            "Program specified is %s. Expected one of %s"
+            % (program, ", ".join(programs))
+        )
 
     # SHORT_QUERY_ADJUST throws an error when using blastn (wrong parameter
     # assignment from NCBIs side).
@@ -107,11 +142,12 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             nucl_reward = 1
             filter = None
             lcase_mask = None
-            warnings.warn('"SHORT_QUERY_ADJUST" is incorrectly implemented '
-                          "(by NCBI) for blastn. We bypass the problem by "
-                          "manually adjusting the search parameters. Thus, "
-                          "results may slightly differ from web page "
-                          "searches.", BiopythonWarning)
+            warnings.warn(
+                '"SHORT_QUERY_ADJUST" is incorrectly implemented (by NCBI) for blastn.'
+                " We bypass the problem by manually adjusting the search parameters."
+                " Thus, results may slightly differ from web page searches.",
+                BiopythonWarning,
+            )
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
@@ -157,18 +193,16 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ("UNGAPPED_ALIGNMENT", ungapped_alignment),
         ("WORD_SIZE", word_size),
         ("CMD", "Put"),
-        ]
+    ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(_urlencode(query))
+    message = urlencode(query).encode()
 
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = _Request(url_base,
-                       message,
-                       {"User-Agent": "BiopythonClient"})
-    handle = _urlopen(request)
+    request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
+    handle = urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
@@ -189,9 +223,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ("SERVICE", service),
         ("SHOW_OVERVIEW", show_overview),
         ("CMD", "Get"),
-        ]
+    ]
     query = [x for x in parameters if x[1] is not None]
-    message = _as_bytes(_urlencode(query))
+    message = urlencode(query).encode()
 
     # Poll NCBI until the results are ready.
     # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
@@ -219,11 +253,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             # Wasn't a quick return, must wait at least a minute
             delay = 60
 
-        request = _Request(url_base,
-                           message,
-                           {"User-Agent": "BiopythonClient"})
-        handle = _urlopen(request)
-        results = _as_string(handle.read())
+        request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
+        handle = urlopen(request)
+        results = handle.read().decode()
 
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
@@ -234,7 +266,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             break
         i = results.index("Status=")
         j = results.index("\n", i)
-        status = results[i + len("Status="):j].strip()
+        status = results[i + len("Status=") : j].strip()
         if status.upper() == "READY":
             break
     return StringIO(results)
@@ -249,20 +281,20 @@ def _parse_qblast_ref_page(handle):
     The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is probably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
-    s = _as_string(handle.read())
+    s = handle.read().decode()
     i = s.find("RID =")
     if i == -1:
         rid = None
     else:
         j = s.find("\n", i)
-        rid = s[i + len("RID ="):j].strip()
+        rid = s[i + len("RID =") : j].strip()
 
     i = s.find("RTOE =")
     if i == -1:
         rtoe = None
     else:
         j = s.find("\n", i)
-        rtoe = s[i + len("RTOE ="):j].strip()
+        rtoe = s[i + len("RTOE =") : j].strip()
 
     if not rid and not rtoe:
         # Can we reliably extract the error message from the HTML page?
@@ -274,14 +306,14 @@ def _parse_qblast_ref_page(handle):
         # This used to occur inside a <div class="error msInf"> entry:
         i = s.find('<div class="error msInf">')
         if i != -1:
-            msg = s[i + len('<div class="error msInf">'):].strip()
+            msg = s[i + len('<div class="error msInf">') :].strip()
             msg = msg.split("</div>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
         # In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
-            msg = s[i + len('<p class="error">'):].strip()
+            msg = s[i + len('<p class="error">') :].strip()
             msg = msg.split("</p>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
@@ -293,20 +325,25 @@ def _parse_qblast_ref_page(handle):
             raise ValueError("Error message from NCBI: %s" % msg)
         # We didn't recognise the error layout :(
         # print s
-        raise ValueError("No RID and no RTOE found in the 'please wait' page, "
-                         "there was probably an error in your request but we "
-                         "could not extract a helpful error message.")
+        raise ValueError(
+            "No RID and no RTOE found in the 'please wait' page, "
+            "there was probably an error in your request but we "
+            "could not extract a helpful error message."
+        )
     elif not rid:
         # Can this happen?
-        raise ValueError("No RID found in the 'please wait' page."
-                         " (although RTOE = %s)" % repr(rtoe))
+        raise ValueError(
+            "No RID found in the 'please wait' page. (although RTOE = %s)" % repr(rtoe)
+        )
     elif not rtoe:
         # Can this happen?
-        raise ValueError("No RTOE found in the 'please wait' page."
-                         " (although RID = %s)" % repr(rid))
+        raise ValueError(
+            "No RTOE found in the 'please wait' page. (although RID = %s)" % repr(rid)
+        )
 
     try:
         return rid, int(rtoe)
     except ValueError:
-        raise ValueError("A non-integer RTOE found in "
-                         "the 'please wait' page, %s" % repr(rtoe))
+        raise ValueError(
+            "A non-integer RTOE found in the 'please wait' page, %s" % repr(rtoe)
+        ) from None

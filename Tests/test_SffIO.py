@@ -6,7 +6,6 @@
 
 """Tests for SffIO module."""
 
-import sys
 import re
 import unittest
 from io import BytesIO
@@ -64,7 +63,7 @@ class TestUAN(unittest.TestCase):
     """Test annotations."""
 
     def setUp(self):
-        self.records = [record for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")]
+        self.records = list(SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"))
         self.test_annotations = {}
         for line in test_data.splitlines():
             fields = re.split(r"\s+", line.strip())
@@ -252,21 +251,6 @@ class TestIndex(unittest.TestCase):
             self.assertEqual(len(index1), len(list(SffIterator(handle))))
         with open(filename, "rb") as handle:
             self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
-
-        if sys.platform != "win32" and sys.version_info[0] < 3:
-            # Can be lazy and treat as binary...
-            with open(filename, "r") as handle:
-                self.assertEqual(len(index1), len(list(SffIterator(handle))))
-            with open(filename) as handle:
-                index2 = sorted(_sff_read_roche_index(handle))
-            self.assertEqual(index1, index2)
-            with open(filename, "r") as handle:
-                index2 = sorted(_sff_do_slow_index(handle))
-            self.assertEqual(index1, index2)
-            with open(filename, "r") as handle:
-                self.assertEqual(len(index1), len(list(SffIterator(handle))))
-            with open(filename, "r") as handle:
-                self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
 
 
 class TestAlternativeIndexes(unittest.TestCase):

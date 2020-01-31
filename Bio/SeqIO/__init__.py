@@ -63,8 +63,7 @@ record.  Alternatively, use this with a handle when downloading a single
 record from the internet.
 
 However, if you just want the first record from a file containing multiple
-record, use the next() function on the iterator (or under Python 2, the
-iterator's next() method):
+record, use the next() function on the iterator:
 
 >>> from Bio import SeqIO
 >>> record = next(SeqIO.parse("Fasta/f002", "fasta"))
@@ -151,9 +150,8 @@ CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
 >>> record_dict.close()
 
 Here the original file and what Biopython would output differ in the line
-wrapping. Also note that under Python 3, the get_raw method will return a
-bytes string, hence the use of decode to turn it into a (unicode) string.
-This is unnecessary on Python 2.
+wrapping. Also note that the get_raw method will return a bytes string,
+hence the use of decode to turn it into a (unicode) string.
 
 Also note that the get_raw method will preserve the newline endings. This
 example FASTQ file uses Unix style endings (b"\n" only),
@@ -337,11 +335,8 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 making up each alignment as SeqRecords.
 """
 
-from __future__ import print_function
 
 import sys
-
-from Bio._py3k import basestring
 
 # TODO
 # - define policy on reading aligned sequences with gaps in
@@ -408,12 +403,6 @@ from . import TabIO
 from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 from . import XdnaIO
-
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
-    _dict = dict
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -504,6 +493,7 @@ _BinaryFormats = [
     "seqxml",
     "snapgene",
     "nib",
+    "seqxml",
     "xdna",
 ]
 
@@ -526,11 +516,11 @@ def write(sequences, handle, format):
     from Bio import AlignIO
 
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower():
+    if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(handle, SeqRecord):
@@ -543,10 +533,7 @@ def write(sequences, handle, format):
         # This raised an exception in older versions of Biopython
         sequences = [sequences]
 
-    if format in _BinaryFormats:
-        mode = "wb"
-    else:
-        mode = "w"
+    mode = "wb" if format in _BinaryFormats else "w"
 
     with as_handle(handle, mode) as fp:
         # Map the file format to a writer function/class
@@ -629,11 +616,7 @@ def parse(handle, format, alphabet=None):
 
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
     ...     print("%s %s" % (record.id, record.seq))
     Alpha ACCGGATGTA
@@ -647,47 +630,35 @@ def parse(handle, format, alphabet=None):
     # string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
-    # Hack for SFF, will need to make this more general in future
-    if format in _BinaryFormats:
-        mode = "rb"
-    else:
-        mode = "rU"
-
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower():
+    if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
+    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
-    with as_handle(handle, mode) as fp:
-        # Map the file format to a sequence iterator:
-        if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
-            if alphabet is None:
-                i = iterator_generator(fp)
-            else:
-                try:
-                    i = iterator_generator(fp, alphabet=alphabet)
-                except TypeError:
-                    i = _force_alphabet(iterator_generator(fp), alphabet)
-        elif format in AlignIO._FormatToIterator:
-            # Use Bio.AlignIO to read in the alignments
-            i = (
-                r
-                for alignment in AlignIO.parse(fp, format, alphabet=alphabet)
-                for r in alignment
-            )
+    iterator_generator = _FormatToIterator.get(format)
+    if iterator_generator:
+        if alphabet is None:
+            i = iterator_generator(handle)
         else:
-            raise ValueError("Unknown format '%s'" % format)
-        # This imposes some overhead... wait until we drop Python 2.4 to fix it
-        for r in i:
-            yield r
+            try:
+                i = iterator_generator(handle, alphabet=alphabet)
+            except TypeError:
+                i = _force_alphabet(iterator_generator(handle), alphabet)
+        return i
+    if format in AlignIO._FormatToIterator:
+        # Use Bio.AlignIO to read in the alignments
+        i = (
+            r
+            for alignment in AlignIO.parse(handle, format, alphabet=alphabet)
+            for r in alignment
+        )
+        return i
+    raise ValueError("Unknown format '%s'" % format)
 
 
 def _force_alphabet(record_iterator, alphabet):
@@ -751,18 +722,15 @@ def read(handle, format, alphabet=None):
     """
     iterator = parse(handle, format, alphabet)
     try:
-        first = next(iterator)
+        record = next(iterator)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(iterator)
         raise ValueError("More than one record found in handle")
-    return first
+    except StopIteration:
+        pass
+    return record
 
 
 def to_dict(sequences, key_function=None):
@@ -784,11 +752,8 @@ def to_dict(sequences, key_function=None):
 
     Since Python 3.7, the default dict class maintains key order, meaning
     this dictionary will reflect the order of records given to it. For
-    CPython, this was already implemented in 3.6.
-
-    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
-    than 3.6 (and for other Python older than 3.7) so that you can always
-    assume the record order is preserved.
+    CPython and PyPy, this was already implemented for Python 3.6, so
+    effectively you can always assume the record order is preserved.
 
     Example usage, defaulting to using the record.id as key:
 
@@ -836,7 +801,7 @@ def to_dict(sequences, key_function=None):
     if key_function is None:
         key_function = _default_key_function
 
-    d = _dict()
+    d = {}
     for record in sequences:
         key = key_function(record)
         if key in d:
@@ -890,10 +855,6 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> print(records["EAS54_6_R1_2_1_540_792"].seq)
     TTGGCAGGCCAAGGCCGATGGATCA
     >>> records.close()
-
-    Note that this pseudo dictionary will not support all the methods of a
-    true Python dictionary, for example values() is not defined as in Python 2
-    since this would require loading all of the records into memory at once.
 
     When you call the index function, it will scan through the file, noting
     the location of each record. When you access a particular record via the
@@ -959,17 +920,15 @@ def index(filename, format, alphabet=None, key_function=None):
 
     """
     # Try and give helpful error messages:
-    if not isinstance(filename, basestring):
+    if not isinstance(filename, str):
         raise TypeError("Need a filename (not a handle)")
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower():
+    if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
+    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
     # Map the file format to a sequence iterator:
@@ -1044,21 +1003,19 @@ def index_db(
 
     """
     # Try and give helpful error messages:
-    if not isinstance(index_filename, basestring):
+    if not isinstance(index_filename, str):
         raise TypeError("Need a string for the index filename")
-    if isinstance(filenames, basestring):
+    if isinstance(filenames, str):
         # Make the API a little more friendly, and more similar
         # to Bio.SeqIO.index(...) for indexing just one file.
         filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
         raise TypeError("Need a list of filenames (as strings), or one filename")
-    if format is not None and not isinstance(format, basestring):
+    if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
-    if format and format != format.lower():
+    if format and not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
+    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %r" % alphabet)
 
     # Map the file format to a sequence iterator:
@@ -1099,11 +1056,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     For example, going from a filename to a handle:
 
     >>> from Bio import SeqIO
-    >>> try:
-    ...     from StringIO import StringIO # Python 2
-    ... except ImportError:
-    ...     from io import StringIO # Python 3
-    ...
+    >>> from io import StringIO
     >>> handle = StringIO("")
     >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "fasta")
     3
@@ -1116,15 +1069,9 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    if in_format in _BinaryFormats:
-        in_mode = "rb"
-    else:
-        in_mode = "rU"
+    in_mode = "rb" if in_format in _BinaryFormats else "r"
 
-    if out_format in _BinaryFormats:
-        out_mode = "wb"
-    else:
-        out_mode = "w"
+    out_mode = "wb" if out_format in _BinaryFormats else "w"
 
     # This will check the arguments and issue error messages,
     # after we have opened the file which is a shame.

@@ -13,7 +13,6 @@ See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for syntax.
 import re
 from collections import defaultdict
 
-from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBIO import Select, StructureIO
 
@@ -96,7 +95,7 @@ class MMCIFIO(StructureIO):
         """
         # Similar to the PDBIO save method, we check if the filepath is a
         # string for a filepath or an open file handle
-        if isinstance(filepath, basestring):
+        if isinstance(filepath, str):
             fp = open(filepath, "w")
             close_file = True
         else:

@@ -27,8 +27,8 @@ try:
     from scipy.integrate import trapz
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install scipy to extract curve parameters.")
+
+    raise MissingPythonDependencyError("Install scipy to extract curve parameters.")
 
 
 def logistic(x, A, u, d, v, y0):
@@ -54,8 +54,17 @@ def richards(x, A, u, d, v, y0):
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
-    y = (A * pow(1 + (v + (np.exp(1 + v) * np.exp((u / A) *
-                                                  (1 + v) * (1 + (1 / v)) * (d - x)))), -(1 / v))) + y0
+    y = (
+        A
+        * pow(
+            1
+            + (
+                v
+                + (np.exp(1 + v) * np.exp((u / A) * (1 + v) * (1 + (1 / v)) * (d - x)))
+            ),
+            -(1 / v),
+        )
+    ) + y0
     return y
 
 

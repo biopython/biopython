@@ -7,51 +7,21 @@
 # package.
 """Code for more fancy file handles.
 
-Classes:
- - UndoHandle     File object decorator with support for undo-like operations.
-
-Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
-files are also defined under Bio.File but these are not intended for direct
-use.
+Bio.File defines private classes used in Bio.SeqIO and Bio.SearchIO for
+indexing files. These are not intended for direct use.
 """
 
-from __future__ import print_function
-
-import codecs
 import os
-import sys
 import contextlib
 import itertools
-import platform
+import collections.abc
 
-from Bio._py3k import basestring
-
-try:
-    from collections import UserDict as _dict_base
-except ImportError:
-    from UserDict import DictMixin as _dict_base
-
-# Ordered dict is a language feature from Python 3.7 onwards.
-# CPython 3.6 also already has ordered dicts.
-# PyPy has always had ordered dicts.
-if (sys.version_info >= (3, 7)
-        or platform.python_implementation() == "PyPy"
-        or (sys.version_info == (3, 6)
-            and platform.python_implementation() == "CPython")):
-    _dict = dict
-else:
-    from collections import OrderedDict as _dict
 
 try:
-    from sqlite3 import dbapi2 as _sqlite
-    from sqlite3 import IntegrityError as _IntegrityError
-    from sqlite3 import OperationalError as _OperationalError
+    import sqlite3
 except ImportError:
-    # Not present on Jython, but should be included in Python 2.5
-    # or later (unless compiled from source without its dependencies)
-    # Still want to offer in-memory indexing.
-    _sqlite = None
-    pass
+    # May be missing if Python was compiled from source without its dependencies
+    sqlite3 = None
 
 
 @contextlib.contextmanager
@@ -70,8 +40,8 @@ def as_handle(handleish, mode="r", **kwargs):
 
     Arguments:
      - handleish  - Either a file handle or path-like object (anything which can be
-                    passed to the builtin 'open' function: str, bytes, and under
-                    Python >= 3.6, pathlib.Path, os.DirEntry)
+                    passed to the builtin 'open' function, such as str, bytes,
+                    pathlib.Path, and os.DirEntry objects)
      - mode       - Mode to open handleish (used only if handleish is a string)
      - kwargs     - Further arguments to pass to open(...)
 
@@ -80,46 +50,27 @@ def as_handle(handleish, mode="r", **kwargs):
     >>> from Bio import File
     >>> import os
     >>> with File.as_handle('seqs.fasta', 'w') as fp:
-    ...     # Python2/3 docstring workaround, revise for 'Python 3 only'.
-    ...     _ = fp.write('>test\nACGT')
+    ...     fp.write('>test\nACGT')
     ...
+    10
     >>> fp.closed
     True
 
     >>> handle = open('seqs.fasta', 'w')
     >>> with File.as_handle(handle) as fp:
-    ...     # Python 2/3 docstring workaround, revise for 'Python 3 only'.
-    ...     _ = fp.write('>test\nACGT')
+    ...     fp.write('>test\nACGT')
     ...
+    10
     >>> fp.closed
     False
     >>> fp.close()
     >>> os.remove("seqs.fasta")  # tidy up
 
-    Note that if the mode argument includes U (for universal new lines)
-    this will be removed under Python 3 where is is redundant and has
-    been deprecated (this happens automatically in text mode).
-
     """
-    # If we're running under a version of Python that supports PEP 519, try
-    # to convert 'handleish' to a string with 'os.fspath'.
-    if hasattr(os, "fspath"):
-        try:
-            handleish = os.fspath(handleish)
-        except TypeError:
-            # handleish isn't path-like, and it remains unchanged -- we'll yield it below
-            pass
-
-    if isinstance(handleish, basestring):
-        if sys.version_info[0] >= 3 and "U" in mode:
-            mode = mode.replace("U", "")
-        if "encoding" in kwargs:
-            with codecs.open(handleish, mode, **kwargs) as fp:
-                yield fp
-        else:
-            with open(handleish, mode, **kwargs) as fp:
-                yield fp
-    else:
+    try:
+        with open(handleish, mode, **kwargs) as fp:
+            yield fp
+    except TypeError:
         yield handleish
 
 
@@ -138,6 +89,7 @@ def _open_for_random_access(filename):
     if magic == b"\x1f\x8b":
         # This is a gzipped file, but is it BGZF?
         from . import bgzf
+
         try:
             # If it is BGZF, we support that
             return bgzf.BgzfReader(mode="rb", fileobj=handle)
@@ -145,14 +97,16 @@ def _open_for_random_access(filename):
             assert "BGZF" in str(e)
             # Not a BGZF file after all,
             handle.close()
-            raise ValueError("Gzipped files are not suitable for indexing, "
-                             "please use BGZF (blocked gzip format) instead.")
+            raise ValueError(
+                "Gzipped files are not suitable for indexing, "
+                "please use BGZF (blocked gzip format) instead."
+            ) from None
 
     return handle
 
 
-class UndoHandle(object):
-    """A Python handle that adds functionality for saving lines.
+class UndoHandle:
+    """A Python handle that adds functionality for saving lines (DEPRECATED).
 
     Saves lines in a LIFO fashion.
 
@@ -164,104 +118,19 @@ class UndoHandle(object):
 
     def __init__(self, handle):
         """Initialize the class."""
-        self._handle = handle
-        self._saved = []
-        try:
-            # If wrapping an online handle, this this is nice to have:
-            self.url = handle.url
-        except AttributeError:
-            pass
-
-    def __iter__(self):
-        """Iterate over the lines in the File."""
-        return self
-
-    def __next__(self):
-        """Return the next line."""
-        next = self.readline()
-        if not next:
-            raise StopIteration
-        return next
-
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
-    def readlines(self, *args, **keywds):
-        """Read all the lines from the file as a list of strings."""
-        lines = self._saved + self._handle.readlines(*args, **keywds)
-        self._saved = []
-        return lines
-
-    def readline(self, *args, **keywds):
-        """Read the next line from the file as string."""
-        if self._saved:
-            line = self._saved.pop(0)
-        else:
-            line = self._handle.readline(*args, **keywds)
-        return line
-
-    def read(self, size=-1):
-        """Read the File."""
-        if size == -1:
-            saved = "".join(self._saved)
-            self._saved[:] = []
-        else:
-            saved = ""
-            while size > 0 and self._saved:
-                if len(self._saved[0]) <= size:
-                    size = size - len(self._saved[0])
-                    saved = saved + self._saved.pop(0)
-                else:
-                    saved = saved + self._saved[0][:size]
-                    self._saved[0] = self._saved[0][size:]
-                    size = 0
-        return saved + self._handle.read(size)
-
-    def saveline(self, line):
-        """Store a line in the cache memory for later use.
-
-        This acts to undo a readline, reflecting the name of the class: UndoHandle.
-        """
-        if line:
-            self._saved = [line] + self._saved
-
-    def peekline(self):
-        """Return the next line in the file, but do not move forward though the file."""
-        if self._saved:
-            line = self._saved[0]
-        else:
-            line = self._handle.readline()
-            self.saveline(line)
-        return line
-
-    def tell(self):
-        """Return the current position of the file read/write pointer within the File."""
-        return self._handle.tell() - sum(len(line) for line in self._saved)
-
-    def seek(self, *args):
-        """Set the current position at the offset specified."""
-        self._saved = []
-        self._handle.seek(*args)
-
-    def __getattr__(self, attr):
-        """Return File attribute."""
-        return getattr(self._handle, attr)
-
-    def __enter__(self):
-        """Call special method when opening the file using a with-statement."""
-        return self
-
-    def __exit__(self, type, value, traceback):
-        """Call special method when closing the file using a with-statement."""
-        self._handle.close()
+        raise Exception(
+            "The UndoHandle class has been deprecated, and was "
+            "moved to Bio/SearchIO/_legacy/ParserSupport.py "
+            "(which is the only module in Biopython still using "
+            "UndoHandle."
+        )
 
 
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 # for indexing
 
-class _IndexedSeqFileProxy(object):
+
+class _IndexedSeqFileProxy:
     """Base class for file format specific random access (PRIVATE).
 
     This is subclasses in both Bio.SeqIO for indexing as SeqRecord
@@ -282,7 +151,7 @@ class _IndexedSeqFileProxy(object):
     def get(self, offset):
         """Return parsed object for this entry."""
         # Most file formats with self contained records can be handled by
-        # parsing StringIO(_bytes_to_string(self.get_raw(offset)))
+        # parsing StringIO(self.get_raw(offset).decode())
         raise NotImplementedError("Subclass should implement this")
 
     def get_raw(self, offset):
@@ -296,7 +165,7 @@ class _IndexedSeqFileProxy(object):
         raise NotImplementedError("Not available for this file format.")
 
 
-class _IndexedSeqFileDict(_dict_base):
+class _IndexedSeqFileDict(collections.abc.Mapping):
     """Read only dictionary interface to a sequential record file.
 
     This code is used in both Bio.SeqIO for indexing as SeqRecord
@@ -321,8 +190,7 @@ class _IndexedSeqFileDict(_dict_base):
     add or change values, pop values, nor clear the dictionary.
     """
 
-    def __init__(self, random_access_proxy, key_function,
-                 repr, obj_repr):
+    def __init__(self, random_access_proxy, key_function, repr, obj_repr):
         """Initialize the class."""
         # Use key_function=None for default value
         self._proxy = random_access_proxy
@@ -330,11 +198,10 @@ class _IndexedSeqFileDict(_dict_base):
         self._repr = repr
         self._obj_repr = obj_repr
         if key_function:
-            offset_iter = (
-                (key_function(k), o, l) for (k, o, l) in random_access_proxy)
+            offset_iter = ((key_function(k), o, l) for (k, o, l) in random_access_proxy)
         else:
             offset_iter = random_access_proxy
-        offsets = _dict()
+        offsets = {}
         for key, offset, length in offset_iter:
             # Note - we don't store the length because I want to minimise the
             # memory requirements. With the SQLite backend the length is kept
@@ -364,55 +231,9 @@ class _IndexedSeqFileDict(_dict_base):
         else:
             return "{}"
 
-    def __contains__(self, key):
-        """Return key if contained in the offsets dictionary."""
-        return key in self._offsets
-
     def __len__(self):
         """Return the number of records."""
         return len(self._offsets)
-
-    def items(self):
-        """Iterate over the (key, SeqRecord) items.
-
-        This tries to act like a Python 3 dictionary, and does not return
-        a list of (key, value) pairs due to memory concerns.
-        """
-        for key in self.__iter__():
-            yield key, self.__getitem__(key)
-
-    def values(self):
-        """Iterate over the SeqRecord items.
-
-        This tries to act like a Python 3 dictionary, and does not return
-        a list of value due to memory concerns.
-        """
-        for key in self.__iter__():
-            yield self.__getitem__(key)
-
-    def keys(self):
-        """Iterate over the keys.
-
-        This tries to act like a Python 3 dictionary, and does not return
-        a list of keys due to memory concerns.
-        """
-        return self.__iter__()
-
-    if hasattr(dict, "iteritems"):
-        # Python 2, also define iteritems etc
-        def itervalues(self):
-            """Iterate over the SeqRecord) items."""
-            for key in self.__iter__():
-                yield self.__getitem__(key)
-
-        def iteritems(self):
-            """Iterate over the (key, SeqRecord) items."""
-            for key in self.__iter__():
-                yield key, self.__getitem__(key)
-
-        def iterkeys(self):
-            """Iterate over the keys."""
-            return self.__iter__()
 
     def __iter__(self):
         """Iterate over the keys."""
@@ -430,17 +251,6 @@ class _IndexedSeqFileDict(_dict_base):
             raise ValueError("Key did not match (%s vs %s)" % (key, key2))
         return record
 
-    def get(self, k, d=None):
-        """Return the value in the dictionary.
-
-        If the key (k) is not found, this returns None unless a
-        default (d) is specified.
-        """
-        try:
-            return self.__getitem__(k)
-        except KeyError:
-            return d
-
     def get_raw(self, key):
         """Return the raw record from the file as a bytes string.
 
@@ -448,64 +258,6 @@ class _IndexedSeqFileDict(_dict_base):
         """
         # Pass the offset to the proxy
         return self._proxy.get_raw(self._offsets[key])
-
-    def __setitem__(self, key, value):
-        """Would allow setting or replacing records, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file is read only.")
-
-    def update(self, *args, **kwargs):
-        """Would allow adding more values, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file is read only.")
-
-    def pop(self, key, default=None):
-        """Would remove specified record, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file is read only.")
-
-    def popitem(self):
-        """Would remove and return a SeqRecord, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file is read only.")
-
-    def clear(self):
-        """Would clear dictionary, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file is read only.")
-
-    def fromkeys(self, keys, value=None):
-        """Would return a new dictionary with keys and values, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file doesn't "
-                                  "support this.")
-
-    def copy(self):
-        """Would copy a dictionary, but not implemented.
-
-        Python dictionaries provide this method for modifying data in the
-        dictionary. This class mimics the dictionary interface but is read only.
-        """
-        raise NotImplementedError("An indexed a sequence file doesn't "
-                                  "support this.")
 
     def close(self):
         """Close the file handle being used to read the data.
@@ -533,27 +285,36 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     one of the open handles is closed first.
     """
 
-    def __init__(self, index_filename, filenames,
-                 proxy_factory, format,
-                 key_function, repr, max_open=10):
+    def __init__(
+        self,
+        index_filename,
+        filenames,
+        proxy_factory,
+        fmt,
+        key_function,
+        repr,
+        max_open=10,
+    ):
         """Initialize the class."""
         # TODO? - Don't keep filename list in memory (just in DB)?
         # Should save a chunk of memory if dealing with 1000s of files.
         # Furthermore could compare a generator to the DB on reloading
         # (no need to turn it into a list)
 
-        if not _sqlite:
-            # Hack for Jython (of if Python is compiled without it)
+        if sqlite3 is None:
+            # Python was compiled without sqlite3 support
             from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, which is "
-                                               "included Python 2.5+")
+
+            raise MissingPythonDependencyError(
+                "Python was compiled without the sqlite3 module"
+            )
         if filenames is not None:
             filenames = list(filenames)  # In case it was a generator
 
         # Cache the arguments as private variables
         self._index_filename = index_filename
         self._filenames = filenames
-        self._format = format
+        self._format = fmt
         self._key_function = key_function
         self._proxy_factory = proxy_factory
         self._repr = repr
@@ -574,49 +335,55 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         index_filename = self._index_filename
         relative_path = self._relative_path
         filenames = self._filenames
-        format = self._format
+        fmt = self._format
         proxy_factory = self._proxy_factory
 
-        con = _sqlite.connect(index_filename,
-                              check_same_thread=False)
+        con = sqlite3.dbapi2.connect(index_filename, check_same_thread=False)
         self._con = con
         # Check the count...
         try:
-            count, = con.execute(
-                "SELECT value FROM meta_data WHERE key=?;",
-                ("count",)).fetchone()
+            (count,) = con.execute(
+                "SELECT value FROM meta_data WHERE key=?;", ("count",)
+            ).fetchone()
             self._length = int(count)
             if self._length == -1:
                 con.close()
-                raise ValueError("Unfinished/partial database")
+                raise ValueError("Unfinished/partial database") from None
 
             # use MAX(_ROWID_) to obtain the number of sequences in the database
             # using COUNT(key) is quite slow in SQLITE
             # (https://stackoverflow.com/questions/8988915/sqlite-count-slow-on-big-tables)
-            count, = con.execute(
-                "SELECT MAX(_ROWID_) FROM offset_data;").fetchone()
+            (count,) = con.execute("SELECT MAX(_ROWID_) FROM offset_data;").fetchone()
             if self._length != int(count):
                 con.close()
-                raise ValueError("Corrupt database? %i entries not %i"
-                                 % (int(count), self._length))
-            self._format, = con.execute(
-                "SELECT value FROM meta_data WHERE key=?;",
-                ("format",)).fetchone()
-            if format and format != self._format:
+                raise ValueError(
+                    "Corrupt database? %i entries not %i" % (int(count), self._length)
+                ) from None
+            (self._format,) = con.execute(
+                "SELECT value FROM meta_data WHERE key=?;", ("format",)
+            ).fetchone()
+            if fmt and fmt != self._format:
                 con.close()
-                raise ValueError("Index file says format %s, not %s"
-                                 % (self._format, format))
+                raise ValueError(
+                    "Index file says format %s, not %s" % (self._format, fmt)
+                ) from None
             try:
-                filenames_relative_to_index, = con.execute(
+                (filenames_relative_to_index,) = con.execute(
                     "SELECT value FROM meta_data WHERE key=?;",
-                    ("filenames_relative_to_index",)).fetchone()
-                filenames_relative_to_index = (filenames_relative_to_index.upper() == "TRUE")
+                    ("filenames_relative_to_index",),
+                ).fetchone()
+                filenames_relative_to_index = (
+                    filenames_relative_to_index.upper() == "TRUE"
+                )
             except TypeError:
                 # Original behaviour, assume if meta_data missing
                 filenames_relative_to_index = False
-            self._filenames = [row[0] for row in
-                               con.execute("SELECT name FROM file_data "
-                                           "ORDER BY file_number;").fetchall()]
+            self._filenames = [
+                row[0]
+                for row in con.execute(
+                    "SELECT name FROM file_data ORDER BY file_number;"
+                ).fetchall()
+            ]
             if filenames_relative_to_index:
                 # Not implicitly relative to $PWD, explicitly relative to index file
                 relative_path = os.path.abspath(os.path.dirname(index_filename))
@@ -627,31 +394,39 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     else:
                         # Would be stored with Unix / path separator, so convert
                         # it to the local OS path separator here:
-                        tmp.append(os.path.join(relative_path, f.replace("/", os.path.sep)))
+                        tmp.append(
+                            os.path.join(relative_path, f.replace("/", os.path.sep))
+                        )
                 self._filenames = tmp
                 del tmp
             if filenames and len(filenames) != len(self._filenames):
                 con.close()
-                raise ValueError("Index file says %i files, not %i"
-                                 % (len(self._filenames), len(filenames)))
+                raise ValueError(
+                    "Index file says %i files, not %i"
+                    % (len(self._filenames), len(filenames))
+                ) from None
             if filenames and filenames != self._filenames:
                 for old, new in zip(self._filenames, filenames):
                     # Want exact match (after making relative to the index above)
                     if os.path.abspath(old) != os.path.abspath(new):
                         con.close()
                         if filenames_relative_to_index:
-                            raise ValueError("Index file has different filenames, e.g. %r != %r"
-                                             % (os.path.abspath(old), os.path.abspath(new)))
+                            raise ValueError(
+                                "Index file has different filenames, e.g. %r != %r"
+                                % (os.path.abspath(old), os.path.abspath(new))
+                            ) from None
                         else:
-                            raise ValueError("Index file has different filenames "
-                                             "[This is an old index where any relative paths "
-                                             "were relative to the original working directory]. "
-                                             "e.g. %r != %r"
-                                             % (os.path.abspath(old), os.path.abspath(new)))
+                            raise ValueError(
+                                "Index file has different filenames "
+                                "[This is an old index where any relative paths "
+                                "were relative to the original working directory]. "
+                                "e.g. %r != %r"
+                                % (os.path.abspath(old), os.path.abspath(new))
+                            ) from None
                 # Filenames are equal (after imposing abspath)
-        except _OperationalError as err:
+        except sqlite3.OperationalError as err:
             con.close()
-            raise ValueError("Not a Biopython index database? %s" % err)
+            raise ValueError("Not a Biopython index database? %s" % err) from None
         # Now we have the format (from the DB if not given to us),
         if not proxy_factory(self._format):
             con.close()
@@ -662,18 +437,20 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         index_filename = self._index_filename
         relative_path = self._relative_path
         filenames = self._filenames
-        format = self._format
+        fmt = self._format
         key_function = self._key_function
         proxy_factory = self._proxy_factory
         max_open = self._max_open
         random_access_proxies = self._proxies
 
-        if not format or not filenames:
-            raise ValueError("Filenames to index and format required to build %r" % index_filename)
-        if not proxy_factory(format):
-            raise ValueError("Unsupported format '%s'" % format)
+        if not fmt or not filenames:
+            raise ValueError(
+                "Filenames to index and format required to build %r" % index_filename
+            )
+        if not proxy_factory(fmt):
+            raise ValueError("Unsupported format '%s'" % fmt)
         # Create the index
-        con = _sqlite.connect(index_filename)
+        con = sqlite3.dbapi2.connect(index_filename)
         self._con = con
         # print("Creating index")
         # Sqlite PRAGMA settings for speed
@@ -683,18 +460,19 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         # con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
         #             "offset INTEGER);")
         con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
-        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                    ("count", -1))
-        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                    ("format", format))
-        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
-                    ("filenames_relative_to_index", "True"))
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);", ("count", -1))
+        con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);", ("format", fmt))
+        con.execute(
+            "INSERT INTO meta_data (key, value) VALUES (?,?);",
+            ("filenames_relative_to_index", "True"),
+        )
         # TODO - Record the alphabet?
         # TODO - Record the file size and modified date?
+        con.execute("CREATE TABLE file_data (file_number INTEGER, name TEXT);")
         con.execute(
-            "CREATE TABLE file_data (file_number INTEGER, name TEXT);")
-        con.execute("CREATE TABLE offset_data (key TEXT, "
-                    "file_number INTEGER, offset INTEGER, length INTEGER);")
+            "CREATE TABLE offset_data (key TEXT, "
+            "file_number INTEGER, offset INTEGER, length INTEGER);"
+        )
         count = 0
         for i, filename in enumerate(filenames):
             # Default to storing as an absolute path,
@@ -706,23 +484,24 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # Note for cross platform use (e.g. shared drive over SAMBA),
                 # convert any Windows slash into Unix style for rel paths.
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
-            elif (os.path.dirname(os.path.abspath(filename)) +
-                  os.path.sep).startswith(relative_path + os.path.sep):
+            elif (os.path.dirname(os.path.abspath(filename)) + os.path.sep).startswith(
+                relative_path + os.path.sep
+            ):
                 # Since sequence file is in same directory or sub directory,
                 # might as well make this into a relative path:
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
                 assert not f.startswith("../"), f
             # print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
-                "INSERT INTO file_data (file_number, name) VALUES (?,?);",
-                (i, f))
-            random_access_proxy = proxy_factory(format, filename)
+                "INSERT INTO file_data (file_number, name) VALUES (?,?);", (i, f)
+            )
+            random_access_proxy = proxy_factory(fmt, filename)
             if key_function:
-                offset_iter = ((key_function(k), i, o, l)
-                               for (k, o, l) in random_access_proxy)
+                offset_iter = (
+                    (key_function(k), i, o, l) for (k, o, l) in random_access_proxy
+                )
             else:
-                offset_iter = ((k, i, o, l)
-                               for (k, o, l) in random_access_proxy)
+                offset_iter = ((k, i, o, l) for (k, o, l) in random_access_proxy)
             while True:
                 batch = list(itertools.islice(offset_iter, 100))
                 if not batch:
@@ -731,7 +510,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 #       % (len(batch), batch[0][0], batch[-1][0]))
                 con.executemany(
                     "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
-                    batch)
+                    batch,
+                )
                 con.commit()
                 count += len(batch)
             if len(random_access_proxies) < max_open:
@@ -741,16 +521,16 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._length = count
         # print("About to index %i entries" % count)
         try:
-            con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
-                        "key_index ON offset_data(key);")
-        except _IntegrityError as err:
+            con.execute(
+                "CREATE UNIQUE INDEX IF NOT EXISTS key_index ON offset_data(key);"
+            )
+        except sqlite3.IntegrityError as err:
             self._proxies = random_access_proxies
             self.close()
             con.close()
-            raise ValueError("Duplicate key? %s" % err)
+            raise ValueError("Duplicate key? %s" % err) from None
         con.execute("PRAGMA locking_mode=NORMAL")
-        con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
-                    (count, "count"))
+        con.execute("UPDATE meta_data SET value = ? WHERE key = ?;", (count, "count"))
         con.commit()
         # print("Index created")
 
@@ -759,8 +539,10 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
     def __contains__(self, key):
         return bool(
-            self._con.execute("SELECT key FROM offset_data WHERE key=?;",
-                              (key,)).fetchone())
+            self._con.execute(
+                "SELECT key FROM offset_data WHERE key=?;", (key,)
+            ).fetchone()
+        )
 
     def __len__(self):
         """Return the number of records indexed."""
@@ -769,27 +551,17 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
     def __iter__(self):
         """Iterate over the keys."""
-        for row in self._con.execute("SELECT key FROM offset_data ORDER BY file_number, offset;"):
+        for row in self._con.execute(
+            "SELECT key FROM offset_data ORDER BY file_number, offset;"
+        ):
             yield str(row[0])
-
-    if hasattr(dict, "iteritems"):
-        # Python 2, use iteritems but not items etc
-        # Just need to override this...
-        def keys(self):
-            """Iterate over the keys.
-
-            This tries to act like a Python 3 dictionary, and does not return
-            a list of keys due to memory concerns.
-            """
-            return [str(row[0]) for row in
-                    self._con.execute("SELECT key FROM offset_data;").fetchall()]
 
     def __getitem__(self, key):
         """Return record for the specified key."""
         # Pass the offset to the proxy
         row = self._con.execute(
-            "SELECT file_number, offset FROM offset_data WHERE key=?;",
-            (key,)).fetchone()
+            "SELECT file_number, offset FROM offset_data WHERE key=?;", (key,)
+        ).fetchone()
         if not row:
             raise KeyError
         file_number, offset = row
@@ -812,17 +584,6 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             raise ValueError("Key did not match (%s vs %s)" % (key, key2))
         return record
 
-    def get(self, k, d=None):
-        """Return the value in the dictionary.
-
-        If the key (k) is not found, this returns None unless a
-        default (d) is specified.
-        """
-        try:
-            return self.__getitem__(k)
-        except KeyError:
-            return d
-
     def get_raw(self, key):
         """Return the raw record from the file as a bytes string.
 
@@ -830,8 +591,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         """
         # Pass the offset to the proxy
         row = self._con.execute(
-            "SELECT file_number, offset, length FROM offset_data WHERE key=?;",
-            (key,)).fetchone()
+            "SELECT file_number, offset, length FROM offset_data WHERE key=?;", (key,)
+        ).fetchone()
         if not row:
             raise KeyError
         file_number, offset, length = row

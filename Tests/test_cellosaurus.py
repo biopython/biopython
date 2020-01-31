@@ -16,7 +16,7 @@ class TestCellosaurus(unittest.TestCase):
         """Test read function."""
         handle = open("Cellosaurus/cell_lines_1.txt")
         record = cellosaurus.read(handle)
-        self.assertEquals(record["ID"], "#15310-LN")
+        self.assertEqual(record["ID"], "#15310-LN")
         self.assertEqual(record["AC"], "CVCL_E548")
         self.assertEqual(record["SY"], "15310-LN; TER461")
         self.assertEqual(record["DR"][0], ("dbMHC", "48439"))
@@ -125,11 +125,13 @@ class TestCellosaurus(unittest.TestCase):
         """Test string function."""
         handle = open("Cellosaurus/cell_lines_3.txt")
         record = cellosaurus.read(handle)
-        input = "ID: ZZ-R 127 AC: CVCL_5418 AS:  SY: ZZ-R DR: [('CCLV', 'CCLV-RIE 0127')] " \
-                "RX: ['PubMed=19656987;', 'PubMed=19941903;'] WW: [] CC: [] ST: [] DI: [] " \
-                "OX: ['NCBI_TaxID=9925; ! Capra hircus'] HI: [] OI: [] SX:  CA: " \
-                "Spontaneously immortalized cell line"
-        self.assertEquals(record.__str__(), input)
+        input = (
+            "ID: ZZ-R 127 AC: CVCL_5418 AS:  SY: ZZ-R DR: [('CCLV', 'CCLV-RIE 0127')] "
+            "RX: ['PubMed=19656987;', 'PubMed=19941903;'] WW: [] CC: [] ST: [] DI: [] "
+            "OX: ['NCBI_TaxID=9925; ! Capra hircus'] HI: [] OI: [] SX:  CA: "
+            "Spontaneously immortalized cell line"
+        )
+        self.assertEqual(record.__str__(), input)
 
 
 if __name__ == "__main__":

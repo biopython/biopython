@@ -7,8 +7,6 @@
 
 import re
 
-from Bio._py3k import _bytes_to_string
-
 from ._base import _BaseExonerateParser, _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
 
@@ -17,11 +15,14 @@ __all__ = ("ExonerateCigarParser", "ExonerateCigarIndexer")
 
 
 # precompile regex
-_RE_CIGAR = re.compile(r"""^cigar:\s+
+_RE_CIGAR = re.compile(
+    r"""^cigar:\s+
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand
         (\d+)(\s+.*)$                         # score, vulgar components
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
 
 class ExonerateCigarParser(_BaseExonerateParser):
@@ -97,11 +98,12 @@ class ExonerateCigarIndexer(ExonerateVulgarIndexer):
         # get line, check if it's a vulgar line, and get query ID
         line = handle.readline()
         assert line.startswith(self._query_mark), line
-        id = re.search(_RE_CIGAR, _bytes_to_string(line))
+        id = re.search(_RE_CIGAR, line.decode())
         return id.group(1)
 
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

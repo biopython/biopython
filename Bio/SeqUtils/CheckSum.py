@@ -10,10 +10,8 @@
 # crc32, crc64, gcg, and seguid
 # crc64 is adapted from BioPerl
 
-from __future__ import print_function
 
 from binascii import crc32 as _crc32
-from Bio._py3k import _as_bytes
 
 
 def crc32(seq):
@@ -32,10 +30,10 @@ def crc32(seq):
     # TODO - Should we return crc32(x) & 0xffffffff here?
     try:
         # Assume its a Seq object
-        return _crc32(_as_bytes(str(seq)))
+        return _crc32(str(seq).encode())
     except AttributeError:
         # Assume its a string/unicode
-        return _crc32(_as_bytes(seq))
+        return _crc32(seq.encode())
 
 
 def _init_table_h():
@@ -47,10 +45,10 @@ def _init_table_h():
             rflag = part_l & 1
             part_l >>= 1
             if part_h & 1:
-                part_l |= (1 << 31)
+                part_l |= 1 << 31
             part_h >>= 1
             if rflag:
-                part_h ^= 0xd8000000
+                part_h ^= 0xD8000000
         _table_h.append(part_h)
     return _table_h
 
@@ -136,6 +134,7 @@ def seguid(seq):
     """
     import hashlib
     import base64
+
     m = hashlib.sha1()
     try:
         # Assume it's a Seq object
@@ -143,7 +142,7 @@ def seguid(seq):
     except AttributeError:
         # Assume it's a string
         pass
-    m.update(_as_bytes(seq.upper()))
+    m.update(seq.upper().encode())
     try:
         # For Python 3+
         tmp = base64.encodebytes(m.digest())
@@ -156,4 +155,5 @@ def seguid(seq):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

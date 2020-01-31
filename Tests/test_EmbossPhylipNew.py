@@ -35,7 +35,7 @@ if "EMBOSS_ROOT" in os.environ:
                 exes[name] = os.path.join(path, name + ".exe")
     del path, name
 if sys.platform != "win32":
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     for name in exes_wanted:
         # This will "just work" if installed on the path as normal on Unix
         output = getoutput("%s -help" % name)
@@ -78,7 +78,7 @@ def parse_trees(filename):
     Helper function until we have Bio.Phylo on trunk.
     """
     # TODO - Can this be removed now?
-    data = open("test_file", "r").read()
+    data = open("test_file").read()
     for tree_str in data.split(";\n"):
         if tree_str:
             yield Trees.Tree(tree_str + ";")
@@ -184,7 +184,7 @@ class ParsimonyTests(unittest.TestCase):
                                          auto=True, stdout=True)
         stdout, stderr = cline()
         a_taxa = [s.name.replace(" ", "_") for s in
-                  next(AlignIO.parse(open(filename, "r"), format))]
+                  next(AlignIO.parse(open(filename), format))]
         for tree in parse_trees("test_file"):
             t_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
             self.assertEqual(sorted(a_taxa), sorted(t_taxa))
@@ -239,11 +239,11 @@ class BootstrapTests(unittest.TestCase):
                                     auto=True, filter=True)
         stdout, stderr = cline()
         # the resultant file should have 2 alignments...
-        bs = list(AlignIO.parse(open("test_file", "r"), format))
+        bs = list(AlignIO.parse(open("test_file"), format))
         self.assertEqual(len(bs), 2)
         # ..and each name in the original alignment...
         a_names = [s.name.replace(" ", "_") for s in
-                   AlignIO.read(open(filename, "r"), format)]
+                   AlignIO.read(open(filename), format)]
         # ...should be in each alignment in the bootstrapped file
         for a in bs:
             self.assertEqual(a_names, [s.name.replace(" ", "_") for s in a])

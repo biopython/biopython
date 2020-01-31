@@ -9,7 +9,6 @@
 # package.
 """Miscellaneous functions for dealing with sequences."""
 
-from __future__ import print_function
 
 import re
 from math import pi, sin, cos
@@ -63,7 +62,7 @@ def GC123(seq):
         d[nt] = [0, 0, 0]
 
     for i in range(0, len(seq), 3):
-        codon = seq[i:i + 3]
+        codon = seq[i : i + 3]
         if len(codon) < 3:
             codon += "  "
         for pos in range(0, 3):
@@ -100,7 +99,7 @@ def GC_skew(seq, window=100):
     # 8/19/03: Iddo: added lowercase
     values = []
     for i in range(0, len(seq), window):
-        s = seq[i: i + window]
+        s = seq[i : i + window]
         g = s.count("G") + s.count("g")
         c = s.count("C") + s.count("c")
         try:
@@ -113,15 +112,13 @@ def GC_skew(seq, window=100):
 
 def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     """Calculate and plot normal and accumulated GC skew (GRAPHICS !!!)."""
-    try:
-        import Tkinter as tkinter  # Python 2
-    except ImportError:
-        import tkinter  # Python 3
+    import tkinter
 
     yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
     xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
-    canvas = tkinter.Canvas(yscrollcommand=yscroll.set,
-                            xscrollcommand=xscroll.set, background="white")
+    canvas = tkinter.Canvas(
+        yscrollcommand=yscroll.set, xscrollcommand=xscroll.set, background="white"
+    )
     win = canvas.winfo_toplevel()
     win.geometry("700x700")
 
@@ -136,8 +133,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     x1, x2, y1, y2 = X0 - r, X0 + r, Y0 - r, Y0 + r
 
     ty = Y0
-    canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7],
-                                                         seq[-7:], len(seq)))
+    canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
     canvas.create_text(X0, ty, text="GC %3.2f%%" % (GC(seq)))
     ty += 20
@@ -250,8 +246,9 @@ def seq3(seq, custom_map=None, undef_code="Xaa"):
         custom_map = {"*": "Ter"}
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
-    threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
-                     list(custom_map.items()))
+    threecode = dict(
+        list(IUPACData.protein_letters_1to3_extended.items()) + list(custom_map.items())
+    )
     # We use a default of 'Xaa' for undefined letters
     # Note this will map '-' to 'Xaa' which may be undesirable!
     return "".join(threecode.get(aa, undef_code) for aa in seq)
@@ -305,11 +302,10 @@ def seq1(seq, custom_map=None, undef_code="X"):
         custom_map = {"Ter": "*"}
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
-    onecode = {k.upper(): v for k, v in
-               IUPACData.protein_letters_3to1_extended.items()}
+    onecode = {k.upper(): v for k, v in IUPACData.protein_letters_3to1_extended.items()}
     # add the given termination codon code and custom maps
     onecode.update((k.upper(), v) for k, v in custom_map.items())
-    seqlist = [seq[3 * i:3 * (i + 1)] for i in range(len(seq) // 3)]
+    seqlist = [seq[3 * i : 3 * (i + 1)] for i in range(len(seq) // 3)]
     return "".join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 
 
@@ -318,8 +314,9 @@ def seq1(seq, custom_map=None, undef_code="X"):
 ######################
 
 
-def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
-                     monoisotopic=False):
+def molecular_weight(
+    seq, seq_type=None, double_stranded=False, circular=False, monoisotopic=False
+):
     """Calculate the molecular mass of DNA, RNA or protein sequences as float.
 
     Only unambiguous letters are allowed. Nucleotide sequences are assumed to
@@ -391,13 +388,15 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
             # Convert to one-letter sequence. Have to use a string for seq1
             seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
         elif not isinstance(base_alphabet, Alphabet.Alphabet):
-            raise TypeError("%s is not a valid alphabet for mass calculations"
-                            % base_alphabet)
+            raise TypeError(
+                "%s is not a valid alphabet for mass calculations" % base_alphabet
+            )
         else:
             tmp_type = "DNA"  # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
-            raise ValueError("seq_type=%r contradicts %s from seq alphabet"
-                             % (seq_type, tmp_type))
+            raise ValueError(
+                "seq_type=%r contradicts %s from seq alphabet" % (seq_type, tmp_type)
+            )
         seq_type = tmp_type
     elif isinstance(seq, str):
         if seq_type is None:
@@ -423,8 +422,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
         else:
             weight_table = IUPACData.protein_weights
     else:
-        raise ValueError("Allowed seq_types are DNA, RNA or protein, not %r"
-                         % seq_type)
+        raise ValueError("Allowed seq_types are DNA, RNA or protein, not %r" % seq_type)
 
     if monoisotopic:
         water = 18.010565
@@ -436,8 +434,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
         if circular:
             weight -= water
     except KeyError as e:
-        raise ValueError("%s is not a valid unambiguous letter for %s"
-                         % (e, seq_type))
+        raise ValueError("%s is not a valid unambiguous letter for %s" % (e, seq_type))
 
     if seq_type in ("DNA", "RNA") and double_stranded:
         seq = str(Seq(seq).complement())
@@ -476,15 +473,15 @@ def six_frame_translations(seq, genetic_code=1):
 
     """  # noqa for pep8 W291 trailing whitespace
     from Bio.Seq import reverse_complement, translate
+
     anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
     frames = {}
     for i in range(0, 3):
         fragment_length = 3 * ((length - i) // 3)
-        frames[i + 1] = translate(seq[i:i + fragment_length], genetic_code)
-        frames[-(i + 1)] = translate(anti[i:i + fragment_length],
-                                     genetic_code)[::-1]
+        frames[i + 1] = translate(seq[i : i + fragment_length], genetic_code)
+        frames[-(i + 1)] = translate(anti[i : i + fragment_length], genetic_code)[::-1]
 
     # create header
     if length > 20:
@@ -495,28 +492,32 @@ def six_frame_translations(seq, genetic_code=1):
     for nt in ["a", "t", "g", "c"]:
         header += "%s:%d " % (nt, seq.count(nt.upper()))
 
-    header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (short.lower(),
-                                                           length, GC(seq))
+    header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
+        short.lower(),
+        length,
+        GC(seq),
+    )
     res = header
 
     for i in range(0, length, 60):
-        subseq = seq[i:i + 60]
-        csubseq = comp[i:i + 60]
+        subseq = seq[i : i + 60]
+        csubseq = comp[i : i + 60]
         p = i // 3
         res += "%d/%d\n" % (i + 1, i / 3 + 1)
-        res += "  " + "  ".join(frames[3][p:p + 20]) + "\n"
-        res += " " + "  ".join(frames[2][p:p + 20]) + "\n"
-        res += "  ".join(frames[1][p:p + 20]) + "\n"
+        res += "  " + "  ".join(frames[3][p : p + 20]) + "\n"
+        res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
+        res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
         res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
         res += csubseq.lower() + "\n"
         # - frames
-        res += "  ".join(frames[-2][p:p + 20]) + " \n"
-        res += " " + "  ".join(frames[-1][p:p + 20]) + "\n"
-        res += "  " + "  ".join(frames[-3][p:p + 20]) + "\n\n"
+        res += "  ".join(frames[-2][p : p + 20]) + " \n"
+        res += " " + "  ".join(frames[-1][p : p + 20]) + "\n"
+        res += "  " + "  ".join(frames[-3][p : p + 20]) + "\n\n"
     return res
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

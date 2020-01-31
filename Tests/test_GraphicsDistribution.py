@@ -20,7 +20,7 @@ try:
     del r
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 # local stuff
 from Bio.Graphics.Distribution import BarChartDistribution

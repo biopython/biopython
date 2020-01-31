@@ -14,7 +14,6 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from __future__ import print_function
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
@@ -49,14 +48,16 @@ def NexusIterator(handle, seq_count=None):
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
 
     if seq_count and seq_count != len(n.unaltered_taxlabels):
-        raise ValueError("Found %i sequences, but seq_count=%i"
-                         % (len(n.unaltered_taxlabels), seq_count))
+        raise ValueError(
+            "Found %i sequences, but seq_count=%i"
+            % (len(n.unaltered_taxlabels), seq_count)
+        )
 
     # TODO - Can we extract any annotation too?
-    records = (SeqRecord(n.matrix[new_name], id=new_name,
-                         name=old_name, description="")
-               for old_name, new_name
-               in zip(n.unaltered_taxlabels, n.taxlabels))
+    records = (
+        SeqRecord(n.matrix[new_name], id=new_name, name=old_name, description="")
+        for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
+    )
     # All done
     yield MultipleSeqAlignment(records, n.alphabet)
 
@@ -81,23 +82,20 @@ class NexusWriter(AlignmentWriter):
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
-            first_alignment = next(align_iter)
+            alignment = next(align_iter)
         except StopIteration:
-            first_alignment = None
-        if first_alignment is None:
             # Nothing to write!
             return 0
 
         # Check there is only one alignment...
         try:
-            second_alignment = next(align_iter)
-        except StopIteration:
-            second_alignment = None
-        if second_alignment is not None:
+            next(align_iter)
             raise ValueError("We can only write one Alignment to a Nexus file.")
+        except StopIteration:
+            pass
 
         # Good.  Actually write the single alignment,
-        self.write_alignment(first_alignment)
+        self.write_alignment(alignment)
         return 1  # we only support writing one alignment!
 
     def write_alignment(self, alignment, interleave=None):
@@ -113,9 +111,10 @@ class NexusWriter(AlignmentWriter):
         columns = alignment.get_alignment_length()
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
-        minimal_record = "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; " \
-                         + "format datatype=%s; end;"  \
-                         % self._classify_alphabet_for_nexus(alignment._alphabet)
+        minimal_record = (
+            "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=%s; end;"
+            % self._classify_alphabet_for_nexus(alignment._alphabet)
+        )
         n = Nexus.Nexus(minimal_record)
         n.alphabet = alignment._alphabet
         for record in alignment:
@@ -123,7 +122,7 @@ class NexusWriter(AlignmentWriter):
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
-            interleave = (columns > 1000)
+            interleave = columns > 1000
         n.write_nexus_data(self.handle, interleave=interleave)
 
     def _classify_alphabet_for_nexus(self, alphabet):
@@ -150,4 +149,5 @@ class NexusWriter(AlignmentWriter):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

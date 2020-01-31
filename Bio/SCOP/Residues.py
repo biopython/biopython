@@ -13,7 +13,7 @@ _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")
 
 
-class Residues(object):
+class Residues:
     """A collection of residues from a PDB structure.
 
     This class provides code to work with SCOP domain definitions. These
@@ -65,7 +65,7 @@ class Residues(object):
             if chain:
                 if chain[-1] != ":":
                     raise ValueError("I don't understand the chain in %s" % l)
-                chain = chain[:-1]   # chop off the ':'
+                chain = chain[:-1]  # chop off the ':'
             else:
                 chain = ""
 

@@ -14,16 +14,10 @@ Usage:
 python check_output.py <name of file to parse>
 """
 # standard modules
-from __future__ import print_function
-
 import sys
 import os
 import gzip
-
-try:
-    from StringIO import StringIO  # Python 2
-except ImportError:
-    from io import StringIO  # Python 3
+from io import StringIO
 
 # biopython
 from Bio import GenBank
@@ -42,20 +36,20 @@ def do_comparison(good_record, test_record):
         good_line = good_handle.readline()
         test_line = test_handle.readline()
 
-        if not(good_line) and not(test_line):
+        if not good_line and not test_line:
             break
 
-        if not(good_line):
+        if not good_line:
             if good_line.strip():
                 raise AssertionError("Extra info in Test: `%s`" % test_line)
-        if not(test_line):
+        if not test_line:
             if test_line.strip():
-                raise AssertionError("Extra info in Expected: `%s`"
-                                     % good_line)
+                raise AssertionError("Extra info in Expected: `%s`" % good_line)
 
-        assert test_line == good_line, \
-            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
-            (good_line, test_line)
+        assert test_line == good_line, (
+            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n"
+            % (good_line, test_line)
+        )
 
 
 def write_format(file):
@@ -65,11 +59,11 @@ def write_format(file):
     print("Testing GenBank writing for %s..." % os.path.basename(file))
     # be able to handle gzipped files
     if ".gz" in file:
-        cur_handle = gzip.open(file, "r")
-        compare_handle = gzip.open(file, "r")
+        cur_handle = gzip.open(file, "rb")
+        compare_handle = gzip.open(file, "rb")
     else:
-        cur_handle = open(file, "r")
-        compare_handle = open(file, "r")
+        cur_handle = open(file)
+        compare_handle = open(file)
 
     iterator = GenBank.Iterator(cur_handle, record_parser)
     compare_iterator = GenBank.Iterator(compare_handle)
