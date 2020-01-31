@@ -465,7 +465,7 @@ def AbiIterator(source, alphabet=None, trim=False):
             yield _abi_trim(record)
 
     finally:
-        if handle != source:
+        if handle is not source:
             handle.close()
 
 
