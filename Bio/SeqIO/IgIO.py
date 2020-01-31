@@ -21,12 +21,19 @@ from Bio.SeqRecord import SeqRecord
 
 def _parse(handle, alphabet):
     # Skip any file header text before the first record (;; lines)
-    while True:
-        line = next(handle)
-        if not line:
-            break  # Premature end of file, or just empty?
-        if not line.startswith(";;"):
+    header = []
+    for line in handle:
+        if line.startswith(";;"):
+            header.append(line[2:].rstrip())
+        else:
             break
+    else:
+        if header:  # header but no records
+            return
+        else:  # no header and no records
+            raise ValueError("Empty file.")
+    # We could change this generator function into a class,
+    # and save the header as part of the object.
 
     if line[0] != ";":
         raise ValueError("Records should start with ';' and not:\n%r" % line)
@@ -119,8 +126,7 @@ def IgIterator(source, alphabet=single_letter_alphabet):
             ) from None
 
     try:
-        records = _parse(handle, alphabet)
-        yield from records
+        yield from _parse(handle, alphabet)
     finally:
         if handle is not source:
             handle.close()
