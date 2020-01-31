@@ -175,24 +175,17 @@ class Chain(Entity):
         for r in self.get_residues():
             yield from r
 
-    def atom_to_internal_coordinates(
-        self, verbose: bool = False, allBonds: bool = False
-    ) -> None:
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
         """Create/update internal coordinates from Atom X,Y,Z coordinates.
 
         Internal coordinates are bond length, angle and dihedral angles.
 
-        :param allBonds bool: default False
-            include hedra and dihedra for bonds around sidechain rings.
-            (not required to capture all atoms)
         :param verbose bool: default False
             describe runtime problems
         """
         if not self.internal_coord:
             self.internal_coord = IC_Chain(self)
-        self.internal_coord.atom_to_internal_coordinates(
-            verbose=verbose, allBonds=allBonds
-        )
+        self.internal_coord.atom_to_internal_coordinates(verbose=verbose)
 
     def internal_to_atom_coordinates(
         self,
