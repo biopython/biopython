@@ -114,7 +114,9 @@ def IgIterator(source, alphabet=single_letter_alphabet):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("IntelliGenetics files must be opened in text mode.") from None
+            raise ValueError(
+                "IntelliGenetics files must be opened in text mode."
+            ) from None
 
     try:
         records = _parse(handle, alphabet)
