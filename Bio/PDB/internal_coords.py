@@ -121,9 +121,9 @@ class IC_Chain:
         NCaCKeys start chain segments (first residue or after chain break).
         These 3 atoms define the coordinate space for a contiguous chain segment,
         as initially specified by PDB or mmCIF file.
-    MaxPeptideBond: Class attribute to detect chain breaks.
+    MaxPeptideBond: **Class** attribute to detect chain breaks.
         Override for fully contiguous chains with some very long bonds - e.g.
-        for 3D printing (OpennSCAD output) a structure with fully disordered
+        for 3D printing (OpenSCAD output) a structure with fully disordered
         (missing) residues.
     ordered_aa_ic_list: list of IC_Residue objects
         IC_Residue objects ic algorithms can process (e.g. no waters)
@@ -138,7 +138,7 @@ class IC_Chain:
     coords_to_structure()
         update Biopython Residue.Atom coords from IC_Residue coords for all
         Residues with IC_Residue attributes
-    atom_to_internal_coordinates(verbose, allBonds)
+    atom_to_internal_coordinates(verbose)
         Calculate dihedrals, angles, bond lengths (internal coordinates) for
         Atom data
     link_residues()
@@ -353,12 +353,10 @@ class IC_Chain:
         )  # internal to XYZ coordinates
         self.coords_to_structure()  # promote to BioPython Residue/Atom
 
-    def atom_to_internal_coordinates(
-        self, verbose: bool = False, allBonds: bool = False
-    ) -> None:
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
         """Calculate dihedrals, angles, bond lengths for Atom data."""
         for ric in self.ordered_aa_ic_list:
-            ric.atom_to_internal_coordinates(verbose=verbose, allBonds=allBonds)
+            ric.atom_to_internal_coordinates(verbose=verbose)
 
     @staticmethod
     def _write_mtx(fp: TextIO, mtx: numpy.array) -> None:
@@ -721,7 +719,7 @@ class IC_Residue(object):
         Convert 1x3 cartesian coords to 4x1 homogeneous coords
     coords_to_residue()
         Convert homogeneous atom_coords to Biopython cartesian Atom coords
-    atom_to_internal_coordinates(verbose, allBonds)
+    atom_to_internal_coordinates(verbose)
         Create hedra and dihedra for atom coordinates
     get_angle()
         Return angle for passed key
@@ -754,6 +752,8 @@ class IC_Residue(object):
     # normal backbone.  CYG for test case 4LGY (1305 residue contiguous
     # chain)
     accept_resnames = ("CYG", "YCM", "UNK")
+
+    AllBonds: bool = False  # For OpenSCAD, generate explicit hedra covering all bonds if True.
 
     def __init__(self, parent: "Residue", NO_ALTLOC: bool = False) -> None:
         """Initialize IC_Residue with parent Biopython Residue.
@@ -1411,13 +1411,11 @@ class IC_Residue(object):
                     dct[tnlst] = obj(nlst)  # type: ignore
                 dct[tnlst].atoms_updated = False  # type: ignore
 
-    def atom_to_internal_coordinates(
-        self, verbose: bool = False, allBonds: bool = False
-    ) -> None:
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
         """Create hedra and dihedra for atom coordinates.
 
-        :param allBonds: bool default False
-            For OpenSCAD, generate explicit hedra covering all bonds if True.
+        :param verbose: bool default False
+            warn about missing N, Ca, C backbone atoms.
         """
         sN, sCA, sC = self.rak("N"), self.rak("CA"), self.rak("C")
         sCB = self.rak("CB")
@@ -1461,7 +1459,7 @@ class IC_Residue(object):
                 r_edra = [self.rak(atom) for atom in edra]
                 # [4] is label on some table entries
                 self._gen_edra(r_edra[0:4])
-            if allBonds:
+            if IC_Residue.AllBonds:
                 sidechain = ic_data_sidechain_extras.get(self.lc, [])
                 for edra in sidechain:
                     r_edra = [self.rak(atom) for atom in edra]
