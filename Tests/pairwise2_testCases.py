@@ -77,6 +77,22 @@ class TestPairwiseErrorConditions(unittest.TestCase):
             self.assertIn("should not", str(w[-1].message))
 
 
+class TestPairwiseKeywordUsage(unittest.TestCase):
+    """Tests for keyword usage."""
+
+    def test_keywords(self):
+        """Test equality of calls with and without keywords."""
+        aligns = pairwise2.align.globalxx("GAACT", "GAT")
+        aligns_kw = pairwise2.align.globalxx(sequenceA="GAACT", sequenceB="GAT")
+        self.assertEqual(aligns, aligns_kw)
+
+        aligns = pairwise2.align.globalmx("GAACT", "GAT", 5, -4)
+        aligns_kw = pairwise2.align.globalmx(sequenceA="GAACT",
+                                             sequenceB="GAT",
+                                             match=5, mismatch=-4)
+        self.assertEqual(aligns, aligns_kw)
+
+
 class TestPairwiseGlobal(unittest.TestCase):
     """Test some usual global alignments."""
 

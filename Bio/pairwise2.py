@@ -38,20 +38,24 @@ the second indicates the parameters for gap penalties.
 
 The match parameters are::
 
-    CODE  DESCRIPTION
+    CODE  DESCRIPTION & OPTIONAL KEYWORDS
     x     No parameters. Identical characters have score of 1, otherwise 0.
     m     A match score is the score of identical chars, otherwise mismatch
-          score.
+          score. Keywords ``match``, ``mismatch``.
     d     A dictionary returns the score of any pair of characters.
-    c     A callback function returns scores.
+          Keyword ``match_dict``.
+    c     A callback function returns scores. Keyword ``match_fn``.
 
 The gap penalty parameters are::
 
-    CODE  DESCRIPTION
+    CODE  DESCRIPTION & OPTIONAL KEYWORDS
     x     No gap penalties.
     s     Same open and extend gap penalties for both sequences.
+          Keywords ``open``, ``extend``.
     d     The sequences have different open and extend gap penalties.
+          Keywords ``openA``, ``extendA``, ``openB``, ``extendB``.
     c     A callback function returns the gap penalties.
+          Keywords ``gap_A_fn``, ``gap_B_fn``.
 
 All the different alignment functions are contained in an object
 ``align``. For example:
@@ -59,8 +63,26 @@ All the different alignment functions are contained in an object
     >>> from Bio import pairwise2
     >>> alignments = pairwise2.align.globalxx("ACCGT", "ACG")
 
-will return a list of the alignments between the two strings. For a nice
-printout, use the ``format_alignment`` method of the module:
+For better readability, the required arguments can be used with optional keywords:
+
+    >>> alignments = pairwise2.align.globalxx(sequenceA="ACCGT", sequenceB="ACG")
+
+The result is a list of the alignments between the two strings. Each alignment
+is a named tuple consisting of the two aligned sequences, the score and the
+start and end positions of the alignment:
+
+   >>> print(alignments)
+   [Alignment(seqA='ACCGT', seqB='A-CG-', score=3, start=0, end=5), ...
+
+You can access each element of an aligment by index or name:
+
+   >>> alignments[0][2]
+   3
+   >>> alignments[0].score
+   3
+
+For a nice printout of an alignment, use the ``format_alignment`` method of
+the module:
 
     >>> from Bio.pairwise2 import format_alignment
     >>> print(format_alignment(*alignments[0]))
@@ -189,6 +211,11 @@ Some examples:
       Score=5
     <BLANKLINE>
 
+- Note that you can use keywords to increase the readability, e.g.:
+
+    >>> a = pairwise2.align.globalms("ACGT", "ACG", match=2, mismatch=-1, open=-.5,
+    ...                              extend=-.1)
+
 - Depending on the penalties, a gap in one sequence may be followed by a gap in
   the other sequence.If you don't like this behaviour, increase the gap-open
   penalty:
@@ -246,11 +273,12 @@ type ``help(pairwise2.align.localds)`` at the Python prompt.
 """  # noqa: W291
 
 import warnings
+from collections import namedtuple
 
 from Bio import BiopythonWarning
 
 
-MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
+MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback
 
 
 class align:
@@ -346,16 +374,22 @@ class align:
             # Set the doc string.
             doc = "%s(%s) -> alignments\n" % (
                 self.__name__, ", ".join(self.param_names))
+            doc += """\
+\nThe following parameters can also be used with optional
+keywords of the same name.\n\n
+sequenceA and sequenceB must be of the same type, either
+strings, lists or Biopython sequence objects.\n
+"""
             if match_doc:
                 doc += "\n%s\n" % match_doc
             if penalty_doc:
                 doc += "\n%s\n" % penalty_doc
             doc += ("""\
-\nalignments is a list of tuples (seqA, seqB, score, begin, end).
-seqA and seqB are strings showing the alignment between the
-sequences.  score is the score of the alignment.  begin and end
-are indexes into seqA and seqB that indicate the where the
-alignment occurs.
+\nalignments is a list of named tuples (seqA, seqB, score,
+begin, end). seqA and seqB are strings showing the alignment
+between the sequences.  score is the score of the alignment.
+begin and end are indexes of seqA and seqB that indicate
+where the alignment occurs.
 """)
             self.__doc__ = doc
 
@@ -366,10 +400,21 @@ alignment occurs.
             to this function into forms appropriate for _align.
             """
             keywds = keywds.copy()
+
+            # Replace possible "keywords" with arguments:
+            args += (len(self.param_names) - len(args)) * (None,)
+            for key in keywds.copy():
+                if key in self.param_names:
+                    _index = self.param_names.index(key)
+                    args = args[:_index] + (keywds[key],) + args[_index:]
+                    del keywds[key]
+            args = tuple(arg for arg in args if arg is not None)
+
             if len(args) != len(self.param_names):
                 raise TypeError("%s takes exactly %d argument (%d given)"
                                 % (self.function_name, len(self.param_names),
                                    len(args)))
+
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
@@ -960,6 +1005,7 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
+    Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:
@@ -976,7 +1022,7 @@ def _clean_alignments(alignments):
         if begin >= end:
             del unique_alignments[i]
             continue
-        unique_alignments[i] = seqA, seqB, score, begin, end
+        unique_alignments[i] = Alignment(seqA, seqB, score, begin, end)
         i += 1
     return unique_alignments
 
