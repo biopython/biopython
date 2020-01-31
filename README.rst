@@ -86,10 +86,6 @@ implementations:
 
 - PyPy3.5 v7.1.1 -- see http://www.pypy.org
 
-  Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
-  currently missing under PyPy), everything should work. Older versions
-  of PyPy mostly work too.
-
 Biopython 1.68 was our final release to support Python 2.6, while Biopython
 1.76 was our final release to support Python 2.7.
 
