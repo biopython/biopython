@@ -49,8 +49,10 @@ from Bio import SeqFeature
 # However, all the writing code is in this file.
 
 
-def GenBankIterator(handle):
+def GenBankIterator(source):
     """Break up a Genbank file into SeqRecord objects.
+
+    Argument source is a file-like object opened in text mode or a path to a file.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -85,13 +87,25 @@ def GenBankIterator(handle):
     AF297471.1
 
     """
-    # This calls a generator function:
-    return GenBankScanner(debug=0).parse_records(handle)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("GenBank files must be opened in text mode.") from None
+
+    try:
+        records = GenBankScanner(debug=0).parse_records(handle)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def EmblIterator(handle):
+def EmblIterator(source):
     """Break up an EMBL file into SeqRecord objects.
 
+    Argument source is a file-like object opened in text mode or a path to a file.
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
 
@@ -131,43 +145,92 @@ def EmblIterator(handle):
     CQ797900.1
 
     """
-    # This calls a generator function:
-    return EmblScanner(debug=0).parse_records(handle)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("EMBL files must be opened in text mode.") from None
+
+    try:
+        records = EmblScanner(debug=0).parse_records(handle)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def ImgtIterator(handle):
+def ImgtIterator(source):
     """Break up an IMGT file into SeqRecord objects.
 
+    Argument source is a file-like object opened in text mode or a path to a file.
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
 
     Note that for genomes or chromosomes, there is typically only
     one record.
     """
-    # This calls a generator function:
-    return _ImgtScanner(debug=0).parse_records(handle)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("IMGT files must be opened in text mode.") from None
+
+    try:
+        records = _ImgtScanner(debug=0).parse_records(handle)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def GenBankCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
+def GenBankCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
     """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
+    Argument source is a file-like object opened in text mode or a path to a file.
+
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
     translation sequence (if given).
     """
-    # This calls a generator function:
-    return GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("GenBank files must be opened in text mode.") from None
+
+    try:
+        records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def EmblCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
+def EmblCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
     """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
+    Argument source is a file-like object opened in text mode or a path to a file.
+
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
     translation sequence (if given).
     """
-    # This calls a generator function:
-    return EmblScanner(debug=0).parse_cds_features(handle, alphabet)
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("EMBL files must be opened in text mode.") from None
+
+    try:
+        records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
+        yield from records
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 def _insdc_feature_position_string(pos, offset=0):
