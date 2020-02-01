@@ -74,7 +74,7 @@ def AtomIterator(pdb_id, structure):
                 else:
                     warnings.warn(
                         "Ignoring out-of-order residues after a gap",
-                        BiopythonParserWarning
+                        BiopythonParserWarning,
                     )
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
@@ -489,7 +489,7 @@ def CifAtomIterator(source):
     from Bio.PDB.MMCIFParser import MMCIFParser
 
     structure = MMCIFParser().get_structure(None, source)
-    pdb_id = structure.header['idcode']
+    pdb_id = structure.header["idcode"]
     if not pdb_id:
         warnings.warn("Could not determine the PDB ID.", BiopythonParserWarning)
         pdb_id = "????"
