@@ -804,9 +804,6 @@ class IC_Residue(object):
         self.lc = rbase[2]
 
         if self.is20AA or rbase[2] in self.accept_resnames:
-            # self.NCaCKey = []
-            self.NCaCKey = [(self.rak("N"), self.rak("CA"), self.rak("C"))]
-
             for atom in parent.get_atoms():
                 if hasattr(atom, "child_dict"):
                     if NO_ALTLOC:
@@ -816,18 +813,29 @@ class IC_Residue(object):
                             self._add_atom(atm)
                 else:
                     self._add_atom(atom)
+            if self.ak_set:  # only for coordinate (pdb) input
+                self.build_rak_cache()  # init cache ready for atom_to_internal_coords
+                self.NCaCKey = [(self.rak("N"), self.rak("CA"), self.rak("C"))]
 
             # print(self.atom_coords)
 
     def rak(self, atm: Union[str, Atom]) -> "AtomKey":
         """Cache calls to AtomKey for this residue."""
-        # I have read this is the internal representation of Dict.get(), so
-        # do it explicitly here so need not check result is None
         try:
             ak = self.akc[atm]
         except (KeyError):
+            if isinstance(atm, str):
+                print(atm)  # rtm debug code
+                pass
+
             ak = self.akc[atm] = AtomKey(self, atm)
         return ak
+
+    def build_rak_cache(self) -> None:
+        for ak in sorted(self.ak_set):
+            atmName = ak.akl[3]
+            if self.akc.get(atmName) is None:
+                self.akc[atmName] = ak
 
     accept_mainchain = (
         "N",
@@ -1023,7 +1031,7 @@ class IC_Residue(object):
         - Link dihedra to this residue
         - form id3_dh_index
         - form ak_set
-        - fix NCaCKey to be available AtomKeys
+        - set NCaCKey to be available AtomKeys
         """
         id3i: Dict[HKT, List[Dihedron]] = {}
         for dh in self.dihedra.values():
@@ -1032,24 +1040,38 @@ class IC_Residue(object):
             if id3 not in id3i:
                 id3i[id3] = []
             id3i[id3].append(dh)
-            self.ak_set.update(id3)
+            self.ak_set.update(dh.aks)
         # map to find each dihedron from atom tokens 1-3
         self.id3_dh_index = id3i
+
+        # if loaded PIC data, akc not initialised yet
+        if not self.akc:
+            self.build_rak_cache()
+
         # more efficient to catch NCaC KeyError later, but fixing here
         # avoids having to test/find altloc problem in future code
         # newNCaCKey: List[Tuple["AtomKey", "AtomKey", "AtomKey"]] = []
+
+        # if loaded PIC data, self.NCaCKey has not been initialised yet
+        # rtm fix comments now don't init NCaCKey elsewhere
+        if not hasattr(self, "NCaCKey"):
+            # not rak here to avoid polluting akc cache with no-altloc keys
+            # so this is
+            self.NCaCKey = [
+                (AtomKey(self, "N"), AtomKey(self, "CA"), AtomKey(self, "C"))
+            ]
+
+        # if loaded coordinate (pdb) data, self.NCaCKey is just one of possible altlocs
+        # in either case, need to expand to all altlocs now
+
         newNCaCKey: List[Tuple["AtomKey", ...]] = []
-        """
-        for tpl in sorted(self.NCaCKey):
-            newNCaCKey.extend(self._split_akl(tpl))
-        self.NCaCKey = tuple(newNCaCKey)
-        """
+
         try:
             for tpl in sorted(self.NCaCKey):
                 newNCaCKey.extend(self._split_akl(tpl))
-            self.NCaCKey = cast(
-                List[Tuple["AtomKey", "AtomKey", "AtomKey"]], newNCaCKey
-            )
+            self.NCaCKey = cast(List[HKT], newNCaCKey)
+            if len(newNCaCKey) != 1 and len(self.rprev) == 0:
+                print(f"chain start multiple NCaCKey  {newNCaCKey} : {self}")
         except AttributeError:
             if verbose:
                 print(
@@ -1185,13 +1207,14 @@ class IC_Residue(object):
             for akl1 in NCaCKey:
                 transformations[akl1] = numpy.identity(4, dtype=numpy.float64)
 
-        startLst = []
-        for lst in [
-            (self.rak("C"), self.rak("CA"), self.rak("N")),
-            (self.rak("N"), self.rak("CA"), self.rak("CB")),
-            (self.rak("O"), self.rak("C"), self.rak("CA")),
-        ]:
-            startLst.extend(self._split_akl(lst))
+        # order of these startLst entries matters
+        startLst = self._split_akl((self.rak("C"), self.rak("CA"), self.rak("N")))
+        if "CB" in self.akc:
+            startLst.extend(
+                self._split_akl((self.rak("N"), self.rak("CA"), self.rak("CB")))
+            )
+        startLst.extend(self._split_akl((self.rak("O"), self.rak("C"), self.rak("CA"))))
+
         startLst.extend(NCaCKey)
 
         q = deque(startLst)
@@ -1306,6 +1329,7 @@ class IC_Residue(object):
             non-altloc AtomKeys to match to specific AtomKeys for this residue
         """
         altloc_ndx = AtomKey.fields.altloc
+        occ_ndx = AtomKey.fields.occ
 
         # step 1
         # given a list of AtomKeys (aks)
@@ -1317,7 +1341,12 @@ class IC_Residue(object):
         akMap = {}
         for ak in lst:
             posnAltlocs[ak] = set()
-            if ak in self.ak_set:
+            if (
+                ak in self.ak_set
+                and ak.akl[altloc_ndx] is None
+                and ak.akl[occ_ndx] is None
+            ):
+                # simple case no altloc and exact match in set
                 edraLst.append((ak,))  # tuple of ak
             else:
                 ak2_lst = []
@@ -1396,10 +1425,7 @@ class IC_Residue(object):
         else:
             tlst = lst
 
-        if all(ak in self.atom_coords for ak in lst):
-            hl = [tlst]
-        else:
-            hl = self._split_akl(tlst)
+        hl = self._split_akl(tlst)  # expand tlst with any altlocs
 
         for nlst in hl:
             # do not add edron if split_akl() made something shorter
@@ -1416,16 +1442,24 @@ class IC_Residue(object):
         :param verbose: bool default False
             warn about missing N, Ca, C backbone atoms.
         """
-        sN, sCA, sC = self.rak("N"), self.rak("CA"), self.rak("C")
-        sCB = self.rak("CB")
 
+        # on entry we have all Biopython Atoms loaded
+
+        sN, sCA, sC = self.rak("N"), self.rak("CA"), self.rak("C")
+        if self.lc != "G":
+            sCB = self.rak("CB")
+
+        # first __init__ di/hedra, AtomKey objects and atom_coords for di/hedra
+        # which extend into next residue.
         if 0 < len(self.rnext):
             # atom_coords, hedra and dihedra for backbone dihedra
             # which reach into next residue
             for rn in self.rnext:
                 nN, nCA, nC = rn.rak("N"), rn.rak("CA"), rn.rak("C")
 
-                for ak in (nN, nCA, nC):
+                nextNCaC = rn._split_akl((nN, nCA, nC))
+
+                for ak in nextNCaC:
                     if ak in rn.atom_coords:
                         self.atom_coords[ak] = rn.atom_coords[ak]
                         self.ak_set.add(ak)
@@ -1442,34 +1476,43 @@ class IC_Residue(object):
                 self._gen_edra((sC, nN, nCA))
                 self._gen_edra((nN, nCA, nC))
 
+        # if start of chain then need to __init__ NCaC hedron as not in previous residue
         if 0 == len(self.rprev):
             self._gen_edra((sN, sCA, sC))
 
-        # standard backbone atoms independent of neighbours
+        # now __init__ di/hedra for standard backbone atoms independent of neighbours
         backbone = ic_data_backbone
         for edra in backbone:
-            r_edra = [self.rak(atom) for atom in edra]
-            self._gen_edra(r_edra[0:4])  # [4] is label on some table entries
+            # only need to build if this residue has all the atoms in the edra
+            if all(atm in self.akc for atm in edra):
+                r_edra = [self.rak(atom) for atom in edra]
+                self._gen_edra(r_edra)  # [4] is label on some table entries
 
-        # sidechain hedra and dihedra
+        # next __init__ sidechain di/hedra
         if self.lc is not None:
             sidechain = ic_data_sidechains.get(self.lc, [])
-            for edra in sidechain:
-                r_edra = [self.rak(atom) for atom in edra]
-                # [4] is label on some table entries
-                self._gen_edra(r_edra[0:4])
-            if IC_Residue.AllBonds:
+            for edraLong in sidechain:
+                edra = edraLong[0:4]  # [4] is label on some sidechain table entries
+                # lots of H di/hedra can be avoided if don't have those atoms
+                if all(atm in self.akc for atm in edra):
+                    r_edra = [self.rak(atom) for atom in edra]
+                    self._gen_edra(r_edra)
+            if IC_Residue.AllBonds:  # openscad output needs all bond cylinders explicit
                 sidechain = ic_data_sidechain_extras.get(self.lc, [])
                 for edra in sidechain:
-                    r_edra = [self.rak(atom) for atom in edra]
-                    self._gen_edra(r_edra[0:4])
+                    # test less useful here but avoids populating rak cache if possible
+                    if all(atm in self.akc for atm in edra):
+                        r_edra = [self.rak(atom) for atom in edra]
+                        self._gen_edra(r_edra)
 
+        # final processing of all dihedra just generated
         self.link_dihedra(verbose)
 
-        if self.gly_Cbeta and "G" == self.lc and sCB not in self.atom_coords:
-            # do here because atom_to_internal_coordinates() may need
-            self.atom_coords[sCB] = None  # so _gen_edra will complete
+        # rtm review gly cbeta
+        # if self.gly_Cbeta and "G" == self.lc and sCB not in self.atom_coords:
+        #    self.atom_coords[sCB] = None  # so _gen_edra will complete below
 
+        # now do the actual work computing di/hedra values from atom coordinates
         for d in self.dihedra.values():
             # populate values and hedra for dihedron ojects
             d.dihedron_from_atoms()
