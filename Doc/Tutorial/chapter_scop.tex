@@ -1,0 +1,149 @@
+\chapter{Query the SCOP database with Bio.SCOP}
+\label{chapter:scop}
+
+SCOP (Structural Classification of Proteins) is a database that stores protein domains and 
+the relationships between them. It uses several levels of organization:
+\begin{itemize}
+\item Class (CL)
+\item Fold (CF)
+\item Superfamily (SF)
+\item Family (FA)
+\item Protein (PR)
+\item Protein species (SP)
+\end{itemize}
+
+Several variants of SCOP exist. The original SCOP project - with versions up to 1.75 - 
+represents the relationships between domains using a tree structure, and was created 
+largely by manual curation. Its successor, SCOPe (currently on version 2.07) extends 
+it using automated tools. Most recently, the SCOP2 database has revised SCOP by using a 
+directed acyclic graph instead of a tree.
+
+Every node is given a 7-digit identifier, with the first digit represeting the level (so that 
+the id of a protein species begins with 8, and the id of a class begins with 1). 
+
+\section{The SCOPRemote object for remote access}
+\label{sec:SCOPRemote}
+
+\begin{minted}{pycon}
+>>> from Bio.SCOP import SCOPRemote
+>>> import pprint #for pretty-printing dictionaries
+>>> scopConnection = SCOPRemote()
+\end{minted}
+
+To retrieve information about the database version, use the \verb|stats()| method.
+
+\begin{minted}{pycon}
+>>> stats = scopConnection.stats() #retrieve statistics as a dictionary
+>>> pprint.pprint(stats) #print Python dictionary cleanly
+{'counts': [['folds', 1398],
+            ['IUPR', 18],
+            ['hyperfamilies', 15],
+            ['superfamilies', 2485],
+            ['families', 5134],
+            ['inter-relationships', 59]],
+ 'sources': {'PDB': '2020-01-03',
+             'SIFTS': '2020-01-04',
+             'UniProt': '2019-11-31'},
+ 'stats': {'domains': '41,104',
+           'release_date': '2020-01-17',
+           'structures': '504,937'}}
+\end{minted}
+
+\subsection{Information on one node}
+
+The \verb|term()| method provides information about a node in the SCOP graph. Examples are taken from the Glypican family of proteins.
+
+\begin{minted}{pycon}
+>>> node_info = scopConnection.term('8048617')
+>>> pprint.pprint(node_info)
+{'counts': [['folds', 1398],
+            ['IUPR', 18],
+            ['hyperfamilies', 15],
+            ['superfamilies', 2485],
+            ['families', 5134],
+            ['inter-relationships', 59]],
+ 'sources': {'PDB': '2020-01-03',
+             'SIFTS': '2020-01-04',
+             'UniProt': '2019-11-31'},
+ 'stats': {'domains': '41,104',
+           'release_date': '2020-01-17',
+           'structures': '504,937'}}
+>>> node_info = scopConnection.term('8048617')
+>>> pprint.pprint(node_info)
+{'children': [],
+ 'description': 'Glypican-1',
+ 'id': 8048617,
+ 'name': '4ACR D:29-475',
+ 'pdb_begin': '29',
+ 'pdb_chain': 'D',
+ 'pdb_end': '475',
+ 'pdb_id': '4ACR',
+ 'pdb_segments': [['D', 29, 475]],
+ 'protein_segments': [[29, 475]],
+ 'protein_species': 'Homo sapiens',
+ 'rank': 8,
+ 'repre_seq': 16820,
+ 'seq_begin': '29',
+ 'seq_end': '475',
+ 'sequence': 'MELRARGWWLLCAAAALVACARGDPASKSRSCGEVRQIYGAKGFSLSDVPQAEISGEH ... LALTVARPRWR',
+ 'type': 'domain',
+ 'uniprot_id': 'P35052'}
+\end{minted}
+
+\subsection{A node's ancestors}
+
+The \verb|ancestry()| method shows the ancestors of a node.
+
+\begin{minted}{pycon}
+>>> ancestry = scopConnection.ancestry('4006165')
+>>> pprint.pprint(ancestry)
+{'id': 4006165,
+ 'lineage': {'edges': [[4006165, 3001950, 'is'],
+                       [3001950, 2001193, 'is'],
+                       [2001193, 1000000, 'is']],
+             'nodes': {'1000000': {'id': 1000000,
+                                   'name': 'All alpha proteins',
+                                   'type': 'class'},
+                       '2001193': {'id': 2001193,
+                                   'name': 'Frizzled domain-like',
+                                   'type': 'fold'},
+                       '3001950': {'id': 3001950,
+                                   'name': 'Frizzled domain-like',
+                                   'type': 'superfamily'},
+                       '4006165': {'id': 4006165,
+                                   'name': 'Glypican-like',
+                                   'type': 'family'}}}}
+\end{minted}
+
+\subsection{A node's (leaf) descendants}
+
+The \verb|domains()| method shows the graph "leaves" that descend from the node.
+
+\begin{minted}{pycon}
+>>> domains = scopConnection.domains('4006165')
+>>> pprint.pprint(domains)
+{'domains': [{'id': 8048617,
+              'num': 13,
+              'pdb_id': '4ACR',
+              'pdb_regions': [['D', 29, 475]],
+              'protein_name': 'Glypican-1',
+              'protein_regions': [[29, 475]],
+              'species': 'Homo sapiens',
+              'type': 'FA',
+              'uniprot_id': 'P35052'},
+             {'id': 8048618,
+              'num': 0,
+              'pdb_id': '3ODN',
+              'pdb_regions': [['A', 117, 614]],
+              'protein_name': 'Dally-like, isoform ALD47466p',
+              'protein_regions': [[117, 614]],
+              'species': 'Drosophila melanogaster',
+              'type': 'FA',
+              'uniprot_id': 'Q9VUG1'}],
+ 'id': 4006165}
+\end{minted}
+
+\section{The Scop object for local access}
+\label{sec:ScopObject}
+
+The Scop object can be used for constructing a local copy of the SCOP database from a file or from other sources.
