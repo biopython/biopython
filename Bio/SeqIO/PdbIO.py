@@ -74,7 +74,7 @@ def AtomIterator(pdb_id, structure):
                 else:
                     warnings.warn(
                         "Ignoring out-of-order residues after a gap",
-                        BiopythonParserWarning,
+                        BiopythonParserWarning
                     )
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
@@ -287,8 +287,7 @@ def PdbAtomIterator(source):
     pdb_id = structure.header["idcode"]
     if not pdb_id:
         warnings.warn(
-            "'HEADER' line not found; can't determine PDB ID.",
-            BiopythonParserWarning,
+            "'HEADER' line not found; can't determine PDB ID.", BiopythonParserWarning
         )
         pdb_id = "????"
 
