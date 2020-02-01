@@ -144,7 +144,7 @@ class IC_Chain:
     link_residues()
         Call link_dihedra() on each IC_Residue (needs rprev, rnext set)
     render_dihedra()
-        Call render_hedra() and render_dihedra() on each IC_Residue
+        Call render_dihedra() on each IC_Residue
     set_residues()
         Add .internal_coord attribute for all Residues in parent Chain, populate
         ordered_aa_ic_list, set IC_Residue rprev, rnext or initNCaC coordinates
@@ -219,6 +219,7 @@ class IC_Chain:
             return True
         elif all(atm in res.child_dict for atm in ("N", "CA", "C")):
             # chain break, save coords for restart
+            print(f"chain break at {res}")
             initNCaC: Dict["AtomKey", numpy.array] = {}
             ric = res.internal_coord
             for atm in ("N", "CA", "C"):
@@ -274,12 +275,15 @@ class IC_Chain:
                 last_res = this_res
 
     def link_residues(self) -> None:
-        """link_dihedra() for each IC_Residue; needs rprev, rnext set."""
+        """link_dihedra() for each IC_Residue; needs rprev, rnext set.
+        
+        Called by PICIO:read_PIC() after finished reading chain
+        """
         for ric in self.ordered_aa_ic_list:
             ric.link_dihedra()
 
     def render_dihedra(self) -> None:
-        """Set dihedron local coords for each IC_Residue."""
+        """Set di/hedron local coords for each IC_Residue."""
         for ric in self.ordered_aa_ic_list:
             ric.render_dihedra()
 
@@ -659,7 +663,7 @@ class IC_Residue(object):
         AtomKey indexed B-factors as read from PDB file
     NCaCKey: List of tuples of AtomKeys
         List of tuples of N, Ca, C backbone atom AtomKeys; usually only 1
-        but more if backbone altlocs
+        but more if backbone altlocs. Set by link_dihedra()
     is20AA: bool
         True if residue is one of 20 standard amino acids, based on
         Residue resname
@@ -764,18 +768,18 @@ class IC_Residue(object):
         """
         # NO_ALTLOC=True will turn off alotloc positions and just use selected
         self.residue = parent
-        # self.ndx = ndx
         # dict of hedron objects indexed by hedron keys
         self.hedra: Dict[HKT, Hedron] = {}
         # dict of dihedron objects indexed by dihedron keys
         self.dihedra: Dict[DKT, Dihedron] = {}
         # map of dihedron key (first 3 atom keys) to dihedron
         # for all dihedra in Residue
-        # set by Residue.link_dihedra()
-        self.akc: Dict[str, AtomKey] = {}
-        # cache of AtomKey results for rak()
+        # built by link_dihedra()
         self.id3_dh_index: Dict[HKT, List[Dihedron]] = {}
-        # set of AtomKeys involved in dihedra, used by split_akl
+        # cache of AtomKey results for rak()
+        self.akc: Dict[Union[str, Atom], AtomKey] = {}
+        # set of AtomKeys involved in dihedra, used by split_akl, build_rak_cache
+        # built by __init__ for XYZ (PDB coord) input, link_dihedra for PIC input
         self.ak_set: Set[AtomKey] = set()
         # reference to adjacent residues in chain
         self.rprev: List[IC_Residue] = []
@@ -787,10 +791,6 @@ class IC_Residue(object):
         # bfactors copied from PDB file
         self.bfactors: Dict[str, float] = {}
         self.alt_ids: Union[List[str], None] = None if NO_ALTLOC else []
-        #       if NO_ALTLOC:
-        #           self.alt_ids = None
-        ##       else:
-        #           self.alt_ids: List[str] = []
         self.is20AA = True
         # rbase = position, insert code or none, resname (1 letter if in 20)
         rid = parent.id
@@ -1013,10 +1013,10 @@ class IC_Residue(object):
         :param edron: parse dictionary from Edron.edron_re
         """
 
-        if edron["a4"] is None:
+        if edron["a4"] is None:  # PIC line is Hedron
             ek = (AtomKey(edron["a1"]), AtomKey(edron["a2"]), AtomKey(edron["a3"]))
             self.hedra[ek] = Hedron(ek, **edron)
-        else:
+        else:  # PIC line is Dihedron
             ek = (
                 AtomKey(edron["a1"]),
                 AtomKey(edron["a2"]),
@@ -1048,21 +1048,11 @@ class IC_Residue(object):
         if not self.akc:
             self.build_rak_cache()
 
-        # more efficient to catch NCaC KeyError later, but fixing here
-        # avoids having to test/find altloc problem in future code
-        # newNCaCKey: List[Tuple["AtomKey", "AtomKey", "AtomKey"]] = []
+        # initialise NCaCKey here:
 
-        # if loaded PIC data, self.NCaCKey has not been initialised yet
-        # rtm fix comments now don't init NCaCKey elsewhere
-        if not hasattr(self, "NCaCKey"):
-            # not rak here to avoid polluting akc cache with no-altloc keys
-            # so this is
-            self.NCaCKey = [
-                (AtomKey(self, "N"), AtomKey(self, "CA"), AtomKey(self, "C"))
-            ]
-
-        # if loaded coordinate (pdb) data, self.NCaCKey is just one of possible altlocs
-        # in either case, need to expand to all altlocs now
+        # not rak here to avoid polluting akc cache with no-altloc keys
+        # so starting with 'generic' key:
+        self.NCaCKey = [(AtomKey(self, "N"), AtomKey(self, "CA"), AtomKey(self, "C"))]
 
         newNCaCKey: List[Tuple["AtomKey", ...]] = []
 
@@ -1070,22 +1060,22 @@ class IC_Residue(object):
             for tpl in sorted(self.NCaCKey):
                 newNCaCKey.extend(self._split_akl(tpl))
             self.NCaCKey = cast(List[HKT], newNCaCKey)
-            if len(newNCaCKey) != 1 and len(self.rprev) == 0:
-                print(f"chain start multiple NCaCKey  {newNCaCKey} : {self}")
+            # if len(newNCaCKey) != 1 and len(self.rprev) == 0:
+            #  rtm debug code to find examples
+            #    print(f"chain start multiple NCaCKey  {newNCaCKey} : {self}")
         except AttributeError:
             if verbose:
                 print(
                     f"Missing N, Ca and/or C atoms for residue {str(self.residue)} chain {self.residue.parent.id}"
                 )
-            pass
+            # pass
 
-        pass
+        # pass
 
     def render_dihedra(self) -> None:
-        """Set hedron-space atom coordinates for each dihedron."""
+        """Set hedron-space atom coordinates for each di/hedron."""
         for d in self.dihedra.values():
-            # if d.atoms_updated:   # sorry, not fully implemented
-            d.init_pos()
+            d.init_pos()  # calls Hedron init_pos as needed
 
     def set_flexible(self) -> None:
         """For OpenSCAD, mark N-CA and CA-C bonds to be flexible joints."""
@@ -1545,7 +1535,7 @@ class IC_Residue(object):
             # +-------------------+------------------+---------+
 
             Ca_Cb_Len = 1.53363
-            if hasattr(self, "scale"):
+            if hasattr(self, "scale"):  # used for openscad output
                 Ca_Cb_len *= self.scale  # type: ignore
 
             # main orientation comes from O-C-Ca-Cb so make Cb-Ca-C hedron
@@ -2713,7 +2703,7 @@ class AtomKey(object):
         # self.id = None
         for arg in args:
             if isinstance(arg, IC_Residue):
-                if [] != akl:
+                if akl != []:
                     raise Exception("Atom Key init Residue not first argument")
                 akl += arg.rbase
             elif isinstance(arg, Atom):
