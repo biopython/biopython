@@ -184,7 +184,7 @@ class Chain(Entity):
             describe runtime problems
         """
         if not self.internal_coord:
-            self.internal_coord = IC_Chain(self)
+            self.internal_coord = IC_Chain(self, verbose)
         self.internal_coord.atom_to_internal_coordinates(verbose=verbose)
 
     def internal_to_atom_coordinates(
