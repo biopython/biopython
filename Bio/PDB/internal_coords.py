@@ -362,7 +362,8 @@ class IC_Chain:
             ric.atom_coords = cast(
                 Dict[AtomKey, numpy.array], ric.assemble(verbose=verbose)
             )
-            ric.ak_set = set(ric.atom_coords.keys())
+            if ric.atom_coords:
+                ric.ak_set = set(ric.atom_coords.keys())
 
     def coords_to_structure(self) -> None:
         """Promote all ic atom_coords to Biopython Residue/Atom coords.
@@ -389,6 +390,21 @@ class IC_Chain:
                 ):
                     res.internal_coord.rprev[0].coords_to_residue(rnext=True)
 
+    def clean_atom_coords(self) -> None:
+        backboneDirty = False
+        for res in self.chain.get_residues():
+            if res.internal_coord is not None:
+                ric = res.internal_coord
+                for h in ric.hedra.values():
+                    if not h.atoms_updated:
+                        for d in ric.dihedra.values():
+                            if h == d.hedron1 or h == d.hedron2:
+                                d.atoms_updated = False
+                        h.init_pos()
+                for d in ric.dihedra.values():
+                    if not d.atoms_updated:
+                        d.init_pos()
+
     def internal_to_atom_coordinates(
         self,
         verbose: bool = False,
@@ -404,6 +420,7 @@ class IC_Chain:
             describe runtime problems
 
         """
+        self.clean_atom_coords()
         self.assemble_residues(
             verbose=verbose, start=start, fin=fin
         )  # internal to XYZ coordinates
