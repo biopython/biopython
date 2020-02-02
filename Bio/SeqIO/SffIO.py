@@ -1046,6 +1046,9 @@ def SffIterator(source, alphabet=Alphabet.generic_dna, trim=False):
                 trim,
             )
         _check_eof(handle, index_offset, index_length)
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 def _check_eof(handle, index_offset, index_length):
