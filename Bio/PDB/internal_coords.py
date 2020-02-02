@@ -214,8 +214,8 @@ class IC_Chain:
             else:
                 return tooFar
 
-        Nlist = []
-        pClist = []
+        Nlist: List[Atom] = []
+        pClist: List[Atom] = []
         if Natom.is_disordered():
             Nlist.extend(Natom.child_dict.values())
         else:
@@ -255,7 +255,9 @@ class IC_Chain:
                 if last_ord_res != last_res:
                     reason = "disordered residues after {last_ord_res.pretty_str()}"
                 else:
-                    reason = self._peptide_check(last_ord_res[0].residue, res)
+                    reason = cast(
+                        str, self._peptide_check(last_ord_res[0].residue, res)
+                    )
                 print(
                     f"chain break at {res.internal_coord.pretty_str()} due to {reason}"
                 )
@@ -672,7 +674,7 @@ class IC_Chain:
         chnStarted = False
         for ric in self.ordered_aa_ic_list:
             # handle start / end
-            for NCaCKey in sorted(ric.NCaCKey):
+            for NCaCKey in sorted(ric.NCaCKey):  #  type: ignore
                 if 0 < len(ric.rprev):
                     for rpr in ric.rprev:
                         acl = [rpr.atom_coords[ak] for ak in NCaCKey]
@@ -1192,7 +1194,7 @@ class IC_Residue(object):
         transforms: bool = False,
         resetLocation: bool = False,
         verbose: bool = False,
-    ) -> Union[Dict["AtomKey", numpy.array], Dict[HKT, numpy.array]]:
+    ) -> Union[Dict["AtomKey", numpy.array], Dict[HKT, numpy.array], None]:
         """Compute atom coordinates for this residue from internal coordinates.
 
         Join dihedrons starting from N-CA-C and N-CA-CB hedrons, computing protein
@@ -1247,7 +1249,7 @@ class IC_Residue(object):
         NCaCKey = sorted(self.NCaCKey)
 
         if not self.ak_set:
-            return {}  # give up now if no atoms to work with
+            return None  # give up now if no atoms to work with
 
         if transforms:
             for akl1 in NCaCKey:
@@ -1517,15 +1519,16 @@ class IC_Residue(object):
 
                 nextNCaC = rn._split_akl((nN, nCA, nC), missingOK=True)
 
-                for ak in nextNCaC:
-                    if ak in rn.atom_coords:
-                        self.atom_coords[ak] = rn.atom_coords[ak]
-                        self.ak_set.add(ak)
-                    else:
-                        for rn_ak in rn.atom_coords.keys():
-                            if rn_ak.altloc_match(ak):
-                                self.atom_coords[rn_ak] = rn.atom_coords[rn_ak]
-                                self.ak_set.add(rn_ak)
+                for tpl in nextNCaC:
+                    for ak in tpl:
+                        if ak in rn.atom_coords:
+                            self.atom_coords[ak] = rn.atom_coords[ak]
+                            self.ak_set.add(ak)
+                        else:
+                            for rn_ak in rn.atom_coords.keys():
+                                if rn_ak.altloc_match(ak):
+                                    self.atom_coords[rn_ak] = rn.atom_coords[rn_ak]
+                                    self.ak_set.add(rn_ak)
 
                 self._gen_edra((sN, sCA, sC, nN))  # psi
                 self._gen_edra((sCA, sC, nN, nCA))  # omega i+1
@@ -1638,9 +1641,9 @@ class IC_Residue(object):
         if verbose:
             oAtom = self.rak("O")  # trigger missing flag if needed
             missing = []
-            for akk, ak in self.akc.items():
-                if isinstance(akk, str) and ak.missing:
-                    missing.append(ak)
+            for akk, akv in self.akc.items():
+                if isinstance(akk, str) and akv.missing:
+                    missing.append(akv)
             if missing:
                 print(f"chain {self.residue.parent.id} missing atom(s): {missing}")
 
@@ -1951,7 +1954,7 @@ class IC_Residue(object):
         """
         edron = self.pick_angle(angle_key)
         if edron:
-            return edron.angle()
+            return edron.angle
         return None
 
     def set_angle(self, angle_key: Union[EKT, str], v: float):
@@ -2371,13 +2374,12 @@ class Hedron(Edron):
         self.init_pos()
 
     @property
-    def angle(self):
+    def angle(self) -> float:
         """Get this hedron angle."""
-        return self._angle
-
-    # @property
-    # def angle(self)
-    #    return self.angle
+        try:
+            return self._angle
+        except:
+            return 0.0
 
     @angle.setter
     def angle(self, angle_deg) -> None:
@@ -2387,7 +2389,10 @@ class Hedron(Edron):
 
     @property
     def len12(self):
-        return self._len12
+        try:
+            return self._len12
+        except:
+            return 0.0
 
     @len12.setter
     def len12(self, len):
@@ -2395,8 +2400,11 @@ class Hedron(Edron):
         self.atoms_updated = False
 
     @property
-    def len23(self):
-        return self._len23
+    def len23(self) -> float:
+        try:
+            return self._len23
+        except:
+            return 0.0
 
     @len23.setter
     def len23(self, len):
@@ -2624,8 +2632,11 @@ class Dihedron(Edron):
         self.atoms_updated = True
 
     @property
-    def angle(self):
-        return self._dihedral
+    def angle(self) -> float:
+        try:
+            return self._dihedral
+        except:
+            return 360.0  # error value without type hint hassles
 
     @angle.setter
     def angle(self, dangle_deg: float) -> None:
