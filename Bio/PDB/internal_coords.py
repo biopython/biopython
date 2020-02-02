@@ -372,9 +372,20 @@ class IC_Chain:
             if 2 == res.is_disordered():
                 for r in res.child_dict.values():
                     if r.internal_coord:
-                        r.internal_coord.coords_to_residue()
+                        if r.internal_coord.atom_coords:
+                            r.internal_coord.coords_to_residue()
+                        elif (
+                            r.internal_coord.rprev
+                            and r.internal_coord.rprev[0].atom_coords
+                        ):
+                            r.internal_coord.rprev[0].coords_to_residue(rnext=True)
             elif res.internal_coord:
-                res.internal_coord.coords_to_residue()
+                if res.internal_coord.atom_coords:
+                    res.internal_coord.coords_to_residue()
+                elif (
+                    res.internal_coord.rprev and res.internal_coord.rprev[0].atom_coords
+                ):
+                    res.internal_coord.rprev[0].coords_to_residue(rnext=True)
 
     def internal_to_atom_coordinates(
         self,
@@ -1342,7 +1353,9 @@ class IC_Residue(object):
             return atomCoords
 
     def _split_akl(
-        self, lst: Union[Tuple["AtomKey", ...], List["AtomKey"]]
+        self,
+        lst: Union[Tuple["AtomKey", ...], List["AtomKey"]],
+        missingOK: bool = False,
     ) -> List[Tuple["AtomKey", ...]]:
         """Get AtomKeys for this residue (ak_set) given generic list of AtomKeys.
 
@@ -1355,7 +1368,7 @@ class IC_Residue(object):
                 multiple lists of matching aks expanded for all atom altlocs
 
             or
-                empty list if any of atom_coord(ak) missing
+                empty list if any of atom_coord(ak) missing and not missingOK
 
         :param lst: list[3] or [4] of AtomKeys
             non-altloc AtomKeys to match to specific AtomKeys for this residue
@@ -1401,14 +1414,15 @@ class IC_Residue(object):
         maxc = 0
         for akl in edraLst:
             lenAKL = len(akl)
-            if 0 == lenAKL:
+            if 0 == lenAKL and not missingOK:
                 return []  # atom missing in atom_coords, cannot form object
             elif maxc < lenAKL:
                 maxc = lenAKL
         if 1 == maxc:  # simple case no altlocs for any ak in list
             newAKL = []
             for akl in edraLst:
-                newAKL.append(akl[0])
+                if akl:  # may have empty lists if missingOK, do not append
+                    newAKL.append(akl[0])
             return [tuple(newAKL)]
         else:
             new_edraLst = []
@@ -1417,6 +1431,8 @@ class IC_Residue(object):
                 alhl = []
                 for akl in edraLst:
                     lenAKL = len(akl)
+                    if 0 == lenAKL:
+                        pass  # ignore empty list from missingOK
                     if 1 == lenAKL:
                         alhl.append(akl[0])  # not all atoms will have altloc
                     # elif (lenAKL < maxc
@@ -1445,6 +1461,10 @@ class IC_Residue(object):
         :param lst: tuple of AtomKeys
             Specifies Hedron or Dihedron
         """
+
+        for ak in lst:
+            if ak.missing:
+                return  # give up if atoms actually missing
 
         lenLst = len(lst)
         if 4 > lenLst:
@@ -1483,13 +1503,14 @@ class IC_Residue(object):
 
         # first __init__ di/hedra, AtomKey objects and atom_coords for di/hedra
         # which extend into next residue.
-        if 0 < len(self.rnext):
+
+        if 0 < len(self.rnext) and self.rnext[0].ak_set:
             # atom_coords, hedra and dihedra for backbone dihedra
             # which reach into next residue
             for rn in self.rnext:
                 nN, nCA, nC = rn.rak("N"), rn.rak("CA"), rn.rak("C")
 
-                nextNCaC = rn._split_akl((nN, nCA, nC))
+                nextNCaC = rn._split_akl((nN, nCA, nC), missingOK=True)
 
                 for ak in nextNCaC:
                     if ak in rn.atom_coords:
@@ -1691,7 +1712,7 @@ class IC_Residue(object):
         if chainid is None:
             chainid = "A"
         s += IC_Residue._residue_string(self.residue)
-        if 0 == len(self.rprev):
+        if 0 == len(self.rprev) and hasattr(self, "NCaCKey"):
             NCaChedron = self.pick_angle(self.NCaCKey[0])  # first tau
             if NCaChedron is not None and NCaChedron.atoms_updated:
                 try:
@@ -1736,17 +1757,28 @@ class IC_Residue(object):
 
         return s
 
-    def coords_to_residue(self) -> None:
+    def coords_to_residue(self, rnext: bool = False) -> None:
         """Convert self.atom_coords to biopython Residue Atom coords.
 
-        Change homogeneous IC_Residue atom_coords to self.residue cartesian
+        Copy homogeneous IC_Residue atom_coords to self.residue cartesian
         Biopython Atom coords.
+
+        :param rnext: bool default False
+            next IC_Residue has no atom coords due to missing atoms, so try to
+            populate with any available coords calculated for this residue
+            di/hedra extending into next
         """
-        respos, icode = self.residue.id[1:3]
+        if rnext:
+            respos, icode = self.rnext[0].residue.id[1:3]
+        else:
+            respos, icode = self.residue.id[1:3]
         respos = str(respos)
         spNdx, icNdx, resnNdx, atmNdx, altlocNdx, occNdx = AtomKey.fields
 
-        Res = self.residue
+        if rnext:
+            Res = self.rnext[0].residue
+        else:
+            Res = self.residue
         ndx = Res.parent.internal_coord.ndx
 
         for ak in sorted(self.atom_coords):
