@@ -178,7 +178,7 @@ class IC_Chain:
                 return False
             sum += axis * axis
         if sum > sqCutoff:
-            # print("sq axis: ", sqrt(sum))
+            # print("sq axis: ", sqrt(sum))  # need import math.sqrt
             return False
         return True
 
@@ -878,7 +878,7 @@ class IC_Residue(object):
         except (KeyError):
             ak = self.akc[atm] = AtomKey(self, atm)
             if isinstance(atm, str):
-                # print(atm)  # rtm debug code
+                # print(atm)  # debug code
                 ak.missing = True
         return ak
 
@@ -1116,7 +1116,7 @@ class IC_Residue(object):
                 newNCaCKey.extend(self._split_akl(tpl))
             self.NCaCKey = cast(List[HKT], newNCaCKey)
             # if len(newNCaCKey) != 1 and len(self.rprev) == 0:
-            #  rtm debug code to find examples
+            #  debug code to find examples of chains starting with disordered residues
             #    print(f"chain start multiple NCaCKey  {newNCaCKey} : {self}")
         except AttributeError:
             if verbose:
@@ -1568,10 +1568,6 @@ class IC_Residue(object):
 
         # final processing of all dihedra just generated
         self.link_dihedra(verbose)
-
-        # rtm review gly cbeta
-        # if self.gly_Cbeta and "G" == self.lc and sCB not in self.atom_coords:
-        #    self.atom_coords[sCB] = None  # so _gen_edra will complete below
 
         # now do the actual work computing di/hedra values from atom coordinates
         for d in self.dihedra.values():
