@@ -1246,6 +1246,9 @@ class IC_Residue(object):
         transformations = {}
         NCaCKey = sorted(self.NCaCKey)
 
+        if not self.ak_set:
+            return {}  # give up now if no atoms to work with
+
         if transforms:
             for akl1 in NCaCKey:
                 transformations[akl1] = numpy.identity(4, dtype=numpy.float64)
@@ -1496,6 +1499,8 @@ class IC_Residue(object):
         """
 
         # on entry we have all Biopython Atoms loaded
+        if not self.ak_set:
+            return  # so give up if no atoms loaded for this residue
 
         sN, sCA, sC = self.rak("N"), self.rak("CA"), self.rak("C")
         if self.lc != "G":
