@@ -865,7 +865,7 @@ class IC_Residue(object):
                     self._add_atom(atom)
             if self.ak_set:  # only for coordinate (pdb) input
                 self.build_rak_cache()  # init cache ready for atom_to_internal_coords
-                self.NCaCKey = [(self.rak("N"), self.rak("CA"), self.rak("C"))]
+                # self.NCaCKey = [(self.rak("N"), self.rak("CA"), self.rak("C"))]
 
             # print(self.atom_coords)
 
