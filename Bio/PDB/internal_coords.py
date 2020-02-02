@@ -155,7 +155,7 @@ class IC_Chain:
 
     MaxPeptideBond = 1.4  # larger C-N distance than this is chain break
 
-    def __init__(self, parent: "Chain") -> None:
+    def __init__(self, parent: "Chain", verbose: bool = False) -> None:
         """Initialize IC_Chain object, with or without residue/Atom data.
 
         :param parent: Biopython Chain object
@@ -166,51 +166,83 @@ class IC_Chain:
         self.ordered_aa_ic_list: List[IC_Residue] = []
         self.initNCaC: Dict[Tuple[str], Dict["AtomKey", numpy.array]] = {}
         self.sqMaxPeptideBond = IC_Chain.MaxPeptideBond * IC_Chain.MaxPeptideBond
-        self.set_residues()  # no effect if no residues loaded
+        self.set_residues(verbose)  # no effect if no residues loaded
 
-    def _peptide_check(self, prev: "Residue", curr: "Residue") -> bool:
+    # return True if a0, a1 within supplied cutoff
+    def _atm_dist_chk(self, a0: Atom, a1: Atom, cutoff: float, sqCutoff: float) -> bool:
+        diff = a0.coord - a1.coord
+        sum = 0
+        for axis in diff:
+            if axis > cutoff:
+                # print("axis: ", axis)
+                return False
+            sum += axis * axis
+        if sum > sqCutoff:
+            # print("sq axis: ", sqrt(sum))
+            return False
+        return True
+
+    # return a string describing issue, or None if OK
+    def _peptide_check(self, prev: "Residue", curr: "Residue") -> Optional[str]:
         if 0 == len(curr.child_dict):
             # curr residue with no atoms => reading pic file, no break
-            return True
+            return None
         if (0 != len(curr.child_dict)) and (0 == len(prev.child_dict)):
             # prev residue with no atoms, curr has atoms => reading pic file,
             # have break
-            return False
+            return "PIC data missing atoms"
 
-        # both biopython Resdiues have Atoms, so check distance
+        # both biopython Residues have Atoms, so check distance
         Natom = curr.child_dict.get("N", None)
         pCatom = prev.child_dict.get("C", None)
         if Natom is None or pCatom is None:
-            return False
+            return f"missing {'previous C' if pCatom is None else 'N'} atom"
 
         # confirm previous residue has all backbone atoms
         pCAatom = prev.child_dict.get("CA", None)
         pNatom = prev.child_dict.get("N", None)
         if pNatom is None or pCAatom is None:
-            return False
+            return "previous residue missing N or Ca"
 
+        tooFar = f"MaxPeptideBond ({IC_Chain.MaxPeptideBond} angstroms) exceeded"
+        if not Natom.is_disordered() and not pCatom.is_disordered():
+            dc = self._atm_dist_chk(
+                Natom, pCatom, IC_Chain.MaxPeptideBond, self.sqMaxPeptideBond
+            )
+            if dc:
+                return None
+            else:
+                return tooFar
+
+        Nlist = []
+        pClist = []
         if Natom.is_disordered():
-            Natom = Natom.selected_child
+            Nlist.extend(Natom.child_dict.values())
+        else:
+            Nlist = [Natom]
         if pCatom.is_disordered():
-            pCatom = pCatom.selected_child
-        diff = curr["N"].coord - prev["C"].coord
-        sum = 0
-        for axis in diff:
-            if axis > self.MaxPeptideBond:
-                return False
-            sum += axis * axis
-        if sum > self.sqMaxPeptideBond:
-            return False
-        return True
+            pClist.extend(pCatom.child_dict.values())
+        else:
+            pClist = [pCatom]
 
-    def _add_residue(self, res: "Residue", last_res: List, last_ord_res: List) -> bool:
+        for n in Nlist:
+            for c in pClist:
+                if self._atm_dist_chk(
+                    Natom, pCatom, IC_Chain.MaxPeptideBond, self.sqMaxPeptideBond
+                ):
+                    return None
+        return tooFar
+
+    def _add_residue(
+        self, res: "Residue", last_res: List, last_ord_res: List, verbose: bool = False
+    ) -> bool:
         """Set rprev, rnext, determine chain break."""
         if not res.internal_coord:
             res.internal_coord = IC_Residue(res)
         if (
             0 < len(last_res)
             and last_ord_res == last_res
-            and self._peptide_check(last_ord_res[0].residue, res)
+            and self._peptide_check(last_ord_res[0].residue, res) is None
         ):
             # no chain break
             for prev in last_ord_res:
@@ -219,7 +251,14 @@ class IC_Chain:
             return True
         elif all(atm in res.child_dict for atm in ("N", "CA", "C")):
             # chain break, save coords for restart
-            print(f"chain break at {res}")
+            if verbose and len(last_res) != 0:  # not first residue
+                if last_ord_res != last_res:
+                    reason = "disordered residues after {last_ord_res.pretty_str()}"
+                else:
+                    reason = self._peptide_check(last_ord_res[0].residue, res)
+                print(
+                    f"chain break at {res.internal_coord.pretty_str()} due to {reason}"
+                )
             initNCaC: Dict["AtomKey", numpy.array] = {}
             ric = res.internal_coord
             for atm in ("N", "CA", "C"):
@@ -244,7 +283,7 @@ class IC_Chain:
         # chain break but do not have N, Ca, C coords to restart from
         return False
 
-    def set_residues(self) -> None:
+    def set_residues(self, verbose: bool = False) -> None:
         """Initialize internal_coord data for loaded Residues.
 
         Add IC_Residue as .internal_coord attribute for each Residue in parent
@@ -263,10 +302,10 @@ class IC_Chain:
                 if 2 == res.is_disordered():
                     # print('disordered res:', res.is_disordered(), res)
                     for r in res.child_dict.values():
-                        if self._add_residue(r, last_res, last_ord_res):
+                        if self._add_residue(r, last_res, last_ord_res, verbose):
                             this_res.append(r.internal_coord)
                 else:
-                    if self._add_residue(res, last_res, last_ord_res):
+                    if self._add_residue(res, last_res, last_ord_res, verbose):
                         this_res.append(res.internal_coord)
 
                 if 0 < len(this_res):
@@ -824,11 +863,10 @@ class IC_Residue(object):
         try:
             ak = self.akc[atm]
         except (KeyError):
-            if isinstance(atm, str):
-                print(atm)  # rtm debug code
-                pass
-
             ak = self.akc[atm] = AtomKey(self, atm)
+            if isinstance(atm, str):
+                # print(atm)  # rtm debug code
+                ak.missing = True
         return ak
 
     def build_rak_cache(self) -> None:
@@ -1006,6 +1044,10 @@ class IC_Residue(object):
     def __str__(self) -> str:
         """Print string is parent Residue ID."""
         return str(self.residue.full_id)
+
+    def pretty_str(self) -> str:
+        id = self.residue.id
+        return f"{self.residue.resname} {id[0]}{str(id[1])}{id[2]}"
 
     def load_PIC(self, edron: Dict[str, str]) -> None:
         """Process parsed (di-/h-)edron data from PIC file.
@@ -1566,6 +1608,15 @@ class IC_Residue(object):
             d.init_pos()
 
             self.link_dihedra(verbose)  # re-run for new dihedra
+
+        if verbose:
+            oAtom = self.rak("O")  # trigger missing flag if needed
+            missing = []
+            for akk, ak in self.akc.items():
+                if isinstance(akk, str) and ak.missing:
+                    missing.append(ak)
+            if missing:
+                print(f"chain {self.residue.parent.id} missing atom(s): {missing}")
 
     @staticmethod
     def _pdb_atom_string(atm: Atom) -> str:
@@ -2659,6 +2710,9 @@ class AtomKey(object):
         A compiled regular expression matching the string form of the key
     d2h: bool
         Convert D atoms to H on input; must also modify IC_Residue.accept_atoms
+    missing: bool default False
+        AtomKey __init__'d from string is probably missing, set this flag to 
+        note the issue (not set here)
 
     Methods
     -------
@@ -2769,6 +2823,7 @@ class AtomKey(object):
 
         self.akl = tuple(akl)
         self._hash = hash(self.akl)
+        self.missing = False
 
     def __repr__(self) -> str:
         """Repr string from id."""
