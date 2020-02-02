@@ -152,26 +152,18 @@ class TestSimpleFastaParsers(unittest.TestCase):
     """Test SimpleFastaParser and FastaTwoLineParser directly."""
 
     # Regular cases input strings and outputs
-    ins_two_line = [">1\nACGT", ">1\nACGT",
-                    ">1\nACGT\n>2\nACGT"]
-    outs_two_line = [[("1", "ACGT")], [("1", "ACGT")],
-                     [("1", "ACGT"), ("2", "ACGT")]]
+    ins_two_line = [">1\nACGT", ">1\nACGT", ">1\nACGT\n>2\nACGT"]
+    outs_two_line = [[("1", "ACGT")], [("1", "ACGT")], [("1", "ACGT"), ("2", "ACGT")]]
 
-    ins_multiline = [">1\nACGT\nACGT",
-                     ">1\nACGT\nACGT\n>2\nACGT\nACGT"]
-    outs_multiline = [[("1", "ACGTACGT")],
-                      [("1", "ACGTACGT"), ("2", "ACGTACGT")]]
+    ins_multiline = [">1\nACGT\nACGT", ">1\nACGT\nACGT\n>2\nACGT\nACGT"]
+    outs_multiline = [[("1", "ACGTACGT")], [("1", "ACGTACGT"), ("2", "ACGTACGT")]]
 
     # Edge case input strings and outputs
-    ins_two_line_edges = [">\nACGT", ">1\n\n",
-                          ">1>1\n\n>1\n\n", ""]
-    outs_two_line_edges = [[("", "ACGT")], [("1", "")],
-                           [("1>1", ""), ("1", "")], []]
+    ins_two_line_edges = [">\nACGT", ">1\n\n", ">1>1\n\n>1\n\n", ""]
+    outs_two_line_edges = [[("", "ACGT")], [("1", "")], [("1>1", ""), ("1", "")], []]
 
-    ins_simple_edges = [">1", ">1\n\n\n",
-                        ">\n>1\n>2"]
-    outs_simple_edges = [[("1", "")], [("1", "")],
-                         [("", ""), ("1", ""), ("2", "")]]
+    ins_simple_edges = [">1", ">1\n\n\n", ">\n>1\n>2"]
+    outs_simple_edges = [[("1", "")], [("1", "")], [("", ""), ("1", ""), ("2", "")]]
 
     def test_regular_SimpleFastaParser(self):
         """Test regular SimpleFastaParser cases."""
@@ -217,15 +209,25 @@ class TestSimpleFastaParsers(unittest.TestCase):
                 list(FastaTwoLineParser(handle))
 
 
-single_nucleic_files = ["Fasta/lupine.nu", "Fasta/elderberry.nu",
-                        "Fasta/phlox.nu", "Fasta/centaurea.nu",
-                        "Fasta/wisteria.nu", "Fasta/sweetpea.nu",
-                        "Fasta/lavender.nu", "Fasta/f001"]
+single_nucleic_files = [
+    "Fasta/lupine.nu",
+    "Fasta/elderberry.nu",
+    "Fasta/phlox.nu",
+    "Fasta/centaurea.nu",
+    "Fasta/wisteria.nu",
+    "Fasta/sweetpea.nu",
+    "Fasta/lavender.nu",
+    "Fasta/f001",
+]
 
 multi_dna_files = ["Quality/example.fasta"]
 
-single_amino_files = ["Fasta/aster.pro", "Fasta/rosemary.pro",
-                      "Fasta/rose.pro", "Fasta/loveliesbleeding.pro"]
+single_amino_files = [
+    "Fasta/aster.pro",
+    "Fasta/rosemary.pro",
+    "Fasta/rose.pro",
+    "Fasta/loveliesbleeding.pro",
+]
 
 multi_amino_files = ["Fasta/f002", "Fasta/fa01"]
 
