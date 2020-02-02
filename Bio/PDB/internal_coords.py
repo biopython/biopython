@@ -1580,8 +1580,15 @@ class IC_Residue(object):
                 # print(h)
                 h.hedron_from_atoms(self.atom_coords)
 
-        if self.gly_Cbeta and "G" == self.lc and self.atom_coords[sCB] is None:
+        # create di/hedra for gly Cbeta manually from database values if needed
+        if self.gly_Cbeta and "G" == self.lc:  # and self.atom_coords[sCB] is None:
             # add C-beta for Gly
+
+            self.ak_set.add(AtomKey(self, "CB"))
+            sCB = self.rak("CB")
+            sCB.missing = False  # was True because akc cache did not have entry
+
+            self.atom_coords[sCB] = None
 
             # data averaged from Sep 2019 Dunbrack cullpdb_pc20_res2.2_R1.0
             # restricted to structures with amide protons.
@@ -1603,7 +1610,7 @@ class IC_Residue(object):
 
             Ca_Cb_Len = 1.53363
             if hasattr(self, "scale"):  # used for openscad output
-                Ca_Cb_len *= self.scale  # type: ignore
+                Ca_Cb_Len *= self.scale  # type: ignore
 
             # main orientation comes from O-C-Ca-Cb so make Cb-Ca-C hedron
             sO = self.rak("O")
