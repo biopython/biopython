@@ -99,14 +99,17 @@ def SwissIterator(source):
         if swiss_record.protein_existence:
             annotations["protein_existence"] = swiss_record.protein_existence
         if swiss_record.created:
-            annotations["date"] = swiss_record.created[0]
-            annotations["sequence_version"] = swiss_record.created[1]
+            date, version = swiss_record.created
+            annotations["date"] = date
+            annotations["sequence_version"] = version
         if swiss_record.sequence_update:
-            annotations["date_last_sequence_update"] = swiss_record.sequence_update[0]
-            annotations["sequence_version"] = swiss_record.sequence_update[1]
+            date, release = swiss_record.sequence_update
+            annotations["date_last_sequence_update"] = date
+            annotations["sequence_version"] = version
         if swiss_record.annotation_update:
-            annotations["date_last_annotation_update"] = swiss_record.annotation_update[0]
-            annotations["entry_version"] = swiss_record.annotation_update[1]
+            date, release = swiss_record.annotation_update
+            annotations["date_last_annotation_update"] = date
+            annotations["entry_version"] = release
         if swiss_record.gene_name:
             annotations["gene_name"] = swiss_record.gene_name
         annotations["organism"] = swiss_record.organism.rstrip(".")
