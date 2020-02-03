@@ -52,21 +52,17 @@ class xbb_translations:
         """Print a short header for the translation window."""
         length = len(seq)
         if length > 20:
-            short = "%s ... %s" % (seq[:10], seq[-10:])
+            short = f"{seq[:10]} ... {seq[-10:]}"
         else:
             short = seq
 
         date = time.strftime("%y %b %d, %X", time.localtime(time.time()))
-        res = "%s: %s, " % (txt, date)
+        res = f"{txt}: {date}, "
 
         for nt in ["a", "t", "g", "c"]:
-            res += "%s:%d " % (nt, seq.count(nt.upper()))
+            res += f"{nt}:{seq.count(nt.upper()):d} "
 
-        res += "\nSequence: %s, %d nt, %0.2f %%GC\n" % (
-            short.lower(),
-            length,
-            self.gc(seq),
-        )
+        res += f"\nSequence: {short.lower()}, {length:d} nt, %0.2f %{self.gc(seq):G}C\n"
         res += "\n\n"
         return res
 

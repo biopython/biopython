@@ -134,7 +134,7 @@ def main():
             pdbid = id[1:5]
             s = pdbid[0:1]
             if s == "0" or s == "s":
-                sys.stderr.write("No coordinates for domain %s\n" % id)
+                sys.stderr.write(f"No coordinates for domain {id}\n")
                 continue
 
             if output is None:
@@ -158,7 +158,7 @@ def main():
                     finally:
                         f.close()
                 except (OSError, KeyError, RuntimeError) as e:
-                    sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
+                    sys.stderr.write(f"I cannot do SCOP domain {id} : {e}\n")
             finally:
                 out_handle.close()
     finally:

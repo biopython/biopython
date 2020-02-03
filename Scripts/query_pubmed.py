@@ -64,7 +64,7 @@ if __name__ == "__main__":
     search_results = Entrez.read(handle)
     ids = search_results["IdList"]
     count = len(ids)
-    print("Found %d citations" % count)
+    print(f"Found {count:d} citations")
 
     if count_only:
         sys.exit(0)

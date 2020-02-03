@@ -39,10 +39,10 @@ files = [x.replace("###", release_number) for x in [ftp_emb_e, ftp_emb_s, ftp_em
 def get_files():
     """Download Rebase files."""
     for file in files:
-        print("copying %s" % file)
+        print(f"copying {file}")
         fn = os.path.basename(file)
         filename = os.path.join(os.getcwd(), fn)
-        print("to %s" % filename)
+        print(f"to {filename}")
         try:
             urlretrieve(file, filename)
             urlcleanup()
