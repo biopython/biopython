@@ -770,6 +770,11 @@ class IC_Residue(object):
         glycine CB atoms in atom_to_internal_coordinates().
 
         `IC_Residue.gly_Cbeta = True`
+    allBonds: bool default False
+        whereas a PDB file just specifies atoms, OpenSCAD output for 3D printing
+        needs all bonds specified explicitly - otherwise, e.g. PHE rings will not 
+        be closed.  This variable is managed by the Write_SCAD() code and enables 
+        this.
 
     scale: optional float
         used for OpenSCAD output to generate gly_Cbeta bond length
@@ -1922,38 +1927,38 @@ class IC_Residue(object):
               previous residue, 0 is this residue, 1 is next residue
             - psi, phi, omg, omega, chi1, chi2, chi3, chi4, chi5
             - tau (N-CA-C angle) see Richardson1981
-            - except for tuples, no option to access alternate disordered atoms
+            - except for tuples of AtomKeys, no option to access alternate disordered atoms
 
         Observe that a residue's phi and omega dihedra, as well as the hedra
-        comprising them (including the N:Ca:C (tau) hedron), are stored in the
+        comprising them (including the N:Ca:C tau hedron), are stored in the
         n-1 di/hedra sets; this is handled here, but may be an issue if accessing
         directly.
 
         The following are equivalent (except for sidechains with non-carbon
-        atoms for chi2):
+        atoms for chi2)::
 
-        ric = r.internal_coord
-        print(
-            r,
-            ric.get_angle("psi"),
-            ric.get_angle("phi"),
-            ric.get_angle("omg"),
-            ric.get_angle("tau"),
-            ric.get_angle("chi2"),
-        )
-        print(
-            r,
-            ric.get_angle("N:CA:C:1N"),
-            ric.get_angle("-1C:N:CA:C"),
-            ric.get_angle("-1CA:-1C:N:CA"),
-            ric.get_angle("N:CA:C"),
-            ric.get_angle("CA:CB:CG:CD"),
-        )
+            ric = r.internal_coord
+            print(
+                r,
+                ric.get_angle("psi"),
+                ric.get_angle("phi"),
+                ric.get_angle("omg"),
+                ric.get_angle("tau"),
+                ric.get_angle("chi2"),
+            )
+            print(
+                r,
+                ric.get_angle("N:CA:C:1N"),
+                ric.get_angle("-1C:N:CA:C"),
+                ric.get_angle("-1CA:-1C:N:CA"),
+                ric.get_angle("N:CA:C"),
+                ric.get_angle("CA:CB:CG:CD"),
+            )
 
         See ic_data.py for detail of atoms in the enumerated sidechain angles
         and the backbone angles which do not span the peptide bond. Using 's'
         for current residue ('self') and 'n' for next residue, the spanning
-        angles are:
+        angles are::
 
                 (sN, sCA, sC, nN)   # psi
                 (sCA, sC, nN, nCA)  # omega i+1
@@ -2046,18 +2051,19 @@ class IC_Residue(object):
               optional position specifier relative to self, e.g. '-1C:N' for
               preceding peptide bond.
 
-        The following are equivalent:
-                ric = r.internal_coord
-                print(
-                    r,
-                    ric.get_length("0C:1N"),
-                )
-                print(
-                    r,
-                    None
-                    if not ric.rnext
-                    else ric.get_length((ric.rak("C"), ric.rnext[0].rak("N"))),
-                )
+        The following are equivalent::
+
+            ric = r.internal_coord
+            print(
+                r,
+                ric.get_length("0C:1N"),
+            )
+            print(
+                r,
+                None
+                if not ric.rnext
+                else ric.get_length((ric.rak("C"), ric.rnext[0].rak("N"))),
+            )
 
         :return: list of hedra containing specified atom pair, tuple of atom keys
         """
