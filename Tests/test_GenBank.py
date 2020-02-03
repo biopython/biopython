@@ -133,7 +133,16 @@ class TestRecordParser(unittest.TestCase):
         cls.rec_parser = GenBank.RecordParser(debug_level=0)
 
     def perform_record_parser_test(
-        self, record, length, locus, definition, accession, titles, features
+        self,
+        record,
+        length,
+        locus,
+        definition,
+        accession,
+        titles,
+        features,
+        tls=None,
+        tsa=None,
     ):
         self.assertEqual(len(record.sequence), length)
         self.assertEqual(record.locus, locus)
@@ -150,6 +159,10 @@ class TestRecordParser(unittest.TestCase):
             for qualifier, (key, value) in zip(feature1.qualifiers, feature2[2]):
                 self.assertEqual(qualifier.key, key)
                 self.assertEqual(qualifier.value, value)
+        if tls:
+            self.assertEqual(tls, record.tls)
+        if tsa:
+            self.assertEqual(tsa, record.tsa)
 
     def test_record_parser_01(self):
         path = "GenBank/noref.gb"
@@ -2429,6 +2442,7 @@ class TestRecordParser(unittest.TestCase):
         locus = "GHGH01000000"
         definition = "TSA: Acropora millepora, transcriptome shotgun assembly"
         accession = ["GHGH00000000"]
+        tsa = ["GHGH01000001", "GHGH01126539"]
         titles = (
             "Acropora millepora genome sequencing and assembly",
             "Direct Submission",
@@ -2448,7 +2462,7 @@ class TestRecordParser(unittest.TestCase):
             )
         ]
         self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
+            record, length, locus, definition, accession, titles, features, tsa=tsa
         )
 
     def test_record_parser_tls(self):
@@ -2460,6 +2474,7 @@ class TestRecordParser(unittest.TestCase):
         locus = "KBUV01000000"
         definition = "TLS: soil metagenome 16S ribosomal RNA, targeted locus study"
         accession = ["KBUV00000000"]
+        tls = ["KBUV01000001", "KBUV01003714"]
         titles = (
             "Spatio-temporal dynamics of soil bacterial communities in function of Amazon forest phenology",
             "Direct Submission",
@@ -2485,7 +2500,7 @@ class TestRecordParser(unittest.TestCase):
             )
         ]
         self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
+            record, length, locus, definition, accession, titles, features, tls=tls
         )
 
 
