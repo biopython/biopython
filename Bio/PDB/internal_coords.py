@@ -772,8 +772,8 @@ class IC_Residue(object):
         `IC_Residue.gly_Cbeta = True`
     allBonds: bool default False
         whereas a PDB file just specifies atoms, OpenSCAD output for 3D printing
-        needs all bonds specified explicitly - otherwise, e.g. PHE rings will not 
-        be closed.  This variable is managed by the Write_SCAD() code and enables 
+        needs all bonds specified explicitly - otherwise, e.g. PHE rings will not
+        be closed.  This variable is managed by the Write_SCAD() code and enables
         this.
 
     scale: optional float
