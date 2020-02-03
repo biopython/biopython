@@ -393,7 +393,6 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> numpy.array:
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
     """
-
     cosang = numpy.cos(angle_rads)
     sinang = numpy.sin(angle_rads)
 
