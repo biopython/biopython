@@ -94,7 +94,6 @@ def write_SCAD(
     :param handle: str, default 'protein'
         name for top level of generated OpenSCAD matrix structure
     """
-
     if maxPeptideBond is not None:
         mpbStash = IC_Chain.MaxPeptideBond
         IC_Chain.MaxPeptideBond = float(maxPeptideBond)
