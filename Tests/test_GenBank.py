@@ -2451,6 +2451,43 @@ class TestRecordParser(unittest.TestCase):
             record, length, locus, definition, accession, titles, features
         )
 
+    def test_record_parser_tls(self):
+        path = "GenBank/tls_KDHP01000000.gb"
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+        length = 0
+        locus = "KBUV01000000"
+        definition = "TLS: soil metagenome 16S ribosomal RNA, targeted locus study"
+        accession = ["KBUV00000000"]
+        titles = (
+            "Spatio-temporal dynamics of soil bacterial communities in function of Amazon forest phenology",
+            "Direct Submission",
+        )
+        features = [
+            (
+                "source",
+                "1..3714",
+                (
+                    ("/organism=", '"soil metagenome"'),
+                    ("/mol_type=", '"genomic DNA"'),
+                    (
+                        "/isolation_source=",
+                        '"soil samples in a lowland tropical evergreen rain forest in Amazonia"',
+                    ),
+                    ("/db_xref=", '"taxon:410658"'),
+                    ("/environmental_sample", ""),
+                    ("/country=", '"Brazil: Manaus"'),
+                    ("/lat_lon=", '"2.92 S 59.95 W"'),
+                    ("/collection_date=", '"2013"'),
+                    ("/note=", '"metagenomic"'),
+                ),
+            )
+        ]
+        self.perform_record_parser_test(
+            record, length, locus, definition, accession, titles, features
+        )
+
 
 class TestFeatureParser(unittest.TestCase):
     @classmethod
@@ -6614,7 +6651,7 @@ KEYWORDS    """
             record.annotations["structured_comment"]["MIENS-Data"]["environment"],
             "Temperate shelf and sea biome [ENVO:00000895], "
             "coastal water body [ENVO:02000049], "
-            "coastal water [ENVO:00002150]"
+            "coastal water [ENVO:00002150]",
         )
 
     def test_locus_line_topogoly(self):
