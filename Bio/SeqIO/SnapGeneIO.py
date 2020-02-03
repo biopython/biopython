@@ -33,7 +33,6 @@ def _iterate(handle):
         packet's data;
       - the actual data.
     """
-
     while True:
         packet_type = handle.read(1)
         if len(packet_type) < 1:  # No more packet
@@ -263,9 +262,7 @@ def SnapGeneIterator(source):
             raise ValueError("Empty file.") from None
 
         if packet_type != 0x09:
-            raise ValueError(
-                "The file does not start with a SnapGene cookie packet"
-            )
+            raise ValueError("The file does not start with a SnapGene cookie packet")
         _parse_cookie_packet(length, data, record)
 
         for (packet_type, length, data) in packets:
