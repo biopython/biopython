@@ -1071,7 +1071,7 @@ class IC_Residue(object):
         self.atom_coords[ak] = IC_Residue.atm241(atm.coord)
         self.ak_set.add(ak)
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         """Print string is parent Residue ID."""
         return str(self.residue.full_id)
 
@@ -1454,7 +1454,7 @@ class IC_Residue(object):
                 for akl in edraLst:
                     lenAKL = len(akl)
                     if 0 == lenAKL:
-                        pass  # ignore empty list from missingOK
+                        continue  # ignore empty list from missingOK
                     if 1 == lenAKL:
                         alhl.append(akl[0])  # not all atoms will have altloc
                     # elif (lenAKL < maxc
@@ -1552,7 +1552,7 @@ class IC_Residue(object):
                 self._gen_edra((sC, nN, nCA, nC))  # phi i+1
                 self._gen_edra((sCA, sC, nN))
                 self._gen_edra((sC, nN, nCA))
-                self._gen_edra((nN, nCA, nC))
+                self._gen_edra((nN, nCA, nC))  # tau i+1
 
         # if start of chain then need to __init__ NCaC hedron as not in previous residue
         if 0 == len(self.rprev):
@@ -1866,7 +1866,7 @@ class IC_Residue(object):
 
         Res.parent.internal_coord.ndx = ndx
 
-    def _get_ak_tuple(self, ak_str: str) -> Tuple["AtomKey", ...]:
+    def _get_ak_tuple(self, ak_str: str) -> Optional[Tuple["AtomKey", ...]]:
         """Convert atom pair string to AtomKey tuple.
 
         :param ak_str: str
@@ -1877,7 +1877,9 @@ class IC_Residue(object):
         AK = AtomKey
         S = self
         angle_key2 = []
-        for a in ak_str.split(":"):
+        akstr_list = ak_str.split(":")
+        lenInput = len(akstr_list)
+        for a in akstr_list:
             m = self.relative_atom_re.match(a)
             if m:
                 if m.group(1) == "-1":
@@ -1890,6 +1892,8 @@ class IC_Residue(object):
                     angle_key2.append(self.rak(m.group(2)))
             else:
                 angle_key2.append(self.rak(a))
+        if len(angle_key2) != lenInput:
+            return None
         return tuple(angle_key2)
 
     relative_atom_re = re.compile(r"^(-?[10])([A-Z]+)$")
@@ -1903,6 +1907,8 @@ class IC_Residue(object):
             rval = self.dihedra.get(cast(DKT, angle_key), None)
         elif 3 == len_mkey:
             rval = self.hedra.get(cast(HKT, angle_key), None)
+        else:
+            return None
         return rval
 
     def pick_angle(
@@ -1913,20 +1919,64 @@ class IC_Residue(object):
         :param angle_key:
             - tuple of 3 or 4 AtomKeys
             - string of atom names ('CA') separated by :'s
-            - string of [-1, 0, 1]<atom name> separated by :'s, -1 is
+            - string of [-1, 0, 1]<atom name> separated by ':'s. -1 is
               previous residue, 0 is this residue, 1 is next residue
             - psi, phi, omg, omega, chi1, chi2, chi3, chi4, chi5
             - tau (N-CA-C angle) see Richardson1981
             - except for tuples, no option to access alternate disordered atoms
+
+        Observe that a residue's phi and omega dihedra, as well as the hedra
+        comprising them (including the N:Ca:C (tau) hedron), are stored in the
+        n-1 di/hedra sets; this is handled here, but may be an issue if accessing
+        directly.
+
+        The following are equivalent (except for sidechains with non-carbon
+        atoms for chi2):
+
+                ric = r.internal_coord
+                print(
+                    r,
+                    ric.get_angle("psi"),
+                    ric.get_angle("phi"),
+                    ric.get_angle("omg"),
+                    ric.get_angle("tau"),
+                    ric.get_angle("chi2"),
+                )
+                print(
+                    r,
+                    ric.get_angle("N:CA:C:1N"),
+                    ric.get_angle("-1C:N:CA:C"),
+                    ric.get_angle("-1CA:-1C:N:CA"),
+                    ric.get_angle("N:CA:C"),
+                    ric.get_angle("CA:CB:CG:CD"),
+                )
+
+        See ic_data.py for detail of atoms in the enumerated sidechain angles
+        and the backbone angles which do not span the peptide bond. Using 's'
+        for current residue ('self') and 'n' for next residue, the spanning
+        angles are:
+
+                (sN, sCA, sC, nN)   # psi
+                (sCA, sC, nN, nCA)  # omega i+1
+                (sC, nN, nCA, nC)   # phi i+1
+                (sCA, sC, nN)
+                (sC, nN, nCA)
+                (nN, nCA, nC)       # tau i+1
 
         :return: Matching Hedron, Dihedron, or None.
         """
         rval: Optional[Union["Hedron", "Dihedron"]] = None
         if isinstance(angle_key, tuple):
             rval = self._get_angle_for_tuple(angle_key)
+            if rval is None and self.rprev:
+                rval = self.rprev[0]._get_angle_for_tuple(angle_key)
         elif ":" in angle_key:
             angle_key = cast(EKT, self._get_ak_tuple(cast(str, angle_key)))
+            if angle_key is None:
+                return None
             rval = self._get_angle_for_tuple(angle_key)
+            if rval is None and self.rprev:
+                rval = self.rprev[0]._get_angle_for_tuple(angle_key)
         elif "psi" == angle_key:
             if 0 == len(self.rnext):
                 return None
@@ -1986,7 +2036,9 @@ class IC_Residue(object):
         if rval is not None:
             rval.angle = v
 
-    def pick_length(self, ak_spec: Union[str, BKT]) -> Tuple[List["Hedron"], BKT]:
+    def pick_length(
+        self, ak_spec: Union[str, BKT]
+    ) -> Tuple[Optional[List["Hedron"]], Optional[BKT]]:
         """Get list of hedra containing specified atom pair.
 
         :param ak_spec:
@@ -1995,13 +2047,27 @@ class IC_Residue(object):
               optional position specifier relative to self, e.g. '-1C:N' for
               preceding peptide bond.
 
+        The following are equivalent:
+                ric = r.internal_coord
+                print(
+                    r,
+                    ric.get_length("0C:1N"),
+                )
+                print(
+                    r,
+                    None
+                    if not ric.rnext
+                    else ric.get_length((ric.rak("C"), ric.rnext[0].rak("N"))),
+                )
+
         :return: list of hedra containing specified atom pair, tuple of atom keys
         """
         rlst: List[Hedron] = []
         # if ":" in ak_spec:
         if isinstance(ak_spec, str):
             ak_spec = cast(BKT, self._get_ak_tuple(ak_spec))
-
+        if ak_spec is None:
+            return None, None
         for hed_key, hed_val in self.hedra.items():
             if all(ak in hed_key for ak in ak_spec):
                 rlst.append(hed_val)
@@ -2012,9 +2078,13 @@ class IC_Residue(object):
 
         See pick_length() for ak_spec.
         """
-        hed_lst, ak_spec = self.pick_length(ak_spec)
+
+        hed_lst, ak_spec2 = self.pick_length(ak_spec)
+        if hed_lst is None or ak_spec2 is None:
+            return None
+
         for hed in hed_lst:
-            val = hed.get_length(ak_spec)
+            val = hed.get_length(ak_spec2)
             if val is not None:
                 return val
         return None
@@ -2024,9 +2094,10 @@ class IC_Residue(object):
 
         See pick_length() for ak_spec.
         """
-        hed_lst, ak_spec = self.pick_length(ak_spec)
-        for hed in hed_lst:
-            hed.set_length(ak_spec, val)
+        hed_lst, ak_spec2 = self.pick_length(ak_spec)
+        if hed_lst is not None and ak_spec2 is not None:
+            for hed in hed_lst:
+                hed.set_length(ak_spec2, val)
 
     def applyMtx(self, mtx: numpy.array) -> None:
         """Apply matrix to atom_coords for this IC_Residue."""
@@ -2312,7 +2383,7 @@ class Hedron(Edron):
 
         # print(self)
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         """Print string for Hedron object."""
         return f"3-{self.id} {self.rdh_class} {str(self.len12)} {str(self.angle)} {str(self.len23)}"
 
@@ -2534,7 +2605,7 @@ class Dihedron(Edron):
 
         # print(self, self.dclass)
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         """Print string for Dihedron object."""
         return f"4-{str(self.id)} {self.rdh_class} {str(self.angle)} {str(self.IC_Residue)}"
 
