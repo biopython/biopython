@@ -175,8 +175,8 @@ class Rebuild(unittest.TestCase):
                 # test extra bond created in TRP (allBonds is True)
                 if '"Cres", 0, 0, 1, 0, StdBond, "W", 24, "CD2CE3CZ3"' in aline:
                     allBondsPass = True
-                # test 509:C-561:N long bond created
-                if "509_K_N:509_K_CA:509_K_C -- 509_K_CA:509_K_C:561_E_N" in aline:
+                # test 509_K-561_E long bond created
+                if "509_K" in aline and "561_E" in aline:
                     maxPeptideBondPass = True
                 if "(264_G_CB, 264_G_CA, 264_G_C)" in aline:
                     glyCbetaPass = True
