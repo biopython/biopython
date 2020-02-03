@@ -47,6 +47,7 @@ possible, especially the following contributors:
 - Rob Miller
 - Sergio Valqui
 - Sujan Dulal (first contribution)
+- Andrey Raspopov
 
 20 December 2019: Biopython 1.76
 ================================
