@@ -9,6 +9,7 @@
 
 import unittest
 import re
+import warnings
 
 try:
     import numpy  # noqa F401
@@ -26,6 +27,8 @@ from Bio.File import as_handle
 from Bio.PDB.Model import Model
 from Bio.PDB.Residue import Residue
 from Bio.PDB.internal_coords import IC_Residue
+
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class Rebuild(unittest.TestCase):
@@ -55,7 +58,9 @@ class Rebuild(unittest.TestCase):
         """Convert disordered protein to internal coordinates and back."""
         # 3jqh has both disordered residues
         # and disordered atoms in ordered residues
-        r = structure_rebuild_test(self.cif_3JQH, False)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", PDBConstructionWarning)
+            r = structure_rebuild_test(self.cif_3JQH, False)
         # print(r)
         self.assertEqual(r["residues"], 26)
         self.assertEqual(r["rCount"], 47)
