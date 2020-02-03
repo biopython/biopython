@@ -791,6 +791,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 # Use the FIRST accession as the ID, not the first on this line!
                 self.data.id = self.data.annotations["accessions"][0]
 
+    def tls(self, content):
+        self.data.annotations["tls"] = content.split("-")
+
     def tsa(self, content):
         self.data.annotations["tsa"] = content.split("-")
 
@@ -1430,6 +1433,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference = None
         self._cur_feature = None
         self._cur_qualifier = None
+
+    def tls(self, content):
+        self.data.tls = content.split("-")
 
     def tsa(self, content):
         self.data.tsa = content.split("-")

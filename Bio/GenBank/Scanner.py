@@ -1184,6 +1184,7 @@ class GenBankScanner(InsdcScanner):
         "BASE COUNT",
         "WGS",
         "TSA",
+        "TLS",
     ]  # trailing spaces removed
 
     GENBANK_INDENT = HEADER_WIDTH
@@ -1865,6 +1866,9 @@ class GenBankScanner(InsdcScanner):
                         if self.debug:
                             print("origin_name = " + line)
                         consumer.origin_name(line)
+                if line.startswith("TLS "):
+                    line = line[3:].strip()
+                    consumer.tls(line)
                 if line.startswith("TSA "):
                     line = line[3:].strip()
                     consumer.tsa(line)
