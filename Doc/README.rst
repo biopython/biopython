@@ -17,7 +17,7 @@ Here is an example::
 
     %doctest path-to-folder
     \begin{minted}{python}
-    from Bio import SeqIO
+    >>> from Bio import SeqIO
     \end{minted}
 
 Formatting text
