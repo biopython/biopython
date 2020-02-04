@@ -37,7 +37,7 @@ Section titles::
 
 Subsection titles::
 
-    \section{Title of Subsection}
+    \subsection{Title of Subsection}
 
 When referring to code in the middle of a paragraph, format it as follows::
 
