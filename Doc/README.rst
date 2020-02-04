@@ -16,12 +16,21 @@ uses its own system for testing code examples, which is located in
 ``test_Tutorial.py``. You can read more about this system in the testing 
 chapter of the Biopython Tutorial.
 
-Here is an example::
+Here is an example of Python code that uses the console to show output::
 
     %doctest path-to-folder
-    \begin{minted}{python}
+    \begin{minted}{pycon}
     >>> from Bio import SeqIO
     \end{minted}
+
+These examples should use %doctest to verify that the output is correct.
+
+Here is an example of Python code that does not show output::
+
+    \begin{minted}{python}
+    from Bio import SeqIO
+    \end{minted}
+
 
 Formatting text
 ---------------
