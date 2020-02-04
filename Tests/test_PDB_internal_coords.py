@@ -23,6 +23,7 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.MMCIFParser import MMCIFParser
 from io import StringIO
 from Bio.PDB.SCADIO import write_SCAD
+from Bio.PDB.PICIO import write_PIC
 from Bio.File import as_handle
 from Bio.PDB.Model import Model
 from Bio.PDB.Residue import Residue
@@ -183,7 +184,7 @@ class Rebuild(unittest.TestCase):
                     glyCbetaPass = True
         self.assertTrue(allBondsPass)
         self.assertTrue(glyCbetaPass)
-        # self.assertTrue(maxPeptideBondPass)
+        self.assertTrue(maxPeptideBondPass)
 
 
 if __name__ == "__main__":
