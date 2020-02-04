@@ -116,3 +116,8 @@ CodeCov: https://codecov.io/github/biopython/biopython/
 
 Ideally the CodeCov checks will also pass, but we currently do not insist
 on this when reviewing pull requests.
+
+Contributing to the Biopython Tutorial
+--------------------------------------
+
+For instructions, see `the Biopython Tutorial README <Doc/README.rst>`_
