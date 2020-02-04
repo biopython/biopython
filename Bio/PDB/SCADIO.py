@@ -87,7 +87,7 @@ def write_SCAD(
     :param includeCode: bool default True
         Include OpenSCAD software (inline below) so output file can be loaded
         into OpenSCAD; if False, output data matrices only
-    :param MaxPeptideBond: Optional[float] default None
+    :param maxPeptideBond: Optional[float] default None
         Override the cut-off in IC_Chain class (default 1.4) for detecting
         chain breaks.  If your target has chain breaks, pass a large number here
         to create a very long 'bond' spanning the break.
@@ -100,22 +100,34 @@ def write_SCAD(
 
     # step one need IC_Residue atom_coords loaded in order to scale
     # so if no internal_coords, initialise from Atom coordinates
-    have_IC_Atoms = False
+    added_IC_Atoms = False
     if "S" == entity.level or "M" == entity.level:
         for chn in entity.get_chains():
             if not chn.internal_coord:
                 chn.internal_coord = IC_Chain(chn)
-                have_IC_Atoms = True
+                added_IC_Atoms = True
     elif "C" == entity.level:
         if not entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
-            have_IC_Atoms = True
+            added_IC_Atoms = True
     else:
         raise PDBException("level not S, M or C: " + str(entity.level))
 
-    if not have_IC_Atoms and scale is not None:
+    if not added_IC_Atoms and scale is not None:
         # if loaded pic file and need to scale, generate atom coords
         entity.internal_to_atom_coordinates()
+
+    # need to reset rnext and rprev in case MaxPeptideBond changed
+    if not added_IC_Atoms:
+        if "C" == entity.level:
+            chnp = entity.internal_coord = IC_Chain(entity)
+            chnp.link_residues()
+            chnp.render_dihedra()
+        else:
+            for chn in entity.get_chains():
+                chnp = chn.internal_coord = IC_Chain(chn)
+                chnp.link_residues()
+                chnp.render_dihedra()
 
     if scale is not None:
         scaleMtx = homog_scale_mtx(scale)
@@ -151,7 +163,6 @@ def write_SCAD(
     entity.internal_to_atom_coordinates()
 
     with as_handle(file, "w") as fp:
-
         if includeCode:
             fp.write(peptide_scad)
 
