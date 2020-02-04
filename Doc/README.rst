@@ -6,10 +6,7 @@ Installing the tools you need
 
 On Ubuntu, you can install these with the following commands::
 
-    sudo apt install hevea
-    sudo apt install texlive-latex-base
-    sudo apt-get install texlive-latex-extra
-    sudo apt-get install python-pygments
+    sudo apt install hevea texlive-latex-base texlive-latex-extra python-pygments
 
 Formatting code examples
 ------------------------
