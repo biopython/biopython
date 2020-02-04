@@ -232,7 +232,6 @@ class StringMethodTests(unittest.TestCase):
             0,
             0,
             0,
-            0,  # Seq() Tests
             0,
             0,
             0,
@@ -244,7 +243,8 @@ class StringMethodTests(unittest.TestCase):
             0,
             0,
             0,
-        ]  # UnknownSeq() Tests
+            0,
+        ]
         expected *= 2  # MutableSeq() Tests
 
         assert len(self._examples) == len(expected)
