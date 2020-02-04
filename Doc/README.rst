@@ -50,12 +50,4 @@ Building the documentation
 
 Build the documentation by running "make" in the Docs folder.
 
-Ideally, the documentation should be generated without a hitch, but some errors may cause the program to stop and ask for user input. Press R to continue building the documentation.
-
-If you would like to ignore errors at the command-line, then you can use::
-
-    yes R | make
-
-However, these errors may provide valuable information if there are mistakes in your own LaTeX code.
-
 Once the documentation has been generated, you can inspect either Tutorial.pdf or Tutorial.html in the Docs directory to see if the output is correct.
