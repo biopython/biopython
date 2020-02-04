@@ -41,9 +41,9 @@ Subsection titles::
 
 When referring to code in the middle of a paragraph, format it as follows::
 
-    \verb|ObjectName|
+    \verb|variable_name|
 
-This will render ObjectName in a monospace font.
+This will render ``variable_name`` in a monospace font. Within the pipe characters, underscores will be interpreted literally, so they do not need to be escaped.
 
 Building the documentation
 --------------------------
