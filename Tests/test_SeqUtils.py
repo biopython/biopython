@@ -34,14 +34,12 @@ class SeqUtilsTests(unittest.TestCase):
         # immunoglobulin lambda light chain variable region from Homo sapiens
         # Both sequences share the same CRC64 checksum: 44CAAD88706CC153
         cls.str_light_chain_one = (
-            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQ"
-            "HPGKAPKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGL"
-            "QAEDEADYYCSSYAGSSTLVFGGGTKLTVL"
+            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
+            "SNRFSGSKSGNTASLTISGLQAEDEADYYCSSYAGSSTLVFGGGTKLTVL"
         )
         cls.str_light_chain_two = (
-            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQ"
-            "HPGKAPKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGL"
-            "QAEDEADYYCCSYAGSSTWVFGGGTKLTVL"
+            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
+            "SNRFSGSKSGNTASLTISGLQAEDEADYYCCSYAGSSTWVFGGGTKLTVL"
         )
         X = CodonAdaptationIndex()
         path = os.path.join("CodonUsage", "HighlyExpressedGenes.txt")
