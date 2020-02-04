@@ -36,7 +36,7 @@ def _iterate(handle):
     while True:
         packet_type = handle.read(1)
         if len(packet_type) < 1:  # No more packet
-            raise StopIteration
+            return
         packet_type = unpack(">B", packet_type)[0]
 
         length = handle.read(4)
