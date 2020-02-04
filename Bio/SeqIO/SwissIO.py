@@ -103,13 +103,13 @@ def SwissIterator(source):
             annotations["date"] = date
             annotations["sequence_version"] = version
         if swiss_record.sequence_update:
-            date, release = swiss_record.sequence_update
+            date, version = swiss_record.sequence_update
             annotations["date_last_sequence_update"] = date
             annotations["sequence_version"] = version
         if swiss_record.annotation_update:
-            date, release = swiss_record.annotation_update
+            date, version = swiss_record.annotation_update
             annotations["date_last_annotation_update"] = date
-            annotations["entry_version"] = release
+            annotations["entry_version"] = version
         if swiss_record.gene_name:
             annotations["gene_name"] = swiss_record.gene_name
         annotations["organism"] = swiss_record.organism.rstrip(".")
