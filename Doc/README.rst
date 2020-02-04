@@ -11,7 +11,7 @@ On Ubuntu, you can install these with the following commands::
 Formatting code examples
 ------------------------
 
-Code examples should be formatted using minted. Also, the Biopython tutorial uses its own system for testing code examples, which is located in ``test_Tutorial.py``. You can read more about this system in `section 21.4 of the Biopython Tutorial <http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc316>`_.
+Code examples should be formatted using minted. Also, the Biopython tutorial uses its own system for testing code examples, which is located in ``test_Tutorial.py``. You can read more about this system in the testing chapter of the Biopython Tutorial.
 
 Here is an example::
 
