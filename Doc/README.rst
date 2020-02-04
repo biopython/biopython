@@ -11,7 +11,10 @@ On Ubuntu, you can install these with the following commands::
 Formatting code examples
 ------------------------
 
-Code examples should be formatted using minted. Also, the Biopython tutorial uses its own system for testing code examples, which is located in ``test_Tutorial.py``. You can read more about this system in the testing chapter of the Biopython Tutorial.
+Code examples should be formatted using minted. Also, the Biopython tutorial
+uses its own system for testing code examples, which is located in 
+``test_Tutorial.py``. You can read more about this system in the testing 
+chapter of the Biopython Tutorial.
 
 Here is an example::
 
@@ -43,11 +46,14 @@ When referring to code in the middle of a paragraph, format it as follows::
 
     \verb|variable_name|
 
-This will render ``variable_name`` in a monospace font. Within the pipe characters, underscores will be interpreted literally, so they do not need to be escaped.
+This will render ``variable_name`` in a monospace font. Within the pipe 
+characters, underscores will be interpreted literally, so they do not need 
+to be escaped.
 
 Building the documentation
 --------------------------
 
 Build the documentation by running "make" in the Docs folder.
 
-Once the documentation has been generated, you can inspect either Tutorial.pdf or Tutorial.html in the Docs directory to see if the output is correct.
+Once the documentation has been generated, you can inspect either Tutorial.pdf 
+or Tutorial.html in the Docs directory to see if the output is correct.
