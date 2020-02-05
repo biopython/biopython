@@ -54,7 +54,8 @@ def UniprotIterator(
         for event, elem in ElementTree.iterparse(source, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
                 yield Parser(
-                    elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
+                    elem, alphabet=alphabet, return_raw_comments=return_raw_comments
+                ).parse()
                 elem.clear()
     except ElementTree.ParseError as exception:
         if errors.messages[exception.code] == errors.XML_ERROR_NO_ELEMENTS:
