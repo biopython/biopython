@@ -169,7 +169,7 @@ def XdnaIterator(source):
         if not header:
             raise ValueError("Empty file.")
         if len(header) < 112:
-            raise ValueError("Improper header, cannot read 112 bytes from handle" % length)
+            raise ValueError("Improper header, cannot read 112 bytes from handle")
         (version, type, topology, length, neg_length, com_length) = unpack(
             ">BBB25xII60xI12x", header
         )
