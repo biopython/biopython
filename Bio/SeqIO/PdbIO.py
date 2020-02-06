@@ -104,8 +104,11 @@ def AtomIterator(pdb_id, structure):
         yield record
 
 
-def PdbSeqresIterator(handle):
+def PdbSeqresIterator(source):
     """Return SeqRecord objects for each chain in a PDB file.
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     The sequences are derived from the SEQRES lines in the
     PDB file header, not the atoms of the 3D structure.
@@ -141,14 +144,18 @@ def PdbSeqresIterator(handle):
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
     from Bio.SeqUtils import seq1
 
-    # raise exception if file is empty
-    empty = True
-
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
-    with as_handle(handle) as handle:
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("PDB files must be opened in text mode.") from None
+
+    try:
+        rec_name = None
         for line in handle:
-            empty = False
             rec_name = line[0:6].strip()
             if rec_name == "SEQRES":
                 # NB: We only actually need chain ID and the residues here;
@@ -206,7 +213,7 @@ def PdbSeqresIterator(handle):
                 )
             # ENH: 'SEQADV' 'MODRES'
 
-        if empty:
+        if rec_name is None:
             raise ValueError("Empty file.")
 
         for chn_id, residues in sorted(chains.items()):
@@ -230,6 +237,9 @@ def PdbSeqresIterator(handle):
             else:
                 record.id = chn_id
             yield record
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 def PdbAtomIterator(source):
