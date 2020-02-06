@@ -52,7 +52,7 @@ def NibIterator(source, alphabet=None):
     """Iterate over a nib file and yield a SeqRecord.
 
         - source - a file-like object or a path to a file in the nib file
-          format is defined by UCSC; the file must be opened in binary mode.
+          format as defined by UCSC; the file must be opened in binary mode.
         - alphabet - always ignored.
 
     Note that a nib file always contains only one sequence record.
