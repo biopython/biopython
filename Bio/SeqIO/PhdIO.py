@@ -53,46 +53,47 @@ Note these examples only show the first 50 bases to keep the output short.
 """
 
 
-from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio.SeqIO import QualityIO
 
 
-def PhdIterator(handle):
+def PhdIterator(source):
     """Return SeqRecord objects from a PHD file.
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     This uses the Bio.Sequencing.Phd module to do the hard work.
     """
-    with as_handle(handle) as handle:
-        phd_records = Phd.parse(handle)
-        for phd_record in phd_records:
-            # Convert the PHY record into a SeqRecord...
-            # The "filename" can contain spaces, e.g. 'HWI-EAS94_4_1_1_602_99 1'
-            # from unit test example file phd_solexa.
-            # This will cause problems if used as the record identifier
-            # (e.g. output for FASTQ format).
-            name = phd_record.file_name.split(None, 1)[0]
-            seq_record = SeqRecord(
-                phd_record.seq, id=name, name=name, description=phd_record.file_name
-            )
-            # Just re-use the comments dictionary as the SeqRecord's annotations
-            seq_record.annotations = phd_record.comments
-            # And store the qualities and peak locations as per-letter-annotation
-            seq_record.letter_annotations["phred_quality"] = [
-                int(site[1]) for site in phd_record.sites
+    phd_records = Phd.parse(source)
+    for phd_record in phd_records:
+        # Convert the PHY record into a SeqRecord...
+        # The "filename" can contain spaces, e.g. 'HWI-EAS94_4_1_1_602_99 1'
+        # from unit test example file phd_solexa.
+        # This will cause problems if used as the record identifier
+        # (e.g. output for FASTQ format).
+        name = phd_record.file_name.split(None, 1)[0]
+        seq_record = SeqRecord(
+            phd_record.seq, id=name, name=name, description=phd_record.file_name
+        )
+        # Just re-use the comments dictionary as the SeqRecord's annotations
+        seq_record.annotations = phd_record.comments
+        # And store the qualities and peak locations as per-letter-annotation
+        seq_record.letter_annotations["phred_quality"] = [
+            int(site[1]) for site in phd_record.sites
+        ]
+        try:
+            seq_record.letter_annotations["peak_location"] = [
+                int(site[2]) for site in phd_record.sites
             ]
-            try:
-                seq_record.letter_annotations["peak_location"] = [
-                    int(site[2]) for site in phd_record.sites
-                ]
-            except IndexError:
-                # peak locations are not always there according to
-                # David Gordon (the Consed author)
-                pass
-            yield seq_record
-        # All done
+        except IndexError:
+            # peak locations are not always there according to
+            # David Gordon (the Consed author)
+            pass
+        yield seq_record
+    # All done
 
 
 class PhdWriter(SequentialSequenceWriter):
