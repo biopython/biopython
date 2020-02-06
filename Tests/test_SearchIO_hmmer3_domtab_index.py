@@ -52,7 +52,6 @@ Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.
 
 
 class HmmerDomtabIndexCases(CheckIndex):
-
     def test_hmmerdomtab_30_hmmscan_001(self):
         """Test hmmscan-domtab indexing, HMMER 3.0, multiple queries."""
         filename = os.path.join("Hmmer", "domtab_30_hmmscan_001.out")
