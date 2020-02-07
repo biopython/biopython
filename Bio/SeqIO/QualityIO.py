@@ -929,21 +929,18 @@ def FastqGeneralIterator(source):
                     "Records in Fastq files should start with '@' character"
                 )
             title_line = line[1:].rstrip()
-            # Will now be at least one line of quality data - in most FASTQ files
-            # just one line! We therefore use string concatenation (if needed)
-            # rather using than the "".join(...) trick just in case it is multiline:
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Unexpected end of file") from None
-            seq_string = line.rstrip()
-            # There may now be more sequence lines, or the "+" quality marker line:
+            seq_string = ""
+            # There will now be one or more sequence lines; keep going until we
+            # find the "+" marking the quality line:
             for line in handle:
                 if line[0] == "+":
                     break
-                seq_string += line.rstrip()  # removes trailing newlines
+                seq_string += line.rstrip()
             else:
-                raise ValueError("End of file without quality information.")
+                if seq_string:
+                    raise ValueError("End of file without quality information.")
+                else:
+                    raise ValueError("Unexpected end of file")
             # The title here is optional, but if present must match!
             second_title = line[1:].rstrip()
             if second_title and second_title != title_line:
