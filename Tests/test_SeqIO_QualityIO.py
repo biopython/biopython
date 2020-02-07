@@ -524,12 +524,6 @@ class TestWriteRead(unittest.TestCase):
                    ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
                     "fasta", "qual", "phd"])
 
-    def test_example_qual(self):
-        """Write and read back example.qual."""
-        self.check(os.path.join("Quality", "example.qual"), "qual",
-                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                    "fasta", "qual", "phd"])
-
     def test_solexa_faked(self):
         """Write and read back solexa_faked.fastq."""
         self.check(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa",
