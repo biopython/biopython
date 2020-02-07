@@ -1042,7 +1042,7 @@ class PairwiseAlignment:
         end = ends[idx]
         max_end = max(ends)
         if max_end > 0:
-            aligned_seq += self._lst2str(other_seq[:max_end - end], " ")
+            aligned_seq += self._lst2str(other_seq[: max_end - end], " ")
             aligned_seq += self._lst2str(seq[:end])
         start = end
         other_start = ends[other_idx]
@@ -1064,7 +1064,7 @@ class PairwiseAlignment:
             aligned_seq += self._lst2str(other_seq[-diff:], " ")
         if type(aligned_seq) == str:
             return aligned_seq
-        return ' '.join(aligned_seq)
+        return " ".join(aligned_seq)
 
     def __format__(self, format_spec):
         """Create a human-readable representation of the alignment."""
