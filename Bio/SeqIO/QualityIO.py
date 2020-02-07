@@ -938,18 +938,16 @@ def FastqGeneralIterator(source):
                 raise ValueError("Unexpected end of file") from None
             seq_string = line.rstrip()
             # There may now be more sequence lines, or the "+" quality marker line:
-            while True:
-                try:
-                    line = next(handle)
-                except StopIteration:
-                    raise ValueError("End of file without quality information.") from None
+            for line in handle:
                 if line[0] == "+":
-                    # The title here is optional, but if present must match!
-                    second_title = line[1:].rstrip()
-                    if second_title and second_title != title_line:
-                        raise ValueError("Sequence and quality captions differ.")
                     break
                 seq_string += line.rstrip()  # removes trailing newlines
+            else:
+                raise ValueError("End of file without quality information.")
+            # The title here is optional, but if present must match!
+            second_title = line[1:].rstrip()
+            if second_title and second_title != title_line:
+                raise ValueError("Sequence and quality captions differ.")
             # This is going to slow things down a little, but assuming
             # this isn't allowed we should try and catch it here:
             if " " in seq_string or "\t" in seq_string:
