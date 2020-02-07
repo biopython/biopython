@@ -941,6 +941,9 @@ def FastqGeneralIterator(source):
                     raise ValueError("End of file without quality information.")
                 else:
                     raise ValueError("Unexpected end of file")
+            if not seq_string.isalpha():
+                if seq_string:
+                    raise ValueError("Sequence should consists of alphabetical characters")
             # The title here is optional, but if present must match!
             second_title = line[1:].rstrip()
             if second_title and second_title != title_line:
@@ -956,30 +959,24 @@ def FastqGeneralIterator(source):
             line = None
             quality_string = ""
             for line in handle:
-                if line[0] == "@":
-                    # This COULD be the start of a new sequence. However, it MAY just
-                    # be a line of quality data which starts with a "@" character.  We
-                    # should be able to check this by looking at the sequence length
-                    # and the amount of quality data found so far.
-                    if len(quality_string) >= seq_len:
-                        # We expect it to be equal if this is the start of a new record.
-                        # If the quality data is longer, we'll raise an error below.
-                        break
-                    # Continue - its just some (more) quality data.
                 quality_string += line.rstrip()
+                if len(quality_string) == seq_len:
+                    break  # Typical case
+                if len(quality_string) > seq_len:
+                    raise ValueError(
+                        "Lengths of sequence and quality values differs for %s (%i and %i)."
+                        % (title_line, seq_len, len(quality_string))
+                    )
             else:
-                if line is None:
-                    raise ValueError("Unexpected end of file")
+                raise ValueError("Unexpected end of file")
                 line = None
-
-            if seq_len != len(quality_string):
-                raise ValueError(
-                    "Lengths of sequence and quality values differs for %s (%i and %i)."
-                    % (title_line, seq_len, len(quality_string))
-                )
-
             # Return the record and then continue...
             yield (title_line, seq_string, quality_string)
+
+            try:
+                line = next(handle)
+            except StopIteration:
+                break
     finally:
         if handle is not source:
             handle.close()
