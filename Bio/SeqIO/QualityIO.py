@@ -929,46 +929,33 @@ def FastqGeneralIterator(source):
                     "Records in Fastq files should start with '@' character"
                 )
             title_line = line[1:].rstrip()
-            # Will now be at least one line of quality data - in most FASTQ files
-            # just one line! We therefore use string concatenation (if needed)
-            # rather using than the "".join(...) trick just in case it is multiline:
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Unexpected end of file") from None
-            seq_string = line.rstrip()
-            # There may now be more sequence lines, or the "+" quality marker line:
-            while True:
-                try:
-                    line = next(handle)
-                except StopIteration:
-                    raise ValueError("End of file without quality information.") from None
+            seq_string = ""
+            # There will now be one or more sequence lines; keep going until we
+            # find the "+" marking the quality line:
+            for line in handle:
                 if line[0] == "+":
-                    # The title here is optional, but if present must match!
-                    second_title = line[1:].rstrip()
-                    if second_title and second_title != title_line:
-                        raise ValueError("Sequence and quality captions differ.")
                     break
-                seq_string += line.rstrip()  # removes trailing newlines
+                seq_string += line.rstrip()
+            else:
+                if seq_string:
+                    raise ValueError("End of file without quality information.")
+                else:
+                    raise ValueError("Unexpected end of file")
+            # The title here is optional, but if present must match!
+            second_title = line[1:].rstrip()
+            if second_title and second_title != title_line:
+                raise ValueError("Sequence and quality captions differ.")
             # This is going to slow things down a little, but assuming
             # this isn't allowed we should try and catch it here:
             if " " in seq_string or "\t" in seq_string:
                 raise ValueError("Whitespace is not allowed in the sequence.")
             seq_len = len(seq_string)
 
-            # Will now be at least one line of quality data...
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Unexpected end of file") from None
-            quality_string = line.rstrip()
-            # There may now be more quality data, or another sequence, or EOF
-            while True:
-                try:
-                    line = next(handle)
-                except StopIteration:
-                    line = None
-                    break
+            # There will now be at least one line of quality data, followed by
+            # another sequence, or EOF
+            line = None
+            quality_string = ""
+            for line in handle:
                 if line[0] == "@":
                     # This COULD be the start of a new sequence. However, it MAY just
                     # be a line of quality data which starts with a "@" character.  We
@@ -980,6 +967,10 @@ def FastqGeneralIterator(source):
                         break
                     # Continue - its just some (more) quality data.
                 quality_string += line.rstrip()
+            else:
+                if line is None:
+                    raise ValueError("Unexpected end of file")
+                line = None
 
             if seq_len != len(quality_string):
                 raise ValueError(
@@ -1375,13 +1366,11 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
             raise ValueError("QUAL files must be opened in text mode") from None
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
-        while True:
-            try:
-                line = next(handle)
-            except StopIteration:
-                return
+        for line in handle:
             if line[0] == ">":
                 break
+        else:
+            return
 
         while True:
             if line[0] != ">":
@@ -1396,20 +1385,12 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
                 name = id
 
             qualities = []
-            try:
-                line = next(handle)
-            except StopIteration:
-                line = None
-            while True:
-                if not line:
-                    break
+            for line in handle:
                 if line[0] == ">":
                     break
                 qualities.extend(int(word) for word in line.split())
-                try:
-                    line = next(handle)
-                except StopIteration:
-                    line = None
+            else:
+                line = None
 
             if qualities and min(qualities) < 0:
                 warnings.warn(
@@ -1431,7 +1412,7 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
             dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
             yield record
 
-            if not line:
+            if line is None:
                 return  # StopIteration
         raise ValueError("Unrecognised QUAL record format.")
     finally:
