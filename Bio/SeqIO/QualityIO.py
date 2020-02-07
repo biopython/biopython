@@ -818,8 +818,11 @@ def _get_solexa_quality_str(record):
 
 
 # TODO - Default to nucleotide or even DNA?
-def FastqGeneralIterator(handle):
+def FastqGeneralIterator(source):
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     This code does not try to interpret the quality string numerically.  It
     just returns tuples of the title, sequence and quality as strings.  For
@@ -909,7 +912,13 @@ def FastqGeneralIterator(handle):
     is that (provided there are no line breaks in the quality sequence) it
     would prevent the above problem with the "@" character.
     """
-    with as_handle(handle) as handle:
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("Fastq files must be opened in text mode") from None
+    try:
         # We need to call handle.readline() at least four times per record,
         # so we'll save a property look up each time:
         handle_readline = handle.readline
@@ -975,13 +984,16 @@ def FastqGeneralIterator(handle):
 
             # Return the record and then continue...
             yield (title_line, seq_string, quality_string)
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+def FastqPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over FASTQ records as SeqRecord objects.
 
     Arguments:
-     - handle - input file
+     - source - input stream opened in text mode, or a path to a file
      - alphabet - optional alphabet
      - title2ids - A function that, when given the title line from the FASTQ
        file (without the beginning >), will return the id, name and
@@ -1051,7 +1063,7 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
 
-    for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
+    for title_line, seq_string, quality_string in FastqGeneralIterator(source):
         if title2ids:
             id, name, descr = title2ids(title_line)
         else:
@@ -1073,7 +1085,7 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         yield record
 
 
-def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     r"""Parse old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
@@ -1211,7 +1223,7 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
 
-    for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
+    for title_line, seq_string, quality_string in FastqGeneralIterator(source):
         if title2ids:
             id, name, descr = title_line
         else:
@@ -1231,7 +1243,7 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
         yield record
 
 
-def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
@@ -1264,7 +1276,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
 
-    for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
+    for title_line, seq_string, quality_string in FastqGeneralIterator(source):
         if title2ids:
             id, name, descr = title2ids(title_line)
         else:
@@ -1283,7 +1295,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
         yield record
 
 
-def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """For QUAL files which include PHRED quality scores, but no sequence.
 
     For example, consider this short QUAL file::
@@ -1350,7 +1362,13 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     scores but will replace them with the lowest possible PHRED score of zero.
     This will trigger a warning, previously it raised a ValueError exception.
     """
-    with as_handle(handle) as handle:
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("QUAL files must be opened in text mode") from None
+    try:
         # Skip any text before the first record (e.g. blank lines, comments)
         while True:
             line = handle.readline()
@@ -1404,6 +1422,9 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
             if not line:
                 return  # StopIteration
         raise ValueError("Unrecognised QUAL record format.")
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 class FastqPhredWriter(SequenceWriter):
@@ -1850,7 +1871,7 @@ def as_fastq_illumina(record):
 
 
 def PairedFastaQualIterator(
-    fasta_handle, qual_handle, alphabet=single_letter_alphabet, title2ids=None
+    fasta_source, qual_source, alphabet=single_letter_alphabet, title2ids=None
 ):
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
 
@@ -1916,11 +1937,11 @@ def PairedFastaQualIterator(
     """
     from Bio.SeqIO.FastaIO import FastaIterator
 
-    fasta_iter = FastaIterator(fasta_handle, alphabet=alphabet, title2ids=title2ids)
-    qual_iter = QualPhredIterator(qual_handle, alphabet=alphabet, title2ids=title2ids)
+    fasta_iter = FastaIterator(fasta_source, alphabet=alphabet, title2ids=title2ids)
+    qual_iter = QualPhredIterator(qual_source, alphabet=alphabet, title2ids=title2ids)
 
-    # Using (Python 3 style) zip wouldn't load everything into memory,
-    # but also would not catch any extra records found in only one file.
+    # Using zip wouldn't load everything into memory, but also would not catch
+    # any extra records found in only one file.
     while True:
         try:
             f_rec = next(fasta_iter)
