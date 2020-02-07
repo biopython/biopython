@@ -118,14 +118,12 @@ class IsoelectricPoint:
     def _chargeR(self, pH):
         positive_charge = 0.0
         for aa, pK in self.pos_pKs.items():
-            CR = 10 ** (pK - pH)
-            partial_charge = CR / (CR + 1.0)
+            partial_charge = 1.0 / (10 ** (pH - pK) + 1.0)
             positive_charge += self.charged_aas_content[aa] * partial_charge
 
         negative_charge = 0.0
         for aa, pK in self.neg_pKs.items():
-            CR = 10 ** (pH - pK)
-            partial_charge = CR / (CR + 1.0)
+            partial_charge = 1.0 / (10 ** (pK - pH) + 1.0)
             negative_charge += self.charged_aas_content[aa] * partial_charge
 
         return positive_charge - negative_charge
