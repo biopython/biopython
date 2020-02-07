@@ -1376,9 +1376,10 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
         while True:
-            line = handle.readline()
-            if line == "":
-                return  # Premature end of file, or just empty?
+            try:
+                line = next(handle)
+            except StopIteration:
+                return
             if line[0] == ">":
                 break
 
@@ -1395,14 +1396,20 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
                 name = id
 
             qualities = []
-            line = handle.readline()
+            try:
+                line = next(handle)
+            except StopIteration:
+                line = None
             while True:
                 if not line:
                     break
                 if line[0] == ">":
                     break
                 qualities.extend(int(word) for word in line.split())
-                line = handle.readline()
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    line = None
 
             if qualities and min(qualities) < 0:
                 warnings.warn(
