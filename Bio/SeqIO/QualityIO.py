@@ -958,12 +958,7 @@ def FastqGeneralIterator(source):
                 raise ValueError("Unexpected end of file") from None
             quality_string = line.rstrip()
             # There may now be more quality data, or another sequence, or EOF
-            while True:
-                try:
-                    line = next(handle)
-                except StopIteration:
-                    line = None
-                    break
+            for line in handle:
                 if line[0] == "@":
                     # This COULD be the start of a new sequence. However, it MAY just
                     # be a line of quality data which starts with a "@" character.  We
@@ -975,6 +970,8 @@ def FastqGeneralIterator(source):
                         break
                     # Continue - its just some (more) quality data.
                 quality_string += line.rstrip()
+            else:
+                line = None
 
             if seq_len != len(quality_string):
                 raise ValueError(
