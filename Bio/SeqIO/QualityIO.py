@@ -941,18 +941,15 @@ def FastqGeneralIterator(source):
                     raise ValueError("End of file without quality information.")
                 else:
                     raise ValueError("Unexpected end of file")
-            if not seq_string.isalpha():
-                if seq_string:
-                    raise ValueError("Sequence should consists of alphabetical characters")
+            if " " in seq_string or "\t" in seq_string:
+                raise ValueError("Sequence should not contain whitespace.")
+            elif "@" in seq_string:
+                raise ValueError("Sequence should not contain '@'.")
+            seq_len = len(seq_string)
             # The title here is optional, but if present must match!
             second_title = line[1:].rstrip()
             if second_title and second_title != title_line:
                 raise ValueError("Sequence and quality captions differ.")
-            # This is going to slow things down a little, but assuming
-            # this isn't allowed we should try and catch it here:
-            if " " in seq_string or "\t" in seq_string:
-                raise ValueError("Whitespace is not allowed in the sequence.")
-            seq_len = len(seq_string)
 
             # There will now be at least one line of quality data, followed by
             # another sequence, or EOF
