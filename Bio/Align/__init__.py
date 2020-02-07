@@ -996,135 +996,77 @@ class PairwiseAlignment:
         else:
             if view.format == "c":
                 return str(sequence)
-        return None
+        return sequence
+
+    def _lst2str(self, lst, char=None):
+        # Takes arbitrary iterables and formats them to strings or lists of strings
+        if type(lst) == str:
+            if char is None:
+                return lst
+            return char * len(lst)
+        strings = map(str, lst)
+        if char is None:
+            return strings
+        return map(lambda s: len(s) * char, strings)
+
+    def aligned_seq(self, idx):
+        if idx == 0:
+            seq = self._convert_sequence_string(self.target)
+            other_seq = self._convert_sequence_string(self.query)
+            other_idx = 1
+        elif idx == 1:
+            seq = self._convert_sequence_string(self.query)
+            other_seq = self._convert_sequence_string(self.target)
+            other_idx = 0
+        else:
+            raise IndexError("index out of range (0 for target or 1 for query)") from None
+        aligned_seq = '' if type(seq) == str else []
+        path = self.path
+        ends = path[0]
+        end = ends[idx]
+        max_end = max(ends)
+        if max_end > 0:
+            aligned_seq += self._lst2str(other_seq[:max_end - end], ' ')
+            aligned_seq += self._lst2str(seq[:end])
+        start = end
+        other_start = ends[other_idx]
+        for ends in path[1:]:
+            end = ends[idx]
+            other_end = ends[other_idx]
+            if end == start:
+                aligned_seq += self._lst2str(other_seq[other_start: other_end], '-')
+            else:
+                aligned_seq += self._lst2str(seq[start:end])
+            start = end
+            other_start = other_end
+        aligned_seq += self._lst2str(seq[end:])
+        remainder = len(seq) - end
+        other_remainder = len(other_seq) - other_end
+        max_remainder = max(remainder, other_remainder)
+        diff = max_remainder - remainder
+        if diff > 0:
+            aligned_seq += self._lst2str(other_seq[-diff:], ' ')
+        if type(aligned_seq) == str:
+            return aligned_seq
+        return ' '.join(aligned_seq)
 
     def __format__(self, format_spec):
         """Create a human-readable representation of the alignment."""
         if format_spec == "psl":
             return self._format_psl()
-        seq1 = self._convert_sequence_string(self.target)
-        if seq1 is None:
-            return self._format_generalized()
-        seq2 = self._convert_sequence_string(self.query)
-        if seq2 is None:
-            return self._format_generalized()
-        n1 = len(seq1)
-        n2 = len(seq2)
-        aligned_seq1 = ""
-        aligned_seq2 = ""
+        aligned_seq1 = self.aligned_seq(0)
+        aligned_seq2 = self.aligned_seq(1)
         pattern = ""
-        path = self.path
-        end1, end2 = path[0]
-        if end1 > 0 or end2 > 0:
-            end = max(end1, end2)
-            aligned_seq1 += " " * (end - end1) + seq1[:end1]
-            aligned_seq2 += " " * (end - end2) + seq2[:end2]
-            pattern += " " * end
-        start1 = end1
-        start2 = end2
-        for end1, end2 in path[1:]:
-            gap = 0
-            if end1 == start1:
-                gap = end2 - start2
-                aligned_seq1 += "-" * gap
-                aligned_seq2 += seq2[start2:end2]
-                pattern += "-" * gap
-            elif end2 == start2:
-                gap = end1 - start1
-                aligned_seq1 += seq1[start1:end1]
-                aligned_seq2 += "-" * gap
-                pattern += "-" * gap
+        for (nt1, nt2) in zip(aligned_seq1, aligned_seq2):
+            if nt1 == '-' or nt2 == '-':
+                pattern_char = '-'
+            elif nt1 == ' ' or nt2 == ' ':
+                pattern_char = ' '
+            elif nt1 == nt2:
+                pattern_char = '|'
             else:
-                s1 = seq1[start1:end1]
-                s2 = seq2[start2:end2]
-                aligned_seq1 += s1
-                aligned_seq2 += s2
-                for c1, c2 in zip(s1, s2):
-                    if c1 == c2:
-                        pattern += "|"
-                    else:
-                        pattern += "."
-            start1 = end1
-            start2 = end2
-        n1 -= end1
-        n2 -= end2
-        n = max(n1, n2)
-        aligned_seq1 += seq1[end1:] + " " * (n - n1)
-        aligned_seq2 += seq2[end2:] + " " * (n - n2)
-        pattern += " " * n
-        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
-
-    def _format_generalized(self):
-        seq1 = self.target
-        seq2 = self.query
-        n1 = len(seq1)
-        n2 = len(seq2)
-        aligned_seq1 = []
-        aligned_seq2 = []
-        pattern = []
-        path = self.path
-        end1, end2 = path[0]
-        if end1 > 0 or end2 > 0:
-            if end1 <= end2:
-                for c2 in seq2[: end2 - end1]:
-                    s2 = str(c2)
-                    s1 = " " * len(s2)
-                    aligned_seq1.append(s1)
-                    aligned_seq2.append(s2)
-                    pattern.append(s1)
-            else:  # end1 > end2
-                for c1 in seq1[: end1 - end2]:
-                    s1 = str(c1)
-                    s2 = " " * len(s1)
-                    aligned_seq1.append(s1)
-                    aligned_seq2.append(s2)
-                    pattern.append(s2)
-        start1 = end1
-        start2 = end2
-        for end1, end2 in path[1:]:
-            if end1 == start1:
-                for c2 in seq2[start2:end2]:
-                    s2 = str(c2)
-                    s1 = "-" * len(s2)
-                    aligned_seq1.append(s1)
-                    aligned_seq2.append(s2)
-                    pattern.append(s1)
-                start2 = end2
-            elif end2 == start2:
-                for c1 in seq1[start1:end1]:
-                    s1 = str(c1)
-                    s2 = "-" * len(s1)
-                    aligned_seq1.append(s1)
-                    aligned_seq2.append(s2)
-                    pattern.append(s2)
-                start1 = end1
-            else:
-                for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
-                    s1 = str(c1)
-                    s2 = str(c2)
-                    m1 = len(s1)
-                    m2 = len(s2)
-                    if c1 == c2:
-                        p = "|"
-                    else:
-                        p = "."
-                    if m1 < m2:
-                        space = (m2 - m1) * " "
-                        s1 += space
-                        pattern.append(p * m1 + space)
-                    elif m1 > m2:
-                        space = (m1 - m2) * " "
-                        s2 += space
-                        pattern.append(p * m2 + space)
-                    else:
-                        pattern.append(p * m1)
-                    aligned_seq1.append(s1)
-                    aligned_seq2.append(s2)
-                start1 = end1
-                start2 = end2
-        aligned_seq1 = " ".join(aligned_seq1)
-        aligned_seq2 = " ".join(aligned_seq2)
-        pattern = " ".join(pattern)
+                pattern_char = '.'
+            pattern += pattern_char
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_psl(self):
