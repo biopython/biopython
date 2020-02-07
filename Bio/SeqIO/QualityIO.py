@@ -951,13 +951,10 @@ def FastqGeneralIterator(source):
                 raise ValueError("Whitespace is not allowed in the sequence.")
             seq_len = len(seq_string)
 
-            # Will now be at least one line of quality data...
-            try:
-                line = next(handle)
-            except StopIteration:
-                raise ValueError("Unexpected end of file") from None
-            quality_string = line.rstrip()
-            # There may now be more quality data, or another sequence, or EOF
+            # There will now be at least one line of quality data, followed by
+            # another sequence, or EOF
+            line = None
+            quality_string = ""
             for line in handle:
                 if line[0] == "@":
                     # This COULD be the start of a new sequence. However, it MAY just
@@ -971,6 +968,8 @@ def FastqGeneralIterator(source):
                     # Continue - its just some (more) quality data.
                 quality_string += line.rstrip()
             else:
+                if line is None:
+                    raise ValueError("Unexpected end of file")
                 line = None
 
             if seq_len != len(quality_string):
