@@ -360,7 +360,6 @@ are approximately equal.
 
 """
 
-from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
@@ -919,15 +918,10 @@ def FastqGeneralIterator(source):
         if handle.read(0) != "":
             raise ValueError("Fastq files must be opened in text mode") from None
     try:
-        # We need to call handle.readline() at least four times per record,
-        # so we'll save a property look up each time:
-        handle_readline = handle.readline
-
-        line = handle_readline()
-        if not line:
+        try:
+            line = next(handle)
+        except StopIteration:
             return  # Premature end of file, or just empty?
-        if isinstance(line[0], int):
-            raise ValueError("Is this handle in binary mode not text mode?")
 
         while line:
             if line[0] != "@":
@@ -938,12 +932,17 @@ def FastqGeneralIterator(source):
             # Will now be at least one line of quality data - in most FASTQ files
             # just one line! We therefore use string concatenation (if needed)
             # rather using than the "".join(...) trick just in case it is multiline:
-            seq_string = handle_readline().rstrip()
+            try:
+                line = next(handle)
+            except StopIteration:
+                raise ValueError("Unexpected end of file") from None
+            seq_string = line.rstrip()
             # There may now be more sequence lines, or the "+" quality marker line:
             while True:
-                line = handle_readline()
-                if not line:
-                    raise ValueError("End of file without quality information.")
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    raise ValueError("End of file without quality information.") from None
                 if line[0] == "+":
                     # The title here is optional, but if present must match!
                     second_title = line[1:].rstrip()
@@ -958,12 +957,18 @@ def FastqGeneralIterator(source):
             seq_len = len(seq_string)
 
             # Will now be at least one line of quality data...
-            quality_string = handle_readline().rstrip()
+            try:
+                line = next(handle)
+            except StopIteration:
+                raise ValueError("Unexpected end of file") from None
+            quality_string = line.rstrip()
             # There may now be more quality data, or another sequence, or EOF
             while True:
-                line = handle_readline()
-                if not line:
-                    break  # end of file
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    line = None
+                    break
                 if line[0] == "@":
                     # This COULD be the start of a new sequence. However, it MAY just
                     # be a line of quality data which starts with a "@" character.  We
@@ -1371,9 +1376,10 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
         while True:
-            line = handle.readline()
-            if line == "":
-                return  # Premature end of file, or just empty?
+            try:
+                line = next(handle)
+            except StopIteration:
+                return
             if line[0] == ">":
                 break
 
@@ -1390,14 +1396,20 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
                 name = id
 
             qualities = []
-            line = handle.readline()
+            try:
+                line = next(handle)
+            except StopIteration:
+                line = None
             while True:
                 if not line:
                     break
                 if line[0] == ">":
                     break
                 qualities.extend(int(word) for word in line.split())
-                line = handle.readline()
+                try:
+                    line = next(handle)
+                except StopIteration:
+                    line = None
 
             if qualities and min(qualities) < 0:
                 warnings.warn(
