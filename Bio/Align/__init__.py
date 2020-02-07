@@ -1010,6 +1010,22 @@ class PairwiseAlignment:
         return map(lambda s: len(s) * char, strings)
 
     def aligned_seq(self, idx):
+        """Return the aligned sequence at index idx: 0 for target, 1 for query.
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> alignments = aligner.align("GAACT", "GAT")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACT
+        ||--|
+        GA--T
+        <BLANKLINE>
+        >>> alignment.aligned_seq(1)
+        GA--T
+        """
         if idx == 0:
             seq = self._convert_sequence_string(self.target)
             other_seq = self._convert_sequence_string(self.query)
@@ -1019,14 +1035,14 @@ class PairwiseAlignment:
             other_seq = self._convert_sequence_string(self.target)
             other_idx = 0
         else:
-            raise IndexError("index out of range (0 for target or 1 for query)") from None
-        aligned_seq = '' if type(seq) == str else []
+            raise IndexError("index out of range") from None
+        aligned_seq = "" if type(seq) == str else []
         path = self.path
         ends = path[0]
         end = ends[idx]
         max_end = max(ends)
         if max_end > 0:
-            aligned_seq += self._lst2str(other_seq[:max_end - end], ' ')
+            aligned_seq += self._lst2str(other_seq[:max_end - end], " ")
             aligned_seq += self._lst2str(seq[:end])
         start = end
         other_start = ends[other_idx]
@@ -1034,7 +1050,7 @@ class PairwiseAlignment:
             end = ends[idx]
             other_end = ends[other_idx]
             if end == start:
-                aligned_seq += self._lst2str(other_seq[other_start: other_end], '-')
+                aligned_seq += self._lst2str(other_seq[other_start: other_end], "-")
             else:
                 aligned_seq += self._lst2str(seq[start:end])
             start = end
@@ -1045,7 +1061,7 @@ class PairwiseAlignment:
         max_remainder = max(remainder, other_remainder)
         diff = max_remainder - remainder
         if diff > 0:
-            aligned_seq += self._lst2str(other_seq[-diff:], ' ')
+            aligned_seq += self._lst2str(other_seq[-diff:], " ")
         if type(aligned_seq) == str:
             return aligned_seq
         return ' '.join(aligned_seq)
@@ -1058,14 +1074,14 @@ class PairwiseAlignment:
         aligned_seq2 = self.aligned_seq(1)
         pattern = ""
         for (nt1, nt2) in zip(aligned_seq1, aligned_seq2):
-            if nt1 == '-' or nt2 == '-':
-                pattern_char = '-'
-            elif nt1 == ' ' or nt2 == ' ':
-                pattern_char = ' '
+            if nt1 == "-" or nt2 == "-":
+                pattern_char = "-"
+            elif nt1 == " " or nt2 == " ":
+                pattern_char = " "
             elif nt1 == nt2:
-                pattern_char = '|'
+                pattern_char = "|"
             else:
-                pattern_char = '.'
+                pattern_char = "."
             pattern += pattern_char
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
