@@ -1368,20 +1368,12 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
                 name = id
 
             qualities = []
-            try:
-                line = next(handle)
-            except StopIteration:
-                line = None
-            while True:
-                if not line:
-                    break
+            for line in handle:
                 if line[0] == ">":
                     break
                 qualities.extend(int(word) for word in line.split())
-                try:
-                    line = next(handle)
-                except StopIteration:
-                    line = None
+            else:
+                line = None
 
             if qualities and min(qualities) < 0:
                 warnings.warn(
