@@ -252,12 +252,11 @@ class FastaWriter(SequentialSequenceWriter):
     ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
     """
 
-    def __init__(self, handle, wrap=60, record2title=None):
+    def __init__(self, target, wrap=60, record2title=None):
         """Create a Fasta writer (OBSOLETE).
 
         Arguments:
-         - handle - Handle to an output file, e.g. as returned
-           by open(filename, "w")
+         - target - Output stream opened in text mode, or a path to a file.
          - wrap -   Optional line length used to wrap sequence lines.
            Defaults to wrapping the sequence at 60 characters
            Use zero (or None) for no wrapping, giving a single
@@ -287,8 +286,7 @@ class FastaWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
-        self.wrap = None
+        SequentialSequenceWriter.__init__(self, target)
         if wrap:
             if wrap < 1:
                 raise ValueError
