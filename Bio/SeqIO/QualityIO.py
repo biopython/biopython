@@ -1349,13 +1349,11 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
             raise ValueError("QUAL files must be opened in text mode") from None
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
-        while True:
-            try:
-                line = next(handle)
-            except StopIteration:
-                return
+        for line in handle:
             if line[0] == ">":
                 break
+        else:
+            return
 
         while True:
             if line[0] != ">":
