@@ -1395,7 +1395,7 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
             dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
             yield record
 
-            if not line:
+            if line is None:
                 return  # StopIteration
         raise ValueError("Unrecognised QUAL record format.")
     finally:
