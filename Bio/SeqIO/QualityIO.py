@@ -918,12 +918,7 @@ def FastqGeneralIterator(source):
         if handle.read(0) != "":
             raise ValueError("Fastq files must be opened in text mode") from None
     try:
-        try:
-            line = next(handle)
-        except StopIteration:
-            return  # Premature end of file, or just empty?
-
-        while line:
+        for line in handle:
             if line[0] != "@":
                 raise ValueError(
                     "Records in Fastq files should start with '@' character"
@@ -953,7 +948,6 @@ def FastqGeneralIterator(source):
 
             # There will now be at least one line of quality data, followed by
             # another sequence, or EOF
-            line = None
             quality_string = ""
             for line in handle:
                 quality_string += line.rstrip()
@@ -966,14 +960,9 @@ def FastqGeneralIterator(source):
                     )
             else:
                 raise ValueError("Unexpected end of file")
-                line = None
             # Return the record and then continue...
             yield (title_line, seq_string, quality_string)
 
-            try:
-                line = next(handle)
-            except StopIteration:
-                break
     finally:
         if handle is not source:
             handle.close()
