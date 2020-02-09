@@ -89,12 +89,12 @@ class CompassTest(unittest.TestCase):
             self.assertEqual("+ ++++ + +   +", com_record.positives)
 
     def testAlignmentParsingTwo(self):
-        with open(self.test_files[0]) as handeL
+        with open(self.test_files[0]) as handle:
             records = Compass.parse(handle)
             com_record = next(records)
-            self.assertEqual(2, com_record.query_start)
-            self.assertEqual(2, com_record.hit_start)
-            self.assertEqual("LKERKL", com_record.hit_aln[-6:])
+        self.assertEqual(2, com_record.query_start)
+        self.assertEqual(2, com_record.hit_start)
+        self.assertEqual("LKERKL", com_record.hit_aln[-6:])
 
 
 if __name__ == "__main__":
