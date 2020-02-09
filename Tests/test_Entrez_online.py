@@ -25,15 +25,6 @@ import unittest
 import requires_internet
 requires_internet.check()
 
-if os.name == "java":
-    try:
-        from xml.parsers.expat import XML_PARAM_ENTITY_PARSING_ALWAYS
-        del XML_PARAM_ENTITY_PARSING_ALWAYS
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
-                                           "Jython, see http://bugs.jython.org/issue1447")
-
 
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython@biopython.org"

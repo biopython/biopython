@@ -13,15 +13,6 @@ from io import BytesIO, StringIO
 
 from Bio import Entrez
 
-if os.name == "java":
-    try:
-        from xml.parsers.expat import XML_PARAM_ENTITY_PARSING_ALWAYS
-        del XML_PARAM_ENTITY_PARSING_ALWAYS
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
-                                           "Jython, see http://bugs.jython.org/issue1447")
-
 
 class GeneralTests(unittest.TestCase):
     """General tests for Bio.Entrez."""
