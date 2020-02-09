@@ -44,7 +44,9 @@ def read(handle):
     try:
         xml_tree = ET.parse(handle)
     except ET.ParseError:
-        raise ValueError("Improper MEME XML input file. XML root tag should start with <MEME version= ...")
+        raise ValueError(
+            "Improper MEME XML input file. XML root tag should start with <MEME version= ..."
+        )
     __read_metadata(record, xml_tree)
     __read_alphabet(record, xml_tree)
     sequence_id_name_map = __get_sequence_id_name_map(xml_tree)
@@ -136,22 +138,30 @@ def __read_metadata(record, xml_tree):
 
 
 def __read_alphabet(record, xml_tree):
-    alphabet_tree = xml_tree.find("training_set").find("letter_frequencies").find("alphabet_array")
+    alphabet_tree = (
+        xml_tree.find("training_set").find("letter_frequencies").find("alphabet_array")
+    )
     for value in alphabet_tree.findall("value"):
         record.alphabet += value.get("letter_id")
 
 
 def __get_sequence_id_name_map(xml_tree):
-    return {sequence_tree.get("id"): sequence_tree.get("name")
-            for sequence_tree in xml_tree.find("training_set").findall("sequence")}
+    return {
+        sequence_tree.get("id"): sequence_tree.get("name")
+        for sequence_tree in xml_tree.find("training_set").findall("sequence")
+    }
 
 
 def __read_motifs(record, xml_tree, sequence_id_name_map):
     for motif_tree in xml_tree.find("motifs").findall("motif"):
         instances = []
-        for site_tree in motif_tree.find("contributing_sites").findall("contributing_site"):
-            letters = [letter_ref.get("letter_id")
-                       for letter_ref in site_tree.find("site").findall("letter_ref")]
+        for site_tree in motif_tree.find("contributing_sites").findall(
+            "contributing_site"
+        ):
+            letters = [
+                letter_ref.get("letter_id")
+                for letter_ref in site_tree.find("site").findall("letter_ref")
+            ]
             sequence = "".join(letters)
             instance = Instance(sequence, record.alphabet)
             instance.motif_name = motif_tree.get("name")
@@ -180,7 +190,7 @@ def __convert_strand(strand):
 
     Default: +
     """
-    if (strand == "minus"):
+    if strand == "minus":
         return "-"
-    if (strand == "plus" or strand == "none"):
+    if strand == "plus" or strand == "none":
         return "+"
