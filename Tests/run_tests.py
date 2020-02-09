@@ -51,17 +51,6 @@ except ImportError:
     numpy = None
 
 
-def is_pypy():
-    import platform
-    try:
-        if platform.python_implementation() == "PyPy":
-            return True
-    except AttributeError:
-        # New in Python 2.6, not in Jython yet either
-        pass
-    return False
-
-
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
@@ -129,8 +118,7 @@ try:
     import sqlite3
     del sqlite3
 except ImportError:
-    # Missing on Jython or Python 2.4
-    # Could be missing on self-compiled Python
+    # May be missing on self-compiled Python
     EXCLUDE_DOCTEST_MODULES.append("Bio.SeqIO")
     EXCLUDE_DOCTEST_MODULES.append("Bio.SearchIO")
 
@@ -371,19 +359,6 @@ class TestRunner(unittest.TextTestRunner):
             return True
         except Exception as msg:
             # This happened during the import
-            sys.stderr.write("ERROR\n")
-            result.stream.write(result.separator1 + "\n")
-            result.stream.write("ERROR: %s\n" % name)
-            result.stream.write(result.separator2 + "\n")
-            result.stream.write(traceback.format_exc())
-            return False
-        except KeyboardInterrupt as err:
-            # Want to allow this, and abort the test
-            # (see below for special case)
-            raise err
-        except:  # noqa: B901
-            # This happens in Jython with java.lang.ClassFormatError:
-            # Invalid method Code length ...
             sys.stderr.write("ERROR\n")
             result.stream.write(result.separator1 + "\n")
             result.stream.write("ERROR: %s\n" % name)
