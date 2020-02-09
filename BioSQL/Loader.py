@@ -1177,7 +1177,9 @@ class DatabaseLoader:
                 db = db.strip()
                 accession = accession.strip()
             except Exception:
-                raise ValueError("Parsing of dbxrefs list failed: '%s'" % value) from None
+                raise ValueError(
+                    "Parsing of dbxrefs list failed: '%s'" % value
+                ) from None
             # Get the dbxref_id value for the dbxref data
             dbxref_id = self._get_dbxref_id(db, accession)
             # Insert the bioentry_dbxref  data
