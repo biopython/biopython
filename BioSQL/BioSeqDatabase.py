@@ -213,49 +213,19 @@ class DBServer:
         # TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_biodatabase_names())
 
-    if hasattr(dict, "iteritems"):
-        # Python 2, use iteritems etc
-        def keys(self):
-            """List of namespaces (sub-databases) in the database."""
-            return self.adaptor.list_biodatabase_names()
+    def keys(self):
+        """Iterate over namespaces (sub-databases) in the database."""
+        return iter(self)
 
-        def values(self):
-            """List of BioSeqDatabase objects in the database."""
-            return [self[key] for key in self]
+    def values(self):
+        """Iterate over BioSeqDatabase objects in the database."""
+        for key in self:
+            yield self[key]
 
-        def items(self):
-            """List of (namespace, BioSeqDatabase) for entries in database."""
-            return [(key, self[key]) for key in self]
-
-        def iterkeys(self):
-            """Iterate over namespaces (sub-databases) in the database."""
-            return iter(self)
-
-        def itervalues(self):
-            """Iterate over BioSeqDatabase objects in the database."""
-            for key in self:
-                yield self[key]
-
-        def iteritems(self):
-            """Iterate over (namespace, BioSeqDatabase) in the database."""
-            for key in self:
-                yield key, self[key]
-
-    else:
-        # Python 3, items etc are all iterators
-        def keys(self):
-            """Iterate over namespaces (sub-databases) in the database."""
-            return iter(self)
-
-        def values(self):
-            """Iterate over BioSeqDatabase objects in the database."""
-            for key in self:
-                yield self[key]
-
-        def items(self):
-            """Iterate over (namespace, BioSeqDatabase) in the database."""
-            for key in self:
-                yield key, self[key]
+    def items(self):
+        """Iterate over (namespace, BioSeqDatabase) in the database."""
+        for key in self:
+            yield key, self[key]
 
     def __delitem__(self, name):
         """Remove a namespace and all its entries."""
@@ -832,49 +802,19 @@ class BioSeqDatabase:
         # TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_bioentry_ids(self.dbid))
 
-    if hasattr(dict, "iteritems"):
-        # Python 2, use iteritems etc
-        def keys(self):
-            """List of ids which may not be meaningful outside this database."""
-            return self.adaptor.list_bioentry_ids(self.dbid)
+    def keys(self):
+        """Iterate over ids (which may not be meaningful outside this database)."""
+        return iter(self)
 
-        def values(self):
-            """List of DBSeqRecord objects in the namespace (sub database)."""
-            return [self[key] for key in self]
+    def values(self):
+        """Iterate over DBSeqRecord objects in the namespace (sub database)."""
+        for key in self:
+            yield self[key]
 
-        def items(self):
-            """List of (id, DBSeqRecord) for the namespace (sub database)."""
-            return [(key, self[key]) for key in self]
-
-        def iterkeys(self):
-            """Iterate over ids (which may not be meaningful outside this database)."""
-            return iter(self)
-
-        def itervalues(self):
-            """Iterate over DBSeqRecord objects in the namespace (sub database)."""
-            for key in self:
-                yield self[key]
-
-        def iteritems(self):
-            """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
-            for key in self:
-                yield key, self[key]
-
-    else:
-        # Python 3, items etc are all iterators
-        def keys(self):
-            """Iterate over ids (which may not be meaningful outside this database)."""
-            return iter(self)
-
-        def values(self):
-            """Iterate over DBSeqRecord objects in the namespace (sub database)."""
-            for key in self:
-                yield self[key]
-
-        def items(self):
-            """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
-            for key in self:
-                yield key, self[key]
+    def items(self):
+        """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
+        for key in self:
+            yield key, self[key]
 
     def lookup(self, **kwargs):
         """Return a DBSeqRecord using an acceptable identifier.

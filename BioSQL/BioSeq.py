@@ -45,9 +45,6 @@ class DBSeq(Seq):
 
     def __getitem__(self, index):  # Seq API requirement
         """Return a subsequence or single letter."""
-        # Note since Python 2.0, __getslice__ is deprecated
-        # and __getitem__ is used instead.
-        # See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int):
             # Return a single letter as a string
             i = index
