@@ -182,7 +182,7 @@ class KEGGTests(unittest.TestCase):
 
     def test_get_hsa05130_image(self):
         with kegg_get("hsa05130", "image") as handle:
-            data = h.read()
+            data = handle.read()
         self.assertEqual(data[:4], b"\x89PNG")
         self.assertEqual(handle.url, "http://rest.kegg.jp/get/hsa05130/image")
 
