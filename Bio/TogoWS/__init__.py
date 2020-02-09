@@ -183,7 +183,9 @@ def search_count(db, query):
     try:
         return int(data.strip())
     except ValueError:
-        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data)) from None
+        raise ValueError(
+            "Expected an integer from URL %s, got: %r" % (url, data)
+        ) from None
 
 
 def search_iter(db, query, limit=None, batch=100):
