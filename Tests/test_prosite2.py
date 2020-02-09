@@ -14,7 +14,6 @@ from Bio.ExPASy import Prosite
 
 
 class TestPrositeRead(unittest.TestCase):
-
     def test_read4(self):
         """Parsing Prosite record ps00432.txt."""
         filename = os.path.join("Prosite", "ps00432.txt")
@@ -465,8 +464,13 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.data_update, "DEC-2004")
         self.assertEqual(record.info_update, "MAR-2006")
         self.assertEqual(record.pdoc, "PDOC00424")
-        self.assertEqual(record.description, "Phenylalanine and histidine ammonia-lyases signature.")
-        self.assertEqual(record.pattern, "[GS]-[STG]-[LIVM]-[STG]-[SAC]-S-G-[DH]-L-x-P-L-[SA]-x(2,3)-[SAGVT].")
+        self.assertEqual(
+            record.description, "Phenylalanine and histidine ammonia-lyases signature."
+        )
+        self.assertEqual(
+            record.pattern,
+            "[GS]-[STG]-[LIVM]-[STG]-[SAC]-S-G-[DH]-L-x-P-L-[SA]-x(2,3)-[SAGVT].",
+        )
         self.assertEqual(record.matrix, [])
         self.assertEqual(record.rules, [])
         self.assertEqual(record.nr_sp_release, "49.3")
