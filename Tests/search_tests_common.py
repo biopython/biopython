@@ -57,16 +57,9 @@ class CheckIndex(unittest.TestCase):
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
-        # check if Python3 installation has sqlite3
-        try:
-            import sqlite3
-        except ImportError:
-            sqlite3 = None
-
         if filename.endswith(".bgz"):
-            handle = gzip.open(filename)
-            parsed = list(SearchIO.parse(handle, format, **kwargs))
-            handle.close()
+            with gzip.open(filename) as handle:
+                parsed = list(SearchIO.parse(handle, format, **kwargs))
         else:
             parsed = list(SearchIO.parse(filename, format, **kwargs))
         # compare values by index

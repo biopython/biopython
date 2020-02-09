@@ -276,7 +276,7 @@ def _open(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("SwissProt files must be opened in text mode.")
+            raise ValueError("SwissProt files must be opened in text mode.") from None
     return handle
 
 
