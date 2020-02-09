@@ -17,39 +17,33 @@ from Bio.ExPASy import Prosite
 import requires_internet
 requires_internet.check()
 
-# TODO - Use with statement when drop Python 2
-
 
 class ExPASyOnlineTests(unittest.TestCase):
     """Test ExPASy online resources."""
 
     def test_prosite_raw(self):
-        handle = ExPASy.get_prosite_raw("PS00001")
-        record = Prosite.read(handle)
-        handle.close()
+        with ExPASy.get_prosite_raw("PS00001") as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.accession, "PS00001")
         self.assertEqual(record.name, "ASN_GLYCOSYLATION")
 
     def test_prodoc_raw(self):
-        handle = ExPASy.get_prosite_raw("PDOC00001")
-        record = Prodoc.read(handle)
-        handle.close()
+        with ExPASy.get_prosite_raw("PDOC00001") as handle:
+            record = Prodoc.read(handle)
         self.assertEqual(record.accession, "PDOC00001")
 
     def test_prosite_html(self):
-        handle = ExPASy.get_prosite_entry("PS00001")
-        html = handle.read()
+        with ExPASy.get_prosite_entry("PS00001") as handle:
+            html = handle.read()
         self.assertEqual(handle.url,
                          "https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001")
-        handle.close()
         self.assertTrue("<title>PROSITE: PS00001</title>" in html)
 
     def test_prodoc_html(self):
-        handle = ExPASy.get_prodoc_entry("PDOC00001")
-        html = handle.read()
+        with ExPASy.get_prodoc_entry("PDOC00001") as handle:
+            html = handle.read()
         self.assertEqual(handle.url,
                          "https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001")
-        handle.close()
         self.assertTrue("{PS00001; ASN_GLYCOSYLATION}" in html)
 
 
