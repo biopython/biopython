@@ -92,18 +92,18 @@ def real_test():
     except OSError as err:
         if "encoder zip not available" in str(err):
             raise MissingExternalDependencyError(
-                "Check zip encoder installed for PIL and ReportLab renderPM")
+                "Check zip encoder installed for PIL and ReportLab renderPM") from None
         else:
-            raise err
+            raise
     except RenderPMError as err:
         if str(err).startswith("Can't setFont("):
             # TODO - can we raise the error BEFORE the unit test function
             # is run? That way it can be skipped in run_tests.py
             raise MissingExternalDependencyError(
                 "Check the fonts needed by ReportLab if you want "
-                "bitmaps from Bio.Graphics\n" + str(err))
+                "bitmaps from Bio.Graphics\n" + str(err)) from None
         else:
-            raise err
+            raise
 
     return True
 
