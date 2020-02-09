@@ -1,4 +1,5 @@
 # Copyright 2003 Yair Benita.  All rights reserved.
+# Revisions copyright 2020 by Tianyi Shi.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -115,7 +116,12 @@ class IsoelectricPoint:
         return pos_pKs, neg_pKs
 
     # This function calculates the total charge of the protein at a given pH.
-    def _chargeR(self, pH):
+    # derivation:
+    #   Henderson Hasselbalch equation: pH = pKa + log([A-]/[HA])
+    #   Rearranging: [HA]/[A-] = 10 ** (pKa - pH)
+    #   partial_charge = [A-]/[A]total = [A-]/([A-] + [HA]) = 1 / { ([A-] + [HA])/[A-] } = 1 / (1 + [HA]/[A-]) = 1 / (1 + 10 ** (pKa - pH)) for acidic residues; 1 / (1 + 10 ** (pH - pKa)) for basic residues
+    def charge_at_pH(self, pH):
+        """Calculate the charge of a protein at given pH."""
         positive_charge = 0.0
         for aa, pK in self.pos_pKs.items():
             partial_charge = 1.0 / (10 ** (pH - pK) + 1.0)
@@ -128,53 +134,16 @@ class IsoelectricPoint:
 
         return positive_charge - negative_charge
 
-    def charge_at_pH(self, pH):
-        """Calculate the charge of a protein at given pH."""
-        return self._chargeR(pH)
-
     # This is the action function, it tries different pH until the charge of
     # the protein is 0 (or close).
-    def pi(self):
+    def pi(self, pH=7.775, min_=3.55, max_=12):
         """Calculate and return the isoelectric point as float."""
-        # Bracket between pH1 and pH2
-        pH = 7
-        charge = self._chargeR(pH)
-        if charge > 0.0:
-            pH1 = pH
-            charge1 = charge
-            while charge1 > 0.0:
-                pH = pH1 + 1.0
-                charge = self._chargeR(pH)
-                if charge > 0.0:
-                    pH1 = pH
-                    charge1 = charge
-                else:
-                    pH2 = pH
-                    charge2 = charge
-                    break
-        else:
-            pH2 = pH
-            charge2 = charge
-            while charge2 < 0.0:
-                pH = pH2 - 1.0
-                charge = self._chargeR(pH)
-                if charge < 0.0:
-                    pH2 = pH
-                    charge2 = charge
-                else:
-                    pH1 = pH
-                    charge1 = charge
-                    break
-
-        # Bisection
-        while pH2 - pH1 > 0.0001 and charge != 0.0:
-            pH = (pH1 + pH2) / 2.0
-            charge = self._chargeR(pH)
+        charge = self.charge_at_pH(pH)
+        if max_ - min_ > 0.0001:
             if charge > 0.0:
-                pH1 = pH
-                charge1 = charge
+                min_ = pH
             else:
-                pH2 = pH
-                charge2 = charge
-
+                max_ = pH
+            next_pH = (min_ + max_) / 2
+            return self.pi(next_pH, min_, max_)
         return pH
