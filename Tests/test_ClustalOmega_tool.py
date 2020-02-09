@@ -160,9 +160,8 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp_test.aln"
 
         cline = ClustalOmegaCommandline(clustalo_exe,
@@ -193,10 +192,9 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         # records should show the deadlock but is very slow - just thirty
         # seems to lockup on Mac OS X, even 20 on Linux (without the fix).
         input_file = "temp_cw_prot.fasta"
-        handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
-        SeqIO.write(records, handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
         del handle, records
         output_file = "temp_cw_prot.aln"
 
