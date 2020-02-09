@@ -21,7 +21,7 @@ except TypeError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Please update NumPy if you want to use Bio.NaiveBayes "
-        "(under this version numpy.float64 is unhashable).")
+        "(under this version numpy.float64 is unhashable).") from None
 del numpy
 
 
