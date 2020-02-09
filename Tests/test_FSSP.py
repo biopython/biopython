@@ -22,9 +22,8 @@ class TestGeo(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         path = os.path.join("FSSP", "1cnv.fssp")
-        handle = open(path)
-        cls.head_rec, cls.sum_rec, cls.align_rec = FSSP.read_fssp(handle)
-        handle.close()
+        with open(path) as handle:
+            cls.head_rec, cls.sum_rec, cls.align_rec = FSSP.read_fssp(handle)
 
     def test_attributes(self):
         self.assertEqual(self.head_rec.author, ["M.Hennig"])
