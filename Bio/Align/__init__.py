@@ -1009,7 +1009,7 @@ class PairwiseAlignment:
             return strings
         return map(lambda s: len(s) * char, strings)
 
-    def aligned_seq(self, idx):
+    def __getitem__(self, idx):
         """Return the aligned sequence at index idx: 0 for target, 1 for query.
 
         For example,
@@ -1023,7 +1023,7 @@ class PairwiseAlignment:
         ||--|
         GA--T
         <BLANKLINE>
-        >>> alignment.aligned_seq(1)
+        >>> print(alignment[1])
         GA--T
         """
         if idx == 0:
@@ -1070,11 +1070,20 @@ class PairwiseAlignment:
         """Create a human-readable representation of the alignment."""
         if format_spec == "psl":
             return self._format_psl()
-        aligned_seq1 = self.aligned_seq(0)
-        aligned_seq2 = self.aligned_seq(1)
+        aligned_seq1 = self[0]
+        aligned_seq2 = self[1]
+        target_is_string = type(self._convert_sequence_string(self.target)) == str
+        query_is_string = type(self._convert_sequence_string(self.query)) == str
+        is_string = target_is_string and query_is_string
         pattern = ""
+        saw_space = True
         for (nt1, nt2) in zip(aligned_seq1, aligned_seq2):
-            if nt1 == "-" or nt2 == "-":
+            change_char = is_string or saw_space
+            saw_space = (nt1 == " ") and (nt2 == " ")
+            if not change_char:
+                if saw_space:
+                    pattern_char = " "
+            elif nt1 == "-" or nt2 == "-":
                 pattern_char = "-"
             elif nt1 == " " or nt2 == " ":
                 pattern_char = " "
