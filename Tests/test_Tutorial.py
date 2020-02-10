@@ -214,7 +214,7 @@ for latex in files:
         try:
             example = rt.refactor_docstring(example, name)
         except TokenError:
-            raise ValueError("Problem with %s:\n%s" % (name, example))
+            raise ValueError("Problem with %s:\n%s" % (name, example)) from None
 
         def funct(n, d, f):
             global tutorial_base
