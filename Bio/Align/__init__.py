@@ -1050,7 +1050,10 @@ class PairwiseAlignment:
             end = ends[idx]
             other_end = ends[other_idx]
             if end == start:
-                aligned_seq += self._lst2str(other_seq[other_start: other_end], "-")
+                aligned_seq += self._lst2str(
+                    other_seq[other_start: other_end],
+                    "-"
+                )
             else:
                 aligned_seq += self._lst2str(seq[start:end])
             start = end

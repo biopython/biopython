@@ -2119,19 +2119,15 @@ Pro Pro Gly --- Ala --- Thr --- ---
         self.assertEqual(len(alignments), 2)
         self.assertEqual(
             str(alignments[0]),
-            """\
-Asn Asn Gly Ala --- --- Thr Glu Glu
-... ... ||| ||| --- --- ||| ...    
-Pro Pro Gly Ala Ala Cys Thr Leu    
-""",
+            "Asn Asn Gly Ala --- --- Thr Glu Glu\n"
+            "... ... ||| ||| --- --- ||| ...    \n"
+            "Pro Pro Gly Ala Ala Cys Thr Leu    \n"
         )
         self.assertEqual(
             str(alignments[1]),
-            """\
-Asn Asn Gly --- Ala --- Thr Glu Glu
-... ... ||| --- ||| --- ||| ...    
-Pro Pro Gly Ala Ala Cys Thr Leu    
-""",
+            "Asn Asn Gly --- Ala --- Thr Glu Glu\n"
+            "... ... ||| --- ||| --- ||| ...    \n"
+            "Pro Pro Gly Ala Ala Cys Thr Leu    \n"
         )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
