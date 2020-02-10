@@ -64,21 +64,17 @@ class IsoelectricPoint:
 
     >>> from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint as IP
     >>> protein = IP("INGAR")
-    >>> print("IEP of peptide {} is {:.2f}"
-    ...       .format(protein.sequence, protein.pi()))
+    >>> print(f"IEP of peptide {protein.sequence} is {protein.pi():.2f}")
     IEP of peptide INGAR is 9.75
-    >>> print("It's charge at pH 7 is {:.2f}"
-    ...       .format(protein.charge_at_pH(7.0)))
+    >>> print(f"It's charge at pH 7 is {protein.charge_at_pH(7.0):.2f}")
     It's charge at pH 7 is 0.76
 
 
     >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
     >>> protein = PA("PETER")
-    >>> print("IEP of {}: {:.2f}".format(protein.sequence,
-    ...                                  protein.isoelectric_point()))
+    >>> print(f"IEP of {protein.sequence}: {protein.isoelectric_point():.2f}")
     IEP of PETER: 4.53
-    >>> print("Charge at pH 4.53: {:.2f}"
-    ...       .format(protein.charge_at_pH(4.53)))
+    >>> print(f"Charge at pH 4.53: {protein.charge_at_pH(4.53):.2f}")
     Charge at pH 4.53: 0.00
 
     """
