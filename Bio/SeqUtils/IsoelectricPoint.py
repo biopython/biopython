@@ -147,10 +147,10 @@ class IsoelectricPoint:
         Arguments:
          - pH: the pH at which the current charge of the protein is computed.
            This pH lies in the centre of the interval (mean of `min_` and `max_`).
-         - min_: the minimum of the interval. Initial value defaults to 4.05,
+         - min\\_: the minimum of the interval. Initial value defaults to 4.05,
            which is below the theoretical minimum, when the protein is composed
            exclusively of aspartate.
-         - max_: the maximum of the the interval. Initial value defaults to 12,
+         - max\\_: the maximum of the the interval. Initial value defaults to 12,
            which is above the theoretical maximum, when the protein is composed
            exclusively of arginine.
         """
