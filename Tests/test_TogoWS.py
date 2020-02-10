@@ -428,7 +428,7 @@ class TogoSearch(unittest.TestCase):
         try:
             search_count = TogoWS.search_count(database, search_term)
         except HTTPError as err:
-            raise ValueError("%s from %s" % (err, err.url))
+            raise ValueError("%s from %s" % (err, err.url)) from None
         if expected_matches and search_count < len(expected_matches):
             raise ValueError("Only %i matches, expected at least %i"
                              % (search_count, len(expected_matches)))
