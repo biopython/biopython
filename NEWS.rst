@@ -45,6 +45,7 @@ possible, especially the following contributors:
 - Markus Piotrowski
 - Peter Cock
 - Rob Miller
+- Witold Wydmański (first contribution)
 - Sergio Valqui
 - Sujan Dulal (first contribution)
 

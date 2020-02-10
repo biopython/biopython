@@ -124,7 +124,8 @@ def read(handle, version=None):
     if not data:
         raise ValueError("Empty file.")
     if data == b"[CEL":
-        raise ValueError("CEL file in version 3 format should be opened in text mode")
+        raise ValueError(
+            "CEL file in version 3 format should be opened in text mode")
     if data == "[CEL":
         # Version 3 format. Continue to read the header here before passing
         # control to _read_v3 to avoid having to seek to the beginning of
@@ -138,7 +139,8 @@ def read(handle, version=None):
             raise ValueError("Failed to parse Affy Version 3 CEL file.")
         version = int(value)
         if version != 3:
-            raise ValueError("Incorrect version number in Affy Version 3 CEL file.")
+            raise ValueError(
+                "Incorrect version number in Affy Version 3 CEL file.")
         return _read_v3(handle)
     try:
         magicNumber = struct.unpack("<i", data)
@@ -241,7 +243,6 @@ def _read_v4(f):
 
     raiseBadHeader("OffsetY", 0)
 
-    
     # This is unfortunately undocumented, but it turns out that real data has
     # the record.AlgorithmParameters repeated in the data section, until
     # 15 bytes of zero padding
@@ -356,32 +357,32 @@ def _read_v3(handle):
                     _, filename = line[:index].split()
                     record.DatHeader["filename"] = filename
                     index += 1
-                    field = line[index : index + 9]
+                    field = line[index: index + 9]
                     assert field[:4] == "CLS="
                     assert field[8] == " "
                     record.DatHeader["CLS"] = int(field[4:8])
                     index += 9
-                    field = line[index : index + 9]
+                    field = line[index: index + 9]
                     assert field[:4] == "RWS="
                     assert field[8] == " "
                     record.DatHeader["RWS"] = int(field[4:8])
                     index += 9
-                    field = line[index : index + 7]
+                    field = line[index: index + 7]
                     assert field[:4] == "XIN="
                     assert field[6] == " "
                     record.DatHeader["XIN"] = int(field[4:6])
                     index += 7
-                    field = line[index : index + 7]
+                    field = line[index: index + 7]
                     assert field[:4] == "YIN="
                     assert field[6] == " "
                     record.DatHeader["YIN"] = int(field[4:6])
                     index += 7
-                    field = line[index : index + 6]
+                    field = line[index: index + 6]
                     assert field[:3] == "VE="
                     assert field[5] == " "
                     record.DatHeader["VE"] = int(field[3:5])
                     index += 6
-                    field = line[index : index + 7]
+                    field = line[index: index + 7]
                     assert field[6] == " "
                     temperature = field[:6].strip()
                     if temperature:
@@ -389,11 +390,11 @@ def _read_v3(handle):
                     else:
                         record.DatHeader["temperature"] = None
                     index += 7
-                    field = line[index : index + 4]
+                    field = line[index: index + 4]
                     assert field.endswith(" ")
                     record.DatHeader["laser-power"] = float(field)
                     index += 4
-                    field = line[index : index + 18]
+                    field = line[index: index + 18]
                     assert field[8] == " "
                     record.DatHeader["scan-date"] = field[:8]
                     assert field[17] == " "
@@ -446,7 +447,8 @@ def _read_v3(handle):
                         elif key in ("AlgVersion", "ErrorBasis"):
                             values[key] = value
                         else:
-                            raise ValueError("Unexpected tag in AlgorithmParameters")
+                            raise ValueError(
+                                "Unexpected tag in AlgorithmParameters")
                     record.AlgorithmParameters = values
             elif section == "INTENSITY":
                 if line.startswith("NumberCells="):
