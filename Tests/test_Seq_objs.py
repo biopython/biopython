@@ -752,7 +752,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 if str(e) == "RNA cannot be transcribed!":
                     continue
-                raise e
+                raise
             str1 = str(example1)
             if len(str1) % 3 != 0:
                 # TODO - Check for or silence the expected warning?
@@ -773,7 +773,7 @@ class StringMethodTests(unittest.TestCase):
                     continue
                 if str(e) == "DNA cannot be back transcribed!":
                     continue
-                raise e
+                raise
             str1 = str(example1)
             self.assertEqual(str1.replace("U", "T").replace("u", "t"), str(tran))
             self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
@@ -792,7 +792,7 @@ class StringMethodTests(unittest.TestCase):
             except ValueError as e:
                 if str(e) == "Proteins cannot be translated!":
                     continue
-                raise e
+                raise
             # This is based on the limited example not having stop codons:
             if tran.alphabet not in [extended_protein, protein, generic_protein]:
                 print(tran.alphabet)
