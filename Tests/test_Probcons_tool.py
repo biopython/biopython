@@ -84,8 +84,8 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.annot = self.annotation_outfile
         self.assertEqual(
             str(cmdline),
-            probcons_exe + " -c 4 -ir 222 -pre 1 -annot Fasta/probcons_annot.out"
-            " -a Fasta/fa01",
+            probcons_exe
+            + " -c 4 -ir 222 -pre 1 -annot Fasta/probcons_annot.out -a Fasta/fa01",
         )
         stdout, stderr = cmdline()
         self.assertTrue(stderr.startswith("\nPROBCONS"))
