@@ -308,7 +308,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
  AwBw
- |-| 
+ |-|.
 zA-Bz
 """,  # noqa: W291
         )
@@ -351,7 +351,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
  AwBw
- |-| 
+ |-|.
 zA-Bz
 """,  # noqa: W291
         )
@@ -1814,7 +1814,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
+  |||||||||||||.........            
   AABBBAAAACCCCAAAABBBAA            
 """,  # noqa: W291
         )
@@ -1825,7 +1825,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
+            .........|||||||||||||  
             AABBBAAAACCCCAAAABBBAA  
 """,  # noqa: W291
         )
@@ -1877,7 +1877,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
+  |||||||||||||.........            
   AABBBAAAACCCCAAAABBBAA            
 """,  # noqa: W291
         )
@@ -1888,7 +1888,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(alignment),
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
+            .........|||||||||||||  
             AABBBAAAACCCCAAAABBBAA  
 """,  # noqa: W291
         )
@@ -1941,7 +1941,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 TTCCAA
-||    
+||..||
 TTGGAA
 """,  # noqa: W291
         )
@@ -1952,7 +1952,7 @@ TTGGAA
             str(alignment),
             """\
 TTCCAA
-    ||
+||..||
 TTGGAA
 """,
         )
@@ -1980,7 +1980,7 @@ Pairwise sequence aligner with parameters
             str(alignment),
             """\
 TTCCAA
-||    
+||..||
 TTGGAA
 """,  # noqa: W291
         )
@@ -1991,7 +1991,7 @@ TTGGAA
             str(alignment),
             """\
 TTCCAA
-    ||
+||..||
 TTGGAA
 """,
         )
@@ -2120,17 +2120,17 @@ Pro Pro Gly --- Ala --- Thr --- ---
         self.assertEqual(
             str(alignments[0]),
             """\
-Gly Ala --- --- Thr
-||| ||| --- --- |||
-Gly Ala Ala Cys Thr
+Asn Asn Gly Ala --- --- Thr Glu Glu
+... ... ||| ||| --- --- ||| ...    
+Pro Pro Gly Ala Ala Cys Thr Leu    
 """,
         )
         self.assertEqual(
             str(alignments[1]),
             """\
-Gly --- Ala --- Thr
-||| --- ||| --- |||
-Gly Ala Ala Cys Thr
+Asn Asn Gly --- Ala --- Thr Glu Glu
+... ... ||| --- ||| --- ||| ...    
+Pro Pro Gly Ala Ala Cys Thr Leu    
 """,
         )
         self.assertAlmostEqual(alignments[0].score, 3.0)
