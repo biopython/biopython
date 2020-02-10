@@ -34,7 +34,6 @@ class Record:
     Example usage:
 
     >>> from Bio.Affy import CelFile
-    >>> from pprint import pprint
     >>> with open("Affy/affy_v3_example.CEL") as handle:
     ...     c = CelFile.read(handle)
     ...
