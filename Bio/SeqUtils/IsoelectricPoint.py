@@ -115,13 +115,15 @@ class IsoelectricPoint:
             neg_pKs["Cterm"] = pKcterminal[cterm]
         return pos_pKs, neg_pKs
 
-    # This function calculates the total charge of the protein at a given pH.
-    # derivation:
-    #   Henderson Hasselbalch equation: pH = pKa + log([A-]/[HA])
-    #   Rearranging: [HA]/[A-] = 10 ** (pKa - pH)
-    #   partial_charge = [A-]/[A]total = [A-]/([A-] + [HA]) = 1 / { ([A-] + [HA])/[A-] } = 1 / (1 + [HA]/[A-]) = 1 / (1 + 10 ** (pKa - pH)) for acidic residues; 1 / (1 + 10 ** (pH - pKa)) for basic residues
     def charge_at_pH(self, pH):
         """Calculate the charge of a protein at given pH."""
+        # derivation:
+        #   Henderson Hasselbalch equation: pH = pKa + log([A-]/[HA])
+        #   Rearranging: [HA]/[A-] = 10 ** (pKa - pH)
+        #   partial_charge =
+        #       [A-]/[A]total = [A-]/([A-] + [HA]) = 1 / { ([A-] + [HA])/[A-] } =
+        #       1 / (1 + [HA]/[A-]) = 1 / (1 + 10 ** (pKa - pH)) for acidic residues;
+        #                             1 / (1 + 10 ** (pH - pKa)) for basic residues
         positive_charge = 0.0
         for aa, pK in self.pos_pKs.items():
             partial_charge = 1.0 / (10 ** (pH - pK) + 1.0)
@@ -136,8 +138,22 @@ class IsoelectricPoint:
 
     # This is the action function, it tries different pH until the charge of
     # the protein is 0 (or close).
-    def pi(self, pH=7.775, min_=3.55, max_=12):
-        """Calculate and return the isoelectric point as float."""
+    def pi(self, pH=7.775, min_=4.05, max_=12):
+        """Calculate and return the isoelectric point as float.
+
+        This is a recursive function that uses bisection method.
+        Wiki on bisection: https://en.wikipedia.org/wiki/Bisection_method
+
+        Arguments:
+         - pH: the pH at which the current charge of the protein is computed.
+           This pH lies in the centre of the interval (mean of `min_` and `max_`).
+         - min_: the minimum of the interval. Initial value defaults to 4.05,
+           which is below the theoretical minimum, when the protein is composed
+           exclusively of aspartate.
+         - max_: the maximum of the the interval. Initial value defaults to 12,
+           which is above the theoretical maximum, when the protein is composed
+           exclusively of arginine.
+        """
         charge = self.charge_at_pH(pH)
         if max_ - min_ > 0.0001:
             if charge > 0.0:
