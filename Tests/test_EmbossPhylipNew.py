@@ -78,7 +78,8 @@ def parse_trees(filename):
     Helper function until we have Bio.Phylo on trunk.
     """
     # TODO - Can this be removed now?
-    data = open("test_file").read()
+    with open("test_file") as handle:
+        data = handle.read()
     for tree_str in data.split(";\n"):
         if tree_str:
             yield Trees.Tree(tree_str + ";")
@@ -183,8 +184,9 @@ class ParsimonyTests(unittest.TestCase):
                                          outtreefile="test_file",
                                          auto=True, stdout=True)
         stdout, stderr = cline()
-        a_taxa = [s.name.replace(" ", "_") for s in
-                  next(AlignIO.parse(open(filename), format))]
+        with open(filename) as handle:
+            a_taxa = [s.name.replace(" ", "_") for s in
+                      next(AlignIO.parse(handle, format))]
         for tree in parse_trees("test_file"):
             t_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
             self.assertEqual(sorted(a_taxa), sorted(t_taxa))
@@ -239,11 +241,13 @@ class BootstrapTests(unittest.TestCase):
                                     auto=True, filter=True)
         stdout, stderr = cline()
         # the resultant file should have 2 alignments...
-        bs = list(AlignIO.parse(open("test_file"), format))
+        with open("test_file") as handle:
+            bs = list(AlignIO.parse(handle, format))
         self.assertEqual(len(bs), 2)
         # ..and each name in the original alignment...
-        a_names = [s.name.replace(" ", "_") for s in
-                   AlignIO.read(open(filename), format)]
+        with open(filename) as handle:
+            a_names = [s.name.replace(" ", "_") for s in
+                       AlignIO.read(handle, format)]
         # ...should be in each alignment in the bootstrapped file
         for a in bs:
             self.assertEqual(a_names, [s.name.replace(" ", "_") for s in a])

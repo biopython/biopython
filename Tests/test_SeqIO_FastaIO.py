@@ -252,7 +252,7 @@ for filename in multi_dna_files:
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_mutli_dna_%s" % name, funct(filename))
+    setattr(TitleFunctions, "test_multi_dna_%s" % name, funct(filename))
     del funct
 
 for filename in single_amino_files:
@@ -276,7 +276,7 @@ for filename in multi_amino_files:
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_mutli_pro_%s" % name, funct(filename))
+    setattr(TitleFunctions, "test_multi_pro_%s" % name, funct(filename))
     del funct
 
 if __name__ == "__main__":
