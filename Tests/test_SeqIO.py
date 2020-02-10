@@ -285,7 +285,7 @@ class TestSeqIO(unittest.TestCase):
                 handle.seek(0)
                 raise ValueError(
                     "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
-                )
+                ) from None
 
             self.assertEqual(len(records2), t_count)
             for r1, r2 in zip(records, records2):
