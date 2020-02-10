@@ -16,7 +16,7 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
 
 from Bio.PDB import Superimposer, Selection
 from Bio.PDB import PDBParser

@@ -23,7 +23,7 @@ try:
     from reportlab.lib.colors import HexColor
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 try:
     c = HexColor("#8080F780")
@@ -32,7 +32,7 @@ except TypeError:
     # unsupported operand type(s) for &: 'int' and 'float'
     # ReportLab 2.7+ also offers hasAlpha=True rather than alpha=True
     raise MissingExternalDependencyError(
-        "Install at least reportlab 2.7 for transparency support.")
+        "Install at least reportlab 2.7 for transparency support.") from None
 
 # Do we have PIL?
 try:
@@ -40,7 +40,7 @@ try:
 except ImportError:
     raise MissingExternalDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
-        "if you want to use bitmaps from KGML.")
+        "if you want to use bitmaps from KGML.") from None
 
 
 # Biopython Bio.KEGG.KGML
