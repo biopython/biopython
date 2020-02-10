@@ -10,7 +10,7 @@ try:
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.Align.substitution_matrices.")
+        "Install NumPy if you want to use Bio.Align.substitution_matrices.") from None
 
 
 import os
