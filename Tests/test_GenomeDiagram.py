@@ -19,7 +19,7 @@ try:
     from reportlab.lib.units import cm
 except ImportError:
     raise MissingPythonDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 try:
     # The preferred PIL import has changed over time...
