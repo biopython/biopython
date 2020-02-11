@@ -235,9 +235,9 @@ tests = [
 for base_name, good_count, full_count in tests:
 
     def funct(name, c1, c2):
-        f = lambda x: x.check_qual_char(
+        f = lambda x: x.check_qual_char(  # noqa: E731
             "Quality/error_qual_%s.fastq" % name, c1, c2
-        )  # noqa: E731
+        )
         f.__doc__ = "Reject FASTQ with %s in quality" % name.replace("_", " ")
         return f
 
