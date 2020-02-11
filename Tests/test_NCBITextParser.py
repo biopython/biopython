@@ -14537,7 +14537,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.alignments), 8)
             for ali in record.alignments:
                 self.assertEqual(len(ali.hsps), 1)
-  
+
             self.assertEqual(None, next(records))
 
     def test_text_2226_blastn_003(self):
