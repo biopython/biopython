@@ -620,9 +620,8 @@ class DiagramTest(unittest.TestCase):
 
     def setUp(self):
         """Test setup, just loads a GenBank file as a SeqRecord."""
-        handle = open(os.path.join("GenBank", "NC_005816.gb"))
-        self.record = SeqIO.read(handle, "genbank")
-        handle.close()
+        with open(os.path.join("GenBank", "NC_005816.gb")) as handle:
+            self.record = SeqIO.read(handle, "genbank")
 
         self.gdd = Diagram("Test Diagram")
         # Add a track of features,
@@ -771,7 +770,8 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, "PDF")
 
         # Also check the write_to_string (bytes string) method matches,
-        assert open(output_filename, "rb").read() == gdd.write_to_string("PDF")
+        with open(output_filename, "rb") as handle:
+            self.assertEqual(handle.read(), gdd.write_to_string("PDF"))
 
         output_filename = os.path.join("Graphics", "GD_region_linear.svg")
         gdd.write(output_filename, "SVG")
