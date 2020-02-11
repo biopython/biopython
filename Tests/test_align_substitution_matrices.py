@@ -123,9 +123,8 @@ Z  0.0
         self.assertEqual(frequencies.shape, (len(nucleotide_alphabet), ))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
-        handle = open(path)
-        text = handle.read()
-        handle.close()
+        with open(path) as handle:
+            text = handle.read()
         self.assertEqual(format(frequencies, "%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
@@ -149,9 +148,8 @@ Z  0.0
         self.assertEqual(frequencies.shape, (len(nucleotide_alphabet), ))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
-        handle = open(path)
-        text = handle.read()
-        handle.close()
+        with open(path) as handle:
+            text = handle.read()
         self.assertEqual(format(frequencies, "%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
@@ -178,9 +176,8 @@ Z  0.0
         self.assertEqual(frequencies.shape, (len(protein_alphabet), ))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
-        handle = open(path)
-        text = handle.read()
-        handle.close()
+        with open(path) as handle:
+            text = handle.read()
         self.assertEqual(format(frequencies, "%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
@@ -220,9 +217,8 @@ Z  0.0
         self.assertEqual(frequencies.shape, (len(protein_alphabet), ))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
-        handle = open(path)
-        text = handle.read()
-        handle.close()
+        with open(path) as handle:
+            text = handle.read()
         self.assertEqual(format(frequencies, "%d"), text)
         total = sum(frequencies)
         self.assertAlmostEqual(total, sum(counts.values()))
