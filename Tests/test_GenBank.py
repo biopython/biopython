@@ -2716,7 +2716,7 @@ qualifiers:
             ]
             features = (
                 (
-                """\
+                    """\
 type: source
 location: [0:880](+)
 qualifiers:
@@ -5099,7 +5099,7 @@ qualifiers:
                 features,
                 dbxrefs,
             )
-    
+
     def test_feature_parser_14(self):
         path = "GenBank/NC_005816.gb"
         with open(path) as handle:
