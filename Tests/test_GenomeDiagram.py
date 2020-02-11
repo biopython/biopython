@@ -770,7 +770,7 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, "PDF")
 
         # Also check the write_to_string (bytes string) method matches,
-        with open(output_filename, "rb") as handle
+        with open(output_filename, "rb") as handle:
             assert handle.read() == gdd.write_to_string("PDF")
 
         output_filename = os.path.join("Graphics", "GD_region_linear.svg")
