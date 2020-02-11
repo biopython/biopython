@@ -21,8 +21,10 @@ from Bio import pairwise2
 
 if pairwise2.rint == pairwise2._python_rint:
     from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError("Missing or non-compiled file: "
-                                         "'cpairwise2'")
+
+    raise MissingExternalDependencyError(
+        "Missing or non-compiled file: 'cpairwise2'"
+    )
 
 
 if __name__ == "__main__":
