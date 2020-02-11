@@ -39,6 +39,7 @@ from io import StringIO
 
 try:
     import numpy
+
     try:
         # NumPy 1.14 changed repr output breaking our doctests,
         # request the legacy 1.13 style
@@ -64,58 +65,61 @@ ONLINE_DOCTEST_MODULES = [
     "Bio.Entrez",
     "Bio.ExPASy",
     "Bio.TogoWS",
-    ]
+]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
-    EXCLUDE_DOCTEST_MODULES.extend([
-        "Bio.Affy.CelFile",
-        "Bio.Align",
-        "Bio.Align.substitution_matrices",
-        "Bio.Cluster",
-        "Bio.KDTree",
-        "Bio.KDTree.KDTree",
-        "Bio.kNN",
-        "Bio.LogisticRegression",
-        "Bio.MarkovModel",
-        "Bio.MaxEntropy",
-        "Bio.NaiveBayes",
-        "Bio.PDB.Chain",
-        "Bio.PDB.Dice",
-        "Bio.PDB.HSExposure",
-        "Bio.PDB.MMCIF2Dict",
-        "Bio.PDB.MMCIFParser",
-        "Bio.PDB.mmtf.DefaultParser",
-        "Bio.PDB.mmtf",
-        "Bio.PDB.Model",
-        "Bio.PDB.NACCESS",
-        "Bio.PDB.NeighborSearch",
-        "Bio.PDB.parse_pdb_header",
-        "Bio.PDB.PDBExceptions",
-        "Bio.PDB.PDBList",
-        "Bio.PDB.PDBParser",
-        "Bio.PDB.Polypeptide",
-        "Bio.PDB.PSEA",
-        "Bio.PDB.QCPSuperimposer",
-        "Bio.PDB.Residue",
-        "Bio.PDB.Selection",
-        "Bio.PDB.StructureAlignment",
-        "Bio.PDB.StructureBuilder",
-        "Bio.PDB.Structure",
-        "Bio.PDB.Superimposer",
-        "Bio.PDB.Vector",
-        "Bio.phenotype",
-        "Bio.phenotype.parse",
-        "Bio.phenotype.phen_micro",
-        "Bio.phenotype.pm_fitting",
-        "Bio.SeqIO.PdbIO",
-        "Bio.Statistics.lowess",
-        "Bio.SVDSuperimposer",
-    ])
+    EXCLUDE_DOCTEST_MODULES.extend(
+        [
+            "Bio.Affy.CelFile",
+            "Bio.Align",
+            "Bio.Align.substitution_matrices",
+            "Bio.Cluster",
+            "Bio.KDTree",
+            "Bio.KDTree.KDTree",
+            "Bio.kNN",
+            "Bio.LogisticRegression",
+            "Bio.MarkovModel",
+            "Bio.MaxEntropy",
+            "Bio.NaiveBayes",
+            "Bio.PDB.Chain",
+            "Bio.PDB.Dice",
+            "Bio.PDB.HSExposure",
+            "Bio.PDB.MMCIF2Dict",
+            "Bio.PDB.MMCIFParser",
+            "Bio.PDB.mmtf.DefaultParser",
+            "Bio.PDB.mmtf",
+            "Bio.PDB.Model",
+            "Bio.PDB.NACCESS",
+            "Bio.PDB.NeighborSearch",
+            "Bio.PDB.parse_pdb_header",
+            "Bio.PDB.PDBExceptions",
+            "Bio.PDB.PDBList",
+            "Bio.PDB.PDBParser",
+            "Bio.PDB.Polypeptide",
+            "Bio.PDB.PSEA",
+            "Bio.PDB.QCPSuperimposer",
+            "Bio.PDB.Residue",
+            "Bio.PDB.Selection",
+            "Bio.PDB.StructureAlignment",
+            "Bio.PDB.StructureBuilder",
+            "Bio.PDB.Structure",
+            "Bio.PDB.Superimposer",
+            "Bio.PDB.Vector",
+            "Bio.phenotype",
+            "Bio.phenotype.parse",
+            "Bio.phenotype.phen_micro",
+            "Bio.phenotype.pm_fitting",
+            "Bio.SeqIO.PdbIO",
+            "Bio.Statistics.lowess",
+            "Bio.SVDSuperimposer",
+        ]
+    )
 
 
 try:
     import sqlite3
+
     del sqlite3
 except ImportError:
     # May be missing on self-compiled Python
@@ -149,8 +153,10 @@ def main(argv):
     test_path = sys.path[0] or "."
     source_path = os.path.abspath("%s/.." % test_path)
     sys.path.insert(1, source_path)
-    build_path = os.path.abspath("%s/../build/lib.%s-%s" % (
-        test_path, distutils.util.get_platform(), sys.version[:3]))
+    build_path = os.path.abspath(
+        "%s/../build/lib.%s-%s"
+        % (test_path, distutils.util.get_platform(), sys.version[:3])
+    )
     if os.access(build_path, os.F_OK):
         sys.path.insert(1, build_path)
 
@@ -163,8 +169,9 @@ def main(argv):
 
     # get the command line options
     try:
-        opts, args = getopt.getopt(argv, "gv", ["generate", "verbose",
-                                                "doctest", "help", "offline"])
+        opts, args = getopt.getopt(
+            argv, "gv", ["generate", "verbose", "doctest", "help", "offline"]
+        )
     except getopt.error as msg:
         print(msg)
         print(__doc__)
@@ -182,12 +189,15 @@ def main(argv):
             EXCLUDE_DOCTEST_MODULES.extend(ONLINE_DOCTEST_MODULES)
             # This is a bit of a hack...
             import requires_internet
+
             requires_internet.check.available = False
             # Monkey patch for urlopen()
             import urllib
 
             def dummy_urlopen(url):
-                raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
+                raise RuntimeError(
+                    "Internal test suite error, attempting to use internet despite --offline setting"
+                )
 
             urllib.urlopen = dummy_urlopen
 
@@ -242,12 +252,12 @@ class TestRunner(unittest.TextTestRunner):
             modules.difference_update(set(EXCLUDE_DOCTEST_MODULES))
             self.tests.extend(sorted(modules))
         stream = StringIO()
-        unittest.TextTestRunner.__init__(self, stream,
-                                         verbosity=verbosity)
+        unittest.TextTestRunner.__init__(self, stream, verbosity=verbosity)
 
     def runTest(self, name):
         from Bio import MissingPythonDependencyError
         from Bio import MissingExternalDependencyError
+
         result = self._makeResult()
         output = StringIO()
         # Restore the language and thus default encoding (in case a prior
@@ -269,11 +279,13 @@ class TestRunner(unittest.TextTestRunner):
                     # New in Python 3.5, don't always get an exception anymore
                     # Instead this is a list of error messages as strings
                     for msg in loader.errors:
-                        if "Bio.MissingExternalDependencyError: " in msg or \
-                                "Bio.MissingPythonDependencyError: " in msg:
+                        if (
+                            "Bio.MissingExternalDependencyError: " in msg
+                            or "Bio.MissingPythonDependencyError: " in msg
+                        ):
                             # Remove the traceback etc
-                            msg = msg[msg.find("Bio.Missing"):]
-                            msg = msg[msg.find("Error: "):]
+                            msg = msg[msg.find("Bio.Missing") :]
+                            msg = msg[msg.find("Error: ") :]
                             sys.stderr.write("skipping. %s\n" % msg)
                             return True
                     # Looks like a real failure
@@ -296,8 +308,7 @@ class TestRunner(unittest.TextTestRunner):
                     result.stream.write("ERROR while importing %s: %s\n" % (name, e))
                     result.printErrors()
                     return False
-                suite = doctest.DocTestSuite(module,
-                                             optionflags=doctest.ELLIPSIS)
+                suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
             if self.testdir != os.path.abspath("."):
@@ -350,8 +361,10 @@ class TestRunner(unittest.TextTestRunner):
         time_taken = stop_time - start_time
         sys.stderr.write(self.stream.getvalue())
         sys.stderr.write("-" * 70 + "\n")
-        sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
-                         (total, total != 1 and "s" or "", time_taken))
+        sys.stderr.write(
+            "Ran %d test%s in %.3f seconds\n"
+            % (total, total != 1 and "s" or "", time_taken)
+        )
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)
