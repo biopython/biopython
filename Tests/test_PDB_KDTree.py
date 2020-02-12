@@ -19,14 +19,14 @@ try:
 except ImportError:
     from Bio import MissingExternalDependencyError
 
-    raise MissingExternalDependencyError("Install NumPy if you want to use Bio.PDB.")
+    raise MissingExternalDependencyError("Install NumPy if you want to use Bio.PDB.") from None
 
 try:
     from Bio.PDB import kdtrees
 except ImportError:
     from Bio import MissingExternalDependencyError
 
-    raise MissingExternalDependencyError("C module Bio.PDB.kdtrees not compiled")
+    raise MissingExternalDependencyError("C module Bio.PDB.kdtrees not compiled") from None
 
 from Bio.PDB.NeighborSearch import NeighborSearch
 

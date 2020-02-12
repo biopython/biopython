@@ -112,10 +112,9 @@ class FastTreeTestCase(unittest.TestCase):
 
     def test_filename_spaces(self):
         path = "Clustalw/temp horses.fasta"  # note spaces in filename
-        handle = open(path, "w")
         records = SeqIO.parse("Phylip/hennigian.phy", "phylip")
-        length = SeqIO.write(records, handle, "fasta")
-        handle.close()
+        with open(path, "w") as handle:
+            length = SeqIO.write(records, handle, "fasta")
         self.assertEqual(length, 10)
         self.check(path, length)
 

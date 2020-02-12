@@ -8,8 +8,8 @@
 # as part of this package.
 """Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
-This module can be used directly which will return Record objects
-which should contain all the original data in the file.
+This module can be used directly, which will return Record objects
+containing all the original data in the file.
 
 Alternatively, using Bio.SeqIO with the "phd" format will call this module
 internally.  This will give SeqRecord objects for each contig sequence.
@@ -49,12 +49,71 @@ class Record:
         self.seq_trimmed = ""
 
 
-def read(handle):
-    """Read the next PHD record from the file, return it as a Record object.
+def read(source):
+    """Read one PHD record from the file and return it as a Record object.
 
-    This function reads PHD file data line by line from the handle,
-    and returns a single Record object.
+    Argument source is a file-like object opened in text mode, or a path
+    to a file.
+
+    This function reads PHD file data line by line from the source, and
+    returns a single Record object. A ValueError is raised if more than
+    one record is found in the file.
     """
+    handle = _open(source)
+    try:
+        record = _read(handle)
+        try:
+            next(handle)
+        except StopIteration:
+            return record
+        else:
+            raise ValueError("More than one PHD record found")
+    finally:
+        if handle is not source:
+            handle.close()
+
+
+def parse(source):
+    """Iterate over a file yielding multiple PHD records.
+
+    Argument source is a file-like object opened in text mode, or a path
+    to a file.
+
+    The data is read line by line from the source.
+
+    Typical usage::
+
+        records = parse(handle)
+        for record in records:
+            # do something with the record object
+
+    """
+    handle = _open(source)
+    try:
+        while True:
+            record = _read(handle)
+            if not record:
+                return
+            yield record
+    finally:
+        if handle is not source:
+            handle.close()
+
+
+# Everything below is considered private
+
+
+def _open(source):
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("PHD files must be opened in text mode.") from None
+    return handle
+
+
+def _read(handle):
     for line in handle:
         if line.startswith("BEGIN_SEQUENCE"):
             record = Record()
@@ -138,24 +197,3 @@ def read(handle):
         record.seq_trimmed = record.seq[first:last]
 
     return record
-
-
-def parse(handle):
-    """Iterate over a file yielding multiple PHD records.
-
-    The data is read line by line from the handle. The handle can be a list
-    of lines, an open file, or similar; the only requirement is that we can
-    iterate over the handle to retrieve lines from it.
-
-    Typical usage::
-
-        records = parse(handle)
-        for record in records:
-            # do something with the record object
-
-    """
-    while True:
-        record = read(handle)
-        if not record:
-            return
-        yield record

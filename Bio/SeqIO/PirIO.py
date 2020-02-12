@@ -113,20 +113,10 @@ _pir_alphabets = {
 }
 
 
-def PirIterator(handle):
-    """Iterate over Fasta records as SeqRecord objects.
+def PirIterator(source):
+    """Iterate over a PIR file and yield SeqRecord objects.
 
-    handle - input file
-    alphabet - optional alphabet
-    title2ids - A function that, when given the title of the FASTA
-    file (without the beginning >), will return the id, name and
-    description (in that order) for the record as a tuple of strings.
-
-    If this is not given, then the entire title line will be used
-    as the description, and the first word as the id and name.
-
-    Note that use of title2ids matches that of Bio.Fasta.SequenceParser
-    but the defaults are slightly different.
+    source - file-like object or a path to a file.
 
     Examples
     --------
@@ -141,18 +131,22 @@ def PirIterator(handle):
     HLA:HLA01083 length 188
 
     """
-    with as_handle(handle) as handle:
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("PIR files must be opened in binary mode.") from None
+
+    try:
         # Skip any text before the first record (e.g. blank lines, comments)
-        while True:
-            line = handle.readline()
-            if line == "":
-                return  # Premature end of file, or just empty?
+        for line in handle:
             if line[0] == ">":
                 break
+        else:
+            return  # Premature end of file, or just empty?
 
         while True:
-            if line[0] != ">":
-                raise ValueError("Records in PIR files should start with '>' character")
             pir_type = line[1:3]
             if pir_type not in _pir_alphabets or line[3] != ";":
                 raise ValueError(
@@ -162,15 +156,13 @@ def PirIterator(handle):
             description = handle.readline().strip()
 
             lines = []
-            line = handle.readline()
-            while True:
-                if not line:
-                    break
+            for line in handle:
                 if line[0] == ">":
                     break
                 # Remove trailing whitespace, and any internal spaces
                 lines.append(line.rstrip().replace(" ", ""))
-                line = handle.readline()
+            else:
+                line = None
             seq = "".join(lines)
             if seq[-1] != "*":
                 # Note the * terminator is present on nucleotide sequences too,
@@ -189,9 +181,12 @@ def PirIterator(handle):
             record.annotations["PIR-type"] = pir_type
             yield record
 
-            if not line:
+            if line is None:
                 return  # StopIteration
         raise ValueError("Unrecognised PIR record format.")
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 class PirWriter(SequentialSequenceWriter):
@@ -238,7 +233,7 @@ class PirWriter(SequentialSequenceWriter):
         self.wrap = None
         if wrap:
             if wrap < 1:
-                raise ValueError
+                raise ValueError("wrap should be None, 0, or a positive integer")
         self.wrap = wrap
         self.record2title = record2title
         self.code = code

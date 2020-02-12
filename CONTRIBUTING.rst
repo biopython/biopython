@@ -101,7 +101,7 @@ be run, and their results reported on the pull request.
 We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
 check Python coding style using the ``flake8`` tool with lots of plugins, and
-reStructuredText files using ``rst-lint``.
+reStructuredText files using ``rst-lint`` and ``doc8``.
 https://travis-ci.org/biopython/biopython/branches
 
 We use AppVeyor to run most of the tests under Windows (although currently
@@ -116,3 +116,8 @@ CodeCov: https://codecov.io/github/biopython/biopython/
 
 Ideally the CodeCov checks will also pass, but we currently do not insist
 on this when reviewing pull requests.
+
+Contributing to the Biopython Tutorial
+--------------------------------------
+
+For instructions, see `the Biopython Tutorial README <Doc/README.rst>`_

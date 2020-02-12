@@ -291,7 +291,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
                 raise ValueError(
                     "Disagree on file %s %s in %s format: %s"
                     % (in_format, in_filename, temp_format, err)
-                )
+                ) from None
 
     def check_EMBOSS_to_SeqIO(self, filename, old_format, skip_formats=()):
         """Check SeqIO can read read seqret's conversion output."""
@@ -310,7 +310,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
                 raise ValueError(
                     "Disagree on %s file %s in %s format: %s"
                     % (old_format, filename, new_format, err)
-                )
+                ) from None
 
     def check_SeqIO_with_EMBOSS(
         self, filename, old_format, skip_formats=(), alphabet=None
@@ -415,7 +415,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError(
                     "Can't parse %s file %s in %s format."
                     % (old_format, filename, new_format)
-                )
+                ) from None
             handle.close()
             try:
                 self.assertTrue(compare_alignments(old_aligns, new_aligns))
@@ -423,7 +423,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError(
                     "Disagree on %s file %s in %s format: %s"
                     % (old_format, filename, new_format, err)
-                )
+                ) from None
 
     def check_AlignIO_to_EMBOSS(
         self, in_filename, in_format, skip_formats=(), alphabet=None
@@ -456,7 +456,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError(
                     "Disagree on file %s %s in %s format: %s"
                     % (in_format, in_filename, temp_format, err)
-                )
+                ) from None
 
     def check_AlignIO_with_EMBOSS(
         self, filename, old_format, skip_formats=(), alphabet=None

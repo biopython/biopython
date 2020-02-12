@@ -22,12 +22,11 @@ class TestMauveIO(unittest.TestCase):
     SIMPLE_FA = os.path.join(MAUVE_TEST_DATA_DIR, "simple.fa")
 
     def test_one(self):
-        handle = open(self.SIMPLE_XMFA)
         ids = []
-        for alignment in MauveIterator(handle):
-            for record in alignment:
-                ids.append(record.id)
-        handle.close()
+        with open(self.SIMPLE_XMFA) as handle:
+            for alignment in MauveIterator(handle):
+                for record in alignment:
+                    ids.append(record.id)
 
         self.assertEqual(ids, ["1/0-5670", "2/0-5670", "1/5670-9940", "2/7140-11410", "1/9940-14910", "2/5670-7140", "2/11410-12880"])
 
@@ -60,13 +59,11 @@ class TestMauveIO(unittest.TestCase):
                          expected.replace(" ", "").replace("\n", ""))
 
     def test_sequence_positions(self):
-        handle = open(self.SIMPLE_FA)
-        seqs = list(SeqIO.parse(handle, "fasta"))
-        handle.close()
+        with open(self.SIMPLE_FA) as handle:
+            seqs = list(SeqIO.parse(handle, "fasta"))
 
-        handle = open(self.SIMPLE_XMFA)
-        aln_list = list(MauveIterator(handle))
-        handle.close()
+        with open(self.SIMPLE_XMFA) as handle:
+            aln_list = list(MauveIterator(handle))
 
         for aln in aln_list:
             for record in aln:
@@ -90,9 +87,8 @@ class TestMauveIO(unittest.TestCase):
                     self.assertEqual(expected, actual)
 
     def test_write_read(self):
-        handle = open(self.SIMPLE_XMFA)
-        aln_list = list(MauveIterator(handle))
-        handle.close()
+        with open(self.SIMPLE_XMFA) as handle:
+            aln_list = list(MauveIterator(handle))
 
         handle = StringIO()
         MauveWriter(handle).write_file(aln_list)

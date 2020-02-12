@@ -203,7 +203,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         pdb file
 
     DSSP : string
-        DSSP executable (argument to os.system)
+        DSSP executable (argument to subprocess)
 
     Returns
     -------
@@ -406,7 +406,7 @@ class DSSP(AbstractResiduePropertyMap):
         in_file : string
             Either a PDB file or a DSSP file.
         dssp : string
-            The dssp executable (ie. the argument to os.system)
+            The dssp executable (ie. the argument to subprocess)
         acc_array : string
             Accessible surface area (ASA) from either Miller et al. (1987),
             Sander & Rost (1994), or Wilke: Tien et al. 2013, as string

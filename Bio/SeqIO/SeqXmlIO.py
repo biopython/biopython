@@ -481,16 +481,23 @@ class SeqXmlWriter(SequentialSequenceWriter):
     """
 
     def __init__(
-        self, handle, source=None, source_version=None, species=None, ncbiTaxId=None
+        self, target, source=None, source_version=None, species=None, ncbiTaxId=None
     ):
-        """Create Object and start the xml generator."""
-        try:
-            handle.write(b"")
-        except TypeError:
-            raise ValueError("SeqXML files must be opened in binary mode.")
+        """Create Object and start the xml generator.
 
-        SequentialSequenceWriter.__init__(self, handle)
+        Arguments:
+         - target - Output stream opened in text mode, or a path to a file.
+         - source - The source program/database of the file, for example
+           UniProt.
+         - source_version - The version or release number of the source
+           program or database from which the data originated.
+         - species - The scientific name of the species of origin of all
+           entries in the file.
+         - ncbiTaxId - The NCBI taxonomy identifier of the species of origin.
 
+        """
+        SequentialSequenceWriter.__init__(self, target, "wb")
+        handle = self.handle
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()
         self.source = source
@@ -501,7 +508,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
     def write_header(self):
         """Write root node with document metadata."""
         SequentialSequenceWriter.write_header(self)
-
         attrs = {
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
             "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",

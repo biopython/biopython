@@ -42,7 +42,9 @@ try:
             "Support for CDAO tree format requires RDFlib v3.2.1 or later."
         )
 except ImportError:
-    raise MissingPythonDependencyError("Support for CDAO tree format requires RDFlib.")
+    raise MissingPythonDependencyError(
+        "Support for CDAO tree format requires RDFlib."
+    ) from None
 
 RDF_NAMESPACES = {
     "owl": "http://www.w3.org/2002/07/owl#",
@@ -422,15 +424,19 @@ class Writer:
                 ),
             ]
 
-            if hasattr(clade, "confidence") and clade.confidence is not None:
-                confidence = rdflib.Literal(
-                    clade.confidence,
-                    datatype="http://www.w3.org/2001/XMLSchema#decimal",
-                )
+            try:
+                confidence = clade.confidence
+            except AttributeError:
+                pass
+            else:
+                if confidence is not None:
+                    confidence = rdflib.Literal(
+                        confidence, datatype="http://www.w3.org/2001/XMLSchema#decimal",
+                    )
 
-                statements += [
-                    (nUri(clade.uri), pUri("cdao:has_Support_Value"), confidence)
-                ]
+                    statements += [
+                        (nUri(clade.uri), pUri("cdao:has_Support_Value"), confidence)
+                    ]
 
             if self.record_complete_ancestry and len(clade.ancestors) > 0:
                 statements += [

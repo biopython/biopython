@@ -15,7 +15,8 @@
 import os
 import tempfile
 import threading
-from tkinter import messagebox
+
+from tkinter import Tk, messagebox
 
 from Bio.Blast.Applications import (
     NcbiblastnCommandline,
@@ -138,4 +139,9 @@ class BlastWorker(threading.Thread):
 
 
 if __name__ == "__main__":
-    os.system("python xbb_blast.py ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC")
+    from xbb_blast import BlastIt
+
+    win = Tk()
+    win.title("Dummy windows for BLAST test")
+    test = BlastIt("ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC")
+    win.mainloop()

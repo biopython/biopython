@@ -31,20 +31,17 @@ class Primer3ParseTest(unittest.TestCase):
         """Make sure that we can use all single target primer3 files."""
         for file in self.test_files:
             # First using read...
-            h = open(file)
-            Primer3.read(h)
-            h.close()
+            with open(file) as handle:
+                Primer3.read(handle)
             # Now using parse...
-            h = open(file)
-            self.assertEqual(1, len(list(Primer3.parse(h))))
-            h.close()
+            with open(file) as handle:
+                self.assertEqual(1, len(list(Primer3.parse(handle))))
 
     def test_indepth_regular_parse(self):
         """Make sure we get the data from normal primer3 files okay."""
         regular_file = self.test_files[0]
-        h = open(regular_file)
-        primer_info = Primer3.read(h)
-        h.close()
+        with open(regular_file) as handle:
+            primer_info = Primer3.read(handle)
 
         self.assertEqual(len(primer_info.primers), 5)
         self.assertEqual(primer_info.comments,
@@ -67,9 +64,8 @@ class Primer3ParseTest(unittest.TestCase):
     def test_in_depth_single_parse(self):
         """Make sure we get info right from a single primer find."""
         file = self.test_files[1]
-        h = open(file)
-        primer_info = Primer3.read(h)
-        h.close()
+        with open(file) as handle:
+            primer_info = Primer3.read(handle)
 
         self.assertEqual(len(primer_info.primers), 5)
         self.assertEqual(primer_info.comments,
@@ -85,9 +81,8 @@ class Primer3ParseTest(unittest.TestCase):
         """Make sure we can parse an internal oligo file correctly."""
         # these files are generated when designing hybridization probes.
         file = self.test_files[4]
-        h = open(file)
-        primer_info = Primer3.read(h)
-        h.close()
+        with open(file) as handle:
+            primer_info = Primer3.read(handle)
 
         self.assertEqual(len(primer_info.primers), 5)
         self.assertEqual(primer_info.comments,
@@ -99,11 +94,10 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.primers[3].internal_start, 16)
         self.assertEqual(primer_info.primers[4].internal_gc, 35.00)
 
-    def test_mutli_record_fwd(self):
+    def test_multi_record_fwd(self):
         """Test parsing multiple primer sets (NirK forward)."""
-        h = open(os.path.join("Emboss", "NirK.primer3"))
-        targets = list(Primer3.parse(h))
-        h.close()
+        with open(os.path.join("Emboss", "NirK.primer3")) as handle:
+            targets = list(Primer3.parse(handle))
 
         self.assertEqual(len(targets), 16)
         for target in targets:
@@ -142,11 +136,10 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(targets[15].primers[4].forward_seq,
                          "TATCGCAACCACTGAGCAAG")
 
-    def test_mutli_record_full(self):
+    def test_multi_record_full(self):
         """Test parsing multiple primer sets (NirK full)."""
-        h = open(os.path.join("Emboss", "NirK_full.primer3"))
-        targets = list(Primer3.parse(h))
-        h.close()
+        with open(os.path.join("Emboss", "NirK_full.primer3")) as handle:
+            targets = list(Primer3.parse(handle))
 
         self.assertEqual(len(targets), 16)
         for target in targets:
@@ -193,16 +186,14 @@ class PrimersearchParseTest(unittest.TestCase):
     def test_simple_parse(self):
         """Make sure that we can parse all primersearch files."""
         for file in self.test_files:
-            h = open(file)
-            PrimerSearch.read(h)
-            h.close()
+            with open(file) as handle:
+                PrimerSearch.read(handle)
 
     def test_in_depth_normal_parse(self):
         """Make sure the output from a simple primersearch file is correct."""
         file = self.test_files[0]
-        h = open(file)
-        amp_info = PrimerSearch.read(h)
-        h.close()
+        with open(file) as handle:
+            amp_info = PrimerSearch.read(handle)
 
         self.assertEqual(len(amp_info.amplifiers), 1)
         self.assertIn("Test", amp_info.amplifiers)

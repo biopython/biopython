@@ -14,6 +14,7 @@ from io import StringIO
 
 import warnings
 from Bio import BiopythonWarning
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonWarning)
     from Bio.SearchIO._legacy import ParserSupport
@@ -80,7 +81,6 @@ file"""
 
 
 class TestParserSupport(unittest.TestCase):
-
     def test_TaggingConsumer(self):
 
         h = StringIO()

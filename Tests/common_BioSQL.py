@@ -94,7 +94,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
                 import org.postgresql.Driver
         except ImportError:
             message = "Install the JDBC driver for %s to use BioSQL " % DBTYPE
-            raise MissingExternalDependencyError(message)
+            raise MissingExternalDependencyError(message) from None
     else:
         try:
             __import__(DBDRIVER)
@@ -103,7 +103,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
                 message = "Install MySQLdb or mysqlclient if you want to use %s with BioSQL " % (DBTYPE)
             else:
                 message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
-            raise MissingExternalDependencyError(message)
+            raise MissingExternalDependencyError(message) from None
 
     try:
         if DBDRIVER in ["sqlite3"]:
@@ -115,7 +115,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         del server
     except Exception as e:
         message = "Connection failed, check settings if you plan to use BioSQL: %s" % e
-        raise MissingExternalDependencyError(message)
+        raise MissingExternalDependencyError(message) from None
 
     DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
     SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
@@ -573,7 +573,7 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertEqual(cds_feature.qualifiers["codon_start"], ["1"])
         except KeyError:
             raise KeyError("Missing expected entries, have %s"
-                           % repr(cds_feature.qualifiers))
+                           % repr(cds_feature.qualifiers)) from None
 
         self.assertIn("db_xref", cds_feature.qualifiers)
         multi_ann = cds_feature.qualifiers["db_xref"]
@@ -961,9 +961,8 @@ class InDepthLoadTest(unittest.TestCase):
     def test_reload(self):
         """Make sure can't reimport existing records."""
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
-        gb_handle = open(gb_file)
-        record = next(SeqIO.parse(gb_handle, "gb"))
-        gb_handle.close()
+        with open(gb_file) as gb_handle:
+            record = next(SeqIO.parse(gb_handle, "gb"))
         # Should be in database already...
         db_record = self.db.lookup(accession="X55053")
         self.assertEqual(db_record.id, record.id)

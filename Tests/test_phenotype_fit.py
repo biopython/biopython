@@ -13,7 +13,7 @@ try:
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.phenotype.")
+        "Install NumPy if you want to use Bio.phenotype.") from None
 try:
     import scipy
     del scipy
@@ -21,7 +21,7 @@ try:
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "Install SciPy if you want to use Bio.phenotype fit functionality.")
+        "Install SciPy if you want to use Bio.phenotype fit functionality.") from None
 
 import json
 import unittest

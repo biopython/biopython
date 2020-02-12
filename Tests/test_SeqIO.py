@@ -156,7 +156,7 @@ class TestZipped(unittest.TestCase):
             self.assertEqual(6, len(list(SeqIO.parse(handle, "gb"))))
         with gzip.open("GenBank/cor6_6.gb.bgz") as handle:
             with self.assertRaisesRegex(
-                ValueError, "Is this handle in binary mode not text mode"
+                ValueError, "GenBank files must be opened in text mode."
             ):
                 list(SeqIO.parse(handle, "gb"))
 
@@ -285,7 +285,7 @@ class TestSeqIO(unittest.TestCase):
                 handle.seek(0)
                 raise ValueError(
                     "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
-                )
+                ) from None
 
             self.assertEqual(len(records2), t_count)
             for r1, r2 in zip(records, records2):

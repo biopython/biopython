@@ -45,9 +45,8 @@ class TestEnzyme(unittest.TestCase):
     def test_lipoprotein(self):
         """Parsing ENZYME record for lipoprotein lipase (3.1.1.34)."""
         filename = os.path.join("Enzymes", "lipoprotein.txt")
-        handle = open(filename)
-        record = Enzyme.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Enzyme.read(handle)
         self.assertEqual(record["ID"], "3.1.1.34")
         self.assertEqual(record["DE"], "Lipoprotein lipase.")
         self.assertEqual(len(record["AN"]), 3)
@@ -75,9 +74,8 @@ class TestEnzyme(unittest.TestCase):
     def test_proline(self):
         """Parsing ENZYME record for proline racemase (5.1.1.4)."""
         filename = os.path.join("Enzymes", "proline.txt")
-        handle = open(filename)
-        record = Enzyme.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Enzyme.read(handle)
         self.assertEqual(record["ID"], "5.1.1.4")
         self.assertEqual(record["DE"], "Proline racemase.")
         self.assertEqual(record["CA"], "L-proline = D-proline.")
@@ -97,9 +95,8 @@ class TestEnzyme(unittest.TestCase):
     def test_valine(self):
         """Parsing ENZYME record for valine decarboxylase (4.1.1.14)."""
         filename = os.path.join("Enzymes", "valine.txt")
-        handle = open(filename)
-        record = Enzyme.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Enzyme.read(handle)
         self.assertEqual(record["ID"], "4.1.1.14")
         self.assertEqual(record["DE"], "Valine decarboxylase.")
         self.assertEqual(record["CA"], "L-valine = 2-methylpropanamine + CO(2).")
@@ -112,9 +109,8 @@ class TestEnzyme(unittest.TestCase):
     def test_lactate(self):
         """Parsing ENZYME record for lactate racemase (5.1.2.1)."""
         filename = os.path.join("Enzymes", "lactate.txt")
-        handle = open(filename)
-        record = Enzyme.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Enzyme.read(handle)
         self.assertEqual(record["ID"], "5.1.2.1")
         self.assertEqual(record["DE"], "Lactate racemase.")
         self.assertEqual(len(record["AN"]), 3)

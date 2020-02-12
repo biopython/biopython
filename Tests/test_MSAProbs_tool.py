@@ -137,9 +137,8 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp_test.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,

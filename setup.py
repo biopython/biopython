@@ -197,8 +197,7 @@ EXTENSIONS = [
     ),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
     Extension(
-        "Bio.Cluster._cluster",
-        ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
+        "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
     Extension(
@@ -231,6 +230,11 @@ setup(
     url="https://biopython.org/",
     description="Freely available tools for computational molecular biology.",
     long_description=readme_rst,
+    project_urls={
+        "Documentation": "https://biopython.org/wiki/Documentation",
+        "Source": "https://github.com/biopython/biopython/",
+        "Tracker": "https://github.com/biopython/biopython/issues",
+    },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

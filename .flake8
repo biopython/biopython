@@ -20,22 +20,16 @@ ignore =
     # =============================================================
     # Biopython's 'standard' ignores we can agree to always accept:
     # =============================================================
-    D203, # 1 blank line required before class docstring
-          # deliberately ignore in favour of passing D211: No blank lines
-          # allowed before class docstring
     W503, # line-break before binary operator
-          # deliberately ignore (in favour of some day enforcing W504?)
+          # deliberately ignore (in favour of enforcing W504)
     # ===========================================
     # Ignores that we have to accept for a while:
     # ===========================================
-    E123, # closing bracket does not match indentation of opening bracket's line
-          # TODO? (main/Bio/Tests: 3/91/31 occurrences)
     E203, # whitespace before ':'
           # gives false positives after running black, see
           # https://github.com/PyCQA/pycodestyle/issues/373
     E501, # line too long
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
-    W504, # line break after binary operator (Bio/Tests/Scripts: 225/119/7) TODO?
     B007, # Loop control variable not used within the loop body.
           # If this is intended, start the name with an underscore
     # =========================================
@@ -48,20 +42,18 @@ ignore =
 # Folder specific ignores:
 # ========================
 per-file-ignores =
-    Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812,BLK100
+    Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
+    Tests/*:E123,F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
-    /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812,BLK100
+    /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
+    /Tests/*:E123,F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
 
 # =============================
 # per-file-ignores error codes:
 # =============================
-#Bio/*:E122 continuation line missing indentation or outdented TODO? (264 occurrences)
-#      E126 continuation line over-indented for hanging indent TODO?  (54 occurrences)
-#      F401 module imported but unused TODO? (107 occurrences)
+#Bio/*:F401 module imported but unused TODO? (107 occurrences)
 #      F841 local variable is assigned to but never used TODO? (55 occurrences)
 #      D105 missing docstring magic method (121 occurrences)
 #      B009 do not call getattr with a constant attribute value,
@@ -72,12 +64,14 @@ per-file-ignores =
 #           instead callers should raise AssertionError().
 #      C812 missing trailing comma
 #      C815 missing trailing comma in Python 3.5+
-#      BLK100 Black would make changes
-#Tests/*:F401 module imported but unused TODO? (88 occurrences)
+#Tests/*:E123 closing bracket does not match indentation of opening bracket's line
+#             (41 occurences, may be removed by Black)
+#        F401 module imported but unused TODO? (88 occurrences)
 #        F841 local variable is assigned to but never used TODO? (64 occurrences)
 #        D101 missing docstring in public class (207 occurrences)
 #        D102 missing docstring in public method (956 occurrences)
 #        D103 missing docstring in public functions (52 occurrences)
+#        W504 line break after binary operator (97 occurences, may be removed by black)
 #        B009 do not call getattr with a constant attribute value,
 #             it is not any safer than normal property access
 #        B010 do not call setattr with a constant attribute value,

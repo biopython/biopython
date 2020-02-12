@@ -44,9 +44,8 @@ class MotifTestsBasic(unittest.TestCase):
 
     def test_alignace_parsing(self):
         """Test if Bio.motifs can parse AlignAce output files."""
-        handle = open("motifs/alignace.out")
-        record = motifs.parse(handle, "AlignAce")
-        handle.close()
+        with open("motifs/alignace.out") as handle:
+            record = motifs.parse(handle, "AlignAce")
         self.assertEqual(record.version, "AlignACE 4.0 05/13/04")
         self.assertEqual(record.command, "./AlignACE -i test.fa")
         self.assertEqual(len(record.parameters), 7)
@@ -436,9 +435,8 @@ class MotifTestsBasic(unittest.TestCase):
 
     def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files."""
-        output_handle = open(self.TFout, "w")
-        output_handle.write(format(self.m, "transfac"))
-        output_handle.close()
+        with open(self.TFout, "w") as output_handle:
+            output_handle.write(format(self.m, "transfac"))
 
     def test_format(self):
         self.m.name = "Foo"
@@ -535,8 +533,8 @@ class TestMEME(unittest.TestCase):
 
     def test_meme_parser_1(self):
         """Parse motifs/meme.INO_up800.classic.oops.xml file."""
-        handle = open("motifs/meme.INO_up800.classic.oops.xml")
-        record = motifs.parse(handle, "meme")
+        with open("motifs/meme.INO_up800.classic.oops.xml") as handle:
+            record = motifs.parse(handle, "meme")
         self.assertEqual(record.version, "5.0.1")
         self.assertEqual(record.datafile, "common/INO_up800.s")
         self.assertEqual(record.alphabet, "ACGT")
@@ -655,12 +653,11 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[4]), "TTCACTACTCCCCTG")
         self.assertEqual(str(motif.instances[5]), "TTGACAACGGCTGGG")
         self.assertEqual(str(motif.instances[6]), "TTCACGCTTGCTACG")
-        handle.close()
 
     def test_meme_parser_2(self):
         """Parsing motifs/meme.adh.classic.oops.xml file."""
-        handle = open("motifs/meme.adh.classic.oops.xml")
-        record = motifs.parse(handle, "meme")
+        with open("motifs/meme.adh.classic.oops.xml") as handle:
+            record = motifs.parse(handle, "meme")
         self.assertEqual(record.version, "5.0.1")
         self.assertEqual(record.datafile, "common/adh.s")
         self.assertEqual(record.alphabet, "ACDEFGHIKLMNPQRSTVWY")
@@ -1113,12 +1110,11 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[30]), "EGKIGASLKDSTLFGVSSLSDSLKGDFTS")
         self.assertEqual(str(motif.instances[31]), "MGPEGVRVNAISAGPIRTLAASGIKDFRK")
         self.assertEqual(str(motif.instances[32]), "RALKSCSPELQQKFRSETITEEELVGLMN")
-        handle.close()
 
     def test_meme_parser_3(self):
         """Parse motifs/meme.farntrans5.classic.anr.xml file."""
-        handle = open("motifs/meme.farntrans5.classic.anr.xml")
-        record = motifs.parse(handle, "meme")
+        with open("motifs/meme.farntrans5.classic.anr.xml") as handle:
+            record = motifs.parse(handle, "meme")
         self.assertEqual(record.version, "5.0.1")
         self.assertEqual(record.datafile, "common/farntrans5.s")
         self.assertEqual(record.alphabet, "ACDEFGHIKLMNPQRSTVWY")
@@ -1459,12 +1455,11 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[18]), "LQREKHFHYLKRGL")
         self.assertEqual(str(motif.instances[19]), "DRKVRLISFIRGNQ")
         self.assertEqual(str(motif.instances[20]), "VNRMAIIFYSISGL")
-        handle.close()
 
     def test_minimal_meme_parser(self):
         """Parse motifs/minimal_test.meme file."""
-        handle = open("motifs/minimal_test.meme")
-        record = motifs.parse(handle, "minimal")
+        with open("motifs/minimal_test.meme") as handle:
+            record = motifs.parse(handle, "minimal")
         self.assertEqual(record.version, "4")
         self.assertEqual(record.alphabet, "ACGT")
         self.assertEqual(len(record.sequences), 0)
@@ -1483,7 +1478,6 @@ class TestMEME(unittest.TestCase):
         self.assertAlmostEqual(motif.evalue, 4.1e-09)
         self.assertEqual(motif.alphabet, "ACGT")
         self.assertEqual(motif.instances, None)
-        handle.close()
 
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
@@ -1495,8 +1489,8 @@ class TestMAST(unittest.TestCase):
 
     def test_mast_parser_1(self):
         """Parse motifs/mast.crp0.de.oops.txt.xml file."""
-        handle = open("motifs/mast.crp0.de.oops.txt.xml")
-        record = motifs.parse(handle, "MAST")
+        with open("motifs/mast.crp0.de.oops.txt.xml") as handle:
+            record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "5.0.1")
         self.assertEqual(record.database, "common/crp0.s")
         self.assertEqual(record.alphabet, "DNA")
@@ -1546,12 +1540,11 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.diagrams["ce1cg"], "105")
         self.assertEqual(record.diagrams["trn9cat"], "105")
         self.assertEqual(record.diagrams["uxu1"], "105")
-        handle.close()
 
     def test_mast_parser_2(self):
         """Parse motifs/mast.adh.de.oops.html.xml file."""
-        handle = open("motifs/mast.adh.de.oops.html.xml")
-        record = motifs.parse(handle, "MAST")
+        with open("motifs/mast.adh.de.oops.html.xml") as handle:
+            record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "5.0.1")
         self.assertEqual(record.database, "common/adh.s")
         self.assertEqual(record.alphabet, "Protein")
@@ -1631,12 +1624,11 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.diagrams["FABI_ECOLI"], "1-[1]-161-[1]-76")
         self.assertEqual(record.diagrams["GUTD_ECOLI"], "147-[2]-10-[1]-78")
         self.assertEqual(record.diagrams["CSGA_MYXXA"], "12-[1]-53-[2]-77")
-        handle.close()
 
     def test_mast_parser_3(self):
         """Parse motifs/mast.Klf1-200.cd.oops.xml.xml file."""
-        handle = open("motifs/mast.Klf1-200.cd.oops.xml.xml")
-        record = motifs.parse(handle, "MAST")
+        with open("motifs/mast.Klf1-200.cd.oops.xml.xml") as handle:
+            record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "5.0.1")
         self.assertEqual(record.database, "common/Klf1-200.fa")
         self.assertEqual(record.alphabet, "DNA")
@@ -1876,7 +1868,6 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.diagrams["chr5:105994747-105995247"], "93-[+2]-153-[-2]-194")
         self.assertEqual(record.diagrams["chr17:84209565-84210065"], "64-[-2]-406")
         self.assertEqual(record.diagrams["chr7:16507689-16508189"], "231-[+2]-239")
-        handle.close()
 
 
 class TestTransfac(unittest.TestCase):
@@ -1884,8 +1875,8 @@ class TestTransfac(unittest.TestCase):
 
     def test_transfac_parser(self):
         """Parse motifs/transfac.dat file."""
-        handle = open("motifs/transfac.dat")
-        record = motifs.parse(handle, "TRANSFAC")
+        with open("motifs/transfac.dat") as handle:
+            record = motifs.parse(handle, "TRANSFAC")
         motif = record[0]
         self.assertEqual(motif["ID"], "motif1")
         self.assertEqual(len(motif.counts), 4)
@@ -1984,7 +1975,6 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 8], 5)
         self.assertEqual(motif.counts["T", 9], 3)
         self.assertEqual(str(motif.counts.degenerate_consensus), "RSCAGAGGTY")
-        handle.close()
 
     def test_permissive_transfac_parser(self):
         """Parse the TRANSFAC-like file motifs/MA0056.1.transfac."""
@@ -1994,11 +1984,10 @@ class TestTransfac(unittest.TestCase):
         # transcription factor binding profiles and its web framework.
         # Nucleic Acids Res. 2018; 46:D260-D266,
         path = "motifs/MA0056.1.transfac"
-        handle = open(path)
-        self.assertRaises(ValueError, motifs.parse, handle, "TRANSFAC")
-        handle.close()
-        handle = open(path)
-        records = motifs.parse(handle, "TRANSFAC", strict=False)
+        with open(path) as handle:
+            self.assertRaises(ValueError, motifs.parse, handle, "TRANSFAC")
+        with open(path) as handle:
+            records = motifs.parse(handle, "TRANSFAC", strict=False)
         motif = records[0]
         self.assertEqual(sorted(motif.keys()), ["AC", "DE", "ID"])
         self.assertEqual(motif["AC"], "MA0056.1")
@@ -2030,7 +2019,6 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 3], 1.0)
         self.assertEqual(motif.counts["T", 4], 0.0)
         self.assertEqual(motif.counts["T", 5], 0.0)
-        handle.close()
 
 
 class MotifTestPWM(unittest.TestCase):
@@ -2038,9 +2026,8 @@ class MotifTestPWM(unittest.TestCase):
 
     def setUp(self):
         """Define motif and sequence for tests."""
-        handle = open("motifs/SRF.pfm")
-        self.m = motifs.read(handle, "pfm")
-        handle.close()
+        with open("motifs/SRF.pfm") as handle:
+            self.m = motifs.read(handle, "pfm")
         self.s = Seq("ACGTGTGCGTAGTGCGT", self.m.alphabet)
 
     def test_simple(self):

@@ -915,9 +915,10 @@ class Events(PhyloElement):
 
     def __getitem__(self, key):
         """Get value of Event with the given key."""
-        if not hasattr(self, key):
-            raise KeyError(key)
-        val = getattr(self, key)
+        try:
+            val = getattr(self, key)
+        except AttributeError:
+            raise KeyError(key) from None
         if val is None:
             raise KeyError("%s has not been set in this object" % repr(key))
         return val
@@ -936,7 +937,10 @@ class Events(PhyloElement):
 
     def __contains__(self, key):
         """Return True if Event dict contains key."""
-        return hasattr(self, key) and getattr(self, key) is not None
+        try:
+            return getattr(self, key) is not None
+        except AttributeError:
+            return False
 
 
 class Id(PhyloElement):
@@ -1153,8 +1157,12 @@ class ProteinDomain(PhyloElement):
     def to_seqfeature(self):
         """Create a SeqFeature from the ProteinDomain Object."""
         feat = SeqFeature(location=FeatureLocation(self.start, self.end), id=self.value)
-        if hasattr(self, "confidence"):
-            feat.qualifiers["confidence"] = self.confidence
+        try:
+            confidence = self.confidence
+        except AttributeError:
+            pass
+        else:
+            feat.qualifiers["confidence"] = confidence
         return feat
 
 

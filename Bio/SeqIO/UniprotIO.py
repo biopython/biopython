@@ -17,13 +17,12 @@ originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 
 """
 from xml.etree import ElementTree
+from xml.parsers.expat import errors
 
 from Bio import Seq
 from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
-from Bio.File import as_handle
-from io import StringIO
 
 
 NS = "{http://uniprot.org/uniprot}"
@@ -31,7 +30,7 @@ REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
 def UniprotIterator(
-    handle, alphabet=Alphabet.generic_protein, return_raw_comments=False
+    source, alphabet=Alphabet.generic_protein, return_raw_comments=False
 ):
     """Iterate over UniProt XML as SeqRecord objects.
 
@@ -40,43 +39,30 @@ def UniprotIterator(
 
     This generator can be used in Bio.SeqIO
 
+    Argument source is a file-like object or a path to a file.
+
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
-    with as_handle(handle) as handle:
-
-        # check if file is empty
-        if handle.readline() == "":
-            raise ValueError("Empty file.")
-
-        if isinstance(alphabet, Alphabet.NucleotideAlphabet):
+    if isinstance(alphabet, Alphabet.NucleotideAlphabet):
+        raise ValueError("Wrong alphabet %r" % alphabet)
+    if isinstance(alphabet, Alphabet.Gapped):
+        if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
             raise ValueError("Wrong alphabet %r" % alphabet)
-        if isinstance(alphabet, Alphabet.Gapped):
-            if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
-                raise ValueError("Wrong alphabet %r" % alphabet)
 
-        if not hasattr(handle, "read"):
-            if isinstance(handle, str):
-                import warnings
-                from Bio import BiopythonDeprecationWarning
-
-                warnings.warn(
-                    "Passing an XML-containing handle is recommended",
-                    BiopythonDeprecationWarning,
-                )
-                handle = StringIO(handle)
-            else:
-                raise TypeError(
-                    "Requires an XML-containing handle"
-                    " (or XML as a string, but that's deprecated)"
-                )
-
-        for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
+    try:
+        for event, elem in ElementTree.iterparse(source, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
                 yield Parser(
                     elem, alphabet=alphabet, return_raw_comments=return_raw_comments
                 ).parse()
                 elem.clear()
+    except ElementTree.ParseError as exception:
+        if errors.messages[exception.code] == errors.XML_ERROR_NO_ELEMENTS:
+            assert exception.position == (1, 0)  # line 1, column 0
+            raise ValueError("Empty file.") from None
+        else:
+            raise
 
 
 class Parser:

@@ -24,22 +24,23 @@ def u_crc32(seq):
     # NOTE - On Python 2 crc32 could return a signed int, but on Python 3 it is
     # always unsigned
     # Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    return crc32(seq) & 0xffffffff
+    return crc32(seq) & 0xFFFFFFFF
 
 
 class SeqUtilsTests(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # Example of crc64 collision from Sebastian Bassi using the
         # immunoglobulin lambda light chain variable region from Homo sapiens
         # Both sequences share the same CRC64 checksum: 44CAAD88706CC153
-        cls.str_light_chain_one = ("QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQ"
-                                   "HPGKAPKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGL"
-                                   "QAEDEADYYCSSYAGSSTLVFGGGTKLTVL")
-        cls.str_light_chain_two = ("QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQ"
-                                   "HPGKAPKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGL"
-                                   "QAEDEADYYCCSYAGSSTWVFGGGTKLTVL")
+        cls.str_light_chain_one = (
+            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
+            "SNRFSGSKSGNTASLTISGLQAEDEADYYCSSYAGSSTLVFGGGTKLTVL"
+        )
+        cls.str_light_chain_two = (
+            "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGKAPKLMIYEGSKRPSGV"
+            "SNRFSGSKSGNTASLTISGLQAEDEADYYCCSYAGSSTWVFGGGTKLTVL"
+        )
         X = CodonAdaptationIndex()
         path = os.path.join("CodonUsage", "HighlyExpressedGenes.txt")
         X.generate_index(path)
@@ -72,8 +73,13 @@ class SeqUtilsTests(unittest.TestCase):
                 a = "M" + str(seq[3:].translate(table))
                 b = feature.qualifiers["translation"][0] + "*"
                 self.assertEqual(a, b, "%r vs %r" % (a, b))
-                records.append(SeqRecord(seq, id=feature.qualifiers["protein_id"][0],
-                                         description=feature.qualifiers["product"][0]))
+                records.append(
+                    SeqRecord(
+                        seq,
+                        id=feature.qualifiers["protein_id"][0],
+                        description=feature.qualifiers["product"][0],
+                    )
+                )
 
         with open(dna_fasta_filename, "w") as handle:
             SeqIO.write(records, handle, "fasta")
@@ -83,8 +89,9 @@ class SeqUtilsTests(unittest.TestCase):
         # sequences - which should each be a whole number of codons.
         CAI.generate_index(dna_fasta_filename)
         # Now check codon usage index (CAI) using this species
-        self.assertEqual(record.annotations["source"],
-                         "Yersinia pestis biovar Microtus str. 91001")
+        self.assertEqual(
+            record.annotations["source"], "Yersinia pestis biovar Microtus str. 91001"
+        )
         value = CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
         self.assertAlmostEqual(value, 0.67213, places=5)
         os.remove(dna_fasta_filename)
@@ -92,16 +99,34 @@ class SeqUtilsTests(unittest.TestCase):
     def test_crc_checksum_collision(self):
         # Explicit testing of crc64 collision:
         self.assertNotEqual(self.str_light_chain_one, self.str_light_chain_two)
-        self.assertNotEqual(crc32(self.str_light_chain_one), crc32(self.str_light_chain_two))
-        self.assertEqual(crc64(self.str_light_chain_one), crc64(self.str_light_chain_two))
-        self.assertNotEqual(gcg(self.str_light_chain_one), gcg(self.str_light_chain_two))
-        self.assertNotEqual(seguid(self.str_light_chain_one), seguid(self.str_light_chain_two))
+        self.assertNotEqual(
+            crc32(self.str_light_chain_one), crc32(self.str_light_chain_two)
+        )
+        self.assertEqual(
+            crc64(self.str_light_chain_one), crc64(self.str_light_chain_two)
+        )
+        self.assertNotEqual(
+            gcg(self.str_light_chain_one), gcg(self.str_light_chain_two)
+        )
+        self.assertNotEqual(
+            seguid(self.str_light_chain_one), seguid(self.str_light_chain_two)
+        )
 
-    def seq_checksums(self, seq_str, exp_crc32, exp_crc64, exp_gcg, exp_seguid,
-                      exp_simple_LCC, exp_window_LCC):
-        for s in [seq_str,
-                  Seq(seq_str, single_letter_alphabet),
-                  MutableSeq(seq_str, single_letter_alphabet)]:
+    def seq_checksums(
+        self,
+        seq_str,
+        exp_crc32,
+        exp_crc64,
+        exp_gcg,
+        exp_seguid,
+        exp_simple_LCC,
+        exp_window_LCC,
+    ):
+        for s in [
+            seq_str,
+            Seq(seq_str, single_letter_alphabet),
+            MutableSeq(seq_str, single_letter_alphabet),
+        ]:
             self.assertEqual(exp_crc32, u_crc32(s))
             self.assertEqual(exp_crc64, crc64(s))
             self.assertEqual(exp_gcg, gcg(s))
@@ -113,31 +138,82 @@ class SeqUtilsTests(unittest.TestCase):
                 self.assertAlmostEqual(value1, value2, places=2)
 
     def test_checksum1(self):
-        self.seq_checksums(self.str_light_chain_one,
-                           2994980265,
-                           "CRC-44CAAD88706CC153",
-                           9729,
-                           "BpBeDdcNUYNsdk46JoJdw7Pd3BI",
-                           1.03,
-                           (0.00, 1.00, 0.96, 0.96, 0.96, 0.65, 0.43, 0.35, 0.35, 0.35, 0.35, 0.53, 0.59, 0.26))
+        self.seq_checksums(
+            self.str_light_chain_one,
+            2994980265,
+            "CRC-44CAAD88706CC153",
+            9729,
+            "BpBeDdcNUYNsdk46JoJdw7Pd3BI",
+            1.03,
+            (
+                0.00,
+                1.00,
+                0.96,
+                0.96,
+                0.96,
+                0.65,
+                0.43,
+                0.35,
+                0.35,
+                0.35,
+                0.35,
+                0.53,
+                0.59,
+                0.26,
+            ),
+        )
 
     def test_checksum2(self):
-        self.seq_checksums(self.str_light_chain_two,
-                           802105214,
-                           "CRC-44CAAD88706CC153",
-                           9647,
-                           "X5XEaayob1nZLOc7eVT9qyczarY",
-                           1.07,
-                           (0.00, 1.00, 0.96, 0.96, 0.96, 0.65, 0.43, 0.35, 0.35, 0.35, 0.35, 0.53, 0.59, 0.26))
+        self.seq_checksums(
+            self.str_light_chain_two,
+            802105214,
+            "CRC-44CAAD88706CC153",
+            9647,
+            "X5XEaayob1nZLOc7eVT9qyczarY",
+            1.07,
+            (
+                0.00,
+                1.00,
+                0.96,
+                0.96,
+                0.96,
+                0.65,
+                0.43,
+                0.35,
+                0.35,
+                0.35,
+                0.35,
+                0.53,
+                0.59,
+                0.26,
+            ),
+        )
 
     def test_checksum3(self):
-        self.seq_checksums("ATGCGTATCGATCGCGATACGATTAGGCGGAT",
-                           817679856,
-                           "CRC-6234FF451DC6DFC6",
-                           7959,
-                           "8WCUbVjBgiRmM10gfR7XJNjbwnE",
-                           1.98,
-                           (0.00, 2.00, 1.99, 1.99, 2.00, 1.99, 1.97, 1.99, 1.99, 1.99, 1.96, 1.96, 1.96, 1.96))
+        self.seq_checksums(
+            "ATGCGTATCGATCGCGATACGATTAGGCGGAT",
+            817679856,
+            "CRC-6234FF451DC6DFC6",
+            7959,
+            "8WCUbVjBgiRmM10gfR7XJNjbwnE",
+            1.98,
+            (
+                0.00,
+                2.00,
+                1.99,
+                1.99,
+                2.00,
+                1.99,
+                1.97,
+                1.99,
+                1.99,
+                1.99,
+                1.96,
+                1.96,
+                1.96,
+                1.96,
+            ),
+        )
 
     def test_GC(self):
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
@@ -157,7 +233,9 @@ class SeqUtilsTests(unittest.TestCase):
 
     def test_codon_adaptation_index(self):
         X = self.X
-        cai = X.cai_for_gene("ATGAAACGCATTAGCACCACCATTACCACCACCATCACCATTACCACAGGTAACGGTGCGGGCTGA")
+        cai = X.cai_for_gene(
+            "ATGAAACGCATTAGCACCACCATTACCACCACCATCACCATTACCACAGGTAACGGTGCGGGCTGA"
+        )
         self.assertAlmostEqual(cai, 0.6723, places=3)
 
     def test_index(self):

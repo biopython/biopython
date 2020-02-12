@@ -25,7 +25,8 @@ from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 def SimpleFastaParser(source):
     """Iterate over Fasta records as string tuples.
 
-    Argument source is a file-like object or a path to a file.
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     For each record a tuple of two strings is returned, the FASTA title
     line (without the leading '>' character), and the sequence (with any
@@ -83,7 +84,8 @@ def SimpleFastaParser(source):
 def FastaTwoLineParser(source):
     """Iterate over no-wrapping Fasta records as string tuples.
 
-    Argument source is a file-like object or a path to a file.
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     Functionally the same as SimpleFastaParser but with a strict
     interpretation of the FASTA format as exactly two lines per
@@ -156,11 +158,11 @@ def FastaTwoLineParser(source):
             handle.close()
 
 
-def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+def FastaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over Fasta records as SeqRecord objects.
 
     Arguments:
-     - handle - input file
+     - source - input stream opened in text mode, or a path to a file
      - alphabet - optional alphabet
      - title2ids - A function that, when given the title of the FASTA
        file (without the beginning >), will return the id, name and
@@ -197,13 +199,13 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     """
     if title2ids:
-        for title, sequence in SimpleFastaParser(handle):
+        for title, sequence in SimpleFastaParser(source):
             id, name, descr = title2ids(title)
             yield SeqRecord(
                 Seq(sequence, alphabet), id=id, name=name, description=descr
             )
     else:
-        for title, sequence in SimpleFastaParser(handle):
+        for title, sequence in SimpleFastaParser(source):
             try:
                 first_word = title.split(None, 1)[0]
             except IndexError:
@@ -218,11 +220,11 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
             )
 
 
-def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
+def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
     """Iterate over two-line Fasta records (as SeqRecord objects).
 
     Arguments:
-     - handle - input file
+     - source - input stream opened in text mode, or a path to a file
      - alphabet - optional alphabet
 
     This uses a strict interpretation of the FASTA as requiring
@@ -231,7 +233,7 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
     Only the default title to ID/name/description parsing offered
     by the relaxed FASTA parser is offered.
     """
-    for title, sequence in FastaTwoLineParser(handle):
+    for title, sequence in FastaTwoLineParser(source):
         try:
             first_word = title.split(None, 1)[0]
         except IndexError:
@@ -250,12 +252,11 @@ class FastaWriter(SequentialSequenceWriter):
     ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
     """
 
-    def __init__(self, handle, wrap=60, record2title=None):
+    def __init__(self, target, wrap=60, record2title=None):
         """Create a Fasta writer (OBSOLETE).
 
         Arguments:
-         - handle - Handle to an output file, e.g. as returned
-           by open(filename, "w")
+         - target - Output stream opened in text mode, or a path to a file.
          - wrap -   Optional line length used to wrap sequence lines.
            Defaults to wrapping the sequence at 60 characters
            Use zero (or None) for no wrapping, giving a single
@@ -285,8 +286,7 @@ class FastaWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
-        self.wrap = None
+        SequentialSequenceWriter.__init__(self, target)
         if wrap:
             if wrap < 1:
                 raise ValueError

@@ -24,7 +24,6 @@ def get_file(filename):
 
 
 class InterproscanXmlCases(unittest.TestCase):
-
     def test_xml_001(self):
         xml_file = get_file("test_001.xml")
         qresults = parse(xml_file, FMT)
@@ -38,13 +37,19 @@ class InterproscanXmlCases(unittest.TestCase):
 
         # test parsed values of qresult
         self.assertEqual("AT5G23090.4", qresult.id)
-        self.assertEqual("pacid=19665592 transcript=AT5G23090.4 locus=AT5G23090 ID=AT5G23090.4.TAIR10 annot-version=TAIR10",
-                         qresult.description)
+        self.assertEqual(
+            "pacid=19665592 transcript=AT5G23090.4 locus=AT5G23090 "
+            "ID=AT5G23090.4.TAIR10 annot-version=TAIR10",
+            qresult.description,
+        )
         self.assertEqual(4, len(qresult))
 
         hit = qresult[0]
         self.assertEqual("PF00808", hit.id)
-        self.assertEqual("Histone-like transcription factor (CBF/NF-Y) and archaeal histone", hit.description)
+        self.assertEqual(
+            "Histone-like transcription factor (CBF/NF-Y) and archaeal histone",
+            hit.description,
+        )
         self.assertEqual("PFAM", hit.attributes["Target"])
         self.assertEqual("31.0", hit.attributes["Target version"])
         self.assertEqual("hmmer3", hit.attributes["Hit type"])
@@ -58,7 +63,12 @@ class InterproscanXmlCases(unittest.TestCase):
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(65, hsp.hit_end)
         self.assertEqual(66, hsp.aln_span)
-        self.assertEqual("MDPMDIVGKSKEDASLPKATMTKIIKEMLPPDVRVARDAQDLLIECCVEFINLVSSESNDVCNKEDKRTIAPEHVLKALQVLGFGEYIEEVYAAYEQHKYETMDTQRSVKWNPGAQMTEEEAAAEQQRMFAEARARMNGGVSVPQPEHPETDQRSPQS", str(hsp.query.seq))
+        self.assertEqual(
+            "MDPMDIVGKSKEDASLPKATMTKIIKEMLPPDVRVARDAQDLLIECCVEFINLVSSESNDVCNKEDKRTIAPEH"
+            "VLKALQVLGFGEYIEEVYAAYEQHKYETMDTQRSVKWNPGAQMTEEEAAAEQQRMFAEARARMNGGVSVPQPEH"
+            "PETDQRSPQS",
+            str(hsp.query.seq),
+        )
 
         # parse last hit
         hit = qresult[-1]

@@ -15,6 +15,7 @@
 import glob
 import os
 import sys
+import subprocess
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -88,12 +89,15 @@ class BlastIt:
         """Test if BLAST binaries are in PATH or let user locate them."""
         if not BlastIt.blast_ok:
             # Test if blast binaries are in path
-            if os.system("blastn -version"):  # Return of non-zero means error
+            if subprocess.call(
+                ["blastn", "-version"]
+            ):  # Return of non-zero means error
                 self.blast_path = filedialog.askdirectory(
                     title="Please locate your BLAST program folder:"
                 )
-                self.blast_path += os.sep
-                if os.system(f"{self.blast_path}blastn -version"):
+                if subprocess.call(
+                    [os.path.join(self.blast_path, "blastn"), "-version"]
+                ):
                     messagebox.showerror(
                         "xbb tools",
                         "Wrong folder or missing BLAST"

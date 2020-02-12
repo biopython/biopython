@@ -14,7 +14,6 @@ from Bio.ExPASy import Prosite
 
 
 class TestPrositeRead(unittest.TestCase):
-
     def test_read1(self):
         """Parsing Prosite record ps00107.txt."""
         filename = os.path.join("Prosite", "ps00107.txt")
@@ -27,8 +26,13 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.data_update, "NOV-1995")
         self.assertEqual(record.info_update, "MAR-2006")
         self.assertEqual(record.pdoc, "PDOC00100")
-        self.assertEqual(record.description, "Protein kinases ATP-binding region signature.")
-        self.assertEqual(record.pattern, "[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.")
+        self.assertEqual(
+            record.description, "Protein kinases ATP-binding region signature."
+        )
+        self.assertEqual(
+            record.pattern,
+            "[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.",
+        )
         self.assertEqual(record.matrix, [])
         self.assertEqual(record.rules, [])
         self.assertEqual(record.nr_sp_release, "49.3")
@@ -2585,8 +2589,14 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.info_update, "MAR-2006")
         self.assertEqual(record.pdoc, "PDOC00149")
 
-        self.assertEqual(record.description, "Serine/threonine dehydratases pyridoxal-phosphate attachment site.")
-        self.assertEqual(record.pattern, "[DESH]-x(4,5)-[STVG]-{EVKD}-[AS]-[FYI]-K-[DLIFSA]-[RLVMF]-[GA]-[LIVMGA].")
+        self.assertEqual(
+            record.description,
+            "Serine/threonine dehydratases pyridoxal-phosphate attachment site.",
+        )
+        self.assertEqual(
+            record.pattern,
+            "[DESH]-x(4,5)-[STVG]-{EVKD}-[AS]-[FYI]-K-[DLIFSA]-[RLVMF]-[GA]-[LIVMGA].",
+        )
         self.assertEqual(record.matrix, [])
         self.assertEqual(record.rules, [])
         self.assertEqual(record.nr_sp_release, "49.3")
