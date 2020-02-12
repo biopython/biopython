@@ -11,13 +11,6 @@
 import os
 
 
-def trim_str(string, max_len, concat_char):
-    """Truncate the given string for display."""
-    if len(string) > max_len:
-        return string[: max_len - len(concat_char)] + concat_char
-    return string
-
-
 def find_test_dir(start_dir=None):
     """Find the absolute path of Biopython's Tests directory.
 
