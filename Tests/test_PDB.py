@@ -1585,15 +1585,15 @@ class CopyTests(unittest.TestCase):
 
     def test_atom_copy(self):
         aa = self.a.copy()
-        self.assertFalse(self.a is aa)
-        self.assertFalse(self.a.get_coord() is aa.get_coord())
+        self.assertIsNot(self.a, aa)
+        self.assertIsNot(self.a.get_coord(), aa.get_coord())
 
     def test_entity_copy(self):
         """Make a copy of a residue."""
         for e in (self.s, self.m, self.c, self.r):
             ee = e.copy()
-            self.assertFalse(e is ee)
-            self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+            self.assertIsNot(e, ee)
+            self.assertIsNot(e.get_list()[0], ee.get_list()[0])
 
 
 def eprint(*args, **kwargs):
