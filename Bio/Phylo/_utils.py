@@ -30,7 +30,7 @@ def to_networkx(tree):
     except ImportError:
         raise MissingPythonDependencyError(
             "Install NetworkX if you want to use to_networkx."
-        )
+        ) from None
 
     # NB (1/2010): the networkx API stabilized at v.1.0
     # 1.0+: edges accept arbitrary data as kwargs, weights are floats
@@ -160,7 +160,7 @@ def draw_graphviz(
     except ImportError:
         raise MissingPythonDependencyError(
             "Install NetworkX if you want to use to_networkx."
-        )
+        ) from None
 
     G = to_networkx(tree)
     try:
@@ -175,17 +175,17 @@ def draw_graphviz(
         int_labels = Gi.node_labels
 
     try:
-        if hasattr(networkx, "graphviz_layout"):
+        try:
             # networkx versions before 1.11 (#1247)
             graphviz_layout = networkx.graphviz_layout
-        else:
+        except AttributeError:
             # networkx version 1.11
             graphviz_layout = networkx.drawing.nx_agraph.graphviz_layout
         posi = graphviz_layout(Gi, prog, args=args)
     except ImportError:
         raise MissingPythonDependencyError(
             "Install PyGraphviz or pydot if you want to use draw_graphviz."
-        )
+        ) from None
 
     def get_label_mapping(G, selection):
         """Apply the user-specified node relabeling."""
@@ -391,7 +391,7 @@ def draw(
         except ImportError:
             raise MissingPythonDependencyError(
                 "Install matplotlib or pylab if you want to use draw."
-            )
+            ) from None
 
     import matplotlib.collections as mpcollections
 
@@ -409,9 +409,13 @@ def draw(
         if show_confidence:
 
             def format_branch_label(clade):
-                if hasattr(clade, "confidences"):
+                try:
+                    confidences = clade.confidences
                     # phyloXML supports multiple confidences
-                    return "/".join(conf2str(cnf.value) for cnf in clade.confidences)
+                except AttributeError:
+                    pass
+                else:
+                    return "/".join(conf2str(cnf.value) for cnf in confidences)
                 if clade.confidence is not None:
                     return conf2str(clade.confidence)
                 return None
@@ -600,8 +604,13 @@ def draw(
 
     # Aesthetics
 
-    if hasattr(tree, "name") and tree.name:
-        axes.set_title(tree.name)
+    try:
+        name = tree.name
+    except AttributeError:
+        pass
+    else:
+        if name:
+            axes.set_title(name)
     axes.set_xlabel("branch length")
     axes.set_ylabel("taxa")
     # Add margins around the tree to prevent overlapping the axes
@@ -621,7 +630,7 @@ def draw(
                 'Keyword argument "%s=%s" is not in the format '
                 "pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),"
                 " or pyplot_option_name=(dict) " % (key, value)
-            )
+            ) from None
         if isinstance(value, dict):
             getattr(plt, str(key))(**dict(value))
         elif not (isinstance(value[0], tuple)):
