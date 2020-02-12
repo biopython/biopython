@@ -3,5 +3,3 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """A selection of Hidden Markov Model code."""
-
-# File needed on Python 2 to import anything else in this directory
