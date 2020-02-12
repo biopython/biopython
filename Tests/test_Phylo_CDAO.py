@@ -72,11 +72,11 @@ def _test_write_factory(source):
                 pass
             else:
                 # Can't sort lists with None on Python 3 ...
-                self.assertFalse(
-                    None in p1, "Bad input values for %s: %r" % (prop_name, p1)
+                self.assertNotIn(
+                    None, p1, "Bad input values for %s: %r" % (prop_name, p1)
                 )
-                self.assertFalse(
-                    None in p2, "Bad output values for %s: %r" % (prop_name, p2)
+                self.assertNotIn(
+                    None, p2, "Bad output values for %s: %r" % (prop_name, p2)
                 )
                 self.assertEqual(sorted(p1), sorted(p2))
 
