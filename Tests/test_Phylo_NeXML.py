@@ -47,6 +47,7 @@ DUMMY = tempfile.mktemp()
 # ---------------------------------------------------------
 # Parser tests
 
+
 def _test_parse_factory(source):
     """Generate a test method for parse()ing the given source.
 
@@ -86,8 +87,16 @@ def _test_write_factory(source):
             t2 = next(NeXMLIO.Parser(infile).parse())
 
         def assert_property(prop_name):
-            p1 = sorted(getattr(n, prop_name) for n in t1.get_terminals() if getattr(n, prop_name))
-            p2 = sorted(getattr(n, prop_name) for n in t2.get_terminals() if getattr(n, prop_name))
+            p1 = sorted(
+                getattr(n, prop_name)
+                for n in t1.get_terminals()
+                if getattr(n, prop_name)
+            )
+            p2 = sorted(
+                getattr(n, prop_name)
+                for n in t2.get_terminals()
+                if getattr(n, prop_name)
+            )
             self.assertEqual(p1, p2)
 
         for prop_name in ("name", "branch_length", "confidence"):
@@ -99,6 +108,7 @@ def _test_write_factory(source):
 
 class ParseTests(unittest.TestCase):
     """Tests for proper parsing of example NeXML files."""
+
     # Methods added at run time...
 
 
@@ -110,6 +120,7 @@ for n, ex in enumerate(nexml_files):
 
 class WriterTests(unittest.TestCase):
     """NeXML writer tests."""
+
     # Methods added at run time...
 
 

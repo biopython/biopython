@@ -18,7 +18,8 @@ try:
     import networkx
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install networkx if you wish to use it with Bio.Phylo") from None
+        "Install networkx if you wish to use it with Bio.Phylo"
+    ) from None
 
 # Example PhyloXML file
 EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
