@@ -266,7 +266,8 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual(len(structure), 1)
 
-        structure = parser.get_structure("example", open("PDB/1A8O.cif"))
+        with open("PDB/1A8O.cif") as handle:
+            structure = parser.get_structure("example", handle)
         self.assertEqual(len(structure), 1)
 
     def test_point_mutations_main(self):
