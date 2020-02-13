@@ -512,7 +512,7 @@ class TestAbiNonAscii(unittest.TestCase):
 
 class TestAbiWrongMode(unittest.TestCase):
     def setUp(self):
-        open_files(test_data)
+        open_files_wrong_mode(test_data)
 
     def tearDown(self):
         close_files(test_data)
@@ -525,10 +525,10 @@ class TestAbiWrongMode(unittest.TestCase):
 
 class TestAbiFake(unittest.TestCase):
     def setUp(self):
-        open_files(test_data)
+        open_files(test_data_fake)
 
     def tearDown(self):
-        close_files(test_data)
+        close_files(test_data_fake)
 
     def test_file_type(self):
         """Test if error is raised if filetype is not ABIF."""
