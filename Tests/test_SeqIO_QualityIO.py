@@ -155,33 +155,30 @@ class TestFastqErrors(unittest.TestCase):
         if not formats:
             formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
         for format in formats:
-            handle = open(filename)
-            records = SeqIO.parse(handle, format)
-            for i in range(good_count):
-                record = next(records)  # Make sure no errors!
-                self.assertTrue(isinstance(record, SeqRecord))
-            self.assertRaises(ValueError, next, records)
-            handle.close()
+            with open(filename) as handle:
+                records = SeqIO.parse(handle, format)
+                for i in range(good_count):
+                    record = next(records)  # Make sure no errors!
+                    self.assertTrue(isinstance(record, SeqRecord))
+                self.assertRaises(ValueError, next, records)
 
     def check_general_fails(self, filename, good_count):
-        handle = open(filename)
-        tuples = QualityIO.FastqGeneralIterator(handle)
-        for i in range(good_count):
-            title, seq, qual = next(tuples)  # Make sure no errors!
-        self.assertRaises(ValueError, next, tuples)
-        handle.close()
+        with open(filename) as handle:
+            tuples = QualityIO.FastqGeneralIterator(handle)
+            for i in range(good_count):
+                title, seq, qual = next(tuples)  # Make sure no errors!
+            self.assertRaises(ValueError, next, tuples)
 
     def check_general_passes(self, filename, record_count):
-        handle = open(filename)
-        tuples = QualityIO.FastqGeneralIterator(handle)
-        # This "raw" parser doesn't check the ASCII characters which means
-        # certain invalid FASTQ files will get parsed without errors.
-        count = 0
-        for title, seq, qual in tuples:
-            self.assertEqual(len(seq), len(qual))
-            count += 1
-        self.assertEqual(count, record_count)
-        handle.close()
+        with open(filename) as handle:
+            tuples = QualityIO.FastqGeneralIterator(handle)
+            # This "raw" parser doesn't check the ASCII characters which means
+            # certain invalid FASTQ files will get parsed without errors.
+            count = 0
+            for title, seq, qual in tuples:
+                self.assertEqual(len(seq), len(qual))
+                count += 1
+            self.assertEqual(count, record_count)
 
     def check_all_fail(self, filename, count):
         self.check_fails(filename, count)
@@ -372,9 +369,8 @@ class TestQual(unittest.TestCase):
 
     def test_paired(self):
         """Check FASTQ parsing matches FASTA+QUAL parsing."""
-        with open("Quality/example.fasta") as f:
-            with open("Quality/example.qual") as q:
-                records1 = list(QualityIO.PairedFastaQualIterator(f, q))
+        with open("Quality/example.fasta") as f, open("Quality/example.qual") as q:
+            records1 = list(QualityIO.PairedFastaQualIterator(f, q))
         records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         self.assertTrue(compare_records(records1, records2))
 

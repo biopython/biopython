@@ -395,9 +395,8 @@ class TestSeqIO(unittest.TestCase):
             warnings.simplefilter("ignore", PDBConstructionWarning)
 
             # Try as an iterator using handle
-            h = open(t_filename, mode)
-            records = list(SeqIO.parse(handle=h, format=t_format))
-            h.close()
+            with open(t_filename, mode) as h:
+                records = list(SeqIO.parse(handle=h, format=t_format))
             self.assertEqual(
                 len(records),
                 t_count,
@@ -412,54 +411,52 @@ class TestSeqIO(unittest.TestCase):
 
             # Try using the iterator with the next() method
             records3 = []
-            h = open(t_filename, mode)
-            seq_iterator = SeqIO.parse(handle=h, format=t_format)
-            while True:
-                try:
-                    record = next(seq_iterator)
-                except StopIteration:
-                    break
-                self.assertIsNotNone(
-                    record, "Should raise StopIteration, not return None"
-                )
-                records3.append(record)
-            h.close()
+            with open(t_filename, mode) as h:
+                seq_iterator = SeqIO.parse(handle=h, format=t_format)
+                while True:
+                    try:
+                        record = next(seq_iterator)
+                    except StopIteration:
+                        break
+                    self.assertIsNotNone(
+                        record, "Should raise StopIteration, not return None"
+                    )
+                    records3.append(record)
             self.assertEqual(len(records3), t_count)
 
             # Try a mixture of next() and list (a torture test!)
-            h = open(t_filename, mode)
-            seq_iterator = SeqIO.parse(handle=h, format=t_format)
-            try:
-                record = next(seq_iterator)
-            except StopIteration:
-                record = None
-            if record is not None:
-                records4 = [record]
-                records4.extend(list(seq_iterator))
-            else:
-                records4 = []
-            h.close()
+            with open(t_filename, mode) as h:
+                seq_iterator = SeqIO.parse(handle=h, format=t_format)
+                try:
+                    record = next(seq_iterator)
+                except StopIteration:
+                    record = None
+                if record is not None:
+                    records4 = [record]
+                    records4.extend(list(seq_iterator))
+                else:
+                    records4 = []
             self.assertEqual(len(records4), t_count)
 
             # Try a mixture of next() and for loop (a torture test!)
             # with a forward-only-handle
-            if t_format == "abi":
-                # Temp hack
-                h = open(t_filename, mode)
-            else:
-                h = ForwardOnlyHandle(open(t_filename, mode))
-            seq_iterator = SeqIO.parse(h, format=t_format)
-            try:
-                record = next(seq_iterator)
-            except StopIteration:
-                record = None
-            if record is not None:
-                records5 = [record]
-                for record in seq_iterator:
-                    records5.append(record)
-            else:
-                records5 = []
-            h.close()
+            with open(t_filename, mode) as h:
+                if t_format == "abi":
+                    # Temporary hack
+                    fh = h
+                else:
+                    fh = ForwardOnlyHandle(h)
+                seq_iterator = SeqIO.parse(fh, format=t_format)
+                try:
+                    record = next(seq_iterator)
+                except StopIteration:
+                    record = None
+                if record is not None:
+                    records5 = [record]
+                    for record in seq_iterator:
+                        records5.append(record)
+                else:
+                    records5 = []
             self.assertEqual(len(records5), t_count)
 
             for i in range(t_count):
@@ -581,9 +578,8 @@ class TestSeqIO(unittest.TestCase):
                     self.assertIsInstance(base_alpha, given_base.__class__)
                     self.assertEqual(base_alpha, given_base)
                 if t_count == 1:
-                    h = open(t_filename, mode)
-                    record = SeqIO.read(h, t_format, given_alpha)
-                    h.close()
+                    with open(t_filename, mode) as h:
+                        record = SeqIO.read(h, t_format, given_alpha)
                     self.assertIsInstance(base_alpha, given_base.__class__)
                     self.assertEqual(base_alpha, given_base)
             for given_alpha in bad:
