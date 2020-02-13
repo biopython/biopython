@@ -155,30 +155,30 @@ class KEGGTests(unittest.TestCase):
     def test_get_hsa_10458_plus_ece_Z5100_as_aaseq(self):
         with kegg_get("hsa:10458+ece:Z5100", "aaseq") as handle:
             data = SeqIO.parse(handle, "fasta")
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
-        self.assertEqual(len(list(data)), 2)
+            self.assertEqual(handle.url,
+                             "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
+            self.assertEqual(len(list(data)), 2)
 
     def test_get_hsa_10458_list_ece_Z5100_as_aaseq(self):
         with kegg_get(["hsa:10458", "ece:Z5100"], "aaseq") as handle:
             data = SeqIO.parse(handle, "fasta")
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
-        self.assertEqual(len(list(data)), 2)
+            self.assertEqual(handle.url,
+                             "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
+            self.assertEqual(len(list(data)), 2)
 
     def test_get_hsa_10458_plus_ece_Z5100_as_ntseq(self):
         with kegg_get("hsa:10458+ece:Z5100", "ntseq") as handle:
             data = SeqIO.parse(handle, "fasta")
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
-        self.assertEqual(len(list(data)), 2)
+            self.assertEqual(handle.url,
+                             "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
+            self.assertEqual(len(list(data)), 2)
 
     def test_get_hsa_10458_list_ece_Z5100_as_ntseq(self):
         with kegg_get(["hsa:10458", "ece:Z5100"], "ntseq") as handle:
             data = SeqIO.parse(handle, "fasta")
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
-        self.assertEqual(len(list(data)), 2)
+            self.assertEqual(handle.url,
+                             "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
+            self.assertEqual(len(list(data)), 2)
 
     def test_get_hsa05130_image(self):
         with kegg_get("hsa05130", "image") as handle:
