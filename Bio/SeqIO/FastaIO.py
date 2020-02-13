@@ -167,7 +167,7 @@ ncbi_identifiers = {  # used by fasta_ncbi_parser()
     'pir': (('id', 'name'), 'PIR'),
     'sp': (('id', 'name'), 'SWISS-PROT'),
     'pat': (('country', 'patent', 'sequence'), 'patent'),
-    'pgp': (('country', 'application number', 'sequence'), 'pre-grand patent'),
+    'pgp': (('country', 'application number', 'sequence'), 'pre-grant patent'),
     'ref': (('id', 'name'), "RefSeq"),
     'gnl': (('database', 'id'), "General database reference"),
     'gi': (('id',), "GenInfo integrated database"),
@@ -387,7 +387,7 @@ class FastaWriter(SequentialSequenceWriter):
 
         if self.wrap:
             for i in range(0, len(data), self.wrap):
-                self.handle.write(data[i: i + self.wrap] + "\n")
+                self.handle.write(data[i : i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
 
@@ -457,7 +457,7 @@ def as_fasta(record):
     assert "\n" not in data
     assert "\r" not in data
     for i in range(0, len(data), 60):
-        lines.append(data[i: i + 60] + "\n")
+        lines.append(data[i : i + 60] + "\n")
 
     return "".join(lines)
 
