@@ -37,19 +37,12 @@ class ScopTests(unittest.TestCase):
         return True
 
     def testParse(self):
-        f = open("./SCOP/dir.cla.scop.txt_test")
-        try:
+        with open("./SCOP/dir.cla.scop.txt_test") as f:
             cla = f.read()
-            f.close()
-
-            f = open("./SCOP/dir.des.scop.txt_test")
+        with open("./SCOP/dir.des.scop.txt_test") as f:
             des = f.read()
-            f.close()
-
-            f = open("./SCOP/dir.hie.scop.txt_test")
+        with open("./SCOP/dir.hie.scop.txt_test") as f:
             hie = f.read()
-        finally:
-            f.close()
 
         scop = Scop(StringIO(cla), StringIO(des), StringIO(hie))
 
