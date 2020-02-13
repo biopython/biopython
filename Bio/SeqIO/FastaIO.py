@@ -176,7 +176,7 @@ ncbi_identifiers = {
     # 'pgp': (('country', 'application number', 'sequence'), 'pre-grant patent'),
     'ref': (('id', 'name'), "RefSeq"),  # Uniprot's dbxref only
     # 'gnl': (('database', 'id'), "General database reference"),
-    # 'gi': (('id',), "GI"),
+    'gi': (('id',), "GI"),
     'dbj': (('id', 'locus'), 'DDBJ'),  # Uniprot's dbxref only
     # 'prf': (('id', 'name'), 'PRF'),
     'pdb': (('id', 'chain'), 'PDB'),
@@ -200,8 +200,8 @@ def fasta_title_parser_auto(title):
     ...     for title, seq in SimpleFastaParser(handle):
     ...         print(fasta_title_parser_auto(title))
     ...
-    ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', ['EMBL:CAA12345.6'])
-    ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', ['PDB:1A2B'])
+    ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', ['EMBL:CAA12345.6', 'GI:78'])
+    ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', ['GI:10', 'PDB:1A2B'])
 
     """
     # used by fasta_ncbi_parser()
