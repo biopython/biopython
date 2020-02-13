@@ -17,13 +17,12 @@ from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio import Alphabet
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
 
-class _PacketIterator:
+def _iterate(handle):
     """Iterate over the packets of a SnapGene file.
 
     A SnapGene file is made of packets, each packet being a TLV-like
@@ -34,29 +33,22 @@ class _PacketIterator:
         packet's data;
       - the actual data.
     """
+    while True:
+        packet_type = handle.read(1)
+        if len(packet_type) < 1:  # No more packet
+            return
+        packet_type = unpack(">B", packet_type)[0]
 
-    def __init__(self, handle):
-        self.handle = handle
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        type = self.handle.read(1)
-        if len(type) < 1:  # No more packet
-            raise StopIteration
-        type = unpack(">B", type)[0]
-
-        length = self.handle.read(4)
+        length = handle.read(4)
         if len(length) < 4:
             raise ValueError("Unexpected end of packet")
         length = unpack(">I", length)[0]
 
-        data = self.handle.read(length)
+        data = handle.read(length)
         if len(data) < length:
             raise ValueError("Unexpected end of packet")
 
-        return (type, length, data)
+        yield (packet_type, length, data)
 
 
 def _parse_dna_packet(length, data, record):
@@ -209,7 +201,6 @@ _packet_handlers = {
     0x00: _parse_dna_packet,
     0x05: _parse_primers_packet,
     0x06: _parse_notes_packet,
-    0x09: _parse_cookie_packet,
     0x0A: _parse_features_packet,
 }
 
@@ -246,34 +237,44 @@ def _get_child_value(node, name, default=None, error=None):
         return default
 
 
-def SnapGeneIterator(handle):
+def SnapGeneIterator(source):
     """Parse a SnapGene file and return a SeqRecord object.
+
+    Argument source is a file-like object or a path to a file.
 
     Note that a SnapGene file can only contain one sequence, so this
     iterator will always return a single record.
     """
+    try:
+        handle = open(source, "rb")
+    except TypeError:
+        handle = source
+        if handle.read(0) != b"":
+            raise ValueError("SnapGene files must be opened in binary mode.") from None
+
     record = SeqRecord(None)
-    n = 0
 
-    # check if file is empty
-    empty = True
+    try:
+        packets = _iterate(handle)
+        try:
+            packet_type, length, data = next(packets)
+        except StopIteration:
+            raise ValueError("Empty file.") from None
 
-    with as_handle(handle, "rb") as handle:
+        if packet_type != 0x09:
+            raise ValueError("The file does not start with a SnapGene cookie packet")
+        _parse_cookie_packet(length, data, record)
 
-        for n, (type, length, data) in enumerate(_PacketIterator(handle)):
-            empty = False
-            if n == 0 and type != 0x09:
-                raise ValueError(
-                    "The file does not start with a SnapGene cookie packet"
-                )
+        for (packet_type, length, data) in packets:
+            handler = _packet_handlers.get(packet_type)
+            if handler is not None:
+                handler(length, data, record)
 
-            if type in _packet_handlers:
-                _packet_handlers[type](length, data, record)
+    finally:
+        if handle is not source:
+            handle.close()
 
-        if empty:
-            raise ValueError("Empty file.")
+    if not record.seq:
+        raise ValueError("No DNA packet in file")
 
-        if not record.seq:
-            raise ValueError("No DNA packet in file")
-
-        yield record
+    yield record

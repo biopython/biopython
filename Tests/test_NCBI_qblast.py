@@ -147,7 +147,7 @@ class TestQblast(unittest.TestCase):
                                         **additional_args)
         except HTTPError:
             # e.g. a proxy error
-            raise MissingExternalDependencyError("internet connection failed")
+            raise MissingExternalDependencyError("internet connection failed") from None
 
         record = NCBIXML.read(handle)
 

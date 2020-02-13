@@ -10,7 +10,6 @@ from copy import deepcopy
 from itertools import chain
 from collections import OrderedDict
 
-from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 
 from ._base import _BaseSearchObject
@@ -206,72 +205,36 @@ class QueryResult(_BaseSearchObject):
             # validation is handled by __setitem__
             self.append(hit)
 
-    # handle Python 2 OrderedDict behavior
-    if hasattr(OrderedDict, "iteritems"):
+    def __iter__(self):
+        """Iterate over hits."""
+        return iter(self.hits)
 
-        def __iter__(self):
-            """Iterate over hit items."""
-            return self.iterhits()
+    @property
+    def hits(self):
+        """Hit objects contained in the QueryResult."""
+        return list(self._items.values())
 
-        @property
-        def hits(self):
-            """Hit objects contained in the QueryResult."""
-            return self._items.values()
+    @property
+    def hit_keys(self):
+        """Hit IDs of the Hit objects contained in the QueryResult."""
+        return list(self._items.keys())
 
-        @property
-        def hit_keys(self):
-            """Hit IDs of the Hit objects contained in the QueryResult."""
-            return self._items.keys()
+    @property
+    def items(self):
+        """List of tuples of Hit IDs and Hit objects."""
+        return list(self._items.items())
 
-        @property
-        def items(self):
-            """List of tuples of Hit IDs and Hit objects."""
-            return self._items.items()
+    def iterhits(self):
+        """Return an iterator over the Hit objects."""
+        yield from self._items.values()
 
-        def iterhits(self):
-            """Return an iterator over the Hit objects."""
-            yield from self._items.itervalues()  # noqa: B301
+    def iterhit_keys(self):
+        """Return an iterator over the ID of the Hit objects."""
+        yield from self._items
 
-        def iterhit_keys(self):
-            """Return an iterator over the ID of the Hit objects."""
-            yield from self._items
-
-        def iteritems(self):
-            """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            yield from self._items.iteritems()  # noqa: B301
-
-    else:
-
-        def __iter__(self):
-            """Iterate over hits."""
-            return iter(self.hits)
-
-        @property
-        def hits(self):
-            """Hit objects contained in the QueryResult."""
-            return list(self._items.values())
-
-        @property
-        def hit_keys(self):
-            """Hit IDs of the Hit objects contained in the QueryResult."""
-            return list(self._items.keys())
-
-        @property
-        def items(self):
-            """List of tuples of Hit IDs and Hit objects."""
-            return list(self._items.items())
-
-        def iterhits(self):
-            """Return an iterator over the Hit objects."""
-            yield from self._items.values()
-
-        def iterhit_keys(self):
-            """Return an iterator over the ID of the Hit objects."""
-            yield from self._items
-
-        def iteritems(self):
-            """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            yield from self._items.items()
+    def iteritems(self):
+        """Return an iterator yielding tuples of Hit ID and Hit objects."""
+        yield from self._items.items()
 
     def __contains__(self, hit_key):
         """Return True if hit key in items or alternative hit identifiers."""
@@ -300,11 +263,17 @@ class QueryResult(_BaseSearchObject):
 
         # set query id line
         qid_line = "  Query: %s" % self.id
-        if hasattr(self, "seq_len"):
-            qid_line += " (%i)" % self.seq_len
-        if self.description:
-            qid_line += trim_str("\n         %s" % self.description, 80, "...")
+        try:
+            seq_len = self.seq_len
+        except AttributeError:
+            pass
+        else:
+            qid_line += " (%i)" % seq_len
         lines.append(qid_line)
+        if self.description:
+            line = "         %s" % self.description
+            line = line[:77] + "..." if len(line) > 80 else line
+            lines.append(line)
 
         # set target line
         lines.append(" Target: %s" % self.target)
@@ -693,7 +662,7 @@ class QueryResult(_BaseSearchObject):
                 return self.pop(self.__alt_hit_ids[hit_key], default)
             # if key doesn't exist and no default is set, raise a KeyError
             if default is self.__marker:
-                raise KeyError(hit_key)
+                raise KeyError(hit_key) from None
         # if key doesn't exist but a default is set, return the default value
         return default
 
@@ -722,7 +691,6 @@ class QueryResult(_BaseSearchObject):
             raise
 
     def sort(self, key=None, reverse=False, in_place=True):
-        # no cmp argument to make sort more Python 3-like
         """Sort the Hit objects.
 
         :param key: sorting function

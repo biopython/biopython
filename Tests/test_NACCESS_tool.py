@@ -24,7 +24,7 @@ try:
                           stderr=subprocess.STDOUT)
 except OSError:
     raise MissingExternalDependencyError(
-        "Install naccess if you want to use it from Biopython.")
+        "Install naccess if you want to use it from Biopython.") from None
 
 
 class NACCESS_test(unittest.TestCase):

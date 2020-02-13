@@ -82,8 +82,8 @@ class _RestrictedDict(dict):
             or (hasattr(self, "_length") and len(value) != self._length)
         ):
             raise TypeError(
-                "We only allow python sequences (lists, tuples or "
-                "strings) of length {0}.".format(self._length)
+                "We only allow python sequences (lists, tuples or strings) "
+                f"of length {self._length}."
             )
         dict.__setitem__(self, key, value)
 
@@ -228,7 +228,9 @@ class SeqRecord:
                 try:
                     self._per_letter_annotations = _RestrictedDict(length=len(seq))
                 except TypeError:
-                    raise TypeError("seq argument should be a Seq object or similar")
+                    raise TypeError(
+                        "seq argument should be a Seq object or similar"
+                    ) from None
         else:
             # This will be handled via the property set function, which will
             # turn this into a _RestrictedDict and thus ensure all the values
@@ -684,13 +686,10 @@ class SeqRecord:
         annotations, letter_annotations and features are not shown (as they
         would lead to a very long string).
         """
-        return "{0}(seq={1!r}, id={2!r}, name={3!r}, description={4!r}, dbxrefs={5!r})".format(
-            self.__class__.__name__,
-            self.seq,
-            self.id,
-            self.name,
-            self.description,
-            self.dbxrefs,
+        return (
+            f"{self.__class__.__name__}(seq={self.seq!r}, id={self.id!r},"
+            f" name={self.name!r}, description={self.description!r},"
+            f" dbxrefs={self.dbxrefs!r})"
         )
 
     def format(self, format):

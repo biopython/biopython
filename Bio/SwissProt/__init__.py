@@ -224,36 +224,60 @@ class FeatureTable(SeqFeature):
     """
 
 
-def parse(handle):
-    """Read multiple SwissProt records from file handle.
+def parse(source):
+    """Read multiple SwissProt records from file.
+
+    Argument source is a file-like object or a path to a file.
 
     Returns a generator object which yields Bio.SwissProt.Record() objects.
     """
-    while True:
-        record = _read(handle)
-        if not record:
-            return
-        yield record
+    handle = _open(source)
+    try:
+        while True:
+            record = _read(handle)
+            if not record:
+                return
+            yield record
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def read(handle):
-    """Read one SwissProt record from file handle.
+def read(source):
+    """Read one SwissProt record from file.
+
+    Argument source is a file-like object or a path to a file.
 
     Returns a Record() object.
     """
-    record = _read(handle)
-    if not record:
-        raise ValueError("No SwissProt record found")
-    # We should have reached the end of the record by now.
-    # Try to read one more line to be sure:
+    handle = _open(source)
     try:
-        next(handle)
-    except StopIteration:
-        return record
-    raise ValueError("More than one SwissProt record found")
+        record = _read(handle)
+        if not record:
+            raise ValueError("No SwissProt record found")
+        # We should have reached the end of the record by now.
+        # Try to read one more line to be sure:
+        try:
+            next(handle)
+        except StopIteration:
+            return record
+        raise ValueError("More than one SwissProt record found")
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 # Everything below is considered private
+
+
+def _open(source):
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("SwissProt files must be opened in text mode.") from None
+    return handle
 
 
 def _read(handle):

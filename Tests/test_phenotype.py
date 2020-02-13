@@ -13,7 +13,7 @@ try:
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.phenotype.")
+        "Install NumPy if you want to use Bio.phenotype.") from None
 
 import json
 import unittest
@@ -76,7 +76,7 @@ class TestPhenoMicro(unittest.TestCase):
             # run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
             raise ValueError("%s\n\n%s\n\n%s"
-                             % (str(e), repr(handle.read()), repr(records)))
+                             % (str(e), repr(handle.read()), repr(records))) from None
 
         self.assertEqual(p1, records[0])
 

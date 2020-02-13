@@ -93,10 +93,6 @@ class PrintFormat:
     Indent = 4
     linesize = PrefWidth - NameWidth
 
-    def __init__(self):
-        """Initialise."""
-        pass
-
     def print_as(self, what="list"):
         """Print the results as specified.
 
@@ -113,8 +109,6 @@ class PrintFormat:
             self.make_format = self._make_number
         else:
             self.make_format = self._make_list
-
-        return
 
     def format_output(self, dct, title="", s1=""):
         """Summarise results as a nicely formatted string.
@@ -154,7 +148,6 @@ class PrintFormat:
         for backwards compatibility.
         """
         print(self.format_output(dct, title, s1))
-        return
 
     def make_format(self, cut=(), title="", nc=(), s1=""):
         """Virtual method used for formatting results.

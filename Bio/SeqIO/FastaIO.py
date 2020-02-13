@@ -15,7 +15,6 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 
 
-from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -23,8 +22,11 @@ from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 
-def SimpleFastaParser(handle):
+def SimpleFastaParser(source):
     """Iterate over Fasta records as string tuples.
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     For each record a tuple of two strings is returned, the FASTA title
     line (without the leading '>' character), and the sequence (with any
@@ -42,37 +44,48 @@ def SimpleFastaParser(handle):
     ('delta', 'CGCGC')
 
     """
-    # Skip any text before the first record (e.g. blank lines, comments)
-    # This matches the previous implementation where .readline() was used
-    for line in handle:
-        if line[0] == ">":
-            title = line[1:].rstrip()
-            break
-        elif isinstance(line[0], int):
-            # Same exception as for FASTQ files
-            raise ValueError("Is this handle in binary mode not text mode?")
-    else:
-        # no break encountered - probably an empty file
-        return
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("Fasta files must be opened in text mode") from None
 
-    # Main logic
-    # Note, remove trailing whitespace, and any internal spaces
-    # (and any embedded \r which are possible in mangled files
-    # when not opened in universal read lines mode)
-    lines = []
-    for line in handle:
-        if line[0] == ">":
-            yield title, "".join(lines).replace(" ", "").replace("\r", "")
-            lines = []
-            title = line[1:].rstrip()
-            continue
-        lines.append(line.rstrip())
+    try:
+        # Skip any text before the first record (e.g. blank lines, comments)
+        for line in handle:
+            if line[0] == ">":
+                title = line[1:].rstrip()
+                break
+        else:
+            # no break encountered - probably an empty file
+            return
 
-    yield title, "".join(lines).replace(" ", "").replace("\r", "")
+        # Main logic
+        # Note, remove trailing whitespace, and any internal spaces
+        # (and any embedded \r which are possible in mangled files
+        # when not opened in universal read lines mode)
+        lines = []
+        for line in handle:
+            if line[0] == ">":
+                yield title, "".join(lines).replace(" ", "").replace("\r", "")
+                lines = []
+                title = line[1:].rstrip()
+                continue
+            lines.append(line.rstrip())
+
+        yield title, "".join(lines).replace(" ", "").replace("\r", "")
+
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def FastaTwoLineParser(handle):
+def FastaTwoLineParser(source):
     """Iterate over no-wrapping Fasta records as string tuples.
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
 
     Functionally the same as SimpleFastaParser but with a strict
     interpretation of the FASTA format as exactly two lines per
@@ -104,41 +117,52 @@ def FastaTwoLineParser(handle):
     ValueError: Expected FASTA record starting with '>' character. Perhaps this file is using FASTA line wrapping? Got: 'MTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI'
 
     """
+    try:
+        handle = open(source)
+    except TypeError:
+        handle = source
+        if handle.read(0) != "":
+            raise ValueError("Fasta files must be opened in text mode") from None
+
     idx = -1  # for empty file
-    for idx, line in enumerate(handle):
-        if idx % 2 == 0:  # title line
-            if line[0] != ">":
-                raise ValueError(
-                    "Expected FASTA record starting with '>' character. "
-                    "Perhaps this file is using FASTA line wrapping? "
-                    "Got: '{}'".format(line)
-                )
-            title = line[1:].rstrip()
-        else:  # sequence line
-            if line[0] == ">":
-                raise ValueError(
-                    "Two '>' FASTA lines in a row. Missing sequence line "
-                    "if this is strict two-line-per-record FASTA format. "
-                    "Have '>{}' and '{}'".format(title, line)
-                )
-            yield title, line.strip()
+    try:
+        for idx, line in enumerate(handle):
+            if idx % 2 == 0:  # title line
+                if line[0] != ">":
+                    raise ValueError(
+                        "Expected FASTA record starting with '>' character. "
+                        "Perhaps this file is using FASTA line wrapping? "
+                        f"Got: '{line}'"
+                    )
+                title = line[1:].rstrip()
+            else:  # sequence line
+                if line[0] == ">":
+                    raise ValueError(
+                        "Two '>' FASTA lines in a row. Missing sequence line "
+                        "if this is strict two-line-per-record FASTA format. "
+                        f"Have '>{title}' and '{line}'"
+                    )
+                yield title, line.strip()
 
-    if idx == -1:
-        pass  # empty file
-    elif idx % 2 == 0:  # on a title line
-        raise ValueError(
-            "Missing sequence line at end of file if this is strict "
-            "two-line-per-record FASTA format. Have title line '{}'".format(line)
-        )
-    else:
-        assert line[0] != ">", "line[0] == '>' ; this should be impossible!"
+        if idx == -1:
+            pass  # empty file
+        elif idx % 2 == 0:  # on a title line
+            raise ValueError(
+                "Missing sequence line at end of file if this is strict "
+                f"two-line-per-record FASTA format. Have title line '{line}'"
+            )
+        else:
+            assert line[0] != ">", "line[0] == '>' ; this should be impossible!"
+    finally:
+        if handle is not source:
+            handle.close()
 
 
-def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+def FastaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over Fasta records as SeqRecord objects.
 
     Arguments:
-     - handle - input file
+     - source - input stream opened in text mode, or a path to a file
      - alphabet - optional alphabet
      - title2ids - A function that, when given the title of the FASTA
        file (without the beginning >), will return the id, name and
@@ -174,44 +198,14 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     DELTA
 
     """
-    with as_handle(handle) as handle:
-        if title2ids:
-            for title, sequence in SimpleFastaParser(handle):
-                id, name, descr = title2ids(title)
-                yield SeqRecord(
-                    Seq(sequence, alphabet), id=id, name=name, description=descr
-                )
-        else:
-            for title, sequence in SimpleFastaParser(handle):
-                try:
-                    first_word = title.split(None, 1)[0]
-                except IndexError:
-                    assert not title, repr(title)
-                    # Should we use SeqRecord default for no ID?
-                    first_word = ""
-                yield SeqRecord(
-                    Seq(sequence, alphabet),
-                    id=first_word,
-                    name=first_word,
-                    description=title,
-                )
-
-
-def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
-    """Iterate over two-line Fasta records (as SeqRecord objects).
-
-    Arguments:
-     - handle - input file
-     - alphabet - optional alphabet
-
-    This uses a strict interpretation of the FASTA as requiring
-    exactly two lines per record (no line wrapping).
-
-    Only the default title to ID/name/description parsing offered
-    by the relaxed FASTA parser is offered.
-    """
-    with as_handle(handle) as handle:
-        for title, sequence in FastaTwoLineParser(handle):
+    if title2ids:
+        for title, sequence in SimpleFastaParser(source):
+            id, name, descr = title2ids(title)
+            yield SeqRecord(
+                Seq(sequence, alphabet), id=id, name=name, description=descr
+            )
+    else:
+        for title, sequence in SimpleFastaParser(source):
             try:
                 first_word = title.split(None, 1)[0]
             except IndexError:
@@ -226,6 +220,31 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
             )
 
 
+def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
+    """Iterate over two-line Fasta records (as SeqRecord objects).
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
+     - alphabet - optional alphabet
+
+    This uses a strict interpretation of the FASTA as requiring
+    exactly two lines per record (no line wrapping).
+
+    Only the default title to ID/name/description parsing offered
+    by the relaxed FASTA parser is offered.
+    """
+    for title, sequence in FastaTwoLineParser(source):
+        try:
+            first_word = title.split(None, 1)[0]
+        except IndexError:
+            assert not title, repr(title)
+            # Should we use SeqRecord default for no ID?
+            first_word = ""
+        yield SeqRecord(
+            Seq(sequence, alphabet), id=first_word, name=first_word, description=title,
+        )
+
+
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files (OBSOLETE).
 
@@ -233,12 +252,11 @@ class FastaWriter(SequentialSequenceWriter):
     ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
     """
 
-    def __init__(self, handle, wrap=60, record2title=None):
+    def __init__(self, target, wrap=60, record2title=None):
         """Create a Fasta writer (OBSOLETE).
 
         Arguments:
-         - handle - Handle to an output file, e.g. as returned
-           by open(filename, "w")
+         - target - Output stream opened in text mode, or a path to a file.
          - wrap -   Optional line length used to wrap sequence lines.
            Defaults to wrapping the sequence at 60 characters
            Use zero (or None) for no wrapping, giving a single
@@ -268,8 +286,7 @@ class FastaWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
-        self.wrap = None
+        SequentialSequenceWriter.__init__(self, target)
         if wrap:
             if wrap < 1:
                 raise ValueError

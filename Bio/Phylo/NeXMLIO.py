@@ -322,14 +322,19 @@ class Writer:
                 "length": str(clade.branch_length),
                 "typeof": convert_uri("cdao:Edge"),
             }
-            if hasattr(clade, "confidence") and clade.confidence is not None:
-                attrib.update(
-                    {
-                        "property": convert_uri("cdao:has_Support_Value"),
-                        "datatype": "xsd:float",
-                        "content": "%1.2f" % clade.confidence,
-                    }
-                )
+            try:
+                confidence = clade.confidence
+            except AttributeError:
+                pass
+            else:
+                if confidence is not None:
+                    attrib.update(
+                        {
+                            "property": convert_uri("cdao:has_Support_Value"),
+                            "datatype": "xsd:float",
+                            "content": "%1.2f" % confidence,
+                        }
+                    )
             node = ElementTree.SubElement(tree, "edge", **attrib)
 
         if not clade.is_terminal():

@@ -15,14 +15,14 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.QCPSuperimposer.")
+        "Install NumPy if you want to use Bio.QCPSuperimposer.") from None
 
 try:
     from Bio.PDB.QCPSuperimposer import QCPSuperimposer
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "C module in Bio.QCPSuperimposer not compiled")
+        "C module in Bio.PDB.QCPSuperimposer not compiled") from None
 
 
 class QCPSuperimposerTest(unittest.TestCase):

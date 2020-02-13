@@ -183,7 +183,9 @@ def search_count(db, query):
     try:
         return int(data.strip())
     except ValueError:
-        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
+        raise ValueError(
+            "Expected an integer from URL %s, got: %r" % (url, data)
+        ) from None
 
 
 def search_iter(db, query, limit=None, batch=100):
@@ -284,13 +286,13 @@ def search(db, query, offset=None, limit=None, format=None):
         except ValueError:
             raise ValueError(
                 "Offset should be an integer (at least one), not %r" % offset
-            )
+            ) from None
         try:
             limit = int(limit)
         except ValueError:
             raise ValueError(
                 "Limit should be an integer (at least one), not %r" % limit
-            )
+            ) from None
         if offset <= 0:
             raise ValueError("Offset should be at least one, not %i" % offset)
         if limit <= 0:

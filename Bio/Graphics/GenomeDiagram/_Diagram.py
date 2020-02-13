@@ -258,10 +258,7 @@ class Diagram:
 
         """
         # The ReportLab drawToString method, which this function used to call,
-        # just used a StringIO handle with the drawToFile method.
-        # In order to put all our complicated file format specific code in one
-        # place we just used a StringIO handle here, later a BytesIO handle
-        # for Python 3 compatibility.
+        # originally just used a StringIO handle with the drawToFile method.
         #
         # TODO - Rename this method to include keyword bytes?
         from io import BytesIO

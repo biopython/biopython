@@ -19,20 +19,16 @@ class ClaTests(unittest.TestCase):
 
     def testParse(self):
         """Test if all records in a CLA file are being read."""
-        f = open(self.filename)
-        try:
-            count = 0
+        count = 0
+        with open(self.filename) as f:
             records = Cla.parse(f)
             for record in records:
                 count += 1
-            self.assertEqual(count, 14)
-        finally:
-            f.close()
+        self.assertEqual(count, 14)
 
     def testStr(self):
         """Test if we can convert each record to a string correctly."""
-        f = open(self.filename)
-        try:
+        with open(self.filename) as f:
             for line in f:
                 record = Cla.Record(line)
                 # The SCOP Classification file format which can be found at
@@ -51,8 +47,6 @@ class ClaTests(unittest.TestCase):
                                  len(expected_hierarchy))
                 for key, actual_value in actual_hierarchy.items():
                     self.assertEqual(actual_value, expected_hierarchy[key])
-        finally:
-            f.close()
 
     def testError(self):
         """Test if a corrupt record raises the appropriate exception."""

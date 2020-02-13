@@ -457,7 +457,10 @@ class HmmsearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, hit.domain_reported_num)
         self.assertEqual(2, hit.domain_included_num)
-        self.assertEqual("Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1", hit.description)
+        self.assertEqual(
+            "Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1",
+            hit.description,
+        )
         hsp = hit.hsps[0]
         self.assertEqual(1.2e-72, hsp.evalue)
         self.assertEqual(249.3, hsp.bitscore)
@@ -479,7 +482,10 @@ class HmmsearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, hit.domain_reported_num)
         self.assertEqual(2, hit.domain_included_num)
-        self.assertEqual("Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1", hit.description)
+        self.assertEqual(
+            "Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1",
+            hit.description,
+        )
         hsp = hit.hsps[-1]
         self.assertEqual(7.6e-72, hsp.evalue)
         self.assertEqual(246.7, hsp.bitscore)

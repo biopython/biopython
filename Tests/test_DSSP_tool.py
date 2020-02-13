@@ -39,7 +39,7 @@ except OSError:
         dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
     except OSError:
         raise MissingExternalDependencyError(
-            "Install dssp if you want to use it from Biopython.")
+            "Install dssp if you want to use it from Biopython.") from None
 
 
 class DSSP_test(unittest.TestCase):

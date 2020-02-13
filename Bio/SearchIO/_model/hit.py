@@ -8,8 +8,7 @@
 
 from itertools import chain
 
-from Bio._utils import getattr_str, trim_str
-from Bio.SearchIO._utils import allitems, optionalcascade
+from Bio.SearchIO._utils import allitems, optionalcascade, getattr_str
 
 from ._base import _BaseSearchObject
 from .hsp import HSP
@@ -169,17 +168,25 @@ class Hit(_BaseSearchObject):
 
         # set query id line
         qid_line = "Query: %s" % self.query_id
-        if self.query_description:
-            qid_line += trim_str("\n       %s" % self.query_description, 80, "...")
         lines.append(qid_line)
+        if self.query_description:
+            line = "       %s" % self.query_description
+            line = line[:77] + "..." if len(line) > 80 else line
+            lines.append(line)
 
         # set hit id line
         hid_line = "  Hit: %s" % self.id
-        if hasattr(self, "seq_len"):
-            hid_line += " (%i)" % self.seq_len
-        if self.description:
-            hid_line += trim_str("\n       %s" % self.description, 80, "...")
+        try:
+            seq_len = self.seq_len
+        except AttributeError:
+            pass
+        else:
+            hid_line += " (%i)" % seq_len
         lines.append(hid_line)
+        if self.description:
+            line = "       %s" % self.description
+            line = line[:77] + "..." if len(line) > 80 else line
+            lines.append(line)
 
         # set attributes lines
         for key, value in sorted(self.attributes.items()):
@@ -217,12 +224,14 @@ class Hit(_BaseSearchObject):
                 query_end = getattr_str(hsp, "query_end")
                 query_range = "[%s:%s]" % (query_start, query_end)
                 # max column length is 18
-                query_range = trim_str(query_range, 15, "~]")
+                query_range = (
+                    query_range[:13] + "~]" if len(query_range) > 15 else query_range
+                )
                 # hit region
                 hit_start = getattr_str(hsp, "hit_start")
                 hit_end = getattr_str(hsp, "hit_end")
                 hit_range = "[%s:%s]" % (hit_start, hit_end)
-                hit_range = trim_str(hit_range, 21, "~]")
+                hit_range = hit_range[:19] + "~]" if len(hit_range) > 21 else hit_range
                 # append the hsp row
                 lines.append(
                     pattern

@@ -25,7 +25,7 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MarkovModel.")
+        "Install NumPy if you want to use Bio.MarkovModel.") from None
 
 with warnings.catch_warnings():
     # Silence this warning:

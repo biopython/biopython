@@ -285,16 +285,11 @@ class Test_dn_ds(unittest.TestCase):
 
 
 try:
-    from math import lgamma  # New in Python 2.7
-except ImportError:
-    lgamma = None
-
-try:
     import numpy
 except ImportError:
     numpy = None
 
-if numpy and lgamma:
+if numpy:
     class Test_MK(unittest.TestCase):
         def test_mk(self):
             p = SeqIO.index(TEST_ALIGN_FILE7[0][0], "fasta", alphabet=IUPAC.IUPACUnambiguousDNA())

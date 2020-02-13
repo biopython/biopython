@@ -16,12 +16,10 @@ from struct import pack, unpack
 import warnings
 
 from Bio import Alphabet, BiopythonWarning
-from Bio._utils import _read_header
 from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
-from Bio.File import as_handle
 
 
 _seq_types = {
@@ -141,12 +139,21 @@ def _read_feature(handle, record):
     record.features.append(feature)
 
 
-def XdnaIterator(handle):
+def XdnaIterator(source):
     """Parse a Xdna file and return a SeqRecord object.
 
-    Note that this is an "iterator" in name only since a Xdna file always
+    Argument source is a file-like object in binary mode or a path to a file.
+
+    Note that this is an "iterator" in name only since an Xdna file always
     contain a single sequence.
+
     """
+    try:
+        handle = open(source, "rb")
+    except TypeError:
+        handle = source
+        if handle.read(0) != b"":
+            raise ValueError("Xdna files must be opened in binary mode.") from None
     # Parse fixed-size header and do some rudimentary checks
     #
     # The "neg_length" value is the length of the part of the sequence
@@ -156,9 +163,13 @@ def XdnaIterator(handle):
     # as I know, so we ignore that value. SerialCloner has no such concept
     # either and always generates files with a neg_length of zero.
 
-    with as_handle(handle, "rb") as handle:
+    try:
 
-        header = _read_header(handle, 112)
+        header = handle.read(112)
+        if not header:
+            raise ValueError("Empty file.")
+        if len(header) < 112:
+            raise ValueError("Improper header, cannot read 112 bytes from handle")
         (version, type, topology, length, neg_length, com_length) = unpack(
             ">BBB25xII60xI12x", header
         )
@@ -196,6 +207,10 @@ def XdnaIterator(handle):
                 num_features -= 1
 
         yield record
+
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 class XdnaWriter(SequenceWriter):

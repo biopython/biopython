@@ -258,10 +258,8 @@ class TreeTests(unittest.TestCase):
 
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
-        # Because we short circult interation, must close handle explicitly
-        handle = open(EX_MADE)
-        tree = next(PhyloXMLIO.parse(handle))
-        handle.close()
+        with open(EX_MADE) as handle:
+            tree = next(PhyloXMLIO.parse(handle))
         self.assertEqual(tree.name, "testing confidence")
         for conf, type, val in zip(tree.confidences,
                                    ("bootstrap", "probability"),
@@ -330,10 +328,8 @@ class TreeTests(unittest.TestCase):
 
         Also checks ProteinDomain type.
         """
-        # Because we short circult interation, must close handle explicitly
-        handle = open(EX_APAF)
-        tree = next(PhyloXMLIO.parse(handle))
-        handle.close()
+        with open(EX_APAF) as handle:
+            tree = next(PhyloXMLIO.parse(handle))
         clade = tree.clade[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         darch = clade.sequences[0].domain_architecture
         self.assertTrue(isinstance(darch, PX.DomainArchitecture))
@@ -408,11 +404,8 @@ class TreeTests(unittest.TestCase):
 
     def test_Reference(self):
         """Instantiation of Reference objects."""
-        # Because we short circult interation, must close handle explicitly
-        # to avoid a ResourceWarning
-        handle = open(EX_DOLLO)
-        tree = next(PhyloXMLIO.parse(handle))
-        handle.close()
+        with open(EX_DOLLO) as handle:
+            tree = next(PhyloXMLIO.parse(handle))
         reference = tree.clade[0, 0, 0, 0, 0, 0].references[0]
         self.assertTrue(isinstance(reference, PX.Reference))
         self.assertEqual(reference.doi, "10.1038/nature06614")
@@ -517,12 +510,10 @@ class WriterTests(unittest.TestCase):
 
     def _rewrite_and_call(self, orig_fname, test_cases):
         """Parse, rewrite and retest a phyloXML example file."""
-        infile = open(orig_fname)
-        phx = PhyloXMLIO.read(infile)
-        infile.close()
-        outfile = open(DUMMY, "w")
-        PhyloXMLIO.write(phx, outfile)
-        outfile.close()
+        with open(orig_fname) as infile:
+            phx = PhyloXMLIO.read(infile)
+        with open(DUMMY, "w") as outfile:
+            PhyloXMLIO.write(phx, outfile)
         for cls, tests in test_cases:
             inst = cls("setUp")
             for test in tests:

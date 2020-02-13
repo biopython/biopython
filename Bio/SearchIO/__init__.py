@@ -344,22 +344,19 @@ def read(handle, format=None, **kwargs):
     search output file format.
 
     """
-    generator = parse(handle, format, **kwargs)
+    query_results = parse(handle, format, **kwargs)
 
     try:
-        first = next(generator)
+        query_result = next(query_results)
     except StopIteration:
-        raise ValueError("No query results found in handle")
-    else:
-        try:
-            second = next(generator)
-        except StopIteration:
-            second = None
-
-    if second is not None:
+        raise ValueError("No query results found in handle") from None
+    try:
+        next(query_results)
         raise ValueError("More than one query results found in handle")
+    except StopIteration:
+        pass
 
-    return first
+    return query_result
 
 
 def to_dict(qresults, key_function=None):

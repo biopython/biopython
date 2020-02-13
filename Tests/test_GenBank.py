@@ -71,19 +71,16 @@ class TestBasics(unittest.TestCase):
         record_parser = GenBank.RecordParser(debug_level=0)
         for filename in filenames:
             path = os.path.join("GenBank", filename)
-            cur_handle = open(path)
-            compare_handle = open(path)
-            iterator = GenBank.Iterator(cur_handle, record_parser)
-            compare_iterator = GenBank.Iterator(compare_handle)
-            while True:
-                cur_rec = next(iterator)
-                compare_record = next(compare_iterator)
-                if cur_rec is None or compare_record is None:
-                    break
-                output_record = str(cur_rec) + "\n"
-                self.do_comparison(compare_record, output_record)
-            cur_handle.close()
-            compare_handle.close()
+            with open(path) as cur_handle, open(path) as compare_handle:
+                iterator = GenBank.Iterator(cur_handle, record_parser)
+                compare_iterator = GenBank.Iterator(compare_handle)
+                while True:
+                    cur_rec = next(iterator)
+                    compare_record = next(compare_iterator)
+                    if cur_rec is None or compare_record is None:
+                        break
+                    output_record = str(cur_rec) + "\n"
+                    self.do_comparison(compare_record, output_record)
 
     def test_cleaning_features(self):
         """Test the ability to clean up feature values."""
@@ -91,9 +88,9 @@ class TestBasics(unittest.TestCase):
             feature_cleaner=GenBank.utils.FeatureValueCleaner()
         )
         path = "GenBank/arab1.gb"
-        handle = open(path)
-        iterator = GenBank.Iterator(handle, gb_parser)
-        first_record = next(iterator)
+        with open(path) as handle:
+            iterator = GenBank.Iterator(handle, gb_parser)
+            first_record = next(iterator)
         # test for cleaning of translation
         translation_feature = first_record.features[1]
         test_trans = translation_feature.qualifiers["translation"][0]
@@ -101,7 +98,6 @@ class TestBasics(unittest.TestCase):
         self.assertNotIn(
             "\012", test_trans, "Did not clean newlines out of the translation"
         )
-        handle.close()
 
     def test_ensembl_locus(self):
         """Test the ENSEMBL locus line."""
@@ -137,7 +133,16 @@ class TestRecordParser(unittest.TestCase):
         cls.rec_parser = GenBank.RecordParser(debug_level=0)
 
     def perform_record_parser_test(
-        self, record, length, locus, definition, accession, titles, features
+        self,
+        record,
+        length,
+        locus,
+        definition,
+        accession,
+        titles,
+        features,
+        tls=None,
+        tsa=None,
     ):
         self.assertEqual(len(record.sequence), length)
         self.assertEqual(record.locus, locus)
@@ -154,12 +159,16 @@ class TestRecordParser(unittest.TestCase):
             for qualifier, (key, value) in zip(feature1.qualifiers, feature2[2]):
                 self.assertEqual(qualifier.key, key)
                 self.assertEqual(qualifier.value, value)
+        if tls:
+            self.assertEqual(tls, record.tls)
+        if tsa:
+            self.assertEqual(tsa, record.tsa)
 
     def test_record_parser_01(self):
         path = "GenBank/noref.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 1622
         locus = "NM_006141"
         definition = "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA"
@@ -214,274 +223,274 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_02(self):
         path = "GenBank/cor6_6.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
-        length = 513
-        locus = "ATCOR66M"
-        definition = "A.thaliana cor6.6 mRNA"
-        accession = ["X55053"]
-        titles = (
-            "Direct Submission",
-            "cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana",
-        )
-        features = [
-            (
-                "source",
-                "1..513",
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+            length = 513
+            locus = "ATCOR66M"
+            definition = "A.thaliana cor6.6 mRNA"
+            accession = ["X55053"]
+            titles = (
+                "Direct Submission",
+                "cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana",
+            )
+            features = [
                 (
-                    ("/organism=", '"Arabidopsis thaliana"'),
-                    ("/strain=", '"Columbia"'),
-                    ("/db_xref=", '"taxon:3702"'),
-                ),
-            ),
-            ("gene", "50..250", (("/gene=", '"cor6.6"'),)),
-            (
-                "CDS",
-                "50..250",
-                (
-                    ("/gene=", '"cor6.6"'),
-                    ("/note=", '"cold regulated"'),
-                    ("/codon_start=", "1"),
-                    ("/protein_id=", '"CAA38894.1"'),
-                    ("/db_xref=", '"GI:16230"'),
-                    ("/db_xref=", '"SWISS-PROT:P31169"'),
+                    "source",
+                    "1..513",
                     (
-                        "/translation=",
-                        '"MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNFVKDKTGLNK"',
+                        ("/organism=", '"Arabidopsis thaliana"'),
+                        ("/strain=", '"Columbia"'),
+                        ("/db_xref=", '"taxon:3702"'),
                     ),
                 ),
-            ),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
-        record = next(records)
-        length = 880
-        locus = "ATKIN2"
-        definition = "A.thaliana kin2 gene"
-        accession = ["X62281"]
-        titles = (
-            "Direct Submission",
-            "Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana",
-        )
-        features = [
-            (
-                "source",
-                "1..880",
+                ("gene", "50..250", (("/gene=", '"cor6.6"'),)),
                 (
-                    ("/organism=", '"Arabidopsis thaliana"'),
-                    ("/strain=", '"ssp. L. Heynh, Colombia"'),
-                    ("/db_xref=", '"taxon:3702"'),
-                ),
-            ),
-            ("TATA_signal", "9..20", ()),
-            ("exon", "44..160", (("/gene=", '"kin2"'), ("/number=", "1"))),
-            ("prim_transcript", "44..>579", (("/gene=", '"kin2"'),)),
-            ("mRNA", "join(44..160,320..390,504..>579)", (("/gene=", '"kin2"'),)),
-            ("gene", "44..579", (("/gene=", '"kin2"'),)),
-            (
-                "CDS",
-                "join(104..160,320..390,504..579)",
-                (
-                    ("/gene=", '"kin2"'),
-                    ("/codon_start=", "1"),
-                    ("/protein_id=", '"CAA44171.1"'),
-                    ("/db_xref=", '"GI:16354"'),
-                    ("/db_xref=", '"SWISS-PROT:P31169"'),
+                    "CDS",
+                    "50..250",
                     (
-                        "/translation=",
-                        '"MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVNFVKDKTGLNK"',
+                        ("/gene=", '"cor6.6"'),
+                        ("/note=", '"cold regulated"'),
+                        ("/codon_start=", "1"),
+                        ("/protein_id=", '"CAA38894.1"'),
+                        ("/db_xref=", '"GI:16230"'),
+                        ("/db_xref=", '"SWISS-PROT:P31169"'),
+                        (
+                            "/translation=",
+                            '"MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNFVKDKTGLNK"',
+                        ),
                     ),
                 ),
-            ),
-            ("intron", "161..319", (("/gene=", '"kin2"'), ("/number=", "1"))),
-            ("exon", "320..390", (("/gene=", '"kin2"'), ("/number=", "2"))),
-            ("intron", "391..503", (("/gene=", '"kin2"'), ("/number=", "2"))),
-            ("exon", "504..>579", (("/gene=", '"kin2"'), ("/number=", "3"))),
-            ("polyA_signal", "620..625", ()),
-            ("polyA_signal", "641..646", ()),
-            ("polyA_site", "785", ()),
-            ("polyA_site", "800", ()),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
-        record = next(records)
-        length = 441
-        locus = "BNAKINI"
-        definition = "Rapeseed Kin1 protein (kin1) mRNA, complete cds"
-        accession = ["M81224"]
-        titles = ("Nucleotide sequence of a winter B. napus Kin 1 cDNA",)
-        features = [
-            (
-                "source",
-                "1..441",
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
+            record = next(records)
+            length = 880
+            locus = "ATKIN2"
+            definition = "A.thaliana kin2 gene"
+            accession = ["X62281"]
+            titles = (
+                "Direct Submission",
+                "Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana",
+            )
+            features = [
                 (
-                    ("/organism=", '"Brassica napus"'),
-                    ("/cultivar=", '"Jet neuf"'),
-                    ("/db_xref=", '"taxon:3708"'),
-                    ("/dev_stage=", '"cold induced"'),
-                    ("/tissue_type=", '"leaf"'),
-                ),
-            ),
-            ("gene", "34..300", (("/gene=", '"kin1"'),)),
-            (
-                "CDS",
-                "34..231",
-                (
-                    ("/gene=", '"kin1"'),
-                    ("/codon_start=", "1"),
-                    ("/evidence=", "experimental"),
-                    ("/protein_id=", '"AAA32993.1"'),
-                    ("/db_xref=", '"GI:167146"'),
+                    "source",
+                    "1..880",
                     (
-                        "/translation=",
-                        '"MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                        ("/organism=", '"Arabidopsis thaliana"'),
+                        ("/strain=", '"ssp. L. Heynh, Colombia"'),
+                        ("/db_xref=", '"taxon:3702"'),
                     ),
                 ),
-            ),
-            (
-                "polyA_signal",
-                "241..247",
-                (("/gene=", '"kin1"'), ("/note=", '"putative"')),
-            ),
-            (
-                "polyA_signal",
-                "294..300",
-                (("/gene=", '"kin1"'), ("/note=", '"putative"')),
-            ),
-            ("polyA_site", "441", (("/gene=", '"kin1"'),)),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
-        record = next(records)
-        length = 206
-        locus = "ARU237582"
-        definition = "Armoracia rusticana csp14 gene (partial), exons 2-3"
-        accession = ["AJ237582"]
-        titles = ("", "Direct Submission")
-        features = [
-            (
-                "source",
-                "1..206",
+                ("TATA_signal", "9..20", ()),
+                ("exon", "44..160", (("/gene=", '"kin2"'), ("/number=", "1"))),
+                ("prim_transcript", "44..>579", (("/gene=", '"kin2"'),)),
+                ("mRNA", "join(44..160,320..390,504..>579)", (("/gene=", '"kin2"'),)),
+                ("gene", "44..579", (("/gene=", '"kin2"'),)),
                 (
-                    ("/organism=", '"Armoracia rusticana"'),
-                    ("/db_xref=", '"taxon:3704"'),
-                    ("/country=", '"Russia:Bashkortostan"'),
-                ),
-            ),
-            ("mRNA", "join(<1..48,143..>206)", (("/gene=", '"csp14"'),)),
-            ("exon", "1..48", (("/gene=", '"csp14"'), ("/number=", "2"))),
-            ("gene", "1..206", (("/gene=", '"csp14"'),)),
-            (
-                "CDS",
-                "join(<1..48,143..>206)",
-                (
-                    ("/gene=", '"csp14"'),
-                    ("/codon_start=", "2"),
-                    ("/product=", '"cold shock protein"'),
-                    ("/protein_id=", '"CAB39890.1"'),
-                    ("/db_xref=", '"GI:4538893"'),
-                    ("/translation=", '"DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG"'),
-                ),
-            ),
-            ("intron", "49..142", (("/gene=", '"csp14"'), ("/number=", "2"))),
-            ("exon", "143..206", (("/gene=", '"csp14"'), ("/number=", "3"))),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
-        record = next(records)
-        length = 282
-        locus = "BRRBIF72"
-        definition = "Brassica rapa (clone bif72) kin mRNA, complete cds"
-        accession = ["L31939"]
-        titles = ("Nucleotide sequences of kin gene in chinese cabbage",)
-        features = [
-            (
-                "source",
-                "1..282",
-                (
-                    ("/organism=", '"Brassica rapa"'),
-                    ("/db_xref=", '"taxon:3711"'),
-                    ("/dev_stage=", '"flower"'),
-                ),
-            ),
-            ("gene", "24..221", (("/gene=", '"kin"'),)),
-            (
-                "CDS",
-                "24..221",
-                (
-                    ("/gene=", '"kin"'),
-                    ("/codon_start=", "1"),
-                    ("/protein_id=", '"AAA91051.1"'),
-                    ("/db_xref=", '"GI:1209262"'),
+                    "CDS",
+                    "join(104..160,320..390,504..579)",
                     (
-                        "/translation=",
-                        '"MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                        ("/gene=", '"kin2"'),
+                        ("/codon_start=", "1"),
+                        ("/protein_id=", '"CAA44171.1"'),
+                        ("/db_xref=", '"GI:16354"'),
+                        ("/db_xref=", '"SWISS-PROT:P31169"'),
+                        (
+                            "/translation=",
+                            '"MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVNFVKDKTGLNK"',
+                        ),
                     ),
                 ),
-            ),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
-        record = next(records)
-        length = 497
-        locus = "AF297471"
-        definition = "Brassica napus BN28a (BN28a) gene, complete cds"
-        accession = ["AF297471"]
-        titles = (
-            "BN28a, a low temperature-induced gene of Brassica napus",
-            "Direct Submission",
-        )
-        features = [
-            (
-                "source",
-                "1..497",
+                ("intron", "161..319", (("/gene=", '"kin2"'), ("/number=", "1"))),
+                ("exon", "320..390", (("/gene=", '"kin2"'), ("/number=", "2"))),
+                ("intron", "391..503", (("/gene=", '"kin2"'), ("/number=", "2"))),
+                ("exon", "504..>579", (("/gene=", '"kin2"'), ("/number=", "3"))),
+                ("polyA_signal", "620..625", ()),
+                ("polyA_signal", "641..646", ()),
+                ("polyA_site", "785", ()),
+                ("polyA_site", "800", ()),
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
+            record = next(records)
+            length = 441
+            locus = "BNAKINI"
+            definition = "Rapeseed Kin1 protein (kin1) mRNA, complete cds"
+            accession = ["M81224"]
+            titles = ("Nucleotide sequence of a winter B. napus Kin 1 cDNA",)
+            features = [
                 (
-                    ("/organism=", '"Brassica napus"'),
-                    ("/cultivar=", '"Cascade"'),
-                    ("/db_xref=", '"taxon:3708"'),
-                ),
-            ),
-            (
-                "mRNA",
-                "join(<1..54,241..309,423..>497)",
-                (("/gene=", '"BN28a"'), ("/product=", '"BN28a"')),
-            ),
-            ("gene", "<1..>497", (("/gene=", '"BN28a"'),)),
-            (
-                "CDS",
-                "join(1..54,241..309,423..497)",
-                (
-                    ("/gene=", '"BN28a"'),
+                    "source",
+                    "1..441",
                     (
-                        "/note=",
-                        '"low temperature-induced; similar to Brassica napus Kin1 in Accession Number M81224"',
-                    ),
-                    ("/codon_start=", "1"),
-                    ("/product=", '"BN28a"'),
-                    ("/protein_id=", '"AAG13407.1"'),
-                    ("/db_xref=", '"GI:10121869"'),
-                    (
-                        "/translation=",
-                        '"MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                        ("/organism=", '"Brassica napus"'),
+                        ("/cultivar=", '"Jet neuf"'),
+                        ("/db_xref=", '"taxon:3708"'),
+                        ("/dev_stage=", '"cold induced"'),
+                        ("/tissue_type=", '"leaf"'),
                     ),
                 ),
-            ),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
+                ("gene", "34..300", (("/gene=", '"kin1"'),)),
+                (
+                    "CDS",
+                    "34..231",
+                    (
+                        ("/gene=", '"kin1"'),
+                        ("/codon_start=", "1"),
+                        ("/evidence=", "experimental"),
+                        ("/protein_id=", '"AAA32993.1"'),
+                        ("/db_xref=", '"GI:167146"'),
+                        (
+                            "/translation=",
+                            '"MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                        ),
+                    ),
+                ),
+                (
+                    "polyA_signal",
+                    "241..247",
+                    (("/gene=", '"kin1"'), ("/note=", '"putative"')),
+                ),
+                (
+                    "polyA_signal",
+                    "294..300",
+                    (("/gene=", '"kin1"'), ("/note=", '"putative"')),
+                ),
+                ("polyA_site", "441", (("/gene=", '"kin1"'),)),
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
+            record = next(records)
+            length = 206
+            locus = "ARU237582"
+            definition = "Armoracia rusticana csp14 gene (partial), exons 2-3"
+            accession = ["AJ237582"]
+            titles = ("", "Direct Submission")
+            features = [
+                (
+                    "source",
+                    "1..206",
+                    (
+                        ("/organism=", '"Armoracia rusticana"'),
+                        ("/db_xref=", '"taxon:3704"'),
+                        ("/country=", '"Russia:Bashkortostan"'),
+                    ),
+                ),
+                ("mRNA", "join(<1..48,143..>206)", (("/gene=", '"csp14"'),)),
+                ("exon", "1..48", (("/gene=", '"csp14"'), ("/number=", "2"))),
+                ("gene", "1..206", (("/gene=", '"csp14"'),)),
+                (
+                    "CDS",
+                    "join(<1..48,143..>206)",
+                    (
+                        ("/gene=", '"csp14"'),
+                        ("/codon_start=", "2"),
+                        ("/product=", '"cold shock protein"'),
+                        ("/protein_id=", '"CAB39890.1"'),
+                        ("/db_xref=", '"GI:4538893"'),
+                        ("/translation=", '"DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG"'),
+                        ),
+                ),
+                ("intron", "49..142", (("/gene=", '"csp14"'), ("/number=", "2"))),
+                ("exon", "143..206", (("/gene=", '"csp14"'), ("/number=", "3"))),
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
+            record = next(records)
+            length = 282
+            locus = "BRRBIF72"
+            definition = "Brassica rapa (clone bif72) kin mRNA, complete cds"
+            accession = ["L31939"]
+            titles = ("Nucleotide sequences of kin gene in chinese cabbage",)
+            features = [
+                (
+                    "source",
+                    "1..282",
+                    (
+                        ("/organism=", '"Brassica rapa"'),
+                        ("/db_xref=", '"taxon:3711"'),
+                        ("/dev_stage=", '"flower"'),
+                    ),
+                ),
+                ("gene", "24..221", (("/gene=", '"kin"'),)),
+                (
+                    "CDS",
+                    "24..221",
+                    (
+                        ("/gene=", '"kin"'),
+                        ("/codon_start=", "1"),
+                        ("/protein_id=", '"AAA91051.1"'),
+                        ("/db_xref=", '"GI:1209262"'),
+                        (
+                            "/translation=",
+                            '"MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                        ),
+                    ),
+                ),
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
+            record = next(records)
+            length = 497
+            locus = "AF297471"
+            definition = "Brassica napus BN28a (BN28a) gene, complete cds"
+            accession = ["AF297471"]
+            titles = (
+                "BN28a, a low temperature-induced gene of Brassica napus",
+                "Direct Submission",
+            )
+            features = [
+                (
+                    "source",
+                    "1..497",
+                    (
+                        ("/organism=", '"Brassica napus"'),
+                        ("/cultivar=", '"Cascade"'),
+                        ("/db_xref=", '"taxon:3708"'),
+                    ),
+                ),
+                (
+                    "mRNA",
+                    "join(<1..54,241..309,423..>497)",
+                    (("/gene=", '"BN28a"'), ("/product=", '"BN28a"')),
+                ),
+                ("gene", "<1..>497", (("/gene=", '"BN28a"'),)),
+                (
+                    "CDS",
+                    "join(1..54,241..309,423..497)",
+                    (
+                        ("/gene=", '"BN28a"'),
+                        (
+                            "/note=",
+                            '"low temperature-induced; similar to Brassica napus Kin1 in Accession Number M81224"',
+                        ),
+                        ("/codon_start=", "1"),
+                        ("/product=", '"BN28a"'),
+                        ("/protein_id=", '"AAG13407.1"'),
+                        ("/db_xref=", '"GI:10121869"'),
+                        (
+                            "/translation=",
+                            '"MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                        ),
+                    ),
+                ),
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
 
     def test_record_parser_03(self):
         path = "GenBank/iro.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 1326
         locus = "IRO125195"
         definition = "Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195"
@@ -517,9 +526,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_04(self):
         path = "GenBank/pri1.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 741
         locus = "HUGLUT1"
         definition = "Human fructose transporter (GLUT5) gene, promoter and exon 1"
@@ -565,9 +574,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_05(self):
         path = "GenBank/arab1.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 86436
         locus = "AC007323"
         definition = "Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence"
@@ -921,9 +930,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_06(self):
         path = "GenBank/protein_refseq.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 182
         locus = "NP_034640"
         definition = "interferon beta, fibroblast [Mus musculus]"
@@ -980,9 +989,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_07(self):
         path = "GenBank/extra_keywords.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 154329
         locus = "DMBR25B3"
         definition = "Drosophila melanogaster BAC clone BACR25B3"
@@ -1236,9 +1245,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_08(self):
         path = "GenBank/one_of.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 2509
         locus = "HSTMPO1"
         definition = "Human thymopoietin (TMPO) gene, exon 1"
@@ -1311,9 +1320,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_09(self):
         path = "GenBank/NT_019265.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 0
         locus = "NT_019265"
         definition = "Homo sapiens chromosome 1 working draft sequence segment"
@@ -1373,9 +1382,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_10(self):
         path = "GenBank/origin_line.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 180
         locus = "NC_002678"
         definition = "Mesorhizobium loti, complete genome (edited)"
@@ -1402,9 +1411,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_11(self):
         path = "GenBank/blank_seq.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 360
         locus = "NP_001832"
         definition = "cannabinoid receptor 2 (macrophage) [Homo sapiens]"
@@ -1457,9 +1466,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_12(self):
         path = "GenBank/dbsource_wrap.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 64
         locus = "SCX3_BUTOC"
         definition = "Neurotoxin III"
@@ -1505,134 +1514,134 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_13(self):
         path = "GenBank/gbvrl1_start.seq"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
-        length = 2007
-        locus = "AB000048"
-        definition = (
-            "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-        )
-        accession = ["AB000048"]
-        titles = (
-            "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
-            "Direct Submission",
-        )
-        features = [
-            (
-                "source",
-                "1..2007",
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+            length = 2007
+            locus = "AB000048"
+            definition = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            )
+            accession = ["AB000048"]
+            titles = (
+                "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
+                "Direct Submission",
+            )
+            features = [
                 (
-                    ("/organism=", '"Feline panleukopenia virus"'),
-                    ("/mol_type=", '"genomic DNA"'),
-                    ("/isolate=", '"483"'),
-                    ("/db_xref=", '"taxon:10786"'),
-                    ("/lab_host=", '"Felis domesticus"'),
-                ),
-            ),
-            (
-                "CDS",
-                "1..2007",
-                (
-                    ("/codon_start=", "1"),
-                    ("/product=", '"nonstructural protein 1"'),
-                    ("/protein_id=", '"BAA19009.1"'),
-                    ("/db_xref=", '"GI:1769754"'),
+                    "source",
+                    "1..2007",
                     (
-                        "/translation=",
-                        '"MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"',
+                        ("/organism=", '"Feline panleukopenia virus"'),
+                        ("/mol_type=", '"genomic DNA"'),
+                        ("/isolate=", '"483"'),
+                        ("/db_xref=", '"taxon:10786"'),
+                        ("/lab_host=", '"Felis domesticus"'),
                     ),
                 ),
-            ),
-        ]
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
-        length = 2007
-        locus = "AB000049"
-        definition = (
-            "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-        )
-        accession = ["AB000049"]
-        titles = (
-            "Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus",
-            "Direct Submission",
-        )
-        features = [
-            (
-                "source",
-                "1..2007",
                 (
-                    ("/organism=", '"Feline panleukopenia virus"'),
-                    ("/mol_type=", '"genomic DNA"'),
-                    ("/isolate=", '"94-1"'),
-                    ("/db_xref=", '"taxon:10786"'),
-                    ("/lab_host=", '"Felis domesticus"'),
-                ),
-            ),
-            (
-                "CDS",
-                "1..2007",
-                (
-                    ("/codon_start=", "1"),
-                    ("/product=", '"nonstructural protein 1"'),
-                    ("/protein_id=", '"BAA19010.1"'),
-                    ("/db_xref=", '"GI:1769756"'),
+                    "CDS",
+                    "1..2007",
                     (
-                        "/translation=",
-                        '"MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"',
+                        ("/codon_start=", "1"),
+                        ("/product=", '"nonstructural protein 1"'),
+                        ("/protein_id=", '"BAA19009.1"'),
+                        ("/db_xref=", '"GI:1769754"'),
+                        (
+                            "/translation=",
+                            '"MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"',
+                        ),
                     ),
                 ),
-            ),
-        ]
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
-        length = 1755
-        locus = "AB000050"
-        definition = "Feline panleukopenia virus DNA for capsid protein 2, complete cds"
-        accession = ["AB000050"]
-        titles = (
-            "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
-            "Direct Submission",
-        )
-        features = [
-            (
-                "source",
-                "1..1755",
+            ]
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+            length = 2007
+            locus = "AB000049"
+            definition = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            )
+            accession = ["AB000049"]
+            titles = (
+                "Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus",
+                "Direct Submission",
+            )
+            features = [
                 (
-                    ("/organism=", '"Feline panleukopenia virus"'),
-                    ("/mol_type=", '"genomic DNA"'),
-                    ("/isolate=", '"94-1"'),
-                    ("/db_xref=", '"taxon:10786"'),
-                    ("/lab_host=", '"Felis domesticus"'),
-                ),
-            ),
-            (
-                "CDS",
-                "1..1755",
-                (
-                    ("/codon_start=", "1"),
-                    ("/product=", '"capsid protein 2"'),
-                    ("/protein_id=", '"BAA19011.1"'),
-                    ("/db_xref=", '"GI:1769758"'),
+                    "source",
+                    "1..2007",
                     (
-                        "/translation=",
-                        '"MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKFLENGWVEITANSSRLVHLNMPESENYKRVVVNNMDKTAVKGNMALDDTHVQIVTPWSLVDANAWGVWFNPGDWQLIVNTMSELHLVSFEQEIFNVVLKTVSESATQPPTKVYNNDLTASLMVALDSNNTMPFTPAAMRSETLGFYPWKPTIPTPWRYYFQWDRTLIPSHTGTSGTPTNVYHGTDPDDVQFYTIENSVPVHLLRTGDEFATGTFFFDCKPCRLTHTWQTNRALGLPPFLNSLPQSEGATNFGDIGVQQDKRRGVTQMGNTDYITEATIMRPAEVGYSAPYYSFEASTQGPFKTPIAAGRGGAQTDENQAADGDPRYAFGRQHGQKTTTTGETPERFTYIAHQDTGRYPEGDWIQNINFNLPVTNDNVLLPTDPIGGKTGINYTNIFNTYGPLTALNNVPPVYPNGQIWDKEFDTDLKPRLHVNAPFVCQNNCPGQLFVKVAPNLTNEYDPDASANMSRIVTYSDFWWKGKLVFKAKLRASHTWNPIQQMSINVDNQFNYVPNNIGAMKIVYEKSQLAPRKLY"',
+                        ("/organism=", '"Feline panleukopenia virus"'),
+                        ("/mol_type=", '"genomic DNA"'),
+                        ("/isolate=", '"94-1"'),
+                        ("/db_xref=", '"taxon:10786"'),
+                        ("/lab_host=", '"Felis domesticus"'),
                     ),
                 ),
-            ),
-        ]
-        self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
-        )
+                (
+                    "CDS",
+                    "1..2007",
+                    (
+                        ("/codon_start=", "1"),
+                        ("/product=", '"nonstructural protein 1"'),
+                        ("/protein_id=", '"BAA19010.1"'),
+                        ("/db_xref=", '"GI:1769756"'),
+                        (
+                            "/translation=",
+                            '"MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"',
+                        ),
+                    ),
+                ),
+            ]
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+            length = 1755
+            locus = "AB000050"
+            definition = "Feline panleukopenia virus DNA for capsid protein 2, complete cds"
+            accession = ["AB000050"]
+            titles = (
+                "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
+                "Direct Submission",
+            )
+            features = [
+                (
+                    "source",
+                    "1..1755",
+                    (
+                        ("/organism=", '"Feline panleukopenia virus"'),
+                        ("/mol_type=", '"genomic DNA"'),
+                        ("/isolate=", '"94-1"'),
+                        ("/db_xref=", '"taxon:10786"'),
+                        ("/lab_host=", '"Felis domesticus"'),
+                    ),
+                ),
+                (
+                    "CDS",
+                    "1..1755",
+                    (
+                        ("/codon_start=", "1"),
+                        ("/product=", '"capsid protein 2"'),
+                        ("/protein_id=", '"BAA19011.1"'),
+                        ("/db_xref=", '"GI:1769758"'),
+                        (
+                            "/translation=",
+                            '"MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKFLENGWVEITANSSRLVHLNMPESENYKRVVVNNMDKTAVKGNMALDDTHVQIVTPWSLVDANAWGVWFNPGDWQLIVNTMSELHLVSFEQEIFNVVLKTVSESATQPPTKVYNNDLTASLMVALDSNNTMPFTPAAMRSETLGFYPWKPTIPTPWRYYFQWDRTLIPSHTGTSGTPTNVYHGTDPDDVQFYTIENSVPVHLLRTGDEFATGTFFFDCKPCRLTHTWQTNRALGLPPFLNSLPQSEGATNFGDIGVQQDKRRGVTQMGNTDYITEATIMRPAEVGYSAPYYSFEASTQGPFKTPIAAGRGGAQTDENQAADGDPRYAFGRQHGQKTTTTGETPERFTYIAHQDTGRYPEGDWIQNINFNLPVTNDNVLLPTDPIGGKTGINYTNIFNTYGPLTALNNVPPVYPNGQIWDKEFDTDLKPRLHVNAPFVCQNNCPGQLFVKVAPNLTNEYDPDASANMSRIVTYSDFWWKGKLVFKAKLRASHTWNPIQQMSINVDNQFNYVPNNIGAMKIVYEKSQLAPRKLY"',
+                        ),
+                    ),
+                ),
+            ]
+            self.perform_record_parser_test(
+                record, length, locus, definition, accession, titles, features
+            )
 
     def test_record_parser_14(self):
         path = "GenBank/NC_005816.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Premature end of file in sequence data
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Premature end of file in sequence data
+                record = next(records)
         length = 9609
         locus = "NC_005816"
         definition = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence"
@@ -2120,12 +2129,12 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_15(self):
         path = "GenBank/no_end_marker.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Premature end of file in sequence data
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Premature end of file in sequence data
+                record = next(records)
         length = 6497
         locus = "AB070938"
         definition = "Streptomyces avermitilis melanin biosynthetic gene cluster"
@@ -2148,12 +2157,12 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_16(self):
         path = "GenBank/wrong_sequence_indent.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Invalid indentation for sequence line
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Invalid indentation for sequence line
+                record = next(records)
         length = 6497
         locus = "AB070938"
         definition = "Streptomyces avermitilis melanin biosynthetic gene cluster"
@@ -2176,12 +2185,12 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_17(self):
         path = "GenBank/invalid_locus_line_spacing.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Attempting to parse malformed locus line
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Attempting to parse malformed locus line
+                record = next(records)
         length = 6497
         locus = "AB070938"
         definition = "Streptomyces avermitilis melanin biosynthetic gene cluster"
@@ -2204,9 +2213,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_18(self):
         path = "GenBank/empty_feature_qualifier.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 6497
         locus = "AB070938"
         definition = "Streptomyces avermitilis melanin biosynthetic gene cluster"
@@ -2231,12 +2240,12 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_19(self):
         path = "GenBank/invalid_misc_feature.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: line too short to contain a feature
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: line too short to contain a feature
+                record = next(records)
         length = 6497
         locus = "AB070938"
         definition = "Streptomyces avermitilis melanin biosynthetic gene cluster"
@@ -2259,9 +2268,9 @@ class TestRecordParser(unittest.TestCase):
 
     def test_record_parser_20(self):
         path = "GenBank/1MRR_A.gp"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.rec_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
         length = 375
         locus = "1MRR_A"
         definition = "Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization"
@@ -2433,6 +2442,7 @@ class TestRecordParser(unittest.TestCase):
         locus = "GHGH01000000"
         definition = "TSA: Acropora millepora, transcriptome shotgun assembly"
         accession = ["GHGH00000000"]
+        tsa = ["GHGH01000001", "GHGH01126539"]
         titles = (
             "Acropora millepora genome sequencing and assembly",
             "Direct Submission",
@@ -2452,7 +2462,45 @@ class TestRecordParser(unittest.TestCase):
             )
         ]
         self.perform_record_parser_test(
-            record, length, locus, definition, accession, titles, features
+            record, length, locus, definition, accession, titles, features, tsa=tsa
+        )
+
+    def test_record_parser_tls(self):
+        path = "GenBank/tls_KDHP01000000.gb"
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.rec_parser)
+            record = next(records)
+        length = 0
+        locus = "KBUV01000000"
+        definition = "TLS: soil metagenome 16S ribosomal RNA, targeted locus study"
+        accession = ["KBUV00000000"]
+        tls = ["KBUV01000001", "KBUV01003714"]
+        titles = (
+            "Spatio-temporal dynamics of soil bacterial communities in function of Amazon forest phenology",
+            "Direct Submission",
+        )
+        features = [
+            (
+                "source",
+                "1..3714",
+                (
+                    ("/organism=", '"soil metagenome"'),
+                    ("/mol_type=", '"genomic DNA"'),
+                    (
+                        "/isolation_source=",
+                        '"soil samples in a lowland tropical evergreen rain forest in Amazonia"',
+                    ),
+                    ("/db_xref=", '"taxon:410658"'),
+                    ("/environmental_sample", ""),
+                    ("/country=", '"Brazil: Manaus"'),
+                    ("/lat_lon=", '"2.92 S 59.95 W"'),
+                    ("/collection_date=", '"2013"'),
+                    ("/note=", '"metagenomic"'),
+                ),
+            )
+        ]
+        self.perform_record_parser_test(
+            record, length, locus, definition, accession, titles, features, tls=tls
         )
 
 
@@ -2500,9 +2548,9 @@ class TestFeatureParser(unittest.TestCase):
 
     def test_feature_parser_01(self):
         path = "GenBank/noref.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA"
         id = "NM_006141.1"
         name = "NM_006141"
@@ -2590,54 +2638,54 @@ qualifiers:
 
     def test_feature_parser_02(self):
         path = "GenBank/cor6_6.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
-        seq = "AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA"
-        id = "X55053.1"
-        name = "ATCOR66M"
-        description = "A.thaliana cor6.6 mRNA"
-        annotations = {
-            "accessions": ["X55053"],
-            "comment": """\
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
+            seq = "AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA"
+            id = "X55053.1"
+            name = "ATCOR66M"
+            description = "A.thaliana cor6.6 mRNA"
+            annotations = {
+                "accessions": ["X55053"],
+                "comment": """\
 Cor6.6 homologous to KIN1. KIN1 is a cold-regulated Arabidopsis
 gene with suggested similarity to type I fish antifreeze proteins.""",
-            "data_file_division": "PLN",
-            "date": "02-MAR-1992",
-            "gi": "16229",
-            "keywords": [
-                "antifreeze protein homology",
-                "cold-regulated gene",
-                "cor6.6 gene",
-                "KIN1 homology",
-            ],
-            "molecule_type": "mRNA",
-            "organism": "Arabidopsis thaliana",
-            "sequence_version": 1,
-            "source": "thale cress",
-            "taxonomy": [
-                "Eukaryota",
-                "Viridiplantae",
-                "Streptophyta",
-                "Embryophyta",
-                "Tracheophyta",
-                "euphyllophytes",
-                "Spermatophyta",
-                "Magnoliophyta",
-                "eudicotyledons",
-                "Rosidae",
-                "Capparales",
-                "Brassicaceae",
-                "Arabidopsis",
-            ],
-        }
-        references = [
-            "location: [0:513]\nauthors: Thomashow,M.F.\ntitle: Direct Submission\njournal: Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil Sciences, Dept. Microbiology, Michigan State University, East Lansing, Michigan 48824, USA\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:513]\nauthors: Gilmour,S.J., Artus,N.N. and Thomashow,M.F.\ntitle: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 18 (1), 13-21 (1992)\nmedline id: 92119220\npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+                "data_file_division": "PLN",
+                "date": "02-MAR-1992",
+                "gi": "16229",
+                "keywords": [
+                    "antifreeze protein homology",
+                    "cold-regulated gene",
+                    "cor6.6 gene",
+                    "KIN1 homology",
+                ],
+                "molecule_type": "mRNA",
+                "organism": "Arabidopsis thaliana",
+                "sequence_version": 1,
+                "source": "thale cress",
+                "taxonomy": [
+                    "Eukaryota",
+                    "Viridiplantae",
+                    "Streptophyta",
+                    "Embryophyta",
+                    "Tracheophyta",
+                    "euphyllophytes",
+                    "Spermatophyta",
+                    "Magnoliophyta",
+                    "eudicotyledons",
+                    "Rosidae",
+                    "Capparales",
+                    "Brassicaceae",
+                    "Arabidopsis",
+                ],
+            }
+            references = [
+                "location: [0:513]\nauthors: Thomashow,M.F.\ntitle: Direct Submission\njournal: Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil Sciences, Dept. Microbiology, Michigan State University, East Lansing, Michigan 48824, USA\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:513]\nauthors: Gilmour,S.J., Artus,N.N. and Thomashow,M.F.\ntitle: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 18 (1), 13-21 (1992)\nmedline id: 92119220\npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:513](+)
 qualifiers:
@@ -2645,19 +2693,19 @@ qualifiers:
     Key: organism, Value: ['Arabidopsis thaliana']
     Key: strain, Value: ['Columbia']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: gene
 location: [49:250](+)
 qualifiers:
     Key: gene, Value: ['cor6.6']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: [49:250](+)
 qualifiers:
@@ -2668,59 +2716,59 @@ qualifiers:
     Key: protein_id, Value: ['CAA38894.1']
     Key: translation, Value: ['MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNFVKDKTGLNK']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA"
-        id = "X62281.1"
-        name = "ATKIN2"
-        description = "A.thaliana kin2 gene"
-        annotations = {
-            "accessions": ["X62281"],
-            "data_file_division": "PLN",
-            "date": "23-JUL-1992",
-            "gi": "16353",
-            "keywords": ["kin2 gene"],
-            "molecule_type": "DNA",
-            "organism": "Arabidopsis thaliana",
-            "sequence_version": 1,
-            "source": "thale cress",
-            "taxonomy": [
-                "Eukaryota",
-                "Viridiplantae",
-                "Streptophyta",
-                "Embryophyta",
-                "Tracheophyta",
-                "euphyllophytes",
-                "Spermatophyta",
-                "Magnoliophyta",
-                "eudicotyledons",
-                "Rosidae",
-                "Capparales",
-                "Brassicaceae",
-                "Arabidopsis",
-            ],
-        }
-        references = [
-            "location: [0:880]\nauthors: Borg-Franck,M.E.\ntitle: Direct Submission\njournal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:880]\nauthors: Kurkela,S. and Borg-Franck,M.\ntitle: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 19 (4), 689-692 (1992)\nmedline id: 92329728\npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA"
+            id = "X62281.1"
+            name = "ATKIN2"
+            description = "A.thaliana kin2 gene"
+            annotations = {
+                "accessions": ["X62281"],
+                "data_file_division": "PLN",
+                "date": "23-JUL-1992",
+                "gi": "16353",
+                "keywords": ["kin2 gene"],
+                "molecule_type": "DNA",
+                "organism": "Arabidopsis thaliana",
+                "sequence_version": 1,
+                "source": "thale cress",
+                "taxonomy": [
+                    "Eukaryota",
+                    "Viridiplantae",
+                    "Streptophyta",
+                    "Embryophyta",
+                    "Tracheophyta",
+                    "euphyllophytes",
+                    "Spermatophyta",
+                    "Magnoliophyta",
+                    "eudicotyledons",
+                    "Rosidae",
+                    "Capparales",
+                    "Brassicaceae",
+                    "Arabidopsis",
+                ],
+            }
+            references = [
+                "location: [0:880]\nauthors: Borg-Franck,M.E.\ntitle: Direct Submission\njournal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:880]\nauthors: Kurkela,S. and Borg-Franck,M.\ntitle: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 19 (4), 689-692 (1992)\nmedline id: 92329728\npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:880](+)
 qualifiers:
@@ -2728,55 +2776,55 @@ qualifiers:
     Key: organism, Value: ['Arabidopsis thaliana']
     Key: strain, Value: ['ssp. L. Heynh, Colombia']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: TATA_signal
 location: [8:20](+)
 qualifiers:
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: exon
 location: [43:160](+)
 qualifiers:
     Key: gene, Value: ['kin2']
     Key: number, Value: ['1']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: prim_transcript
 location: [43:>579](+)
 qualifiers:
     Key: gene, Value: ['kin2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: mRNA
 location: join{[43:160](+), [319:390](+), [503:>579](+)}
 qualifiers:
     Key: gene, Value: ['kin2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: gene
 location: [43:579](+)
 qualifiers:
     Key: gene, Value: ['kin2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: join{[103:160](+), [319:390](+), [503:579](+)}
 qualifiers:
@@ -2786,130 +2834,130 @@ qualifiers:
     Key: protein_id, Value: ['CAA44171.1']
     Key: translation, Value: ['MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVNFVKDKTGLNK']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: intron
 location: [160:319](+)
 qualifiers:
     Key: gene, Value: ['kin2']
     Key: number, Value: ['1']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: exon
 location: [319:390](+)
 qualifiers:
     Key: gene, Value: ['kin2']
     Key: number, Value: ['2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: intron
 location: [390:503](+)
 qualifiers:
     Key: gene, Value: ['kin2']
     Key: number, Value: ['2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: exon
 location: [503:>579](+)
 qualifiers:
     Key: gene, Value: ['kin2']
     Key: number, Value: ['3']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_signal
 location: [619:625](+)
 qualifiers:
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_signal
 location: [640:646](+)
 qualifiers:
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_site
 location: [784:785](+)
 qualifiers:
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_site
 location: [799:800](+)
 qualifiers:
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC"
-        id = "M81224.1"
-        name = "BNAKINI"
-        description = "Rapeseed Kin1 protein (kin1) mRNA, complete cds"
-        annotations = {
-            "accessions": ["M81224"],
-            "data_file_division": "PLN",
-            "date": "27-APR-1993",
-            "gi": "167145",
-            "keywords": [""],
-            "molecule_type": "mRNA",
-            "organism": "Brassica napus",
-            "sequence_version": 1,
-            "source": "Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA",
-            "taxonomy": [
-                "Eukaryota",
-                "Viridiplantae",
-                "Embryophyta",
-                "Tracheophyta",
-                "Spermatophyta",
-                "Magnoliophyta",
-                "eudicotyledons",
-                "core eudicots",
-                "Rosidae",
-                "eurosids II",
-                "Brassicales",
-                "Brassicaceae",
-                "Brassica",
-            ],
-        }
-        references = [
-            "location: [0:441]\nauthors: Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.\ntitle: Nucleotide sequence of a winter B. napus Kin 1 cDNA\njournal: Plant Physiol. 98, 1532-1534 (1992)\nmedline id: \npubmed id: \ncomment: \n"
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC"
+            id = "M81224.1"
+            name = "BNAKINI"
+            description = "Rapeseed Kin1 protein (kin1) mRNA, complete cds"
+            annotations = {
+                "accessions": ["M81224"],
+                "data_file_division": "PLN",
+                "date": "27-APR-1993",
+                "gi": "167145",
+                "keywords": [""],
+                "molecule_type": "mRNA",
+                "organism": "Brassica napus",
+                "sequence_version": 1,
+                "source": "Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA",
+                "taxonomy": [
+                    "Eukaryota",
+                    "Viridiplantae",
+                    "Embryophyta",
+                    "Tracheophyta",
+                    "Spermatophyta",
+                    "Magnoliophyta",
+                    "eudicotyledons",
+                    "core eudicots",
+                    "Rosidae",
+                    "eurosids II",
+                    "Brassicales",
+                    "Brassicaceae",
+                    "Brassica",
+                ],
+            }
+            references = [
+                "location: [0:441]\nauthors: Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.\ntitle: Nucleotide sequence of a winter B. napus Kin 1 cDNA\njournal: Plant Physiol. 98, 1532-1534 (1992)\nmedline id: \npubmed id: \ncomment: \n"
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:441](+)
 qualifiers:
@@ -2919,19 +2967,19 @@ qualifiers:
     Key: organism, Value: ['Brassica napus']
     Key: tissue_type, Value: ['leaf']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: gene
 location: [33:300](+)
 qualifiers:
     Key: gene, Value: ['kin1']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: [33:231](+)
 qualifiers:
@@ -2942,88 +2990,88 @@ qualifiers:
     Key: protein_id, Value: ['AAA32993.1']
     Key: translation, Value: ['MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_signal
 location: [240:247](+)
 qualifiers:
     Key: gene, Value: ['kin1']
     Key: note, Value: ['putative']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_signal
 location: [293:300](+)
 qualifiers:
     Key: gene, Value: ['kin1']
     Key: note, Value: ['putative']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: polyA_site
 location: [440:441](+)
 qualifiers:
     Key: gene, Value: ['kin1']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC"
-        id = "AJ237582.1"
-        name = "ARU237582"
-        description = "Armoracia rusticana csp14 gene (partial), exons 2-3"
-        annotations = {
-            "accessions": ["AJ237582"],
-            "data_file_division": "PLN",
-            "date": "24-MAR-1999",
-            "gi": "4538892",
-            "keywords": ["cold shock protein", "csp14 gene"],
-            "molecule_type": "DNA",
-            "organism": "Armoracia rusticana",
-            "sequence_version": 1,
-            "source": "horseradish",
-            "taxonomy": [
-                "Eukaryota",
-                "Viridiplantae",
-                "Streptophyta",
-                "Embryophyta",
-                "Tracheophyta",
-                "euphyllophytes",
-                "Spermatophyta",
-                "Magnoliophyta",
-                "eudicotyledons",
-                "Rosidae",
-                "Capparales",
-                "Brassicaceae",
-                "Armoracia",
-            ],
-        }
-        references = [
-            "location: [0:206]\nauthors: Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.\ntitle: \njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:206]\nauthors: Baymiev,A.K.\ntitle: Direct Submission\njournal: Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA\nmedline id: \npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC"
+            id = "AJ237582.1"
+            name = "ARU237582"
+            description = "Armoracia rusticana csp14 gene (partial), exons 2-3"
+            annotations = {
+                "accessions": ["AJ237582"],
+                "data_file_division": "PLN",
+                "date": "24-MAR-1999",
+                "gi": "4538892",
+                "keywords": ["cold shock protein", "csp14 gene"],
+                "molecule_type": "DNA",
+                "organism": "Armoracia rusticana",
+                "sequence_version": 1,
+                "source": "horseradish",
+                "taxonomy": [
+                    "Eukaryota",
+                    "Viridiplantae",
+                    "Streptophyta",
+                    "Embryophyta",
+                    "Tracheophyta",
+                    "euphyllophytes",
+                    "Spermatophyta",
+                    "Magnoliophyta",
+                    "eudicotyledons",
+                    "Rosidae",
+                    "Capparales",
+                    "Brassicaceae",
+                    "Armoracia",
+                ],
+            }
+            references = [
+                "location: [0:206]\nauthors: Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.\ntitle: \njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:206]\nauthors: Baymiev,A.K.\ntitle: Direct Submission\njournal: Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA\nmedline id: \npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:206](+)
 qualifiers:
@@ -3031,38 +3079,38 @@ qualifiers:
     Key: db_xref, Value: ['taxon:3704']
     Key: organism, Value: ['Armoracia rusticana']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: mRNA
 location: join{[<0:48](+), [142:>206](+)}
 qualifiers:
     Key: gene, Value: ['csp14']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: exon
 location: [0:48](+)
 qualifiers:
     Key: gene, Value: ['csp14']
     Key: number, Value: ['2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: gene
 location: [0:206](+)
 qualifiers:
     Key: gene, Value: ['csp14']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: join{[<0:48](+), [142:>206](+)}
 qualifiers:
@@ -3073,78 +3121,78 @@ qualifiers:
     Key: protein_id, Value: ['CAB39890.1']
     Key: translation, Value: ['DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: intron
 location: [48:142](+)
 qualifiers:
     Key: gene, Value: ['csp14']
     Key: number, Value: ['2']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: exon
 location: [142:206](+)
 qualifiers:
     Key: gene, Value: ['csp14']
     Key: number, Value: ['3']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT"
-        id = "L31939.1"
-        name = "BRRBIF72"
-        description = "Brassica rapa (clone bif72) kin mRNA, complete cds"
-        annotations = {
-            "accessions": ["L31939"],
-            "data_file_division": "PLN",
-            "date": "01-MAR-1996",
-            "gi": "1209261",
-            "keywords": [""],
-            "molecule_type": "mRNA",
-            "organism": "Brassica rapa",
-            "sequence_version": 1,
-            "source": "Brassica rapa flower cDNA to mRNA",
-            "taxonomy": [
-                "Eukaryota",
-                "Viridiplantae",
-                "Embryophyta",
-                "Tracheophyta",
-                "Spermatophyta",
-                "Magnoliophyta",
-                "eudicotyledons",
-                "core eudicots",
-                "Rosidae",
-                "eurosids II",
-                "Brassicales",
-                "Brassicaceae",
-                "Brassica",
-            ],
-        }
-        references = [
-            "location: [0:282]\nauthors: Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.\ntitle: Nucleotide sequences of kin gene in chinese cabbage\njournal: Unpublished (1994)\nmedline id: \npubmed id: \ncomment: \n"
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT"
+            id = "L31939.1"
+            name = "BRRBIF72"
+            description = "Brassica rapa (clone bif72) kin mRNA, complete cds"
+            annotations = {
+                "accessions": ["L31939"],
+                "data_file_division": "PLN",
+                "date": "01-MAR-1996",
+                "gi": "1209261",
+                "keywords": [""],
+                "molecule_type": "mRNA",
+                "organism": "Brassica rapa",
+                "sequence_version": 1,
+                "source": "Brassica rapa flower cDNA to mRNA",
+                "taxonomy": [
+                    "Eukaryota",
+                    "Viridiplantae",
+                    "Embryophyta",
+                    "Tracheophyta",
+                    "Spermatophyta",
+                    "Magnoliophyta",
+                    "eudicotyledons",
+                    "core eudicots",
+                    "Rosidae",
+                    "eurosids II",
+                    "Brassicales",
+                    "Brassicaceae",
+                    "Brassica",
+                ],
+            }
+            references = [
+                "location: [0:282]\nauthors: Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.\ntitle: Nucleotide sequences of kin gene in chinese cabbage\njournal: Unpublished (1994)\nmedline id: \npubmed id: \ncomment: \n"
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:282](+)
 qualifiers:
@@ -3152,19 +3200,19 @@ qualifiers:
     Key: dev_stage, Value: ['flower']
     Key: organism, Value: ['Brassica rapa']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: gene
 location: [23:221](+)
 qualifiers:
     Key: gene, Value: ['kin']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: [23:221](+)
 qualifiers:
@@ -3174,59 +3222,59 @@ qualifiers:
     Key: protein_id, Value: ['AAA91051.1']
     Key: translation, Value: ['MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLVKEKTGMNK']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG"
-        id = "AF297471.1"
-        name = "AF297471"
-        description = "Brassica napus BN28a (BN28a) gene, complete cds"
-        annotations = {
-            "accessions": ["AF297471"],
-            "data_file_division": "PLN",
-            "date": "14-SEP-2000",
-            "gi": "10121868",
-            "keywords": [""],
-            "molecule_type": "DNA",
-            "organism": "Brassica napus",
-            "sequence_version": 1,
-            "source": "rape",
-            "taxonomy": [
-                "Eukaryota",
-                "Viridiplantae",
-                "Embryophyta",
-                "Tracheophyta",
-                "Spermatophyta",
-                "Magnoliophyta",
-                "eudicotyledons",
-                "core eudicots",
-                "Rosidae",
-                "eurosids II",
-                "Brassicales",
-                "Brassicaceae",
-                "Brassica",
-            ],
-        }
-        references = [
-            "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle: BN28a, a low temperature-induced gene of Brassica napus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle: Direct Submission\njournal: Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada\nmedline id: \npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG"
+            id = "AF297471.1"
+            name = "AF297471"
+            description = "Brassica napus BN28a (BN28a) gene, complete cds"
+            annotations = {
+                "accessions": ["AF297471"],
+                "data_file_division": "PLN",
+                "date": "14-SEP-2000",
+                "gi": "10121868",
+                "keywords": [""],
+                "molecule_type": "DNA",
+                "organism": "Brassica napus",
+                "sequence_version": 1,
+                "source": "rape",
+                "taxonomy": [
+                    "Eukaryota",
+                    "Viridiplantae",
+                    "Embryophyta",
+                    "Tracheophyta",
+                    "Spermatophyta",
+                    "Magnoliophyta",
+                    "eudicotyledons",
+                    "core eudicots",
+                    "Rosidae",
+                    "eurosids II",
+                    "Brassicales",
+                    "Brassicaceae",
+                    "Brassica",
+                ],
+            }
+            references = [
+                "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle: BN28a, a low temperature-induced gene of Brassica napus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle: Direct Submission\njournal: Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada\nmedline id: \npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:497](+)
 qualifiers:
@@ -3234,29 +3282,29 @@ qualifiers:
     Key: db_xref, Value: ['taxon:3708']
     Key: organism, Value: ['Brassica napus']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: mRNA
 location: join{[<0:54](+), [240:309](+), [422:>497](+)}
 qualifiers:
     Key: gene, Value: ['BN28a']
     Key: product, Value: ['BN28a']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: gene
 location: [<0:>497](+)
 qualifiers:
     Key: gene, Value: ['BN28a']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: join{[0:54](+), [240:309](+), [422:497](+)}
 qualifiers:
@@ -3268,27 +3316,27 @@ qualifiers:
     Key: protein_id, Value: ['AAG13407.1']
     Key: translation, Value: ['MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
 
     def test_feature_parser_03(self):
         path = "GenBank/iro.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCT...AAA"
         id = "AL109817.1"
         name = "IRO125195"
@@ -3405,9 +3453,9 @@ qualifiers:
 
     def test_feature_parser_04(self):
         path = "GenBank/pri1.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAA...GCA"
         id = "U05344.1"
         name = "HUGLUT1"
@@ -3511,9 +3559,9 @@ qualifiers:
 
     def test_feature_parser_05(self):
         path = "GenBank/arab1.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGG...CTT"
         id = "AC007323.5"
         name = "AC007323"
@@ -3852,9 +3900,9 @@ qualifiers:
 
     def test_feature_parser_06(self):
         path = "GenBank/protein_refseq.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYR...FQN"
         id = "NP_034640.1"
         name = "NP_034640"
@@ -3980,9 +4028,9 @@ qualifiers:
 
     def test_feature_parser_07(self):
         path = "GenBank/extra_keywords.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCTGCAGGGTGTGGGAA...TTG"
         id = "AL138972.1"
         name = "DMBR25B3"
@@ -4346,9 +4394,9 @@ qualifiers:
 
     def test_feature_parser_08(self):
         path = "GenBank/one_of.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAAACCTACGGCAAGCA...GGC"
         id = "U18266.1"
         name = "HSTMPO1"
@@ -4470,9 +4518,9 @@ qualifiers:
 
     def test_feature_parser_09(self):
         path = "GenBank/NT_019265.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNN"
         id = "NT_019265.6"
         name = "NT_019265"
@@ -4584,9 +4632,9 @@ qualifiers:
 
     def test_feature_parser_10(self):
         path = "GenBank/origin_line.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTCGATTAAAAGCGGTA...CGC"
         id = "NC_002678.1"
         name = "NC_002678"
@@ -4652,9 +4700,9 @@ qualifiers:
 
     def test_feature_parser_11(self):
         path = "GenBank/blank_seq.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAV...SDC"
         id = "NP_001832.1"
         name = "NP_001832"
@@ -4766,9 +4814,9 @@ qualifiers:
 
     def test_feature_parser_12(self):
         path = "GenBank/dbsource_wrap.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDH...RCN"
         id = "P01485"
         name = "SCX3_BUTOC"
@@ -4890,41 +4938,41 @@ qualifiers:
 
     def test_feature_parser_13(self):
         path = "GenBank/gbvrl1_start.seq"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
-        seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
-        id = "AB000048.1"
-        name = "AB000048"
-        description = (
-            "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-        )
-        annotations = {
-            "accessions": ["AB000048"],
-            "data_file_division": "VRL",
-            "date": "05-FEB-1999",
-            "gi": "1769753",
-            "keywords": ["nonstructural protein 1"],
-            "molecule_type": "DNA",
-            "organism": "Feline panleukopenia virus",
-            "sequence_version": 1,
-            "source": "Feline panleukopenia virus",
-            "taxonomy": [
-                "Viruses",
-                "ssDNA viruses",
-                "Parvoviridae",
-                "Parvovirinae",
-                "Parvovirus",
-            ],
-            "topology": "linear",
-        }
-        references = [
-            "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
+            seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
+            id = "AB000048.1"
+            name = "AB000048"
+            description = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            )
+            annotations = {
+                "accessions": ["AB000048"],
+                "data_file_division": "VRL",
+                "date": "05-FEB-1999",
+                "gi": "1769753",
+                "keywords": ["nonstructural protein 1"],
+                "molecule_type": "DNA",
+                "organism": "Feline panleukopenia virus",
+                "sequence_version": 1,
+                "source": "Feline panleukopenia virus",
+                "taxonomy": [
+                    "Viruses",
+                    "ssDNA viruses",
+                    "Parvoviridae",
+                    "Parvovirinae",
+                    "Parvovirus",
+                ],
+                "topology": "linear",
+            }
+            references = [
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:2007](+)
 qualifiers:
@@ -4934,10 +4982,10 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Feline panleukopenia virus']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: [0:2007](+)
 qualifiers:
@@ -4947,54 +4995,55 @@ qualifiers:
     Key: protein_id, Value: ['BAA19009.1']
     Key: translation, Value: ['MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
-        id = "AB000049.1"
-        name = "AB000049"
-        description = (
-            "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-        )
-        annotations = {
-            "accessions": ["AB000049"],
-            "data_file_division": "VRL",
-            "date": "05-FEB-1999",
-            "gi": "1769755",
-            "keywords": ["nonstructural protein 1"],
-            "molecule_type": "DNA",
-            "organism": "Feline panleukopenia virus",
-            "sequence_version": 1,
-            "source": "Feline panleukopenia virus",
-            "taxonomy": [
-                "Viruses",
-                "ssDNA viruses",
-                "Parvoviridae",
-                "Parvovirinae",
-                "Parvovirus",
-            ],
-            "topology": "linear",
-        }
-        references = [
-            "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.maxDiff = None
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
+            id = "AB000049.1"
+            name = "AB000049"
+            description = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            )
+            annotations = {
+                "accessions": ["AB000049"],
+                "data_file_division": "VRL",
+                "date": "05-FEB-1999",
+                "gi": "1769755",
+                "keywords": ["nonstructural protein 1"],
+                "molecule_type": "DNA",
+                "organism": "Feline panleukopenia virus",
+                "sequence_version": 1,
+                "source": "Feline panleukopenia virus",
+                "taxonomy": [
+                    "Viruses",
+                    "ssDNA viruses",
+                    "Parvoviridae",
+                    "Parvovirinae",
+                    "Parvovirus",
+                ],
+                "topology": "linear",
+            }
+            references = [
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:2007](+)
 qualifiers:
@@ -5004,10 +5053,10 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Feline panleukopenia virus']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: [0:2007](+)
 qualifiers:
@@ -5017,54 +5066,54 @@ qualifiers:
     Key: protein_id, Value: ['BAA19010.1']
     Key: translation, Value: ['MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
-        record = next(records)
-        seq = "ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAA...TAA"
-        id = "AB000050.1"
-        name = "AB000050"
-        description = (
-            "Feline panleukopenia virus DNA for capsid protein 2, complete cds"
-        )
-        annotations = {
-            "accessions": ["AB000050"],
-            "data_file_division": "VRL",
-            "date": "05-FEB-1999",
-            "gi": "1769757",
-            "keywords": ["capsid protein 2"],
-            "molecule_type": "DNA",
-            "organism": "Feline panleukopenia virus",
-            "sequence_version": 1,
-            "source": "Feline panleukopenia virus",
-            "taxonomy": [
-                "Viruses",
-                "ssDNA viruses",
-                "Parvoviridae",
-                "Parvovirinae",
-                "Parvovirus",
-            ],
-            "topology": "linear",
-        }
-        references = [
-            "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
-        ]
-        features = (
-            (
-                """\
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
+            record = next(records)
+            seq = "ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAA...TAA"
+            id = "AB000050.1"
+            name = "AB000050"
+            description = (
+                "Feline panleukopenia virus DNA for capsid protein 2, complete cds"
+            )
+            annotations = {
+                "accessions": ["AB000050"],
+                "data_file_division": "VRL",
+                "date": "05-FEB-1999",
+                "gi": "1769757",
+                "keywords": ["capsid protein 2"],
+                "molecule_type": "DNA",
+                "organism": "Feline panleukopenia virus",
+                "sequence_version": 1,
+                "source": "Feline panleukopenia virus",
+                "taxonomy": [
+                    "Viruses",
+                    "ssDNA viruses",
+                    "Parvoviridae",
+                    "Parvovirinae",
+                    "Parvovirus",
+                ],
+                "topology": "linear",
+            }
+            references = [
+                "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
+            ]
+            features = (
+                (
+                    """\
 type: source
 location: [0:1755](+)
 qualifiers:
@@ -5074,10 +5123,10 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Feline panleukopenia virus']
 """,
-                1,
-            ),
-            (
-                """\
+                    1,
+                ),
+                (
+                    """\
 type: CDS
 location: [0:1755](+)
 qualifiers:
@@ -5087,30 +5136,30 @@ qualifiers:
     Key: protein_id, Value: ['BAA19011.1']
     Key: translation, Value: ['MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKFLENGWVEITANSSRLVHLNMPESENYKRVVVNNMDKTAVKGNMALDDTHVQIVTPWSLVDANAWGVWFNPGDWQLIVNTMSELHLVSFEQEIFNVVLKTVSESATQPPTKVYNNDLTASLMVALDSNNTMPFTPAAMRSETLGFYPWKPTIPTPWRYYFQWDRTLIPSHTGTSGTPTNVYHGTDPDDVQFYTIENSVPVHLLRTGDEFATGTFFFDCKPCRLTHTWQTNRALGLPPFLNSLPQSEGATNFGDIGVQQDKRRGVTQMGNTDYITEATIMRPAEVGYSAPYYSFEASTQGPFKTPIAAGRGGAQTDENQAADGDPRYAFGRQHGQKTTTTGETPERFTYIAHQDTGRYPEGDWIQNINFNLPVTNDNVLLPTDPIGGKTGINYTNIFNTYGPLTALNNVPPVYPNGQIWDKEFDTDLKPRLHVNAPFVCQNNCPGQLFVKVAPNLTNEYDPDASANMSRIVTYSDFWWKGKLVFKAKLRASHTWNPIQQMSINVDNQFNYVPNNIGAMKIVYEKSQLAPRKLY']
 """,
-                1,
-            ),
-        )
-        dbxrefs = []
-        self.perform_feature_parser_test(
-            record,
-            seq,
-            id,
-            name,
-            description,
-            annotations,
-            references,
-            features,
-            dbxrefs,
-        )
+                    1,
+                ),
+            )
+            dbxrefs = []
+            self.perform_feature_parser_test(
+                record,
+                seq,
+                id,
+                name,
+                description,
+                annotations,
+                references,
+                features,
+                dbxrefs,
+            )
 
     def test_feature_parser_14(self):
         path = "GenBank/NC_005816.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Premature end of file in sequence data
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Premature end of file in sequence data
+                record = next(records)
         seq = "TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG"
         id = "NC_005816.1"
         name = "NC_005816"
@@ -5660,12 +5709,12 @@ qualifiers:
 
     def test_feature_parser_15(self):
         path = "GenBank/no_end_marker.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Premature end of file in sequence data
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Premature end of file in sequence data
+                record = next(records)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -5720,12 +5769,12 @@ qualifiers:
 
     def test_feature_parser_16(self):
         path = "GenBank/wrong_sequence_indent.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Invalid indentation for sequence line
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Invalid indentation for sequence line
+                record = next(records)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -5780,12 +5829,12 @@ qualifiers:
 
     def test_feature_parser_17(self):
         path = "GenBank/invalid_locus_line_spacing.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Attempting to parse malformed locus line
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Attempting to parse malformed locus line
+                record = next(records)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -5839,9 +5888,9 @@ qualifiers:
 
     def test_feature_parser_18(self):
         path = "GenBank/empty_feature_qualifier.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            record = next(records)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -5897,12 +5946,12 @@ qualifiers:
 
     def test_feature_parser_19(self):
         path = "GenBank/invalid_misc_feature.gb"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: line too short to contain a feature
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: line too short to contain a feature
+                record = next(records)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -5957,12 +6006,12 @@ qualifiers:
 
     def test_feature_parser_20(self):
         path = "GenBank/1MRR_A.gp"
-        handle = open(path)
-        records = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # BiopythonParserWarning: Dropping bond qualifier in feature location
-            record = next(records)
+        with open(path) as handle:
+            records = GenBank.Iterator(handle, self.feat_parser)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                # BiopythonParserWarning: Dropping bond qualifier in feature location
+                record = next(records)
         seq = "AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL"
         id = "1MRR_A"
         name = "1MRR_A"
@@ -6617,7 +6666,7 @@ KEYWORDS    """
             record.annotations["structured_comment"]["MIENS-Data"]["environment"],
             "Temperate shelf and sea biome [ENVO:00000895], "
             "coastal water body [ENVO:02000049], "
-            "coastal water [ENVO:00002150]"
+            "coastal water [ENVO:00002150]",
         )
 
     def test_locus_line_topogoly(self):

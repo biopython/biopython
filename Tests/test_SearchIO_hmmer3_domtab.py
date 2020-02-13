@@ -230,7 +230,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("gi|22748937|ref|NP_065801.1|", hsp.query_id)
         self.assertEqual(2, hsp.domain_index)
         self.assertEqual(0.35, hsp.evalue_cond)
-        self.assertEqual(2.4e+03, hsp.evalue)
+        self.assertEqual(2.4e03, hsp.evalue)
         self.assertEqual(-1.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(111, hsp.hit_start)
@@ -271,7 +271,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("gi|22748937|ref|NP_065801.1|", hsp.query_id)
         self.assertEqual(2, hsp.domain_index)
         self.assertEqual(1.2, hsp.evalue_cond)
-        self.assertEqual(8e+03, hsp.evalue)
+        self.assertEqual(8e03, hsp.evalue)
         self.assertEqual(-3.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(56, hsp.hit_start)
@@ -372,7 +372,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual("gi|125490392|ref|NP_038661.2|", hsp.query_id)
         self.assertEqual(2, hsp.domain_index)
         self.assertEqual(0.19, hsp.evalue_cond)
-        self.assertEqual(5.2e+02, hsp.evalue)
+        self.assertEqual(5.2e02, hsp.evalue)
         self.assertEqual(0.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(38, hsp.hit_start)
@@ -581,7 +581,10 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(8.5e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
-        self.assertEqual("Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1", hit.description)
+        self.assertEqual(
+            "Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1",
+            hit.description,
+        )
         hsp = hit.hsps[0]
         self.assertEqual("sp|Q9WUT3|KS6A2_MOUSE", hsp.hit_id)
         self.assertEqual("Pkinase", hsp.query_id)
@@ -620,7 +623,10 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
-        self.assertEqual("Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1", hit.description)
+        self.assertEqual(
+            "Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1",
+            hit.description,
+        )
         hsp = hit.hsps[0]
         self.assertEqual("sp|Q9WUT3|KS6A2_MOUSE", hsp.hit_id)
         self.assertEqual("Pkinase", hsp.query_id)

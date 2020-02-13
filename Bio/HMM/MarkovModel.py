@@ -667,17 +667,11 @@ class HiddenMarkovModel:
         and log-transformed values.
         """
         log_prob = copy.copy(probability)
-        try:
-            neg_inf = float("-inf")
-        except ValueError:
-            # On Python 2.5 or older that was handled in C code,
-            # and failed on Windows XP 32bit
-            neg_inf = -1e400
         for key in log_prob:
             prob = log_prob[key]
             if prob > 0:
                 log_prob[key] = math.log(log_prob[key])
             else:
-                log_prob[key] = neg_inf
+                log_prob[key] = -math.inf
 
         return log_prob

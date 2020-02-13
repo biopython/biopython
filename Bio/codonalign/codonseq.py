@@ -93,8 +93,8 @@ class CodonSeq(Seq):
             for i in self.rf_table:
                 if self._data[i : i + 3] not in alphabet.letters:
                     raise ValueError(
-                        "Sequence contain codon not in the alphabet "
-                        "({0})! ".format(self._data[i : i + 3])
+                        "Sequence contain codon not in the alphabet"
+                        f" ({self._data[i:i + 3]})!"
                     )
         else:
             # if gap_char in self._data:
@@ -112,9 +112,8 @@ class CodonSeq(Seq):
             for i in rf_table:
                 if seq_ungapped[i : i + 3] not in alphabet.letters:
                     raise ValueError(
-                        "Sequence contain undefined letters "
-                        "from alphabet "
-                        "({0})!".format(seq_ungapped[i : i + 3])
+                        "Sequence contain undefined letters from alphabet"
+                        f" ({seq_ungapped[i:i + 3]})!"
                     )
             self.rf_table = rf_table
 
@@ -206,8 +205,8 @@ class CodonSeq(Seq):
                 amino_acids.append(codon_table.forward_table[codon])
             except KeyError:
                 raise RuntimeError(
-                    "Unknown codon detected ({0}). Did you forget to specify the "
-                    "ungap_seq argument?".format(codon)
+                    f"Unknown codon detected ({codon}). Did you"
+                    " forget to specify the ungap_seq argument?"
                 )
         return "".join(amino_acids)
 
@@ -363,10 +362,8 @@ def cal_dn_ds(
         )
     if len(codon_seq1.get_full_rf_table()) != len(codon_seq2.get_full_rf_table()):
         raise RuntimeError(
-            "full_rf_table length of seq1 ({0}) and seq2 ({1}) "
-            "are not the same".format(
-                len(codon_seq1.get_full_rf_table()), len(codon_seq2.get_full_rf_table())
-            )
+            f"full_rf_table length of seq1 ({len(codon_seq1.get_full_rf_table())})"
+            f" and seq2 ({len(codon_seq2.get_full_rf_table())}) are not the same"
         )
     if cfreq is None:
         cfreq = "F3x4"
@@ -376,8 +373,8 @@ def cal_dn_ds(
         import warnings
 
         warnings.warn(
-            "Unknown cfreq ({0}). Only F1x4, F3x4 and F61 are "
-            "acceptable. Use F3x4 in the following.".format(cfreq)
+            f"Unknown cfreq ({cfreq}). "
+            "Only F1x4, F3x4 and F61 are acceptable. Used F3x4 in the following."
         )
         cfreq = "F3x4"
     seq1_codon_lst = _get_codon_list(codon_seq1)
@@ -496,13 +493,13 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     """
     if not isinstance(codon1, str) or not isinstance(codon2, str):
         raise TypeError(
-            "_count_diff_NG86 accepts string object to represent codon ({0}, {1} "
-            "detected)".format(type(codon1), type(codon2))
+            "_count_diff_NG86 accepts string object to represent codon"
+            f" ({type(codon1)}, {type(codon2)} detected)"
         )
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError(
-            "codon should be three letter string ({0}, {1} "
-            "detected)".format(len(codon1), len(codon2))
+            "codon should be three letter string"
+            f" ({len(codon1)}, {len(codon2)} detected)"
         )
     SN = [0, 0]  # synonymous and nonsynonymous counts
     if codon1 == "---" or codon2 == "---":
@@ -510,13 +507,13 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     base_tuple = ("A", "C", "G", "T")
     if not all(i in base_tuple for i in codon1):
         raise RuntimeError(
-            "Unrecognized character detected in codon1 {0} (Codons consist of "
-            "A, T, C or G)".format(codon1)
+            f"Unrecognized character detected in codon1 {codon1}"
+            " (Codons consist of A, T, C or G)"
         )
     if not all(i in base_tuple for i in codon2):
         raise RuntimeError(
-            "Unrecognized character detected in codon2 {0} (Codons consist of "
-            "A, T, C or G)".format(codon2)
+            f"Unrecognized character detected in codon2 {codon2}"
+            " (Codons consist of A, T, C or G)"
         )
     if codon1 == codon2:
         return SN
@@ -981,13 +978,13 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
     """
     if not isinstance(codon1, str) or not isinstance(codon2, str):
         raise TypeError(
-            "_count_diff_YN00 accepts string object to represent codon ({0}, {1} "
-            "detected)".format(type(codon1), type(codon2))
+            "_count_diff_YN00 accepts string object to represent codon"
+            f" ({type(codon1)}, {type(codon2)} detected)"
         )
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError(
-            "codon should be three letter string ({0}, {1} "
-            "detected)".format(len(codon1), len(codon2))
+            "codon should be three letter string"
+            f" ({len(codon1)}, {len(codon2)} detected)"
         )
     TV = [
         0,
@@ -1001,13 +998,13 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
     base_tuple = ("A", "C", "G", "T")
     if not all(i in base_tuple for i in codon1):
         raise RuntimeError(
-            "Unrecognized character detected in codon1 {0} (Codons consist of "
-            "A, T, C or G)".format(codon1)
+            f"Unrecognized character detected in codon1 {codon1}"
+            " (Codons consist of A, T, C or G)"
         )
     if not all(i in base_tuple for i in codon2):
         raise RuntimeError(
-            "Unrecognized character detected in codon2 {0} (Codons consist of "
-            "A, T, C or G)".format(codon2)
+            f"Unrecognized character detected in codon2 {codon2}"
+            " (Codons consist of A, T, C or G)"
         )
     if codon1 == codon2:
         return TV

@@ -58,7 +58,7 @@ class DNAsearch:
         for i in s:
             r = self.alphabet.get(i, i)
             if len(r) > 1:
-                rx = "%s[%s]" % (rx, r)
+                rx = f"{rx}[{r}]"
             else:
                 rx += r
         return rx
@@ -142,7 +142,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
             if not color:
                 color = "cyan"
         self.current_color = color
-        self.current_tag = "searched_%s" % self.current_color
+        self.current_tag = f"searched_{self.current_color}"
         self.master.tag_config(self.current_tag, background=self.current_color)
         self.master.tag_config(
             self.current_tag + "R", background=self.current_color, underline=1
@@ -171,16 +171,16 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
             if self.highlight:
                 start, stop = pos, pos + len(self.pattern)
                 if other_strand:
-                    w.tag_add(self.current_tag + "R", "1.%d" % start, "1.%s" % stop)
+                    w.tag_add(self.current_tag + "R", f"1.{start:d}", f"1.{stop}")
                 else:
-                    w.tag_add(self.current_tag, "1.%d" % start, "1.%s" % stop)
-                w.see("1.%d" % start)
+                    w.tag_add(self.current_tag, f"1.{start:d}", f"1.{stop}")
+                w.see(f"1.{start:d}")
 
     def exit(self):
         """Clean up on exit."""
         for c in self.colors:
-            self.master.tag_remove("searched_%s" % c, 1.0, tk.END)
-            self.master.tag_remove("searched_%sR" % c, 1.0, tk.END)
+            self.master.tag_remove(f"searched_{c}", 1.0, tk.END)
+            self.master.tag_remove(f"searched_{c}R", 1.0, tk.END)
         self.destroy()
         del self
 

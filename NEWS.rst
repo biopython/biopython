@@ -16,6 +16,9 @@ tested on PyPy3.6.1 v7.1.1-beta0.
 
 **We have dropped support for Python 2 now.**
 
+``pairwise2`` now allows the input of parameters with keywords and returns the
+alignments as a list of ``namedtuples``.
+
 The codon tables have been updated to NCBI genetic code table version 4.5,
 which adds Cephalodiscidae mitochondrial as table 33.
 
@@ -34,11 +37,13 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrey Raspopov
 - Austin Varela (first contribution)
 - Chris Rands
 - Deepak Khatri
 - Hielke Walinga (first contribution)
 - Kai Blin
+- Markus Piotrowski
 - Peter Cock
 - Rob Miller
 - Sergio Valqui

@@ -20,7 +20,7 @@ except ImportError:
 
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use PDB formats with SeqIO."
-    )
+    ) from None
 
 from Bio import SeqIO
 from Bio import BiopythonParserWarning

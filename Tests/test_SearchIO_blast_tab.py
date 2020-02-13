@@ -27,15 +27,19 @@ class BlastTabCases(unittest.TestCase):
     def test_tab_2228_tblastn_001(self):
         """Test parsing TBLASTN 2.2.28+ tabular output (tab_2228_tblastn_001)."""
         tab_file = get_file("tab_2228_tblastn_001.txt")
-        qresults = list(parse(tab_file, FMT,
-                              fields=["evalue", "sallseqid", "qseqid"],
-                              comments=True))
+        qresults = list(
+            parse(
+                tab_file, FMT, fields=["evalue", "sallseqid", "qseqid"], comments=True
+            )
+        )
 
         self.assertEqual(1, len(qresults))
         self.assertEqual(10, len(qresults[0].hits))
         # there is one hit with an alternative ID
-        self.assertEqual(qresults[0]["gi|148227873|ref|NM_001095167.1|"],
-                         qresults[0]["gi|55250552|gb|BC086280.1|"])
+        self.assertEqual(
+            qresults[0]["gi|148227873|ref|NM_001095167.1|"],
+            qresults[0]["gi|55250552|gb|BC086280.1|"],
+        )
 
         # check some of the HSPs
         self.assertEqual(0.0, qresults[0][0][0].evalue)
@@ -44,17 +48,19 @@ class BlastTabCases(unittest.TestCase):
     def test_tab_2228_tblastx_001(self):
         """Test parsing TBLASTX 2.2.28+ tabular output (tab_2228_tblastx_001)."""
         tab_file = get_file("tab_2228_tblastx_001.txt")
-        qresults = list(parse(tab_file, FMT,
-                              fields=list(all_fields.values()),
-                              comments=True))
+        qresults = list(
+            parse(tab_file, FMT, fields=list(all_fields.values()), comments=True)
+        )
 
         # this a single query, with 192 hits and 243 hsps
         self.assertEqual(1, len(qresults))
         self.assertEqual(192, len(qresults[0].hits))
         self.assertEqual(243, sum(len(x) for x in qresults[0]))
         # there is one hit with an alternative ID
-        self.assertEqual(qresults[0]["gi|31126987|gb|AY255526.2|"],
-                         qresults[0]["gi|31342050|ref|NM_181083.2|"])
+        self.assertEqual(
+            qresults[0]["gi|31126987|gb|AY255526.2|"],
+            qresults[0]["gi|31342050|ref|NM_181083.2|"],
+        )
 
         # only checking the new fields in 2.2.28+
         hit = qresults[0][0]
@@ -65,9 +71,14 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(["N/A"], hit.blast_names)
         self.assertEqual(["N/A"], hit.super_kingdoms)
         self.assertEqual("Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA", hit.title)
-        self.assertEqual(["Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
-                         "Synthetic construct Saccharomyces cerevisiae clone "
-                          "FLH203015.01X MON2, complete sequence"], hit.title_all)
+        self.assertEqual(
+            [
+                "Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA",
+                "Synthetic construct Saccharomyces cerevisiae clone "
+                "FLH203015.01X MON2, complete sequence",
+            ],
+            hit.title_all,
+        )
         self.assertEqual("N/A", hit.strand)
         self.assertEqual(100.0, hit.query_coverage)
 
@@ -399,9 +410,10 @@ class BlastTabCases(unittest.TestCase):
     def test_tab_2226_tblastn_005_comments_false(self):
         """Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_005)."""
         tab_file = get_file("tab_2226_tblastn_005.txt")
-        exc_msg = ("Encountered unexpected character '#' at the beginning of"
-                   " a line. Set comments=True if the file is a commented"
-                   " file.")
+        exc_msg = (
+            "Encountered unexpected character '#' at the beginning of a line. "
+            "Set comments=True if the file is a commented file."
+        )
         qresults = parse(tab_file, FMT)
         with self.assertRaises(ValueError, msg=exc_msg):
             next(qresults)
@@ -728,8 +740,12 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(1872, hsp.hit_end)
         self.assertEqual(1e-05, hsp.evalue)
         self.assertEqual(34.7, hsp.bitscore)
-        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq))
-        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq))
+        self.assertEqual(
+            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq)
+        )
+        self.assertEqual(
+            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq)
+        )
         self.assertEqual(78, hsp.bitscore_raw)
         self.assertEqual(15, hsp.ident_num)
         self.assertEqual(26, hsp.pos_num)
@@ -758,8 +774,14 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(1233, hsp.hit_end)
         self.assertEqual(1e-04, hsp.evalue)
         self.assertEqual(31.6, hsp.bitscore)
-        self.assertEqual("GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL", str(hsp.query.seq))
-        self.assertEqual("GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL", str(hsp.hit.seq))
+        self.assertEqual(
+            "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL",
+            str(hsp.query.seq),
+        )
+        self.assertEqual(
+            "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL",
+            str(hsp.hit.seq),
+        )
         self.assertEqual(70.0, hsp.bitscore_raw)
         self.assertEqual(20, hsp.ident_num)
         self.assertEqual(29, hsp.pos_num)
@@ -806,8 +828,14 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(388, hsp.hit_end)
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199, hsp.bitscore)
-        self.assertEqual("KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK", str(hsp.query.seq))
-        self.assertEqual("KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK", str(hsp.hit.seq))
+        self.assertEqual(
+            "KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK",
+            str(hsp.query.seq),
+        )
+        self.assertEqual(
+            "KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK",
+            str(hsp.hit.seq),
+        )
         self.assertEqual(506.0, hsp.bitscore_raw)
         self.assertEqual(94, hsp.ident_num)
         self.assertEqual(96, hsp.pos_num)
@@ -829,8 +857,14 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(754, hsp.hit_end)
         self.assertEqual(4e-05, hsp.evalue)
         self.assertEqual(32.7, hsp.bitscore)
-        self.assertEqual("IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA", str(hsp.query.seq))
-        self.assertEqual("LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA", str(hsp.hit.seq))
+        self.assertEqual(
+            "IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA",
+            str(hsp.query.seq),
+        )
+        self.assertEqual(
+            "LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA",
+            str(hsp.hit.seq),
+        )
         self.assertEqual(73.0, hsp.bitscore_raw)
         self.assertEqual(21, hsp.ident_num)
         self.assertEqual(33, hsp.pos_num)
@@ -918,8 +952,12 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(1872, hsp.hit_end)
         self.assertEqual(1e-05, hsp.evalue)
         self.assertEqual(34.7, hsp.bitscore)
-        self.assertEqual("PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq))
-        self.assertEqual("PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq))
+        self.assertEqual(
+            "PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD", str(hsp.query.seq)
+        )
+        self.assertEqual(
+            "PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID", str(hsp.hit.seq)
+        )
 
         hit = qresult[-1]
         self.assertEqual("gi|115975252|ref|XM_001180111.1|", hit.id)
@@ -939,8 +977,14 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(1233, hsp.hit_end)
         self.assertEqual(1e-04, hsp.evalue)
         self.assertEqual(31.6, hsp.bitscore)
-        self.assertEqual("GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL", str(hsp.query.seq))
-        self.assertEqual("GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL", str(hsp.hit.seq))
+        self.assertEqual(
+            "GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL",
+            str(hsp.query.seq),
+        )
+        self.assertEqual(
+            "GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL",
+            str(hsp.hit.seq),
+        )
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, next, qresults)

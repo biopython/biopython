@@ -64,8 +64,8 @@ class TestApp(unittest.TestCase):
         self.assertEqual(stderr, "")
         self.assertEqual(stdout, None)
         self.assertTrue(os.path.isfile(tmp))
-        with open(tmp) as h:
-            contents = h.read()
+        with open(tmp) as handle:
+            contents = handle.read()
         self.assertEqual(contents, "Hello World\n")
         os.remove(tmp)
 
@@ -78,9 +78,9 @@ class TestApp(unittest.TestCase):
         self.assertEqual(stderr, None)
         self.assertEqual(stdout, "Hello World\n")
         self.assertTrue(os.path.isfile(tmp))
-        with open(tmp) as h:
-            contents = h.read()
-            self.assertEqual(contents, "")
+        with open(tmp) as handle:
+            contents = handle.read()
+        self.assertEqual(contents, "")
         os.remove(tmp)
 
     def test_echo_file_same(self):
@@ -92,8 +92,8 @@ class TestApp(unittest.TestCase):
         self.assertEqual(stderr, None)
         self.assertEqual(stdout, None)
         self.assertTrue(os.path.isfile(tmp))
-        with open(tmp) as h:
-            contents = h.read()
+        with open(tmp) as handle:
+            contents = handle.read()
         self.assertEqual(contents, "Hello World\n")  # stdout + stderr
         os.remove(tmp)
 
@@ -109,13 +109,13 @@ class TestApp(unittest.TestCase):
         self.assertEqual(stderr, None)
         self.assertEqual(stdout, None)
         self.assertTrue(os.path.isfile(tmp), tmp)
-        with open(tmp) as h:
-            contents = h.read()
+        with open(tmp) as handle:
+            contents = handle.read()
         self.assertEqual(contents, "Hello World\n")  # stdout
         os.remove(tmp)
         self.assertTrue(os.path.isfile(tmp2), tmp2)
-        with open(tmp2) as h:
-            contents = h.read()
+        with open(tmp2) as handle:
+            contents = handle.read()
         self.assertEqual(contents, "")  # stderr
         os.remove(tmp2)
 

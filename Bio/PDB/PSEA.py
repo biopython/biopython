@@ -16,7 +16,7 @@ Comput Appl Biosci 1997 , 13:291-295
 ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
-import os
+import subprocess
 
 from Bio.PDB.Polypeptide import is_aa
 
@@ -32,7 +32,7 @@ def run_psea(fname):
 
     Note that P-SEA will write output to the terminal while run.
     """
-    os.system("psea " + fname)
+    subprocess.call(["psea", fname])
     last = fname.split("/")[-1]
     base = last.split(".")[0]
     return base + ".sea"
@@ -84,7 +84,7 @@ def annotate(m, ss_seq):
         raise ValueError("Length mismatch %i %i" % (L, len(ss_seq)))
     for i in range(0, L):
         residues[i].xtra["SS_PSEA"] = ss_seq[i]
-    # os.system("rm "+fname)
+    # subprocess.call(["rm", fname])
 
 
 class PSEA:

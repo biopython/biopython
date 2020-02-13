@@ -154,8 +154,34 @@ class SequentialSequenceWriter(SequenceWriter):
     the number of records.
     """
 
-    def __init__(self, handle):
+    def __init__(self, target, mode="w"):
         """Initialize the class."""
+        if mode == "w":
+            try:
+                target.write("")
+            except TypeError:
+                # target was opened in binary mode
+                raise ValueError("File must be opened in text mode.") from None
+            except AttributeError:
+                # target is a path
+                handle = open(target, mode)
+            else:
+                handle = target
+        elif mode == "wb":
+            try:
+                target.write(b"")
+            except TypeError:
+                # target was opened in text mode
+                raise ValueError("File must be opened in binary mode.") from None
+            except AttributeError:
+                # target is a path
+                handle = open(target, mode)
+            else:
+                handle = target
+        else:
+            raise RuntimeError("Unknown mode '%s'" % mode)
+
+        self._target = target
         self.handle = handle
         self._header_written = False
         self._record_written = False
@@ -240,7 +266,11 @@ class SequentialSequenceWriter(SequenceWriter):
         This method can only be called once.  Returns the number of records
         written.
         """
-        self.write_header()
-        count = self.write_records(records)
-        self.write_footer()
+        try:
+            self.write_header()
+            count = self.write_records(records)
+            self.write_footer()
+        finally:
+            if self.handle is not self._target:
+                self.handle.close()
         return count

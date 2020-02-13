@@ -54,6 +54,7 @@ in a residue)::
 import os
 import tempfile
 import warnings
+import subprocess
 
 import numpy
 
@@ -525,7 +526,7 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
 
     Arguments:
      - PDB_TO_XYZR - deprecated, ignore this.
-     - MSMS - msms executable (used as argument to os.system)
+     - MSMS - msms executable (used as argument to subprocess.call)
 
     """
     # Issue warning if PDB_TO_XYZR is given
@@ -551,7 +552,7 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     surface_tmp = tempfile.mktemp()
     MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + tempfile.mktemp()
     make_surface = MSMS % (xyz_tmp, surface_tmp)
-    os.system(make_surface)
+    subprocess.call(make_surface, shell=True)
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
         raise RuntimeError(

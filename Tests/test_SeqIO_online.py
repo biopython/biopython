@@ -26,6 +26,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.SwissProt import SwissProtParserError
 
 import requires_internet
+
 requires_internet.check()
 
 # This lets us set the email address to be sent to NCBI Entrez:
@@ -43,8 +44,9 @@ class ExPASyTests(unittest.TestCase):
             record = SeqIO.read(handle, "swiss")
         except SwissProtParserError as e:
             # This is to catch an error page from our proxy
-            if (str(e) == "Failed to find ID in first line" and
-                    e.line.startswith("<!DOCTYPE HTML")):
+            if str(e) == "Failed to find ID in first line" and e.line.startswith(
+                "<!DOCTYPE HTML"
+            ):
                 raise OSError from None
         handle.close()
         self.assertEqual(record.id, identifier)
@@ -67,31 +69,38 @@ class EntrezTests(unittest.TestCase):
             }
             if entry in gi_to_acc:
                 entry = gi_to_acc[entry]
-            self.assertTrue((entry in record.name) or
-                            (entry in record.id) or
-                            ("gi" in record.annotations and
-                             record.annotations["gi"] == entry),
-                            "%s got %s, %s" % (entry, record.name, record.id))
+            self.assertTrue(
+                (entry in record.name)
+                or (entry in record.id)
+                or ("gi" in record.annotations and record.annotations["gi"] == entry),
+                "%s got %s, %s" % (entry, record.name, record.id),
+            )
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
 
 
 for database, formats, entry, length, checksum in [
-        ("nuccore", ["fasta", "gb"], "X52960", 248,
-         "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
-        ("nucleotide", ["fasta", "gb"], "6273291", 902,
-         "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
-        ("protein", ["fasta", "gbwithparts"], "16130152", 367,
-         "fCjcjMFeGIrilHAn6h+yju267lg"),
-        ]:
+    ("nuccore", ["fasta", "gb"], "X52960", 248, "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
+    ("nucleotide", ["fasta", "gb"], "6273291", 902, "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
+    (
+        "protein",
+        ["fasta", "gbwithparts"],
+        "16130152",
+        367,
+        "fCjcjMFeGIrilHAn6h+yju267lg",
+    ),
+]:
 
     def funct(d, f, e, l, c):
         method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
         method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
         return method
 
-    setattr(EntrezTests, "test_%s_%s" % (database, entry),
-            funct(database, formats, entry, length, checksum))
+    setattr(
+        EntrezTests,
+        "test_%s_%s" % (database, entry),
+        funct(database, formats, entry, length, checksum),
+    )
     del funct
 del database, formats, entry, length, checksum
 

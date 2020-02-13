@@ -232,7 +232,6 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
@@ -914,11 +913,11 @@ class _AddTellHandle:
 
 
 # This is a generator function!
-def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
+def SffIterator(source, alphabet=Alphabet.generic_dna, trim=False):
     """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
-        - handle - input file, an SFF file, e.g. from Roche 454 sequencing.
-          This must NOT be opened in universal read lines mode!
+        - source - path to an SFF file, e.g. from Roche 454 sequencing,
+          or a file-like object opened in binary mode.
         - alphabet - optional alphabet, defaults to generic DNA.
         - trim - should the sequences be trimmed?
 
@@ -984,13 +983,20 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
 
-    with as_handle(handle, "rb") as handle:
+    try:
+        handle = open(source, "rb")
+    except TypeError:
+        if source.read(0) != b"":
+            raise ValueError("SFF files must be opened in binary mode.") from None
         try:
-            if 0 != handle.tell():
-                raise ValueError("Not at start of file, offset %i" % handle.tell())
+            if 0 != source.tell():
+                raise ValueError("Not at start of file, offset %i" % source.tell())
+            handle = source
         except AttributeError:
             # Probably a network handle or something like that
-            handle = _AddTellHandle(handle)
+            handle = _AddTellHandle(source)
+
+    try:
         (
             header_length,
             index_offset,
@@ -1040,6 +1046,9 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
                 trim,
             )
         _check_eof(handle, index_offset, index_length)
+    finally:
+        if handle is not source:
+            handle.close()
 
 
 def _check_eof(handle, index_offset, index_length):

@@ -171,8 +171,8 @@ class Entity:
         if self.parent:
             if value in self.parent.child_dict:
                 raise ValueError(
-                    "Cannot change id from `{}` to `{}`. The id `{}` is already used "
-                    "for a sibling of this entity.".format(self._id, value, value)
+                    f"Cannot change id from `{self._id}` to `{value}`."
+                    f" The id `{value}` is already used for a sibling of this entity."
                 )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
