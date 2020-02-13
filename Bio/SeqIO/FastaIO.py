@@ -303,7 +303,7 @@ def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
         )
 
 
-def fasta_ncbi_iterator(source, alphabet=single_letter_alphabet):
+def FastaNcbiIterator(source, alphabet=single_letter_alphabet):
     for title, sequence in SimpleFastaParser(source):
         id, name, xrefs = fasta_title_parser_auto(title)
         yield SeqRecord(Seq(sequence, alphabet), id, name, name, dbxrefs=xrefs)

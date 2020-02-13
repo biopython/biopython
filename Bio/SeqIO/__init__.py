@@ -419,6 +419,7 @@ _FormatToIterator = {
     "ace": AceIO.AceIterator,
     "fasta": FastaIO.FastaIterator,
     "fasta-2line": FastaIO.FastaTwoLineIterator,
+    "fasta-ncbi": FastaIO.FastaNcbiIterator,
     "ig": IgIO.IgIterator,
     "embl": InsdcIO.EmblIterator,
     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
