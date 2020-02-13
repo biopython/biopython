@@ -305,6 +305,13 @@ def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
 
 
 def FastaNcbiIterator(source, alphabet=single_letter_alphabet):
+    """Iterate over Fasta records as SeqRecord objects, with dbxrefs support.
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
+     - alphabet - optional alphabet
+
+    """
     for title, sequence in SimpleFastaParser(source):
         id, name, xrefs = fasta_title_parser_auto(title)
         yield SeqRecord(Seq(sequence, alphabet), id, name, name, dbxrefs=xrefs)
