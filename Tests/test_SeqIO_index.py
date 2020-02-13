@@ -666,10 +666,9 @@ class IndexDictTests(unittest.TestCase):
 
     def test_duplicates_to_dict(self):
         """Index file with duplicate identifiers with Bio.SeqIO.to_dict()."""
-        handle = open("Fasta/dups.fasta")
-        iterator = SeqIO.parse(handle, "fasta")
-        self.assertRaises(ValueError, SeqIO.to_dict, iterator)
-        handle.close()
+        with open("Fasta/dups.fasta") as handle:
+            iterator = SeqIO.parse(handle, "fasta")
+            self.assertRaises(ValueError, SeqIO.to_dict, iterator)
 
 
 class IndexOrderingSingleFile(unittest.TestCase):

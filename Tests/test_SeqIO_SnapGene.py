@@ -92,9 +92,8 @@ class TestSnapGene(unittest.TestCase):
 
 class TestCorruptedSnapGene(unittest.TestCase):
     def setUp(self):
-        f = open("SnapGene/sample-d.dna", "rb")
-        self.buffer = f.read()
-        f.close()
+        with open("SnapGene/sample-d.dna", "rb") as f:
+            self.buffer = f.read()
 
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
