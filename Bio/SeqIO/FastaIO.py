@@ -158,6 +158,64 @@ def FastaTwoLineParser(source):
             handle.close()
 
 
+ncbi_identifiers = {  # used by fasta_ncbi_parser()
+    "lcl": (('id',), "local"),
+    "bbs": (('id',), "GenInfo backbond seqid"),
+    "bbm": (('id',), "GenInfo import ID"),
+    'gb': (('id', 'locus'), "GenBank"),
+    'emb': (('id', 'locus'), "EMBL"),
+    'pir': (('id', 'name'), 'PIR'),
+    'sp': (('id', 'name'), 'SWISS-PROT'),
+    'pat': (('country', 'patent', 'sequence'), 'patent'),
+    'pgp': (('country', 'application number', 'sequence'), 'pre-grand patent'),
+    'ref': (('id', 'name'), "RefSeq"),
+    'gnl': (('database', 'id'), "General database reference"),
+    'gi': (('id',), "GenInfo integrated database"),
+    'dbj': (('id', 'locus'), 'DDBJ'),
+    'prf': (('id', 'name'), 'PRF'),
+    'pdb': (('id', 'chain'), 'PDB'),
+    'tpg': (('id', 'name'), 'third-party GenBank'),
+    'tpd': (('id', 'name'), 'third-party DDBJ'),
+    'tr': (('id', 'name'), 'TrEMBL'),
+    'gpp': (('id', 'name'), 'genome pipeline'),
+    'nat': (('id', 'name'), 'named annotation track')
+}
+
+
+def fasta_title_parser_auto(title):
+    """auto-parse FASTA title lines according to the NCBI schema
+
+    see https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+
+    Arguments:
+     - title - title line as a stripped string without '>' parsed by SimpleFastaParser
+
+    >>> with open("Fasta/ncbi_standard.fasta") as handle:
+    ...     for title, seq in SimpleFastaParser(handle):
+    ...         print(fasta_title_parser_auto(title))
+    ...
+    ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', {'emb': {'_db_description': 'EMBL', 'id': 'CAA12345.6', 'locus': ''}, 'gi': {'_db_description': 'GenInfo integrated database', 'id': '78'}})
+    ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', {'pat': {'_db_description': 'patent', 'country': 'US', 'patent': 'RE33188', 'sequence': '1'}, 'gi': {'_db_description': 'GenInfo integrated database', 'id': '10'}, 'pdb': {'_db_description': 'PDB', 'id': '1A2B', 'chain': 'C'}})
+
+    """
+    # used by fasta_ncbi_parser()
+    xrefs, long_name = title.split(' ', 1)
+    id = xrefs
+    i = 0
+    fields = xrefs.split('|')
+    parsed_fields = {}
+    while i < len(fields):
+        field_code = fields[i]
+        parsed_fields.update({field_code: {}})
+        i += 1
+        field_attrs, field_description = ncbi_identifiers[field_code]
+        parsed_fields[field_code].update({'_db_description': field_description})
+        for attr in field_attrs:
+            parsed_fields[field_code].update({attr: fields[i]})
+            i += 1
+    return id, long_name, parsed_fields
+
+
 def FastaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over Fasta records as SeqRecord objects.
 
@@ -245,6 +303,12 @@ def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
         )
 
 
+def fasta_ncbi_iterator(source, alphabet=single_letter_alphabet):
+    for title, sequence in SimpleFastaParser(source):
+        id, name, xrefs = fasta_title_parser_auto(title)
+        yield SeqRecord(Seq(sequence, alphabet), id, name, name, dbxrefs=xrefs)
+
+
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files (OBSOLETE).
 
@@ -323,7 +387,7 @@ class FastaWriter(SequentialSequenceWriter):
 
         if self.wrap:
             for i in range(0, len(data), self.wrap):
-                self.handle.write(data[i : i + self.wrap] + "\n")
+                self.handle.write(data[i: i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
 
@@ -393,7 +457,7 @@ def as_fasta(record):
     assert "\n" not in data
     assert "\r" not in data
     for i in range(0, len(data), 60):
-        lines.append(data[i : i + 60] + "\n")
+        lines.append(data[i: i + 60] + "\n")
 
     return "".join(lines)
 
