@@ -158,27 +158,33 @@ def FastaTwoLineParser(source):
             handle.close()
 
 
-ncbi_identifiers = {  # used by fasta_ncbi_parser()
-    "lcl": (('id',), "local"),
+# used by fasta_ncbi_parser()
+# based on https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+# those without a match in NCBI's or Uniprot's dbxref are commented out
+# NCBI's dbxref: https://www.ncbi.nlm.nih.gov/genbank/collab/db_xref/
+# Uniprot's dbxref: https://www.uniprot.org/docs/dbxref
+# RefSeq, Genbank & DDBJ not in NCBI's dbxref but in Uniprot's
+ncbi_identifiers = {
+    # "lcl": (('id',), "local"),
     "bbs": (('id',), "GenInfo backbond seqid"),
     "bbm": (('id',), "GenInfo import ID"),
-    'gb': (('id', 'locus'), "GenBank"),
-    'emb': (('id', 'locus'), "EMBL"),
+    'gb': (('id', 'locus'), "GenBank"),  # Uniprot's dbxref only
+    'emb': (('id', 'locus'), "EMBL"),  # Uniprot's dbxref only
     'pir': (('id', 'name'), 'PIR'),
-    'sp': (('id', 'name'), 'SWISS-PROT'),
-    'pat': (('country', 'patent', 'sequence'), 'patent'),
-    'pgp': (('country', 'application number', 'sequence'), 'pre-grant patent'),
-    'ref': (('id', 'name'), "RefSeq"),
-    'gnl': (('database', 'id'), "General database reference"),
-    'gi': (('id',), "GenInfo integrated database"),
-    'dbj': (('id', 'locus'), 'DDBJ'),
-    'prf': (('id', 'name'), 'PRF'),
+    'sp': (('id', 'name'), 'UniProtKB/Swiss-Prot'),
+    # 'pat': (('country', 'patent', 'sequence'), 'patent'),
+    # 'pgp': (('country', 'application number', 'sequence'), 'pre-grant patent'),
+    'ref': (('id', 'name'), "RefSeq"),  # Uniprot's dbxref only
+    # 'gnl': (('database', 'id'), "General database reference"),
+    # 'gi': (('id',), "GI"),
+    'dbj': (('id', 'locus'), 'DDBJ'),  # Uniprot's dbxref only
+    # 'prf': (('id', 'name'), 'PRF'),
     'pdb': (('id', 'chain'), 'PDB'),
-    'tpg': (('id', 'name'), 'third-party GenBank'),
-    'tpd': (('id', 'name'), 'third-party DDBJ'),
-    'tr': (('id', 'name'), 'TrEMBL'),
-    'gpp': (('id', 'name'), 'genome pipeline'),
-    'nat': (('id', 'name'), 'named annotation track')
+    # 'tpg': (('id', 'name'), 'third-party GenBank'),
+    # 'tpd': (('id', 'name'), 'third-party DDBJ'),
+    'tr': (('id', 'name'), 'UniProtKB/TrEMBL'),
+    # 'gpp': (('id', 'name'), 'genome pipeline'),
+    # 'nat': (('id', 'name'), 'named annotation track')
 }
 
 
@@ -194,8 +200,8 @@ def fasta_title_parser_auto(title):
     ...     for title, seq in SimpleFastaParser(handle):
     ...         print(fasta_title_parser_auto(title))
     ...
-    ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', {'emb': {'_db_description': 'EMBL', 'id': 'CAA12345.6', 'locus': ''}, 'gi': {'_db_description': 'GenInfo integrated database', 'id': '78'}})
-    ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', {'pat': {'_db_description': 'patent', 'country': 'US', 'patent': 'RE33188', 'sequence': '1'}, 'gi': {'_db_description': 'GenInfo integrated database', 'id': '10'}, 'pdb': {'_db_description': 'PDB', 'id': '1A2B', 'chain': 'C'}})
+    ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', ['EMBL:CAA12345.6'])
+    ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', ['PDB:1A2B'])
 
     """
     # used by fasta_ncbi_parser()
@@ -203,16 +209,11 @@ def fasta_title_parser_auto(title):
     id = xrefs
     i = 0
     fields = xrefs.split('|')
-    parsed_fields = {}
+    parsed_fields = []
     while i < len(fields):
-        field_code = fields[i]
-        parsed_fields.update({field_code: {}})
+        if fields[i] in ncbi_identifiers:
+            parsed_fields.append(f'{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}')
         i += 1
-        field_attrs, field_description = ncbi_identifiers[field_code]
-        parsed_fields[field_code].update({'_db_description': field_description})
-        for attr in field_attrs:
-            parsed_fields[field_code].update({attr: fields[i]})
-            i += 1
     return id, long_name, parsed_fields
 
 
