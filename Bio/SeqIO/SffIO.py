@@ -232,8 +232,8 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 from Bio import Alphabet
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequenceWriter
+from Bio.SeqRecord import SeqRecord
 import struct
 import sys
 import re
@@ -1134,6 +1134,7 @@ def _check_eof(handle, index_offset, index_length):
 def _SffTrimIterator(handle, alphabet=Alphabet.generic_dna):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
     return SffIterator(handle, alphabet, trim=True)
+
 
 class SffWriter(SequenceWriter):
     """SFF file writer."""
