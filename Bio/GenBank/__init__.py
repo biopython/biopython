@@ -1222,7 +1222,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                         seq_type=self._seq_type.lower(),
                     ).parts
 
-                except ValueError as err:
+                except ValueError:
                     print(location_line)
                     print(part)
                     raise

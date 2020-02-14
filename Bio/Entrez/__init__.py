@@ -614,7 +614,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
             # for a bit.
             if exception.code // 100 == 4 and exception.code != 429:
                 raise
-        except URLError as exception:
+        except URLError:
             # Reraise if the final try fails
             if i >= max_tries - 1:
                 raise
