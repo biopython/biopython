@@ -76,8 +76,7 @@ test_records[4][0][2].annotations["weight"] = 2.5
 
 
 class WriterTests(unittest.TestCase):
-    """Cunning unit test where methods are added at run time."""
-    # TODO - Let's not be cunning
+    """Cunning unit test where methods are added at run time."""  ## TODO - Let's not be cunning
 
     def check(self, records, format):
         """General test function with with a little format specific information.
@@ -86,7 +85,7 @@ class WriterTests(unittest.TestCase):
         """
         # TODO - Check the exception messages?
         lengths = len({len(r) for r in records})
-        dna = all([set(record.seq.upper()).issubset("ACGTN") for record in records])
+        dna = all(set(record.seq.upper()).issubset("ACGTN") for record in records)
         if not records and format in ["stockholm", "phylip", "phylip-relaxed",
                                       "phylip-sequential", "nexus", "clustal",
                                       "sff", "mauve"]:
