@@ -26,7 +26,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrea Pierleoni <andrea at the Italian domain biocomp dot unibo>
 - Andrea Rizzi <https://github.com/andrrizzi>
 - Andreas Kuntzagk <andreas.kuntzagk at domain mdc-berlin.de>
-- Andrei Istrate <andrei at ebi.ac.uk>
+- Andrei Istrate <andrei at ebi dot ac dot uk>
 - Andres Colubri <andres dot colubri at gmail dot com>
 - Andrew Dalke <dalke at domain dalke scientific dot com>
 - Andrew Guy <https://github.com/andrewguy>
