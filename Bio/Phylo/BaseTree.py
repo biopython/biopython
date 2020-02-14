@@ -17,8 +17,6 @@ import itertools
 import random
 import re
 
-from Bio import _utils
-
 
 # General tree-traversal algorithms
 
@@ -246,7 +244,8 @@ class TreeElement:
         # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
-                return "%s='%s'" % (key, _utils.trim_str(str(val), 60, "..."))
+                val = val[:57] + "..." if len(val) > 60 else val
+                return "%s='%s'" % (key, val)
             return "%s=%s" % (key, val)
 
         return "%s(%s)" % (
@@ -288,7 +287,7 @@ class TreeMixin:
         except KeyError:
             raise ValueError(
                 "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
-            )
+            ) from None
 
         if follow_attrs:
             get_children = _sorted_attrs
@@ -1102,7 +1101,7 @@ class Clade(TreeElement, TreeMixin):
     def __str__(self):
         """Return name of the class instance."""
         if self.name:
-            return _utils.trim_str(self.name, 40, "...")
+            return self.name[:37] + "..." if len(self.name) > 40 else self.name
         return self.__class__.__name__
 
     # Syntax sugar for setting the branch color

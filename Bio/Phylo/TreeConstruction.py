@@ -9,14 +9,10 @@
 
 import itertools
 import copy
+import numbers
 from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
-
-
-def _is_numeric(x):
-    """Return True if is numeric."""
-    return isinstance(x, (float, complex, int))
 
 
 class _Matrix:
@@ -110,7 +106,7 @@ class _Matrix:
                 isinstance(matrix, list)
                 and all(isinstance(l, list) for l in matrix)
                 and all(
-                    _is_numeric(n)
+                    isinstance(n, numbers.Number)
                     for n in [item for sublist in matrix for item in sublist]
                 )
             ):
@@ -205,7 +201,9 @@ class _Matrix:
             if index > len(self) - 1:
                 raise IndexError("Index out of range.")
             # check and assign value
-            if isinstance(value, list) and all(_is_numeric(n) for n in value):
+            if isinstance(value, list) and all(
+                isinstance(n, numbers.Number) for n in value
+            ):
                 if len(value) == len(self):
                     for i in range(0, index):
                         self.matrix[index][i] = value[i]
@@ -234,7 +232,7 @@ class _Matrix:
             if row_index > len(self) - 1 or col_index > len(self) - 1:
                 raise IndexError("Index out of range.")
             # check and assign value
-            if _is_numeric(value):
+            if isinstance(value, numbers.Number):
                 if row_index > col_index:
                     self.matrix[row_index][col_index] = value
                 else:

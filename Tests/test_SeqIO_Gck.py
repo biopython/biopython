@@ -279,12 +279,8 @@ class TestGckWithDGVC(unittest.TestCase):
                 return
 
             try:
-                src = urlopen(
-                    "https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip"
-                )
-                with open("Gck/DGVC_GCK.zip", "wb") as dst:
+                with urlopen("https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip") as src, open("Gck/DGVC_GCK.zip", "wb") as dst:
                     shutil.copyfileobj(src, dst)
-                src.close()
             except HTTPError:
                 self.skipTest("Cannot download the sample files")
                 return
@@ -297,8 +293,8 @@ class TestGckWithDGVC(unittest.TestCase):
     def test_read(self):
         """Read sample files."""
         for sample in self.sample_data.values():
-            f = self.zipdata.open(sample["file"])
-            record = SeqIO.read(f, "gck")
+            with self.zipdata.open(sample["file"]) as f:
+                record = SeqIO.read(f, "gck")
             self.assertEqual(sample["name"], record.name)
             self.assertEqual(sample["id"], record.id)
             self.assertEqual(sample["description"], record.description)
@@ -306,16 +302,13 @@ class TestGckWithDGVC(unittest.TestCase):
             self.assertEqual(sample["topology"], record.annotations["topology"])
 
             self.assertEqual(len(sample["features"]), len(record.features))
-            for i in range(len(sample["features"])):
-                exp_feat = sample["features"][i]
+            for i, exp_feat in enumerate(sample["features"]):
                 read_feat = record.features[i]
                 self.assertEqual(exp_feat["type"], read_feat.type)
                 self.assertEqual(exp_feat["start"], read_feat.location.start)
                 self.assertEqual(exp_feat["end"], read_feat.location.end)
                 self.assertEqual(exp_feat["strand"], read_feat.location.strand)
                 self.assertEqual(exp_feat["label"], read_feat.qualifiers["label"][0])
-
-            f.close()
 
 
 class TestGckWithArtificialData(unittest.TestCase):
