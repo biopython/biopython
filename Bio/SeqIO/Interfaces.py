@@ -94,11 +94,37 @@ class SequenceWriter:
     SequentialSequenceWriter class instead.
     """
 
-    def __init__(self, handle):
+    def __init__(self, target, mode="w"):
         """Create the writer object.
 
         Use the method write_file() to actually record your sequence records.
         """
+        if mode == "w":
+            try:
+                target.write("")
+            except TypeError:
+                # target was opened in binary mode
+                raise ValueError("File must be opened in text mode.") from None
+            except AttributeError:
+                # target is a path
+                handle = open(target, mode)
+            else:
+                handle = target
+        elif mode == "wb":
+            try:
+                target.write(b"")
+            except TypeError:
+                # target was opened in text mode
+                raise ValueError("File must be opened in binary mode.") from None
+            except AttributeError:
+                # target is a path
+                handle = open(target, mode)
+            else:
+                handle = target
+        else:
+            raise RuntimeError("Unknown mode '%s'" % mode)
+
+        self._target = target
         self.handle = handle
 
     def _get_seq_string(self, record):
@@ -156,33 +182,7 @@ class SequentialSequenceWriter(SequenceWriter):
 
     def __init__(self, target, mode="w"):
         """Initialize the class."""
-        if mode == "w":
-            try:
-                target.write("")
-            except TypeError:
-                # target was opened in binary mode
-                raise ValueError("File must be opened in text mode.") from None
-            except AttributeError:
-                # target is a path
-                handle = open(target, mode)
-            else:
-                handle = target
-        elif mode == "wb":
-            try:
-                target.write(b"")
-            except TypeError:
-                # target was opened in text mode
-                raise ValueError("File must be opened in binary mode.") from None
-            except AttributeError:
-                # target is a path
-                handle = open(target, mode)
-            else:
-                handle = target
-        else:
-            raise RuntimeError("Unknown mode '%s'" % mode)
-
-        self._target = target
-        self.handle = handle
+        super().__init__(target, mode)
         self._header_written = False
         self._record_written = False
         self._footer_written = False

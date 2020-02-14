@@ -230,10 +230,10 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 """
 
 
-from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqIO.Interfaces import SequenceWriter
 import struct
 import sys
 import re
@@ -1135,29 +1135,21 @@ def _SffTrimIterator(handle, alphabet=Alphabet.generic_dna):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
     return SffIterator(handle, alphabet, trim=True)
 
-
 class SffWriter(SequenceWriter):
     """SFF file writer."""
 
-    def __init__(self, handle, index=True, xml=None):
+    def __init__(self, target, index=True, xml=None):
         """Initialize an SFF writer object.
 
         Arguments:
-         - handle - Output handle, in binary write mode.
+         - target - Output stream opened in binary mode, or a path to a file.
          - index - Boolean argument, should we try and write an index?
          - xml - Optional string argument, xml manifest to be recorded
            in the index block (see function ReadRocheXmlManifest for
            reading this data).
 
         """
-        try:
-            # Confirm we have a binary handle,
-            handle.write(b"")
-        except TypeError:
-            raise ValueError(
-                "SFF files must NOT be opened in text mode, binary required."
-            ) from None
-        self.handle = handle
+        SequenceWriter.__init__(self, target, "wb")
         self._xml = xml
         if index:
             self._index = []
