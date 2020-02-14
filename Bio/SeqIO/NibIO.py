@@ -145,7 +145,7 @@ class NibWriter(SequentialSequenceWriter):
         handle.write(bytes.fromhex(signature))
 
     def write_record(self, record):
-        """Use this to write an entire file containing the given record."""
+        """Write a single record to the output file."""
         handle = self.handle
         sequence = record.seq
         nucleotides = str(sequence)
