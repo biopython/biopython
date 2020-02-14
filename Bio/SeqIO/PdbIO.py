@@ -13,7 +13,6 @@ import warnings
 from Bio import BiopythonParserWarning
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 

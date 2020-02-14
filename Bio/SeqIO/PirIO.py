@@ -94,7 +94,6 @@ from Bio.Alphabet import (
     generic_dna,
     generic_rna,
 )
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter

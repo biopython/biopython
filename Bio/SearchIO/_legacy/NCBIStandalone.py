@@ -22,8 +22,6 @@ preferred. Furthermore, the NCBI themselves regard these command line tools as
 wrappers for these under Bio.Blast.Applications (see the tutorial).
 """
 
-
-import sys
 import re
 
 from io import StringIO
