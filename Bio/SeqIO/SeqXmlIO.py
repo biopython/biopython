@@ -486,7 +486,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         """Create Object and start the xml generator.
 
         Arguments:
-         - target - Output stream opened in text mode, or a path to a file.
+         - target - Output stream opened in binary mode, or a path to a file.
          - source - The source program/database of the file, for example
            UniProt.
          - source_version - The version or release number of the source
