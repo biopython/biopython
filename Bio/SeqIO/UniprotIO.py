@@ -443,7 +443,7 @@ class Parser:
         def _parse_position(element, offset=0):
             try:
                 position = int(element.attrib["position"]) + offset
-            except KeyError as err:
+            except KeyError:
                 position = None
             status = element.attrib.get("status", "")
             if status == "unknown":
