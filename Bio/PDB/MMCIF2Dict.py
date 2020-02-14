@@ -78,15 +78,14 @@ class MMCIF2Dict(dict):
                     in_token = False
                     yield line[start_i:i]
             elif c in self.quote_chars:
-                if not quote_open_char:
-                    if in_token:
+                if not quote_open_char and in_token and i < len(line) - 1:
+                    if line[i + 1] not in self.whitespace_chars:
                         raise ValueError("Opening quote in middle of word: " + line)
+                if not quote_open_char and not in_token:
                     quote_open_char = c
                     in_token = True
                     start_i = i + 1
-                elif c == quote_open_char and (
-                    i + 1 == len(line) or line[i + 1] in self.whitespace_chars
-                ):
+                elif c == quote_open_char and (i + 1 == len(line) or line[i + 1] in self.whitespace_chars):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]
