@@ -10,7 +10,6 @@
 
 from io import StringIO
 
-from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 

@@ -229,14 +229,13 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
 
+import struct
+import re
 
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-import struct
-import sys
-import re
 
 _null = b"\0"
 _sff = b".sff"

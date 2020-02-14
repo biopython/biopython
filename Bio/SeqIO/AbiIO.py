@@ -19,11 +19,9 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 import datetime
 import struct
 import sys
-import warnings
 
 from os.path import basename
 
-from Bio import BiopythonParserWarning
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq

@@ -335,9 +335,6 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 making up each alignment as SeqRecords.
 """
 
-
-import sys
-
 # TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
