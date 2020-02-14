@@ -40,7 +40,7 @@ description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 """
 
 
-from Bio.SeqIO.Interfaces import SequenceWriter
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
@@ -119,16 +119,22 @@ def NibIterator(source, alphabet=None):
             handle.close()
 
 
-class NibWriter(SequenceWriter):
+class NibWriter(SequentialSequenceWriter):
     """Nib file writer."""
 
-    def __init__(self, handle):
-        """Initialize an Nib writer object.
+    def __init__(self, target):
+        """Initialize a Nib writer object.
 
         Arguments:
-         - handle - Output handle, in binary write mode.
+         - target - output stream opened in binary mode, or a path to a file
+
         """
-        self.handle = handle
+        super().__init__(target, mode="wb")
+
+    def write_header(self):
+        """Write the file header."""
+        super().write_header()
+        handle = self.handle
         byteorder = sys.byteorder
         if byteorder == "little":  # little-endian
             signature = "3a3de96b"
@@ -138,15 +144,8 @@ class NibWriter(SequenceWriter):
             raise RuntimeError("unexpected system byte order %s" % byteorder)
         handle.write(bytes.fromhex(signature))
 
-    def write_file(self, records):
-        """Use this to write an entire file containing the given record."""
-        count = 0
-        for record in records:
-            count += 1
-        if count == 0:
-            raise ValueError("Must have one sequence")
-        if count > 1:
-            raise ValueError("More than one sequence found")
+    def write_record(self, record):
+        """Write a single record to the output file."""
         handle = self.handle
         sequence = record.seq
         nucleotides = str(sequence)
@@ -160,6 +159,14 @@ class NibWriter(SequenceWriter):
             raise ValueError("Sequence should contain A,C,G,T,N,a,c,g,t,n only")
         indices = nucleotides.translate(table)
         handle.write(bytes.fromhex(indices))
+
+    def write_file(self, records):
+        """Use this to write an entire file containing the given records."""
+        count = super().write_file(records)
+        if count == 0:
+            raise ValueError("Must have one sequence")
+        if count > 1:
+            raise ValueError("More than one sequence found")
         return count
 
 
