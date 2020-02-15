@@ -347,7 +347,7 @@ class Writer:
         ####################################################
 
     def write_footer(self):
-        """Write the file footer to the output file. """
+        """Write the file footer to the output file."""
         pass
         ####################################################
         # You SHOULD implement this method in the subclass #
@@ -410,7 +410,12 @@ class Writer:
             if mincount == 1:  # Common case
                 raise ValueError("Must have one sequence")
             elif mincount == maxcount:
-                raise ValueError("Number of sequences is %d (expected %d)" % (count, mincount))
+                raise ValueError(
+                    "Number of sequences is %d (expected %d)" % (count, mincount)
+                )
             else:
-                raise ValueError("Number of sequences is %d (expected at least %d)" % (count, mincount))
+                raise ValueError(
+                    "Number of sequences is %d (expected at least %d)"
+                    % (count, mincount)
+                )
         return count
