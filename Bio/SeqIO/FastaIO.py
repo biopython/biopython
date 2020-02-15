@@ -395,7 +395,7 @@ class FastaWriter(SequentialSequenceWriter):
 
         if self.wrap:
             for i in range(0, len(data), self.wrap):
-                self.handle.write(data[i: i + self.wrap] + "\n")
+                self.handle.write(data[i : i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
 
@@ -465,7 +465,7 @@ def as_fasta(record):
     assert "\n" not in data
     assert "\r" not in data
     for i in range(0, len(data), 60):
-        lines.append(data[i: i + 60] + "\n")
+        lines.append(data[i : i + 60] + "\n")
 
     return "".join(lines)
 
