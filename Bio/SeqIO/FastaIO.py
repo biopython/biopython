@@ -286,7 +286,7 @@ class FastaWriter(Writer):
             handle.close()
 
         """
-        Writer.__init__(self, target)
+        super().__init__(target)
         if wrap:
             if wrap < 1:
                 raise ValueError

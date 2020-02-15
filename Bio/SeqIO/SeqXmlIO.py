@@ -33,7 +33,7 @@ class ContentHandler(handler.ContentHandler):
 
     def __init__(self):
         """Create a handler to handle XML events."""
-        handler.ContentHandler.__init__(self)
+        super().__init__()
         self.source = None
         self.sourceVersion = None
         self.seqXMLversion = None
@@ -496,7 +496,7 @@ class SeqXmlWriter(Writer):
          - ncbiTaxId - The NCBI taxonomy identifier of the species of origin.
 
         """
-        Writer.__init__(self, target, "wb")
+        super().__init__(target, "wb")
         handle = self.handle
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()

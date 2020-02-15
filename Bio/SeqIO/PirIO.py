@@ -229,7 +229,7 @@ class PirWriter(Writer):
             handle.close()
 
         """
-        Writer.__init__(self, handle)
+        super().__init__(handle)
         self.wrap = None
         if wrap:
             if wrap < 1:

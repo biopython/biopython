@@ -339,8 +339,7 @@ class Writer:
         return text.replace("\n", " ").replace("\r", " ")
 
     def write_header(self):
-        """Write the file header to the output file.
-        """
+        """Write the file header to the output file."""
         pass
         ####################################################
         # You SHOULD implement this method in the subclass #
@@ -348,8 +347,7 @@ class Writer:
         ####################################################
 
     def write_footer(self):
-        """Write the file footer to the output file.
-        """
+        """Write the file footer to the output file. """
         pass
         ####################################################
         # You SHOULD implement this method in the subclass #
@@ -385,7 +383,9 @@ class Writer:
                     if maxcount == 1:
                         raise ValueError("More than one sequence found")
                     else:
-                        raise ValueError("Number of sequences is larger than %d" % maxcount)
+                        raise ValueError(
+                            "Number of sequences is larger than %d" % maxcount
+                        )
                 self.write_record(record)
                 count += 1
         return count

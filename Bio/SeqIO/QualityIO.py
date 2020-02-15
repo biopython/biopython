@@ -1554,7 +1554,7 @@ class QualPhredWriter(Writer):
         The record2title argument is present for consistency with the
         Bio.SeqIO.FastaIO writer class.
         """
-        Writer.__init__(self, handle)
+        super().__init__(handle)
         # self.handle = handle
         self.wrap = None
         if wrap:

@@ -101,7 +101,7 @@ class PhdWriter(Writer):
 
     def __init__(self, handle):
         """Initialize the class."""
-        Writer.__init__(self, handle)
+        super().__init__(handle)
 
     def write_record(self, record):
         """Write a single Phd record to the file."""
