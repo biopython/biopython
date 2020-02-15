@@ -166,23 +166,23 @@ def FastaTwoLineParser(source):
 # RefSeq, Genbank & DDBJ not in NCBI's dbxref but in Uniprot's
 ncbi_identifiers = {
     # "lcl": (('id',), "local"),
-    "bbs": (('id',), "GenInfo backbond seqid"),
-    "bbm": (('id',), "GenInfo import ID"),
-    'gb': (('id', 'locus'), "GenBank"),  # Uniprot's dbxref only
-    'emb': (('id', 'locus'), "EMBL"),  # Uniprot's dbxref only
-    'pir': (('id', 'name'), 'PIR'),
-    'sp': (('id', 'name'), 'UniProtKB/Swiss-Prot'),
+    "bbs": (("id",), "GenInfo backbond seqid"),
+    "bbm": (("id",), "GenInfo import ID"),
+    "gb": (("id", "locus"), "GenBank"),  # Uniprot's dbxref only
+    "emb": (("id", "locus"), "EMBL"),  # Uniprot's dbxref only
+    "pir": (("id", "name"), "PIR"),
+    "sp": (("id", "name"), "UniProtKB/Swiss-Prot"),
     # 'pat': (('country', 'patent', 'sequence'), 'patent'),
     # 'pgp': (('country', 'application number', 'sequence'), 'pre-grant patent'),
-    'ref': (('id', 'name'), "RefSeq"),  # Uniprot's dbxref only
+    "ref": (("id", "name"), "RefSeq"),  # Uniprot's dbxref only
     # 'gnl': (('database', 'id'), "General database reference"),
-    'gi': (('id',), "GI"),
-    'dbj': (('id', 'locus'), 'DDBJ'),  # Uniprot's dbxref only
+    "gi": (("id",), "GI"),
+    "dbj": (("id", "locus"), "DDBJ"),  # Uniprot's dbxref only
     # 'prf': (('id', 'name'), 'PRF'),
-    'pdb': (('id', 'chain'), 'PDB'),
+    "pdb": (("id", "chain"), "PDB"),
     # 'tpg': (('id', 'name'), 'third-party GenBank'),
     # 'tpd': (('id', 'name'), 'third-party DDBJ'),
-    'tr': (('id', 'name'), 'UniProtKB/TrEMBL'),
+    "tr": (("id", "name"), "UniProtKB/TrEMBL"),
     # 'gpp': (('id', 'name'), 'genome pipeline'),
     # 'nat': (('id', 'name'), 'named annotation track')
 }
@@ -205,14 +205,14 @@ def fasta_title_parser_auto(title):
 
     """
     # used by fasta_ncbi_parser()
-    xrefs, long_name = title.split(' ', 1)
+    xrefs, long_name = title.split(" ", 1)
     id = xrefs
     i = 0
-    fields = xrefs.split('|')
+    fields = xrefs.split("|")
     parsed_fields = []
     while i < len(fields):
         if fields[i] in ncbi_identifiers:
-            parsed_fields.append(f'{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}')
+            parsed_fields.append(f"{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}")
         i += 1
     return id, long_name, parsed_fields
 
