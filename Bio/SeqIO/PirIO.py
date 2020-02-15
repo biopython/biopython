@@ -97,7 +97,7 @@ from Bio.Alphabet import (
 from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import Writer
 
 
 _pir_alphabets = {
@@ -189,7 +189,7 @@ def PirIterator(source):
             handle.close()
 
 
-class PirWriter(SequentialSequenceWriter):
+class PirWriter(Writer):
     """Class to write PIR format files."""
 
     def __init__(self, handle, wrap=60, record2title=None, code=None):
@@ -229,7 +229,7 @@ class PirWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
+        Writer.__init__(self, handle)
         self.wrap = None
         if wrap:
             if wrap < 1:
