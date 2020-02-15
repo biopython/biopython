@@ -86,7 +86,7 @@ def _clean(text):
 
 
 class SequenceWriter:
-    """Base class for building SeqRecord writers.
+    """Base class for building SeqRecord writers (OBSOLETE).
 
     Interlaced file formats (e.g. Clustal) should subclass directly.
 
@@ -159,7 +159,7 @@ class SequenceWriter:
 
 
 class SequentialSequenceWriter(SequenceWriter):
-    """Base class for sequence writers. This class should be subclassed.
+    """Base class for sequence writers (OBSOLETE). This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
     header, repeated records, and an (optional) footer.
@@ -280,29 +280,22 @@ class Writer:
     """Base class for sequence writers. This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
-    header, repeated records, and an (optional) footer.
+    header, repeated records, and an (optional) footer, as well
+    as for interlaced file formats such as Clustal.
 
-    In this case (as with interlaced file formats), the user may
-    simply call the write_file() method and be done.
+    The user may call the write_file() method to write a complete
+    file containing the sequences.
 
-    However, they may also call the write_header(), followed
-    by multiple calls to write_record() and/or write_records()
+    Alternatively, users may call the write_header(), followed
+    by multiple calls to write_record() and/or write_records(),
     followed finally by write_footer().
-
-    Users must call write_header() and write_footer() even when
-    the file format concerned doesn't have a header or footer.
-    This is to try and make life as easy as possible when
-    switching the output format.
 
     Note that write_header() cannot require any assumptions about
     the number of records.
     """
 
     def __init__(self, target, mode="w"):
-        """Create the writer object.
-
-        Use the method write_file() to actually record your sequence records.
-        """
+        """Create the writer object."""
         if mode == "w":
             try:
                 target.write("")
@@ -330,9 +323,6 @@ class Writer:
 
         self._target = target
         self.handle = handle
-        self._header_written = False
-        self._record_written = False
-        self._footer_written = False
 
     def _get_seq_string(self, record):
         """Use this to catch errors like the sequence being None (PRIVATE)."""
@@ -348,106 +338,79 @@ class Writer:
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ")
 
-    def write_file(self, records):
-        """Use this to write an entire file containing the given records.
-
-        records - A list or iterator returning SeqRecord objects
-
-        Should return the number of records (as an integer).
-
-        This method can only be called once.
-        """
-        # Note when implementing this, your writer class should NOT close the
-        # file at the end, but the calling code should.
-        raise NotImplementedError("This object should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
-
     def write_header(self):
-        """Write the file header.
-
-        If your file format defines a header, you should implement this method
-        in order to write the header before any of the records.
-
-        The default implementation checks the private attribute ._header_written
-        to ensure the header is only written once.
+        """Write the file header to the output file.
         """
-        assert not self._header_written, "You have aleady called write_header()"
-        assert (
-            not self._record_written
-        ), "You have aleady called write_record() or write_records()"
-        assert not self._footer_written, "You have aleady called write_footer()"
-        self._header_written = True
+        pass
+        ####################################################
+        # You SHOULD implement this method in the subclass #
+        # if the file format defined a file header.        #
+        ####################################################
 
     def write_footer(self):
-        """Write the file footer.
-
-        If your file format defines a footer, you should implement this method
-        in order to write the footer after all the records.
-
-        The default implementation checks the private attribute ._footer_written
-        to ensure the footer is only written once.
+        """Write the file footer to the output file.
         """
-        assert self._header_written, "You must call write_header() first"
-        assert (
-            self._record_written
-        ), "You have not called write_record() or write_records() yet"
-        assert not self._footer_written, "You have aleady called write_footer()"
-        self._footer_written = True
+        pass
+        ####################################################
+        # You SHOULD implement this method in the subclass #
+        # if the file format defined a file footer.        #
+        ####################################################
 
     def write_record(self, record):
         """Write a single record to the output file.
 
         record - a SeqRecord object
-
-        Once you have called write_header() you can call write_record()
-        and/or write_records() as many times as needed.  Then call
-        write_footer() and close().
         """
-        assert self._header_written, "You must call write_header() first"
-        assert not self._footer_written, "You have already called write_footer()"
-        self._record_written = True
-        raise NotImplementedError("This object should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
+        raise NotImplementedError("This method should be implemented")
+        ####################################################
+        # You SHOULD implement this method in the subclass #
+        # for sequential file formats.                     #
+        ####################################################
 
-    def write_records(self, records):
-        """Write multiple record to the output file.
+    def write_records(self, records, maxcount=None):
+        """Write records to the output file, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
-
-        Once you have called write_header() you can call write_record()
-        and/or write_records() as many times as needed.  Then call
-        write_footer() and close().
-
-        Returns the number of records written.
+        maxcount - The maximum number of records allowed by the
+        file format, or None if there is no maximum.
         """
-        # Default implementation:
-        assert self._header_written, "You must call write_header() first"
-        assert not self._footer_written, "You have already called write_footer()"
         count = 0
-        for record in records:
-            self.write_record(record)
-            count += 1
-        # Mark as true, even if there where no records
-        self._record_written = True
+        if maxcount is None:
+            for record in records:
+                self.write_record(record)
+                count += 1
+        else:
+            for record in records:
+                if count == maxcount:
+                    if maxcount == 1:
+                        raise ValueError("More than one sequence found")
+                    else:
+                        raise ValueError("Number of sequences is larger than %d" % maxcount)
+                self.write_record(record)
+                count += 1
         return count
 
-    def write_file(self, records):
-        """Use this to write an entire file containing the given records.
+    def write_file(self, records, mincount=0, maxcount=None):
+        """Write a complete file with the records, and return the number of records.
 
         records - A list or iterator returning SeqRecord objects
-
-        This method can only be called once.  Returns the number of records
-        written.
         """
+        ####################################################
+        # You SHOULD implement this method in the subclass #
+        # for interlaced file formats.                     #
+        ####################################################
         try:
             self.write_header()
-            count = self.write_records(records)
+            count = self.write_records(records, maxcount)
             self.write_footer()
         finally:
             if self.handle is not self._target:
                 self.handle.close()
+        if count < mincount:
+            if mincount == 1:  # Common case
+                raise ValueError("Must have one sequence")
+            elif mincount == maxcount:
+                raise ValueError("Number of sequences is %d (expected %d)" % (count, mincount))
+            else:
+                raise ValueError("Number of sequences is %d (expected at least %d)" % (count, mincount))
         return count

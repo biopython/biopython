@@ -240,10 +240,6 @@ class PirWriter(Writer):
 
     def write_record(self, record):
         """Write a single PIR record to the file."""
-        assert self._header_written
-        assert not self._footer_written
-        self._record_written = True
-
         if self.record2title:
             title = self.clean(self.record2title(record))
         else:

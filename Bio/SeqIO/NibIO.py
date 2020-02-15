@@ -161,12 +161,8 @@ class NibWriter(Writer):
         handle.write(bytes.fromhex(indices))
 
     def write_file(self, records):
-        """Use this to write an entire file containing the given records."""
-        count = super().write_file(records)
-        if count == 0:
-            raise ValueError("Must have one sequence")
-        if count > 1:
-            raise ValueError("More than one sequence found")
+        """Write the complete file with the records, and return the number of records."""
+        count = super().write_file(records, mincount=1, maxcount=1)
         return count
 
 
