@@ -855,7 +855,6 @@ class TestUniGene(unittest.TestCase):
                                                "PROTID=NP_001009045.1; "
                                                "PCT=54.51; ALN=276]")
 
-
     def test_read(self):
 
         # Start of the UniGene file for Homo sapiens downloaded from:
@@ -1173,7 +1172,6 @@ class TestUniGene(unittest.TestCase):
 
         self.assertEqual(repr(record), "<Record> Hs.2 NAT2 N-acetyltransferase 2 "
                                        "(arylamine N-acetyltransferase)")
-
 
     def test_read_value_error(self):
 
