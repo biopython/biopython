@@ -14,7 +14,6 @@ from Bio.Alphabet import IUPAC
 
 
 class TestTranscriptionTranslation(unittest.TestCase):
-
     def test_transcription(self):
         s = "ATA"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
@@ -23,11 +22,17 @@ class TestTranscriptionTranslation(unittest.TestCase):
         s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
         rna = dna.transcribe()
-        self.assertEqual(str(rna), "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU")
+        self.assertEqual(
+            str(rna),
+            "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU",
+        )
         s = "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU"
         rna = Seq.Seq(s, IUPAC.unambiguous_rna)
         dna = rna.back_transcribe()
-        self.assertEqual(str(dna), "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT")
+        self.assertEqual(
+            str(dna),
+            "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT",
+        )
 
     def test_translation(self):
         s = ""

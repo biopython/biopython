@@ -20,6 +20,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio import Medline
 
 import requires_internet
+
 requires_internet.check()
 
 #####################################################################
@@ -28,67 +29,130 @@ requires_internet.check()
 class TogoFields(unittest.TestCase):
     def test_invalid_database(self):
         """Check asking for fields of invalid database fails."""
-        self.assertRaises(IOError, TogoWS._get_fields,
-                          "http://togows.dbcls.jp/entry/invalid?fields")
+        self.assertRaises(
+            IOError, TogoWS._get_fields, "http://togows.dbcls.jp/entry/invalid?fields"
+        )
 
     def test_databases(self):
         """Check supported databases."""
         dbs = set(TogoWS._get_entry_dbs())
-        expected = {"nuccore", "nucest", "nucgss",
-                    "nucleotide", "protein", "gene",
-                    "homologene", "snp",
-                    "mesh", "pubmed",  # 'embl',
-                    "uniprot", "uniparc", "uniref100",
-                    "uniref90", "uniref50", "ddbj",
-                    "dad", "pdb", "compound", "drug",
-                    "enzyme", "genes", "glycan",
-                    "orthology", "reaction", "module",
-                    "pathway"}
-        self.assertTrue(dbs.issuperset(expected),
-                        "Missing DB: %s" % ", ".join(sorted(expected.difference(dbs))))
+        expected = {
+            "nuccore",
+            "nucest",
+            "nucgss",
+            "nucleotide",
+            "protein",
+            "gene",
+            "homologene",
+            "snp",
+            "mesh",
+            "pubmed",  # 'embl',
+            "uniprot",
+            "uniparc",
+            "uniref100",
+            "uniref90",
+            "uniref50",
+            "ddbj",
+            "dad",
+            "pdb",
+            "compound",
+            "drug",
+            "enzyme",
+            "genes",
+            "glycan",
+            "orthology",
+            "reaction",
+            "module",
+            "pathway",
+        }
+        self.assertTrue(
+            dbs.issuperset(expected),
+            "Missing DB: %s" % ", ".join(sorted(expected.difference(dbs))),
+        )
 
     def test_pubmed(self):
         """Check supported fields for pubmed database."""
         fields = set(TogoWS._get_entry_fields("pubmed"))
-        self.assertTrue(fields.issuperset(["abstract", "au", "authors",
-                                           "doi", "mesh", "so",
-                                           "title"]), fields)
+        self.assertTrue(
+            fields.issuperset(
+                ["abstract", "au", "authors", "doi", "mesh", "so", "title"]
+            ),
+            fields,
+        )
 
     def test_ncbi_protein(self):
         """Check supported fields for NCBI protein database."""
         fields = set(TogoWS._get_entry_fields("ncbi-protein"))
-        self.assertTrue(fields.issuperset(["entry_id", "length", "strand",
-                                           "moltype", "linearity", "division",
-                                           "date", "definition", "accession",
-                                           "accessions", "version", "versions",
-                                           "acc_version", "gi", "keywords",
-                                           "organism", "common_name",
-                                           "taxonomy", "comment", "seq"]),
-                        fields)
+        self.assertTrue(
+            fields.issuperset(
+                [
+                    "entry_id",
+                    "length",
+                    "strand",
+                    "moltype",
+                    "linearity",
+                    "division",
+                    "date",
+                    "definition",
+                    "accession",
+                    "accessions",
+                    "version",
+                    "versions",
+                    "acc_version",
+                    "gi",
+                    "keywords",
+                    "organism",
+                    "common_name",
+                    "taxonomy",
+                    "comment",
+                    "seq",
+                ]
+            ),
+            fields,
+        )
 
     def test_ddbj(self):
         """Check supported fields for ddbj database."""
         fields = set(TogoWS._get_entry_fields("ddbj"))
-        self.assertTrue(fields.issuperset(["entry_id", "length", "strand",
-                                           "moltype", "linearity", "division",
-                                           "date", "definition", "accession",
-                                           "accessions", "version", "versions",
-                                           "acc_version", "gi", "keywords",
-                                           "organism", "common_name",
-                                           "taxonomy", "comment", "seq"]),
-                        fields)
+        self.assertTrue(
+            fields.issuperset(
+                [
+                    "entry_id",
+                    "length",
+                    "strand",
+                    "moltype",
+                    "linearity",
+                    "division",
+                    "date",
+                    "definition",
+                    "accession",
+                    "accessions",
+                    "version",
+                    "versions",
+                    "acc_version",
+                    "gi",
+                    "keywords",
+                    "organism",
+                    "common_name",
+                    "taxonomy",
+                    "comment",
+                    "seq",
+                ]
+            ),
+            fields,
+        )
 
     def test_uniprot(self):
         """Check supported fields for uniprot database."""
         fields = set(TogoWS._get_entry_fields("uniprot"))
-        self.assertTrue(fields.issuperset(["definition", "entry_id", "seq"]),
-                        fields)
+        self.assertTrue(fields.issuperset(["definition", "entry_id", "seq"]), fields)
 
     def test_pdb(self):
         """Check supported fields for pdb database."""
         fields = set(TogoWS._get_entry_fields("pdb"))
-        self.assertTrue(fields.issuperset(["accession", "chains", "keywords",
-                                           "models"]), fields)
+        self.assertTrue(
+            fields.issuperset(["accession", "chains", "keywords", "models"]), fields
+        )
 
 
 class TogoEntry(unittest.TestCase):
@@ -98,31 +162,41 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("pubmed", "16381885")
         data = Medline.read(handle)
         handle.close()
-        self.assertEqual(data["TI"],
-                         "From genomics to chemical genomics: "
-                         "new developments in KEGG.")
-        self.assertEqual(data["AU"], ["Kanehisa M", "Goto S", "Hattori M",
-                                      "Aoki-Kinoshita KF", "Itoh M",
-                                      "Kawashima S", "Katayama T", "Araki M",
-                                      "Hirakawa M"])
+        self.assertEqual(
+            data["TI"], "From genomics to chemical genomics: new developments in KEGG.",
+        )
+        self.assertEqual(
+            data["AU"],
+            [
+                "Kanehisa M",
+                "Goto S",
+                "Hattori M",
+                "Aoki-Kinoshita KF",
+                "Itoh M",
+                "Kawashima S",
+                "Katayama T",
+                "Araki M",
+                "Hirakawa M",
+            ],
+        )
 
     def test_pubmed_16381885_ti(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")."""
         handle = TogoWS.entry("pubmed", "16381885", field="title")
         data = handle.read().strip()
         handle.close()
-        self.assertEqual(data,
-                         "From genomics to chemical genomics: "
-                         "new developments in KEGG.")
+        self.assertEqual(
+            data, "From genomics to chemical genomics: new developments in KEGG."
+        )
 
     def test_pubmed_16381885_title(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")."""
         handle = TogoWS.entry("pubmed", "16381885", field="title")
         data = handle.read().strip()
         handle.close()
-        self.assertEqual(data,
-                         "From genomics to chemical genomics: "
-                         "new developments in KEGG.")
+        self.assertEqual(
+            data, "From genomics to chemical genomics: new developments in KEGG."
+        )
 
     def test_pubmed_16381885_au(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="au")."""
@@ -130,10 +204,20 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("pubmed", "16381885", field="au")
         data = handle.read().strip().split("\n")
         handle.close()
-        self.assertEqual(data, ["Kanehisa M", "Goto S", "Hattori M",
-                                "Aoki-Kinoshita KF", "Itoh M",
-                                "Kawashima S", "Katayama T", "Araki M",
-                                "Hirakawa M"])
+        self.assertEqual(
+            data,
+            [
+                "Kanehisa M",
+                "Goto S",
+                "Hattori M",
+                "Aoki-Kinoshita KF",
+                "Itoh M",
+                "Kawashima S",
+                "Katayama T",
+                "Araki M",
+                "Hirakawa M",
+            ],
+        )
 
     def test_pubmed_16381885_authors(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="authors")."""
@@ -141,25 +225,36 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("pubmed", "16381885", field="authors")
         data = handle.read().strip().split("\t")
         handle.close()
-        self.assertEqual(data, ["Kanehisa, M.", "Goto, S.", "Hattori, M.",
-                                "Aoki-Kinoshita, K. F.", "Itoh, M.",
-                                "Kawashima, S.", "Katayama, T.", "Araki, M.",
-                                "Hirakawa, M."])
+        self.assertEqual(
+            data,
+            [
+                "Kanehisa, M.",
+                "Goto, S.",
+                "Hattori, M.",
+                "Aoki-Kinoshita, K. F.",
+                "Itoh, M.",
+                "Kawashima, S.",
+                "Katayama, T.",
+                "Araki, M.",
+                "Hirakawa, M.",
+            ],
+        )
 
     def test_pubmed_16381885_invalid_field(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="invalid_for_testing")."""
-        self.assertRaises(ValueError, TogoWS.entry,
-                          "pubmed", "16381885", field="invalid_for_testing")
+        self.assertRaises(
+            ValueError, TogoWS.entry, "pubmed", "16381885", field="invalid_for_testing"
+        )
 
     def test_pubmed_16381885_invalid_format(self):
         """Bio.TogoWS.entry("pubmed", "16381885", format="invalid_for_testing")."""
-        self.assertRaises(ValueError, TogoWS.entry,
-                          "pubmed", "16381885", format="invalid_for_testing")
+        self.assertRaises(
+            ValueError, TogoWS.entry, "pubmed", "16381885", format="invalid_for_testing"
+        )
 
     def test_pubmed_invalid_id(self):
         """Bio.TogoWS.entry("pubmed", "invalid_for_testing")."""
-        self.assertRaises(IOError, TogoWS.entry,
-                          "pubmed", "invalid_for_testing")
+        self.assertRaises(IOError, TogoWS.entry, "pubmed", "invalid_for_testing")
 
     def test_pubmed_16381885_and_19850725(self):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725")."""
@@ -167,21 +262,42 @@ class TogoEntry(unittest.TestCase):
         records = list(Medline.parse(handle))
         handle.close()
         self.assertEqual(len(records), 2)
-        self.assertEqual(records[0]["TI"],
-                         "From genomics to chemical genomics: "
-                         "new developments in KEGG.")
-        self.assertEqual(records[0]["AU"], ["Kanehisa M", "Goto S",
-                                            "Hattori M", "Aoki-Kinoshita KF",
-                                            "Itoh M", "Kawashima S",
-                                            "Katayama T", "Araki M",
-                                            "Hirakawa M"])
-        self.assertEqual(records[1]["TI"],
-                         "DDBJ launches a new archive database with "
-                         "analytical tools for next-generation sequence data.")
-        self.assertEqual(records[1]["AU"], ["Kaminuma E", "Mashima J",
-                                            "Kodama Y", "Gojobori T",
-                                            "Ogasawara O", "Okubo K",
-                                            "Takagi T", "Nakamura Y"])
+        self.assertEqual(
+            records[0]["TI"],
+            "From genomics to chemical genomics: new developments in KEGG.",
+        )
+        self.assertEqual(
+            records[0]["AU"],
+            [
+                "Kanehisa M",
+                "Goto S",
+                "Hattori M",
+                "Aoki-Kinoshita KF",
+                "Itoh M",
+                "Kawashima S",
+                "Katayama T",
+                "Araki M",
+                "Hirakawa M",
+            ],
+        )
+        self.assertEqual(
+            records[1]["TI"],
+            "DDBJ launches a new archive database with "
+            "analytical tools for next-generation sequence data.",
+        )
+        self.assertEqual(
+            records[1]["AU"],
+            [
+                "Kaminuma E",
+                "Mashima J",
+                "Kodama Y",
+                "Gojobori T",
+                "Ogasawara O",
+                "Okubo K",
+                "Takagi T",
+                "Nakamura Y",
+            ],
+        )
 
     def test_pubmed_16381885_and_19850725_authors(self):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725", field="authors")."""
@@ -192,20 +308,37 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(2, len(names))
         names1, names2 = names
-        self.assertEqual(names1.split("\t"),
-                         ["Kanehisa, M.", "Goto, S.", "Hattori, M.",
-                          "Aoki-Kinoshita, K. F.", "Itoh, M.",
-                          "Kawashima, S.", "Katayama, T.",
-                          "Araki, M.", "Hirakawa, M."])
-        self.assertEqual(names2.split("\t"),
-                         ["Kaminuma, E.", "Mashima, J.", "Kodama, Y.",
-                          "Gojobori, T.", "Ogasawara, O.", "Okubo, K.",
-                          "Takagi, T.", "Nakamura, Y."])
+        self.assertEqual(
+            names1.split("\t"),
+            [
+                "Kanehisa, M.",
+                "Goto, S.",
+                "Hattori, M.",
+                "Aoki-Kinoshita, K. F.",
+                "Itoh, M.",
+                "Kawashima, S.",
+                "Katayama, T.",
+                "Araki, M.",
+                "Hirakawa, M.",
+            ],
+        )
+        self.assertEqual(
+            names2.split("\t"),
+            [
+                "Kaminuma, E.",
+                "Mashima, J.",
+                "Kodama, Y.",
+                "Gojobori, T.",
+                "Ogasawara, O.",
+                "Okubo, K.",
+                "Takagi, T.",
+                "Nakamura, Y.",
+            ],
+        )
 
     def test_invalid_db(self):
         """Bio.TogoWS.entry("invalid_db", "invalid_id")."""
-        self.assertRaises(ValueError, TogoWS.entry,
-                          "invalid_db", "invalid_id")
+        self.assertRaises(ValueError, TogoWS.entry, "invalid_db", "invalid_id")
 
     def test_ddbj_genbank_length(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="length")."""
@@ -275,13 +408,23 @@ class TogoEntry(unittest.TestCase):
 
     def test_ddbj_genbank_invalid_field(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="invalid_for_testing")."""
-        self.assertRaises(ValueError, TogoWS.entry,
-                          "nucleotide", "X52960", field="invalid_for_testing")
+        self.assertRaises(
+            ValueError,
+            TogoWS.entry,
+            "nucleotide",
+            "X52960",
+            field="invalid_for_testing",
+        )
 
     def test_nucleotide_invalid_format(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="invalid_for_testing")."""
-        self.assertRaises(ValueError, TogoWS.entry,
-                          "nucleotide", "X52960", format="invalid_for_testing")
+        self.assertRaises(
+            ValueError,
+            TogoWS.entry,
+            "nucleotide",
+            "X52960",
+            format="invalid_for_testing",
+        )
 
     def test_ddbj_gff3(self):
         """Bio.TogoWS.entry("ddbj", "X52960", format="gff")."""
@@ -358,33 +501,35 @@ class TogoSearch(unittest.TestCase):
 
     def test_bad_args_just_limit(self):
         """Reject Bio.TogoWS.search(...) with just limit."""
-        self.assertRaises(ValueError, TogoWS.search,
-                          "pubmed", "lung+cancer", limit=10)
+        self.assertRaises(ValueError, TogoWS.search, "pubmed", "lung+cancer", limit=10)
 
     def test_bad_args_just_offset(self):
         """Reject Bio.TogoWS.search(...) with just offset."""
-        self.assertRaises(ValueError, TogoWS.search,
-                          "pubmed", "lung+cancer", offset=10)
+        self.assertRaises(ValueError, TogoWS.search, "pubmed", "lung+cancer", offset=10)
 
     def test_bad_args_zero_limit(self):
         """Reject Bio.TogoWS.search(...) with zero limit."""
-        self.assertRaises(ValueError, TogoWS.search,
-                          "pubmed", "lung+cancer", offset=1, limit=0)
+        self.assertRaises(
+            ValueError, TogoWS.search, "pubmed", "lung+cancer", offset=1, limit=0
+        )
 
     def test_bad_args_zero_offset(self):
         """Reject Bio.TogoWS.search(...) with zero offset."""
-        self.assertRaises(ValueError, TogoWS.search,
-                          "pubmed", "lung+cancer", offset=0, limit=10)
+        self.assertRaises(
+            ValueError, TogoWS.search, "pubmed", "lung+cancer", offset=0, limit=10
+        )
 
     def test_bad_args_non_int_offset(self):
         """Reject Bio.TogoWS.search(...) with non-integer offset."""
-        self.assertRaises(ValueError, TogoWS.search,
-                          "pubmed", "lung+cancer", offset="test", limit=10)
+        self.assertRaises(
+            ValueError, TogoWS.search, "pubmed", "lung+cancer", offset="test", limit=10
+        )
 
     def test_bad_args_non_int_limit(self):
         """Reject Bio.TogoWS.search(...) with non-integer limit."""
-        self.assertRaises(ValueError, TogoWS.search,
-                          "pubmed", "lung+cancer", offset=1, limit="lots")
+        self.assertRaises(
+            ValueError, TogoWS.search, "pubmed", "lung+cancer", offset=1, limit="lots"
+        )
 
     def test_pubmed_search_togows(self):
         """Bio.TogoWS.search_iter("pubmed", "TogoWS") etc."""
@@ -392,8 +537,11 @@ class TogoSearch(unittest.TestCase):
 
     def test_pubmed_search_bioruby(self):
         """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc."""
-        self.check("pubmed", "BioRuby", ["22994508", "22399473",
-                                         "20739307", "20015970", "14693808"])
+        self.check(
+            "pubmed",
+            "BioRuby",
+            ["22994508", "22399473", "20739307", "20015970", "14693808"],
+        )
 
     def test_pubmed_search_porin(self):
         """Bio.TogoWS.search_iter("pubmed", "human porin") etc.
@@ -404,13 +552,13 @@ class TogoSearch(unittest.TestCase):
         """
         self.check("pubmed", "human porin", ["21189321", "21835183"])
 
-# TogoWS search for PDBj currently unavailable
-#    def test_pdb_search_porin(self):
-#        """Bio.TogoWS.search_iter("pdb", "porin") etc
-#
-#        Count was about 161 at time of writing.
-#        """
-#        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
+    # TogoWS search for PDBj currently unavailable
+    #    def test_pdb_search_porin(self):
+    #        """Bio.TogoWS.search_iter("pdb", "porin") etc
+    #
+    #        Count was about 161 at time of writing.
+    #        """
+    #        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_uniprot_search_lung_cancer(self):
         """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc.
@@ -430,8 +578,10 @@ class TogoSearch(unittest.TestCase):
         except HTTPError as err:
             raise ValueError("%s from %s" % (err, err.url)) from None
         if expected_matches and search_count < len(expected_matches):
-            raise ValueError("Only %i matches, expected at least %i"
-                             % (search_count, len(expected_matches)))
+            raise ValueError(
+                "Only %i matches, expected at least %i"
+                % (search_count, len(expected_matches))
+            )
         if search_count > 5000 and not limit:
             print("%i results, skipping" % search_count)
             return
@@ -444,8 +594,9 @@ class TogoSearch(unittest.TestCase):
         search_iter = list(TogoWS.search_iter(database, search_term, limit))
         self.assertEqual(count, len(search_iter))
         for match in expected_matches:
-            self.assertTrue(match in search_iter,
-                            "Expected %s in results but not" % match)
+            self.assertTrue(
+                match in search_iter, "Expected %s in results but not" % match
+            )
 
 
 class TogoConvert(unittest.TestCase):
@@ -453,12 +604,20 @@ class TogoConvert(unittest.TestCase):
 
     def test_invalid_format(self):
         """Check convert file format checking."""
-        self.assertRaises(ValueError, TogoWS.convert,
-                          StringIO("PLACEHOLDER"),
-                          "genbank", "invalid_for_testing")
-        self.assertRaises(ValueError, TogoWS.convert,
-                          StringIO("PLACEHOLDER"),
-                          "invalid_for_testing", "fasta")
+        self.assertRaises(
+            ValueError,
+            TogoWS.convert,
+            StringIO("PLACEHOLDER"),
+            "genbank",
+            "invalid_for_testing",
+        )
+        self.assertRaises(
+            ValueError,
+            TogoWS.convert,
+            StringIO("PLACEHOLDER"),
+            "invalid_for_testing",
+            "fasta",
+        )
 
     def test_genbank_to_fasta(self):
         """Conversion of GenBank to FASTA."""
@@ -467,6 +626,7 @@ class TogoConvert(unittest.TestCase):
         with open(filename) as handle:
             new = SeqIO.read(TogoWS.convert(handle, "genbank", "fasta"), "fasta")
         self.assertEqual(str(old.seq), str(new.seq))
+
 
 #    def test_genbank_to_embl(self):
 #        """Conversion of GenBank to EMBL."""
