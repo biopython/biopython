@@ -25,8 +25,8 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        with open(datafile) as test_handle:
-            seq_record = SeqIO.read(test_handle, "uniprot-xml")
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "uniprot-xml")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -78,9 +78,8 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "uniprot-xml")
-        test_handle.close()
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "uniprot-xml")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -269,9 +268,8 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -289,9 +287,8 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -432,9 +429,10 @@ class TestUniprot(unittest.TestCase):
 
     def test_submittedName_allowed(self):
         """Checks if parser supports new XML Element (submittedName)."""
-        for entry in SeqIO.parse(open("SwissProt/R5HY77.xml"), "uniprot-xml"):
-            self.assertEqual(entry.id, "R5HY77")
-            self.assertEqual(entry.description, "Elongation factor Ts")
+        with open("SwissProt/R5HY77.xml") as handle:
+            for entry in SeqIO.parse(handle, "uniprot-xml"):
+                self.assertEqual(entry.id, "R5HY77")
+                self.assertEqual(entry.description, "Elongation factor Ts")
 
 
 if __name__ == "__main__":
