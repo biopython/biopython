@@ -117,7 +117,7 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["SX"], "Female")
             self.assertEqual(record["CA"], "Cancer cell line")
             self.assertRaises(StopIteration, next, records)
-    
+
     def test__str__(self):
         """Test string function."""
         with open("Cellosaurus/cell_lines_3.txt") as handle:
