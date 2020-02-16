@@ -131,12 +131,10 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
 
     def test_fasta_one_sequence(self):
         """Test a fasta input file containing only one sequence."""
-        input_file = "seq.fasta"
-        handle = open(input_file, "w")
         record = list(SeqIO.parse("Registry/seqs.fasta", "fasta"))[0]
-        SeqIO.write(record, handle, "fasta")
-        handle.close()
-        del handle, record
+        input_file = "seq.fasta"
+        with open(input_file, "w") as handle:
+            SeqIO.write(record, handle, "fasta")
 
         cline = XXmotifCommandline(outdir=self.out_dir,
                                    seqfile=input_file)
@@ -159,12 +157,10 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
 
     def test_large_fasta_file(self):
         """Test a large fasta input file."""
-        input_file = "temp_b_nuc.fasta"
-        handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/B_nuc.pir", "pir"))
-        SeqIO.write(records, handle, "fasta")
-        handle.close()
-        del handle, records
+        input_file = "temp_b_nuc.fasta"
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
 
         cline = XXmotifCommandline(outdir=self.out_dir,
                                    seqfile=input_file)
@@ -174,10 +170,10 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
 
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
+        records = SeqIO.parse("Phylip/hennigian.phy", "phylip")
         input_file = "temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
 
         cline = XXmotifCommandline(outdir=self.out_dir,
                                    seqfile=input_file)
