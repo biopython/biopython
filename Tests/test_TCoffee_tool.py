@@ -76,8 +76,8 @@ class TCoffeeApplication(unittest.TestCase):
         cmdline.output = "pir_aln"
         self.assertEqual(
             str(cmdline),
-            t_coffee_exe + " -output pir_aln "
-            "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet",
+            t_coffee_exe
+            + " -output pir_aln -infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet",
         )
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
@@ -102,8 +102,8 @@ class TCoffeeApplication(unittest.TestCase):
         cmdline.type = "protein"
         self.assertEqual(
             str(cmdline),
-            t_coffee_exe + " -output clustalw_aln "
-            "-infile Fasta/fa01 -outfile Fasta/tc_out.aln "
+            t_coffee_exe
+            + " -output clustalw_aln -infile Fasta/fa01 -outfile Fasta/tc_out.aln "
             "-type protein -outorder input -gapopen -2 -gapext -5",
         )
         stdout, stderr = cmdline()
@@ -155,8 +155,8 @@ class TCoffeeApplication(unittest.TestCase):
         )
         self.assertEqual(
             str(cmdline),
-            t_coffee_exe + " -output msf_aln "
-            "-infile Fasta/fa01 -outfile Fasta/tc_out.msf -quiet",
+            t_coffee_exe
+            + " -output msf_aln -infile Fasta/fa01 -outfile Fasta/tc_out.msf -quiet",
         )
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
