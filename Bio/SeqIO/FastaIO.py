@@ -1,4 +1,5 @@
 # Copyright 2006-2017 by Peter Cock.  All rights reserved.
+# NCBI standard parser copyright 2020 by Tianyi Shi. All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -196,24 +197,33 @@ def fasta_title_parser_auto(title):
     Arguments:
      - title - title line as a stripped string without '>' parsed by SimpleFastaParser
 
-    >>> with open("Fasta/ncbi_standard.fasta") as handle:
+    >>> with open("Fasta/ncbi_standard_aa.fasta") as handle:
     ...     for title, seq in SimpleFastaParser(handle):
     ...         print(fasta_title_parser_auto(title))
     ...
     ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', ['EMBL:CAA12345.6', 'GI:78'])
     ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', ['GI:10', 'PDB:1A2B'])
+    ('unsupportedIdentifier|3', 'title0', [])
+    ('', 'title_without_identifiers', [])
 
     """
     # used by fasta_ncbi_parser()
-    xrefs, long_name = title.split(" ", 1)
-    id = xrefs
-    i = 0
-    fields = xrefs.split("|")
-    parsed_fields = []
-    while i < len(fields):
-        if fields[i] in ncbi_identifiers:
-            parsed_fields.append(f"{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}")
-        i += 1
+    id, long_name, parsed_fields = '', '', []
+    if title:
+        splitTitle = title.split(" ", 1)
+        if len(splitTitle) == 2:
+            # parse xrefs only when they're present
+            xrefs, long_name = title.split(" ", 1)
+            id = xrefs
+            i = 0
+            fields = xrefs.split("|")
+            parsed_fields = []
+            while i < len(fields):
+                if fields[i] in ncbi_identifiers:
+                    parsed_fields.append(f"{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}")
+                i += 1
+        else:
+            long_name = title
     return id, long_name, parsed_fields
 
 
