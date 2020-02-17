@@ -229,7 +229,7 @@ single_amino_files = [
     "Fasta/loveliesbleeding.pro",
 ]
 
-multi_amino_files = ["Fasta/f002", "Fasta/fa01"]
+multi_amino_files = ["Fasta/f002", "Fasta/fa01", "Fasta/ncbi_standard_aa.fasta"]
 
 for filename in single_nucleic_files:
     name = filename.split(".")[0]
