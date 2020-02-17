@@ -10,6 +10,7 @@ import unittest
 from Bio import SCOP
 
 import requires_internet
+
 requires_internet.check()
 
 

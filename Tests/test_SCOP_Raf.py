@@ -57,7 +57,7 @@ class RafTests(unittest.TestCase):
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
-        r = r[r.index("124"): r.index("135") + 1]
+        r = r[r.index("124") : r.index("135") + 1]
         self.assertEqual(len(r.res), 12)
 
     def test_SeqMap_getAtoms_err(self):
@@ -65,11 +65,10 @@ class RafTests(unittest.TestCase):
         # There is no overlap with this PDB file...
         with open("PDB/1A8O.pdb") as pdb_handle:
             out_handle = StringIO()
-            self.assertRaises(RuntimeError, r.getAtoms,
-                              *(pdb_handle, out_handle))
+            self.assertRaises(RuntimeError, r.getAtoms, *(pdb_handle, out_handle))
 
     def testSeqMapIndex(self):
-        filename = ("./SCOP/raftest.txt")
+        filename = "./SCOP/raftest.txt"
 
         index = Raf.SeqMapIndex(filename)
         r = index.getSeqMap("103m")
@@ -79,7 +78,9 @@ class RafTests(unittest.TestCase):
         self.assertEqual(r.flags, "111011")
 
         r = index.getSeqMap("103m 1-10")
-        self.assertEqual(r.pdbid, "103m",)
+        self.assertEqual(
+            r.pdbid, "103m",
+        )
         self.assertEqual(len(r.res), 10)
         self.assertEqual(r.pdb_datestamp, "010301")
         self.assertEqual(r.flags, "111011")
