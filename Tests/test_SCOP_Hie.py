@@ -11,7 +11,6 @@ from Bio.SCOP import Hie
 
 
 class HieTests(unittest.TestCase):
-
     def setUp(self):
         self.filename = "./SCOP/dir.hie.scop.txt_test"
 

@@ -11,7 +11,6 @@ from Bio.SCOP import Des
 
 
 class DesTests(unittest.TestCase):
-
     def setUp(self):
         self.filename = "./SCOP/dir.des.scop.txt_test"
 

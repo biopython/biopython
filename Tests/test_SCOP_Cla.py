@@ -13,7 +13,6 @@ from Bio.SCOP import Cla
 
 
 class ClaTests(unittest.TestCase):
-
     def setUp(self):
         self.filename = "./SCOP/dir.cla.scop.txt_test"
 
@@ -38,13 +37,12 @@ class ClaTests(unittest.TestCase):
                 # there, NOT that they are in the same order.
                 # End of line is platform dependent. Strip it off
                 expected_hierarchy = line.rstrip().split("\t")[5].split(",")
-                expected_hierarchy = dict(pair.split("=") for pair
-                                          in expected_hierarchy)
+                expected_hierarchy = dict(
+                    pair.split("=") for pair in expected_hierarchy
+                )
                 actual_hierarchy = str(record).rstrip().split("\t")[5].split(",")
-                actual_hierarchy = dict(pair.split("=") for pair
-                                        in actual_hierarchy)
-                self.assertEqual(len(actual_hierarchy),
-                                 len(expected_hierarchy))
+                actual_hierarchy = dict(pair.split("=") for pair in actual_hierarchy)
+                self.assertEqual(len(actual_hierarchy), len(expected_hierarchy))
                 for key, actual_value in actual_hierarchy.items():
                     self.assertEqual(actual_value, expected_hierarchy[key])
 
@@ -63,13 +61,18 @@ class ClaTests(unittest.TestCase):
         self.assertEqual(record.residues.fragments, (("T", "", ""), ("U", "91", "106")))
         self.assertEqual(record.sccs, "b.1.2.1")
         self.assertEqual(record.sunid, 21953)
-        self.assertEqual(record.hierarchy, {"cl": 48724,
-                                            "cf": 48725,
-                                            "sf": 49265,
-                                            "fa": 49266,
-                                            "dm": 49267,
-                                            "sp": 49268,
-                                            "px": 21953})
+        self.assertEqual(
+            record.hierarchy,
+            {
+                "cl": 48724,
+                "cf": 48725,
+                "sf": 49265,
+                "fa": 49266,
+                "dm": 49267,
+                "sp": 49268,
+                "px": 21953,
+            },
+        )
 
     def testIndex(self):
         """Test CLA file indexing."""
