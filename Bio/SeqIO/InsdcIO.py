@@ -38,7 +38,7 @@ from Bio import BiopythonWarning
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
-from Bio.SeqIO.Interfaces import Writer
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import SeqFeature
 
 # NOTE
@@ -367,7 +367,7 @@ def _insdc_location_string(location, rec_length):
             return loc
 
 
-class _InsdcWriter(Writer):
+class _InsdcWriter(SequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
 
     MAX_WIDTH = 80

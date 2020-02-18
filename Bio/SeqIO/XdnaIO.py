@@ -229,8 +229,8 @@ class XdnaWriter(SequenceWriter):
         """Write the specified record to a Xdna file.
 
         Note that the function expects a list (or iterable) of records
-        as per the Writer interface, but the list should contain only one
-        record as the Xdna format is a mono-record format.
+        as per the SequenceWriter interface, but the list should contain
+        only one record as the Xdna format is a mono-record format.
         """
         records = iter(records)
 

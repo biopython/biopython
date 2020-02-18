@@ -25,7 +25,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import Writer
+from .Interfaces import SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -472,7 +472,7 @@ class SeqXmlIterator:
         raise StopIteration
 
 
-class SeqXmlWriter(Writer):
+class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
@@ -507,7 +507,6 @@ class SeqXmlWriter(Writer):
 
     def write_header(self):
         """Write root node with document metadata."""
-        Writer.write_header(self)
         attrs = {
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
             "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",
@@ -557,7 +556,6 @@ class SeqXmlWriter(Writer):
 
     def write_footer(self):
         """Close the root node and finish the XML document."""
-        Writer.write_footer(self)
 
         self.xml_generator.endElement("seqXML")
         self.xml_generator.endDocument()

@@ -40,7 +40,7 @@ description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 """
 
 
-from Bio.SeqIO.Interfaces import Writer
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
@@ -119,7 +119,7 @@ def NibIterator(source, alphabet=None):
             handle.close()
 
 
-class NibWriter(Writer):
+class NibWriter(SequenceWriter):
     """Nib file writer."""
 
     def __init__(self, target):
