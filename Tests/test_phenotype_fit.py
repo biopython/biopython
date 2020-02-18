@@ -9,19 +9,25 @@
 
 try:
     import numpy
+
     del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.phenotype.") from None
+        "Install NumPy if you want to use Bio.phenotype."
+    ) from None
 try:
     import scipy
+
     del scipy
     from scipy.optimize import OptimizeWarning
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "Install SciPy if you want to use Bio.phenotype fit functionality.") from None
+        "Install SciPy if you want to use Bio.phenotype fit functionality."
+    ) from None
 
 import json
 import unittest
@@ -29,6 +35,7 @@ import unittest
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
     from Bio import phenotype
@@ -46,9 +53,10 @@ class TestPhenoMicro(unittest.TestCase):
             p = json.load(handle)
 
         times = p["measurements"]["Hour"]
-        w = phenotype.phen_micro.WellRecord("A10",
-                                            signals={times[i]: p["measurements"]["A10"][i]
-                                                     for i in range(len(times))})
+        w = phenotype.phen_micro.WellRecord(
+            "A10",
+            signals={times[i]: p["measurements"]["A10"][i] for i in range(len(times))},
+        )
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", OptimizeWarning)
