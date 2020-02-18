@@ -556,7 +556,6 @@ class SeqXmlWriter(SequenceWriter):
 
     def write_footer(self):
         """Close the root node and finish the XML document."""
-
         self.xml_generator.endElement("seqXML")
         self.xml_generator.endDocument()
 
