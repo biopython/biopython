@@ -7,6 +7,7 @@
 
 import re
 from functools import reduce
+from abc import ABC, abstractmethod
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -310,8 +311,8 @@ def _parse_hit_or_query_line(line):
     return id, desc
 
 
-class _BaseExonerateParser:
-    """Abstract iterator for exonerate format."""
+class _BaseExonerateParser(ABC):
+    """Abstract base class iterator for exonerate format."""
 
     _ALN_MARK = None
 
@@ -351,8 +352,9 @@ class _BaseExonerateParser:
             else:
                 self.line = self.handle.readline()
 
+    @abstractmethod
     def parse_alignment_block(self, header):
-        raise NotImplementedError("Subclass must implement this")
+        pass
 
     def _parse_alignment_header(self):
         # read all header lines and store them
