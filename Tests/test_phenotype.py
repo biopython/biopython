@@ -146,13 +146,14 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(p2["A02"], p["A02"] - p["A01"])
         self.assertEqual(
             repr(p),
-            "PlateRecord('WellRecord['A01'], WellRecord"
-            "['A02'], WellRecord['A03'], ..., WellRecord['B12']')",
+            "PlateRecord('WellRecord['A01'], WellRecord['A02'], "
+            "WellRecord['A03'], ..., WellRecord['B12']')",
         )
         self.assertEqual(
             str(p),
-            "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: 12\nPlateRecord('WellRecord"
-            "['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['B12']')",
+            "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: 12\n"
+            "PlateRecord('WellRecord['A01'], WellRecord['A02'], "
+            "WellRecord['A03'], ..., WellRecord['B12']')",
         )
 
         with open(SMALL_JSON_PLATE_2) as handle:
