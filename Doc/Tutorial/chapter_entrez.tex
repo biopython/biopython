@@ -203,7 +203,7 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed", term="biopython")
+>>> handle = Entrez.esearch(db="pubmed", term="biopython", retmax="40" )
 >>> record = Entrez.read(handle)
 >>> "19304878" in record["IdList"]
 True
