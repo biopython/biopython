@@ -195,7 +195,7 @@ def efetch(db, **keywords):
             ids = ",".join(map(str, ids))
         except ValueError:
             # string with commas or string not representing an integer
-            ids = ",".join(map(str, [id.strip() for id in ids.split(",")]))
+            ids = ",".join(map(str, (id.strip() for id in ids.split(","))))
 
         variables["id"] = ids
         if ids.count(",") >= 200:
