@@ -150,18 +150,18 @@ class SequenceWriter:
     def write_header(self):
         """Write the file header to the output file."""
         pass
-        ####################################################
-        # You SHOULD implement this method in the subclass #
-        # if the file format defined a file header.        #
-        ####################################################
+        ##################################################
+        # You MUST implement this method in the subclass #
+        # if the file format defines a file header.      #
+        ##################################################
 
     def write_footer(self):
         """Write the file footer to the output file."""
         pass
-        ####################################################
-        # You SHOULD implement this method in the subclass #
-        # if the file format defined a file footer.        #
-        ####################################################
+        ##################################################
+        # You MUST implement this method in the subclass #
+        # if the file format defines a file footer.      #
+        ##################################################
 
     def write_record(self, record):
         """Write a single record to the output file.
@@ -169,10 +169,10 @@ class SequenceWriter:
         record - a SeqRecord object
         """
         raise NotImplementedError("This method should be implemented")
-        ####################################################
-        # You SHOULD implement this method in the subclass #
-        # for sequential file formats.                     #
-        ####################################################
+        ##################################################
+        # You MUST implement this method in the subclass #
+        # for sequential file formats.                   #
+        ##################################################
 
     def write_records(self, records, maxcount=None):
         """Write records to the output file, and return the number of records.
@@ -204,10 +204,10 @@ class SequenceWriter:
 
         records - A list or iterator returning SeqRecord objects
         """
-        ####################################################
-        # You SHOULD implement this method in the subclass #
-        # for interlaced file formats.                     #
-        ####################################################
+        ##################################################
+        # You MUST implement this method in the subclass #
+        # for interlaced file formats.                   #
+        ##################################################
         try:
             self.write_header()
             count = self.write_records(records, maxcount)
@@ -304,9 +304,6 @@ class SequentialSequenceWriter(SequenceWriter):
         assert not self._footer_written, "You have already called write_footer()"
         self._record_written = True
         raise NotImplementedError("This object should be subclassed")
-        #####################################################
-        # You SHOULD subclass this                          #
-        #####################################################
 
     def write_records(self, records):
         """Write multiple record to the output file.
