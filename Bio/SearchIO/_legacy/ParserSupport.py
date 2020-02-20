@@ -128,12 +128,12 @@ class UndoHandle:
 
 
 class AbstractParser(ABC):
-    """Base class for other parsers."""
+    """Abstract base class for other parsers."""
 
     @abstractmethod
     def parse(self, handle):
         """Provision for parsing a file handle."""
-        pass
+        raise NotImplementedError
 
     def parse_str(self, string):
         """Make string a handle, so it can be taken by parse."""
