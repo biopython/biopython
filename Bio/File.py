@@ -148,14 +148,14 @@ class _IndexedSeqFileProxy(ABC):
         The length can be zero where it is not implemented or not
         possible for a particular file format.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get(self, offset):
         """Return parsed object for this entry."""
         # Most file formats with self contained records can be handled by
         # parsing StringIO(self.get_raw(offset).decode())
-        pass
+        raise NotImplementedError
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string (if implemented).
