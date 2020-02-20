@@ -364,7 +364,7 @@ from Bio.File import as_handle
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 from math import log
@@ -1406,7 +1406,7 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         raise ValueError("Unrecognised QUAL record format.")
 
 
-class FastqPhredWriter(SequentialSequenceWriter):
+class FastqPhredWriter(SequenceWriter):
     """Class to write standard FASTQ format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
@@ -1510,7 +1510,7 @@ def as_fastq(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-class QualPhredWriter(SequentialSequenceWriter):
+class QualPhredWriter(SequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
@@ -1554,7 +1554,7 @@ class QualPhredWriter(SequentialSequenceWriter):
         The record2title argument is present for consistency with the
         Bio.SeqIO.FastaIO writer class.
         """
-        SequentialSequenceWriter.__init__(self, handle)
+        super().__init__(handle)
         # self.handle = handle
         self.wrap = None
         if wrap:
@@ -1659,7 +1659,7 @@ def as_qual(record):
     return "".join(lines)
 
 
-class FastqSolexaWriter(SequentialSequenceWriter):
+class FastqSolexaWriter(SequenceWriter):
     r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities) (OBSOLETE).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
@@ -1766,7 +1766,7 @@ def as_fastq_solexa(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-class FastqIlluminaWriter(SequentialSequenceWriter):
+class FastqIlluminaWriter(SequenceWriter):
     r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores) (OBSOLETE).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,

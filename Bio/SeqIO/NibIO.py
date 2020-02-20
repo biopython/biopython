@@ -40,7 +40,7 @@ description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 """
 
 
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
@@ -119,7 +119,7 @@ def NibIterator(source, alphabet=None):
             handle.close()
 
 
-class NibWriter(SequentialSequenceWriter):
+class NibWriter(SequenceWriter):
     """Nib file writer."""
 
     def __init__(self, target):
@@ -161,12 +161,8 @@ class NibWriter(SequentialSequenceWriter):
         handle.write(bytes.fromhex(indices))
 
     def write_file(self, records):
-        """Use this to write an entire file containing the given records."""
-        count = super().write_file(records)
-        if count == 0:
-            raise ValueError("Must have one sequence")
-        if count > 1:
-            raise ValueError("More than one sequence found")
+        """Write the complete file with the records, and return the number of records."""
+        count = super().write_file(records, mincount=1, maxcount=1)
         return count
 
 

@@ -25,7 +25,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequentialSequenceWriter
+from .Interfaces import SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -33,7 +33,7 @@ class ContentHandler(handler.ContentHandler):
 
     def __init__(self):
         """Create a handler to handle XML events."""
-        handler.ContentHandler.__init__(self)
+        super().__init__()
         self.source = None
         self.sourceVersion = None
         self.seqXMLversion = None
@@ -472,7 +472,7 @@ class SeqXmlIterator:
         raise StopIteration
 
 
-class SeqXmlWriter(SequentialSequenceWriter):
+class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
@@ -496,7 +496,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
          - ncbiTaxId - The NCBI taxonomy identifier of the species of origin.
 
         """
-        SequentialSequenceWriter.__init__(self, target, "wb")
+        super().__init__(target, "wb")
         handle = self.handle
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()
@@ -507,7 +507,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
     def write_header(self):
         """Write root node with document metadata."""
-        SequentialSequenceWriter.write_header(self)
         attrs = {
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
             "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",
@@ -557,8 +556,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
     def write_footer(self):
         """Close the root node and finish the XML document."""
-        SequentialSequenceWriter.write_footer(self)
-
         self.xml_generator.endElement("seqXML")
         self.xml_generator.endDocument()
 

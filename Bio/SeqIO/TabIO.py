@@ -36,7 +36,7 @@ example above.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 
@@ -101,7 +101,7 @@ def TabIterator(source, alphabet=single_letter_alphabet):
             handle.close()
 
 
-class TabWriter(SequentialSequenceWriter):
+class TabWriter(SequenceWriter):
     """Class to write simple tab separated format files (OBSOLETE).
 
     Each line consists of "id(tab)sequence" only.

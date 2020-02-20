@@ -228,16 +228,23 @@ class XdnaWriter(SequenceWriter):
     def write_file(self, records):
         """Write the specified record to a Xdna file.
 
-        Note that the function expects a list of records as per the
-        SequenceWriter interface, but the list should contain only one
-        record as the Xdna format is a mono-record format.
+        Note that the function expects a list (or iterable) of records
+        as per the SequenceWriter interface, but the list should contain
+        only one record as the Xdna format is a mono-record format.
         """
-        if not records:
-            raise ValueError("Must have one sequence")
-        if len(records) > 1:
-            raise ValueError("More than one sequence found")
+        records = iter(records)
 
-        record = records[0]
+        try:
+            record = next(records)
+        except StopIteration:
+            raise ValueError("Must have one sequence")
+
+        try:
+            next(records)
+            raise ValueError("More than one sequence found")
+        except StopIteration:
+            pass
+
         self._has_truncated_strings = False
 
         alptype = Alphabet._get_base_alphabet(record.seq.alphabet)
