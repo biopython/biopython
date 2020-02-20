@@ -15,6 +15,10 @@ from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
 
+class StreamModeError(ValueError):
+    """Incorrect stream mode (text vs binary)"""
+
+
 class SequenceIterator:
     """Base class for building SeqRecord iterators.
 
@@ -110,7 +114,7 @@ class SequenceWriter:
                 target.write("")
             except TypeError:
                 # target was opened in binary mode
-                raise ValueError("File must be opened in text mode.") from None
+                raise StreamModeError("File must be opened in text mode.") from None
             except AttributeError:
                 # target is a path
                 handle = open(target, mode)
@@ -121,7 +125,7 @@ class SequenceWriter:
                 target.write(b"")
             except TypeError:
                 # target was opened in text mode
-                raise ValueError("File must be opened in binary mode.") from None
+                raise StreamModeError("File must be opened in binary mode.") from None
             except AttributeError:
                 # target is a path
                 handle = open(target, mode)
