@@ -15,6 +15,10 @@
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
 
+from io import StringIO
+from Bio import StreamModeError
+
+
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
 
 
@@ -756,14 +760,12 @@ class SeqRecord:
             # Follow python convention and default to using __str__
             return str(self)
         from Bio import SeqIO
-        from Bio.SeqIO.Interfaces import StreamModeError
 
         # Easy case, can call string-building function directly
         if format_spec in SeqIO._FormatToString:
             return SeqIO._FormatToString[format_spec](self)
 
         # Harder case, make a temp handle instead
-        from io import StringIO
         handle = StringIO()
         try:
             SeqIO.write(self, handle, format_spec)

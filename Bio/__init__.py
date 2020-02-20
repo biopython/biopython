@@ -25,8 +25,6 @@ class MissingExternalDependencyError(Exception):
     tests to allow skipping tests with missing external dependencies.
     """
 
-    pass
-
 
 class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     """Missing an external python dependency (subclass of ImportError).
@@ -37,7 +35,14 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     ImportError.
     """
 
-    pass
+
+class StreamModeError(ValueError):
+    """Incorrect stream mode (text vs binary).
+
+    This error should be raised when a stream (file or file-like object)
+    argument is in text mode while the receiving function expects binary mode,
+    or vice versa.
+    """
 
 
 class BiopythonWarning(Warning):
@@ -53,8 +58,6 @@ class BiopythonWarning(Warning):
     Consult the warnings module documentation for more details.
     """
 
-    pass
-
 
 class BiopythonParserWarning(BiopythonWarning):
     """Biopython parser warning.
@@ -69,8 +72,6 @@ class BiopythonParserWarning(BiopythonWarning):
 
     Consult the warnings module documentation for more details.
     """
-
-    pass
 
 
 class BiopythonDeprecationWarning(BiopythonWarning):
@@ -89,8 +90,6 @@ class BiopythonDeprecationWarning(BiopythonWarning):
     of Biopython. To avoid removal of this code, please contact the Biopython
     developers via the mailing list or GitHub.
     """
-
-    pass
 
 
 class BiopythonExperimentalWarning(BiopythonWarning):
@@ -112,8 +111,6 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     If all goes well, experimental code would be promoted to stable in
     a subsequent release, and this warning removed from it.
     """
-
-    pass
 
 
 _parent_dir = os.path.dirname(os.path.dirname(__file__))
