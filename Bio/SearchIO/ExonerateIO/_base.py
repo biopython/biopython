@@ -354,7 +354,7 @@ class _BaseExonerateParser(ABC):
 
     @abstractmethod
     def parse_alignment_block(self, header):
-        pass
+        raise NotImplementedError
 
     def _parse_alignment_header(self):
         # read all header lines and store them
