@@ -16,6 +16,7 @@ from Bio import motifs
 from Bio.Seq import Seq
 
 import requires_internet
+
 requires_internet.check()
 
 
@@ -35,18 +36,22 @@ class TestotifWeblogo(unittest.TestCase):
 
     def test_dna(self):
         """Test Bio.motifs.weblogo with a DNA sequence."""
-        self.check(["TACAA", "TACGC", "TACAC", "TACCC",
-                    "AACCC", "AATGC", "AATGC"], "GATCBDSW")
+        self.check(
+            ["TACAA", "TACGC", "TACAC", "TACCC", "AACCC", "AATGC", "AATGC"], "GATCBDSW"
+        )
 
     def test_rna(self):
         """Test Bio.motifs.weblogo with an RNA sequence."""
-        self.check(["UACAA", "UACGC", "UACAC", "UACCC",
-                    "AACCC", "AAUGC", "AAUGC"], "GAUC")
+        self.check(
+            ["UACAA", "UACGC", "UACAC", "UACCC", "AACCC", "AAUGC", "AAUGC"], "GAUC"
+        )
 
     def test_protein(self):
         """Test Bio.motifs.weblogo with a protein sequence."""
-        self.check(["ACDEG", "AYCRN", "HYLID", "AYHEL",
-                    "ACDEH", "AYYRN", "HYIID"], "ACDEFGHIKLMNPQRSTVWYBXZJUO")
+        self.check(
+            ["ACDEG", "AYCRN", "HYLID", "AYHEL", "ACDEH", "AYYRN", "HYIID"],
+            "ACDEFGHIKLMNPQRSTVWYBXZJUO",
+        )
 
 
 if __name__ == "__main__":

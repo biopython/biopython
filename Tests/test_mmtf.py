@@ -28,17 +28,24 @@ class ParseMMTF(unittest.TestCase):
         for i, e in enumerate(self.mmcif_atoms):
             mmtf_atom = self.mmtf_atoms[i]
             mmcif_atom = self.mmcif_atoms[i]
-            self.assertEqual(mmtf_atom.name, mmcif_atom.name)  # eg. CA, spaces are removed from atom name
-            self.assertEqual(mmtf_atom.fullname, mmcif_atom.fullname)  # e.g. " CA ", spaces included
+            self.assertEqual(
+                mmtf_atom.name, mmcif_atom.name
+            )  # eg. CA, spaces are removed from atom name
+            self.assertEqual(
+                mmtf_atom.fullname, mmcif_atom.fullname
+            )  # e.g. " CA ", spaces included
             self.assertAlmostEqual(mmtf_atom.coord[0], mmcif_atom.coord[0], places=3)
             self.assertAlmostEqual(mmtf_atom.coord[1], mmcif_atom.coord[1], places=3)
             self.assertAlmostEqual(mmtf_atom.coord[2], mmcif_atom.coord[2], places=3)
             self.assertEqual(mmtf_atom.bfactor, mmcif_atom.bfactor)
             self.assertEqual(mmtf_atom.occupancy, mmcif_atom.occupancy)
             self.assertEqual(mmtf_atom.altloc, mmcif_atom.altloc)
-            self.assertEqual(mmtf_atom.full_id,
-                             mmcif_atom.full_id)  # (structure id, model id, chain id, residue id, atom id)
-            self.assertEqual(mmtf_atom.id, mmcif_atom.name)  # id of atom is the atom name (e.g. "CA")
+            self.assertEqual(
+                mmtf_atom.full_id, mmcif_atom.full_id
+            )  # (structure id, model id, chain id, residue id, atom id)
+            self.assertEqual(
+                mmtf_atom.id, mmcif_atom.name
+            )  # id of atom is the atom name (e.g. "CA")
             # self.assertEqual(mmtf_atom.serial_number,mmcif_atom.serial_number) # mmCIF serial number is none
             self.assertEqual(mmtf_atom - mmtf_atom, 0)
             self.assertEqual(mmtf_atom - mmcif_atom, 0)
@@ -78,11 +85,15 @@ class ParseMMTF(unittest.TestCase):
         self.mmcif_res = list(mmcif_struct.get_residues())
         self.mmtf_res = list(mmtf_struct.get_residues())
         self.check_residues()
-        self.assertEqual(sum(1 for _ in mmcif_struct.get_models()), sum(1 for _ in mmtf_struct.get_models()))
+        self.assertEqual(
+            sum(1 for _ in mmcif_struct.get_models()),
+            sum(1 for _ in mmtf_struct.get_models()),
+        )
 
     def test_4CUP(self):
         """Compare parsing 4CUP.mmtf and 4CUP.cif."""
         self.check_mmtf_vs_cif("PDB/4CUP.mmtf", "PDB/4CUP.cif")
+
 
 # TODO:
 #    def test_1A8O(self):
@@ -140,7 +151,9 @@ class WriteMMTF(unittest.TestCase):
             self.assertEqual(set(dict_back.ins_code_list), {"\x00"})
             self.assertEqual(set(dict_back.alt_loc_list), {"\x00"})
             self.assertEqual(list(dict_back.atom_id_list), list(range(1, 645)))
-            self.assertEqual(list(dict_back.sequence_index_list), list(range(70)) + [-1] * 88)
+            self.assertEqual(
+                list(dict_back.sequence_index_list), list(range(70)) + [-1] * 88
+            )
             self.assertEqual(dict_back.chain_id_list, ["A", "B"])
             self.assertEqual(dict_back.chain_name_list, ["A", "A"])
             self.assertEqual(dict_back.chains_per_model, [2])
@@ -151,7 +164,10 @@ class WriteMMTF(unittest.TestCase):
             self.assertEqual(len(dict_back.entity_list), 2)
             self.assertEqual(dict_back.entity_list[0]["type"], "polymer")
             self.assertEqual(dict_back.entity_list[0]["chainIndexList"], [0])
-            self.assertEqual(dict_back.entity_list[0]["sequence"], "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG")
+            self.assertEqual(
+                dict_back.entity_list[0]["sequence"],
+                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
+            )
             self.assertEqual(dict_back.entity_list[1]["type"], "water")
             self.assertEqual(dict_back.entity_list[1]["chainIndexList"], [1])
             self.assertEqual(dict_back.entity_list[1]["sequence"], "")
@@ -174,7 +190,9 @@ class WriteMMTF(unittest.TestCase):
             self.assertEqual(dict_back.num_chains, 4)
             self.assertEqual(dict_back.num_groups, 4)
             self.assertEqual(dict_back.num_atoms, 4)
-            self.assertEqual(list(dict_back.x_coord_list), [-1.058, -0.025, 7.024, 6.259])
+            self.assertEqual(
+                list(dict_back.x_coord_list), [-1.058, -0.025, 7.024, 6.259]
+            )
             self.assertEqual(dict_back.chain_id_list, ["A", "B", "A", "B"])
             self.assertEqual(dict_back.chain_name_list, ["A", "B", "A", "B"])
             self.assertEqual(dict_back.chains_per_model, [2, 2])
