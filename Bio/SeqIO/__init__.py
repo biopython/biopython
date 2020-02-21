@@ -563,9 +563,7 @@ def write(sequences, handle, format):
         return count
 
     if format in _FormatToIterator or format in AlignIO._FormatToIterator:
-        raise ValueError(
-            "Reading format '%s' is supported, but not writing" % format
-        )
+        raise ValueError("Reading format '%s' is supported, but not writing" % format)
 
     raise ValueError("Unknown format '%s'" % format)
 
