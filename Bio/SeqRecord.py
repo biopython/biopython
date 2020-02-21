@@ -14,6 +14,11 @@
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
+
+from io import StringIO
+from Bio import StreamModeError
+
+
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
 
 
@@ -760,17 +765,15 @@ class SeqRecord:
         if format_spec in SeqIO._FormatToString:
             return SeqIO._FormatToString[format_spec](self)
 
-        if format_spec in SeqIO._BinaryFormats:
+        # Harder case, make a temp handle instead
+        handle = StringIO()
+        try:
+            SeqIO.write(self, handle, format_spec)
+        except StreamModeError:
             raise ValueError(
                 "Binary format %s cannot be used with SeqRecord format method"
                 % format_spec
-            )
-
-        # Harder case, make a temp handle instead
-        from io import StringIO
-
-        handle = StringIO()
-        SeqIO.write(self, handle, format_spec)
+            ) from None
         return handle.getvalue()
 
     def __len__(self):
