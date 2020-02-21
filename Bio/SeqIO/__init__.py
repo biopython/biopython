@@ -533,7 +533,7 @@ def write(sequences, handle, format):
     format_function = _FormatToString.get(format)
     if format_function is not None:
         count = 0
-        with as_handle(handle, 'w') as fp:
+        with as_handle(handle, "w") as fp:
             for record in sequences:
                 fp.write(format_function(record))
                 count += 1
