@@ -107,7 +107,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[1].instances[19]), "GGCGGGCCATCCCTGTATGAA")
         self.assertEqual(str(record[1].instances[20]), "CTCCAGGTCGCATGGAGAGAG")
         self.assertEqual(str(record[1].instances[21]), "CCTCGGATCGCTTGGGAAGAG")
-        self.assertEqual(record[1].mask, (1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1))
+        self.assertEqual(
+            record[1].mask,
+            (1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
+        )
         self.assertAlmostEqual(record[1].score, 19.6235)
 
         self.assertEqual(record[2].alphabet, "ACGT")
@@ -130,7 +133,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[2].instances[15]), "GACCTGGAGGCTTAGACTTGG")
         self.assertEqual(str(record[2].instances[16]), "GCGCTCTTCCCAAGCGATCCG")
         self.assertEqual(str(record[2].instances[17]), "GGGCCGTCAGCTCTCAAGTCT")
-        self.assertEqual(record[2].mask, (1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1))
+        self.assertEqual(
+            record[2].mask,
+            (1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[2].score, 19.1804)
 
         self.assertEqual(record[3].alphabet, "ACGT")
@@ -151,7 +157,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[3].instances[13]), "GCGATCAGCTTGTGGGCGTGC")
         self.assertEqual(str(record[3].instances[14]), "GACAAATCGGATACTGGGGCA")
         self.assertEqual(str(record[3].instances[15]), "GCACTTAGCAGCGTATCGTTA")
-        self.assertEqual(record[3].mask, (1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1))
+        self.assertEqual(
+            record[3].mask,
+            (1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1),
+        )
         self.assertAlmostEqual(record[3].score, 18.0097)
         self.assertEqual(record[4].alphabet, "ACGT")
         self.assertEqual(len(record[4].instances), 15)
@@ -192,7 +201,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[5].instances[15]), "CTCTGCGTCGCATGGCGGCGTGG")
         self.assertEqual(str(record[5].instances[16]), "GGAGGCTTAGACTTGGGCGATAC")
         self.assertEqual(str(record[5].instances[17]), "GCATGGAGAGAGATCCGGAGGAG")
-        self.assertEqual(record[5].mask, (1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1))
+        self.assertEqual(
+            record[5].mask,
+            (1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1),
+        )
         self.assertAlmostEqual(record[5].score, 15.0441)
         self.assertEqual(record[6].alphabet, "ACGT")
         self.assertEqual(len(record[6].instances), 20)
@@ -240,7 +252,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[7].instances[17]), "AGTCAATGACACGCGCCTGGG")
         self.assertEqual(str(record[7].instances[18]), "GGTCATGGAATCTTATGTAGC")
         self.assertEqual(str(record[7].instances[19]), "GTAGATAACAGAGGTCGGGGG")
-        self.assertEqual(record[7].mask, (1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1))
+        self.assertEqual(
+            record[7].mask,
+            (1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[7].score, 11.6098)
         self.assertEqual(record[8].alphabet, "ACGT")
         self.assertEqual(len(record[8].instances), 14)
@@ -297,7 +312,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[10].instances[10]), "ATCCTCTGCGTCGCATGGCGG")
         self.assertEqual(str(record[10].instances[11]), "GACCATAGACGAGCATCAAAG")
         self.assertEqual(str(record[10].instances[12]), "GGCCCTCGGATCGCTTGGGAA")
-        self.assertEqual(record[10].mask, (1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1))
+        self.assertEqual(
+            record[10].mask,
+            (1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[10].score, 9.01393)
         self.assertEqual(record[11].alphabet, "ACGT")
         self.assertEqual(len(record[11].instances), 16)
@@ -337,7 +355,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[12].instances[13]), "GCACGTAGCTGGTAAATAGG")
         self.assertEqual(str(record[12].instances[14]), "GCGGCGTGGATTTCATACAG")
         self.assertEqual(str(record[12].instances[15]), "CCTGGAGGCTTAGACTTGGG")
-        self.assertEqual(record[12].mask, (1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1))
+        self.assertEqual(
+            record[12].mask,
+            (1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[12].score, 5.63667)
         self.assertEqual(record[13].alphabet, "ACGT")
         self.assertEqual(len(record[13].instances), 15)
@@ -356,7 +377,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[13].instances[12]), "ACGCACGGGACTTCAACCAG")
         self.assertEqual(str(record[13].instances[13]), "GCACGTAGCTGGTAAATAGG")
         self.assertEqual(str(record[13].instances[14]), "ATCCTCTGCGTCGCATGGCG")
-        self.assertEqual(record[13].mask, (1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1))
+        self.assertEqual(
+            record[13].mask,
+            (1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1),
+        )
         self.assertAlmostEqual(record[13].score, 3.89842)
         self.assertEqual(record[14].alphabet, "ACGT")
         self.assertEqual(len(record[14].instances), 14)
@@ -399,7 +423,9 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[15].instances[18]), "AGGCTCGCACGTAGCTGG")
         self.assertEqual(str(record[15].instances[19]), "CCACGCCGCCATGCGACG")
         self.assertEqual(str(record[15].instances[20]), "AGCCTCCAGGTCGCATGG")
-        self.assertEqual(record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1))
+        self.assertEqual(
+            record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1)
+        )
         self.assertAlmostEqual(record[15].score, 1.0395)
 
     def test_clusterbuster_parsing_and_output(self):
@@ -414,7 +440,10 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[2].degenerate_consensus, "CAATTATT")
 
         self.CLUSTERBUSTERin.seek(0)
-        self.assertEqual(motifs.write(record, "clusterbuster").split(), self.CLUSTERBUSTERin.read().split())
+        self.assertEqual(
+            motifs.write(record, "clusterbuster").split(),
+            self.CLUSTERBUSTERin.read().split(),
+        )
 
     def test_xms_parsing(self):
         """Test if Bio.motifs can parse and output xms PFM files."""
@@ -530,7 +559,6 @@ T:   0.50   0.17   0.50   0.17   0.50
 
 
 class TestMEME(unittest.TestCase):
-
     def test_meme_parser_1(self):
         """Parse motifs/meme.INO_up800.classic.oops.xml file."""
         with open("motifs/meme.INO_up800.classic.oops.xml") as handle:
@@ -546,7 +574,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[4], "sequence_4")
         self.assertEqual(record.sequences[5], "sequence_5")
         self.assertEqual(record.sequences[6], "sequence_6")
-        self.assertEqual(record.command, "meme common/INO_up800.s -oc results/meme10 -mod oops -dna -revcomp -bfile common/yeast.nc.6.freq -nmotifs 2 -objfun classic -minw 8 -nostatus ")
+        self.assertEqual(
+            record.command,
+            "meme common/INO_up800.s -oc results/meme10 -mod oops -dna -revcomp -bfile common/yeast.nc.6.freq -nmotifs 2 -objfun classic -minw 8 -nostatus ",
+        )
         self.assertEqual(len(record), 2)
         motif = record[0]
         self.assertEqual(motif.name, "GSKGCATGTGAAA")
@@ -695,7 +726,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[30], "sequence_30")
         self.assertEqual(record.sequences[31], "sequence_31")
         self.assertEqual(record.sequences[32], "sequence_32")
-        self.assertEqual(record.command, "meme common/adh.s -oc results/meme4 -mod oops -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ")
+        self.assertEqual(
+            record.command,
+            "meme common/adh.s -oc results/meme4 -mod oops -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ",
+        )
         self.assertEqual(len(record), 2)
         motif = record[0]
         self.assertEqual(motif.id, "motif_1")
@@ -1124,7 +1158,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[2], "sequence_2")
         self.assertEqual(record.sequences[3], "sequence_3")
         self.assertEqual(record.sequences[4], "sequence_4")
-        self.assertEqual(record.command, "meme common/farntrans5.s -oc results/meme15 -mod anr -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ")
+        self.assertEqual(
+            record.command,
+            "meme common/farntrans5.s -oc results/meme15 -mod anr -protein -nmotifs 2 -objfun classic -minw 8 -nostatus ",
+        )
         self.assertEqual(len(record), 2)
         motif = record[0]
         self.assertEqual(motif.name, "GGFGGRPGKEVDLCYTYCALAALAJLGSLD")
@@ -1755,109 +1792,257 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.sequences[110], "chr5:105994747-105995247")
         self.assertEqual(record.sequences[111], "chr17:84209565-84210065")
         self.assertEqual(record.sequences[112], "chr7:16507689-16508189")
-        self.assertEqual(record.diagrams["chr3:104843905-104844405"], "115-[-1]-209-[-2]-126")
-        self.assertEqual(record.diagrams["chr12:114390660-114391160"], "3-[+2]-[+2]-3-[+1]-173-[+1]-3-[-2]-188")
-        self.assertEqual(record.diagrams["chr12:27135944-27136444"], "275-[-1]-89-[+2]-4-[+2]-52")
-        self.assertEqual(record.diagrams["chr10:59256089-59256589"], "247-[+2]-17-[-1]-186")
-        self.assertEqual(record.diagrams["chr4:135733850-135734350"], "183-[-1]-263-[+2]-4")
-        self.assertEqual(record.diagrams["chr1:137838164-137838664"], "192-[-2]-1-[+1]-44-[-1]-193")
-        self.assertEqual(record.diagrams["chr17:47735006-47735506"], "203-[+2]-15-[+1]-97-[-1]-115")
-        self.assertEqual(record.diagrams["chr6:72223026-72223526"], "52-[-2]-7-[+2]-162-[-1]-42-[-1]-137")
-        self.assertEqual(record.diagrams["chr13:3866266-3866766"], "241-[+1]-2-[-1]-217")
-        self.assertEqual(record.diagrams["chr1:133343883-133344383"], "190-[+2]-15-[+1]-245")
-        self.assertEqual(record.diagrams["chr11:117187372-117187872"], "242-[+1]-46-[-2]-71-[+1]-71")
-        self.assertEqual(record.diagrams["chr13:76003199-76003699"], "230-[+2]-15-[+2]-60-[-1]-115")
-        self.assertEqual(record.diagrams["chr5:65202593-65203093"], "24-[-2]-36-[+2]-193-[-1]-11-[+1]-10-[+1]-106")
-        self.assertEqual(record.diagrams["chr14:79702844-79703344"], "247-[-1]-46-[-2]-157")
-        self.assertEqual(record.diagrams["chr12:112796794-112797294"], "232-[+1]-41-[+1]-187")
-        self.assertEqual(record.diagrams["chr13:112863645-112864145"], "228-[+1]-20-[-1]-212")
-        self.assertEqual(record.diagrams["chr7:111007530-111008030"], "217-[+1]-83-[+2]-150")
-        self.assertEqual(record.diagrams["chr1:43307690-43308190"], "164-[-2]-52-[-2]-224")
-        self.assertEqual(record.diagrams["chr14:47973722-47974222"], "21-[+1]-181-[+1]-20-[-2]-208")
-        self.assertEqual(record.diagrams["chr9:120025371-120025871"], "110-[-2]-58-[+1]-282")
-        self.assertEqual(record.diagrams["chr7:105490727-105491227"], "100-[-2]-111-[-1]-239")
-        self.assertEqual(record.diagrams["chr5:37127175-37127675"], "234-[-2]-24-[+1]-192")
+        self.assertEqual(
+            record.diagrams["chr3:104843905-104844405"], "115-[-1]-209-[-2]-126"
+        )
+        self.assertEqual(
+            record.diagrams["chr12:114390660-114391160"],
+            "3-[+2]-[+2]-3-[+1]-173-[+1]-3-[-2]-188",
+        )
+        self.assertEqual(
+            record.diagrams["chr12:27135944-27136444"], "275-[-1]-89-[+2]-4-[+2]-52"
+        )
+        self.assertEqual(
+            record.diagrams["chr10:59256089-59256589"], "247-[+2]-17-[-1]-186"
+        )
+        self.assertEqual(
+            record.diagrams["chr4:135733850-135734350"], "183-[-1]-263-[+2]-4"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:137838164-137838664"], "192-[-2]-1-[+1]-44-[-1]-193"
+        )
+        self.assertEqual(
+            record.diagrams["chr17:47735006-47735506"], "203-[+2]-15-[+1]-97-[-1]-115"
+        )
+        self.assertEqual(
+            record.diagrams["chr6:72223026-72223526"],
+            "52-[-2]-7-[+2]-162-[-1]-42-[-1]-137",
+        )
+        self.assertEqual(
+            record.diagrams["chr13:3866266-3866766"], "241-[+1]-2-[-1]-217"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:133343883-133344383"], "190-[+2]-15-[+1]-245"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:117187372-117187872"], "242-[+1]-46-[-2]-71-[+1]-71"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:76003199-76003699"], "230-[+2]-15-[+2]-60-[-1]-115"
+        )
+        self.assertEqual(
+            record.diagrams["chr5:65202593-65203093"],
+            "24-[-2]-36-[+2]-193-[-1]-11-[+1]-10-[+1]-106",
+        )
+        self.assertEqual(
+            record.diagrams["chr14:79702844-79703344"], "247-[-1]-46-[-2]-157"
+        )
+        self.assertEqual(
+            record.diagrams["chr12:112796794-112797294"], "232-[+1]-41-[+1]-187"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:112863645-112864145"], "228-[+1]-20-[-1]-212"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:111007530-111008030"], "217-[+1]-83-[+2]-150"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:43307690-43308190"], "164-[-2]-52-[-2]-224"
+        )
+        self.assertEqual(
+            record.diagrams["chr14:47973722-47974222"], "21-[+1]-181-[+1]-20-[-2]-208"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:120025371-120025871"], "110-[-2]-58-[+1]-282"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:105490727-105491227"], "100-[-2]-111-[-1]-239"
+        )
+        self.assertEqual(
+            record.diagrams["chr5:37127175-37127675"], "234-[-2]-24-[+1]-192"
+        )
         self.assertEqual(record.diagrams["chr5:45951565-45952065"], "261-[-1]-219")
         self.assertEqual(record.diagrams["chr7:91033422-91033922"], "465-[-1]-15")
-        self.assertEqual(record.diagrams["chr4:154285745-154286245"], "235-[+1]-20-[-2]-195")
-        self.assertEqual(record.diagrams["chr13:100518008-100518508"], "226-[-2]-18-[-1]-206")
-        self.assertEqual(record.diagrams["chr1:36977019-36977519"], "88-[+1]-187-[+2]-60-[-1]-95")
-        self.assertEqual(record.diagrams["chr7:151917814-151918314"], "219-[+1]-80-[+2]-151")
-        self.assertEqual(record.diagrams["chr7:110976195-110976695"], "287-[+2]-12-[+1]-151")
+        self.assertEqual(
+            record.diagrams["chr4:154285745-154286245"], "235-[+1]-20-[-2]-195"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:100518008-100518508"], "226-[-2]-18-[-1]-206"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:36977019-36977519"], "88-[+1]-187-[+2]-60-[-1]-95"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:151917814-151918314"], "219-[+1]-80-[+2]-151"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:110976195-110976695"], "287-[+2]-12-[+1]-151"
+        )
         self.assertEqual(record.diagrams["chr15:58719281-58719781"], "212-[-2]-258")
-        self.assertEqual(record.diagrams["chr11:57590460-57590960"], "56-[-1]-271-[-1]-75-[+2]-28")
-        self.assertEqual(record.diagrams["chr8:83025150-83025650"], "219-[+1]-87-[+2]-144")
-        self.assertEqual(record.diagrams["chr13:54345922-54346422"], "283-[-2]-161-[+1]-6")
-        self.assertEqual(record.diagrams["chr12:82044358-82044858"], "50-[+2]-160-[+1]-39-[+2]-171")
-        self.assertEqual(record.diagrams["chr11:105013714-105014214"], "115-[-2]-160-[+1]-26-[-1]-129")
-        self.assertEqual(record.diagrams["chr10:93585404-93585904"], "141-[+2]-48-[+1]-261")
+        self.assertEqual(
+            record.diagrams["chr11:57590460-57590960"], "56-[-1]-271-[-1]-75-[+2]-28"
+        )
+        self.assertEqual(
+            record.diagrams["chr8:83025150-83025650"], "219-[+1]-87-[+2]-144"
+        )
+        self.assertEqual(
+            record.diagrams["chr13:54345922-54346422"], "283-[-2]-161-[+1]-6"
+        )
+        self.assertEqual(
+            record.diagrams["chr12:82044358-82044858"], "50-[+2]-160-[+1]-39-[+2]-171"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:105013714-105014214"],
+            "115-[-2]-160-[+1]-26-[-1]-129",
+        )
+        self.assertEqual(
+            record.diagrams["chr10:93585404-93585904"], "141-[+2]-48-[+1]-261"
+        )
         self.assertEqual(record.diagrams["chr7:19832207-19832707"], "229-[-1]-251")
-        self.assertEqual(record.diagrams["chr8:97323995-97324495"], "177-[-1]-40-[-2]-139-[+1]-74")
-        self.assertEqual(record.diagrams["chr10:126642277-126642777"], "252-[-1]-92-[-2]-106")
-        self.assertEqual(record.diagrams["chr1:156887119-156887619"], "189-[-2]-78-[-1]-183")
-        self.assertEqual(record.diagrams["chr15:81700367-81700867"], "109-[-1]-99-[-1]-252")
-        self.assertEqual(record.diagrams["chr6:121187425-121187925"], "29-[+2]-313-[-1]-108")
-        self.assertEqual(record.diagrams["chr4:43977111-43977611"], "60-[+1]-148-[+1]-252")
-        self.assertEqual(record.diagrams["chr11:102236405-102236905"], "10-[+2]-145-[-1]-3-[-1]-6-[+2]-60-[+1]-156")
+        self.assertEqual(
+            record.diagrams["chr8:97323995-97324495"], "177-[-1]-40-[-2]-139-[+1]-74"
+        )
+        self.assertEqual(
+            record.diagrams["chr10:126642277-126642777"], "252-[-1]-92-[-2]-106"
+        )
+        self.assertEqual(
+            record.diagrams["chr1:156887119-156887619"], "189-[-2]-78-[-1]-183"
+        )
+        self.assertEqual(
+            record.diagrams["chr15:81700367-81700867"], "109-[-1]-99-[-1]-252"
+        )
+        self.assertEqual(
+            record.diagrams["chr6:121187425-121187925"], "29-[+2]-313-[-1]-108"
+        )
+        self.assertEqual(
+            record.diagrams["chr4:43977111-43977611"], "60-[+1]-148-[+1]-252"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:102236405-102236905"],
+            "10-[+2]-145-[-1]-3-[-1]-6-[+2]-60-[+1]-156",
+        )
         self.assertEqual(record.diagrams["chr17:5112057-5112557"], "249-[+1]-231")
         self.assertEqual(record.diagrams["chr10:110604369-110604869"], "232-[+1]-248")
-        self.assertEqual(record.diagrams["chr1:169314208-169314708"], "192-[-1]-[-1]-11-[-2]-227")
-        self.assertEqual(record.diagrams["chr9:57618594-57619094"], "125-[+2]-151-[-1]-4-[-1]-150")
-        self.assertEqual(record.diagrams["chr10:128184604-128185104"], "30-[-2]-128-[+1]-292")
-        self.assertEqual(record.diagrams["chr4:109112541-109113041"], "21-[-1]-13-[+1]-94-[+2]-302")
-        self.assertEqual(record.diagrams["chr3:97461668-97462168"], "18-[+2]-256-[-1]-81-[+1]-21-[+1]-34")
+        self.assertEqual(
+            record.diagrams["chr1:169314208-169314708"], "192-[-1]-[-1]-11-[-2]-227"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:57618594-57619094"], "125-[+2]-151-[-1]-4-[-1]-150"
+        )
+        self.assertEqual(
+            record.diagrams["chr10:128184604-128185104"], "30-[-2]-128-[+1]-292"
+        )
+        self.assertEqual(
+            record.diagrams["chr4:109112541-109113041"], "21-[-1]-13-[+1]-94-[+2]-302"
+        )
+        self.assertEqual(
+            record.diagrams["chr3:97461668-97462168"],
+            "18-[+2]-256-[-1]-81-[+1]-21-[+1]-34",
+        )
         self.assertEqual(record.diagrams["chr9:102674395-102674895"], "372-[+2]-98")
         self.assertEqual(record.diagrams["chr17:24289205-24289705"], "262-[-1]-218")
-        self.assertEqual(record.diagrams["chr17:28960252-28960752"], "221-[+1]-81-[+1]-158")
+        self.assertEqual(
+            record.diagrams["chr17:28960252-28960752"], "221-[+1]-81-[+1]-158"
+        )
         self.assertEqual(record.diagrams["chr2:73323093-73323593"], "49-[-2]-421")
-        self.assertEqual(record.diagrams["chr11:32150818-32151318"], "151-[-1]-27-[-1]-118-[-2]-134")
-        self.assertEqual(record.diagrams["chr7:103853792-103854292"], "212-[-2]-42-[+1]-196")
-        self.assertEqual(record.diagrams["chr16:49839621-49840121"], "192-[+2]-47-[-1]-17-[+2]-164")
+        self.assertEqual(
+            record.diagrams["chr11:32150818-32151318"], "151-[-1]-27-[-1]-118-[-2]-134"
+        )
+        self.assertEqual(
+            record.diagrams["chr7:103853792-103854292"], "212-[-2]-42-[+1]-196"
+        )
+        self.assertEqual(
+            record.diagrams["chr16:49839621-49840121"], "192-[+2]-47-[-1]-17-[+2]-164"
+        )
         self.assertEqual(record.diagrams["chr6:135115628-135116128"], "231-[-1]-249")
         self.assertEqual(record.diagrams["chr3:88305500-88306000"], "229-[+1]-251")
         self.assertEqual(record.diagrams["chr18:57137388-57137888"], "296-[+2]-174")
         self.assertEqual(record.diagrams["chr5:97380648-97381148"], "188-[-2]-282")
-        self.assertEqual(record.diagrams["chr15:91082416-91082916"], "239-[-1]-104-[-1]-73-[+2]-14")
-        self.assertEqual(record.diagrams["chr14:61272713-61273213"], "216-[+2]-104-[+1]-130")
+        self.assertEqual(
+            record.diagrams["chr15:91082416-91082916"], "239-[-1]-104-[-1]-73-[+2]-14"
+        )
+        self.assertEqual(
+            record.diagrams["chr14:61272713-61273213"], "216-[+2]-104-[+1]-130"
+        )
         self.assertEqual(record.diagrams["chr5:33616214-33616714"], "247-[-1]-233")
         self.assertEqual(record.diagrams["chr18:23982470-23982970"], "285-[-1]-195")
-        self.assertEqual(record.diagrams["chr9:24715045-24715545"], "214-[-1]-153-[+1]-93")
+        self.assertEqual(
+            record.diagrams["chr9:24715045-24715545"], "214-[-1]-153-[+1]-93"
+        )
         self.assertEqual(record.diagrams["chr10:116195445-116195945"], "400-[+2]-70")
-        self.assertEqual(record.diagrams["chr11:77795184-77795684"], "247-[+1]-42-[-2]-67-[-2]-64")
-        self.assertEqual(record.diagrams["chr16:32508975-32509475"], "213-[+2]-29-[-1]-208")
+        self.assertEqual(
+            record.diagrams["chr11:77795184-77795684"], "247-[+1]-42-[-2]-67-[-2]-64"
+        )
+        self.assertEqual(
+            record.diagrams["chr16:32508975-32509475"], "213-[+2]-29-[-1]-208"
+        )
         self.assertEqual(record.diagrams["chr18:80416880-80417380"], "239-[-1]-241")
-        self.assertEqual(record.diagrams["chr10:57252236-57252736"], "155-[+1]-158-[+2]-137")
-        self.assertEqual(record.diagrams["chr5:34915767-34916267"], "179-[+2]-29-[-1]-242")
+        self.assertEqual(
+            record.diagrams["chr10:57252236-57252736"], "155-[+1]-158-[+2]-137"
+        )
+        self.assertEqual(
+            record.diagrams["chr5:34915767-34916267"], "179-[+2]-29-[-1]-242"
+        )
         self.assertEqual(record.diagrams["chr9:98389943-98390443"], "252-[-1]-228")
-        self.assertEqual(record.diagrams["chr19:5845899-5846399"], "136-[+1]-193-[+1]-131")
-        self.assertEqual(record.diagrams["chr3:151777796-151778296"], "30-[-2]-58-[-1]-362")
+        self.assertEqual(
+            record.diagrams["chr19:5845899-5846399"], "136-[+1]-193-[+1]-131"
+        )
+        self.assertEqual(
+            record.diagrams["chr3:151777796-151778296"], "30-[-2]-58-[-1]-362"
+        )
         self.assertEqual(record.diagrams["chr4:76585120-76585620"], "329-[+2]-141")
-        self.assertEqual(record.diagrams["chr7:104332488-104332988"], "164-[+2]-23-[-1]-222-[+1]-21")
+        self.assertEqual(
+            record.diagrams["chr7:104332488-104332988"], "164-[+2]-23-[-1]-222-[+1]-21"
+        )
         self.assertEqual(record.diagrams["chr5:138127197-138127697"], "238-[+1]-242")
-        self.assertEqual(record.diagrams["chr11:60988820-60989320"], "115-[+1]-68-[+1]-47-[+1]-210")
-        self.assertEqual(record.diagrams["chr8:19984030-19984530"], "103-[-1]-81-[+2]-266")
-        self.assertEqual(record.diagrams["chr11:31712262-31712762"], "118-[+2]-53-[+2]-269")
-        self.assertEqual(record.diagrams["chr15:41338514-41339014"], "173-[+2]-75-[+2]-192")
-        self.assertEqual(record.diagrams["chr9:21362671-21363171"], "105-[+1]-131-[+1]-224")
+        self.assertEqual(
+            record.diagrams["chr11:60988820-60989320"], "115-[+1]-68-[+1]-47-[+1]-210"
+        )
+        self.assertEqual(
+            record.diagrams["chr8:19984030-19984530"], "103-[-1]-81-[+2]-266"
+        )
+        self.assertEqual(
+            record.diagrams["chr11:31712262-31712762"], "118-[+2]-53-[+2]-269"
+        )
+        self.assertEqual(
+            record.diagrams["chr15:41338514-41339014"], "173-[+2]-75-[+2]-192"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:21362671-21363171"], "105-[+1]-131-[+1]-224"
+        )
         self.assertEqual(record.diagrams["chr18:58822702-58823202"], "467-[-2]-3")
         self.assertEqual(record.diagrams["chr1:173447614-173448114"], "369-[-1]-111")
         self.assertEqual(record.diagrams["chr6:81915769-81916269"], "197-[+1]-283")
         self.assertEqual(record.diagrams["chr1:169322898-169323398"], "253-[-1]-227")
-        self.assertEqual(record.diagrams["chr12:70860461-70860961"], "197-[+2]-22-[-1]-231")
-        self.assertEqual(record.diagrams["chr9:59598186-59598686"], "163-[-2]-10-[-1]-277")
+        self.assertEqual(
+            record.diagrams["chr12:70860461-70860961"], "197-[+2]-22-[-1]-231"
+        )
+        self.assertEqual(
+            record.diagrams["chr9:59598186-59598686"], "163-[-2]-10-[-1]-277"
+        )
         self.assertEqual(record.diagrams["chr3:19550495-19550995"], "452-[-2]-18")
         self.assertEqual(record.diagrams["chr7:36132953-36133453"], "157-[-1]-323")
-        self.assertEqual(record.diagrams["chr7:38970375-38970875"], "49-[+1]-114-[+1]-297")
+        self.assertEqual(
+            record.diagrams["chr7:38970375-38970875"], "49-[+1]-114-[+1]-297"
+        )
         self.assertEqual(record.diagrams["chr15:78243390-78243890"], "234-[+1]-246")
-        self.assertEqual(record.diagrams["chr7:87847381-87847881"], "99-[+2]-2-[-1]-230-[-1]-99")
+        self.assertEqual(
+            record.diagrams["chr7:87847381-87847881"], "99-[+2]-2-[-1]-230-[-1]-99"
+        )
         self.assertEqual(record.diagrams["chr1:33631214-33631714"], "358-[-1]-122")
-        self.assertEqual(record.diagrams["chr4:135407873-135408373"], "116-[-1]-64-[+2]-270")
+        self.assertEqual(
+            record.diagrams["chr4:135407873-135408373"], "116-[-1]-64-[+2]-270"
+        )
         self.assertEqual(record.diagrams["chr7:101244829-101245329"], "311-[-2]-159")
         self.assertEqual(record.diagrams["chr10:60612190-60612690"], "215-[+1]-265")
-        self.assertEqual(record.diagrams["chr19:56465963-56466463"], "306-[+1]-36-[+1]-18-[+1]-80")
+        self.assertEqual(
+            record.diagrams["chr19:56465963-56466463"], "306-[+1]-36-[+1]-18-[+1]-80"
+        )
         self.assertEqual(record.diagrams["chr4:41334759-41335259"], "204-[+1]-276")
         self.assertEqual(record.diagrams["chr8:92969521-92970021"], "453-[+2]-17")
-        self.assertEqual(record.diagrams["chr6:145703215-145703715"], "154-[-2]-58-[+2]-228")
+        self.assertEqual(
+            record.diagrams["chr6:145703215-145703715"], "154-[-2]-58-[+2]-228"
+        )
         self.assertEqual(record.diagrams["chr13:57679178-57679678"], "217-[-1]-263")
         self.assertEqual(record.diagrams["chr19:45121628-45122128"], "35-[-2]-435")
         self.assertEqual(record.diagrams["chr15:79757891-79758391"], "310-[+1]-170")
@@ -1865,7 +2050,9 @@ class TestMAST(unittest.TestCase):
         self.assertEqual(record.diagrams["chr13:81067500-81068000"], "252-[+1]-228")
         self.assertEqual(record.diagrams["chr11:69714224-69714724"], "145-[+2]-325")
         self.assertEqual(record.diagrams["chr2:103728071-103728571"], "369-[+1]-111")
-        self.assertEqual(record.diagrams["chr5:105994747-105995247"], "93-[+2]-153-[-2]-194")
+        self.assertEqual(
+            record.diagrams["chr5:105994747-105995247"], "93-[+2]-153-[-2]-194"
+        )
         self.assertEqual(record.diagrams["chr17:84209565-84210065"], "64-[-2]-406")
         self.assertEqual(record.diagrams["chr7:16507689-16508189"], "231-[+2]-239")
 
@@ -2087,13 +2274,15 @@ class MotifTestPWM(unittest.TestCase):
     def test_mixed_alphabets(self):
         """Test creating motif with mixed alphabets."""
         # TODO - Can we support this?
-        seqs = [Seq("TACAA", IUPAC.unambiguous_dna),
-                Seq("TACGC", IUPAC.ambiguous_dna),
-                Seq("TACAC", IUPAC.extended_dna),
-                Seq("TACCC", Gapped(IUPAC.unambiguous_dna)),
-                Seq("AACCC", IUPAC.unambiguous_dna),
-                Seq("AATGC", IUPAC.unambiguous_dna),
-                Seq("AATGC", generic_dna)]
+        seqs = [
+            Seq("TACAA", IUPAC.unambiguous_dna),
+            Seq("TACGC", IUPAC.ambiguous_dna),
+            Seq("TACAC", IUPAC.extended_dna),
+            Seq("TACCC", Gapped(IUPAC.unambiguous_dna)),
+            Seq("AACCC", IUPAC.unambiguous_dna),
+            Seq("AATGC", IUPAC.unambiguous_dna),
+            Seq("AATGC", generic_dna),
+        ]
         # ValueError: Alphabets are inconsistent
         self.assertRaises(ValueError, motifs.create, seqs)
 
