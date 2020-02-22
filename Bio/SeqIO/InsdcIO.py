@@ -1513,6 +1513,22 @@ class ImgtWriter(EmblWriter):
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
 
 
+def convert(in_stream, in_format, out_stream, out_format):
+    """Fast GenBank/EMBL to FASTA (PRIVATE)."""
+    from Bio import SeqIO
+    if out_format != "fasta":
+        return None
+    if in_format in ("genbank", "gb"):
+        scanner = GenBankScanner()
+    elif in_format == "embl":
+        scanner = EmblScanner()
+    else:
+        return None
+    # We don't need to parse the features...
+    records = scanner.parse_records(in_stream, do_features=False)
+    return SeqIO.write(records, out_stream, "fasta")
+
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
 

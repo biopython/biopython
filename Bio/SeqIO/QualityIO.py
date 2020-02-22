@@ -1954,6 +1954,350 @@ def PairedFastaQualIterator(
     # Done
 
 
+def _fastq_generic(in_handle, out_handle, mapping):
+    """FASTQ helper function where can't have data loss by truncation (PRIVATE)."""
+    # For real speed, don't even make SeqRecord and Seq objects!
+    count = 0
+    null = chr(0)
+    for title, seq, old_qual in FastqGeneralIterator(in_handle):
+        count += 1
+        # map the qual...
+        qual = old_qual.translate(mapping)
+        if null in qual:
+            raise ValueError("Invalid character in quality string")
+        out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+    return count
+
+
+def _fastq_generic2(in_handle, out_handle, mapping, truncate_char, truncate_msg):
+    """FASTQ helper function where there could be data loss by truncation (PRIVATE)."""
+    # For real speed, don't even make SeqRecord and Seq objects!
+    count = 0
+    null = chr(0)
+    for title, seq, old_qual in FastqGeneralIterator(in_handle):
+        count += 1
+        # map the qual...
+        qual = old_qual.translate(mapping)
+        if null in qual:
+            raise ValueError("Invalid character in quality string")
+        if truncate_char in qual:
+            qual = qual.replace(truncate_char, chr(126))
+            import warnings
+
+            warnings.warn(truncate_msg, BiopythonWarning)
+        out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+    return count
+
+
+def _fastq_sanger_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
+    """Fast Sanger FASTQ to Sanger FASTQ conversion (PRIVATE).
+
+    Useful for removing line wrapping and the redundant second identifier
+    on the plus lines. Will check also check the quality string is valid.
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 33)]
+        + [chr(ascii) for ascii in range(33, 127)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_solexa_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
+    """Fast Solexa FASTQ to Solexa FASTQ conversion (PRIVATE).
+
+    Useful for removing line wrapping and the redundant second identifier
+    on the plus lines. Will check also check the quality string is valid.
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 59)]
+        + [chr(ascii) for ascii in range(59, 127)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_illumina_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
+    """Fast Illumina 1.3+ FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
+
+    Useful for removing line wrapping and the redundant second identifier
+    on the plus lines. Will check also check the quality string is valid.
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 64)]
+        + [chr(ascii) for ascii in range(64, 127)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_illumina_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
+    """Fast Illumina 1.3+ FASTQ to Sanger FASTQ conversion (PRIVATE).
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 64)]
+        + [chr(33 + q) for q in range(0, 62 + 1)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_sanger_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
+    """Fast Sanger FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion. Will issue a warning if the scores had to be truncated at 62
+    (maximum possible in the Illumina 1.3+ FASTQ format)
+    """
+    # Map unexpected chars to null
+    trunc_char = chr(1)
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 33)]
+        + [chr(64 + q) for q in range(0, 62 + 1)]
+        + [trunc_char for ascii in range(96, 127)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic2(
+        in_handle,
+        out_handle,
+        mapping,
+        trunc_char,
+        "Data loss - max PHRED quality 62 in Illumina 1.3+ FASTQ",
+    )
+
+
+def _fastq_solexa_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
+    """Fast Solexa FASTQ to Sanger FASTQ conversion (PRIVATE).
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 59)]
+        + [
+            chr(33 + int(round(phred_quality_from_solexa(q))))
+            for q in range(-5, 62 + 1)
+        ]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_sanger_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
+    """Fast Sanger FASTQ to Solexa FASTQ conversion (PRIVATE).
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion. Will issue a warning if the scores had to be truncated at 62
+    (maximum possible in the Solexa FASTQ format)
+    """
+    # Map unexpected chars to null
+    trunc_char = chr(1)
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 33)]
+        + [chr(64 + int(round(solexa_quality_from_phred(q)))) for q in range(0, 62 + 1)]
+        + [trunc_char for ascii in range(96, 127)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic2(
+        in_handle,
+        out_handle,
+        mapping,
+        trunc_char,
+        "Data loss - max Solexa quality 62 in Solexa FASTQ",
+    )
+
+
+def _fastq_solexa_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
+    """Fast Solexa FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 59)]
+        + [
+            chr(64 + int(round(phred_quality_from_solexa(q))))
+            for q in range(-5, 62 + 1)
+        ]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_illumina_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
+    """Fast Illumina 1.3+ FASTQ to Solexa FASTQ conversion (PRIVATE).
+
+    Avoids creating SeqRecord and Seq objects in order to speed up this
+    conversion.
+    """
+    # Map unexpected chars to null
+    mapping = "".join(
+        [chr(0) for ascii in range(0, 64)]
+        + [chr(64 + int(round(solexa_quality_from_phred(q)))) for q in range(0, 62 + 1)]
+        + [chr(0) for ascii in range(127, 256)]
+    )
+    assert len(mapping) == 256
+    return _fastq_generic(in_handle, out_handle, mapping)
+
+
+def _fastq_convert_fasta(in_handle, out_handle):
+    """Fast FASTQ to FASTA conversion (PRIVATE).
+
+    Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
+    Seq objects in order to speed up this conversion.
+
+    NOTE - This does NOT check the characters used in the FASTQ quality string
+    are valid!
+    """
+    # For real speed, don't even make SeqRecord and Seq objects!
+    count = 0
+    for title, seq, qual in FastqGeneralIterator(in_handle):
+        count += 1
+        out_handle.write(">%s\n" % title)
+        # Do line wrapping
+        for i in range(0, len(seq), 60):
+            out_handle.write(seq[i : i + 60] + "\n")
+    return count
+
+
+def _fastq_convert_tab(in_handle, out_handle):
+    """Fast FASTQ to simple tabbed conversion (PRIVATE).
+
+    Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
+    Seq objects in order to speed up this conversion.
+
+    NOTE - This does NOT check the characters used in the FASTQ quality string
+    are valid!
+    """
+    # For real speed, don't even make SeqRecord and Seq objects!
+    count = 0
+    for title, seq, qual in FastqGeneralIterator(in_handle):
+        count += 1
+        out_handle.write("%s\t%s\n" % (title.split(None, 1)[0], seq))
+    return count
+
+
+def _fastq_convert_qual(in_handle, out_handle, mapping):
+    """FASTQ helper function for QUAL output (PRIVATE).
+
+    Mapping should be a dictionary mapping expected ASCII characters from the
+    FASTQ quality string to PHRED quality scores (as strings).
+    """
+    # For real speed, don't even make SeqRecord and Seq objects!
+    count = 0
+    for title, seq, qual in FastqGeneralIterator(in_handle):
+        count += 1
+        out_handle.write(">%s\n" % title)
+        # map the qual... note even with Sanger encoding max 2 digits
+        try:
+            qualities_strs = [mapping[ascii] for ascii in qual]
+        except KeyError:
+            raise ValueError("Invalid character in quality string")
+        data = " ".join(qualities_strs)
+        while len(data) > 60:
+            # Know quality scores are either 1 or 2 digits, so there
+            # must be a space in any three consecutive characters.
+            if data[60] == " ":
+                out_handle.write(data[:60] + "\n")
+                data = data[61:]
+            elif data[59] == " ":
+                out_handle.write(data[:59] + "\n")
+                data = data[60:]
+            else:
+                assert data[58] == " ", "Internal logic failure in wrapping"
+                out_handle.write(data[:58] + "\n")
+                data = data[59:]
+        out_handle.write(data + "\n")
+    return count
+
+
+def _fastq_sanger_convert_qual(in_handle, out_handle):
+    """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
+    mapping = {chr(q + 33): str(q) for q in range(0, 93 + 1)}
+    return _fastq_convert_qual(in_handle, out_handle, mapping)
+
+
+def _fastq_solexa_convert_qual(in_handle, out_handle):
+    """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
+    mapping = {
+        chr(q + 64): str(int(round(phred_quality_from_solexa(q))))
+        for q in range(-5, 62 + 1)
+    }
+    return _fastq_convert_qual(in_handle, out_handle, mapping)
+
+
+def _fastq_illumina_convert_qual(in_handle, out_handle):
+    """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
+    mapping = {chr(q + 64): str(q) for q in range(0, 62 + 1)}
+    return _fastq_convert_qual(in_handle, out_handle, mapping)
+
+
+_converters = {
+    ("fastq", "fasta"): _fastq_convert_fasta,
+    ("fastq-sanger", "fasta"): _fastq_convert_fasta,
+    ("fastq-solexa", "fasta"): _fastq_convert_fasta,
+    ("fastq-illumina", "fasta"): _fastq_convert_fasta,
+    ("fastq", "tab"): _fastq_convert_tab,
+    ("fastq-sanger", "tab"): _fastq_convert_tab,
+    ("fastq-solexa", "tab"): _fastq_convert_tab,
+    ("fastq-illumina", "tab"): _fastq_convert_tab,
+    ("fastq", "fastq"): _fastq_sanger_convert_fastq_sanger,
+    ("fastq-sanger", "fastq"): _fastq_sanger_convert_fastq_sanger,
+    ("fastq-solexa", "fastq"): _fastq_solexa_convert_fastq_sanger,
+    ("fastq-illumina", "fastq"): _fastq_illumina_convert_fastq_sanger,
+    ("fastq", "fastq-sanger"): _fastq_sanger_convert_fastq_sanger,
+    ("fastq-sanger", "fastq-sanger"): _fastq_sanger_convert_fastq_sanger,
+    ("fastq-solexa", "fastq-sanger"): _fastq_solexa_convert_fastq_sanger,
+    ("fastq-illumina", "fastq-sanger"): _fastq_illumina_convert_fastq_sanger,
+    ("fastq", "fastq-solexa"): _fastq_sanger_convert_fastq_solexa,
+    ("fastq-sanger", "fastq-solexa"): _fastq_sanger_convert_fastq_solexa,
+    ("fastq-solexa", "fastq-solexa"): _fastq_solexa_convert_fastq_solexa,
+    ("fastq-illumina", "fastq-solexa"): _fastq_illumina_convert_fastq_solexa,
+    ("fastq", "fastq-illumina"): _fastq_sanger_convert_fastq_illumina,
+    ("fastq-sanger", "fastq-illumina"): _fastq_sanger_convert_fastq_illumina,
+    ("fastq-solexa", "fastq-illumina"): _fastq_solexa_convert_fastq_illumina,
+    ("fastq-illumina", "fastq-illumina"): _fastq_illumina_convert_fastq_illumina,
+    ("fastq", "qual"): _fastq_sanger_convert_qual,
+    ("fastq-sanger", "qual"): _fastq_sanger_convert_qual,
+    ("fastq-solexa", "qual"): _fastq_solexa_convert_qual,
+    ("fastq-illumina", "qual"): _fastq_illumina_convert_qual,
+}
+
+
+def convert(in_stream, in_format, out_stream, out_format):
+    """Fast Fastq to FASTA/tab (PRIVATE)."""
+    from Bio import SeqIO
+    key = (in_format, out_format)
+    converter = _converters.get(key)
+    if converter is None:
+        return None
+    return converter(in_stream, out_stream)
+
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
 

@@ -1063,20 +1063,18 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    in_mode = "rb" if in_format in _BinaryFormats else "r"
 
-    out_mode = "wb" if out_format in _BinaryFormats else "w"
+    if in_format in ("genbank", "gb", "embl"):
+        count = InsdcIO.convert(in_file, in_format, out_file, out_format)
+        if count is not None:
+            return count
+    elif in_format in ("fastq", "fastq-illumina", "fastq-sanger", "fastq-solexa"):
+        count = QualityIO.convert(in_file, in_format, out_file, out_format)
+        if count is not None:
+            return count
 
-    # This will check the arguments and issue error messages,
-    # after we have opened the file which is a shame.
-    from ._convert import _handle_convert  # Lazy import
-
-    with as_handle(in_file, in_mode) as in_handle:
-        with as_handle(out_file, out_mode) as out_handle:
-            count = _handle_convert(
-                in_handle, in_format, out_handle, out_format, alphabet
-            )
-    return count
+    records = parse(in_file, in_format, alphabet)
+    return write(records, out_file, out_format)
 
 
 # This helpful trick for testing no longer works with the

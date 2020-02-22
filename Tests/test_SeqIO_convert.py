@@ -11,7 +11,6 @@ from Bio import BiopythonWarning
 from Bio.Seq import UnknownSeq
 from Bio import SeqIO
 from Bio.SeqIO import QualityIO
-from Bio.SeqIO._convert import _converter as converter_dict
 from io import StringIO
 from Bio.Alphabet import generic_nucleotide, generic_dna
 
@@ -199,8 +198,43 @@ tests = [
     ("GenBank/NC_005816.gb", "gb", None),
     ("GenBank/cor6_6.gb", "genbank", None),
 ]
+
+formats = (
+    ("genbank", "fasta"),
+    ("gb", "fasta"),
+    ("embl", "fasta"),
+    ("fastq", "fasta"),
+    ("fastq-sanger", "fasta"),
+    ("fastq-solexa", "fasta"),
+    ("fastq-illumina", "fasta"),
+    ("fastq", "tab"),
+    ("fastq-sanger", "tab"),
+    ("fastq-solexa", "tab"),
+    ("fastq-illumina", "tab"),
+    ("fastq", "fastq"),
+    ("fastq-sanger", "fastq"),
+    ("fastq-solexa", "fastq"),
+    ("fastq-illumina", "fastq"),
+    ("fastq", "fastq-sanger"),
+    ("fastq-sanger", "fastq-sanger"),
+    ("fastq-solexa", "fastq-sanger"),
+    ("fastq-illumina", "fastq-sanger"),
+    ("fastq", "fastq-solexa"),
+    ("fastq-sanger", "fastq-solexa"),
+    ("fastq-solexa", "fastq-solexa"),
+    ("fastq-illumina", "fastq-solexa"),
+    ("fastq", "fastq-illumina"),
+    ("fastq-sanger", "fastq-illumina"),
+    ("fastq-solexa", "fastq-illumina"),
+    ("fastq-illumina", "fastq-illumina"),
+    ("fastq", "qual"),
+    ("fastq-sanger", "qual"),
+    ("fastq-solexa", "qual"),
+    ("fastq-illumina", "qual"),
+)
+
 for filename, format, alphabet in tests:
-    for (in_format, out_format) in converter_dict:
+    for (in_format, out_format) in formats:
         if in_format != format:
             continue
 
@@ -243,7 +277,7 @@ tests = [
     ("Quality/error_double_qual.fastq", "fastq", generic_dna),
 ]
 for filename, format, alphabet in tests:
-    for (in_format, out_format) in converter_dict:
+    for (in_format, out_format) in formats:
         if in_format != format:
             continue
         if (
