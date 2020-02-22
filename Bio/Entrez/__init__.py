@@ -188,14 +188,16 @@ def efetch(db, **keywords):
         pass
     else:
         try:
-            ids = ",".join(ids)
-        except TypeError as e:
-            if isinstance(ids, int):
-                ids = str(ids)
-            else:
-                raise e
-        variables["id"] = ids
+            # ids is a single integer or a string representing a single integer
+            ids = str(int(ids))
+        except TypeError:
+            # ids was not a string; try an iterable:
+            ids = ",".join(map(str, ids))
+        except ValueError:
+            # string with commas or string not representing an integer
+            ids = ",".join(map(str, (id.strip() for id in ids.split(","))))
 
+        variables["id"] = ids
         if ids.count(",") >= 200:
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are
             # more than about 200 IDs

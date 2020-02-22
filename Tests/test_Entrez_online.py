@@ -74,7 +74,7 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL."""
-        handle = Entrez.efetch(db="protein", id={15718680, 157427902, 119703751},
+        handle = Entrez.efetch(db="protein", id="15718680, 157427902, 119703751",
                                retmode="xml")
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
@@ -233,6 +233,35 @@ class EntrezOnlineCase(unittest.TestCase):
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
         self.assertEqual(result, expected_result)
         handle.close()
+
+    def test_efetch_ids(self):
+        """Test different options to supply ids."""
+        ids = (
+            [15718680, 157427902],
+            (15718680, 157427902),
+            {15718680, 157427902},
+            ["15718680", "157427902"],
+            ("15718680", "157427902"),
+            {15718680, "157427902"},
+            "15718680, 157427902",
+        )
+        for _id in ids:
+            with Entrez.efetch(db="protein", id=_id, retmode="xml") as handle:
+                # _id can be a set with unpredictable sorting,
+                # thus we test the ids separately
+                self.assertIn("15718680", handle.url)
+                self.assertIn("157427902", handle.url)
+                recs = list(Entrez.parse(handle))
+                self.assertEqual(2, len(recs))
+
+        ids = (
+            [15718680], (15718680), {15718680}, 15718680, "15718680", "15718680,",
+        )
+        for _id in ids:
+            with Entrez.efetch(db="protein", id=_id, retmode="xml") as handle:
+                self.assertIn("15718680", handle.url)
+                recs = list(Entrez.parse(handle))
+                self.assertEqual(1, len(recs))
 
     def test_efetch_gds_utf8(self):
         """Test correct handling of encodings in Entrez.efetch."""
