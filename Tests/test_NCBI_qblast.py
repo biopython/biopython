@@ -287,14 +287,14 @@ class TestQblast(unittest.TestCase):
     def test_short_query(self):
         """Test SHORT_QUERY_ADJUST parameter."""
         # Should give no hits:
-        my_search = NCBIWWW.qblast("blastp", "nr", "ICWENRM", hitlist_size=5)
+        my_search = NCBIWWW.qblast("blastp", "nr", "ICWENRMP", hitlist_size=5)
         my_hits = NCBIXML.read(my_search)
         my_search.close()
         self.assertEqual(len(my_hits.alignments), 0)
 
         # Should give hits:
         my_search = NCBIWWW.qblast(
-            "blastp", "nr", "ICWENRM", hitlist_size=5, short_query=True
+            "blastp", "nr", "ICWENRMP", hitlist_size=5, short_query=True
         )
         my_hits = NCBIXML.read(my_search)
         my_search.close()
