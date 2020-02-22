@@ -264,6 +264,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Thomas Schmitt <https://github.com/wurstbonbon>
 - Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
 - Tiago Antao <https://github.com/tiagoantao>
+- Tianyi Shi <https://github.com/TianyiShi2001>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
