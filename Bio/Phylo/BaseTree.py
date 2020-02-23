@@ -812,7 +812,9 @@ class Tree(TreeElement, TreeMixin):
 
         return Phylogeny.from_tree(self, **kwargs)
 
-    def root_with_outgroup(self, outgroup_targets, *more_targets, outgroup_branch_length=None):
+    def root_with_outgroup(
+        self, outgroup_targets, *more_targets, outgroup_branch_length=None
+    ):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
         Operates in-place.
