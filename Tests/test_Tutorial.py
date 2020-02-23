@@ -241,8 +241,7 @@ class TutorialTestCase(unittest.TestCase):
     # Single method to be invoked by run_tests.py
     def test_doctests(self):
         """Run tutorial doctests."""
-        # TODO: Remove IGNORE_EXCEPTION_DETAIL once drop Python 2 support
-        runner = doctest.DocTestRunner(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
+        runner = doctest.DocTestRunner()
         failures = []
         for test in doctest.DocTestFinder().find(TutorialDocTestHolder):
             failed, success = runner.run(test)
