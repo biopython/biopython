@@ -710,22 +710,6 @@ class ParseTest(unittest.TestCase):
         self.assertLessEqual(atom2, atom1)
         self.assertLessEqual(atom2, atom3)
 
-        # In Py2 this will be True/False, in Py3 it will raise a TypeError.
-        try:
-            self.assertTrue(atom1 < res1)  # __gt__ diff. types
-        except TypeError:
-            pass
-
-        try:
-            self.assertTrue(struct > model)  # __gt__ diff. types
-        except TypeError:
-            pass
-
-        try:
-            self.assertFalse(struct >= [])  # __le__ diff. types
-        except TypeError:
-            pass
-
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
