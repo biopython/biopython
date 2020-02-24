@@ -20,13 +20,6 @@ from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
 
 
-def u_crc32(seq):
-    # NOTE - On Python 2 crc32 could return a signed int, but on Python 3 it is
-    # always unsigned
-    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    return crc32(seq) & 0xFFFFFFFF
-
-
 class SeqUtilsTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -127,7 +120,7 @@ class SeqUtilsTests(unittest.TestCase):
             Seq(seq_str, single_letter_alphabet),
             MutableSeq(seq_str, single_letter_alphabet),
         ]:
-            self.assertEqual(exp_crc32, u_crc32(s))
+            self.assertEqual(exp_crc32, crc32(s))
             self.assertEqual(exp_crc64, crc64(s))
             self.assertEqual(exp_gcg, gcg(s))
             self.assertEqual(exp_seguid, seguid(s))

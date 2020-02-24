@@ -5,19 +5,7 @@
 # as part of this package.
 """Test for graphics things that don't really deserve there own test module."""
 
-# TODO: Right now this test occasionally fails with a trace like:
-#
-# File "/usr/local/lib/python2.1/site-packages/reportlab/graphics/
-# charts/lineplots.py", line 182, in calcPositions
-#     datum = self.data[rowNo][colNo] # x,y value
-# IndexError: list index out of range
-#
-# This appears to be a problem with reportlab, so I'm not worrying about
-# it right now, unless it starts to happen with real data! If anyone
-# can figure out the data that causes it so I can avoid it, that'd be much
-# appreciated.
 
-# standard library
 import os
 import random
 import unittest
