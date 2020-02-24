@@ -115,6 +115,13 @@ def cmp_sccs(sccs1, sccs2):
         if i1 > i2:
             return +1
 
+    n1 = len(s1)
+    n2 = len(s2)
+    if n1 < n2:
+        return -1
+    if n1 > n2:
+        return +1
+
     return 0
 
 
