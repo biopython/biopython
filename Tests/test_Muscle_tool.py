@@ -110,9 +110,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(
             str(cmdline),
             _escape_filename(muscle_exe)
-            + " -in Fasta/f002"
-            + " -out Fasta/temp_align_out2.fa"
-            + " -objscore sp -noanchors",
+            + " -in Fasta/f002 -out Fasta/temp_align_out2.fa -objscore sp -noanchors",
         )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -130,8 +128,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(
             str(cmdline),
             _escape_filename(muscle_exe)
-            + " -out Fasta/temp_align_out3.fa"
-            + " -profile -in1 Fasta/fa01 -in2 Fasta/f001",
+            + " -out Fasta/temp_align_out3.fa -profile -in1 Fasta/fa01 -in2 Fasta/f001",
         )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -154,8 +151,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(
             str(cmdline),
             _escape_filename(muscle_exe)
-            + " -out Fasta/temp_align_out4.fa"
-            + " -profile -in1 Fasta/fa01 -in2 Fasta/f001"
+            + " -out Fasta/temp_align_out4.fa -profile -in1 Fasta/fa01 -in2 Fasta/f001"
             + " -cluster1 neighborjoining -stable",
         )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
