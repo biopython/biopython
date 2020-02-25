@@ -9,7 +9,7 @@ import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.EmbossIO import EmbossWriter, EmbossIterator
+from Bio.AlignIO.EmbossIO import EmbossIterator
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
 simple_example = \

@@ -11,11 +11,6 @@ alphabet for CodonSeq class.
 
 import copy
 
-try:
-    from itertools import izip
-except ImportError:
-    izip = zip
-
 from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
 from Bio.Data.CodonTable import generic_by_id
 
