@@ -18,7 +18,6 @@ from Bio.SeqRecord import SeqRecord
 
 import doctest
 import os
-import locale
 import sys
 import unittest
 
