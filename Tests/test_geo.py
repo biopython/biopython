@@ -11,55 +11,144 @@ from Bio import Geo
 
 
 class TestGeo(unittest.TestCase):
-
     def test_soft_ex_dual(self):
         path = "Geo/soft_ex_dual.txt"
         with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
-            self.assertEqual(record.entity_id, "Control Embyronic Stem Cell Replicate 1")
+            self.assertEqual(
+                record.entity_id, "Control Embyronic Stem Cell Replicate 1"
+            )
             self.assertEqual(len(record.entity_attributes), 24)
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch2"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "TriZol procedure")
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch2"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "TriZol procedure",
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL3759")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Control Embyronic Stem Cell Replicate 1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "file1.gpr")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch2"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Mus musculus")
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "Control Embyronic Stem Cell Replicate 1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"], "file1.gpr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch2"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"], "Mus musculus"
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "Cy5")
             self.assertEqual(len(record.entity_attributes["Sample_scan_protocol"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][0], "Scanned on an Agilent G2565AA scanner.")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][1], "Images were quantified using Agilent Feature Extraction Software (version A.7.5).")
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][0],
+                "Scanned on an Agilent G2565AA scanner.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][1],
+                "Images were quantified using Agilent Feature Extraction Software (version A.7.5).",
+            )
             self.assertEqual(record.entity_attributes["sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch2"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.")
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch2"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_end"], "")
             self.assertEqual(record.entity_attributes["Sample_label_ch2"], "Cy3")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Biological replicate 1 of 4. Control embryonic stem cells, untreated, harvested after several passages.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch2"], "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch2"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "ES-D3 cell line (CRL-1934)")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][2], "Tissue: blastocytes")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][3], "Strain: 129/Sv mice")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch2"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][0], "Strain: C57BL/6")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][1], "Age: e17.5 d")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][2], "Tissue: whole embryo")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Biological replicate 1 of 4. Control embryonic stem cells, untreated, harvested after several passages.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch2"],
+                "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch2"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 4
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "ES-D3 cell line (CRL-1934)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][2],
+                "Tissue: blastocytes",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][3],
+                "Strain: 129/Sv mice",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch2"]), 3
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][0],
+                "Strain: C57BL/6",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][1],
+                "Age: e17.5 d",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][2],
+                "Tissue: whole embryo",
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "log(REDsignal/GREENsignal) per feature (processed signals used).")
-            self.assertEqual(record.col_defs["gProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.')
-            self.assertEqual(record.col_defs["LogRatioError"], "error of the log ratio calculated according to the error model chosen.")
-            self.assertEqual(record.col_defs["PValueLogRatio"], "Significance level of the Log Ratio computed for a feature.")
-            self.assertEqual(record.col_defs["rProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.')
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "log(REDsignal/GREENsignal) per feature (processed signals used).",
+            )
+            self.assertEqual(
+                record.col_defs["gProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.',
+            )
+            self.assertEqual(
+                record.col_defs["LogRatioError"],
+                "error of the log ratio calculated according to the error model chosen.",
+            )
+            self.assertEqual(
+                record.col_defs["PValueLogRatio"],
+                "Significance level of the Log Ratio computed for a feature.",
+            )
+            self.assertEqual(
+                record.col_defs["rProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 6)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -210,48 +299,138 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.table_rows[20][5], "6.32E+01")
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
-            self.assertEqual(record.entity_id, "Control Embyronic Stem Cell Replicate 2")
+            self.assertEqual(
+                record.entity_id, "Control Embyronic Stem Cell Replicate 2"
+            )
             self.assertEqual(len(record.entity_attributes), 24)
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch2"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "TriZol procedure")
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch2"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "TriZol procedure",
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL3759")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Control Embyronic Stem Cell Replicate 2")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "file2.gpr")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch2"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Mus musculus")
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "Control Embyronic Stem Cell Replicate 2",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"], "file2.gpr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch2"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"], "Mus musculus"
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "Cy5")
             self.assertEqual(len(record.entity_attributes["Sample_scan_protocol"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][0], "Scanned on an Agilent G2565AA scanner.")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][1], "Images were quantified using Agilent Feature Extraction Software (version A.7.5).")
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][0],
+                "Scanned on an Agilent G2565AA scanner.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][1],
+                "Images were quantified using Agilent Feature Extraction Software (version A.7.5).",
+            )
             self.assertEqual(record.entity_attributes["sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch2"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.")
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch2"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_end"], "")
             self.assertEqual(record.entity_attributes["Sample_label_ch2"], "Cy3")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Biological replicate 2 of 4. Control embryonic stem cells, untreated, harvested after several passages.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch2"], "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch2"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "ES-D3 cell line (CRL-1934)")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][2], "Tissue: blastocytes")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][3], "Strain: 129/Sv mice")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch2"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][0], "Strain: C57BL/6")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][1], "Age: e17.5 d")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][2], "Tissue: whole embryo")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Biological replicate 2 of 4. Control embryonic stem cells, untreated, harvested after several passages.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch2"],
+                "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch2"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 4
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "ES-D3 cell line (CRL-1934)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][2],
+                "Tissue: blastocytes",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][3],
+                "Strain: 129/Sv mice",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch2"]), 3
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][0],
+                "Strain: C57BL/6",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][1],
+                "Age: e17.5 d",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][2],
+                "Tissue: whole embryo",
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "log(REDsignal/GREENsignal) per feature (processed signals used).")
-            self.assertEqual(record.col_defs["gProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.')
-            self.assertEqual(record.col_defs["LogRatioError"], "error of the log ratio calculated according to the error model chosen.")
-            self.assertEqual(record.col_defs["PValueLogRatio"], "Significance level of the Log Ratio computed for a feature.")
-            self.assertEqual(record.col_defs["rProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.')
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "log(REDsignal/GREENsignal) per feature (processed signals used).",
+            )
+            self.assertEqual(
+                record.col_defs["gProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.',
+            )
+            self.assertEqual(
+                record.col_defs["LogRatioError"],
+                "error of the log ratio calculated according to the error model chosen.",
+            )
+            self.assertEqual(
+                record.col_defs["PValueLogRatio"],
+                "Significance level of the Log Ratio computed for a feature.",
+            )
+            self.assertEqual(
+                record.col_defs["rProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 6)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -402,48 +581,142 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.table_rows[20][5], "1.45E+02")
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
-            self.assertEqual(record.entity_id, "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1")
+            self.assertEqual(
+                record.entity_id,
+                "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1",
+            )
             self.assertEqual(len(record.entity_attributes), 25)
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch2"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "TriZol procedure")
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch2"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "TriZol procedure",
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL3759")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "file3.gpr")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch2"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Mus musculus")
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"], "file3.gpr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch2"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"], "Mus musculus"
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "Cy5")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "Scanned on an Agilent G2565AA scanner.")
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "Scanned on an Agilent G2565AA scanner.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch2"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.")
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch2"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_end"], "")
             self.assertEqual(record.entity_attributes["Sample_label_ch2"], "Cy3")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Biological replicate 1 of 3. Stable triple-fusion-reporter-gene transfected embryonic stem cells, harvested after several passages.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Total RNA from murine ES-D3 triple-transfected embryonic stem cells labeled with Cyanine-5 (red).")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch2"], "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch2"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 5)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "ES-D3 cell line (CRL-1934)")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Transfected with pUb-fluc-mrfp-ttk triple fusion reporter gene.")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][2], "Age: day 4")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][3], "Tissue: blastocytes")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][4], "Strain: 129/Sv mice")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch2"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][0], "Strain: C57BL/6")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][1], "Age: e17.5 d")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][2], "Tissue: whole embryo")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "PCR amplification and standard cloning techniques were used to insert fluc and mrfp genes from plasmids pCDNA 3.1-CMV-fluc (Promega, Madison, WI) and pCDNA3.1-CMV-mrfp in frame with the ttk gene into the pCDNA3.1-truncated	sr39tk. This triple fusion (TF) reporter gene fragment (3.3 kbp) was released from the plasmid with Not1 and BamH1 restriction enzymes before blunt-end ligation into the multiple cloning site of lentiviral transfer vector, FUG, driven by the human ubiquitin-C promoter. Self-inactivating (SIN) lentivirus was prepared by transient transfection of 293T cells. Briefly, pFUG-TF containing the triple fusion reporter gene was co-transfected into 293T cells with HIV-1 packaging vector (?8.9) and vesicular stomatitis virus G glycoprotein-pseudotyped envelop vector (pVSVG). Lentivirus supernatant was concentrated by sediment centrifugation using a SW29 rotor at 50,000 x g for two hours. Concentrated virus was titered on 293T cells. Murine ES cells were transfected with LV-pUb-fluc-mrfp-ttk at a multiplicity of infection (MOI) of 10.")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Biological replicate 1 of 3. Stable triple-fusion-reporter-gene transfected embryonic stem cells, harvested after several passages.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Total RNA from murine ES-D3 triple-transfected embryonic stem cells labeled with Cyanine-5 (red).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch2"],
+                "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch2"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 5
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "ES-D3 cell line (CRL-1934)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Transfected with pUb-fluc-mrfp-ttk triple fusion reporter gene.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][2], "Age: day 4"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][3],
+                "Tissue: blastocytes",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][4],
+                "Strain: 129/Sv mice",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch2"]), 3
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][0],
+                "Strain: C57BL/6",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][1],
+                "Age: e17.5 d",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][2],
+                "Tissue: whole embryo",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "PCR amplification and standard cloning techniques were used to insert fluc and mrfp genes from plasmids pCDNA 3.1-CMV-fluc (Promega, Madison, WI) and pCDNA3.1-CMV-mrfp in frame with the ttk gene into the pCDNA3.1-truncated	sr39tk. This triple fusion (TF) reporter gene fragment (3.3 kbp) was released from the plasmid with Not1 and BamH1 restriction enzymes before blunt-end ligation into the multiple cloning site of lentiviral transfer vector, FUG, driven by the human ubiquitin-C promoter. Self-inactivating (SIN) lentivirus was prepared by transient transfection of 293T cells. Briefly, pFUG-TF containing the triple fusion reporter gene was co-transfected into 293T cells with HIV-1 packaging vector (?8.9) and vesicular stomatitis virus G glycoprotein-pseudotyped envelop vector (pVSVG). Lentivirus supernatant was concentrated by sediment centrifugation using a SW29 rotor at 50,000 x g for two hours. Concentrated virus was titered on 293T cells. Murine ES cells were transfected with LV-pUb-fluc-mrfp-ttk at a multiplicity of infection (MOI) of 10.",
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "log(REDsignal/GREENsignal) per feature (processed signals used).")
-            self.assertEqual(record.col_defs["gProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.')
-            self.assertEqual(record.col_defs["LogRatioError"], "error of the log ratio calculated according to the error model chosen.")
-            self.assertEqual(record.col_defs["PValueLogRatio"], "Significance level of the Log Ratio computed for a feature.")
-            self.assertEqual(record.col_defs["rProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.')
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "log(REDsignal/GREENsignal) per feature (processed signals used).",
+            )
+            self.assertEqual(
+                record.col_defs["gProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.',
+            )
+            self.assertEqual(
+                record.col_defs["LogRatioError"],
+                "error of the log ratio calculated according to the error model chosen.",
+            )
+            self.assertEqual(
+                record.col_defs["PValueLogRatio"],
+                "Significance level of the Log Ratio computed for a feature.",
+            )
+            self.assertEqual(
+                record.col_defs["rProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 6)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -601,31 +874,85 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "Drosophila_T0-1")
             self.assertEqual(len(record.entity_attributes), 18)
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Drosophila melanogaster")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"],
+                "Drosophila melanogaster",
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "biotin")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.",
+            )
             self.assertEqual(record.entity_attributes["Sample_table_end"], "")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "Genotype: yellow white and Oregon R parents")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "Trizol extraction of total RNA was performed according to the manufacturer's instructions.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Drosophila embryos before nuclear cycle 9 (maternal transcripts)")
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 2
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "Genotype: yellow white and Oregon R parents",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "Trizol extraction of total RNA was performed according to the manufacturer's instructions.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Drosophila embryos before nuclear cycle 9 (maternal transcripts)",
+            )
             self.assertEqual(record.entity_attributes["Sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).")
-            self.assertEqual(record.entity_attributes["Sample_title"], "embryo at T0, biological rep1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "Drosophila_T0-1.CEL")
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "embryo at T0, biological rep1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"],
+                "Drosophila_T0-1.CEL",
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL72")
             self.assertEqual(len(record.col_defs), 4)
-            self.assertEqual(record.col_defs["DETECTION P-VALUE"], "'detection p-value', p-value that indicates the significance level of the detection call")
+            self.assertEqual(
+                record.col_defs["DETECTION P-VALUE"],
+                "'detection p-value', p-value that indicates the significance level of the detection call",
+            )
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "MAS5-calculated Signal intensity")
-            self.assertEqual(record.col_defs["ABS_CALL"], "the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)")
+            self.assertEqual(
+                record.col_defs["VALUE"], "MAS5-calculated Signal intensity"
+            )
+            self.assertEqual(
+                record.col_defs["ABS_CALL"],
+                "the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)",
+            )
             self.assertEqual(len(record.table_rows), 22)
             self.assertEqual(len(record.table_rows[0]), 4)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -741,31 +1068,85 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "Drosophila_T0-2")
             self.assertEqual(len(record.entity_attributes), 18)
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Drosophila melanogaster")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"],
+                "Drosophila melanogaster",
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "biotin")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.",
+            )
             self.assertEqual(record.entity_attributes["Sample_table_end"], "")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "Genotype: yellow white and Oregon R parents")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "Trizol extraction of total RNA was performed according to the manufacturer's instructions.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Drosophila embryos before nuclear cycle 9 (maternal transcripts)")
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 2
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "Genotype: yellow white and Oregon R parents",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "Trizol extraction of total RNA was performed according to the manufacturer's instructions.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Drosophila embryos before nuclear cycle 9 (maternal transcripts)",
+            )
             self.assertEqual(record.entity_attributes["Sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).")
-            self.assertEqual(record.entity_attributes["Sample_title"], "embryo at T0, biological rep2")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "Drosophila_T0-2.CEL")
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "embryo at T0, biological rep2",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"],
+                "Drosophila_T0-2.CEL",
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL72")
             self.assertEqual(len(record.col_defs), 4)
-            self.assertEqual(record.col_defs["DETECTION P-VALUE"], "'detection p-value', p-value that indicates the significance level of the detection call")
+            self.assertEqual(
+                record.col_defs["DETECTION P-VALUE"],
+                "'detection p-value', p-value that indicates the significance level of the detection call",
+            )
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "MAS5-calculated Signal intensity")
-            self.assertEqual(record.col_defs["ABS_CALL"], "the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)")
+            self.assertEqual(
+                record.col_defs["VALUE"], "MAS5-calculated Signal intensity"
+            )
+            self.assertEqual(
+                record.col_defs["ABS_CALL"],
+                "the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)",
+            )
             self.assertEqual(len(record.table_rows), 22)
             self.assertEqual(len(record.table_rows[0]), 4)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -881,31 +1262,85 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "Drosophila_T1-1")
             self.assertEqual(len(record.entity_attributes), 18)
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Drosophila melanogaster")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"],
+                "Drosophila melanogaster",
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "biotin")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Gene expression data from embryos in slow phase of cellularisation.")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Gene expression data from embryos in slow phase of cellularisation.",
+            )
             self.assertEqual(record.entity_attributes["Sample_table_end"], "")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "Genotype: yellow white and Oregon R parents")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: embryos in slow phase of cellularisation")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "Trizol extraction of total RNA was performed according to the manufacturer's instructions.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Drosophila embryos in slow phase of cellularisation")
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 2
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "Genotype: yellow white and Oregon R parents",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Age: embryos in slow phase of cellularisation",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "Trizol extraction of total RNA was performed according to the manufacturer's instructions.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Drosophila embryos in slow phase of cellularisation",
+            )
             self.assertEqual(record.entity_attributes["Sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).")
-            self.assertEqual(record.entity_attributes["Sample_title"], "embryo at T1, biological rep1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "Drosophila_T1-1.CEL")
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "embryo at T1, biological rep1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"],
+                "Drosophila_T1-1.CEL",
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL72")
             self.assertEqual(len(record.col_defs), 4)
-            self.assertEqual(record.col_defs["DETECTION P-VALUE"], "'detection p-value', p-value that indicates the significance level of the detection call")
+            self.assertEqual(
+                record.col_defs["DETECTION P-VALUE"],
+                "'detection p-value', p-value that indicates the significance level of the detection call",
+            )
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "MAS5-calculated Signal intensity")
-            self.assertEqual(record.col_defs["ABS_CALL"], "the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)")
+            self.assertEqual(
+                record.col_defs["VALUE"], "MAS5-calculated Signal intensity"
+            )
+            self.assertEqual(
+                record.col_defs["ABS_CALL"],
+                "the call in an absolute analysis that indicates if the transcript was present (P), absent (A), marginal (M), or no call (NC)",
+            )
             self.assertEqual(len(record.table_rows), 22)
             self.assertEqual(len(record.table_rows[0]), 4)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -1022,21 +1457,49 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_id, "Dros_embryo_timecourse")
             self.assertEqual(len(record.entity_attributes), 6)
             self.assertEqual(len(record.entity_attributes["Series_sample_id"]), 3)
-            self.assertEqual(record.entity_attributes["Series_sample_id"][0], "Drosophila_T0-1")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][1], "Drosophila_T0-2")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][2], "Drosophila_T1-1")
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][0], "Drosophila_T0-1"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][1], "Drosophila_T0-2"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][2], "Drosophila_T1-1"
+            )
             self.assertEqual(len(record.entity_attributes["Series_contributor"]), 5)
-            self.assertEqual(record.entity_attributes["Series_contributor"][0], "Jane,Doe")
-            self.assertEqual(record.entity_attributes["Series_contributor"][1], "John,A,Smith")
-            self.assertEqual(record.entity_attributes["Series_contributor"][2], "Hans,van Elton")
-            self.assertEqual(record.entity_attributes["Series_contributor"][3], "John,Smithers Jr")
-            self.assertEqual(record.entity_attributes["Series_contributor"][4], "Jie,D,Chen")
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][0], "Jane,Doe"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][1], "John,A,Smith"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][2], "Hans,van Elton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][3], "John,Smithers Jr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][4], "Jie,D,Chen"
+            )
             self.assertEqual(len(record.entity_attributes["Series_summary"]), 2)
-            self.assertEqual(record.entity_attributes["Series_summary"][0], "Morphogenesis of epithelial tissues relies on the precise developmental control of cell polarity and architecture. In the early Drosophila embryo, the primary epithelium forms during cellularisation, following a tightly controlled genetic programme where specific sets of genes are up-regulated. Some of them, for instance, control membrane invagination between the nuclei anchored at the apical surface of the syncytium.")
-            self.assertEqual(record.entity_attributes["Series_summary"][1], "We used microarrays to detail the global programme of gene expression underlying cellularisation and identified distinct classes of up-regulated genes during this process.")
+            self.assertEqual(
+                record.entity_attributes["Series_summary"][0],
+                "Morphogenesis of epithelial tissues relies on the precise developmental control of cell polarity and architecture. In the early Drosophila embryo, the primary epithelium forms during cellularisation, following a tightly controlled genetic programme where specific sets of genes are up-regulated. Some of them, for instance, control membrane invagination between the nuclei anchored at the apical surface of the syncytium.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_summary"][1],
+                "We used microarrays to detail the global programme of gene expression underlying cellularisation and identified distinct classes of up-regulated genes during this process.",
+            )
             self.assertEqual(record.entity_attributes["Series_type"], "time course")
-            self.assertEqual(record.entity_attributes["Series_title"], "Expression data from early Drosophila embryo")
-            self.assertEqual(record.entity_attributes["Series_overall_design"], "Drosophila embryos were selected at successive stages of early development for RNA extraction and hybridization on Affymetrix microarrays. We sought to obtain homogeneous populations of embryos at each developmental stage in order to increase the temporal resolution of expression profiles. To that end, we hand-selected embryos according to morphological criteria at five time-points: before pole cell formation, i.e. before zygotic transcription (T0), during the slow phase (T1) and the fast phase (T2) of cellularisation and at the beginning (T3) and the end (T4) of gastrulation.")
+            self.assertEqual(
+                record.entity_attributes["Series_title"],
+                "Expression data from early Drosophila embryo",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_overall_design"],
+                "Drosophila embryos were selected at successive stages of early development for RNA extraction and hybridization on Affymetrix microarrays. We sought to obtain homogeneous populations of embryos at each developmental stage in order to increase the temporal resolution of expression profiles. To that end, we hand-selected embryos according to morphological criteria at five time-points: before pole cell formation, i.e. before zygotic transcription (T0), during the slow phase (T1) and the fast phase (T2) of cellularisation and at the beginning (T3) and the end (T4) of gastrulation.",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
 
@@ -1049,52 +1512,144 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_id, "GSM804")
             self.assertEqual(len(record.entity_attributes), 18)
             self.assertEqual(record.entity_attributes["Sample_pubmed_id"], "11687795")
-            self.assertEqual(record.entity_attributes["Sample_submitter_institute"], "University of California San Francisco")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_institute"],
+                "University of California San Francisco",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_author"]), 19)
-            self.assertEqual(record.entity_attributes["Sample_author"][0], "Antoine,M,Snijders")
-            self.assertEqual(record.entity_attributes["Sample_author"][1], "Norma,,Nowak")
-            self.assertEqual(record.entity_attributes["Sample_author"][2], "Richard,,Segraves")
-            self.assertEqual(record.entity_attributes["Sample_author"][3], "Stephanie,,Blackwood")
-            self.assertEqual(record.entity_attributes["Sample_author"][4], "Nils,,Brown")
-            self.assertEqual(record.entity_attributes["Sample_author"][5], "Jeffery,,Conroy")
-            self.assertEqual(record.entity_attributes["Sample_author"][6], "Greg,,Hamilton")
-            self.assertEqual(record.entity_attributes["Sample_author"][7], "Anna,K,Hindle")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][0], "Antoine,M,Snijders"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][1], "Norma,,Nowak"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][2], "Richard,,Segraves"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][3], "Stephanie,,Blackwood"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][4], "Nils,,Brown"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][5], "Jeffery,,Conroy"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][6], "Greg,,Hamilton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][7], "Anna,K,Hindle"
+            )
             self.assertEqual(record.entity_attributes["Sample_author"][8], "Bing,,Huey")
-            self.assertEqual(record.entity_attributes["Sample_author"][9], "Karen,,Kimura")
-            self.assertEqual(record.entity_attributes["Sample_author"][10], "Sindy,,Law")
-            self.assertEqual(record.entity_attributes["Sample_author"][11], "Ken,,Myambo")
-            self.assertEqual(record.entity_attributes["Sample_author"][12], "Joel,,Palmer")
-            self.assertEqual(record.entity_attributes["Sample_author"][13], "Bauke,,Ylstra")
-            self.assertEqual(record.entity_attributes["Sample_author"][14], "Jingzhu,P,Yue")
-            self.assertEqual(record.entity_attributes["Sample_author"][15], "Joe,W,Gray")
-            self.assertEqual(record.entity_attributes["Sample_author"][16], "Ajay,N,Jain")
-            self.assertEqual(record.entity_attributes["Sample_author"][17], "Daniel,,Pinkel")
-            self.assertEqual(record.entity_attributes["Sample_author"][18], "Donna,G,Albertson")
-            self.assertEqual(record.entity_attributes["Sample_submitter_phone"], "415 502-8463")
-            self.assertEqual(record.entity_attributes["Sample_submitter_department"], "Comprehensive Cancer Center")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][9], "Karen,,Kimura"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][10], "Sindy,,Law"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][11], "Ken,,Myambo"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][12], "Joel,,Palmer"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][13], "Bauke,,Ylstra"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][14], "Jingzhu,P,Yue"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][15], "Joe,W,Gray"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][16], "Ajay,N,Jain"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][17], "Daniel,,Pinkel"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][18], "Donna,G,Albertson"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_phone"], "415 502-8463"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_department"],
+                "Comprehensive Cancer Center",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_description"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_description"][0], 'Coriell Cell Repositories cell line <a href="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.')
-            self.assertEqual(record.entity_attributes["Sample_description"][1], "Fibroblast cell line derived from a 1 month old female with multiple congenital malformations, dysmorphic features, intrauterine growth retardation, heart murmur, cleft palate, equinovarus deformity, microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activity, and 1 copy of catalase gene.")
-            self.assertEqual(record.entity_attributes["Sample_description"][2], "Chromosome abnormalities are present.")
-            self.assertEqual(record.entity_attributes["Sample_description"][3], "Karyotype is 46,XX,-11,+der(11)inv ins(11;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat")
-            self.assertEqual(record.entity_attributes["Sample_target_source2"], "normal male reference genomic DNA")
-            self.assertEqual(record.entity_attributes["Sample_target_source1"], "Cell line GM05296")
-            self.assertEqual(record.entity_attributes["Sample_submitter_name"], "Donna,G,Albertson")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][0],
+                'Coriell Cell Repositories cell line <a href="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.',
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][1],
+                "Fibroblast cell line derived from a 1 month old female with multiple congenital malformations, dysmorphic features, intrauterine growth retardation, heart murmur, cleft palate, equinovarus deformity, microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activity, and 1 copy of catalase gene.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][2],
+                "Chromosome abnormalities are present.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][3],
+                "Karyotype is 46,XX,-11,+der(11)inv ins(11;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source2"],
+                "normal male reference genomic DNA",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source1"], "Cell line GM05296"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_name"], "Donna,G,Albertson"
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL28")
-            self.assertEqual(record.entity_attributes["Sample_type"], "dual channel genomic")
-            self.assertEqual(record.entity_attributes["Sample_status"], "Public on Feb 12 2002")
-            self.assertEqual(record.entity_attributes["Sample_submitter_email"], "albertson@cc.ucsf.edu")
-            self.assertEqual(record.entity_attributes["Sample_title"], "CGH_Albertson_GM05296-001218")
-            self.assertEqual(record.entity_attributes["Sample_organism"], "Homo sapiens")
+            self.assertEqual(
+                record.entity_attributes["Sample_type"], "dual channel genomic"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_status"], "Public on Feb 12 2002"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_email"],
+                "albertson@cc.ucsf.edu",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"], "CGH_Albertson_GM05296-001218"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism"], "Homo sapiens"
+            )
             self.assertEqual(record.entity_attributes["Sample_series_id"], "GSE16")
-            self.assertEqual(record.entity_attributes["Sample_submission_date"], "Jan 17 2002")
-            self.assertEqual(record.entity_attributes["Sample_submitter_city"], "San Francisco,CA,94143,USA")
+            self.assertEqual(
+                record.entity_attributes["Sample_submission_date"], "Jan 17 2002"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_city"],
+                "San Francisco,CA,94143,USA",
+            )
             self.assertEqual(len(record.col_defs), 5)
-            self.assertEqual(record.col_defs["NO_REPLICATES"], "Number of replicate spot measurements")
-            self.assertEqual(record.col_defs["LOG2STDDEV"], "Standard deviation of VALUE")
-            self.assertEqual(record.col_defs["ID_REF"], "Unique row identifier, genome position order")
-            self.assertEqual(record.col_defs["VALUE"], "aka LOG2RATIO, mean of log base 2 of LINEAR_RATIO")
-            self.assertEqual(record.col_defs["LINEAR_RATIO"], "Mean of replicate Cy3/Cy5 ratios")
+            self.assertEqual(
+                record.col_defs["NO_REPLICATES"],
+                "Number of replicate spot measurements",
+            )
+            self.assertEqual(
+                record.col_defs["LOG2STDDEV"], "Standard deviation of VALUE"
+            )
+            self.assertEqual(
+                record.col_defs["ID_REF"],
+                "Unique row identifier, genome position order",
+            )
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "aka LOG2RATIO, mean of log base 2 of LINEAR_RATIO",
+            )
+            self.assertEqual(
+                record.col_defs["LINEAR_RATIO"], "Mean of replicate Cy3/Cy5 ratios"
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 5)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -1229,42 +1784,111 @@ class TestGeo(unittest.TestCase):
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "PLATFORM")
-            self.assertEqual(record.entity_id, "Murine 15K long oligo array version 2.0")
+            self.assertEqual(
+                record.entity_id, "Murine 15K long oligo array version 2.0"
+            )
             self.assertEqual(len(record.entity_attributes), 12)
-            self.assertEqual(record.entity_attributes["Platform_title"], "Murine 15K long oligo array version 2.0")
-            self.assertEqual(record.entity_attributes["Platform_web_link"], "http://www.microarray.protocols.html")
+            self.assertEqual(
+                record.entity_attributes["Platform_title"],
+                "Murine 15K long oligo array version 2.0",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_web_link"],
+                "http://www.microarray.protocols.html",
+            )
             self.assertEqual(record.entity_attributes["platform_table_end"], "")
             self.assertEqual(record.entity_attributes["Platform_support"], "glass")
-            self.assertEqual(record.entity_attributes["Platform_manufacturer"], "Un. London microarray facility")
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacturer"],
+                "Un. London microarray facility",
+            )
             self.assertEqual(record.entity_attributes["Platform_coating"], "polysine")
-            self.assertEqual(record.entity_attributes["Platform_technology"], "spotted oligonucleotide")
+            self.assertEqual(
+                record.entity_attributes["Platform_technology"],
+                "spotted oligonucleotide",
+            )
             self.assertEqual(record.entity_attributes["platform_table_begin"], "")
-            self.assertEqual(len(record.entity_attributes["Platform_manufacture_protocol"]), 12)
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][0], "1.  Oligos are arrayed in Greiner 384-well flat-bottom plates. Each well contains 600 pmol of 70-mer oligo.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][1], "2. Resuspend oligos in water to 20 uM and rearray 5 \xb5L into 384-well, Genetix polystyrene V-bottom plates (cat# X6004).")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][2], "3. Allow Genetix plates to dry through passive water evaporation in a protected environment (e.g., chemical hood).")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][3], "4. Before printing, add 5 \xb5L of 1X Printing Buffer to each well. This can be done the night before a print run is started.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][4], "5. Seal plates with Corning seals.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][5], "6. Incubate at 37\xb0C for 30 minutes to aid resuspension of DNA.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][6], "7. Shake plates near maximum rotational speed on flat-bed shaker for 1 minute.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][7], "8. Centrifuge plates at 2000 rpm for 3 minutes.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][8], "9. Remove seals and cover with plate lids. Place in appropriate location of plate cassette. This should be done with first plates just before print run is started to minimize evaporation time before printing. For second and third cassettes, wait until 30 minutes before next cassette is needed to begin centrifugation.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][9], "10. Make sure plates rest behind both holding clips in the cassettes. Push plates back into the cassettes as far as they will go, putting them in the proper position for the server arm.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][10], "11. After the print run is completed, allow plates to dry through passive evaporation in a protected environment.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][11], "12. For each subsequent preparation of these plates for a print run, add water to the wells instead of sodium phosphate buffer. The amount of water should be decreased by 0.25 \xb5L per print run, as this is the amount drawn up by the pin capillary during each dip.")
-            self.assertEqual(record.entity_attributes["Platform_organism"], "Mus musculus")
+            self.assertEqual(
+                len(record.entity_attributes["Platform_manufacture_protocol"]), 12
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][0],
+                "1.  Oligos are arrayed in Greiner 384-well flat-bottom plates. Each well contains 600 pmol of 70-mer oligo.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][1],
+                "2. Resuspend oligos in water to 20 uM and rearray 5 \xb5L into 384-well, Genetix polystyrene V-bottom plates (cat# X6004).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][2],
+                "3. Allow Genetix plates to dry through passive water evaporation in a protected environment (e.g., chemical hood).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][3],
+                "4. Before printing, add 5 \xb5L of 1X Printing Buffer to each well. This can be done the night before a print run is started.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][4],
+                "5. Seal plates with Corning seals.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][5],
+                "6. Incubate at 37\xb0C for 30 minutes to aid resuspension of DNA.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][6],
+                "7. Shake plates near maximum rotational speed on flat-bed shaker for 1 minute.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][7],
+                "8. Centrifuge plates at 2000 rpm for 3 minutes.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][8],
+                "9. Remove seals and cover with plate lids. Place in appropriate location of plate cassette. This should be done with first plates just before print run is started to minimize evaporation time before printing. For second and third cassettes, wait until 30 minutes before next cassette is needed to begin centrifugation.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][9],
+                "10. Make sure plates rest behind both holding clips in the cassettes. Push plates back into the cassettes as far as they will go, putting them in the proper position for the server arm.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][10],
+                "11. After the print run is completed, allow plates to dry through passive evaporation in a protected environment.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][11],
+                "12. For each subsequent preparation of these plates for a print run, add water to the wells instead of sodium phosphate buffer. The amount of water should be decreased by 0.25 \xb5L per print run, as this is the amount drawn up by the pin capillary during each dip.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_organism"], "Mus musculus"
+            )
             self.assertEqual(len(record.entity_attributes["Platform_contributor"]), 5)
-            self.assertEqual(record.entity_attributes["Platform_contributor"][0], "Jane,Doe")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][1], "John,A,Smith")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][2], "Hans,van Elton")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][3], "John,Smithers Jr")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][4], "Jie,D,Chen")
-            self.assertEqual(record.entity_attributes["Platform_distribution"], "non-commercial")
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][0], "Jane,Doe"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][1], "John,A,Smith"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][2], "Hans,van Elton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][3], "John,Smithers Jr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][4], "Jie,D,Chen"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_distribution"], "non-commercial"
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["Gene_Desc"], "Gene description")
             self.assertEqual(record.col_defs["SEQUENCE"], "Probe sequence information")
             self.assertEqual(record.col_defs["Gene_Sym"], "Gene symbols")
-            self.assertEqual(record.col_defs["GB_ACC"], 'GenBank accession number of sequence used to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term="')
+            self.assertEqual(
+                record.col_defs["GB_ACC"],
+                'GenBank accession number of sequence used to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term="',
+            )
             self.assertEqual(record.col_defs["SPOT_ID"], "alternative identifier")
             self.assertEqual(record.col_defs["ID"], "")
             self.assertEqual(len(record.table_rows), 21)
@@ -1278,129 +1902,208 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(len(record.table_rows[1]), 6)
             self.assertEqual(record.table_rows[1][0], "1")
             self.assertEqual(record.table_rows[1][1], "U02079")
-            self.assertEqual(record.table_rows[1][2], "nuclear factor of activated T-cells, cytoplasmic 2")
+            self.assertEqual(
+                record.table_rows[1][2],
+                "nuclear factor of activated T-cells, cytoplasmic 2",
+            )
             self.assertEqual(record.table_rows[1][3], "Nfatc2")
             self.assertEqual(record.table_rows[1][4], "")
-            self.assertEqual(record.table_rows[1][5], "ACCTGGATGACGCAGCCACTTCAGAAAGCTGGGTTGGGACAGAAAGGTATATAGAGAGAAAATTTTGGAA")
+            self.assertEqual(
+                record.table_rows[1][5],
+                "ACCTGGATGACGCAGCCACTTCAGAAAGCTGGGTTGGGACAGAAAGGTATATAGAGAGAAAATTTTGGAA",
+            )
             self.assertEqual(len(record.table_rows[2]), 6)
             self.assertEqual(record.table_rows[2][0], "2")
             self.assertEqual(record.table_rows[2][1], "NM_008154")
             self.assertEqual(record.table_rows[2][2], "G-protein coupled receptor 3")
             self.assertEqual(record.table_rows[2][3], "Gpr3")
             self.assertEqual(record.table_rows[2][4], "")
-            self.assertEqual(record.table_rows[2][5], "CTGTACAATGCTCTCACTTACTACTCAGAGACAACGGTAACTCGGACTTATGTGATGCTGGCCTTGGTGT")
+            self.assertEqual(
+                record.table_rows[2][5],
+                "CTGTACAATGCTCTCACTTACTACTCAGAGACAACGGTAACTCGGACTTATGTGATGCTGGCCTTGGTGT",
+            )
             self.assertEqual(len(record.table_rows[3]), 6)
             self.assertEqual(record.table_rows[3][0], "3")
             self.assertEqual(record.table_rows[3][1], "AK015719")
             self.assertEqual(record.table_rows[3][2], "tropomodulin 2")
             self.assertEqual(record.table_rows[3][3], "Tmod2")
             self.assertEqual(record.table_rows[3][4], "")
-            self.assertEqual(record.table_rows[3][5], "CACCAGGCTCAGTGCCTAGTATCGGCTTCACCTAGTGTGGTTACTCAGGGCACGCAGAGCTACAGAACAC")
+            self.assertEqual(
+                record.table_rows[3][5],
+                "CACCAGGCTCAGTGCCTAGTATCGGCTTCACCTAGTGTGGTTACTCAGGGCACGCAGAGCTACAGAACAC",
+            )
             self.assertEqual(len(record.table_rows[4]), 6)
             self.assertEqual(record.table_rows[4][0], "4")
             self.assertEqual(record.table_rows[4][1], "AK003367")
-            self.assertEqual(record.table_rows[4][2], "mitochondrial ribosomal protein L15")
+            self.assertEqual(
+                record.table_rows[4][2], "mitochondrial ribosomal protein L15"
+            )
             self.assertEqual(record.table_rows[4][3], "Mrpl15")
             self.assertEqual(record.table_rows[4][4], "")
-            self.assertEqual(record.table_rows[4][5], "CAAGAAGTCTAGAAATTCTGTGCAAGCCTATTCCATTCTTTCTGCGGGGACAACCAATTCCGAAAAGAAT")
+            self.assertEqual(
+                record.table_rows[4][5],
+                "CAAGAAGTCTAGAAATTCTGTGCAAGCCTATTCCATTCTTTCTGCGGGGACAACCAATTCCGAAAAGAAT",
+            )
             self.assertEqual(len(record.table_rows[5]), 6)
             self.assertEqual(record.table_rows[5][0], "5")
             self.assertEqual(record.table_rows[5][1], "BC003333")
             self.assertEqual(record.table_rows[5][2], "RIKEN cDNA 0610033I05 gene")
             self.assertEqual(record.table_rows[5][3], "0610033I05Rik")
             self.assertEqual(record.table_rows[5][4], "")
-            self.assertEqual(record.table_rows[5][5], "AGAACTGGGTGGCAGATATCCTAGAGTTTTGACCAACGTTCACAGCACACATATTGATCTTATAGGACCT")
+            self.assertEqual(
+                record.table_rows[5][5],
+                "AGAACTGGGTGGCAGATATCCTAGAGTTTTGACCAACGTTCACAGCACACATATTGATCTTATAGGACCT",
+            )
             self.assertEqual(len(record.table_rows[6]), 6)
             self.assertEqual(record.table_rows[6][0], "6")
             self.assertEqual(record.table_rows[6][1], "NM_008462")
-            self.assertEqual(record.table_rows[6][2], "killer cell lectin-like receptor, subfamily A, member 2")
+            self.assertEqual(
+                record.table_rows[6][2],
+                "killer cell lectin-like receptor, subfamily A, member 2",
+            )
             self.assertEqual(record.table_rows[6][3], "Klra2")
             self.assertEqual(record.table_rows[6][4], "")
-            self.assertEqual(record.table_rows[6][5], "TGAATTGAAGTTCCTTAAATCCCAACTTCAAAGAAACACATACTGGATTTCACTGACACATCATAAAAGC")
+            self.assertEqual(
+                record.table_rows[6][5],
+                "TGAATTGAAGTTCCTTAAATCCCAACTTCAAAGAAACACATACTGGATTTCACTGACACATCATAAAAGC",
+            )
             self.assertEqual(len(record.table_rows[7]), 6)
             self.assertEqual(record.table_rows[7][0], "7")
             self.assertEqual(record.table_rows[7][1], "NM_008029")
             self.assertEqual(record.table_rows[7][2], "FMS-like tyrosine kinase 4")
             self.assertEqual(record.table_rows[7][3], "Flt4")
             self.assertEqual(record.table_rows[7][4], "")
-            self.assertEqual(record.table_rows[7][5], "GAGGTGCTGTGGGATGACCGCCGGGGCATGCGGGTGCCCACTCAACTGTTGCGCGATGCCCTGTACCTGC")
+            self.assertEqual(
+                record.table_rows[7][5],
+                "GAGGTGCTGTGGGATGACCGCCGGGGCATGCGGGTGCCCACTCAACTGTTGCGCGATGCCCTGTACCTGC",
+            )
             self.assertEqual(len(record.table_rows[8]), 6)
             self.assertEqual(record.table_rows[8][0], "8")
             self.assertEqual(record.table_rows[8][1], "NM_054088")
             self.assertEqual(record.table_rows[8][2], "adiponutrin")
             self.assertEqual(record.table_rows[8][3], "Adpn")
             self.assertEqual(record.table_rows[8][4], "")
-            self.assertEqual(record.table_rows[8][5], "GTCTGAGTTCCATTCCAAAGACGAAGTCGTGGATGCCCTGGTGTGTTCCTGCTTCATTCCCCTCTTCTCT")
+            self.assertEqual(
+                record.table_rows[8][5],
+                "GTCTGAGTTCCATTCCAAAGACGAAGTCGTGGATGCCCTGGTGTGTTCCTGCTTCATTCCCCTCTTCTCT",
+            )
             self.assertEqual(len(record.table_rows[9]), 6)
             self.assertEqual(record.table_rows[9][0], "9")
             self.assertEqual(record.table_rows[9][1], "NM_009750")
-            self.assertEqual(record.table_rows[9][2], "nerve growth factor receptor (TNFRSF16) associated protein 1")
+            self.assertEqual(
+                record.table_rows[9][2],
+                "nerve growth factor receptor (TNFRSF16) associated protein 1",
+            )
             self.assertEqual(record.table_rows[9][3], "Ngfrap1")
             self.assertEqual(record.table_rows[9][4], "")
-            self.assertEqual(record.table_rows[9][5], "TACAGCTGAGAAATTGTCTACGCATCCTTATGGGGGAGCTGTCTAACCACCACGATCACCATGATGAATT")
+            self.assertEqual(
+                record.table_rows[9][5],
+                "TACAGCTGAGAAATTGTCTACGCATCCTTATGGGGGAGCTGTCTAACCACCACGATCACCATGATGAATT",
+            )
             self.assertEqual(len(record.table_rows[10]), 6)
             self.assertEqual(record.table_rows[10][0], "10")
             self.assertEqual(record.table_rows[10][1], "AB045323")
-            self.assertEqual(record.table_rows[10][2], "DNA segment, Chr 8, ERATO Doi 594, expressed")
+            self.assertEqual(
+                record.table_rows[10][2], "DNA segment, Chr 8, ERATO Doi 594, expressed"
+            )
             self.assertEqual(record.table_rows[10][3], "D8Ertd594e")
             self.assertEqual(record.table_rows[10][4], "")
-            self.assertEqual(record.table_rows[10][5], "GATTCAGACTCGGGAGGAGCATCCCAACCTCTCCTTGAGGATAAAGGCCTGAGCGATTGCCCTGGGGAGC")
+            self.assertEqual(
+                record.table_rows[10][5],
+                "GATTCAGACTCGGGAGGAGCATCCCAACCTCTCCTTGAGGATAAAGGCCTGAGCGATTGCCCTGGGGAGC",
+            )
             self.assertEqual(len(record.table_rows[11]), 6)
             self.assertEqual(record.table_rows[11][0], "11")
             self.assertEqual(record.table_rows[11][1], "AK005789")
-            self.assertEqual(record.table_rows[11][2], "dynein, cytoplasmic, light chain 2B")
+            self.assertEqual(
+                record.table_rows[11][2], "dynein, cytoplasmic, light chain 2B"
+            )
             self.assertEqual(record.table_rows[11][3], "Dncl2b")
             self.assertEqual(record.table_rows[11][4], "")
-            self.assertEqual(record.table_rows[11][5], "TGCAGAAGGCATTCCAATCCGAACAACCCTGGACAACTCCACAACGGTTCAGTATGCGGGTCTTCTCCAC")
+            self.assertEqual(
+                record.table_rows[11][5],
+                "TGCAGAAGGCATTCCAATCCGAACAACCCTGGACAACTCCACAACGGTTCAGTATGCGGGTCTTCTCCAC",
+            )
             self.assertEqual(len(record.table_rows[12]), 6)
             self.assertEqual(record.table_rows[12][0], "12")
             self.assertEqual(record.table_rows[12][1], "NM_010517")
-            self.assertEqual(record.table_rows[12][2], "insulin-like growth factor binding protein 4")
+            self.assertEqual(
+                record.table_rows[12][2], "insulin-like growth factor binding protein 4"
+            )
             self.assertEqual(record.table_rows[12][3], "Igfbp4")
             self.assertEqual(record.table_rows[12][4], "")
-            self.assertEqual(record.table_rows[12][5], "GGAGAAGCTGGCGCGCTGCCGCCCCCCCGTGGGTTGCGAGGAGTTGGTGCGGGAGCCAGGCTGCGGTTGT")
+            self.assertEqual(
+                record.table_rows[12][5],
+                "GGAGAAGCTGGCGCGCTGCCGCCCCCCCGTGGGTTGCGAGGAGTTGGTGCGGGAGCCAGGCTGCGGTTGT",
+            )
             self.assertEqual(len(record.table_rows[13]), 6)
             self.assertEqual(record.table_rows[13][0], "13")
             self.assertEqual(record.table_rows[13][1], "AK010722")
             self.assertEqual(record.table_rows[13][2], "RIKEN cDNA 2410075D05 gene")
             self.assertEqual(record.table_rows[13][3], "2410075D05Rik")
             self.assertEqual(record.table_rows[13][4], "")
-            self.assertEqual(record.table_rows[13][5], "GGAGCATCTGGAGTTCCGCTTACCGGAAATAAAGTCTTTACTATCGGTGATTGGAGGGCAGTTCACTAAC")
+            self.assertEqual(
+                record.table_rows[13][5],
+                "GGAGCATCTGGAGTTCCGCTTACCGGAAATAAAGTCTTTACTATCGGTGATTGGAGGGCAGTTCACTAAC",
+            )
             self.assertEqual(len(record.table_rows[14]), 6)
             self.assertEqual(record.table_rows[14][0], "14")
             self.assertEqual(record.table_rows[14][1], "AK003755")
-            self.assertEqual(record.table_rows[14][2], "DNA segment, Chr 4, ERATO Doi 421, expressed")
+            self.assertEqual(
+                record.table_rows[14][2], "DNA segment, Chr 4, ERATO Doi 421, expressed"
+            )
             self.assertEqual(record.table_rows[14][3], "D4Ertd421e")
             self.assertEqual(record.table_rows[14][4], "")
-            self.assertEqual(record.table_rows[14][5], "AGCAAAGAGATCTCCCTCAGTGTGCCCATAGGTGGCGGTGCGAGCTTGCGGTTATTGGCCAGTGACTTGC")
+            self.assertEqual(
+                record.table_rows[14][5],
+                "AGCAAAGAGATCTCCCTCAGTGTGCCCATAGGTGGCGGTGCGAGCTTGCGGTTATTGGCCAGTGACTTGC",
+            )
             self.assertEqual(len(record.table_rows[15]), 6)
             self.assertEqual(record.table_rows[15][0], "15")
             self.assertEqual(record.table_rows[15][1], "BC003241")
-            self.assertEqual(record.table_rows[15][2], "cleavage stimulation factor, 3' pre-RNA, subunit 3")
+            self.assertEqual(
+                record.table_rows[15][2],
+                "cleavage stimulation factor, 3' pre-RNA, subunit 3",
+            )
             self.assertEqual(record.table_rows[15][3], "Cstf3")
             self.assertEqual(record.table_rows[15][4], "")
-            self.assertEqual(record.table_rows[15][5], "AAATTAGAAGAAAATCCATATGACCTTGATGCTTGGAGCATTCTCATTCGAGAGGCACAGAATCAACCTA")
+            self.assertEqual(
+                record.table_rows[15][5],
+                "AAATTAGAAGAAAATCCATATGACCTTGATGCTTGGAGCATTCTCATTCGAGAGGCACAGAATCAACCTA",
+            )
             self.assertEqual(len(record.table_rows[16]), 6)
             self.assertEqual(record.table_rows[16][0], "16")
             self.assertEqual(record.table_rows[16][1], "AK004937")
             self.assertEqual(record.table_rows[16][2], "RIKEN cDNA 1300007O09 gene")
             self.assertEqual(record.table_rows[16][3], "1300007O09Rik")
             self.assertEqual(record.table_rows[16][4], "")
-            self.assertEqual(record.table_rows[16][5], "CAGACACAAACCCTAGGTTGTATTGTAGACCGGAGTTTAAGCAGGCACTACCTGTCTGTCTTTTCTTCAT")
+            self.assertEqual(
+                record.table_rows[16][5],
+                "CAGACACAAACCCTAGGTTGTATTGTAGACCGGAGTTTAAGCAGGCACTACCTGTCTGTCTTTTCTTCAT",
+            )
             self.assertEqual(len(record.table_rows[17]), 6)
             self.assertEqual(record.table_rows[17][0], "17")
             self.assertEqual(record.table_rows[17][1], "AK004524")
-            self.assertEqual(record.table_rows[17][2], "unnamed protein product; hypothetical SOCS domain")
+            self.assertEqual(
+                record.table_rows[17][2],
+                "unnamed protein product; hypothetical SOCS domain",
+            )
             self.assertEqual(record.table_rows[17][3], "")
             self.assertEqual(record.table_rows[17][4], "")
-            self.assertEqual(record.table_rows[17][5], "CGGAGCCCTGCGCGCCCAGAGCCCCCTCCCACCCGCTTCCACCAAGTGCATGGAGCCAACATCCGCATGG")
+            self.assertEqual(
+                record.table_rows[17][5],
+                "CGGAGCCCTGCGCGCCCAGAGCCCCCTCCCACCCGCTTCCACCAAGTGCATGGAGCCAACATCCGCATGG",
+            )
             self.assertEqual(len(record.table_rows[18]), 6)
             self.assertEqual(record.table_rows[18][0], "18")
             self.assertEqual(record.table_rows[18][1], "NM_025999")
             self.assertEqual(record.table_rows[18][2], "RIKEN cDNA 2610110L04 gene")
             self.assertEqual(record.table_rows[18][3], "2610110L04Rik")
             self.assertEqual(record.table_rows[18][4], "")
-            self.assertEqual(record.table_rows[18][5], "TGCATTGATAAATGGAGTGATCGACACAGGAACTGCCCCATTTGTCGCCTACAGATGACTGGAGCAAATG")
+            self.assertEqual(
+                record.table_rows[18][5],
+                "TGCATTGATAAATGGAGTGATCGACACAGGAACTGCCCCATTTGTCGCCTACAGATGACTGGAGCAAATG",
+            )
             self.assertEqual(len(record.table_rows[19]), 6)
             self.assertEqual(record.table_rows[19][0], "19")
             self.assertEqual(record.table_rows[19][1], "")
@@ -1411,10 +2114,16 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(len(record.table_rows[20]), 6)
             self.assertEqual(record.table_rows[20][0], "20")
             self.assertEqual(record.table_rows[20][1], "NM_023120")
-            self.assertEqual(record.table_rows[20][2], "guanine nucleotide binding protein (G protein), beta polypeptide 1-like")
+            self.assertEqual(
+                record.table_rows[20][2],
+                "guanine nucleotide binding protein (G protein), beta polypeptide 1-like",
+            )
             self.assertEqual(record.table_rows[20][3], "Gnb1l")
             self.assertEqual(record.table_rows[20][4], "")
-            self.assertEqual(record.table_rows[20][5], "ACCGCCTGGTCCCAGATTTGTCCTCCGAGGCACACAGTCGGCTGTGAACACGCTCCATTTCTGCCCACCA")
+            self.assertEqual(
+                record.table_rows[20][5],
+                "ACCGCCTGGTCCCAGATTTGTCCTCCGAGGCACACAGTCGGCTGTGAACACGCTCCATTTCTGCCCACCA",
+            )
 
     def test_GSM700(self):
         path = "Geo/GSM700.txt"
@@ -1424,46 +2133,123 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "GSM700")
             self.assertEqual(len(record.entity_attributes), 20)
-            self.assertEqual(record.entity_attributes["Sample_submitter_institute"], "National Cancer Institute")
-            self.assertEqual(record.entity_attributes["Sample_submitter_department"], "Cancer Genome Anatomy Project")
-            self.assertEqual(record.entity_attributes["Sample_submitter_web_link"], "http://cgap.nci.nih.gov/")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_institute"],
+                "National Cancer Institute",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_department"],
+                "Cancer Genome Anatomy Project",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_web_link"],
+                "http://cgap.nci.nih.gov/",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_description"]), 14)
-            self.assertEqual(record.entity_attributes["Sample_description"][0], "This library represents a Cancer Genome Anatomy Project library, which was either produced through CGAP funding, or donated to CGAP.")
-            self.assertEqual(record.entity_attributes["Sample_description"][1], "The Cancer Genome Anatomy Project (CGAP: http://cgap.nci.nih.gov) is an interdisciplinary program established and administered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generate the information and technological tools needed to decipher the molecular anatomy of the cancer cell.")
-            self.assertEqual(record.entity_attributes["Sample_description"][2], "Cell line grown under 1.5% oxygen conditions for 24 hours prior to harvesting in zinc option media with 10% RBS and harvested at passage 102. Library constructed in the laboratory of G. Riggins, M.D., Ph.D. (Duke University).")
-            self.assertEqual(record.entity_attributes["Sample_description"][3], "Organ: brain")
-            self.assertEqual(record.entity_attributes["Sample_description"][4], "Tissue_type: glioblastoma multiforme")
-            self.assertEqual(record.entity_attributes["Sample_description"][5], "Cell_line: H247")
-            self.assertEqual(record.entity_attributes["Sample_description"][6], "Lab host: DH10B")
-            self.assertEqual(record.entity_attributes["Sample_description"][7], "Vector: pZErO-1")
-            self.assertEqual(record.entity_attributes["Sample_description"][8], "Vector type: plasmid")
-            self.assertEqual(record.entity_attributes["Sample_description"][9], "R. Site 1: Sph1")
-            self.assertEqual(record.entity_attributes["Sample_description"][10], "R. Site 2: Sph1")
-            self.assertEqual(record.entity_attributes["Sample_description"][11], "Library treatment: non-normalized")
-            self.assertEqual(record.entity_attributes["Sample_description"][12], "Tissue description: Brain, Duke glioblastoma multiforme cell line, H247, grown under 1.5% oxygen conditions  for 24 hours prior to harvesting.")
-            self.assertEqual(record.entity_attributes["Sample_description"][13], "Tissue")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][0],
+                "This library represents a Cancer Genome Anatomy Project library, which was either produced through CGAP funding, or donated to CGAP.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][1],
+                "The Cancer Genome Anatomy Project (CGAP: http://cgap.nci.nih.gov) is an interdisciplinary program established and administered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generate the information and technological tools needed to decipher the molecular anatomy of the cancer cell.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][2],
+                "Cell line grown under 1.5% oxygen conditions for 24 hours prior to harvesting in zinc option media with 10% RBS and harvested at passage 102. Library constructed in the laboratory of G. Riggins, M.D., Ph.D. (Duke University).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][3], "Organ: brain"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][4],
+                "Tissue_type: glioblastoma multiforme",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][5], "Cell_line: H247"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][6], "Lab host: DH10B"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][7], "Vector: pZErO-1"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][8],
+                "Vector type: plasmid",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][9], "R. Site 1: Sph1"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][10], "R. Site 2: Sph1"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][11],
+                "Library treatment: non-normalized",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][12],
+                "Tissue description: Brain, Duke glioblastoma multiforme cell line, H247, grown under 1.5% oxygen conditions  for 24 hours prior to harvesting.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][13], "Tissue"
+            )
             self.assertEqual(len(record.entity_attributes["Sample_author"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_author"][0], "Gregory,J,Riggins")
-            self.assertEqual(record.entity_attributes["Sample_author"][1], "Robert,L,Strausberg")
-            self.assertEqual(record.entity_attributes["Sample_web_link"], "http://cgap.nci.nih.gov")
-            self.assertEqual(record.entity_attributes["Sample_submitter_phone"], "301-496-1550")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][0], "Gregory,J,Riggins"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][1], "Robert,L,Strausberg"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_web_link"], "http://cgap.nci.nih.gov"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_phone"], "301-496-1550"
+            )
             self.assertEqual(record.entity_attributes["Sample_series_id"], "GSE14")
             self.assertEqual(record.entity_attributes["Sample_tag_count"], "72031")
             self.assertEqual(record.entity_attributes["Sample_type"], "sage")
-            self.assertEqual(record.entity_attributes["Sample_submitter_name"], "Robert,L,Strausberg")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_name"], "Robert,L,Strausberg"
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL4")
-            self.assertEqual(record.entity_attributes["Sample_submitter_city"], "Bethesda,MD,20892,USA")
-            self.assertEqual(record.entity_attributes["Sample_status"], "Public on Nov 28 2001")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_city"],
+                "Bethesda,MD,20892,USA",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_status"], "Public on Nov 28 2001"
+            )
             self.assertEqual(record.entity_attributes["Sample_anchor"], "NlaIII")
-            self.assertEqual(record.entity_attributes["Sample_title"], "SAGE_Duke_H247_Hypoxia")
-            self.assertEqual(record.entity_attributes["Sample_organism"], "Homo sapiens")
-            self.assertEqual(record.entity_attributes["Sample_target_source"], "Brain, glioblastoma multiforme, cell-line H247")
-            self.assertEqual(record.entity_attributes["Sample_submission_date"], "Nov 28 2001")
-            self.assertEqual(record.entity_attributes["Sample_submitter_email"], "cgapbs-r@mail.nih.gov")
+            self.assertEqual(
+                record.entity_attributes["Sample_title"], "SAGE_Duke_H247_Hypoxia"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism"], "Homo sapiens"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source"],
+                "Brain, glioblastoma multiforme, cell-line H247",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submission_date"], "Nov 28 2001"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_email"],
+                "cgapbs-r@mail.nih.gov",
+            )
             self.assertEqual(len(record.col_defs), 3)
             self.assertEqual(record.col_defs["COUNT"], "Absolute tag count")
-            self.assertEqual(record.col_defs["TPM"], "Tags per million, or (1000000*COUNT)/(Total tags)")
-            self.assertEqual(record.col_defs["TAG"], 'Ten base SAGE tag, LINK_PRE:"http://www.ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="')
+            self.assertEqual(
+                record.col_defs["TPM"],
+                "Tags per million, or (1000000*COUNT)/(Total tags)",
+            )
+            self.assertEqual(
+                record.col_defs["TAG"],
+                'Ten base SAGE tag, LINK_PRE:"http://www.ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 3)
             self.assertEqual(record.table_rows[0][0], "TAG")
@@ -1558,35 +2344,92 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "GSM645")
             self.assertEqual(len(record.entity_attributes), 17)
-            self.assertEqual(record.entity_attributes["Sample_submitter_institute"], "Max von Pettenkofer Institut")
-            self.assertEqual(record.entity_attributes["Sample_submitter_department"], "Bacteriology")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_institute"],
+                "Max von Pettenkofer Institut",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_department"], "Bacteriology"
+            )
             self.assertEqual(len(record.entity_attributes["Sample_author"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_author"][0], "Reinhard,,Hoffmann")
-            self.assertEqual(record.entity_attributes["Sample_author"][1], "Thomas,,Seidl")
-            self.assertEqual(record.entity_attributes["Sample_author"][2], "Ton,,Rolink")
-            self.assertEqual(record.entity_attributes["Sample_author"][3], "Fritz,,Melchers")
-            self.assertEqual(record.entity_attributes["Sample_submitter_phone"], "+49-89-5160-5424")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][0], "Reinhard,,Hoffmann"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][1], "Thomas,,Seidl"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][2], "Ton,,Rolink"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][3], "Fritz,,Melchers"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_phone"], "+49-89-5160-5424"
+            )
             self.assertEqual(record.entity_attributes["Sample_series_id"], "GSE13")
-            self.assertEqual(record.entity_attributes["Sample_description"], "B220+CD25+sIg- Large Pre BII cells sorted out of mouse bone marrow, sort no. 8")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "B220+CD25+sIg- Large Pre BII cells sorted out of mouse bone marrow, sort no. 8",
+            )
             self.assertEqual(record.entity_attributes["Sample_type"], "single channel")
-            self.assertEqual(record.entity_attributes["Sample_submitter_name"], "Reinhard,,Hoffmann")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_name"], "Reinhard,,Hoffmann"
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL22")
-            self.assertEqual(record.entity_attributes["Sample_submitter_city"], "Munich,80336,Germany")
-            self.assertEqual(record.entity_attributes["Sample_status"], "Public on Dec 17 2001")
-            self.assertEqual(record.entity_attributes["Sample_submitter_email"], "r_hoffmann@m3401.mpk.med.uni-muenchen.de")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Large Pre-BII cells 8b")
-            self.assertEqual(record.entity_attributes["Sample_organism"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_target_source"], "Large Pre-BII cells")
-            self.assertEqual(record.entity_attributes["Sample_submission_date"], "Nov 27 2001")
-            self.assertEqual(record.entity_attributes["Sample_submitter_address"], "Pettenkoferstr. 9a")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_city"],
+                "Munich,80336,Germany",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_status"], "Public on Dec 17 2001"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_email"],
+                "r_hoffmann@m3401.mpk.med.uni-muenchen.de",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"], "Large Pre-BII cells 8b"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source"], "Large Pre-BII cells"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submission_date"], "Nov 27 2001"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_address"],
+                "Pettenkoferstr. 9a",
+            )
             self.assertEqual(len(record.col_defs), 14)
-            self.assertEqual(record.col_defs["PAIRS"], "number of probe set specific probe pairs on the array")
-            self.assertEqual(record.col_defs["ABS_CALL"], "Whether a probe set is present, marginal, or absent; see Affymetrix Literature")
-            self.assertEqual(record.col_defs["PM Excess"], "number of probe pairs  where PM/MM exceeds the ratio limit (10 by default)")
-            self.assertEqual(record.col_defs["POSITIVE"], "number of poisitive probe pairs")
-            self.assertEqual(record.col_defs["MM Excess"], "Number of probe peirs where MM/PM exceeds 1/ratio limit (10 by default)")
-            self.assertEqual(record.col_defs["ID_REF"], "Affymetrix Probe Set Identifier")
-            self.assertEqual(record.col_defs["NEGATIVE"], "number of negative probe pairs")
+            self.assertEqual(
+                record.col_defs["PAIRS"],
+                "number of probe set specific probe pairs on the array",
+            )
+            self.assertEqual(
+                record.col_defs["ABS_CALL"],
+                "Whether a probe set is present, marginal, or absent; see Affymetrix Literature",
+            )
+            self.assertEqual(
+                record.col_defs["PM Excess"],
+                "number of probe pairs  where PM/MM exceeds the ratio limit (10 by default)",
+            )
+            self.assertEqual(
+                record.col_defs["POSITIVE"], "number of poisitive probe pairs"
+            )
+            self.assertEqual(
+                record.col_defs["MM Excess"],
+                "Number of probe peirs where MM/PM exceeds 1/ratio limit (10 by default)",
+            )
+            self.assertEqual(
+                record.col_defs["ID_REF"], "Affymetrix Probe Set Identifier"
+            )
+            self.assertEqual(
+                record.col_defs["NEGATIVE"], "number of negative probe pairs"
+            )
             self.assertEqual(record.col_defs["VALUE"], "Average Difference Intensity")
             self.assertEqual(record.col_defs["POS_FRACTION"], "Positive/Pairs Used")
             self.assertEqual(record.col_defs["Experiment Name"], "Experiment Name")
@@ -1919,28 +2762,67 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SERIES")
             self.assertEqual(record.entity_id, "Bone_marrow_stromal_cells")
             self.assertEqual(len(record.entity_attributes), 13)
-            self.assertEqual(record.entity_attributes["Series_variable_description_1"], "HS-5")
-            self.assertEqual(record.entity_attributes["Series_variable_sample_list_1"], "GSM10001, GSM10002")
+            self.assertEqual(
+                record.entity_attributes["Series_variable_description_1"], "HS-5"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_variable_sample_list_1"],
+                "GSM10001, GSM10002",
+            )
             self.assertEqual(len(record.entity_attributes["Series_sample_id"]), 4)
-            self.assertEqual(record.entity_attributes["Series_sample_id"][0], "GSM10001")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][1], "GSM10002")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][2], "GSM10003")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][3], "GSM10004")
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][0], "GSM10001"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][1], "GSM10002"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][2], "GSM10003"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][3], "GSM10004"
+            )
             self.assertEqual(record.entity_attributes["Series_variable_2"], "cell line")
             self.assertEqual(record.entity_attributes["Series_pubmed_id"], "123456789")
             self.assertEqual(len(record.entity_attributes["Series_contributor"]), 5)
-            self.assertEqual(record.entity_attributes["Series_contributor"][0], "Jane,Doe")
-            self.assertEqual(record.entity_attributes["Series_contributor"][1], "John,A,Smith")
-            self.assertEqual(record.entity_attributes["Series_contributor"][2], "Hans,van Elton")
-            self.assertEqual(record.entity_attributes["Series_contributor"][3], "John,Smithers Jr")
-            self.assertEqual(record.entity_attributes["Series_contributor"][4], "Jie,D,Chen")
-            self.assertEqual(record.entity_attributes["Series_summary"], "Two human stromal cell lines, HS-5 and HS-27a, represent functionally distinct components of the bone marrow microenvironment.1,2 HS-27a supports cobblestone area formation by early hematopoietic progenitors, whereas HS-5 secretes multiple cytokines that support the proliferation of committed progenitors. These cell lines have been distributed to research groups worldwide for use as a tool to understand interactions between hematopoietic cells and their microenvironment. We have used DNA microarray technology to characterize and compare the expression of over 17 000 genes in these cell lines. Gene expression differences in cytokines/chemokines, G-protein signaling molecules, and multiple extracellular matrix proteins add to the known protein and functional characterization of the lines, leading to new insight into the differences in their support function for hematopoietic progenitors.")
-            self.assertEqual(record.entity_attributes["Series_type"], "Cell Line Comparison")
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][0], "Jane,Doe"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][1], "John,A,Smith"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][2], "Hans,van Elton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][3], "John,Smithers Jr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][4], "Jie,D,Chen"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_summary"],
+                "Two human stromal cell lines, HS-5 and HS-27a, represent functionally distinct components of the bone marrow microenvironment.1,2 HS-27a supports cobblestone area formation by early hematopoietic progenitors, whereas HS-5 secretes multiple cytokines that support the proliferation of committed progenitors. These cell lines have been distributed to research groups worldwide for use as a tool to understand interactions between hematopoietic cells and their microenvironment. We have used DNA microarray technology to characterize and compare the expression of over 17 000 genes in these cell lines. Gene expression differences in cytokines/chemokines, G-protein signaling molecules, and multiple extracellular matrix proteins add to the known protein and functional characterization of the lines, leading to new insight into the differences in their support function for hematopoietic progenitors.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_type"], "Cell Line Comparison"
+            )
             self.assertEqual(record.entity_attributes["Series_variable_1"], "cell line")
-            self.assertEqual(record.entity_attributes["Series_variable_description_2"], "HS-27a")
-            self.assertEqual(record.entity_attributes["Series_title"], "Profiling of the functionally distinct human bone marrow stromal cell lines HS-5 and HS-27a.")
-            self.assertEqual(record.entity_attributes["Series_variable_sample_list_2"], "GSM10003, GSM10004")
-            self.assertEqual(record.entity_attributes["Series_overall_design"], "We analyzed 2 arrays for HS-5 cell line and 2 arrays for HS-27a cell line")
+            self.assertEqual(
+                record.entity_attributes["Series_variable_description_2"], "HS-27a"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_title"],
+                "Profiling of the functionally distinct human bone marrow stromal cell lines HS-5 and HS-27a.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_variable_sample_list_2"],
+                "GSM10003, GSM10004",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_overall_design"],
+                "We analyzed 2 arrays for HS-5 cell line and 2 arrays for HS-27a cell line",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
 
@@ -1952,45 +2834,121 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "GSM691")
             self.assertEqual(len(record.entity_attributes), 20)
-            self.assertEqual(record.entity_attributes["Sample_submitter_institute"], "National Cancer Institute")
-            self.assertEqual(record.entity_attributes["Sample_submitter_department"], "Cancer Genome Anatomy Project")
-            self.assertEqual(record.entity_attributes["Sample_submitter_web_link"], "http://cgap.nci.nih.gov/")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_institute"],
+                "National Cancer Institute",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_department"],
+                "Cancer Genome Anatomy Project",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_web_link"],
+                "http://cgap.nci.nih.gov/",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_description"]), 12)
-            self.assertEqual(record.entity_attributes["Sample_description"][0], "This library represents a Cancer Genome Anatomy Project library, which was either produced through CGAP funding, or donated to CGAP.")
-            self.assertEqual(record.entity_attributes["Sample_description"][1], "The Cancer Genome Anatomy Project (CGAP: http://cgap.nci.nih.gov) is an interdisciplinary program established and administered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generate the information and technological tools needed to decipher the molecular anatomy of the cancer cell.")
-            self.assertEqual(record.entity_attributes["Sample_description"][2], "Library constructed by Riggins laboratory Tissue supplied by Jeffrey Marks, Ph.D.")
-            self.assertEqual(record.entity_attributes["Sample_description"][3], "Organ: Breast")
-            self.assertEqual(record.entity_attributes["Sample_description"][4], "Tissue_type: normal epithelial organoids")
-            self.assertEqual(record.entity_attributes["Sample_description"][5], "Library treatment: non-normalized")
-            self.assertEqual(record.entity_attributes["Sample_description"][6], "Tissue description: Breast, Isolated normal epithelial organoids. Derived from a reduction mammoplasty.")
-            self.assertEqual(record.entity_attributes["Sample_description"][7], "Tissue supplier: Jeffrey Marks, Ph.D.")
-            self.assertEqual(record.entity_attributes["Sample_description"][8], "Sample type: Bulk")
-            self.assertEqual(record.entity_attributes["Sample_description"][9], "Producer: Riggins Laboratory")
-            self.assertEqual(record.entity_attributes["Sample_description"][10], "Clones generated to date: 768")
-            self.assertEqual(record.entity_attributes["Sample_description"][11], "Sequences generated to date: 572")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][0],
+                "This library represents a Cancer Genome Anatomy Project library, which was either produced through CGAP funding, or donated to CGAP.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][1],
+                "The Cancer Genome Anatomy Project (CGAP: http://cgap.nci.nih.gov) is an interdisciplinary program established and administered by the National Cancer Institute (NCI: http://www.nci.nih.gov) to generate the information and technological tools needed to decipher the molecular anatomy of the cancer cell.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][2],
+                "Library constructed by Riggins laboratory Tissue supplied by Jeffrey Marks, Ph.D.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][3], "Organ: Breast"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][4],
+                "Tissue_type: normal epithelial organoids",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][5],
+                "Library treatment: non-normalized",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][6],
+                "Tissue description: Breast, Isolated normal epithelial organoids. Derived from a reduction mammoplasty.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][7],
+                "Tissue supplier: Jeffrey Marks, Ph.D.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][8], "Sample type: Bulk"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][9],
+                "Producer: Riggins Laboratory",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][10],
+                "Clones generated to date: 768",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][11],
+                "Sequences generated to date: 572",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_author"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_author"][0], "Jeffrey,,Marks")
-            self.assertEqual(record.entity_attributes["Sample_author"][1], "Gregory,J,Riggins")
-            self.assertEqual(record.entity_attributes["Sample_author"][2], "Robert,L,Strausberg")
-            self.assertEqual(record.entity_attributes["Sample_web_link"], "http://cgap.nci.nih.gov")
-            self.assertEqual(record.entity_attributes["Sample_submitter_phone"], "301-496-1550")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][0], "Jeffrey,,Marks"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][1], "Gregory,J,Riggins"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][2], "Robert,L,Strausberg"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_web_link"], "http://cgap.nci.nih.gov"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_phone"], "301-496-1550"
+            )
             self.assertEqual(record.entity_attributes["Sample_series_id"], "GSE14")
             self.assertEqual(record.entity_attributes["Sample_tag_count"], "7165")
             self.assertEqual(record.entity_attributes["Sample_type"], "sage")
-            self.assertEqual(record.entity_attributes["Sample_submitter_name"], "Robert,L,Strausberg")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_name"], "Robert,L,Strausberg"
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL4")
-            self.assertEqual(record.entity_attributes["Sample_submitter_city"], "Bethesda,MD,20892,USA")
-            self.assertEqual(record.entity_attributes["Sample_status"], "Public on Nov 28 2001")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_city"],
+                "Bethesda,MD,20892,USA",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_status"], "Public on Nov 28 2001"
+            )
             self.assertEqual(record.entity_attributes["Sample_anchor"], "NlaIII")
             self.assertEqual(record.entity_attributes["Sample_title"], "SAGE_Duke_40N")
-            self.assertEqual(record.entity_attributes["Sample_organism"], "Homo sapiens")
-            self.assertEqual(record.entity_attributes["Sample_target_source"], "Breast, isolated normal epithelial organoids")
-            self.assertEqual(record.entity_attributes["Sample_submission_date"], "Nov 28 2001")
-            self.assertEqual(record.entity_attributes["Sample_submitter_email"], "cgapbs-r@mail.nih.gov")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism"], "Homo sapiens"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source"],
+                "Breast, isolated normal epithelial organoids",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submission_date"], "Nov 28 2001"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_email"],
+                "cgapbs-r@mail.nih.gov",
+            )
             self.assertEqual(len(record.col_defs), 3)
             self.assertEqual(record.col_defs["COUNT"], "Absolute tag count")
-            self.assertEqual(record.col_defs["TPM"], "Tags per million, or (1000000*COUNT)/(Total tags)")
-            self.assertEqual(record.col_defs["TAG"], 'Ten base SAGE tag, LINK_PRE:"http://www.ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="')
+            self.assertEqual(
+                record.col_defs["TPM"],
+                "Tags per million, or (1000000*COUNT)/(Total tags)",
+            )
+            self.assertEqual(
+                record.col_defs["TAG"],
+                'Ten base SAGE tag, LINK_PRE:"http://www.ncbi.nlm.nih.gov/SAGE/SAGEtag.cgi?tag="',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 3)
             self.assertEqual(record.table_rows[0][0], "TAG")
@@ -2083,42 +3041,111 @@ class TestGeo(unittest.TestCase):
             records = Geo.parse(handle)
             record = next(records)
             self.assertEqual(record.entity_type, "PLATFORM")
-            self.assertEqual(record.entity_id, "Murine 15K long oligo array version 2.0")
+            self.assertEqual(
+                record.entity_id, "Murine 15K long oligo array version 2.0"
+            )
             self.assertEqual(len(record.entity_attributes), 12)
-            self.assertEqual(record.entity_attributes["Platform_title"], "Murine 15K long oligo array version 2.0")
-            self.assertEqual(record.entity_attributes["Platform_web_link"], "http://www.microarray.protocols.html")
+            self.assertEqual(
+                record.entity_attributes["Platform_title"],
+                "Murine 15K long oligo array version 2.0",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_web_link"],
+                "http://www.microarray.protocols.html",
+            )
             self.assertEqual(record.entity_attributes["platform_table_end"], "")
             self.assertEqual(record.entity_attributes["Platform_support"], "glass")
-            self.assertEqual(record.entity_attributes["Platform_manufacturer"], "Un. London microarray facility")
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacturer"],
+                "Un. London microarray facility",
+            )
             self.assertEqual(record.entity_attributes["Platform_coating"], "polysine")
-            self.assertEqual(record.entity_attributes["Platform_technology"], "spotted oligonucleotide")
+            self.assertEqual(
+                record.entity_attributes["Platform_technology"],
+                "spotted oligonucleotide",
+            )
             self.assertEqual(record.entity_attributes["platform_table_begin"], "")
-            self.assertEqual(len(record.entity_attributes["Platform_manufacture_protocol"]), 12)
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][0], "1.  Oligos are arrayed in Greiner 384-well flat-bottom plates. Each well contains 600 pmol of 70-mer oligo.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][1], "2. Resuspend oligos in water to 20 uM and rearray 5 \xb5L into 384-well, Genetix polystyrene V-bottom plates (cat# X6004).")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][2], "3. Allow Genetix plates to dry through passive water evaporation in a protected environment (e.g., chemical hood).")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][3], "4. Before printing, add 5 \xb5L of 1X Printing Buffer to each well. This can be done the night before a print run is started.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][4], "5. Seal plates with Corning seals.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][5], "6. Incubate at 37\xb0C for 30 minutes to aid resuspension of DNA.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][6], "7. Shake plates near maximum rotational speed on flat-bed shaker for 1 minute.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][7], "8. Centrifuge plates at 2000 rpm for 3 minutes.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][8], "9. Remove seals and cover with plate lids. Place in appropriate location of plate cassette. This should be done with first plates just before print run is started to minimize evaporation time before printing. For second and third cassettes, wait until 30 minutes before next cassette is needed to begin centrifugation.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][9], "10. Make sure plates rest behind both holding clips in the cassettes. Push plates back into the cassettes as far as they will go, putting them in the proper position for the server arm.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][10], "11. After the print run is completed, allow plates to dry through passive evaporation in a protected environment.")
-            self.assertEqual(record.entity_attributes["Platform_manufacture_protocol"][11], "12. For each subsequent preparation of these plates for a print run, add water to the wells instead of sodium phosphate buffer. The amount of water should be decreased by 0.25 \xb5L per print run, as this is the amount drawn up by the pin capillary during each dip.")
-            self.assertEqual(record.entity_attributes["Platform_organism"], "Mus musculus")
+            self.assertEqual(
+                len(record.entity_attributes["Platform_manufacture_protocol"]), 12
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][0],
+                "1.  Oligos are arrayed in Greiner 384-well flat-bottom plates. Each well contains 600 pmol of 70-mer oligo.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][1],
+                "2. Resuspend oligos in water to 20 uM and rearray 5 \xb5L into 384-well, Genetix polystyrene V-bottom plates (cat# X6004).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][2],
+                "3. Allow Genetix plates to dry through passive water evaporation in a protected environment (e.g., chemical hood).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][3],
+                "4. Before printing, add 5 \xb5L of 1X Printing Buffer to each well. This can be done the night before a print run is started.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][4],
+                "5. Seal plates with Corning seals.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][5],
+                "6. Incubate at 37\xb0C for 30 minutes to aid resuspension of DNA.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][6],
+                "7. Shake plates near maximum rotational speed on flat-bed shaker for 1 minute.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][7],
+                "8. Centrifuge plates at 2000 rpm for 3 minutes.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][8],
+                "9. Remove seals and cover with plate lids. Place in appropriate location of plate cassette. This should be done with first plates just before print run is started to minimize evaporation time before printing. For second and third cassettes, wait until 30 minutes before next cassette is needed to begin centrifugation.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][9],
+                "10. Make sure plates rest behind both holding clips in the cassettes. Push plates back into the cassettes as far as they will go, putting them in the proper position for the server arm.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][10],
+                "11. After the print run is completed, allow plates to dry through passive evaporation in a protected environment.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_manufacture_protocol"][11],
+                "12. For each subsequent preparation of these plates for a print run, add water to the wells instead of sodium phosphate buffer. The amount of water should be decreased by 0.25 \xb5L per print run, as this is the amount drawn up by the pin capillary during each dip.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_organism"], "Mus musculus"
+            )
             self.assertEqual(len(record.entity_attributes["Platform_contributor"]), 5)
-            self.assertEqual(record.entity_attributes["Platform_contributor"][0], "Jane,Doe")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][1], "John,A,Smith")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][2], "Hans,van Elton")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][3], "John,Smithers Jr")
-            self.assertEqual(record.entity_attributes["Platform_contributor"][4], "Jie,D,Chen")
-            self.assertEqual(record.entity_attributes["Platform_distribution"], "non-commercial")
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][0], "Jane,Doe"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][1], "John,A,Smith"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][2], "Hans,van Elton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][3], "John,Smithers Jr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_contributor"][4], "Jie,D,Chen"
+            )
+            self.assertEqual(
+                record.entity_attributes["Platform_distribution"], "non-commercial"
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["Gene_Desc"], "Gene description")
             self.assertEqual(record.col_defs["SEQUENCE"], "Probe sequence information")
             self.assertEqual(record.col_defs["Gene_Sym"], "Gene symbols")
-            self.assertEqual(record.col_defs["GB_ACC"], 'GenBank accession number of sequence used to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term="')
+            self.assertEqual(
+                record.col_defs["GB_ACC"],
+                'GenBank accession number of sequence used to design oligonucleotide probe   LINK_PRE:"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term="',
+            )
             self.assertEqual(record.col_defs["SPOT_ID"], "alternative identifier")
             self.assertEqual(record.col_defs["ID"], "")
             self.assertEqual(len(record.table_rows), 21)
@@ -2132,129 +3159,208 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(len(record.table_rows[1]), 6)
             self.assertEqual(record.table_rows[1][0], "1")
             self.assertEqual(record.table_rows[1][1], "U02079")
-            self.assertEqual(record.table_rows[1][2], "nuclear factor of activated T-cells, cytoplasmic 2")
+            self.assertEqual(
+                record.table_rows[1][2],
+                "nuclear factor of activated T-cells, cytoplasmic 2",
+            )
             self.assertEqual(record.table_rows[1][3], "Nfatc2")
             self.assertEqual(record.table_rows[1][4], "")
-            self.assertEqual(record.table_rows[1][5], "ACCTGGATGACGCAGCCACTTCAGAAAGCTGGGTTGGGACAGAAAGGTATATAGAGAGAAAATTTTGGAA")
+            self.assertEqual(
+                record.table_rows[1][5],
+                "ACCTGGATGACGCAGCCACTTCAGAAAGCTGGGTTGGGACAGAAAGGTATATAGAGAGAAAATTTTGGAA",
+            )
             self.assertEqual(len(record.table_rows[2]), 6)
             self.assertEqual(record.table_rows[2][0], "2")
             self.assertEqual(record.table_rows[2][1], "NM_008154")
             self.assertEqual(record.table_rows[2][2], "G-protein coupled receptor 3")
             self.assertEqual(record.table_rows[2][3], "Gpr3")
             self.assertEqual(record.table_rows[2][4], "")
-            self.assertEqual(record.table_rows[2][5], "CTGTACAATGCTCTCACTTACTACTCAGAGACAACGGTAACTCGGACTTATGTGATGCTGGCCTTGGTGT")
+            self.assertEqual(
+                record.table_rows[2][5],
+                "CTGTACAATGCTCTCACTTACTACTCAGAGACAACGGTAACTCGGACTTATGTGATGCTGGCCTTGGTGT",
+            )
             self.assertEqual(len(record.table_rows[3]), 6)
             self.assertEqual(record.table_rows[3][0], "3")
             self.assertEqual(record.table_rows[3][1], "AK015719")
             self.assertEqual(record.table_rows[3][2], "tropomodulin 2")
             self.assertEqual(record.table_rows[3][3], "Tmod2")
             self.assertEqual(record.table_rows[3][4], "")
-            self.assertEqual(record.table_rows[3][5], "CACCAGGCTCAGTGCCTAGTATCGGCTTCACCTAGTGTGGTTACTCAGGGCACGCAGAGCTACAGAACAC")
+            self.assertEqual(
+                record.table_rows[3][5],
+                "CACCAGGCTCAGTGCCTAGTATCGGCTTCACCTAGTGTGGTTACTCAGGGCACGCAGAGCTACAGAACAC",
+            )
             self.assertEqual(len(record.table_rows[4]), 6)
             self.assertEqual(record.table_rows[4][0], "4")
             self.assertEqual(record.table_rows[4][1], "AK003367")
-            self.assertEqual(record.table_rows[4][2], "mitochondrial ribosomal protein L15")
+            self.assertEqual(
+                record.table_rows[4][2], "mitochondrial ribosomal protein L15"
+            )
             self.assertEqual(record.table_rows[4][3], "Mrpl15")
             self.assertEqual(record.table_rows[4][4], "")
-            self.assertEqual(record.table_rows[4][5], "CAAGAAGTCTAGAAATTCTGTGCAAGCCTATTCCATTCTTTCTGCGGGGACAACCAATTCCGAAAAGAAT")
+            self.assertEqual(
+                record.table_rows[4][5],
+                "CAAGAAGTCTAGAAATTCTGTGCAAGCCTATTCCATTCTTTCTGCGGGGACAACCAATTCCGAAAAGAAT",
+            )
             self.assertEqual(len(record.table_rows[5]), 6)
             self.assertEqual(record.table_rows[5][0], "5")
             self.assertEqual(record.table_rows[5][1], "BC003333")
             self.assertEqual(record.table_rows[5][2], "RIKEN cDNA 0610033I05 gene")
             self.assertEqual(record.table_rows[5][3], "0610033I05Rik")
             self.assertEqual(record.table_rows[5][4], "")
-            self.assertEqual(record.table_rows[5][5], "AGAACTGGGTGGCAGATATCCTAGAGTTTTGACCAACGTTCACAGCACACATATTGATCTTATAGGACCT")
+            self.assertEqual(
+                record.table_rows[5][5],
+                "AGAACTGGGTGGCAGATATCCTAGAGTTTTGACCAACGTTCACAGCACACATATTGATCTTATAGGACCT",
+            )
             self.assertEqual(len(record.table_rows[6]), 6)
             self.assertEqual(record.table_rows[6][0], "6")
             self.assertEqual(record.table_rows[6][1], "NM_008462")
-            self.assertEqual(record.table_rows[6][2], "killer cell lectin-like receptor, subfamily A, member 2")
+            self.assertEqual(
+                record.table_rows[6][2],
+                "killer cell lectin-like receptor, subfamily A, member 2",
+            )
             self.assertEqual(record.table_rows[6][3], "Klra2")
             self.assertEqual(record.table_rows[6][4], "")
-            self.assertEqual(record.table_rows[6][5], "TGAATTGAAGTTCCTTAAATCCCAACTTCAAAGAAACACATACTGGATTTCACTGACACATCATAAAAGC")
+            self.assertEqual(
+                record.table_rows[6][5],
+                "TGAATTGAAGTTCCTTAAATCCCAACTTCAAAGAAACACATACTGGATTTCACTGACACATCATAAAAGC",
+            )
             self.assertEqual(len(record.table_rows[7]), 6)
             self.assertEqual(record.table_rows[7][0], "7")
             self.assertEqual(record.table_rows[7][1], "NM_008029")
             self.assertEqual(record.table_rows[7][2], "FMS-like tyrosine kinase 4")
             self.assertEqual(record.table_rows[7][3], "Flt4")
             self.assertEqual(record.table_rows[7][4], "")
-            self.assertEqual(record.table_rows[7][5], "GAGGTGCTGTGGGATGACCGCCGGGGCATGCGGGTGCCCACTCAACTGTTGCGCGATGCCCTGTACCTGC")
+            self.assertEqual(
+                record.table_rows[7][5],
+                "GAGGTGCTGTGGGATGACCGCCGGGGCATGCGGGTGCCCACTCAACTGTTGCGCGATGCCCTGTACCTGC",
+            )
             self.assertEqual(len(record.table_rows[8]), 6)
             self.assertEqual(record.table_rows[8][0], "8")
             self.assertEqual(record.table_rows[8][1], "NM_054088")
             self.assertEqual(record.table_rows[8][2], "adiponutrin")
             self.assertEqual(record.table_rows[8][3], "Adpn")
             self.assertEqual(record.table_rows[8][4], "")
-            self.assertEqual(record.table_rows[8][5], "GTCTGAGTTCCATTCCAAAGACGAAGTCGTGGATGCCCTGGTGTGTTCCTGCTTCATTCCCCTCTTCTCT")
+            self.assertEqual(
+                record.table_rows[8][5],
+                "GTCTGAGTTCCATTCCAAAGACGAAGTCGTGGATGCCCTGGTGTGTTCCTGCTTCATTCCCCTCTTCTCT",
+            )
             self.assertEqual(len(record.table_rows[9]), 6)
             self.assertEqual(record.table_rows[9][0], "9")
             self.assertEqual(record.table_rows[9][1], "NM_009750")
-            self.assertEqual(record.table_rows[9][2], "nerve growth factor receptor (TNFRSF16) associated protein 1")
+            self.assertEqual(
+                record.table_rows[9][2],
+                "nerve growth factor receptor (TNFRSF16) associated protein 1",
+            )
             self.assertEqual(record.table_rows[9][3], "Ngfrap1")
             self.assertEqual(record.table_rows[9][4], "")
-            self.assertEqual(record.table_rows[9][5], "TACAGCTGAGAAATTGTCTACGCATCCTTATGGGGGAGCTGTCTAACCACCACGATCACCATGATGAATT")
+            self.assertEqual(
+                record.table_rows[9][5],
+                "TACAGCTGAGAAATTGTCTACGCATCCTTATGGGGGAGCTGTCTAACCACCACGATCACCATGATGAATT",
+            )
             self.assertEqual(len(record.table_rows[10]), 6)
             self.assertEqual(record.table_rows[10][0], "10")
             self.assertEqual(record.table_rows[10][1], "AB045323")
-            self.assertEqual(record.table_rows[10][2], "DNA segment, Chr 8, ERATO Doi 594, expressed")
+            self.assertEqual(
+                record.table_rows[10][2], "DNA segment, Chr 8, ERATO Doi 594, expressed"
+            )
             self.assertEqual(record.table_rows[10][3], "D8Ertd594e")
             self.assertEqual(record.table_rows[10][4], "")
-            self.assertEqual(record.table_rows[10][5], "GATTCAGACTCGGGAGGAGCATCCCAACCTCTCCTTGAGGATAAAGGCCTGAGCGATTGCCCTGGGGAGC")
+            self.assertEqual(
+                record.table_rows[10][5],
+                "GATTCAGACTCGGGAGGAGCATCCCAACCTCTCCTTGAGGATAAAGGCCTGAGCGATTGCCCTGGGGAGC",
+            )
             self.assertEqual(len(record.table_rows[11]), 6)
             self.assertEqual(record.table_rows[11][0], "11")
             self.assertEqual(record.table_rows[11][1], "AK005789")
-            self.assertEqual(record.table_rows[11][2], "dynein, cytoplasmic, light chain 2B")
+            self.assertEqual(
+                record.table_rows[11][2], "dynein, cytoplasmic, light chain 2B"
+            )
             self.assertEqual(record.table_rows[11][3], "Dncl2b")
             self.assertEqual(record.table_rows[11][4], "")
-            self.assertEqual(record.table_rows[11][5], "TGCAGAAGGCATTCCAATCCGAACAACCCTGGACAACTCCACAACGGTTCAGTATGCGGGTCTTCTCCAC")
+            self.assertEqual(
+                record.table_rows[11][5],
+                "TGCAGAAGGCATTCCAATCCGAACAACCCTGGACAACTCCACAACGGTTCAGTATGCGGGTCTTCTCCAC",
+            )
             self.assertEqual(len(record.table_rows[12]), 6)
             self.assertEqual(record.table_rows[12][0], "12")
             self.assertEqual(record.table_rows[12][1], "NM_010517")
-            self.assertEqual(record.table_rows[12][2], "insulin-like growth factor binding protein 4")
+            self.assertEqual(
+                record.table_rows[12][2], "insulin-like growth factor binding protein 4"
+            )
             self.assertEqual(record.table_rows[12][3], "Igfbp4")
             self.assertEqual(record.table_rows[12][4], "")
-            self.assertEqual(record.table_rows[12][5], "GGAGAAGCTGGCGCGCTGCCGCCCCCCCGTGGGTTGCGAGGAGTTGGTGCGGGAGCCAGGCTGCGGTTGT")
+            self.assertEqual(
+                record.table_rows[12][5],
+                "GGAGAAGCTGGCGCGCTGCCGCCCCCCCGTGGGTTGCGAGGAGTTGGTGCGGGAGCCAGGCTGCGGTTGT",
+            )
             self.assertEqual(len(record.table_rows[13]), 6)
             self.assertEqual(record.table_rows[13][0], "13")
             self.assertEqual(record.table_rows[13][1], "AK010722")
             self.assertEqual(record.table_rows[13][2], "RIKEN cDNA 2410075D05 gene")
             self.assertEqual(record.table_rows[13][3], "2410075D05Rik")
             self.assertEqual(record.table_rows[13][4], "")
-            self.assertEqual(record.table_rows[13][5], "GGAGCATCTGGAGTTCCGCTTACCGGAAATAAAGTCTTTACTATCGGTGATTGGAGGGCAGTTCACTAAC")
+            self.assertEqual(
+                record.table_rows[13][5],
+                "GGAGCATCTGGAGTTCCGCTTACCGGAAATAAAGTCTTTACTATCGGTGATTGGAGGGCAGTTCACTAAC",
+            )
             self.assertEqual(len(record.table_rows[14]), 6)
             self.assertEqual(record.table_rows[14][0], "14")
             self.assertEqual(record.table_rows[14][1], "AK003755")
-            self.assertEqual(record.table_rows[14][2], "DNA segment, Chr 4, ERATO Doi 421, expressed")
+            self.assertEqual(
+                record.table_rows[14][2], "DNA segment, Chr 4, ERATO Doi 421, expressed"
+            )
             self.assertEqual(record.table_rows[14][3], "D4Ertd421e")
             self.assertEqual(record.table_rows[14][4], "")
-            self.assertEqual(record.table_rows[14][5], "AGCAAAGAGATCTCCCTCAGTGTGCCCATAGGTGGCGGTGCGAGCTTGCGGTTATTGGCCAGTGACTTGC")
+            self.assertEqual(
+                record.table_rows[14][5],
+                "AGCAAAGAGATCTCCCTCAGTGTGCCCATAGGTGGCGGTGCGAGCTTGCGGTTATTGGCCAGTGACTTGC",
+            )
             self.assertEqual(len(record.table_rows[15]), 6)
             self.assertEqual(record.table_rows[15][0], "15")
             self.assertEqual(record.table_rows[15][1], "BC003241")
-            self.assertEqual(record.table_rows[15][2], "cleavage stimulation factor, 3' pre-RNA, subunit 3")
+            self.assertEqual(
+                record.table_rows[15][2],
+                "cleavage stimulation factor, 3' pre-RNA, subunit 3",
+            )
             self.assertEqual(record.table_rows[15][3], "Cstf3")
             self.assertEqual(record.table_rows[15][4], "")
-            self.assertEqual(record.table_rows[15][5], "AAATTAGAAGAAAATCCATATGACCTTGATGCTTGGAGCATTCTCATTCGAGAGGCACAGAATCAACCTA")
+            self.assertEqual(
+                record.table_rows[15][5],
+                "AAATTAGAAGAAAATCCATATGACCTTGATGCTTGGAGCATTCTCATTCGAGAGGCACAGAATCAACCTA",
+            )
             self.assertEqual(len(record.table_rows[16]), 6)
             self.assertEqual(record.table_rows[16][0], "16")
             self.assertEqual(record.table_rows[16][1], "AK004937")
             self.assertEqual(record.table_rows[16][2], "RIKEN cDNA 1300007O09 gene")
             self.assertEqual(record.table_rows[16][3], "1300007O09Rik")
             self.assertEqual(record.table_rows[16][4], "")
-            self.assertEqual(record.table_rows[16][5], "CAGACACAAACCCTAGGTTGTATTGTAGACCGGAGTTTAAGCAGGCACTACCTGTCTGTCTTTTCTTCAT")
+            self.assertEqual(
+                record.table_rows[16][5],
+                "CAGACACAAACCCTAGGTTGTATTGTAGACCGGAGTTTAAGCAGGCACTACCTGTCTGTCTTTTCTTCAT",
+            )
             self.assertEqual(len(record.table_rows[17]), 6)
             self.assertEqual(record.table_rows[17][0], "17")
             self.assertEqual(record.table_rows[17][1], "AK004524")
-            self.assertEqual(record.table_rows[17][2], "unnamed protein product; hypothetical SOCS domain")
+            self.assertEqual(
+                record.table_rows[17][2],
+                "unnamed protein product; hypothetical SOCS domain",
+            )
             self.assertEqual(record.table_rows[17][3], "")
             self.assertEqual(record.table_rows[17][4], "")
-            self.assertEqual(record.table_rows[17][5], "CGGAGCCCTGCGCGCCCAGAGCCCCCTCCCACCCGCTTCCACCAAGTGCATGGAGCCAACATCCGCATGG")
+            self.assertEqual(
+                record.table_rows[17][5],
+                "CGGAGCCCTGCGCGCCCAGAGCCCCCTCCCACCCGCTTCCACCAAGTGCATGGAGCCAACATCCGCATGG",
+            )
             self.assertEqual(len(record.table_rows[18]), 6)
             self.assertEqual(record.table_rows[18][0], "18")
             self.assertEqual(record.table_rows[18][1], "NM_025999")
             self.assertEqual(record.table_rows[18][2], "RIKEN cDNA 2610110L04 gene")
             self.assertEqual(record.table_rows[18][3], "2610110L04Rik")
             self.assertEqual(record.table_rows[18][4], "")
-            self.assertEqual(record.table_rows[18][5], "TGCATTGATAAATGGAGTGATCGACACAGGAACTGCCCCATTTGTCGCCTACAGATGACTGGAGCAAATG")
+            self.assertEqual(
+                record.table_rows[18][5],
+                "TGCATTGATAAATGGAGTGATCGACACAGGAACTGCCCCATTTGTCGCCTACAGATGACTGGAGCAAATG",
+            )
             self.assertEqual(len(record.table_rows[19]), 6)
             self.assertEqual(record.table_rows[19][0], "19")
             self.assertEqual(record.table_rows[19][1], "")
@@ -2265,54 +3371,153 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(len(record.table_rows[20]), 6)
             self.assertEqual(record.table_rows[20][0], "20")
             self.assertEqual(record.table_rows[20][1], "NM_023120")
-            self.assertEqual(record.table_rows[20][2], "guanine nucleotide binding protein (G protein), beta polypeptide 1-like")
+            self.assertEqual(
+                record.table_rows[20][2],
+                "guanine nucleotide binding protein (G protein), beta polypeptide 1-like",
+            )
             self.assertEqual(record.table_rows[20][3], "Gnb1l")
             self.assertEqual(record.table_rows[20][4], "")
-            self.assertEqual(record.table_rows[20][5], "ACCGCCTGGTCCCAGATTTGTCCTCCGAGGCACACAGTCGGCTGTGAACACGCTCCATTTCTGCCCACCA")
+            self.assertEqual(
+                record.table_rows[20][5],
+                "ACCGCCTGGTCCCAGATTTGTCCTCCGAGGCACACAGTCGGCTGTGAACACGCTCCATTTCTGCCCACCA",
+            )
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
-            self.assertEqual(record.entity_id, "Control Embyronic Stem Cell Replicate 1")
+            self.assertEqual(
+                record.entity_id, "Control Embyronic Stem Cell Replicate 1"
+            )
             self.assertEqual(len(record.entity_attributes), 24)
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch2"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_platform_id"], "Murine 15K long oligo array version 2.0")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Control Embyronic Stem Cell Replicate 1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "file1.gpr")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch2"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Mus musculus")
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch2"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_platform_id"],
+                "Murine 15K long oligo array version 2.0",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "Control Embyronic Stem Cell Replicate 1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"], "file1.gpr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch2"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"], "Mus musculus"
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "Cy5")
             self.assertEqual(len(record.entity_attributes["Sample_scan_protocol"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][0], "Scanned on an Agilent G2565AA scanner.")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][1], "Images were quantified using Agilent Feature Extraction Software (version A.7.5).")
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][0],
+                "Scanned on an Agilent G2565AA scanner.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][1],
+                "Images were quantified using Agilent Feature Extraction Software (version A.7.5).",
+            )
             self.assertEqual(record.entity_attributes["sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch2"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.")
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch2"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_end"], "")
             self.assertEqual(record.entity_attributes["Sample_label_ch2"], "Cy3")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Biological replicate 1 of 4. Control embryonic stem cells, untreated, harvested after several passages.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch2"], "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch2"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "ES-D3 cell line (CRL-1934)")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][2], "Tissue: blastocytes")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][3], "Strain: 129/Sv mice")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch2"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][0], "Strain: C57BL/6")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][1], "Age: e17.5 d")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][2], "Tissue: whole embryo")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Biological replicate 1 of 4. Control embryonic stem cells, untreated, harvested after several passages.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch2"],
+                "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch2"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 4
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "ES-D3 cell line (CRL-1934)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][2],
+                "Tissue: blastocytes",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][3],
+                "Strain: 129/Sv mice",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch2"]), 3
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][0],
+                "Strain: C57BL/6",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][1],
+                "Age: e17.5 d",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][2],
+                "Tissue: whole embryo",
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "log(REDsignal/GREENsignal) per feature (processed signals used).")
-            self.assertEqual(record.col_defs["gProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.')
-            self.assertEqual(record.col_defs["LogRatioError"], "error of the log ratio calculated according to the error model chosen.")
-            self.assertEqual(record.col_defs["PValueLogRatio"], "Significance level of the Log Ratio computed for a feature.")
-            self.assertEqual(record.col_defs["rProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.')
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "log(REDsignal/GREENsignal) per feature (processed signals used).",
+            )
+            self.assertEqual(
+                record.col_defs["gProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.',
+            )
+            self.assertEqual(
+                record.col_defs["LogRatioError"],
+                "error of the log ratio calculated according to the error model chosen.",
+            )
+            self.assertEqual(
+                record.col_defs["PValueLogRatio"],
+                "Significance level of the Log Ratio computed for a feature.",
+            )
+            self.assertEqual(
+                record.col_defs["rProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 6)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -2463,48 +3668,141 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.table_rows[20][5], "6.32E+01")
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
-            self.assertEqual(record.entity_id, "Control Embyronic Stem Cell Replicate 2")
+            self.assertEqual(
+                record.entity_id, "Control Embyronic Stem Cell Replicate 2"
+            )
             self.assertEqual(len(record.entity_attributes), 24)
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch2"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_platform_id"], "Murine 15K long oligo array version 2.0")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Control Embyronic Stem Cell Replicate 2")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "file2.gpr")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch2"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Mus musculus")
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch2"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_platform_id"],
+                "Murine 15K long oligo array version 2.0",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "Control Embyronic Stem Cell Replicate 2",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"], "file2.gpr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch2"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"], "Mus musculus"
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "Cy5")
             self.assertEqual(len(record.entity_attributes["Sample_scan_protocol"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][0], "Scanned on an Agilent G2565AA scanner.")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"][1], "Images were quantified using Agilent Feature Extraction Software (version A.7.5).")
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][0],
+                "Scanned on an Agilent G2565AA scanner.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"][1],
+                "Images were quantified using Agilent Feature Extraction Software (version A.7.5).",
+            )
             self.assertEqual(record.entity_attributes["sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch2"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.")
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch2"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_end"], "")
             self.assertEqual(record.entity_attributes["Sample_label_ch2"], "Cy3")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Biological replicate 2 of 4. Control embryonic stem cells, untreated, harvested after several passages.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch2"], "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch2"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "ES-D3 cell line (CRL-1934)")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][2], "Tissue: blastocytes")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][3], "Strain: 129/Sv mice")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch2"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][0], "Strain: C57BL/6")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][1], "Age: e17.5 d")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][2], "Tissue: whole embryo")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Biological replicate 2 of 4. Control embryonic stem cells, untreated, harvested after several passages.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Total RNA from murine ES-D3 embryonic stem cells labeled with Cyanine-5 (red).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch2"],
+                "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch2"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 4
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "ES-D3 cell line (CRL-1934)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1], "Age: day 4"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][2],
+                "Tissue: blastocytes",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][3],
+                "Strain: 129/Sv mice",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch2"]), 3
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][0],
+                "Strain: C57BL/6",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][1],
+                "Age: e17.5 d",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][2],
+                "Tissue: whole embryo",
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "log(REDsignal/GREENsignal) per feature (processed signals used).")
-            self.assertEqual(record.col_defs["gProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.')
-            self.assertEqual(record.col_defs["LogRatioError"], "error of the log ratio calculated according to the error model chosen.")
-            self.assertEqual(record.col_defs["PValueLogRatio"], "Significance level of the Log Ratio computed for a feature.")
-            self.assertEqual(record.col_defs["rProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.')
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "log(REDsignal/GREENsignal) per feature (processed signals used).",
+            )
+            self.assertEqual(
+                record.col_defs["gProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.',
+            )
+            self.assertEqual(
+                record.col_defs["LogRatioError"],
+                "error of the log ratio calculated according to the error model chosen.",
+            )
+            self.assertEqual(
+                record.col_defs["PValueLogRatio"],
+                "Significance level of the Log Ratio computed for a feature.",
+            )
+            self.assertEqual(
+                record.col_defs["rProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 6)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -2655,48 +3953,145 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.table_rows[20][5], "1.45E+02")
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
-            self.assertEqual(record.entity_id, "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1")
+            self.assertEqual(
+                record.entity_id,
+                "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1",
+            )
             self.assertEqual(len(record.entity_attributes), 25)
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch2"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "TriZol procedure")
-            self.assertEqual(record.entity_attributes["Sample_platform_id"], "Murine 15K long oligo array version 2.0")
-            self.assertEqual(record.entity_attributes["Sample_title"], "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "file3.gpr")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch2"], "Mus musculus")
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Mus musculus")
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch2"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Oligoarray control targets and hybridization buffer (Agilent In Situ Hybridization Kit Plus) were added, and samples were applied to microarrays enclosed in Agilent SureHyb-enabled hybridization chambers. After hybridization, slides were washed sequentially with 6x SSC/0.005% Triton X-102 and 0.1x SSC/0.005% Triton X-102 before scanning. Slides were hybridized for 17 h at 60\xb0C in a rotating oven, and washed.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "TriZol procedure",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_platform_id"],
+                "Murine 15K long oligo array version 2.0",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"], "file3.gpr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch2"], "Mus musculus"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"], "Mus musculus"
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "Cy5")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "Scanned on an Agilent G2565AA scanner.")
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "Scanned on an Agilent G2565AA scanner.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_begin"], "")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch2"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.")
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch2"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP, with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "10 \xb5g of total RNA were primed with 2 \xb5l of 100 \xb5M T16N2 DNA primer at 70\xb0C for 10 min, then reversed transcribed at 42\xb0C for 1 h in the presence of 400 U SuperScript II RTase (Invitrogen), and 100 \xb5M each dATP, dTTP, dGTP with 25 \xb5M dCTP, 25 \xb5M Cy5-labeled dCTP (NEN Life Science, Boston, MA), and RNase inhibitor (Invitrogen). RNA was then degraded with RNase A, and labeled cDNAs were purified using QIAquick PCR columns (Qiagen).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "LOWESS normalized, background subtracted VALUE data obtained from log of processed Red signal/processed Green signal.",
+            )
             self.assertEqual(record.entity_attributes["sample_table_end"], "")
             self.assertEqual(record.entity_attributes["Sample_label_ch2"], "Cy3")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Biological replicate 1 of 3. Stable triple-fusion-reporter-gene transfected embryonic stem cells, harvested after several passages.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Total RNA from murine ES-D3 triple-transfected embryonic stem cells labeled with Cyanine-5 (red).")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch2"], "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch2"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 5)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "ES-D3 cell line (CRL-1934)")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Transfected with pUb-fluc-mrfp-ttk triple fusion reporter gene.")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][2], "Age: day 4")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][3], "Tissue: blastocytes")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][4], "Strain: 129/Sv mice")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch2"]), 3)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][0], "Strain: C57BL/6")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][1], "Age: e17.5 d")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch2"][2], "Tissue: whole embryo")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "PCR amplification and standard cloning techniques were used to insert fluc and mrfp genes from plasmids pCDNA 3.1-CMV-fluc (Promega, Madison, WI) and pCDNA3.1-CMV-mrfp in frame with the ttk gene into the pCDNA3.1-truncated	sr39tk. This triple fusion (TF) reporter gene fragment (3.3 kbp) was released from the plasmid with Not1 and BamH1 restriction enzymes before blunt-end ligation into the multiple cloning site of lentiviral transfer vector, FUG, driven by the human ubiquitin-C promoter. Self-inactivating (SIN) lentivirus was prepared by transient transfection of 293T cells. Briefly, pFUG-TF containing the triple fusion reporter gene was co-transfected into 293T cells with HIV-1 packaging vector (?8.9) and vesicular stomatitis virus G glycoprotein-pseudotyped envelop vector (pVSVG). Lentivirus supernatant was concentrated by sediment centrifugation using a SW29 rotor at 50,000 x g for two hours. Concentrated virus was titered on 293T cells. Murine ES cells were transfected with LV-pUb-fluc-mrfp-ttk at a multiplicity of infection (MOI) of 10.")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Biological replicate 1 of 3. Stable triple-fusion-reporter-gene transfected embryonic stem cells, harvested after several passages.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Total RNA from murine ES-D3 triple-transfected embryonic stem cells labeled with Cyanine-5 (red).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch2"],
+                "Total RNA from pooled whole mouse embryos e17.5, labeled with Cyanine-3 (green).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch2"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "ES cells were kept in an undifferentiated, pluripotent state by using 1000 IU/ml leukemia inhibitory factor (LIF; Chemicon, ESGRO, ESG1107), and grown on top of murine embryonic fibroblasts feeder layer inactivated by 10 ug/ml of mitomycin C (Sigma, St. Louis). ES cells were cultured on 0.1% gelatin-coated plastic dishes in ES medium containing Dulbecco modified Eagle medium supplemented with 15% fetal calf serum, 0.1 mM beta-mercaptoethanol, 2 mM glutamine, and 0.1 mN non-essential amino acids.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 5
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "ES-D3 cell line (CRL-1934)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Transfected with pUb-fluc-mrfp-ttk triple fusion reporter gene.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][2], "Age: day 4"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][3],
+                "Tissue: blastocytes",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][4],
+                "Strain: 129/Sv mice",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch2"]), 3
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][0],
+                "Strain: C57BL/6",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][1],
+                "Age: e17.5 d",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch2"][2],
+                "Tissue: whole embryo",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "PCR amplification and standard cloning techniques were used to insert fluc and mrfp genes from plasmids pCDNA 3.1-CMV-fluc (Promega, Madison, WI) and pCDNA3.1-CMV-mrfp in frame with the ttk gene into the pCDNA3.1-truncated	sr39tk. This triple fusion (TF) reporter gene fragment (3.3 kbp) was released from the plasmid with Not1 and BamH1 restriction enzymes before blunt-end ligation into the multiple cloning site of lentiviral transfer vector, FUG, driven by the human ubiquitin-C promoter. Self-inactivating (SIN) lentivirus was prepared by transient transfection of 293T cells. Briefly, pFUG-TF containing the triple fusion reporter gene was co-transfected into 293T cells with HIV-1 packaging vector (?8.9) and vesicular stomatitis virus G glycoprotein-pseudotyped envelop vector (pVSVG). Lentivirus supernatant was concentrated by sediment centrifugation using a SW29 rotor at 50,000 x g for two hours. Concentrated virus was titered on 293T cells. Murine ES cells were transfected with LV-pUb-fluc-mrfp-ttk at a multiplicity of infection (MOI) of 10.",
+            )
             self.assertEqual(len(record.col_defs), 6)
             self.assertEqual(record.col_defs["ID_REF"], "")
-            self.assertEqual(record.col_defs["VALUE"], "log(REDsignal/GREENsignal) per feature (processed signals used).")
-            self.assertEqual(record.col_defs["gProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.')
-            self.assertEqual(record.col_defs["LogRatioError"], "error of the log ratio calculated according to the error model chosen.")
-            self.assertEqual(record.col_defs["PValueLogRatio"], "Significance level of the Log Ratio computed for a feature.")
-            self.assertEqual(record.col_defs["rProcessedSignal"], 'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.')
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "log(REDsignal/GREENsignal) per feature (processed signals used).",
+            )
+            self.assertEqual(
+                record.col_defs["gProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," green "channel," used for computation of log ratio.',
+            )
+            self.assertEqual(
+                record.col_defs["LogRatioError"],
+                "error of the log ratio calculated according to the error model chosen.",
+            )
+            self.assertEqual(
+                record.col_defs["PValueLogRatio"],
+                "Significance level of the Log Ratio computed for a feature.",
+            )
+            self.assertEqual(
+                record.col_defs["rProcessedSignal"],
+                'Dye-normalized signal after surrogate "algorithm," red "channel," used for computation of log ratio.',
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 6)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -2850,24 +4245,62 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_id, "Murine ES Cells")
             self.assertEqual(len(record.entity_attributes), 7)
             self.assertEqual(len(record.entity_attributes["Series_sample_id"]), 3)
-            self.assertEqual(record.entity_attributes["Series_sample_id"][0], "Control Embyronic Stem Cell Replicate 1")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][1], "Control Embyronic Stem Cell Replicate 2")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][2], "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1")
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][0],
+                "Control Embyronic Stem Cell Replicate 1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][1],
+                "Control Embyronic Stem Cell Replicate 2",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][2],
+                "Triple-Fusion Transfected Embryonic Stem Cells Replicate 1",
+            )
             self.assertEqual(record.entity_attributes["Series_pubmed_id"], "16390873")
             self.assertEqual(len(record.entity_attributes["Series_contributor"]), 9)
-            self.assertEqual(record.entity_attributes["Series_contributor"][0], "Joseph,C,Wu")
-            self.assertEqual(record.entity_attributes["Series_contributor"][1], "Joshua,M,Spin")
-            self.assertEqual(record.entity_attributes["Series_contributor"][2], "Feng,,Cao")
-            self.assertEqual(record.entity_attributes["Series_contributor"][3], "Shaun,,Lin")
-            self.assertEqual(record.entity_attributes["Series_contributor"][4], "Olivier,,Gheysens")
-            self.assertEqual(record.entity_attributes["Series_contributor"][5], "Ian,Y,Chen")
-            self.assertEqual(record.entity_attributes["Series_contributor"][6], "Anya,,Tsalenko")
-            self.assertEqual(record.entity_attributes["Series_contributor"][7], "Sanjiv,S,Ghambhir")
-            self.assertEqual(record.entity_attributes["Series_contributor"][8], "Thomas,,Quertermous")
-            self.assertEqual(record.entity_attributes["Series_summary"], "Transcriptional profiling of mouse embryonic stem cells comparing control untreated ES cells with ES cells transfected with a pUb-fluc-mrfp-ttk triple fusion reporter gene. The latter makes ES visualization possible by FACS and single ce")
-            self.assertEqual(record.entity_attributes["Series_type"], "Genetic modification")
-            self.assertEqual(record.entity_attributes["Series_title"], "Murine ES Cells: Control vs. Triple-Fusion Transfected")
-            self.assertEqual(record.entity_attributes["Series_overall_design"], "Two-condition experiment, ES vs. TF-ES cells. Biological replicates: 4 control, 3 transfected, independently grown and harvested. One replicate per array.")
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][0], "Joseph,C,Wu"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][1], "Joshua,M,Spin"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][2], "Feng,,Cao"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][3], "Shaun,,Lin"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][4], "Olivier,,Gheysens"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][5], "Ian,Y,Chen"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][6], "Anya,,Tsalenko"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][7], "Sanjiv,S,Ghambhir"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][8], "Thomas,,Quertermous"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_summary"],
+                "Transcriptional profiling of mouse embryonic stem cells comparing control untreated ES cells with ES cells transfected with a pUb-fluc-mrfp-ttk triple fusion reporter gene. The latter makes ES visualization possible by FACS and single ce",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_type"], "Genetic modification"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_title"],
+                "Murine ES Cells: Control vs. Triple-Fusion Transfected",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_overall_design"],
+                "Two-condition experiment, ES vs. TF-ES cells. Biological replicates: 4 control, 3 transfected, independently grown and harvested. One replicate per array.",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
 
@@ -2880,52 +4313,144 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_id, "GSM804")
             self.assertEqual(len(record.entity_attributes), 18)
             self.assertEqual(record.entity_attributes["Sample_pubmed_id"], "11687795")
-            self.assertEqual(record.entity_attributes["Sample_submitter_institute"], "University of California San Francisco")
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_institute"],
+                "University of California San Francisco",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_author"]), 19)
-            self.assertEqual(record.entity_attributes["Sample_author"][0], "Antoine,M,Snijders")
-            self.assertEqual(record.entity_attributes["Sample_author"][1], "Norma,,Nowak")
-            self.assertEqual(record.entity_attributes["Sample_author"][2], "Richard,,Segraves")
-            self.assertEqual(record.entity_attributes["Sample_author"][3], "Stephanie,,Blackwood")
-            self.assertEqual(record.entity_attributes["Sample_author"][4], "Nils,,Brown")
-            self.assertEqual(record.entity_attributes["Sample_author"][5], "Jeffery,,Conroy")
-            self.assertEqual(record.entity_attributes["Sample_author"][6], "Greg,,Hamilton")
-            self.assertEqual(record.entity_attributes["Sample_author"][7], "Anna,K,Hindle")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][0], "Antoine,M,Snijders"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][1], "Norma,,Nowak"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][2], "Richard,,Segraves"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][3], "Stephanie,,Blackwood"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][4], "Nils,,Brown"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][5], "Jeffery,,Conroy"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][6], "Greg,,Hamilton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][7], "Anna,K,Hindle"
+            )
             self.assertEqual(record.entity_attributes["Sample_author"][8], "Bing,,Huey")
-            self.assertEqual(record.entity_attributes["Sample_author"][9], "Karen,,Kimura")
-            self.assertEqual(record.entity_attributes["Sample_author"][10], "Sindy,,Law")
-            self.assertEqual(record.entity_attributes["Sample_author"][11], "Ken,,Myambo")
-            self.assertEqual(record.entity_attributes["Sample_author"][12], "Joel,,Palmer")
-            self.assertEqual(record.entity_attributes["Sample_author"][13], "Bauke,,Ylstra")
-            self.assertEqual(record.entity_attributes["Sample_author"][14], "Jingzhu,P,Yue")
-            self.assertEqual(record.entity_attributes["Sample_author"][15], "Joe,W,Gray")
-            self.assertEqual(record.entity_attributes["Sample_author"][16], "Ajay,N,Jain")
-            self.assertEqual(record.entity_attributes["Sample_author"][17], "Daniel,,Pinkel")
-            self.assertEqual(record.entity_attributes["Sample_author"][18], "Donna,G,Albertson")
-            self.assertEqual(record.entity_attributes["Sample_submitter_phone"], "415 502-8463")
-            self.assertEqual(record.entity_attributes["Sample_submitter_department"], "Comprehensive Cancer Center")
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][9], "Karen,,Kimura"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][10], "Sindy,,Law"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][11], "Ken,,Myambo"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][12], "Joel,,Palmer"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][13], "Bauke,,Ylstra"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][14], "Jingzhu,P,Yue"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][15], "Joe,W,Gray"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][16], "Ajay,N,Jain"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][17], "Daniel,,Pinkel"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_author"][18], "Donna,G,Albertson"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_phone"], "415 502-8463"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_department"],
+                "Comprehensive Cancer Center",
+            )
             self.assertEqual(len(record.entity_attributes["Sample_description"]), 4)
-            self.assertEqual(record.entity_attributes["Sample_description"][0], 'Coriell Cell Repositories cell line <a href="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.')
-            self.assertEqual(record.entity_attributes["Sample_description"][1], "Fibroblast cell line derived from a 1 month old female with multiple congenital malformations, dysmorphic features, intrauterine growth retardation, heart murmur, cleft palate, equinovarus deformity, microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activity, and 1 copy of catalase gene.")
-            self.assertEqual(record.entity_attributes["Sample_description"][2], "Chromosome abnormalities are present.")
-            self.assertEqual(record.entity_attributes["Sample_description"][3], "Karyotype is 46,XX,-11,+der(11)inv ins(11;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat")
-            self.assertEqual(record.entity_attributes["Sample_target_source2"], "normal male reference genomic DNA")
-            self.assertEqual(record.entity_attributes["Sample_target_source1"], "Cell line GM05296")
-            self.assertEqual(record.entity_attributes["Sample_submitter_name"], "Donna,G,Albertson")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][0],
+                'Coriell Cell Repositories cell line <a href="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.',
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][1],
+                "Fibroblast cell line derived from a 1 month old female with multiple congenital malformations, dysmorphic features, intrauterine growth retardation, heart murmur, cleft palate, equinovarus deformity, microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activity, and 1 copy of catalase gene.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][2],
+                "Chromosome abnormalities are present.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_description"][3],
+                "Karyotype is 46,XX,-11,+der(11)inv ins(11;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source2"],
+                "normal male reference genomic DNA",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_target_source1"], "Cell line GM05296"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_name"], "Donna,G,Albertson"
+            )
             self.assertEqual(record.entity_attributes["Sample_platform_id"], "GPL28")
-            self.assertEqual(record.entity_attributes["Sample_type"], "dual channel genomic")
-            self.assertEqual(record.entity_attributes["Sample_status"], "Public on Feb 12 2002")
-            self.assertEqual(record.entity_attributes["Sample_submitter_email"], "albertson@cc.ucsf.edu")
-            self.assertEqual(record.entity_attributes["Sample_title"], "CGH_Albertson_GM05296-001218")
-            self.assertEqual(record.entity_attributes["Sample_organism"], "Homo sapiens")
+            self.assertEqual(
+                record.entity_attributes["Sample_type"], "dual channel genomic"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_status"], "Public on Feb 12 2002"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_email"],
+                "albertson@cc.ucsf.edu",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"], "CGH_Albertson_GM05296-001218"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_organism"], "Homo sapiens"
+            )
             self.assertEqual(record.entity_attributes["Sample_series_id"], "GSE16")
-            self.assertEqual(record.entity_attributes["Sample_submission_date"], "Jan 17 2002")
-            self.assertEqual(record.entity_attributes["Sample_submitter_city"], "San Francisco,CA,94143,USA")
+            self.assertEqual(
+                record.entity_attributes["Sample_submission_date"], "Jan 17 2002"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_submitter_city"],
+                "San Francisco,CA,94143,USA",
+            )
             self.assertEqual(len(record.col_defs), 5)
-            self.assertEqual(record.col_defs["NO_REPLICATES"], "Number of replicate spot measurements")
-            self.assertEqual(record.col_defs["LOG2STDDEV"], "Standard deviation of VALUE")
-            self.assertEqual(record.col_defs["ID_REF"], "Unique row identifier, genome position order")
-            self.assertEqual(record.col_defs["VALUE"], "aka LOG2RATIO, mean of log base 2 of LINEAR_RATIO")
-            self.assertEqual(record.col_defs["LINEAR_RATIO"], "Mean of replicate Cy3/Cy5 ratios")
+            self.assertEqual(
+                record.col_defs["NO_REPLICATES"],
+                "Number of replicate spot measurements",
+            )
+            self.assertEqual(
+                record.col_defs["LOG2STDDEV"], "Standard deviation of VALUE"
+            )
+            self.assertEqual(
+                record.col_defs["ID_REF"],
+                "Unique row identifier, genome position order",
+            )
+            self.assertEqual(
+                record.col_defs["VALUE"],
+                "aka LOG2RATIO, mean of log base 2 of LINEAR_RATIO",
+            )
+            self.assertEqual(
+                record.col_defs["LINEAR_RATIO"], "Mean of replicate Cy3/Cy5 ratios"
+            )
             self.assertEqual(len(record.table_rows), 21)
             self.assertEqual(len(record.table_rows[0]), 5)
             self.assertEqual(record.table_rows[0][0], "ID_REF")
@@ -3062,72 +4587,216 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "Drosophila_T0-1")
             self.assertEqual(len(record.entity_attributes), 16)
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Drosophila melanogaster")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"],
+                "Drosophila melanogaster",
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "biotin")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "Genotype: yellow white and Oregon R parents")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "Trizol extraction of total RNA was performed according to the manufacturer's instructions.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Drosophila embryos before nuclear cycle 9 (maternal transcripts)")
-            self.assertEqual(record.entity_attributes["Sample_table"], "Drosophila_T0-1.CHP")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).")
-            self.assertEqual(record.entity_attributes["Sample_title"], "embryo at T0, biological rep1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "Drosophila_T0-1.CEL")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 2
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "Genotype: yellow white and Oregon R parents",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "Trizol extraction of total RNA was performed according to the manufacturer's instructions.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Drosophila embryos before nuclear cycle 9 (maternal transcripts)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_table"], "Drosophila_T0-1.CHP"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "embryo at T0, biological rep1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"],
+                "Drosophila_T0-1.CEL",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "Drosophila_T0-2")
             self.assertEqual(len(record.entity_attributes), 16)
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Drosophila melanogaster")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"],
+                "Drosophila melanogaster",
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "biotin")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "Genotype: yellow white and Oregon R parents")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "Trizol extraction of total RNA was performed according to the manufacturer's instructions.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Drosophila embryos before nuclear cycle 9 (maternal transcripts)")
-            self.assertEqual(record.entity_attributes["Sample_table"], "Drosophila_T0-2.CHP")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).")
-            self.assertEqual(record.entity_attributes["Sample_title"], "embryo at T0, biological rep2")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "Drosophila_T0-2.CEL")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Gene expression data from embryos younger than nuclear cycle 9, i.e. before zygotic genome activation.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 2
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "Genotype: yellow white and Oregon R parents",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Age: embryos younger than nuclear cycle 9, i.e. before pole cells budding",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "Trizol extraction of total RNA was performed according to the manufacturer's instructions.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Drosophila embryos before nuclear cycle 9 (maternal transcripts)",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_table"], "Drosophila_T0-2.CHP"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "embryo at T0, biological rep2",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"],
+                "Drosophila_T0-2.CEL",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
             record = next(records)
             self.assertEqual(record.entity_type, "SAMPLE")
             self.assertEqual(record.entity_id, "Drosophila_T1-1")
             self.assertEqual(len(record.entity_attributes), 16)
-            self.assertEqual(record.entity_attributes["Sample_organism_ch1"], "Drosophila melanogaster")
+            self.assertEqual(
+                record.entity_attributes["Sample_organism_ch1"],
+                "Drosophila melanogaster",
+            )
             self.assertEqual(record.entity_attributes["Sample_label_ch1"], "biotin")
-            self.assertEqual(record.entity_attributes["Sample_description"], "Gene expression data from embryos in slow phase of cellularisation.")
-            self.assertEqual(record.entity_attributes["Sample_growth_protocol_ch1"], "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.")
-            self.assertEqual(len(record.entity_attributes["Sample_characteristics_ch1"]), 2)
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][0], "Genotype: yellow white and Oregon R parents")
-            self.assertEqual(record.entity_attributes["Sample_characteristics_ch1"][1], "Age: embryos in slow phase of cellularisation")
-            self.assertEqual(record.entity_attributes["Sample_scan_protocol"], "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.")
-            self.assertEqual(record.entity_attributes["Sample_hyb_protocol"], "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.")
-            self.assertEqual(record.entity_attributes["Sample_extract_protocol_ch1"], "Trizol extraction of total RNA was performed according to the manufacturer's instructions.")
-            self.assertEqual(record.entity_attributes["Sample_source_name_ch1"], "Drosophila embryos in slow phase of cellularisation")
-            self.assertEqual(record.entity_attributes["Sample_table"], "Drosophila_T1-1.CHP")
-            self.assertEqual(record.entity_attributes["Sample_molecule_ch1"], "total RNA")
-            self.assertEqual(record.entity_attributes["Sample_label_protocol_ch1"], "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).")
-            self.assertEqual(record.entity_attributes["Sample_data_processing"], "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.")
-            self.assertEqual(record.entity_attributes["Sample_treatment_protocol_ch1"], "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).")
-            self.assertEqual(record.entity_attributes["Sample_title"], "embryo at T1, biological rep1")
-            self.assertEqual(record.entity_attributes["Sample_supplementary_file"], "Drosophila_T1-1.CEL")
+            self.assertEqual(
+                record.entity_attributes["Sample_description"],
+                "Gene expression data from embryos in slow phase of cellularisation.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_growth_protocol_ch1"],
+                "30 min egg collections of OreR and yw flies at 25C were aged at room temperature (RT) according to the different temporal classes T0-T4.",
+            )
+            self.assertEqual(
+                len(record.entity_attributes["Sample_characteristics_ch1"]), 2
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][0],
+                "Genotype: yellow white and Oregon R parents",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_characteristics_ch1"][1],
+                "Age: embryos in slow phase of cellularisation",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_scan_protocol"],
+                "GeneChips were scanned using the Hewlett-Packard GeneArray Scanner G2500A.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_hyb_protocol"],
+                "Following fragmentation, 10 microg of cRNA were hybridized for 16 hr at 45C on GeneChip Drosophila Genome Array. GeneChips were washed and stained in the Affymetrix Fluidics Station 400.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_extract_protocol_ch1"],
+                "Trizol extraction of total RNA was performed according to the manufacturer's instructions.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_source_name_ch1"],
+                "Drosophila embryos in slow phase of cellularisation",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_table"], "Drosophila_T1-1.CHP"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_molecule_ch1"], "total RNA"
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_label_protocol_ch1"],
+                "Biotinylated cRNA were prepared according to the standard Affymetrix protocol from 6 microg total RNA (Expression Analysis Technical Manual, 2001, Affymetrix).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_data_processing"],
+                "The data were analyzed with Microarray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and global scaling as normalization method. The trimmed mean target intensity of each array was arbitrarily set to 100.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_treatment_protocol_ch1"],
+                "Embryos were dechorionated with 50% bleach, put on a cover slip and covered with Halocarbon oil 27 (Sigma). Embryos of the appropriate stage were manually selected under the dissecting scope. Selected embryos were transferred to a basket, rinsed with PBS with 0,7% NaCl, 0,04% triton-X100 and placed on ice in the Trizol solution (GibcoBRL).",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_title"],
+                "embryo at T1, biological rep1",
+            )
+            self.assertEqual(
+                record.entity_attributes["Sample_supplementary_file"],
+                "Drosophila_T1-1.CEL",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
             record = next(records)
@@ -3135,21 +4804,49 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_id, "Dros_embryo_timecourse")
             self.assertEqual(len(record.entity_attributes), 6)
             self.assertEqual(len(record.entity_attributes["Series_sample_id"]), 3)
-            self.assertEqual(record.entity_attributes["Series_sample_id"][0], "Drosophila_T0-1")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][1], "Drosophila_T0-2")
-            self.assertEqual(record.entity_attributes["Series_sample_id"][2], "Drosophila_T1-1")
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][0], "Drosophila_T0-1"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][1], "Drosophila_T0-2"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_sample_id"][2], "Drosophila_T1-1"
+            )
             self.assertEqual(len(record.entity_attributes["Series_contributor"]), 5)
-            self.assertEqual(record.entity_attributes["Series_contributor"][0], "Jane,Doe")
-            self.assertEqual(record.entity_attributes["Series_contributor"][1], "John,A,Smith")
-            self.assertEqual(record.entity_attributes["Series_contributor"][2], "Hans,van Elton")
-            self.assertEqual(record.entity_attributes["Series_contributor"][3], "John,Smithers Jr")
-            self.assertEqual(record.entity_attributes["Series_contributor"][4], "Jie,D,Chen")
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][0], "Jane,Doe"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][1], "John,A,Smith"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][2], "Hans,van Elton"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][3], "John,Smithers Jr"
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_contributor"][4], "Jie,D,Chen"
+            )
             self.assertEqual(len(record.entity_attributes["Series_summary"]), 2)
-            self.assertEqual(record.entity_attributes["Series_summary"][0], "Morphogenesis of epithelial tissues relies on the precise developmental control of cell polarity and architecture. In the early Drosophila embryo, the primary epithelium forms during cellularisation, following a tightly controlled genetic programme where specific sets of genes are up-regulated. Some of them, for instance, control membrane invagination between the nuclei anchored at the apical surface of the syncytium.")
-            self.assertEqual(record.entity_attributes["Series_summary"][1], "We used microarrays to detail the global programme of gene expression underlying cellularisation and identified distinct classes of up-regulated genes during this process.")
+            self.assertEqual(
+                record.entity_attributes["Series_summary"][0],
+                "Morphogenesis of epithelial tissues relies on the precise developmental control of cell polarity and architecture. In the early Drosophila embryo, the primary epithelium forms during cellularisation, following a tightly controlled genetic programme where specific sets of genes are up-regulated. Some of them, for instance, control membrane invagination between the nuclei anchored at the apical surface of the syncytium.",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_summary"][1],
+                "We used microarrays to detail the global programme of gene expression underlying cellularisation and identified distinct classes of up-regulated genes during this process.",
+            )
             self.assertEqual(record.entity_attributes["Series_type"], "time course")
-            self.assertEqual(record.entity_attributes["Series_title"], "Expression data from early Drosophila embryo")
-            self.assertEqual(record.entity_attributes["Series_overall_design"], "Drosophila embryos were selected at successive stages of early development for RNA extraction and hybridization on Affymetrix microarrays. We sought to obtain homogeneous populations of embryos at each developmental stage in order to increase the temporal resolution of expression profiles. To that end, we hand-selected embryos according to morphological criteria at five time-points: before pole cell formation, i.e. before zygotic transcription (T0), during the slow phase (T1) and the fast phase (T2) of cellularisation and at the beginning (T3) and the end (T4) of gastrulation.")
+            self.assertEqual(
+                record.entity_attributes["Series_title"],
+                "Expression data from early Drosophila embryo",
+            )
+            self.assertEqual(
+                record.entity_attributes["Series_overall_design"],
+                "Drosophila embryos were selected at successive stages of early development for RNA extraction and hybridization on Affymetrix microarrays. We sought to obtain homogeneous populations of embryos at each developmental stage in order to increase the temporal resolution of expression profiles. To that end, we hand-selected embryos according to morphological criteria at five time-points: before pole cell formation, i.e. before zygotic transcription (T0), during the slow phase (T1) and the fast phase (T2) of cellularisation and at the beginning (T3) and the end (T4) of gastrulation.",
+            )
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
 
@@ -3158,7 +4855,10 @@ class TestGeo(unittest.TestCase):
         with open(path, encoding="latin") as handle:
             records = Geo.parse(handle)
             record = next(records)
-            self.assertEqual(str(record), """GEO Type: SAMPLE
+            self.assertEqual(
+                str(record),
+                """\
+GEO Type: SAMPLE
 GEO Id: GSM804
 Sample_author: Antoine,M,Snijders
 
@@ -3278,7 +4978,8 @@ Column Header Definitions
 18: 18	-0.088807	0.9403	0.010571	3\t
 19: 19	0.016349	1.011397	0.007113	3\t
 20: 20	0.030977	1.021704	0.016798	3\t
-""")
+""",
+            )
 
 
 if __name__ == "__main__":
