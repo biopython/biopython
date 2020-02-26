@@ -254,7 +254,8 @@ Bio.motifs).
 Bio.SeqIO.Interfaces
 --------------------
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61, and
-removed in Release 1.64.
+removed in Release 1.64. Unused class SequenceIterator was deprecated in
+Release 1.77.
 
 Bio.HotRand
 -----------
