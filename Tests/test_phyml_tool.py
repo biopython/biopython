@@ -23,7 +23,7 @@ exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
 
 output = getoutput(exe_name + " --version")
 # Looks like this:
-#. This is PhyML version 20120412.
+# . This is PhyML version 20120412.
 if "20" in output and "PhyML" in output:
     phyml_exe = exe_name
 
