@@ -183,8 +183,8 @@ class TestErrors(unittest.TestCase):
             try:
                 values = _sff_find_roche_index(handle)
             except ValueError as err:
-                self.assertTrue(str(err) in ("Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
-                                             "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'"))
+                self.assertIn(str(err), ("Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
+                                         "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'"))
             else:
                 self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
 

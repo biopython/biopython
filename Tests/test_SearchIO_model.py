@@ -155,8 +155,8 @@ class QueryResultCases(unittest.TestCase):
         # contains should work with hit ids or hit objects
         self.assertIn("hit1", self.qresult)
         self.assertIn(hit21, self.qresult)
-        self.assertFalse("hit5" in self.qresult)
-        self.assertFalse(hit41 in self.qresult)
+        self.assertNotIn("hit5", self.qresult)
+        self.assertNotIn(hit41, self.qresult)
 
     def test_contains_alt(self):
         """Test QueryResult.__contains__, with alternative IDs."""

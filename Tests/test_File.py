@@ -21,8 +21,8 @@ class RandomAccess(unittest.TestCase):
     def test_plain(self):
         """Test plain text file."""
         with File._open_for_random_access("Quality/example.fastq") as handle:
-            self.assertTrue("r" in handle.mode)
-            self.assertTrue("b" in handle.mode)
+            self.assertIn("r", handle.mode)
+            self.assertIn("b", handle.mode)
 
     def test_bgzf(self):
         """Test BGZF compressed file."""

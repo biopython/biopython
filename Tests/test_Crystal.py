@@ -396,7 +396,7 @@ class ChainTestCase(unittest.TestCase):
 
     def testContains(self):
         chain = Chain(self.c[:])
-        self.assertFalse("ser" in chain)
+        self.assertNotIn("ser", chain)
         self.assertIn("lys", chain)
         self.assertIn("asp", chain)
 
@@ -448,7 +448,7 @@ class CrystalTestCase(unittest.TestCase):
     def testDelItem(self):
         target = copy.deepcopy(self.crystal)
         del target["b"]
-        self.assertFalse("b" in target.data)
+        self.assertNotIn("b", target.data)
         self.assertIn("a", target.data)
         self.assertIn("c", target.data)
 
@@ -472,7 +472,7 @@ class CrystalTestCase(unittest.TestCase):
     def testHasKey(self):
         self.assertIn("b", self.crystal)
         self.assertIn("c", self.crystal)
-        self.assertFalse("z" in self.crystal)
+        self.assertNotIn("z", self.crystal)
 
 
 class HeteroTestCase(unittest.TestCase):

@@ -497,10 +497,9 @@ class ModTest(unittest.TestCase):
                     + " for %s-%s" % (seq1, seq2),
                 )
                 for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
-                    self.assertTrue(
-                        param in params,
-                        version_msg + ": '%s' not in parsed parameters" % (param),
-                    )
+                    self.assertIn(param, params, version_msg +
+                                  ": '%s' not in parsed parameters"
+                                  % (param))
                     self.assertTrue(isinstance(params[param], float))
                     if param != "lnL":
                         self.assertTrue(params[param] >= 0)
