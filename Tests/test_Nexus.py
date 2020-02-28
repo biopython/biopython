@@ -486,7 +486,7 @@ Root:  16
         self.assertFalse(tree.has_support())
         with self.assertRaises(Exception) as context:
             tree.randomize()
-        self.assertTrue("Either numer of taxa or list of taxa must be specified." in str(context.exception))
+        self.assertIn("Either numer of taxa or list of taxa must be specified.", str(context.exception))
         tree_rand = Trees.Tree(ts1c)
         tree_rand.randomize(ntax=4)
         self.assertEqual(sorted(tree_rand.get_taxa()), ["taxon1", "taxon2",

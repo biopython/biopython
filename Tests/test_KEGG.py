@@ -91,7 +91,7 @@ class EnzymeTests(unittest.TestCase):
         with open("KEGG/enzyme.sample") as handle:
             with self.assertRaises(ValueError) as context:
                 list(Enzyme.read(handle))
-            self.assertTrue("More than one record found in handle" in str(context.exception))
+            self.assertIn("More than one record found in handle", str(context.exception))
             records = Enzyme.parse(handle)
             for i in range(0, 6):
                 next(records)

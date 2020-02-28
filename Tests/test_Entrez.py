@@ -114,8 +114,8 @@ class TestURLConstruction(unittest.TestCase):
                         result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
-                        result_url)
+        self.assertIn("id=15718680%2C157427902%2C119703751", result_url,
+                      result_url)
         self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_elink3(self):
@@ -150,8 +150,8 @@ class TestURLConstruction(unittest.TestCase):
                         result_url)
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
-                        result_url)
+        self.assertIn("id=15718680%2C157427902%2C119703751", result_url,
+                      result_url)
         self.assertIn(URL_API_KEY, result_url)
 
 

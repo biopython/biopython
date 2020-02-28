@@ -508,10 +508,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
                 )
             if local:
                 # Local alignment
-                self.assertTrue(str(alignment[0].seq).replace("-", "") in query_seq)
-                self.assertTrue(
-                    str(alignment[1].seq).replace("-", "").upper()
-                    in str(target.seq).upper()
+                self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
+                self.assertIn(
+                    str(alignment[1].seq).replace("-", "").upper(),
+                    str(target.seq).upper()
                 )
             else:
                 # Global alignment

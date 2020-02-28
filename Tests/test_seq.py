@@ -1025,8 +1025,8 @@ class TestUnknownSeq(unittest.TestCase):
 class TestAmbiguousComplements(unittest.TestCase):
     def test_ambiguous_values(self):
         """Test that other tests do not introduce characters to our values."""
-        self.assertFalse("-" in ambiguous_dna_values)
-        self.assertFalse("?" in ambiguous_dna_values)
+        self.assertNotIn("-", ambiguous_dna_values)
+        self.assertNotIn("?", ambiguous_dna_values)
 
 
 class TestComplement(unittest.TestCase):

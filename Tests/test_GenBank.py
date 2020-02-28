@@ -6643,7 +6643,7 @@ KEYWORDS    """
         # No structured comment in NC_000932.gb, just a regular comment
         path = "GenBank/NC_000932.gb"
         record = SeqIO.read(path, "genbank")
-        self.assertFalse("structured_comment" in record.annotations)
+        self.assertNotIn("structured_comment", record.annotations)
         self.assertEqual(
             record.annotations["comment"],
             "REVIEWED REFSEQ: This record has been curated by NCBI staff. The\n"

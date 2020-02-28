@@ -79,7 +79,7 @@ class KDTreeTest(unittest.TestCase):
         )
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(random((nr_points, 3 - 2)), bucket_size)
-        self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
+        self.assertIn("expected a Nx3 numpy array", str(context.exception))
 
     def test_KDTree_point_search(self):
         """Test searching all points within a certain radius of center.
