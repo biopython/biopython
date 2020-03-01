@@ -138,7 +138,7 @@ class Parser:
                 node_children = {}
                 root = None
 
-                child_tags = node.getchildren()
+                child_tags = list(node)
                 nodes = []
                 edges = []
                 for child in child_tags:
@@ -155,7 +155,7 @@ class Parser:
                     if "root" in node.attrib and node.attrib["root"] == "true":
                         root = node_id
 
-                    for child in node.getchildren():
+                    for child in node:
                         if child.tag == qUri("nex:meta"):
                             self.add_annotation(node_dict[node_id], child)
 
@@ -176,7 +176,7 @@ class Parser:
                     ):
                         node_dict[tar]["confidence"] = float(edge.attrib["content"])
 
-                    for child in edge.getchildren():
+                    for child in edge:
                         if child.tag == qUri("nex:meta"):
                             self.add_annotation(node_dict[tar], child)
 
