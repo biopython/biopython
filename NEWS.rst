@@ -16,8 +16,6 @@ tested on PyPy3.6.1 v7.1.1-beta0.
 
 **We have dropped support for Python 2 now.**
 
-Use iter instead of getiterator for Python 3.9 compatibility.
-
 ``pairwise2`` now allows the input of parameters with keywords and returns the
 alignments as a list of ``namedtuples``.
 
