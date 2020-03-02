@@ -78,25 +78,24 @@ class Codeml(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        if True:  # Dummy statement to preserve indentation for diff
-            with open(self.ctl_file, "w") as ctl_handle:
-                ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
-                ctl_handle.write("outfile = %s\n" % self._rel_out_file)
-                ctl_handle.write("treefile = %s\n" % self._rel_tree)
-                for option in self._options.items():
-                    if option[1] is None:
-                        # If an option has a value of None, there's no need
-                        # to write it in the control file; it's normally just
-                        # commented out.
-                        continue
-                    if option[0] == "NSsites":
-                        # NSsites is stored in Python as a list but in the
-                        # control file it is specified as a series of numbers
-                        # separated by spaces.
-                        NSsites = " ".join(str(site) for site in option[1])
-                        ctl_handle.write("%s = %s\n" % (option[0], NSsites))
-                    else:
-                        ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+        with open(self.ctl_file, "w") as ctl_handle:
+            ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
+            ctl_handle.write("outfile = %s\n" % self._rel_out_file)
+            ctl_handle.write("treefile = %s\n" % self._rel_tree)
+            for option in self._options.items():
+                if option[1] is None:
+                    # If an option has a value of None, there's no need
+                    # to write it in the control file; it's normally just
+                    # commented out.
+                    continue
+                if option[0] == "NSsites":
+                    # NSsites is stored in Python as a list but in the
+                    # control file it is specified as a series of numbers
+                    # separated by spaces.
+                    NSsites = " ".join(str(site) for site in option[1])
+                    ctl_handle.write("%s = %s\n" % (option[0], NSsites))
+                else:
+                    ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Codeml instance."""
