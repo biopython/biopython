@@ -52,7 +52,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertNotIn("api_key=", handle.url)
         rec = Entrez.read(handle)
         handle.close()
-        self.assertTrue(isinstance(rec, dict))
+        self.assertIsInstance(rec, dict)
         self.assertIn("DbList", rec)
         # arbitrary number, just to make sure that DbList has contents
         self.assertTrue(len(rec["DbList"]) > 5)
@@ -66,7 +66,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn(URL_API_KEY, handle.url)
         rec = Entrez.read(handle)
         handle.close()
-        self.assertTrue(isinstance(rec, dict))
+        self.assertIsInstance(rec, dict)
         self.assertIn("DbList", rec)
         # arbitrary number, just to make sure that DbList has contents
         self.assertTrue(len(rec["DbList"]) > 5)
@@ -126,7 +126,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn("id=186972394", url)
         record = SeqIO.read(handle, "genbank")
         handle.close()
-        self.assertTrue(isinstance(record, SeqRecord))
+        self.assertIsInstance(record, SeqRecord)
         self.assertEqual("EU490707.1", record.id)
         self.assertEqual(1302, len(record))
 
@@ -142,7 +142,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn("id=19304878", url)
         record = Medline.read(handle)
         handle.close()
-        self.assertTrue(isinstance(record, dict))
+        self.assertIsInstance(record, dict)
         self.assertEqual("19304878", record["PMID"])
         self.assertEqual("10.1093/bioinformatics/btp163 [doi]", record["LID"])
 
