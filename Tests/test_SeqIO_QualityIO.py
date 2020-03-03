@@ -159,7 +159,7 @@ class TestFastqErrors(unittest.TestCase):
                 records = SeqIO.parse(handle, format)
                 for i in range(good_count):
                     record = next(records)  # Make sure no errors!
-                    self.assertTrue(isinstance(record, SeqRecord))
+                    self.assertIsInstance(record, SeqRecord)
                 self.assertRaises(ValueError, next, records)
 
     def check_general_fails(self, filename, good_count):

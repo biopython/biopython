@@ -36,7 +36,7 @@ class DistanceMatrixTest(unittest.TestCase):
 
     def test_good_construction(self):
         dm = DistanceMatrix(self.names, self.matrix)
-        self.assertTrue(isinstance(dm, TreeConstruction.DistanceMatrix))
+        self.assertIsInstance(dm, TreeConstruction.DistanceMatrix)
         self.assertEqual(dm.names[0], "Alpha")
         self.assertEqual(dm.matrix[2][1], 3)
         self.assertEqual(len(dm), 4)
@@ -182,7 +182,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
 
     def test_upgma(self):
         tree = self.constructor.upgma(self.dm)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         # tree_file = StringIO()
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/upgma.tre", "newick")
@@ -191,7 +191,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
 
     def test_nj(self):
         tree = self.constructor.nj(self.dm)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         # tree_file = StringIO()
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/nj.tre", "newick")
@@ -205,14 +205,14 @@ class DistanceTreeConstructorTest(unittest.TestCase):
             del self.min_dm[len(self.min_dm) - 1]
 
         min_tree = self.constructor.nj(self.min_dm)
-        self.assertTrue(isinstance(min_tree, BaseTree.Tree))
+        self.assertIsInstance(min_tree, BaseTree.Tree)
 
         ref_min_tree = Phylo.read("./TreeConstruction/nj_min.tre", "newick")
         self.assertTrue(Consensus._equal_topology(min_tree, ref_min_tree))
 
     def test_built_tree(self):
         tree = self.constructor.build_tree(self.aln)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         # tree_file = StringIO()
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/nj.tre", "newick")

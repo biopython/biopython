@@ -111,7 +111,7 @@ class StringMethodTests(unittest.TestCase):
             def pre_comp_function(x):
                 return x
 
-        self.assertTrue(isinstance(method_name, str))
+        self.assertIsInstance(method_name, str)
         for example1 in self._examples:
             if not hasattr(example1, method_name):
                 # e.g. MutableSeq does not support find
@@ -659,7 +659,7 @@ class StringMethodTests(unittest.TestCase):
             if isinstance(example1, MutableSeq):
                 continue
             mut = example1.tomutable()
-            self.assertTrue(isinstance(mut, MutableSeq))
+            self.assertIsInstance(mut, MutableSeq)
             self.assertEqual(str(mut), str(example1))
             self.assertEqual(mut.alphabet, example1.alphabet)
 
@@ -669,9 +669,9 @@ class StringMethodTests(unittest.TestCase):
             try:
                 seq = example1.toseq()
             except AttributeError:
-                self.assertTrue(isinstance(example1, Seq))
+                self.assertIsInstance(example1, Seq)
                 continue
-            self.assertTrue(isinstance(seq, Seq))
+            self.assertIsInstance(seq, Seq)
             self.assertEqual(str(seq), str(example1))
             self.assertEqual(seq.alphabet, example1.alphabet)
 

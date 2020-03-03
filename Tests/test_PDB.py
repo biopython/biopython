@@ -198,7 +198,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assertTrue(isinstance(s, Seq))
+        self.assertIsInstance(s, Seq)
         self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
@@ -217,7 +217,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assertTrue(isinstance(s, Seq))
+        self.assertIsInstance(s, Seq)
         self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
@@ -761,7 +761,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 220)
             # Check the sequence
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
             self.assertEqual(
@@ -780,7 +780,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
             # Second fragment
@@ -788,7 +788,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
             # Third fragment
@@ -796,7 +796,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TACQG", str(s))
 

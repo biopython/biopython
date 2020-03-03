@@ -500,7 +500,7 @@ class ModTest(unittest.TestCase):
                     self.assertIn(param, params, version_msg +
                                   ": '%s' not in parsed parameters"
                                   % (param))
-                    self.assertTrue(isinstance(params[param], float))
+                    self.assertIsInstance(params[param], float)
                     if param != "lnL":
                         self.assertTrue(params[param] >= 0)
 
