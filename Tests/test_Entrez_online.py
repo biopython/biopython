@@ -22,6 +22,7 @@ import sys
 import unittest
 
 import requires_internet
+
 requires_internet.check()
 
 
@@ -36,7 +37,6 @@ URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 
 class EntrezOnlineCase(unittest.TestCase):
-
     def test_no_api_key(self):
         """Test Entrez.read without API key."""
         cached = Entrez.api_key
@@ -73,8 +73,9 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL."""
-        handle = Entrez.efetch(db="protein", id="15718680, 157427902, 119703751",
-                               retmode="xml")
+        handle = Entrez.efetch(
+            db="protein", id="15718680, 157427902, 119703751", retmode="xml"
+        )
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
@@ -88,9 +89,14 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_webenv_search(self):
         """Test Entrez.search from link webenv history."""
-        handle = Entrez.elink(db="nucleotide", dbfrom="protein",
-                              id="22347800,48526535", webenv=None, query_key=None,
-                              cmd="neighbor_history")
+        handle = Entrez.elink(
+            db="nucleotide",
+            dbfrom="protein",
+            id="22347800,48526535",
+            webenv=None,
+            query_key=None,
+            cmd="neighbor_history",
+        )
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
@@ -102,10 +108,15 @@ class EntrezOnlineCase(unittest.TestCase):
 
         webenv = record["WebEnv"]
         query_key = record["LinkSetDbHistory"][0]["QueryKey"]
-        handle = Entrez.esearch(db="nucleotide", term=None,
-                                retstart=0, retmax=10,
-                                webenv=webenv, query_key=query_key,
-                                usehistory="y")
+        handle = Entrez.esearch(
+            db="nucleotide",
+            term=None,
+            retstart=0,
+            retmax=10,
+            webenv=webenv,
+            query_key=query_key,
+            usehistory="y",
+        )
         self.assertTrue(handle.url.startswith(URL_HEAD + "esearch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
@@ -116,8 +127,9 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_seqio_from_url(self):
         """Test Entrez into SeqIO.read from URL."""
-        handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb",
-                               retmode="text")
+        handle = Entrez.efetch(
+            db="nucleotide", id="186972394", rettype="gb", retmode="text"
+        )
         url = handle.url
         self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
         self.assertIn(URL_TOOL, url)
@@ -132,8 +144,9 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_medline_from_url(self):
         """Test Entrez into Medline.read from URL."""
-        handle = Entrez.efetch(db="pubmed", id="19304878", rettype="medline",
-                               retmode="text")
+        handle = Entrez.efetch(
+            db="pubmed", id="19304878", rettype="medline", retmode="text"
+        )
         url = handle.url
         self.assertTrue(url.startswith(URL_HEAD + "efetch.fcgi?"), url)
         self.assertIn(URL_TOOL, url)
@@ -166,8 +179,9 @@ class EntrezOnlineCase(unittest.TestCase):
     def test_elink(self):
         """Test Entrez.elink with multiple ids, both comma separated and as list."""
         # Commas: Link from protein to gene
-        handle = Entrez.elink(db="gene", dbfrom="protein",
-                              id="15718680,157427902,119703751")
+        handle = Entrez.elink(
+            db="gene", dbfrom="protein", id="15718680,157427902,119703751"
+        )
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
@@ -176,8 +190,9 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
         # Multiple ID entries: Find one-to-one links from protein to gene
-        handle = Entrez.elink(db="gene", dbfrom="protein",
-                              id=["15718680", "157427902", "119703751"])
+        handle = Entrez.elink(
+            db="gene", dbfrom="protein", id=["15718680", "157427902", "119703751"]
+        )
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
@@ -197,7 +212,10 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_egquery(self):
-        """Test Entrez.egquery which searches in all Entrez databases for a single text query."""
+        """Test Entrez.egquery.
+
+        which searches in all Entrez databases for a single text query.
+        """
         handle = Entrez.egquery(term="biopython")
         record = Entrez.read(handle)
         handle.close()
@@ -222,14 +240,19 @@ class EntrezOnlineCase(unittest.TestCase):
         """Test Entrez.ecitmatch to search for a citation."""
         citation = {
             "journal_title": "proc natl acad sci u s a",
-            "year": "1991", "volume": "88", "first_page": "3248",
-            "author_name": "mann bj", "key": "citation_1"
+            "year": "1991",
+            "volume": "88",
+            "first_page": "3248",
+            "author_name": "mann bj",
+            "key": "citation_1",
         }
         handle = Entrez.ecitmatch(db="pubmed", bdata=[citation])
         url = handle.url
         self.assertIn("retmode=xml", url)
         result = handle.read()
-        expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
+        expected_result = (
+            "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
+        )
         self.assertEqual(result, expected_result)
         handle.close()
 
@@ -254,7 +277,12 @@ class EntrezOnlineCase(unittest.TestCase):
                 self.assertEqual(2, len(recs))
 
         ids = (
-            [15718680], (15718680), {15718680}, 15718680, "15718680", "15718680,",
+            [15718680],
+            (15718680),
+            {15718680},
+            15718680,
+            "15718680",
+            "15718680,",
         )
         for _id in ids:
             with Entrez.efetch(db="protein", id=_id, retmode="xml") as handle:
