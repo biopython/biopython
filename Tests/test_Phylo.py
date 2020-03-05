@@ -122,9 +122,10 @@ class IOTests(unittest.TestCase):
         tree = Phylo.read(StringIO("A:0.1;"), "newick")
         mem_file = StringIO()
         Phylo.write(tree, mem_file, "newick", format_branch_length="%.0e")
-        # Py2.5 compat: Windows with Py2.5- represents this as 1e-001;
-        # on all other platforms it's 1e-01
-        self.assertIn(mem_file.getvalue().strip(), ["A:1e-01;", "A:1e-001;"])
+        value = mem_file.getvalue().strip()
+        self.assertTrue(value.startswith("A:"))
+        self.assertTrue(value.endswith(";"))
+        self.assertEqual(value[2:-1], "%.0e" % 0.1)
 
     def test_convert(self):
         """Convert a tree between all supported formats."""
@@ -151,14 +152,18 @@ class IOTests(unittest.TestCase):
         trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
         with tempfile.NamedTemporaryFile(mode="w") as out_handle:
             count = Phylo.write(trees, out_handle, "phyloxml")
-            self.assertEqual(13, count)
+        self.assertEqual(13, count)
 
     def test_convert_phyloxml_filename(self):
         """Write phyloxml to a given filename."""
         trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
-        tmp_filename = tempfile.mktemp()
-        count = Phylo.write(trees, tmp_filename, "phyloxml")
-        os.remove(tmp_filename)
+        out_handle = tempfile.NamedTemporaryFile(mode="w", delete=False)
+        out_handle.close()
+        tmp_filename = out_handle.name
+        try:
+            count = Phylo.write(trees, tmp_filename, "phyloxml")
+        finally:
+            os.remove(tmp_filename)
         self.assertEqual(13, count)
 
     def test_int_labels(self):
