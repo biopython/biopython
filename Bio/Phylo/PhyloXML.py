@@ -720,7 +720,7 @@ class Confidence(PhyloElement):
         return other.__rtruediv__(self.value)
 
     def __floordiv__(self, other):
-        """C-style and old-style division in Py3.0+."""
+        """C-style and old-style division."""
         return self.value.__floordiv__(other)
 
     def __rfloordiv__(self, other):

@@ -812,9 +812,9 @@ class Tree(TreeElement, TreeMixin):
 
         return Phylogeny.from_tree(self, **kwargs)
 
-    # XXX Py3 Compatibility: In Python 3.0+, **kwargs can be replaced with the
-    # named keyword argument outgroup_branch_length=None
-    def root_with_outgroup(self, outgroup_targets, *more_targets, **kwargs):
+    def root_with_outgroup(
+        self, outgroup_targets, *more_targets, outgroup_branch_length=None
+    ):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
         Operates in-place.
@@ -845,15 +845,6 @@ class Tree(TreeElement, TreeMixin):
             return
 
         prev_blen = outgroup.branch_length or 0.0
-        # Hideous kludge because Py2.x doesn't allow keyword args after *args
-        outgroup_branch_length = kwargs.get("outgroup_branch_length")
-        if outgroup_branch_length is not None:
-            if not (0 <= outgroup_branch_length <= prev_blen):
-                raise ValueError(
-                    "outgroup_branch_length must be between 0 "
-                    "and the original length of the branch "
-                    "leading to the outgroup."
-                )
 
         if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup
