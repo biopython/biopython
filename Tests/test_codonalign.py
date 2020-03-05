@@ -48,7 +48,7 @@ class TestCodonSeq(unittest.TestCase):
         self.assertRaises(ValueError, codonalign.CodonSeq, "AAA-TT")
         self.assertRaises(ValueError, codonalign.CodonSeq, "AAA-T")
         self.assertRaises(ValueError, codonalign.CodonSeq, "YVVRRDQQQ")
-        self.assertTrue(isinstance(codonseq1.toSeq(), Seq))
+        self.assertIsInstance(codonseq1.toSeq(), Seq)
 
 
 class TestCodonAlignment(unittest.TestCase):
@@ -66,7 +66,7 @@ class TestCodonAlignment(unittest.TestCase):
     def test_align(self):
         codonAlign = codonalign.CodonAlignment(self.seqrec)
         self.assertEqual(codonAlign.get_aln_length(), 6)
-        self.assertTrue(isinstance(codonAlign.toMultipleSeqAlignment(), MultipleSeqAlignment))
+        self.assertIsInstance(codonAlign.toMultipleSeqAlignment(), MultipleSeqAlignment)
 
 
 class TestAddition(unittest.TestCase):
@@ -86,13 +86,13 @@ class TestAddition(unittest.TestCase):
         """Check addition of CodonAlignment and MultipleSeqAlignment."""
         new_aln1 = self.codon_aln + self.multi_aln
 
-        self.assertTrue(isinstance(new_aln1, MultipleSeqAlignment))
+        self.assertIsInstance(new_aln1, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(str(new_aln1[x].seq), str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq))
 
         new_aln2 = self.multi_aln + self.codon_aln
 
-        self.assertTrue(isinstance(new_aln2, MultipleSeqAlignment))
+        self.assertIsInstance(new_aln2, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(str(new_aln2[x].seq), str(self.multi_aln[x].seq) + str(self.codon_aln[x].seq))
 
@@ -100,7 +100,7 @@ class TestAddition(unittest.TestCase):
         """Check addition of CodonAlignment and CodonAlignment."""
         new_aln = self.codon_aln + self.codon_aln
 
-        self.assertTrue(isinstance(new_aln, codonalign.CodonAlignment))
+        self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(str(new_aln[x].seq), str(self.codon_aln[x].seq) + str(self.codon_aln[x].seq))
 

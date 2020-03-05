@@ -89,16 +89,6 @@ astralEv_to_sql = {10: "e1", 5: "e0_7", 1: "e0", 0.5: "e_0_3", 0.1: "e_1",
 # fmt: on
 
 
-def _cmp(a, b):
-    """Implement cmp(x,y) for Python 3 (PRIVATE).
-
-    Based on Python 3 docs which say if you really need the cmp()
-    functionality, you could use the expression (a > b) -  (a < b)
-    as the equivalent for cmp(a, b)
-    """
-    return (a > b) - (a < b)
-
-
 def cmp_sccs(sccs1, sccs2):
     """Order SCOP concise classification strings (sccs).
 
@@ -111,13 +101,28 @@ def cmp_sccs(sccs1, sccs2):
     s1 = sccs1.split(".")
     s2 = sccs2.split(".")
 
-    if s1[0] != s2[0]:
-        return _cmp(s1[0], s2[0])
+    c1, c2 = s1[0], s2[0]
+    if c1 < c2:
+        return -1
+    if c1 > c2:
+        return +1
 
-    s1 = [int(x) for x in s1[1:]]
-    s2 = [int(x) for x in s2[1:]]
+    for c1, c2 in zip(s1[1:], s2[1:]):
+        i1 = int(c1)
+        i2 = int(c2)
+        if i1 < i2:
+            return -1
+        if i1 > i2:
+            return +1
 
-    return _cmp(s1, s2)
+    n1 = len(s1)
+    n2 = len(s2)
+    if n1 < n2:
+        return -1
+    if n1 > n2:
+        return +1
+
+    return 0
 
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")

@@ -107,7 +107,7 @@ class ScopTests(unittest.TestCase):
 
     def testConstructFromDirectory(self):
         scop = Scop(dir_path="SCOP", version="test")
-        self.assertTrue(isinstance(scop, Scop))
+        self.assertIsInstance(scop, Scop)
 
         domain = scop.getDomainBySid("d1hbia_")
         self.assertEqual(domain.sunid, 14996)

@@ -137,7 +137,7 @@ class FastTreeTestCase(unittest.TestCase):
         self.assertEqual(len(records), 1)
         cline = FastTreeCommandline(fasttree_exe, input=path)
         stdout, stderr = cline()
-        self.assertTrue("Unique: 1/1" in stderr)
+        self.assertIn("Unique: 1/1", stderr)
 
     def test_empty(self):
         path = "does_not_exist.fasta"

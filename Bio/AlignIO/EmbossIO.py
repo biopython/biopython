@@ -20,49 +20,6 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
-class EmbossWriter(SequentialAlignmentWriter):
-    """Emboss alignment writer (WORK IN PROGRESS).
-
-    Writes a simplfied version of the EMBOSS pairs/simple file format.
-    A lot of the information their tools record in their headers is not
-    available and is omitted.
-    """
-
-    def write_header(self):
-        """Write header for the file."""
-        handle = self.handle
-        handle.write("########################################\n")
-        handle.write("# Program: Biopython\n")
-        try:
-            handle.write("# Report_file: %s\n" % handle.name)
-        except AttributeError:
-            pass
-        handle.write("########################################\n")
-
-    def write_footer(self):
-        """Write footer for the file."""
-        handle = self.handle
-        handle.write("#---------------------------------------\n")
-        handle.write("#---------------------------------------\n")
-
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
-        handle = self.handle
-        handle.write("#=======================================\n")
-        handle.write("#\n")
-        handle.write("# Aligned_sequences: %i\n" % len(alignment))
-        for i, record in enumerate(alignment):
-            handle.write("# %i: %s\n" % (i + 1, record.id))
-        handle.write("#\n")
-        handle.write("# Length: %i\n" % alignment.get_alignment_length())
-        handle.write("#\n")
-        handle.write("#=======================================\n")
-        handle.write("\n")
-        raise NotImplementedError(
-            "The subclass should implement the write_alignment method."
-        )
-
-
 class EmbossIterator(AlignmentIterator):
     """Emboss alignment iterator.
 

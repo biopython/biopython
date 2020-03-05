@@ -528,11 +528,11 @@ class IndexDictTests(unittest.TestCase):
         assert not hasattr(rec_dict, "iteritems")
         for key, rec in rec_dict.items():
             self.assertIn(key, keys)
-            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIsInstance(rec, SeqRecord)
             self.assertIn(rec.id, ids)
         for rec in rec_dict.values():
             self.assertIn(key, keys)
-            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIsInstance(rec, SeqRecord)
             self.assertIn(rec.id, ids)
 
     def get_raw_check(self, filename, format, alphabet, comp):
