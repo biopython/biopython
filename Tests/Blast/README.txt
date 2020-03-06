@@ -221,7 +221,7 @@ for our mocked online tests in test_NCBI_qlast_mock.py:
 mock_actin.xml
 mock_disco.xml
 mock_orchid.xml
-mock_pcr_xml
+mock_pcr.xml
 mock_short_empty.xml
 mock_short_result.xml
 mock_wait.html

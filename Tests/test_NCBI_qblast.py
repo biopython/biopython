@@ -16,6 +16,13 @@ If an internet connection is available and run_tests.py has not given the argume
 module runs offline using a mocked version of urllib.request.urlopen, which returns
 file contents instead of internet responses.
 
+IMPORTANT:
+If you add new tests (or change existing tests) you must provide new 'mock' xml
+files which fulfill the requirements of the respective tests. These need to be
+added to the 'response_list' within the 'mock_response' function. Note: The
+tests are run in alphabetical order, so you must place your mock file at the
+correct position.
+
 """
 import unittest
 from unittest import mock
@@ -23,6 +30,7 @@ import warnings
 
 from urllib.error import HTTPError
 from io import BytesIO
+from io import StringIO
 
 from Bio import MissingExternalDependencyError
 from Bio import BiopythonWarning
@@ -46,37 +54,35 @@ if not requires_internet.check.available:
     # if the tests are running with --offline or if no internet is available,
     # we mock urlopen, so that it returns files from the blast folder
 
-    def mock_response(call_count):
+    def mock_response():
         """Mimick an NCBI qblast response."""
         # Each use of NCBIWWW.qblast makes two urlopen calls with different responses:
         # a. the 'wait' page, and b. the result.
-        if call_count % 2 == 0:
-            # This mimicks the 'wait' page:
-            return BytesIO(open("Blast/mock_wait.html", "rb").read())
-        else:
-            # These are the results:
-            if call_count == 1:
-                # test_blastp_nr_actin
-                return BytesIO(open("Blast/mock_actin.xml", "rb").read())
-            elif call_count == 3:
-                # test_discomegablast
-                return BytesIO(open("Blast/mock_disco.xml", "rb").read())
-            elif call_count == 5:
-                # test_orchid_est
-                return BytesIO(open("Blast/mock_orchid.xml", "rb").read())
-            elif call_count == 7:
-                # test_pcr_primers
-                return BytesIO(open("Blast/mock_pcr.xml", "rb").read())
-            elif call_count == 9:
-                # test_short_query #1: no results
-                return BytesIO(open("Blast/mock_short_empty.xml", "rb").read())
-            else:  # call_counts 11 & 13
-                # test_short_query #2 & #3: 5 results
-                return BytesIO(open("Blast/mock_short_result.xml", "rb").read())
+        wait = ["Blast/mock_wait.html"]  # This mimicks the 'wait' page
+
+        # These mimick the results. Add new mock files here, if you add more tests.
+        # Note: The test are run in alphabetical order, so place new files at the
+        # correct position.
+        response_list = [
+            "Blast/mock_actin.xml",  # result for test_blastp_nr_actin
+            "Blast/mock_disco.xml",  # result for test_discomegalast
+            "Blast/mock_orchid.xml",  # result for test_orchid_est
+            "Blast/mock_pcr.xml",  # result for test_pcr_primers
+            "Blast/mock_short_empty.xml",  # result for test_short_query # 1
+            "Blast/mock_short_result.xml",  # result for test_short_query # 2
+            "Blast/mock_short_result.xml",  # result for test_short_query # 3
+        ]
+
+        # Generate a list of responses with the structure wait|result|wait|result...
+        responses = (
+            BytesIO(open(a, "rb").read())
+            for b in zip(len(response_list) * wait, response_list)
+            for a in b
+        )
+        return responses
 
     NCBIWWW.time.sleep = mock.Mock()  # we don't want to wait 20 sec for each test...
-
-    NCBIWWW.urlopen = mock.Mock(side_effect=map(mock_response, range(14)))
+    NCBIWWW.urlopen = mock.Mock(side_effect=mock_response())
 
 
 #####################################################################
