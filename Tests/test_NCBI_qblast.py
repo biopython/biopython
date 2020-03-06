@@ -30,7 +30,6 @@ import warnings
 
 from urllib.error import HTTPError
 from io import BytesIO
-from io import StringIO
 
 from Bio import MissingExternalDependencyError
 from Bio import BiopythonWarning
