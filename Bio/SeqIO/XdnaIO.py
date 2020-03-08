@@ -20,6 +20,7 @@ from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
 
 
 _seq_types = {
@@ -153,7 +154,7 @@ def XdnaIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise ValueError("Xdna files must be opened in binary mode.") from None
+            raise StreamModeError("Xdna files must be opened in binary mode.") from None
     # Parse fixed-size header and do some rudimentary checks
     #
     # The "neg_length" value is the length of the part of the sequence

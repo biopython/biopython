@@ -20,6 +20,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
+from Bio import StreamModeError
 
 
 def SimpleFastaParser(source):
@@ -49,7 +50,7 @@ def SimpleFastaParser(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("Fasta files must be opened in text mode") from None
+            raise StreamModeError("Fasta files must be opened in text mode") from None
 
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
@@ -122,7 +123,7 @@ def FastaTwoLineParser(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("Fasta files must be opened in text mode") from None
+            raise StreamModeError("Fasta files must be opened in text mode") from None
 
     idx = -1  # for empty file
     try:

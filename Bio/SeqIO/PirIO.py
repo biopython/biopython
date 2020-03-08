@@ -97,6 +97,7 @@ from Bio.Alphabet import (
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequenceWriter
+from Bio import StreamModeError
 
 
 _pir_alphabets = {
@@ -135,7 +136,7 @@ def PirIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("PIR files must be opened in binary mode.") from None
+            raise StreamModeError("PIR files must be opened in binary mode.") from None
 
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
