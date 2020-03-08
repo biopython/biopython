@@ -251,7 +251,9 @@ def SnapGeneIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise StreamModeError("SnapGene files must be opened in binary mode.") from None
+            raise StreamModeError(
+                "SnapGene files must be opened in binary mode."
+            ) from None
 
     record = SeqRecord(None)
 

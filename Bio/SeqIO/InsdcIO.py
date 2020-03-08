@@ -94,7 +94,9 @@ def GenBankIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise StreamModeError("GenBank files must be opened in text mode.") from None
+            raise StreamModeError(
+                "GenBank files must be opened in text mode."
+            ) from None
 
     try:
         records = GenBankScanner(debug=0).parse_records(handle)
