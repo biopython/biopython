@@ -28,6 +28,8 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+from Bio import StreamModeError
+
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 
@@ -37,14 +39,6 @@ CUR_DIR = os.getcwd()
 def add_prefix(key):
     """Sample key_function for testing index code."""
     return "id_" + key
-
-
-def gzip_open(filename, format):
-    """Open gzip file in either binary or text mode as needed."""
-    if format in SeqIO._BinaryFormats:
-        return gzip.open(filename, "rb")
-    else:
-        return gzip.open(filename, "rt")
 
 
 if sqlite3:
@@ -347,6 +341,8 @@ if sqlite3:
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
 
+    modes = {}
+
     def setUp(self):
         os.chdir(CUR_DIR)
         h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
@@ -357,10 +353,28 @@ class IndexDictTests(unittest.TestCase):
         if os.path.isfile(self.index_tmp):
             os.remove(self.index_tmp)
 
+    @classmethod
+    def get_mode(cls, fmt):
+        mode = cls.modes.get(fmt)
+        if mode is not None:
+            return mode
+        streams = {"rt": StringIO(), "rb": BytesIO()}
+        for mode in streams:
+            try:
+                SeqIO.read(streams[mode], fmt)
+            except StreamModeError:
+                continue
+            except ValueError:
+                pass
+            cls.modes[fmt] = mode
+            return mode
+        raise RuntimeError("Failed to find file mode for %s" % fmt)
+
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
-            with gzip_open(filename, format) as handle:
+            mode = self.get_mode(format)
+            with gzip.open(filename, mode) as handle:
                 id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
@@ -429,7 +443,8 @@ class IndexDictTests(unittest.TestCase):
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
-            with gzip_open(filename, format) as handle:
+            mode = self.get_mode(format)
+            with gzip.open(filename, mode) as handle:
                 id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
@@ -540,7 +555,8 @@ class IndexDictTests(unittest.TestCase):
         if comp:
             with gzip.open(filename, "rb") as handle:
                 raw_file = handle.read()
-            with gzip_open(filename, format) as handle:
+            mode = self.get_mode(format)
+            with gzip.open(filename, mode) as handle:
                 id_list = [
                     rec.id.lower() for rec in SeqIO.parse(handle, format, alphabet)
                 ]
@@ -606,7 +622,7 @@ class IndexDictTests(unittest.TestCase):
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
             # __getitem__ SFF code is working.
-            if format in SeqIO._BinaryFormats:
+            if self.get_mode(format) == "rb":
                 handle = BytesIO(raw)
             else:
                 handle = StringIO(raw.decode())

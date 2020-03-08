@@ -236,6 +236,8 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
+
 
 _null = b"\0"
 _sff = b".sff"
@@ -986,7 +988,7 @@ def SffIterator(source, alphabet=Alphabet.generic_dna, trim=False):
         handle = open(source, "rb")
     except TypeError:
         if source.read(0) != b"":
-            raise ValueError("SFF files must be opened in binary mode.") from None
+            raise StreamModeError("SFF files must be opened in binary mode.") from None
         try:
             if 0 != source.tell():
                 raise ValueError("Not at start of file, offset %i" % source.tell())

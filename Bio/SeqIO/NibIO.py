@@ -43,6 +43,8 @@ description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
+
 import struct
 import sys
 
@@ -83,7 +85,7 @@ def NibIterator(source, alphabet=None):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise ValueError("nib files must be opened in binary mode.") from None
+            raise StreamModeError("nib files must be opened in binary mode.") from None
 
     try:
         word = handle.read(4)
