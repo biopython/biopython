@@ -188,7 +188,7 @@ class PrimerSearchInputTest(unittest.TestCase):
         p_info.add_primer_set("Test2", "AATA", "TTAT")
 
         output = str(p_info)
-        self.assertEqual(output, "Test GATC CATG\n" "Test2 AATA TTAT\n")
+        self.assertEqual(output, "Test GATC CATG\nTest2 AATA TTAT\n")
 
 
 if __name__ == "__main__":
