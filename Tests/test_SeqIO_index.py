@@ -355,13 +355,13 @@ class IndexDictTests(unittest.TestCase):
 
     @classmethod
     def get_mode(cls, fmt):
+        """Determine file mode ("rt" or "rb") based on format."""
         mode = cls.modes.get(fmt)
         if mode is not None:
             return mode
-        streams = {"rt": StringIO(), "rb": BytesIO()}
-        for mode in streams:
+        for mode, stream in (("rt", StringIO()), ("rb", BytesIO())):
             try:
-                SeqIO.read(streams[mode], fmt)
+                SeqIO.read(stream, fmt)
             except StreamModeError:
                 continue
             except ValueError:
