@@ -511,7 +511,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                 self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
                 self.assertIn(
                     str(alignment[1].seq).replace("-", "").upper(),
-                    str(target.seq).upper()
+                    str(target.seq).upper(),
                 )
             else:
                 # Global alignment
