@@ -307,7 +307,7 @@ def _sff_file_header(handle):
             flowgram_format,
         ) = struct.unpack(fmt, data)
     except TypeError:
-        raise ValueError("SFF files must NOT be opened in text mode, binary required.")
+        raise StreamModeError("SFF files must be opened in binary mode.")
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")

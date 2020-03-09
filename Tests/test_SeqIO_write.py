@@ -16,6 +16,7 @@ from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from Bio import Alphabet
+from test_SeqIO import SeqIOTestsBaseClass
 
 
 # List of formats including alignment only file formats we can read AND write.
@@ -75,7 +76,7 @@ test_records[4][0][2].annotations["comment"] = (
 test_records[4][0][2].annotations["weight"] = 2.5
 
 
-class WriterTests(unittest.TestCase):
+class WriterTests(SeqIOTestsBaseClass):
     """Cunning unit test where methods are added at run time."""  # TODO - Let's not be cunning
 
     def check(self, records, format):
@@ -116,10 +117,11 @@ class WriterTests(unittest.TestCase):
             self.check_simple(records, format)
 
     def check_simple(self, records, format):
-        if format in SeqIO._BinaryFormats:
-            handle = BytesIO()
-        else:
+        mode = self.get_mode(format)
+        if mode == "t":
             handle = StringIO()
+        elif mode == "b":
+            handle = BytesIO()
         count = SeqIO.write(records, handle, format)
         self.assertEqual(count, len(records))
         # Now read them back...
@@ -138,10 +140,11 @@ class WriterTests(unittest.TestCase):
         handle.close()
 
     def check_write_fails(self, records, format, err_type, err_msg=""):
-        if format in SeqIO._BinaryFormats:
-            handle = BytesIO()
-        else:
+        mode = self.get_mode(format)
+        if mode == "t":
             handle = StringIO()
+        elif mode == "b":
+            handle = BytesIO()
         if err_msg:
             try:
                 with warnings.catch_warnings():
