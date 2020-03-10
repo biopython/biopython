@@ -94,10 +94,10 @@ from Bio.Alphabet import (
     generic_dna,
     generic_rna,
 )
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
+from Bio import StreamModeError
 
 
 _pir_alphabets = {
@@ -136,7 +136,7 @@ def PirIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("PIR files must be opened in binary mode.") from None
+            raise StreamModeError("PIR files must be opened in binary mode.") from None
 
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
@@ -189,7 +189,7 @@ def PirIterator(source):
             handle.close()
 
 
-class PirWriter(SequentialSequenceWriter):
+class PirWriter(SequenceWriter):
     """Class to write PIR format files."""
 
     def __init__(self, handle, wrap=60, record2title=None, code=None):
@@ -229,7 +229,7 @@ class PirWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
+        super().__init__(handle)
         self.wrap = None
         if wrap:
             if wrap < 1:
@@ -240,10 +240,6 @@ class PirWriter(SequentialSequenceWriter):
 
     def write_record(self, record):
         """Write a single PIR record to the file."""
-        assert self._header_written
-        assert not self._footer_written
-        self._record_written = True
-
         if self.record2title:
             title = self.clean(self.record2title(record))
         else:

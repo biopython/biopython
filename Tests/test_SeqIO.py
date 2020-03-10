@@ -23,6 +23,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
+from Bio import StreamModeError
 
 
 # TODO - Check that desired warnings are issued. Used to do that by capturing
@@ -72,6 +73,29 @@ for format in sorted(AlignIO._FormatToWriter):
         test_write_read_alignment_formats.append(format)
 test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
+
+
+class SeqIOTestsBaseClass(unittest.TestCase):
+    """Base class for Bio.SeqIO unit tests."""
+
+    modes = {}
+
+    @classmethod
+    def get_mode(cls, fmt):
+        """Determine if file mode should be text ("t") or binary ("b") based on format."""
+        mode = cls.modes.get(fmt)
+        if mode is not None:
+            return mode
+        for mode, stream in (("t", StringIO()), ("b", BytesIO())):
+            try:
+                SeqIO.read(stream, fmt)
+            except StreamModeError:
+                continue
+            except ValueError:  # SeqIO.read will complain that the stream is empty
+                pass
+            cls.modes[fmt] = mode
+            return mode
+        raise RuntimeError("Failed to find file mode for %s" % fmt)
 
 
 class ForwardOnlyHandle:
@@ -161,7 +185,7 @@ class TestZipped(unittest.TestCase):
                 list(SeqIO.parse(handle, "gb"))
 
 
-class TestSeqIO(unittest.TestCase):
+class TestSeqIO(SeqIOTestsBaseClass):
     def setUp(self):
         self.addTypeEqualityFunc(SeqRecord, self.compare_record)
 
@@ -221,10 +245,11 @@ class TestSeqIO(unittest.TestCase):
                 # rather long, and it seems a bit pointless to record them.
                 continue
             # Going to write to a handle...
-            if format in SeqIO._BinaryFormats:
-                handle = BytesIO()
-            else:
+            mode = self.get_mode(format)
+            if mode == "t":
                 handle = StringIO()
+            elif mode == "b":
+                handle = BytesIO()
 
             if unequal_length and format in AlignIO._FormatToWriter:
                 msg = "Sequences must all be the same length"
@@ -285,7 +310,7 @@ class TestSeqIO(unittest.TestCase):
                 handle.seek(0)
                 raise ValueError(
                     "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
-                )
+                ) from None
 
             self.assertEqual(len(records2), t_count)
             for r1, r2 in zip(records, records2):
@@ -353,14 +378,14 @@ class TestSeqIO(unittest.TestCase):
 
             if len(records) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
-                if format in SeqIO._BinaryFormats:
-                    handle = BytesIO()
-                else:
+                if mode == "t":
                     handle = StringIO()
+                elif mode == "b":
+                    handle = BytesIO()
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", BiopythonWarning)
                     SeqIO.write(records[0], handle, format)
-                    if format not in SeqIO._BinaryFormats:
+                    if mode == "t":
                         self.assertEqual(handle.getvalue(), records[0].format(format))
         if debug:
             self.fail(
@@ -380,11 +405,7 @@ class TestSeqIO(unittest.TestCase):
         expected_alignment,
         expected_messages,
     ):
-        if t_format in SeqIO._BinaryFormats:
-            mode = "rb"
-        else:
-            mode = "r"
-
+        mode = "r" + self.get_mode(t_format)
         with warnings.catch_warnings():
             # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
             # location
@@ -395,9 +416,8 @@ class TestSeqIO(unittest.TestCase):
             warnings.simplefilter("ignore", PDBConstructionWarning)
 
             # Try as an iterator using handle
-            h = open(t_filename, mode)
-            records = list(SeqIO.parse(handle=h, format=t_format))
-            h.close()
+            with open(t_filename, mode) as h:
+                records = list(SeqIO.parse(handle=h, format=t_format))
             self.assertEqual(
                 len(records),
                 t_count,
@@ -412,54 +432,52 @@ class TestSeqIO(unittest.TestCase):
 
             # Try using the iterator with the next() method
             records3 = []
-            h = open(t_filename, mode)
-            seq_iterator = SeqIO.parse(handle=h, format=t_format)
-            while True:
-                try:
-                    record = next(seq_iterator)
-                except StopIteration:
-                    break
-                self.assertIsNotNone(
-                    record, "Should raise StopIteration, not return None"
-                )
-                records3.append(record)
-            h.close()
+            with open(t_filename, mode) as h:
+                seq_iterator = SeqIO.parse(handle=h, format=t_format)
+                while True:
+                    try:
+                        record = next(seq_iterator)
+                    except StopIteration:
+                        break
+                    self.assertIsNotNone(
+                        record, "Should raise StopIteration, not return None"
+                    )
+                    records3.append(record)
             self.assertEqual(len(records3), t_count)
 
             # Try a mixture of next() and list (a torture test!)
-            h = open(t_filename, mode)
-            seq_iterator = SeqIO.parse(handle=h, format=t_format)
-            try:
-                record = next(seq_iterator)
-            except StopIteration:
-                record = None
-            if record is not None:
-                records4 = [record]
-                records4.extend(list(seq_iterator))
-            else:
-                records4 = []
-            h.close()
+            with open(t_filename, mode) as h:
+                seq_iterator = SeqIO.parse(handle=h, format=t_format)
+                try:
+                    record = next(seq_iterator)
+                except StopIteration:
+                    record = None
+                if record is not None:
+                    records4 = [record]
+                    records4.extend(list(seq_iterator))
+                else:
+                    records4 = []
             self.assertEqual(len(records4), t_count)
 
             # Try a mixture of next() and for loop (a torture test!)
             # with a forward-only-handle
-            if t_format == "abi":
-                # Temp hack
-                h = open(t_filename, mode)
-            else:
-                h = ForwardOnlyHandle(open(t_filename, mode))
-            seq_iterator = SeqIO.parse(h, format=t_format)
-            try:
-                record = next(seq_iterator)
-            except StopIteration:
-                record = None
-            if record is not None:
-                records5 = [record]
-                for record in seq_iterator:
-                    records5.append(record)
-            else:
-                records5 = []
-            h.close()
+            with open(t_filename, mode) as h:
+                if t_format == "abi":
+                    # Temporary hack
+                    fh = h
+                else:
+                    fh = ForwardOnlyHandle(h)
+                seq_iterator = SeqIO.parse(fh, format=t_format)
+                try:
+                    record = next(seq_iterator)
+                except StopIteration:
+                    record = None
+                if record is not None:
+                    records5 = [record]
+                    for record in seq_iterator:
+                        records5.append(record)
+                else:
+                    records5 = []
             self.assertEqual(len(records5), t_count)
 
             for i in range(t_count):
@@ -581,9 +599,8 @@ class TestSeqIO(unittest.TestCase):
                     self.assertIsInstance(base_alpha, given_base.__class__)
                     self.assertEqual(base_alpha, given_base)
                 if t_count == 1:
-                    h = open(t_filename, mode)
-                    record = SeqIO.read(h, t_format, given_alpha)
-                    h.close()
+                    with open(t_filename, mode) as h:
+                        record = SeqIO.read(h, t_format, given_alpha)
                     self.assertIsInstance(base_alpha, given_base.__class__)
                     self.assertEqual(base_alpha, given_base)
             for given_alpha in bad:
@@ -672,7 +689,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -774,7 +791,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -1360,7 +1377,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -1489,7 +1506,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -1537,7 +1554,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -1585,7 +1602,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -1730,7 +1747,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -1776,7 +1793,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
             "genbank": "Invalid whitespace in 'one should be punished, for (that)!' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'one should be punished, for (that)!'",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
             "sff": "Missing SFF flow information",
@@ -2314,7 +2331,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
             "sff": "Missing SFF flow information",
@@ -3126,7 +3143,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
             "sff": "Missing SFF flow information",
@@ -3160,7 +3177,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
@@ -3418,7 +3435,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -3584,7 +3601,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -3640,7 +3657,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -3913,7 +3930,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -3959,7 +3976,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -4005,7 +4022,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -4044,7 +4061,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -4087,7 +4104,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -4225,7 +4242,7 @@ class TestSeqIO(unittest.TestCase):
         lengths = [856, 3296]
         alignment = None
         messages = {
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4351,7 +4368,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -4391,7 +4408,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "seqxml": "Need a DNA, RNA or Protein alphabet",
@@ -4460,7 +4477,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
             "sff": "Missing SFF flow information",
@@ -4528,7 +4545,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
             "sff": "Missing SFF flow information",
@@ -4567,7 +4584,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
             "sff": "Missing SFF flow information",
@@ -4664,7 +4681,7 @@ class TestSeqIO(unittest.TestCase):
             "embl": "Need a DNA, RNA or Protein alphabet",
             "genbank": "Need a Nucleotide or Protein alphabet",
             "imgt": "Need a DNA, RNA or Protein alphabet",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
@@ -5050,7 +5067,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
             "genbank": "Invalid whitespace in 'empty description' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'empty description'",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
             "sff": "Missing SFF flow information",
@@ -5084,7 +5101,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
             "sff": "Missing SFF flow information",
@@ -5212,7 +5229,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "seqxml": "source should be of type string",
@@ -5304,7 +5321,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "sff": "Missing SFF flow information",
@@ -5366,7 +5383,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "sff": "Missing SFF flow information",
@@ -5428,7 +5445,7 @@ class TestSeqIO(unittest.TestCase):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "nib": "More than one sequence found",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "sff": "Missing SFF flow information",
@@ -5504,24 +5521,25 @@ class TestSeqIO(unittest.TestCase):
     def test_empty_file(self):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
-            if t_format in SeqIO._BinaryFormats:
+            mode = self.get_mode(t_format)
+            if mode == "t":
+                handle = StringIO()
+                if t_format in (
+                    "uniprot-xml",
+                    "pdb-seqres",
+                    "pdb-atom",
+                    "cif-atom",
+                    "cif-seqres",
+                ):
+                    with self.assertRaisesRegex(ValueError, "Empty file."):
+                        list(SeqIO.parse(handle, t_format))
+                else:
+                    records = list(SeqIO.parse(handle, t_format))
+                    self.assertEqual(len(records), 0)
+            elif mode == "b":
                 handle = BytesIO()
                 with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
-            elif t_format in (
-                "uniprot-xml",
-                "pdb-seqres",
-                "pdb-atom",
-                "cif-atom",
-                "cif-seqres",
-            ):
-                handle = StringIO()
-                with self.assertRaisesRegex(ValueError, "Empty file."):
-                    list(SeqIO.parse(handle, t_format))
-            else:
-                handle = StringIO()
-                records = list(SeqIO.parse(handle, t_format))
-                self.assertEqual(len(records), 0)
 
 
 if __name__ == "__main__":

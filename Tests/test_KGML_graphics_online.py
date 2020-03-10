@@ -21,7 +21,7 @@ try:
     from reportlab.lib.pagesizes import A4
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 # Do we have PIL?
 try:
@@ -29,7 +29,7 @@ try:
 except ImportError:
     raise MissingExternalDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
-        "if you want to use bitmaps from KGML.")
+        "if you want to use bitmaps from KGML.") from None
 
 
 # Biopython Bio.KEGG.KGML

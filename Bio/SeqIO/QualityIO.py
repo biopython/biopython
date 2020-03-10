@@ -363,7 +363,7 @@ are approximately equal.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 from math import log
@@ -918,7 +918,7 @@ def FastqGeneralIterator(source):
         if handle.read(0) != "":
             raise ValueError("Fastq files must be opened in text mode") from None
     try:
-        for line in handle:
+        while True:
             if line[0] != "@":
                 raise ValueError(
                     "Records in Fastq files should start with '@' character"
@@ -936,32 +936,53 @@ def FastqGeneralIterator(source):
                     raise ValueError("End of file without quality information.")
                 else:
                     raise ValueError("Unexpected end of file")
+            # The title here is optional, but if present must match!
+            second_title = line[1:].rstrip()
+            if second_title and second_title != title_line:
+                raise ValueError("Sequence and quality captions differ.")
+            # This is going to slow things down a little, but assuming
+            # this isn't allowed we should try and catch it here:
             if " " in seq_string or "\t" in seq_string:
                 raise ValueError("Sequence should not contain whitespace.")
             elif "@" in seq_string:
                 raise ValueError("Sequence should not contain '@'.")
             seq_len = len(seq_string)
-            # The title here is optional, but if present must match!
-            second_title = line[1:].rstrip()
-            if second_title and second_title != title_line:
-                raise ValueError("Sequence and quality captions differ.")
 
             # There will now be at least one line of quality data, followed by
             # another sequence, or EOF
+            line = None
             quality_string = ""
             for line in handle:
+                if line[0] == "@":
+                    # This COULD be the start of a new sequence. However, it MAY just
+                    # be a line of quality data which starts with a "@" character.  We
+                    # should be able to check this by looking at the sequence length
+                    # and the amount of quality data found so far.
+                    if len(quality_string) >= seq_len:
+                        # We expect it to be equal if this is the start of a new record.
+                        # If the quality data is longer, we'll raise an error below.
+                        break
+                    # Continue - its just some (more) quality data.
                 quality_string += line.rstrip()
-                if len(quality_string) == seq_len:
-                    break  # Typical case
-                if len(quality_string) > seq_len:
-                    raise ValueError(
-                        "Lengths of sequence and quality values differs for %s (%i and %i)."
-                        % (title_line, seq_len, len(quality_string))
-                    )
             else:
-                raise ValueError("Unexpected end of file")
+                if line is None:
+                    raise ValueError("Unexpected end of file")
+                line = None
+
+            if seq_len != len(quality_string):
+                raise ValueError(
+                    "Lengths of sequence and quality values differs for %s (%i and %i)."
+                    % (title_line, seq_len, len(quality_string))
+                )
+
             # Return the record and then continue...
             yield (title_line, seq_string, quality_string)
+
+            if line is None:
+                break
+    finally:
+        if handle is not source:
+            handle.close()
 
     finally:
         if handle is not source:
@@ -1403,7 +1424,7 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
             handle.close()
 
 
-class FastqPhredWriter(SequentialSequenceWriter):
+class FastqPhredWriter(SequenceWriter):
     """Class to write standard FASTQ format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
@@ -1507,7 +1528,7 @@ def as_fastq(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-class QualPhredWriter(SequentialSequenceWriter):
+class QualPhredWriter(SequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
@@ -1551,7 +1572,7 @@ class QualPhredWriter(SequentialSequenceWriter):
         The record2title argument is present for consistency with the
         Bio.SeqIO.FastaIO writer class.
         """
-        SequentialSequenceWriter.__init__(self, handle)
+        super().__init__(handle)
         # self.handle = handle
         self.wrap = None
         if wrap:
@@ -1656,7 +1677,7 @@ def as_qual(record):
     return "".join(lines)
 
 
-class FastqSolexaWriter(SequentialSequenceWriter):
+class FastqSolexaWriter(SequenceWriter):
     r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities) (OBSOLETE).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
@@ -1763,7 +1784,7 @@ def as_fastq_solexa(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-class FastqIlluminaWriter(SequentialSequenceWriter):
+class FastqIlluminaWriter(SequenceWriter):
     r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores) (OBSOLETE).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,

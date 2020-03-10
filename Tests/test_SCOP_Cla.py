@@ -13,26 +13,21 @@ from Bio.SCOP import Cla
 
 
 class ClaTests(unittest.TestCase):
-
     def setUp(self):
         self.filename = "./SCOP/dir.cla.scop.txt_test"
 
     def testParse(self):
         """Test if all records in a CLA file are being read."""
-        f = open(self.filename)
-        try:
-            count = 0
+        count = 0
+        with open(self.filename) as f:
             records = Cla.parse(f)
             for record in records:
                 count += 1
-            self.assertEqual(count, 14)
-        finally:
-            f.close()
+        self.assertEqual(count, 14)
 
     def testStr(self):
         """Test if we can convert each record to a string correctly."""
-        f = open(self.filename)
-        try:
+        with open(self.filename) as f:
             for line in f:
                 record = Cla.Record(line)
                 # The SCOP Classification file format which can be found at
@@ -42,17 +37,14 @@ class ClaTests(unittest.TestCase):
                 # there, NOT that they are in the same order.
                 # End of line is platform dependent. Strip it off
                 expected_hierarchy = line.rstrip().split("\t")[5].split(",")
-                expected_hierarchy = dict(pair.split("=") for pair
-                                          in expected_hierarchy)
+                expected_hierarchy = dict(
+                    pair.split("=") for pair in expected_hierarchy
+                )
                 actual_hierarchy = str(record).rstrip().split("\t")[5].split(",")
-                actual_hierarchy = dict(pair.split("=") for pair
-                                        in actual_hierarchy)
-                self.assertEqual(len(actual_hierarchy),
-                                 len(expected_hierarchy))
+                actual_hierarchy = dict(pair.split("=") for pair in actual_hierarchy)
+                self.assertEqual(len(actual_hierarchy), len(expected_hierarchy))
                 for key, actual_value in actual_hierarchy.items():
                     self.assertEqual(actual_value, expected_hierarchy[key])
-        finally:
-            f.close()
 
     def testError(self):
         """Test if a corrupt record raises the appropriate exception."""
@@ -69,13 +61,18 @@ class ClaTests(unittest.TestCase):
         self.assertEqual(record.residues.fragments, (("T", "", ""), ("U", "91", "106")))
         self.assertEqual(record.sccs, "b.1.2.1")
         self.assertEqual(record.sunid, 21953)
-        self.assertEqual(record.hierarchy, {"cl": 48724,
-                                            "cf": 48725,
-                                            "sf": 49265,
-                                            "fa": 49266,
-                                            "dm": 49267,
-                                            "sp": 49268,
-                                            "px": 21953})
+        self.assertEqual(
+            record.hierarchy,
+            {
+                "cl": 48724,
+                "cf": 48725,
+                "sf": 49265,
+                "fa": 49266,
+                "dm": 49267,
+                "sp": 49268,
+                "px": 21953,
+            },
+        )
 
     def testIndex(self):
         """Test CLA file indexing."""

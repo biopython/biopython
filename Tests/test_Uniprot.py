@@ -15,16 +15,6 @@ from Bio.SeqRecord import SeqRecord
 from seq_tests_common import compare_reference, compare_record
 
 
-# Left as None if the import within UniProtIO fails
-if SeqIO.UniprotIO.ElementTree is None:
-    from Bio import MissingPythonDependencyError
-    # TODO: Can this fail on Python 2.7 onwards?
-    raise MissingPythonDependencyError("No ElementTree module was found. "
-                                       "Use Python 2.5+, lxml or elementtree "
-                                       "if you want to use "
-                                       "Bio.SeqIO.UniprotIO.")
-
-
 class TestUniprot(unittest.TestCase):
     """Tests Uniprot XML parser."""
 
@@ -35,10 +25,10 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        with open(datafile) as test_handle:
-            seq_record = SeqIO.read(test_handle, "uniprot-xml")
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "uniprot-xml")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(seq_record.id, "Q91G55")
@@ -88,11 +78,10 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "uniprot-xml")
-        test_handle.close()
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "uniprot-xml")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test general record entries
         self.assertEqual(seq_record.id, "O44185")
@@ -279,11 +268,10 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test ProteinExistence (the numerical value describing the evidence for the existence of the protein)
         self.assertEqual(seq_record.annotations["protein_existence"], 1)
@@ -299,11 +287,10 @@ class TestUniprot(unittest.TestCase):
 
         datafile = os.path.join("SwissProt", filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as handle:
+            seq_record = SeqIO.read(handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test Sequence version
         self.assertEqual(seq_record.annotations["sequence_version"], 34)
@@ -442,9 +429,10 @@ class TestUniprot(unittest.TestCase):
 
     def test_submittedName_allowed(self):
         """Checks if parser supports new XML Element (submittedName)."""
-        for entry in SeqIO.parse(open("SwissProt/R5HY77.xml"), "uniprot-xml"):
-            self.assertEqual(entry.id, "R5HY77")
-            self.assertEqual(entry.description, "Elongation factor Ts")
+        with open("SwissProt/R5HY77.xml") as handle:
+            for entry in SeqIO.parse(handle, "uniprot-xml"):
+                self.assertEqual(entry.id, "R5HY77")
+                self.assertEqual(entry.description, "Elongation factor Ts")
 
 
 if __name__ == "__main__":

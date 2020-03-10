@@ -120,9 +120,8 @@ class TestXdna(unittest.TestCase):
 class TestInvalidXdna(unittest.TestCase):
 
     def setUp(self):
-        f = open("Xdna/sample-a.xdna", "rb")
-        self.buffer = f.read()
-        f.close()
+        with open("Xdna/sample-a.xdna", "rb") as f:
+            self.buffer = f.read()
 
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)

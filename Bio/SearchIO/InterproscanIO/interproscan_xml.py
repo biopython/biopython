@@ -8,7 +8,6 @@
 """Bio.SearchIO parser for InterProScan XML output formats."""
 # for more info: https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats
 
-import sys
 import re
 from xml.etree import ElementTree
 

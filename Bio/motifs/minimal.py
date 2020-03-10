@@ -7,9 +7,7 @@
 # package.
 """Module for the support of MEME minimal motif format."""
 
-from Bio import Seq
 from Bio import motifs
-import math
 
 
 def read(handle):

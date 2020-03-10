@@ -1095,7 +1095,7 @@ class DatabaseLoader:
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
             except Exception:
-                raise ValueError("Parsing of db_xref failed: '%s'" % value)
+                raise ValueError("Parsing of db_xref failed: '%s'" % value) from None
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
             for accession in accessions:
@@ -1177,7 +1177,9 @@ class DatabaseLoader:
                 db = db.strip()
                 accession = accession.strip()
             except Exception:
-                raise ValueError("Parsing of dbxrefs list failed: '%s'" % value)
+                raise ValueError(
+                    "Parsing of dbxrefs list failed: '%s'" % value
+                ) from None
             # Get the dbxref_id value for the dbxref data
             dbxref_id = self._get_dbxref_id(db, accession)
             # Insert the bioentry_dbxref  data

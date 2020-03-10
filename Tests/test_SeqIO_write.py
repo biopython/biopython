@@ -16,6 +16,7 @@ from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from Bio import Alphabet
+from test_SeqIO import SeqIOTestsBaseClass
 
 
 # List of formats including alignment only file formats we can read AND write.
@@ -75,8 +76,8 @@ test_records[4][0][2].annotations["comment"] = (
 test_records[4][0][2].annotations["weight"] = 2.5
 
 
-class WriterTests(unittest.TestCase):
-    """Cunning unit test where methods are added at run time."""
+class WriterTests(SeqIOTestsBaseClass):
+    """Cunning unit test where methods are added at run time."""  # TODO - Let's not be cunning
 
     def check(self, records, format):
         """General test function with with a little format specific information.
@@ -85,6 +86,7 @@ class WriterTests(unittest.TestCase):
         """
         # TODO - Check the exception messages?
         lengths = len({len(r) for r in records})
+        dna = all(set(record.seq.upper()).issubset("ACGTN") for record in records)
         if not records and format in ["stockholm", "phylip", "phylip-relaxed",
                                       "phylip-sequential", "nexus", "clustal",
                                       "sff", "mauve"]:
@@ -96,6 +98,9 @@ class WriterTests(unittest.TestCase):
         elif lengths > 1 and format in AlignIO._FormatToWriter:
             self.check_write_fails(records, format, ValueError,
                                    "Sequences must all be the same length")
+        elif (not dna) and format == "nib":
+            self.check_write_fails(records, format, ValueError,
+                                   "Sequence should contain A,C,G,T,N,a,c,g,t,n only")
         elif len(records) > 1 and format in ["nib", "xdna"]:
             self.check_write_fails(records, format, ValueError,
                                    "More than one sequence found")
@@ -112,10 +117,11 @@ class WriterTests(unittest.TestCase):
             self.check_simple(records, format)
 
     def check_simple(self, records, format):
-        if format in SeqIO._BinaryFormats:
-            handle = BytesIO()
-        else:
+        mode = self.get_mode(format)
+        if mode == "t":
             handle = StringIO()
+        elif mode == "b":
+            handle = BytesIO()
         count = SeqIO.write(records, handle, format)
         self.assertEqual(count, len(records))
         # Now read them back...
@@ -134,10 +140,11 @@ class WriterTests(unittest.TestCase):
         handle.close()
 
     def check_write_fails(self, records, format, err_type, err_msg=""):
-        if format in SeqIO._BinaryFormats:
-            handle = BytesIO()
-        else:
+        mode = self.get_mode(format)
+        if mode == "t":
             handle = StringIO()
+        elif mode == "b":
+            handle = BytesIO()
         if err_msg:
             try:
                 with warnings.catch_warnings():

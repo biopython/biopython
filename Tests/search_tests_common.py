@@ -31,8 +31,8 @@ class CheckRaw(unittest.TestCase):
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
         new = idx.get_raw(id)
-        self.assertTrue(isinstance(new, bytes),
-                        "Didn't get bytes from %s get_raw" % self.fmt)
+        self.assertIsInstance(new, bytes,
+                              "Didn't get bytes from %s get_raw" % self.fmt)
         self.assertEqual(raw.replace(b"\r\n", b"\n"),
                          new.replace(b"\r\n", b"\n"))
         idx.close()
@@ -41,8 +41,8 @@ class CheckRaw(unittest.TestCase):
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             new = idx.get_raw(id)
-            self.assertTrue(isinstance(new, bytes),
-                            "Didn't get bytes from %s get_raw" % self.fmt)
+            self.assertIsInstance(new, bytes,
+                                  "Didn't get bytes from %s get_raw" % self.fmt)
             self.assertEqual(raw.replace(b"\r\n", b"\n"),
                              new.replace(b"\r\n", b"\n"))
             idx.close()
@@ -57,16 +57,9 @@ class CheckIndex(unittest.TestCase):
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
-        # check if Python3 installation has sqlite3
-        try:
-            import sqlite3
-        except ImportError:
-            sqlite3 = None
-
         if filename.endswith(".bgz"):
-            handle = gzip.open(filename)
-            parsed = list(SearchIO.parse(handle, format, **kwargs))
-            handle.close()
+            with gzip.open(filename) as handle:
+                parsed = list(SearchIO.parse(handle, format, **kwargs))
         else:
             parsed = list(SearchIO.parse(filename, format, **kwargs))
         # compare values by index

@@ -55,7 +55,7 @@ Note these examples only show the first 50 bases to keep the output short.
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO import QualityIO
 
 
@@ -96,12 +96,12 @@ def PhdIterator(source):
     # All done
 
 
-class PhdWriter(SequentialSequenceWriter):
+class PhdWriter(SequenceWriter):
     """Class to write Phd format files."""
 
     def __init__(self, handle):
         """Initialize the class."""
-        SequentialSequenceWriter.__init__(self, handle)
+        super().__init__(handle)
 
     def write_record(self, record):
         """Write a single Phd record to the file."""

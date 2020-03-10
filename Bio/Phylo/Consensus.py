@@ -523,7 +523,7 @@ def get_support(target_tree, trees, len_trees=None):
                 "Trees does not support len(trees), "
                 "you must provide the number of replicates in trees "
                 "as the optional parameter len_trees."
-            )
+            ) from None
 
     for clade in target_tree.find_clades(terminal=False):
         bitstr = _clade_to_bitstr(clade, term_names)

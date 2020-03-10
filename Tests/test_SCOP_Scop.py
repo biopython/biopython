@@ -15,7 +15,6 @@ from Bio.SCOP import Scop, cmp_sccs, parse_domain
 
 
 class ScopTests(unittest.TestCase):
-
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
         """Compare the two specified Cla lines for equality.
 
@@ -37,26 +36,18 @@ class ScopTests(unittest.TestCase):
         return True
 
     def testParse(self):
-        f = open("./SCOP/dir.cla.scop.txt_test")
-        try:
+        with open("./SCOP/dir.cla.scop.txt_test") as f:
             cla = f.read()
-            f.close()
-
-            f = open("./SCOP/dir.des.scop.txt_test")
+        with open("./SCOP/dir.des.scop.txt_test") as f:
             des = f.read()
-            f.close()
-
-            f = open("./SCOP/dir.hie.scop.txt_test")
+        with open("./SCOP/dir.hie.scop.txt_test") as f:
             hie = f.read()
-        finally:
-            f.close()
 
         scop = Scop(StringIO(cla), StringIO(des), StringIO(hie))
 
         cla_out = StringIO()
         scop.write_cla(cla_out)
-        lines = zip(cla.rstrip().split("\n"),
-                    cla_out.getvalue().rstrip().split("\n"))
+        lines = zip(cla.rstrip().split("\n"), cla_out.getvalue().rstrip().split("\n"))
         for expected_line, line in lines:
             self.assertTrue(self._compare_cla_lines(expected_line, line))
 
@@ -116,7 +107,7 @@ class ScopTests(unittest.TestCase):
 
     def testConstructFromDirectory(self):
         scop = Scop(dir_path="SCOP", version="test")
-        self.assertTrue(isinstance(scop, Scop))
+        self.assertIsInstance(scop, Scop)
 
         domain = scop.getDomainBySid("d1hbia_")
         self.assertEqual(domain.sunid, 14996)

@@ -20,6 +20,7 @@ from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
 
 
 _seq_types = {
@@ -153,7 +154,7 @@ def XdnaIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise ValueError("Xdna files must be opened in binary mode.") from None
+            raise StreamModeError("Xdna files must be opened in binary mode.") from None
     # Parse fixed-size header and do some rudimentary checks
     #
     # The "neg_length" value is the length of the part of the sequence
@@ -216,19 +217,35 @@ def XdnaIterator(source):
 class XdnaWriter(SequenceWriter):
     """Write files in the Xdna format."""
 
+    def __init__(self, target):
+        """Initialize an Xdna writer object.
+
+        Arguments:
+         - target - Output stream opened in binary mode, or a path to a file.
+
+        """
+        SequenceWriter.__init__(self, target, "wb")
+
     def write_file(self, records):
         """Write the specified record to a Xdna file.
 
-        Note that the function expects a list of records as per the
-        SequenceWriter interface, but the list should contain only one
-        record as the Xdna format is a mono-record format.
+        Note that the function expects a list (or iterable) of records
+        as per the SequenceWriter interface, but the list should contain
+        only one record as the Xdna format is a mono-record format.
         """
-        if not records:
-            raise ValueError("Must have one sequence")
-        if len(records) > 1:
-            raise ValueError("More than one sequence found")
+        records = iter(records)
 
-        record = records[0]
+        try:
+            record = next(records)
+        except StopIteration:
+            raise ValueError("Must have one sequence")
+
+        try:
+            next(records)
+            raise ValueError("More than one sequence found")
+        except StopIteration:
+            pass
+
         self._has_truncated_strings = False
 
         alptype = Alphabet._get_base_alphabet(record.seq.alphabet)

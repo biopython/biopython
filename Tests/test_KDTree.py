@@ -199,10 +199,10 @@ class KDTreeTest(unittest.TestCase):
         )
         with self.assertRaises(Exception) as context:
             kdt.set_coords(random.random((nr_points, dim - 2)))
-        self.assertTrue("Expected a Nx%i NumPy array" % dim in str(context.exception))
+        self.assertIn("Expected a Nx%i NumPy array" % dim, str(context.exception))
         with self.assertRaises(Exception) as context:
             kdt.search(array([0, 0, 0]), radius)
-        self.assertTrue("No point set specified" in str(context.exception))
+        self.assertIn("No point set specified", str(context.exception))
 
     def test_KDTree_neighbour(self):
         for i in range(0, 10):

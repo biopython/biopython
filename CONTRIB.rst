@@ -20,12 +20,14 @@ please open an issue on GitHub or mention it on the mailing list.
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
+- Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
 - Alona Levy-Jurgenson <https://github.com/alonalj>
 - Anders Pitman <https://github.com/anderspitman>
 - Andrea Pierleoni <andrea at the Italian domain biocomp dot unibo>
 - Andrea Rizzi <https://github.com/andrrizzi>
 - Andreas Kuntzagk <andreas.kuntzagk at domain mdc-berlin.de>
+- Andrei Istrate <andrei at ebi dot ac dot uk>
 - Andres Colubri <andres dot colubri at gmail dot com>
 - Andrew Dalke <dalke at domain dalke scientific dot com>
 - Andrew Guy <https://github.com/andrewguy>
@@ -263,6 +265,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Thomas Schmitt <https://github.com/wurstbonbon>
 - Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
 - Tiago Antao <https://github.com/tiagoantao>
+- Tianyi Shi <https://github.com/TianyiShi2001>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>

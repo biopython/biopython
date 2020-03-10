@@ -17,7 +17,7 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.")
+    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
@@ -218,6 +218,8 @@ class MMCIF2dictTests(unittest.TestCase):
             list(mmcif._splitline('foo "bar\' a" b')), ["foo", "bar' a", "b"]
         )
         self.assertEqual(list(mmcif._splitline("foo '' b")), ["foo", "", "b"])
+        self.assertEqual(list(mmcif._splitline("foo bar' b")), ["foo", "bar'", "b"])
+        self.assertEqual(list(mmcif._splitline("foo bar b'")), ["foo", "bar", "b'"])
 
         # A hash (#) starts a comment iff it is preceded by whitespace or is at
         # the beginning of a line:

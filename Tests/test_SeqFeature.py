@@ -28,13 +28,24 @@ class TestReference(unittest.TestCase):
         rec1 = SeqIO.read(testfile, "genbank")
         rec2 = SeqIO.read(testfile, "genbank")
 
-        self.assertEqual(rec1.annotations["references"][0], rec1.annotations["references"][0])
-        cmp1, cmp2 = rec1.annotations["references"][0], rec2.annotations["references"][0]
-        self.assertEqual(cmp1, cmp2)
-        self.assertNotEqual(rec1.annotations["references"][0], rec1.annotations["references"][1])
-        self.assertNotEqual(rec1.annotations["references"][0], rec2.annotations["references"][1])
-        self.assertEqual(rec1.annotations["references"][1], rec1.annotations["references"][1])
-        self.assertEqual(rec1.annotations["references"][1], rec2.annotations["references"][1])
+        self.assertEqual(
+            rec1.annotations["references"][0], rec1.annotations["references"][0]
+        )
+        self.assertEqual(
+            rec1.annotations["references"][0], rec2.annotations["references"][0]
+        )
+        self.assertNotEqual(
+            rec1.annotations["references"][0], rec1.annotations["references"][1]
+        )
+        self.assertNotEqual(
+            rec1.annotations["references"][0], rec2.annotations["references"][1]
+        )
+        self.assertEqual(
+            rec1.annotations["references"][1], rec1.annotations["references"][1]
+        )
+        self.assertEqual(
+            rec1.annotations["references"][1], rec2.annotations["references"][1]
+        )
 
 
 class TestFeatureLocation(unittest.TestCase):
@@ -120,21 +131,31 @@ class TestCompoundLocation(unittest.TestCase):
         self.assertEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
+        loc2 = CompoundLocation(
+            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)]
+        )
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
         """Test two different locations are not equal."""
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1) + FeatureLocation(50, 60, 1)
+        loc2 = (
+            FeatureLocation(12, 17, 1)
+            + FeatureLocation(23, 42, 1)
+            + FeatureLocation(50, 60, 1)
+        )
         self.assertNotEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
         loc2 = FeatureLocation(12, 17, -1) + FeatureLocation(23, 42, -1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
-        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], "order")
+        loc1 = CompoundLocation(
+            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)]
+        )
+        loc2 = CompoundLocation(
+            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], "order"
+        )
         self.assertNotEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
@@ -155,7 +176,6 @@ class TestSeqFeature(unittest.TestCase):
 
 
 class TestLocations(unittest.TestCase):
-
     def test_fuzzy(self):
         """Test fuzzy representations."""
         # check the positions alone
@@ -196,19 +216,21 @@ class TestLocations(unittest.TestCase):
 
 
 class TestPositions(unittest.TestCase):
-
     def test_pickle(self):
         """Test pickle behaviour of position instances."""
         # setup
         import pickle
+
         within_pos = WithinPosition(10, left=10, right=13)
         between_pos = BetweenPosition(24, left=20, right=24)
         oneof_pos = OneOfPosition(1888, [ExactPosition(1888), ExactPosition(1901)])
         # test __getnewargs__
         self.assertEqual(within_pos.__getnewargs__(), (10, 10, 13))
         self.assertEqual(between_pos.__getnewargs__(), (24, 20, 24))
-        self.assertEqual(oneof_pos.__getnewargs__(),
-                         (1888, [ExactPosition(1888), ExactPosition(1901)]))
+        self.assertEqual(
+            oneof_pos.__getnewargs__(),
+            (1888, [ExactPosition(1888), ExactPosition(1901)]),
+        )
         # test pickle behaviour
         within_pos2 = pickle.loads(pickle.dumps(within_pos))
         between_pos2 = pickle.loads(pickle.dumps(between_pos))

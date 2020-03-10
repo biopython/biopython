@@ -15,10 +15,10 @@ os.environ["LANG"] = "C"
 
 t_coffee_exe = None
 if sys.platform == "win32":
-    raise MissingExternalDependencyError(
-        "Testing TCOFFEE on Windows not supported yet")
+    raise MissingExternalDependencyError("Testing TCOFFEE on Windows not supported yet")
 else:
     from subprocess import getoutput
+
     output = getoutput("t_coffee -version")
     if "not found" not in output and "not recognized" not in output:
         if "t_coffee" in output.lower() or "t-coffee" in output.lower():
@@ -26,11 +26,11 @@ else:
 
 if not t_coffee_exe:
     raise MissingExternalDependencyError(
-        "Install TCOFFEE if you want to use the Bio.Align.Applications wrapper.")
+        "Install TCOFFEE if you want to use the Bio.Align.Applications wrapper."
+    )
 
 
 class TCoffeeApplication(unittest.TestCase):
-
     def setUp(self):
         self.infile1 = "Fasta/fa01"
         # TODO: Use a temp dir for the output files:
@@ -64,7 +64,9 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+            self.assertEqual(
+                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+            )
 
     def test_TCoffee_pir(self):
         """Round-trip through app and read pir alignment from file."""
@@ -72,8 +74,11 @@ class TCoffeeApplication(unittest.TestCase):
         cmdline.infile = self.infile1
         cmdline.outfile = self.outfile3
         cmdline.output = "pir_aln"
-        self.assertEqual(str(cmdline), t_coffee_exe + " -output pir_aln "
-                         "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet")
+        self.assertEqual(
+            str(cmdline),
+            t_coffee_exe
+            + " -output pir_aln -infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet",
+        )
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
         self.assertNotIn("error", stderr.lower(), stderr)
@@ -82,7 +87,9 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+            self.assertEqual(
+                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+            )
 
     def test_TCoffee_clustalw(self):
         """Round-trip through app and read clustalw alignment from file."""
@@ -93,9 +100,12 @@ class TCoffeeApplication(unittest.TestCase):
         cmdline.outorder = "input"
         cmdline.set_parameter("gapext", -5)
         cmdline.type = "protein"
-        self.assertEqual(str(cmdline), t_coffee_exe + " -output clustalw_aln "
-                         "-infile Fasta/fa01 -outfile Fasta/tc_out.aln "
-                         "-type protein -outorder input -gapopen -2 -gapext -5")
+        self.assertEqual(
+            str(cmdline),
+            t_coffee_exe
+            + " -output clustalw_aln -infile Fasta/fa01 -outfile Fasta/tc_out.aln "
+            "-type protein -outorder input -gapopen -2 -gapext -5",
+        )
         stdout, stderr = cmdline()
         self.assertTrue(stderr.strip().startswith("PROGRAM: T-COFFEE"))
         align = AlignIO.read(self.outfile4, "clustal")
@@ -103,15 +113,24 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+            self.assertEqual(
+                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+            )
 
     def test_TCoffee_phylip(self):
         """Round-trip through app and read PHYLIP alignment from file."""
-        cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1,
-                                     outfile=self.outfile5,
-                                     quiet=True, output="phylip_aln")
-        self.assertEqual(str(cmdline), t_coffee_exe + " -output phylip_aln "
-                         "-infile Fasta/fa01 -outfile Fasta/tc_out.phy -quiet")
+        cmdline = TCoffeeCommandline(
+            t_coffee_exe,
+            infile=self.infile1,
+            outfile=self.outfile5,
+            quiet=True,
+            output="phylip_aln",
+        )
+        self.assertEqual(
+            str(cmdline),
+            t_coffee_exe + " -output phylip_aln "
+            "-infile Fasta/fa01 -outfile Fasta/tc_out.phy -quiet",
+        )
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
         self.assertNotIn("error", stderr.lower(), stderr)
@@ -121,15 +140,24 @@ class TCoffeeApplication(unittest.TestCase):
         for old, new in zip(records, align):
             # TCoffee does strict 10 character truncation as per original PHYLIP
             self.assertEqual(old.id[:10], new.id[:10])
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+            self.assertEqual(
+                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+            )
 
     def test_TCoffee_msf(self):
         """Round-trip through app and read GCG MSF alignment from file."""
-        cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1,
-                                     outfile=self.outfile6,
-                                     quiet=True, output="msf_aln")
-        self.assertEqual(str(cmdline), t_coffee_exe + " -output msf_aln "
-                         "-infile Fasta/fa01 -outfile Fasta/tc_out.msf -quiet")
+        cmdline = TCoffeeCommandline(
+            t_coffee_exe,
+            infile=self.infile1,
+            outfile=self.outfile6,
+            quiet=True,
+            output="msf_aln",
+        )
+        self.assertEqual(
+            str(cmdline),
+            t_coffee_exe
+            + " -output msf_aln -infile Fasta/fa01 -outfile Fasta/tc_out.msf -quiet",
+        )
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
         self.assertNotIn("error", stderr.lower(), stderr)
@@ -138,7 +166,9 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+            self.assertEqual(
+                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+            )
 
 
 if __name__ == "__main__":

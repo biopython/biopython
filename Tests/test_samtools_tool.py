@@ -239,13 +239,13 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsMpileupCommandline(samtools_exe)
         cmdline.set_parameter("input_file", [self.bamfile1])
         stdout, stderr = cmdline()
-        self.assertFalse("[bam_pileup_core]" in stdout)
+        self.assertNotIn("[bam_pileup_core]", stdout)
 
     def test_mpileup_list(self):
         cmdline = SamtoolsMpileupCommandline(samtools_exe)
         cmdline.set_parameter("input_file", [self.sortedbamfile1, self.sortedbamfile2])
         stdout, stderr = cmdline()
-        self.assertFalse("[bam_pileup_core]" in stdout)
+        self.assertNotIn("[bam_pileup_core]", stdout)
 
     # TODO: def test_phase(self):
     # TODO: def test_reheader(self):

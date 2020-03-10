@@ -21,10 +21,20 @@ from Bio import MissingExternalDependencyError
 from Bio.Blast import Applications
 
 # TODO - On windows, can we use the ncbi.ini file?
-wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
-          "rpsblast+",  # For Debian
-          "rpsblast", "rpstblastn", "psiblast", "blast_formatter",
-          "deltablast", "makeblastdb"]
+wanted = [
+    "blastx",
+    "blastp",
+    "blastn",
+    "tblastn",
+    "tblastx",
+    "rpsblast+",  # For Debian
+    "rpsblast",
+    "rpstblastn",
+    "psiblast",
+    "blast_formatter",
+    "deltablast",
+    "makeblastdb",
+]
 exe_names = {}
 
 if sys.platform == "win32":
@@ -52,11 +62,13 @@ for folder in likely_dirs:
         # To tell the old and new rpsblast apart (since I have both on
         # my path and the old blast has priority), try -h as a parameter.
         # This should also reject WU-BLAST (since it doesn't like -h).
-        child = subprocess.Popen(exe_name + " -h",
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            exe_name + " -h",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         output, error = child.communicate()
         if child.returncode == 0 and "ERROR: Invalid argument: -h" not in output:
             # Special case, blast_formatter from BLAST 2.2.23+ (i.e. BLAST+)
@@ -80,9 +92,10 @@ if "rpsblast+" in exe_names:
 # We can cope with deltablast being missing, only added in BLAST 2.2.26+
 optional = ["blast_formatter", "deltablast"]
 if len(set(exe_names).difference(optional)) < len(set(wanted).difference(optional)):
-    raise MissingExternalDependencyError("Install the NCBI BLAST+ command line "
-                                         "tools if you want to use the "
-                                         "Bio.Blast.Applications wrapper.")
+    raise MissingExternalDependencyError(
+        "Install the NCBI BLAST+ command line tools if you want to use the "
+        "Bio.Blast.Applications wrapper."
+    )
 
 
 class Pairwise(unittest.TestCase):
@@ -93,19 +106,26 @@ class Pairwise(unittest.TestCase):
             exe_names["blastp"],
             query="Fasta/rose.pro",
             subject="GenBank/NC_005816.faa",
-            evalue=1)
-        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"]) +
-                         " -query Fasta/rose.pro -evalue 1" +
-                         " -subject GenBank/NC_005816.faa")
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+            evalue=1,
+        )
+        self.assertEqual(
+            str(cline),
+            _escape_filename(exe_names["blastp"])
+            + " -query Fasta/rose.pro -evalue 1"
+            + " -subject GenBank/NC_005816.faa",
+        )
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
-        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
-                         % (return_code, cline))
+        self.assertEqual(
+            return_code, 0, "Got error code %i back from:\n%s" % (return_code, cline)
+        )
         # Used to get 10 matches from 10 pairwise searches,
         # as of NCBI BLAST+ 2.3.0 only get 1 Query= line:
         if stdoutdata.count("Query= ") == 10:
@@ -126,19 +146,26 @@ class Pairwise(unittest.TestCase):
             exe_names["blastn"],
             query="GenBank/NC_005816.ffn",
             subject="GenBank/NC_005816.fna",
-            evalue="0.000001")
-        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"]) +
-                         " -query GenBank/NC_005816.ffn -evalue 0.000001" +
-                         " -subject GenBank/NC_005816.fna")
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+            evalue="0.000001",
+        )
+        self.assertEqual(
+            str(cline),
+            _escape_filename(exe_names["blastn"])
+            + " -query GenBank/NC_005816.ffn -evalue 0.000001"
+            + " -subject GenBank/NC_005816.fna",
+        )
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
-        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
-                         % (return_code, cline))
+        self.assertEqual(
+            return_code, 0, "Got error code %i back from:\n%s" % (return_code, cline)
+        )
         self.assertEqual(10, stdoutdata.count("Query= "))
         self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
         # TODO - Parse it?
@@ -150,19 +177,26 @@ class Pairwise(unittest.TestCase):
             exe_names["tblastn"],
             query="GenBank/NC_005816.faa",
             subject="GenBank/NC_005816.fna",
-            evalue="1e-6")
-        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"]) +
-                         " -query GenBank/NC_005816.faa -evalue 1e-6" +
-                         " -subject GenBank/NC_005816.fna")
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+            evalue="1e-6",
+        )
+        self.assertEqual(
+            str(cline),
+            _escape_filename(exe_names["tblastn"])
+            + " -query GenBank/NC_005816.faa -evalue 1e-6"
+            + " -subject GenBank/NC_005816.fna",
+        )
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
-        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
-                         % (return_code, cline))
+        self.assertEqual(
+            return_code, 0, "Got error code %i back from:\n%s" % (return_code, cline)
+        )
         self.assertEqual(10, stdoutdata.count("Query= "))
         self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
         # TODO - Parse it?
@@ -173,8 +207,8 @@ class BlastDB(unittest.TestCase):
         """Check that dbtype throws error if not set."""
         global exe_names
         cline = Applications.NcbimakeblastdbCommandline(
-            exe_names["makeblastdb"],
-            input_file="GenBank/NC_005816.faa")
+            exe_names["makeblastdb"], input_file="GenBank/NC_005816.faa"
+        )
         with self.assertRaises(ValueError):
             str(cline)
 
@@ -188,19 +222,24 @@ class BlastDB(unittest.TestCase):
             hash_index=True,
             max_file_sz="20MB",
             parse_seqids=True,
-            taxid=10)
+            taxid=10,
+        )
 
-        self.assertEqual(str(cline),
-                         _escape_filename(exe_names["makeblastdb"]) +
-                         " -dbtype prot -in GenBank/NC_005816.faa"
-                         " -parse_seqids -hash_index -max_file_sz 20MB"
-                         " -taxid 10")
+        self.assertEqual(
+            str(cline),
+            _escape_filename(exe_names["makeblastdb"])
+            + " -dbtype prot -in GenBank/NC_005816.faa"
+            " -parse_seqids -hash_index -max_file_sz 20MB"
+            " -taxid 10",
+        )
 
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
 
@@ -223,19 +262,24 @@ class BlastDB(unittest.TestCase):
             hash_index=True,
             max_file_sz="20MB",
             parse_seqids=True,
-            taxid=10)
+            taxid=10,
+        )
 
-        self.assertEqual(str(cline),
-                         _escape_filename(exe_names["makeblastdb"]) +
-                         " -dbtype nucl -in GenBank/NC_005816.fna"
-                         " -parse_seqids -hash_index -max_file_sz 20MB"
-                         " -taxid 10")
+        self.assertEqual(
+            str(cline),
+            _escape_filename(exe_names["makeblastdb"])
+            + " -dbtype nucl -in GenBank/NC_005816.fna"
+            " -parse_seqids -hash_index -max_file_sz 20MB"
+            " -taxid 10",
+        )
 
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
 
@@ -272,30 +316,30 @@ class CheckCompleteArgList(unittest.TestCase):
             cline = wrapper(exe, h=True, dbtype="prot")
         else:
             cline = wrapper(exe, h=True)
-        names = {parameter.names[0]
-                 for parameter in cline.parameters}
+        names = {parameter.names[0] for parameter in cline.parameters}
 
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
         stdoutdata, stderrdata = child.communicate()
-        self.assertEqual(stderrdata, "",
-                         "%s\n%s" % (str(cline), stderrdata))
+        self.assertEqual(stderrdata, "", "%s\n%s" % (str(cline), stderrdata))
         names_in_tool = set()
         while stdoutdata:
             index = stdoutdata.find("[")
             if index == -1:
                 break
-            stdoutdata = stdoutdata[index + 1:]
+            stdoutdata = stdoutdata[index + 1 :]
             index = stdoutdata.find("]")
             assert index != -1
             name = stdoutdata[:index]
             if " " in name:
                 name = name.split(None, 1)[0]
             names_in_tool.add(name)
-            stdoutdata = stdoutdata[index + 1:]
+            stdoutdata = stdoutdata[index + 1 :]
 
         extra = names.difference(names_in_tool)
         missing = names_in_tool.difference(names)
@@ -314,8 +358,9 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "tblastx":
             # These appear to have been removed in BLAST 2.2.23+
             # (which seems a bit odd - TODO - check with NCBI?)
-            extra = extra.difference(["-gapextend", "-gapopen",
-                                      "-xdrop_gap", "-xdrop_gap_final"])
+            extra = extra.difference(
+                ["-gapextend", "-gapopen", "-xdrop_gap", "-xdrop_gap_final"]
+            )
         if exe_name in ["rpsblast", "rpstblastn"]:
             # These appear to have been removed in BLAST 2.2.24+
             # (which seems a bit odd - TODO - check with NCBI?)
@@ -327,8 +372,13 @@ class CheckCompleteArgList(unittest.TestCase):
         # will be seen as an extra argument on older versions:
         if "-seqidlist" in extra:
             extra.remove("-seqidlist")
-        if "-db_hard_mask" in extra \
-           and exe_name in ["blastn", "blastp", "blastx", "tblastx", "tblastn"]:
+        if "-db_hard_mask" in extra and exe_name in [
+            "blastn",
+            "blastp",
+            "blastx",
+            "tblastx",
+            "tblastn",
+        ]:
             # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-db_hard_mask")
         if "-msa_master_idx" in extra and exe_name == "psiblast":
@@ -336,9 +386,9 @@ class CheckCompleteArgList(unittest.TestCase):
             extra.remove("-msa_master_idx")
         if exe_name == "rpsblast":
             # New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
-            extra = extra.difference(["-best_hit_overhang",
-                                      "-best_hit_score_edge",
-                                      "-culling_limit"])
+            extra = extra.difference(
+                ["-best_hit_overhang", "-best_hit_score_edge", "-culling_limit"]
+            )
         if "-max_hsps_per_subject" in extra:
             # New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
@@ -347,13 +397,20 @@ class CheckCompleteArgList(unittest.TestCase):
             extra.remove("-ignore_msa_master")
         if exe_name == "blastx":
             # New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
-            extra = extra.difference(["-comp_based_stats",
-                                      "-use_sw_tback"])
+            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
         if exe_name in ["blastx", "tblastn"]:
             # Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
             extra = extra.difference(["-frame_shift_penalty"])
-        if exe_name in ["blastn", "blastp", "blastx", "tblastn", "tblastx",
-                        "psiblast", "rpstblastn", "rpsblast"]:
+        if exe_name in [
+            "blastn",
+            "blastp",
+            "blastx",
+            "tblastn",
+            "tblastx",
+            "psiblast",
+            "rpstblastn",
+            "rpsblast",
+        ]:
             # New in BLAST 2.2.29+ so will look like extra args on old BLAST:
             extra = extra.difference(["-max_hsps", "-sum_statistics"])
         if exe_name in ["rpstblastn", "rpsblast"]:
@@ -373,8 +430,17 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name in ["blastx", "tblastn"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-task"])
-        if exe_name in ["blastn", "blastp", "blastx", "deltablast", "psiblast",
-                        "rpstblastn", "rpsblast", "tblastn", "tblastx"]:
+        if exe_name in [
+            "blastn",
+            "blastp",
+            "blastx",
+            "deltablast",
+            "psiblast",
+            "rpstblastn",
+            "rpsblast",
+            "tblastn",
+            "tblastx",
+        ]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-line_length", "-qcov_hsp_perc", "-sum_stats"])
         if exe_name in ["deltablast", "psiblast"]:
@@ -385,8 +451,9 @@ class CheckCompleteArgList(unittest.TestCase):
             # arg on older versions. -mask_desc and -mask_id were added after
             # 2.2.28+, but not documented in changelog.
             # -dbtype also ignored here, as it was set to initialize class.
-            extra = extra.difference(["-input_type", "-mask_desc",
-                                      "-mask_id", "-dbtype"])
+            extra = extra.difference(
+                ["-input_type", "-mask_desc", "-mask_id", "-dbtype"]
+            )
         # This was added in BLAST+ 2.7.1 (or maybe 2.7.0) to most/all the tools,
         # so will be seen as an extra argument on older versions:
         if "-negative_seqidlist" in extra:
@@ -394,12 +461,13 @@ class CheckCompleteArgList(unittest.TestCase):
 
         if extra or missing:
             import warnings
-            warnings.warn("NCBI BLAST+ %s and Biopython out sync. Please "
-                          "update Biopython, or report this issue if you are "
-                          "already using the latest version. (Extra args: %s; "
-                          "Missing: %s)" % (exe_name,
-                                            ",".join(sorted(extra)),
-                                            ",".join(sorted(missing))))
+
+            warnings.warn(
+                "NCBI BLAST+ %s and Biopython out sync. Please update Biopython, "
+                "or report this issue if you are already using the latest version. "
+                "(Extra args: %s; Missing: %s)"
+                % (exe_name, ",".join(sorted(extra)), ",".join(sorted(missing)))
+            )
 
         # An almost trivial example to test any validation
         if "-query" in names:
@@ -445,11 +513,13 @@ class CheckCompleteArgList(unittest.TestCase):
         self.check("makeblastdb", Applications.NcbimakeblastdbCommandline)
 
     if "blast_formatter" in exe_names:
+
         def test_blast_formatter(self):
             """Check all blast_formatter arguments are supported."""
             self.check("blast_formatter", Applications.NcbiblastformatterCommandline)
 
     if "deltablast" in exe_names:
+
         def test_deltablast(self):
             """Check all deltablast arguments are supported."""
             self.check("deltablast", Applications.NcbideltablastCommandline)

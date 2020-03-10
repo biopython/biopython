@@ -33,7 +33,9 @@ class ProtParamTest(unittest.TestCase):
         percent_dict = self.analysis.get_amino_acids_percent()
         seq_len = len(self.seq_text)
         for i in sorted(percent_dict):
-            self.assertAlmostEqual(percent_dict[i], self.seq_text.count(i) / float(seq_len))
+            self.assertAlmostEqual(
+                percent_dict[i], self.seq_text.count(i) / float(seq_len)
+            )
 
     def test_get_molecular_weight(self):
         """Calculate protein molecular weight."""
@@ -74,6 +76,8 @@ class ProtParamTest(unittest.TestCase):
     def test_flexibility(self):
         """Calculate protein flexibility."""
         flexibility = self.analysis.flexibility()
+        # Turn black code style off
+        # fmt: off
         expected_flexibility = [
             0.9825119047619049, 1.0166904761904763, 0.9947857142857144,
             0.9660238095238095, 0.9890714285714285, 0.9737261904761906,
@@ -122,8 +126,12 @@ class ProtParamTest(unittest.TestCase):
             1.003297619047619, 1.0161666666666667, 0.977440476190476,
             0.9762738095238096, 0.9785833333333332, 0.9609642857142857,
             0.9650833333333334]
+        # Turn black code style on
+        # fmt: on
 
-        self.assertEqual(len(flexibility), len(expected_flexibility), "Output length differs")
+        self.assertEqual(
+            len(flexibility), len(expected_flexibility), "Output length differs"
+        )
         for f, e in zip(flexibility, expected_flexibility):
             self.assertAlmostEqual(f, e)
 
@@ -146,6 +154,8 @@ class ProtParamTest(unittest.TestCase):
 
     def test_protein_scale(self):
         """Calculate the Kite Doolittle scale."""
+        # Turn black code style off
+        # fmt: off
         expected = [-0.0783, +0.0358, +0.1258, +0.6950, +0.8775, +0.8350, +0.2925, +0.3383,
                     -0.1733, -0.4142, -0.5292, -0.6108, -0.8308, -0.8100, -0.8208, -1.0283,
                     -1.6300, -1.8233, -2.4267, -2.2292, -1.7817, -1.4742, -0.7467, -0.1608,
@@ -164,7 +174,11 @@ class ProtParamTest(unittest.TestCase):
                     +0.0317, -0.0917, -0.6375, -0.9650, -1.4500, -1.6008, -1.7558, -1.5450,
                     -1.7900, -1.8133, -2.0125, -2.1383, -2.3142, -2.1525, -2.1425, -1.9733,
                     -1.4742, -0.8083, -0.2100, +0.8067, +1.3092, +1.8367, +2.0283, +2.3558]
-        for i, e in zip(self.analysis.protein_scale(ProtParamData.kd, 9, 0.4), expected):
+        # Turn black code style on
+        # fmt: on
+        for i, e in zip(
+            self.analysis.protein_scale(ProtParamData.kd, 9, 0.4), expected
+        ):
             # Expected values have 4 decimal places, so restrict to that exactness
             self.assertAlmostEqual(i, e, places=4)
 
@@ -174,8 +188,12 @@ class ProtParamTest(unittest.TestCase):
 
     def test_molar_extinction_coefficient(self):
         """Molar extinction coefficient."""
-        self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[0], 17420, places=5)
-        self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[1], 17545, places=5)
+        self.assertAlmostEqual(
+            self.analysis.molar_extinction_coefficient()[0], 17420, places=5
+        )
+        self.assertAlmostEqual(
+            self.analysis.molar_extinction_coefficient()[1], 17545, places=5
+        )
 
 
 if __name__ == "__main__":

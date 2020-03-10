@@ -141,13 +141,13 @@ class BootstrapTest(unittest.TestCase):
         constructor = DistanceTreeConstructor(calculator)
         trees = list(Consensus.bootstrap_trees(self.msa, 100, constructor))
         self.assertEqual(len(trees), 100)
-        self.assertTrue(isinstance(trees[0], BaseTree.Tree))
+        self.assertIsInstance(trees[0], BaseTree.Tree)
 
     def test_bootstrap_consensus(self):
         calculator = DistanceCalculator("blosum62")
         constructor = DistanceTreeConstructor(calculator, "nj")
         tree = Consensus.bootstrap_consensus(self.msa, 100, constructor, Consensus.majority_consensus)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         Phylo.write(tree, os.path.join(temp_dir, "bootstrap_consensus.tre"), "newick")
 
 

@@ -577,9 +577,9 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
             dntps = dNTPs * 1e-3
             ka = 3e4  # Dissociation constant for Mg:dNTP
             # Free Mg2+ calculation:
-            mg = (-(ka * dntps - ka * mg + 1.0) +
-                  math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 +
-                            4.0 * ka * mg)) / (2.0 * ka)
+            mg = (-(ka * dntps - ka * mg + 1.0)
+                  + math.sqrt((ka * dntps - ka * mg + 1.0) ** 2
+                              + 4.0 * ka * mg)) / (2.0 * ka)
         if Mon > 0:
             R = math.sqrt(mg) / mon
             if R < 0.22:
@@ -588,13 +588,13 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
                 return corr
             elif R < 6.0:
                 a = 3.92 * (0.843 - 0.352 * math.sqrt(mon) * math.log(mon))
-                d = 1.42 * (1.279 - 4.03e-3 * math.log(mon) -
-                            8.03e-3 * math.log(mon) ** 2)
-                g = 8.31 * (0.486 - 0.258 * math.log(mon) +
-                            5.25e-3 * math.log(mon) ** 3)
-        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100) *
-                (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1))) *
-                (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
+                d = 1.42 * (1.279 - 4.03e-3 * math.log(mon)
+                            - 8.03e-3 * math.log(mon) ** 2)
+                g = 8.31 * (0.486 - 0.258 * math.log(mon)
+                            + 5.25e-3 * math.log(mon) ** 3)
+        corr = (a + b * math.log(mg) + (SeqUtils.GC(seq) / 100)
+                * (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1)))
+                * (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
     # Turn black code style on
     # fmt: on
     if method > 7:

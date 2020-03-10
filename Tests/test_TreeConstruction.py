@@ -36,30 +36,47 @@ class DistanceMatrixTest(unittest.TestCase):
 
     def test_good_construction(self):
         dm = DistanceMatrix(self.names, self.matrix)
-        self.assertTrue(isinstance(dm, TreeConstruction.DistanceMatrix))
+        self.assertIsInstance(dm, TreeConstruction.DistanceMatrix)
         self.assertEqual(dm.names[0], "Alpha")
         self.assertEqual(dm.matrix[2][1], 3)
         self.assertEqual(len(dm), 4)
-        self.assertEqual(repr(dm),
-                         "DistanceMatrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], "
-                         "matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])")
+        self.assertEqual(
+            repr(dm),
+            "DistanceMatrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], "
+            "matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])",
+        )
 
     def test_bad_construction(self):
-        self.assertRaises(TypeError, DistanceMatrix,
-                          ["Alpha", 100, "Gamma", "Delta"],
-                          [[0], [0.1, 0], [0.2, 0.3, 0], [0.4, 0.5, 0.6, 0]])
-        self.assertRaises(TypeError, DistanceMatrix,
-                          ["Alpha", "Beta", "Gamma", "Delta"],
-                          [[0], ["a"], [0.2, 0.3], [0.4, 0.5, 0.6]])
-        self.assertRaises(ValueError, DistanceMatrix,
-                          ["Alpha", "Alpha", "Gamma", "Delta"],
-                          [[0], [0.1], [0.2, 0.3], [0.4, 0.5, 0.6]])
-        self.assertRaises(ValueError, DistanceMatrix,
-                          ["Alpha", "Beta", "Gamma", "Delta"],
-                          [[0], [0.2, 0], [0.4, 0.5, 0.6]])
-        self.assertRaises(ValueError, DistanceMatrix,
-                          ["Alpha", "Beta", "Gamma", "Delta"],
-                          [[0], [0.1], [0.2, 0.3, 0.4], [0.4, 0.5, 0.6]])
+        self.assertRaises(
+            TypeError,
+            DistanceMatrix,
+            ["Alpha", 100, "Gamma", "Delta"],
+            [[0], [0.1, 0], [0.2, 0.3, 0], [0.4, 0.5, 0.6, 0]],
+        )
+        self.assertRaises(
+            TypeError,
+            DistanceMatrix,
+            ["Alpha", "Beta", "Gamma", "Delta"],
+            [[0], ["a"], [0.2, 0.3], [0.4, 0.5, 0.6]],
+        )
+        self.assertRaises(
+            ValueError,
+            DistanceMatrix,
+            ["Alpha", "Alpha", "Gamma", "Delta"],
+            [[0], [0.1], [0.2, 0.3], [0.4, 0.5, 0.6]],
+        )
+        self.assertRaises(
+            ValueError,
+            DistanceMatrix,
+            ["Alpha", "Beta", "Gamma", "Delta"],
+            [[0], [0.2, 0], [0.4, 0.5, 0.6]],
+        )
+        self.assertRaises(
+            ValueError,
+            DistanceMatrix,
+            ["Alpha", "Beta", "Gamma", "Delta"],
+            [[0], [0.1], [0.2, 0.3, 0.4], [0.4, 0.5, 0.6]],
+        )
 
     def test_good_manipulation(self):
         dm = DistanceMatrix(self.names, self.matrix)
@@ -146,12 +163,12 @@ class DistanceCalculatorTest(unittest.TestCase):
         aln = AlignIO.read(StringIO(">Alpha\nA-A--\n>Gamma\n-Y-Y-"), "fasta")
         # With a proper scoring matrix -- no matches
         dmat = DistanceCalculator("blosum62").get_distance(aln)
-        self.assertEqual(dmat["Alpha", "Alpha"], 0.)
-        self.assertEqual(dmat["Alpha", "Gamma"], 1.)
+        self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
+        self.assertEqual(dmat["Alpha", "Gamma"], 1.0)
         # Comparing characters only -- 4 misses, 1 match
         dmat = DistanceCalculator().get_distance(aln)
-        self.assertEqual(dmat["Alpha", "Alpha"], 0.)
-        self.assertAlmostEqual(dmat["Alpha", "Gamma"], 4. / 5.)
+        self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
+        self.assertAlmostEqual(dmat["Alpha", "Gamma"], 4.0 / 5.0)
 
 
 class DistanceTreeConstructorTest(unittest.TestCase):
@@ -165,7 +182,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
 
     def test_upgma(self):
         tree = self.constructor.upgma(self.dm)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         # tree_file = StringIO()
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/upgma.tre", "newick")
@@ -174,7 +191,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
 
     def test_nj(self):
         tree = self.constructor.nj(self.dm)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         # tree_file = StringIO()
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/nj.tre", "newick")
@@ -188,14 +205,14 @@ class DistanceTreeConstructorTest(unittest.TestCase):
             del self.min_dm[len(self.min_dm) - 1]
 
         min_tree = self.constructor.nj(self.min_dm)
-        self.assertTrue(isinstance(min_tree, BaseTree.Tree))
+        self.assertIsInstance(min_tree, BaseTree.Tree)
 
         ref_min_tree = Phylo.read("./TreeConstruction/nj_min.tre", "newick")
         self.assertTrue(Consensus._equal_topology(min_tree, ref_min_tree))
 
     def test_built_tree(self):
         tree = self.constructor.build_tree(self.aln)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
+        self.assertIsInstance(tree, BaseTree.Tree)
         # tree_file = StringIO()
         # Phylo.write(tree, tree_file, 'newick')
         ref_tree = Phylo.read("./TreeConstruction/nj.tre", "newick")
@@ -214,40 +231,62 @@ class ParsimonyScorerTest(unittest.TestCase):
         self.assertEqual(score, 2 + 1 + 2 + 2 + 1 + 1 + 1 + 3)
 
         alphabet = ["A", "T", "C", "G"]
-        step_matrix = [[0],
-                       [2.5, 0],
-                       [2.5, 1, 0],
-                       [1, 2.5, 2.5, 0]]
+        step_matrix = [[0], [2.5, 0], [2.5, 1, 0], [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         score = scorer.get_score(tree, aln)
         self.assertEqual(score, 3.5 + 2.5 + 3.5 + 3.5 + 2.5 + 1 + 2.5 + 4.5)
 
-        alphabet = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N",
-                    "P", "Q", "R", "1", "2", "T", "V", "W", "Y", "*", "-"]
-        step_matrix = [[0],
-                       [2, 0],
-                       [1, 2, 0],
-                       [1, 2, 1, 0],
-                       [2, 1, 2, 2, 0],
-                       [1, 1, 1, 1, 2, 0],
-                       [2, 2, 1, 2, 2, 2, 0],
-                       [2, 2, 2, 2, 1, 2, 2, 0],
-                       [2, 2, 2, 1, 2, 2, 2, 1, 0],
-                       [2, 2, 2, 2, 1, 2, 1, 1, 2, 0],
-                       [2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0],
-                       [2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 0],
-                       [1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
-                       [2, 2, 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 0],
-                       [2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0],
-                       [1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
-                       [2, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 0],
-                       [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 0],
-                       [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0],
-                       [2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 3, 2, 2, 1, 1, 2, 2, 2, 0],
-                       [2, 1, 1, 2, 1, 2, 1, 2, 2, 2, 3, 1, 2, 2, 2, 1, 2, 2, 2, 2, 0],
-                       [2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 0],
-                       [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0]]
+        alphabet = [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "1",
+            "2",
+            "T",
+            "V",
+            "W",
+            "Y",
+            "*",
+            "-",
+        ]
+        step_matrix = [
+            [0],
+            [2, 0],
+            [1, 2, 0],
+            [1, 2, 1, 0],
+            [2, 1, 2, 2, 0],
+            [1, 1, 1, 1, 2, 0],
+            [2, 2, 1, 2, 2, 2, 0],
+            [2, 2, 2, 2, 1, 2, 2, 0],
+            [2, 2, 2, 1, 2, 2, 2, 1, 0],
+            [2, 2, 2, 2, 1, 2, 1, 1, 2, 0],
+            [2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0],
+            [2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 0],
+            [1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
+            [2, 2, 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 0],
+            [2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0],
+            [1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
+            [2, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 0],
+            [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 0],
+            [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0],
+            [2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 3, 2, 2, 1, 1, 2, 2, 2, 0],
+            [2, 1, 1, 2, 1, 2, 1, 2, 2, 2, 3, 1, 2, 2, 2, 1, 2, 2, 2, 2, 0],
+            [2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 0],
+            [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0],
+        ]
 
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
@@ -261,10 +300,7 @@ class NNITreeSearcherTest(unittest.TestCase):
     def test_get_neighbors(self):
         tree = Phylo.read("./TreeConstruction/upgma.tre", "newick")
         alphabet = ["A", "T", "C", "G"]
-        step_matrix = [[0],
-                       [2.5, 0],
-                       [2.5, 1, 0],
-                       [1, 2.5, 2.5, 0]]
+        step_matrix = [[0], [2.5, 0], [2.5, 1, 0], [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)
@@ -281,10 +317,7 @@ class ParsimonyTreeConstructorTest(unittest.TestCase):
         tree1 = Phylo.read("./TreeConstruction/upgma.tre", "newick")
         tree2 = Phylo.read("./TreeConstruction/nj.tre", "newick")
         alphabet = ["A", "T", "C", "G"]
-        step_matrix = [[0],
-                       [2.5, 0],
-                       [2.5, 1, 0],
-                       [1, 2.5, 2.5, 0]]
+        step_matrix = [[0], [2.5, 0], [2.5, 1, 0], [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)

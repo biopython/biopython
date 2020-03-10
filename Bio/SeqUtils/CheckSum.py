@@ -25,14 +25,11 @@ def crc32(seq):
     1688586483
 
     """
-    # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
-    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    # TODO - Should we return crc32(x) & 0xffffffff here?
     try:
-        # Assume its a Seq object
+        # Assume it's a Seq object
         return _crc32(str(seq).encode())
     except AttributeError:
-        # Assume its a string/unicode
+        # Assume it's a string/unicode
         return _crc32(seq.encode())
 
 
@@ -100,10 +97,10 @@ def gcg(seq):
 
     """
     try:
-        # Assume its a Seq object
+        # Assume it's a Seq object
         seq = str(seq)
     except AttributeError:
-        # Assume its a string
+        # Assume it's a string
         pass
     index = checksum = 0
     for char in seq:
@@ -143,14 +140,8 @@ def seguid(seq):
         # Assume it's a string
         pass
     m.update(seq.upper().encode())
-    try:
-        # For Python 3+
-        tmp = base64.encodebytes(m.digest())
-        return tmp.decode().replace("\n", "").rstrip("=")
-    except AttributeError:
-        pass
-    # For all other Pythons
-    return base64.b64encode(m.digest()).rstrip("=")
+    tmp = base64.encodebytes(m.digest())
+    return tmp.decode().replace("\n", "").rstrip("=")
 
 
 if __name__ == "__main__":

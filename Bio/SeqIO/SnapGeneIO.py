@@ -20,6 +20,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
 
 
 def _iterate(handle):
@@ -250,7 +251,9 @@ def SnapGeneIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise ValueError("SnapGene files must be opened in binary mode.") from None
+            raise StreamModeError(
+                "SnapGene files must be opened in binary mode."
+            ) from None
 
     record = SeqRecord(None)
 

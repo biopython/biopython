@@ -37,6 +37,9 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Alexander Decurnou (first contribution)
+- Andrei Istrate (first contribution)
+- Andrey Raspopov
 - Austin Varela (first contribution)
 - Chris Rands
 - Deepak Khatri
@@ -47,6 +50,7 @@ possible, especially the following contributors:
 - Rob Miller
 - Sergio Valqui
 - Sujan Dulal (first contribution)
+- Tianyi Shi (first contribution)
 
 20 December 2019: Biopython 1.76
 ================================

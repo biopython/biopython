@@ -223,7 +223,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     """
     # Using universal newlines is important on Python 3, this
-    # gives unicode handles rather than bytes handles.
+    # gives text handles rather than bytes handles.
     # Newer version of DSSP executable is named 'mkdssp',
     # and calling 'dssp' will hence not work in some operating systems
     # (Debian distribution of DSSP includes a symlink for 'dssp' argument)

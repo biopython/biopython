@@ -37,10 +37,12 @@ from Bio.HMM import Utilities
 
 if os.name == "java":
     from Bio import MissingExternalDependencyError
+
     # This is a slight miss-use of MissingExternalDependencyError,
     # but it will do in the short term to skip this unit test on Jython
-    raise MissingExternalDependencyError("This test can cause a fatal error "
-                                         "on Jython with some versions of Java")
+    raise MissingExternalDependencyError(
+        "This test can cause a fatal error on Jython with some versions of Java"
+    )
 
 
 # whether we should print everything out. Set this to zero for
@@ -113,20 +115,20 @@ def generate_rolls(num_rolls):
         # now give us a chance to switch to a new state
         chance_num = random.random()
         if cur_state == "F":
-            if chance_num <= .05:
+            if chance_num <= 0.05:
                 cur_state = "L"
         elif cur_state == "L":
-            if chance_num <= .1:
+            if chance_num <= 0.1:
                 cur_state = "F"
     return roll_seq.toseq(), state_seq.toseq()
 
 
 class TestHMMCasino(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
-        cls.mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
-                                                        DiceRollAlphabet())
+        cls.mm_builder = MarkovModel.MarkovModelBuilder(
+            DiceTypeAlphabet(), DiceRollAlphabet()
+        )
         cls.mm_builder.allow_all_transitions()
         cls.mm_builder.set_random_probabilities()
         # get a sequence of rolls to train the markov model with
@@ -172,7 +174,9 @@ class TestHMMCasino(unittest.TestCase):
         predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
         if VERBOSE:
             print("Prediction probability: %f" % prob)
-            Utilities.pretty_print_prediction(self.test_rolls, test_states, predicted_states)
+            Utilities.pretty_print_prediction(
+                self.test_rolls, test_states, predicted_states
+            )
 
 
 if __name__ == "__main__":

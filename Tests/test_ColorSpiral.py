@@ -20,7 +20,7 @@ try:
     from reportlab.lib.pagesizes import A4
 except ImportError:
     raise MissingPythonDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.") from None
 
 
 # Biopython Bio.Graphics.ColorSpiral
