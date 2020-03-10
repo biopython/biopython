@@ -1063,7 +1063,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-
     if in_format in ("genbank", "gb", "embl"):
         count = InsdcIO.convert(in_file, in_format, out_file, out_format)
         if count is not None:

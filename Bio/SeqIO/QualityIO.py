@@ -2308,7 +2308,6 @@ _converters = {
 
 def convert(in_stream, in_format, out_stream, out_format):
     """Fast Fastq to FASTA/tab (PRIVATE)."""
-    from Bio import SeqIO
     key = (in_format, out_format)
     converter = _converters.get(key)
     if converter is None:
