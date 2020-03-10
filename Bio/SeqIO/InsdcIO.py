@@ -38,6 +38,7 @@ from Bio import BiopythonWarning
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
+from Bio import SeqIO
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import SeqFeature
 from Bio import StreamModeError
