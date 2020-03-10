@@ -23,6 +23,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
+from Bio import StreamModeError
 
 
 # TODO - Check that desired warnings are issued. Used to do that by capturing
@@ -72,6 +73,29 @@ for format in sorted(AlignIO._FormatToWriter):
         test_write_read_alignment_formats.append(format)
 test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
+
+
+class SeqIOTestsBaseClass(unittest.TestCase):
+    """Base class for Bio.SeqIO unit tests."""
+
+    modes = {}
+
+    @classmethod
+    def get_mode(cls, fmt):
+        """Determine if file mode should be text ("t") or binary ("b") based on format."""
+        mode = cls.modes.get(fmt)
+        if mode is not None:
+            return mode
+        for mode, stream in (("t", StringIO()), ("b", BytesIO())):
+            try:
+                SeqIO.read(stream, fmt)
+            except StreamModeError:
+                continue
+            except ValueError:  # SeqIO.read will complain that the stream is empty
+                pass
+            cls.modes[fmt] = mode
+            return mode
+        raise RuntimeError("Failed to find file mode for %s" % fmt)
 
 
 class ForwardOnlyHandle:
@@ -135,7 +159,7 @@ class TestZipped(unittest.TestCase):
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
         with gzip.open("Quality/example.fastq.gz") as handle:
             with self.assertRaisesRegex(
-                ValueError, "Is this handle in binary mode not text mode"
+                ValueError, "Fastq files must be opened in text mode"
             ):
                 list(SeqIO.parse(handle, "fastq"))
 
@@ -161,7 +185,7 @@ class TestZipped(unittest.TestCase):
                 list(SeqIO.parse(handle, "gb"))
 
 
-class TestSeqIO(unittest.TestCase):
+class TestSeqIO(SeqIOTestsBaseClass):
     def setUp(self):
         self.addTypeEqualityFunc(SeqRecord, self.compare_record)
 
@@ -221,10 +245,11 @@ class TestSeqIO(unittest.TestCase):
                 # rather long, and it seems a bit pointless to record them.
                 continue
             # Going to write to a handle...
-            if format in SeqIO._BinaryFormats:
-                handle = BytesIO()
-            else:
+            mode = self.get_mode(format)
+            if mode == "t":
                 handle = StringIO()
+            elif mode == "b":
+                handle = BytesIO()
 
             if unequal_length and format in AlignIO._FormatToWriter:
                 msg = "Sequences must all be the same length"
@@ -353,14 +378,14 @@ class TestSeqIO(unittest.TestCase):
 
             if len(records) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
-                if format in SeqIO._BinaryFormats:
-                    handle = BytesIO()
-                else:
+                if mode == "t":
                     handle = StringIO()
+                elif mode == "b":
+                    handle = BytesIO()
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", BiopythonWarning)
                     SeqIO.write(records[0], handle, format)
-                    if format not in SeqIO._BinaryFormats:
+                    if mode == "t":
                         self.assertEqual(handle.getvalue(), records[0].format(format))
         if debug:
             self.fail(
@@ -380,11 +405,7 @@ class TestSeqIO(unittest.TestCase):
         expected_alignment,
         expected_messages,
     ):
-        if t_format in SeqIO._BinaryFormats:
-            mode = "rb"
-        else:
-            mode = "r"
-
+        mode = "r" + self.get_mode(t_format)
         with warnings.catch_warnings():
             # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
             # location
@@ -5500,24 +5521,25 @@ class TestSeqIO(unittest.TestCase):
     def test_empty_file(self):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
-            if t_format in SeqIO._BinaryFormats:
+            mode = self.get_mode(t_format)
+            if mode == "t":
+                handle = StringIO()
+                if t_format in (
+                    "uniprot-xml",
+                    "pdb-seqres",
+                    "pdb-atom",
+                    "cif-atom",
+                    "cif-seqres",
+                ):
+                    with self.assertRaisesRegex(ValueError, "Empty file."):
+                        list(SeqIO.parse(handle, t_format))
+                else:
+                    records = list(SeqIO.parse(handle, t_format))
+                    self.assertEqual(len(records), 0)
+            elif mode == "b":
                 handle = BytesIO()
                 with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
-            elif t_format in (
-                "uniprot-xml",
-                "pdb-seqres",
-                "pdb-atom",
-                "cif-atom",
-                "cif-seqres",
-            ):
-                handle = StringIO()
-                with self.assertRaisesRegex(ValueError, "Empty file."):
-                    list(SeqIO.parse(handle, t_format))
-            else:
-                handle = StringIO()
-                records = list(SeqIO.parse(handle, t_format))
-                self.assertEqual(len(records), 0)
 
 
 if __name__ == "__main__":

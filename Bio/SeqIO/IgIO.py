@@ -17,6 +17,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
 
 
 def _parse(handle, alphabet):
@@ -114,7 +115,7 @@ def IgIterator(source, alphabet=single_letter_alphabet):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError(
+            raise StreamModeError(
                 "IntelliGenetics files must be opened in text mode."
             ) from None
 

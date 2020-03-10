@@ -15,6 +15,7 @@ from Bio import MissingExternalDependencyError
 raxml_exe = None
 try:
     from subprocess import getoutput
+
     output = getoutput("raxmlHPC -v")
     if "not found" not in output and "not recognized" not in output:
         if "This is RAxML" in output:
@@ -24,7 +25,9 @@ except FileNotFoundError:
 
 if not raxml_exe:
     raise MissingExternalDependencyError(
-        "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
+        "Install RAxML (binary raxmlHPC) if you want"
+        " to test the Bio.Phylo.Applications wrapper."
+    )
 
 # Example Phylip file with 4 aligned protein sequences
 EX_PHYLIP = "Phylip/interlaced2.phy"
@@ -35,9 +38,9 @@ class AppTests(unittest.TestCase):
 
     def test_raxml(self):
         """Run RAxML using the wrapper."""
-        cmd = RaxmlCommandline(raxml_exe,
-                               sequences=EX_PHYLIP, model="PROTCATWAG",
-                               name="test")
+        cmd = RaxmlCommandline(
+            raxml_exe, sequences=EX_PHYLIP, model="PROTCATWAG", name="test"
+        )
         # The parsimony seed should be set automatically
         self.assertIn("-p", str(cmd))
         # Smoke test
@@ -51,13 +54,14 @@ class AppTests(unittest.TestCase):
         finally:
             # Remove RAxML-generated files, or RAxML will complain bitterly
             # during the next run
-            for fname in ["RAxML_info.test",
-                          "RAxML_log.test",
-                          "RAxML_parsimonyTree.test",
-                          "RAxML_result.test",
-                          # Present in 7.2.X+  but not 7.0.4:
-                          "RAxML_bestTree.test",
-                          ]:
+            for fname in [
+                "RAxML_info.test",
+                "RAxML_log.test",
+                "RAxML_parsimonyTree.test",
+                "RAxML_result.test",
+                # Present in 7.2.X+  but not 7.0.4:
+                "RAxML_bestTree.test",
+            ]:
                 if os.path.isfile(fname):
                     os.remove(fname)
 

@@ -236,6 +236,8 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
+
 
 _null = b"\0"
 _sff = b".sff"
@@ -305,7 +307,7 @@ def _sff_file_header(handle):
             flowgram_format,
         ) = struct.unpack(fmt, data)
     except TypeError:
-        raise ValueError("SFF files must NOT be opened in text mode, binary required.")
+        raise StreamModeError("SFF files must be opened in binary mode.")
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
@@ -986,7 +988,7 @@ def SffIterator(source, alphabet=Alphabet.generic_dna, trim=False):
         handle = open(source, "rb")
     except TypeError:
         if source.read(0) != b"":
-            raise ValueError("SFF files must be opened in binary mode.") from None
+            raise StreamModeError("SFF files must be opened in binary mode.") from None
         try:
             if 0 != source.tell():
                 raise ValueError("Not at start of file, offset %i" % source.tell())

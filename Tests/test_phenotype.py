@@ -221,7 +221,7 @@ class TestPhenoMicro(unittest.TestCase):
 
         # self.assertIsInstance(w.plate,
         #                       phenotype.phen_micro.PlateRecord)
-        self.assertTrue(isinstance(w.plate, phenotype.phen_micro.PlateRecord))
+        self.assertIsInstance(w.plate, phenotype.phen_micro.PlateRecord)
         self.assertEqual(w.id, "A10")
         self.assertEqual(len(w), len(times))
         self.assertEqual(len(w), 384)

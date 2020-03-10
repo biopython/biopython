@@ -394,7 +394,7 @@ class TestRecordParser(unittest.TestCase):
                         ("/protein_id=", '"CAB39890.1"'),
                         ("/db_xref=", '"GI:4538893"'),
                         ("/translation=", '"DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG"'),
-                        ),
+                    ),
                 ),
                 ("intron", "49..142", (("/gene=", '"csp14"'), ("/number=", "2"))),
                 ("exon", "143..206", (("/gene=", '"csp14"'), ("/number=", "3"))),
@@ -1519,9 +1519,7 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
             length = 2007
             locus = "AB000048"
-            definition = (
-                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-            )
+            definition = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
             accession = ["AB000048"]
             titles = (
                 "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
@@ -1558,9 +1556,7 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
             length = 2007
             locus = "AB000049"
-            definition = (
-                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-            )
+            definition = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
             accession = ["AB000049"]
             titles = (
                 "Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus",
@@ -1597,7 +1593,9 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
             length = 1755
             locus = "AB000050"
-            definition = "Feline panleukopenia virus DNA for capsid protein 2, complete cds"
+            definition = (
+                "Feline panleukopenia virus DNA for capsid protein 2, complete cds"
+            )
             accession = ["AB000050"]
             titles = (
                 "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
@@ -4944,9 +4942,7 @@ qualifiers:
             seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
             id = "AB000048.1"
             name = "AB000048"
-            description = (
-                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-            )
+            description = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
             annotations = {
                 "accessions": ["AB000048"],
                 "data_file_division": "VRL",
@@ -5015,9 +5011,7 @@ qualifiers:
             seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
             id = "AB000049.1"
             name = "AB000049"
-            description = (
-                "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
-            )
+            description = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
             annotations = {
                 "accessions": ["AB000049"],
                 "data_file_division": "VRL",
@@ -6649,7 +6643,7 @@ KEYWORDS    """
         # No structured comment in NC_000932.gb, just a regular comment
         path = "GenBank/NC_000932.gb"
         record = SeqIO.read(path, "genbank")
-        self.assertFalse("structured_comment" in record.annotations)
+        self.assertNotIn("structured_comment", record.annotations)
         self.assertEqual(
             record.annotations["comment"],
             "REVIEWED REFSEQ: This record has been curated by NCBI staff. The\n"

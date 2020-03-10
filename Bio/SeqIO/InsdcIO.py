@@ -40,6 +40,8 @@ from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import SeqFeature
+from Bio import StreamModeError
+
 
 # NOTE
 # ====
@@ -92,7 +94,9 @@ def GenBankIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("GenBank files must be opened in text mode.") from None
+            raise StreamModeError(
+                "GenBank files must be opened in text mode."
+            ) from None
 
     try:
         records = GenBankScanner(debug=0).parse_records(handle)
@@ -150,7 +154,7 @@ def EmblIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("EMBL files must be opened in text mode.") from None
+            raise StreamModeError("EMBL files must be opened in text mode.") from None
 
     try:
         records = EmblScanner(debug=0).parse_records(handle)
@@ -175,7 +179,7 @@ def ImgtIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("IMGT files must be opened in text mode.") from None
+            raise StreamModeError("IMGT files must be opened in text mode.") from None
 
     try:
         records = _ImgtScanner(debug=0).parse_records(handle)
@@ -199,7 +203,9 @@ def GenBankCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("GenBank files must be opened in text mode.") from None
+            raise StreamModeError(
+                "GenBank files must be opened in text mode."
+            ) from None
 
     try:
         records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
@@ -223,7 +229,7 @@ def EmblCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("EMBL files must be opened in text mode.") from None
+            raise StreamModeError("EMBL files must be opened in text mode.") from None
 
     try:
         records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)

@@ -17,7 +17,10 @@ from Bio.SeqRecord import SeqRecord
 
 
 class SequenceIterator:
-    """Base class for building SeqRecord iterators.
+    """Base class for building SeqRecord iterators (DEPRECATED).
+
+    This is no longer used in the Biopython code base, instead all the parsers
+    ended up being implemented as generator functions.
 
     You should write a __next__ method to return SeqRecord  objects.  You may
     wish to redefine the __init__ method as well.
@@ -38,6 +41,15 @@ class SequenceIterator:
         - you do not have to require an alphabet.
         - you can add additional optional arguments.
         """
+        import warnings
+        from Bio import BiopythonDeprecationWarning
+
+        warnings.warn(
+            "SequenceIterator is deprecated, and we intend to remove it"
+            " in a future release of Biopython. Please contact the Biopython"
+            " developers if you need this class.",
+            BiopythonDeprecationWarning,
+        )
         self.handle = handle
         self.alphabet = alphabet
 

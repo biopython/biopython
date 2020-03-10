@@ -20,18 +20,18 @@ os.environ["LANG"] = "C"
 
 phyml_exe = None
 exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
-try:
-    output = getoutput(exe_name + " --version")
-    if "not found" not in output and "not recognized" not in output:
-        if "20" in output or "PhyML" in output:
-            phyml_exe = exe_name
-except FileNotFoundError:
-    pass
+
+output = getoutput(exe_name + " --version")
+# Looks like this:
+# . This is PhyML version 20120412.
+if "20" in output and "PhyML" in output:
+    phyml_exe = exe_name
 
 if not phyml_exe:
     raise MissingExternalDependencyError(
-        "Install PhyML 3.0 or later if you want to use the "
-        "Bio.Phylo.Applications wrapper.")
+        "Couldn't find the PhyML software. Install PhyML 3.0 or later if you want "
+        "to use the Bio.Phylo.Applications wrapper."
+    )
 
 
 # Example Phylip file with 4 aligned protein sequences

@@ -26,25 +26,14 @@ from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToRandomAccess
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
-from seq_tests_common import compare_record
-
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 
+from seq_tests_common import compare_record
+from test_SeqIO import SeqIOTestsBaseClass
+
+
 CUR_DIR = os.getcwd()
-
-
-def add_prefix(key):
-    """Sample key_function for testing index code."""
-    return "id_" + key
-
-
-def gzip_open(filename, format):
-    """Open gzip file in either binary or text mode as needed."""
-    if format in SeqIO._BinaryFormats:
-        return gzip.open(filename, "rb")
-    else:
-        return gzip.open(filename, "rt")
 
 
 if sqlite3:
@@ -344,8 +333,8 @@ if sqlite3:
             )
 
 
-class IndexDictTests(unittest.TestCase):
-    """Cunning unit test where methods are added at run time."""
+class IndexDictTests(SeqIOTestsBaseClass):
+    """Cunning unit test where methods are added at run time."""  # TODO - Let's not be cunning
 
     def setUp(self):
         os.chdir(CUR_DIR)
@@ -360,7 +349,8 @@ class IndexDictTests(unittest.TestCase):
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
-            with gzip_open(filename, format) as handle:
+            mode = "r" + self.get_mode(format)
+            with gzip.open(filename, mode) as handle:
                 id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
@@ -426,15 +416,20 @@ class IndexDictTests(unittest.TestCase):
 
             os.remove(index_tmp)
 
+    def add_prefix(self, key):
+        """Sample key_function for testing index code."""
+        return "id_" + key
+
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
-            with gzip_open(filename, format) as handle:
+            mode = "r" + self.get_mode(format)
+            with gzip.open(filename, mode) as handle:
                 id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
-        key_list = [add_prefix(id) for id in id_list]
+        key_list = [self.add_prefix(id) for id in id_list]
 
         with warnings.catch_warnings():
             if "_alt_index_" in filename:
@@ -443,7 +438,7 @@ class IndexDictTests(unittest.TestCase):
                 # b'.diy1.00'
                 warnings.simplefilter("ignore", BiopythonParserWarning)
 
-            rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+            rec_dict = SeqIO.index(filename, format, alphabet, self.add_prefix)
             self.check_dict_methods(rec_dict, key_list, id_list)
             rec_dict.close()
             del rec_dict
@@ -453,7 +448,7 @@ class IndexDictTests(unittest.TestCase):
 
             # In memory,
             rec_dict = SeqIO.index_db(
-                ":memory:", [filename], format, alphabet, add_prefix
+                ":memory:", [filename], format, alphabet, self.add_prefix
             )
             self.check_dict_methods(rec_dict, key_list, id_list)
             # check error conditions
@@ -462,14 +457,14 @@ class IndexDictTests(unittest.TestCase):
                 SeqIO.index_db,
                 ":memory:",
                 format="dummy",
-                key_function=add_prefix,
+                key_function=self.add_prefix,
             )
             self.assertRaises(
                 ValueError,
                 SeqIO.index_db,
                 ":memory:",
                 filenames=["dummy"],
-                key_function=add_prefix,
+                key_function=self.add_prefix,
             )
             rec_dict.close()
             del rec_dict
@@ -479,7 +474,7 @@ class IndexDictTests(unittest.TestCase):
             if os.path.isfile(index_tmp):
                 os.remove(index_tmp)
             rec_dict = SeqIO.index_db(
-                index_tmp, [filename], format, alphabet, add_prefix
+                index_tmp, [filename], format, alphabet, self.add_prefix
             )
             self.check_dict_methods(rec_dict, key_list, id_list)
             rec_dict.close()
@@ -488,7 +483,7 @@ class IndexDictTests(unittest.TestCase):
 
             # Now reload it...
             rec_dict = SeqIO.index_db(
-                index_tmp, [filename], format, alphabet, add_prefix
+                index_tmp, [filename], format, alphabet, self.add_prefix
             )
             self.check_dict_methods(rec_dict, key_list, id_list)
             rec_dict.close()
@@ -497,7 +492,7 @@ class IndexDictTests(unittest.TestCase):
 
             # Now reload without passing filenames and format
             rec_dict = SeqIO.index_db(
-                index_tmp, alphabet=alphabet, key_function=add_prefix
+                index_tmp, alphabet=alphabet, key_function=self.add_prefix
             )
             self.check_dict_methods(rec_dict, key_list, id_list)
             rec_dict.close()
@@ -528,11 +523,11 @@ class IndexDictTests(unittest.TestCase):
         assert not hasattr(rec_dict, "iteritems")
         for key, rec in rec_dict.items():
             self.assertIn(key, keys)
-            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIsInstance(rec, SeqRecord)
             self.assertIn(rec.id, ids)
         for rec in rec_dict.values():
             self.assertIn(key, keys)
-            self.assertTrue(isinstance(rec, SeqRecord))
+            self.assertIsInstance(rec, SeqRecord)
             self.assertIn(rec.id, ids)
 
     def get_raw_check(self, filename, format, alphabet, comp):
@@ -540,7 +535,8 @@ class IndexDictTests(unittest.TestCase):
         if comp:
             with gzip.open(filename, "rb") as handle:
                 raw_file = handle.read()
-            with gzip_open(filename, format) as handle:
+            mode = "r" + self.get_mode(format)
+            with gzip.open(filename, mode) as handle:
                 id_list = [
                     rec.id.lower() for rec in SeqIO.parse(handle, format, alphabet)
                 ]
@@ -606,10 +602,13 @@ class IndexDictTests(unittest.TestCase):
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
             # __getitem__ SFF code is working.
-            if format in SeqIO._BinaryFormats:
+            mode = self.get_mode(format)
+            if mode == "b":
                 handle = BytesIO(raw)
-            else:
+            elif mode == "t":
                 handle = StringIO(raw.decode())
+            else:
+                raise RuntimeError("Unexpected mode %s" % mode)
             if format == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,

@@ -101,6 +101,8 @@ class Parser:
 
     def __init__(self, handle):
         """Initialize file handle for the Newick Tree."""
+        if handle.read(0) != "":
+            raise ValueError("Newick files must be opened in text mode") from None
         self.handle = handle
 
     @classmethod
@@ -117,19 +119,7 @@ class Parser:
         self.comments_are_confidence = comments_are_confidence
         self.rooted = rooted
         buf = ""
-        unicodeChecked = False
-        unicodeLines = ("\xef", "\xff", "\xfe", "\x00")
         for line in self.handle:
-            if not unicodeChecked:
-                # check for unicode byte order marks on first line only,
-                # these lead to parsing errors (on Python 2)
-                if line.startswith(unicodeLines):
-                    raise NewickError(
-                        "The file or stream you attempted to parse includes "
-                        "unicode byte order marks.  You must convert it to "
-                        "ASCII before it can be parsed."
-                    )
-                unicodeChecked = True
             buf += line.rstrip()
             if buf.endswith(";"):
                 yield self._parse_tree(buf)

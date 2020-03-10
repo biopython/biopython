@@ -25,7 +25,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "Q13454")
         self.assertEqual(seq_record.name, "N33_HUMAN")
@@ -99,7 +99,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -112,7 +112,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -130,7 +130,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P54101")
         self.assertEqual(seq_record.name, "CSP_MOUSE")
@@ -187,7 +187,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -200,7 +200,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -218,7 +218,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P42655")
         self.assertEqual(seq_record.name, "143E_HUMAN")
@@ -330,7 +330,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -343,7 +343,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -361,7 +361,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P0A186")
         self.assertEqual(seq_record.name, "NDOA_PSEU8")
@@ -445,7 +445,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -458,7 +458,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -476,7 +476,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P24973")
         self.assertEqual(seq_record.name, "NU3M_BALPH")
@@ -518,7 +518,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -531,7 +531,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -549,7 +549,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P39896")
         self.assertEqual(seq_record.name, "TCMO_STRGA")
@@ -587,7 +587,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -600,7 +600,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -618,7 +618,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "O95832")
         self.assertEqual(seq_record.name, "CLD1_HUMAN")
@@ -695,7 +695,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -708,7 +708,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -726,7 +726,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P01892")
         self.assertEqual(seq_record.name, "1A02_HUMAN")
@@ -1291,7 +1291,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -1304,7 +1304,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1322,7 +1322,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "O23729")
         self.assertEqual(seq_record.name, "CHS3_BROFI")
@@ -1365,7 +1365,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -1378,7 +1378,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1396,7 +1396,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "Q13639")
         self.assertEqual(seq_record.name, "5H4_HUMAN")
@@ -1590,7 +1590,7 @@ class TestSwissProt(unittest.TestCase):
         records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -1603,7 +1603,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1621,7 +1621,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "Q13639")
         self.assertEqual(seq_record.name, "5HT4R_HUMAN")
@@ -1856,7 +1856,7 @@ class TestSwissProt(unittest.TestCase):
         records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -1869,7 +1869,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1885,7 +1885,7 @@ class TestSwissProt(unittest.TestCase):
         datafile = os.path.join("SwissProt", filename)
         seq_record = SeqIO.read(datafile, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P16235")
         self.assertEqual(seq_record.name, "LSHR_RAT")
@@ -2270,7 +2270,7 @@ class TestSwissProt(unittest.TestCase):
         records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -2283,7 +2283,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -2299,7 +2299,7 @@ class TestSwissProt(unittest.TestCase):
         datafile = os.path.join("SwissProt", filename)
         seq_record = SeqIO.read(datafile, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "Q9Y736")
         self.assertEqual(seq_record.name, "Q9Y736")
@@ -2338,7 +2338,7 @@ class TestSwissProt(unittest.TestCase):
         records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -2351,7 +2351,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -2367,7 +2367,7 @@ class TestSwissProt(unittest.TestCase):
         datafile = os.path.join("SwissProt", filename)
         seq_record = SeqIO.read(datafile, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P82909")
         self.assertEqual(seq_record.name, "P82909")
@@ -2406,7 +2406,7 @@ class TestSwissProt(unittest.TestCase):
         records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -2419,7 +2419,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -2435,7 +2435,7 @@ class TestSwissProt(unittest.TestCase):
         datafile = os.path.join("SwissProt", filename)
         seq_record = SeqIO.read(datafile, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "P60137")
         self.assertEqual(seq_record.name, "PSBL_ORYSJ")
@@ -2490,7 +2490,7 @@ class TestSwissProt(unittest.TestCase):
         records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -2503,7 +2503,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -2521,7 +2521,7 @@ class TestSwissProt(unittest.TestCase):
         with open(datafile) as test_handle:
             seq_record = SeqIO.read(test_handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         self.assertEqual(seq_record.id, "IPI00383150")
         self.assertEqual(seq_record.name, "IPI00383150.2")
@@ -2554,7 +2554,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SeqRecord))
+        self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
@@ -2567,7 +2567,7 @@ class TestSwissProt(unittest.TestCase):
             records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
-        self.assertTrue(isinstance(records[0], SwissProt.Record))
+        self.assertIsInstance(records[0], SwissProt.Record)
 
         # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
