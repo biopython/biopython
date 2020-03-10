@@ -365,6 +365,7 @@ from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
+from Bio import StreamModeError
 
 from math import log
 import warnings
@@ -916,14 +917,14 @@ def FastqGeneralIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("Fastq files must be opened in text mode") from None
+            raise StreamModeError("Fastq files must be opened in text mode") from None
     try:
         try:
             line = next(handle)
         except StopIteration:
             return  # Premature end of file, or just empty?
 
-        while line:
+        while True:
             if line[0] != "@":
                 raise ValueError(
                     "Records in Fastq files should start with '@' character"
@@ -980,6 +981,9 @@ def FastqGeneralIterator(source):
 
             # Return the record and then continue...
             yield (title_line, seq_string, quality_string)
+
+            if line is None:
+                break
     finally:
         if handle is not source:
             handle.close()
@@ -1363,7 +1367,7 @@ def QualPhredIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("QUAL files must be opened in text mode") from None
+            raise StreamModeError("QUAL files must be opened in text mode") from None
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in handle:
