@@ -64,6 +64,7 @@ from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 # This is the same mechanism used for run_tests.py --offline
 # to skip tests requiring the network.
 import requires_internet
+
 try:
     requires_internet.check()
     online = True
@@ -78,13 +79,13 @@ warnings.simplefilter("ignore", BiopythonExperimentalWarning)
 fixers = refactor.get_fixers_from_package("lib2to3.fixes")
 fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
 rt = refactor.RefactoringTool(fixers)
-assert rt.refactor_docstring(
-    ">>> print(2+2)\n4\n", "example1") == \
-    ">>> print(2+2)\n4\n"
-assert rt.refactor_docstring(
-    '>>> print("Two plus two is", 2+2)\n'
-    "Two plus two is 4\n", "example2") == \
-    '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
+assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == ">>> print(2+2)\n4\n"
+assert (
+    rt.refactor_docstring(
+        '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n', "example2"
+    )
+    == '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
+)
 
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")
@@ -93,7 +94,9 @@ if os.path.basename(sys.argv[0]) == "test_Tutorial.py":
     # sys.argv[0] will be (relative) path to test_Turorial.py - use this to allow, e.g.
     # [base]$ python Tests/test_Tutorial.py
     # [Tests/]$ python test_Tutorial.py
-    tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
+    tutorial_base = os.path.abspath(
+        os.path.join(os.path.dirname(sys.argv[0]), "../Doc/")
+    )
     tutorial = os.path.join(tutorial_base, "Tutorial.tex")
 else:
     # Probably called via run_tests.py so current directory should (now) be Tests/
@@ -103,6 +106,7 @@ else:
     tutorial = os.path.join(tutorial_base, "Tutorial.tex")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
 
 # Build a list of all the Tutorial LaTeX files:
@@ -115,7 +119,9 @@ for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
 def _extract(handle):
     line = handle.readline()
     if line != "\\begin{minted}{pycon}\n":
-        raise ValueError("Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'")
+        raise ValueError(
+            "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'"
+        )
     lines = []
     while True:
         line = handle.readline()
@@ -221,16 +227,21 @@ for latex in files:
             method = lambda x: None  # noqa: E731
             if f:
                 p = os.path.join(tutorial_base, f)
-                method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
-                    % (n, p, d)
+                method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" % (
+                    n,
+                    p,
+                    d,
+                )
             else:
                 method.__doc__ = "%s\n\n%s\n" % (n, d)
             method._folder = f
             return method
 
-        setattr(TutorialDocTestHolder,
-                "doctest_%s" % name.replace(" ", "_"),
-                funct(name, example, folder))
+        setattr(
+            TutorialDocTestHolder,
+            "doctest_%s" % name.replace(" ", "_"),
+            funct(name, example, folder),
+        )
         del funct
 
 
@@ -251,27 +262,29 @@ class TutorialTestCase(unittest.TestCase):
                 failures.append(name[30:])
                 # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
-            raise ValueError("%i Tutorial doctests failed: %s" %
-                             (len(failures), ", ".join(failures)))
+            raise ValueError(
+                "%i Tutorial doctests failed: %s" % (len(failures), ", ".join(failures))
+            )
 
     def tearDown(self):
         global original_path
         os.chdir(original_path)
         # files currently don't get created during test with python3.5 and pypy
         # remove files created from chapter_phylo.tex
-        delete_phylo_tutorial = [
-            "examples/tree1.nwk", "examples/other_trees.nwk"
-            ]
+        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.nwk"]
         for file in delete_phylo_tutorial:
             if os.path.exists(os.path.join(tutorial_base, file)):
                 os.remove(os.path.join(tutorial_base, file))
         # remove files created from chapter_cluster.tex
         tutorial_cluster_base = os.path.abspath("../Tests/")
         delete_cluster_tutorial = [
-            "Cluster/cyano_result.atr", "Cluster/cyano_result.cdt",
-            "Cluster/cyano_result.gtr", "Cluster/cyano_result_K_A2.kag",
-            "Cluster/cyano_result_K_G5.kgg", "Cluster/cyano_result_K_G5_A2.cdt"
-            ]
+            "Cluster/cyano_result.atr",
+            "Cluster/cyano_result.cdt",
+            "Cluster/cyano_result.gtr",
+            "Cluster/cyano_result_K_A2.kag",
+            "Cluster/cyano_result_K_G5.kgg",
+            "Cluster/cyano_result_K_G5_A2.cdt",
+        ]
         for file in delete_cluster_tutorial:
             if os.path.exists(os.path.join(tutorial_cluster_base, file)):
                 os.remove(os.path.join(tutorial_cluster_base, file))
