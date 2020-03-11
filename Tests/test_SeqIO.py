@@ -149,7 +149,7 @@ class SeqIOConverterTestBaseClass(unittest.TestCase):
                 # Finally, use the convert function, and check that agrees:
                 handle2 = self.convert_records(filename, in_format, out_format, alphabet)
                 # We could re-parse this, but it is simpler and stricter:
-                self.assertEqual(handle.getvalue(),handle2.getvalue())
+                self.assertEqual(handle.getvalue(), handle2.getvalue())
 
     def perform_failure_tests(self, tests):
         for filename, in_format, alphabet in tests:
@@ -172,8 +172,7 @@ class SeqIOConverterTestBaseClass(unittest.TestCase):
                 with self.assertRaises(ValueError, msg="Convert should have failed!") as cm:
                     self.convert_records(filename, in_format, out_format, alphabet)
                 err2 = str(cm.exception)
-                self.assertEqual(err1, err2,
-                    "Different failures, parse/write:\n%s\nconvert:\n%s" % (err1, err2))
+                self.assertEqual(err1, err2, "Different failures, parse/write:\n%s\nconvert:\n%s" % (err1, err2))
 
 
 class ForwardOnlyHandle:
