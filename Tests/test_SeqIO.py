@@ -98,6 +98,84 @@ class SeqIOTestsBaseClass(unittest.TestCase):
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
 
+class SeqIOConverterTestBaseClass(unittest.TestCase):
+
+    def compare_record(self, old, new, fmt):
+        """Quality aware SeqRecord comparison.
+
+        This will check the mapping between Solexa and PHRED scores.
+        It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
+        """
+        self.assertEqual(old.id, new.id)
+        self.assertTrue(
+            old.description == new.description
+            or (old.id + " " + old.description).strip() == new.description
+            or new.description == "<unknown description>"
+            or new.description == "", msg="'%s' vs '%s' " % (old.description, new.description))
+        self.assertEqual(len(old.seq), len(new.seq))
+        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
+            pass
+        else:
+            if len(old.seq) < 200:
+                msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            else:
+                msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+            self.assertEqual(str(old.seq), str(new.seq), msg=msg)
+
+    def write_records(self, records, out_format):
+        handle = StringIO()
+        SeqIO.write(records, handle, out_format)
+        handle.seek(0)
+        return handle
+
+    def convert_records(self, filename, in_format, out_format, alphabet):
+        handle = StringIO()
+        SeqIO.convert(filename, in_format, handle, out_format, alphabet)
+        return handle
+
+    def perform_conversion_tests(self, tests):
+        for filename, in_format, alphabet in tests:
+            for out_format in self.out_formats:
+                records1 = list(SeqIO.parse(filename, in_format, alphabet))
+                # Write it out...
+                handle = self.write_records(records1, out_format)
+                # Now load it back and check it agrees,
+                records2 = list(SeqIO.parse(handle, out_format, alphabet))
+                n1 = len(records1)
+                n2 = len(records2)
+                self.assertEqual(n1, n2, "%i vs %i records" % (n1, n2))
+                for record1, record2 in zip(records1, records2):
+                    self.compare_record(record1, record2, out_format)
+                # Finally, use the convert function, and check that agrees:
+                handle2 = self.convert_records(filename, in_format, out_format, alphabet)
+                # We could re-parse this, but it is simpler and stricter:
+                self.assertEqual(handle.getvalue(),handle2.getvalue())
+
+    def perform_failure_tests(self, tests):
+        for filename, in_format, alphabet in tests:
+            for out_format in self.out_formats:
+                if (
+                    in_format in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"]
+                    and out_format in ["fasta", "tab"]
+                    and filename.startswith("Quality/error_qual_")
+                ):
+                    # TODO? These conversions don't check for bad characters in the quality,
+                    # and in order to pass this strict test they should.
+                    continue
+
+                # We want the SAME error message from parse/write as convert!
+                with self.assertRaises(ValueError, msg="Parse or write should have failed!") as cm:
+                    records = list(SeqIO.parse(filename, in_format, alphabet))
+                    self.write_records(records, out_format)
+                err1 = str(cm.exception)
+                # Now do the conversion...
+                with self.assertRaises(ValueError, msg="Convert should have failed!") as cm:
+                    self.convert_records(filename, in_format, out_format, alphabet)
+                err2 = str(cm.exception)
+                self.assertEqual(err1, err2,
+                    "Different failures, parse/write:\n%s\nconvert:\n%s" % (err1, err2))
+
+
 class ForwardOnlyHandle:
     """Mimic a network handle without seek and tell methods etc."""
 

@@ -14,12 +14,15 @@ from io import StringIO
 from io import BytesIO
 
 from Bio import BiopythonWarning, BiopythonParserWarning
-from Bio.Alphabet import generic_dna
+from Bio.Alphabet import generic_nucleotide, generic_dna
 from Bio.SeqIO import QualityIO
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
+
+from test_SeqIO import SeqIOConverterTestBaseClass
+
 
 BINARY_FORMATS = ["sff", "sff-trim"]
 
@@ -30,7 +33,7 @@ def truncation_expected(format):
     elif format in ["fastq", "fastq-sanger"]:
         return 93
     else:
-        assert format in ["fasta", "qual", "phd", "sff"]
+        assert format in ["fasta", "qual", "phd", "sff", "tab"]
         return None
 
 
@@ -1080,6 +1083,106 @@ class NonFastqTests(unittest.TestCase):
 
     def test_sff_as_fastq(self):
         self.check_wrong_format("Roche/greek.sff")
+
+
+class TestConverter(SeqIOConverterTestBaseClass):
+
+    out_formats = ("fasta", "tab", "fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina", "qual")
+
+    def compare_record(self, old, new, fmt):
+        """Quality aware SeqRecord comparison.
+
+        This will check the mapping between Solexa and PHRED scores.
+        It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
+        """
+        super().compare_record(old, new, fmt)
+        truncate = truncation_expected(fmt)
+        for keyword in ("phred_quality", "solexa_quality"):
+            q_old = old.letter_annotations.get(keyword)
+            q_new = new.letter_annotations.get(keyword)
+            if q_old is None or q_new is None:
+                continue
+            if truncate and q_old != q_new:
+                q_old = [min(q, truncate) for q in q_old]
+                q_new = [min(q, truncate) for q in q_new]
+            self.assertEqual(q_old, q_new, msg="Mismatch in phred_quality")
+
+        q_old = old.letter_annotations.get("phred_quality")
+        q_new = new.letter_annotations.get("solexa_quality")
+        if q_old is not None and q_new is not None:
+            # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
+            # Assume "old" is the original, and "new" has been converted.
+            converted = [round(QualityIO.solexa_quality_from_phred(q)) for q in q_old]
+            if truncate:
+                converted = [min(q, truncate) for q in converted]
+            msg = "\n".join(["Mismatch in phred_quality vs solexa_quality", str(q_old), str(converted), str(q_new)])
+            self.assertEqual(converted, q_new, msg=msg)
+
+        q_old = old.letter_annotations.get("solexa_quality")
+        q_new = new.letter_annotations.get("phred_quality")
+        if q_old is not None and q_new is not None:
+            # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
+            # Assume "old" is the original, and "new" has been converted.
+            converted = [round(QualityIO.phred_quality_from_solexa(q)) for q in q_old]
+            if truncate:
+                converted = [min(q, truncate) for q in converted]
+            msg = "\n".join(["Mismatch in solexa_quality vs phred_quality", str(q_old), str(converted), str(q_new)])
+            self.assertEqual(converted, q_new, msg=msg)
+
+    def write_records(self, records, out_format):
+        qual_truncate = truncation_expected(out_format)
+        with warnings.catch_warnings():
+            if qual_truncate:
+                warnings.simplefilter("ignore", BiopythonWarning)
+            handle = super().write_records(records, out_format)
+        return handle
+
+    def convert_records(self, filename, in_format, out_format, alphabet):
+        qual_truncate = truncation_expected(out_format)
+        with warnings.catch_warnings():
+            if qual_truncate:
+                warnings.simplefilter("ignore", BiopythonWarning)
+            handle = super().convert_records(filename, in_format, out_format, alphabet)
+        return handle
+
+    def test_conversion(self):
+        tests = [
+            ("Quality/example.fastq", "fastq", None),
+            ("Quality/example.fastq", "fastq-sanger", generic_dna),
+            ("Quality/tricky.fastq", "fastq", generic_nucleotide),
+            ("Quality/sanger_93.fastq", "fastq-sanger", None),
+            ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
+            ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
+            ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
+        ]
+        self.perform_conversion_tests(tests)
+
+    def test_failure_detection(self):
+        tests = [
+            ("Quality/error_diff_ids.fastq", "fastq", None),
+            ("Quality/error_long_qual.fastq", "fastq", None),
+            ("Quality/error_no_qual.fastq", "fastq", None),
+            ("Quality/error_qual_del.fastq", "fastq", None),
+            ("Quality/error_qual_escape.fastq", "fastq", None),
+            ("Quality/error_qual_null.fastq", "fastq", None),
+            ("Quality/error_qual_space.fastq", "fastq", None),
+            ("Quality/error_qual_tab.fastq", "fastq", None),
+            ("Quality/error_qual_unit_sep.fastq", "fastq", None),
+            ("Quality/error_qual_vtab.fastq", "fastq", None),
+            ("Quality/error_short_qual.fastq", "fastq", None),
+            ("Quality/error_spaces.fastq", "fastq", None),
+            ("Quality/error_tabs.fastq", "fastq", None),
+            ("Quality/error_trunc_at_plus.fastq", "fastq", None),
+            ("Quality/error_trunc_at_qual.fastq", "fastq", None),
+            ("Quality/error_trunc_at_seq.fastq", "fastq", None),
+            ("Quality/error_trunc_in_title.fastq", "fastq", generic_dna),
+            ("Quality/error_trunc_in_seq.fastq", "fastq", generic_nucleotide),
+            ("Quality/error_trunc_in_plus.fastq", "fastq", None),
+            ("Quality/error_trunc_in_qual.fastq", "fastq", generic_dna),
+            ("Quality/error_double_seq.fastq", "fastq", generic_dna),
+            ("Quality/error_double_qual.fastq", "fastq", generic_dna),
+        ]
+        self.perform_failure_tests(tests)
 
 
 if __name__ == "__main__":
