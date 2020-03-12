@@ -227,11 +227,7 @@ for latex in files:
             method = lambda x: None  # noqa: E731
             if f:
                 p = os.path.join(tutorial_base, f)
-                method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" % (
-                    n,
-                    p,
-                    d,
-                )
+                method.__doc__ = f"{n}\n\n>>> import os\n>>> os.chdir({p!r})\n{d}\n"
             else:
                 method.__doc__ = "%s\n\n%s\n" % (n, d)
             method._folder = f
