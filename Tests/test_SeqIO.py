@@ -75,7 +75,7 @@ test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 
-class SeqIOTestsBaseClass(unittest.TestCase):
+class SeqIOTestBaseClass(unittest.TestCase):
     """Base class for Bio.SeqIO unit tests."""
 
     modes = {}
@@ -97,15 +97,8 @@ class SeqIOTestsBaseClass(unittest.TestCase):
             return mode
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
-
-class SeqIOConverterTestBaseClass(unittest.TestCase):
-
-    def compare_record(self, old, new, fmt):
-        """Quality aware SeqRecord comparison.
-
-        This will check the mapping between Solexa and PHRED scores.
-        It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
-        """
+    def compare_record(self, old, new, *args, **kwargs):
+        """Default SeqRecord comparison."""
         self.assertEqual(old.id, new.id)
         self.assertTrue(
             old.description == new.description
@@ -121,6 +114,15 @@ class SeqIOConverterTestBaseClass(unittest.TestCase):
             else:
                 msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
             self.assertEqual(str(old.seq), str(new.seq), msg=msg)
+
+    def compare_records(self, old_list, new_list, *args, **kwargs):
+        """Check if two lists of SeqRecords are equal."""
+        self.assertEqual(len(old_list), len(new_list))
+        for old, new in zip(old_list, new_list):
+            self.compare_record(old, new, *args, **kwargs)
+
+
+class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
 
     def write_records(self, records, out_format):
         handle = StringIO()
@@ -141,11 +143,7 @@ class SeqIOConverterTestBaseClass(unittest.TestCase):
                 handle = self.write_records(records1, out_format)
                 # Now load it back and check it agrees,
                 records2 = list(SeqIO.parse(handle, out_format, alphabet))
-                n1 = len(records1)
-                n2 = len(records2)
-                self.assertEqual(n1, n2, "%i vs %i records" % (n1, n2))
-                for record1, record2 in zip(records1, records2):
-                    self.compare_record(record1, record2, out_format)
+                self.compare_records(records1, records2, out_format)
                 # Finally, use the convert function, and check that agrees:
                 handle2 = self.convert_records(filename, in_format, out_format, alphabet)
                 # We could re-parse this, but it is simpler and stricter:
@@ -262,43 +260,33 @@ class TestZipped(unittest.TestCase):
                 list(SeqIO.parse(handle, "gb"))
 
 
-class TestSeqIO(SeqIOTestsBaseClass):
+class TestSeqIO(SeqIOTestBaseClass):
     def setUp(self):
         self.addTypeEqualityFunc(SeqRecord, self.compare_record)
 
     def compare_record(self, record_one, record_two, msg=None):
         """Attempt strict SeqRecord comparison."""
-        if not isinstance(record_one, SeqRecord):
-            self.failureException(msg)
-        if not isinstance(record_two, SeqRecord):
-            self.failureException(msg)
-        if record_one.seq is None:
-            self.failureException(msg)
-        if record_two.seq is None:
-            self.failureException(msg)
-        if record_one.id != record_two.id:
-            self.failureException(msg)
-        if record_one.name != record_two.name:
-            self.failureException(msg)
-        if record_one.description != record_two.description:
-            self.failureException(msg)
-        if len(record_one) != len(record_two):
-            self.failureException(msg)
+        self.assertIsInstance(record_one, SeqRecord, msg=msg)
+        self.assertIsInstance(record_two, SeqRecord, msg=msg)
+        self.assertIsNotNone(record_one.seq, msg=msg)
+        self.assertIsNotNone(record_two.seq, msg=msg)
+        self.assertEqual(record_one.id, record_two.id, msg=msg)
+        self.assertEqual(record_one.name, record_two.name, msg=msg)
+        self.assertEqual(record_one.description, record_two.description, msg=msg)
+        self.assertEqual(len(record_one), len(record_two), msg=msg)
         if isinstance(record_one.seq, UnknownSeq) and isinstance(
             record_two.seq, UnknownSeq
         ):
             # Jython didn't like us comparing the string of very long UnknownSeq
             # object (out of heap memory error)
-            if record_one.seq._character != record_two.seq._character:
-                self.failureException(msg)
-        elif str(record_one.seq) != str(record_two.seq):
-            self.failureException(msg)
+            self.assertEqual(record_one.seq._character, record_two.seq._character, msg=msg)
+        else:
+            self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
         ):
-            if record_one.letter_annotations[key] != record_two.letter_annotations[key]:
-                self.failureException(msg)
+            self.assertEqual(record_one.letter_annotations[key], record_two.letter_annotations[key], msg=msg)
 
     def check_simple_write_read(self, records, t_format, t_count, messages):
         """Check can write/read given records.
