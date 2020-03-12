@@ -98,7 +98,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
     def compare_record(self, old, new, *args, **kwargs):
-        """Default SeqRecord comparison."""
+        """Compare old SeqRecord to new SeqRecord"""
         self.assertEqual(old.id, new.id)
         self.assertTrue(
             old.description == new.description
