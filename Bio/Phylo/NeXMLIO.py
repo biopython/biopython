@@ -138,10 +138,9 @@ class Parser:
                 node_children = {}
                 root = None
 
-                child_tags = list(node)
                 nodes = []
                 edges = []
-                for child in child_tags:
+                for child in node:
                     if child.tag == qUri("nex:node"):
                         nodes.append(child)
                     if child.tag == qUri("nex:edge"):

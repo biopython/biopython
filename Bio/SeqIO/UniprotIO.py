@@ -286,11 +286,9 @@ class Parser:
                             end = int(pos_els[0].attrib["position"])
                             start = end - 1
                         else:
-                            start = int(
-                                list(el.iter(NS + "begin"))[0].attrib["position"]
-                            )
+                            start = int(next(el.iter(NS + "begin")).attrib["position"])
                             start -= 1
-                            end = int(list(el.iter(NS + "end"))[0].attrib["position"])
+                            end = int(next(el.iter(NS + "end")).attrib["position"])
                     except (ValueError, KeyError):
                         # undefined positions or erroneously mapped
                         pass
