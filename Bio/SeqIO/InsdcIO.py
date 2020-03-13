@@ -1521,7 +1521,7 @@ class ImgtWriter(EmblWriter):
 
 
 def convert(in_stream, in_format, out_stream, out_format):
-    """Fast GenBank/EMBL to FASTA (PRIVATE)."""
+    """Fast GenBank/EMBL to FASTA."""
     if out_format != "fasta":
         return None
     if in_format in ("genbank", "gb"):
