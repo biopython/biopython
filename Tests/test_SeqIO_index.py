@@ -334,7 +334,67 @@ if sqlite3:
 
 
 class IndexDictTests(SeqIOTestBaseClass):
-    """Cunning unit test where methods are added at run time."""  # TODO - Let's not be cunning
+
+    tests = [
+        ("Ace/contig1.ace", "ace", generic_dna),
+        ("Ace/consed_sample.ace", "ace", None),
+        ("Ace/seq.cap.ace", "ace", generic_dna),
+        ("Quality/wrapping_original_sanger.fastq", "fastq", None),
+        ("Quality/example.fastq", "fastq", None),  # Unix newlines
+        ("Quality/example.fastq", "fastq-sanger", generic_dna),
+        ("Quality/example_dos.fastq", "fastq", None),  # DOS/Windows newlines
+        ("Quality/tricky.fastq", "fastq", generic_nucleotide),
+        ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
+        ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
+        ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
+        ("Quality/zero_length.fastq", "fastq", generic_dna),
+        ("EMBL/epo_prt_selection.embl", "embl", None),
+        ("EMBL/U87107.embl", "embl", None),
+        ("EMBL/TRBG361.embl", "embl", None),
+        ("EMBL/kipo_prt_sample.embl", "embl", None),
+        ("EMBL/A04195.imgt", "embl", None),  # Not a proper EMBL file, an IMGT file
+        ("EMBL/A04195.imgt", "imgt", None),
+        ("EMBL/hla_3260_sample.imgt", "imgt", None),
+        ("EMBL/patents.embl", "embl", generic_protein),
+        ("EMBL/AAA03323.embl", "embl", None),
+        ("GenBank/NC_000932.faa", "fasta", generic_protein),
+        ("GenBank/NC_005816.faa", "fasta", generic_protein),
+        ("GenBank/NC_005816.tsv", "tab", generic_protein),
+        ("GenBank/NC_005816.ffn", "fasta", generic_dna),
+        ("GenBank/NC_005816.fna", "fasta", generic_dna),
+        ("GenBank/NC_005816.gb", "gb", None),
+        ("GenBank/cor6_6.gb", "genbank", None),
+        ("GenBank/empty_accession.gbk", "gb", None),
+        ("GenBank/empty_version.gbk", "gb", None),
+        ("IntelliGenetics/vpu_nucaligned.txt", "ig", generic_nucleotide),
+        ("IntelliGenetics/TAT_mase_nuc.txt", "ig", None),
+        ("IntelliGenetics/VIF_mase-pro.txt", "ig", generic_protein),
+        ("Phd/phd1", "phd", generic_dna),
+        ("Phd/phd2", "phd", None),
+        ("Phd/phd_solexa", "phd", generic_dna),
+        ("Phd/phd_454", "phd", generic_dna),
+        ("NBRF/B_nuc.pir", "pir", generic_nucleotide),
+        ("NBRF/Cw_prot.pir", "pir", generic_protein),
+        ("NBRF/clustalw.pir", "pir", None),
+        ("SwissProt/sp001", "swiss", None),
+        ("SwissProt/sp010", "swiss", None),
+        ("SwissProt/sp016", "swiss", None),
+        ("SwissProt/multi_ex.txt", "swiss", None),
+        ("SwissProt/multi_ex.xml", "uniprot-xml", None),
+        ("SwissProt/multi_ex.fasta", "fasta", None),
+        ("Roche/E3MFGYR02_random_10_reads.sff", "sff", generic_dna),
+        ("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim", generic_dna),
+        ("Roche/E3MFGYR02_index_at_start.sff", "sff", generic_dna),
+        ("Roche/E3MFGYR02_index_in_middle.sff", "sff", generic_dna),
+        ("Roche/E3MFGYR02_alt_index_at_start.sff", "sff", generic_dna),
+        ("Roche/E3MFGYR02_alt_index_in_middle.sff", "sff", generic_dna),
+        ("Roche/E3MFGYR02_alt_index_at_end.sff", "sff", generic_dna),
+        ("Roche/E3MFGYR02_no_manifest.sff", "sff", generic_dna),
+        ("Roche/greek.sff", "sff", generic_nucleotide),
+        ("Roche/greek.sff", "sff-trim", generic_nucleotide),
+        ("Roche/paired.sff", "sff", None),
+        ("Roche/paired.sff", "sff-trim", None),
+    ]
 
     def setUp(self):
         os.chdir(CUR_DIR)
@@ -346,14 +406,42 @@ class IndexDictTests(SeqIOTestBaseClass):
         if os.path.isfile(self.index_tmp):
             os.remove(self.index_tmp)
 
-    def simple_check(self, filename, format, alphabet, comp):
+    def check_dict_methods(self, rec_dict, keys, ids, msg):
+        self.assertEqual(set(keys), set(rec_dict), msg=msg)
+        # This is redundant, I just want to make sure len works:
+        self.assertEqual(len(keys), len(rec_dict), msg=msg)
+        # Make sure boolean evaluation works
+        self.assertEqual(bool(keys), bool(rec_dict), msg=msg)
+        for key, id in zip(keys, ids):
+            self.assertIn(key, rec_dict, msg=msg)
+            self.assertEqual(id, rec_dict[key].id, msg=msg)
+            self.assertEqual(id, rec_dict.get(key).id, msg=msg)
+        # Check non-existant keys,
+        assert chr(0) not in keys, "Bad example in test"
+        with self.assertRaises(KeyError, msg=msg):
+            rec = rec_dict[chr(0)]
+        self.assertEqual(rec_dict.get(chr(0)), None, msg=msg)
+        self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1), msg=msg)
+        with self.assertRaises(AttributeError, msg=msg):
+            rec_dict.iteritems
+        for key, rec in rec_dict.items():
+            self.assertIn(key, keys, msg=msg)
+            self.assertIsInstance(rec, SeqRecord, msg=msg)
+            self.assertIn(rec.id, ids, msg=msg)
+        for rec in rec_dict.values():
+            self.assertIn(key, keys, msg=msg)
+            self.assertIsInstance(rec, SeqRecord, msg=msg)
+            self.assertIn(rec.id, ids, msg=msg)
+
+    def simple_check(self, filename, fmt, alphabet, comp):
         """Check indexing (without a key function)."""
+        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
         if comp:
-            mode = "r" + self.get_mode(format)
+            mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
-                id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
+                id_list = [rec.id for rec in SeqIO.parse(handle, fmt, alphabet)]
         else:
-            id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
+            id_list = [rec.id for rec in SeqIO.parse(filename, fmt, alphabet)]
 
         with warnings.catch_warnings():
             if "_alt_index_" in filename:
@@ -362,26 +450,24 @@ class IndexDictTests(SeqIOTestBaseClass):
                 # b'.diy1.00'
                 warnings.simplefilter("ignore", BiopythonParserWarning)
 
-            rec_dict = SeqIO.index(filename, format, alphabet)
-            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict = SeqIO.index(filename, fmt, alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list, msg=msg)
             rec_dict.close()
-            del rec_dict
 
             if not sqlite3:
                 return
 
             # In memory,
             # note here give filenames as list of strings
-            rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet)
-            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict = SeqIO.index_db(":memory:", [filename], fmt, alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list, msg=msg)
             rec_dict.close()
-            del rec_dict
 
             # check error conditions
-            self.assertRaises(ValueError, SeqIO.index_db, ":memory:", format="dummy")
-            self.assertRaises(
-                ValueError, SeqIO.index_db, ":memory:", filenames=["dummy"]
-            )
+            with self.assertRaises(ValueError, msg=msg):
+                SeqIO.index_db(":memory:", format="dummy")
+            with self.assertRaises(ValueError, msg=msg):
+                SeqIO.index_db(":memory:", filenames=["dummy"])
 
             # Saving to file...
             index_tmp = self.index_tmp
@@ -390,29 +476,29 @@ class IndexDictTests(SeqIOTestBaseClass):
 
             # To disk,
             # note here we give the filename as a single string
-            # to confirm that works too (convience feature).
-            rec_dict = SeqIO.index_db(index_tmp, filename, format, alphabet)
-            self.check_dict_methods(rec_dict, id_list, id_list)
+            # to confirm that works too.
+            rec_dict = SeqIO.index_db(index_tmp, filename, fmt, alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            del rec_dict
 
             # Now reload it...
-            rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
-            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict = SeqIO.index_db(index_tmp, [filename], fmt, alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            del rec_dict
 
             # Now reload without passing filenames and format
             # and switch directory to check  paths still work
             index_tmp = os.path.abspath(index_tmp)
             os.chdir(os.path.dirname(filename))
-            rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
-            self.check_dict_methods(rec_dict, id_list, id_list)
+            try:
+                rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
+            finally:
+                os.chdir(CUR_DIR)
+            self.check_dict_methods(rec_dict, id_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            del rec_dict
 
             os.remove(index_tmp)
 
@@ -420,14 +506,15 @@ class IndexDictTests(SeqIOTestBaseClass):
         """Sample key_function for testing index code."""
         return "id_" + key
 
-    def key_check(self, filename, format, alphabet, comp):
+    def key_check(self, filename, fmt, alphabet, comp):
         """Check indexing with a key function."""
+        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
         if comp:
-            mode = "r" + self.get_mode(format)
+            mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
-                id_list = [rec.id for rec in SeqIO.parse(handle, format, alphabet)]
+                id_list = [rec.id for rec in SeqIO.parse(handle, fmt, alphabet)]
         else:
-            id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
+            id_list = [rec.id for rec in SeqIO.parse(filename, fmt, alphabet)]
 
         key_list = [self.add_prefix(id) for id in id_list]
 
@@ -438,178 +525,127 @@ class IndexDictTests(SeqIOTestBaseClass):
                 # b'.diy1.00'
                 warnings.simplefilter("ignore", BiopythonParserWarning)
 
-            rec_dict = SeqIO.index(filename, format, alphabet, self.add_prefix)
-            self.check_dict_methods(rec_dict, key_list, id_list)
+            rec_dict = SeqIO.index(filename, fmt, alphabet, self.add_prefix)
+            self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
-            del rec_dict
 
             if not sqlite3:
                 return
 
             # In memory,
             rec_dict = SeqIO.index_db(
-                ":memory:", [filename], format, alphabet, self.add_prefix
+                ":memory:", [filename], fmt, alphabet, self.add_prefix
             )
-            self.check_dict_methods(rec_dict, key_list, id_list)
+            self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             # check error conditions
-            self.assertRaises(
-                ValueError,
-                SeqIO.index_db,
-                ":memory:",
-                format="dummy",
-                key_function=self.add_prefix,
-            )
-            self.assertRaises(
-                ValueError,
-                SeqIO.index_db,
-                ":memory:",
-                filenames=["dummy"],
-                key_function=self.add_prefix,
-            )
+            with self.assertRaises(ValueError, msg=msg):
+                SeqIO.index_db(":memory:", format="dummy", key_function=self.add_prefix)
+            with self.assertRaises(ValueError, msg=msg):
+                SeqIO.index_db(":memory:", filenames=["dummy"], key_function=self.add_prefix)
             rec_dict.close()
-            del rec_dict
 
             # Saving to file...
             index_tmp = filename + ".key.idx"
             if os.path.isfile(index_tmp):
                 os.remove(index_tmp)
             rec_dict = SeqIO.index_db(
-                index_tmp, [filename], format, alphabet, self.add_prefix
+                index_tmp, [filename], fmt, alphabet, self.add_prefix
             )
-            self.check_dict_methods(rec_dict, key_list, id_list)
+            self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            del rec_dict
 
             # Now reload it...
             rec_dict = SeqIO.index_db(
-                index_tmp, [filename], format, alphabet, self.add_prefix
+                index_tmp, [filename], fmt, alphabet, self.add_prefix
             )
-            self.check_dict_methods(rec_dict, key_list, id_list)
+            self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            del rec_dict
 
             # Now reload without passing filenames and format
             rec_dict = SeqIO.index_db(
                 index_tmp, alphabet=alphabet, key_function=self.add_prefix
             )
-            self.check_dict_methods(rec_dict, key_list, id_list)
+            self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
-            del rec_dict
             os.remove(index_tmp)
             # Done
 
-    def check_dict_methods(self, rec_dict, keys, ids):
-        self.assertEqual(set(keys), set(rec_dict))
-        # This is redundant, I just want to make sure len works:
-        self.assertEqual(len(keys), len(rec_dict))
-        # Make sure boolean evaluation works
-        self.assertEqual(bool(keys), bool(rec_dict))
-        for key, id in zip(keys, ids):
-            self.assertIn(key, rec_dict)
-            self.assertEqual(id, rec_dict[key].id)
-            self.assertEqual(id, rec_dict.get(key).id)
-        # Check non-existant keys,
-        assert chr(0) not in keys, "Bad example in test"
-        try:
-            rec = rec_dict[chr(0)]
-            raise ValueError("Accessing a non-existent key should fail")
-        except KeyError:
-            pass
-        self.assertEqual(rec_dict.get(chr(0)), None)
-        self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
-        assert not hasattr(rec_dict, "iteritems")
-        for key, rec in rec_dict.items():
-            self.assertIn(key, keys)
-            self.assertIsInstance(rec, SeqRecord)
-            self.assertIn(rec.id, ids)
-        for rec in rec_dict.values():
-            self.assertIn(key, keys)
-            self.assertIsInstance(rec, SeqRecord)
-            self.assertIn(rec.id, ids)
-
-    def get_raw_check(self, filename, format, alphabet, comp):
+    def get_raw_check(self, filename, fmt, alphabet, comp):
         # Also checking the key_function here
+        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
         if comp:
             with gzip.open(filename, "rb") as handle:
                 raw_file = handle.read()
-            mode = "r" + self.get_mode(format)
+            mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
                 id_list = [
-                    rec.id.lower() for rec in SeqIO.parse(handle, format, alphabet)
+                    rec.id.lower() for rec in SeqIO.parse(handle, fmt, alphabet)
                 ]
         else:
             with open(filename, "rb") as handle:
                 raw_file = handle.read()
             id_list = [
-                rec.id.lower() for rec in SeqIO.parse(filename, format, alphabet)
+                rec.id.lower() for rec in SeqIO.parse(filename, fmt, alphabet)
             ]
 
-        if format in ["sff"]:
+        if fmt in ["sff"]:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonParserWarning)
                 rec_dict = SeqIO.index(
-                    filename, format, alphabet, key_function=lambda x: x.lower()
-                )  # noqa: E731
+                    filename, fmt, alphabet, key_function=str.lower
+                )
                 if sqlite3:
                     rec_dict_db = SeqIO.index_db(
                         ":memory:",
                         filename,
-                        format,
+                        fmt,
                         alphabet,
-                        key_function=lambda x: x.lower(),
-                    )  # noqa: E731
+                        key_function=str.lower,
+                    )
         else:
-            rec_dict = SeqIO.index(
-                filename, format, alphabet, key_function=lambda x: x.lower()
-            )  # noqa: E731
+            rec_dict = SeqIO.index( filename, fmt, alphabet, key_function=str.lower)
             if sqlite3:
                 rec_dict_db = SeqIO.index_db(
                     ":memory:",
                     filename,
-                    format,
+                    fmt,
                     alphabet,
-                    key_function=lambda x: x.lower(),
-                )  # noqa: E731
+                    key_function=str.lower,
+                )
 
-        self.assertEqual(set(id_list), set(rec_dict))
+        self.assertEqual(set(id_list), set(rec_dict), msg=msg)
         if sqlite3:
-            self.assertEqual(set(id_list), set(rec_dict_db))
-        self.assertEqual(len(id_list), len(rec_dict))
+            self.assertEqual(set(id_list), set(rec_dict_db), msg=msg)
+        self.assertEqual(len(id_list), len(rec_dict), msg=msg)
         for key in id_list:
-            self.assertIn(key, rec_dict)
-            self.assertEqual(key, rec_dict[key].id.lower())
-            self.assertEqual(key, rec_dict.get(key).id.lower())
+            self.assertIn(key, rec_dict, msg=msg)
+            self.assertEqual(key, rec_dict[key].id.lower(), msg=msg)
+            self.assertEqual(key, rec_dict.get(key).id.lower(), msg=msg)
             raw = rec_dict.get_raw(key)
-            self.assertTrue(
-                isinstance(raw, bytes), "Didn't get bytes from %s get_raw" % format
-            )
-            self.assertTrue(raw.strip())
-            self.assertIn(raw, raw_file)
+            self.assertIsInstance(raw, bytes, msg=msg)
+            self.assertTrue(raw.strip(), msg=msg)
+            self.assertIn(raw, raw_file, msg=msg)
 
             if sqlite3:
                 raw_db = rec_dict_db.get_raw(key)
                 # Via index using format-specific get_raw which scans the file,
                 # Via index_db in general using raw length found when indexing.
-                self.assertEqual(
-                    raw,
-                    raw_db,
-                    "index and index_db .get_raw() different for %s" % format,
-                )
+                self.assertEqual(raw, raw_db, msg=msg)
 
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
             # __getitem__ SFF code is working.
-            mode = self.get_mode(format)
+            mode = self.get_mode(fmt)
             if mode == "b":
                 handle = BytesIO(raw)
             elif mode == "t":
                 handle = StringIO(raw.decode())
             else:
                 raise RuntimeError("Unexpected mode %s" % mode)
-            if format == "sff":
+            if fmt == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
                     rec_dict._proxy._flows_per_read,
@@ -618,7 +654,7 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._alphabet,
                     trim=False,
                 )
-            elif format == "sff-trim":
+            elif fmt == "sff-trim":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
                     rec_dict._proxy._flows_per_read,
@@ -627,9 +663,9 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._alphabet,
                     trim=True,
                 )
-            elif format == "uniprot-xml":
-                self.assertTrue(raw.startswith(b"<entry "))
-                self.assertTrue(raw.endswith(b"</entry>"))
+            elif fmt == "uniprot-xml":
+                self.assertTrue(raw.startswith(b"<entry "), msg=msg)
+                self.assertTrue(raw.endswith(b"</entry>"), msg=msg)
                 # Currently the __getitem__ method uses this
                 # trick too, but we hope to fix that later
                 raw = (
@@ -644,9 +680,9 @@ class IndexDictTests(SeqIOTestBaseClass):
                     % raw.decode()
                 )
                 handle = StringIO(raw)
-                rec2 = SeqIO.read(handle, format, alphabet)
+                rec2 = SeqIO.read(handle, fmt, alphabet)
             else:
-                rec2 = SeqIO.read(handle, format, alphabet)
+                rec2 = SeqIO.read(handle, fmt, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
         rec_dict.close()
         del rec_dict
@@ -668,6 +704,33 @@ class IndexDictTests(SeqIOTestBaseClass):
         with open("Fasta/dups.fasta") as handle:
             iterator = SeqIO.parse(handle, "fasta")
             self.assertRaises(ValueError, SeqIO.to_dict, iterator)
+
+    def test_simple_checks(self):
+        for filename1, fmt, alphabet in self.tests:
+            assert fmt in _FormatToRandomAccess
+            tasks = [(filename1, None)]
+            if os.path.isfile(filename1 + ".bgz"):
+                tasks.append((filename1 + ".bgz", "bgzf"))
+            for filename2, comp in tasks:
+                self.simple_check(filename2, fmt, alphabet, comp)
+
+    def test_key_checks(self):
+        for filename1, fmt, alphabet in self.tests:
+            assert fmt in _FormatToRandomAccess
+            tasks = [(filename1, None)]
+            if os.path.isfile(filename1 + ".bgz"):
+                tasks.append((filename1 + ".bgz", "bgzf"))
+            for filename2, comp in tasks:
+                self.key_check(filename2, fmt, alphabet, comp)
+
+    def test_raw_checks(self):
+        for filename1, fmt, alphabet in self.tests:
+            assert fmt in _FormatToRandomAccess
+            tasks = [(filename1, None)]
+            if os.path.isfile(filename1 + ".bgz"):
+                tasks.append((filename1 + ".bgz", "bgzf"))
+            for filename2, comp in tasks:
+                self.get_raw_check(filename2, fmt, alphabet, comp)
 
 
 class IndexOrderingSingleFile(unittest.TestCase):
@@ -704,111 +767,6 @@ if sqlite3:
             d = SeqIO.index_db(":memory:", files, "fasta")
             self.assertEqual(ids, list(d))
 
-
-tests = [
-    ("Ace/contig1.ace", "ace", generic_dna),
-    ("Ace/consed_sample.ace", "ace", None),
-    ("Ace/seq.cap.ace", "ace", generic_dna),
-    ("Quality/wrapping_original_sanger.fastq", "fastq", None),
-    ("Quality/example.fastq", "fastq", None),  # Unix newlines
-    ("Quality/example.fastq", "fastq-sanger", generic_dna),
-    ("Quality/example_dos.fastq", "fastq", None),  # DOS/Windows newlines
-    ("Quality/tricky.fastq", "fastq", generic_nucleotide),
-    ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
-    ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
-    ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
-    ("Quality/zero_length.fastq", "fastq", generic_dna),
-    ("EMBL/epo_prt_selection.embl", "embl", None),
-    ("EMBL/U87107.embl", "embl", None),
-    ("EMBL/TRBG361.embl", "embl", None),
-    ("EMBL/kipo_prt_sample.embl", "embl", None),
-    ("EMBL/A04195.imgt", "embl", None),  # Not a proper EMBL file, an IMGT file
-    ("EMBL/A04195.imgt", "imgt", None),
-    ("EMBL/hla_3260_sample.imgt", "imgt", None),
-    ("EMBL/patents.embl", "embl", generic_protein),
-    ("EMBL/AAA03323.embl", "embl", None),
-    ("GenBank/NC_000932.faa", "fasta", generic_protein),
-    ("GenBank/NC_005816.faa", "fasta", generic_protein),
-    ("GenBank/NC_005816.tsv", "tab", generic_protein),
-    ("GenBank/NC_005816.ffn", "fasta", generic_dna),
-    ("GenBank/NC_005816.fna", "fasta", generic_dna),
-    ("GenBank/NC_005816.gb", "gb", None),
-    ("GenBank/cor6_6.gb", "genbank", None),
-    ("GenBank/empty_accession.gbk", "gb", None),
-    ("GenBank/empty_version.gbk", "gb", None),
-    ("IntelliGenetics/vpu_nucaligned.txt", "ig", generic_nucleotide),
-    ("IntelliGenetics/TAT_mase_nuc.txt", "ig", None),
-    ("IntelliGenetics/VIF_mase-pro.txt", "ig", generic_protein),
-    ("Phd/phd1", "phd", generic_dna),
-    ("Phd/phd2", "phd", None),
-    ("Phd/phd_solexa", "phd", generic_dna),
-    ("Phd/phd_454", "phd", generic_dna),
-    ("NBRF/B_nuc.pir", "pir", generic_nucleotide),
-    ("NBRF/Cw_prot.pir", "pir", generic_protein),
-    ("NBRF/clustalw.pir", "pir", None),
-    ("SwissProt/sp001", "swiss", None),
-    ("SwissProt/sp010", "swiss", None),
-    ("SwissProt/sp016", "swiss", None),
-    ("SwissProt/multi_ex.txt", "swiss", None),
-    ("SwissProt/multi_ex.xml", "uniprot-xml", None),
-    ("SwissProt/multi_ex.fasta", "fasta", None),
-    ("Roche/E3MFGYR02_random_10_reads.sff", "sff", generic_dna),
-    ("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim", generic_dna),
-    ("Roche/E3MFGYR02_index_at_start.sff", "sff", generic_dna),
-    ("Roche/E3MFGYR02_index_in_middle.sff", "sff", generic_dna),
-    ("Roche/E3MFGYR02_alt_index_at_start.sff", "sff", generic_dna),
-    ("Roche/E3MFGYR02_alt_index_in_middle.sff", "sff", generic_dna),
-    ("Roche/E3MFGYR02_alt_index_at_end.sff", "sff", generic_dna),
-    ("Roche/E3MFGYR02_no_manifest.sff", "sff", generic_dna),
-    ("Roche/greek.sff", "sff", generic_nucleotide),
-    ("Roche/greek.sff", "sff-trim", generic_nucleotide),
-    ("Roche/paired.sff", "sff", None),
-    ("Roche/paired.sff", "sff-trim", None),
-]
-for filename1, format, alphabet in tests:
-    assert format in _FormatToRandomAccess
-    tasks = [(filename1, None)]
-    if os.path.isfile(filename1 + ".bgz"):
-        tasks.append((filename1 + ".bgz", "bgzf"))
-    for filename2, comp in tasks:
-
-        def funct(fn, fmt, alpha, c):
-            f = lambda x: x.simple_check(fn, fmt, alpha, c)  # noqa: E731
-            f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
-            return f
-
-        setattr(
-            IndexDictTests,
-            "test_%s_%s_simple"
-            % (format, filename2.replace("/", "_").replace(".", "_")),
-            funct(filename2, format, alphabet, comp),
-        )
-        del funct
-
-        def funct(fn, fmt, alpha, c):
-            f = lambda x: x.key_check(fn, fmt, alpha, c)  # noqa: E731
-            f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
-            return f
-
-        setattr(
-            IndexDictTests,
-            "test_%s_%s_keyf" % (format, filename2.replace("/", "_").replace(".", "_")),
-            funct(filename2, format, alphabet, comp),
-        )
-        del funct
-
-        def funct(fn, fmt, alpha, c):
-            f = lambda x: x.get_raw_check(fn, fmt, alpha, c)  # noqa: E731
-            f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
-            return f
-
-        setattr(
-            IndexDictTests,
-            "test_%s_%s_get_raw"
-            % (format, filename2.replace("/", "_").replace(".", "_")),
-            funct(filename2, format, alphabet, comp),
-        )
-        del funct
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
