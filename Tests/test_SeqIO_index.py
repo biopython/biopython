@@ -606,7 +606,7 @@ class IndexDictTests(SeqIOTestBaseClass):
                         key_function=str.lower,
                     )
         else:
-            rec_dict = SeqIO.index( filename, fmt, alphabet, key_function=str.lower)
+            rec_dict = SeqIO.index(filename, fmt, alphabet, key_function=str.lower)
             if sqlite3:
                 rec_dict_db = SeqIO.index_db(
                     ":memory:",
