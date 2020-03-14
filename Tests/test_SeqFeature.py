@@ -99,19 +99,19 @@ class TestFeatureLocation(unittest.TestCase):
         expected = "must be greater than or equal to start location"
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 23, 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 0, 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, AfterPosition(0), 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         # Features with UnknownPositions should pass check
         FeatureLocation(42, UnknownPosition())
