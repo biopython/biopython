@@ -41,7 +41,6 @@ class ConvertTests(unittest.TestCase):
         self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
         # TODO - convert passing an output filename?
 
-
     def test_convert(self):
         tests = [("Clustalw/hedgehog.aln", "clustal", None),
                  ("Nexus/test_Nexus_input.nex", "nexus", None),
