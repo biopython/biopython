@@ -43,6 +43,20 @@ def title_to_ids(title):
     return id, name, descr
 
 
+def read_single_with_titles(filename, alphabet):
+    """Parser wrapper to confirm single entry FASTA file."""
+    global title_to_ids
+    with open(filename) as handle:
+        iterator = FastaIterator(handle, alphabet, title_to_ids)
+        record = next(iterator)
+        try:
+            second = next(iterator)
+        except StopIteration:
+            second = None
+    assert record is not None and second is None
+    return record
+
+
 def read_title_and_seq(filename):
     """Crude parser that gets the first record from a FASTA file."""
     with open(filename) as handle:
@@ -81,46 +95,45 @@ class Wrapping(unittest.TestCase):
 
 
 class TitleFunctions(unittest.TestCase):
-    """Test using title functions."""
+    """Test using title functions.
+
+    This is a dynamic class where methods are added at run time.
+    """
 
     def simple_check(self, filename, alphabet):
         """Test parsing single record FASTA files."""
-        msg = "Test failure parsing file %s" % filename
         title, seq = read_title_and_seq(filename)  # crude parser
-        idn, name, descr = title_to_ids(title)
         # First check using Bio.SeqIO.FastaIO directly with title function,
-        records = FastaIterator(filename, alphabet, title_to_ids)
-        record = next(records)
-        with self.assertRaises(StopIteration):
-            next(records)
-        self.assertEqual(record.id, idn, msg=msg)
-        self.assertEqual(record.name, name, msg=msg)
-        self.assertEqual(record.description, descr, msg=msg)
-        self.assertEqual(str(record.seq), seq, msg=msg)
-        self.assertEqual(record.seq.alphabet, alphabet, msg=msg)
+        record = read_single_with_titles(filename, alphabet)
+        idn, name, descr = title_to_ids(title)
+        self.assertEqual(record.id, idn)
+        self.assertEqual(record.name, name)
+        self.assertEqual(record.description, descr)
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.seq.alphabet, alphabet)
         # Now check using Bio.SeqIO (default settings)
         record = SeqIO.read(filename, "fasta", alphabet)
-        self.assertEqual(record.id, title.split()[0], msg=msg)
-        self.assertEqual(record.name, title.split()[0], msg=msg)
-        self.assertEqual(record.description, title, msg=msg)
-        self.assertEqual(str(record.seq), seq, msg=msg)
-        self.assertEqual(record.seq.alphabet, alphabet, msg=msg)
+        self.assertEqual(record.id, title.split()[0])
+        self.assertEqual(record.name, title.split()[0])
+        self.assertEqual(record.description, title)
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.seq.alphabet, alphabet)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
     def multi_check(self, filename, alphabet):
         """Test parsing multi-record FASTA files."""
-        msg = "Test failure parsing file %s" % filename
-        re_titled = list(FastaIterator(filename, alphabet, title_to_ids))
+        with open(filename) as handle:
+            re_titled = list(FastaIterator(handle, alphabet, title_to_ids))
         default = list(SeqIO.parse(filename, "fasta", alphabet))
-        self.assertEqual(len(re_titled), len(default), msg=msg)
+        self.assertEqual(len(re_titled), len(default))
         for old, new in zip(default, re_titled):
             idn, name, descr = title_to_ids(old.description)
-            self.assertEqual(new.id, idn, msg=msg)
-            self.assertEqual(new.name, name, msg=msg)
-            self.assertEqual(new.description, descr, msg=msg)
-            self.assertEqual(str(new.seq), str(old.seq), msg=msg)
-            self.assertEqual(new.seq.alphabet, old.seq.alphabet, msg=msg)
+            self.assertEqual(new.id, idn)
+            self.assertEqual(new.name, name)
+            self.assertEqual(new.description, descr)
+            self.assertEqual(str(new.seq), str(old.seq))
+            self.assertEqual(new.seq.alphabet, old.seq.alphabet)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
@@ -133,42 +146,6 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual("", record.id)
         self.assertEqual("", record.name)
         self.assertEqual("", record.description)
-
-    def test_single_nucleic_files(self):
-        """Test Fasta files containing a single nucleotide sequence."""
-        paths = ("Fasta/lupine.nu",
-                 "Fasta/elderberry.nu",
-                 "Fasta/phlox.nu",
-                 "Fasta/centaurea.nu",
-                 "Fasta/wisteria.nu",
-                 "Fasta/sweetpea.nu",
-                 "Fasta/lavender.nu",
-                 "Fasta/f001",
-                 )
-        for path in paths:
-            self.simple_check(path, generic_nucleotide)
-
-    def test_multi_dna_files(self):
-        """Test Fasta files containing multiple nucleotide sequences."""
-        paths = ("Quality/example.fasta", )
-        for path in paths:
-            self.multi_check(path, generic_dna)
-
-    def test_single_proteino_files(self):
-        """Test Fasta files containing a single protein sequence."""
-        paths = ("Fasta/aster.pro",
-                 "Fasta/rosemary.pro",
-                 "Fasta/rose.pro",
-                 "Fasta/loveliesbleeding.pro",
-                 )
-        for path in paths:
-            self.simple_check(path, generic_nucleotide)
-
-    def test_multi_protein_files(self):
-        """Test Fasta files containing multiple protein sequences."""
-        paths = ("Fasta/f002", "Fasta/fa01")
-        for path in paths:
-            self.multi_check(path, generic_dna)
 
 
 class TestSimpleFastaParsers(unittest.TestCase):
@@ -231,6 +208,76 @@ class TestSimpleFastaParsers(unittest.TestCase):
             with self.assertRaises(ValueError):
                 list(FastaTwoLineParser(handle))
 
+
+single_nucleic_files = [
+    "Fasta/lupine.nu",
+    "Fasta/elderberry.nu",
+    "Fasta/phlox.nu",
+    "Fasta/centaurea.nu",
+    "Fasta/wisteria.nu",
+    "Fasta/sweetpea.nu",
+    "Fasta/lavender.nu",
+    "Fasta/f001",
+]
+
+multi_dna_files = ["Quality/example.fasta"]
+
+single_amino_files = [
+    "Fasta/aster.pro",
+    "Fasta/rosemary.pro",
+    "Fasta/rose.pro",
+    "Fasta/loveliesbleeding.pro",
+]
+
+multi_amino_files = ["Fasta/f002", "Fasta/fa01"]
+
+for filename in single_nucleic_files:
+    name = filename.split(".")[0]
+
+    def funct(fn):
+        """Dynamically generated function."""
+        f = lambda x: x.simple_check(fn, generic_nucleotide)  # noqa: E731
+        f.__doc__ = "Checking nucleotide file %s" % fn
+        return f
+
+    setattr(TitleFunctions, "test_nuc_%s" % name, funct(filename))
+    del funct
+
+for filename in multi_dna_files:
+    name = filename.split(".")[0]
+
+    def funct(fn):
+        """Dynamically generated function."""
+        f = lambda x: x.multi_check(fn, generic_dna)  # noqa: E731
+        f.__doc__ = "Checking multi DNA file %s" % fn
+        return f
+
+    setattr(TitleFunctions, "test_multi_dna_%s" % name, funct(filename))
+    del funct
+
+for filename in single_amino_files:
+    name = filename.split(".")[0]
+
+    def funct(fn):
+        """Dynamically generated function."""
+        f = lambda x: x.simple_check(fn, generic_nucleotide)  # noqa: E731
+        f.__doc__ = "Checking protein file %s" % fn
+        return f
+
+    setattr(TitleFunctions, "test_pro_%s" % name, funct(filename))
+    del funct
+
+for filename in multi_amino_files:
+    name = filename.split(".")[0]
+
+    def funct(fn):
+        """Dynamically generated function."""
+        f = lambda x: x.multi_check(fn, generic_dna)  # noqa: E731
+        f.__doc__ = "Checking multi protein file %s" % fn
+        return f
+
+    setattr(TitleFunctions, "test_multi_pro_%s" % name, funct(filename))
+    del funct
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
