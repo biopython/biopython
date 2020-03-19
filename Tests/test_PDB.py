@@ -1651,7 +1651,7 @@ class DsspTests(unittest.TestCase):
                     # Then convert each element to float where possible:
                     xtra_list_ref = list(map(will_it_float, xtra_list_ref))
                     # The xtra attribute is a dict.
-                    # To compare with the pre-comouted values first sort according to keys:
+                    # To compare with the pre-computed values first sort according to keys:
                     xtra_itemts = sorted(
                         res.xtra.items(), key=lambda s: s[0]
                     )  # noqa: E731
@@ -1754,9 +1754,7 @@ class ResidueDepthTests(unittest.TestCase):
         biopy_radii = []
         for atom in model.get_atoms():
             biopy_radii.append(_get_atom_radius(atom, rtype="united"))
-
-        assert len(msms_radii) == len(biopy_radii)
-        self.assertSequenceEqual(msms_radii, biopy_radii)
+        self.assertListEqual(msms_radii, biopy_radii)
 
 
 if __name__ == "__main__":
