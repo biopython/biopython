@@ -30,7 +30,7 @@ from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 
 from seq_tests_common import compare_record
-from test_SeqIO import SeqIOTestsBaseClass
+from test_SeqIO import SeqIOTestBaseClass
 
 
 CUR_DIR = os.getcwd()
@@ -333,7 +333,7 @@ if sqlite3:
             )
 
 
-class IndexDictTests(SeqIOTestsBaseClass):
+class IndexDictTests(SeqIOTestBaseClass):
 
     tests = [
         ("Ace/contig1.ace", "ace", generic_dna),

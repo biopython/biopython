@@ -16,7 +16,7 @@ from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from Bio import Alphabet
-from test_SeqIO import SeqIOTestsBaseClass
+from test_SeqIO import SeqIOTestBaseClass
 
 
 # List of formats including alignment only file formats we can read AND write.
@@ -76,7 +76,7 @@ test_records[4][0][2].annotations["comment"] = (
 test_records[4][0][2].annotations["weight"] = 2.5
 
 
-class WriterTests(SeqIOTestsBaseClass):
+class WriterTests(SeqIOTestBaseClass):
     """Cunning unit test where methods are added at run time."""  # TODO - Let's not be cunning
 
     def check(self, records, format):
