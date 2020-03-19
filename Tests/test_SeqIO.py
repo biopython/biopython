@@ -266,27 +266,37 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def compare_record(self, record_one, record_two, msg=None):
         """Attempt strict SeqRecord comparison."""
-        self.assertIsInstance(record_one, SeqRecord, msg=msg)
-        self.assertIsInstance(record_two, SeqRecord, msg=msg)
-        self.assertIsNotNone(record_one.seq, msg=msg)
-        self.assertIsNotNone(record_two.seq, msg=msg)
-        self.assertEqual(record_one.id, record_two.id, msg=msg)
-        self.assertEqual(record_one.name, record_two.name, msg=msg)
-        self.assertEqual(record_one.description, record_two.description, msg=msg)
-        self.assertEqual(len(record_one), len(record_two), msg=msg)
+        if not isinstance(record_one, SeqRecord):
+            self.failureException(msg)
+        if not isinstance(record_two, SeqRecord):
+            self.failureException(msg)
+        if record_one.seq is None:
+            self.failureException(msg)
+        if record_two.seq is None:
+            self.failureException(msg)
+        if record_one.id != record_two.id:
+            self.failureException(msg)
+        if record_one.name != record_two.name:
+            self.failureException(msg)
+        if record_one.description != record_two.description:
+            self.failureException(msg)
+        if len(record_one) != len(record_two):
+            self.failureException(msg)
         if isinstance(record_one.seq, UnknownSeq) and isinstance(
             record_two.seq, UnknownSeq
         ):
             # Jython didn't like us comparing the string of very long UnknownSeq
             # object (out of heap memory error)
-            self.assertEqual(record_one.seq._character, record_two.seq._character, msg=msg)
-        else:
-            self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
+            if record_one.seq._character != record_two.seq._character:
+                self.failureException(msg)
+        elif str(record_one.seq) != str(record_two.seq):
+            self.failureException(msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
         ):
-            self.assertEqual(record_one.letter_annotations[key], record_two.letter_annotations[key], msg=msg)
+            if record_one.letter_annotations[key] != record_two.letter_annotations[key]:
+                self.failureException(msg)
 
     def check_simple_write_read(self, records, t_format, t_count, messages):
         """Check can write/read given records.
