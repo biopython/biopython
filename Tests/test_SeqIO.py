@@ -97,6 +97,30 @@ class SeqIOTestBaseClass(unittest.TestCase):
             return mode
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
+    def compare_record(self, old, new, *args, **kwargs):
+        """Compare old SeqRecord to new SeqRecord."""
+        self.assertEqual(old.id, new.id)
+        self.assertTrue(
+            old.description == new.description
+            or (old.id + " " + old.description).strip() == new.description
+            or new.description == "<unknown description>"
+            or new.description == "", msg="'%s' vs '%s' " % (old.description, new.description))
+        self.assertEqual(len(old.seq), len(new.seq))
+        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
+            pass
+        else:
+            if len(old.seq) < 200:
+                msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            else:
+                msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+            self.assertEqual(str(old.seq), str(new.seq), msg=msg)
+
+    def compare_records(self, old_list, new_list, *args, **kwargs):
+        """Check if two lists of SeqRecords are equal."""
+        self.assertEqual(len(old_list), len(new_list))
+        for old, new in zip(old_list, new_list):
+            self.compare_record(old, new, *args, **kwargs)
+
 
 class ForwardOnlyHandle:
     """Mimic a network handle without seek and tell methods etc."""
