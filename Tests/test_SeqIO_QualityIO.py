@@ -28,6 +28,7 @@ class QualityIOTestBaseClass(SeqIOTestBaseClass):
 
     def compare_record(self, old, new, fmt=None):
         """Quality aware SeqRecord comparison.
+
         This will check the mapping between Solexa and PHRED scores.
         It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
         """
