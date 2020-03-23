@@ -4,20 +4,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.SeqIO.FastaIO module."""
-
-
 import unittest
 from io import StringIO
-
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_nucleotide, generic_dna
 from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
+from Bio.SeqIO.FastaIO import fasta_title_parser_auto, FastaNcbiIterator
 
 
 def title_to_ids(title):
     """Convert a FASTA title line into the id, name, and description.
-
     This is just a quick-n-dirty implementation, and is definetely not meant
     to handle every FASTA title line case.
     """
@@ -27,7 +24,6 @@ def title_to_ids(title):
     id_info = all_info[0]
     rest = all_info[1:]
     descr = " ".join(rest)
-
     # now extract the ids from the id block
     # gi|5690369|gb|AF158246.1|AF158246
     id_info_items = id_info.split("|")
@@ -39,7 +35,6 @@ def title_to_ids(title):
         # Fallback:
         id = id_info_items[0]
         name = id_info_items[0]
-
     return id, name, descr
 
 
@@ -66,13 +61,11 @@ class Wrapping(unittest.TestCase):
     def test_passes(self):
         """Test case which should pass."""
         expected = SeqIO.read("Fasta/aster.pro", "fasta")
-
         record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta")
         self.assertEqual(expected.id, record.id)
         self.assertEqual(expected.name, record.name)
         self.assertEqual(expected.description, record.description)
         self.assertEqual(expected.seq, record.seq)
-
         record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta-2line")
         self.assertEqual(expected.id, record.id)
         self.assertEqual(expected.name, record.name)
@@ -136,31 +129,33 @@ class TitleFunctions(unittest.TestCase):
 
     def test_single_nucleic_files(self):
         """Test Fasta files containing a single nucleotide sequence."""
-        paths = ("Fasta/lupine.nu",
-                 "Fasta/elderberry.nu",
-                 "Fasta/phlox.nu",
-                 "Fasta/centaurea.nu",
-                 "Fasta/wisteria.nu",
-                 "Fasta/sweetpea.nu",
-                 "Fasta/lavender.nu",
-                 "Fasta/f001",
-                 )
+        paths = (
+            "Fasta/lupine.nu",
+            "Fasta/elderberry.nu",
+            "Fasta/phlox.nu",
+            "Fasta/centaurea.nu",
+            "Fasta/wisteria.nu",
+            "Fasta/sweetpea.nu",
+            "Fasta/lavender.nu",
+            "Fasta/f001",
+        )
         for path in paths:
             self.simple_check(path, generic_nucleotide)
 
     def test_multi_dna_files(self):
         """Test Fasta files containing multiple nucleotide sequences."""
-        paths = ("Quality/example.fasta", )
+        paths = ("Quality/example.fasta",)
         for path in paths:
             self.multi_check(path, generic_dna)
 
     def test_single_proteino_files(self):
         """Test Fasta files containing a single protein sequence."""
-        paths = ("Fasta/aster.pro",
-                 "Fasta/rosemary.pro",
-                 "Fasta/rose.pro",
-                 "Fasta/loveliesbleeding.pro",
-                 )
+        paths = (
+            "Fasta/aster.pro",
+            "Fasta/rosemary.pro",
+            "Fasta/rose.pro",
+            "Fasta/loveliesbleeding.pro",
+        )
         for path in paths:
             self.simple_check(path, generic_nucleotide)
 
@@ -177,14 +172,11 @@ class TestSimpleFastaParsers(unittest.TestCase):
     # Regular cases input strings and outputs
     ins_two_line = [">1\nACGT", ">1\nACGT", ">1\nACGT\n>2\nACGT"]
     outs_two_line = [[("1", "ACGT")], [("1", "ACGT")], [("1", "ACGT"), ("2", "ACGT")]]
-
     ins_multiline = [">1\nACGT\nACGT", ">1\nACGT\nACGT\n>2\nACGT\nACGT"]
     outs_multiline = [[("1", "ACGTACGT")], [("1", "ACGTACGT"), ("2", "ACGTACGT")]]
-
     # Edge case input strings and outputs
     ins_two_line_edges = [">\nACGT", ">1\n\n", ">1>1\n\n>1\n\n", ""]
     outs_two_line_edges = [[("", "ACGT")], [("1", "")], [("1>1", ""), ("1", "")], []]
-
     ins_simple_edges = [">1", ">1\n\n\n", ">\n>1\n>2"]
     outs_simple_edges = [[("1", "")], [("1", "")], [("", ""), ("1", ""), ("2", "")]]
 
@@ -230,6 +222,23 @@ class TestSimpleFastaParsers(unittest.TestCase):
             handle = StringIO(inp)
             with self.assertRaises(ValueError):
                 list(FastaTwoLineParser(handle))
+
+
+class TestNCBIFastaTitleParser(unittest.TestCase):
+    """Test NCBI title parsers
+    according to the NCBI standard:
+    https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+    Test SimpleFastaParser and FastaTwoLineParser directly."""
+
+    def test_fasta_title_parser_auto(self):
+        filename = "Fasta/ncbi_standard.pro"
+        dbxrefs_expected = [["EMBL:CAA12345.6", "GI:78"], ["GI:10", "PDB:1A2B"], [], []]
+        simple = FastaIterator(filename)
+        ncbi = FastaNcbiIterator(filename)
+        for rec_simple, rec_ncbi, dbxrefs in zip(simple, ncbi, dbxrefs_expected):
+            self.assertEqual(rec_simple.id, rec_ncbi.id)
+            self.assertEqual(rec_simple.description, rec_ncbi.descriptioin)
+            self.assertEqual(rec_ncbi.description, dbxrefs)
 
 
 if __name__ == "__main__":
