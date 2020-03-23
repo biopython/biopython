@@ -236,10 +236,11 @@ class TestSimpleFastaParsers(unittest.TestCase):
 
 
 class TestNCBIFastaTitleParser(unittest.TestCase):
-    """Test NCBI title parsers
-    according to the NCBI standard:
+    """Test NCBI title parsers.
+
+    According to the NCBI standard:
     https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
-    Test SimpleFastaParser and FastaTwoLineParser directly."""
+    """
 
     def test_fasta_title_parser_auto(self):
         filename = "Fasta/ncbi_standard.pro"
