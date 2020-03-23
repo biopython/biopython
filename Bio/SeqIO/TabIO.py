@@ -36,8 +36,9 @@ example above.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
+from Bio import StreamModeError
 
 
 def TabIterator(source, alphabet=single_letter_alphabet):
@@ -77,7 +78,7 @@ def TabIterator(source, alphabet=single_letter_alphabet):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError(
+            raise StreamModeError(
                 "Tab-separated plain-text files must be opened in text mode."
             ) from None
     try:
@@ -101,7 +102,7 @@ def TabIterator(source, alphabet=single_letter_alphabet):
             handle.close()
 
 
-class TabWriter(SequentialSequenceWriter):
+class TabWriter(SequenceWriter):
     """Class to write simple tab separated format files (OBSOLETE).
 
     Each line consists of "id(tab)sequence" only.

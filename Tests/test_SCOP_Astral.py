@@ -11,7 +11,6 @@ from Bio.SCOP import Astral, Scop
 
 
 class AstralTests(unittest.TestCase):
-
     def setUp(self):
         self.scop = Scop(dir_path="SCOP", version="test")
         self.astral = Astral(scop=self.scop, dir_path="SCOP", version="test")
@@ -25,8 +24,9 @@ class AstralTests(unittest.TestCase):
 
     def testConstructWithCustomFile(self):
         scop = Scop(dir_path="SCOP", version="test")
-        astral = Astral(scop=scop,
-                        astral_file="SCOP/scopseq-test/astral-scopdom-seqres-all-test.fa")
+        astral = Astral(
+            scop=scop, astral_file="SCOP/scopseq-test/astral-scopdom-seqres-all-test.fa"
+        )
         self.assertEqual(str(astral.getSeqBySid("d3sdha_")), "AAAAA")
         self.assertEqual(str(astral.getSeqBySid("d4hbib_")), "KKKKK")
 

@@ -9,39 +9,31 @@ from Bio.SeqRecord import SeqRecord
 
 
 class TestNibReaderWriter(unittest.TestCase):
-
     def test_read_even(self):
-        handle = open("Nib/test_even.fa")
-        record = SeqIO.read(handle, "fasta")
-        handle.close()
+        with open("Nib/test_even.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
         sequence = str(record.seq)
-        handle = open("Nib/test_even_bigendian.nib", "rb")
-        record = SeqIO.read(handle, "nib")
-        handle.close()
+        with open("Nib/test_even_bigendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
         self.assertEqual(sequence, str(record.seq))
-        handle = open("Nib/test_even_littleendian.nib", "rb")
-        record = SeqIO.read(handle, "nib")
-        handle.close()
+        with open("Nib/test_even_littleendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
         self.assertEqual(sequence, str(record.seq))
 
     def test_read_odd(self):
-        handle = open("Nib/test_odd.fa")
-        record = SeqIO.read(handle, "fasta")
-        handle.close()
+        with open("Nib/test_odd.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
         sequence = str(record.seq)
-        handle = open("Nib/test_odd_bigendian.nib", "rb")
-        record = SeqIO.read(handle, "nib")
-        handle.close()
+        with open("Nib/test_odd_bigendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
         self.assertEqual(sequence, str(record.seq))
-        handle = open("Nib/test_odd_littleendian.nib", "rb")
-        record = SeqIO.read(handle, "nib")
-        handle.close()
+        with open("Nib/test_odd_littleendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
         self.assertEqual(sequence, str(record.seq))
 
     def test_write_even(self):
-        handle = open("Nib/test_even.fa")
-        record = SeqIO.read(handle, "fasta")
-        handle.close()
+        with open("Nib/test_even.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
         sequence = str(record.seq)
         handle = BytesIO()
         n = SeqIO.write(record, handle, "nib")
@@ -53,9 +45,8 @@ class TestNibReaderWriter(unittest.TestCase):
         self.assertEqual(sequence, str(record.seq))
 
     def test_write_odd(self):
-        handle = open("Nib/test_odd.fa")
-        record = SeqIO.read(handle, "fasta")
-        handle.close()
+        with open("Nib/test_odd.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
         sequence = str(record.seq)
         handle = BytesIO()
         n = SeqIO.write(record, handle, "nib")

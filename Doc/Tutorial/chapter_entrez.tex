@@ -197,13 +197,13 @@ familiar with a particular database.
 
 \section{ESearch: Searching the Entrez databases}
 \label{sec:entrez-esearch}
-To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications related to Biopython:
+To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications that include Biopython in their title:
 
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed", term="biopython")
+>>> handle = Entrez.esearch(db="pubmed", term="biopython[title]", retmax="40" )
 >>> record = Entrez.read(handle)
 >>> "19304878" in record["IdList"]
 True
@@ -211,9 +211,9 @@ True
 %truncted for display, so not in doctest
 \begin{minted}{pycon}
 >>> print(record["IdList"])
-['28011774', '24929426', '24497503', '24267035', '24194598', ..., '14871861']
+['22909249', '19304878']
 \end{minted}
-In this output, you see lots of PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
+In this output, you see PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
 You can also use ESearch to search GenBank. Here we'll do a quick
 search for the \emph{matK} gene in \emph{Cypripedioideae} orchids

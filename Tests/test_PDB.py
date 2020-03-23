@@ -198,7 +198,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assertTrue(isinstance(s, Seq))
+        self.assertIsInstance(s, Seq)
         self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
@@ -217,7 +217,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assertTrue(isinstance(s, Seq))
+        self.assertIsInstance(s, Seq)
         self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
@@ -710,22 +710,6 @@ class ParseTest(unittest.TestCase):
         self.assertLessEqual(atom2, atom1)
         self.assertLessEqual(atom2, atom3)
 
-        # In Py2 this will be True/False, in Py3 it will raise a TypeError.
-        try:
-            self.assertTrue(atom1 < res1)  # __gt__ diff. types
-        except TypeError:
-            pass
-
-        try:
-            self.assertTrue(struct > model)  # __gt__ diff. types
-        except TypeError:
-            pass
-
-        try:
-            self.assertFalse(struct >= [])  # __le__ diff. types
-        except TypeError:
-            pass
-
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
@@ -777,7 +761,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 220)
             # Check the sequence
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
             self.assertEqual(
@@ -796,7 +780,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
             # Second fragment
@@ -804,7 +788,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
             # Third fragment
@@ -812,7 +796,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
+            self.assertIsInstance(s, Seq)
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TACQG", str(s))
 
@@ -1585,15 +1569,15 @@ class CopyTests(unittest.TestCase):
 
     def test_atom_copy(self):
         aa = self.a.copy()
-        self.assertFalse(self.a is aa)
-        self.assertFalse(self.a.get_coord() is aa.get_coord())
+        self.assertIsNot(self.a, aa)
+        self.assertIsNot(self.a.get_coord(), aa.get_coord())
 
     def test_entity_copy(self):
         """Make a copy of a residue."""
         for e in (self.s, self.m, self.c, self.r):
             ee = e.copy()
-            self.assertFalse(e is ee)
-            self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+            self.assertIsNot(e, ee)
+            self.assertIsNot(e.get_list()[0], ee.get_list()[0])
 
 
 def eprint(*args, **kwargs):
@@ -1667,7 +1651,7 @@ class DsspTests(unittest.TestCase):
                     # Then convert each element to float where possible:
                     xtra_list_ref = list(map(will_it_float, xtra_list_ref))
                     # The xtra attribute is a dict.
-                    # To compare with the pre-comouted values first sort according to keys:
+                    # To compare with the pre-computed values first sort according to keys:
                     xtra_itemts = sorted(
                         res.xtra.items(), key=lambda s: s[0]
                     )  # noqa: E731
@@ -1770,9 +1754,7 @@ class ResidueDepthTests(unittest.TestCase):
         biopy_radii = []
         for atom in model.get_atoms():
             biopy_radii.append(_get_atom_radius(atom, rtype="united"))
-
-        assert len(msms_radii) == len(biopy_radii)
-        self.assertSequenceEqual(msms_radii, biopy_radii)
+        self.assertListEqual(msms_radii, biopy_radii)
 
 
 if __name__ == "__main__":

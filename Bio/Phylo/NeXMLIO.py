@@ -285,11 +285,7 @@ class Writer:
         # use xml.dom.minodom for pretty printing
         rough_string = ElementTree.tostring(root_node, "utf-8")
         reparsed = minidom.parseString(rough_string)
-        try:
-            handle.write(reparsed.toprettyxml(indent="  "))
-        except TypeError:
-            # for compatibility with Python 3
-            handle.write(bytes(reparsed.toprettyxml(indent="  "), "utf8"))
+        handle.write(reparsed.toprettyxml(indent="  ").encode("utf8"))
 
         return count
 
@@ -322,14 +318,19 @@ class Writer:
                 "length": str(clade.branch_length),
                 "typeof": convert_uri("cdao:Edge"),
             }
-            if hasattr(clade, "confidence") and clade.confidence is not None:
-                attrib.update(
-                    {
-                        "property": convert_uri("cdao:has_Support_Value"),
-                        "datatype": "xsd:float",
-                        "content": "%1.2f" % clade.confidence,
-                    }
-                )
+            try:
+                confidence = clade.confidence
+            except AttributeError:
+                pass
+            else:
+                if confidence is not None:
+                    attrib.update(
+                        {
+                            "property": convert_uri("cdao:has_Support_Value"),
+                            "datatype": "xsd:float",
+                            "content": "%1.2f" % confidence,
+                        }
+                    )
             node = ElementTree.SubElement(tree, "edge", **attrib)
 
         if not clade.is_terminal():

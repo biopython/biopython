@@ -18,8 +18,9 @@ You are expected to use this module via the Bio.SeqIO functions.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqIO.Interfaces import _clean, _get_seq_string
+from Bio import StreamModeError
 
 
 def SimpleFastaParser(source):
@@ -49,7 +50,7 @@ def SimpleFastaParser(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("Fasta files must be opened in text mode") from None
+            raise StreamModeError("Fasta files must be opened in text mode") from None
 
     try:
         # Skip any text before the first record (e.g. blank lines, comments)
@@ -122,7 +123,7 @@ def FastaTwoLineParser(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("Fasta files must be opened in text mode") from None
+            raise StreamModeError("Fasta files must be opened in text mode") from None
 
     idx = -1  # for empty file
     try:
@@ -245,7 +246,7 @@ def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
         )
 
 
-class FastaWriter(SequentialSequenceWriter):
+class FastaWriter(SequenceWriter):
     """Class to write Fasta format files (OBSOLETE).
 
     Please use the ``as_fasta`` function instead, or the top level
@@ -286,7 +287,7 @@ class FastaWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, target)
+        super().__init__(target)
         if wrap:
             if wrap < 1:
                 raise ValueError

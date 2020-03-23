@@ -196,8 +196,6 @@ of the format's documentation.
 
 """
 
-import sys
-
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor

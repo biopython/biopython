@@ -19,15 +19,15 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 import datetime
 import struct
 import sys
-import warnings
 
 from os.path import basename
 
-from Bio import BiopythonParserWarning
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
+
 
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number
@@ -364,7 +364,7 @@ def AbiIterator(source, alphabet=None, trim=False):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise ValueError("ABI files must be opened in binary mode.") from None
+            raise StreamModeError("ABI files must be opened in binary mode.") from None
 
     try:
 

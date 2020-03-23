@@ -25,7 +25,8 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequentialSequenceWriter
+from Bio import StreamModeError
+from .Interfaces import SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -33,7 +34,7 @@ class ContentHandler(handler.ContentHandler):
 
     def __init__(self):
         """Create a handler to handle XML events."""
-        handler.ContentHandler.__init__(self)
+        super().__init__()
         self.source = None
         self.sourceVersion = None
         self.seqXMLversion = None
@@ -402,7 +403,7 @@ class SeqXmlIterator:
             # one specified in the XML file. With a binary handle, the correct
             # encoding is picked up by the parser from the XML file.
             if stream_or_path.read(0) != b"":
-                raise TypeError(
+                raise StreamModeError(
                     "SeqXML files should be opened in binary mode"
                 ) from None
             self.handle = stream_or_path
@@ -472,7 +473,7 @@ class SeqXmlIterator:
         raise StopIteration
 
 
-class SeqXmlWriter(SequentialSequenceWriter):
+class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
@@ -486,7 +487,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         """Create Object and start the xml generator.
 
         Arguments:
-         - target - Output stream opened in text mode, or a path to a file.
+         - target - Output stream opened in binary mode, or a path to a file.
          - source - The source program/database of the file, for example
            UniProt.
          - source_version - The version or release number of the source
@@ -496,7 +497,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
          - ncbiTaxId - The NCBI taxonomy identifier of the species of origin.
 
         """
-        SequentialSequenceWriter.__init__(self, target, "wb")
+        super().__init__(target, "wb")
         handle = self.handle
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()
@@ -507,7 +508,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
     def write_header(self):
         """Write root node with document metadata."""
-        SequentialSequenceWriter.write_header(self)
         attrs = {
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
             "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",
@@ -557,8 +557,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
     def write_footer(self):
         """Close the root node and finish the XML document."""
-        SequentialSequenceWriter.write_footer(self)
-
         self.xml_generator.endElement("seqXML")
         self.xml_generator.endDocument()
 

@@ -9,7 +9,6 @@
 import unittest
 import tempfile
 import os
-import filecmp
 
 from Bio.NMR import xpktools
 from Bio.NMR import NOEtools

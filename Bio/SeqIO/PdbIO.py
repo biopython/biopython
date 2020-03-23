@@ -13,9 +13,9 @@ import warnings
 from Bio import BiopythonParserWarning
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
 
 
 def AtomIterator(pdb_id, structure):
@@ -151,7 +151,7 @@ def PdbSeqresIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != "":
-            raise ValueError("PDB files must be opened in text mode.") from None
+            raise StreamModeError("PDB files must be opened in text mode.") from None
 
     try:
         rec_name = None

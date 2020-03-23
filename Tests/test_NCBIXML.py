@@ -18,9 +18,10 @@ class TestNCBIXML(unittest.TestCase):
         """Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)."""
         filename = "xml_2212L_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
 
         alignments = record.alignments
         self.assertEqual(len(alignments), 212)
@@ -1391,20 +1392,17 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignment.hsps), 1)
         self.assertTrue(alignment.hsps[0].expect > E_VALUE_THRESH)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
-
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
 
     def test_xml_2212L_blastn_001(self):
         """Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)."""
         filename = "xml_2212L_blastn_001.xml"
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
         alignments = record.alignments
 
         self.assertEqual(record.query_id, "gi|1348916|gb|G26684.1|G26684")
@@ -1419,74 +1417,65 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[1].hsps), 1)
         self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
-
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
 
     def test_xml_2212L_blastx_001(self):
         """Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)."""
         filename = "xml_2212L_blastx_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 84)
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
 
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
 
         hsp = record.alignments[0].hsps[0]
         self.assertEqual(hsp.score, 630.0)
         self.assertEqual(hsp.bits, 247.284)
-
-        handle.close()
 
     def test_xml_2212L_tblastn_001(self):
         """Parsing TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xml_2212L_tblastn_001)."""
         filename = "xml_2212L_tblastn_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|729325|sp|P39483|DHG2_BACME")
         self.assertEqual(len(alignments), 100)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 127)
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
 
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
 
     def test_xml_2212L_tblastx_001(self):
         """Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)."""
         filename = "xml_2212L_tblastx_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1348853|gb|G26621.1|G26621")
         self.assertEqual(len(alignments), 10)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 102)
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
 
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
 
     def test_xml_2218_blastp_001(self):
         """Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)."""
@@ -1495,10 +1484,11 @@ class TestNCBIXML(unittest.TestCase):
         filename = "xml_2218_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
 
-        record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "31493")
         self.assertEqual(len(alignments), 10)
@@ -1548,45 +1538,39 @@ class TestNCBIXML(unittest.TestCase):
         self.assertTrue(alignments[9].hsps[0].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[9].hsps[1].expect > E_VALUE_THRESH)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
-
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+            handle.close()
 
     def test_xml_2218_blastp_002(self):
         """Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)."""
         filename = "xml_2218_blastp_002.xml"
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
-        self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
-        self.assertEqual(len(record.alignments), 0)
-        record = next(records)
-        self.assertEqual(record.query_id, "gi|129628|sp|P07175.1|PARA_AGRTU")
-        self.assertEqual(len(record.alignments), 0)
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
+            self.assertEqual(len(record.alignments), 0)
+            record = next(records)
+            self.assertEqual(record.query_id, "gi|129628|sp|P07175.1|PARA_AGRTU")
+            self.assertEqual(len(record.alignments), 0)
+            self.assertRaises(StopIteration, next, records)
 
     def test_xml_2218L_blastp_001(self):
         """Parsing BLASTP 2.2.18, Fake query (xml_2218L_blastp_001)."""
         filename = "xml_2218L_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
         self.assertEqual(record.query_id, "lcl|1_0")
         alignments = record.alignments
         self.assertEqual(len(alignments), 0)
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
 
-        handle = open(datafile, "rb")
-        record = NCBIXML.read(handle)
-        handle.close()
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
 
     def test_xml_2222_blastx_001(self):
         """Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)."""
@@ -1595,122 +1579,121 @@ class TestNCBIXML(unittest.TestCase):
         filename = "xml_2222_blastx_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence")
-        self.assertEqual(record.query_letters, 1002)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 1)
-        self.assertEqual(len(record.alignments), 1)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence")
+            self.assertEqual(record.query_letters, 1002)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 1)
+            self.assertEqual(len(record.alignments), 1)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds")
-        self.assertEqual(record.query_letters, 2050)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        # I used -num_descriptions 10 and -num_alignments 1
-        self.assertEqual(len(record.descriptions), 10)
-        self.assertEqual(len(record.alignments), 10)
-        self.assertEqual(len(record.alignments[0].hsps), 2)
-        self.assertEqual(len(record.alignments[1].hsps), 2)
-        self.assertEqual(len(record.alignments[9].hsps), 2)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds")
+            self.assertEqual(record.query_letters, 2050)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            # I used -num_descriptions 10 and -num_alignments 1
+            self.assertEqual(len(record.descriptions), 10)
+            self.assertEqual(len(record.alignments), 10)
+            self.assertEqual(len(record.alignments[0].hsps), 2)
+            self.assertEqual(len(record.alignments[1].hsps), 2)
+            self.assertEqual(len(record.alignments[9].hsps), 2)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence")
-        self.assertEqual(record.query_letters, 550)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 0)
-        self.assertEqual(len(record.alignments), 0)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence")
+            self.assertEqual(record.query_letters, 550)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 0)
+            self.assertEqual(len(record.alignments), 0)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
-        self.assertEqual(record.query_letters, 655)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 10)
-        self.assertEqual(len(record.alignments), 10)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
-        self.assertEqual(len(record.alignments[9].hsps), 1)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
+            self.assertEqual(record.query_letters, 655)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 10)
+            self.assertEqual(len(record.alignments), 10)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
+            self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence")
-        self.assertEqual(record.query_letters, 623)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 10)
-        self.assertEqual(len(record.alignments), 10)
-        self.assertEqual(len(record.alignments[0].hsps), 2)
-        self.assertEqual(len(record.alignments[9].hsps), 1)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence")
+            self.assertEqual(record.query_letters, 623)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 10)
+            self.assertEqual(len(record.alignments), 10)
+            self.assertEqual(len(record.alignments[0].hsps), 2)
+            self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds")
-        self.assertEqual(record.query_letters, 309)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 10)
-        self.assertEqual(len(record.alignments), 10)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
-        self.assertEqual(len(record.alignments[9].hsps), 1)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds")
+            self.assertEqual(record.query_letters, 309)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 10)
+            self.assertEqual(len(record.alignments), 10)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
+            self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product")
-        self.assertEqual(record.query_letters, 2551)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 10)
-        self.assertEqual(len(record.alignments), 10)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
-        self.assertEqual(len(record.alignments[9].hsps), 1)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTX")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product")
+            self.assertEqual(record.query_letters, 2551)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 10)
+            self.assertEqual(len(record.alignments), 10)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
+            self.assertEqual(len(record.alignments[9].hsps), 1)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
+            self.assertRaises(StopIteration, next, records)
 
     def test_xml_2222_blastp_001(self):
         """Parsing BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)."""
@@ -1719,38 +1702,37 @@ class TestNCBIXML(unittest.TestCase):
         filename = "xml_2222_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, "2.2.22+")
-        self.assertEqual(record.date, "")
-        self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
-        self.assertEqual(record.query_letters, 107)
-        self.assertEqual(record.database, "nr")
-        self.assertEqual(record.num_sequences_in_database, 8994603)
-        self.assertEqual(record.database_sequences, 8994603)
-        # self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
-        self.assertEqual(len(record.descriptions), 10)
-        self.assertEqual(len(record.alignments), 10)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(record.query_letters, 107)
+            self.assertEqual(record.database, "nr")
+            self.assertEqual(record.num_sequences_in_database, 8994603)
+            self.assertEqual(record.database_sequences, 8994603)
+            # self.assertEqual(record.database_length, 3078807967)
+            self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
+            self.assertEqual(len(record.descriptions), 10)
+            self.assertEqual(len(record.alignments), 10)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
 
-        record = next(records)
-        self.assertEqual(record.query, "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin")
-        self.assertEqual(record.query_letters, 304)
+            record = next(records)
+            self.assertEqual(record.query, "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin")
+            self.assertEqual(record.query_letters, 304)
 
-        record = next(records)
-        self.assertEqual(record.query, "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein")
-        self.assertEqual(record.query_letters, 600)
+            record = next(records)
+            self.assertEqual(record.query, "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein")
+            self.assertEqual(record.query_letters, 600)
 
-        record = next(records)
-        self.assertEqual(record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit")
-        self.assertEqual(record.query_letters, 473)
+            record = next(records)
+            self.assertEqual(record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit")
+            self.assertEqual(record.query_letters, 473)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
+            self.assertRaises(StopIteration, next, records)
 
     def test_xml_2218L_rpsblast_001(self):
         """Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)."""
@@ -1762,108 +1744,107 @@ class TestNCBIXML(unittest.TestCase):
         filename = "xml_2218L_rpsblast_001.xml"
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, "2.2.18")
-        self.assertEqual(record.date, "Mar-02-2008")
-        self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
-        self.assertEqual(record.query_letters, 131)
-        self.assertEqual(record.database, "/opt/BlastDBs/nr")
-        self.assertEqual(record.num_sequences_in_database, 2563094)
-        self.assertEqual(record.database_sequences, 2563094)
-        self.assertEqual(record.database_length, 864488805)
-        self.assertEqual(len(record.descriptions), 11)
-        self.assertEqual(len(record.alignments), 11)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
-        hsp = record.alignments[0].hsps[0]
-        self.assertEqual(hsp.align_length, 131)
-        self.assertEqual(hsp.identities, 131)
-        self.assertEqual(hsp.positives, 131)
-        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.score, 680)
-        self.assertEqual(hsp.expect, 4.72196e-70)
-        self.assertEqual(hsp.query_start, 1)
-        self.assertEqual(hsp.query_end, 131)
-        self.assertEqual(hsp.sbjct_start, 1)
-        self.assertEqual(hsp.sbjct_end, 131)
-        self.assertEqual(len(record.alignments[1].hsps), 1)
-        hsp = record.alignments[1].hsps[0]
-        self.assertEqual(hsp.align_length, 77)
-        self.assertEqual(hsp.identities, 36)
-        self.assertEqual(hsp.positives, 49)
-        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQ")
-        self.assertEqual(hsp.sbjct, "MAREEPYKGDYVGGVAKILQGYFANYYGFPNVSLRLAGEEANLSKTGHANAKAIVHEMIKVIKEASKPLR-RGKGFK")
-        self.assertEqual(hsp.match, "MA+ EP KGDY GG  KIL  +     G+P V+L+LAGEEAN  + G    K  +H ++K+I +A KP R +G GF+")
-        self.assertEqual(hsp.score, 181)
-        self.assertEqual(hsp.expect, 3.03476e-12)
-        self.assertEqual(hsp.query_start, 1)
-        self.assertEqual(hsp.query_end, 77)
-        self.assertEqual(hsp.sbjct_start, 1)
-        self.assertEqual(hsp.sbjct_end, 76)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.18")
+            self.assertEqual(record.date, "Mar-02-2008")
+            self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
+            self.assertEqual(record.query_letters, 131)
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
+            self.assertEqual(record.num_sequences_in_database, 2563094)
+            self.assertEqual(record.database_sequences, 2563094)
+            self.assertEqual(record.database_length, 864488805)
+            self.assertEqual(len(record.descriptions), 11)
+            self.assertEqual(len(record.alignments), 11)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
+            hsp = record.alignments[0].hsps[0]
+            self.assertEqual(hsp.align_length, 131)
+            self.assertEqual(hsp.identities, 131)
+            self.assertEqual(hsp.positives, 131)
+            self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.score, 680)
+            self.assertEqual(hsp.expect, 4.72196e-70)
+            self.assertEqual(hsp.query_start, 1)
+            self.assertEqual(hsp.query_end, 131)
+            self.assertEqual(hsp.sbjct_start, 1)
+            self.assertEqual(hsp.sbjct_end, 131)
+            self.assertEqual(len(record.alignments[1].hsps), 1)
+            hsp = record.alignments[1].hsps[0]
+            self.assertEqual(hsp.align_length, 77)
+            self.assertEqual(hsp.identities, 36)
+            self.assertEqual(hsp.positives, 49)
+            self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQ")
+            self.assertEqual(hsp.sbjct, "MAREEPYKGDYVGGVAKILQGYFANYYGFPNVSLRLAGEEANLSKTGHANAKAIVHEMIKVIKEASKPLR-RGKGFK")
+            self.assertEqual(hsp.match, "MA+ EP KGDY GG  KIL  +     G+P V+L+LAGEEAN  + G    K  +H ++K+I +A KP R +G GF+")
+            self.assertEqual(hsp.score, 181)
+            self.assertEqual(hsp.expect, 3.03476e-12)
+            self.assertEqual(hsp.query_start, 1)
+            self.assertEqual(hsp.query_end, 77)
+            self.assertEqual(hsp.sbjct_start, 1)
+            self.assertEqual(hsp.sbjct_end, 76)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, "2.2.18")
-        self.assertEqual(record.date, "Mar-02-2008")
-        self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
-        self.assertEqual(record.query_letters, 131)
-        self.assertEqual(record.database, "/opt/BlastDBs/nr")
-        self.assertEqual(record.num_sequences_in_database, 2563094)
-        self.assertEqual(record.database_sequences, 2563094)
-        self.assertEqual(record.database_length, 864488805)
-        self.assertEqual(len(record.descriptions), 19)
-        self.assertEqual(len(record.alignments), 19)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
-        hsp = record.alignments[0].hsps[0]
-        self.assertEqual(hsp.align_length, 131)
-        self.assertEqual(hsp.identities, 131)
-        self.assertEqual(hsp.positives, 131)
-        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.score, 590)
-        self.assertEqual(hsp.expect, 1.28615e-59)
-        self.assertEqual(hsp.query_start, 1)
-        self.assertEqual(hsp.query_end, 131)
-        self.assertEqual(hsp.sbjct_start, 1)
-        self.assertEqual(hsp.sbjct_end, 131)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.18")
+            self.assertEqual(record.date, "Mar-02-2008")
+            self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
+            self.assertEqual(record.query_letters, 131)
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
+            self.assertEqual(record.num_sequences_in_database, 2563094)
+            self.assertEqual(record.database_sequences, 2563094)
+            self.assertEqual(record.database_length, 864488805)
+            self.assertEqual(len(record.descriptions), 19)
+            self.assertEqual(len(record.alignments), 19)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
+            hsp = record.alignments[0].hsps[0]
+            self.assertEqual(hsp.align_length, 131)
+            self.assertEqual(hsp.identities, 131)
+            self.assertEqual(hsp.positives, 131)
+            self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.score, 590)
+            self.assertEqual(hsp.expect, 1.28615e-59)
+            self.assertEqual(hsp.query_start, 1)
+            self.assertEqual(hsp.query_end, 131)
+            self.assertEqual(hsp.sbjct_start, 1)
+            self.assertEqual(hsp.sbjct_end, 131)
 
-        record = next(records)
-        self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, "2.2.18")
-        self.assertEqual(record.date, "Mar-02-2008")
-        self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
-        self.assertEqual(record.query_letters, 131)
-        self.assertEqual(record.database, "/opt/BlastDBs/nr")
-        self.assertEqual(record.num_sequences_in_database, 2563094)
-        self.assertEqual(record.database_sequences, 2563094)
-        self.assertEqual(record.database_length, 864488805)
-        self.assertEqual(len(record.descriptions), 9)
-        self.assertEqual(len(record.alignments), 9)
-        self.assertEqual(len(record.alignments[0].hsps), 1)
-        hsp = record.alignments[0].hsps[0]
-        self.assertEqual(hsp.align_length, 131)
-        self.assertEqual(hsp.identities, 131)
-        self.assertEqual(hsp.positives, 131)
-        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
-        self.assertEqual(hsp.score, 535)
-        self.assertEqual(hsp.expect, 3.43623e-53)
-        self.assertEqual(hsp.query_start, 1)
-        self.assertEqual(hsp.query_end, 131)
-        self.assertEqual(hsp.sbjct_start, 1)
-        self.assertEqual(hsp.sbjct_end, 131)
+            record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.18")
+            self.assertEqual(record.date, "Mar-02-2008")
+            self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
+            self.assertEqual(record.query_letters, 131)
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
+            self.assertEqual(record.num_sequences_in_database, 2563094)
+            self.assertEqual(record.database_sequences, 2563094)
+            self.assertEqual(record.database_length, 864488805)
+            self.assertEqual(len(record.descriptions), 9)
+            self.assertEqual(len(record.alignments), 9)
+            self.assertEqual(len(record.alignments[0].hsps), 1)
+            hsp = record.alignments[0].hsps[0]
+            self.assertEqual(hsp.align_length, 131)
+            self.assertEqual(hsp.identities, 131)
+            self.assertEqual(hsp.positives, 131)
+            self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+            self.assertEqual(hsp.score, 535)
+            self.assertEqual(hsp.expect, 3.43623e-53)
+            self.assertEqual(hsp.query_start, 1)
+            self.assertEqual(hsp.query_end, 131)
+            self.assertEqual(hsp.sbjct_start, 1)
+            self.assertEqual(hsp.sbjct_end, 131)
 
-        # TODO - Can we detect the convergence status:
-        # <Iteration_message>CONVERGED</Iteration_message>
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
+            # TODO - Can we detect the convergence status:
+            # <Iteration_message>CONVERGED</Iteration_message>
+            self.assertRaises(StopIteration, next, records)
 
     def test_xml_2900_blastp_001_v1(self):
         record = self._test_xml_2900_blastp_001("xml_2900_blastp_001.xml")
@@ -1929,9 +1910,10 @@ class TestNCBIXML(unittest.TestCase):
 
     def _test_xml_2900_blastp_001(self, filename):
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
 
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, "2.9.0+")
@@ -2207,9 +2189,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.e, 2.25306e-55)
         self.assertEqual(description.num_alignments, 1)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
-
         return record
 
     def test_xml_2900_blastn_001_v1(self):
@@ -2220,9 +2199,10 @@ class TestNCBIXML(unittest.TestCase):
 
     def _test_xml_2900_blastn_001(self, filename):
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
 
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, "2.9.0+")
@@ -2564,9 +2544,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.e, 4.57222)
         self.assertEqual(description.num_alignments, 1)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
-
     def test_xml_2900_blastx_001_v1(self):
         self._test_xml_2900_blastx_001("xml_2900_blastx_001.xml")
 
@@ -2575,9 +2552,10 @@ class TestNCBIXML(unittest.TestCase):
 
     def _test_xml_2900_blastx_001(self, filename):
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, "2.9.0+")
         self.assertEqual(record.query,
@@ -2895,9 +2873,10 @@ class TestNCBIXML(unittest.TestCase):
 
     def _test_xml_2900_tblastn_001(self, filename):
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
 
         self.assertEqual(record.application, "TBLASTN")
         self.assertEqual(record.version, "2.9.0+")
@@ -2939,9 +2918,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.e, 2.08707e-139)
         self.assertEqual(description.num_alignments, 1)
 
-        self.assertRaises(StopIteration, next, records)
-        handle.close()
-
     def test_xml_2900_tblastx_001_v1(self):
         self._test_xml_2900_tblastx_001("xml_2900_tblastx_001.xml")
 
@@ -2950,9 +2926,9 @@ class TestNCBIXML(unittest.TestCase):
 
     def _test_xml_2900_tblastx_001(self, filename):
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile, "rb")
-        records = NCBIXML.parse(handle)
-        record = next(records)
+        with open(datafile, "rb") as handle:
+            records = NCBIXML.parse(handle)
+            record = next(records)
 
         self.assertEqual(record.application, "TBLASTX")
         self.assertEqual(record.version, "2.9.0+")

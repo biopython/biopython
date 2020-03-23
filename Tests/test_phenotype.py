@@ -9,11 +9,14 @@
 
 try:
     import numpy
+
     del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.phenotype.")
+        "Install NumPy if you want to use Bio.phenotype."
+    ) from None
 
 import json
 import unittest
@@ -23,6 +26,7 @@ from io import StringIO
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
     from Bio import phenotype
@@ -46,11 +50,7 @@ class TestPhenoMicro(unittest.TestCase):
         """Test bad arguments to phenotype IO methods."""
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, "pm-csv")
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, "pm-json")
-        self.assertRaises(
-            ValueError,
-            phenotype.read,
-            CSV_PLATES,
-            "pm-noformat")
+        self.assertRaises(ValueError, phenotype.read, CSV_PLATES, "pm-noformat")
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, "PM-CSV")
         self.assertRaises(TypeError, phenotype.read, CSV_PLATES, 1)
         self.assertRaises(KeyError, phenotype.read, JSON_BAD, "pm-json")
@@ -75,8 +75,9 @@ class TestPhenoMicro(unittest.TestCase):
             # I want to see the output when called from the test harness,
             # run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            raise ValueError("%s\n\n%s\n\n%s"
-                             % (str(e), repr(handle.read()), repr(records)))
+            raise ValueError(
+                "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
+            ) from None
 
         self.assertEqual(p1, records[0])
 
@@ -89,10 +90,10 @@ class TestPhenoMicro(unittest.TestCase):
 
     def test_PlateRecord_errors(self):
         """Test bad arguments with PlateRecord objects."""
-        self.assertRaises(ValueError,
-                          phenotype.phen_micro.PlateRecord, "test", [1, 2, 3])
-        self.assertRaises(TypeError,
-                          phenotype.phen_micro.PlateRecord, "test", 1)
+        self.assertRaises(
+            ValueError, phenotype.phen_micro.PlateRecord, "test", [1, 2, 3]
+        )
+        self.assertRaises(TypeError, phenotype.phen_micro.PlateRecord, "test", 1)
 
     def test_PlateRecord(self):
         """Test basic functionalities of PlateRecord objects."""
@@ -105,9 +106,10 @@ class TestPhenoMicro(unittest.TestCase):
         for k in j["measurements"]:
             if k == "Hour":
                 continue
-            p[k] = phenotype.phen_micro.WellRecord(k,
-                                                   signals={times[i]: j["measurements"][k][i]
-                                                            for i in range(len(times))})
+            p[k] = phenotype.phen_micro.WellRecord(
+                k,
+                signals={times[i]: j["measurements"][k][i] for i in range(len(times))},
+            )
 
         del j["measurements"]
         p.qualifiers = j
@@ -142,11 +144,17 @@ class TestPhenoMicro(unittest.TestCase):
         p2 = p.subtract_control()
         self.assertEqual(p2.id, p.id)
         self.assertEqual(p2["A02"], p["A02"] - p["A01"])
-        self.assertEqual(repr(p), "PlateRecord('WellRecord['A01'], WellRecord"
-                         "['A02'], WellRecord['A03'], ..., WellRecord['B12']')")
-        self.assertEqual(str(p), "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: "
-                         "12\nPlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord"
-                         "['A03'], ..., WellRecord['B12']')")
+        self.assertEqual(
+            repr(p),
+            "PlateRecord('WellRecord['A01'], WellRecord['A02'], "
+            "WellRecord['A03'], ..., WellRecord['B12']')",
+        )
+        self.assertEqual(
+            str(p),
+            "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: 12\n"
+            "PlateRecord('WellRecord['A01'], WellRecord['A02'], "
+            "WellRecord['A03'], ..., WellRecord['B12']')",
+        )
 
         with open(SMALL_JSON_PLATE_2) as handle:
             j = json.load(handle)
@@ -157,9 +165,10 @@ class TestPhenoMicro(unittest.TestCase):
         for k in j["measurements"]:
             if k == "Hour":
                 continue
-            p1[k] = phenotype.phen_micro.WellRecord(k,
-                                                    signals={times[i]: j["measurements"][k][i]
-                                                             for i in range(len(times))})
+            p1[k] = phenotype.phen_micro.WellRecord(
+                k,
+                signals={times[i]: j["measurements"][k][i] for i in range(len(times))},
+            )
 
         del j["measurements"]
         p1.qualifiers = j
@@ -183,9 +192,10 @@ class TestPhenoMicro(unittest.TestCase):
             p = json.load(handle)
 
         times = p["measurements"]["Hour"]
-        w = phenotype.phen_micro.WellRecord("A10",
-                                            signals={times[i]: p["measurements"]["A10"][i]
-                                                     for i in range(len(times))})
+        w = phenotype.phen_micro.WellRecord(
+            "A10",
+            signals={times[i]: p["measurements"]["A10"][i] for i in range(len(times))},
+        )
 
         self.assertRaises(ValueError, w.fit, "wibble")
         self.assertRaises(ValueError, w.fit, ["wibble"])
@@ -199,32 +209,32 @@ class TestPhenoMicro(unittest.TestCase):
             p = json.load(handle)
 
         times = p["measurements"]["Hour"]
-        w = phenotype.phen_micro.WellRecord("A10",
-                                            signals={times[i]: p["measurements"]["A10"][i]
-                                                     for i in range(len(times))})
+        w = phenotype.phen_micro.WellRecord(
+            "A10",
+            signals={times[i]: p["measurements"]["A10"][i] for i in range(len(times))},
+        )
 
-        w1 = phenotype.phen_micro.WellRecord("H12",
-                                             signals={times[i]: p["measurements"]["H12"][i]
-                                                      for i in range(len(times))})
+        w1 = phenotype.phen_micro.WellRecord(
+            "H12",
+            signals={times[i]: p["measurements"]["H12"][i] for i in range(len(times))},
+        )
 
         # self.assertIsInstance(w.plate,
         #                       phenotype.phen_micro.PlateRecord)
-        self.assertTrue(isinstance(w.plate, phenotype.phen_micro.PlateRecord))
+        self.assertIsInstance(w.plate, phenotype.phen_micro.PlateRecord)
         self.assertEqual(w.id, "A10")
         self.assertEqual(len(w), len(times))
         self.assertEqual(len(w), 384)
         self.assertEqual(max(w), (95.75, 217.0))
         self.assertEqual(min(w), (0.0, 37.0))
-        self.assertEqual(max(w, key=lambda x: x[1]),  # noqa: E731
-                         (16.75, 313.0))
-        self.assertEqual(min(w, key=lambda x: x[1]),  # noqa: E731
-                         (0.25, 29.0))
+        self.assertEqual(max(w, key=lambda x: x[1]), (16.75, 313.0))  # noqa: E731
+        self.assertEqual(min(w, key=lambda x: x[1]), (0.25, 29.0))  # noqa: E731
         self.assertEqual(len(w[:]), 96)
-        self.assertEqual(w[1], 29.)
-        self.assertEqual(w[12], 272.)
-        self.assertEqual(w[1:5], [29., 35., 39., 43.])
+        self.assertEqual(w[1], 29.0)
+        self.assertEqual(w[12], 272.0)
+        self.assertEqual(w[1:5], [29.0, 35.0, 39.0, 43.0])
         self.assertRaises(ValueError, w.__getitem__, "a")
-        self.assertAlmostEqual(w[1:2:.25][0], 29.)
+        self.assertAlmostEqual(w[1:2:0.25][0], 29.0)
         self.assertAlmostEqual(w[1.3567], 33.7196)
         self.assertEqual(w.get_raw()[0], (0.0, 37.0))
         self.assertEqual(w.get_raw()[-1], (95.75, 217.0))
@@ -235,14 +245,14 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(
             repr(w),
             "WellRecord('(0.0, 37.0), (0.25, 29.0), (0.5, 32.0),"
-            " (0.75, 30.0), (1.0, 29.0), ..., (95.75, 217.0)')"
+            " (0.75, 30.0), (1.0, 29.0), ..., (95.75, 217.0)')",
         )
         self.assertEqual(
             str(w),
             "Well ID: A10\nTime points: 384\nMinum signal 0.25 at time 29.00\n"
             "Maximum signal 16.75 at time 313.00\n"
             "WellRecord('(0.0, 37.0), (0.25, 29.0), (0.5, 32.0), (0.75, 30.0), "
-            "(1.0, 29.0), ..., (95.75, 217.0)')"
+            "(1.0, 29.0), ..., (95.75, 217.0)')",
         )
 
         w.fit(None)
@@ -265,14 +275,12 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(len(w2), 384)
         self.assertEqual(max(w2), (95.75, 327.0))
         self.assertEqual(min(w2), (0.0, 63.0))
-        self.assertEqual(max(w2, key=lambda x: x[1]),  # noqa: E731
-                         (18.25, 357.0))
-        self.assertEqual(min(w2, key=lambda x: x[1]),  # noqa: E731
-                         (0.25, 55.0))
-        self.assertEqual(w2[1], 71.)
-        self.assertEqual(w2[12], 316.)
+        self.assertEqual(max(w2, key=lambda x: x[1]), (18.25, 357.0))  # noqa: E731
+        self.assertEqual(min(w2, key=lambda x: x[1]), (0.25, 55.0))  # noqa: E731
+        self.assertEqual(w2[1], 71.0)
+        self.assertEqual(w2[12], 316.0)
         self.assertEqual(w2[1:5], [71.0, 88.0, 94.0, 94.0])
-        self.assertAlmostEqual(w2[1:2:.25][0], 71.0)
+        self.assertAlmostEqual(w2[1:2:0.25][0], 71.0)
         self.assertAlmostEqual(w2[1.3567], 77.7196)
         self.assertEqual(w2.get_raw()[0], (0.0, 63.0))
         self.assertEqual(w2.get_raw()[-1], (95.75, 327.0))
@@ -289,14 +297,12 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(len(w2), 384)
         self.assertEqual(max(w2), (95.75, 107.0))
         self.assertEqual(min(w2), (0.0, 11.0))
-        self.assertEqual(max(w2, key=lambda x: x[1]),  # noqa: E731
-                         (15.75, 274.0))
-        self.assertEqual(min(w2, key=lambda x: x[1]),  # noqa: E731
-                         (3.25, -20.0))
-        self.assertEqual(w2[1], -13.)
-        self.assertEqual(w2[12], 228.)
+        self.assertEqual(max(w2, key=lambda x: x[1]), (15.75, 274.0))  # noqa: E731
+        self.assertEqual(min(w2, key=lambda x: x[1]), (3.25, -20.0))  # noqa: E731
+        self.assertEqual(w2[1], -13.0)
+        self.assertEqual(w2[12], 228.0)
         self.assertEqual(w2[1:5], [-13.0, -18.0, -16.0, -8.0])
-        self.assertAlmostEqual(w2[1:2:.25][0], -13.0)
+        self.assertAlmostEqual(w2[1:2:0.25][0], -13.0)
         self.assertAlmostEqual(w2[1.3567], -10.2804)
         self.assertEqual(w2.get_raw()[0], (0.0, 11.0))
         self.assertEqual(w2.get_raw()[-1], (95.75, 107.0))

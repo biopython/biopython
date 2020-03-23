@@ -58,10 +58,9 @@ class BgzfTests(unittest.TestCase):
 
     def check_text(self, old_file, new_file):
         """Check text mode using explicit open/close."""
-        h = open(old_file)  # text mode!
-        old_line = h.readline()
-        old = old_line + h.read()
-        h.close()
+        with open(old_file) as h:  # text mode!
+            old_line = h.readline()
+            old = old_line + h.read()
 
         h = bgzf.BgzfReader(new_file, "r")  # Text mode!
         new_line = h.readline()
@@ -336,57 +335,53 @@ class BgzfTests(unittest.TestCase):
         """Check offset works during BGZF writing."""
         temp_file = self.temp_file
 
-        h = bgzf.open(temp_file, "w")  # Text mode!
-        # When opening new file, offset should be 0
-        self.assertEqual(h.tell(), 0)
+        with bgzf.open(temp_file, "w") as h:  # Text mode!
+            # When opening new file, offset should be 0
+            self.assertEqual(h.tell(), 0)
 
-        h.write("X" * 100000)
-        offset = h.tell()
-        self.assertNotEqual(offset, 100000)  # Should be a virtual offset!
+            h.write("X" * 100000)
+            offset = h.tell()
+            self.assertNotEqual(offset, 100000)  # Should be a virtual offset!
 
-        # After writing the same data two times, size of the first and the second
-        # write should be equal also in terms of offsets
-        # (This is because the flush ensures two identical blocks written)
-        h.flush()
-        offset1 = h.tell()
-        # Note 'offset' and 'offset1' effectively the same, but not equal
-        # due to the flush - 'offet' is at the end of the first BGZF block,
-        # while 'offset1' is at the start of the second BGZF block. In terms
-        # of the decompressed data, they point to the same location!
-        self.assertNotEqual(offset, offset1)  # New block started
-        h.write("Magic" + "Y" * 100000)
-        h.flush()
-        offset2 = h.tell()
-        h.write("Magic" + "Y" * 100000)
-        h.flush()
-        offset3 = h.tell()
-        self.assertEqual(
-            (offset3 << 16) - (offset2 << 16), (offset2 << 16) - (offset1 << 16)
-        )
+            # After writing the same data two times, size of the first and the second
+            # write should be equal also in terms of offsets
+            # (This is because the flush ensures two identical blocks written)
+            h.flush()
+            offset1 = h.tell()
+            # Note 'offset' and 'offset1' effectively the same, but not equal
+            # due to the flush - 'offet' is at the end of the first BGZF block,
+            # while 'offset1' is at the start of the second BGZF block. In terms
+            # of the decompressed data, they point to the same location!
+            self.assertNotEqual(offset, offset1)  # New block started
+            h.write("Magic" + "Y" * 100000)
+            h.flush()
+            offset2 = h.tell()
+            h.write("Magic" + "Y" * 100000)
+            h.flush()
+            offset3 = h.tell()
+            self.assertEqual(
+                (offset3 << 16) - (offset2 << 16), (offset2 << 16) - (offset1 << 16)
+            )
 
-        # Flushing should change the offset
-        h.flush()
-        self.assertNotEqual(offset3, h.tell())
+            # Flushing should change the offset
+            h.flush()
+            self.assertNotEqual(offset3, h.tell())
 
-        h.close()
+        with bgzf.open(temp_file, "r") as h:  # Text mode!
 
-        h = bgzf.open(temp_file, "r")  # Text mode!
+            h.seek(offset)  # i.e. End of first BGZF block
+            self.assertEqual(offset1, h.tell())  # Note *not* seek offset
+            # Now at start of second BGZF block
+            self.assertEqual(h.read(5), "Magic")
 
-        h.seek(offset)  # i.e. End of first BGZF block
-        self.assertEqual(offset1, h.tell())  # Note *not* seek offset
-        # Now at start of second BGZF block
-        self.assertEqual(h.read(5), "Magic")
+            h.seek(offset2)
+            self.assertEqual(offset2, h.tell())
+            self.assertEqual(h.read(5), "Magic")
 
-        h.seek(offset2)
-        self.assertEqual(offset2, h.tell())
-        self.assertEqual(h.read(5), "Magic")
-
-        # Now go back in the file,
-        h.seek(offset1)
-        self.assertEqual(offset1, h.tell())
-        self.assertEqual(h.read(5), "Magic")
-
-        h.close()
+            # Now go back in the file,
+            h.seek(offset1)
+            self.assertEqual(offset1, h.tell())
+            self.assertEqual(h.read(5), "Magic")
 
     def test_append_mode(self):
         with self.assertRaises(NotImplementedError):
@@ -395,33 +390,31 @@ class BgzfTests(unittest.TestCase):
     def test_many_blocks_in_single_read(self):
         n = 1000
 
-        h = bgzf.open(self.temp_file, "wb")
-        # create a file with a lot of a small blocks
-        for i in range(n):
-            h.write(b"\x01\x02\x03\x04")
-            h.flush()
-        h.write(b"\nABCD")
-        h.close()
+        with bgzf.open(self.temp_file, "wb") as h:
+            # create a file with a lot of a small blocks
+            for i in range(n):
+                h.write(b"\x01\x02\x03\x04")
+                h.flush()
+            h.write(b"\nABCD")
 
-        h = bgzf.open(self.temp_file, "rb")
-        data = h.read(4 * n)
-        self.assertEqual(len(data), 4 * n)
-        self.assertEqual(data[:4], b"\x01\x02\x03\x04")
-        self.assertEqual(data[-4:], b"\x01\x02\x03\x04")
+        with bgzf.open(self.temp_file, "rb") as h:
+            data = h.read(4 * n)
+            self.assertEqual(len(data), 4 * n)
+            self.assertEqual(data[:4], b"\x01\x02\x03\x04")
+            self.assertEqual(data[-4:], b"\x01\x02\x03\x04")
 
-        h.seek(0)
-        data = h.readline()
-        self.assertEqual(len(data), 4 * n + 1)
-        self.assertEqual(data[:4], b"\x01\x02\x03\x04")
-        self.assertEqual(data[-5:], b"\x01\x02\x03\x04\n")
-        h.close()
+            h.seek(0)
+            data = h.readline()
+            self.assertEqual(len(data), 4 * n + 1)
+            self.assertEqual(data[:4], b"\x01\x02\x03\x04")
+            self.assertEqual(data[-5:], b"\x01\x02\x03\x04\n")
 
     def test_BgzfBlocks_TypeError(self):
         """Check get expected TypeError from BgzfBlocks."""
         for mode in ("r", "rb"):
-            decompressed = bgzf.open("GenBank/cor6_6.gb.bgz", mode)
-            with self.assertRaises(TypeError):
-                list(bgzf.BgzfBlocks(decompressed))
+            with bgzf.open("GenBank/cor6_6.gb.bgz", mode) as decompressed:
+                with self.assertRaises(TypeError):
+                    list(bgzf.BgzfBlocks(decompressed))
 
 
 if __name__ == "__main__":

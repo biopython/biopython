@@ -511,23 +511,31 @@ class TestAbiNonAscii(unittest.TestCase):
 
 
 class TestAbiWrongMode(unittest.TestCase):
+    def setUp(self):
+        open_files_wrong_mode(test_data)
+
+    def tearDown(self):
+        close_files(test_data)
+
     def test_file_mode(self):
         """Test if exception is raised if file is not opened in 'rb' mode."""
-        open_files_wrong_mode(test_data)
         for trace in test_data:
             self.assertRaises(ValueError, SeqIO.read, test_data[trace]["handle"], "abi")
-        close_files(test_data)
 
 
 class TestAbiFake(unittest.TestCase):
+    def setUp(self):
+        open_files(test_data_fake)
+
+    def tearDown(self):
+        close_files(test_data_fake)
+
     def test_file_type(self):
         """Test if error is raised if filetype is not ABIF."""
-        open_files(test_data_fake)
         for trace in test_data_fake:
             self.assertRaises(
                 IOError, SeqIO.read, test_data_fake[trace]["handle"], "abi"
             )
-        close_files(test_data_fake)
 
 
 if __name__ == "__main__":

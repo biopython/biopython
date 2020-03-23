@@ -118,10 +118,10 @@ class MafftApplication(unittest.TestCase):
             self.assertTrue(stdoutdata.startswith(" 3 68") or
                             stdoutdata.startswith(" 3 69") or
                             stdoutdata.startswith(" 3 70"), stdoutdata)
-            self.assertTrue("gi|1348912 " in stdoutdata,
-                            stdoutdata)
-            self.assertTrue("gi|1348912|gb|G26680|G26680" not in stdoutdata,
-                            stdoutdata)
+            self.assertIn("gi|1348912 ", stdoutdata,
+                          stdoutdata)
+            self.assertNotIn("gi|1348912|gb|G26680|G26680", stdoutdata,
+                             stdoutdata)
             self.assertNotIn("$#=0", stderrdata)
 
         def test_Mafft_with_PHYLIP_namelength(self):
@@ -134,8 +134,8 @@ class MafftApplication(unittest.TestCase):
             self.assertTrue(stdoutdata.startswith(" 3 68") or
                             stdoutdata.startswith(" 3 69") or
                             stdoutdata.startswith(" 3 70"), stdoutdata)
-            self.assertTrue("gi|1348912|gb|G26680|G26680" in stdoutdata,
-                            stdoutdata)
+            self.assertIn("gi|1348912|gb|G26680|G26680", stdoutdata,
+                          stdoutdata)
             self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_complex_command_line(self):

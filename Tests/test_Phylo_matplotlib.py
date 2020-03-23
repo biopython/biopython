@@ -17,7 +17,8 @@ try:
     import matplotlib
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install matplotlib if you want to use Bio.Phylo._utils.") from None
+        "Install matplotlib if you want to use Bio.Phylo._utils."
+    ) from None
 
 # Don't use the Wx backend for matplotlib, use the simpler postscript
 # backend -- we're not going to display or save the plot anyway, so it
@@ -29,7 +30,8 @@ try:
 except ImportError:
     # Can fail here with font problems
     raise MissingExternalDependencyError(
-        "Install matplotlib if you want to use Bio.Phylo._utils.") from None
+        "Install matplotlib if you want to use Bio.Phylo._utils."
+    ) from None
 
 
 # Example PhyloXML file
@@ -42,14 +44,16 @@ class UtilTests(unittest.TestCase):
 
     def test_draw(self):
         """Run the tree layout algorithm, but don't display it."""
-        pyplot.ioff()   # Turn off interactive display
+        pyplot.ioff()  # Turn off interactive display
         dollo = Phylo.read(EX_DOLLO, "phyloxml")
         apaf = Phylo.read(EX_APAF, "phyloxml")
         Phylo.draw(dollo, do_show=False)
         Phylo.draw(apaf, do_show=False)
         # Fancier options
         Phylo.draw(apaf, do_show=False, branch_labels={apaf.root: "Root"})
-        Phylo.draw(apaf, do_show=False, branch_labels=lambda c: c.branch_length)  # noqa: E731
+        Phylo.draw(
+            apaf, do_show=False, branch_labels=lambda c: c.branch_length  # noqa: E731
+        )
 
     def test_draw_with_label_colors_dict(self):
         """Layout tree with label colors as dict.
@@ -57,7 +61,7 @@ class UtilTests(unittest.TestCase):
         Run the tree layout algorithm with a label_colors argument passed in
         as a dictionary. Don't display tree.
         """
-        pyplot.ioff()   # Turn off interactive display
+        pyplot.ioff()  # Turn off interactive display
         dollo = Phylo.read(EX_DOLLO, "phyloxml")
         apaf = Phylo.read(EX_APAF, "phyloxml")
         label_colors_dollo = {
@@ -77,7 +81,7 @@ class UtilTests(unittest.TestCase):
         Run the tree layout algorithm with a label_colors argument passed in
         as a callable. Don't display tree.
         """
-        pyplot.ioff()   # Turn off interactive display
+        pyplot.ioff()  # Turn off interactive display
         dollo = Phylo.read(EX_DOLLO, "phyloxml")
         apaf = Phylo.read(EX_APAF, "phyloxml")
 

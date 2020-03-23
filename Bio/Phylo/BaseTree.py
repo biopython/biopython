@@ -17,8 +17,6 @@ import itertools
 import random
 import re
 
-from Bio import _utils
-
 
 # General tree-traversal algorithms
 
@@ -246,7 +244,8 @@ class TreeElement:
         # This comment stops black style adding a blank line here, which causes flake8 D202.
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
-                return "%s='%s'" % (key, _utils.trim_str(str(val), 60, "..."))
+                val = val[:57] + "..." if len(val) > 60 else val
+                return "%s='%s'" % (key, val)
             return "%s=%s" % (key, val)
 
         return "%s(%s)" % (
@@ -288,7 +287,7 @@ class TreeMixin:
         except KeyError:
             raise ValueError(
                 "Invalid order '%s'; must be one of: %s" % (order, tuple(order_opts))
-            )
+            ) from None
 
         if follow_attrs:
             get_children = _sorted_attrs
@@ -813,9 +812,9 @@ class Tree(TreeElement, TreeMixin):
 
         return Phylogeny.from_tree(self, **kwargs)
 
-    # XXX Py3 Compatibility: In Python 3.0+, **kwargs can be replaced with the
-    # named keyword argument outgroup_branch_length=None
-    def root_with_outgroup(self, outgroup_targets, *more_targets, **kwargs):
+    def root_with_outgroup(
+        self, outgroup_targets, *more_targets, outgroup_branch_length=None
+    ):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
         Operates in-place.
@@ -846,15 +845,6 @@ class Tree(TreeElement, TreeMixin):
             return
 
         prev_blen = outgroup.branch_length or 0.0
-        # Hideous kludge because Py2.x doesn't allow keyword args after *args
-        outgroup_branch_length = kwargs.get("outgroup_branch_length")
-        if outgroup_branch_length is not None:
-            if not (0 <= outgroup_branch_length <= prev_blen):
-                raise ValueError(
-                    "outgroup_branch_length must be between 0 "
-                    "and the original length of the branch "
-                    "leading to the outgroup."
-                )
 
         if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup
@@ -1102,7 +1092,7 @@ class Clade(TreeElement, TreeMixin):
     def __str__(self):
         """Return name of the class instance."""
         if self.name:
-            return _utils.trim_str(self.name, 40, "...")
+            return self.name[:37] + "..." if len(self.name) > 40 else self.name
         return self.__class__.__name__
 
     # Syntax sugar for setting the branch color

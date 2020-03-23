@@ -18,6 +18,7 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 import warnings
 
 from io import StringIO
+import time
 
 from urllib.request import urlopen
 from urllib.parse import urlencode
@@ -121,8 +122,6 @@ def qblast(
     https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
-    import time
-
     programs = ["blastn", "blastp", "blastx", "tblastn", "tblastx"]
     if program not in programs:
         raise ValueError(

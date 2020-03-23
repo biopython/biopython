@@ -13,8 +13,10 @@ try:
     from numpy import linalg  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.LogisticRegression.") from None
+        "Install NumPy if you want to use Bio.LogisticRegression."
+    ) from None
 
 import unittest
 import copy
@@ -22,41 +24,27 @@ import copy
 from Bio import LogisticRegression
 
 
-xs = [[-53, -200.78],
-      [117, -267.14],
-      [57, -163.47],
-      [16, -190.30],
-      [11, -220.94],
-      [85, -193.94],
-      [16, -182.71],
-      [15, -180.41],
-      [-26, -181.73],
-      [58, -259.87],
-      [126, -414.53],
-      [191, -249.57],
-      [113, -265.28],
-      [145, -312.99],
-      [154, -213.83],
-      [147, -380.85],
-      [93, -291.13]]
+xs = [
+    [-53, -200.78],
+    [117, -267.14],
+    [57, -163.47],
+    [16, -190.30],
+    [11, -220.94],
+    [85, -193.94],
+    [16, -182.71],
+    [15, -180.41],
+    [-26, -181.73],
+    [58, -259.87],
+    [126, -414.53],
+    [191, -249.57],
+    [113, -265.28],
+    [145, -312.99],
+    [154, -213.83],
+    [147, -380.85],
+    [93, -291.13],
+]
 
-ys = [1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0]
+ys = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 
 
 def show_progress(iteration, loglikelihood):
@@ -65,25 +53,21 @@ def show_progress(iteration, loglikelihood):
 
 
 class TestLogisticRegression(unittest.TestCase):
-
     def test_xs_and_ys_input_parameter_lengths(self):
         modified_xs = copy.copy(xs)
         modified_xs.pop()
-        self.assertRaises(ValueError,
-                          LogisticRegression.train, modified_xs, ys)
+        self.assertRaises(ValueError, LogisticRegression.train, modified_xs, ys)
 
     def test_ys_input_class_assignments(self):
         modified_ys = copy.copy(ys)
         modified_ys.pop()
         modified_ys.append(2)
-        self.assertRaises(ValueError,
-                          LogisticRegression.train, xs, modified_ys)
+        self.assertRaises(ValueError, LogisticRegression.train, xs, modified_ys)
 
     def test_dimensionality_of_input_xs(self):
         modified_xs = copy.copy(xs)
         modified_xs[0] = []
-        self.assertRaises(ValueError,
-                          LogisticRegression.train, modified_xs, ys)
+        self.assertRaises(ValueError, LogisticRegression.train, modified_xs, ys)
 
     def test_calculate_model(self):
         model = LogisticRegression.train(xs, ys)
@@ -128,7 +112,7 @@ class TestLogisticRegression(unittest.TestCase):
         correct = 0
         predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0]
         for i in range(len(predictions)):
-            model = LogisticRegression.train(xs[:i] + xs[i + 1:], ys[:i] + ys[i + 1:])
+            model = LogisticRegression.train(xs[:i] + xs[i + 1 :], ys[:i] + ys[i + 1 :])
             prediction = LogisticRegression.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
             if prediction == ys[i]:

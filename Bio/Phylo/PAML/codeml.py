@@ -130,7 +130,7 @@ class Codeml(Paml):
                                 except ValueError:
                                     raise TypeError(
                                         "Invalid site class: %s" % site_classes[n]
-                                    )
+                                    ) from None
                             temp_options["NSsites"] = site_classes
                         elif option not in self._options:
                             raise KeyError("Invalid option: %s" % option)

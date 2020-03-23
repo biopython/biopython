@@ -17,6 +17,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
 
 
 def _read(handle, length):
@@ -226,7 +227,7 @@ def GckIterator(source):
     except TypeError:
         handle = source
         if handle.read(0) != b"":
-            raise ValueError("GCK files must be opened in binary mode.") from None
+            raise StreamModeError("GCK files must be opened in binary mode.") from None
 
     try:
         records = _parse(handle)
