@@ -13,7 +13,7 @@ from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_nucleotide, generic_dna
 from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
-from Bio.SeqIO.FastaIO import fasta_title_parser_auto, FastaNcbiIterator
+from Bio.SeqIO.FastaIO import fasta_title_parser_ncbi_auto, FastaNcbiIterator
 
 
 def title_to_ids(title):
