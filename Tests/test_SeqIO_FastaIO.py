@@ -248,7 +248,7 @@ class TestNCBIFastaTitleParser(unittest.TestCase):
         ncbi = FastaNcbiIterator(filename)
         for rec_simple, rec_ncbi, dbxrefs in zip(simple, ncbi, dbxrefs_expected):
             self.assertEqual(rec_simple.id, rec_ncbi.id)
-            self.assertEqual(rec_simple.description, rec_ncbi.descriptioin)
+            self.assertEqual(rec_simple.description, rec_ncbi.description)
             self.assertEqual(rec_ncbi.dbxrefs, dbxrefs)
 
 
