@@ -1049,7 +1049,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-
     from ._convert import _handle_convert  # Lazy import
 
     count = _handle_convert(in_file, in_format, out_file, out_format, alphabet)

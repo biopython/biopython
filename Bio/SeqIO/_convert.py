@@ -414,7 +414,6 @@ _converter = {
 
 def _handle_convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert handles from one format to another (PRIVATE)."""
-
     try:
         f = _converter[(in_format, out_format)]
     except KeyError:
