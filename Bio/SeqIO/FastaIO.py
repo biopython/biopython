@@ -214,17 +214,15 @@ def fasta_title_parser_ncbi_auto(title):
         title_split = title.split(" ", 1)
         if len(title_split) == 2:
             # parse xrefs only when they're present
-            xrefs, long_name = title.split(" ", 1)
+            xrefs, long_name = title_split
             id = xrefs
-            i = 0
             fields = xrefs.split("|")
             parsed_fields = []
-            while i < len(fields):
-                if fields[i] in ncbi_identifiers:
+            for i, field, in enumerate(fields):
+                if field in ncbi_identifiers:
                     parsed_fields.append(
                         f"{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}"
                     )
-                i += 1
         else:
             # if there's only one field; both id and long_name equal to this.
             id = title
