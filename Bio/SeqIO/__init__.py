@@ -481,19 +481,6 @@ _FormatToWriter = {
     "xdna": XdnaIO.XdnaWriter,
 }
 
-_BinaryFormats = [
-    "sff",
-    "sff-trim",
-    "abi",
-    "abi-trim",
-    "gck",
-    "seqxml",
-    "snapgene",
-    "nib",
-    "seqxml",
-    "xdna",
-]
-
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
@@ -1044,8 +1031,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - alphabet - optional alphabet to assume
 
     **NOTE** - If you provide an output filename, it will be opened which will
-    overwrite any existing file without warning. This may happen if even
-    the conversion is aborted (e.g. an invalid out_format name is given).
+    overwrite any existing file without warning.
 
     For example, going from a filename to a handle:
 
@@ -1063,19 +1049,9 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    in_mode = "rb" if in_format in _BinaryFormats else "r"
-
-    out_mode = "wb" if out_format in _BinaryFormats else "w"
-
-    # This will check the arguments and issue error messages,
-    # after we have opened the file which is a shame.
     from ._convert import _handle_convert  # Lazy import
 
-    with as_handle(in_file, in_mode) as in_handle:
-        with as_handle(out_file, out_mode) as out_handle:
-            count = _handle_convert(
-                in_handle, in_format, out_handle, out_format, alphabet
-            )
+    count = _handle_convert(in_file, in_format, out_file, out_format, alphabet)
     return count
 
 

@@ -28,6 +28,8 @@ All these file format specific optimisations are handled by this (private) modul
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
+from Bio.File import as_handle
+
 
 # NOTE - Lots of lazy imports further on...
 
@@ -410,14 +412,16 @@ _converter = {
 }
 
 
-def _handle_convert(in_handle, in_format, out_handle, out_format, alphabet=None):
+def _handle_convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert handles from one format to another (PRIVATE)."""
     try:
         f = _converter[(in_format, out_format)]
     except KeyError:
         f = None
     if f:
-        return f(in_handle, out_handle, alphabet)
+        with as_handle(in_file, "r") as in_handle:
+            with as_handle(out_file, "w") as out_handle:
+                return f(in_handle, out_handle, alphabet)
     else:
-        records = SeqIO.parse(in_handle, in_format, alphabet)
-        return SeqIO.write(records, out_handle, out_format)
+        records = SeqIO.parse(in_file, in_format, alphabet)
+        return SeqIO.write(records, out_file, out_format)
