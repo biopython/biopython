@@ -427,11 +427,17 @@ class DataHandler:
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""
-        self.parser.StartElementHandler = self.startElementHandler
         self.parser.CharacterDataHandler = self.characterDataHandler
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
         self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
+        self.parser.StartElementHandler = self.handleMissingDocumentDefinition
+
+    def handleMissingDocumentDefinition(self, tag, attrs):
+        """Raise an Exception if neither a DTD nor an XML Schema is found."""
+        raise ValueError(
+            "As the XML data contained neither a Document Type Definition (DTD) nor an XML Schema, Bio.Entrez is unable to parse these data. We recommend using a generic XML parser from the Python standard library instead, for example ElementTree."
+        )
 
     def startNamespaceDeclHandler(self, prefix, uri):
         """Handle start of an XML namespace declaration."""
@@ -987,6 +993,7 @@ class DataHandler:
         parser.ParseFile(handle)
         handle.close()
         self.dtd_urls.pop()
+        self.parser.StartElementHandler = self.startElementHandler
         return 1
 
     def _initialize_directory(self):
