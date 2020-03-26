@@ -80,7 +80,7 @@ class ParseReal(unittest.TestCase):
             },
         )
 
-        info = _parse_remark_465("1  DG B     9 ")
+        info = _parse_remark_465("1  DG B     9")
         self.assertEqual(
             info,
             {
