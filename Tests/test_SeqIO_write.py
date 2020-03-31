@@ -102,7 +102,7 @@ class WriterTests(SeqIOTestBaseClass):
             self.check_write_fails(records, fmt, descr, ValueError,
                                    "More than one sequence found")
         elif records and fmt in ["fastq", "fastq-sanger", "fastq-solexa",
-                                    "fastq-illumina", "qual", "phd"]:
+                                 "fastq-illumina", "qual", "phd"]:
             self.check_write_fails(records, fmt, descr, ValueError,
                                    "No suitable quality scores found in "
                                    "letter_annotations of SeqRecord "
@@ -124,11 +124,7 @@ class WriterTests(SeqIOTestBaseClass):
         self.assertEqual(count, len(records), msg=msg)
         # Now read them back...
         handle.seek(0)
-        text = handle.read()
-        handle.seek(0)
         new_records = list(SeqIO.parse(handle, fmt))
-        if fmt == 'mauve' and descr == 'three proteins alignment':
-            open("buh", 'w').write(text)
         self.assertEqual(len(new_records), len(records), msg=msg)
         for record, new_record in zip(records, new_records):
             # Using compare_record(record, new_record) is too strict
