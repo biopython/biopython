@@ -431,7 +431,7 @@ class Writer:
             else:
                 if confidence is not None:
                     confidence = rdflib.Literal(
-                        confidence, datatype="http://www.w3.org/2001/XMLSchema#decimal",
+                        confidence, datatype="http://www.w3.org/2001/XMLSchema#decimal"
                     )
 
                     statements += [
