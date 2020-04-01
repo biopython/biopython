@@ -72,33 +72,32 @@ class Baseml(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        if True:  # Dummy statement to preserve indentation for diff
-            with open(self.ctl_file, "w") as ctl_handle:
-                ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
-                ctl_handle.write("outfile = %s\n" % self._rel_out_file)
-                ctl_handle.write("treefile = %s\n" % self._rel_tree)
-                for option in self._options.items():
-                    if option[1] is None:
-                        # If an option has a value of None, there's no need
-                        # to write it in the control file; it's normally just
-                        # commented out.
+        with open(self.ctl_file, "w") as ctl_handle:
+            ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
+            ctl_handle.write("outfile = %s\n" % self._rel_out_file)
+            ctl_handle.write("treefile = %s\n" % self._rel_tree)
+            for option in self._options.items():
+                if option[1] is None:
+                    # If an option has a value of None, there's no need
+                    # to write it in the control file; it's normally just
+                    # commented out.
+                    continue
+                if option[0] == "model_options":
+                    continue
+                # If "model" is 9 or 10, it may be followed in the cotnrol
+                # file by further options such as
+                # [1 (TC CT AG GA)]
+                # or
+                # [5 (AC CA) (AG GA) (AT TA) (CG GC) (CT TC)]
+                # which are to be stored in "model_options" as a string.
+                if option[0] == "model" and option[1] in [9, 10]:
+                    if self._options["model_options"] is not None:
+                        ctl_handle.write(
+                            "model = %s  %s"
+                            % (option[1], self._options["model_options"])
+                        )
                         continue
-                    if option[0] == "model_options":
-                        continue
-                    # If "model" is 9 or 10, it may be followed in the cotnrol
-                    # file by further options such as
-                    # [1 (TC CT AG GA)]
-                    # or
-                    # [5 (AC CA) (AG GA) (AT TA) (CG GC) (CT TC)]
-                    # which are to be stored in "model_options" as a string.
-                    if option[0] == "model" and option[1] in [9, 10]:
-                        if self._options["model_options"] is not None:
-                            ctl_handle.write(
-                                "model = %s  %s"
-                                % (option[1], self._options["model_options"])
-                            )
-                            continue
-                    ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+                ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Baseml instance."""
