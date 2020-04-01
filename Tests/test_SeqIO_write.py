@@ -22,9 +22,9 @@ from test_SeqIO import SeqIOTestBaseClass
 # List of formats including alignment only file formats we can read AND write.
 # We don't care about the order
 test_write_read_alignment_formats = sorted(SeqIO._FormatToWriter)
-for format in sorted(AlignIO._FormatToWriter):
-    if format not in test_write_read_alignment_formats:
-        test_write_read_alignment_formats.append(format)
+for fmt in sorted(AlignIO._FormatToWriter):
+    if fmt not in test_write_read_alignment_formats:
+        test_write_read_alignment_formats.append(fmt)
 test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
@@ -53,15 +53,13 @@ test_records = [
                 description="an%sevil\rdescription right\nhere" % os.linesep),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
      "3 DNA seq alignment with CR/LF in name/descr",
-     [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line"),
-      (["mauve"], ValueError, "Sequences have different lengths, or repeated identifier")]),
+     [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line")]),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record",
      [(["stockholm"], ValueError, "Duplicate record identifier: Beta"),
-      (["maf"], ValueError, "Identifiers in each MultipleSeqAlignment must be unique"),
       (["phylip", "phylip-relaxed", "phylip-sequential"], ValueError, "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
@@ -77,9 +75,8 @@ test_records[4][0][2].annotations["weight"] = 2.5
 
 
 class WriterTests(SeqIOTestBaseClass):
-    """Cunning unit test where methods are added at run time."""  # TODO - Let's not be cunning
 
-    def check(self, records, format):
+    def check(self, records, fmt, descr):
         """General test function with with a little format specific information.
 
         This has some general expected exceptions hard coded!
@@ -87,112 +84,98 @@ class WriterTests(SeqIOTestBaseClass):
         # TODO - Check the exception messages?
         lengths = len({len(r) for r in records})
         dna = all(set(record.seq.upper()).issubset("ACGTN") for record in records)
-        if not records and format in ["stockholm", "phylip", "phylip-relaxed",
-                                      "phylip-sequential", "nexus", "clustal",
-                                      "sff", "mauve"]:
-            self.check_write_fails(records, format, ValueError,
+        if not records and fmt in ["stockholm", "phylip", "phylip-relaxed",
+                                   "phylip-sequential", "nexus", "clustal",
+                                   "sff", "mauve"]:
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "Must have at least one sequence")
-        elif not records and format in ["nib", "xdna"]:
-            self.check_write_fails(records, format, ValueError,
+        elif not records and fmt in ["nib", "xdna"]:
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "Must have one sequence")
-        elif lengths > 1 and format in AlignIO._FormatToWriter:
-            self.check_write_fails(records, format, ValueError,
+        elif lengths > 1 and fmt in AlignIO._FormatToWriter:
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "Sequences must all be the same length")
-        elif (not dna) and format == "nib":
-            self.check_write_fails(records, format, ValueError,
+        elif (not dna) and fmt == "nib":
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "Sequence should contain A,C,G,T,N,a,c,g,t,n only")
-        elif len(records) > 1 and format in ["nib", "xdna"]:
-            self.check_write_fails(records, format, ValueError,
+        elif len(records) > 1 and fmt in ["nib", "xdna"]:
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "More than one sequence found")
-        elif records and format in ["fastq", "fastq-sanger", "fastq-solexa",
-                                    "fastq-illumina", "qual", "phd"]:
-            self.check_write_fails(records, format, ValueError,
+        elif records and fmt in ["fastq", "fastq-sanger", "fastq-solexa",
+                                 "fastq-illumina", "qual", "phd"]:
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "No suitable quality scores found in "
                                    "letter_annotations of SeqRecord "
                                    "(id=%s)." % records[0].id)
-        elif records and format == "sff":
-            self.check_write_fails(records, format, ValueError,
+        elif records and fmt == "sff":
+            self.check_write_fails(records, fmt, descr, ValueError,
                                    "Missing SFF flow information")
         else:
-            self.check_simple(records, format)
+            self.check_simple(records, fmt, descr)
 
-    def check_simple(self, records, format):
-        mode = self.get_mode(format)
+    def check_simple(self, records, fmt, descr):
+        msg = "Test failure %s for %s" % (fmt, descr)
+        mode = self.get_mode(fmt)
         if mode == "t":
             handle = StringIO()
         elif mode == "b":
             handle = BytesIO()
-        count = SeqIO.write(records, handle, format)
-        self.assertEqual(count, len(records))
+        count = SeqIO.write(records, handle, fmt)
+        self.assertEqual(count, len(records), msg=msg)
         # Now read them back...
         handle.seek(0)
-        new_records = list(SeqIO.parse(handle, format))
-        self.assertEqual(len(new_records), len(records))
+        new_records = list(SeqIO.parse(handle, fmt))
+        self.assertEqual(len(new_records), len(records), msg=msg)
         for record, new_record in zip(records, new_records):
             # Using compare_record(record, new_record) is too strict
-            if format == "nexus":
+            if fmt == "nexus":
                 # The nexus parser will dis-ambiguate repeated record ids.
                 self.assertTrue(record.id == new_record.id or
-                                new_record.id.startswith(record.id + ".copy"))
+                                new_record.id.startswith(record.id + ".copy"),
+                                msg=msg)
             else:
-                self.assertEqual(record.id, new_record.id)
-            self.assertEqual(str(record.seq), str(new_record.seq))
+                self.assertEqual(record.id, new_record.id, msg=msg)
+            self.assertEqual(str(record.seq), str(new_record.seq), msg=msg)
         handle.close()
 
-    def check_write_fails(self, records, format, err_type, err_msg=""):
-        mode = self.get_mode(format)
+    def check_write_fails(self, records, fmt, descr, err_type, err_msg=""):
+        msg = "Test failure %s for %s" % (fmt, descr)
+        mode = self.get_mode(fmt)
         if mode == "t":
             handle = StringIO()
         elif mode == "b":
             handle = BytesIO()
         if err_msg:
-            try:
+            with self.assertRaises(err_type, msg=msg) as cm:
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", BiopythonWarning)
-                    SeqIO.write(records, handle, format)
-            except err_type as err:
-                self.assertEqual(str(err), err_msg)
+                    SeqIO.write(records, handle, fmt)
+            self.assertEqual(str(cm.exception), err_msg, msg=msg)
         else:
-            self.assertRaises(err_type, SeqIO.write, records, handle, format)
+            with self.assertRaises(err_type, msg=msg) as cm:
+                SeqIO.write(records, handle, fmt)
         handle.close()
 
     def test_bad_handle(self):
         handle = os.devnull
         record = SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha")
         records = [record]
-        format = "fasta"
+        fmt = "fasta"
         # These deliberately mix up the handle and record order:
-        self.assertRaises(TypeError, SeqIO.write, handle, record, format)
-        self.assertRaises(TypeError, SeqIO.write, handle, records, format)
-        self.assertEqual(1, SeqIO.write(records, handle, format))
+        self.assertRaises(TypeError, SeqIO.write, handle, record, fmt)
+        self.assertRaises(TypeError, SeqIO.write, handle, records, fmt)
+        self.assertEqual(1, SeqIO.write(records, handle, fmt))
 
+    def test_alignment_formats(self):
+        for (records, descr, errs) in test_records:
+            for fmt in test_write_read_alignment_formats:
+                for err_formats, err_type, err_msg in errs:
+                    if fmt in err_formats:
+                        self.check_write_fails(records, fmt, descr, err_type, err_msg)
+                        break
+                else:
+                    self.check(records, fmt, descr)
 
-for (records, descr, errs) in test_records:
-    for format in test_write_read_alignment_formats:
-        # Assume no errors expected...
-        def funct(records, format, descr):
-            f = lambda x: x.check(records, format)  # noqa: E731
-            f.__doc__ = "%s for %s" % (format, descr)
-            return f
-        setattr(WriterTests,
-                "test_%s_%s" % (format, descr.replace(" ", "_")),
-                funct(records, format, descr))
-        # Replace the method with an error specific one?
-        for err_formats, err_type, err_msg in errs:
-            if format in err_formats:
-                def funct_e(records, format, descr, err_type, err_msg):
-                    f = lambda x: x.check_write_fails(  # noqa: E731
-                        records,
-                        format,
-                        err_type,
-                        err_msg)
-                    f.__doc__ = "%s for %s" % (format, descr)
-                    return f
-                setattr(WriterTests,
-                        "test_%s_%s" % (format, descr.replace(" ", "_")),
-                        funct_e(records, format, descr, err_type, err_msg))
-                break
-        del funct
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
