@@ -51,9 +51,9 @@ class ConvertTests(unittest.TestCase):
                 err_msg = "%s: '%s' vs '%s'" % (msg, old.seq, new.seq)
             else:
                 err_msg = "%s: '%s...' vs '%s...'" % (msg, old.seq[:100], new.seq[:100])
-            # Don't use assertEqual, as it would show the complete sequence in
-            # case of a failure.
-            self.assertTrue(str(old.seq)==str(new.seq), msg=err_msg)
+            # Don't use assertEqual here, as it would show the complete
+            # sequence in case of a failure.
+            self.assertTrue(str(old.seq) == str(new.seq), msg=err_msg)
 
         for keyword in ("phred_quality", "solexa_quality"):
             q_old = old.letter_annotations.get(keyword)
