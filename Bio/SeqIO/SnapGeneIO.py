@@ -116,7 +116,7 @@ def _parse_features_packet(length, data, record):
     which are in a dedicated Primers packet). The data is a XML string
     starting with a 'Features' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     for feature in xml.getElementsByTagName("Feature"):
         quals = {}
 
