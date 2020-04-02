@@ -97,9 +97,9 @@ class SeqIOTestBaseClass(unittest.TestCase):
             return mode
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
-    def compare_record(self, old, new, *args, **kwargs):
+    def compare_record(self, old, new, msg=None, *args, **kwargs):
         """Compare old SeqRecord to new SeqRecord."""
-        self.assertEqual(old.id, new.id)
+        self.assertEqual(old.id, new.id, msg=msg)
         self.assertTrue(
             old.description == new.description
             or (old.id + " " + old.description).strip() == new.description
@@ -110,10 +110,12 @@ class SeqIOTestBaseClass(unittest.TestCase):
             pass
         else:
             if len(old.seq) < 200:
-                msg = "'%s' vs '%s'" % (old.seq, new.seq)
+                err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
             else:
-                msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
-            self.assertEqual(str(old.seq), str(new.seq), msg=msg)
+                err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+            if msg is not None:
+                err_msg = "%s: %s" % (msg, err_msg)
+            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
