@@ -15,6 +15,8 @@ from Bio.SeqIO._convert import _converter as converter_dict
 from io import StringIO
 from Bio.Alphabet import generic_nucleotide, generic_dna
 
+from test_SeqIO import SeqIOTestBaseClass
+
 
 # TODO - share this with the QualityIO tests...
 def truncation_expected(format):
@@ -26,7 +28,7 @@ def truncation_expected(format):
         return None
 
 
-class ConvertTests(unittest.TestCase):
+class ConvertTests(SeqIOTestBaseClass):
 
     # TODO - move compare_record to a shared test module...
     def compare_record(self, old, new, truncate, msg):
@@ -35,26 +37,7 @@ class ConvertTests(unittest.TestCase):
         This will check the mapping between Solexa and PHRED scores.
         It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).
         """
-        self.assertEqual(old.id, new.id, msg=msg)
-        self.assertTrue(
-            old.description == new.description
-            or (old.id + " " + old.description).strip() == new.description
-            or new.description == "<unknown description>"
-            or new.description == "",
-            msg=msg
-        )
-        self.assertEqual(len(old.seq), len(new.seq), msg=msg)
-        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
-            pass
-        else:
-            if len(old.seq) < 200:
-                err_msg = "%s: '%s' vs '%s'" % (msg, old.seq, new.seq)
-            else:
-                err_msg = "%s: '%s...' vs '%s...'" % (msg, old.seq[:100], new.seq[:100])
-            # Don't use assertEqual here, as it would show the complete
-            # sequence in case of a failure.
-            self.assertTrue(str(old.seq) == str(new.seq), msg=err_msg)
-
+        super().compare_record(old, new, msg=msg)
         for keyword in ("phred_quality", "solexa_quality"):
             q_old = old.letter_annotations.get(keyword)
             q_new = new.letter_annotations.get(keyword)
