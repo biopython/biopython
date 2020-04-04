@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright 2010 by Andrea Pierleoni
 # Revisions copyright 2010-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its

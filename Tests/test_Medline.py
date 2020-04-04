@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright 2008 Michiel de Hoon
 #
 # This file is part of the Biopython distribution and governed by your

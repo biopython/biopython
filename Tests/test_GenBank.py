@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright 2001-2004 by Brad Chapman.  All rights reserved.
 # Revisions copyright 2007-2016 by Peter Cock. All rights reserved.
 # Revisions copyright 2013 by Kai Blin. All rights reserved.

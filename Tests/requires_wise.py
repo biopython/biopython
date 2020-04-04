@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 # Copyright 2004 by Michael Hoffman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
