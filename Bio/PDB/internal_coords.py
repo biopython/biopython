@@ -410,21 +410,27 @@ class IC_Chain:
         verbose: bool = False,
         start: Optional[int] = None,
         fin: Optional[int] = None,
+        promote: Optional[bool] = True,
     ) -> None:
         """Complete process, IC data to Residue/Atom coords.
 
+        :param verbose bool: default False
+            describe runtime problems
         :param: start, fin lists
             sequence position, insert code for begin, end of subregion to
             process
-        :param verbose bool: default False
-            describe runtime problems
-
+        :param promote bool: default True
+            If True (the default) copy result atom XYZ coordinates to
+            Biopython Atom objects for access by other Biopython methods;
+            otherwise, updated atom coordinates must be accessed through
+            IC_Residue and hedron objects.
         """
         self.clean_atom_coords()
         self.assemble_residues(
             verbose=verbose, start=start, fin=fin
         )  # internal to XYZ coordinates
-        self.coords_to_structure()  # promote to BioPython Residue/Atom
+        if promote:
+            self.coords_to_structure()  # promote to BioPython Residue/Atom
 
     def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
         """Calculate dihedrals, angles, bond lengths for Atom data."""
