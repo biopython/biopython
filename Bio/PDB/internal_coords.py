@@ -595,8 +595,8 @@ class IC_Chain:
             atom_done_str = ""  # create each only once
             akndx = 0
             for ak in hed.aks:
-                atm = ak.akl[ak.fields.atm]
-                res = ak.akl[ak.fields.resname]
+                atm = ak.akl[AtomKey.fields.atm]
+                res = ak.akl[AtomKey.fields.resname]
                 # try first for generic backbone/Cbeta atoms
                 ab_state_res = residue_atom_bond_state["X"]
                 ab_state = ab_state_res.get(atm, None)
@@ -681,9 +681,9 @@ class IC_Chain:
             akl = hed.aks[0].akl
             fp.write(
                 ', "'
-                + akl[ak.fields.resname]
+                + akl[AtomKey.fields.resname]
                 + '", '
-                + akl[ak.fields.respos]
+                + akl[AtomKey.fields.respos]
                 + ', "'
                 + hed.dh_class
                 + '"'
@@ -2861,7 +2861,7 @@ class AtomKey(object):
         '_'-joined AtomKey fields, excluding 'None' fields
     atom_re: compiled regex (Class Attribute)
         A compiled regular expression matching the string form of the key
-    d2h: bool
+    d2h: bool (Class Attribute)
         Convert D atoms to H on input; must also modify IC_Residue.accept_atoms
     missing: bool default False
         AtomKey __init__'d from string is probably missing, set this flag to
@@ -2924,7 +2924,7 @@ class AtomKey(object):
             elif isinstance(arg, list):
                 akl += arg
             elif isinstance(arg, dict):
-                for k in self.fieldNames:
+                for k in AtomKey.fieldNames:
                     akl.append(arg.get(k, None))
             elif "_" in arg:
                 # got atom key string, recurse with regex parse
@@ -2943,19 +2943,19 @@ class AtomKey(object):
         # if not specified above
         for i in range(6):
             if len(akl) <= i:
-                fld = kwargs.get(self.fieldNames[i])
+                fld = kwargs.get(AtomKey.fieldNames[i])
                 if fld is not None:
                     akl.append(fld)
 
         # tweak local akl to generate id string
         akl[0] = str(akl[0])  # numeric residue position to string
 
-        # occNdx = self.fields.occ
+        # occNdx = AtomKey.fields.occ
         # if akl[occNdx] is not None:
         #    akl[occNdx] = str(akl[occNdx])  # numeric occupancy to string
 
         if self.d2h:
-            atmNdx = self.fields.atm
+            atmNdx = AtomKey.fields.atm
             if akl[atmNdx][0] == "D":
                 akl[atmNdx] = re.sub("D", "H", akl[atmNdx], count=1)
 
@@ -3038,10 +3038,10 @@ class AtomKey(object):
         """Comparison function ranking self vs. other."""
         akl_s = self.akl
         akl_o = other.akl
-        atmNdx = self.fields.atm
-        occNdx = self.fields.occ
-        rsNdx = self.fields.respos
-        # rsnNdx = self.fields.resname
+        atmNdx = AtomKey.fields.atm
+        occNdx = AtomKey.fields.occ
+        rsNdx = AtomKey.fields.respos
+        # rsnNdx = AtomKey.fields.resname
         for i in range(6):
             s, o = akl_s[i], akl_o[i]
             if s != o:
