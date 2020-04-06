@@ -1119,7 +1119,7 @@ class IC_Residue(object):
         """
         id3i: Dict[HKT, List[Dihedron]] = {}
         for dh in self.dihedra.values():
-            dh.IC_Residue = self  # each dihedron can find its IC_Residue
+            dh.ic_residue = self  # each dihedron can find its IC_Residue
             id3 = dh.id3
             if id3 not in id3i:
                 id3i[id3] = []
@@ -1653,7 +1653,7 @@ class IC_Residue(object):
             dtpl = (sO, sC, sCA, sCB)
             self._gen_edra(dtpl)
             d = self.dihedra[dtpl]
-            d.IC_Residue = self
+            d.ic_residue = self
             d._set_hedra()
             sN = self.rak("N")
             refval = self.dihedra.get((sN, sCA, sC, sO), None)
@@ -2574,7 +2574,7 @@ class Dihedron(Edron):
     Methods
     -------
     init_pos()
-        Find Hedron objects for self.IC_Residue, set initial_coords
+        Find Hedron objects for self.ic_residue, set initial_coords
         and a4_pre_rotation
     dihedron_from_atoms()
         Compute dihedral and bond lengths, angles from IC_Residue atom_coords
@@ -2607,7 +2607,7 @@ class Dihedron(Edron):
 
         # IC_Residue object which includes this dihedron;
         # set by Residue:linkDihedra()
-        self.IC_Residue: IC_Residue
+        self.ic_residue: IC_Residue
         # order of atoms in dihedron is reversed from order of atoms in hedra
         self.reverse = False
 
@@ -2621,7 +2621,7 @@ class Dihedron(Edron):
 
     def __repr__(self) -> str:
         """Print string for Dihedron object."""
-        return f"4-{str(self.id)} {self.rdh_class} {str(self.angle)} {str(self.IC_Residue)}"
+        return f"4-{str(self.id)} {self.rdh_class} {str(self.angle)} {str(self.ic_residue)}"
 
     @staticmethod
     def _get_hedron(ic_res: IC_Residue, id3: HKT) -> Optional[Hedron]:
@@ -2642,7 +2642,7 @@ class Dihedron(Edron):
     def _set_hedra(self) -> Tuple[bool, Hedron, Hedron]:
         """Work out hedra keys and set rev flag."""
         rev = False
-        res = self.IC_Residue
+        res = self.ic_residue
         h1key = self.id3
         hedron1 = Dihedron._get_hedron(res, h1key)
         if not hedron1:
@@ -2794,7 +2794,7 @@ class Dihedron(Edron):
         """
         rev, hed1, hed2 = self._set_hedra()
 
-        atom_coords = self.IC_Residue.atom_coords
+        atom_coords = self.ic_residue.atom_coords
         acs = cast(DACS, self.gen_acs(atom_coords))
         mt = coord_space(acs[:3])
         # do4 = mt @ acs[3]
