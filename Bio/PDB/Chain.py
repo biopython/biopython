@@ -195,11 +195,11 @@ class Chain(Entity):
     ):
         """Create/update atom coordinates from internal coordinates.
 
+        :param verbose bool: default False
+            describe runtime problems
         :param: start, fin lists
             sequence position, insert code for begin, end of subregion to
             process
-        :param verbose bool: default False
-            describe runtime problems
         :raises Exception: if any chain does not have .pic attribute
         """
         if self.internal_coord:
