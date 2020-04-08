@@ -7,13 +7,16 @@
 (European Nucleotide Archive). For more information see _SeqDb.
 """
 
-from ._SeqDb import _SeqDb
+from .NcbiDb import NcbiNucleotideDb
 
 
-class EbiEnaDB(_SeqDb):
+class EbiEnaDB(NcbiNucleotideDb):
     """API for DDBJ EBI-ENA (European Nucleotide Archive).
     """
 
     name = "EBI-ENA"
     base_url = "https://www.ebi.ac.uk/ena"
-    entry_url = "old: https://www.ebi.ac.uk/ena/data/view/{0} new: https://www.ebi.ac.uk/ena/browser/view/{0}"
+    entry_url = "new: https://www.ebi.ac.uk/ena/browser/view/{0}"
+    fetch_url = "https://www.ebi.ac.uk/ena/browser/api/{}/{id}?download=true"
+    fetch_file_format_map = dict(embl="embl", fasta="fasta")
+    fetch_file_format_default = "embl"

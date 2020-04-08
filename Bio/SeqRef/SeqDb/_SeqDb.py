@@ -46,7 +46,7 @@ class _SeqDb(object):
             raise Exception("This database does not support fetching!")
         if not file_format:
             file_format = cls.fetch_file_format_default
-        fmt = cls.fetch_file_format_map.get(file_format)
+        fmt = cls.fetch_file_format_map.get(file_format.lower())
         if not fmt:
             raise Exception(
                 f"""Cannot fetch the format {file_format} from this database!
