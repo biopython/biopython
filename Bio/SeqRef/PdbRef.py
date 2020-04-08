@@ -4,25 +4,36 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-from ._commons import SeqRef, SeqId
+r"""Working with PDB references.
+
+About: http://www.rcsb.org/pages/about-us/index
+
+Contains one public class GbRef for representing PDB references.
+"""
+
+from ._commons import SeqRef, _SeqId
 
 from .SeqDb import NcbiProteinDb, RcsbDb
 
 
-class PdbId(SeqId):
+class _PdbId(_SeqId):
     def __init__(self, id, chain):
         self.id = id
         self.chain = chain
 
+    def __str__(self):
+        return self.id + "|" + self.chain if self.chain else self.id
+
 
 class PdbRef(SeqRef):
+    """NCBI GenBank reference.
+    """
+
+    name = "PDB"
     databases = (NcbiProteinDb, RcsbDb)
     # https://www.ncbi.nlm.nih.gov/protein/3LZG_L
     # http://www.rcsb.org/structure/3LZG
 
     def __init__(self, id, chain=""):
-        self.id = PdbId(id, chain)
+        self.id = _PdbId(id, chain)
         self.urls = self.get_urls()
-
-    def get_urls(self):
-        return {db.name: db.make_entry_url(self.id) for db in self.databases}

@@ -4,11 +4,19 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-from ._commons import SeqRef, SeqId
-from .SeqDb import NcbiNucleotideDb, EbiDB
+r"""Working with NCBI's GenBank references.
+
+About: https://www.ncbi.nlm.nih.gov/genbank/
+Examples: "CY073775.2", "CY073775"
+
+Contains one public class GbRef for representing GenBank references.
+"""
+
+from ._commons import SeqRef, _SeqId
+from .SeqDb import NcbiNucleotideDb, EbiEnaDB
 
 
-class GbId(SeqId):
+class _GbId(_SeqId):
     def __init__(self, id, version):
         if not version:
             split = id.split(".")
@@ -17,12 +25,27 @@ class GbId(SeqId):
         self.id = id
         self.version = str(version)
 
+    def __str__(self):
+        return self.id + "." + self.version if self.version else self.id
+
 
 class GbRef(SeqRef):
-    databases = (NcbiNucleotideDb, EbiDB)
+    """NCBI GenBank reference.
+    """
+
+    name = "GenBank"
+    databases = (NcbiNucleotideDb, EbiEnaDB)
 
     def __init__(self, id, version=""):
-        self.id = GbId(id, version)
-        self.urls = self.get_urls()
+        """Initialize a GbRef object.
 
-    # https://www.ncbi.nlm.nih.gov/nuccore/CY073775.2/
+        Arguments:
+            - id - accession code
+            - version - (optional) version
+
+        The version can either be specified explicitly, e.g. GbRef("CY073775", 2)
+        or implicitly, e.g. GbRef("CY073775.2"), or it can be empty (then the
+        latest version is used).
+        """
+        self.id = _GbId(id, version)
+        self.urls = self.get_urls()
