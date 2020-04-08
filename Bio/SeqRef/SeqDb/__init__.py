@@ -13,3 +13,16 @@ from .NcbiDb import NcbiNucleotideDb, NcbiProteinDb
 from .EbiDb import EbiEnaDB
 from .RcsbDb import RcsbDb
 from .DdbjDb import DdbjDb
+
+reftype_to_default_db = {
+    "gb": NcbiNucleotideDb,
+    "ebi": EbiEnaDB,
+    "rcsb": RcsbDb,
+    "ddbj": DdbjDb,
+    "dbj": DdbjDb,
+}
+
+
+def fetch_seq(accession_code, reftype, file_format=None, database=None):
+    db = database if database else reftype_to_default_db[reftype]
+    return db.fetch(accession_code, file_format)
