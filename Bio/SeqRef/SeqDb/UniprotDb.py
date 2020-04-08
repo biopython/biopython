@@ -4,6 +4,9 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
+"""This module contains public classes as APIs for several Uniprot databases.
+For more information see individual classes, as well as their parent, _SeqDb.
+"""
 
 from ._SeqDb import _SeqDb
 

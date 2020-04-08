@@ -30,14 +30,13 @@ class _GbId(_SeqId):
 
 
 class GbRef(SeqRef):
-    """NCBI's GenBank reference.
-    """
+    """NCBI's GenBank reference."""
 
     name = "GenBank"
     databases = (NcbiNucleotideDb, EbiEnaDB, DdbjDb)
 
     def __init__(self, id, version=""):
-        """Initialize a GbRef object.
+        """Initialize a GbRef/EmblRef/DdbjRef object.
 
         Arguments:
             - id - accession code
@@ -52,14 +51,12 @@ class GbRef(SeqRef):
 
 
 class EmblRef(GbRef):
-    """EBI's EMBL reference (equivalent to GenBank).
-    """
+    """EBI's EMBL reference (equivalent to GenBank)."""
 
     pass
 
 
 class DdbjRef(GbRef):
-    """DDBJ's reference (equivalent to GenBank).
-    """
+    """DDBJ's reference (equivalent to GenBank)."""
 
     pass

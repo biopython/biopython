@@ -26,7 +26,7 @@ class _SeqDb(object):
     base_url = ""
     entry_url = ""  # to be formatted; e.g. http://www.rcsb.org/structure/{} ; defaults to base_url + "/" + id
     fetch_url = ""
-    fetch_file_format_map = dict(fasta="fasta", genbank="genbank")
+    fetch_file_format_map = {"fasta": "fasta", "genbank": "genbank"}
     fetch_file_format_default = "genbank"
 
     @classmethod

@@ -3,6 +3,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
+
 """This module contains one public class EbiEna as an API for RSCB PDB
 (Protein Data Bank). For more information see _SeqDb.
 """

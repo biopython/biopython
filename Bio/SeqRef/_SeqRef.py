@@ -4,6 +4,11 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
+"""This module has one public class `SeqRef` which is the parent of a number
+of classes (e.g. `PdbRef`, `GbRef`) representing different types of sequence
+references.
+"""
+
 
 class _SeqId(object):
     """A helper class for representing the ID itself.
@@ -34,7 +39,7 @@ class SeqRef(object):
     """
 
     name = "Type of reference"
-    databases = tuple()
+    databases = ()
 
     def __init__(self, id):
         self.id = _SeqId(id)
@@ -58,14 +63,16 @@ class SeqRef(object):
         return s[:-1] + ")"
 
     def __str__(self):
-        """String representation of the reference.
+        """Pretty-print the reference and associated URLs.
 
         Format:
+        ```
         <type of reference e.g. PDB, GenBank>: <accession code/id>
             <database 1>: <url 1>
             <databse 2>: <url 2>
             ...
         <blank line>
+        ```
         """
         s = f"{self.name}: {self.id}\n"
         for db, url in self.urls.items():

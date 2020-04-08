@@ -26,8 +26,7 @@ class _PdbId(_SeqId):
 
 
 class PdbRef(SeqRef):
-    """NCBI GenBank reference.
-    """
+    """NCBI GenBank reference."""
 
     name = "PDB"
     databases = (NcbiProteinDb, RcsbDb)
@@ -35,5 +34,6 @@ class PdbRef(SeqRef):
     # http://www.rcsb.org/structure/3LZG
 
     def __init__(self, id, chain=""):
+        """Initialize a PdbRef Object."""
         self.id = _PdbId(id, chain)
         self.urls = self.get_urls()

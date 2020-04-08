@@ -1,10 +1,15 @@
+# Copyright 2020 by Tianyi Shi.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
+"""This module contains public classes as APIs for several databases hosted
+by NCBI. For more information see individual classes, as well as their parent,
+_SeqDb.
+"""
+
 from ._SeqDb import _SeqDb
-
-
-# https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=fasta&id=631490879&conwithfeat=on&withparts=on&hide-cdd=on
-# https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?id=631490879&db=nuccore&report=genbank&conwithfeat=on&withparts=on&hide-cdd=on&retmode=html&withmarkup=on&tool=portal&log$=seqview&maxdownloadsize=1000000
-# https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=gbwithparts&id=631490879&withparts=on
-#
 from copy import deepcopy
 
 
