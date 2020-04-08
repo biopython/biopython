@@ -324,6 +324,9 @@ def FastaNcbiIterator(source, alphabet=single_letter_alphabet):
      - source - input stream opened in text mode, or a path to a file
      - alphabet - optional alphabet
 
+     This first uses SimpleFastaParser to parse FASTA records into titles
+     and sequences, then it tries to parse database references (dbxrefs)
+     from title lines.
     """
     for title, sequence in SimpleFastaParser(source):
         id, name, xrefs = fasta_title_parser_ncbi_auto(title)
