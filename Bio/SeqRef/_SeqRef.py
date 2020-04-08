@@ -21,6 +21,9 @@ class _SeqId(object):
     def __str__(self):
         return self.id
 
+    def __repr__(self):
+        return type(self).__name__ + " " + str(self.__dict__)
+
 
 class SeqRef(object):
     """A type of sequence reference.
@@ -49,13 +52,8 @@ class SeqRef(object):
 
     def __repr__(self):
         """Debugging representation of the reference.
-
-        The returned string can be evaluated to return the same object.
         """
-        s = self.__class__.__name__ + "("
-        for attr, val in self.id.__dict__.items():
-            s += f"{attr}='{val}',"
-        return s[:-1] + ")"
+        return f"<{type(self).__name__}: {self.__dict__}>"
 
     def __str__(self):
         """String representation of the reference.
