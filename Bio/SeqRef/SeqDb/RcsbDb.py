@@ -4,7 +4,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-from ._commons import _SeqDb
+from ._SeqDb import _SeqDb
 
 
 class RcsbDb(_SeqDb):

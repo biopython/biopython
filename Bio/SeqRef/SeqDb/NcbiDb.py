@@ -1,4 +1,4 @@
-from ._commons import _SeqDb
+from ._SeqDb import _SeqDb
 
 
 # https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=fasta&id=631490879&conwithfeat=on&withparts=on&hide-cdd=on

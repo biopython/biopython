@@ -11,7 +11,7 @@ About: http://www.rcsb.org/pages/about-us/index
 Contains one public class GbRef for representing PDB references.
 """
 
-from ._commons import SeqRef, _SeqId
+from ._SeqRef import SeqRef, _SeqId
 
 from .SeqDb import NcbiProteinDb, RcsbDb
 

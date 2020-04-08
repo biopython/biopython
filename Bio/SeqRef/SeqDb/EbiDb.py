@@ -1,4 +1,4 @@
-from ._commons import _SeqDb
+from ._SeqDb import _SeqDb
 
 
 class EbiEnaDB(_SeqDb):

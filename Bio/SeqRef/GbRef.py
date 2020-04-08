@@ -12,7 +12,7 @@ Examples: "CY073775.2", "CY073775"
 Contains one public class GbRef for representing GenBank references.
 """
 
-from ._commons import SeqRef, _SeqId
+from ._SeqRef import SeqRef, _SeqId
 from .SeqDb import NcbiNucleotideDb, EbiEnaDB, DdbjDb
 
 
