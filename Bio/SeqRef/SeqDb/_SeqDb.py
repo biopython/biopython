@@ -1,7 +1,27 @@
+# Copyright 2020 by Tianyi Shi.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
+"""Contains a private class _SeqDb which is the parent class for a number of
+classes that represent APIs for working with major databases.
+"""
+
 from urllib import request
 
 
 class _SeqDb(object):
+    """The parent class for a number of classes that represent APIs for working
+    with major databases.
+
+    All APIs are able to:
+        - construct a URL with given accession code and type
+
+    Some APIs are able to:
+        - fetch a sequence with given accession code, type and format
+    """
+
     name = ""
     base_url = ""
     entry_url = ""  # to be formatted; e.g. http://www.rcsb.org/structure/{} ; defaults to base_url + "/" + id
