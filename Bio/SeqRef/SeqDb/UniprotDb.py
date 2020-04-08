@@ -1,5 +1,5 @@
-from ._commons import SeqDb
+from ._commons import _SeqDb
 
 
-class UniprotDb(SeqDb):
+class UniprotDb(_SeqDb):
     pass

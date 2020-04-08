@@ -53,7 +53,7 @@ class SeqRef(object):
     def __repr__(self):
         """Debugging representation of the reference.
         """
-        return type(self).__name__ + " " + str(self.__dict__)
+        return f"<{type(self).__name__}: {self.__dict__}>"
 
     def __str__(self):
         """String representation of the reference.

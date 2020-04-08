@@ -4,7 +4,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-r"""Working with NCBI's GenBank references.
+r"""Working with NCBI's GenBank code and their equivalents, EMBL and DDBJ.
 
 About: https://www.ncbi.nlm.nih.gov/genbank/
 Examples: "CY073775.2", "CY073775"
@@ -13,7 +13,7 @@ Contains one public class GbRef for representing GenBank references.
 """
 
 from ._commons import SeqRef, _SeqId
-from .SeqDb import NcbiNucleotideDb, EbiEnaDB
+from .SeqDb import NcbiNucleotideDb, EbiEnaDB, DdbjDb
 
 
 class _GbId(_SeqId):
@@ -30,11 +30,11 @@ class _GbId(_SeqId):
 
 
 class GbRef(SeqRef):
-    """NCBI GenBank reference.
+    """NCBI's GenBank reference.
     """
 
     name = "GenBank"
-    databases = (NcbiNucleotideDb, EbiEnaDB)
+    databases = (NcbiNucleotideDb, EbiEnaDB, DdbjDb)
 
     def __init__(self, id, version=""):
         """Initialize a GbRef object.
@@ -49,3 +49,17 @@ class GbRef(SeqRef):
         """
         self.id = _GbId(id, version)
         self.urls = self.get_urls()
+
+
+class EmblRef(GbRef):
+    """EBI's EMBL reference (equivalent to GenBank).
+    """
+
+    pass
+
+
+class DdbjRef(GbRef):
+    """DDBJ's reference (equivalent to GenBank).
+    """
+
+    pass

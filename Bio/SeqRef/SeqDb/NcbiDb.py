@@ -1,7 +1,7 @@
-from ._commons import SeqDb
+from ._commons import _SeqDb
 
 
-class NcbiNucleotideDb(SeqDb):
+class NcbiNucleotideDb(_SeqDb):
     # https://www.ncbi.nlm.nih.gov/nuccore/CY009444.1/
     name = "NCBI Nucleotide"
     base_url = "https://www.ncbi.nlm.nih.gov/nuccore"
@@ -14,7 +14,7 @@ class NcbiNucleotideDb(SeqDb):
         return identifier
 
 
-class NcbiProteinDb(SeqDb):
+class NcbiProteinDb(_SeqDb):
     # https://www.ncbi.nlm.nih.gov/protein/3LZG_L
     name = "NCBI Protein"
     base_url = "https://www.ncbi.nlm.nih.gov/protein"

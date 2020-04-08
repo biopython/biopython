@@ -1,4 +1,4 @@
-class SeqDb(object):
+class _SeqDb(object):
     name = ""
     base_url = ""
     entry_url = ""  # to be formatted; e.g. http://www.rcsb.org/structure/{} ; defaults to base_url + "/" + id

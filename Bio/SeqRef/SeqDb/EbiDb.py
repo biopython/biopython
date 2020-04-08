@@ -1,7 +1,7 @@
-from ._commons import SeqDb
+from ._commons import _SeqDb
 
 
-class EbiEnaDB(SeqDb):
+class EbiEnaDB(_SeqDb):
     name = "EBI-ENA"
     base_url = "https://www.ebi.ac.uk/ena"
-    entry_url = "https://www.ebi.ac.uk/ena/data/view/{}"
+    entry_url = "old: https://www.ebi.ac.uk/ena/data/view/{0} new: https://www.ebi.ac.uk/ena/browser/view/{0}"

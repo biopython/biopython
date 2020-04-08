@@ -8,5 +8,5 @@ r"""Database references for sequences.
 
 """
 
-from .GbRef import GbRef
+from .GbRef import GbRef, EmblRef, DdbjRef
 from .PdbRef import PdbRef

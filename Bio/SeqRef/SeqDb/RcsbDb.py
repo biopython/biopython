@@ -4,10 +4,10 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-from ._commons import SeqDb
+from ._commons import _SeqDb
 
 
-class RcsbDb(SeqDb):
+class RcsbDb(_SeqDb):
     name = "RCSB"
     base_url = "http://www.rcsb.org"
     entry_url = "http://www.rcsb.org/structure/{}"

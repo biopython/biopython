@@ -12,3 +12,4 @@ These classes know how to construct urls from given accession codes.
 from .NcbiDb import NcbiNucleotideDb, NcbiProteinDb
 from .EbiDb import EbiEnaDB
 from .RcsbDb import RcsbDb
+from .DdbjDb import DdbjDb
