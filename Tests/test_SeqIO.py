@@ -125,8 +125,10 @@ class SeqIOTestBaseClass(unittest.TestCase):
 
 
 class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
+    """Base class for testing SeqIO.convert."""
 
     def check_conversion(self, filename, in_format, out_format, alphabet):
+        """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
         msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
         records = list(SeqIO.parse(filename, in_format, alphabet))
         # Write it out...
@@ -147,6 +149,7 @@ class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
         self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
 
     def failure_check(self, filename, in_format, out_format, alphabet):
+        """Test if SeqIO.convert raises the correct ValueError on broken files."""
         msg = "Confirm failure detection converting %s from %s to %s" % (filename, in_format, out_format)
         # We want the SAME error message from parse/write as convert!
         with self.assertRaises(ValueError, msg=msg) as cm:
