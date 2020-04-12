@@ -1048,7 +1048,10 @@ _converter = {
     ("fastq", "fastq-illumina"): QualityIO._fastq_sanger_convert_fastq_illumina,
     ("fastq-sanger", "fastq-illumina"): QualityIO._fastq_sanger_convert_fastq_illumina,
     ("fastq-solexa", "fastq-illumina"): QualityIO._fastq_solexa_convert_fastq_illumina,
-    ("fastq-illumina", "fastq-illumina"): QualityIO._fastq_illumina_convert_fastq_illumina,
+    (
+        "fastq-illumina",
+        "fastq-illumina",
+    ): QualityIO._fastq_illumina_convert_fastq_illumina,
     ("fastq", "qual"): QualityIO._fastq_sanger_convert_qual,
     ("fastq-sanger", "qual"): QualityIO._fastq_sanger_convert_qual,
     ("fastq-solexa", "qual"): QualityIO._fastq_solexa_convert_qual,
@@ -1071,14 +1074,14 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 
     The idea here is that while doing this will work::
 
-    from Bio import SeqIO
-    records = SeqIO.parse(in_handle, in_format)
-    count = SeqIO.write(records, out_handle, out_format)
+        from Bio import SeqIO
+        records = SeqIO.parse(in_handle, in_format)
+        count = SeqIO.write(records, out_handle, out_format)
 
     it is shorter to write::
 
-    from Bio import SeqIO
-    count = SeqIO.convert(in_handle, in_format, out_handle, out_format)
+        from Bio import SeqIO
+        count = SeqIO.convert(in_handle, in_format, out_handle, out_format)
 
     Also, Bio.SeqIO.convert is faster for some conversions as it can make some
     optimisations.
