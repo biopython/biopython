@@ -127,6 +127,8 @@ class SeqIOTestBaseClass(unittest.TestCase):
 class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
     """Base class for testing SeqIO.convert."""
 
+    formats = tuple(SeqIO._converter.keys())
+
     def check_conversion(self, filename, in_format, out_format, alphabet):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
         msg = "Convert %s from %s to %s" % (filename, in_format, out_format)

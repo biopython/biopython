@@ -16,7 +16,6 @@ from io import BytesIO
 from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio.Alphabet import generic_dna, generic_nucleotide
 from Bio.SeqIO import QualityIO
-from Bio.SeqIO._convert import _converter
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
@@ -1044,7 +1043,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
         ]
         for filename, fmt, alphabet in tests:
-            for (in_format, out_format) in _converter:
+            for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format, alphabet)
@@ -1075,7 +1074,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             ("Quality/error_double_qual.fastq", "fastq", generic_dna),
         ]
         for filename, fmt, alphabet in tests:
-            for (in_format, out_format) in _converter:
+            for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
                 if (
