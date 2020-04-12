@@ -56,9 +56,9 @@ class SequenceTesting(unittest.TestCase):
         self.assertEqual(
             str(FormattedSeq(Seq("GATC"))), "FormattedSeq(Seq('GATC'), linear=True)"
         )
-        self.assertFalse(FormattedSeq(Seq("GATC")) == FormattedSeq(Seq("TAGC")))
-        self.assertFalse(FormattedSeq(Seq("TAGC")) == Seq("TAGC"))
-        self.assertTrue(FormattedSeq(Seq("ATGC")) == FormattedSeq(Seq("ATGC")))
+        self.assertNotEqual(FormattedSeq(Seq("GATC")), FormattedSeq(Seq("TAGC")))
+        self.assertNotEqual(FormattedSeq(Seq("TAGC")), Seq("TAGC"))
+        self.assertEqual(FormattedSeq(Seq("ATGC")), FormattedSeq(Seq("ATGC")))
         linear_seq = FormattedSeq(Seq("T"))
         self.assertTrue(linear_seq.is_linear())
         linear_seq.circularise()
@@ -485,7 +485,7 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_premade_batches(self):
         """Test content of premade batches CommOnly, NoComm, AllEnzymes."""
-        self.assertTrue(len(AllEnzymes) == len(CommOnly) + len(NonComm))
+        self.assertEqual(len(AllEnzymes), (len(CommOnly) + len(NonComm)))
         self.assertTrue(len(AllEnzymes) > len(CommOnly) > len(NonComm))
 
     def test_search_premade_batches(self):
