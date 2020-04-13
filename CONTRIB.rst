@@ -242,6 +242,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Sergei Lebedev <https://github.com/superbobry>
 - Sergio Valqui <https://github.com/svalqui>
 - Seth Sims <seth.sims at gmail>
+- She Zhang <https://github.com/shz66>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
