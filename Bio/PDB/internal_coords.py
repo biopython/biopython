@@ -701,7 +701,7 @@ class IC_Chain:
                 if 0 < len(ric.rprev):
                     for rpr in ric.rprev:
                         acl = [rpr.atom_coords[ak] for ak in NCaCKey]
-                        mt, mtr = coord_space(acl, True)
+                        mt, mtr = coord_space(acl[0], acl[1], acl[2], True)
                 else:
                     mtr = numpy.identity(4, dtype=numpy.float64)
                 if chnStarted:
@@ -2796,7 +2796,8 @@ class Dihedron(Edron):
 
         atom_coords = self.ic_residue.atom_coords
         acs = cast(DACS, self.gen_acs(atom_coords))
-        mt = coord_space(acs[:3])
+        # mt = coord_space(acs[:3])
+        mt = coord_space(acs[0], acs[1], acs[2])[0]
         # do4 = mt @ acs[3]
         do4 = mt.dot(acs[3])
 
