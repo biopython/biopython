@@ -571,7 +571,7 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
 
     # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
     # mt = mry @ mrz @ tm  # python 3.5 and later
-    mt = gmry.dot(gmrz.dot(tm))
+    mt = gmry.dot(gmrz.dot(gtm))
 
     # if dbg:
     #    print("mt * a2", (mt.dot(a2)).transpose())
@@ -610,7 +610,7 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     set_homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
-    mr = tm.dot(gmrz.dot(gmry.dot(gmrz2)))
+    mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
     # mr = numpy.dot(tm, numpy.dot(mrz, numpy.dot(mry, mrz2)))
 
     return mt, mr
