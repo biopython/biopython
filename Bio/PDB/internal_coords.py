@@ -2434,38 +2434,44 @@ class Hedron(Edron):
 
         # build hedron with a2 on +Z axis, a1 at origin,
         # a0 in -Z at angle n XZ plane
-        atoms: List[numpy.array] = []
-        for _ in range(3):
-            # note this initializes a1 to 0,0,0 origin
-            atoms.append(
-                numpy.array([[0], [0], [0], [1]], dtype=numpy.float64)
-            )  # 4x1 array
+
+        atoms: List[numpy.array] = [
+            numpy.zeros((4, 1), dtype=numpy.float64),
+            numpy.zeros((4, 1), dtype=numpy.float64),
+            numpy.zeros((4, 1), dtype=numpy.float64),
+            numpy.zeros((4, 1), dtype=numpy.float64),
+        ]
+        atoms[0][3][0] = 1.0
+        atoms[1][3][0] = 1.0
+        atoms[2][3][0] = 1.0
+        atoms[3][3][0] = 1.0
+
+        # atomsR initialisation continues below
+        atomsR: numpy.array = numpy.copy(atoms)
 
         # supplementary angle radian: angles which add to 180 are supplementary
         sar = numpy.deg2rad(180.0 - self.angle)
+        sinSar = numpy.sin(sar)
+        cosSarN = -numpy.cos(sar)
 
         # a2 is len3 up from a2 on Z axis, X=Y=0
         atoms[2][2][0] = self.len23
         # a0 X is sin( sar ) * len12
-        atoms[0][0][0] = numpy.sin(sar) * self.len12
+        atoms[0][0][0] = sinSar * self.len12
         # a0 Z is -(cos( sar ) * len12)
         # (assume angle always obtuse, so a0 is in -Z)
-        atoms[0][2][0] = -(numpy.cos(sar) * self.len12)
+        atoms[0][2][0] = cosSarN * self.len12
 
         self.atoms = cast(HACS, tuple(atoms))
 
-        atomsR: List[numpy.array] = []
         # same again but 'reversed' : a0 on Z axis, a1 at origin, a2 in -Z
-        for _ in range(3):
-            # atom[1] to 0,0,0 origin
-            atomsR.append(numpy.array([[0], [0], [0], [1]], dtype=numpy.float64))
 
         # a0r is len12 up from a1 on Z axis, X=Y=0
         atomsR[0][2][0] = self.len12
         # a2r X is sin( sar ) * len23
-        atomsR[2][0][0] = numpy.sin(sar) * self.len23
+        atomsR[2][0][0] = sinSar * self.len23
         # a2r Z is -(cos( sar ) * len23)
-        atomsR[2][2][0] = -(numpy.cos(sar) * self.len23)
+        atomsR[2][2][0] = cosSarN * self.len23
 
         self.atomsR = cast(HACS, tuple(atomsR))
 
@@ -2574,7 +2580,7 @@ class Hedron(Edron):
             self.len23 = newLength
         else:
             raise TypeError("%s not found in %s" % (str(ak_tpl), self))
-            return
+            # return
 
 
 class Dihedron(Edron):
