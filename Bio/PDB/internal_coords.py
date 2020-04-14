@@ -1312,17 +1312,17 @@ class IC_Residue(object):
             atomCoords = self.get_startpos()
 
         while q:  # deque is not empty
-            if dbg:
-                print("assemble loop start q=", q)
+            # if dbg:
+            #    print("assemble loop start q=", q)
             h1k = cast(HKT, q.pop())
             dihedra = self.id3_dh_index.get(h1k, None)
-            if dbg:
-                print(
-                    "  h1k:",
-                    h1k,
-                    "len dihedra: ",
-                    len(dihedra) if dihedra is not None else "None",
-                )
+            # if dbg:
+            #    print(
+            #        "  h1k:",
+            #        h1k,
+            #        "len dihedra: ",
+            #        len(dihedra) if dihedra is not None else "None",
+            #    )
             if dihedra is not None:
                 for d in dihedra:
                     if 4 == len(d.initial_coords) and d.initial_coords[3] is not None:
@@ -1330,12 +1330,14 @@ class IC_Residue(object):
                         # to missing input data
                         d_h2key = d.hedron2.aks
                         akl = d.aks
-                        acount = 0
-                        if dbg:
-                            print("    process", d, d_h2key, akl)
-                        for a in akl:
-                            if a in atomCoords and atomCoords[a] is not None:
-                                acount += 1
+
+                        # if dbg:
+                        #    print("    process", d, d_h2key, akl)
+
+                        acount = len(
+                            [a for a in d.aks if atomCoords.get(a, None) is not None]
+                        )
+
                         if 4 == acount:  # and not need_transform:
                             # dihedron already done, queue 2nd hedron key
                             q.appendleft(d_h2key)
@@ -1351,33 +1353,37 @@ class IC_Residue(object):
                             mt, mtr = coord_space(acs[0], acs[1], acs[2], True)
                             if transforms:
                                 transformations[h1k] = mtr
-                            if dbg:
-                                print(
-                                    "        initial_coords[3]=",
-                                    d.initial_coords[3].transpose(),
-                                )
+                            # if dbg:
+                            #    print(
+                            #        "        initial_coords[3]=",
+                            #        d.initial_coords[3].transpose(),
+                            #    )
                             acak3 = mtr.dot(d.initial_coords[3])
-                            if dbg:
-                                print("        acak3=", acak3.transpose())
-                            for i in range(3):
-                                acak3[i][0] = set_accuracy_83(acak3[i][0])
+                            # if dbg:
+                            #    print("        acak3=", acak3.transpose())
+
+                            # for i in range(3):
+                            #    acak3[i][0] = set_accuracy_83(acak3[i][0])
+                            acak3[0][0] = set_accuracy_83(acak3[0][0])
+                            acak3[1][0] = set_accuracy_83(acak3[1][0])
+                            acak3[2][0] = set_accuracy_83(acak3[2][0])
                             atomCoords[akl[3]] = acak3
-                            if dbg:
-                                print(
-                                    "        3- finished, ak:",
-                                    akl[3],
-                                    "coords:",
-                                    atomCoords[akl[3]].transpose(),
-                                )
+                            # if dbg:
+                            #    print(
+                            #        "        3- finished, ak:",
+                            #        akl[3],
+                            #        "coords:",
+                            #        atomCoords[akl[3]].transpose(),
+                            #    )
                             q.appendleft(d_h2key)
                         else:
                             if verbose:
                                 print("no coords to start", d)
-                            pass
+                            # pass
                     else:
                         if verbose:
                             print("no initial coords for", d)
-                        pass
+                        # pass
         # print('coord_space returning')
         if transforms:
             return transformations
