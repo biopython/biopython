@@ -799,10 +799,10 @@ class DistanceTreeConstructor(TreeConstructor):
     def _height_of(self, clade):
         """Calculate clade height -- the longest path to any terminal (PRIVATE)."""
         if clade.is_terminal():
-            height = 0 
+            height = 0
         else:
             height = max(self._height_of(c) + c.branch_length for c in clade.clades)
-            
+
         return height
 
 
