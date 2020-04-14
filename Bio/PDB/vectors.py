@@ -521,7 +521,9 @@ gmry = numpy.identity(4, dtype=numpy.float64)
 gmrz2 = numpy.identity(4, dtype=numpy.float64)
 
 
-def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
+def coord_space(
+    a0: numpy.ndarray, a1: numpy.ndarray, a2: numpy.ndarray, rev: bool = False
+) -> Tuple[numpy.ndarray, Optional[numpy.ndarray]]:
     """Generate transformation matrix to coordinate space defined by 3 points.
 
     New coordinate space will have:
@@ -539,9 +541,9 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     #    for ac in acs:
     #        print(ac.transpose())
 
-    a0 = acs[0]
-    a1 = acs[1]
-    a2 = acs[2]
+    # a0 = acs[0]
+    # a1 = acs[1]
+    # a2 = acs[2]
 
     global gtm
     global gmry
@@ -592,7 +594,7 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     mt = gmrz2.dot(mt)
 
     if not rev:
-        return mt
+        return mt, None
 
     # rev=True, so generate the reverse transformation
 
