@@ -9,7 +9,7 @@
 
 
 import numpy  # type: ignore
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 def m2rotaxis(m):
@@ -398,32 +398,32 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> numpy.array:
 
     if "z" == axis:
         return numpy.array(
-            [
-                [cosang, -sinang, 0, 0],
-                [sinang, cosang, 0, 0],
-                [0, 0, 1, 0],
-                [0, 0, 0, 1],
-            ],
+            (
+                (cosang, -sinang, 0, 0),
+                (sinang, cosang, 0, 0),
+                (0, 0, 1, 0),
+                (0, 0, 0, 1),
+            ),
             dtype=numpy.float64,
         )
     elif "y" == axis:
         return numpy.array(
-            [
-                [cosang, 0, sinang, 0],
-                [0, 1, 0, 0],
-                [-sinang, 0, cosang, 0],
-                [0, 0, 0, 1],
-            ],
+            (
+                (cosang, 0, sinang, 0),
+                (0, 1, 0, 0),
+                (-sinang, 0, cosang, 0),
+                (0, 0, 0, 1),
+            ),
             dtype=numpy.float64,
         )
     else:
         return numpy.array(
-            [
-                [1, 0, 0, 0],
-                [0, cosang, -sinang, 0],
-                [0, sinang, cosang, 0],
-                [0, 0, 0, 1],
-            ],
+            (
+                (1, 0, 0, 0),
+                (0, cosang, -sinang, 0),
+                (0, sinang, cosang, 0),
+                (0, 0, 0, 1),
+            ),
             dtype=numpy.float64,
         )
 
@@ -434,7 +434,7 @@ def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
     :param x, y, z: translation in each axis
     """
     return numpy.array(
-        [[1, 0, 0, x], [0, 1, 0, y], [0, 0, 1, z], [0, 0, 0, 1]], dtype=numpy.float64
+        ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, z), (0, 0, 0, 1)), dtype=numpy.float64
     )
 
 
