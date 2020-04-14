@@ -447,6 +447,17 @@ def set_Y_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
     mtx[0][2] = sinang
     mtx[2][0] = -sinang
 
+
+def set_X_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+    """Update existing X rotation matrix to new angle."""
+    cosang = numpy.cos(angle_rads)
+    sinang = numpy.sin(angle_rads)
+
+    mtx[1][1] = mtx[2][2] = cosang
+    mtx[2][1] = sinang
+    mtx[1][2] = -sinang
+
+
 def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
     """Generate a 4x4 numpy translation matrix.
 
@@ -455,6 +466,13 @@ def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
     return numpy.array(
         ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, z), (0, 0, 0, 1)), dtype=numpy.float64
     )
+
+
+def set_homog_trans_mtx(x: float, y: float, z: float, mtx: numpy.ndarray):
+    """Update existing translation matrix to new values."""
+    mtx[0][3] = x
+    mtx[1][3] = y
+    mtx[2][3] = z
 
 
 def homog_scale_mtx(scale: float) -> numpy.array:
@@ -497,6 +515,7 @@ def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
     return (r, azimuth, polar_angle)
 
 
+gtm = numpy.identity(4, dtype=numpy.float64)
 gmrz = numpy.identity(4, dtype=numpy.float64)
 gmry = numpy.identity(4, dtype=numpy.float64)
 gmrz2 = numpy.identity(4, dtype=numpy.float64)
@@ -524,15 +543,18 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     a1 = acs[1]
     a2 = acs[2]
 
+    global gtm
     global gmry
     global gmrz, gmrz2
 
+    tm = gtm
     mry = gmry
     mrz = gmrz
     mrz2 = gmrz2
 
     # tx acs[1] to origin
-    tm = homog_trans_mtx(-a1[0], -a1[1], -a1[2])
+    # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
+    set_homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0], tm)
 
     # directly translate a2 using a1
     p = a2 - a1
@@ -584,7 +606,8 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     # mrz = homog_rot_mtx(sc[1], "z")
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
-    tm = homog_trans_mtx(a1[0], a1[1], a1[2])
+    # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
+    set_homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = tm.dot(gmrz.dot(gmry.dot(gmrz2)))
