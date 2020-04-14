@@ -1125,6 +1125,8 @@ class IC_Residue(object):
                 id3i[id3] = []
             id3i[id3].append(dh)
             self.ak_set.update(dh.aks)
+        for h in self.hedra.values():  # collect any atoms in orphan hedra
+            self.ak_set.update(h.aks)  # e.g. alternate CB path with no O
         # map to find each dihedron from atom tokens 1-3
         self.id3_dh_index = id3i
 
@@ -1191,12 +1193,13 @@ class IC_Residue(object):
             akl: List[AtomKey] = []
             for tpl in self.NCaCKey:
                 akl.extend(tpl)
+            akl.append(AtomKey(self, "CB"))
             for ak in akl:
                 for rp in self.rprev:
                     rpak = rp.atom_coords.get(ak, None)
                     if rpak is not None:
                         startPos[ak] = rpak
-            if 3 > len(startPos):
+            if 3 > len(startPos):  # if don't have all 3, reset to have none
                 startPos = {}
         else:
             # get atom posns already added by load_structure
@@ -1567,6 +1570,18 @@ class IC_Residue(object):
                 self._gen_edra((sCA, sC, nN))
                 self._gen_edra((sC, nN, nCA))
                 self._gen_edra((nN, nCA, nC))  # tau i+1
+
+                # redundant next residue C-beta locator
+                # otherwise missing O will cause no sidechain
+                # not rn.rak so don't trigger missing CB for Gly
+                nCB = rn.akc.get("CB", None)
+                if nCB is not None:
+                    self.atom_coords[nCB] = rn.atom_coords[nCB]
+                    self.ak_set.add(nCB)
+                    self._gen_edra((nN, nCA, nCB))
+                    self._gen_edra((sC, nN, nCA, nCB))
+
+                # pass
 
         # if start of chain then need to __init__ NCaC hedron as not in previous residue
         if 0 == len(self.rprev):
