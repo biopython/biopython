@@ -437,6 +437,16 @@ def set_Z_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
     mtx[1][0] = sinang
     mtx[0][1] = -sinang
 
+
+def set_Y_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+    """Update existing Y rotation matrix to new angle."""
+    cosang = numpy.cos(angle_rads)
+    sinang = numpy.sin(angle_rads)
+
+    mtx[0][0] = mtx[2][2] = cosang
+    mtx[0][2] = sinang
+    mtx[2][0] = -sinang
+
 def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
     """Generate a 4x4 numpy translation matrix.
 
@@ -488,6 +498,7 @@ def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
 
 
 gmrz = numpy.identity(4, dtype=numpy.float64)
+gmry = numpy.identity(4, dtype=numpy.float64)
 gmrz2 = numpy.identity(4, dtype=numpy.float64)
 
 
@@ -513,8 +524,10 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     a1 = acs[1]
     a2 = acs[2]
 
+    global gmry
     global gmrz, gmrz2
 
+    mry = gmry
     mrz = gmrz
     mrz2 = gmrz2
 
@@ -529,13 +542,14 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     #    print("p", p.transpose())
     #    print("sc", sc)
 
-    mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a2 -polar_angle about Y
     # mrz = homog_rot_mtx(-sc[1], "z")  # rotate translated a2 -azimuth about Z
     set_Z_homog_rot_mtx(-sc[1], mrz)
+    # mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a2 -polar_angle about Y
+    set_Y_homog_rot_mtx(-sc[2], mry)
 
     # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
     # mt = mry @ mrz @ tm  # python 3.5 and later
-    mt = mry.dot(gmrz.dot(tm))
+    mt = gmry.dot(gmrz.dot(tm))
 
     # if dbg:
     #    print("mt * a2", (mt.dot(a2)).transpose())
@@ -564,7 +578,8 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     # mrz2 = homog_rot_mtx(azimuth2, "z")
     set_Z_homog_rot_mtx(azimuth2, mrz2)
     # rotate a2 phi about Y
-    mry = homog_rot_mtx(sc[2], "y")
+    # mry = homog_rot_mtx(sc[2], "y")
+    set_Y_homog_rot_mtx(sc[2], mry)
     # rotate a2 theta about Z
     # mrz = homog_rot_mtx(sc[1], "z")
     set_Z_homog_rot_mtx(sc[1], mrz)
@@ -572,7 +587,7 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     tm = homog_trans_mtx(a1[0], a1[1], a1[2])
 
     # mr = tm @ mrz @ mry @ mrz2
-    mr = tm.dot(gmrz.dot(mry.dot(gmrz2)))
+    mr = tm.dot(gmrz.dot(gmry.dot(gmrz2)))
     # mr = numpy.dot(tm, numpy.dot(mrz, numpy.dot(mry, mrz2)))
 
     return mt, mr
