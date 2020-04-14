@@ -1341,16 +1341,14 @@ class IC_Residue(object):
                             q.appendleft(d_h2key)
                             # print("    4- already done, append left")
                             if transforms and not (h1k in transformations):
+                                acs = [atomCoords[a] for a in akl[:3]]
                                 # can happen for altloc atoms
-                                mt, mtr = coord_space(
-                                    [atomCoords[a] for a in akl[:3]], True
-                                )
+                                mt, mtr = coord_space(acs[0], acs[1], acs[2], True)
                                 transformations[h1k] = mtr
                         elif 3 == acount:  # or need_transform:
                             # print("    3- call coord_space")
-                            mt, mtr = coord_space(
-                                [atomCoords[a] for a in akl[:3]], True
-                            )
+                            acs = [atomCoords[a] for a in akl[:3]]
+                            mt, mtr = coord_space(acs[0], acs[1], acs[2], True)
                             if transforms:
                                 transformations[h1k] = mtr
                             if dbg:
