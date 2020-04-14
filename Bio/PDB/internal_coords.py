@@ -2928,6 +2928,8 @@ class AtomKey(object):
     fields = fieldsDef(0, 1, 2, 3, 4, 5)
 
     d2h = False  # convert D Deuterium to H Hydrogen on input
+    # icd = {"icr": 0, "atm": 0, "lst": 0, "dct": 0, "_": 0, "else": 0}
+    # @profile
 
     def __init__(
         self, *args: Union[IC_Residue, Atom, List, Dict, str], **kwargs: str
@@ -2946,11 +2948,31 @@ class AtomKey(object):
         akl: List[Optional[str]] = []
         # self.id = None
         for arg in args:
-            if isinstance(arg, IC_Residue):
+            if isinstance(arg, str):
+                if "_" in arg:
+                    # AtomKey.icd["_"] += 1
+                    # got atom key string, recurse with regex parse
+                    m = self.atom_re.match(arg)
+                    if m is not None:
+                        if akl != []:  # [] != akl:
+                            raise Exception(
+                                "Atom Key init full key not first argument: " + arg
+                            )
+                        # for fn in AtomKey.fieldNames:
+                        #    akl.append(m.group(fn))
+                        # akl = [m.group(fn) for fn in AtomKey.fieldNames]
+                        akl = list(map(m.group, AtomKey.fieldNames))
+                else:
+                    # AtomKey.icd["else"] += 1
+                    akl.append(arg)
+
+            elif isinstance(arg, IC_Residue):
+                # AtomKey.icd["icr"] += 1
                 if akl != []:
                     raise Exception("Atom Key init Residue not first argument")
-                akl += arg.rbase
+                akl = list(arg.rbase)
             elif isinstance(arg, Atom):
+                # AtomKey.icd["atm"] += 1
                 if 3 != len(akl):
                     raise Exception("Atom Key init Atom before Residue info")
                 akl.append(arg.name)
@@ -2959,33 +2981,32 @@ class AtomKey(object):
                 occ = float(arg.occupancy)
                 akl.append(str(occ) if occ != 1.00 else None)
             elif isinstance(arg, list):
+                # AtomKey.icd["lst"] += 1
                 akl += arg
             elif isinstance(arg, dict):
+                # AtomKey.icd["dct"] += 1
                 for k in AtomKey.fieldNames:
                     akl.append(arg.get(k, None))
-            elif "_" in arg:
-                # got atom key string, recurse with regex parse
-                m = self.atom_re.match(arg)
-                if m is not None:
-                    if [] != akl:
-                        raise Exception(
-                            "Atom Key init full key not first argument: " + arg
-                        )
-                    for fn in AtomKey.fieldNames:
-                        akl.append(m.group(fn))
             else:
-                akl.append(arg)
+                raise Exception("Atom Key init not recognised")
 
         # process kwargs, initialize occ and altloc to None
         # if not specified above
-        for i in range(6):
+        # for i in range(6):
+        #    if len(akl) <= i:
+        #        fld = kwargs.get(AtomKey.fieldNames[i])
+        #        if fld is not None:
+        #            akl.append(fld)
+
+        for i in range(len(akl), 6):
             if len(akl) <= i:
                 fld = kwargs.get(AtomKey.fieldNames[i])
                 if fld is not None:
                     akl.append(fld)
 
         # tweak local akl to generate id string
-        akl[0] = str(akl[0])  # numeric residue position to string
+        if isinstance(akl[0], int):
+            akl[0] = str(akl[0])  # numeric residue position to string
 
         # occNdx = AtomKey.fields.occ
         # if akl[occNdx] is not None:
@@ -3008,8 +3029,9 @@ class AtomKey(object):
             ]
         )
 
-        while len(akl) < 6:
-            akl.append(None)  # add no altloc, occ if not specified
+        # while len(akl) < 6:
+        #    akl.append(None)  # add no altloc, occ if not specified
+        akl += [None] * (6 - len(akl))
 
         self.akl = tuple(akl)
         self._hash = hash(self.akl)
