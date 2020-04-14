@@ -549,7 +549,8 @@ def coord_space(acs: numpy.array, rev: bool = False) -> numpy.array:
     azimuth2 = _get_azimuth(p[0][0], p[1][0])
 
     # rotate a0 -azimuth2 about Z to align with X
-    mrz2 = homog_rot_mtx(-azimuth2, "z")
+    # mrz2 = homog_rot_mtx(-azimuth2, "z")
+    set_Z_homog_rot_mtx(-azimuth2, mrz2)
 
     # mt = mrz2 @ mt
     mt = gmrz2.dot(mt)
