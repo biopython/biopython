@@ -38,6 +38,7 @@ from Bio import BiopythonWarning
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
+from Bio import SeqIO
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import SeqFeature
 from Bio import StreamModeError
@@ -1517,6 +1518,22 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
+
+
+def _genbank_convert_fasta(in_file, out_file, alphabet=None):
+    """Fast GenBank to FASTA (PRIVATE)."""
+    # We don't need to parse the features...
+    records = GenBankScanner().parse_records(in_file, do_features=False)
+    # For FASTA output we can ignore the alphabet too
+    return SeqIO.write(records, out_file, "fasta")
+
+
+def _embl_convert_fasta(in_file, out_file, alphabet=None):
+    """Fast EMBL to FASTA (PRIVATE)."""
+    # We don't need to parse the features...
+    records = EmblScanner().parse_records(in_file, do_features=False)
+    # For FASTA output we can ignore the alphabet too
+    return SeqIO.write(records, out_file, "fasta")
 
 
 if __name__ == "__main__":

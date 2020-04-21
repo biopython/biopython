@@ -13,7 +13,6 @@ from Bio.Alphabet import generic_dna
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO._convert import _converter
 
 
 from seq_tests_common import compare_record
@@ -115,7 +114,7 @@ class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
             ("GenBank/cor6_6.gb", "genbank", None),
         ]
         for filename, fmt, alphabet in tests:
-            for (in_format, out_format) in _converter:
+            for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format, alphabet)
