@@ -63,6 +63,9 @@ class SequenceIterator:
                 self.stream.close()
             raise
 
+    def read_header(self, stream):
+        pass
+
     def __next__(self):
         try:
             return self.parse(self.stream)
