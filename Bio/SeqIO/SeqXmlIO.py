@@ -25,8 +25,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
-from .Interfaces import SequenceWriter
+from . import Interfaces
 
 
 class ContentHandler(handler.ContentHandler):
@@ -373,7 +372,7 @@ class ContentHandler(handler.ContentHandler):
             self.data += data
 
 
-class SeqXmlIterator:
+class SeqXmlIterator(Interfaces.SequenceIterator):
     """Breaks seqXML file into SeqRecords.
 
     Assumes valid seqXML please validate beforehand.
@@ -390,90 +389,67 @@ class SeqXmlIterator:
 
     def __init__(self, stream_or_path, namespace=None):
         """Create the object and initialize the XML parser."""
+        # Make sure we got a binary handle. If we got a text handle, then
+        # the parser will still run but unicode characters will be garbled
+        # if the text handle was opened with a different encoding than the
+        # one specified in the XML file. With a binary handle, the correct
+        # encoding is picked up by the parser from the XML file.
         self.parser = sax.make_parser()
         content_handler = ContentHandler()
         self.parser.setContentHandler(content_handler)
         self.parser.setFeature(handler.feature_namespaces, True)
-        try:
-            handle = open(stream_or_path, "rb")
-        except TypeError:  # not a path, assume we received a stream
-            # Make sure we got a binary handle. If we got a text handle, then
-            # the parser will still run but unicode characters will be garbled
-            # if the text handle was opened with a different encoding than the
-            # one specified in the XML file. With a binary handle, the correct
-            # encoding is picked up by the parser from the XML file.
-            if stream_or_path.read(0) != b"":
-                raise StreamModeError(
-                    "SeqXML files should be opened in binary mode"
-                ) from None
-            self.handle = stream_or_path
-            self.should_close_handle = False
-        else:  # we received a path
-            self.handle = handle
-            self.should_close_handle = True
-        # Read until we see the seqXML element with the seqXMLversion
+        super().__init__(stream_or_path, mode="b", fmt="SeqXML")
+
+    def read_header(self, handle):
+        parser = self.parser
+        content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK
-        try:
-            while True:
-                # Read in another block of the file...
-                text = self.handle.read(BLOCK)
-                if not text:
-                    if content_handler.startElementNS is None:
-                        raise ValueError("Empty file.")
-                    else:
-                        raise ValueError("XML file contains no data.")
-                self.parser.feed(text)
-                seqXMLversion = content_handler.seqXMLversion
-                if seqXMLversion is not None:
-                    break
-        except Exception:
-            if self.should_close_handle:
-                self.handle.close()
-            raise
+        while True:
+            # Read in another block of the file...
+            text = handle.read(BLOCK)
+            if not text:
+                if content_handler.startElementNS is None:
+                    raise ValueError("Empty file.")
+                else:
+                    raise ValueError("XML file contains no data.")
+            parser.feed(text)
+            seqXMLversion = content_handler.seqXMLversion
+            if seqXMLversion is not None:
+                break
         self.seqXMLversion = seqXMLversion
         self.source = content_handler.source
         self.sourceVersion = content_handler.sourceVersion
         self.ncbiTaxID = content_handler.ncbiTaxID
         self.speciesName = content_handler.speciesName
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
+    def parse(self, handle):
         """Iterate over the records in the XML file."""
-        content_handler = self.parser.getContentHandler()
+        parser = self.parser
+        content_handler = parser.getContentHandler()
         records = content_handler.records
         BLOCK = self.BLOCK
-        try:
-            while True:
-                # Read in another block of the file...
-                text = self.handle.read(BLOCK)
-                if not text:
-                    break
-                self.parser.feed(text)
-                if len(records) > 1:
-                    # Then at least the first record is finished
-                    record = records.pop(0)
-                    return record
-        except Exception:
-            if self.should_close_handle:
-                self.handle.close()
-            raise
+        while True:
+            if len(records) > 1:
+                # Then at least the first record is finished
+                record = records.pop(0)
+                return record
+            # Read in another block of the file...
+            text = handle.read(BLOCK)
+            if not text:
+                break
+            parser.feed(text)
         # We have reached the end of the XML file;
         # send out the remaining records
         try:
             record = records.pop(0)
+            return record
         except IndexError:
             pass
-        else:
-            return record
-        self.parser.close()
-        if self.should_close_handle:
-            self.handle.close()
+        parser.close()
         raise StopIteration
 
 
-class SeqXmlWriter(SequenceWriter):
+class SeqXmlWriter(Interfaces.SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,

@@ -26,7 +26,7 @@ from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
+from . import Interfaces
 
 
 # dictionary for determining which tags goes into SeqRecord annotation
@@ -350,24 +350,15 @@ def _get_string_tag(opt_bytes_value, default=None):
         return opt_bytes_value.decode(encoding=sys.getdefaultencoding())
 
 
-def AbiIterator(source, alphabet=None, trim=False):
+class AbiIterator(Interfaces.SequenceIterator):
     """Return an iterator for the Abi file format."""
-    # raise exception is alphabet is not dna
-    if alphabet is not None:
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
-            raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
-            raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
+    def __init__(self, source, alphabet=None, trim=False):
 
-    try:
-        handle = open(source, "rb")
-    except TypeError:
-        handle = source
-        if handle.read(0) != b"":
-            raise StreamModeError("ABI files must be opened in binary mode.") from None
+        self.trim = trim
+        self.done = False
+        super().__init__(source, alphabet=alphabet, mode="b", fmt="ABI")
 
-    try:
-
+    def read_header(self, handle):
         # check if input file is a valid Abi file
         marker = handle.read(4)
         if not marker:
@@ -377,6 +368,16 @@ def AbiIterator(source, alphabet=None, trim=False):
         if marker != b"ABIF":
             raise OSError("File should start ABIF, not %r" % marker)
 
+    def parse(self, handle):
+        if self.done:
+            raise StopIteration
+        alphabet = self.alphabet
+        # raise exception if alphabet is not dna
+        if alphabet is not None:
+            if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
+                raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
+            if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
+                raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
@@ -459,14 +460,11 @@ def AbiIterator(source, alphabet=None, trim=False):
                 letter_annotations={"phred_quality": qual},
             )
 
-        if not trim or is_fsa_file:
-            yield record
-        else:
-            yield _abi_trim(record)
+        if self.trim and not is_fsa_file:
+            record = _abi_trim(record)
 
-    finally:
-        if handle is not source:
-            handle.close()
+        self.done = True
+        return record
 
 
 def _AbiTrimIterator(handle):
