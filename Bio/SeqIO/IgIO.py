@@ -64,7 +64,7 @@ class IgIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, alphabet=alphabet, mode="t", fmt="IntelliGenetics")
 
-    def read_header(self, handle):
+    def prepare(self, handle):
         # Skip any file header text before the first record (;; lines)
         for line in handle:
             if not line.startswith(";;"):

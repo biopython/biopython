@@ -400,7 +400,7 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
         self.parser.setFeature(handler.feature_namespaces, True)
         super().__init__(stream_or_path, mode="b", fmt="SeqXML")
 
-    def read_header(self, handle):
+    def prepare(self, handle):
         parser = self.parser
         content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK

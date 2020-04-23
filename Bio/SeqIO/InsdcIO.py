@@ -41,7 +41,7 @@ from Bio import Alphabet
 from Bio import SeqIO
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import SeqFeature
-from Bio import StreamModeError
+from . import Interfaces
 
 
 # NOTE
@@ -52,192 +52,170 @@ from Bio import StreamModeError
 # However, all the writing code is in this file.
 
 
-def GenBankIterator(source):
-    """Break up a Genbank file into SeqRecord objects.
+class GenBankIterator(Interfaces.SequenceIterator):
 
-    Argument source is a file-like object opened in text mode or a path to a file.
+    def __init__(self, source):
+        """Break up a Genbank file into SeqRecord objects.
 
-    Every section from the LOCUS line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+        Argument source is a file-like object opened in text mode or a path to a file.
 
-    Note that for genomes or chromosomes, there is typically only
-    one record.
+        Every section from the LOCUS line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    This gets called internally by Bio.SeqIO for the GenBank file format:
+        Note that for genomes or chromosomes, there is typically only
+        one record.
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
-    ...     print(record.id)
-    ...
-    X55053.1
-    X62281.1
-    M81224.1
-    AJ237582.1
-    L31939.1
-    AF297471.1
+        This gets called internally by Bio.SeqIO for the GenBank file format:
 
-    Equivalently,
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
+        ...     print(record.id)
+        ...
+        X55053.1
+        X62281.1
+        M81224.1
+        AJ237582.1
+        L31939.1
+        AF297471.1
 
-    >>> with open("GenBank/cor6_6.gb") as handle:
-    ...     for record in GenBankIterator(handle):
-    ...         print(record.id)
-    ...
-    X55053.1
-    X62281.1
-    M81224.1
-    AJ237582.1
-    L31939.1
-    AF297471.1
+        Equivalently,
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError(
-                "GenBank files must be opened in text mode."
-            ) from None
+        >>> with open("GenBank/cor6_6.gb") as handle:
+        ...     for record in GenBankIterator(handle):
+        ...         print(record.id)
+        ...
+        X55053.1
+        X62281.1
+        M81224.1
+        AJ237582.1
+        L31939.1
+        AF297471.1
 
-    try:
-        records = GenBankScanner(debug=0).parse_records(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        """
+
+        super().__init__(source, mode="t", fmt="GenBank")
+
+    def prepare(self, handle):
+        self.records = GenBankScanner(debug=0).parse_records(handle)
+
+    def parse(self, handle):
+        return next(self.records)
 
 
-def EmblIterator(source):
-    """Break up an EMBL file into SeqRecord objects.
+class EmblIterator(Interfaces.SequenceIterator):
 
-    Argument source is a file-like object opened in text mode or a path to a file.
-    Every section from the LOCUS line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+    def __init__(self, source):
+        """Break up an EMBL file into SeqRecord objects.
 
-    Note that for genomes or chromosomes, there is typically only
-    one record.
+        Argument source is a file-like object opened in text mode or a path to a file.
+        Every section from the LOCUS line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    This gets called internally by Bio.SeqIO for the EMBL file format:
+        Note that for genomes or chromosomes, there is typically only
+        one record.
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("EMBL/epo_prt_selection.embl", "embl"):
-    ...     print(record.id)
-    ...
-    A00022.1
-    A00028.1
-    A00031.1
-    A00034.1
-    A00060.1
-    A00071.1
-    A00072.1
-    A00078.1
-    CQ797900.1
+        This gets called internally by Bio.SeqIO for the EMBL file format:
 
-    Equivalently,
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("EMBL/epo_prt_selection.embl", "embl"):
+        ...     print(record.id)
+        ...
+        A00022.1
+        A00028.1
+        A00031.1
+        A00034.1
+        A00060.1
+        A00071.1
+        A00072.1
+        A00078.1
+        CQ797900.1
 
-    >>> with open("EMBL/epo_prt_selection.embl") as handle:
-    ...     for record in EmblIterator(handle):
-    ...         print(record.id)
-    ...
-    A00022.1
-    A00028.1
-    A00031.1
-    A00034.1
-    A00060.1
-    A00071.1
-    A00072.1
-    A00078.1
-    CQ797900.1
+        Equivalently,
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError("EMBL files must be opened in text mode.") from None
+        >>> with open("EMBL/epo_prt_selection.embl") as handle:
+        ...     for record in EmblIterator(handle):
+        ...         print(record.id)
+        ...
+        A00022.1
+        A00028.1
+        A00031.1
+        A00034.1
+        A00060.1
+        A00071.1
+        A00072.1
+        A00078.1
+        CQ797900.1
 
-    try:
-        records = EmblScanner(debug=0).parse_records(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        """
+        super().__init__(source, mode="t", fmt="EMBL")
+
+    def prepare(self, handle):
+        self.records = EmblScanner(debug=0).parse_records(handle)
+
+    def parse(self, handle):
+        return next(self.records)
 
 
-def ImgtIterator(source):
-    """Break up an IMGT file into SeqRecord objects.
+class ImgtIterator(Interfaces.SequenceIterator):
 
-    Argument source is a file-like object opened in text mode or a path to a file.
-    Every section from the LOCUS line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+    def __init__(self, source):
+        """Break up an IMGT file into SeqRecord objects.
 
-    Note that for genomes or chromosomes, there is typically only
-    one record.
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError("IMGT files must be opened in text mode.") from None
+        Argument source is a file-like object opened in text mode or a path to a file.
+        Every section from the LOCUS line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    try:
-        records = _ImgtScanner(debug=0).parse_records(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        Note that for genomes or chromosomes, there is typically only
+        one record.
+        """
+        super().__init__(source, mode="t", fmt="IMGT")
+
+    def prepare(self, handle):
+        self.records = _ImgtScanner(debug=0).parse_records(handle)
+
+    def parse(self, handle):
+        return next(self.records)
 
 
-def GenBankCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
-    """Break up a Genbank file into SeqRecord objects for each CDS feature.
+class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
 
-    Argument source is a file-like object opened in text mode or a path to a file.
+    def __init__(self, source, alphabet=Alphabet.generic_protein):
+        """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
-    Every section from the LOCUS line to the terminating // can contain
-    many CDS features.  These are returned as with the stated amino acid
-    translation sequence (if given).
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError(
-                "GenBank files must be opened in text mode."
-            ) from None
+        Argument source is a file-like object opened in text mode or a path to a file.
 
-    try:
-        records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        Every section from the LOCUS line to the terminating // can contain
+        many CDS features.  These are returned as with the stated amino acid
+        translation sequence (if given).
+        """
+        super().__init__(source, alphabet=alphabet, mode="t", fmt="GenBank")
+
+    def prepare(self, handle):
+        alphabet = self.alphabet
+        self.records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
+    def parse(self, handle):
+        return next(self.records)
 
 
-def EmblCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
-    """Break up a EMBL file into SeqRecord objects for each CDS feature.
+class EmblCdsFeatureIterator(Interfaces.SequenceIterator):
 
-    Argument source is a file-like object opened in text mode or a path to a file.
+    def __init__(self, source, alphabet=Alphabet.generic_protein):
+        """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
-    Every section from the LOCUS line to the terminating // can contain
-    many CDS features.  These are returned as with the stated amino acid
-    translation sequence (if given).
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError("EMBL files must be opened in text mode.") from None
+        Argument source is a file-like object opened in text mode or a path to a file.
 
-    try:
-        records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        Every section from the LOCUS line to the terminating // can contain
+        many CDS features.  These are returned as with the stated amino acid
+        translation sequence (if given).
+        """
+        super().__init__(source, alphabet=alphabet, mode="t", fmt="EMBL")
+
+    def prepare(self, handle):
+        alphabet = self.alphabet
+        self.records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
+
+    def parse(self, handle):
+        return next(self.records)
 
 
 def _insdc_feature_position_string(pos, offset=0):
