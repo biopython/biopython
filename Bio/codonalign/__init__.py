@@ -85,7 +85,7 @@ def build(
         if not isinstance(_get_base_alphabet(pro.seq.alphabet), ProteinAlphabet):
             raise TypeError(
                 "Alphabet Error!\nThe input alignment should be "
-                "a *PROTEIN* alignemnt, found %r" % pro.seq.alphabet
+                "a *PROTEIN* alignment, found %r" % pro.seq.alphabet
             )
     if alphabet is None:
         alphabet = _get_codon_alphabet(codon_table, gap_char=gap_char)
@@ -93,10 +93,12 @@ def build(
     # the same
     pro_num = len(pro_align)
     if corr_dict is None:
-        if nucl_seqs.__class__.__name__ == "generator":
-            # nucl_seqs will be a tuple if read by SeqIO.parse()
+        try:
+            nucl_num = len(nucl_seqs)
+        except TypeError:
+            # nucl_seqs will be an iterator if returned by SeqIO.parse()
             nucl_seqs = tuple(nucl_seqs)
-        nucl_num = len(nucl_seqs)
+            nucl_num = len(nucl_seqs)
         if pro_num > nucl_num:
             raise ValueError(
                 f"Higher Number of SeqRecords in Protein Alignment ({pro_num}) "
