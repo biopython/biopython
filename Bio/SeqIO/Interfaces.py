@@ -45,25 +45,25 @@ class SequenceIterator:
             if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
-                        "%s files should be opened in text mode" % fmt
+                        "%s files must be opened in text mode." % fmt
                     ) from None
             elif mode == "b":
                 if source.read(0) != b"":
                     raise StreamModeError(
-                        "%s files should be opened in binary mode" % fmt
+                        "%s files must be opened in binary mode." % fmt
                     ) from None
             else:
                 raise ValueError("Unknown mode '%s'" % mode)
             self.stream = source
             self.should_close_stream = False
         try:
-            self.read_header(self.stream)
+            self.prepare(self.stream)
         except Exception:
             if self.should_close_stream:
                 self.stream.close()
             raise
 
-    def read_header(self, stream):
+    def prepare(self, stream):
         pass
 
     def __next__(self):

@@ -358,7 +358,7 @@ class AbiIterator(Interfaces.SequenceIterator):
         self.done = False
         super().__init__(source, alphabet=alphabet, mode="b", fmt="ABI")
 
-    def read_header(self, handle):
+    def prepare(self, handle):
         # check if input file is a valid Abi file
         marker = handle.read(4)
         if not marker:
