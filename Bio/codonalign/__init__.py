@@ -6,6 +6,8 @@
 
 """Code for dealing with Codon Alignments."""
 
+from collections.abc import Mapping, Iterable
+
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
 
@@ -111,9 +113,9 @@ def build(
         # and nucl_seqs are the same. If nucl_seqs is a dict or read by
         # SeqIO.index(), we match seqs in pro_align and those in
         # nucl_seq by their id.
-        if nucl_seqs.__class__.__name__ in ("_IndexedSeqFileDict", "dict"):
+        if isinstance(nucl_seqs, Mapping):
             corr_method = 1
-        elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
+        elif isinstance(nucl_seqs, Iterable):
             corr_method = 0
         else:
             raise TypeError(
@@ -126,19 +128,16 @@ def build(
                 "protein id to nucleotide id!"
             )
         if len(corr_dict) >= pro_num:
-            # read by SeqIO.parse()
-            if nucl_seqs.__class__.__name__ == "generator":
-                from Bio import SeqIO
-
-                nucl_seqs = SeqIO.to_dict(nucl_seqs)
-            elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
-                nucl_seqs = {i.id: i for i in nucl_seqs}
-            elif nucl_seqs.__class__.__name__ in ("_IndexedSeqFileDict", "dict"):
+            if isinstance(nucl_seqs, Mapping):
                 pass
             else:
-                raise TypeError(
-                    "Nucl Sequences Error, Unknown type of Nucleotide Records!"
-                )
+                d = {}
+                for record in nucl_seqs:
+                    key = record.id
+                    if key in d:
+                        raise ValueError("Duplicate key '%s'" % key)
+                    d[key] = record
+                nucl_seqs = d
             corr_method = 2
         else:
             raise RuntimeError(
