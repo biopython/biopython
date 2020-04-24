@@ -23,7 +23,7 @@ class SequenceIterator:
     wish to redefine the __init__ method as well.
     """
 
-    def __init__(self, source, alphabet=generic_alphabet, mode='t', fmt=None):
+    def __init__(self, source, alphabet=generic_alphabet, mode="t", fmt=None):
         """Create a SequenceIterator object.
 
         Arguments:
@@ -39,7 +39,7 @@ class SequenceIterator:
         """
         self.alphabet = alphabet
         try:
-            self.stream = open(source, "r"+mode)
+            self.stream = open(source, "r" + mode)
             self.should_close_stream = True
         except TypeError:  # not a path, assume we received a stream
             if mode == "t":
