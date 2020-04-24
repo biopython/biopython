@@ -96,8 +96,7 @@ from Bio.Alphabet import (
 )
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequenceWriter
-from Bio import StreamModeError
+from . import Interfaces
 
 
 _pir_alphabets = {
@@ -113,32 +112,32 @@ _pir_alphabets = {
 }
 
 
-def PirIterator(source):
-    """Iterate over a PIR file and yield SeqRecord objects.
+class PirIterator(Interfaces.SequenceIterator):
+    def __init__(self, source):
+        """Iterate over a PIR file and yield SeqRecord objects.
 
-    source - file-like object or a path to a file.
+        source - file-like object or a path to a file.
 
-    Examples
-    --------
-    >>> with open("NBRF/DMB_prot.pir") as handle:
-    ...    for record in PirIterator(handle):
-    ...        print("%s length %i" % (record.id, len(record)))
-    HLA:HLA00489 length 263
-    HLA:HLA00490 length 94
-    HLA:HLA00491 length 94
-    HLA:HLA00492 length 80
-    HLA:HLA00493 length 175
-    HLA:HLA01083 length 188
+        Examples
+        --------
+        >>> with open("NBRF/DMB_prot.pir") as handle:
+        ...    for record in PirIterator(handle):
+        ...        print("%s length %i" % (record.id, len(record)))
+        HLA:HLA00489 length 263
+        HLA:HLA00490 length 94
+        HLA:HLA00491 length 94
+        HLA:HLA00492 length 80
+        HLA:HLA00493 length 175
+        HLA:HLA01083 length 188
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError("PIR files must be opened in binary mode.") from None
+        """
+        super().__init__(source, mode="t", fmt="Pir")
 
-    try:
+    def parse(self, handle):
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in handle:
             if line[0] == ">":
@@ -184,12 +183,9 @@ def PirIterator(source):
             if line is None:
                 return  # StopIteration
         raise ValueError("Unrecognised PIR record format.")
-    finally:
-        if handle is not source:
-            handle.close()
 
 
-class PirWriter(SequenceWriter):
+class PirWriter(Interfaces.SequenceWriter):
     """Class to write PIR format files."""
 
     def __init__(self, handle, wrap=60, record2title=None, code=None):

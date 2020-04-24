@@ -64,57 +64,59 @@ class IgIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, alphabet=alphabet, mode="t", fmt="IntelliGenetics")
 
-    def prepare(self, handle):
+    def parse(self, handle):
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
         # Skip any file header text before the first record (;; lines)
         for line in handle:
             if not line.startswith(";;"):
-                self.line = line
                 break
         else:
             # Empty file, or header only
-            self.line = None
             return
 
-    def parse(self, handle):
-        line = self.line
-        if line is None:
-            raise StopIteration
         if line[0] != ";":
             raise ValueError("Records should start with ';' and not:\n%r" % line)
+        while line:
+            # Now iterate over the records
 
-        # Try and agree with SeqRecord convention from the GenBank parser,
-        # (and followed in the SwissProt parser) which stores the comments
-        # as a long string with newlines under annotations key 'comment'.
+            # Try and agree with SeqRecord convention from the GenBank parser,
+            # (and followed in the SwissProt parser) which stores the comments
+            # as a long string with newlines under annotations key 'comment'.
 
-        # Note some examples use "; ..." and others ";..."
-        comment_lines = []
-        while line.startswith(";"):
-            # TODO - Extract identifier from lines like "LOCUS\tB_SF2"?
-            comment_lines.append(line[1:].strip())
-            line = next(handle)
-        title = line.rstrip()
+            # Note some examples use "; ..." and others ";..."
+            comment_lines = []
+            while line.startswith(";"):
+                # TODO - Extract identifier from lines like "LOCUS\tB_SF2"?
+                comment_lines.append(line[1:].strip())
+                line = next(handle)
+            title = line.rstrip()
 
-        seq_lines = []
-        for line in handle:
-            if line[0] == ";":
-                break
-            # Remove trailing whitespace, and any internal spaces
-            seq_lines.append(line.rstrip().replace(" ", ""))
-        else:
-            line = None
-        seq_str = "".join(seq_lines)
-        if seq_str.endswith("1"):
-            # Remove the optional terminator (digit one)
-            seq_str = seq_str[:-1]
-        if "1" in seq_str:
-            raise ValueError("Potential terminator digit one found within sequence.")
+            seq_lines = []
+            for line in handle:
+                if line[0] == ";":
+                    break
+                # Remove trailing whitespace, and any internal spaces
+                seq_lines.append(line.rstrip().replace(" ", ""))
+            else:
+                line = None
+            seq_str = "".join(seq_lines)
+            if seq_str.endswith("1"):
+                # Remove the optional terminator (digit one)
+                seq_str = seq_str[:-1]
+            if "1" in seq_str:
+                raise ValueError("Potential terminator digit one found within sequence.")
 
-        # Return the record and then continue...
-        alphabet = self.alphabet
-        record = SeqRecord(Seq(seq_str, alphabet), id=title, name=title)
-        record.annotations["comment"] = "\n".join(comment_lines)
-        self.line = line
-        return record
+            # Return the record and then continue...
+            alphabet = self.alphabet
+            record = SeqRecord(Seq(seq_str, alphabet), id=title, name=title)
+            record.annotations["comment"] = "\n".join(comment_lines)
+            yield record
+
+        # We should be at the end of the file now
+        assert not line
 
 
 if __name__ == "__main__":

@@ -355,10 +355,9 @@ class AbiIterator(Interfaces.SequenceIterator):
     def __init__(self, source, alphabet=None, trim=False):
 
         self.trim = trim
-        self.done = False
         super().__init__(source, alphabet=alphabet, mode="b", fmt="ABI")
 
-    def prepare(self, handle):
+    def parse(self, handle):
         # check if input file is a valid Abi file
         marker = handle.read(4)
         if not marker:
@@ -367,10 +366,10 @@ class AbiIterator(Interfaces.SequenceIterator):
 
         if marker != b"ABIF":
             raise OSError("File should start ABIF, not %r" % marker)
+        records = self.iterate(handle)
+        return records
 
-    def parse(self, handle):
-        if self.done:
-            raise StopIteration
+    def iterate(self, handle):
         alphabet = self.alphabet
         # raise exception if alphabet is not dna
         if alphabet is not None:
@@ -463,8 +462,7 @@ class AbiIterator(Interfaces.SequenceIterator):
         if self.trim and not is_fsa_file:
             record = _abi_trim(record)
 
-        self.done = True
-        return record
+        yield record
 
 
 def _AbiTrimIterator(handle):

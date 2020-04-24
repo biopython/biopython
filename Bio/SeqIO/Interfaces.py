@@ -57,18 +57,15 @@ class SequenceIterator:
             self.stream = source
             self.should_close_stream = False
         try:
-            self.prepare(self.stream)
+            self.records = self.parse(self.stream)
         except Exception:
             if self.should_close_stream:
                 self.stream.close()
             raise
 
-    def prepare(self, stream):
-        pass
-
     def __next__(self):
         try:
-            return self.parse(self.stream)
+            return next(self.records)
         except Exception:
             if self.should_close_stream:
                 self.stream.close()

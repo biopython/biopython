@@ -95,11 +95,9 @@ class GenBankIterator(Interfaces.SequenceIterator):
 
         super().__init__(source, mode="t", fmt="GenBank")
 
-    def prepare(self, handle):
-        self.records = GenBankScanner(debug=0).parse_records(handle)
-
     def parse(self, handle):
-        return next(self.records)
+        records = GenBankScanner(debug=0).parse_records(handle)
+        return records
 
 
 class EmblIterator(Interfaces.SequenceIterator):
@@ -149,11 +147,9 @@ class EmblIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, mode="t", fmt="EMBL")
 
-    def prepare(self, handle):
-        self.records = EmblScanner(debug=0).parse_records(handle)
-
     def parse(self, handle):
-        return next(self.records)
+        records = EmblScanner(debug=0).parse_records(handle)
+        return records
 
 
 class ImgtIterator(Interfaces.SequenceIterator):
@@ -170,11 +166,9 @@ class ImgtIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, mode="t", fmt="IMGT")
 
-    def prepare(self, handle):
-        self.records = _ImgtScanner(debug=0).parse_records(handle)
-
     def parse(self, handle):
-        return next(self.records)
+        records = _ImgtScanner(debug=0).parse_records(handle)
+        return records
 
 
 class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
@@ -190,11 +184,10 @@ class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, alphabet=alphabet, mode="t", fmt="GenBank")
 
-    def prepare(self, handle):
-        alphabet = self.alphabet
-        self.records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
     def parse(self, handle):
-        return next(self.records)
+        alphabet = self.alphabet
+        records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
+        return records
 
 
 class EmblCdsFeatureIterator(Interfaces.SequenceIterator):
@@ -210,12 +203,10 @@ class EmblCdsFeatureIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, alphabet=alphabet, mode="t", fmt="EMBL")
 
-    def prepare(self, handle):
-        alphabet = self.alphabet
-        self.records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
-
     def parse(self, handle):
-        return next(self.records)
+        alphabet = self.alphabet
+        records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
+        return records
 
 
 def _insdc_feature_position_string(pos, offset=0):

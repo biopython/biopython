@@ -180,12 +180,13 @@ class FastaIterator(Interfaces.SequenceIterator):
         self.title2ids = title2ids
         super().__init__(source, alphabet=alphabet, mode="t", fmt="Fasta")
 
-    def prepare(self, handle):
-        title2ids = self.title2ids
-        self.records = self.generate(handle, title2ids)
+    def parse(self, handle):
+        records = self.iterate(handle)
+        return records
 
-    def generate(self, handle, title2ids):
+    def iterate(self, handle):
         alphabet = self.alphabet
+        title2ids = self.title2ids
         if title2ids:
             for title, sequence in SimpleFastaParser(handle):
                 id, name, descr = title2ids(title)
@@ -207,9 +208,6 @@ class FastaIterator(Interfaces.SequenceIterator):
                     description=title,
                 )
 
-    def parse(self, handle):
-        return next(self.records)
-
 
 class FastaTwoLineIterator(Interfaces.SequenceIterator):
     def __init__(self, source, alphabet=single_letter_alphabet):
@@ -227,21 +225,22 @@ class FastaTwoLineIterator(Interfaces.SequenceIterator):
         """
         super().__init__(source, alphabet=alphabet, mode="t", fmt="FASTA")
 
-    def prepare(self, handle):
-        self.iterator = FastaTwoLineParser(handle)
-
     def parse(self, handle):
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
         alphabet = self.alphabet
-        title, sequence = next(self.iterator)
-        try:
-            first_word = title.split(None, 1)[0]
-        except IndexError:
-            assert not title, repr(title)
-            # Should we use SeqRecord default for no ID?
-            first_word = ""
-        return SeqRecord(
-            Seq(sequence, alphabet), id=first_word, name=first_word, description=title
-        )
+        for title, sequence in FastaTwoLineParser(handle):
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                # Should we use SeqRecord default for no ID?
+                first_word = ""
+            yield SeqRecord(
+                Seq(sequence, alphabet), id=first_word, name=first_word, description=title
+            )
 
 
 class FastaWriter(SequenceWriter):

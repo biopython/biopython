@@ -15,7 +15,7 @@ from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
+from . import Interfaces
 
 
 def AtomIterator(pdb_id, structure):
@@ -104,56 +104,56 @@ def AtomIterator(pdb_id, structure):
         yield record
 
 
-def PdbSeqresIterator(source):
-    """Return SeqRecord objects for each chain in a PDB file.
+class PdbSeqresIterator(Interfaces.SequenceIterator):
+    def __init__(self, source):
+        """Return SeqRecord objects for each chain in a PDB file.
 
-    Arguments:
-     - source - input stream opened in text mode, or a path to a file
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
 
-    The sequences are derived from the SEQRES lines in the
-    PDB file header, not the atoms of the 3D structure.
+        The sequences are derived from the SEQRES lines in the
+        PDB file header, not the atoms of the 3D structure.
 
-    Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
+        Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
 
-    See: http://www.wwpdb.org/documentation/format23/sect3.html
+        See: http://www.wwpdb.org/documentation/format23/sect3.html
 
-    This gets called internally via Bio.SeqIO for the SEQRES based interpretation
-    of the PDB file format:
+        This gets called internally via Bio.SeqIO for the SEQRES based interpretation
+        of the PDB file format:
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-seqres"):
-    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...     print(record.dbxrefs)
-    ...
-    Record id 1A8O:A, chain A
-    ['UNP:P12497', 'UNP:POL_HV1N5']
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-seqres"):
+        ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...     print(record.dbxrefs)
+        ...
+        Record id 1A8O:A, chain A
+        ['UNP:P12497', 'UNP:POL_HV1N5']
 
-    Equivalently,
+        Equivalently,
 
-    >>> with open("PDB/1A8O.pdb") as handle:
-    ...     for record in PdbSeqresIterator(handle):
-    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...         print(record.dbxrefs)
-    ...
-    Record id 1A8O:A, chain A
-    ['UNP:P12497', 'UNP:POL_HV1N5']
+        >>> with open("PDB/1A8O.pdb") as handle:
+        ...     for record in PdbSeqresIterator(handle):
+        ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...         print(record.dbxrefs)
+        ...
+        Record id 1A8O:A, chain A
+        ['UNP:P12497', 'UNP:POL_HV1N5']
 
-    Note the chain is recorded in the annotations dictionary, and any PDB DBREF
-    lines are recorded in the database cross-references list.
-    """
-    # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
-    from Bio.SeqUtils import seq1
+        Note the chain is recorded in the annotations dictionary, and any PDB DBREF
+        lines are recorded in the database cross-references list.
+        """
+        super().__init__(source, mode="t", fmt="PDB")
 
-    chains = collections.defaultdict(list)
-    metadata = collections.defaultdict(list)
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise StreamModeError("PDB files must be opened in text mode.") from None
+    def parse(self, handle):
+        records = self.iterate(handle)
+        return records
+ 
+    def iterate(self, handle):
+        # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
+        from Bio.SeqUtils import seq1
+        chains = collections.defaultdict(list)
+        metadata = collections.defaultdict(list)
 
-    try:
         rec_name = None
         for line in handle:
             rec_name = line[0:6].strip()
@@ -237,9 +237,6 @@ def PdbSeqresIterator(source):
             else:
                 record.id = chn_id
             yield record
-    finally:
-        if handle is not source:
-            handle.close()
 
 
 def PdbAtomIterator(source):

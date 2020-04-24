@@ -400,7 +400,7 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
         self.parser.setFeature(handler.feature_namespaces, True)
         super().__init__(stream_or_path, mode="b", fmt="SeqXML")
 
-    def prepare(self, handle):
+    def parse(self, handle):
         parser = self.parser
         content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK
@@ -421,8 +421,10 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
         self.sourceVersion = content_handler.sourceVersion
         self.ncbiTaxID = content_handler.ncbiTaxID
         self.speciesName = content_handler.speciesName
+        records = self.iterate(handle)
+        return records
 
-    def parse(self, handle):
+    def iterate(self, handle):
         """Iterate over the records in the XML file."""
         parser = self.parser
         content_handler = parser.getContentHandler()
@@ -432,7 +434,7 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
             if len(records) > 1:
                 # Then at least the first record is finished
                 record = records.pop(0)
-                return record
+                yield record
             # Read in another block of the file...
             text = handle.read(BLOCK)
             if not text:
@@ -440,13 +442,9 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
             parser.feed(text)
         # We have reached the end of the XML file;
         # send out the remaining records
-        try:
-            record = records.pop(0)
-            return record
-        except IndexError:
-            pass
+        yield from records
+        records.clear()
         parser.close()
-        raise StopIteration
 
 
 class SeqXmlWriter(Interfaces.SequenceWriter):
