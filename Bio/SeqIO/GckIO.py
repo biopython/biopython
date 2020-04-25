@@ -215,18 +215,16 @@ def _parse(handle):
 
 
 class GckIterator(Interfaces.SequenceIterator):
-    """Parse a GCK file and return a SeqRecord object.
+    """Parser for GCK files."""
 
-    Argument source is a file-like object or a path to a file.
-
-    Note that a GCK file can only contain one sequence, so this
-    iterator will always return a single record.
-    """
     def __init__(self, source):
         super().__init__(source, mode="b", fmt="GCK")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a SeqRecord generator.
+            Note that a GCK file can only contain one sequence, so this
+            iterator will always return a single record.
+        """
 
         records = _parse(handle)
         return records

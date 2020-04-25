@@ -41,6 +41,8 @@ from . import Interfaces
 
 
 class TabIterator(Interfaces.SequenceIterator):
+    """Parser for tab-delimited files."""
+
     def __init__(self, source, alphabet=single_letter_alphabet):
         """Iterate over tab separated lines as SeqRecord objects.
 

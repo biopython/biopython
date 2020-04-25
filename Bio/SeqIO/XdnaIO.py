@@ -140,6 +140,8 @@ def _read_feature(handle, record):
 
 
 class XdnaIterator(Interfaces.SequenceIterator):
+    """Parser for Xdna files."""
+
     def __init__(self, source):
         """Parse a Xdna file and return a SeqRecord object.
 

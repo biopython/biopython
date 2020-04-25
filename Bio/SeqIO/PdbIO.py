@@ -105,6 +105,8 @@ def AtomIterator(pdb_id, structure):
 
 
 class PdbSeqresIterator(Interfaces.SequenceIterator):
+    """Parser for PDB files."""
+
     def __init__(self, source):
         """Return SeqRecord objects for each chain in a PDB file.
 
@@ -146,11 +148,11 @@ class PdbSeqresIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
- 
+
     def iterate(self, handle):
+        """Iterate over the records in the PDB file."""
         # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
         from Bio.SeqUtils import seq1
         chains = collections.defaultdict(list)

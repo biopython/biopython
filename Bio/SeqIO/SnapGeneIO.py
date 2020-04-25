@@ -239,6 +239,8 @@ def _get_child_value(node, name, default=None, error=None):
 
 
 class SnapGeneIterator(Interfaces.SequenceIterator):
+    """Parser for SnapGene files."""
+
     def __init__(self, source):
         """Parse a SnapGene file and return a SeqRecord object.
 
@@ -251,11 +253,11 @@ class SnapGeneIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Iterate over the records in the SnapGene file."""
         record = SeqRecord(None)
         packets = _iterate(handle)
         try:

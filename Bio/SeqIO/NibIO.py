@@ -49,6 +49,8 @@ import sys
 
 
 class NibIterator(Interfaces.SequenceIterator):
+    """Parser for nib files."""
+
     def __init__(self, source, alphabet=None):
         """Iterate over a nib file and yield a SeqRecord.
 
@@ -82,7 +84,6 @@ class NibIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         word = handle.read(4)
         if not word:
             raise ValueError("Empty file.")
@@ -97,6 +98,7 @@ class NibIterator(Interfaces.SequenceIterator):
         return records
 
     def iterate(self, handle, byteorder):
+        """Iterate over the records in the nib file."""
         number = handle.read(4)
         length = int.from_bytes(number, byteorder)
         data = handle.read()

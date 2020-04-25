@@ -915,6 +915,8 @@ class _AddTellHandle:
 
 
 class SffIterator(Interfaces.SequenceIterator):
+    """Parser for Standard Flowgram Format (SFF) files."""
+
     def __init__(self, source, alphabet=Alphabet.generic_dna, trim=False):
         """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 

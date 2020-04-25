@@ -113,6 +113,8 @@ _pir_alphabets = {
 
 
 class PirIterator(Interfaces.SequenceIterator):
+    """Parser for PIR files."""
+
     def __init__(self, source):
         """Iterate over a PIR file and yield SeqRecord objects.
 
@@ -135,11 +137,11 @@ class PirIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Iterate over the records in the PIR file."""
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in handle:
             if line[0] == ">":

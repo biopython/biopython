@@ -991,6 +991,8 @@ def FastqGeneralIterator(source):
 
 
 class FastqPhredIterator(Interfaces.SequenceIterator):
+    """Parser for FASTQ files."""
+
     def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
         """Iterate over FASTQ records as SeqRecord objects.
 
@@ -1310,6 +1312,8 @@ def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=Non
 
 
 class QualPhredIterator(Interfaces.SequenceIterator):
+    """Parser for QUAL files with PHRED quality scores but no sequence."""
+
     def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
         """For QUAL files which include PHRED quality scores, but no sequence.
 

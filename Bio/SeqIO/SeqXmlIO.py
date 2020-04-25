@@ -373,8 +373,9 @@ class ContentHandler(handler.ContentHandler):
 
 
 class SeqXmlIterator(Interfaces.SequenceIterator):
-    """Breaks seqXML file into SeqRecords.
+    """Parser for seqXML files.
 
+    Parses seqXML files and creates SeqRecords.
     Assumes valid seqXML please validate beforehand.
     It is assumed that all information for one record can be found within a
     record element or above. Two types of methods are called when the start

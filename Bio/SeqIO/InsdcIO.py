@@ -53,6 +53,7 @@ from . import Interfaces
 
 
 class GenBankIterator(Interfaces.SequenceIterator):
+    """Parser for GenBank files."""
 
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects.
@@ -103,6 +104,7 @@ class GenBankIterator(Interfaces.SequenceIterator):
 
 
 class EmblIterator(Interfaces.SequenceIterator):
+    """Parser for EMBL files."""
 
     def __init__(self, source):
         """Break up an EMBL file into SeqRecord objects.
@@ -155,6 +157,7 @@ class EmblIterator(Interfaces.SequenceIterator):
 
 
 class ImgtIterator(Interfaces.SequenceIterator):
+    """Parser for IMGT files."""
 
     def __init__(self, source):
         """Break up an IMGT file into SeqRecord objects.
@@ -174,6 +177,7 @@ class ImgtIterator(Interfaces.SequenceIterator):
 
 
 class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
+    """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
 
     def __init__(self, source, alphabet=Alphabet.generic_protein):
         """Break up a Genbank file into SeqRecord objects for each CDS feature.
@@ -193,6 +197,7 @@ class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
 
 
 class EmblCdsFeatureIterator(Interfaces.SequenceIterator):
+    """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
 
     def __init__(self, source, alphabet=Alphabet.generic_protein):
         """Break up a EMBL file into SeqRecord objects for each CDS feature.

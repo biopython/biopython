@@ -214,6 +214,8 @@ class FastaIterator(Interfaces.SequenceIterator):
 
 
 class FastaTwoLineIterator(Interfaces.SequenceIterator):
+    """Parser for Fasta files with exactly two lines per record."""
+
     def __init__(self, source, alphabet=single_letter_alphabet):
         """Iterate over two-line Fasta records (as SeqRecord objects).
 

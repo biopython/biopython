@@ -20,8 +20,8 @@ from Bio.SeqRecord import SeqRecord
 from . import Interfaces
 
 
-
 class IgIterator(Interfaces.SequenceIterator):
+    """Parser for IntelliGenetics files."""
 
     def __init__(self, source, alphabet=single_letter_alphabet):
         """Iterate over IntelliGenetics records (as SeqRecord objects).
@@ -66,11 +66,11 @@ class IgIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Iterate over the records in the IntelliGenetics file."""
         # Skip any file header text before the first record (;; lines)
         for line in handle:
             if not line.startswith(";;"):
