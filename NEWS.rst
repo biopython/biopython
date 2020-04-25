@@ -51,6 +51,7 @@ possible, especially the following contributors:
 - Sergio Valqui
 - Sujan Dulal (first contribution)
 - Tianyi Shi (first contribution)
+- Martin Gonzalez Buitron (first contribution)
 
 20 December 2019: Biopython 1.76
 ================================
