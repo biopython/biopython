@@ -39,7 +39,6 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
 
-
 class TabIterator(SequenceIterator):
     """Parser for tab-delimited files."""
 
