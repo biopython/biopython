@@ -19,8 +19,8 @@ from Bio.SeqRecord import SeqRecord
 class SequenceIterator:
     """Base class for building SeqRecord iterators.
 
-    You should write a __next__ method to return SeqRecord  objects.  You may
-    wish to redefine the __init__ method as well.
+    You should write a parse method that returns a SeqRecord generator.  You
+    may wish to redefine the __init__ method as well.
     """
 
     def __init__(self, source, alphabet=generic_alphabet, mode="t", fmt=None):

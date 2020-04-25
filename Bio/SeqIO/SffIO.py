@@ -984,6 +984,8 @@ class SffIterator(Interfaces.SequenceIterator):
         self.trim = trim
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         try:
             if 0 != handle.tell():
                 raise ValueError("Not at start of file, offset %i" % handle.tell())

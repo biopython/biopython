@@ -81,6 +81,8 @@ class NibIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="b", fmt="Nib")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         word = handle.read(4)
         if not word:
             raise ValueError("Empty file.")

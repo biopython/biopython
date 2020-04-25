@@ -226,5 +226,7 @@ class GckIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="b", fmt="GCK")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = _parse(handle)
         return records

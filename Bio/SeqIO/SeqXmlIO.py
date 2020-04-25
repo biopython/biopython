@@ -401,6 +401,8 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
         super().__init__(stream_or_path, mode="b", fmt="SeqXML")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         parser = self.parser
         content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK

@@ -145,6 +145,8 @@ class PdbSeqresIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="t", fmt="PDB")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = self.iterate(handle)
         return records
  

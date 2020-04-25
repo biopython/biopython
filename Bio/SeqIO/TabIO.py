@@ -76,6 +76,8 @@ class TabIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="Tab-separated plain-text")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = self.iterate(handle)
         return records
 

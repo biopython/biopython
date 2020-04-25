@@ -26,7 +26,7 @@ from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator
 
 
 # dictionary for determining which tags goes into SeqRecord annotation
@@ -350,14 +350,17 @@ def _get_string_tag(opt_bytes_value, default=None):
         return opt_bytes_value.decode(encoding=sys.getdefaultencoding())
 
 
-class AbiIterator(Interfaces.SequenceIterator):
-    """Return an iterator for the Abi file format."""
+class AbiIterator(SequenceIterator):
+    """Parser for Abi files."""
+
     def __init__(self, source, alphabet=None, trim=False):
+        """Return an iterator for the Abi file format."""
 
         self.trim = trim
         super().__init__(source, alphabet=alphabet, mode="b", fmt="ABI")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         # check if input file is a valid Abi file
         marker = handle.read(4)
         if not marker:
@@ -370,6 +373,7 @@ class AbiIterator(Interfaces.SequenceIterator):
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         alphabet = self.alphabet
         # raise exception if alphabet is not dna
         if alphabet is not None:

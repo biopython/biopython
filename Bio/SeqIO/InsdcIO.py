@@ -96,6 +96,8 @@ class GenBankIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="t", fmt="GenBank")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = GenBankScanner(debug=0).parse_records(handle)
         return records
 

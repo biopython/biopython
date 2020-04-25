@@ -1059,6 +1059,8 @@ class FastqPhredIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="Fastq")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = self.iterate(handle)
         return records
 
@@ -1379,6 +1381,8 @@ class QualPhredIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="QUAL")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = self.iterate(handle)
         return records
 

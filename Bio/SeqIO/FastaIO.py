@@ -137,6 +137,8 @@ def FastaTwoLineParser(handle):
 
 
 class FastaIterator(Interfaces.SequenceIterator):
+    """Parser for Fasta files."""
+
     def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
         """Iterate over Fasta records as SeqRecord objects.
 
@@ -181,6 +183,8 @@ class FastaIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="Fasta")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         records = self.iterate(handle)
         return records
 

@@ -152,6 +152,8 @@ class XdnaIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="b", fmt="Xdna")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+
         # Parse fixed-size header and do some rudimentary checks
         #
         # The "neg_length" value is the length of the part of the sequence
