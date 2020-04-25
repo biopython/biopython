@@ -403,7 +403,6 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         parser = self.parser
         content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK

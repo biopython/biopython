@@ -79,11 +79,11 @@ class TabIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         alphabet = self.alphabet
         for line in handle:
             try:

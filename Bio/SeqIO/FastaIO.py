@@ -184,11 +184,11 @@ class FastaIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         alphabet = self.alphabet
         title2ids = self.title2ids
         if title2ids:
@@ -232,10 +232,12 @@ class FastaTwoLineIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="FASTA")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         alphabet = self.alphabet
         for title, sequence in FastaTwoLineParser(handle):
             try:

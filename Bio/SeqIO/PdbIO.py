@@ -154,7 +154,9 @@ class PdbSeqresIterator(Interfaces.SequenceIterator):
     def iterate(self, handle):
         """Iterate over the records in the PDB file."""
         # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
+        # Not sure if this is really needed; Python can handle circular dependencies.
         from Bio.SeqUtils import seq1
+
         chains = collections.defaultdict(list)
         metadata = collections.defaultdict(list)
 

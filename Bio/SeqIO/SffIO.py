@@ -987,7 +987,6 @@ class SffIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         try:
             if 0 != handle.tell():
                 raise ValueError("Not at start of file, offset %i" % handle.tell())
@@ -998,6 +997,7 @@ class SffIterator(Interfaces.SequenceIterator):
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         alphabet = self.alphabet
         if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
             raise ValueError("Invalid alphabet, SFF files do not hold proteins.")

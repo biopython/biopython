@@ -155,7 +155,6 @@ class XdnaIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         # Parse fixed-size header and do some rudimentary checks
         #
         # The "neg_length" value is the length of the part of the sequence
@@ -164,7 +163,6 @@ class XdnaIterator(Interfaces.SequenceIterator):
         # Biopython's SeqRecord has no such concept of a sequence origin as far
         # as I know, so we ignore that value. SerialCloner has no such concept
         # either and always generates files with a neg_length of zero.
-
         header = handle.read(112)
         if not header:
             raise ValueError("Empty file.")
@@ -174,6 +172,7 @@ class XdnaIterator(Interfaces.SequenceIterator):
         return records
 
     def iterate(self, handle, header):
+        """Parse the file and generate SeqRecord objects."""
         (version, type, topology, length, neg_length, com_length) = unpack(
             ">BBB25xII60xI12x", header
         )

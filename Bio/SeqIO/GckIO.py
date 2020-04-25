@@ -218,13 +218,13 @@ class GckIterator(Interfaces.SequenceIterator):
     """Parser for GCK files."""
 
     def __init__(self, source):
+        """Break up a GCK file into SeqRecord objects."""
         super().__init__(source, mode="b", fmt="GCK")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator.
-            Note that a GCK file can only contain one sequence, so this
-            iterator will always return a single record.
+           Note that a GCK file can only contain one sequence, so this
+           iterator will always return a single record.
         """
-
         records = _parse(handle)
         return records

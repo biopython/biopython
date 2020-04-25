@@ -355,7 +355,6 @@ class AbiIterator(SequenceIterator):
 
     def __init__(self, source, alphabet=None, trim=False):
         """Return an iterator for the Abi file format."""
-
         self.trim = trim
         super().__init__(source, alphabet=alphabet, mode="b", fmt="ABI")
 
@@ -377,9 +376,13 @@ class AbiIterator(SequenceIterator):
         alphabet = self.alphabet
         # raise exception if alphabet is not dna
         if alphabet is not None:
-            if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
+            if isinstance(
+                Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet
+            ):
                 raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
-            if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
+            if isinstance(
+                Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet
+            ):
                 raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}

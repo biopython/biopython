@@ -109,7 +109,9 @@ class IgIterator(Interfaces.SequenceIterator):
                 # Remove the optional terminator (digit one)
                 seq_str = seq_str[:-1]
             if "1" in seq_str:
-                raise ValueError("Potential terminator digit one found within sequence.")
+                raise ValueError(
+                    "Potential terminator digit one found within sequence."
+                )
 
             # Return the record and then continue...
             alphabet = self.alphabet

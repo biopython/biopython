@@ -57,7 +57,6 @@ class GenBankIterator(Interfaces.SequenceIterator):
 
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects.
-
         Argument source is a file-like object opened in text mode or a path to a file.
 
         Every section from the LOCUS line to the terminating // becomes
@@ -98,7 +97,6 @@ class GenBankIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = GenBankScanner(debug=0).parse_records(handle)
         return records
 
@@ -152,6 +150,7 @@ class EmblIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="t", fmt="EMBL")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         records = EmblScanner(debug=0).parse_records(handle)
         return records
 
@@ -172,6 +171,7 @@ class ImgtIterator(Interfaces.SequenceIterator):
         super().__init__(source, mode="t", fmt="IMGT")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         records = _ImgtScanner(debug=0).parse_records(handle)
         return records
 
@@ -191,6 +191,7 @@ class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="GenBank")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         alphabet = self.alphabet
         records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
         return records
@@ -211,6 +212,7 @@ class EmblCdsFeatureIterator(Interfaces.SequenceIterator):
         super().__init__(source, alphabet=alphabet, mode="t", fmt="EMBL")
 
     def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         alphabet = self.alphabet
         records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
         return records

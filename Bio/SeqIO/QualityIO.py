@@ -1062,11 +1062,11 @@ class FastqPhredIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         title2ids = self.title2ids
         alphabet = self.alphabet
         assert SANGER_SCORE_OFFSET == ord("!")
@@ -1391,6 +1391,7 @@ class QualPhredIterator(Interfaces.SequenceIterator):
         return records
 
     def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         title2ids = self.title2ids
         alphabet = self.alphabet
         # Skip any text before the first record (e.g. blank lines, comments)
