@@ -215,7 +215,7 @@ class PDBList:
         return obsolete
 
     def retrieve_pdb_file(
-        self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False
+        self, pdb_code, obsolete=False, pdir=None, file_format=None, overwrite=False, compress=False
     ):
         """Fetch PDB structure file from PDB server, and store it locally.
 
@@ -255,6 +255,9 @@ class PDBList:
 
         :param pdir: put the file in this directory (default: create a PDB-style directory tree)
         :type pdir: string
+
+        :param compress: if set to True, existing structure files will be gzip stored. Default: False
+        :type compress: bool
 
         :return: filename
         :rtype: string
@@ -339,10 +342,13 @@ class PDBList:
         except OSError:
             print("Desired structure doesn't exists")
         else:
-            with gzip.open(filename, "rb") as gz:
-                with open(final_file, "wb") as out:
-                    out.writelines(gz)
-            os.remove(filename)
+            if compress:
+                pass
+            else:
+                with gzip.open(filename, "rb") as gz:
+                    with open(final_file, "wb") as out:
+                        out.writelines(gz)
+                os.remove(filename)
         return final_file
 
     def update_pdb(self, file_format=None):
