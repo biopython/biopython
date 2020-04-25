@@ -42,13 +42,14 @@ description at https://genome.ucsc.edu/FAQ/FAQformat.html.
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter
+
 
 import struct
 import sys
 
 
-class NibIterator(Interfaces.SequenceIterator):
+class NibIterator(SequenceIterator):
     """Parser for nib files."""
 
     def __init__(self, source, alphabet=None):
@@ -119,7 +120,7 @@ class NibIterator(Interfaces.SequenceIterator):
         yield record
 
 
-class NibWriter(Interfaces.SequenceWriter):
+class NibWriter(SequenceWriter):
     """Nib file writer."""
 
     def __init__(self, target):

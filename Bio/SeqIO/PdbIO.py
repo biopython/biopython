@@ -15,7 +15,7 @@ from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator
 
 
 def AtomIterator(pdb_id, structure):
@@ -104,7 +104,7 @@ def AtomIterator(pdb_id, structure):
         yield record
 
 
-class PdbSeqresIterator(Interfaces.SequenceIterator):
+class PdbSeqresIterator(SequenceIterator):
     """Parser for PDB files."""
 
     def __init__(self, source):

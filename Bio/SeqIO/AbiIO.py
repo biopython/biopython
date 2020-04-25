@@ -380,9 +380,7 @@ class AbiIterator(SequenceIterator):
                 Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet
             ):
                 raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
-            if isinstance(
-                Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet
-            ):
+            if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
                 raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}

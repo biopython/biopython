@@ -364,9 +364,8 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.File import as_handle
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 from Bio import StreamModeError
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
 from math import log
 import warnings
@@ -990,7 +989,7 @@ def FastqGeneralIterator(source):
             handle.close()
 
 
-class FastqPhredIterator(Interfaces.SequenceIterator):
+class FastqPhredIterator(SequenceIterator):
     """Parser for FASTQ files."""
 
     def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
@@ -1311,7 +1310,7 @@ def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=Non
         yield record
 
 
-class QualPhredIterator(Interfaces.SequenceIterator):
+class QualPhredIterator(SequenceIterator):
     """Parser for QUAL files with PHRED quality scores but no sequence."""
 
     def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
@@ -1386,7 +1385,6 @@ class QualPhredIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-
         records = self.iterate(handle)
         return records
 
@@ -1446,7 +1444,7 @@ class QualPhredIterator(Interfaces.SequenceIterator):
         raise ValueError("Unrecognised QUAL record format.")
 
 
-class FastqPhredWriter(Interfaces.SequenceWriter):
+class FastqPhredWriter(SequenceWriter):
     """Class to write standard FASTQ format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
@@ -1550,7 +1548,7 @@ def as_fastq(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-class QualPhredWriter(Interfaces.SequenceWriter):
+class QualPhredWriter(SequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
@@ -1699,7 +1697,7 @@ def as_qual(record):
     return "".join(lines)
 
 
-class FastqSolexaWriter(Interfaces.SequenceWriter):
+class FastqSolexaWriter(SequenceWriter):
     r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities) (OBSOLETE).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
@@ -1806,7 +1804,7 @@ def as_fastq_solexa(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-class FastqIlluminaWriter(Interfaces.SequenceWriter):
+class FastqIlluminaWriter(SequenceWriter):
     r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores) (OBSOLETE).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,

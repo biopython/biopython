@@ -17,10 +17,10 @@ You are expected to use this module via the Bio.SeqIO functions.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator
 
 
-class IgIterator(Interfaces.SequenceIterator):
+class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
 
     def __init__(self, source, alphabet=single_letter_alphabet):

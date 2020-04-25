@@ -20,7 +20,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator
 
 
 def _iterate(handle):
@@ -238,7 +238,7 @@ def _get_child_value(node, name, default=None, error=None):
         return default
 
 
-class SnapGeneIterator(Interfaces.SequenceIterator):
+class SnapGeneIterator(SequenceIterator):
     """Parser for SnapGene files."""
 
     def __init__(self, source):

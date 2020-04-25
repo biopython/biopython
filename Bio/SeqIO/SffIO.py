@@ -234,10 +234,9 @@ import re
 
 from Bio import Alphabet
 from Bio.Seq import Seq
-from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqRecord import SeqRecord
 from Bio import StreamModeError
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 _null = b"\0"
@@ -914,7 +913,7 @@ class _AddTellHandle:
         return self._handle.close()
 
 
-class SffIterator(Interfaces.SequenceIterator):
+class SffIterator(SequenceIterator):
     """Parser for Standard Flowgram Format (SFF) files."""
 
     def __init__(self, source, alphabet=Alphabet.generic_dna, trim=False):
@@ -1136,6 +1135,7 @@ def _check_eof(handle, index_offset, index_length):
 
 class _SffTrimIterator(SffIterator):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
+
     def __init__(self, source, alphabet=Alphabet.generic_dna):
         super().__init__(source, alphabet=alphabet, trim=True)
 
@@ -1154,7 +1154,7 @@ class SffWriter(SequenceWriter):
            reading this data).
 
         """
-        SequenceWriter.__init__(self, target, "wb")
+        super().__init__(target, "wb")
         self._xml = xml
         if index:
             self._index = []

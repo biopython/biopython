@@ -19,7 +19,7 @@ from Bio import Alphabet, BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 _seq_types = {
@@ -139,7 +139,7 @@ def _read_feature(handle, record):
     record.features.append(feature)
 
 
-class XdnaIterator(Interfaces.SequenceIterator):
+class XdnaIterator(SequenceIterator):
     """Parser for Xdna files."""
 
     def __init__(self, source):
@@ -211,7 +211,7 @@ class XdnaIterator(Interfaces.SequenceIterator):
         yield record
 
 
-class XdnaWriter(Interfaces.SequenceWriter):
+class XdnaWriter(SequenceWriter):
     """Write files in the Xdna format."""
 
     def __init__(self, target):

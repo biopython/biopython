@@ -18,9 +18,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequenceWriter
-from Bio.SeqIO.Interfaces import _clean, _get_seq_string
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
 
 def SimpleFastaParser(handle):
@@ -136,7 +134,7 @@ def FastaTwoLineParser(handle):
         assert line[0] != ">", "line[0] == '>' ; this should be impossible!"
 
 
-class FastaIterator(Interfaces.SequenceIterator):
+class FastaIterator(SequenceIterator):
     """Parser for Fasta files."""
 
     def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
@@ -213,7 +211,7 @@ class FastaIterator(Interfaces.SequenceIterator):
                 )
 
 
-class FastaTwoLineIterator(Interfaces.SequenceIterator):
+class FastaTwoLineIterator(SequenceIterator):
     """Parser for Fasta files with exactly two lines per record."""
 
     def __init__(self, source, alphabet=single_letter_alphabet):
@@ -247,7 +245,10 @@ class FastaTwoLineIterator(Interfaces.SequenceIterator):
                 # Should we use SeqRecord default for no ID?
                 first_word = ""
             yield SeqRecord(
-                Seq(sequence, alphabet), id=first_word, name=first_word, description=title
+                Seq(sequence, alphabet),
+                id=first_word,
+                name=first_word,
+                description=title,
             )
 
 

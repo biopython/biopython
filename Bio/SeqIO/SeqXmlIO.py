@@ -25,7 +25,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -372,7 +372,7 @@ class ContentHandler(handler.ContentHandler):
             self.data += data
 
 
-class SeqXmlIterator(Interfaces.SequenceIterator):
+class SeqXmlIterator(SequenceIterator):
     """Parser for seqXML files.
 
     Parses seqXML files and creates SeqRecords.
@@ -449,7 +449,7 @@ class SeqXmlIterator(Interfaces.SequenceIterator):
         parser.close()
 
 
-class SeqXmlWriter(Interfaces.SequenceWriter):
+class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
     SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,

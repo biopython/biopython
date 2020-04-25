@@ -39,9 +39,8 @@ from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
 from Bio import SeqIO
-from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio import SeqFeature
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 # NOTE
@@ -52,13 +51,13 @@ from . import Interfaces
 # However, all the writing code is in this file.
 
 
-class GenBankIterator(Interfaces.SequenceIterator):
+class GenBankIterator(SequenceIterator):
     """Parser for GenBank files."""
 
     def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects.
-        Argument source is a file-like object opened in text mode or a path to a file.
 
+        Argument source is a file-like object opened in text mode or a path to a file.
         Every section from the LOCUS line to the terminating // becomes
         a single SeqRecord with associated annotation and features.
 
@@ -92,7 +91,6 @@ class GenBankIterator(Interfaces.SequenceIterator):
         AF297471.1
 
         """
-
         super().__init__(source, mode="t", fmt="GenBank")
 
     def parse(self, handle):
@@ -101,7 +99,7 @@ class GenBankIterator(Interfaces.SequenceIterator):
         return records
 
 
-class EmblIterator(Interfaces.SequenceIterator):
+class EmblIterator(SequenceIterator):
     """Parser for EMBL files."""
 
     def __init__(self, source):
@@ -155,7 +153,7 @@ class EmblIterator(Interfaces.SequenceIterator):
         return records
 
 
-class ImgtIterator(Interfaces.SequenceIterator):
+class ImgtIterator(SequenceIterator):
     """Parser for IMGT files."""
 
     def __init__(self, source):
@@ -176,7 +174,7 @@ class ImgtIterator(Interfaces.SequenceIterator):
         return records
 
 
-class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
+class GenBankCdsFeatureIterator(SequenceIterator):
     """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
 
     def __init__(self, source, alphabet=Alphabet.generic_protein):
@@ -197,7 +195,7 @@ class GenBankCdsFeatureIterator(Interfaces.SequenceIterator):
         return records
 
 
-class EmblCdsFeatureIterator(Interfaces.SequenceIterator):
+class EmblCdsFeatureIterator(SequenceIterator):
     """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
 
     def __init__(self, source, alphabet=Alphabet.generic_protein):

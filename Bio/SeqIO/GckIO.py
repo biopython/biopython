@@ -17,7 +17,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator
 
 
 def _read(handle, length):
@@ -214,7 +214,7 @@ def _parse(handle):
     yield record
 
 
-class GckIterator(Interfaces.SequenceIterator):
+class GckIterator(SequenceIterator):
     """Parser for GCK files."""
 
     def __init__(self, source):
@@ -223,8 +223,9 @@ class GckIterator(Interfaces.SequenceIterator):
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator.
-           Note that a GCK file can only contain one sequence, so this
-           iterator will always return a single record.
+
+        Note that a GCK file can only contain one sequence, so this
+        iterator will always return a single record.
         """
         records = _parse(handle)
         return records

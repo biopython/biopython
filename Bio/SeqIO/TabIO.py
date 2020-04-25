@@ -36,11 +36,11 @@ example above.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import _clean, _get_seq_string
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
 
-class TabIterator(Interfaces.SequenceIterator):
+
+class TabIterator(SequenceIterator):
     """Parser for tab-delimited files."""
 
     def __init__(self, source, alphabet=single_letter_alphabet):
@@ -75,7 +75,9 @@ class TabIterator(Interfaces.SequenceIterator):
         gi|45478721|ref|NP_995576.1| length 90
 
         """
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="Tab-separated plain-text")
+        super().__init__(
+            source, alphabet=alphabet, mode="t", fmt="Tab-separated plain-text"
+        )
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -102,7 +104,7 @@ class TabIterator(Interfaces.SequenceIterator):
             yield SeqRecord(Seq(seq, alphabet), id=title, name=title, description="")
 
 
-class TabWriter(Interfaces.SequenceWriter):
+class TabWriter(SequenceWriter):
     """Class to write simple tab separated format files.
 
     Each line consists of "id(tab)sequence" only.

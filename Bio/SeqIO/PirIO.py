@@ -96,7 +96,7 @@ from Bio.Alphabet import (
 )
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from . import Interfaces
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 _pir_alphabets = {
@@ -112,7 +112,7 @@ _pir_alphabets = {
 }
 
 
-class PirIterator(Interfaces.SequenceIterator):
+class PirIterator(SequenceIterator):
     """Parser for PIR files."""
 
     def __init__(self, source):
@@ -189,7 +189,7 @@ class PirIterator(Interfaces.SequenceIterator):
         raise ValueError("Unrecognised PIR record format.")
 
 
-class PirWriter(Interfaces.SequenceWriter):
+class PirWriter(SequenceWriter):
     """Class to write PIR format files."""
 
     def __init__(self, handle, wrap=60, record2title=None, code=None):
