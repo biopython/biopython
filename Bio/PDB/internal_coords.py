@@ -192,6 +192,10 @@ class IC_Chain:
             # have break
             return "PIC data missing atoms"
 
+        # handle non-standard AA not marked as HETATM (1KQF, 1NTH)
+        if not prev.internal_coord.is20AA:
+            return "previous residue not standard amino acid"
+
         # both biopython Residues have Atoms, so check distance
         Natom = curr.child_dict.get("N", None)
         pCatom = prev.child_dict.get("C", None)
