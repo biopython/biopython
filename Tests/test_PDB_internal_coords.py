@@ -129,7 +129,7 @@ class Rebuild(unittest.TestCase):
         self.assertTrue(psicount > 0)
 
     def test_write_SCAD(self):
-        """Check SCAD output plus MxPeptideBond and Gly CB.
+        """Check SCAD output plus MaxPeptideBond and Gly CB.
 
         SCAD tests: scaling, transform mtx, extra bond created (allBonds)
         """
