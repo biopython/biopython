@@ -1590,7 +1590,7 @@ class IC_Residue(object):
                 # otherwise missing O will cause no sidechain
                 # not rn.rak so don't trigger missing CB for Gly
                 nCB = rn.akc.get("CB", None)
-                if nCB is not None:
+                if nCB is not None and nCB in rn.atom_coords:
                     self.atom_coords[nCB] = rn.atom_coords[nCB]
                     self.ak_set.add(nCB)
                     self._gen_edra((nN, nCA, nCB))
