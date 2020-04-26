@@ -2937,7 +2937,6 @@ class AtomKey(object):
 
     d2h = False  # convert D Deuterium to H Hydrogen on input
     # icd = {"icr": 0, "atm": 0, "lst": 0, "dct": 0, "_": 0, "else": 0}
-    # @profile
 
     def __init__(
         self, *args: Union[IC_Residue, Atom, List, Dict, str], **kwargs: str
