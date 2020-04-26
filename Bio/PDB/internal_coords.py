@@ -2902,6 +2902,8 @@ class AtomKey(object):
         '_'-joined AtomKey fields, excluding 'None' fields
     atom_re: compiled regex (Class Attribute)
         A compiled regular expression matching the string form of the key
+    endnum_re: compiled regex (Class Attribute)
+        A compiled regular expresion capturing digits at end of a string
     d2h: bool (Class Attribute)
         Convert D atoms to H on input; must also modify IC_Residue.accept_atoms
     missing: bool default False
@@ -2921,6 +2923,8 @@ class AtomKey(object):
         r"_(?P<resname>[a-zA-Z]+)_(?P<atm>[A-Za-z0-9]+)"
         r"(?:_(?P<altloc>\w))?(?:_(?P<occ>-?\d\.\d?\d?))?$"
     )
+
+    endnum_re = re.compile(r"(\d+)$")
 
     # PDB altLoc = Character = [\w ] (any non-ctrl ASCII incl space)
     # PDB iCode = AChar = [A-Za-z]
@@ -3130,6 +3134,7 @@ class AtomKey(object):
                     else:  # resname or altloc
                         return ord(s), ord(o)
 
+                # atom names from here
                 # backbone atoms before sidechain atoms
 
                 sb = self._backbone_sort_keys.get(s, None)
@@ -3141,13 +3146,8 @@ class AtomKey(object):
                 elif sb is None and ob is not None:
                     return 1, 0
                 # finished backbone and backbone vs. sidechain atoms
-                # now hydrogens after sidechain
-                # s0, o0 = s[0], o[0]
-                # if (s0 == 'H' and o0 != 'H'):
-                #    return 1, 0
-                # elif (s0 != 'H' and o0 == 'H'):
-                #    return 0, 1
 
+                # sidechain vs sidechain, sidechain vs H
                 ss = self._sidechain_sort_keys.get(s, None)
                 os = self._sidechain_sort_keys.get(o, None)
                 if ss is not None and os is not None:
@@ -3157,16 +3157,22 @@ class AtomKey(object):
                 elif ss is None and os is not None:
                     return 1, 0
 
+                # amide single 'H' captured above in sidechain sort
+                # now 'complex'' hydrogens after sidechain
                 s0, s1, o0, o1 = s[0], s[1], o[0], o[1]
                 s1d, o1d = s1.isdigit(), o1.isdigit()
                 # if "H" == s0 == o0: # breaks cython
                 if ("H" == s0) and ("H" == o0):
-                    alphaS = s.rstrip("0123456789")
-                    alphaO = o.rstrip("0123456789")
+
                     if (s1 == o1) or (s1d and o1d):
-                        numS = int(s[len(alphaS) :])
-                        numO = int(s[len(alphaO) :])
-                        return numS, numO
+                        enmS = self.endnum_re.match(s)
+                        enmO = self.endnum_re.match(o)
+                        if (enmS is not None) and (enmO is not None):
+                            return int(enmS.match()), int(enmO.match())
+                        elif enmS is None:
+                            return 0, 1
+                        else:
+                            return 1, 0
                     elif s1d:
                         return 0, 1
                     elif o1d:
