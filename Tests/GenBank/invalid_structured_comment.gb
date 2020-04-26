@@ -1,0 +1,77 @@
+LOCUS       AYW00820                1841 aa            linear   VRL 01-SEP-2019
+DEFINITION  Nsp1-3 [Mucambo virus].
+ACCESSION   AYW00820
+VERSION     AYW00820.1
+DBSOURCE    accession MF993533.1
+KEYWORDS    .
+SOURCE      Mucambo virus
+  ORGANISM  Mucambo virus
+            Viruses; ssRNA viruses; ssRNA positive-strand viruses, no DNA
+            stage; Togaviridae; Alphavirus.
+REFERENCE   1  (residues 1 to 1841)
+  AUTHORS   Araujo,P.A., Casseb,S.M., Ferreira,M.S., Silva,S.P., Silva,F.A.,
+            Martins,L.C., Chiang,J.O., Cruz,A.C.R. and Vasconcelos,P.F.C.
+  TITLE     Genomic detection and Phylogenetic Analysis of Mucambo virus from
+            hematophagus arthropods of Caxiuana Nacional Forest, municipality
+            of Melgaco, Para
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 1841)
+  AUTHORS   Araujo,P.A., Casseb,S.M., Ferreira,M.S., Silva,S.P., Silva,F.A.,
+            Martins,L.C., Chiang,J.O., Cruz,A.C.R. and Vasconcelos,P.F.C.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (22-SEP-2017) Section of Arbovirology and Hemorrhagic
+            Fevers, Evandro Chagas Institute, Highway BR 316, Ananindeua, Para
+            67030-000, Brazil
+COMMENT     EMAIL: pedroarthuraraujo@yahoo.com.br
+            ##Assembly-Data-START##
+            Assembly method: IDBA-UD
+            Sequencing Technology: MiniSeq
+            ##Assembly-Data-END##.
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..1841
+                     /organism="Mucambo virus"
+                     /strain="AR816662"
+                     /isolation_source="pool atrhopods"
+                     /host="Uranotaenia (Ura) geometrica"
+                     /db_xref="taxon:60875"
+                     /country="Brazil"
+                     /lat_lon="1.7375 S 51.4554 W"
+                     /collection_date="23-Nov-2014"
+     Protein         1..1841
+                     /product="Nsp1-3"
+     CDS             1..1841
+                     /coded_by="MF993533.1:43..5568"
+ORIGIN
+        1 mekvhvdiee dspflralqr sfpqfeveak qvtdndhana rafshlaskl ietevepsdt
+       61 ildigsapar rmyskhkyhc vcpmrcaedp drlfkyaakl kknckditdk dldkkmaela
+      121 avmedpdleq dticlhddet cryeghvavy qdvyavdgpt siyhqankgv rvaywigfdt
+      181 tpfmfknlag aypsystnwa detvltarni glcssdvmer srrglsilrk kylkpsnnii
+      241 fsvgstiyhe krdllkswhl psvfhlrgkq nytcrcetiv scdgyvvkri aispglygkp
+      301 sgyaatmhre gflcckvtdt lngervsfpv ctyvpatlcd qmtgilatdv saedaqkllv
+      361 glnqrivvng rtqrntntmk nyllpvvaqa farwakeykd dqdderplgl rdrqlvmgcc
+      421 wafkkhkits vykrpdtqtv ikvpsdfhsf vlprpgsntl eiglrtrikk lledkkippp
+      481 iitpedvsta keaaaeakei reaeelrial ppivpdveep tleadvdlml qeagagsvet
+      541 prglikvtsy sgedkigsya vlspqavlrs eklscihpla eevivithag rkgryavepy
+      601 hgkvvvpegh aipvadfqal sesativyne refvnrylhh iainggalnt deeyykvvkp
+      661 teydgeylyd idrkqcvkke qvsglgltge lveppfhefa yeslktrpaa pyqvptigvy
+      721 gvpgsgksgi iksavtkrdl vvsakkenca evirdvkkmr gldivartvd svllngckhp
+      781 vdtlyideaf achagtlral iaiikpkkav lcgdpkqcgf fnmmclrvhf nheictqvfh
+      841 ksisrrctks vtsvvstlfy dkkmrttnpr etkieidttg stkprkddli ltcfrgwvkq
+      901 lqidykgnei mtaaasqglt rkgvyavryk vnenplyaan sehvnvlltr tedrivwktl
+      961 agdpwiktlt akytgdftat leewqqehda imkhilerpd padvfqnkan vcwakalvpv
+     1021 lktagidlta eqwntivqfr ddkahsaeia lnqlcvrffg ldldsglfsa ptvplsiknn
+     1081 hwdnspspnm yglnkevarq lsrrypqlpr avatgrvldm ntgtlrgydp cinlvpvnrr
+     1141 lphalvthhs eqprsdfsaf asklrgrtvl vvgeklnitg knvdwlsesp eatfksrldl
+     1201 giphelpkyd ivfvnvrtpy kyhhyqqced haiklsmltk kaclhlnpgg tcvsigygya
+     1261 drasesivga iarqfkfsrv ckpkvsteet eilfvfigyd rkvrthnpyk lsstltniyt
+     1321 gshlheagca psyhvvrgdi anaeegvivn aansrgqpgg gvcgalykrf penfdlqpie
+     1381 vgksrlvkga akhiihavgp nfnkvseldg dkqlaeayes vakiindnhy rtvaipllst
+     1441 gifagnkdrl mqslnhllta ldttdadvai ycrdkkwett lkeviarrea veeiciseda
+     1501 svaepdaelv rvhpksslag rkgfstvdgk tfsylegtkf hqaakdvaei namwptvtea
+     1561 neqiclyilg esmssirskc pveeseastp pstlpclcih smtpervhrl kasrpeqitv
+     1621 cssfplpkyr itgvqkiqca qpilflpkvp ehihprrylp pqenreeeen svetlpespe
+     1681 iptvaaasei dtqteetmsi tsettvasfv pneivveaei hsdlmrfssd wsipqasdfd
+     1741 vdsvsvqgtv difnsalqed arsavssycs gikpipaprt vfiqppkprr rrrkskasts
+     1801 staplvtvss atsrsslvsn ppgrigvitr eefeafvaqq q
+//
