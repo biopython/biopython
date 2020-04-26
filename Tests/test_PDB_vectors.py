@@ -14,7 +14,9 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio.PDB.vectors import Vector
 from Bio.PDB import rotmat, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
@@ -207,7 +209,7 @@ class VectorTests(unittest.TestCase):
         )
         # confirm get id matrix to transform to/from coord space
         homog_id = numpy.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
-        mtxs = coord_space(point_set, True)
+        mtxs = coord_space(point_set[0], point_set[1], point_set[2], True)
         for i in range(2):
             self.assertTrue(numpy.array_equal(mtxs[i], homog_id))
         # test in every quadrant
@@ -223,7 +225,7 @@ class VectorTests(unittest.TestCase):
                         ps2[i] = tm.dot(point_set[i])
 
                     # confirm coord_space puts points back to axis alignment
-                    mtxs = coord_space(ps2, True)
+                    mtxs = coord_space(ps2[0], ps2[1], ps2[2], True)
                     rslt = [1, 2, 3]
                     for i in range(3):
                         rslt[i] = mtxs[0].dot(ps2[i])
