@@ -1067,8 +1067,10 @@ class IC_Residue(object):
     @staticmethod
     def atm241(coord: numpy.array) -> numpy.array:
         """Convert 1x3 cartesian coordinates to 4x1 homogeneous coordinates."""
-        arr41 = numpy.append(coord, [1])
-        return numpy.array(arr41, dtype=numpy.float64)[numpy.newaxis].transpose()
+        arr41 = numpy.empty(4)
+        arr41[0:3] = coord
+        arr41[3] = 1.0
+        return arr41.reshape((4, 1))
 
     def _add_atom(self, atm: Atom) -> None:
         """Filter Biopython Atom with accept_atoms; set atom_coords, ak_set.
