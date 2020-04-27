@@ -256,7 +256,7 @@ class PDBList:
         :param pdir: put the file in this directory (default: create a PDB-style directory tree)
         :type pdir: string
 
-        :param compress: if set to True, existing structure files will be gzip stored. Default: False
+        :param compress: if set to True, downloaded files will be gzip stored. Default: False
         :type compress: bool
 
         :return: filename
@@ -349,7 +349,7 @@ class PDBList:
             print("Desired structure doesn't exists")
         else:
             if compress:
-                pass
+                return filename
             else:
                 with gzip.open(filename, "rb") as gz:
                     with open(final_file, "wb") as out:
