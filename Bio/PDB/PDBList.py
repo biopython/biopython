@@ -328,10 +328,16 @@ class PDBList:
 
         # Skip download if the file already exists
         if not overwrite:
-            if os.path.exists(final_file):
-                if self._verbose:
-                    print("Structure exists: '%s' " % final_file)
-                return final_file
+            if compress:
+                if os.path.exists(filename):
+                    if self._verbose:
+                       print("Structure exists: '%s' " % filename)
+                    return filename
+            else:
+                if os.path.exists(final_file):
+                    if self._verbose:
+                        print("Structure exists: '%s' " % final_file)
+                    return final_file
 
         # Retrieve the file
         if self._verbose:
