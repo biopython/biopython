@@ -104,7 +104,8 @@ DKT = Tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
 EKT = Union[HKT, DKT]  # Edron Key Tuple
 BKT = Tuple["AtomKey", "AtomKey"]  # Bond Key Tuple
 
-HACS = Tuple[numpy.array, numpy.array, numpy.array]  # Hedron Atom Coord Set
+# HACS = Tuple[numpy.array, numpy.array, numpy.array]  # Hedron Atom Coord Set
+HACS = numpy.array  # Hedron Atom Coord Set
 DACS = Tuple[
     numpy.array, numpy.array, numpy.array, numpy.array
 ]  # Dihedron Atom Coord Set
@@ -2435,16 +2436,8 @@ class Hedron(Edron):
         # build hedron with a2 on +Z axis, a1 at origin,
         # a0 in -Z at angle n XZ plane
 
-        atoms: List[numpy.array] = [
-            numpy.zeros((4, 1), dtype=numpy.float64),
-            numpy.zeros((4, 1), dtype=numpy.float64),
-            numpy.zeros((4, 1), dtype=numpy.float64),
-            numpy.zeros((4, 1), dtype=numpy.float64),
-        ]
-        atoms[0][3][0] = 1.0
-        atoms[1][3][0] = 1.0
-        atoms[2][3][0] = 1.0
-        atoms[3][3][0] = 1.0
+        atoms: numpy.array = numpy.zeros((4, 4, 1), dtype=numpy.float64)
+        atoms[:, 3, 0] = 1.0
 
         # atomsR initialisation continues below
         atomsR: numpy.array = numpy.copy(atoms)
@@ -2462,7 +2455,7 @@ class Hedron(Edron):
         # (assume angle always obtuse, so a0 is in -Z)
         atoms[0][2][0] = cosSarN * self.len12
 
-        self.atoms = cast(HACS, tuple(atoms))
+        self.atoms = atoms  # cast(HACS, tuple(atoms))
 
         # same again but 'reversed' : a0 on Z axis, a1 at origin, a2 in -Z
 
@@ -2473,7 +2466,7 @@ class Hedron(Edron):
         # a2r Z is -(cos( sar ) * len23)
         atomsR[2][2][0] = cosSarN * self.len23
 
-        self.atomsR = cast(HACS, tuple(atomsR))
+        self.atomsR = atomsR  # cast(HACS, tuple(atomsR))
 
         self.atoms_updated = True
 
@@ -2725,35 +2718,15 @@ class Dihedron(Edron):
         else:
             rev, hedron1, hedron2 = self._set_hedra()
 
-        acount = 0
-        for a in hedron1.atoms:
-            if a is not None:
-                acount += 1
-        for a in hedron2.atoms:
-            if a is not None:
-                acount += 1
-        if 6 > acount:
-            raise MissingAtomError("dihedron: hedra missing atoms: " + str(self))
-
         if not hedron1.atoms_updated:
             hedron1.init_pos()
         if not hedron2.atoms_updated:
             hedron2.init_pos()
 
-        initial = []
-
         if not rev:
-            initial.append(hedron1.atoms[0].copy())
-            initial.append(hedron1.atoms[1].copy())
-            initial.append(hedron1.atoms[2].copy())
-
             a4_pre_rotation = hedron2.atomsR[2].copy()
             a4shift = hedron2.len12
         else:
-            initial.append(hedron1.atomsR[2].copy())
-            initial.append(hedron1.atomsR[1].copy())
-            initial.append(hedron1.atomsR[0].copy())
-
             a4_pre_rotation = hedron2.atoms[0].copy()
             a4shift = hedron2.len23
 
@@ -2763,10 +2736,28 @@ class Dihedron(Edron):
         a4_pre_rotation[2][0] += a4shift
 
         mrz = homog_rot_mtx(numpy.deg2rad(self.angle), "z")
-        # initial.append(mrz @ a4_pre_rotation)
-        initial.append(mrz.dot(a4_pre_rotation))
 
-        self.initial_coords = cast(DACS, tuple(initial))
+        if not rev:
+            self.initial_coords = numpy.array(
+                (
+                    hedron1.atoms[0],
+                    hedron1.atoms[1],
+                    hedron1.atoms[2],
+                    mrz.dot(a4_pre_rotation),
+                ),
+                copy=True,
+            )
+        else:
+            self.initial_coords = numpy.array(
+                (
+                    hedron1.atomsR[2],
+                    hedron1.atomsR[1],
+                    hedron1.atomsR[0],
+                    mrz.dot(a4_pre_rotation),
+                ),
+                copy=True,
+            )
+
         self.a4_pre_rotation = a4_pre_rotation
 
         self.atoms_updated = True
@@ -2832,7 +2823,7 @@ class Dihedron(Edron):
 
         atom_coords = self.ic_residue.atom_coords
         acs = cast(DACS, self.gen_acs(atom_coords))
-        # mt = coord_space(acs[:3])
+
         mt = coord_space(acs[0], acs[1], acs[2])[0]
         # do4 = mt @ acs[3]
         do4 = mt.dot(acs[3])
@@ -3231,17 +3222,18 @@ def set_accuracy_95(num: float) -> float:
     :param float num: input number
     :returns: float with specified accuracy
     """
+    # return round(num, 5)  # much slower
     return float("{:9.5f}".format(num))
 
 
-def set_accuracy_83(num: float) -> float:
-    """Reduce floating point accuracy to 8.3 (xxxxx.xxx).
-
-    Used by IC_Residue class, matches PDB output format.
-    :param float num: input number
-    :returns: float with specified accuracy
-    """
-    return float("{:8.3f}".format(num))
+# def set_accuracy_83(num: float) -> float:
+#    """Reduce floating point accuracy to 8.3 (xxxxx.xxx).
+#
+#    Used by IC_Residue class, matches PDB output format.
+#    :param float num: input number
+#    :returns: float with specified accuracy
+#    """
+#    return float("{:8.3f}".format(num))
 
 
 # internal coordinates construction Exceptions
