@@ -13,6 +13,7 @@ from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_nucleotide, generic_dna
 from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
+from Bio.SeqIO.FastaIO import fasta_title_parser_ncbi_auto, FastaNcbiIterator
 
 
 def title_to_ids(title):
@@ -136,31 +137,33 @@ class TitleFunctions(unittest.TestCase):
 
     def test_single_nucleic_files(self):
         """Test Fasta files containing a single nucleotide sequence."""
-        paths = ("Fasta/lupine.nu",
-                 "Fasta/elderberry.nu",
-                 "Fasta/phlox.nu",
-                 "Fasta/centaurea.nu",
-                 "Fasta/wisteria.nu",
-                 "Fasta/sweetpea.nu",
-                 "Fasta/lavender.nu",
-                 "Fasta/f001",
-                 )
+        paths = (
+            "Fasta/lupine.nu",
+            "Fasta/elderberry.nu",
+            "Fasta/phlox.nu",
+            "Fasta/centaurea.nu",
+            "Fasta/wisteria.nu",
+            "Fasta/sweetpea.nu",
+            "Fasta/lavender.nu",
+            "Fasta/f001",
+        )
         for path in paths:
             self.simple_check(path, generic_nucleotide)
 
     def test_multi_dna_files(self):
         """Test Fasta files containing multiple nucleotide sequences."""
-        paths = ("Quality/example.fasta", )
+        paths = ("Quality/example.fasta",)
         for path in paths:
             self.multi_check(path, generic_dna)
 
     def test_single_proteino_files(self):
         """Test Fasta files containing a single protein sequence."""
-        paths = ("Fasta/aster.pro",
-                 "Fasta/rosemary.pro",
-                 "Fasta/rose.pro",
-                 "Fasta/loveliesbleeding.pro",
-                 )
+        paths = (
+            "Fasta/aster.pro",
+            "Fasta/rosemary.pro",
+            "Fasta/rose.pro",
+            "Fasta/loveliesbleeding.pro",
+        )
         for path in paths:
             self.simple_check(path, generic_nucleotide)
 
@@ -230,6 +233,24 @@ class TestSimpleFastaParsers(unittest.TestCase):
             handle = StringIO(inp)
             with self.assertRaises(ValueError):
                 list(FastaTwoLineParser(handle))
+
+
+class TestNCBIFastaTitleParser(unittest.TestCase):
+    """Test NCBI title parsers.
+
+    According to the NCBI standard:
+    https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+    """
+
+    def test_fasta_title_parser_auto(self):
+        filename = "Fasta/ncbi_standard.pro"
+        dbxrefs_expected = [["EMBL:CAA12345.6", "GI:78"], ["GI:10", "PDB:1A2B"], [], []]
+        simple = FastaIterator(filename)
+        ncbi = FastaNcbiIterator(filename)
+        for rec_simple, rec_ncbi, dbxrefs in zip(simple, ncbi, dbxrefs_expected):
+            self.assertEqual(rec_simple.id, rec_ncbi.id)
+            self.assertEqual(rec_simple.description, rec_ncbi.description)
+            self.assertEqual(rec_ncbi.dbxrefs, dbxrefs)
 
 
 if __name__ == "__main__":

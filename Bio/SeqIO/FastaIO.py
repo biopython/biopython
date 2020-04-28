@@ -1,4 +1,5 @@
 # Copyright 2006-2017 by Peter Cock.  All rights reserved.
+# NCBI standard parser copyright 2020 by Tianyi Shi. All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -159,6 +160,76 @@ def FastaTwoLineParser(source):
             handle.close()
 
 
+# used by fasta_ncbi_parser()
+# based on https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+# those without a match in NCBI's or Uniprot's dbxref are commented out
+# NCBI's dbxref: https://www.ncbi.nlm.nih.gov/genbank/collab/db_xref/
+# Uniprot's dbxref: https://www.uniprot.org/docs/dbxref
+# RefSeq, Genbank & DDBJ not in NCBI's dbxref but in Uniprot's
+ncbi_identifiers = {
+    # "lcl": (('id',), "local"),
+    "bbs": (("id",), "GenInfo backbond seqid"),
+    "bbm": (("id",), "GenInfo import ID"),
+    "gb": (("id", "locus"), "GenBank"),  # Uniprot's dbxref only
+    "emb": (("id", "locus"), "EMBL"),  # Uniprot's dbxref only
+    "pir": (("id", "name"), "PIR"),
+    "sp": (("id", "name"), "UniProtKB/Swiss-Prot"),
+    # 'pat': (('country', 'patent', 'sequence'), 'patent'),
+    # 'pgp': (('country', 'application number', 'sequence'), 'pre-grant patent'),
+    "ref": (("id", "name"), "RefSeq"),  # Uniprot's dbxref only
+    # 'gnl': (('database', 'id'), "General database reference"),
+    "gi": (("id",), "GI"),
+    "dbj": (("id", "locus"), "DDBJ"),  # Uniprot's dbxref only
+    # 'prf': (('id', 'name'), 'PRF'),
+    "pdb": (("id", "chain"), "PDB"),
+    # 'tpg': (('id', 'name'), 'third-party GenBank'),
+    # 'tpd': (('id', 'name'), 'third-party DDBJ'),
+    "tr": (("id", "name"), "UniProtKB/TrEMBL"),
+    # 'gpp': (('id', 'name'), 'genome pipeline'),
+    # 'nat': (('id', 'name'), 'named annotation track')
+}
+
+
+def fasta_title_parser_ncbi_auto(title):
+    """Auto-parse FASTA title lines according to the NCBI schema.
+
+    see https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+
+    Arguments:
+     - title - title line as a stripped string without '>' parsed by SimpleFastaParser
+
+    >>> with open("Fasta/ncbi_standard.pro") as handle:
+    ...     for title, seq in SimpleFastaParser(handle):
+    ...         print(fasta_title_parser_ncbi_auto(title))
+    ...
+    ('emb|CAA12345.6||gi|78', 'fake protein seq @#$%^[]', ['EMBL:CAA12345.6', 'GI:78'])
+    ('pat|US|RE33188|1|gi|10|pdb|1A2B|C', 'fake @#$%^[]:?;', ['GI:10', 'PDB:1A2B'])
+    ('unsupportedIdentifier|3', 'title0', [])
+    ('title_without_identifiers', 'title_without_identifiers', [])
+
+    """
+    # used by fasta_ncbi_parser()
+    id, long_name, parsed_fields = "", "", []
+    if title:
+        title_split = title.split(" ", 1)
+        if len(title_split) == 2:
+            # parse xrefs only when they're present
+            xrefs, long_name = title_split
+            id = xrefs
+            fields = xrefs.split("|")
+            parsed_fields = []
+            for i, field, in enumerate(fields):
+                if field in ncbi_identifiers:
+                    parsed_fields.append(
+                        f"{ncbi_identifiers[fields[i]][1]}:{fields[i+1]}"
+                    )
+        else:
+            # if there's only one field; both id and long_name equal to this.
+            id = title
+            long_name = title
+    return id, long_name, parsed_fields
+
+
 def FastaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over Fasta records as SeqRecord objects.
 
@@ -243,6 +314,24 @@ def FastaTwoLineIterator(source, alphabet=single_letter_alphabet):
             first_word = ""
         yield SeqRecord(
             Seq(sequence, alphabet), id=first_word, name=first_word, description=title
+        )
+
+
+def FastaNcbiIterator(source, alphabet=single_letter_alphabet):
+    """Iterate over Fasta records as SeqRecord objects, with dbxrefs support.
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
+     - alphabet - optional alphabet
+
+     This first uses SimpleFastaParser to parse FASTA records into titles
+     and sequences, then it tries to parse database references (dbxrefs)
+     from title lines.
+    """
+    for title, sequence in SimpleFastaParser(source):
+        id, name, xrefs = fasta_title_parser_ncbi_auto(title)
+        yield SeqRecord(
+            Seq(sequence, alphabet), id=id, name=name, description=title, dbxrefs=xrefs
         )
 
 
