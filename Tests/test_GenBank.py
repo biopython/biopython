@@ -6664,8 +6664,10 @@ KEYWORDS    """
         )
 
     def test_malformed_structured_comment_parsing(self):
-        """The comment will be ignored if it is not read by the parser
-           AYW00820.1; Malformed key-value delimiter used. Should be " :: ", but the record uses ": "
+        """Test malformed structured comment gives warning.
+
+        The comment will be ignored if it is not read by the parser AYW00820.1;
+        Malformed key-value delimiter used. Should be " :: ", but the record uses ": "
         """
         path = "GenBank/invalid_structured_comment.gb"
 
