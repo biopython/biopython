@@ -6663,6 +6663,24 @@ KEYWORDS    """
             "coastal water [ENVO:00002150]",
         )
 
+    def test_malformed_structured_comment_parsing(self):
+        """Test malformed structured comment gives warning.
+
+        The comment will be ignored if it is not read by the parser AYW00820.1;
+        Malformed key-value delimiter used. Should be " :: ", but the record uses ": "
+        """
+        path = "GenBank/invalid_structured_comment.gb"
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(path, "genbank")
+            self.assertFalse(
+                "structured_comment" in record.annotations
+            )
+            self.assertTrue(
+                "Structured comment not parsed for AYW00820." in str(caught[0].message)
+            )
+
     def test_locus_line_topogoly(self):
         """Test if chromosome topology is conserved."""
         record = SeqIO.read("GenBank/DS830848.gb", "genbank")

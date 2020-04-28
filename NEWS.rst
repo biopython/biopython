@@ -49,6 +49,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Rob Miller
 - Sergio Valqui
+- Steve Bond
 - Sujan Dulal (first contribution)
 - Tianyi Shi (first contribution)
 
