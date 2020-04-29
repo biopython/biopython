@@ -120,11 +120,15 @@ def write_SCAD(
     # need to reset rnext and rprev in case MaxPeptideBond changed
     if not added_IC_Atoms:
         if "C" == entity.level:
+            if entity.internal_coord is not None:
+                entity.internal_coord.clear_ic()
             chnp = entity.internal_coord = IC_Chain(entity)
             chnp.link_residues()
             chnp.render_dihedra()
         else:
             for chn in entity.get_chains():
+                if chn.internal_coord is not None:
+                    chn.internal_coord.clear_ic()
                 chnp = chn.internal_coord = IC_Chain(chn)
                 chnp.link_residues()
                 chnp.render_dihedra()
