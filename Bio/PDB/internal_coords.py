@@ -545,6 +545,11 @@ class IC_Chain:
         ndx = 0
         chnStarted = False
         for ric in self.ordered_aa_ic_list:
+            if "O" not in ric.akc:
+                if ric.lc != "G" and ric.lc != "A":
+                    print(
+                        f"Unable to generate complete sidechain for {ric} {ric.lc} missing O atom"
+                    )
             resNdx[ric] = ndx
             if chnStarted:
                 fp.write("\n     ],")
@@ -563,37 +568,24 @@ class IC_Chain:
             # assemble with no start position, return transform matrices
             transformations = ric.assemble(transforms=True, resetLocation=True)
             ndx2 = 0
+            started = False
             for i in range(1 if backboneOnly else 2):
                 if i == 1:
+                    cma = "," if started else ""
                     fp.write(
-                        ",\n       // "
-                        + str(ric.residue.id)
-                        + " "
-                        + ric.lc
-                        + " sidechain\n"
+                        f"{cma}\n       // {str(ric.residue.id)} {ric.lc} sidechain\n"
                     )
                 started = False
                 for dk, d in sorted(ric.dihedra.items()):
-                    if (
-                        d.h2key in hedraNdx
-                        and transformations[d.id3] is not None
-                        and (
-                            (i == 0 and d.is_backbone())
-                            or (i == 1 and not d.is_backbone())
-                        )
+                    if d.h2key in hedraNdx and (
+                        (i == 0 and d.is_backbone()) or (i == 1 and not d.is_backbone())
                     ):
                         if started:
                             fp.write(",\n")
                         else:
-                            started = True
-                        fp.write("      ")
-                        IC_Chain._writeSCAD_dihed(
-                            fp, d, transformations, hedraNdx, hedraSet
-                        )
-                        dihedraNdx[dk] = ndx2
-                        hedraSet.add(d.h1key)
-                        hedraSet.add(d.h2key)
-                        ndx2 += 1
+                            print(
+                                f"Atom missing for {d.id3}-{d.id32}, OpenSCAD chain may be discontiguous"
+                            )
         fp.write("   ],")  # end of residue entry dihedra table
         fp.write("\n  ],\n")  # end of all dihedra table
 
@@ -1201,6 +1193,23 @@ class IC_Residue(object):
             elif h.dh_class == "CACO":
                 setattr(h, "hbond_2", True)
 
+    def default_startpos(self) -> Dict["AtomKey", numpy.array]:
+        """Generate default N-Ca-C coordinates to build this residue from."""
+        atomCoords = {}
+        dlist0 = [self.id3_dh_index.get(akl, None) for akl in sorted(self.NCaCKey)]
+        dlist1 = [d for d in dlist0 if d is not None]
+        # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
+        dlist = [val for sublist in dlist1 for val in sublist]
+        # dlist = self.id3_dh_index[NCaCKey]
+        for d in dlist:
+            for i, a in enumerate(d.aks):
+                atomCoords[a] = d.initial_coords[i]
+        if "O" not in self.akc and "CB" in self.akc:
+            # need CB coord if no O coord - handle alternate CB path
+            # but not clear how to do this for default position
+            pass
+        return atomCoords
+
     def get_startpos(self) -> Dict["AtomKey", numpy.array]:
         """Find N-Ca-C coordinates to build this residue from."""
         if 0 < len(self.rprev):
@@ -1278,31 +1287,22 @@ class IC_Residue(object):
         loop terminates (queue drains) as hedron keys which do not start any
         dihedra are removed without action
 
-        :param transforms: bool default False
-            - Option to return transformation matrices for each hedron instead
-            of coordinates.
-
         :param resetLocation: bool default False
             - Option to ignore start location and orient so N-Ca-C hedron
             at origin.
 
         :returns:
-            Homogeneous atom coords for residue in protein space relative to
-            previous residue **OR** table of transformation matrices if
-            **transforms** = True
+            Dict of AtomKey -> homogeneous atom coords for residue in protein space
+            relative to previous residue
 
         """
+        # debug statements below still useful, commented for performance
         # dbg = False
 
-        transformations = {}
         NCaCKey = sorted(self.NCaCKey)
 
         if not self.ak_set:
             return None  # give up now if no atoms to work with
-
-        if transforms:  # safety for scad output
-            for akl1 in NCaCKey:
-                transformations[akl1] = numpy.identity(4, dtype=numpy.float64)
 
         # order of these startLst entries matters
         startLst = self._split_akl((self.rak("C"), self.rak("CA"), self.rak("N")))
@@ -1310,24 +1310,21 @@ class IC_Residue(object):
             startLst.extend(
                 self._split_akl((self.rak("N"), self.rak("CA"), self.rak("CB")))
             )
-        startLst.extend(self._split_akl((self.rak("O"), self.rak("C"), self.rak("CA"))))
+        if "O" in self.akc:
+            startLst.extend(
+                self._split_akl((self.rak("O"), self.rak("C"), self.rak("CA")))
+            )
 
         startLst.extend(NCaCKey)
 
         q = deque(startLst)
+        resnum = self.rbase[0]
 
         # get initial coords from previous residue or IC_Chain info
         # or default coords
         if resetLocation:
             # use N-CA-C initial coords from creating dihedral
-            atomCoords = {}
-            dlist0 = [self.id3_dh_index[akl] for akl in NCaCKey]
-            # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
-            dlist = [val for sublist in dlist0 for val in sublist]
-            # dlist = self.id3_dh_index[NCaCKey]
-            for d in dlist:
-                for i, a in enumerate(d.aks):
-                    atomCoords[a] = d.initial_coords[i]
+            atomCoords = self.default_startpos()
         else:
             atomCoords = self.get_startpos()
 
@@ -1593,7 +1590,7 @@ class IC_Residue(object):
                 self._gen_edra((sC, nN, nCA))
                 self._gen_edra((nN, nCA, nC))  # tau i+1
 
-                # redundant next residue C-beta locator
+                # redundant next residue C-beta locator (alternate CB path)
                 # otherwise missing O will cause no sidechain
                 # not rn.rak so don't trigger missing CB for Gly
                 nCB = rn.akc.get("CB", None)
@@ -1716,7 +1713,10 @@ class IC_Residue(object):
                 if isinstance(akk, str) and akv.missing:
                     missing.append(akv)
             if missing:
-                print(f"chain {self.residue.parent.id} missing atom(s): {missing}")
+                chn = self.residue.parent
+                chn_id = chn.id
+                chn_len = len(chn.internal_coord.ordered_aa_ic_list)
+                print(f"chain {chn_id} len {chn_len} missing atom(s): {missing}")
 
     @staticmethod
     def _pdb_atom_string(atm: Atom) -> str:
