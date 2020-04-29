@@ -569,8 +569,13 @@ class IC_Chain:
                     )
                 started = False
                 for dk, d in sorted(ric.dihedra.items()):
-                    if d.h2key in hedraNdx and (
-                        (i == 0 and d.is_backbone()) or (i == 1 and not d.is_backbone())
+                    if (
+                        d.h2key in hedraNdx
+                        and transformations[d.id3] is not None
+                        and (
+                            (i == 0 and d.is_backbone())
+                            or (i == 1 and not d.is_backbone())
+                        )
                     ):
                         if started:
                             fp.write(",\n")
