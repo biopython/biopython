@@ -238,6 +238,11 @@ class IC_Chain:
                     return None
         return tooFar
 
+    def clear_ic(self):
+        """Clear residue internal_coord settings for this chain."""
+        for res in self.chain.get_residues():
+            res.internal_coord = None
+
     def _add_residue(
         self, res: "Residue", last_res: List, last_ord_res: List, verbose: bool = False
     ) -> bool:
