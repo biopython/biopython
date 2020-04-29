@@ -307,6 +307,7 @@ class IC_Chain:
         # ndx = 0
         last_res: List["IC_Residue"] = []
         last_ord_res: List["IC_Residue"] = []
+
         for res in self.chain.get_residues():
             # select only not hetero or accepted hetero
             if res.id[0] == " " or res.id[0] in IC_Residue.accept_resnames:
@@ -356,6 +357,9 @@ class IC_Chain:
             process
 
         """
+        for ric in self.ordered_aa_ic_list:
+            ric.clear_transforms()
+
         for ric in self.ordered_aa_ic_list:
             if not hasattr(ric, "NCaCKey"):
                 if verbose:
@@ -469,7 +473,7 @@ class IC_Chain:
 
     @staticmethod
     def _writeSCAD_dihed(
-        fp: TextIO, d: "Dihedron", transformations, hedraNdx: Dict, hedraSet: Set[EKT]
+        fp: TextIO, d: "Dihedron", hedraNdx: Dict, hedraSet: Set[EKT]
     ) -> None:
         fp.write(
             "[ {:9.5f}, {}, {}, {}, ".format(
@@ -487,8 +491,7 @@ class IC_Chain:
             )
         )
         fp.write("        ")
-        mtx = transformations[d.id3]
-        IC_Chain._write_mtx(fp, mtx)
+        IC_Chain._write_mtx(fp, d.rcst)
         fp.write(" ]")  # close residue array of dihedra entry
 
     def write_SCAD(self, fp: TextIO, backboneOnly: bool) -> None:
@@ -566,7 +569,8 @@ class IC_Chain:
             )
             ndx += 1
             # assemble with no start position, return transform matrices
-            transformations = ric.assemble(transforms=True, resetLocation=True)
+            ric.clear_transforms()
+            ric.assemble(resetLocation=True)
             ndx2 = 0
             started = False
             for i in range(1 if backboneOnly else 2):
@@ -580,8 +584,17 @@ class IC_Chain:
                     if d.h2key in hedraNdx and (
                         (i == 0 and d.is_backbone()) or (i == 1 and not d.is_backbone())
                     ):
-                        if started:
-                            fp.write(",\n")
+                        if d.rcst is not None:
+                            if started:
+                                fp.write(",\n")
+                            else:
+                                started = True
+                            fp.write("      ")
+                            IC_Chain._writeSCAD_dihed(fp, d, hedraNdx, hedraSet)
+                            dihedraNdx[dk] = ndx2
+                            hedraSet.add(d.h1key)
+                            hedraSet.add(d.h2key)
+                            ndx2 += 1
                         else:
                             print(
                                 f"Atom missing for {d.id3}-{d.id32}, OpenSCAD chain may be discontiguous"
@@ -803,7 +816,7 @@ class IC_Residue(object):
     -------
     applyMtx()
         multiply all IC_Residue atom_cords by passed matrix
-    assemble(atomCoordsIn, transforms, verbose)
+    assemble(atomCoordsIn, resetLocation, verbose)
         Compute atom coordinates for this residue from internal coordinates
     atm241(coord)
         Convert 1x3 cartesian coords to 4x1 homogeneous coords
@@ -1236,27 +1249,27 @@ class IC_Residue(object):
                 startPos = cast(Dict["AtomKey", numpy.array], sp)
 
         if startPos == {}:
-            # fallback: use N-CA-C initial coords from creating dihedral
-            startPos = {}
-            dlist0 = [self.id3_dh_index[akl2] for akl2 in sorted(self.NCaCKey)]
-            # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
-            dlist = [val for sublist in dlist0 for val in sublist]
-            # dlist = self.id3_dh_index[NCaCKey]
-            for d in dlist:
-                for i, a in enumerate(d.aks):
-                    startPos[a] = d.initial_coords[i]
+            startPos = self.default_startpos()
+
         return startPos
 
+    def clear_transforms(self):
+        """Set cst and rcst attributes to none before assemble()."""
+        for d in self.dihedra.values():
+            d.cst = None
+            d.rcst = None
+
     def assemble(
-        self,
-        transforms: bool = False,
-        resetLocation: bool = False,
-        verbose: bool = False,
+        self, resetLocation: bool = False, verbose: bool = False,
     ) -> Union[Dict["AtomKey", numpy.array], Dict[HKT, numpy.array], None]:
         """Compute atom coordinates for this residue from internal coordinates.
 
         Join dihedrons starting from N-CA-C and N-CA-CB hedrons, computing protein
         space coordinates for backbone and sidechain atoms
+
+        Sets forward and reverse transforms on each Dihedron to convert from
+        protein coordinates to dihedron space coordinates for first three
+        atoms (see coord_space())
 
         **Algorithm**
 
@@ -1347,7 +1360,6 @@ class IC_Residue(object):
                         # to missing input data
                         d_h2key = d.hedron2.aks
                         akl = d.aks
-
                         # if dbg:
                         #    print("    process", d, d_h2key, akl)
 
@@ -1358,25 +1370,26 @@ class IC_Residue(object):
                             q.appendleft(d_h2key)
                             # if dbg:
                             #    print("    4- already done, append left")
-                            if transforms and not (h1k in transformations):
-                                acs = [atomCoords[a] for a in akl[:3]]
+                            if d.rcst is None:  # missing transform
                                 # can happen for altloc atoms
-                                mt, transformations[h1k] = coord_space(
+                                # only needed for write_SCAD output
+                                acs = [atomCoords[a] for a in h1k]
+                                d.cst, d.rcst = coord_space(
                                     acs[0], acs[1], acs[2], True
                                 )
-                        elif 3 == acount:  # or need_transform:
+                        elif 3 == acount:
                             # if dbg:
                             #    print("    3- call coord_space")
-                            acs = [atomCoords[a] for a in akl[:3]]
-                            mt, mtr = coord_space(acs[0], acs[1], acs[2], True)
-                            if transforms:
-                                transformations[h1k] = mtr
+
+                            acs = [atomCoords[a] for a in h1k]
+                            d.cst, d.rcst = coord_space(acs[0], acs[1], acs[2], True)
+
                             # if dbg:
                             #    print(
                             #        "        initial_coords[3]=",
                             #        d.initial_coords[3].transpose(),
                             #    )
-                            acak3 = mtr.dot(d.initial_coords[3])
+                            acak3 = d.rcst.dot(d.initial_coords[3])
                             # if dbg:
                             #    print("        acak3=", acak3.transpose())
 
@@ -1407,10 +1420,7 @@ class IC_Residue(object):
                             print("no initial coords for", d)
                         # pass
         # print('coord_space returning')
-        if transforms:
-            return transformations
-        else:
-            return atomCoords
+        return atomCoords
 
     def _split_akl(
         self,
@@ -1791,14 +1801,19 @@ class IC_Residue(object):
         if chainid is None:
             chainid = "A"
         s += IC_Residue._residue_string(self.residue)
-        if 0 == len(self.rprev) and hasattr(self, "NCaCKey"):
+
+        if (
+            0 == len(self.rprev)
+            and hasattr(self, "NCaCKey")
+            and self.NCaCKey is not None
+        ):
             NCaChedron = self.pick_angle(self.NCaCKey[0])  # first tau
             if NCaChedron is not None and NCaChedron.atoms_updated:
                 try:
                     ts = IC_Residue._pdb_atom_string(self.residue["N"])
                     ts += IC_Residue._pdb_atom_string(self.residue["CA"])
                     ts += IC_Residue._pdb_atom_string(self.residue["C"])
-                    s += ts  # only if no exception, have all 3 atoms
+                    s += ts  # only if no exception: have all 3 atoms
                 except KeyError:
                     pass
 
@@ -2169,8 +2184,8 @@ class Edron(object):
     id: str
         ':'-joined string of AtomKeys for this di/hedron
     atoms_updated: bool
-        indicates hedron local atom_coords reflect current di/hedron angle and
-        length values in hedron local coordinate space
+        indicates di/hedron local atom_coords reflect current di/hedron
+        angle and length values in hedron local coordinate space
     dh_class: str
         sequence of atoms (no position or residue) comprising di/hedron
         for statistics
@@ -2609,6 +2624,10 @@ class Dihedron(Edron):
     reverse: bool
         Indicates order of atoms in dihedron is reversed from order of atoms
         in hedra (configured by _set_hedra())
+    cst, rcst: numpy array [4][4]
+        transforms to and from coordinate space defined by first hedron.
+        set by IC_Residue.assemble().  defined by id3 order NOT h1key order
+        (atoms may be reversed between these two)
 
     Methods
     -------
@@ -2649,6 +2668,11 @@ class Dihedron(Edron):
         self.ic_residue: IC_Residue
         # order of atoms in dihedron is reversed from order of atoms in hedra
         self.reverse = False
+
+        # coordinate space transform matrices
+        # defined by id3 order NOT h1key order (may be reversed)
+        # self.cst = None  # protein coords to 1st hedron coord space
+        # self.rcst = None  # reverse = 1st hedron coords back to protein coords
 
         if "dihedral" in kwargs:
             self.angle = float(kwargs["dihedral"])
