@@ -382,7 +382,7 @@ class IC_Chain:
     def coords_to_structure(self) -> None:
         """Promote all ic atom_coords to Biopython Residue/Atom coords.
 
-        IC atom_coords are homogeneous [4][1], Biopython atom coords are XYZ [3].
+        IC atom_coords are homogeneous [4], Biopython atom coords are XYZ [3].
         """
         self.ndx = 0
         for res in self.chain.get_residues():
@@ -749,8 +749,8 @@ class IC_Residue(object):
     rprev, rnext: lists of IC_Residue objects
         References to adjacent (bonded, not missing, possibly disordered)
         residues in chain
-    atom_coords: AtomKey indexed dict of numpy [4][1] arrays
-        Local copy of atom homogeneous coordinates [4][1] for work
+    atom_coords: AtomKey indexed dict of numpy [4] arrays
+        Local copy of atom homogeneous coordinates [4] for work
         distinct from Bopython Residue/Atom values
     alt_ids: list of char
         AltLoc IDs from PDB file
@@ -884,7 +884,7 @@ class IC_Residue(object):
         # reference to adjacent residues in chain
         self.rprev: List[IC_Residue] = []
         self.rnext: List[IC_Residue] = []
-        # local copy, homogeneous coordinates for atoms, numpy [4][1]
+        # local copy, homogeneous coordinates for atoms, numpy [4]
         # generated from dihedra include some i+1 atoms
         # or initialised here from parent residue if loaded from coordinates
         self.atom_coords: Dict["AtomKey", numpy.array] = {}
@@ -1086,7 +1086,7 @@ class IC_Residue(object):
         arr41 = numpy.empty(4)
         arr41[0:3] = coord
         arr41[3] = 1.0
-        return arr41.reshape((4, 1))
+        return arr41
 
     def _add_atom(self, atm: Atom) -> None:
         """Filter Biopython Atom with accept_atoms; set atom_coords, ak_set.
@@ -1547,14 +1547,14 @@ class IC_Residue(object):
             tlst = lst
 
         hl = self._split_akl(tlst)  # expand tlst with any altlocs
+        # returns list of tuples
 
-        for nlst in hl:
+        for tnlst in hl:
             # do not add edron if split_akl() made something shorter
-            if len(nlst) == lenLst:
+            if len(tnlst) == lenLst:
                 # if edron already exists, then update not replace with new
-                tnlst = tuple(nlst)
                 if tnlst not in dct:
-                    dct[tnlst] = obj(nlst)  # type: ignore
+                    dct[tnlst] = obj(tnlst)  # type: ignore
                 dct[tnlst].atoms_updated = False  # type: ignore
 
     def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
@@ -1882,7 +1882,7 @@ class IC_Residue(object):
             ):
 
                 ac = self.atom_coords[ak]
-                atm_coords = ac[:3].transpose()[0]
+                atm_coords = ac[:3]
                 akl = ak.akl
                 atm, altloc = akl[atmNdx], akl[altlocNdx]
 
@@ -2397,9 +2397,9 @@ class Hedron(Edron):
         angle (degrees) formed by 3 atoms
     len23: float
         distance between 2nd and 3rd atoms
-    atoms: tuple[3] of numpy arrays [4][1]
+    atoms: tuple[3] of numpy arrays [4]
         3 atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
-    atomsR: tuple[3] of numpy arrays [4][1]
+    atomsR: tuple[3] of numpy arrays [4]
         atoms reversed, 1st on +Z, 2nd at origin, 3rd on XZ plane
 
     Methods
@@ -2461,8 +2461,8 @@ class Hedron(Edron):
         # build hedron with a2 on +Z axis, a1 at origin,
         # a0 in -Z at angle n XZ plane
 
-        atoms: numpy.array = numpy.zeros((4, 4, 1), dtype=numpy.float64)
-        atoms[:, 3, 0] = 1.0
+        atoms: numpy.array = numpy.zeros((4, 4), dtype=numpy.float64)
+        atoms[:, 3] = 1.0
 
         # atomsR initialisation continues below
         atomsR: numpy.array = numpy.copy(atoms)
@@ -2473,23 +2473,23 @@ class Hedron(Edron):
         cosSarN = -numpy.cos(sar)
 
         # a2 is len3 up from a2 on Z axis, X=Y=0
-        atoms[2][2][0] = self.len23
+        atoms[2][2] = self.len23
         # a0 X is sin( sar ) * len12
-        atoms[0][0][0] = sinSar * self.len12
+        atoms[0][0] = sinSar * self.len12
         # a0 Z is -(cos( sar ) * len12)
         # (assume angle always obtuse, so a0 is in -Z)
-        atoms[0][2][0] = cosSarN * self.len12
+        atoms[0][2] = cosSarN * self.len12
 
         self.atoms = atoms  # cast(HACS, tuple(atoms))
 
         # same again but 'reversed' : a0 on Z axis, a1 at origin, a2 in -Z
 
         # a0r is len12 up from a1 on Z axis, X=Y=0
-        atomsR[0][2][0] = self.len12
+        atomsR[0][2] = self.len12
         # a2r X is sin( sar ) * len23
-        atomsR[2][0][0] = sinSar * self.len23
+        atomsR[2][0] = sinSar * self.len23
         # a2r Z is -(cos( sar ) * len23)
-        atomsR[2][2][0] = cosSarN * self.len23
+        atomsR[2][2] = cosSarN * self.len23
 
         self.atomsR = atomsR  # cast(HACS, tuple(atomsR))
 
@@ -2614,10 +2614,10 @@ class Dihedron(Edron):
         Hash keys for hedron1 and hedron2
     id3,id32: tuples of AtomKeys
         First 3 and second 3 atoms comprising dihedron; hxkey orders may differ
-    initial_coords: tuple[4] of numpy arrays [4][1]
+    initial_coords: tuple[4] of numpy arrays [4]
         Local atom coords for 4 atoms, [0] on XZ plane, [1] at origin,
         [2] on +Z, [3] rotated by dihedral
-    a4_pre_rotation: numpy array [4][1]
+    a4_pre_rotation: numpy array [4]
         4th atom of dihedral aligned to XZ plane (angle not applied)
     IC_Residue: IC_Residue object reference
         IC_Residue object containing this dihedral
@@ -2765,9 +2765,9 @@ class Dihedron(Edron):
             a4shift = hedron2.len23
 
         # a4 to +Z
-        a4_pre_rotation[2][0] *= -1
+        a4_pre_rotation[2] *= -1
         # hedron2 shift up so a2 at 0,0,0
-        a4_pre_rotation[2][0] += a4shift
+        a4_pre_rotation[2] += a4shift
 
         mrz = homog_rot_mtx(numpy.deg2rad(self.angle), "z")
 
@@ -2818,7 +2818,7 @@ class Dihedron(Edron):
     def _get_dadad(acs: DACS) -> Tuple[float, float, float, float, float]:
         """Get distance, angle, distance, angle, distance for 4 atoms.
 
-        :param acs: list[4] of numpy [4][1] array
+        :param acs: list[4] of numpy [4] array
             Atom coordinates
         """
         a0 = acs[0].squeeze()
@@ -2862,7 +2862,7 @@ class Dihedron(Edron):
         # do4 = mt @ acs[3]
         do4 = mt.dot(acs[3])
 
-        dh1r = numpy.rad2deg(numpy.arctan2(do4[1][0], do4[0][0]))
+        dh1r = numpy.rad2deg(numpy.arctan2(do4[1], do4[0]))
 
         self.angle = dh1r
 
@@ -2870,10 +2870,10 @@ class Dihedron(Edron):
         # for testing
         bp_dihed = numpy.rad2deg(
             calc_dihedral(
-                Vector(acs[0][0][0], acs[0][1][0], acs[0][2][0]),
-                Vector(acs[1][0][0], acs[1][1][0], acs[1][2][0]),
-                Vector(acs[2][0][0], acs[2][1][0], acs[2][2][0]),
-                Vector(acs[3][0][0], acs[3][1][0], acs[3][2][0]),
+                Vector(acs[0][0], acs[0][1], acs[0][2]),
+                Vector(acs[1][0], acs[1][1], acs[1][2]),
+                Vector(acs[2][0], acs[2][1], acs[2][2]),
+                Vector(acs[3][0], acs[3][1], acs[3][2]),
             )
         )
         print("dihed: ", dh1r, " ", bp_dihed)
