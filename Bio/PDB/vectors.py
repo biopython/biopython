@@ -509,8 +509,8 @@ def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
     r = numpy.linalg.norm(xyz)
     if 0 == r:
         return (0, 0, 0)
-    azimuth = _get_azimuth(xyz[0][0], xyz[1][0])
-    polar_angle = numpy.arccos(xyz[2][0] / r)
+    azimuth = _get_azimuth(xyz[0], xyz[1])
+    polar_angle = numpy.arccos(xyz[2] / r)
 
     return (r, azimuth, polar_angle)
 
@@ -556,7 +556,7 @@ def coord_space(
 
     # tx acs[1] to origin
     # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
-    set_homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0], tm)
+    set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
 
     # directly translate a2 using a1
     p = a2 - a1
@@ -584,7 +584,7 @@ def coord_space(
     # need azimuth of translated a0
     # sc2 = get_spherical_coordinates(p)
     # print(sc2)
-    azimuth2 = _get_azimuth(p[0][0], p[1][0])
+    azimuth2 = _get_azimuth(p[0], p[1])
 
     # rotate a0 -azimuth2 about Z to align with X
     # mrz2 = homog_rot_mtx(-azimuth2, "z")
@@ -609,7 +609,7 @@ def coord_space(
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
     # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
-    set_homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0], tm)
+    set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
