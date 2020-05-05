@@ -198,7 +198,9 @@ See plot in interactive mode:
 from pandas import DataFrame
 from typing import List
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqAnalysis import SeqDatabase, SeqAnalyzer, SeqVisualizer
+from Bio.SeqAnalysis.SeqDatabase import SeqDatabase
+from Bio.SeqAnalysis.SeqAnalyzer import SeqAnalyzer
+from Bio.SeqAnalysis.SeqVisualizer import SeqVisualizer
 
 
 def database(sequences_ids: List[str]) -> SeqDatabase:
