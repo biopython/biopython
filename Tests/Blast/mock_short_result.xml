@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+
+<!-- This is a mock file mimicking a qblast response for our mock tests -->
+
+<BlastOutput>
+ <BlastOutput_query-ID>Query_59049</BlastOutput_query-ID>
+<BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>200000</Parameters_expect>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+<Iteration_hits>
+ <Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>ref|WP_087874572.1|</Hit_id>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gb|ERN16210.1|</Hit_id>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gb|MQL97015.1|</Hit_id>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gb|AQK72962.1|</Hit_id>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gb|ACN33860.1|</Hit_id>
+</Hit>
+</Iteration_hits>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

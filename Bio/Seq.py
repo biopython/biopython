@@ -151,21 +151,12 @@ class Seq:
         return self._data
 
     def __hash__(self):
-        """Hash for comparison.
+        """Hash of the sequence as a string (ignoring alphabet) for comparison.
 
-        See Seq object comparison documentation - this has changed
-        from past versions of Biopython!
+        See Seq object comparison documentation (method ``__eq__`` in
+        particular) as this has changed in Biopython 1.65. Older versions
+        would hash on object identity.
         """
-        # TODO - remove this warning in a future release
-        warnings.warn(
-            "Biopython Seq objects now use string comparison. "
-            "Older versions of Biopython used object comparison. "
-            "During this transition, please use hash(id(my_seq)) "
-            "or my_dict[id(my_seq)] if you want the old behaviour, "
-            "or use hash(str(my_seq)) or my_dict[str(my_seq)] for "
-            "the new string hashing behaviour.",
-            BiopythonWarning,
-        )
         return hash(str(self))
 
     def __eq__(self, other):
@@ -179,7 +170,8 @@ class Seq:
         Note that incompatible alphabets (e.g. DNA to RNA) will trigger a
         warning.
 
-        During this transition period, please just do explicit comparisons:
+        If you still need to support releases prior to Biopython 1.65, please
+        just do explicit comparisons:
 
         >>> from Bio.Seq import Seq
         >>> seq1 = Seq("ACGT")

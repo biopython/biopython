@@ -155,8 +155,8 @@ class QueryResultCases(unittest.TestCase):
         # contains should work with hit ids or hit objects
         self.assertIn("hit1", self.qresult)
         self.assertIn(hit21, self.qresult)
-        self.assertFalse("hit5" in self.qresult)
-        self.assertFalse(hit41 in self.qresult)
+        self.assertNotIn("hit5", self.qresult)
+        self.assertNotIn(hit41, self.qresult)
 
     def test_contains_alt(self):
         """Test QueryResult.__contains__, with alternative IDs."""
@@ -516,7 +516,7 @@ class QueryResultCases(unittest.TestCase):
         filter_func = lambda hit: len(hit) > 50  # noqa: E731
         filtered = self.qresult.hit_filter(filter_func)
         self.assertEqual(0, len(filtered))
-        self.assertTrue(isinstance(filtered, QueryResult))
+        self.assertIsInstance(filtered, QueryResult)
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual("refseq_rna", filtered.target)
 
@@ -589,7 +589,7 @@ class QueryResultCases(unittest.TestCase):
         filter_func = lambda hsp: len(hsp) > 50  # noqa: E731
         filtered = self.qresult.hsp_filter(filter_func)
         self.assertEqual(0, len(filtered))
-        self.assertTrue(isinstance(filtered, QueryResult))
+        self.assertIsInstance(filtered, QueryResult)
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual("refseq_rna", filtered.target)
 
@@ -1089,7 +1089,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
     def test_alignment(self):
         """Test HSP.alignment property."""
         aln = self.hsp.aln
-        self.assertTrue(isinstance(aln, MultipleSeqAlignment))
+        self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(2, len(aln))
         self.assertTrue("ATCAGT", str(aln[0].seq))
         self.assertTrue("AT-ACT", str(aln[1].seq))
@@ -1350,9 +1350,9 @@ class HSPFragmentCases(unittest.TestCase):
         hit_seq = SeqRecord(Seq("ATGCTAGCTACA"))
         query_seq = SeqRecord(Seq("ATG--AGCTAGG"))
         hsp = HSPFragment("hit_id", "query_id", hit_seq, query_seq)
-        self.assertTrue(isinstance(hsp.query, SeqRecord))
-        self.assertTrue(isinstance(hsp.hit, SeqRecord))
-        self.assertTrue(isinstance(hsp.aln, MultipleSeqAlignment))
+        self.assertIsInstance(hsp.query, SeqRecord)
+        self.assertIsInstance(hsp.hit, SeqRecord)
+        self.assertIsInstance(hsp.aln, MultipleSeqAlignment)
 
     def test_init_wrong_seqtypes(self):
         """Test HSPFragment.__init__, wrong sequence argument types."""
@@ -1366,17 +1366,17 @@ class HSPFragmentCases(unittest.TestCase):
     def test_seqmodel(self):
         """Test HSPFragment sequence attribute types and default values."""
         # check hit
-        self.assertTrue(isinstance(self.fragment.hit, SeqRecord))
+        self.assertIsInstance(self.fragment.hit, SeqRecord)
         self.assertEqual("<unknown description>", self.fragment.hit.description)
         self.assertEqual("aligned hit sequence", self.fragment.hit.name)
         self.assertEqual(single_letter_alphabet, self.fragment.hit.seq.alphabet)
         # check query
-        self.assertTrue(isinstance(self.fragment.query, SeqRecord))
+        self.assertIsInstance(self.fragment.query, SeqRecord)
         self.assertEqual("<unknown description>", self.fragment.query.description)
         self.assertEqual("aligned query sequence", self.fragment.query.name)
         self.assertEqual(single_letter_alphabet, self.fragment.query.seq.alphabet)
         # check alignment
-        self.assertTrue(isinstance(self.fragment.aln, MultipleSeqAlignment))
+        self.assertIsInstance(self.fragment.aln, MultipleSeqAlignment)
         self.assertEqual(single_letter_alphabet, self.fragment.aln._alphabet)
 
     def test_alphabet_no_seq(self):
@@ -1422,7 +1422,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment.__getitem__."""
         # getitem is supported when alignment is present
         sliced_fragment = self.fragment[:5]
-        self.assertTrue(isinstance(sliced_fragment, HSPFragment))
+        self.assertIsInstance(sliced_fragment, HSPFragment)
         self.assertEqual(5, len(sliced_fragment))
         self.assertEqual("ATGCT", str(sliced_fragment.hit.seq))
         self.assertEqual("ATG--", str(sliced_fragment.query.seq))

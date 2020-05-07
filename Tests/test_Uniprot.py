@@ -28,7 +28,7 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(seq_record.id, "Q91G55")
@@ -81,7 +81,7 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test general record entries
         self.assertEqual(seq_record.id, "O44185")
@@ -271,7 +271,7 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test ProteinExistence (the numerical value describing the evidence for the existence of the protein)
         self.assertEqual(seq_record.annotations["protein_existence"], 1)
@@ -290,7 +290,7 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "swiss")
 
-        self.assertTrue(isinstance(seq_record, SeqRecord))
+        self.assertIsInstance(seq_record, SeqRecord)
 
         # test Sequence version
         self.assertEqual(seq_record.annotations["sequence_version"], 34)

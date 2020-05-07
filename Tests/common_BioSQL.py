@@ -447,7 +447,7 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_seq_record(self):
         """Make sure SeqRecords from BioSQL implement the right interface."""
         test_record = self.item
-        self.assertTrue(isinstance(test_record.seq, BioSeq.DBSeq))
+        self.assertIsInstance(test_record.seq, BioSeq.DBSeq)
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene")
@@ -455,9 +455,9 @@ class SeqInterfaceTest(unittest.TestCase):
         # XXX should do something with annotations once they are like
         # a dictionary
         for feature in test_record.features:
-            self.assertTrue(isinstance(feature, SeqFeature))
+            self.assertIsInstance(feature, SeqFeature)
         # shouldn't cause any errors!
-        self.assertTrue(isinstance(str(test_record), str))
+        self.assertIsInstance(str(test_record), str)
         # Confirm can delete annotations etc to test these properties
         del test_record.annotations
         del test_record.dbxrefs
@@ -468,7 +468,7 @@ class SeqInterfaceTest(unittest.TestCase):
         """Make sure Seqs from BioSQL implement the right interface."""
         test_seq = self.item.seq
         alphabet = test_seq.alphabet
-        self.assertTrue(isinstance(alphabet, Alphabet.Alphabet))
+        self.assertIsInstance(alphabet, Alphabet.Alphabet)
         data = test_seq.data
         self.assertEqual(type(data), type(""))
         string_rep = str(test_seq)
@@ -490,12 +490,12 @@ class SeqInterfaceTest(unittest.TestCase):
         other = test_seq.toseq()
         self.assertEqual(str(test_seq), str(other))
         self.assertEqual(test_seq.alphabet, other.alphabet)
-        self.assertTrue(isinstance(other, Seq))
+        self.assertIsInstance(other, Seq)
 
         other = test_seq.tomutable()
         self.assertEqual(str(test_seq), str(other))
         self.assertEqual(test_seq.alphabet, other.alphabet)
-        self.assertTrue(isinstance(other, MutableSeq))
+        self.assertIsInstance(other, MutableSeq)
 
     def test_addition(self):
         """Check can add DBSeq objects together."""
@@ -506,7 +506,7 @@ class SeqInterfaceTest(unittest.TestCase):
                       test_seq]:
             test = test_seq + other
             self.assertEqual(str(test), str(test_seq) + str(other))
-            self.assertTrue(isinstance(test, Seq))
+            self.assertIsInstance(test, Seq)
             test = other + test_seq
             self.assertEqual(str(test), str(other) + str(test_seq))
 
@@ -516,22 +516,22 @@ class SeqInterfaceTest(unittest.TestCase):
         alphabet = test_seq.alphabet
         tripled = test_seq * 3
         # Test DBSeq.__mul__
-        self.assertTrue(isinstance(tripled, Seq))
-        self.assertFalse(isinstance(tripled, BioSeq.DBSeq))
+        self.assertIsInstance(tripled, Seq)
+        self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(test_seq) * 3)
         self.assertEqual(tripled.alphabet, alphabet)
         # Test DBSeq.__rmul__
         tripled = 3 * test_seq
-        self.assertTrue(isinstance(tripled, Seq))
-        self.assertFalse(isinstance(tripled, BioSeq.DBSeq))
+        self.assertIsInstance(tripled, Seq)
+        self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(test_seq) * 3)
         self.assertEqual(tripled.alphabet, alphabet)
         # Test DBSeq.__imul__
         original = self.item.seq
         tripled = test_seq
         tripled *= 3
-        self.assertTrue(isinstance(tripled, Seq))
-        self.assertFalse(isinstance(tripled, BioSeq.DBSeq))
+        self.assertIsInstance(tripled, Seq)
+        self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(original) * 3)
         self.assertEqual(tripled.alphabet, alphabet)
 
@@ -539,7 +539,7 @@ class SeqInterfaceTest(unittest.TestCase):
         """Check that slices of sequences are retrieved properly."""
         test_seq = self.item.seq
         new_seq = test_seq[:10]
-        self.assertTrue(isinstance(new_seq, BioSeq.DBSeq))
+        self.assertIsInstance(new_seq, BioSeq.DBSeq)
         # simple slicing
         self.assertEqual(str(test_seq[:5]), "ATTTG")
         self.assertEqual(str(test_seq[0:5]), "ATTTG")
@@ -555,7 +555,7 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_record_slicing(self):
         """Check that slices of DBSeqRecord are retrieved properly."""
         new_rec = self.item[400:]
-        self.assertTrue(isinstance(new_rec, SeqRecord))
+        self.assertIsInstance(new_rec, SeqRecord)
         self.assertEqual(len(new_rec), 480)
         self.assertEqual(len(new_rec.features), 5)
 
@@ -987,14 +987,14 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(test_record.name, "ATCOR66M")
         self.assertEqual(test_record.id, "X55053.1")
         self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA")
-        self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
+        self.assertIsInstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
         self.assertEqual(str(test_record.seq[:10]), "AACAAAACAC")
 
         test_record = self.db.lookup(accession="X62281")
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.id, "X62281.1")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene")
-        self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
+        self.assertIsInstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
         self.assertEqual(str(test_record.seq[:10]), "ATTTGGCCTA")
 
     def test_seq_feature(self):
@@ -1214,8 +1214,8 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
         dbrecord = self.db.lookup(primary_id=id)
         for feature in dbrecord.features:
             if feature.type == "signal peptide":
-                self.assertTrue(isinstance(feature.location.end, UnknownPosition))
+                self.assertIsInstance(feature.location.end, UnknownPosition)
             elif feature.type == "chain":
-                self.assertTrue(isinstance(feature.location.start, UnknownPosition))
+                self.assertIsInstance(feature.location.start, UnknownPosition)
             else:
-                self.assertTrue(isinstance(feature.location.start, ExactPosition))
+                self.assertIsInstance(feature.location.start, ExactPosition)

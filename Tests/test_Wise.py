@@ -28,14 +28,18 @@ class TestWiseDryRun(unittest.TestCase):
         Wise.align(["dnal"], ("seq1.fna", "seq2.fna"), kbyte=100000, dry_run=True)
         # If test output is redirected to a file, the wrapper adds -quiet
         output = sys.stdout.getvalue().replace(" -quiet ", " ")
-        self.assertTrue(output.startswith("dnal -kbyte 100000 seq1.fna seq2.fna"), output[:200])
+        self.assertTrue(
+            output.startswith("dnal -kbyte 100000 seq1.fna seq2.fna"), output[:200]
+        )
 
     def test_psw(self):
         """Call psw, and do a trivial check on its output."""
         Wise.align(["psw"], ("seq1.faa", "seq2.faa"), dry_run=True, kbyte=4)
         # If test output is redirected to a file, the wrapper adds -quiet
         output = sys.stdout.getvalue().replace(" -quiet ", " ")
-        self.assertTrue(output.startswith("psw -kbyte 4 seq1.faa seq2.faa"), output[:200])
+        self.assertTrue(
+            output.startswith("psw -kbyte 4 seq1.faa seq2.faa"), output[:200]
+        )
 
     def tearDown(self):
         sys.stdout = self.old_stdout
@@ -44,15 +48,27 @@ class TestWiseDryRun(unittest.TestCase):
 class TestWise(unittest.TestCase):
     def test_align(self):
         """Call dnal with optional arguments, and do a trivial check on the output."""
-        temp_file = Wise.align(["dnal"], ("Wise/human_114_g01_exons.fna_01", "Wise/human_114_g02_exons.fna_01"), kbyte=100000, force_type="DNA", quiet=True)
+        temp_file = Wise.align(
+            ["dnal"],
+            ("Wise/human_114_g01_exons.fna_01", "Wise/human_114_g02_exons.fna_01"),
+            kbyte=100000,
+            force_type="DNA",
+            quiet=True,
+        )
         line = temp_file.readline().rstrip()
         if line == "Score 114":
             # Wise 2.4.1 includes a score line, even in quiet mode, ignore this
             line = temp_file.readline().rstrip()
-        if line == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAGTGGGGTCCC":
+        if (
+            line
+            == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAGTGGGGTCCC"
+        ):
             # This is what we expect from wise 2.2.0 (and earlier)
             pass
-        elif line == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAG-TGGGGTCC":
+        elif (
+            line
+            == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAG-TGGGGTCC"
+        ):
             # This is what we expect from wise 2.4.1
             pass
         else:

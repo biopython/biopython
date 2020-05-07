@@ -80,6 +80,18 @@ class ParseReal(unittest.TestCase):
             },
         )
 
+        info = _parse_remark_465("1  DG B     9")
+        self.assertEqual(
+            info,
+            {
+                "model": 1,
+                "res_name": "DG",
+                "chain": "B",
+                "ssseq": 9,
+                "insertion": None,
+            },
+        )
+
     def test_parse_header_line(self):
         """Unit test for parsing and converting fields in HEADER record."""
         header = parse_pdb_header("PDB/header.pdb")

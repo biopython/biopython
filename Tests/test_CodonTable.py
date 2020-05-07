@@ -92,7 +92,7 @@ class BasicSanityTests(unittest.TestCase):
     def test_ambiguous_tables(self):
         """Check if all IDs and all names are present in ambiguous tables."""
         for key, val in generic_by_name.items():
-            self.assertTrue(key in ambiguous_generic_by_name[key].names)
+            self.assertIn(key, ambiguous_generic_by_name[key].names)
         for key, val in generic_by_id.items():
             self.assertEqual(ambiguous_generic_by_id[key].id, key)
 

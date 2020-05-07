@@ -5803,6 +5803,17 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             records = Entrez.parse(handle)
             self.assertRaises(Parser.NotXMLError, next, records)
 
+    def test_xml_without_definition(self):
+        """Test error handling for a missing DTD or XML Schema."""
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db="biosample", id="3502652", rettype="xml")
+        with open("Entrez/biosample.xml", "rb") as handle:
+            self.assertRaises(ValueError, Entrez.read, handle)
+        # Test if the error is also raised with Entrez.parse
+        with open("Entrez/biosample.xml", "rb") as handle:
+            records = Entrez.parse(handle)
+            self.assertRaises(ValueError, next, records)
+
     def test_truncated_xml(self):
         """Test error handling for a truncated XML declaration."""
         from Bio.Entrez.Parser import CorruptedXMLError

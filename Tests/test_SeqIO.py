@@ -23,6 +23,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
+from Bio import StreamModeError
 
 
 # TODO - Check that desired warnings are issued. Used to do that by capturing
@@ -72,6 +73,99 @@ for format in sorted(AlignIO._FormatToWriter):
         test_write_read_alignment_formats.append(format)
 test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
+
+
+class SeqIOTestBaseClass(unittest.TestCase):
+    """Base class for Bio.SeqIO unit tests."""
+
+    modes = {}
+
+    @classmethod
+    def get_mode(cls, fmt):
+        """Determine if file mode should be text ("t") or binary ("b") based on format."""
+        mode = cls.modes.get(fmt)
+        if mode is not None:
+            return mode
+        for mode, stream in (("t", StringIO()), ("b", BytesIO())):
+            try:
+                SeqIO.read(stream, fmt)
+            except StreamModeError:
+                continue
+            except ValueError:  # SeqIO.read will complain that the stream is empty
+                pass
+            cls.modes[fmt] = mode
+            return mode
+        raise RuntimeError("Failed to find file mode for %s" % fmt)
+
+    def compare_record(self, old, new, *args, msg=None, **kwargs):
+        """Compare old SeqRecord to new SeqRecord."""
+        self.assertEqual(old.id, new.id, msg=msg)
+        self.assertTrue(
+            old.description == new.description
+            or (old.id + " " + old.description).strip() == new.description
+            or new.description == "<unknown description>"
+            or new.description == "", msg="'%s' vs '%s' " % (old.description, new.description))
+        self.assertEqual(len(old.seq), len(new.seq))
+        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
+            pass
+        else:
+            if len(old.seq) < 200:
+                err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            else:
+                err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+            if msg is not None:
+                err_msg = "%s: %s" % (msg, err_msg)
+            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
+
+    def compare_records(self, old_list, new_list, *args, **kwargs):
+        """Check if two lists of SeqRecords are equal."""
+        self.assertEqual(len(old_list), len(new_list))
+        for old, new in zip(old_list, new_list):
+            self.compare_record(old, new, *args, **kwargs)
+
+
+class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
+    """Base class for testing SeqIO.convert."""
+
+    formats = tuple(SeqIO._converter.keys())
+
+    def check_conversion(self, filename, in_format, out_format, alphabet):
+        """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
+        msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
+        records = list(SeqIO.parse(filename, in_format, alphabet))
+        # Write it out...
+        handle = StringIO()
+        with warnings.catch_warnings():
+            SeqIO.write(records, handle, out_format)
+        handle.seek(0)
+        # Now load it back and check it agrees,
+        records2 = list(SeqIO.parse(handle, out_format, alphabet))
+        self.assertEqual(len(records), len(records2), msg=msg)
+        for record1, record2 in zip(records, records2):
+            self.compare_record(record1, record2, msg=msg)
+        # Finally, use the convert function, and check that agrees:
+        handle2 = StringIO()
+        with warnings.catch_warnings():
+            SeqIO.convert(filename, in_format, handle2, out_format, alphabet)
+        # We could re-parse this, but it is simpler and stricter:
+        self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
+
+    def failure_check(self, filename, in_format, out_format, alphabet):
+        """Test if SeqIO.convert raises the correct ValueError on broken files."""
+        msg = "Confirm failure detection converting %s from %s to %s" % (filename, in_format, out_format)
+        # We want the SAME error message from parse/write as convert!
+        with self.assertRaises(ValueError, msg=msg) as cm:
+            records = list(SeqIO.parse(filename, in_format, alphabet))
+            self.write_records(records, out_format)
+        err1 = str(cm.exception)
+        # Now do the conversion...
+        with self.assertRaises(ValueError, msg=msg) as cm:
+            handle = StringIO()
+            SeqIO.convert(filename, in_format, handle, out_format, alphabet)
+        err2 = str(cm.exception)
+        # Verify that parse/write and convert give the same failure
+        err_msg = "%s: parse/write and convert gave different failures" % msg
+        self.assertEqual(err1, err2, msg=err_msg)
 
 
 class ForwardOnlyHandle:
@@ -135,7 +229,7 @@ class TestZipped(unittest.TestCase):
             self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
         with gzip.open("Quality/example.fastq.gz") as handle:
             with self.assertRaisesRegex(
-                ValueError, "Is this handle in binary mode not text mode"
+                ValueError, "Fastq files must be opened in text mode"
             ):
                 list(SeqIO.parse(handle, "fastq"))
 
@@ -161,43 +255,33 @@ class TestZipped(unittest.TestCase):
                 list(SeqIO.parse(handle, "gb"))
 
 
-class TestSeqIO(unittest.TestCase):
+class TestSeqIO(SeqIOTestBaseClass):
     def setUp(self):
         self.addTypeEqualityFunc(SeqRecord, self.compare_record)
 
     def compare_record(self, record_one, record_two, msg=None):
         """Attempt strict SeqRecord comparison."""
-        if not isinstance(record_one, SeqRecord):
-            self.failureException(msg)
-        if not isinstance(record_two, SeqRecord):
-            self.failureException(msg)
-        if record_one.seq is None:
-            self.failureException(msg)
-        if record_two.seq is None:
-            self.failureException(msg)
-        if record_one.id != record_two.id:
-            self.failureException(msg)
-        if record_one.name != record_two.name:
-            self.failureException(msg)
-        if record_one.description != record_two.description:
-            self.failureException(msg)
-        if len(record_one) != len(record_two):
-            self.failureException(msg)
+        self.assertIsInstance(record_one, SeqRecord, msg=msg)
+        self.assertIsInstance(record_two, SeqRecord, msg=msg)
+        self.assertIsNotNone(record_one.seq, msg=msg)
+        self.assertIsNotNone(record_two.seq, msg=msg)
+        self.assertEqual(record_one.id, record_two.id, msg=msg)
+        self.assertEqual(record_one.name, record_two.name, msg=msg)
+        self.assertEqual(record_one.description, record_two.description, msg=msg)
+        self.assertEqual(len(record_one), len(record_two), msg=msg)
         if isinstance(record_one.seq, UnknownSeq) and isinstance(
             record_two.seq, UnknownSeq
         ):
             # Jython didn't like us comparing the string of very long UnknownSeq
             # object (out of heap memory error)
-            if record_one.seq._character != record_two.seq._character:
-                self.failureException(msg)
-        elif str(record_one.seq) != str(record_two.seq):
-            self.failureException(msg)
+            self.assertEqual(record_one.seq._character, record_two.seq._character, msg=msg)
+        else:
+            self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
         ):
-            if record_one.letter_annotations[key] != record_two.letter_annotations[key]:
-                self.failureException(msg)
+            self.assertEqual(record_one.letter_annotations[key], record_two.letter_annotations[key], msg=msg)
 
     def check_simple_write_read(self, records, t_format, t_count, messages):
         """Check can write/read given records.
@@ -221,10 +305,11 @@ class TestSeqIO(unittest.TestCase):
                 # rather long, and it seems a bit pointless to record them.
                 continue
             # Going to write to a handle...
-            if format in SeqIO._BinaryFormats:
-                handle = BytesIO()
-            else:
+            mode = self.get_mode(format)
+            if mode == "t":
                 handle = StringIO()
+            elif mode == "b":
+                handle = BytesIO()
 
             if unequal_length and format in AlignIO._FormatToWriter:
                 msg = "Sequences must all be the same length"
@@ -353,14 +438,14 @@ class TestSeqIO(unittest.TestCase):
 
             if len(records) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
-                if format in SeqIO._BinaryFormats:
-                    handle = BytesIO()
-                else:
+                if mode == "t":
                     handle = StringIO()
+                elif mode == "b":
+                    handle = BytesIO()
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", BiopythonWarning)
                     SeqIO.write(records[0], handle, format)
-                    if format not in SeqIO._BinaryFormats:
+                    if mode == "t":
                         self.assertEqual(handle.getvalue(), records[0].format(format))
         if debug:
             self.fail(
@@ -380,11 +465,7 @@ class TestSeqIO(unittest.TestCase):
         expected_alignment,
         expected_messages,
     ):
-        if t_format in SeqIO._BinaryFormats:
-            mode = "rb"
-        else:
-            mode = "r"
-
+        mode = "r" + self.get_mode(t_format)
         with warnings.catch_warnings():
             # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
             # location
@@ -5500,24 +5581,25 @@ class TestSeqIO(unittest.TestCase):
     def test_empty_file(self):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
-            if t_format in SeqIO._BinaryFormats:
+            mode = self.get_mode(t_format)
+            if mode == "t":
+                handle = StringIO()
+                if t_format in (
+                    "uniprot-xml",
+                    "pdb-seqres",
+                    "pdb-atom",
+                    "cif-atom",
+                    "cif-seqres",
+                ):
+                    with self.assertRaisesRegex(ValueError, "Empty file."):
+                        list(SeqIO.parse(handle, t_format))
+                else:
+                    records = list(SeqIO.parse(handle, t_format))
+                    self.assertEqual(len(records), 0)
+            elif mode == "b":
                 handle = BytesIO()
                 with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
-            elif t_format in (
-                "uniprot-xml",
-                "pdb-seqres",
-                "pdb-atom",
-                "cif-atom",
-                "cif-seqres",
-            ):
-                handle = StringIO()
-                with self.assertRaisesRegex(ValueError, "Empty file."):
-                    list(SeqIO.parse(handle, t_format))
-            else:
-                handle = StringIO()
-                records = list(SeqIO.parse(handle, t_format))
-                self.assertEqual(len(records), 0)
 
 
 if __name__ == "__main__":

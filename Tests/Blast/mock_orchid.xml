@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+
+<!-- This is a mock file mimicking a qblast response for our mock tests -->
+
+<BlastOutput>
+ <BlastOutput_program>blastx</BlastOutput_program>
+ <BlastOutput_query-ID>some sequence</BlastOutput_query-ID>
+ <BlastOutput_query-def>gi|116660609|gb|EG558220.1|EG558220 CR02019H04 Leaf CR02 cDNA library Catharanthus roseus cDNA clone CR02019H04 5', mRNA sequence</BlastOutput_query-def>
+<BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>0.0000001</Parameters_expect>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+<Iteration_hits>
+ <Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|0000000|gb|XP_021665344.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_021665344</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|0000001|gb|XP_021615158.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_021615158</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|0000000|gb|XP_017223689.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_017223689</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|0000000|gb|OMP06800.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>OMP06800</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|0000000|gb|XP_021634873.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_021634873</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|0000000|gb|XP_021299673.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_021299673</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|0000000|gb|XP_002311451.2|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_002311451</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|0000000|gb|XP_021976565.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XP_021976565</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gi|0000000|gb|OMO90244.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>OMO90244</Hit_accession>
+</Hit>
+</Iteration_hits>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

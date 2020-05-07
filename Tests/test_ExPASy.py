@@ -37,14 +37,14 @@ class ExPASyOnlineTests(unittest.TestCase):
             html = handle.read()
         self.assertEqual(handle.url,
                          "https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001")
-        self.assertTrue("<title>PROSITE: PS00001</title>" in html)
+        self.assertIn("<title>PROSITE: PS00001</title>", html)
 
     def test_prodoc_html(self):
         with ExPASy.get_prodoc_entry("PDOC00001") as handle:
             html = handle.read()
         self.assertEqual(handle.url,
                          "https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001")
-        self.assertTrue("{PS00001; ASN_GLYCOSYLATION}" in html)
+        self.assertIn("{PS00001; ASN_GLYCOSYLATION}", html)
 
 
 if __name__ == "__main__":
