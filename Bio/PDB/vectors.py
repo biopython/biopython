@@ -536,10 +536,12 @@ def coord_space(
         (to return from coord_space)
     :returns: 4x4 numpy array, x2 if rev=True
     """
-    # dbg = False
-    # if dbg:
-    #    for ac in acs:
-    #        print(ac.transpose())
+    dbg = False
+    if dbg:
+        print("============================== >>>>>")
+    #    print(a0.transpose())
+    #    print(a1.transpose())
+    #    print(a2.transpose())
 
     # a0 = acs[0]
     # a1 = acs[1]
@@ -568,6 +570,7 @@ def coord_space(
 
     # mrz = homog_rot_mtx(-sc[1], "z")  # rotate translated a2 -azimuth about Z
     set_Z_homog_rot_mtx(-sc[1], mrz)
+
     # mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a2 -polar_angle about Y
     set_Y_homog_rot_mtx(-sc[2], mry)
 
@@ -576,10 +579,17 @@ def coord_space(
     mt = gmry.dot(gmrz.dot(gtm))
 
     # if dbg:
-    #    print("mt * a2", (mt.dot(a2)).transpose())
+    #    print("tm:\n", tm)
+    #    print("mrz:\n", mrz)
+    #    print("mry:\n", mry)
+    #    # print("mt ", mt)
 
     # p = mt @ a0
+    # print("a0", a0)
     p = mt.dot(a0)
+
+    if dbg:
+        print("mt:\n", mt, "\na0:\n", a0, "\np:\n", p)
 
     # need azimuth of translated a0
     # sc2 = get_spherical_coordinates(p)
@@ -592,6 +602,14 @@ def coord_space(
 
     # mt = mrz2 @ mt
     mt = gmrz2.dot(mt)
+
+    # if dbg:
+    #    print("mt:", mt, "\na0:", a0, "\np:", p)
+    #    # print(p, "\n", azimuth2, "\n", mrz2, "\n", mt)
+
+    if dbg:
+        print("mt:\n", mt)
+        print("<<<<<<==============================")
 
     if not rev:
         return mt, None
