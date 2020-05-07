@@ -12,8 +12,14 @@
 
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
-"""
 
+
+Variables:
+
+    - email        Set the Blast email parameter (default is not set).
+    - tool         Set the Blast tool parameter (default is ``biopython``).
+
+"""
 
 import warnings
 
@@ -28,6 +34,9 @@ from Bio import BiopythonWarning
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
+
+email = None
+tool = "biopython"
 
 
 def qblast(
@@ -193,16 +202,13 @@ def qblast(
         ("WORD_SIZE", word_size),
         ("CMD", "Put"),
     ]
-    query = [x for x in parameters if x[1] is not None]
-    message = urlencode(query).encode()
 
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
-    handle = urlopen(request)
-
+    handle = urlopen(_build_query(url_base,parameters))
+    
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     rid, rtoe = _parse_qblast_ref_page(handle)
@@ -223,8 +229,6 @@ def qblast(
         ("SHOW_OVERVIEW", show_overview),
         ("CMD", "Get"),
     ]
-    query = [x for x in parameters if x[1] is not None]
-    message = urlencode(query).encode()
 
     # Poll NCBI until the results are ready.
     # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
@@ -252,8 +256,7 @@ def qblast(
             # Wasn't a quick return, must wait at least a minute
             delay = 60
 
-        request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
-        handle = urlopen(request)
+        handle = urlopen(_build_query(url_base,parameters))
         results = handle.read().decode()
 
         # Can see an "\n\n" page while results are in progress,
@@ -273,6 +276,12 @@ def qblast(
 
 qblast._previous = 0
 
+def _build_query(url_base, parameters):
+    query = [x for x in parameters if x[1] is not None]
+    query = query+[("EMAIL",email),("TOOL",tool)]
+    message = urlencode(query).encode()
+    request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
+    return request
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).

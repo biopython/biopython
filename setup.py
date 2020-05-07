@@ -122,6 +122,7 @@ PACKAGES = [
     "Bio.Alphabet",
     "Bio.Application",
     "Bio.Blast",
+    "Bio.Blast.NCBIWWW",
     "Bio.CAPS",
     "Bio.Cluster",
     "Bio.codonalign",
