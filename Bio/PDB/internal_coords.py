@@ -77,7 +77,7 @@ except ImportError:
 from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.PDB.Polypeptide import three_to_one
 
-from Bio.PDB.vectors import homog_rot_mtx, coord_space, calc_dihedral, Vector
+from Bio.PDB.vectors import homog_rot_mtx, coord_space
 from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 
@@ -90,7 +90,6 @@ from typing import (
     Union,
     Tuple,
     cast,
-    Type,
     TYPE_CHECKING,
     Optional,
 )
@@ -1331,7 +1330,7 @@ class IC_Residue(object):
         startLst.extend(NCaCKey)
 
         q = deque(startLst)
-        resnum = self.rbase[0]
+        # resnum = self.rbase[0]
 
         # get initial coords from previous residue or IC_Chain info
         # or default coords
@@ -1717,7 +1716,7 @@ class IC_Residue(object):
             self.link_dihedra(verbose)  # re-run for new dihedra
 
         if verbose:
-            oAtom = self.rak("O")  # trigger missing flag if needed
+            self.rak("O")  # trigger missing flag if needed
             missing = []
             for akk, akv in self.akc.items():
                 if isinstance(akk, str) and akv.missing:
