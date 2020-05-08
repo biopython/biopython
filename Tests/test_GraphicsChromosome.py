@@ -246,9 +246,11 @@ class OrganismGraphicTest(unittest.TestCase):
         properties = new_stdout.getvalue()
         sys.stdout = save_stdout
 
-        self.assertIn(expected_string, properties,
-                      "Unexpected results from dumpProperties: \n %s"
-                      % properties)
+        self.assertIn(
+            expected_string,
+            properties,
+            "Unexpected results from dumpProperties: \n %s" % properties,
+        )
 
         properties = test_widget.getProperties()
         self.assertEqual(
