@@ -188,9 +188,9 @@ class VectorTests(unittest.TestCase):
                 for k in range(2):
                     sc = get_spherical_coordinates(
                         [
-                            [(0.5 if i else -0.5)],
-                            [0.5 if j else -0.5],
-                            [(1 if k else -1) * srt22],
+                            (0.5 if i else -0.5),
+                            0.5 if j else -0.5,
+                            (1 if k else -1) * srt22,
                         ]
                     )
                     # print(sc[0], numpy.degrees(sc[1]), numpy.degrees(sc[2]))
