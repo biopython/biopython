@@ -866,7 +866,7 @@ class MappingTests(unittest.TestCase):
             SeqIO.write(
                 SeqIO.parse(in_handle, "fastq-sanger"), out_handle, "fastq-solexa"
             )
-            self.assertTrue(len(w) <= 1, w)
+            self.assertLessEqual(len(w), 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-solexa")
         self.assertEqual(str(record.seq), seq)
@@ -902,7 +902,7 @@ class MappingTests(unittest.TestCase):
             SeqIO.write(
                 SeqIO.parse(in_handle, "fastq-sanger"), out_handle, "fastq-illumina"
             )
-            self.assertTrue(len(w) <= 1, w)
+            self.assertLessEqual(len(w), 1, w)
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-illumina")
         self.assertEqual(str(record.seq), seq)
@@ -971,7 +971,7 @@ class TestSFF(unittest.TestCase):
         ]:
             record = next(SeqIO.parse("Roche/greek.sff", "sff"))
             self.assertEqual(len(record), 395)
-            self.assertTrue(0 <= record.annotations[clip], record.annotations[clip])
+            self.assertLessEqual(0, record.annotations[clip])
             record.annotations[clip] = -1
             with BytesIO() as h:
                 self.assertRaises(ValueError, SeqIO.write, record, h, "sff")
