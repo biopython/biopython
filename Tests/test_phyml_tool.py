@@ -47,7 +47,7 @@ class AppTests(unittest.TestCase):
         # Smoke test
         try:
             out, err = cmd()
-            self.assertTrue(len(out) > 0)
+            self.assertGreater(len(out), 0)
             self.assertEqual(len(err), 0)
             # Check the output tree
             outfname = EX_PHYLIP + "_phyml_tree.txt"
