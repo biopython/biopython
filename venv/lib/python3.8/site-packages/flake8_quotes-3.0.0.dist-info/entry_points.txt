@@ -1,3 +1,0 @@
-[flake8.extension]
-Q0 = flake8_quotes:QuoteChecker
-

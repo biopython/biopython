@@ -1,3 +1,0 @@
-[flake8.extension]
-B90 = flake8_blind_except:check_blind_except
-
