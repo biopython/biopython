@@ -1209,7 +1209,7 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
         """Loaded uniprot-xml with ambiguous location in BioSQL."""
         id = "P97881"
         seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
-        self.assertTrue(self.db.load(seqiter) == 1)
+        self.assertEqual(self.db.load(seqiter), 1)
 
         dbrecord = self.db.lookup(primary_id=id)
         for feature in dbrecord.features:

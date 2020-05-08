@@ -679,7 +679,7 @@ class ParseTest(unittest.TestCase):
         self.assertGreaterEqual(struct2, struct)
 
         # Model
-        self.assertTrue(model == model)  # __eq__ same type
+        self.assertEqual(model, model)  # __eq__ same type
         self.assertFalse(struct[0] == struct[1])
 
         self.assertFalse(struct[0] == [])  # __eq__ diff. types
