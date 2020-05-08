@@ -82,7 +82,7 @@ todo_include_todos = True
 # -- Options for autodoc --------------------------------------------------
 
 # This requires Sphinx 1.8.0b1 or later:
-autodoc_default_values = {
+autodoc_default_options = {
     "members": None,
     "undoc-members": None,
     "special-members": None,
