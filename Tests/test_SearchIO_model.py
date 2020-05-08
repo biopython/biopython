@@ -196,8 +196,8 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(hit11, query["hit1"])
         self.assertEqual(hit11, query["alt1"])
         self.assertEqual(hit11, query["alt11"])
-        self.assertTrue(hit11.id != "alt1")
-        self.assertTrue(hit11.id != "alt11")
+        self.assertNotEqual(hit11.id, "alt1")
+        self.assertNotEqual(hit11.id, "alt11")
         hit11._id_alt = []
 
     def test_setitem_ok_alt_existing(self):
@@ -319,7 +319,7 @@ class QueryResultCases(unittest.TestCase):
         query = QueryResult([hit11])
         self.assertEqual(hit11, query["hit1"])
         self.assertEqual(hit11, query["alt1"])
-        self.assertTrue(hit11.id != "alt1")
+        self.assertNotEqual(hit11.id, "alt1")
         hit11._id_alt = []
 
     def test_delitem_string_ok(self):
