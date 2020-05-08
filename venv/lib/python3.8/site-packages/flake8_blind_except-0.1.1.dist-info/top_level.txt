@@ -1,0 +1,1 @@
+flake8_blind_except

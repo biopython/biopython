@@ -1,0 +1,3 @@
+[flake8.extension]
+BLK = flake8_black:BlackStyleChecker
+
