@@ -17,7 +17,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
+from .Interfaces import SequenceIterator
 
 
 def _read(handle, length):
@@ -214,24 +214,18 @@ def _parse(handle):
     yield record
 
 
-def GckIterator(source):
-    """Parse a GCK file and return a SeqRecord object.
+class GckIterator(SequenceIterator):
+    """Parser for GCK files."""
 
-    Argument source is a file-like object or a path to a file.
+    def __init__(self, source):
+        """Break up a GCK file into SeqRecord objects."""
+        super().__init__(source, mode="b", fmt="GCK")
 
-    Note that a GCK file can only contain one sequence, so this
-    iterator will always return a single record.
-    """
-    try:
-        handle = open(source, "rb")
-    except TypeError:
-        handle = source
-        if handle.read(0) != b"":
-            raise StreamModeError("GCK files must be opened in binary mode.") from None
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator.
 
-    try:
+        Note that a GCK file can only contain one sequence, so this
+        iterator will always return a single record.
+        """
         records = _parse(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        return records

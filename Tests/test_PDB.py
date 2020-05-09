@@ -679,11 +679,13 @@ class ParseTest(unittest.TestCase):
         self.assertGreaterEqual(struct2, struct)
 
         # Model
-        self.assertEqual(model, model)  # __eq__ same type
-        self.assertFalse(struct[0] == struct[1])
 
-        self.assertFalse(struct[0] == [])  # __eq__ diff. types
-        self.assertFalse(struct == model)
+        self.assertEqual(model, model)  # __eq__ same type
+        self.assertNotEqual(struct[0], struct[1])
+
+
+        self.assertNotEqual(struct[0], [])  # __eq__ diff. types
+        self.assertNotEqual(struct, model)
 
         # residues with same ID string should not be equal if the parent is not equal
         res1, res2, res3 = residues[0], residues[-1], struct2[1]["A"][44]
@@ -691,7 +693,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(
             res2, res3
         )  # Equality of identical residues with different structure ID
-        self.assertFalse(res1 == res2)
+        self.assertNotEqual(res1, res2)
         self.assertGreater(res1, res2)
         self.assertGreaterEqual(res1, res2)
         self.assertLess(res2, res1)

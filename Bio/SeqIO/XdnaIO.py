@@ -17,10 +17,9 @@ import warnings
 
 from Bio import Alphabet, BiopythonWarning
 from Bio.Seq import Seq
-from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 _seq_types = {
@@ -140,37 +139,40 @@ def _read_feature(handle, record):
     record.features.append(feature)
 
 
-def XdnaIterator(source):
-    """Parse a Xdna file and return a SeqRecord object.
+class XdnaIterator(SequenceIterator):
+    """Parser for Xdna files."""
 
-    Argument source is a file-like object in binary mode or a path to a file.
+    def __init__(self, source):
+        """Parse a Xdna file and return a SeqRecord object.
 
-    Note that this is an "iterator" in name only since an Xdna file always
-    contain a single sequence.
+        Argument source is a file-like object in binary mode or a path to a file.
 
-    """
-    try:
-        handle = open(source, "rb")
-    except TypeError:
-        handle = source
-        if handle.read(0) != b"":
-            raise StreamModeError("Xdna files must be opened in binary mode.") from None
-    # Parse fixed-size header and do some rudimentary checks
-    #
-    # The "neg_length" value is the length of the part of the sequence
-    # before the nucleotide considered as the "origin" (nucleotide number 1,
-    # which in DNA Strider is not always the first nucleotide).
-    # Biopython's SeqRecord has no such concept of a sequence origin as far
-    # as I know, so we ignore that value. SerialCloner has no such concept
-    # either and always generates files with a neg_length of zero.
+        Note that this is an "iterator" in name only since an Xdna file always
+        contain a single sequence.
 
-    try:
+        """
+        super().__init__(source, mode="b", fmt="Xdna")
 
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        # Parse fixed-size header and do some rudimentary checks
+        #
+        # The "neg_length" value is the length of the part of the sequence
+        # before the nucleotide considered as the "origin" (nucleotide number 1,
+        # which in DNA Strider is not always the first nucleotide).
+        # Biopython's SeqRecord has no such concept of a sequence origin as far
+        # as I know, so we ignore that value. SerialCloner has no such concept
+        # either and always generates files with a neg_length of zero.
         header = handle.read(112)
         if not header:
             raise ValueError("Empty file.")
         if len(header) < 112:
             raise ValueError("Improper header, cannot read 112 bytes from handle")
+        records = self.iterate(handle, header)
+        return records
+
+    def iterate(self, handle, header):
+        """Parse the file and generate SeqRecord objects."""
         (version, type, topology, length, neg_length, com_length) = unpack(
             ">BBB25xII60xI12x", header
         )
@@ -178,7 +180,6 @@ def XdnaIterator(source):
             raise ValueError("Unsupported XDNA version")
         if type not in _seq_types:
             raise ValueError("Unknown sequence type")
-
         # Read actual sequence and comment found in all XDNA files
         sequence = _read(handle, length).decode("ASCII")
         comment = _read(handle, com_length).decode("ASCII")
@@ -209,10 +210,6 @@ def XdnaIterator(source):
 
         yield record
 
-    finally:
-        if handle is not source:
-            handle.close()
-
 
 class XdnaWriter(SequenceWriter):
     """Write files in the Xdna format."""
@@ -224,7 +221,7 @@ class XdnaWriter(SequenceWriter):
          - target - Output stream opened in binary mode, or a path to a file.
 
         """
-        SequenceWriter.__init__(self, target, "wb")
+        super().__init__(target, mode="wb")
 
     def write_file(self, records):
         """Write the specified record to a Xdna file.

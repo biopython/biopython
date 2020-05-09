@@ -4,20 +4,6 @@ import os
 import string
 import numpy
 
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.substitution_matrices is an experimental module "
-    "which may still undergo significant changes. In particular, "
-    "the location of this module may change, and the Array class "
-    "defined in this module may be moved to other existing or new "
-    "modules in Biopython.",
-    BiopythonExperimentalWarning,
-)
-
 
 class Array(numpy.ndarray):
     """numpy array subclass indexed by integers and by letters."""
