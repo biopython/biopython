@@ -49,8 +49,8 @@ class NeighborTest(unittest.TestCase):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
-            self.assertTrue(isinstance(hits, list), hits)
-            self.assertTrue(len(hits) >= 0, hits)
+            self.assertIsInstance(hits, list)
+            self.assertGreaterEqual(len(hits), 0)
         x = array([250, 250, 250])  # Far away from our random atoms
         self.assertEqual([], ns.search(x, 5.0, "A"))
         self.assertEqual([], ns.search(x, 5.0, "R"))
