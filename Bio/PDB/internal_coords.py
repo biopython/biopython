@@ -1900,7 +1900,6 @@ class IC_Residue(object):
             else:
                 d.angle = 120
             del self.atom_coords[sCB]  # remove None so now must populate
-            d.init_pos()
 
             self.link_dihedra(verbose)  # re-run for new dihedra
 
