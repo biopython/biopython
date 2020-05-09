@@ -75,8 +75,6 @@ if numpy is None:
             "Bio.Align",
             "Bio.Align.substitution_matrices",
             "Bio.Cluster",
-            "Bio.KDTree",
-            "Bio.KDTree.KDTree",
             "Bio.kNN",
             "Bio.LogisticRegression",
             "Bio.MarkovModel",

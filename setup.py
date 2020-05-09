@@ -137,7 +137,6 @@ PACKAGES = [
     "Bio.Graphics",
     "Bio.Graphics.GenomeDiagram",
     "Bio.HMM",
-    "Bio.KDTree",
     "Bio.KEGG",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
