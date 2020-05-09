@@ -77,7 +77,9 @@ except ImportError:
 from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.PDB.Polypeptide import three_to_one
 
-from Bio.PDB.vectors import homog_rot_mtx, coord_space, calc_dihedral, Vector
+from Bio.PDB.vectors import homog_rot_mtx, coord_space
+
+# , calc_dihedral, Vector
 from Bio.PDB.ic_data import ic_data_backbone, ic_data_sidechains
 from Bio.PDB.ic_data import ic_data_sidechain_extras, residue_atom_bond_state
 
@@ -90,7 +92,7 @@ from typing import (
     Union,
     Tuple,
     cast,
-    Type,
+    #    Type,
     TYPE_CHECKING,
     Optional,
 )
