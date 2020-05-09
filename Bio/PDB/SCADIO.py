@@ -33,8 +33,9 @@ from Bio.File import as_handle
 from Bio.PDB.PDBExceptions import PDBException
 
 from Bio.PDB.internal_coords import IC_Residue, IC_Chain
-from Bio.PDB.Structure import Structure
-from Bio.PDB.Residue import Residue
+
+# from Bio.PDB.Structure import Structure
+# from Bio.PDB.Residue import Residue
 from Bio.PDB.vectors import homog_scale_mtx
 
 
