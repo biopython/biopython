@@ -1511,7 +1511,7 @@ class IC_Residue(object):
         startLst.extend(NCaCKey)
 
         q = deque(startLst)
-        resnum = self.rbase[0]
+        # resnum = self.rbase[0]
 
         # get initial coords from previous residue or IC_Chain info
         # or default coords
@@ -1905,7 +1905,8 @@ class IC_Residue(object):
             self.link_dihedra(verbose)  # re-run for new dihedra
 
         if verbose:
-            oAtom = self.rak("O")  # trigger missing flag if needed
+            # oAtom =
+            self.rak("O")  # trigger missing flag if needed
             missing = []
             for akk, akv in self.akc.items():
                 if isinstance(akk, str) and akv.missing:
