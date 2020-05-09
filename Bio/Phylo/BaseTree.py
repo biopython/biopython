@@ -32,7 +32,7 @@ def _level_traverse(root, get_children):
 
 def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children) (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def dfs(elem):
         yield elem
         for v in get_children(elem):
@@ -43,7 +43,7 @@ def _preorder_traverse(root, get_children):
 
 def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent) (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def dfs(elem):
         for v in get_children(elem):
             yield from dfs(v)
@@ -72,7 +72,7 @@ def _sorted_attrs(elem):
 
 def _identity_matcher(target):
     """Match a node to the target object by identity (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         return node is target
 
@@ -81,7 +81,7 @@ def _identity_matcher(target):
 
 def _class_matcher(target_cls):
     """Match a node if it's an instance of the given class (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         return isinstance(node, target_cls)
 
@@ -111,7 +111,7 @@ def _attribute_matcher(kwargs):
     match each of the corresponding values -- think 'and', not 'or', for
     multiple keys.
     """
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         if "terminal" in kwargs:
             # Special case: restrict to internal/external/any nodes
@@ -144,7 +144,7 @@ def _attribute_matcher(kwargs):
 
 def _function_matcher(matcher_func):
     """Safer attribute lookup -- returns False instead of raising an error (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         try:
             return matcher_func(node)
@@ -241,7 +241,7 @@ class TreeElement:
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
                 val = val[:57] + "..." if len(val) > 60 else val
@@ -365,7 +365,7 @@ class TreeMixin:
             depth-first (preorder) by default.
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop("clades")
             found = elem.find_any(target, **kwargs)

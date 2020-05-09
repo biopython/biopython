@@ -37,7 +37,7 @@ class NeighborTest(unittest.TestCase):
 
         Based on the self test in Bio.PDB.NeighborSearch.
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         class RandomAtom:
             def __init__(self):
                 self.coord = 100 * random(3)

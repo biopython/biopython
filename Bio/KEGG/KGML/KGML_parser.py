@@ -106,7 +106,7 @@ class KGMLParser:
 
     def parse(self):
         """Parse the input elements."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)

@@ -2027,7 +2027,7 @@ class Nexus:
         pos=0: first position
         pos=nchar: last position
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def _adjust(set, x, d, leftgreedy=False):
             """Adjust character sets if gaps are inserted (PRIVATE).
 

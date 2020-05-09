@@ -248,7 +248,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     def to_alignment(self):
         """Construct an alignment from the aligned sequences in this tree."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def is_aligned_seq(elem):
             if isinstance(elem, Sequence) and elem.mol_seq.is_aligned:
                 return True
@@ -1333,7 +1333,7 @@ class Sequence(PhyloElement):
             }
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
             return {key: val for key, val in dct.items() if val is not None}
