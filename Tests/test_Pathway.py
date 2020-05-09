@@ -77,10 +77,10 @@ class GraphTestCase(unittest.TestCase):
         a.add_edge("a", "b", "label1")
         a.add_edge("b", "c", "label1")
         a.add_edge("b", "a", "label2")
-        self.assertTrue(
-            str(a) == "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
-        self.assertTrue(
-            repr(a) == "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>")
+        self.assertEqual(
+            str(a), "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertEqual(
+            repr(a), "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>")
         self.assertListEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
         self.assertListEqual(a.labels(), ["label1", "label2"])
 
@@ -157,8 +157,8 @@ class MultiGraphTestCase(unittest.TestCase):
         a.add_edge("a", "b", "label1")
         a.add_edge("b", "c", "label1")
         a.add_edge("b", "a", "label2")
-        self.assertTrue(
-            str(a) == "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertEqual(
+            str(a), "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
         self.assertListEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
         self.assertListEqual(a.labels(), ["label1", "label2"])
 
