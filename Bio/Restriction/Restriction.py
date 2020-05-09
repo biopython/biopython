@@ -2226,7 +2226,7 @@ class RestrictionBatch(set):
         It works but it is slow, so it has really an interest when splitting
         over multiple conditions.
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def splittest(element):
             for klass in classes:
                 b = bool.get(klass.__name__, True)

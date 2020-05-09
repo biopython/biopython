@@ -164,7 +164,7 @@ class Hhsuite2TextParser:
             T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def match_is_valid(match):
             """Return True if match is not a Consensus column (PRIVATE).
 
