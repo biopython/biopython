@@ -475,14 +475,23 @@ class IC_Chain:
             ric.atom_to_internal_coordinates(verbose=verbose)
 
             for k, d in ric.dihedra.items():
-                dihedraDict[k] = d
-                dihedraAtomDict[k] = d.gen_acs(ric.atom_coords)
-                hInDset.update((d.h1key, d.h2key))
+                try:
+                    dihedraAtomDict[k] = d.gen_acs(ric.atom_coords)
+                    dihedraDict[k] = d
+                    hInDset.update((d.h1key, d.h2key))
+                except KeyError:
+                    pass  # fails for gly CB, ic's already set
 
             for k, h in ric.hedra.items():
                 if k not in hInDset:
-                    hedraDict[k] = h
-                    hedraAtomDict[k] = h.gen_acs(ric.atom_coords)
+                    try:
+                        hedraAtomDict[k] = h.gen_acs(ric.atom_coords)
+                        hedraDict[k] = h
+                    except KeyError:
+                        pass  # fails for gly CB, ic's already set
+
+        if dihedraDict == {}:
+            return  # escape if no hedra loaded for this chain
 
         # only few hedra not in dihedra to process
         hedraDict2 = {k: h for k, h in hedraDict.items() if k not in hInDset}
@@ -1709,9 +1718,9 @@ class IC_Residue(object):
 
         lenLst = len(lst)
         if 4 > lenLst:
-            dct, obj = self.hedra, Hedron
+            cdct, dct, obj = self.cic.hedra, self.hedra, Hedron
         else:
-            dct, obj = self.dihedra, Dihedron  # type: ignore
+            cdct, dct, obj = self.cic.dihedra, self.dihedra, Dihedron  # type: ignore
 
         if isinstance(lst, List):
             tlst = tuple(lst)
@@ -1725,8 +1734,11 @@ class IC_Residue(object):
             # do not add edron if split_akl() made something shorter
             if len(tnlst) == lenLst:
                 # if edron already exists, then update not replace with new
+                if tnlst not in cdct:
+                    cdct[tnlst] = obj(tnlst)  # type: ignore
                 if tnlst not in dct:
-                    dct[tnlst] = obj(tnlst)  # type: ignore
+                    dct[tnlst] = cdct[tnlst]  # type: ignore
+
                 dct[tnlst].atoms_updated = False  # type: ignore
 
     def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
@@ -1872,7 +1884,6 @@ class IC_Residue(object):
             h.len23 = self.hedra[(sCA, sC, sO)].len12
             h.angle = 110.17513
             h.len12 = Ca_Cb_Len
-            h.init_pos()
 
             # generate dihedral based on N-Ca-C-O offset from db query above
             dtpl = (sO, sC, sCA, sCB)
