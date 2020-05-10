@@ -515,9 +515,9 @@ class IC_Chain:
 
             for k, h in hedraDict2.items():
                 hndx = h2ai[k]
-                h.angle = set_accuracy_95(h_a0a1a2[hndx])
-                h.len12 = set_accuracy_95(h_a0a1[hndx])
-                h.len23 = set_accuracy_95(h_a1a2[hndx])
+                h.angle = h_a0a1a2[hndx]
+                h.len12 = h_a0a1[hndx]
+                h.len23 = h_a1a2[hndx]
 
         # now process dihedra
         ldha = len(dihedraDict)
@@ -615,16 +615,16 @@ class IC_Chain:
             d.angle = dh1r[dndx]
             rev, hed1, hed2 = (d.reverse, d.hedron1, d.hedron2)
             if not rev:
-                hed1.len12 = set_accuracy_95(a0a1[dndx])
-                hed1.len23 = hed2.len12 = set_accuracy_95(a1a2[dndx])
-                hed2.len23 = set_accuracy_95(a2a3[dndx])
+                hed1.len12 = a0a1[dndx]
+                hed1.len23 = hed2.len12 = a1a2[dndx]
+                hed2.len23 = a2a3[dndx]
             else:
-                hed1.len23 = set_accuracy_95(a0a1[dndx])
-                hed1.len12 = hed2.len23 = set_accuracy_95(a1a2[dndx])
-                hed2.len12 = set_accuracy_95(a2a3[dndx])
+                hed1.len23 = a0a1[dndx]
+                hed1.len12 = hed2.len23 = a1a2[dndx]
+                hed2.len12 = a2a3[dndx]
 
-            hed1.angle = set_accuracy_95(a0a1a2[dndx])
-            hed2.angle = set_accuracy_95(a1a2a3[dndx])
+            hed1.angle = a0a1a2[dndx]
+            hed2.angle = a1a2a3[dndx]
 
     @staticmethod
     def _write_mtx(fp: TextIO, mtx: numpy.array) -> None:
@@ -2012,14 +2012,18 @@ class IC_Residue(object):
                     base
                     + h.id
                     + " "
-                    + "{:9.5f} {:9.5f} {:9.5f}".format(h.len12, h.angle, h.len23)
+                    + "{:9.5f} {:9.5f} {:9.5f}".format(
+                        set_accuracy_95(h.len12),
+                        set_accuracy_95(h.angle),
+                        set_accuracy_95(h.len23),
+                    )
                 )
             except KeyError:
                 pass
             s += "\n"
         for d in sorted(self.dihedra.values()):
             try:
-                s += base + d.id + " " + "{:9.5f}".format(d.angle)
+                s += base + d.id + " " + "{:9.5f}".format(set_accuracy_95(d.angle))
             except KeyError:
                 pass
             s += "\n"
@@ -2705,14 +2709,12 @@ class Hedron(Edron):
         return a0a1, a0a1a2, a1a2
 
     def hedron_from_atoms(self, atom_coords: Dict["AtomKey", numpy.array]) -> None:
-        """Compute length, angle, length for hedron for residue atom coords."""
+        """Compute length, angle, length for hedron for residue atom coords.
+
+        * superseded - hedra and dihedra values set by chain:internal_to_atom_coords()
+        """
         acs = cast(HACS, self.gen_acs(atom_coords))
-
-        len12, angle, len23 = Hedron._get_dad(acs)
-        self.len12 = set_accuracy_95(len12)
-        self.angle = set_accuracy_95(angle)
-        self.len23 = set_accuracy_95(len23)
-
+        self.len12, self.angle, self.len23 = Hedron._get_dad(acs)
         # self.atoms_updated = False
         self.init_pos()
 
@@ -2727,7 +2729,7 @@ class Hedron(Edron):
     @angle.setter
     def angle(self, angle_deg) -> None:
         """Set this hedron angle; clears atoms_updated."""
-        self._angle = set_accuracy_95(angle_deg)
+        self._angle = angle_deg
         self.atoms_updated = False
 
     @property
@@ -2999,7 +3001,7 @@ class Dihedron(Edron):
         :param dangle_deg: float
             New dihedral angle in degrees
         """
-        self._dihedral = set_accuracy_95(dangle_deg)
+        self._dihedral = dangle_deg
         self.atoms_updated = False
 
     @staticmethod
@@ -3076,16 +3078,16 @@ class Dihedron(Edron):
         a0a1, a0a1a2, a1a2, a1a2a3, a2a3 = Dihedron._get_dadad(acs)
 
         if not rev:
-            hed1.len12 = set_accuracy_95(a0a1)
-            hed1.len23 = hed2.len12 = set_accuracy_95(a1a2)
-            hed2.len23 = set_accuracy_95(a2a3)
+            hed1.len12 = a0a1
+            hed1.len23 = hed2.len12 = a1a2
+            hed2.len23 = a2a3
         else:
-            hed1.len23 = set_accuracy_95(a0a1)
-            hed1.len12 = hed2.len23 = set_accuracy_95(a1a2)
-            hed2.len12 = set_accuracy_95(a2a3)
+            hed1.len23 = a0a1
+            hed1.len12 = hed2.len23 = a1a2
+            hed2.len12 = a2a3
 
-        hed1.angle = set_accuracy_95(a0a1a2)
-        hed2.angle = set_accuracy_95(a1a2a3)
+        hed1.angle = a0a1a2
+        hed2.angle = a1a2a3
 
         hed1.init_pos()
         hed2.init_pos()
