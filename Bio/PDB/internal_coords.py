@@ -515,9 +515,10 @@ class IC_Chain:
 
             for k, h in hedraDict2.items():
                 hndx = h2ai[k]
-                h.angle = h_a0a1a2[hndx]
-                h.len12 = h_a0a1[hndx]
-                h.len23 = h_a1a2[hndx]
+                h.lal[:] = (h_a0a1[hndx], h_a0a1a2[hndx], h_a1a2[hndx])
+                # h.angle = h_a0a1a2[hndx]
+                # h.len12 = h_a0a1[hndx]
+                # h.len23 = h_a1a2[hndx]
 
         # now process dihedra
         ldha = len(dihedraDict)
@@ -615,13 +616,21 @@ class IC_Chain:
             d.angle = dh1r[dndx]
             rev, hed1, hed2 = (d.reverse, d.hedron1, d.hedron2)
             if not rev:
-                hed1.len12 = a0a1[dndx]
-                hed1.len23 = hed2.len12 = a1a2[dndx]
-                hed2.len23 = a2a3[dndx]
+                hed1.lal[:] = (a0a1[dndx], a0a1a2[dndx], a1a2[dndx])
+                hed2.lal[:] = (a1a2[dndx], a1a2a3[dndx], a2a3[dndx])
+
+                # hed1.len12 = a0a1[dndx]
+                # hed1.len23 = hed2.len12 = a1a2[dndx]
+                # hed2.len23 = a2a3[dndx]
             else:
-                hed1.len23 = a0a1[dndx]
-                hed1.len12 = hed2.len23 = a1a2[dndx]
-                hed2.len12 = a2a3[dndx]
+                hed1.lal[:] = (a1a2[dndx], a0a1a2[dndx], a0a1[dndx])
+                hed2.lal[:] = (a2a3[dndx], a1a2a3[dndx], a1a2[dndx])
+                # hed1.len23 = a0a1[dndx]
+                # hed1.len12 = hed2.len23 = a1a2[dndx]
+                # hed2.len12 = a2a3[dndx]
+
+            # hed1.angle = a0a1a2[dndx]
+            # hed2.angle = a1a2a3[dndx]
 
             hed1.angle = a0a1a2[dndx]
             hed2.angle = a1a2a3[dndx]
@@ -784,7 +793,11 @@ class IC_Chain:
             hed = hedra[hk]
             fp.write("     [ ")
             fp.write(
-                "{:9.5f}, {:9.5f}, {:9.5f}".format(hed.len12, hed.angle, hed.len23)
+                "{:9.5f}, {:9.5f}, {:9.5f}".format(
+                    set_accuracy_95(hed.lal[0]),  # len12
+                    set_accuracy_95(hed.lal[1]),  # angle
+                    set_accuracy_95(hed.lal[2]),  # len23
+                )
             )
             atom_str = ""  # atom and bond state
             atom_done_str = ""  # create each only once
@@ -1881,9 +1894,9 @@ class IC_Residue(object):
             htpl = (sCB, sCA, sC)
             self._gen_edra(htpl)
             h = self.hedra[htpl]
-            h.len23 = self.hedra[(sCA, sC, sO)].len12
-            h.angle = 110.17513
-            h.len12 = Ca_Cb_Len
+            h.lal[2] = self.hedra[(sCA, sC, sO)].lal[0]  # CaCO len12 -> len23
+            h.lal[1] = 110.17513  # angle
+            h.lal[0] = Ca_Cb_Len  # len12
 
             # generate dihedral based on N-Ca-C-O offset from db query above
             dtpl = (sO, sC, sCA, sCB)
@@ -2013,9 +2026,9 @@ class IC_Residue(object):
                     + h.id
                     + " "
                     + "{:9.5f} {:9.5f} {:9.5f}".format(
-                        set_accuracy_95(h.len12),
-                        set_accuracy_95(h.angle),
-                        set_accuracy_95(h.len23),
+                        set_accuracy_95(h.lal[0]),  # len12
+                        set_accuracy_95(h.lal[1]),  # angle
+                        set_accuracy_95(h.lal[2]),  # len23
                     )
                 )
             except KeyError:
@@ -2583,15 +2596,14 @@ class Hedron(Edron):
 
     Attributes
     ----------
-    len12: float
-        distance between 1st and 2nd atom
-    angle: float
-        angle (degrees) formed by 3 atoms
-    len23: float
-        distance between 2nd and 3rd atoms
-    atoms: tuple[3] of numpy arrays [4]
-        3 atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
-    atomsR: tuple[3] of numpy arrays [4]
+    lal: numpy array of len12, angle, len23
+        len12 = distance between 1st and 2nd atom
+        angle = angle (degrees) formed by 3 atoms
+        len23 = distance between 2nd and 3rd atoms
+
+    atoms: 3x4 numpy arrray
+        3 homogeneous atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
+    atomsR: 3x4 numpy array
         atoms reversed, 1st on +Z, 2nd at origin, 3rd on XZ plane
 
     Methods
@@ -2626,14 +2638,17 @@ class Hedron(Edron):
         self.atomsR: HACS
 
         if "len12" in kwargs:
-            # distance between 1st and 2nd atom
-            self.len12 = float(kwargs["len12"])
-            # angle formed between 3 atoms
-            self.angle = float(kwargs["angle"])
-            # distance between 2nd and 3rd atoms
-            self.len23 = float(kwargs["len23"])
+            self.lal = numpy.array(
+                (
+                    float(kwargs["len12"]),
+                    float(kwargs["angle"]),
+                    float(kwargs["len23"]),
+                )
+            )
+        else:
+            self.lal = numpy.zeros(3)
 
-            self.init_pos()
+            # self.init_pos()
         # else:
         #    self.len12 = None
         #    self.angle = None
@@ -2643,45 +2658,45 @@ class Hedron(Edron):
 
     def __repr__(self) -> str:
         """Print string for Hedron object."""
-        return f"3-{self.id} {self.rdh_class} {str(self.len12)} {str(self.angle)} {str(self.len23)}"
+        return f"3-{self.id} {self.rdh_class} {str(self.lal[0])} {str(self.lal[1])} {str(self.lal[2])}"
 
     def init_pos(self) -> None:
         """Initialize Hedron by creating atom coordinate numpy arrays."""
-        if not hasattr(self, "_len12"):
-            raise AttributeError("%s missing length and angle settings" % (self))
+        # if not hasattr(self, "_len12"):
+        #    raise AttributeError("%s missing length and angle settings" % (self))
 
         # build hedron with a2 on +Z axis, a1 at origin,
         # a0 in -Z at angle n XZ plane
 
-        atoms: numpy.array = numpy.zeros((4, 4), dtype=numpy.float64)
+        atoms: numpy.array = numpy.zeros((3, 4), dtype=numpy.float64)
         atoms[:, 3] = 1.0
 
         # atomsR initialisation continues below
         atomsR: numpy.array = numpy.copy(atoms)
 
         # supplementary angle radian: angles which add to 180 are supplementary
-        sar = numpy.deg2rad(180.0 - self.angle)
+        sar = numpy.deg2rad(180.0 - self.lal[1])  # angle
         sinSar = numpy.sin(sar)
         cosSarN = -numpy.cos(sar)
 
         # a2 is len3 up from a2 on Z axis, X=Y=0
-        atoms[2][2] = self.len23
+        atoms[2][2] = self.lal[2]  # len23
         # a0 X is sin( sar ) * len12
-        atoms[0][0] = sinSar * self.len12
+        atoms[0][0] = sinSar * self.lal[0]  # len12
         # a0 Z is -(cos( sar ) * len12)
         # (assume angle always obtuse, so a0 is in -Z)
-        atoms[0][2] = cosSarN * self.len12
+        atoms[0][2] = cosSarN * self.lal[0]  # len12
 
         self.atoms = atoms  # cast(HACS, tuple(atoms))
 
         # same again but 'reversed' : a0 on Z axis, a1 at origin, a2 in -Z
 
         # a0r is len12 up from a1 on Z axis, X=Y=0
-        atomsR[0][2] = self.len12
+        atomsR[0][2] = self.lal[0]  # len12
         # a2r X is sin( sar ) * len23
-        atomsR[2][0] = sinSar * self.len23
+        atomsR[2][0] = sinSar * self.lal[2]  # len23
         # a2r Z is -(cos( sar ) * len23)
-        atomsR[2][2] = cosSarN * self.len23
+        atomsR[2][2] = cosSarN * self.lal[2]  # len23
 
         self.atomsR = atomsR  # cast(HACS, tuple(atomsR))
 
@@ -2714,7 +2729,8 @@ class Hedron(Edron):
         * superseded - hedra and dihedra values set by chain:internal_to_atom_coords()
         """
         acs = cast(HACS, self.gen_acs(atom_coords))
-        self.len12, self.angle, self.len23 = Hedron._get_dad(acs)
+        # self.len12, self.angle, self.len23 = Hedron._get_dad(acs)
+        self.lal[:] = Hedron._get_dad(acs)
         # self.atoms_updated = False
         self.init_pos()
 
@@ -2722,42 +2738,43 @@ class Hedron(Edron):
     def angle(self) -> float:
         """Get this hedron angle."""
         try:
-            return self._angle
+            return self.lal[1]  # _angle
         except AttributeError:
             return 0.0
 
     @angle.setter
     def angle(self, angle_deg) -> None:
         """Set this hedron angle; clears atoms_updated."""
-        self._angle = angle_deg
+        self.lal[1] = angle_deg  # _angle
         self.atoms_updated = False
 
     @property
     def len12(self):
         """Get first length for Hedron."""
         try:
-            return self._len12
+            return self.lal[0]  # _len12
         except AttributeError:
             return 0.0
 
     @len12.setter
     def len12(self, len):
         """Set first length for Hedron; clears atoms_updated."""
-        self._len12 = len
+        self.lal[0]  # _len12 = len
         self.atoms_updated = False
 
     @property
     def len23(self) -> float:
         """Get second length for Hedron."""
         try:
-            return self._len23
+            return self.lal[2]  # _len23
         except AttributeError:
             return 0.0
 
     @len23.setter
     def len23(self, len):
         """Set second length for Hedron; clears atoms_updated."""
-        self._len23 = len
+        self.lal[2] = len
+        # self._len23 = len
         self.atoms_updated = False
 
     def get_length(self, ak_tpl: BKT) -> Optional[float]:
@@ -2769,9 +2786,9 @@ class Hedron(Edron):
         if 2 > len(ak_tpl):
             return None
         if all(ak in self.aks[:2] for ak in ak_tpl):
-            return self.len12
+            return self.lal[0]  # len12
         if all(ak in self.aks[1:] for ak in ak_tpl):
-            return self.len23
+            return self.lal[2]  # len23
         return None
 
     def set_length(self, ak_tpl: BKT, newLength: float):
@@ -2783,9 +2800,9 @@ class Hedron(Edron):
         if 2 > len(ak_tpl):
             raise TypeError("Require exactly 2 AtomKeys: %s" % (str(ak_tpl)))
         elif all(ak in self.aks[:2] for ak in ak_tpl):
-            self.len12 = newLength
+            self.lal[0] = newLength  # len12
         elif all(ak in self.aks[1:] for ak in ak_tpl):
-            self.len23 = newLength
+            self.lal[2] = newLength  # len23
         else:
             raise TypeError("%s not found in %s" % (str(ak_tpl), self))
             # return
@@ -2949,10 +2966,10 @@ class Dihedron(Edron):
 
         if not rev:
             a4_pre_rotation = hedron2.atomsR[2].copy()
-            a4shift = hedron2.len12
+            a4shift = hedron2.lal[0]  # len12
         else:
             a4_pre_rotation = hedron2.atoms[0].copy()
-            a4shift = hedron2.len23
+            a4shift = hedron2.lal[2]  # len23
 
         # a4 to +Z
         a4_pre_rotation[2] *= -1
@@ -3078,21 +3095,25 @@ class Dihedron(Edron):
         a0a1, a0a1a2, a1a2, a1a2a3, a2a3 = Dihedron._get_dadad(acs)
 
         if not rev:
-            hed1.len12 = a0a1
-            hed1.len23 = hed2.len12 = a1a2
-            hed2.len23 = a2a3
+            hed1.lal[:] = (a0a1, a0a1a2, a1a2)
+            hed2.lal[:] = (a1a2, a1a2a3, a2a3)
+            # hed1.len12 = a0a1
+            # hed1.len23 = hed2.len12 = a1a2
+            # hed2.len23 = a2a3
         else:
-            hed1.len23 = a0a1
-            hed1.len12 = hed2.len23 = a1a2
-            hed2.len12 = a2a3
+            hed1.lal[:] = (a1a2, a0a1a2, a0a1)
+            hed2.lal[:] = (a2a3, a1a2a3, a0a1)
+            # hed1.len23 = a0a1
+            # hed1.len12 = hed2.len23 = a1a2
+            # hed2.len12 = a2a3
 
-        hed1.angle = a0a1a2
-        hed2.angle = a1a2a3
+        # hed1.angle = a0a1a2
+        # hed2.angle = a1a2a3
 
         hed1.init_pos()
         hed2.init_pos()
 
-        self.init_pos(True)
+        self.init_pos()
 
 
 class AtomKey(object):
