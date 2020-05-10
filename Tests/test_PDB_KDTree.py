@@ -9,7 +9,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Unit tests for those parts of the Bio.PDB module using Bio.KDTree."""
+"""Unit tests for those parts of the Bio.PDB module using Bio.PDB.kdtrees."""
 
 import unittest
 
@@ -84,7 +84,7 @@ class KDTreeTest(unittest.TestCase):
     def test_KDTree_point_search(self):
         """Test searching all points within a certain radius of center.
 
-        Using the KDTree C module, search all point pairs that are
+        Using the kdtrees C module, search all point pairs that are
         within radius, and compare the results to a manual search.
         """
         bucket_size = self.bucket_size
