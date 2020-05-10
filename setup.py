@@ -137,7 +137,6 @@ PACKAGES = [
     "Bio.Graphics",
     "Bio.Graphics.GenomeDiagram",
     "Bio.HMM",
-    "Bio.KDTree",
     "Bio.KEGG",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
@@ -200,9 +199,6 @@ EXTENSIONS = [
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
-    Extension(
-        "Bio.KDTree._CKDTree", ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]
-    ),
 ]
 
 # We now define the Biopython version number in Bio/__init__.py
