@@ -162,7 +162,7 @@ from Bio.SeqAnalysis.SeqVisualizer import SeqVisualizer
 def database(sequences_ids: List[str]) -> SeqDatabase:
     return SeqDatabase(sequences_ids)
 
-
+#kacdom
 def analyzer(sequences_records: List[SeqRecord]) -> SeqAnalyzer:
     return SeqAnalyzer(sequences_records)
 
