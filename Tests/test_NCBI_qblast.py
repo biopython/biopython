@@ -239,6 +239,7 @@ class TestQblast(unittest.TestCase):
         expected_hits,
     ):
         """Do qblast searches with given parameters and analyze results."""
+        NCBIWWW.email = "biopython@biopython.org"
         try:
             if program == "blastn":
                 # Check the megablast parameter is accepted
@@ -343,6 +344,7 @@ class TestQblast(unittest.TestCase):
         self.assertRaises(ValueError, NCBIWWW._parse_qblast_ref_page, handle)
 
     def test_short_query(self):
+        NCBIWWW.email = "biopython@biopython.org"
         """Test SHORT_QUERY_ADJUST parameter."""
         # Should give no hits:
         my_search = NCBIWWW.qblast("blastp", "nr", "ICWENRMP", hitlist_size=5)
@@ -374,6 +376,7 @@ class TestQblast(unittest.TestCase):
 
     def test_error_conditions(self):
         """Test if exceptions were properly handled."""
+        NCBIWWW.email = "biopython@biopython.org"
         self.assertRaises(
             ValueError,
             NCBIWWW.qblast,
