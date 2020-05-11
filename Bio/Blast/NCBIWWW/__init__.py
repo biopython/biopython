@@ -278,7 +278,8 @@ qblast._previous = 0
 
 def _build_query(url_base, parameters):
     query = [x for x in parameters if x[1] is not None]
-    query = query+[("EMAIL",email),("TOOL",tool)]
+    if url_base == NCBI_BLAST_URL :
+        query = query+[("email",email),("tool",tool)]
     message = urlencode(query).encode()
     request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
     return request

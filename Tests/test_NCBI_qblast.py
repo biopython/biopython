@@ -42,8 +42,8 @@ import requires_internet
 
 NCBIWWW.email="biopython@biopython.org"
 
-URL_TOOL = b"TOOL=biopython"
-URL_EMAIL = b"EMAIL=biopython%40biopython.org"
+URL_TOOL = b"tool=biopython"
+URL_EMAIL = b"email=biopython%40biopython.org"
 
 try:
     requires_internet.check()
@@ -384,7 +384,8 @@ class TestQblast(unittest.TestCase):
 
     def test_query(self):
         NCBIWWW.email="biopython@biopython.org"
-        request=NCBIWWW._build_query("https://test.test/test.cgi",[("TEST","test")])
+        request=NCBIWWW._build_query("https://blast.ncbi.nlm.nih.gov/Blast.cgi"
+,[("TEST","test")])
         self.assertIn(URL_TOOL, request.data)
         self.assertIn(URL_EMAIL, request.data)        
 
