@@ -384,8 +384,7 @@ class TestQblast(unittest.TestCase):
 
     def test_query(self):
         NCBIWWW.email="biopython@biopython.org"
-        request=NCBIWWW._build_query("https://blast.ncbi.nlm.nih.gov/Blast.cgi"
-,[("TEST","test")])
+        request=NCBIWWW._build_query(NCBIWWW.NCBI_BLAST_URL,[("TEST","test")])
         self.assertIn(URL_TOOL, request.data)
         self.assertIn(URL_EMAIL, request.data)        
 
