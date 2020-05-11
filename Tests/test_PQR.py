@@ -8,7 +8,6 @@
 # as part of this package.
 
 """Unit tests for the PQR parser in Bio.PDB module."""
-from __future__ import print_function
 from Bio.PDB.PDBParser import PDBParser
 import unittest
 import warnings
