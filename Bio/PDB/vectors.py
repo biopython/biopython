@@ -634,3 +634,34 @@ def coord_space(
     # mr = numpy.dot(tm, numpy.dot(mrz, numpy.dot(mry, mrz2)))
 
     return mt, mr
+
+
+def multi_rot_Z(entries: int, angle_rads: numpy.ndarray) -> numpy.ndarray:
+    """Create [entries] numpy Z rotation matrices for [entries] angles.
+
+    :param entries: int number of matrices generated.
+    :param angle_rads: numpy array of angles
+    :returns: entries x 4 x 4 homogeneous rotation matrices
+    """
+    rz = numpy.empty((entries, 4, 4))
+    rz[...] = numpy.identity(4)
+    rz[:, 0, 0] = rz[:, 1, 1] = numpy.cos(angle_rads)
+    rz[:, 1, 0] = numpy.sin(angle_rads)
+    rz[:, 0, 1] = -rz[:, 1, 0]
+    return rz
+
+
+def multi_rot_Y(entries: int, angle_rads: numpy.ndarray) -> numpy.ndarray:
+    """Create [entries] numpy Y rotation matrices for [entries] angles.
+
+    :param entries: int number of matrices generated.
+    :param angle_rads: numpy array of angles
+    :returns: entries x 4 x 4 homogeneous rotation matrices
+    """
+    ry = numpy.empty((entries, 4, 4))
+    ry[...] = numpy.identity(4)
+    ry[:, 0, 0] = ry[:, 2, 2] = numpy.cos(angle_rads)
+    ry[:, 0, 2] = numpy.sin(angle_rads)
+    ry[:, 2, 0] = -ry[:, 0, 2]
+
+    return ry
