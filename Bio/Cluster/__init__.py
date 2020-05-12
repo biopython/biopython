@@ -1282,7 +1282,7 @@ def __check_distancematrix(distancematrix):
                 m = len(row)
                 if m != i:
                     raise ValueError(
-                        "row %d has incorrect size (%d, expected %d)" % (m, i)
+                        "row %d has incorrect size (%d, expected %d)" % (i, m, i)
                     ) from None
                 if numpy.isnan(row).any():
                     raise ValueError("distancematrix contains NaN values") from None
