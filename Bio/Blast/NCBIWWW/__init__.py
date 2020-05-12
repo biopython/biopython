@@ -207,8 +207,8 @@ def qblast(
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    handle = urlopen(_build_query(url_base,parameters))
-    
+    handle = urlopen(_build_query(url_base, parameters))
+
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     rid, rtoe = _parse_qblast_ref_page(handle)
@@ -256,7 +256,7 @@ def qblast(
             # Wasn't a quick return, must wait at least a minute
             delay = 60
 
-        handle = urlopen(_build_query(url_base,parameters))
+        handle = urlopen(_build_query(url_base, parameters))
         results = handle.read().decode()
 
         # Can see an "\n\n" page while results are in progress,
@@ -276,13 +276,15 @@ def qblast(
 
 qblast._previous = 0
 
+
 def _build_query(url_base, parameters):
-    if url_base == NCBI_BLAST_URL :
-        parameters = parameters+[("email",email),("tool",tool)]
+    if url_base == NCBI_BLAST_URL:
+        parameters = parameters + [("email", email), ("tool", tool)]
     query = [x for x in parameters if x[1] is not None]
     message = urlencode(query).encode()
     request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
     return request
+
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).

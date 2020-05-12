@@ -40,7 +40,7 @@ from Bio.Blast import NCBIXML
 
 import requires_internet
 
-NCBIWWW.email="biopython@biopython.org"
+NCBIWWW.email = "biopython@biopython.org"
 
 URL_TOOL = b"tool=biopython"
 URL_EMAIL = b"email=biopython%40biopython.org"
@@ -386,10 +386,10 @@ class TestQblast(unittest.TestCase):
         )
 
     def test_query(self):
-        NCBIWWW.email="biopython@biopython.org"
-        request=NCBIWWW._build_query(NCBIWWW.NCBI_BLAST_URL,[("TEST","test")])
+        NCBIWWW.email = "biopython@biopython.org"
+        request = NCBIWWW._build_query(NCBIWWW.NCBI_BLAST_URL, [("TEST", "test")])
         self.assertIn(URL_TOOL, request.data)
-        self.assertIn(URL_EMAIL, request.data)        
+        self.assertIn(URL_EMAIL, request.data)
 
 
 if __name__ == "__main__":
