@@ -23,7 +23,7 @@ class analyzer(records):
             slownik[_[0]] = _[1][0]
         return slownik
 
-    def median_stdev_avg(self):
+    def median_stdev_avg(self) -> list:
         """
         Calculates standard deviation of lenths of given sequences
         :return:
