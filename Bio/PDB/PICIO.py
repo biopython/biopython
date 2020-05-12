@@ -243,7 +243,9 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
         chnp = chn.internal_coord = IC_Chain(chn)
         # done in IC_Chain init : chnp.set_residues()
         chnp.link_residues()
-        chnp.render_dihedra()
+        chnp.hedra_from_residues()
+        chnp.dihedra_from_residues()
+        # chnp.render_dihedra()
 
     # print(report_PIC(struct_builder.get_structure()))
     return struct
