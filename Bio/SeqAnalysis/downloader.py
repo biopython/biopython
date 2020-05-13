@@ -11,7 +11,10 @@ from Bio import SeqIO
 
 class SeqDownloader:
     def __init__(self, full_list, directory):
-        clear_ids = list(full_list)
+        if type(full_list) == str:
+            clear_ids = [full_list]
+        elif type(full_list) == list:
+            clear_ids = full_list
         analysis_dir = directory
 
         print("Number of unique IDs: {0}".format(len(clear_ids)))
@@ -71,7 +74,7 @@ class SeqDownloader:
         for file in onlyfiles:
             with open('./Downloads/{0}/{1}'.format(analysis_dir, file)) as big_fasta:
                 one_fasta = big_fasta.read()
-                with open('./Database/{0}.fasta'.format(analysis_dir), 'a+') as data:
+                with open('./Database/{0}.fasta'.format(analysis_dir), 'w+') as data:
                     data.write(one_fasta + '\n')
 
         print("Your sequences were saved in Database/{0}.fasta".format(analysis_dir))
@@ -166,3 +169,14 @@ class SequenceDatabase:
             if index not in seqData.keys():
                 seqData[index] = record
         self.database = seqData
+
+    def get(self, indexes=None) -> list:
+        if indexes is None:
+            records = list(self.database.values())
+        else:
+            if type(indexes) == str:
+                keys = [indexes]
+            elif type(indexes) == list:
+                keys = indexes
+            records = [self.database.get(key) for key in keys]
+        return records
