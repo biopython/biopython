@@ -281,7 +281,6 @@ def _enumerate_entity_atoms(entity):
                 for atm in res.get_unpacked_list():
                     atm.set_serial_number(anum)
                     anum += 1
-    pass
 
 
 def enumerate_atoms(entity):
