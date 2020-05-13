@@ -145,19 +145,25 @@ class Rebuild(unittest.TestCase):
                     m = re.search(r"\[\s+(\d+\.\d+)\,", aline)
                     if m:
                         # test correctly scaled atom bond length
-                        self.assertAlmostEqual(float(m.group(1)), 15.30583, places=3)
-                elif '[ 114, "1970K",' in aline:
+                        self.assertAlmostEqual(float(m.group(1)), 15.30582, places=3)
+                    else:
+                        self.fail("scaled atom bond length not found")
+                elif '[ 1, "1857M",' in aline:
                     next_one = True
                 elif next_one:
                     next_one = False
                     # test last residue transform looks roughly correct
                     # some differences due to sorting issues on different python
                     # versions
-                    target = [184.474, 125.988, -99.326, 1.0]
-                    ms = re.findall(r"\s+(-?\d+\.\d+)\s+\]", aline)
+                    target = [-12.413, -3.303, 35.771, 1.0]
+                    ms = re.findall(  # last column of each row
+                        r"\s+(-?\d+\.\d+)\s+\]", aline
+                    )
                     if ms:
                         for i in range(0, 3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
+                    else:
+                        self.fail("transform not found")
         sf.seek(0)
         IC_Residue.gly_Cbeta = True
         write_SCAD(
@@ -171,7 +177,7 @@ class Rebuild(unittest.TestCase):
         sf.seek(0)
         allBondsPass = False
         maxPeptideBondPass = False
-        glyCbetaPass = False
+        glyCbetaFound = False
         with as_handle(sf, mode="r") as handle:
             for aline in handle.readlines():
                 # test extra bond created in TRP (allBonds is True)
@@ -180,10 +186,18 @@ class Rebuild(unittest.TestCase):
                 # test 509_K-561_E long bond created
                 if "509_K" in aline and "561_E" in aline:
                     maxPeptideBondPass = True
-                if "(264_G_CB, 264_G_CA, 264_G_C)" in aline:
-                    glyCbetaPass = True
+                if "(21_G_CB, 21_G_CA, 21_G_C)" in aline:
+                    glyCbetaFound = True
+                    target = [15.33630, 110.17513, 15.13861]
+                    ms = re.findall(r"\s+(-?\d+\.\d+)", aline)
+                    if ms:
+                        for i in range(0, 3):
+                            self.assertAlmostEqual(float(ms[i]), target[i], places=0)
+                    else:
+                        self.fail("Cbeta internal coords not found")
+
         self.assertTrue(allBondsPass)
-        self.assertTrue(glyCbetaPass)
+        self.assertTrue(glyCbetaFound)
         self.assertTrue(maxPeptideBondPass)
 
 

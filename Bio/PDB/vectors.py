@@ -538,8 +538,9 @@ def coord_space(
     """
     # dbg = False
     # if dbg:
-    #    for ac in acs:
-    #        print(ac.transpose())
+    #    print(a0.transpose())
+    #    print(a1.transpose())
+    #    print(a2.transpose())
 
     # a0 = acs[0]
     # a1 = acs[1]
@@ -576,10 +577,15 @@ def coord_space(
     mt = gmry.dot(gmrz.dot(gtm))
 
     # if dbg:
-    #    print("mt * a2", (mt.dot(a2)).transpose())
+    #    print("tm:\n", tm)
+    #    print("mrz:\n", mrz)
+    #    print("mry:\n", mry)
+    #    # print("mt ", mt)
 
-    # p = mt @ a0
     p = mt.dot(a0)
+
+    # if dbg:
+    #    print("mt:\n", mt, "\na0:\n", a0, "\np:\n", p)
 
     # need azimuth of translated a0
     # sc2 = get_spherical_coordinates(p)
@@ -592,6 +598,14 @@ def coord_space(
 
     # mt = mrz2 @ mt
     mt = gmrz2.dot(mt)
+
+    # if dbg:
+    #    print("mt:", mt, "\na0:", a0, "\np:", p)
+    #    # print(p, "\n", azimuth2, "\n", mrz2, "\n", mt)
+
+    # if dbg:
+    #    print("mt:\n", mt)
+    #    print("<<<<<<==============================")
 
     if not rev:
         return mt, None
@@ -616,3 +630,34 @@ def coord_space(
     # mr = numpy.dot(tm, numpy.dot(mrz, numpy.dot(mry, mrz2)))
 
     return mt, mr
+
+
+def multi_rot_Z(entries: int, angle_rads: numpy.ndarray) -> numpy.ndarray:
+    """Create [entries] numpy Z rotation matrices for [entries] angles.
+
+    :param entries: int number of matrices generated.
+    :param angle_rads: numpy array of angles
+    :returns: entries x 4 x 4 homogeneous rotation matrices
+    """
+    rz = numpy.empty((entries, 4, 4))
+    rz[...] = numpy.identity(4)
+    rz[:, 0, 0] = rz[:, 1, 1] = numpy.cos(angle_rads)
+    rz[:, 1, 0] = numpy.sin(angle_rads)
+    rz[:, 0, 1] = -rz[:, 1, 0]
+    return rz
+
+
+def multi_rot_Y(entries: int, angle_rads: numpy.ndarray) -> numpy.ndarray:
+    """Create [entries] numpy Y rotation matrices for [entries] angles.
+
+    :param entries: int number of matrices generated.
+    :param angle_rads: numpy array of angles
+    :returns: entries x 4 x 4 homogeneous rotation matrices
+    """
+    ry = numpy.empty((entries, 4, 4))
+    ry[...] = numpy.identity(4)
+    ry[:, 0, 0] = ry[:, 2, 2] = numpy.cos(angle_rads)
+    ry[:, 0, 2] = numpy.sin(angle_rads)
+    ry[:, 2, 0] = -ry[:, 0, 2]
+
+    return ry

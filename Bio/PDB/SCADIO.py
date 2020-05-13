@@ -33,8 +33,9 @@ from Bio.File import as_handle
 from Bio.PDB.PDBExceptions import PDBException
 
 from Bio.PDB.internal_coords import IC_Residue, IC_Chain
-from Bio.PDB.Structure import Structure
-from Bio.PDB.Residue import Residue
+
+# from Bio.PDB.Structure import Structure
+# from Bio.PDB.Residue import Residue
 from Bio.PDB.vectors import homog_scale_mtx
 
 
@@ -123,15 +124,19 @@ def write_SCAD(
             if entity.internal_coord is not None:
                 entity.internal_coord.clear_ic()
             chnp = entity.internal_coord = IC_Chain(entity)
-            chnp.link_residues()
-            chnp.render_dihedra()
+            chnp.atom_to_internal_coordinates()
+            # chnp.link_residues()
+            # chnp.init_edra()  # render_dihedra()
+            # chnp.init_atom_coords()
         else:
             for chn in entity.get_chains():
                 if chn.internal_coord is not None:
                     chn.internal_coord.clear_ic()
                 chnp = chn.internal_coord = IC_Chain(chn)
-                chnp.link_residues()
-                chnp.render_dihedra()
+                chnp.atom_to_internal_coordinates()
+                # chnp.link_residues()
+                # chnp.init_edra()  # render_dihedra()
+                # chnp.init_atom_coords()
 
     if scale is not None:
         scaleMtx = homog_scale_mtx(scale)
