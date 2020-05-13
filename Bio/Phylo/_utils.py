@@ -326,7 +326,7 @@ def build_ete3tree(tree, ete_root):
         if hasattr(node, "confidences"):
             if len(node.confidences) == 1:
                 confidence = node.confidences[0].value
-                ete_node.add_features(confidence=confidence)
+                ete_node.add_features(confidence=confidence, support=confidence)
             else:
                 ete_node.add_features(confidences=node.confidences)
 
