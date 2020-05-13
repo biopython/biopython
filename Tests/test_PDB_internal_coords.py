@@ -39,6 +39,7 @@ class Rebuild(unittest.TestCase):
     CIF_parser = MMCIFParser(QUIET=True)
     pdb_1LCD = PDB_parser.get_structure("1LCD", "PDB/1LCD.pdb")
     pdb_2XHE = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
+    pdb_2XHE2 = PDB_parser.get_structure("2XHE", "PDB/2XHE.pdb")
     cif_3JQH = CIF_parser.get_structure("3JQH", "PDB/3JQH.cif")
     cif_4CUP = CIF_parser.get_structure("4CUP", "PDB/4CUP.cif")
 
@@ -188,7 +189,7 @@ class Rebuild(unittest.TestCase):
                     maxPeptideBondPass = True
                 if "(21_G_CB, 21_G_CA, 21_G_C)" in aline:
                     glyCbetaFound = True
-                    target = [12.43599, 110.17513, 15.33630]
+                    target = [15.33630, 110.17513, 15.13861]
                     ms = re.findall(r"\s+(-?\d+\.\d+)", aline)
                     if ms:
                         for i in range(0, 3):
