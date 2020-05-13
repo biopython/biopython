@@ -81,7 +81,7 @@ class KGMLPathwayTest(unittest.TestCase):
         self.data = [
             PathwayData("01100", (3628, 1726, 1746, 149)),
             PathwayData("03070", (81, 72, 8, 1), True),
-            ]
+        ]
         # A list of KO IDs that we're going to use to modify pathway
         # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
