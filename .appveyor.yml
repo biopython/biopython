@@ -38,7 +38,8 @@ build_script:
   - conda update conda
 # Pinning pillow==5.4.1 as version 6 breaks on current latest reportlab
 # https://bitbucket.org/rptlab/reportlab/issues/176/incompatibility-with-pillow-600
-  - conda install setuptools numpy psycopg2 ete3 matplotlib networkx reportlab scipy coverage pillow==5.4.1
+  - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
+  - conda install -c etetoolkit ete3 ete_toolchain
 
 # Pinning mysql-connector-python==8.0.13 for Python 3 as 8.0.16 breaks our tests
 # https://github.com/biopython/biopython/issues/2120
