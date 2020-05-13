@@ -53,7 +53,7 @@ class TestCAPS(unittest.TestCase):
             "TTAGTGAAAATGGAGGATCAAGTagctTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT"
             "GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC"
             "AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC",
-            ]
+        ]
         self.assertEqual(len(alignment), 3)
         enzymes = [EcoRI, AluI]
         align = createAlignment(alignment, Alphabet.generic_dna)
