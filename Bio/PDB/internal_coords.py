@@ -119,34 +119,53 @@ class IC_Chain:
     ----------
     chain: biopython Chain object reference
         The Chain object this extends
+
     initNCaC: AtomKey indexed dictionary of N, Ca, C atom coordinates.
         NCaCKeys start chain segments (first residue or after chain break).
         These 3 atoms define the coordinate space for a contiguous chain segment,
         as initially specified by PDB or mmCIF file.
+
     MaxPeptideBond: **Class** attribute to detect chain breaks.
         Override for fully contiguous chains with some very long bonds - e.g.
         for 3D printing (OpenSCAD output) a structure with fully disordered
         (missing) residues.
+
     ordered_aa_ic_list: list of IC_Residue objects
         IC_Residue objects ic algorithms can process (e.g. no waters)
+
     hedra: dict indexed by 3-tuples of AtomKeys
-        Hedra forming this residue
+        Hedra forming residues in this chain
+
+    hedraLen: int length of hedra dict
+
     hedraNdx: dict mapping hedra AtomKeys to numpy array data
+
     dihedra: dict indexed by 4-tuples of AtomKeys
         Dihedra forming (overlapping) this residue
-    dihedraNdx: dict mapping dihedra AtomKeys to numpy array data
-    atomArray: numpy array of homogeneous atom coords for chain
-    atomArrayIndex: dict mapping AtomKeys to atomArray indexes
-    hedraIC
-    hedraNdx
-    hedraLen
-    hAtoms
-    hAtomsR
-    hAtoms_needs_update
-    dihedraIC
 
-    dAtoms
-    dAtoms_needs_update
+    dihedraLen: int length of dihedra dict
+
+    dihedraNdx: dict mapping dihedra AtomKeys to numpy array data
+
+    atomArray: numpy array of homogeneous atom coords for chain
+
+    atomArrayIndex: dict mapping AtomKeys to atomArray indexes
+
+    numpy arrays for vector processing of chain di/hedra:
+
+    hedraIC: length-angle-length entries for each hedron
+
+    hAtoms: homogeneous atom coordinates (3x4) of hedra, central atom at origin
+
+    hAtomsR: hAtoms in reverse order
+
+    hAtoms_needs_update: booleans indicating whether hAtoms represent hedraIC
+
+    dihedraIC: dihedral angles for each dihedron
+
+    dAtoms: homogeneous atom coordinates (4x4) of dihedra, second atom at origin
+
+    dAtoms_needs_update: booleans indicating whether dAtoms represent dihedraIC
 
     Methods
     -------
@@ -524,7 +543,6 @@ class IC_Chain:
     # @profile
     def init_atom_coords(self) -> None:
         """Set chain level di/hedra arrays from IC_Residue data."""
-
         dhlen = self.dihedraLen
 
         # hedra inital coords
@@ -2085,13 +2103,11 @@ class IC_Residue(object):
         dihedron d2 where d1.rdh_class='AOACACAACB' and
         d2.rdh_class='ANACAACAO' and d1.pdb=d2.pdb and d1.chn=d2.chn
         and d1.res=d2.res) as f) as g
-        +-------------------+------------------+---------+
-        | avg_rslt          | sd_rslt          | count   |
-        |-------------------+------------------+---------|
-        | -122.682194862932 | 5.04403040513919 | 14098   |
-        +-------------------+------------------+---------+
-        """
 
+        | avg_rslt          | sd_rslt          | count   |
+        | -122.682194862932 | 5.04403040513919 | 14098   |
+
+        """
         Ca_Cb_Len = 1.53363
         if hasattr(self, "scale"):  # used for openscad output
             Ca_Cb_Len *= self.scale  # type: ignore
@@ -3060,8 +3076,7 @@ class Dihedron(Edron):
         """Save new dihedral angle; sets needs_update.
 
         faster to modify IC_Chain level arrays directly.
-        :param dangle_deg: float
-            New dihedral angle in degrees
+        :param dangle_deg: float new dihedral angle in degrees
         """
         self._dihedral = dangle_deg
         self.needs_update = True
