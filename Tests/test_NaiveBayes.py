@@ -42,7 +42,7 @@ class CarTest(unittest.TestCase):
             ["Yellow", "SUV", "Domestic"],
             ["Red", "SUV", "Imported"],
             ["Red", "Sports", "Imported"],
-            ]
+        ]
 
         ycar = [
             "Yes",
@@ -55,7 +55,7 @@ class CarTest(unittest.TestCase):
             "No",
             "No",
             "Yes",
-            ]
+        ]
 
         carmodel = NaiveBayes.train(xcar, ycar)
         self.assertEqual("Yes", NaiveBayes.classify(carmodel, ["Red", "Sports", "Domestic"]))
