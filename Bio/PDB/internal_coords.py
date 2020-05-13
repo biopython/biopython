@@ -34,19 +34,11 @@ The following classes comprise the core functionality for processing internal
 coordinates and are sufficiently related and coupled to place them together in
 this module:
 
-<<<<<<< HEAD
-IC_Chain: Extends Biopython Chain on .internal_coords attribute.
-    Manages connected sequence of residues and chain breaks; methods generally
-    apply IC_Residue methods along chain.
-
-IC_Residue: Extends for Biopython Residue on .internal_coords attribute.
-=======
 IC_Chain: Extends Biopython Chain on .internal_coord attribute.
     Manages connected sequence of residues and chain breaks; methods generally
     apply IC_Residue methods along chain.
 
 IC_Residue: Extends for Biopython Residue on .internal_coord attribute.
->>>>>>> ic_faster
     Most control and methods of interest are in this class, see API.
 
 Dihedron: four joined atoms forming a dihedral angle.
@@ -137,8 +129,6 @@ class IC_Chain:
         (missing) residues.
     ordered_aa_ic_list: list of IC_Residue objects
         IC_Residue objects ic algorithms can process (e.g. no waters)
-<<<<<<< HEAD
-=======
     hedra: dict indexed by 3-tuples of AtomKeys
         Hedra forming this residue
     hedraNdx: dict mapping hedra AtomKeys to numpy array data
@@ -157,7 +147,6 @@ class IC_Chain:
 
     dAtoms
     dAtoms_needs_update
->>>>>>> ic_faster
 
     Methods
     -------
@@ -174,11 +163,6 @@ class IC_Chain:
         Atom data
     link_residues()
         Call link_dihedra() on each IC_Residue (needs rprev, rnext set)
-<<<<<<< HEAD
-    render_dihedra()
-        Call render_dihedra() on each IC_Residue
-=======
->>>>>>> ic_faster
     set_residues()
         Add .internal_coord attribute for all Residues in parent Chain, populate
         ordered_aa_ic_list, set IC_Residue rprev, rnext or initNCaC coordinates
@@ -1193,11 +1177,8 @@ class IC_Residue(object):
         needs all bonds specified explicitly - otherwise, e.g. PHE rings will not
         be closed.  This variable is managed by the Write_SCAD() code and enables
         this.
-<<<<<<< HEAD
-=======
     cic: IC_Chain default None
         parent chain IC_Chain object
->>>>>>> ic_faster
 
     scale: optional float
         used for OpenSCAD output to generate gly_Cbeta bond length
@@ -1235,13 +1216,6 @@ class IC_Residue(object):
         Find hedra for passed AtomKey pair
     rak(atom info)
         Residue AtomKey - per residue AtomKey result cache
-<<<<<<< HEAD
-    render_dihedra()
-        Call init_pos for each dihedron in dihedra
-    render_hedra()
-        Call init_pos for each hedron in hedra
-=======
->>>>>>> ic_faster
     set_angle()
         Set angle for passed key (no position updates)
     set_length()
@@ -2596,13 +2570,8 @@ class Edron(object):
         3 (hedron) or 4 (dihedron) AtomKeys defining this di/hedron
     id: str
         ':'-joined string of AtomKeys for this di/hedron
-<<<<<<< HEAD
-    atoms_updated: bool
-        indicates di/hedron local atom_coords reflect current di/hedron
-=======
     needs_update: bool
         indicates di/hedron local atom_coords do NOT reflect current di/hedron
->>>>>>> ic_faster
         angle and length values in hedron local coordinate space
     dh_class: str
         sequence of atoms (no position or residue) comprising di/hedron
@@ -2809,17 +2778,6 @@ class Hedron(Edron):
 
     Attributes
     ----------
-<<<<<<< HEAD
-    len12: float
-        distance between 1st and 2nd atom
-    angle: float
-        angle (degrees) formed by 3 atoms
-    len23: float
-        distance between 2nd and 3rd atoms
-    atoms: tuple[3] of numpy arrays [4]
-        3 atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
-    atomsR: tuple[3] of numpy arrays [4]
-=======
     lal: numpy array of len12, angle, len23
         len12 = distance between 1st and 2nd atom
         angle = angle (degrees) formed by 3 atoms
@@ -2828,19 +2786,10 @@ class Hedron(Edron):
     atoms: 3x4 numpy arrray
         3 homogeneous atoms comprising hedron, 1st on XZ, 2nd at origin, 3rd on +Z
     atomsR: 3x4 numpy array
->>>>>>> ic_faster
         atoms reversed, 1st on +Z, 2nd at origin, 3rd on XZ plane
 
     Methods
     -------
-<<<<<<< HEAD
-    init_pos()
-        Create hedron space atom coordinate numpy arrays (atoms and atomsR).
-    hedron_from_atoms()
-        Compute length, angle, length for hedron from IC_Residue atom coords;
-        calls init_pos()
-=======
->>>>>>> ic_faster
     get_length()
         get bond length for specified atom pair
     set_length()
