@@ -44,7 +44,7 @@ class TestMarkovModel(unittest.TestCase):
             ("ACCGTTTTTTT", "01123333333"),
             ("ACGGGTTTTTT", "01222333333"),
             ("ACCGTTTTTTTT", "011233333333"),
-            ]
+        ]
         markov_model = MarkovModel.train_visible(states, alphabet, training_data)
         states = MarkovModel.find_states(markov_model, "AACGTT")
         self.assertEqual(len(states), 1)
@@ -122,7 +122,7 @@ class TestMarkovModel(unittest.TestCase):
         alphabet = ["cola", "ice_t", "lem"]
         outputs = [
             (2, 1, 0)
-            ]
+        ]
         p_initial = [1.0, 0.0000001]
         p_transition = [[0.7, 0.3],
                         [0.5, 0.5]]
