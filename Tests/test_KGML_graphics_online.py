@@ -61,7 +61,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
         self.data = [
             PathwayData("01100", (3628, 1726, 1746, 149)),
             PathwayData("03070", (81, 72, 8, 1), True),
-            ]
+        ]
 
     def test_render_KGML_import_map(self):
         """Basic rendering of KGML: use imported imagemap.
