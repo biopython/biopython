@@ -2,44 +2,36 @@ import pandas as pd
 from Bio import SeqAnalysis
 import numpy as np
 
-#seq_db = SeqAnalysis.database(['YP_025292.1', '1JOY'])
-records = seq_db.get()
-
-
-class analyzer(records):
+class analyzer:
     """
     A class that takes in records from SeqAnalysis.database and performs
     multiple operations on it and returns pd.DataFrame with values
     """
 
-    def makedict(self) -> dict:
+    def makedict(self, records) -> dict:
         """
         Makes a dictionary from records, where ids are keys and sequences are values
-        :return:
-        returns a created dictionary
+
+        :return: returns a created dictionary
         """
-        slownik = {}
-        for _ in records:
-            slownik[_[0]] = _[1][0]
+        slownik = {_[0]: _[1][0] for _ in records}
         return slownik
 
-    def median_stdev_avg(self) -> list:
+    def median_stdev_avg(self) -> tuple:
         """
         Calculates standard deviation of lenths of given sequences
-        :return:
-        changes self.stdev values to standard value calculate from sequences
+
+        :return: changes self.stdev values to standard value calculate from sequences
         """
         list_of_seq = self.dict.values()
-        list_of_lenths = []
-        for _ in list_of_seq:
-            list_of_lenths.append(len(_))
-        stdev = np.std(list_of_lenths)
-        avg = np.average(list_of_lenths)
-        median = np.median(list_of_lenths)
+        list_of_lenths = [len(_) for _ in list_of_seq]
+        stdev = float(np.std(list_of_lenths))
+        avg = float(np.average(list_of_lenths))
+        median = float(np.median(list_of_lenths))
         return stdev, avg, median
 
-    def __init__(self):
-        self.dict = analyzer.makedict(self)  # creates a dict with seq ids and seqeances itself
+    def __init__(self, records):
+        self.dict = analyzer.makedict(self, records)  # creates a dict with seq ids and seqeances itself
         self.tuples = [(id, seq) for id, seq in self.dict.values()]
         self.stdev, self.average, self.median = analyzer.median_stdev_avg(self)
 
@@ -62,6 +54,3 @@ class analyzer(records):
         df = pd.DataFrame(data)
         return df
 
-
-seq_analyzer = SeqAnalysis.analyzer(records)
-results = seq_analyzer.results()
