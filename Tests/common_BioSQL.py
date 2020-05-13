@@ -43,9 +43,7 @@ def load_biosql_ini(DBTYPE):
     """Load the database settings from INI file."""
     if not os.path.isfile("biosql.ini"):
         raise MissingExternalDependencyError(
-            "BioSQL test configuration"
-            " file biosql.ini missing"
-            " (see biosql.ini.sample)"
+            "BioSQL test configuration file biosql.ini missing (see biosql.ini.sample)"
         )
 
     config = configparser.ConfigParser()
