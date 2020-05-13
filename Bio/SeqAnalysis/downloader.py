@@ -74,7 +74,7 @@ class SeqDownloader:
         for file in onlyfiles:
             with open('./Downloads/{0}/{1}'.format(analysis_dir, file)) as big_fasta:
                 one_fasta = big_fasta.read()
-                with open('./Database/{0}.fasta'.format(analysis_dir), 'w+') as data:
+                with open('./Database/{0}.fasta'.format(analysis_dir), 'a+') as data:
                     data.write(one_fasta + '\n')
 
         print("Your sequences were saved in Database/{0}.fasta".format(analysis_dir))
@@ -165,7 +165,7 @@ class SequenceDatabase:
         download = SeqDownloader(full_list, directory)
         seqData = {}
         for index, record in zip(download.downloaded_files,
-                                 SeqIO.parse("C:/Users/solak/Desktop/Docs/MGR/APB/Database/directory.fasta", "fasta")):
+                                 SeqIO.parse("./Database/{0}.fasta".format(directory), "fasta")):
             if index not in seqData.keys():
                 seqData[index] = record
         self.database = seqData
