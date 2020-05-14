@@ -901,6 +901,43 @@ class ParseReal(unittest.TestCase):
             "O O O O O O O O O O O O O O O O O O O O O",
         )
 
+
+    def test_duplicated_residue_permissive(self):
+        """Throw (silent) exception on duplicated residue."""
+
+        data = (
+            "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
+            "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
+            "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
+            "END\n"
+        )
+        parser = PDBParser()
+        with warnings.catch_warnings(record=True) as w:
+            s = parser.get_structure("example", StringIO(data))
+            self.assertEqual(len(w), 1)
+
+        reslist = list(s.get_residues())
+        n_res = len(reslist)
+        resids = [r.id[1] for r in reslist]
+        self.assertEqual(n_res, 2)
+        self.assertEqual(resids, [5, 6])
+
+
+    def test_duplicated_residue_strict(self):
+        """Throw exception on duplicated residue."""
+
+        data = (
+            "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
+            "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
+            "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
+            "END\n"
+        )
+
+        parser = PDBParser(PERMISSIVE=False)
+        with self.assertRaises(PDBConstructionException):
+            s = parser.get_structure("example", StringIO(data))
+
+
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
 
