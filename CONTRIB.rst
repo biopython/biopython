@@ -190,6 +190,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Marco Galardini <https://github.com/mgalardini>
 - Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
+- Marton Langa <https://github.com/martonlanga>
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
