@@ -248,8 +248,14 @@ class BlastDB(unittest.TestCase):
         self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.phr"))
         self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.pin"))
         self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.pog"))
-        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.psd"))
-        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.psi"))
+        self.assertTrue(
+            os.path.isfile("GenBank/NC_005816.faa.psd")
+            or os.path.isfile("GenBank/NC_005816.faa.pnd")
+        )
+        self.assertTrue(
+            os.path.isfile("GenBank/NC_005816.faa.psi")
+            or os.path.isfile("GenBank/NC_005816.faa.pni")
+        )
         self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.psq"))
 
     def test_fasta_db_nucl(self):
@@ -288,8 +294,14 @@ class BlastDB(unittest.TestCase):
         self.assertTrue(os.path.isfile("GenBank/NC_005816.fna.nhr"))
         self.assertTrue(os.path.isfile("GenBank/NC_005816.fna.nin"))
         self.assertTrue(os.path.isfile("GenBank/NC_005816.fna.nog"))
-        self.assertTrue(os.path.isfile("GenBank/NC_005816.fna.nsd"))
-        self.assertTrue(os.path.isfile("GenBank/NC_005816.fna.nsi"))
+        self.assertTrue(
+            os.path.isfile("GenBank/NC_005816.fna.nsd")
+            or os.path.isfile("GenBank/NC_005816.fna.nnd")
+        )
+        self.assertTrue(
+            os.path.isfile("GenBank/NC_005816.fna.nsi")
+            or os.path.isfile("GenBank/NC_005816.fna.nni")
+        )
         self.assertTrue(os.path.isfile("GenBank/NC_005816.fna.nsq"))
 
     # makeblastdb makes files in the same dir as the input, clean these up
