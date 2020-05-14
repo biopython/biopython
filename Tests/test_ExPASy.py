@@ -15,6 +15,7 @@ from Bio.ExPASy import Prodoc
 from Bio.ExPASy import Prosite
 
 import requires_internet
+
 requires_internet.check()
 
 
@@ -35,15 +36,19 @@ class ExPASyOnlineTests(unittest.TestCase):
     def test_prosite_html(self):
         with ExPASy.get_prosite_entry("PS00001") as handle:
             html = handle.read()
-        self.assertEqual(handle.url,
-                         "https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001")
+        self.assertEqual(
+            handle.url,
+            "https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001",
+        )
         self.assertIn("<title>PROSITE: PS00001</title>", html)
 
     def test_prodoc_html(self):
         with ExPASy.get_prodoc_entry("PDOC00001") as handle:
             html = handle.read()
-        self.assertEqual(handle.url,
-                         "https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001")
+        self.assertEqual(
+            handle.url,
+            "https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001",
+        )
         self.assertIn("{PS00001; ASN_GLYCOSYLATION}", html)
 
 
