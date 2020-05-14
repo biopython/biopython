@@ -16,6 +16,7 @@ from Bio.Phylo._utils import (
     draw,
     draw_ascii,
     draw_graphviz,
+    draw_matplot,
     to_networkx,
     build_ete3tree,
 )
