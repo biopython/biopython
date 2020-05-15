@@ -46,6 +46,17 @@ def read_PIC(file: TextIO, verbose: bool = False) -> Structure:
 
     An improvement would define relative positions for HOH (water) entries.
 
+    N.B. dihedron (i-1)C-N-CA-CB is ignored in assembly if O exists.
+
+    C-beta is by default placed using O-C-CA-CB, but O is missing
+    in some PDB file residues, which means the sidechain cannot be
+    placed.  The alternate CB path (i-1)C-N-CA-CB is provided to
+    circumvent this, but if this is needed then it must be adjusted in
+    conjunction with PHI ((i-1)C-N-CA-C) as they overlap.  (i-1)C-N-CA-CB is
+    included by default in .pic files for consistency and informational
+    (e.g. statistics gathering) purposes, as otherwise the dihedron would only
+    appear in the few cases it is needed for.
+
     :param Bio.File file: file name or handle
     :param bool verbose: complain when lines not as expected
     :returns: Biopython Structure object, Residues with .internal_coord attributes
