@@ -8,7 +8,16 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.77
+(In progress, not yet released): Biopython 1.78
+===============================================
+
+This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
+tested on PyPy3.6.1 v7.1.1-beta0.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+15 May 2020: Biopython 1.77
 ===============================================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
@@ -41,12 +50,14 @@ possible, especially the following contributors:
 - Andrei Istrate (first contribution)
 - Andrey Raspopov
 - Austin Varela (first contribution)
+- Chris Daley
 - Chris Rands
 - Deepak Khatri
 - Hielke Walinga (first contribution)
 - Kai Blin
 - Karthikeyan Singaravelan (first contribution)
 - Markus Piotrowski
+- Michiel de Hoon
 - Peter Cock
 - Rob Miller
 - Sergio Valqui
