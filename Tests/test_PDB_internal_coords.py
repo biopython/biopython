@@ -78,13 +78,27 @@ class Rebuild(unittest.TestCase):
             if mdl.serial_num == 2:
                 break
         mdl.atom_to_internal_coordinates()
+        # other tests show can build with arbitrary internal coords
+        # build here so changes below trigger more comlicated
+        # xAtoms_needs_update mask arrays
+        mdl.internal_to_atom_coordinates()
+        nvt = {}
         nvc1 = {}
         nvpsi = {}
+        tcount = 0
         c1count = 0
         psicount = 0
         for r in mdl.get_residues():
             ric = r.internal_coord
             if ric:
+                # hedra change
+                tau = ric.get_angle("tau")
+                if ric.rprev != [] and tau is not None:
+                    tcount += 1
+                    nv = tau + 0.5
+                    ric.set_angle("tau", nv)
+                    nvt[str(r)] = nv
+                # sidechain dihedron change
                 chi1 = ric.get_angle("chi1")
                 if chi1 is not None:
                     c1count += 1
@@ -93,6 +107,7 @@ class Rebuild(unittest.TestCase):
                         nv -= 360.0
                     ric.set_angle("chi1", nv)
                     nvc1[str(r)] = nv
+                # backbone dihedron change
                 psi = ric.get_angle("psi")
                 if psi is not None:
                     psicount += 1
@@ -110,11 +125,16 @@ class Rebuild(unittest.TestCase):
             if mdl.serial_num == 2:
                 break
         mdl.atom_to_internal_coordinates()
+        ttcount = 0
         c1tcount = 0
         psitcount = 0
         for r in mdl.get_residues():
             ric = r.internal_coord
             if ric:
+                tau = ric.get_angle("tau")
+                if ric.rprev != [] and tau is not None:
+                    ttcount += 1
+                    self.assertAlmostEqual(tau, nvt[str(r)], places=1)
                 chi1 = ric.get_angle("chi1")
                 if chi1 is not None:
                     c1tcount += 1
@@ -123,8 +143,10 @@ class Rebuild(unittest.TestCase):
                 if psi is not None:
                     psitcount += 1
                     self.assertAlmostEqual(psi, nvpsi[str(r)], places=1)
+        self.assertEqual(tcount, ttcount)
         self.assertEqual(c1count, c1tcount)
         self.assertEqual(psicount, psitcount)
+        self.assertTrue(ttcount > 0)
         self.assertTrue(c1count > 0)
         self.assertTrue(psicount > 0)
 
