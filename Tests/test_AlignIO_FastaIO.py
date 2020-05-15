@@ -818,9 +818,7 @@ class FastaIOTests(unittest.TestCase):
             self.assertEqual(alignments[11][0].seq, "AQQQESATTQKAEKEVTRMVIIMVIAFLICW")
             self.assertEqual(alignments[11][0].id, "sp|P08100|OPSD_HUMAN")
             self.assertEqual(alignments[11][0].annotations["original_length"], 348)
-            self.assertEqual(
-                alignments[11][1].seq, "SQQIRNATTMMMTMRVTSFSAFWVVADSCCW"
-            )
+            self.assertEqual(alignments[11][1].seq, "SQQIRNATTMMMTMRVTSFSAFWVVADSCCW")
             self.assertEqual(alignments[11][1].id, "gi|283855822|gb|GQ290312.1|")
             self.assertEqual(alignments[11][1].annotations["original_length"], 983)
 

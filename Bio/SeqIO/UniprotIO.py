@@ -252,11 +252,11 @@ class Parser:
 
             if element.attrib["type"] in simple_comments:
                 ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
-                for text_element in element.getiterator(NS + "text"):
+                for text_element in element.iter(NS + "text"):
                     if text_element.text:
                         append_to_annotations(ann_key, text_element.text)
             elif element.attrib["type"] == "subcellular location":
-                for subloc_element in element.getiterator(NS + "subcellularLocation"):
+                for subloc_element in element.iter(NS + "subcellularLocation"):
                     for el in subloc_element:
                         if el.text:
                             ann_key = "comment_%s_%s" % (
@@ -265,34 +265,30 @@ class Parser:
                             )
                             append_to_annotations(ann_key, el.text)
             elif element.attrib["type"] == "interaction":
-                for interact_element in element.getiterator(NS + "interactant"):
+                for interact_element in element.iter(NS + "interactant"):
                     ann_key = "comment_%s_intactId" % element.attrib["type"]
                     append_to_annotations(ann_key, interact_element.attrib["intactId"])
             elif element.attrib["type"] == "alternative products":
-                for alt_element in element.getiterator(NS + "isoform"):
+                for alt_element in element.iter(NS + "isoform"):
                     ann_key = "comment_%s_isoform" % element.attrib["type"].replace(
                         " ", ""
                     )
-                    for id_element in alt_element.getiterator(NS + "id"):
+                    for id_element in alt_element.iter(NS + "id"):
                         append_to_annotations(ann_key, id_element.text)
             elif element.attrib["type"] == "mass spectrometry":
                 ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
                 start = end = 0
-                for el in element.getiterator(NS + "location"):
-                    pos_els = list(el.getiterator(NS + "position"))
+                for el in element.iter(NS + "location"):
+                    pos_els = list(el.iter(NS + "position"))
                     # this try should be avoided, maybe it is safer to skip position parsing for mass spectrometry
                     try:
                         if pos_els:
                             end = int(pos_els[0].attrib["position"])
                             start = end - 1
                         else:
-                            start = int(
-                                list(el.getiterator(NS + "begin"))[0].attrib["position"]
-                            )
+                            start = int(next(el.iter(NS + "begin")).attrib["position"])
                             start -= 1
-                            end = int(
-                                list(el.getiterator(NS + "end"))[0].attrib["position"]
-                            )
+                            end = int(next(el.iter(NS + "end")).attrib["position"])
                     except (ValueError, KeyError):
                         # undefined positions or erroneously mapped
                         pass
@@ -307,9 +303,9 @@ class Parser:
             elif element.attrib["type"] == "sequence caution":
                 pass  # not parsed: few information, complex structure
             elif element.attrib["type"] == "online information":
-                for link_element in element.getiterator(NS + "link"):
+                for link_element in element.iter(NS + "link"):
                     ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
-                    for id_element in link_element.getiterator(NS + "link"):
+                    for id_element in link_element.iter(NS + "link"):
                         append_to_annotations(
                             ann_key,
                             "%s@%s"

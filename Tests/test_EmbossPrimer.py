@@ -25,7 +25,7 @@ class Primer3ParseTest(unittest.TestCase):
             os.path.join("Emboss", "short.primer3"),
             os.path.join("Emboss", "internal_oligo.primer3"),
             os.path.join("Emboss", "no_oligo.primer3"),
-            ]
+        ]
 
     def test_simple_parse(self):
         """Make sure that we can use all single target primer3 files."""
@@ -44,12 +44,9 @@ class Primer3ParseTest(unittest.TestCase):
             primer_info = Primer3.read(handle)
 
         self.assertEqual(len(primer_info.primers), 5)
-        self.assertEqual(primer_info.comments,
-                         "# PRIMER3 RESULTS FOR AC074298\n")
-        self.assertEqual(primer_info.primers[1].forward_seq,
-                         "CCGGTTTCTCTGGTTGAAAA")
-        self.assertEqual(primer_info.primers[2].reverse_seq,
-                         "TCACATTCCCAAATGTAGATCG")
+        self.assertEqual(primer_info.comments, "# PRIMER3 RESULTS FOR AC074298\n")
+        self.assertEqual(primer_info.primers[1].forward_seq, "CCGGTTTCTCTGGTTGAAAA")
+        self.assertEqual(primer_info.primers[2].reverse_seq, "TCACATTCCCAAATGTAGATCG")
         self.assertEqual(primer_info.primers[0].size, 218)
         self.assertEqual(len(primer_info.primers[0]), 218)
         self.assertEqual(primer_info.primers[3].forward_start, 112)
@@ -68,12 +65,10 @@ class Primer3ParseTest(unittest.TestCase):
             primer_info = Primer3.read(handle)
 
         self.assertEqual(len(primer_info.primers), 5)
-        self.assertEqual(primer_info.comments,
-                         "# PRIMER3 RESULTS FOR 26964-28647#\n")
+        self.assertEqual(primer_info.comments, "# PRIMER3 RESULTS FOR 26964-28647#\n")
         self.assertEqual(primer_info.primers[1].reverse_seq, "")
         self.assertEqual(primer_info.primers[1].internal_seq, "")
-        self.assertEqual(primer_info.primers[3].forward_seq,
-                         "TGTGATTGCTTGAGCTGGAC")
+        self.assertEqual(primer_info.primers[3].forward_seq, "TGTGATTGCTTGAGCTGGAC")
         self.assertEqual(primer_info.primers[3].internal_seq, "")
         self.assertEqual(primer_info.primers[3].forward_start, 253)
 
@@ -85,11 +80,9 @@ class Primer3ParseTest(unittest.TestCase):
             primer_info = Primer3.read(handle)
 
         self.assertEqual(len(primer_info.primers), 5)
-        self.assertEqual(primer_info.comments,
-                         "# EPRIMER3 RESULTS FOR YNL138W-A\n")
+        self.assertEqual(primer_info.comments, "# EPRIMER3 RESULTS FOR YNL138W-A\n")
         self.assertEqual(primer_info.primers[0].internal_length, 22)
-        self.assertEqual(primer_info.primers[1].internal_seq,
-                         "TTGCGCTTTAGTTTGAATTGAA")
+        self.assertEqual(primer_info.primers[1].internal_seq, "TTGCGCTTTAGTTTGAATTGAA")
         self.assertEqual(primer_info.primers[2].internal_tm, 58.62)
         self.assertEqual(primer_info.primers[3].internal_start, 16)
         self.assertEqual(primer_info.primers[4].internal_gc, 35.00)
@@ -103,38 +96,23 @@ class Primer3ParseTest(unittest.TestCase):
         for target in targets:
             self.assertEqual(len(target.primers), 5)
 
-        self.assertEqual(targets[0].primers[0].forward_seq,
-                         "GCAAACTGAAAAGCGGACTC")
-        self.assertEqual(targets[0].primers[1].forward_seq,
-                         "GGGACGTACTTTCGCACAAT")
-        self.assertEqual(targets[0].primers[2].forward_seq,
-                         "GTCTTATGCGTGGTGGAGGT")
-        self.assertEqual(targets[0].primers[3].forward_seq,
-                         "GTACATCAACATCCGCAACG")
-        self.assertEqual(targets[0].primers[4].forward_seq,
-                         "CGTACATCAACATCCGCAAC")
+        self.assertEqual(targets[0].primers[0].forward_seq, "GCAAACTGAAAAGCGGACTC")
+        self.assertEqual(targets[0].primers[1].forward_seq, "GGGACGTACTTTCGCACAAT")
+        self.assertEqual(targets[0].primers[2].forward_seq, "GTCTTATGCGTGGTGGAGGT")
+        self.assertEqual(targets[0].primers[3].forward_seq, "GTACATCAACATCCGCAACG")
+        self.assertEqual(targets[0].primers[4].forward_seq, "CGTACATCAACATCCGCAAC")
 
-        self.assertEqual(targets[1].primers[0].forward_seq,
-                         "GGAAGTGCTTCTCGTTTTCG")
-        self.assertEqual(targets[1].primers[1].forward_seq,
-                         "TACAGAGCGTCACGGATGAG")
-        self.assertEqual(targets[1].primers[2].forward_seq,
-                         "TTGTCATCGTGCTCTTCGTC")
-        self.assertEqual(targets[1].primers[3].forward_seq,
-                         "GACTCCAACCTCAGCTTTCG")
-        self.assertEqual(targets[1].primers[4].forward_seq,
-                         "GGCACGAAGAAGGACAGAAG")
+        self.assertEqual(targets[1].primers[0].forward_seq, "GGAAGTGCTTCTCGTTTTCG")
+        self.assertEqual(targets[1].primers[1].forward_seq, "TACAGAGCGTCACGGATGAG")
+        self.assertEqual(targets[1].primers[2].forward_seq, "TTGTCATCGTGCTCTTCGTC")
+        self.assertEqual(targets[1].primers[3].forward_seq, "GACTCCAACCTCAGCTTTCG")
+        self.assertEqual(targets[1].primers[4].forward_seq, "GGCACGAAGAAGGACAGAAG")
 
-        self.assertEqual(targets[15].primers[0].forward_seq,
-                         "TGCTTGAAAATGACGCACTC")
-        self.assertEqual(targets[15].primers[1].forward_seq,
-                         "CTCGCTGGCTAGGTCATAGG")
-        self.assertEqual(targets[15].primers[2].forward_seq,
-                         "TATCGCACCAAACACGGTAA")
-        self.assertEqual(targets[15].primers[3].forward_seq,
-                         "CGATTACCCTCACCGTCACT")
-        self.assertEqual(targets[15].primers[4].forward_seq,
-                         "TATCGCAACCACTGAGCAAG")
+        self.assertEqual(targets[15].primers[0].forward_seq, "TGCTTGAAAATGACGCACTC")
+        self.assertEqual(targets[15].primers[1].forward_seq, "CTCGCTGGCTAGGTCATAGG")
+        self.assertEqual(targets[15].primers[2].forward_seq, "TATCGCACCAAACACGGTAA")
+        self.assertEqual(targets[15].primers[3].forward_seq, "CGATTACCCTCACCGTCACT")
+        self.assertEqual(targets[15].primers[4].forward_seq, "TATCGCAACCACTGAGCAAG")
 
     def test_multi_record_full(self):
         """Test parsing multiple primer sets (NirK full)."""
@@ -145,38 +123,23 @@ class Primer3ParseTest(unittest.TestCase):
         for target in targets:
             self.assertEqual(len(target.primers), 5)
 
-        self.assertEqual(targets[15].primers[0].forward_seq,
-                         "ACTCACTTCGGCTGAATGCT")
-        self.assertEqual(targets[15].primers[1].forward_seq,
-                         "GGCGATTAGCGCTGTCTATC")
-        self.assertEqual(targets[15].primers[2].forward_seq,
-                         "ACTCACTTCGGCTGAATGCT")
-        self.assertEqual(targets[15].primers[3].forward_seq,
-                         "TAGGCGTATAGACCGGGTTG")
-        self.assertEqual(targets[15].primers[4].forward_seq,
-                         "AGCAAGCTGACCACTGGTTT")
+        self.assertEqual(targets[15].primers[0].forward_seq, "ACTCACTTCGGCTGAATGCT")
+        self.assertEqual(targets[15].primers[1].forward_seq, "GGCGATTAGCGCTGTCTATC")
+        self.assertEqual(targets[15].primers[2].forward_seq, "ACTCACTTCGGCTGAATGCT")
+        self.assertEqual(targets[15].primers[3].forward_seq, "TAGGCGTATAGACCGGGTTG")
+        self.assertEqual(targets[15].primers[4].forward_seq, "AGCAAGCTGACCACTGGTTT")
 
-        self.assertEqual(targets[15].primers[0].reverse_seq,
-                         "CATTTAATCCGGATGCCAAC")
-        self.assertEqual(targets[15].primers[1].reverse_seq,
-                         "TGGCCTTTCTCTCCTCTTCA")
-        self.assertEqual(targets[15].primers[2].reverse_seq,
-                         "ATTTAATCCGGATGCCAACA")
-        self.assertEqual(targets[15].primers[3].reverse_seq,
-                         "CACACATTATTGGCGGTCAC")
-        self.assertEqual(targets[15].primers[4].reverse_seq,
-                         "TCTGAAACCACCAAGGAAGC")
+        self.assertEqual(targets[15].primers[0].reverse_seq, "CATTTAATCCGGATGCCAAC")
+        self.assertEqual(targets[15].primers[1].reverse_seq, "TGGCCTTTCTCTCCTCTTCA")
+        self.assertEqual(targets[15].primers[2].reverse_seq, "ATTTAATCCGGATGCCAACA")
+        self.assertEqual(targets[15].primers[3].reverse_seq, "CACACATTATTGGCGGTCAC")
+        self.assertEqual(targets[15].primers[4].reverse_seq, "TCTGAAACCACCAAGGAAGC")
 
-        self.assertEqual(targets[15].primers[0].internal_seq,
-                         "CCCACCAATATTTGGCTAGC")
-        self.assertEqual(targets[15].primers[1].internal_seq,
-                         "AATCTTCTGTGCACCTTGCC")
-        self.assertEqual(targets[15].primers[2].internal_seq,
-                         "CCCACCAATATTTGGCTAGC")
-        self.assertEqual(targets[15].primers[3].internal_seq,
-                         "TGAGCCTGTGTTCCACACAT")
-        self.assertEqual(targets[15].primers[4].internal_seq,
-                         "CTATGCCCTTCTGCCACAAT")
+        self.assertEqual(targets[15].primers[0].internal_seq, "CCCACCAATATTTGGCTAGC")
+        self.assertEqual(targets[15].primers[1].internal_seq, "AATCTTCTGTGCACCTTGCC")
+        self.assertEqual(targets[15].primers[2].internal_seq, "CCCACCAATATTTGGCTAGC")
+        self.assertEqual(targets[15].primers[3].internal_seq, "TGAGCCTGTGTTCCACACAT")
+        self.assertEqual(targets[15].primers[4].internal_seq, "CTATGCCCTTCTGCCACAAT")
 
 
 class PrimersearchParseTest(unittest.TestCase):
@@ -200,14 +163,16 @@ class PrimersearchParseTest(unittest.TestCase):
         self.assertEqual(len(amp_info.amplifiers["Test"]), 1)
 
         self.assertEqual(amp_info.amplifiers["Test"][0].length, 218)
-        self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,
-                         "AC074298 AC074298 \n"
-                         "\tTelomere associated sequence for Arabidopsis thaliana "
-                         "TEL1N from chromosome I, complete sequence.\n"
-                         "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 "
-                         "with 0 mismatches\n"
-                         "\tTCACATTCCCAAATGTAGATCG hits reverse strand at "
-                         "[114] with 0 mismatches")
+        self.assertEqual(
+            amp_info.amplifiers["Test"][0].hit_info,
+            "AC074298 AC074298 \n"
+            "\tTelomere associated sequence for Arabidopsis thaliana "
+            "TEL1N from chromosome I, complete sequence.\n"
+            "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 "
+            "with 0 mismatches\n"
+            "\tTCACATTCCCAAATGTAGATCG hits reverse strand at "
+            "[114] with 0 mismatches",
+        )
 
 
 class PrimerSearchInputTest(unittest.TestCase):
@@ -223,9 +188,7 @@ class PrimerSearchInputTest(unittest.TestCase):
         p_info.add_primer_set("Test2", "AATA", "TTAT")
 
         output = str(p_info)
-        self.assertEqual(output,
-                         "Test GATC CATG\n"
-                         "Test2 AATA TTAT\n")
+        self.assertEqual(output, "Test GATC CATG\nTest2 AATA TTAT\n")
 
 
 if __name__ == "__main__":

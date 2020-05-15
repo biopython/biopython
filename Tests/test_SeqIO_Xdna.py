@@ -33,16 +33,16 @@ class TestXdna(unittest.TestCase):
                     "end": 150,
                     "strand": 1,
                     "label": "FeatureA"
-                    },
+                },
                 {
                     "type": "misc_binding",
                     "start": 499,
                     "end": 700,
                     "strand": -1,
                     "label": "FeatureB"
-                    }
-                ]
-            },
+                }
+            ]
+        },
         "sample-b": {
             "file": "Xdna/sample-b.xdna",
             "name": "Sample",
@@ -58,16 +58,16 @@ class TestXdna(unittest.TestCase):
                     "end": 241,
                     "strand": 1,
                     "label": "FeatureA"
-                    },
+                },
                 {
                     "type": "terminator",
                     "start": 399,
                     "end": 750,
                     "strand": -1,
                     "label": "FeatureB"
-                    }
-                ]
-            },
+                }
+            ]
+        },
         "sample-c": {
             "file": "Xdna/sample-c.xprt",
             "name": "Sample",
@@ -83,17 +83,17 @@ class TestXdna(unittest.TestCase):
                     "end": 11,
                     "strand": 1,
                     "label": "S11"
-                    },
+                },
                 {
                     "type": "misc_binding",
                     "start": 164,
                     "end": 195,
                     "strand": 1,
                     "label": "RIP1"
-                    }
-                ]
-            }
+                }
+            ]
         }
+    }
 
     def test_read(self):
         """Read sample files."""

@@ -16,6 +16,7 @@ from common_BioSQL import load_biosql_ini, check_config
 from common_BioSQL_online import share_config
 
 import requires_internet
+
 requires_internet.check()
 
 DBDRIVER = "psycopg2"

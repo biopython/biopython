@@ -160,10 +160,10 @@ use string-like equality testing and hashing (ingoring any difference in
 alphabet except to issue warnings).
 
 Prior releases used Python's object comparison. Warnings of this change
-were first added in Release 1.54 (May 2010), with hash warnings added in
-Release 1.62 (August 2013).
+were first added in Release 1.54 (May 2010), with hash warnings present
+from Release 1.62 (August 2013) to Release 1.76 (December 2019).
 
-For backward compatibility and/or to silence the warnings, please use
+For backward compatibility and/or to silence warnings about this, please use
 explicit string comparision, str(seq1) == str(seq2), or object comparison,
 id(seq1) == id(seq2), as required.
 
@@ -821,10 +821,10 @@ removed in Release 1.61.
 
 Bio.KDTree
 ----------
-This module was declared obsolete in Release 1.72, and deprecated in Release
-1.74. As of Release 1.72, KDTree data structures and the functionality
-previously available in ``Bio.KDTree`` are provided in a new module
-``Bio.PDB.kdtrees``.
+This module was declared obsolete in Release 1.72, deprecated in Release 1.74,
+and removed in Release 1.77. As of Release 1.72, KDTree data structures and
+the functionality previously available in ``Bio.KDTree`` are provided in a new
+module ``Bio.PDB.kdtrees``.
 
 Bio.trie, Bio.triefind
 ----------------------

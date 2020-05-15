@@ -786,7 +786,7 @@ class Tree(Nodes.Chain):
 
     def root_with_outgroup(self, outgroup=None):
         """Define a tree's root with a reference group outgroup."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def _connect_subtree(parent, child):
             """Attach subtree starting with node child to parent (PRIVATE)."""
             for i, branch in enumerate(self.unrooted):

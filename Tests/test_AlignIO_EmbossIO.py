@@ -9,11 +9,11 @@ import unittest
 
 from io import StringIO
 
-from Bio.AlignIO.EmbossIO import EmbossWriter, EmbossIterator
+from Bio.AlignIO.EmbossIO import EmbossIterator
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
-simple_example = \
-"""########################################
+simple_example = """\
+########################################
 # Program:  alignret
 # Rundate:  Wed Jan 16 17:16:13 2002
 # Report_file: stdout
@@ -63,8 +63,8 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 """  # noqa: E122 not clear to me, why this comes up here
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
-pair_example = \
-"""########################################
+pair_example = """\
+########################################
 # Program:  water
 # Rundate:  Wed Jan 16 17:23:19 2002
 # Report_file: stdout
@@ -106,8 +106,8 @@ IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
 
 """  # noqa : W291
 
-pair_example2 = \
-"""########################################
+pair_example2 = """\
+########################################
 # Program: needle
 # Rundate: Sun 27 Apr 2007 17:20:35
 # Commandline: needle
@@ -369,7 +369,6 @@ asis             311 -----------------    311
 
 
 class TestEmbossIO(unittest.TestCase):
-
     def test_pair_example(self):
         alignments = list(EmbossIterator(StringIO(pair_example)))
         self.assertEqual(len(alignments), 1)
@@ -380,7 +379,9 @@ class TestEmbossIO(unittest.TestCase):
         alignments = list(EmbossIterator(StringIO(simple_example)))
         self.assertEqual(len(alignments), 1)
         self.assertEqual(len(alignments[0]), 4)
-        self.assertEqual([r.id for r in alignments[0]], ["IXI_234", "IXI_235", "IXI_236", "IXI_237"])
+        self.assertEqual(
+            [r.id for r in alignments[0]], ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
+        )
 
     def test_pair_plus_simple(self):
         alignments = list(EmbossIterator(StringIO(pair_example + simple_example)))
@@ -388,14 +389,20 @@ class TestEmbossIO(unittest.TestCase):
         self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(len(alignments[1]), 4)
         self.assertEqual([r.id for r in alignments[0]], ["IXI_234", "IXI_235"])
-        self.assertEqual([r.id for r in alignments[1]], ["IXI_234", "IXI_235", "IXI_236", "IXI_237"])
+        self.assertEqual(
+            [r.id for r in alignments[1]], ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
+        )
 
     def test_pair_example2(self):
         alignments = list(EmbossIterator(StringIO(pair_example2)))
         self.assertEqual(len(alignments), 5)
         self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual([r.id for r in alignments[0]], ["ref_rec", "gi|94968718|receiver"])
-        self.assertEqual([r.id for r in alignments[4]], ["ref_rec", "gi|94970041|receiver"])
+        self.assertEqual(
+            [r.id for r in alignments[0]], ["ref_rec", "gi|94968718|receiver"]
+        )
+        self.assertEqual(
+            [r.id for r in alignments[4]], ["ref_rec", "gi|94970041|receiver"]
+        )
 
     def test_pair_example3(self):
         alignments = list(EmbossIterator(StringIO(pair_example3)))

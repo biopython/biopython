@@ -248,7 +248,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     def to_alignment(self):
         """Construct an alignment from the aligned sequences in this tree."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def is_aligned_seq(elem):
             if isinstance(elem, Sequence) and elem.mol_seq.is_aligned:
                 return True
@@ -711,24 +711,16 @@ class Confidence(PhyloElement):
         """Conduct reverse multiplication between values of two Confidence objects."""
         return other * self.value
 
-    def __div__(self, other):
-        """Conduct division between values of two Confidence objects."""
-        return self.value.__div__(other)
-
-    def __rdiv__(self, other):
-        """Conduct revers division between values of two Confidence objects."""
-        return other.__div__(self.value)
-
     def __truediv__(self, other):
-        """Rational-style division in Py3.0+."""
-        return self.value / other
+        """Conduct division between values of two Confidence objects."""
+        return self.value.__truediv__(other)
 
     def __rtruediv__(self, other):
-        """Conduct revers Rational-style division."""
-        return other / self.value
+        """Conduct reverse division between values of two Confidence objects."""
+        return other.__rtruediv__(self.value)
 
     def __floordiv__(self, other):
-        """C-style and old-style division in Py3.0+."""
+        """C-style and old-style division."""
         return self.value.__floordiv__(other)
 
     def __rfloordiv__(self, other):
@@ -1341,7 +1333,7 @@ class Sequence(PhyloElement):
             }
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
             return {key: val for key, val in dct.items() if val is not None}

@@ -481,28 +481,14 @@ _FormatToWriter = {
     "xdna": XdnaIO.XdnaWriter,
 }
 
-_BinaryFormats = [
-    "sff",
-    "sff-trim",
-    "abi",
-    "abi-trim",
-    "gck",
-    "seqxml",
-    "snapgene",
-    "nib",
-    "seqxml",
-    "xdna",
-]
-
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
     Arguments:
-     - sequences - A list (or iterator) of SeqRecord objects, or (if using
-       Biopython 1.54 or later) a single SeqRecord.
-     - handle    - File handle object to write to, or filename as string
-       (note older versions of Biopython only took a handle).
+     - sequences - A list (or iterator) of SeqRecord objects, or a single
+       SeqRecord.
+     - handle    - File handle object to write to, or filename as string.
      - format    - lower case string describing the file format to write.
 
     Note if providing a file handle, your code should close the handle
@@ -530,45 +516,43 @@ def write(sequences, handle, format):
         # This raised an exception in older versions of Biopython
         sequences = [sequences]
 
-    mode = "wb" if format in _BinaryFormats else "w"
-
-    with as_handle(handle, mode) as fp:
-        # Map the file format to a writer function/class
-        if format in _FormatToString:
-            format_function = _FormatToString[format]
-            count = 0
+    # Map the file format to a writer function/class
+    format_function = _FormatToString.get(format)
+    if format_function is not None:
+        count = 0
+        with as_handle(handle, "w") as fp:
             for record in sequences:
                 fp.write(format_function(record))
                 count += 1
-        elif format in _FormatToWriter:
-            writer_class = _FormatToWriter[format]
-            count = writer_class(fp).write_file(sequences)
-        elif format in AlignIO._FormatToWriter:
-            # Try and turn all the records into a single alignment,
-            # and write that using Bio.AlignIO
-            alignment = MultipleSeqAlignment(sequences)
-            alignment_count = AlignIO.write([alignment], fp, format)
-            if alignment_count != 1:
-                raise RuntimeError(
-                    "Internal error - the underlying writer "
-                    "should have returned 1, not %r" % alignment_count
-                )
-            count = len(alignment)
-            del alignment_count, alignment
-        elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
-            raise ValueError(
-                "Reading format '%s' is supported, but not writing" % format
-            )
-        else:
-            raise ValueError("Unknown format '%s'" % format)
+        return count
 
+    writer_class = _FormatToWriter.get(format)
+    if writer_class is not None:
+        count = writer_class(handle).write_file(sequences)
         if not isinstance(count, int):
             raise RuntimeError(
                 "Internal error - the underlying %s writer "
                 "should have returned the record count, not %r" % (format, count)
             )
+        return count
 
-    return count
+    if format in AlignIO._FormatToWriter:
+        # Try and turn all the records into a single alignment,
+        # and write that using Bio.AlignIO
+        alignment = MultipleSeqAlignment(sequences)
+        alignment_count = AlignIO.write([alignment], handle, format)
+        if alignment_count != 1:
+            raise RuntimeError(
+                "Internal error - the underlying writer "
+                "should have returned 1, not %r" % alignment_count
+            )
+        count = len(alignment)
+        return count
+
+    if format in _FormatToIterator or format in AlignIO._FormatToIterator:
+        raise ValueError("Reading format '%s' is supported, but not writing" % format)
+
+    raise ValueError("Unknown format '%s'" % format)
 
 
 def parse(handle, format, alphabet=None):
@@ -1036,6 +1020,45 @@ def index_db(
     )
 
 
+# TODO? - Handling aliases explicitly would let us shorten this list:
+_converter = {
+    ("genbank", "fasta"): InsdcIO._genbank_convert_fasta,
+    ("gb", "fasta"): InsdcIO._genbank_convert_fasta,
+    ("embl", "fasta"): InsdcIO._embl_convert_fasta,
+    ("fastq", "fasta"): QualityIO._fastq_convert_fasta,
+    ("fastq-sanger", "fasta"): QualityIO._fastq_convert_fasta,
+    ("fastq-solexa", "fasta"): QualityIO._fastq_convert_fasta,
+    ("fastq-illumina", "fasta"): QualityIO._fastq_convert_fasta,
+    ("fastq", "tab"): QualityIO._fastq_convert_tab,
+    ("fastq-sanger", "tab"): QualityIO._fastq_convert_tab,
+    ("fastq-solexa", "tab"): QualityIO._fastq_convert_tab,
+    ("fastq-illumina", "tab"): QualityIO._fastq_convert_tab,
+    ("fastq", "fastq"): QualityIO._fastq_sanger_convert_fastq_sanger,
+    ("fastq-sanger", "fastq"): QualityIO._fastq_sanger_convert_fastq_sanger,
+    ("fastq-solexa", "fastq"): QualityIO._fastq_solexa_convert_fastq_sanger,
+    ("fastq-illumina", "fastq"): QualityIO._fastq_illumina_convert_fastq_sanger,
+    ("fastq", "fastq-sanger"): QualityIO._fastq_sanger_convert_fastq_sanger,
+    ("fastq-sanger", "fastq-sanger"): QualityIO._fastq_sanger_convert_fastq_sanger,
+    ("fastq-solexa", "fastq-sanger"): QualityIO._fastq_solexa_convert_fastq_sanger,
+    ("fastq-illumina", "fastq-sanger"): QualityIO._fastq_illumina_convert_fastq_sanger,
+    ("fastq", "fastq-solexa"): QualityIO._fastq_sanger_convert_fastq_solexa,
+    ("fastq-sanger", "fastq-solexa"): QualityIO._fastq_sanger_convert_fastq_solexa,
+    ("fastq-solexa", "fastq-solexa"): QualityIO._fastq_solexa_convert_fastq_solexa,
+    ("fastq-illumina", "fastq-solexa"): QualityIO._fastq_illumina_convert_fastq_solexa,
+    ("fastq", "fastq-illumina"): QualityIO._fastq_sanger_convert_fastq_illumina,
+    ("fastq-sanger", "fastq-illumina"): QualityIO._fastq_sanger_convert_fastq_illumina,
+    ("fastq-solexa", "fastq-illumina"): QualityIO._fastq_solexa_convert_fastq_illumina,
+    (
+        "fastq-illumina",
+        "fastq-illumina",
+    ): QualityIO._fastq_illumina_convert_fastq_illumina,
+    ("fastq", "qual"): QualityIO._fastq_sanger_convert_qual,
+    ("fastq-sanger", "qual"): QualityIO._fastq_sanger_convert_qual,
+    ("fastq-solexa", "qual"): QualityIO._fastq_solexa_convert_qual,
+    ("fastq-illumina", "qual"): QualityIO._fastq_illumina_convert_qual,
+}
+
+
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.
 
@@ -1047,8 +1070,21 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - alphabet - optional alphabet to assume
 
     **NOTE** - If you provide an output filename, it will be opened which will
-    overwrite any existing file without warning. This may happen if even
-    the conversion is aborted (e.g. an invalid out_format name is given).
+    overwrite any existing file without warning.
+
+    The idea here is that while doing this will work::
+
+        from Bio import SeqIO
+        records = SeqIO.parse(in_handle, in_format)
+        count = SeqIO.write(records, out_handle, out_format)
+
+    it is shorter to write::
+
+        from Bio import SeqIO
+        count = SeqIO.convert(in_handle, in_format, out_handle, out_format)
+
+    Also, Bio.SeqIO.convert is faster for some conversions as it can make some
+    optimisations.
 
     For example, going from a filename to a handle:
 
@@ -1066,19 +1102,12 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    in_mode = "rb" if in_format in _BinaryFormats else "r"
-
-    out_mode = "wb" if out_format in _BinaryFormats else "w"
-
-    # This will check the arguments and issue error messages,
-    # after we have opened the file which is a shame.
-    from ._convert import _handle_convert  # Lazy import
-
-    with as_handle(in_file, in_mode) as in_handle:
-        with as_handle(out_file, out_mode) as out_handle:
-            count = _handle_convert(
-                in_handle, in_format, out_handle, out_format, alphabet
-            )
+    f = _converter.get((in_format, out_format))
+    if f:
+        count = f(in_file, out_file, alphabet)
+    else:
+        records = parse(in_file, in_format, alphabet)
+        count = write(records, out_file, out_format)
     return count
 
 

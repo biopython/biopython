@@ -37,6 +37,7 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Alexander Decurnou (first contribution)
 - Andrei Istrate (first contribution)
 - Andrey Raspopov
 - Austin Varela (first contribution)
@@ -44,11 +45,14 @@ possible, especially the following contributors:
 - Deepak Khatri
 - Hielke Walinga (first contribution)
 - Kai Blin
+- Karthikeyan Singaravelan (first contribution)
 - Markus Piotrowski
 - Peter Cock
 - Rob Miller
 - Sergio Valqui
+- Steve Bond
 - Sujan Dulal (first contribution)
+- Tianyi Shi (first contribution)
 
 20 December 2019: Biopython 1.76
 ================================
@@ -136,6 +140,11 @@ Values from mmCIF files are now read in as a list even when they consist of a
 single value. This change improves consistency and reduces the likelihood of
 making an error, but will require user code to be updated accordingly.
 
+`Bio.motifs.meme` has been updated to parse XML output files from MEME over
+the plain-text output file. The goal of this change is to parse a more
+structured data source with minimal loss of functionality upon future MEME
+releases.
+
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
@@ -191,6 +200,7 @@ possible, especially the following contributors:
 - Peter Kerpedjiev
 - Sergio Valqui
 - Spencer Bliven
+- Victor Lin
 
 
 16 July 2019: Biopython 1.74

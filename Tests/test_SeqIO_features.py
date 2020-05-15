@@ -317,19 +317,19 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertEqual(location_str, _get_location_string(feature, len(parent_seq)))
 
         new = feature.extract(parent_seq)
-        self.assertTrue(isinstance(new, Seq))
+        self.assertIsInstance(new, Seq)
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(str(parent_seq))
-        self.assertTrue(isinstance(new, str))
+        self.assertIsInstance(new, str)
         self.assertEqual(new, answer_str)
 
         new = feature.extract(parent_seq.tomutable())
-        self.assertTrue(isinstance(new, Seq))  # Not MutableSeq!
+        self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
-        self.assertTrue(isinstance(new, UnknownSeq))
+        self.assertIsInstance(new, UnknownSeq)
         self.assertEqual(len(new), len(answer_str))
 
         if _get_location_string(feature, 1326) != location_str:
@@ -364,7 +364,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         if len(feature):
             self.assertEqual(feature.location.start, min(feature.location))
             self.assertEqual(feature.location.end, max(feature.location) + 1)
-        self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
+        self.assertLessEqual(len(feature), feature.location.end - feature.location.start)
 
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)."""

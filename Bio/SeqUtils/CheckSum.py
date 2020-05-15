@@ -25,9 +25,6 @@ def crc32(seq):
     1688586483
 
     """
-    # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
-    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    # TODO - Should we return crc32(x) & 0xffffffff here?
     try:
         # Assume it's a Seq object
         return _crc32(str(seq).encode())

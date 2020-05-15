@@ -24,7 +24,7 @@ from copy import deepcopy
 
 def get_indiv(line):
     """Extract the details of the individual information on the line."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def int_no_zero(val):
         """Return integer of val, or None if is zero."""
         v = int(val)

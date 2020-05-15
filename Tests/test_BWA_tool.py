@@ -101,9 +101,9 @@ class BwaTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(index_file),
                             "Index File %s not found"
                             % (index_file))
-        self.assertTrue("Finished constructing BWT" in str(stdout) + str(stderr),
-                        "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
-                        % (cmdline, stdout, stderr))
+        self.assertIn("Finished constructing BWT", str(stdout) + str(stderr),
+                      "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
+                      % (cmdline, stdout, stderr))
 
     def do_aln(self, in_file, out_file):
         """Test for generating sai files given the reference and read file."""
@@ -112,9 +112,9 @@ class BwaTestCase(unittest.TestCase):
         cmdline.read_file = in_file
         self.assertTrue(os.path.isfile(in_file))
         stdout, stderr = cmdline(stdout=out_file)
-        self.assertTrue("fail to locate the index" not in str(stderr) + str(stdout),
-                        "Error aligning sequence to reference:\n%s\nStdout:%s\nStderr:%s\n"
-                        % (cmdline, stdout, stderr))
+        self.assertNotIn("fail to locate the index", str(stderr) + str(stdout),
+                         "Error aligning sequence to reference:\n%s\nStdout:%s\nStderr:%s\n"
+                         % (cmdline, stdout, stderr))
 
     def create_fasta_index(self):
         """Test for generating index for fasta file.

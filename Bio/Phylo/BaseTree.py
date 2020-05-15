@@ -32,7 +32,7 @@ def _level_traverse(root, get_children):
 
 def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children) (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def dfs(elem):
         yield elem
         for v in get_children(elem):
@@ -43,7 +43,7 @@ def _preorder_traverse(root, get_children):
 
 def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent) (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def dfs(elem):
         for v in get_children(elem):
             yield from dfs(v)
@@ -72,7 +72,7 @@ def _sorted_attrs(elem):
 
 def _identity_matcher(target):
     """Match a node to the target object by identity (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         return node is target
 
@@ -81,7 +81,7 @@ def _identity_matcher(target):
 
 def _class_matcher(target_cls):
     """Match a node if it's an instance of the given class (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         return isinstance(node, target_cls)
 
@@ -111,7 +111,7 @@ def _attribute_matcher(kwargs):
     match each of the corresponding values -- think 'and', not 'or', for
     multiple keys.
     """
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         if "terminal" in kwargs:
             # Special case: restrict to internal/external/any nodes
@@ -144,7 +144,7 @@ def _attribute_matcher(kwargs):
 
 def _function_matcher(matcher_func):
     """Safer attribute lookup -- returns False instead of raising an error (PRIVATE)."""
-    # This comment stops black style adding a blank line here, which causes flake8 D202.
+
     def match(node):
         try:
             return matcher_func(node)
@@ -241,7 +241,7 @@ class TreeElement:
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def pair_as_kwarg_string(key, val):
             if isinstance(val, str):
                 val = val[:57] + "..." if len(val) > 60 else val
@@ -365,7 +365,7 @@ class TreeMixin:
             depth-first (preorder) by default.
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop("clades")
             found = elem.find_any(target, **kwargs)
@@ -812,9 +812,9 @@ class Tree(TreeElement, TreeMixin):
 
         return Phylogeny.from_tree(self, **kwargs)
 
-    # XXX Py3 Compatibility: In Python 3.0+, **kwargs can be replaced with the
-    # named keyword argument outgroup_branch_length=None
-    def root_with_outgroup(self, outgroup_targets, *more_targets, **kwargs):
+    def root_with_outgroup(
+        self, outgroup_targets, *more_targets, outgroup_branch_length=None
+    ):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
         Operates in-place.
@@ -845,15 +845,6 @@ class Tree(TreeElement, TreeMixin):
             return
 
         prev_blen = outgroup.branch_length or 0.0
-        # Hideous kludge because Py2.x doesn't allow keyword args after *args
-        outgroup_branch_length = kwargs.get("outgroup_branch_length")
-        if outgroup_branch_length is not None:
-            if not (0 <= outgroup_branch_length <= prev_blen):
-                raise ValueError(
-                    "outgroup_branch_length must be between 0 "
-                    "and the original length of the branch "
-                    "leading to the outgroup."
-                )
 
         if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup

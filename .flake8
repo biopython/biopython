@@ -33,6 +33,7 @@ ignore =
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
     B007, # Loop control variable not used within the loop body.
           # If this is intended, start the name with an underscore
+    E741, # ambiguous variable name 'l' (lots of these)
     # =========================================
     # Optional ignores for local installations:
     # =========================================
@@ -44,12 +45,12 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:E123,F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
+    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:E123,F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
+    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
 
 # =============================
 # per-file-ignores error codes:
@@ -65,9 +66,7 @@ per-file-ignores =
 #           instead callers should raise AssertionError().
 #      C812 missing trailing comma
 #      C815 missing trailing comma in Python 3.5+
-#Tests/*:E123 closing bracket does not match indentation of opening bracket's line
-#             (41 occurences, may be removed by Black)
-#        F401 module imported but unused TODO? (88 occurrences)
+#Tests/*:F401 module imported but unused TODO? (88 occurrences)
 #        F841 local variable is assigned to but never used TODO? (64 occurrences)
 #        D101 missing docstring in public class (207 occurrences)
 #        D102 missing docstring in public method (956 occurrences)

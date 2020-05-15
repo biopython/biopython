@@ -8,8 +8,23 @@ import unittest
 
 from Bio.Restriction import Analysis, Restriction, RestrictionBatch
 from Bio.Restriction import CommOnly, NonComm, AllEnzymes
-from Bio.Restriction import (Acc65I, Asp718I, BamHI, EcoRI, EcoRV, KpnI, SmaI,
-                             MluCI, McrI, NdeI, BsmBI, AanI, EarI, SnaI, SphI)
+from Bio.Restriction import (
+    Acc65I,
+    Asp718I,
+    BamHI,
+    EcoRI,
+    EcoRV,
+    KpnI,
+    SmaI,
+    MluCI,
+    McrI,
+    NdeI,
+    BsmBI,
+    AanI,
+    EarI,
+    SnaI,
+    SphI,
+)
 from Bio.Restriction import FormattedSeq
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
@@ -38,13 +53,12 @@ class SequenceTesting(unittest.TestCase):
 
     def test_formatted_seq(self):
         """Test several methods of FormattedSeq."""
-        self.assertEqual(str(FormattedSeq(Seq("GATC"))),
-                         "FormattedSeq(Seq('GATC'), linear=True)")
-        self.assertFalse(FormattedSeq(Seq("GATC")) ==
-                         FormattedSeq(Seq("TAGC")))
-        self.assertFalse(FormattedSeq(Seq("TAGC")) == Seq("TAGC"))
-        self.assertTrue(FormattedSeq(Seq("ATGC")) ==
-                        FormattedSeq(Seq("ATGC")))
+        self.assertEqual(
+            str(FormattedSeq(Seq("GATC"))), "FormattedSeq(Seq('GATC'), linear=True)"
+        )
+        self.assertNotEqual(FormattedSeq(Seq("GATC")), FormattedSeq(Seq("TAGC")))
+        self.assertNotEqual(FormattedSeq(Seq("TAGC")), Seq("TAGC"))
+        self.assertEqual(FormattedSeq(Seq("ATGC")), FormattedSeq(Seq("ATGC")))
         linear_seq = FormattedSeq(Seq("T"))
         self.assertTrue(linear_seq.is_linear())
         linear_seq.circularise()
@@ -62,19 +76,15 @@ class SimpleEnzyme(unittest.TestCase):
     def test_init(self):
         """Check for error during __init__."""
         with self.assertRaises(ValueError) as ve:
-            Restriction.OneCut("bla-me", (Restriction.RestrictionType,),
-                               {})
+            Restriction.OneCut("bla-me", (Restriction.RestrictionType,), {})
             self.assertIn("hyphen", str(ve.exception))
 
     def setUp(self):
         """Set up some sequences for later use."""
         base_seq = Seq("AAAA", IUPACAmbiguousDNA())
-        self.ecosite_seq = base_seq + Seq(EcoRI.site,
-                                          IUPACAmbiguousDNA()) + base_seq
-        self.smasite_seq = base_seq + Seq(SmaI.site,
-                                          IUPACAmbiguousDNA()) + base_seq
-        self.kpnsite_seq = base_seq + Seq(KpnI.site,
-                                          IUPACAmbiguousDNA()) + base_seq
+        self.ecosite_seq = base_seq + Seq(EcoRI.site, IUPACAmbiguousDNA()) + base_seq
+        self.smasite_seq = base_seq + Seq(SmaI.site, IUPACAmbiguousDNA()) + base_seq
+        self.kpnsite_seq = base_seq + Seq(KpnI.site, IUPACAmbiguousDNA()) + base_seq
 
     def test_eco_cutting(self):
         """Test basic cutting with EcoRI (5'overhang)."""
@@ -108,8 +118,9 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertEqual(KpnI.overhang(), "3' overhang")
         parts = KpnI.catalyse(self.kpnsite_seq)
         self.assertEqual(len(parts), 2)
-        self.assertEqual(KpnI.catalyse(self.kpnsite_seq),
-                         KpnI.catalyze(self.kpnsite_seq))
+        self.assertEqual(
+            KpnI.catalyse(self.kpnsite_seq), KpnI.catalyze(self.kpnsite_seq)
+        )
 
     def test_sma_cutting(self):
         """Test basic cutting with SmaI (blunt cutter)."""
@@ -160,10 +171,12 @@ class SimpleEnzyme(unittest.TestCase):
         locations = SmaI.search(parts[0], linear=False)
         self.assertEqual(locations, [1])
 
-        self.assertEqual(EarI.search(FormattedSeq(Seq("CTCTTCAAAAA")),
-                                     linear=False), [8])
-        self.assertEqual(SnaI.search(FormattedSeq(Seq("GTATACAAAAA")),
-                                     linear=False), [1])
+        self.assertEqual(
+            EarI.search(FormattedSeq(Seq("CTCTTCAAAAA")), linear=False), [8]
+        )
+        self.assertEqual(
+            SnaI.search(FormattedSeq(Seq("GTATACAAAAA")), linear=False), [1]
+        )
 
     def test_shortcuts(self):
         """Check if '/' and '//' work as '.search' and '.catalyse'."""
@@ -218,6 +231,7 @@ class EnzymeComparison(unittest.TestCase):
         self.assertEqual(Acc65I, Acc65I)
         self.assertNotEqual(Acc65I, KpnI)
         self.assertFalse(Acc65I == Asp718I)
+        # self.assertNotEqual(Acc65I, Asp718I) it doesn't work as expected
         self.assertFalse(Acc65I != Asp718I)
         self.assertNotEqual(Acc65I, EcoRI)
         self.assertTrue(Acc65I >> KpnI)
@@ -284,10 +298,11 @@ class RestrictionBatchPrintTest(unittest.TestCase):
         1. With no marker.
         """
         analysis = self.createAnalysis(
-            "CCAGTCTATAATTCG" +
-            Restriction.BamHI.site +
-            "GCGGCATCATACTCGAATATCGCGTGATGATACGTAGTAATTACGCATG",
-            ["BamHI"])
+            "CCAGTCTATAATTCG"
+            + Restriction.BamHI.site
+            + "GCGGCATCATACTCGAATATCGCGTGATGATACGTAGTAATTACGCATG",
+            ["BamHI"],
+        )
         analysis.print_as("map")
         expected = [
             "                17 BamHI",
@@ -301,7 +316,9 @@ class RestrictionBatchPrintTest(unittest.TestCase):
             "||||||||||",
             "TAATGCGTAC",
             "61                          70",
-            "", ""]
+            "",
+            "",
+        ]
         self.assertAnalysisFormat(analysis, "\n".join(expected))
 
     def test_make_format_map2(self):
@@ -310,14 +327,15 @@ class RestrictionBatchPrintTest(unittest.TestCase):
         2. With marker.
         """
         analysis = self.createAnalysis(
-            "CCAGTCTATAATTCG" +
-            Restriction.BamHI.site +
-            "GCGGCATCATACTCGA" +
-            Restriction.BamHI.site +
-            "ATATCGCGTGATGATA" +
-            Restriction.NdeI.site +
-            "CGTAGTAATTACGCATG",
-            ["NdeI", "EcoRI", "BamHI", "BsmBI"])
+            "CCAGTCTATAATTCG"
+            + Restriction.BamHI.site
+            + "GCGGCATCATACTCGA"
+            + Restriction.BamHI.site
+            + "ATATCGCGTGATGATA"
+            + Restriction.NdeI.site
+            + "CGTAGTAATTACGCATG",
+            ["NdeI", "EcoRI", "BamHI", "BsmBI"],
+        )
         analysis.print_as("map")
         expected = [
             "                17 BamHI",
@@ -335,7 +353,9 @@ class RestrictionBatchPrintTest(unittest.TestCase):
             "||||||||||||||||||||||",
             "TATACGCATCATTAATGCGTAC",
             "61                          82",
-            "", ""]
+            "",
+            "",
+        ]
         self.assertAnalysisFormat(analysis, "\n".join(expected))
 
     def test_make_format_map3(self):
@@ -344,14 +364,15 @@ class RestrictionBatchPrintTest(unittest.TestCase):
         3. With marker restricted.
         """
         analysis = self.createAnalysis(
-            "CCAGTCTATAATTCG" +
-            Restriction.BamHI.site +
-            "GCGGCATCATACTCGA" +
-            Restriction.BamHI.site +
-            "ATATCGCGTGATGATA" +
-            Restriction.EcoRV.site +
-            "CGTAGTAATTACGCATG",
-            ["NdeI", "EcoRI", "BamHI", "BsmBI"])
+            "CCAGTCTATAATTCG"
+            + Restriction.BamHI.site
+            + "GCGGCATCATACTCGA"
+            + Restriction.BamHI.site
+            + "ATATCGCGTGATGATA"
+            + Restriction.EcoRV.site
+            + "CGTAGTAATTACGCATG",
+            ["NdeI", "EcoRI", "BamHI", "BsmBI"],
+        )
         analysis.print_as("map")
         expected = [
             "                17 BamHI",
@@ -367,15 +388,22 @@ class RestrictionBatchPrintTest(unittest.TestCase):
             "||||||||||||||||||||||",
             "TATAGGCATCATTAATGCGTAC",
             "61                          82",
-            "", ""]
+            "",
+            "",
+        ]
         self.assertAnalysisFormat(analysis, "\n".join(expected))
 
     def test_change(self):
         """Test that change() changes something."""
-        seq = Seq("CCAGTCTATAATTCG" + BamHI.site +
-                  "GCGGCATCATACTCGA" + BamHI.site +
-                  "ATATCGCGTGATGATA" + EcoRV.site +
-                  "CGTAGTAATTACGCATG")
+        seq = Seq(
+            "CCAGTCTATAATTCG"
+            + BamHI.site
+            + "GCGGCATCATACTCGA"
+            + BamHI.site
+            + "ATATCGCGTGATGATA"
+            + EcoRV.site
+            + "CGTAGTAATTACGCATG"
+        )
         batch = NdeI + EcoRI + BamHI + BsmBI
         analysis = Analysis(batch, seq)
         self.assertEqual(analysis.full()[BamHI], [17, 39])
@@ -439,8 +467,7 @@ class RestrictionBatches(unittest.TestCase):
         # These tests may be 'update sensitive' since company names and
         # products may change often...
         batch = RestrictionBatch((), ("S"))  # Sigma
-        self.assertEqual(batch.current_suppliers(),
-                         ["Sigma Chemical Corporation"])
+        self.assertEqual(batch.current_suppliers(), ["Sigma Chemical Corporation"])
         self.assertIn(EcoRI, batch)
         self.assertNotIn(AanI, batch)
         batch.add_supplier("B")  # Life Technologies
@@ -448,8 +475,9 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_batch_analysis(self):
         """Sequence analysis with a restriction batch."""
-        seq = Seq("AAAA" + EcoRV.site + "AAAA" + EcoRI.site + "AAAA",
-                  IUPACAmbiguousDNA())
+        seq = Seq(
+            "AAAA" + EcoRV.site + "AAAA" + EcoRI.site + "AAAA", IUPACAmbiguousDNA()
+        )
         batch = RestrictionBatch([EcoRV, EcoRI])
 
         hits = batch.search(seq)
@@ -458,7 +486,7 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_premade_batches(self):
         """Test content of premade batches CommOnly, NoComm, AllEnzymes."""
-        self.assertTrue(len(AllEnzymes) == len(CommOnly) + len(NonComm))
+        self.assertEqual(len(AllEnzymes), (len(CommOnly) + len(NonComm)))
         self.assertTrue(len(AllEnzymes) > len(CommOnly) > len(NonComm))
 
     def test_search_premade_batches(self):
@@ -475,8 +503,7 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_analysis_restrictions(self):
         """Test Fancier restriction analysis."""
-        new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA",
-                      IUPACAmbiguousDNA())
+        new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA", IUPACAmbiguousDNA())
         rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
         ana = Analysis(rb, new_seq, linear=False)
         # Output only the result for enzymes which cut blunt:
@@ -556,8 +583,7 @@ class TestPrintOutputs(unittest.TestCase):
         my_batch = EcoRI + SmaI + KpnI
         my_seq = Seq("GAATTCCCGGGATATA")  # EcoRI and SmaI sites
         analysis = Analysis(my_batch, my_seq)
-        analysis.print_that(None, title="My sequence\n\n",
-                            s1="Non Cutters\n\n")
+        analysis.print_that(None, title="My sequence\n\n", s1="Non Cutters\n\n")
         self.assertIn("My sequence", out.getvalue())
         self.assertIn("Non Cutters", out.getvalue())
         self.assertIn("2.", out.getvalue())
@@ -570,9 +596,10 @@ class TestPrintOutputs(unittest.TestCase):
         batch += Asp718I
         batch += SnaI
         self.assertEqual(str(batch), "Asp718I+EcoRI...SmaI+SnaI")
-        self.assertEqual(repr(batch),
-                         "RestrictionBatch(['Asp718I', 'EcoRI', 'KpnI', "
-                         "'SmaI', 'SnaI'])")
+        self.assertEqual(
+            repr(batch),
+            "RestrictionBatch(['Asp718I', 'EcoRI', 'KpnI', 'SmaI', 'SnaI'])",
+        )
 
 
 if __name__ == "__main__":

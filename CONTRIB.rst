@@ -20,6 +20,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
+- Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
 - Alona Levy-Jurgenson <https://github.com/alonalj>
 - Anders Pitman <https://github.com/anderspitman>
@@ -160,6 +161,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Juraj Szász <https:/github.com/sars1492>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
+- Karthikeyan Singaravelan <https://github.com/tirkarthi>
 - Katharine Lindner <katel at domain worldpath.net>
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
@@ -188,6 +190,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Marco Galardini <https://github.com/mgalardini>
 - Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
+- Marton Langa <https://github.com/martonlanga>
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
@@ -264,6 +267,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Thomas Schmitt <https://github.com/wurstbonbon>
 - Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
 - Tiago Antao <https://github.com/tiagoantao>
+- Tianyi Shi <https://github.com/TianyiShi2001>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>

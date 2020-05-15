@@ -75,8 +75,6 @@ if numpy is None:
             "Bio.Align",
             "Bio.Align.substitution_matrices",
             "Bio.Cluster",
-            "Bio.KDTree",
-            "Bio.KDTree.KDTree",
             "Bio.kNN",
             "Bio.LogisticRegression",
             "Bio.MarkovModel",
@@ -192,14 +190,14 @@ def main(argv):
 
             requires_internet.check.available = False
             # Monkey patch for urlopen()
-            import urllib
+            import urllib.request
 
             def dummy_urlopen(url):
                 raise RuntimeError(
                     "Internal test suite error, attempting to use internet despite --offline setting"
                 )
 
-            urllib.urlopen = dummy_urlopen
+            urllib.request.urlopen = dummy_urlopen
 
         if opt == "-v" or opt == "--verbose":
             verbosity = 2
