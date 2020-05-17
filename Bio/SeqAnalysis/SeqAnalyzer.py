@@ -1,5 +1,13 @@
 import pandas as pd
 import numpy as np
+from Bio.SeqUtils.ProtParam import ProteinAnalysis, IsoelectricPoint
+
+records = {
+    'czlowiek': 'MGKKRAPQKGKTVTKPQEIIVDESKLNWKPVDIPDTLDDFGGFYGLEEIDGVDVKVVDGKVTFVTKKDSKVLKDSNKEKVGDDQESVENESGSDSESELLEFKNLDDIKEGELSAASYSSSDEDEQGNIESSKLTDPSEDVDEDVDEDIPIVEKLISNFSQK',
+    'pies': 'METIDSKQNINRESLLEERRKKLAKWKQKKAQFDAQKEHQTSRNDIVTNSLEGKQTTEKFTERQERVKEELRKRKNEFRKSDEPVSVKPSKKKSKRSKVKKKISFDFSDDDDSEIGVSFR',
+    'kot': 'WKQKKAQFDAQKEHQTSRNDIVTNSLEGKQTTEKFTERQECCCCCCCRVMGKKRAPQKGKTVTKPQEIIVDESKLNWKPVDIPDTLDDFGGFYGLEEIDGVDVKVVDGKVTFVTKKDSKVLKDSNKEKVGDDQESVENESGSDSESELLEFKNLDDIKEGELSAASYSSSDEDEQGNIESSKLTDPSEDVDEDVDEDIPIVEKLISNFSQK'
+}
+
 
 class Analyzer:
     """
@@ -13,8 +21,8 @@ class Analyzer:
 
         :return: returns a created dictionary
         """
-        slownik = {_[0]: _[1][0] for _ in records}
-        return slownik
+        dict = {key: value.seq[0] for key, value in records}
+        return dict
 
     def median_stdev_avg(self) -> tuple:
         """
@@ -29,51 +37,118 @@ class Analyzer:
         median = float(np.median(list_of_lenths))
         return stdev, avg, median
 
+    def seq_lenth(self) -> list:
+        """
+        Makes a list of sequences lenths
+
+        :return: returns a list of sequences lenths
+        """
+        return [len(_[1]) for _ in self.tuples]
+
+    def id(self) -> list:
+        """
+        Makes a list of protein IDs
+
+        :return: ruturns a list od protein ids
+        """
+        return [_[0] for _ in self.tuples]
+
+    def molecular_weight(self) -> tuple:
+        """
+        Main funcion calculating proteins values (10 values).
+
+        :return: Funcion returns a tuple containning:
+        1. molecular_weight - calculated malecular weight from protein sequences in a list
+        2. pi - calculated isoelectric point for protein sequences in a list
+        3. amino_acids - counted standard aa in protein sequences, in a list of dicts
+        4. aromacity - calculated aromacity for protein sequences according to Lobry 1994 method, in a list
+        5. amino_acids_percent - calculated percantage based aa content in protein sequences, in a list
+        6. instability - calculated instability indexes for protein sequences according to Guruprasad et al 1990, in a list
+        7. flexibility - calculated flexibility of protein sequences according to Vihinen, 1994, in a list
+        8. secondary_structure_fraction - calculated fraction of helix, turn and sheet for protein sequences, in a list
+        of tuples with 3 elements (helix, turn, sheet) fractions accordingly
+        9. seq_gravy - calculated gravy of protein sequences according to Kyte and Doolittle, in a list
+        10.mol_ext_coefficient - calculated molar extinction coefficients for protein sequences, in a list
+        """
+        l_objects = [ProteinAnalysis(_[1]) for _ in self.tuples]
+        molecular_weight = [_.molecular_weight() for _ in l_objects]
+        pi = [_.isoelectric_point() for _ in l_objects]
+        amino_acids = [_.count_amino_acids() for _ in l_objects]
+        aromacity = [_.aromaticity() for _ in l_objects]
+        amino_acids_percent = [_.get_amino_acids_percent() for _ in l_objects]
+        instability = [_.instability_index() for _ in l_objects]
+        flexibility = [sum(__) / len(__) for __ in [_.flexibility() for _ in l_objects]]
+        secondary_structure_fraction = [_.secondary_structure_fraction() for _ in l_objects]
+        seq_gravy = [_.gravy() for _ in l_objects]
+        mol_ext_coefficient = [_.molar_extinction_coefficient()[0] for _ in l_objects]
+        return molecular_weight, pi, amino_acids, aromacity, amino_acids_percent, instability, flexibility, \
+               secondary_structure_fraction, seq_gravy, mol_ext_coefficient
+
+    def n_and_c_term(self) -> tuple:
+        """
+        Counts occurrences of given aa on 'C' and 'N' terminus of protein
+
+        :return: returns a list of two dicts, where list[0] is a dictionary with information about occurrences
+        of aa on 'N' terminus, and list[1] about 'C' terminus respectively
+        """
+        list_c_term = [_[-1] for _ in self.dict.values()]
+        dict_c_term = {i: list_c_term.count(i) / len(set(list_c_term)) for i in set(list_c_term)}
+
+        list_n_term = [_[0] for _ in self.dict.values()]
+        dict_n_term = {i: list_n_term.count(i) / len(set(list_n_term)) for i in set(list_n_term)}
+        return dict_n_term, dict_c_term
+
     def __init__(self, records):
-        self.dict = analyzer.makedict(self, records)  # creates a dict with seq ids and seqeances itself
-        self.tuples = [(id, seq) for id, seq in self.dict.values()]
-        self.stdev, self.average, self.median = analyzer.median_stdev_avg(self)
+        self.dict = records  # Analyzer.makedict(self, records)  # creates a dict with seq ids and seqeances itself
+        self.tuples = [(id, seq) for id, seq in self.dict.items()]
+        self.stdev, self.average, self.median = Analyzer.median_stdev_avg(self)
+        self.ids = Analyzer.id(self)
+        self.lenths = Analyzer.seq_lenth(self)
+        self.objects = Analyzer.molecular_weight(self)
+
+        self.molecular_weight, \
+        self.pi, \
+        self.amino_acids, \
+        self.aromaticity, \
+        self.amino_acids_percent, \
+        self.instability, \
+        self.flexibility, \
+        self.secondary_structure_fraction, \
+        self.gravy, \
+        self.mol_ext_coeff \
+        = Analyzer.molecular_weight(self)
+
+        self.n_term, self.c_term = Analyzer.n_and_c_term(self)
 
     def results(self):
-        data = pd.DataFrame(data={
-            'id': [id[0] for id in self.tuples].append(['median', 'standard_deviation', 'average_lenth']),
-            'sequence_length': [len(seq[1]) for seq in self.tuples].append([self.median, self.stdev, self.average]),
-            'molecular_weight': [],
-            'theoretical_pl': [],
-            'extinction_coefficient': [],
-            'instability_index': [],
-            'gravy': [],
-            'est_half_life': [],
-            'c_term_freq': [{'A': 0.2, 'G': 0.8}, {'A': 0.3, 'L': 0.7}],
-            'n_term_freq': [{'A': 0.8, 'G': 0.2}, {'A': 0.7, 'L': 0.3}],
-            'amino_acid_comp': [{'A': 12, 'G': 24}, {'L': 124, 'A': 52}],
-            'atomic_comp': [{'C': 42, 'H': 335, 'N': 55}, {'C': 55, 'H': 523, 'N': 13, 'O': 53}]
-        })
+        dict_1 = {
+            'median_id': self.median,
+            'mean_id': self.average,
+            'sd_id': self.stdev,
+            'id': self.ids,
+            'sequence_length': self.lenths,
+            'molecular_weight': self.molecular_weight,
+            'theoretical_pl': self.pi,
+            'instability_index': self.instability,
+            'flexibility': self.flexibility,
+            'secondary_structure_fraction': self.secondary_structure_fraction,
+            'extinction_coefficient': self.mol_ext_coeff,
+            'gravy': self.gravy,
+            'c_term_freq': self.c_term,
+            'n_term_freq': self.n_term,
+            'amino_acid_comp': self.amino_acids,
+            'amino_acid_percent': self.amino_acids_percent,
+            'aromacity': self.aromaticity
+        }
 
-        df = pd.DataFrame(data)
-        return df
+        return dict_1
 
 
-""" dict_1
-{'median_id': '0',
- 'mean_id': '0',
- 'sd_id': '0',
- 'id': ['remain', 'correct', 'margin', 'spring', 'toilet', 'certain'], 
- 'sequence_length': [123.91, 142.41, 322.0, 896.65, 1145.16, 379.1],
- 'molecular_weight': [121.91, 489.38, 356.37, 328.72, 184.74, 338.53],
- 'theoretical_pl': [1.83, 0.79, 3.34, 3.96, 0.66, 3.08],
- 'extinction_coefficient': [71.9, 97.17, 78.98, 36.03, 89.86, 34.71], 
- 'instability_index': [1.99, 3.99, 2.68, 3.94, 4.54, 2.29],
- 'gravy': [76.67, 3.81, 85.85, 50.89, 16.16, 86.14], 
- 'est_half_life': [342.98, 1057.0, 296.45, 958.88, 1196.21, 112.16], 
- 'c_term_freq': {'A': 0.136, 'G': 0.864},
- 'n_term_freq': {'A': 0.903, 'G': 0.09699999999999998}, 
- 'amino_acid_comp': [{'C': 271, 'K': 152, 'Y': 313, 'Q': 129, 'H': 400, 'W': 443, 'L': 74, 'F': 467, 'A': 146, 'G': 102, 'M': 233, 'N': 357, 'S': 291, 'R': 376, 'D': 322, 'P': 124, 'V': 83, 'I': 266, 'T': 263}, 
-                     {'V': 265, 'T': 350, 'D': 120, 'R': 160, 'E': 63, 'Y': 129}, {'F': 276, 'G': 371, 'E': 329, 'N': 208, 'W': 64, 'Y': 263, 'P': 361, 'I': 327, 'A': 180, 'T': 359, 'D': 203, 'C': 318},
-                     {'W': 47, 'T': 438, 'M': 211, 'I': 364, 'N': 476, 'C': 273, 'F': 438, 'L': 450, 'S': 404, 'A': 408, 'Y': 195, 'V': 292, 'K': 341, 'R': 477, 'G': 278, 'Q': 64, 'H': 242, 'D': 491}, 
-                     {'H': 216, 'A': 237, 'L': 367, 'T': 173, 'W': 14, 'N': 206, 'S': 121, 'V': 306, 'P': 18, 'I': 478, 'Q': 137, 'C': 374, 'E': 131},
-                     {'D': 492, 'I': 90, 'V': 372, 'L': 439, 'T': 129, 'C': 116, 'W': 195, 'K': 150, 'E': 9}], 
- 'atomic_comp': [{'C': 430, 'O': 312, 'N': 51}, {'N': 192, 'C': 462, 'O': 438}, {'H': 220, 'C': 388, 'N': 244}, {'H': 113, 'N': 358, 'O': 279}, {'O': 80, 'C': 202, 'H': 275}, {'H': 88, 'O': 494, 'C': 151}]} """
+Analyzer = Analyzer(records)
+
+print(Analyzer.results())
+
+
 
 """ dict_2
 {'system': {'median_id': '0',
@@ -91,4 +166,3 @@ class Analyzer:
                   'n_term_freq': {'A': 0.94, 'G': 0.06000000000000005}, 
                   'amino_acid_comp': [{'T': 420, 'L': 473, 'A': 209, 'S': 147, 'G': 94, 'M': 402, 'I': 302, 'F': 261, 'V': 257, 'E': 303, 'H': 403, 'N': 372, 'Q': 78, 'K': 387, 'P': 99, 'W': 123, 'R': 352}], 
                   'atomic_comp': [{'H': 123, 'N': 387, 'O': 52}]}, """
-
