@@ -24,6 +24,12 @@ which adds Cephalodiscidae mitochondrial as table 33.
 
 Updated ``Bio.Restriction`` to the January 2020 release of REBASE.
 
+A major contribution by Rob Miller to ``Bio.PDB`` provides new methods to
+handle protein structure transformations using dihedral angles (internal
+coordinates). The new framework supports lossless interconversion between
+internal and cartesian coordinates, which, among other uses, simplifies the
+analysis and manipulation of coordinates of proteins structures.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
