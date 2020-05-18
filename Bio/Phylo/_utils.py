@@ -317,7 +317,7 @@ def draw_ascii(tree, file=None, column_width=80):
     file.write("\n")
 
 
-def draw_matplot(
+def draw_matplotlib(
     tree,
     label_func=str,
     do_show=True,
@@ -383,16 +383,6 @@ def draw_matplot(
             None, the label will be shown in black.
 
     """
-    try:
-        import matplotlib.pyplot as plt
-    except ImportError:
-        try:
-            import pylab as plt
-        except ImportError:
-            raise MissingPythonDependencyError(
-                "Install matplotlib or pylab if you want to use draw."
-            ) from None
-
     import matplotlib.collections as mpcollections
 
     # Arrays that store lines for the plot of clades
@@ -642,7 +632,7 @@ def draw_matplot(
         plt.show()
 
 
-def build_ete3tree(tree, ete_root):
+def to_ete3(tree, ete_root):
     """Convert a Tree object to a ete3's Tree."""
     for node in tree.root:
         ete_node = ete_root.add_child(name=node.name, dist=node.branch_length)
@@ -658,16 +648,17 @@ def build_ete3tree(tree, ete_root):
         if hasattr(node, "taxonomy"):
             ete_node.add_features(taxonomy=node.taxonomy)
 
-        build_ete3tree(node, ete_node)
+        to_ete3(node, ete_node)
 
 
-def draw(
+def draw_ete3(
     tree,
     label_func=str,
     do_show=True,
     show_confidence=True,
     branch_labels=None,
     label_colors=None,
+    *args,
     **kwargs
 ):
     """Plot the given tree using ete3 or matplotlib (or pylab).
@@ -696,20 +687,13 @@ def draw(
             None, the label will be shown in black.
 
     """
-    try:
-        import ete3
-    except ImportError:
-        raise MissingPythonDependencyError(
-            "Install ete3 if you want to use the draw method."
-        ) from None
-
     from ete3 import Tree as EteTree, TextFace
 
     # Create the ete3's tree
 
     ete_tree = EteTree(dist=0, support=0)
     ete_tree.add_features(taxonomy="", branch_length=0)
-    build_ete3tree(tree, ete_tree)
+    to_ete3(tree, ete_tree)
 
     # Options for displaying branch labels / confidence
 
@@ -751,6 +735,11 @@ def draw(
                 return label_colors(label)
 
         else:
+            if not isinstance(label_colors, dict):
+                raise TypeError(
+                    "label_colors must be either a dict or a callable (function)"
+                )
+
             # label_colors is presumed to be a dict
             def get_label_color(label):
                 return label_colors.get(label, "black")
@@ -780,7 +769,7 @@ def draw(
             label = label_func(node)
 
         # Node labels
-        node_face = TextFace(label, fgcolor=get_label_color(node), fsize=10)
+        node_face = TextFace(label, fgcolor=get_label_color(label), fsize=10)
 
         if node.is_leaf():
             leaf_faces[node] = node_face
@@ -832,3 +821,21 @@ def draw(
                     plt.imshow(im)
                     plt.show()
                     tmp.flush()
+
+
+try:
+    import ete3
+
+    draw = draw_ete3
+except ImportError:
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        try:
+            import pylab as plt
+        except ImportError:
+            raise MissingPythonDependencyError(
+                "Install qt or matplotlib or pylab if you want to use the draw method."
+            ) from None
+    else:
+        draw = draw_matplotlib
