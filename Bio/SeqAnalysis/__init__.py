@@ -5,14 +5,17 @@
 # package.
 
 r"""Proteins sequences analysis and visualization.
+
 Bio.SeqAnalysis provides python components for storing, analyzing and visualizing proteins sequences.
 Components can be used separately or through API as fully working, automated pipeline.
+
 Components
 ==========
 There are 3 main components which basically are 3 classes:
     **SeqDatabase** -- downloading, storing and providing protein sequences
     **SeqAnalyzer** -- complex analysis of protein sequences
     **SeqVisualizer** -- protein sequences analysis report visualization
+
 SeqDatabase
 -----------
 Component responsible for downloading, storing and providing sequences.
@@ -21,9 +24,12 @@ downloading them one by one. After that, they are converted to proper format and
 stored on disk. Report about which sequences were properly downloaded is printed.
 Then user can use SeqDatabase object to retrieve and manage those sequences.
 Sequences are available in SeqIO format.
+
 :Input:
+
 Creating SeqDatabase object is done by providing list of UniProt/NCBI IDs
 which sequences should be downloaded and converted to :class:`SeqRecord <Bio.SeqRecord.SeqRecord>` format:
+
 >>> from Bio import SeqAnalysis
 >>> seq_db = SeqAnalysis.database(
 ...     [
@@ -38,11 +44,16 @@ which sequences should be downloaded and converted to :class:`SeqRecord <Bio.Seq
     1JOY
 [-] Unable to download and store sequences (1/3):
     8OO85XXX
+
+
 :Output:
+
 After creating database, retrieving sequences in SeqRecord format is available in two ways:
     - providing sequence ID or list of IDs
     - calling `get()` without parameters and use index
+
 Retrieving single sequence:
+
 >>> record = seq_db.get('YP_025292.1')
 >>> same_record = seq_db.get()[0]
 >>> record == same_record
@@ -53,7 +64,10 @@ Name: HokC
 Description: toxic membrane protein
 Number of features: 0
 Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+
+
 Retrieving multiple sequences:
+
 >>> records = seq_db.get(['YP_025292.1', '1JOY'])
 >>> same_records = seq_db.get()[0:2]
 >>> records == same_records
@@ -65,6 +79,8 @@ Description: Homodimeric domain of EnvZ from E. coli
 Number of features: 1
 Per letter annotation for: secondary_structure
 Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+
+
 SeqAnalyzer
 -----------
 Component responsible for complex analysis of received protein sequences. Analyzed are:
@@ -78,8 +94,11 @@ Component responsible for complex analysis of received protein sequences. Analyz
     - average hydrophobicity and hydrophilicity (GRAVY)
     - estimated half-life
     - amino acids frequencies on C/N terminals
+
 :Results as dict example:
+
     .. code-block:: python
+
         data = {
             'id': ['AsDF', 'asd'],
             'sequence_length': [12, 14],
@@ -94,9 +113,13 @@ Component responsible for complex analysis of received protein sequences. Analyz
             'c_term_freq': [{'A': 0.2, 'G': 0.8}, {'A': 0.3, 'L': 0.7}],
             'n_term_freq': [{'A': 0.8, 'G': 0.2}, {'A': 0.7, 'L': 0.3}],
         }
+
+
 :Input:
+
 Object of SeqAnalyzer class is created by providing list of SeqRecord objects
 which will be analyzed. They can be passed from SeqDatabase:
+
 >>> from Bio import SeqAnalysis
 >>> seq_db = SeqAnalysis.database(
 ...     [
@@ -106,27 +129,39 @@ which will be analyzed. They can be passed from SeqDatabase:
 ... )
 >>> records = seq_db.get()
 >>> seq_analyzer = SeqAnalysis.analyzer(records)
+
+
 :Output:
+
 Results are available in pandas `DataFrame <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`
 format or as simple dict. Analysis are per protein sequence but additionally contains medians,
 averages and deviations for all sequences.
+
 >>> results = seq_analyzer.results()
 >>> print(results)
             id  sequence_length  ...           c_term_freq           n_term_freq
 0  YP_025292.1               12  ...  {'A': 0.2, 'G': 0.8}  {'A': 0.8, 'G': 0.2}
 1         1JOY               14  ...  {'A': 0.3, 'L': 0.7}  {'A': 0.7, 'L': 0.3}
+
 [2 rows x 12 columns]
+
+
 SeqVisualizer
 -------------
 Component responsible for results from analysis visualization. Available visualizations:
     - histograms
     - box-plots
     - scatter plot
+
 All plots are available also in animated/interactive forms.
+
+
 :Input:
+
 Object of SeqVisualizer class is created by providing DataFrame object obtained from
 :func:`SeqAnalyzer.results() <Bio.SeqAnalysis.SeqAnalyzer.results>` method, it can be
 combined with receiving sequences from SeqDatabase object:
+
 >>> from Bio import SeqAnalysis
 >>> seq_db = SeqAnalysis.database(
 ...     [
@@ -138,15 +173,23 @@ combined with receiving sequences from SeqDatabase object:
 >>> seq_analyzer = SeqAnalysis.analyzer(records)
 >>> results = seq_analyzer.results()
 >>> seq_visualizer = SeqAnalysis.visualizer(results)
+
+
 :Output:
+
 Specific visualization can be obtained by calling proper method:
+
 >>> seq_visualizer.histogram()
 >>> seq_visualizer.box_plot()
 >>> seq_visualizer.scatter_plot()
+
+
 User can provide additional parameters if want to save visualization:
 >>> seq_visualizer.histogram(output='seqs_hist.html')
+
 Run animation:
 >>> seq_visualizer.box_plot(animation=True)
+
 See plot in interactive mode:
 >>> seq_visualizer.scatter_plot(interactive=True)
 """
