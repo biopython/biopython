@@ -765,6 +765,8 @@ def draw_ete3(
         # Ignore the default value of the __str__ method
         if label_func is str:
             label = node.name
+        elif label_func is None:
+            label = ""
         else:
             label = label_func(node)
 
