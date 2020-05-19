@@ -16,7 +16,7 @@ class SeqAnalyzer:
     6. Calculates instability indexes for protein sequences according to Guruprasad et al 1990
     7. Calculates flexibility of protein sequences according to Vihinen, 1994
     8. Calculates fraction of helix, turn and sheet for protein sequence
-    9. Calculates gravy of protein sequences according to Kyte and Doolittle
+    9. Calculates GRAVY of protein sequences according to Kyte and Doolittle
     10. Calculates molar extinction coefficients for protein sequences
     11. Calculates median length of sequences
     12. Calculates average length of sequences
@@ -38,15 +38,15 @@ class SeqAnalyzer:
         self.standard_deviation, self.average_length, self.median = SeqAnalyzer.median_standard_deviation_average_length(
             id_seq_dictionary)
         self.molecular_weight, \
-            self.pi, \
-            self.amino_acids, \
-            self.aromaticity, \
-            self.amino_acids_percent, \
-            self.instability, \
-            self.flexibility, \
-            self.secondary_structure_fraction, \
-            self.gravy, \
-            self.mol_ext_coefficient \
+        self.pi, \
+        self.amino_acids, \
+        self.aromaticity, \
+        self.amino_acids_percent, \
+        self.instability, \
+        self.flexibility, \
+        self.secondary_structure_fraction, \
+        self.gravy, \
+        self.mol_ext_coefficient \
             = SeqAnalyzer.main_calculations(id_seq_dictionary)
         self.aa_n_terminus, self.aa_c_terminus = SeqAnalyzer.terminal_aa_counter(id_seq_dictionary)
 
@@ -102,9 +102,9 @@ class SeqAnalyzer:
         7. flexibility - of ints and/or floats
         8. secondary_structure_fraction - of tuples (of ints and/or floats) with 3 elements
         9. seq_gravy - of ints and/or floats
-        10. mol_ext_coefficient - of ints and/or floats
+        10. mol_ext_coefficient - of two elemental tuples of ints and/or floats
 
-        :Example:
+        :Example:   #need to finish
         >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
         [1318.4349, 1446.5641000000003],
         [8.59112548828125, 8.59112548828125],
