@@ -1,26 +1,24 @@
 import numpy as np
 from Bio.SeqUtils.ProtParam import ProteinAnalysis, IsoelectricPoint
 
-data = {
-    'czlowiek': 'MGKKRAPQPIVEKLISNFSQK',
-    'pies': 'MSVKPSKKKSKRSKVKKKISCCCCCCCFDFSDDDDSCCEIGVSFR',
-}
-
 
 class SeqAnalyzer:
     """
-    A class that takes in records from SeqAnalysis.database, performs
-    multiple operations on it and returns 2 dictionaries with result values. For further information about
-    said dictionaries please see 'results()' function documentation.
+    A class that takes in records from SeqAnalysis.database, performs multiple operations on them and returns
+    2 dictionaries with result values(rounded to three decimal places). It is important to point out that in cases where
+    aa sequences have positions containing characters: 'B', 'Z', 'X', 'J', which characters mean that aa in this
+    position aren't certain - the class rejects such sequences, doesn't perform any calculation upon them and doesn't
+    pass them on to SeqVisualizer.
+    For further information about said dictionaries please see 'results()' function documentation.
     The operations that the class performs upon received data from SeqAnalysis.database is it:
     1. Calculates molecular weight of protein sequences
     2. Calculates isoelectric point for protein sequences
-    3. Counts standard aa in protein sequences, in a list of dicts (amino_acids)
+    3. Counts standard aa in protein sequences
     4. Calculates aromaticity for protein sequences according to Lobry 1994 method
     5. Calculates amino acid percentage content based aa content in protein sequences
     6. Calculates instability indexes for protein sequences according to Guruprasad et al 1990
     7. Calculates flexibility of protein sequences according to Vihinen, 1994
-    8. Calculates fraction of helix, turn and sheet for protein sequence
+    8. Calculates percentage of helix, turn and sheet in protein sequences
     9. Calculates GRAVY of protein sequences according to Kyte and Doolittle
     10. Calculates molar extinction coefficients for protein sequences
     11. Calculates median length of sequences
@@ -32,12 +30,13 @@ class SeqAnalyzer:
     def __init__(self, data: dict):
         """
         This method is called when an object is created from the class and it allows the class to initialize and
-        calculate via staticmethods usage(median_standard_deviation_average_length,  main_calculations
+        calculate via static methods usage(median_standard_deviation_average_length,  main_calculations
         terminal_aa_counter) attributes of a SeqAnalyzer
 
         :param data: takes in a dict with protein IDs as keys and SeqRecord objects as values
         """
-        id_seq_dictionary = data  # {key: value.seq[0] for key, value in data}
+        id_seq_dictionary = {key: value for key, value in {key: value.seq[0] for key, value in data}.items() if
+                             not (set('BZXJ').intersection(value))}
         self.lengths = [len(seq) for seq in id_seq_dictionary.values()]
         self.ids = [ids for ids in id_seq_dictionary.keys()]
         self.standard_deviation, self.average_length, self.median = SeqAnalyzer.median_standard_deviation_average_length(
@@ -89,13 +88,13 @@ class SeqAnalyzer:
         2. Calculated isoelectric point for protein sequences (pi)
         3. Counted standard aa in protein sequences, in a list of dicts (amino_acids)
         4. Calculated aromaticity for protein sequences according to Lobry 1994 method, in a list (aromaticity)
-        5. Calculated amino acid percentage content based aa content in protein sequences, in a list (amino_acids_percent )
-        6. Calculated instability indexes for protein sequences according to Guruprasad et al 1990, in a list (instability)
+        5. Calculated amino acid percentage content based aa content in protein sequences, in a list (amino_acids_percent)
+        6. Calculated instability indexes for protein sequences according to Guruprasad et al 1990, in a list(instability)
         7. Calculated flexibility of protein sequences according to Vihinen, 1994, in a list (flexibility)
-        8. Calculated fraction of helix, turn and sheet for protein sequences, in a list
-        of tuples with 3 elements (helix, turn, sheet) fractions accordingly (secondary_structure_fraction)
+        8. Calculated fraction of helix, turn and sheet for protein sequences, in a dict with (helix, turn, sheet) as
+        keys and ther percentage in protein structure as values
         9. Calculated gravy of protein sequences according to Kyte and Doolittle, in a list (seq_gravy )
-        10. Calculated molar extinction coefficients for protein sequences, in a list (mol_ext_coefficient)
+        10. Calculated molar extinction coefficients for protein sequences, in a dict (mol_ext_coefficient)
 
         :return: Output parameters are in list of:
         1. molecular_weight - of ints and/or floats
@@ -105,9 +104,9 @@ class SeqAnalyzer:
         5. amino_acids_percent - of ints and/or floats
         6. instability - of ints and/or floats
         7. flexibility - of ints and/or floats
-        8. secondary_structure_fraction - of lists (of ints and/or floats) with 3 elements
+        8. secondary_structure_fraction - of dicts with three keys/values with ints and/or floats as values
         9. seq_gravy - of ints and/or floats
-        10. mol_ext_coefficient - of two elemental lists of ints and/or floats
+        10. mol_ext_coefficient - of dicts with two keys/values with ints and/or floats as values
 
         :Example:   #need to finish
         >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
@@ -198,7 +197,7 @@ class SeqAnalyzer:
         for index, key in enumerate(dict_each_sequence):
             dict_each_sequence[key]['sequence_length'] = self.lengths[index]
             dict_each_sequence[key]['molecular_weight'] = self.molecular_weight[index]
-            dict_each_sequence[key]['theoretical_pl'] = self.pi[index]
+            dict_each_sequence[key]['theoretical_pi'] = self.pi[index]
             dict_each_sequence[key]['instability_index'] = self.instability[index]
             dict_each_sequence[key]['flexibility'] = self.flexibility[index]
             dict_each_sequence[key]['gravy'] = self.gravy[index]
@@ -211,5 +210,3 @@ class SeqAnalyzer:
         return dict_all_sequences, dict_each_sequence
 
 
-wynik = SeqAnalyzer(data)
-print(wynik.results())
