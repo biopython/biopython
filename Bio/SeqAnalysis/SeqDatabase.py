@@ -58,33 +58,44 @@ class SeqDownloader:
 
         dirs = ['Downloads', 'Failed', 'Database']
         for single_dir in dirs:
-            self.mk_dirs(single_dir)
-        self.mk_subdirs(analysis_dir)
+            SeqDownloader.mk_dirs(single_dir)
+        SeqDownloader.mk_subdirs(analysis_dir)
 
         obsolete = []
         http_error = []
 
         print("--------------------------------------Downloading--------------------------------------------")
 
-        urls = self.paths_and_urls(clear_ids, analysis_dir)
+        urls = SeqDownloader.paths_and_urls(clear_ids, analysis_dir)
 
         print("Downloading files. Please wait...")
 
-        ThreadPool(20).imap_unordered(self.fetch_url, urls)
+        ThreadPool(20).imap_unordered(SeqDownloader.fetch_url, urls)
         start = timer()
         for entry in urls:
-            self.fetch_url(entry, obsolete, http_error)
+            SeqDownloader.fetch_url(entry, obsolete, http_error)
 
         Entrez.email = ''
         for idx in clear_ids:
-            if re.match(r'([A-Z]){2,3}\w+', idx):
-                self.download_ncbi(idx, analysis_dir, obsolete, http_error)
+            if re.match(r'([A-Z]){2,3}\w+', idx) or re.match(r'([A-Z]){2,3}\w+\.\w+', idx):
+                # Matches only IDs with letter A-Z as the second token and any word character next (typical NCBI ID).
+                # e.g. YZ_102984
+                # Although NCBI IDs might and might not have {...}.xxx ending so the second regex covers it.
+                # e.g. NC_983123.412
+                SeqDownloader.download_ncbi(idx, analysis_dir, obsolete, http_error)
 
         obsolete = list(dict.fromkeys(obsolete))
 
         mypath = ('./Downloads/{0}'.format(analysis_dir))
-        only_files = [f for f in os.listdir(mypath) if isfile(join(mypath, f))]
-        files_no_ext = [".".join(f.split(".")[:-1]) for f in os.listdir(mypath) if os.path.isfile(join(mypath, f))]
+        only_files = [  # give a list of all files (and only files) in a current directory
+            file for file in os.listdir(mypath)
+            if isfile(join(mypath, file))
+        ]
+        files_no_ext = [  # give a list of all files (and only files) in a current directory but without the extension
+            ".".join(file.split(".")[:-1])
+            for file in os.listdir(mypath)
+            if os.path.isfile(join(mypath, file))
+        ]
 
         total_number = len(only_files)
         print("Download of " + str(total_number) + f" took {timer() - start} seconds")
@@ -116,7 +127,7 @@ class SeqDownloader:
         self.downloaded_files = files_no_ext
 
     @staticmethod
-    def read_list_of_ids(file: str) -> List:
+    def read_list_of_ids(file: str) -> List[str]:
         """
         Reads given file and creates List with unique IDs.
 
@@ -164,7 +175,7 @@ class SeqDownloader:
             print("Directory Failed/{0} status: already exists".format(dir_name))
 
     @staticmethod
-    def paths_and_urls(ids: List, cdir: str) -> List:
+    def paths_and_urls(ids: List, cdir: str) -> List[Tuple]:
         """
         Creates List of tuples with the path where the file will be saved and url from which it will be fetched.
 
@@ -174,7 +185,9 @@ class SeqDownloader:
         """
         pu = []
         for idx in ids:
-            if re.match(r'([A-Z]){1}\d+', idx):
+            if re.match(r'([A-Z])\d+', idx):
+                # matches only IDs with letter A-Z as the first token and digit next (typical Uniprot ID)
+                # e.g. A0A2C9
                 path_url = tuple([('./Downloads/{0}/{1}.fasta'.format(cdir, idx)),
                                   ('https://www.uniprot.org/uniprot/' + idx + '.fasta')])
                 pu.append(path_url)
@@ -194,6 +207,7 @@ class SeqDownloader:
         """
         path, url = entry
         uniprot_id = re.sub('[/.]', ' ', path).strip().split()
+        # Substitutes "/." in path of the file with space. This allows to split given path and retrieve sequence's ID
         if not os.path.exists(path):
             try:
                 fasta = request.urlopen(url)
@@ -256,7 +270,7 @@ class SeqDatabase:
                 seq_data[index] = record
         self.database = seq_data
 
-    def get(self, indexes: Union[str, List] = None) -> List:
+    def get(self, indexes: Union[str, List] = None) -> List[str]:
         """
         Allows user to get desired record or list of records data.
 
