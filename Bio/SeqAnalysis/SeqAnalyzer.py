@@ -7,7 +7,7 @@ class SeqAnalyzer:
     A class that takes in records from SeqAnalysis.database, performs
     multiple operations on it and returns 2 dictionaries with result values. For further information about
     said dictionaries please see 'results()' function documentation.
-    The operations that the class performs upon received data from SeqAnalysis.database is it:
+    The operations that the class performs upon received data from SeqAnalysis.database are:
     1. Calculates molecular weight of protein sequences
     2. Calculates isoelectric point for protein sequences
     3. Counts standard aa in protein sequences, in a list of dicts (amino_acids)
@@ -16,7 +16,7 @@ class SeqAnalyzer:
     6. Calculates instability indexes for protein sequences according to Guruprasad et al 1990
     7. Calculates flexibility of protein sequences according to Vihinen, 1994
     8. Calculates fraction of helix, turn and sheet for protein sequence
-    9. Calculates gravy of protein sequences according to Kyte and Doolittle
+    9. Calculates GRAVY of protein sequences according to Kyte and Doolittle
     10. Calculates molar extinction coefficients for protein sequences
     11. Calculates median length of sequences
     12. Calculates average length of sequences
