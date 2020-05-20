@@ -1,9 +1,9 @@
 import numpy as np
 from Bio.SeqUtils.ProtParam import ProteinAnalysis, IsoelectricPoint
 
-records = {
+data = {
     'czlowiek': 'MGKKRAPQPIVEKLISNFSQK',
-    'pies': 'MSVKPSKKKSKRSKVKKKISFDFSDDDDSEIGVSFR',
+    'pies': 'MSVKPSKKKSKRSKVKKKISCCCCCCCFDFSDDDDSCCEIGVSFR',
 }
 
 
@@ -37,7 +37,7 @@ class SeqAnalyzer:
 
         :param data: takes in a dict with protein IDs as keys and SeqRecord objects as values
         """
-        id_seq_dictionary = records  # {key: value.seq[0] for key, value in data}
+        id_seq_dictionary = data  # {key: value.seq[0] for key, value in data}
         self.lengths = [len(seq) for seq in id_seq_dictionary.values()]
         self.ids = [ids for ids in id_seq_dictionary.keys()]
         self.standard_deviation, self.average_length, self.median = SeqAnalyzer.median_standard_deviation_average_length(
@@ -105,9 +105,9 @@ class SeqAnalyzer:
         5. amino_acids_percent - of ints and/or floats
         6. instability - of ints and/or floats
         7. flexibility - of ints and/or floats
-        8. secondary_structure_fraction - of tuples (of ints and/or floats) with 3 elements
+        8. secondary_structure_fraction - of lists (of ints and/or floats) with 3 elements
         9. seq_gravy - of ints and/or floats
-        10. mol_ext_coefficient - of two elemental tuples of ints and/or floats
+        10. mol_ext_coefficient - of two elemental lists of ints and/or floats
 
         :Example:   #need to finish
         >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
@@ -122,16 +122,17 @@ class SeqAnalyzer:
         amino_acids_percent = [dict(seq.get_amino_acids_percent()) for seq in list_of_proteinanalysis_objects]
         for dict_aa_percent in amino_acids_percent:  # rounding values in aa percentage occurrences dictionaries
             for key, value in dict_aa_percent.items():
-                dict_aa_percent[key] = round(value, 3)
+                dict_aa_percent[key] = round(value * 100, 3)
 
         instability = [round(seq.instability_index(), 3) for seq in list_of_proteinanalysis_objects]
         flexibility = [round(sum(seq) / len(seq), 3) for seq in
                        [aa.flexibility() for aa in list_of_proteinanalysis_objects]]
-        secondary_structure_fraction = [[round(value, 3) for value in [v1, v2, v3]] for v1, v2, v3 in
-                                        (seq.secondary_structure_fraction() for seq in
-                                         list_of_proteinanalysis_objects)]
+        secondary_structure_fraction = [
+            {'Helix': round(v1 * 100, 3), 'Turn': round(v2 * 100, 3), 'Sheet': round(v3 * 100, 3)} for
+            v1, v2, v3 in (seq.secondary_structure_fraction() for seq in list_of_proteinanalysis_objects)
+        ]
         gravy = [round(seq.gravy(), 3) for seq in list_of_proteinanalysis_objects]
-        mol_ext_coefficient = [[round(value, 3) for value in [v1, v2]] for v1, v2 in
+        mol_ext_coefficient = [{'Cysteines_reduced': v1, 'Cysteines_residues': v2} for v1, v2 in
                                (seq.molar_extinction_coefficient() for seq in list_of_proteinanalysis_objects)]
         return molecular_weight, pi, amino_acids, aromaticity, amino_acids_percent, instability, flexibility, \
                secondary_structure_fraction, gravy, mol_ext_coefficient
@@ -153,10 +154,12 @@ class SeqAnalyzer:
 
         """
         list_c_terminus = [seq[-1] for seq in id_seq_dictionary.values()]
-        aa_n_terminus = {i: round(list_c_terminus.count(i) / len(set(list_c_terminus)), 3) for i in set(list_c_terminus)}
+        aa_n_terminus = {i: round(list_c_terminus.count(i) / len(set(list_c_terminus)), 3) for i in
+                         set(list_c_terminus)}
 
         list_n_terminus = [seq[0] for seq in id_seq_dictionary.values()]
-        aa_c_terminus = {i: round(list_n_terminus.count(i) / len(set(list_n_terminus)), 3) for i in set(list_n_terminus)}
+        aa_c_terminus = {i: round(list_n_terminus.count(i) / len(set(list_n_terminus)), 3) for i in
+                         set(list_n_terminus)}
         return aa_n_terminus, aa_c_terminus
 
     def results(self):
@@ -170,23 +173,24 @@ class SeqAnalyzer:
         """
         dict_all_sequences = \
             {
-                'median_id': self.median,
-                'average_length_id': self.average_length,
-                'standard_deviation_id': self.standard_deviation,
+                'median_length': self.median,
+                'average_length': self.average_length,
+                'standard_deviation_length': self.standard_deviation,
                 'id': self.ids,
                 'sequence_length': self.lengths,
                 'molecular_weight': self.molecular_weight,
-                'theoretical_pl': self.pi,
+                'theoretical_pi': self.pi,
                 'instability_index': self.instability,
                 'flexibility': self.flexibility,
-                'secondary_structure_fraction': self.secondary_structure_fraction,
-                'extinction_coefficient': self.mol_ext_coefficient,
                 'gravy': self.gravy,
+                'aromaticity': self.aromaticity,
                 'c_term_freq': self.aa_c_terminus,
                 'n_term_freq': self.aa_n_terminus,
+                'secondary_structure_fractions': self.secondary_structure_fraction,
+                'extinction_coefficient': self.mol_ext_coefficient,
                 'amino_acid_comp': self.amino_acids,
                 'amino_acid_percent': self.amino_acids_percent,
-                'aromaticity': self.aromaticity
+
             }
 
         dict_each_sequence = {ids: {} for ids in self.ids}  # creating empty dict of dicts
@@ -196,16 +200,16 @@ class SeqAnalyzer:
             dict_each_sequence[key]['molecular_weight'] = self.molecular_weight[index]
             dict_each_sequence[key]['theoretical_pl'] = self.pi[index]
             dict_each_sequence[key]['instability_index'] = self.instability[index]
-            dict_each_sequence[key]['flexibility'] = self.instability[index]
+            dict_each_sequence[key]['flexibility'] = self.flexibility[index]
+            dict_each_sequence[key]['gravy'] = self.gravy[index]
+            dict_each_sequence[key]['aromaticity'] = self.aromaticity[index]
             dict_each_sequence[key]['secondary_structure_fraction'] = self.secondary_structure_fraction[index]
             dict_each_sequence[key]['extinction_coefficient'] = self.mol_ext_coefficient[index]
             dict_each_sequence[key]['amino_acid_comp'] = self.amino_acids[index]
             dict_each_sequence[key]['amino_acid_percent'] = self.amino_acids_percent[index]
-            dict_each_sequence[key]['aromaticity'] = self.aromaticity[index]
-            dict_each_sequence[key]['gravy'] = self.gravy[index]
 
         return dict_all_sequences, dict_each_sequence
 
 
-wynik = SeqAnalyzer(records)
+wynik = SeqAnalyzer(data)
 print(wynik.results())
