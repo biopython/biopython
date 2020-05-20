@@ -8,6 +8,7 @@
 """The structure class, representing a macromolecular structure."""
 
 from Bio.PDB.Entity import Entity
+from Bio.PDB.internal_coords import IC_Chain
 
 
 class Structure(Entity):
@@ -40,3 +41,26 @@ class Structure(Entity):
         """Return atoms from residue."""
         for r in self.get_residues():
             yield from r
+
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
+        """Create/update internal coordinates from Atom X,Y,Z coordinates.
+
+        Internal coordinates are bond length, angle and dihedral angles.
+
+        :param verbose bool: default False
+            describe runtime problems
+
+        """
+        for chn in self.get_chains():
+            chn.atom_to_internal_coordinates(verbose)
+
+    def internal_to_atom_coordinates(self, verbose: bool = False) -> None:
+        """Create/update atom coordinates from internal coordinates.
+
+        :param verbose bool: default False
+            describe runtime problems
+
+        :raises Exception: if any chain does not have .pic attribute
+        """
+        for chn in self.get_chains():
+            chn.internal_to_atom_coordinates(verbose)
