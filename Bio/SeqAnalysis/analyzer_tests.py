@@ -1,13 +1,13 @@
 #Work in progress, not ready for reviewing
 
 
-from Bio.SeqAnalysis.SeqAnalyzer.py import
+from Bio.SeqAnalysis.SeqAnalyzer import SeqAnalyzer
 import unittest
 from Bio import SeqIO
 #cant create objects
 
 data = {
-    'czlowiek': 'MGKKRAPQPIVEKLISNFSQK',
+    'czlowiek': 'MGKKRAVGAQALACFECERCKSDNEQYCTNDHVLTMWTPYKDG',
     'pies': 'MSVKPSKKKKRSKVKKKISFDFSDDDDSEIGVSFR',
     'maciek': 'MRALAYFGKGNIRFTNHLKEPHIVAPDELVIDIEWCGICGTDLHEYTDGPIFFPEDGHTHEISHNPLPQAMGHEMAGTVLEVGPGVKNLKVGDKVVVEPTGTCRDYNICSYLGLCGAGVQSGGFAERVVMNESHCYKVPDFVPLDVAALIQPLAVCWH',
     'kubiks': 'IFFPEDGHTHEISHNPLPQAMGHEMAGTVLEVGPGVKNLKVGDKVVVEPTGTCR',
@@ -19,5 +19,3 @@ analyzer = Bio.SeqAnalysis.SeqAnalyzer(records)
 reults = analyzer.results()
 
 SeqAnalyzer = SeqAnalyzer(input_data)
-
-print(SeqAnalyzer.results()[0], '\n', SeqAnalyzer.results()[1])
