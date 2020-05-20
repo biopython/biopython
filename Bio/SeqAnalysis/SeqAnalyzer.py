@@ -1,6 +1,11 @@
 import numpy as np
 from Bio.SeqUtils.ProtParam import ProteinAnalysis, IsoelectricPoint
 
+records = {
+    'czlowiek': 'MGKKRAPQPIVEKLISNFSQK',
+    'pies': 'MSVKPSKKKSKRSKVKKKISFDFSDDDDSEIGVSFR',
+}
+
 
 class SeqAnalyzer:
     """
@@ -32,7 +37,7 @@ class SeqAnalyzer:
 
         :param data: takes in a dict with protein IDs as keys and SeqRecord objects as values
         """
-        id_seq_dictionary = {key: value.seq[0] for key, value in data}
+        id_seq_dictionary = records  # {key: value.seq[0] for key, value in data}
         self.lengths = [len(seq) for seq in id_seq_dictionary.values()]
         self.ids = [ids for ids in id_seq_dictionary.keys()]
         self.standard_deviation, self.average_length, self.median = SeqAnalyzer.median_standard_deviation_average_length(
@@ -71,9 +76,9 @@ class SeqAnalyzer:
 
         """
         list_of_lengths = [len(seq) for seq in id_seq_dictionary.values()]
-        standard_deviation = float(np.std(list_of_lengths))
-        average_length = float(np.average(list_of_lengths))
-        median_length = float(np.median(list_of_lengths))
+        standard_deviation = round(float(np.std(list_of_lengths)), 3)
+        average_length = round(float(np.average(list_of_lengths)), 3)
+        median_length = round(float(np.median(list_of_lengths)), 3)
         return standard_deviation, average_length, median_length
 
     @staticmethod
@@ -110,17 +115,24 @@ class SeqAnalyzer:
         [8.59112548828125, 8.59112548828125],
         """
         list_of_proteinanalysis_objects = [ProteinAnalysis(seq) for seq in id_seq_dictionary.values()]
-        molecular_weight = [seq.molecular_weight() for seq in list_of_proteinanalysis_objects]
-        pi = [seq.isoelectric_point() for seq in list_of_proteinanalysis_objects]
+        molecular_weight = [round(seq.molecular_weight(), 3) for seq in list_of_proteinanalysis_objects]
+        pi = [round(seq.isoelectric_point(), 3) for seq in list_of_proteinanalysis_objects]
         amino_acids = [seq.count_amino_acids() for seq in list_of_proteinanalysis_objects]
-        aromaticity = [seq.aromaticity() for seq in list_of_proteinanalysis_objects]
-        amino_acids_percent = [seq.get_amino_acids_percent() for seq in list_of_proteinanalysis_objects]
-        instability = [seq.instability_index() for seq in list_of_proteinanalysis_objects]
-        flexibility = [sum(seq) / len(seq) for seq in [aa.flexibility() for aa in list_of_proteinanalysis_objects]]
-        secondary_structure_fraction = [seq.secondary_structure_fraction() for seq in
-                                        list_of_proteinanalysis_objects]
-        gravy = [seq.gravy() for seq in list_of_proteinanalysis_objects]
-        mol_ext_coefficient = [seq.molar_extinction_coefficient() for seq in list_of_proteinanalysis_objects]
+        aromaticity = [round(seq.aromaticity(), 3) for seq in list_of_proteinanalysis_objects]
+        amino_acids_percent = [dict(seq.get_amino_acids_percent()) for seq in list_of_proteinanalysis_objects]
+        for dict_aa_percent in amino_acids_percent:  # rounding values in aa percentage occurrences dictionaries
+            for key, value in dict_aa_percent.items():
+                dict_aa_percent[key] = round(value, 3)
+
+        instability = [round(seq.instability_index(), 3) for seq in list_of_proteinanalysis_objects]
+        flexibility = [round(sum(seq) / len(seq), 3) for seq in
+                       [aa.flexibility() for aa in list_of_proteinanalysis_objects]]
+        secondary_structure_fraction = [[round(value, 3) for value in [v1, v2, v3]] for v1, v2, v3 in
+                                        (seq.secondary_structure_fraction() for seq in
+                                         list_of_proteinanalysis_objects)]
+        gravy = [round(seq.gravy(), 3) for seq in list_of_proteinanalysis_objects]
+        mol_ext_coefficient = [[round(value, 3) for value in [v1, v2]] for v1, v2 in
+                               (seq.molar_extinction_coefficient() for seq in list_of_proteinanalysis_objects)]
         return molecular_weight, pi, amino_acids, aromaticity, amino_acids_percent, instability, flexibility, \
                secondary_structure_fraction, gravy, mol_ext_coefficient
 
@@ -141,10 +153,10 @@ class SeqAnalyzer:
 
         """
         list_c_terminus = [seq[-1] for seq in id_seq_dictionary.values()]
-        aa_n_terminus = {i: list_c_terminus.count(i) / len(set(list_c_terminus)) for i in set(list_c_terminus)}
+        aa_n_terminus = {i: round(list_c_terminus.count(i) / len(set(list_c_terminus)), 3) for i in set(list_c_terminus)}
 
         list_n_terminus = [seq[0] for seq in id_seq_dictionary.values()]
-        aa_c_terminus = {i: list_n_terminus.count(i) / len(set(list_n_terminus)) for i in set(list_n_terminus)}
+        aa_c_terminus = {i: round(list_n_terminus.count(i) / len(set(list_n_terminus)), 3) for i in set(list_n_terminus)}
         return aa_n_terminus, aa_c_terminus
 
     def results(self):
@@ -194,3 +206,6 @@ class SeqAnalyzer:
 
         return dict_all_sequences, dict_each_sequence
 
+
+wynik = SeqAnalyzer(records)
+print(wynik.results())
