@@ -17,6 +17,7 @@ from Bio.KEGG.REST import kegg_info, kegg_link, kegg_list
 from Bio import SeqIO
 
 import requires_internet
+
 requires_internet.check()
 
 
@@ -101,26 +102,28 @@ class KEGGTests(unittest.TestCase):
     def test_find_compound_C7H10O5_formula(self):
         with kegg_find("compound", "C7H10O5", "formula") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/C7H10O5/formula")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/find/compound/C7H10O5/formula"
+        )
 
     def test_find_compound_O5C7_formula(self):
         with kegg_find("compound", "O5C7", "formula") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/O5C7/formula")
+        self.assertEqual(handle.url, "http://rest.kegg.jp/find/compound/O5C7/formula")
 
     def test_find_compound_exact_mass(self):
         with kegg_find("compound", "174.05", "exact_mass") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/174.05/exact_mass")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/find/compound/174.05/exact_mass"
+        )
 
     def test_find_compound_weight(self):
         with kegg_find("compound", "300-310", "mol_weight") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/find/compound/300-310/mol_weight")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/find/compound/300-310/mol_weight"
+        )
 
     def test_get_cpd_C01290_plus_gl_G00092(self):
         with kegg_get("cpd:C01290+gl:G00092") as handle:
@@ -199,14 +202,16 @@ class KEGGTests(unittest.TestCase):
     def test_conv_ncbi_gi_hsa_10458_plus_ece_Z5100(self):
         with kegg_conv("ncbi-gi", "hsa:10458+ece:Z5100") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100"
+        )
 
     def test_conv_ncbi_gi_hsa_10458_list_ece_Z5100(self):
         with kegg_conv("ncbi-gi", ["hsa:10458", "ece:Z5100"]) as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100"
+        )
 
     def test_link_pathway_hsa(self):
         with kegg_link("pathway", "hsa") as handle:
@@ -221,14 +226,16 @@ class KEGGTests(unittest.TestCase):
     def test_pathway_hsa_10458_plus_ece_Z5100(self):
         with kegg_link("pathway", "hsa:10458+ece:Z5100") as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100"
+        )
 
     def test_pathway_hsa_10458_list_ece_Z5100(self):
         with kegg_link("pathway", ["hsa:10458", "ece:Z5100"]) as handle:
             handle.read()
-        self.assertEqual(handle.url,
-                         "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100")
+        self.assertEqual(
+            handle.url, "http://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100"
+        )
 
 
 class KGMLPathwayTests(unittest.TestCase):

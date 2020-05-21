@@ -8,7 +8,8 @@
 """Vector class, including rotation-related functions."""
 
 
-import numpy
+import numpy  # type: ignore
+from typing import Tuple, Optional
 
 
 def m2rotaxis(m):
@@ -376,3 +377,287 @@ class Vector:
     def copy(self):
         """Return a deep copy of the Vector."""
         return Vector(self._ar)
+
+
+"""Homogeneous matrix geometry routines.
+
+Rotation, translation, scale, and coordinate transformations.
+
+Robert T. Miller 2019
+"""
+
+
+def homog_rot_mtx(angle_rads: float, axis: str) -> numpy.array:
+    """Generate a 4x4 single-axis numpy rotation matrix.
+
+    :param float angle_rads: the desired rotation angle in radians
+    :param char axis: character specifying the rotation axis
+    """
+    cosang = numpy.cos(angle_rads)
+    sinang = numpy.sin(angle_rads)
+
+    if "z" == axis:
+        return numpy.array(
+            (
+                (cosang, -sinang, 0, 0),
+                (sinang, cosang, 0, 0),
+                (0, 0, 1, 0),
+                (0, 0, 0, 1),
+            ),
+            dtype=numpy.float64,
+        )
+    elif "y" == axis:
+        return numpy.array(
+            (
+                (cosang, 0, sinang, 0),
+                (0, 1, 0, 0),
+                (-sinang, 0, cosang, 0),
+                (0, 0, 0, 1),
+            ),
+            dtype=numpy.float64,
+        )
+    else:
+        return numpy.array(
+            (
+                (1, 0, 0, 0),
+                (0, cosang, -sinang, 0),
+                (0, sinang, cosang, 0),
+                (0, 0, 0, 1),
+            ),
+            dtype=numpy.float64,
+        )
+
+
+def set_Z_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+    """Update existing Z rotation matrix to new angle."""
+    cosang = numpy.cos(angle_rads)
+    sinang = numpy.sin(angle_rads)
+
+    mtx[0][0] = mtx[1][1] = cosang
+    mtx[1][0] = sinang
+    mtx[0][1] = -sinang
+
+
+def set_Y_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+    """Update existing Y rotation matrix to new angle."""
+    cosang = numpy.cos(angle_rads)
+    sinang = numpy.sin(angle_rads)
+
+    mtx[0][0] = mtx[2][2] = cosang
+    mtx[0][2] = sinang
+    mtx[2][0] = -sinang
+
+
+def set_X_homog_rot_mtx(angle_rads: float, mtx: numpy.ndarray):
+    """Update existing X rotation matrix to new angle."""
+    cosang = numpy.cos(angle_rads)
+    sinang = numpy.sin(angle_rads)
+
+    mtx[1][1] = mtx[2][2] = cosang
+    mtx[2][1] = sinang
+    mtx[1][2] = -sinang
+
+
+def homog_trans_mtx(x: float, y: float, z: float) -> numpy.array:
+    """Generate a 4x4 numpy translation matrix.
+
+    :param x, y, z: translation in each axis
+    """
+    return numpy.array(
+        ((1, 0, 0, x), (0, 1, 0, y), (0, 0, 1, z), (0, 0, 0, 1)), dtype=numpy.float64
+    )
+
+
+def set_homog_trans_mtx(x: float, y: float, z: float, mtx: numpy.ndarray):
+    """Update existing translation matrix to new values."""
+    mtx[0][3] = x
+    mtx[1][3] = y
+    mtx[2][3] = z
+
+
+def homog_scale_mtx(scale: float) -> numpy.array:
+    """Generate a 4x4 numpy scaling matrix.
+
+    :param float scale: scale multiplier
+    """
+    return numpy.array(
+        [[scale, 0, 0, 0], [0, scale, 0, 0], [0, 0, scale, 0], [0, 0, 0, 1]],
+        dtype=numpy.float64,
+    )
+
+
+def _get_azimuth(x: float, y: float) -> float:
+    sign_y = -1.0 if y < 0.0 else 1.0
+    sign_x = -1.0 if x < 0.0 else 1.0
+    return (
+        numpy.arctan2(y, x)
+        if (0 != x and 0 != y)
+        else (numpy.pi / 2.0 * sign_y)  # +/-90 if X=0, Y!=0
+        if 0 != y
+        else numpy.pi
+        if sign_x < 0.0  # 180 if Y=0, X < 0
+        else 0.0  # 0 if Y=0, X >= 0
+    )
+
+
+def get_spherical_coordinates(xyz: numpy.array) -> Tuple[float, float, float]:
+    """Compute spherical coordinates (r, azimuth, polar_angle) for X,Y,Z point.
+
+    :param array xyz: column vector (3 row x 1 column numpy array)
+    :return: tuple of r, azimuth, polar_angle for input coordinate
+    """
+    r = numpy.linalg.norm(xyz)
+    if 0 == r:
+        return (0, 0, 0)
+    azimuth = _get_azimuth(xyz[0], xyz[1])
+    polar_angle = numpy.arccos(xyz[2] / r)
+
+    return (r, azimuth, polar_angle)
+
+
+gtm = numpy.identity(4, dtype=numpy.float64)
+gmrz = numpy.identity(4, dtype=numpy.float64)
+gmry = numpy.identity(4, dtype=numpy.float64)
+gmrz2 = numpy.identity(4, dtype=numpy.float64)
+
+
+def coord_space(
+    a0: numpy.ndarray, a1: numpy.ndarray, a2: numpy.ndarray, rev: bool = False
+) -> Tuple[numpy.ndarray, Optional[numpy.ndarray]]:
+    """Generate transformation matrix to coordinate space defined by 3 points.
+
+    New coordinate space will have:
+        acs[0] on XZ plane
+        acs[1] origin
+        acs[2] on +Z axis
+
+    :param numpy column array x3 acs: X,Y,Z column input coordinates x3
+    :param bool rev: if True, also return reverse transformation matrix
+        (to return from coord_space)
+    :returns: 4x4 numpy array, x2 if rev=True
+    """
+    # dbg = False
+    # if dbg:
+    #    print(a0.transpose())
+    #    print(a1.transpose())
+    #    print(a2.transpose())
+
+    # a0 = acs[0]
+    # a1 = acs[1]
+    # a2 = acs[2]
+
+    global gtm
+    global gmry
+    global gmrz, gmrz2
+
+    tm = gtm
+    mry = gmry
+    mrz = gmrz
+    mrz2 = gmrz2
+
+    # tx acs[1] to origin
+    # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
+    set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
+
+    # directly translate a2 using a1
+    p = a2 - a1
+    sc = get_spherical_coordinates(p)
+
+    # if dbg:
+    #    print("p", p.transpose())
+    #    print("sc", sc)
+
+    # mrz = homog_rot_mtx(-sc[1], "z")  # rotate translated a2 -azimuth about Z
+    set_Z_homog_rot_mtx(-sc[1], mrz)
+    # mry = homog_rot_mtx(-sc[2], "y")  # rotate translated a2 -polar_angle about Y
+    set_Y_homog_rot_mtx(-sc[2], mry)
+
+    # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
+    # mt = mry @ mrz @ tm  # python 3.5 and later
+    mt = gmry.dot(gmrz.dot(gtm))
+
+    # if dbg:
+    #    print("tm:\n", tm)
+    #    print("mrz:\n", mrz)
+    #    print("mry:\n", mry)
+    #    # print("mt ", mt)
+
+    p = mt.dot(a0)
+
+    # if dbg:
+    #    print("mt:\n", mt, "\na0:\n", a0, "\np:\n", p)
+
+    # need azimuth of translated a0
+    # sc2 = get_spherical_coordinates(p)
+    # print(sc2)
+    azimuth2 = _get_azimuth(p[0], p[1])
+
+    # rotate a0 -azimuth2 about Z to align with X
+    # mrz2 = homog_rot_mtx(-azimuth2, "z")
+    set_Z_homog_rot_mtx(-azimuth2, mrz2)
+
+    # mt = mrz2 @ mt
+    mt = gmrz2.dot(mt)
+
+    # if dbg:
+    #    print("mt:", mt, "\na0:", a0, "\np:", p)
+    #    # print(p, "\n", azimuth2, "\n", mrz2, "\n", mt)
+
+    # if dbg:
+    #    print("mt:\n", mt)
+    #    print("<<<<<<==============================")
+
+    if not rev:
+        return mt, None
+
+    # rev=True, so generate the reverse transformation
+
+    # rotate a0 theta about Z, reversing alignment with X
+    # mrz2 = homog_rot_mtx(azimuth2, "z")
+    set_Z_homog_rot_mtx(azimuth2, mrz2)
+    # rotate a2 phi about Y
+    # mry = homog_rot_mtx(sc[2], "y")
+    set_Y_homog_rot_mtx(sc[2], mry)
+    # rotate a2 theta about Z
+    # mrz = homog_rot_mtx(sc[1], "z")
+    set_Z_homog_rot_mtx(sc[1], mrz)
+    # translation matrix origin to a1
+    # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
+    set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
+
+    # mr = tm @ mrz @ mry @ mrz2
+    mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
+    # mr = numpy.dot(tm, numpy.dot(mrz, numpy.dot(mry, mrz2)))
+
+    return mt, mr
+
+
+def multi_rot_Z(angle_rads: numpy.ndarray) -> numpy.ndarray:
+    """Create [entries] numpy Z rotation matrices for [entries] angles.
+
+    :param entries: int number of matrices generated.
+    :param angle_rads: numpy array of angles
+    :returns: entries x 4 x 4 homogeneous rotation matrices
+    """
+    rz = numpy.empty((angle_rads.shape[0], 4, 4))
+    rz[...] = numpy.identity(4)
+    rz[:, 0, 0] = rz[:, 1, 1] = numpy.cos(angle_rads)
+    rz[:, 1, 0] = numpy.sin(angle_rads)
+    rz[:, 0, 1] = -rz[:, 1, 0]
+    return rz
+
+
+def multi_rot_Y(angle_rads: numpy.ndarray) -> numpy.ndarray:
+    """Create [entries] numpy Y rotation matrices for [entries] angles.
+
+    :param entries: int number of matrices generated.
+    :param angle_rads: numpy array of angles
+    :returns: entries x 4 x 4 homogeneous rotation matrices
+    """
+    ry = numpy.empty((angle_rads.shape[0], 4, 4))
+    ry[...] = numpy.identity(4)
+    ry[:, 0, 0] = ry[:, 2, 2] = numpy.cos(angle_rads)
+    ry[:, 0, 2] = numpy.sin(angle_rads)
+    ry[:, 2, 0] = -ry[:, 0, 2]
+
+    return ry
