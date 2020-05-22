@@ -35,10 +35,11 @@ class SeqAnalyzer:
 
         :param data: takes in a dict with protein IDs as keys and SeqRecord objects as values
         """
+
         id_seq_dictionary = {
-            key: value for key, value in {key: value.seq[0] for key, value in data}.items() if
+            key: value for key, value in {key: str(value.seq) for key, value in data.items()}.items() if
             not (set('BZXJ').intersection(value)) and len(value) >= 10
-        }
+                            }
         self.terminus_aa = [(seq[0], seq[-1]) for seq in id_seq_dictionary.values()]
         self.lengths = [len(seq) for seq in id_seq_dictionary.values()]
         self.ids = [ids for ids in id_seq_dictionary.keys()]
@@ -75,7 +76,6 @@ class SeqAnalyzer:
         :Example:
         >>> SeqAnalyzer.median_standard_deviation_average_length({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
         0.5, 11.5, 11.5
-
         """
         list_of_lengths = [len(seq) for seq in id_seq_dictionary.values()]
         standard_deviation = round(float(np.std(list_of_lengths)), 3)
@@ -112,9 +112,19 @@ class SeqAnalyzer:
         10. mol_ext_coefficient - of dicts with two keys/values with ints and/or floats as values
 
         :Example:   #need to finish
-        >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
-        [1318.4349, 1446.5641000000003],
-        [8.59112548828125, 8.59112548828125],
+        >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'})
+        ([2178.314, 2306.443], [5.445, 5.414],
+        [{'A': 0, 'C': 0, 'D': 1, 'E': 2, 'F': 0, 'G': 1, 'H': 1, 'I': 0, 'K': 2, 'L': 2, 'M': 0, 'N': 1, 'P': 0,
+        'Q': 2, 'R': 0, 'S': 1, 'T': 3, 'V': 0, 'W': 1, 'Y': 1}, {'A': 0, 'C': 0, 'D': 1, 'E': 2, 'F': 0, 'G': 1,
+        'H': 1, 'I': 0, 'K': 2, 'L': 2, 'M': 0, 'N': 1, 'P': 0, 'Q': 3, 'R': 0, 'S': 1, 'T': 3, 'V': 0, 'W': 1, 'Y': 1}]
+        ,[0.111, 0.105], [{'A': 0.0, 'C': 0.0, 'D': 5.556, 'E': 11.111, 'F': 0.0, 'G': 5.556, 'H': 5.556, 'I': 0.0,
+        'K': 11.111, 'L': 11.111, 'M': 0.0, 'N': 5.556, 'P': 0.0, 'Q': 11.111, 'R': 0.0, 'S': 5.556, 'T': 16.667,
+        'V': 0.0, 'W': 5.556, 'Y': 5.556}, {'A': 0.0, 'C': 0.0, 'D': 5.263, 'E': 10.526, 'F': 0.0, 'G': 5.263,
+        'H': 5.263, 'I': 0.0, 'K': 10.526, 'L': 10.526, 'M': 0.0, 'N': 5.263, 'P': 0.0, 'Q': 15.789, 'R': 0.0,
+        'S': 5.263, 'T': 15.789, 'V': 0.0, 'W': 5.263, 'Y': 5.263}], [17.928, 19.737], [1.005, 1.009],
+        [{'Helix': 22.222, 'Turn': 16.667, 'Sheet': 22.222}, {'Helix': 21.053, 'Turn': 15.789, 'Sheet': 21.053}],
+        [-1.661, -1.758], [{'Cysteines_reduced': 6990, 'Cysteines_residues': 6990},
+        {'Cysteines_reduced': 6990, 'Cysteines_residues': 6990}])
         """
         list_of_proteinanalysis_objects = [ProteinAnalysis(seq) for seq in id_seq_dictionary.values()]
         molecular_weight = [round(seq.molecular_weight(), 3) for seq in list_of_proteinanalysis_objects]
@@ -130,16 +140,16 @@ class SeqAnalyzer:
         flexibility = [
             round(sum(seq) / len(seq), 3) for seq in
             [aa.flexibility() for aa in list_of_proteinanalysis_objects]
-        ]
+                        ]
         secondary_structure_fraction = [
             {'Helix': round(v1 * 100, 3), 'Turn': round(v2 * 100, 3), 'Sheet': round(v3 * 100, 3)} for
             v1, v2, v3 in (seq.secondary_structure_fraction() for seq in list_of_proteinanalysis_objects)
-        ]
+                                        ]
         gravy = [round(seq.gravy(), 3) for seq in list_of_proteinanalysis_objects]
         mol_ext_coefficient = [
             {'Cysteines_reduced': v1, 'Cysteines_residues': v2} for v1, v2 in
             (seq.molar_extinction_coefficient() for seq in list_of_proteinanalysis_objects)
-        ]
+                                 ]
         return molecular_weight, pi, amino_acids, aromaticity, amino_acids_percent, instability, flexibility, \
                secondary_structure_fraction, gravy, mol_ext_coefficient
 
@@ -155,9 +165,8 @@ class SeqAnalyzer:
         of aa on 'N' terminus, and aa_c_terminus about 'C' terminus respectively
 
         :Example:
-        >>> SeqAnalyzer.terminal_aa_counter({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
-        'n_term_freq': {'Q': 2.0}, 'c_term_freq': {'W': 2.0}
-
+        >>> SeqAnalyzer.terminal_aa_counter({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'})
+        ({'Q': 2.0}, {'T': 0.5, 'W': 0.5})
         """
         list_c_terminus = [seq[-1] for seq in id_seq_dictionary.values()]
         aa_n_terminus = {
@@ -220,5 +229,3 @@ class SeqAnalyzer:
             dict_each_sequence[key]['n_term_freq'] = {self.terminus_aa[index][0]: 1}
 
         return dict_all_sequences, dict_each_sequence
-
-
