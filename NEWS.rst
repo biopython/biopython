@@ -17,7 +17,7 @@ tested on PyPy3.6.1 v7.1.1-beta0.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-15 May 2020: Biopython 1.77
+25 May 2020: Biopython 1.77
 ===============================================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
