@@ -158,8 +158,9 @@ class SeqAnalyzer:
         of aa on 'N' terminus, and aa_c_terminus about 'C' terminus respectively
 
         :Example:
-        >>> SeqAnalyzer.terminal_aa_counter({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'}, 3)
-        ({'Q': 2.0}, {'T': 0.5, 'W': 0.5})
+        >>> SeqAnalyzer.terminal_aa_counter({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'}, 3)\
+        == ({'Q': 2.0}, {'T': 0.5, 'W': 0.5})
+        True
         """
         list_c_terminus = [seq[-1] for seq in id_seq_dictionary.values()]
         aa_n_terminus = {
