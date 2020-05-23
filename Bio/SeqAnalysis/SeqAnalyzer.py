@@ -7,7 +7,7 @@ class SeqAnalyzer:
     A class that takes in records from SeqAnalysis.database, performs multiple operations on them and returns
     2 dictionaries with result values(rounded to three decimal places). It is important to point out that in cases where
     aa sequences have positions containing characters: 'B', 'Z', 'X', 'J', which characters mean that aa in this
-    position aren't certain - the class rejects such sequences, doesn't perform any calculation upon them and doesn't
+    position aren't certain - the class rejects such sequences, doesn't perform any calculation on them and doesn't
     pass them on to SeqVisualizer. The same goes to protein sequences shorter than 10 aa.
     For further information about said dictionaries please see 'results()' function documentation.
     The operations that the class performs upon received data from SeqAnalysis.database is it:
@@ -31,20 +31,22 @@ class SeqAnalyzer:
         """
         This method is called when an object is created from the class and it allows the class to initialize and
         calculate via static methods usage(median_standard_deviation_average_length, main_calculations
-        terminal_aa_counter) attributes of a SeqAnalyzer.
+        terminal_aa_counter) attributes of a SeqAnalyzer. Calculated values are rounded to round_values decimal places
 
         :param data: takes in a dict with protein IDs as keys and SeqRecord objects as values
         """
-
+        round_value = 3
         id_seq_dictionary = {
-            key: value for key, value in {key: str(value.seq) for key, value in data.items()}.items() if
-            not (set('BZXJ').intersection(value)) and len(value) >= 10
-                            }
-        self.terminus_aa = [(seq[0], seq[-1]) for seq in id_seq_dictionary.values()]
+            id: aa_seq
+            for id, aa_seq
+            in {id: str(aa_seq.seq) for id, aa_seq in data.items()}.items()
+            if not (set('BZXJ').intersection(aa_seq)) and len(aa_seq) >= 10
+        }
+        self.round = self.terminus_aa = [(seq[0], seq[-1]) for seq in id_seq_dictionary.values()]
         self.lengths = [len(seq) for seq in id_seq_dictionary.values()]
         self.ids = [ids for ids in id_seq_dictionary.keys()]
         self.standard_deviation, self.average_length, self.median = \
-            SeqAnalyzer.median_standard_deviation_average_length(id_seq_dictionary)
+            SeqAnalyzer.median_standard_deviation_average_length(id_seq_dictionary, round_value)
         self.molecular_weight, \
         self.pi, \
         self.amino_acids, \
@@ -55,15 +57,15 @@ class SeqAnalyzer:
         self.secondary_structure_fraction, \
         self.gravy, \
         self.mol_ext_coefficient \
-            = SeqAnalyzer.main_calculations(id_seq_dictionary)
-        self.aa_n_terminus, self.aa_c_terminus = SeqAnalyzer.terminal_aa_counter(id_seq_dictionary)
+            = SeqAnalyzer.main_calculations(id_seq_dictionary, round_value)
+        self.aa_n_terminus, self.aa_c_terminus = SeqAnalyzer.terminal_aa_counter(id_seq_dictionary, round_value)
 
     @staticmethod
-    def median_standard_deviation_average_length(id_seq_dictionary: dict) -> tuple:
+    def median_standard_deviation_average_length(id_seq_dictionary: dict, round_value: int) -> tuple:
         """
         Calculates standard deviation of lengths of given sequences, median of given sequences lengths and
-        average sequence length calculated from given protein sequences. Calculated values are later assigned to
-        apropriate self. values :
+        average sequence length calculated from given protein sequences. Calculated values (rounded to round_value
+        decimal places) are later assigned to apropriate self. values :
         self.standard_deviation - standard deviation
         self.average_length - average length
         self.median - median length
@@ -74,17 +76,18 @@ class SeqAnalyzer:
         a form of a tuple
 
         :Example:
-        >>> SeqAnalyzer.median_standard_deviation_average_length({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'})
-        0.5, 11.5, 11.5
+        >>> SeqAnalyzer.median_standard_deviation_average_length({'protein1': 'WKQTNSLEGKQ', 'protein2': 'WKQQTNSLEGKQ'}, 3)
+        (0.5, 11.5, 11.5)
         """
         list_of_lengths = [len(seq) for seq in id_seq_dictionary.values()]
-        standard_deviation = round(float(np.std(list_of_lengths)), 3)
-        average_length = round(float(np.average(list_of_lengths)), 3)
-        median_length = round(float(np.median(list_of_lengths)), 3)
+        standard_deviation = round(float(np.std(list_of_lengths)), round_value)
+        average_length = round(float(np.average(list_of_lengths)), round_value)
+        median_length = round(float(np.median(list_of_lengths)), round_value)
+
         return standard_deviation, average_length, median_length
 
     @staticmethod
-    def main_calculations(id_seq_dictionary: dict) -> tuple:
+    def main_calculations(id_seq_dictionary: dict, round_value: int) -> tuple:
         """
         Main function calculating proteins values (10 values):
         1. Calculated molecular weight of protein sequences (molecular_weight )
@@ -98,6 +101,7 @@ class SeqAnalyzer:
         keys and ther percentage in protein structure as values
         9. Calculated gravy of protein sequences according to Kyte and Doolittle, in a list (seq_gravy )
         10. Calculated molar extinction coefficients for protein sequences, in a dict (mol_ext_coefficient)
+        Calculated values are rounded to round_value decimal places
 
         :return: Output parameters are in list of:
         1. molecular_weight - of ints and/or floats
@@ -112,52 +116,41 @@ class SeqAnalyzer:
         10. mol_ext_coefficient - of dicts with two keys/values with ints and/or floats as values
 
         :Example:   #need to finish
-        >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'})
-        ([2178.314, 2306.443], [5.445, 5.414],
-        [{'A': 0, 'C': 0, 'D': 1, 'E': 2, 'F': 0, 'G': 1, 'H': 1, 'I': 0, 'K': 2, 'L': 2, 'M': 0, 'N': 1, 'P': 0,
-        'Q': 2, 'R': 0, 'S': 1, 'T': 3, 'V': 0, 'W': 1, 'Y': 1}, {'A': 0, 'C': 0, 'D': 1, 'E': 2, 'F': 0, 'G': 1,
-        'H': 1, 'I': 0, 'K': 2, 'L': 2, 'M': 0, 'N': 1, 'P': 0, 'Q': 3, 'R': 0, 'S': 1, 'T': 3, 'V': 0, 'W': 1, 'Y': 1}]
-        ,[0.111, 0.105], [{'A': 0.0, 'C': 0.0, 'D': 5.556, 'E': 11.111, 'F': 0.0, 'G': 5.556, 'H': 5.556, 'I': 0.0,
-        'K': 11.111, 'L': 11.111, 'M': 0.0, 'N': 5.556, 'P': 0.0, 'Q': 11.111, 'R': 0.0, 'S': 5.556, 'T': 16.667,
-        'V': 0.0, 'W': 5.556, 'Y': 5.556}, {'A': 0.0, 'C': 0.0, 'D': 5.263, 'E': 10.526, 'F': 0.0, 'G': 5.263,
-        'H': 5.263, 'I': 0.0, 'K': 10.526, 'L': 10.526, 'M': 0.0, 'N': 5.263, 'P': 0.0, 'Q': 15.789, 'R': 0.0,
-        'S': 5.263, 'T': 15.789, 'V': 0.0, 'W': 5.263, 'Y': 5.263}], [17.928, 19.737], [1.005, 1.009],
-        [{'Helix': 22.222, 'Turn': 16.667, 'Sheet': 22.222}, {'Helix': 21.053, 'Turn': 15.789, 'Sheet': 21.053}],
-        [-1.661, -1.758], [{'Cysteines_reduced': 6990, 'Cysteines_residues': 6990},
-        {'Cysteines_reduced': 6990, 'Cysteines_residues': 6990}])
+        >>> SeqAnalyzer.main_calculations({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'}, 3)
+        ([2178.314, 2306.443], [5.445, 5.414], [{'A': 0, 'C': 0, 'D': 1, 'E': 2, 'F': 0, 'G': 1, 'H': 1, 'I': 0, 'K': 2, 'L': 2, 'M': 0, 'N': 1, 'P': 0, 'Q': 2, 'R': 0, 'S': 1, 'T': 3, 'V': 0, 'W': 1, 'Y': 1}, {'A': 0, 'C': 0, 'D': 1, 'E': 2, 'F': 0, 'G': 1, 'H': 1, 'I': 0, 'K': 2, 'L': 2, 'M': 0, 'N': 1, 'P': 0, 'Q': 3, 'R': 0, 'S': 1, 'T': 3, 'V': 0, 'W': 1, 'Y': 1}], [0.111, 0.105], [{'A': 0.0, 'C': 0.0, 'D': 5.556, 'E': 11.111, 'F': 0.0, 'G': 5.556, 'H': 5.556, 'I': 0.0, 'K': 11.111, 'L': 11.111, 'M': 0.0, 'N': 5.556, 'P': 0.0, 'Q': 11.111, 'R': 0.0, 'S': 5.556, 'T': 16.667, 'V': 0.0, 'W': 5.556, 'Y': 5.556}, {'A': 0.0, 'C': 0.0, 'D': 5.263, 'E': 10.526, 'F': 0.0, 'G': 5.263, 'H': 5.263, 'I': 0.0, 'K': 10.526, 'L': 10.526, 'M': 0.0, 'N': 5.263, 'P': 0.0, 'Q': 15.789, 'R': 0.0, 'S': 5.263, 'T': 15.789, 'V': 0.0, 'W': 5.263, 'Y': 5.263}], [17.928, 19.737], [1.005, 1.009], [{'Helix': 22.222, 'Turn': 16.667, 'Sheet': 22.222}, {'Helix': 21.053, 'Turn': 15.789, 'Sheet': 21.053}], [-1.661, -1.758], [{'Cysteines reduced': 6990, 'Cysteines residues': 6990}, {'Cysteines reduced': 6990, 'Cysteines residues': 6990}])
+
         """
         list_of_proteinanalysis_objects = [ProteinAnalysis(seq) for seq in id_seq_dictionary.values()]
-        molecular_weight = [round(seq.molecular_weight(), 3) for seq in list_of_proteinanalysis_objects]
-        pi = [round(seq.isoelectric_point(), 3) for seq in list_of_proteinanalysis_objects]
+        molecular_weight = [round(seq.molecular_weight(), round_value) for seq in list_of_proteinanalysis_objects]
+        pi = [round(seq.isoelectric_point(), round_value) for seq in list_of_proteinanalysis_objects]
         amino_acids = [seq.count_amino_acids() for seq in list_of_proteinanalysis_objects]
-        aromaticity = [round(seq.aromaticity(), 3) for seq in list_of_proteinanalysis_objects]
+        aromaticity = [round(seq.aromaticity(), round_value) for seq in list_of_proteinanalysis_objects]
         amino_acids_percent = [dict(seq.get_amino_acids_percent()) for seq in list_of_proteinanalysis_objects]
         for dict_aa_percent in amino_acids_percent:  # rounding values in aa percentage occurrences dictionaries
             for key, value in dict_aa_percent.items():
-                dict_aa_percent[key] = round(value * 100, 3)
+                dict_aa_percent[key] = round(value * 100, round_value)
 
-        instability = [round(seq.instability_index(), 3) for seq in list_of_proteinanalysis_objects]
-        flexibility = [
-            round(sum(seq) / len(seq), 3) for seq in
-            [aa.flexibility() for aa in list_of_proteinanalysis_objects]
-                        ]
+        instability = [round(seq.instability_index(), round_value) for seq in list_of_proteinanalysis_objects]
+        flexibility = [round(sum(seq) / len(seq), round_value) for seq
+                       in [aa.flexibility() for aa in list_of_proteinanalysis_objects]]
         secondary_structure_fraction = [
-            {'Helix': round(v1 * 100, 3), 'Turn': round(v2 * 100, 3), 'Sheet': round(v3 * 100, 3)} for
-            v1, v2, v3 in (seq.secondary_structure_fraction() for seq in list_of_proteinanalysis_objects)
-                                        ]
-        gravy = [round(seq.gravy(), 3) for seq in list_of_proteinanalysis_objects]
+            {'Helix': round(v1 * 100,  round_value), 'Turn': round(v2 * 100, round_value), 'Sheet': round(v3 * 100, round_value)}
+            for v1, v2, v3
+            in (seq.secondary_structure_fraction() for seq in list_of_proteinanalysis_objects)
+        ]
+        gravy = [round(seq.gravy(), round_value) for seq in list_of_proteinanalysis_objects]
         mol_ext_coefficient = [
-            {'Cysteines_reduced': v1, 'Cysteines_residues': v2} for v1, v2 in
+            {'Cysteines reduced': v1, 'Cysteines residues': v2} for v1, v2 in
             (seq.molar_extinction_coefficient() for seq in list_of_proteinanalysis_objects)
-                                 ]
+        ]
         return molecular_weight, pi, amino_acids, aromaticity, amino_acids_percent, instability, flexibility, \
                secondary_structure_fraction, gravy, mol_ext_coefficient
 
     @staticmethod
-    def terminal_aa_counter(id_seq_dictionary: dict) -> tuple:
+    def terminal_aa_counter(id_seq_dictionary: dict, round_value: int) -> tuple:
         """
         Counts occurrences of given aa on 'C' and 'N' terminus of protein and makes a dictionary for each terminus
-        ('C' and 'N') with those aa occurrences
+        ('C' and 'N') with those aa occurrences. Calculated values are rounded to round_value decimal places
 
         :parameter: takes in a dict with protein ID as keys and protein sequences as values
 
@@ -165,17 +158,17 @@ class SeqAnalyzer:
         of aa on 'N' terminus, and aa_c_terminus about 'C' terminus respectively
 
         :Example:
-        >>> SeqAnalyzer.terminal_aa_counter({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'})
+        >>> SeqAnalyzer.terminal_aa_counter({'protein1': 'WKQTNSTDLHEYTLEGKQ', 'protein2': 'TDLHEYTWKQQTNSLEGKQ'}, 3)
         ({'Q': 2.0}, {'T': 0.5, 'W': 0.5})
         """
         list_c_terminus = [seq[-1] for seq in id_seq_dictionary.values()]
         aa_n_terminus = {
-            i: round(list_c_terminus.count(i) / len(set(list_c_terminus)), 3) for i in set(list_c_terminus)
+            i: round(list_c_terminus.count(i) / len(set(list_c_terminus)), round_value) for i in set(list_c_terminus)
         }
 
         list_n_terminus = [seq[0] for seq in id_seq_dictionary.values()]
         aa_c_terminus = {
-            i: round(list_n_terminus.count(i) / len(set(list_n_terminus)), 3) for i in set(list_n_terminus)
+            i: round(list_n_terminus.count(i) / len(set(list_n_terminus)), round_value) for i in set(list_n_terminus)
         }
         return aa_n_terminus, aa_c_terminus
 
@@ -203,7 +196,7 @@ class SeqAnalyzer:
                 'aromaticity': self.aromaticity,
                 'c_term_freq': self.aa_c_terminus,
                 'n_term_freq': self.aa_n_terminus,
-                'secondary_structure_fractions': self.secondary_structure_fraction,
+                'secondary_structure_fraction': self.secondary_structure_fraction,
                 'extinction_coefficient': self.mol_ext_coefficient,
                 'amino_acid_comp': self.amino_acids,
                 'amino_acid_percent': self.amino_acids_percent,
@@ -229,3 +222,4 @@ class SeqAnalyzer:
             dict_each_sequence[key]['n_term_freq'] = {self.terminus_aa[index][0]: 1}
 
         return dict_all_sequences, dict_each_sequence
+
