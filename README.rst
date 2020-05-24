@@ -84,7 +84,7 @@ implementations:
 
 - Python 3.6, 3.7, 3.8 -- see http://www.python.org
 
-- PyPy3.5 v7.1.1 -- see http://www.pypy.org
+- PyPy3.6 v7.3.1 -- see http://www.pypy.org
 
 Biopython 1.68 was our final release to support Python 2.6, while Biopython
 1.76 was our final release to support Python 2.7 and Python 3.5.
