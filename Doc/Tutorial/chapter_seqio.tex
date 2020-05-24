@@ -2,7 +2,7 @@
 \label{chapter:seqio}
 
 In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick_start} and also used in Chapter~\ref{chapter:seq_annot}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
-See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
+See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/docs/1.77/api/Bio.SeqIO.html}{online}):
 
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
@@ -54,7 +54,7 @@ for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(len(seq_record))
 \end{minted}
 
-Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}).
+Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/docs/1.77/api/Bio.SeqIO.html}{online}).
 
 Another very common way to use a Python iterator is within a list comprehension (or
 a generator expression).  For example, if all you wanted to extract from the file was
