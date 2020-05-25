@@ -8,6 +8,27 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
+(In progress, not yet released): Biopython 1.78
+===============================================
+
+This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
+tested on PyPy3.6.1 v7.1.1.
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite. There has been further work to follow the Python
+PEP8, PEP257 and best practice standard coding style, and more of the code
+style has been reformatted with the ``black`` tool.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Peter Cock
+
 25 May 2020: Biopython 1.77
 ===========================
 
