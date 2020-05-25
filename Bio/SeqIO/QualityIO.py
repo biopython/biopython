@@ -1074,9 +1074,10 @@ class FastqPhredIterator(SequenceIterator):
         # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
         #
         # Precomputing is faster, perhaps partly by avoiding the subtractions.
-        q_mapping = {}
-        for letter in range(0, 255):
-            q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
+        q_mapping = {
+            chr(letter): letter - SANGER_SCORE_OFFSET
+            for letter in range(SANGER_SCORE_OFFSET, 94 + SANGER_SCORE_OFFSET)
+        }
 
         for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
             if title2ids:
@@ -1088,9 +1089,10 @@ class FastqPhredIterator(SequenceIterator):
             record = SeqRecord(
                 Seq(seq_string, alphabet), id=id, name=name, description=descr
             )
-            qualities = [q_mapping[letter] for letter in quality_string]
-            if qualities and (min(qualities) < 0 or max(qualities) > 93):
-                raise ValueError("Invalid character in quality string")
+            try:
+                qualities = [q_mapping[letter] for letter in quality_string]
+            except KeyError:
+                raise ValueError("Invalid character in quality string") from None
             # For speed, will now use a dirty trick to speed up assigning the
             # qualities. We do this to bypass the length check imposed by the
             # per-letter-annotations restricted dict (as this has already been
@@ -1234,9 +1236,10 @@ def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None)
     As shown above, the poor quality Solexa reads have been mapped to the
     equivalent PHRED score (e.g. -5 to 1 as shown earlier).
     """
-    q_mapping = {}
-    for letter in range(0, 255):
-        q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
+    q_mapping = {
+        chr(letter): letter - SOLEXA_SCORE_OFFSET
+        for letter in range(SOLEXA_SCORE_OFFSET - 5, 63 + SOLEXA_SCORE_OFFSET)
+    }
 
     for title_line, seq_string, quality_string in FastqGeneralIterator(source):
         if title2ids:
@@ -1248,10 +1251,11 @@ def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None)
         record = SeqRecord(
             Seq(seq_string, alphabet), id=id, name=name, description=descr
         )
-        qualities = [q_mapping[letter] for letter in quality_string]
+        try:
+            qualities = [q_mapping[letter] for letter in quality_string]
         # DO NOT convert these into PHRED qualities automatically!
-        if qualities and (min(qualities) < -5 or max(qualities) > 62):
-            raise ValueError("Invalid character in quality string")
+        except KeyError:
+            raise ValueError("Invalid character in quality string") from None
         # Dirty trick to speed up this line:
         # record.letter_annotations["solexa_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations, "solexa_quality", qualities)
@@ -1287,9 +1291,10 @@ def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=Non
 
     NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.
     """
-    q_mapping = {}
-    for letter in range(0, 255):
-        q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
+    q_mapping = {
+        chr(letter): letter - SOLEXA_SCORE_OFFSET
+        for letter in range(SOLEXA_SCORE_OFFSET, 63 + SOLEXA_SCORE_OFFSET)
+    }
 
     for title_line, seq_string, quality_string in FastqGeneralIterator(source):
         if title2ids:
@@ -1301,9 +1306,10 @@ def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=Non
         record = SeqRecord(
             Seq(seq_string, alphabet), id=id, name=name, description=descr
         )
-        qualities = [q_mapping[letter] for letter in quality_string]
-        if qualities and (min(qualities) < 0 or max(qualities) > 62):
-            raise ValueError("Invalid character in quality string")
+        try:
+            qualities = [q_mapping[letter] for letter in quality_string]
+        except KeyError:
+            raise ValueError("Invalid character in quality string") from None
         # Dirty trick to speed up this line:
         # record.letter_annotations["phred_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
