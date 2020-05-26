@@ -33,7 +33,7 @@ using the Bio.AlignIO.read() function:
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm")
     >>> print(align)
-    SingleLetterAlphabet() alignment with 2 rows and 104 columns
+    Alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
     >>> for record in align:
@@ -51,7 +51,7 @@ optional argument to the Bio.AlignIO.read() function:
     >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
     ...                      alphabet=generic_rna)
     >>> print(align)
-    RNAAlphabet() alignment with 2 rows and 104 columns
+    Alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
 

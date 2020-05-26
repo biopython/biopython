@@ -51,11 +51,11 @@ would probably load this using the Bio.AlignIO.parse() function:
     >>> for aln in alignments:
     ...     print(aln)
     ...
-    SingleLetterAlphabet() alignment with 3 rows and 240 columns
+    Alignment with 3 rows and 240 columns
     --------------------------------------------...--- a.fa
     TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG b.fa/5416-5968
     TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT c.fa/9475-10076
-    SingleLetterAlphabet() alignment with 2 rows and 46 columns
+    Alignment with 2 rows and 46 columns
     -----------------------GGGCGAACGTATAAACCATTCTG b.fa/5968-6015
     TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT c.fa/9428-9476
 
