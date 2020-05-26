@@ -198,7 +198,7 @@ class TestCifAtom(AtomTestGenerator("cif", "cif-atom")):
         self.assertEqual(chain.annotations["chain"], "A")
         self.assertEqual(
             str(chain.seq),
-            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL" "KALGPGATLEEMMTACQG",
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
         )
 
 
