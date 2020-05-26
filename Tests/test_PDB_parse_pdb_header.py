@@ -14,7 +14,9 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio.PDB.parse_pdb_header import parse_pdb_header, _parse_remark_465
 

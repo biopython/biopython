@@ -31,7 +31,9 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
