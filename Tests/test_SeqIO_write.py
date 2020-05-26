@@ -13,9 +13,9 @@ from io import StringIO
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
+from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
-from Bio import Alphabet
 from test_SeqIO import SeqIOTestBaseClass
 
 
@@ -35,29 +35,29 @@ test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 # list of formats, exception type, exception message).
 test_records = [
     ([], "zero records", {}),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma"),
-      SeqRecord(Seq("DITHGVG", Alphabet.generic_protein), id="delta")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
+      SeqRecord(Seq("DITHGVG", generic_protein), id="delta")],
      "three peptides of different lengths", []),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma")],
      "three proteins alignment", []),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", Alphabet.generic_dna), id="X"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", Alphabet.generic_dna), id="Y"),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X"),
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y"),
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z")],
      "three DNA sequence alignment", []),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", Alphabet.generic_dna), id="X",
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X",
                 name="The\nMystery\rSequece:\r\nX"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", Alphabet.generic_dna), id="Y",
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z")],
      "3 DNA seq alignment with CR/LF in name/descr",
      [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line")]),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma")],
      "alignment with repeated record",
      [(["stockholm"], ValueError, "Duplicate record identifier: Beta"),
       (["phylip", "phylip-relaxed", "phylip-sequential"], ValueError, "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
@@ -158,7 +158,7 @@ class WriterTests(SeqIOTestBaseClass):
 
     def test_bad_handle(self):
         handle = os.devnull
-        record = SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha")
+        record = SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha")
         records = [record]
         fmt = "fasta"
         # These deliberately mix up the handle and record order:
