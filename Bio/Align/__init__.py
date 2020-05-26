@@ -42,7 +42,7 @@ class MultipleSeqAlignment:
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
     >>> print(align)
-    alignment with 7 rows and 156 columns
+    Alignment with 7 rows and 156 columns
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -83,7 +83,7 @@ class MultipleSeqAlignment:
     Or, take just the first ten columns as a sub-alignment:
 
     >>> print(align[:, :10])
-    alignment with 7 rows and 10 columns
+    Alignment with 7 rows and 10 columns
     TATACATTAA gi|6273285|gb|AF191659.1|AF191
     TATACATTAA gi|6273284|gb|AF191658.1|AF191
     TATACATTAA gi|6273287|gb|AF191661.1|AF191
@@ -97,7 +97,7 @@ class MultipleSeqAlignment:
     and last ten columns:
 
     >>> print(align[:, :10] + align[:, -10:])
-    alignment with 7 rows and 20 columns
+    Alignment with 7 rows and 20 columns
     TATACATTAAGTGTACCAGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAGTGTACCAGA gi|6273284|gb|AF191658.1|AF191
     TATACATTAAGTGTACCAGA gi|6273287|gb|AF191661.1|AF191
@@ -148,7 +148,7 @@ class MultipleSeqAlignment:
         ...                              annotations={"tool": "demo"},
         ...                              column_annotations={"stats": "CCCXCCC"})
         >>> print(align)
-        alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -263,7 +263,7 @@ class MultipleSeqAlignment:
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> print(align)
-        alignment with 3 rows and 12 columns
+        Alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
         ACTGCTAGATAG Gamma
@@ -272,7 +272,7 @@ class MultipleSeqAlignment:
         """
         rows = len(self._records)
         lines = [
-            "alignment with %i rows and %i columns"
+            "Alignment with %i rows and %i columns"
             % (rows, self.get_alignment_length())
         ]
         if rows <= 20:
@@ -502,7 +502,7 @@ class MultipleSeqAlignment:
 
         >>> align = MultipleSeqAlignment([a, b, c])
         >>> print(align)
-        alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -511,7 +511,7 @@ class MultipleSeqAlignment:
 
         >>> align.extend([d, e])
         >>> print(align)
-        alignment with 5 rows and 7 columns
+        Alignment with 5 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -553,7 +553,7 @@ class MultipleSeqAlignment:
         >>> from Bio import AlignIO
         >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
         >>> print(align)
-        alignment with 7 rows and 156 columns
+        Alignment with 7 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -574,7 +574,7 @@ class MultipleSeqAlignment:
 
         >>> align.append(dummy)
         >>> print(align)
-        alignment with 8 rows and 156 columns
+        Alignment with 8 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -639,12 +639,12 @@ class MultipleSeqAlignment:
         Now, let's look at these two alignments:
 
         >>> print(left)
-        alignment with 3 rows and 5 columns
+        Alignment with 3 rows and 5 columns
         AAAAC Alpha
         AAA-C Beta
         AAAAG Gamma
         >>> print(right)
-        alignment with 3 rows and 2 columns
+        Alignment with 3 rows and 2 columns
         GT Alpha
         GT Beta
         GT Gamma
@@ -653,7 +653,7 @@ class MultipleSeqAlignment:
 
         >>> combined = left + right
         >>> print(combined)
-        alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -754,7 +754,7 @@ class MultipleSeqAlignment:
 
         >>> sub_alignment = align[2:5]
         >>> print(sub_alignment)
-        alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAAGGT Gamma
         AAAACGT Delta
         AAA-GGT Epsilon
@@ -764,7 +764,7 @@ class MultipleSeqAlignment:
 
         >>> sub_alignment = align[::2]
         >>> print(sub_alignment)
-        alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAAAGGT Gamma
         AAA-GGT Epsilon
@@ -773,7 +773,7 @@ class MultipleSeqAlignment:
 
         >>> rev_alignment = align[::-1]
         >>> print(rev_alignment)
-        alignment with 5 rows and 7 columns
+        Alignment with 5 rows and 7 columns
         AAA-GGT Epsilon
         AAAACGT Delta
         AAAAGGT Gamma
@@ -809,7 +809,7 @@ class MultipleSeqAlignment:
         However, in general you get a sub-alignment,
 
         >>> print(align[1:5, 3:6])
-        alignment with 4 rows and 3 columns
+        Alignment with 4 rows and 3 columns
         -CG Beta
         AGG Gamma
         ACG Delta
@@ -882,7 +882,7 @@ class MultipleSeqAlignment:
         If you simple try and add these without sorting, you get this:
 
         >>> print(align1 + align2)
-        alignment with 3 rows and 8 columns
+        Alignment with 3 rows and 8 columns
         ACGTCGGT <unknown id>
         ACGGCGTT <unknown id>
         ACGCCGCT Chicken
@@ -895,7 +895,7 @@ class MultipleSeqAlignment:
         >>> align1.sort()
         >>> align2.sort()
         >>> print(align1 + align2)
-        alignment with 3 rows and 8 columns
+        Alignment with 3 rows and 8 columns
         ACGCCGCT Chicken
         ACGTCGTT Human
         ACGGCGGT Mouse
@@ -905,13 +905,13 @@ class MultipleSeqAlignment:
 
         >>> from Bio.SeqUtils import GC
         >>> print(align1)
-        alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGC Chicken
         ACGT Human
         ACGG Mouse
         >>> align1.sort(key = lambda record: GC(record.seq))
         >>> print(align1)
-        alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGT Human
         ACGC Chicken
         ACGG Mouse
@@ -921,7 +921,7 @@ class MultipleSeqAlignment:
 
         >>> align1.sort(reverse=True)
         >>> print(align1)
-        alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGG Mouse
         ACGT Human
         ACGC Chicken
