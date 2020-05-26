@@ -161,6 +161,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Juraj Szász <https:/github.com/sars1492>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
+- Karthikeyan Singaravelan <https://github.com/tirkarthi>
 - Katharine Lindner <katel at domain worldpath.net>
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
@@ -190,6 +191,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Martin Thoma <https://martin-thoma.com/author/martin-thoma/>
+- Marton Langa <https://github.com/martonlanga>
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>

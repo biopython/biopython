@@ -82,7 +82,7 @@ This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downlo
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
-SingleLetterAlphabet() alignment with 7 rows and 52 columns
+Alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRL...SKA COATB_BPI22/32-83
@@ -168,7 +168,7 @@ However, as you should expect, if you check each \verb|SeqRecord| there is no an
 
 Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
 
-With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.AlignIO-module.html}{online}):
+With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/docs/1.77/api/Bio.AlignIO.html}{online}):
 
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
@@ -234,21 +234,21 @@ If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 \noindent This would give the following output, again abbreviated for display:
 
 \begin{minted}{text}
-SingleLetterAlphabet() alignment with 5 rows and 6 columns
+Alignment with 5 rows and 6 columns
 AAACCA Alpha
 AAACCC Beta
 ACCCCA Gamma
 CCCAAC Delta
 CCCAAA Epsilon
 
-SingleLetterAlphabet() alignment with 5 rows and 6 columns
+Alignment with 5 rows and 6 columns
 AAACAA Alpha
 AAACCC Beta
 ACCCAA Gamma
 CCCACC Delta
 CCCAAA Epsilon
 
-SingleLetterAlphabet() alignment with 5 rows and 6 columns
+Alignment with 5 rows and 6 columns
 AAAAAC Alpha
 AAACCC Beta
 AACAAC Gamma
@@ -257,7 +257,7 @@ CCCAAC Epsilon
 
 ...
 
-SingleLetterAlphabet() alignment with 5 rows and 6 columns
+Alignment with 5 rows and 6 columns
 AAAACC Alpha
 ACCCCC Beta
 AAAACC Gamma
@@ -695,7 +695,7 @@ it selects some of the rows giving back another alignment object:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
-SingleLetterAlphabet() alignment with 7 rows and 52 columns
+Alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRL...SKA COATB_BPI22/32-83
@@ -704,7 +704,7 @@ AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 >>> print(alignment[3:7])
-SingleLetterAlphabet() alignment with 4 rows and 52 columns
+Alignment with 4 rows and 52 columns
 AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
@@ -742,7 +742,7 @@ three rows we extracted earlier, but take just their first six columns:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[3:6, :6])
-SingleLetterAlphabet() alignment with 3 rows and 6 columns
+Alignment with 3 rows and 6 columns
 AEGDDP COATB_BPM13/24-72
 AEGDDP COATB_BPZJ2/1-49
 AEGDDP Q9T0Q9_BPFD/1-49
@@ -753,7 +753,7 @@ Leaving the first index as \verb|:| means take all the rows:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, :6])
-SingleLetterAlphabet() alignment with 7 rows and 6 columns
+Alignment with 7 rows and 6 columns
 AEPNAA COATB_BPIKE/30-81
 AEPNAA Q9T0Q8_BPIKE/1-52
 DGTSTA COATB_BPI22/32-83
@@ -769,7 +769,7 @@ This brings us to a neat way to remove a section. Notice columns
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, 6:9])
-SingleLetterAlphabet() alignment with 7 rows and 3 columns
+Alignment with 7 rows and 3 columns
 TNY COATB_BPIKE/30-81
 TNY Q9T0Q8_BPIKE/1-52
 TSY COATB_BPI22/32-83
@@ -784,7 +784,7 @@ TSQ COATB_BPIF1/22-73
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, 9:])
-SingleLetterAlphabet() alignment with 7 rows and 43 columns
+Alignment with 7 rows and 43 columns
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
 ATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
@@ -801,7 +801,7 @@ by column. This lets you do this as a way to remove a block of columns:
 \begin{minted}{pycon}
 >>> edited = alignment[:, :6] + alignment[:, 9:]
 >>> print(edited)
-SingleLetterAlphabet() alignment with 7 rows and 49 columns
+Alignment with 7 rows and 49 columns
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
 DGTSTAATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
@@ -821,7 +821,7 @@ alignment rows alphabetically by id:
 \begin{minted}{pycon}
 >>> edited.sort()
 >>> print(edited)
-SingleLetterAlphabet() alignment with 7 rows and 49 columns
+Alignment with 7 rows and 49 columns
 DGTSTAATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
 FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
@@ -1005,7 +1005,7 @@ You should be able to work out how to read in the alignment using
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("opuntia.aln", "clustal")
 >>> print(align)
-SingleLetterAlphabet() alignment with 7 rows and 906 columns
+Alignment with 7 rows and 906 columns
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -1140,7 +1140,7 @@ Remember that MUSCLE defaults to using FASTA as the output format:
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(StringIO(stdout), "fasta")
 >>> print(align)
-SingleLetterAlphabet() alignment with 7 rows and 906 columns
+Alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191664
@@ -1168,7 +1168,7 @@ with handles instead:
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(child.stdout, "fasta")
 >>> print(align)
-SingleLetterAlphabet() alignment with 7 rows and 906 columns
+Alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191664
@@ -1238,7 +1238,7 @@ start to run, and we can ask for the output:
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(child.stdout, "clustal")
 >>> print(align)
-SingleLetterAlphabet() alignment with 6 rows and 900 columns
+Alignment with 6 rows and 900 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
@@ -1283,7 +1283,7 @@ a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(StringIO(stdout), "clustal")
 >>> print(align)
-SingleLetterAlphabet() alignment with 6 rows and 900 columns
+Alignment with 6 rows and 900 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
@@ -1399,7 +1399,7 @@ discussed earlier in this chapter, as the \texttt{emboss} format:
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("needle.txt", "emboss")
 >>> print(align)
-SingleLetterAlphabet() alignment with 2 rows and 149 columns
+Alignment with 2 rows and 149 columns
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
 \end{minted}
@@ -1469,7 +1469,7 @@ used for  decoding the scores and penalties for matches (and mismatches) and gap
 The first letter decodes the match score, e.g. \texttt{x} means that a match counts
 1 while mismatches have no costs. With \texttt{m} general values for either matches
 or mismatches can be defined
-(for more options see \href{http://biopython.org/DIST/docs/api/Bio.pairwise2-module.html}{Biopython's API}).
+(for more options see \href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}).
 The second letter decodes the cost for gaps; \texttt{x} means no gap costs at all,
 with \texttt{s} different penalties for opening and extending a gap can be assigned.
 So, \verb|globalxx| means that only matches between both sequences are counted.
@@ -1624,7 +1624,7 @@ for both sequences, sequences can be supplied as lists (useful if you have
 residues that are encoded by more than one character), etc. These features
 are hard (if at all) to realize with other alignment tools. For more details
 see the modules documentation in
-\href{http://biopython.org/DIST/docs/api/Bio.pairwise2-module.html}{Biopython's API}.
+\href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}.
 
 \subsection{PairwiseAligner}
 \label{sec:pairwisealigner}

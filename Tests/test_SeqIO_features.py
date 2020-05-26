@@ -364,7 +364,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         if len(feature):
             self.assertEqual(feature.location.start, min(feature.location))
             self.assertEqual(feature.location.end, max(feature.location) + 1)
-        self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
+        self.assertLessEqual(len(feature), feature.location.end - feature.location.start)
 
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)."""

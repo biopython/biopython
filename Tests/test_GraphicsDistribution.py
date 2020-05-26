@@ -14,15 +14,19 @@ import random
 import unittest
 
 from Bio import MissingExternalDependencyError
+
 try:
     import reportlab as r
+
     del r
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.") from None
+        "Install reportlab if you want to use Bio.Graphics."
+    ) from None
 
 # local stuff
 from Bio.Graphics.Distribution import BarChartDistribution
+
 # TODO from Bio.Graphics.Distribution import LineDistribution
 from Bio.Graphics.Distribution import DistributionPage
 

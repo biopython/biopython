@@ -940,7 +940,7 @@ A  7.0 0.0 0.0 0.0
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "NTNGCNTNNNNNGNNGGNTGGNTCN")
         self.assertEqual(str(alignment), """\
-Gapped(IUPACAmbiguousDNA(), '-') alignment with 3 rows and 25 columns
+Alignment with 3 rows and 25 columns
 CCCTTCTTGTCTTCAGCGTTTCTCC EAS54_6_R1_2_1_413_324
 TTGGCAGGCCAAGGCCGATGGATCA EAS54_6_R1_2_1_540_792
 GTTGCTTCTGGCGTGGGTGGGGGGG EAS54_6_R1_2_1_443_348""")

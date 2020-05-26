@@ -14,7 +14,9 @@ from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
+
 from seq_tests_common import compare_record
+from test_SeqIO import SeqIOConverterTestBaseClass
 
 
 class TestEmbl(unittest.TestCase):
@@ -99,6 +101,23 @@ class TestEmblRewrite(unittest.TestCase):
     def test_annotation3(self):
         """Check writing-and-parsing EMBL file (3)."""
         self.check_rewrite("EMBL/AE017046.embl")
+
+
+class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
+
+    def test_conversion(self):
+        """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
+        tests = [
+            ("EMBL/U87107.embl", "embl", None),
+            ("EMBL/TRBG361.embl", "embl", None),
+            ("GenBank/NC_005816.gb", "gb", None),
+            ("GenBank/cor6_6.gb", "genbank", None),
+        ]
+        for filename, fmt, alphabet in tests:
+            for (in_format, out_format) in self.formats:
+                if in_format != fmt:
+                    continue
+                self.check_conversion(filename, in_format, out_format, alphabet)
 
 
 if __name__ == "__main__":

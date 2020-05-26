@@ -34,7 +34,7 @@ alignment):
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("Phylip/interlaced.phy", "phylip")
 >>> print(align)
-SingleLetterAlphabet() alignment with 3 rows and 384 columns
+Alignment with 3 rows and 384 columns
 -----MKVILLFVLAVFTVFVSS---------------RGIPPE...I-- CYS1_DICDI
 MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTL...VAA ALEU_HORVU
 ------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSL...PLV CATH_HUMAN
@@ -48,7 +48,7 @@ into a list:
 >>> from Bio import AlignIO
 >>> alignments = list(AlignIO.parse("Emboss/needle.txt", "emboss"))
 >>> print(alignments[2])
-SingleLetterAlphabet() alignment with 2 rows and 120 columns
+Alignment with 2 rows and 120 columns
 -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKER...--- ref_rec
 LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHP...HKE gi|94967506|receiver
 

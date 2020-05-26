@@ -17,13 +17,16 @@ from Bio.Align import MultipleSeqAlignment
 
 def createAlignment(sequences, alphabet):
     """Create an Alignment object from a list of sequences."""
-    return MultipleSeqAlignment((SeqRecord(Seq(s, alphabet), id="sequence%i" % (i + 1))
-                                 for (i, s) in enumerate(sequences)),
-                                alphabet)
+    return MultipleSeqAlignment(
+        (
+            SeqRecord(Seq(s, alphabet), id="sequence%i" % (i + 1))
+            for (i, s) in enumerate(sequences)
+        ),
+        alphabet,
+    )
 
 
 class TestCAPS(unittest.TestCase):
-
     def test_trivial(self):
         enzymes = [EcoRI]
         alignment = ["gaattc", "gaactc"]
@@ -53,7 +56,7 @@ class TestCAPS(unittest.TestCase):
             "TTAGTGAAAATGGAGGATCAAGTagctTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT"
             "GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC"
             "AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC",
-            ]
+        ]
         self.assertEqual(len(alignment), 3)
         enzymes = [EcoRI, AluI]
         align = createAlignment(alignment, Alphabet.generic_dna)
@@ -77,15 +80,14 @@ class TestCAPS(unittest.TestCase):
         self.assertEqual(map.dcuts, [])
 
     def test_uneven(self):
-        alignment = ["aaaaaaaaaaaaaa",
-                     "aaaaaaaaaaaaaa",  # we'll change this below
-                     "aaaaaaaaaaaaaa",
-                     ]
+        alignment = [
+            "aaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaa",  # we'll change this below
+            "aaaaaaaaaaaaaa",
+        ]
         align = createAlignment(alignment, Alphabet.generic_nucleotide)
         align[1].seq = align[1].seq[:8]  # evil
-        self.assertRaises(CAPS.AlignmentHasDifferentLengthsError,
-                          CAPS.CAPSMap,
-                          align)
+        self.assertRaises(CAPS.AlignmentHasDifferentLengthsError, CAPS.CAPSMap, align)
 
 
 if __name__ == "__main__":

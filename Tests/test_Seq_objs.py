@@ -883,8 +883,8 @@ class StringMethodTests(unittest.TestCase):
                         if t == "*":
                             self.assertEqual(values, set("*"))
                         elif t == "X":
-                            self.assertTrue(
-                                len(values) > 1,
+                            self.assertGreater(
+                                len(values), 1,
                                 "translate('%s') = '%s' not '%s'"
                                 % (c1 + c2 + c3, t, ",".join(values)),
                             )

@@ -922,11 +922,84 @@ the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
 >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
 \end{minted}
 
+\subsection{Internal coordinates for standard residues}
+The \texttt{internal\_coords} module is provided to facilitate working with canonical bond lengths,
+angles and torsion angles for a standard protein.  \texttt{atom\_to\_internal\_coordinates()} for 
+\texttt{Structure}, \texttt{Model}, and \texttt{Chain} entities
+will extend \texttt{Chain} and \texttt{Residue} classes with \texttt{internal\_coord} attributes referencing 
+\texttt{IC\_Chain} and \texttt{IC\_Residue}
+classes respectively.  \texttt{IC\_Residue} provides \texttt{get\_angle()} and \texttt{get\_length()}
+to query the computed values with various specifiers and synonyms:
+\begin{minted}{pycon}
+>>> model.atom_to_internal_coordinates()
+>>> for r in model.get_residues():
+...     if r.internal_coord:
+...         print(
+...             r,
+...             r.internal_coord.get_angle("psi"),
+...             r.internal_coord.get_angle("phi"),
+...             r.internal_coord.get_angle("omega"),  # or "omg"
+...             r.internal_coord.get_angle("chi2"),
+...             r.internal_coord.get_angle("CB:CA:C"),
+...             (r.internal_coord.get_length("-1C:0N")  # i-1 to i peptide bond
+...               if r.internal_coord.rprev else "None")
+...         )
+\end{minted}
+Note that only angles, dihedral angles and residue configurations specified in \texttt{ic\_data.py} are computed, 
+however these data structures can be extended to add support for HETATMS as needed.
+ 
+Corresponding \texttt{set\_angle()} and \texttt{set\_length()} routines are also provided, and the atom coordinates 
+may be updated using \texttt{internal\_to\_atom\_coordinates()}.
+
+Missing atoms will cause problems for rebuilding structures from internal coordinates, however chain breaks and
+disordered residues and atoms as described above are handled correctly.  \texttt{structure\_rebuild\_test(entity)}  
+will compare a structure to a copy built from internal coordinates and return a report of success or failure as
+a dictionary.
+
+An entity specification consisting of only internal coordinates (and optional positioning information) may be exported
+as a \emph{.pic} file with \texttt{write\_PIC()}.  This format uses 3- and 4-tuples of \texttt{AtomKey}s to specify 3-atom
+hedra and 4-atom dihedra geometries.  \texttt{AtomKey}s consist of up to six fields, capturing residue position, insertion 
+code, residue name, atom name, altloc and occupancy.  A \emph{.pic} file includes sufficient information to regenerate the
+ATOM records of a \emph{.pdb} file.
+
+The \texttt{internal\_to\_atom\_coords()} assembly algorithm is also implemented in OpenSCAD (\url{http://www.openscad.org/}),
+a language for describing 3D solid CAD models.  \texttt{write\_SCAD()} can thus generate a protein model suitable for rendering 
+on a 3D printer, however the printing process is non-trivial and it is likely that you will want to modify the \emph{.scad} file 
+for your own purposes, just as you might select different rendering options for a 3D protein visualizer.  A modified example 
+is available at \url{https://www.thingiverse.com/thing:3957471}.
+
+A few control attributes are available in the \texttt{internal\_coords} classes to modify or filter data as internal coordinates are calculated.  These are listed in Table~\ref{table:ic-attribs},
+
+\begin{table}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Class&Attribute&Default&Effect\\
+		\hline
+		\hline
+		AtomKey&d2h&False&Convert D atoms to H if True\\
+		\hline
+		IC\_Chain&MaxPeptideBond&1.4&Max C-N length w/o chain break; \\
+		& & & make large to link over missing \\
+		& & & residues for 3D models \\
+		\hline
+		IC\_Residue&accept\_atoms&mainchain, hydrogen atoms&override to remove some or all H's, D's\\
+		\hline
+		&accept\_resnames&CYG, YCM, UNK&3-letter names for HETATMs to process, \\
+		& & & backbone only unless added to ic\_data.py \\
+		\hline
+		&gly\_Cbeta&False&override to generate Gly C$\beta$ atoms \\
+		& & & based on database averages \\
+		\hline
+	\end{tabular}
+	\caption{Control attributes in Bio.PDB.internal\_coords.}
+	\label{table:ic-attribs}
+\end{table}
+
 \subsection{Determining atom-atom contacts}
 
 Use \texttt{NeighborSearch} to perform neighbor lookup.
-The neighbor lookup is done using a KD tree module written in C (see \texttt{Bio.KDTree}), making it very fast.
-It  also includes a fast method to find all point pairs within a certain distance of each other.
+The neighbor lookup is done using a KD tree module written in C (see the \texttt{KDTree} class in module \texttt{Bio.PDB.kdtrees}), making it very fast.
+It also includes a fast method to find all point pairs within a certain distance of each other.
 
 \subsection{Superimposing two structures}
 

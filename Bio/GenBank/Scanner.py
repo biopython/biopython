@@ -1798,6 +1798,18 @@ class GenBankScanner(InsdcScanner):
                                 structured_comment_key is not None
                                 and self.STRUCTURED_COMMENT_END not in data
                             ):
+                                # Don't die on a malformed comment, just warn and carry on
+                                if (
+                                    structured_comment_key
+                                    not in structured_comment_dict
+                                ):
+                                    warnings.warn(
+                                        "Structured comment not parsed for %s. Is it malformed?"
+                                        % consumer.data.name,
+                                        BiopythonParserWarning,
+                                    )
+                                    continue
+
                                 # The current structured comment has a multiline value
                                 previous_value_line = structured_comment_dict[
                                     structured_comment_key

@@ -438,7 +438,7 @@ class MixinTests(unittest.TestCase):
 
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
-        # This comment stops black style adding a blank line here, causing flake8 D202.
+
         def ordered_names(tree):
             return [n.name for n in tree.get_terminals()]
 

@@ -48,7 +48,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Biopython"
-copyright = "1999-2017, The Biopython Contributors"
+copyright = "1999-2019, The Biopython Contributors"
 author = "The Biopython Contributors"
 document = "Biopython API Documentation"
 
@@ -81,8 +81,8 @@ todo_include_todos = True
 
 # -- Options for autodoc --------------------------------------------------
 
-# This requires Sphinx 1.8.0b1 or later:
-autodoc_default_values = {
+# This requires Sphinx 1.8 or later:
+autodoc_default_options = {
     "members": None,
     "undoc-members": None,
     "special-members": None,

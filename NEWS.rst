@@ -8,8 +8,33 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.77
+(In progress, not yet released): Biopython 1.78
 ===============================================
+
+This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
+tested on PyPy3.6.1 v7.1.1.
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
+in the ``Bio.SeqIO.QualityIO`` module.
+
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite. There has been further work to follow the Python
+PEP8, PEP257 and best practice standard coding style, and more of the code
+style has been reformatted with the ``black`` tool.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Chris Rands
+- Peter Cock
+
+25 May 2020: Biopython 1.77
+===========================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
 tested on PyPy3.6.1 v7.1.1-beta0.
@@ -23,6 +48,12 @@ The codon tables have been updated to NCBI genetic code table version 4.5,
 which adds Cephalodiscidae mitochondrial as table 33.
 
 Updated ``Bio.Restriction`` to the January 2020 release of REBASE.
+
+A major contribution by Rob Miller to ``Bio.PDB`` provides new methods to
+handle protein structure transformations using dihedral angles (internal
+coordinates). The new framework supports lossless interconversion between
+internal and cartesian coordinates, which, among other uses, simplifies the
+analysis and manipulation of coordinates of proteins structures.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
@@ -41,14 +72,18 @@ possible, especially the following contributors:
 - Andrei Istrate (first contribution)
 - Andrey Raspopov
 - Austin Varela (first contribution)
+- Chris Daley
 - Chris Rands
 - Deepak Khatri
 - Hielke Walinga (first contribution)
 - Kai Blin
+- Karthikeyan Singaravelan (first contribution)
 - Markus Piotrowski
+- Michiel de Hoon
 - Peter Cock
 - Rob Miller
 - Sergio Valqui
+- Steve Bond
 - Sujan Dulal (first contribution)
 - Tianyi Shi (first contribution)
 
@@ -138,6 +173,11 @@ Values from mmCIF files are now read in as a list even when they consist of a
 single value. This change improves consistency and reduces the likelihood of
 making an error, but will require user code to be updated accordingly.
 
+`Bio.motifs.meme` has been updated to parse XML output files from MEME over
+the plain-text output file. The goal of this change is to parse a more
+structured data source with minimal loss of functionality upon future MEME
+releases.
+
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
@@ -193,6 +233,7 @@ possible, especially the following contributors:
 - Peter Kerpedjiev
 - Sergio Valqui
 - Spencer Bliven
+- Victor Lin
 
 
 16 July 2019: Biopython 1.74

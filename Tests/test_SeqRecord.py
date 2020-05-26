@@ -350,7 +350,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(rec.dbxrefs, [])  # May change this...
             self.assertEqual(rec.annotations, {})  # May change this...
             self.assertEqual(rec.letter_annotations, {"fake": "X" * 26})
-            self.assertTrue(len(rec.features) <= len(self.record.features))
+            self.assertLessEqual(len(rec.features), len(self.record.features))
 
     def test_slice_add_shift(self):
         """Simple slice and add to shift."""
@@ -366,7 +366,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(rec.dbxrefs, [])  # May change this...
             self.assertEqual(rec.annotations, {})  # May change this...
             self.assertEqual(rec.letter_annotations, {"fake": "X" * 26})
-            self.assertTrue(len(rec.features) <= len(self.record.features))
+            self.assertLessEqual(len(rec.features), len(self.record.features))
 
 
 class SeqRecordMethodsMore(unittest.TestCase):

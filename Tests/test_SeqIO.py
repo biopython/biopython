@@ -97,9 +97,9 @@ class SeqIOTestBaseClass(unittest.TestCase):
             return mode
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
-    def compare_record(self, old, new, *args, **kwargs):
+    def compare_record(self, old, new, *args, msg=None, **kwargs):
         """Compare old SeqRecord to new SeqRecord."""
-        self.assertEqual(old.id, new.id)
+        self.assertEqual(old.id, new.id, msg=msg)
         self.assertTrue(
             old.description == new.description
             or (old.id + " " + old.description).strip() == new.description
@@ -110,16 +110,62 @@ class SeqIOTestBaseClass(unittest.TestCase):
             pass
         else:
             if len(old.seq) < 200:
-                msg = "'%s' vs '%s'" % (old.seq, new.seq)
+                err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
             else:
-                msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
-            self.assertEqual(str(old.seq), str(new.seq), msg=msg)
+                err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+            if msg is not None:
+                err_msg = "%s: %s" % (msg, err_msg)
+            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
         self.assertEqual(len(old_list), len(new_list))
         for old, new in zip(old_list, new_list):
             self.compare_record(old, new, *args, **kwargs)
+
+
+class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
+    """Base class for testing SeqIO.convert."""
+
+    formats = tuple(SeqIO._converter.keys())
+
+    def check_conversion(self, filename, in_format, out_format, alphabet):
+        """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
+        msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
+        records = list(SeqIO.parse(filename, in_format, alphabet))
+        # Write it out...
+        handle = StringIO()
+        with warnings.catch_warnings():
+            SeqIO.write(records, handle, out_format)
+        handle.seek(0)
+        # Now load it back and check it agrees,
+        records2 = list(SeqIO.parse(handle, out_format, alphabet))
+        self.assertEqual(len(records), len(records2), msg=msg)
+        for record1, record2 in zip(records, records2):
+            self.compare_record(record1, record2, msg=msg)
+        # Finally, use the convert function, and check that agrees:
+        handle2 = StringIO()
+        with warnings.catch_warnings():
+            SeqIO.convert(filename, in_format, handle2, out_format, alphabet)
+        # We could re-parse this, but it is simpler and stricter:
+        self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
+
+    def failure_check(self, filename, in_format, out_format, alphabet):
+        """Test if SeqIO.convert raises the correct ValueError on broken files."""
+        msg = "Confirm failure detection converting %s from %s to %s" % (filename, in_format, out_format)
+        # We want the SAME error message from parse/write as convert!
+        with self.assertRaises(ValueError, msg=msg) as cm:
+            records = list(SeqIO.parse(filename, in_format, alphabet))
+            self.write_records(records, out_format)
+        err1 = str(cm.exception)
+        # Now do the conversion...
+        with self.assertRaises(ValueError, msg=msg) as cm:
+            handle = StringIO()
+            SeqIO.convert(filename, in_format, handle, out_format, alphabet)
+        err2 = str(cm.exception)
+        # Verify that parse/write and convert give the same failure
+        err_msg = "%s: parse/write and convert gave different failures" % msg
+        self.assertEqual(err1, err2, msg=err_msg)
 
 
 class ForwardOnlyHandle:

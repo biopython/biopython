@@ -332,11 +332,7 @@ EXCLUDE_DOCTEST_MODULES = [
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
-ONLINE_DOCTEST_MODULES = [
-    "Bio.Entrez",
-    "Bio.ExPASy",
-    "Bio.TogoWS",
-]
+ONLINE_DOCTEST_MODULES = [ "Bio.Entrez", "Bio.ExPASy", "Bio.TogoWS"]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:

@@ -144,6 +144,7 @@ class TestBuildAndIO(unittest.TestCase):
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
                     caln = codonalign.build(prot, nucl, alphabet=codonalign.default_codon_alphabet, max_score=20)
+                nucl.close()  # Close the indexed FASTA file
             elif i[1] == "id":
                 nucl = SeqIO.parse(i[0][0], "fasta", alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], "clustal", alphabet=IUPAC.protein)
@@ -153,7 +154,6 @@ class TestBuildAndIO(unittest.TestCase):
                     warnings.simplefilter("ignore")
                     caln = codonalign.build(prot, nucl, corr_dict=id, alphabet=codonalign.default_codon_alphabet)
             alns.append(caln)
-            nucl.close()  # Close the indexed FASTA file
         self.alns = alns
 
     def test_IO(self):

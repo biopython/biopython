@@ -743,7 +743,7 @@ class HSPFragment(_BaseHSP):
     >>> fragment.aln.__class__
     <class 'Bio.Align.MultipleSeqAlignment'>
     >>> print(fragment.aln)
-    DNAAlphabet() alignment with 2 rows and 61 columns
+    Alignment with 2 rows and 61 columns
     CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 33211
     CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
 

@@ -254,8 +254,7 @@ Bio.motifs).
 Bio.SeqIO.Interfaces
 --------------------
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61, and
-removed in Release 1.64. Unused class SequenceIterator was deprecated in
-Release 1.77.
+removed in Release 1.64.
 
 Bio.HotRand
 -----------
@@ -822,10 +821,10 @@ removed in Release 1.61.
 
 Bio.KDTree
 ----------
-This module was declared obsolete in Release 1.72, and deprecated in Release
-1.74. As of Release 1.72, KDTree data structures and the functionality
-previously available in ``Bio.KDTree`` are provided in a new module
-``Bio.PDB.kdtrees``.
+This module was declared obsolete in Release 1.72, deprecated in Release 1.74,
+and removed in Release 1.77. As of Release 1.72, KDTree data structures and
+the functionality previously available in ``Bio.KDTree`` are provided in a new
+module ``Bio.PDB.kdtrees``.
 
 Bio.trie, Bio.triefind
 ----------------------

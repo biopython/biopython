@@ -235,9 +235,9 @@ blat <unknown version>
 
 For a complete list of accessible attributes, you can check each format-specific
 documentation. Here are the ones
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlastIO-module.html}{for BLAST}
+\href{http://biopython.org/docs/1.77/api/Bio.SearchIO.BlastIO.html}{for BLAST}
 and for
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlatIO-module.html}{BLAT}.
+\href{http://biopython.org/docs/1.77/api/Bio.SearchIO.BlatIO.html}{BLAT}.
 
 Having looked at using \verb|print| on \verb|QueryResult| objects, let's drill
 down deeper. What exactly is a \verb|QueryResult|? In terms of Python objects,
@@ -693,7 +693,7 @@ details. Here are some examples:
 \end{minted}
 
 Check out the \verb|HSP|
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+\href{http://biopython.org/docs/1.77/api/Bio.SearchIO.html#module-Bio.SearchIO#module-Bio.SearchIO}{documentation}
 for a full list of these predefined properties.
 
 Furthermore, each sequence search tool usually computes its own statistics /
@@ -741,7 +741,7 @@ It should not surprise you now that the \verb|HSP| object has an
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(blast_hsp.aln)
-DNAAlphabet() alignment with 2 rows and 61 columns
+Alignment with 2 rows and 61 columns
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 42291
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
 \end{minted}
@@ -880,7 +880,7 @@ However, you can use their \verb|*_all| counterparts: \verb|query_all|,
 \verb|hit_all|, and \verb|aln_all|. These properties will return a list containing
 \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects from each of the HSP
 fragment. There are other attributes that behave similarly, i.e. they only work
-for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/docs/1.77/api/Bio.SearchIO.html#module-Bio.SearchIO}{documentation}
 for a full list.
 
 Finally, to check whether you have multiple fragments or not, you can use the

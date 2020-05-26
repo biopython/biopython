@@ -250,14 +250,14 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_less_than_comparison(self):
         """Test __lt__ comparison method."""
-        self.assertTrue(self.s[:-1] < self.s)
+        self.assertLess(self.s[:-1], self.s)
 
     def test_less_than_comparison_of_incompatible_alphabets(self):
         """Test incompatible alphabet __lt__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
-            self.assertTrue(seq1 < seq2)
+            self.assertLess(seq1, seq2)
 
     def test_less_than_comparison_of_incompatible_types(self):
         """Test incompatible types __lt__ comparison method."""
@@ -266,14 +266,14 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_less_than_or_equal_comparison(self):
         """Test __le__ comparison method."""
-        self.assertTrue(self.s <= self.s)
+        self.assertLessEqual(self.s, self.s)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
         """Test incompatible alphabet __le__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
-            self.assertTrue(seq1 <= seq2)
+            self.assertLessEqual(seq1, seq2)
 
     def test_less_than_or_equal_comparison_of_incompatible_types(self):
         """Test incompatible types __le__ comparison method."""
@@ -282,14 +282,14 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_greater_than_comparison(self):
         """Test __gt__ comparison method."""
-        self.assertTrue(self.s > self.s[:-1])
+        self.assertGreater(self.s, self.s[:-1])
 
     def test_greater_than_comparison_of_incompatible_alphabets(self):
         """Test incompatible alphabet __gt__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
-            self.assertTrue(seq2 > seq1)
+            self.assertGreater(seq2, seq1)
 
     def test_greater_than_comparison_of_incompatible_types(self):
         """Test incompatible types __gt__ comparison method."""
@@ -298,14 +298,14 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_greater_than_or_equal_comparison(self):
         """Test __ge__ comparison method."""
-        self.assertTrue(self.s >= self.s)
+        self.assertGreaterEqual(self.s, self.s)
 
     def test_greater_than_or_equal_comparison_of_incompatible_alphabets(self):
         """Test incompatible alphabet __ge__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
-            self.assertTrue(seq2 >= seq1)
+            self.assertGreaterEqual(seq2, seq1)
 
     def test_greater_than_or_equal_comparison_of_incompatible_types(self):
         """Test incompatible types __ge__ comparison method."""
@@ -668,7 +668,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_less_than_comparison(self):
         """Test __lt__ comparison method."""
-        self.assertTrue(self.mutable_s[:-1] < self.mutable_s)
+        self.assertLess(self.mutable_s[:-1], self.mutable_s)
 
     def test_less_than_comparison_of_incompatible_alphabets(self):
         with self.assertWarns(BiopythonWarning):
@@ -679,11 +679,11 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s < 1
 
     def test_less_than_comparison_without_alphabet(self):
-        self.assertTrue(self.mutable_s[:-1] < "TCAAAAGGATGCATCATG")
+        self.assertLessEqual(self.mutable_s[:-1], "TCAAAAGGATGCATCATG")
 
     def test_less_than_or_equal_comparison(self):
         """Test __le__ comparison method."""
-        self.assertTrue(self.mutable_s[:-1] <= self.mutable_s)
+        self.assertLessEqual(self.mutable_s[:-1], self.mutable_s)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
         with self.assertWarns(BiopythonWarning):
@@ -694,11 +694,11 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s <= 1
 
     def test_less_than_or_equal_comparison_without_alphabet(self):
-        self.assertTrue(self.mutable_s[:-1] <= "TCAAAAGGATGCATCATG")
+        self.assertLessEqual(self.mutable_s[:-1], "TCAAAAGGATGCATCATG")
 
     def test_greater_than_comparison(self):
         """Test __gt__ comparison method."""
-        self.assertTrue(self.mutable_s > self.mutable_s[:-1])
+        self.assertGreater(self.mutable_s, self.mutable_s[:-1])
 
     def test_greater_than_comparison_of_incompatible_alphabets(self):
         with self.assertWarns(BiopythonWarning):
@@ -709,11 +709,11 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s > 1
 
     def test_greater_than_comparison_without_alphabet(self):
-        self.assertTrue(self.mutable_s > "TCAAAAGGATGCATCAT")
+        self.assertGreater(self.mutable_s, "TCAAAAGGATGCATCAT")
 
     def test_greater_than_or_equal_comparison(self):
         """Test __ge__ comparison method."""
-        self.assertTrue(self.mutable_s >= self.mutable_s)
+        self.assertGreaterEqual(self.mutable_s, self.mutable_s)
 
     def test_greater_than_or_equal_comparison_of_incompatible_alphabets(self):
         with self.assertWarns(BiopythonWarning):
@@ -724,7 +724,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s >= 1
 
     def test_greater_than_or_equal_comparison_without_alphabet(self):
-        self.assertTrue(self.mutable_s >= "TCAAAAGGATGCATCATG")
+        self.assertGreaterEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
 
     def test_add_method(self):
         """Test adding wrong type to MutableSeq."""

@@ -9,7 +9,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Unit tests for those parts of the Bio.PDB module using Bio.KDTree."""
+"""Unit tests for those parts of the Bio.PDB module using Bio.PDB.kdtrees."""
 
 import unittest
 
@@ -37,7 +37,7 @@ class NeighborTest(unittest.TestCase):
 
         Based on the self test in Bio.PDB.NeighborSearch.
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         class RandomAtom:
             def __init__(self):
                 self.coord = 100 * random(3)
@@ -49,8 +49,8 @@ class NeighborTest(unittest.TestCase):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
-            self.assertTrue(isinstance(hits, list), hits)
-            self.assertTrue(len(hits) >= 0, hits)
+            self.assertIsInstance(hits, list)
+            self.assertGreaterEqual(len(hits), 0)
         x = array([250, 250, 250])  # Far away from our random atoms
         self.assertEqual([], ns.search(x, 5.0, "A"))
         self.assertEqual([], ns.search(x, 5.0, "R"))
@@ -84,7 +84,7 @@ class KDTreeTest(unittest.TestCase):
     def test_KDTree_point_search(self):
         """Test searching all points within a certain radius of center.
 
-        Using the KDTree C module, search all point pairs that are
+        Using the kdtrees C module, search all point pairs that are
         within radius, and compare the results to a manual search.
         """
         bucket_size = self.bucket_size

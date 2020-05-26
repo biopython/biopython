@@ -94,7 +94,7 @@ class FastTreeTestCase(unittest.TestCase):
                     names[clade.name] = clade
             return names
         names = lookup_by_names(tree)
-        self.assertTrue(len(names) > 0)
+        self.assertGreater(len(names), 0)
 
         def terminal_neighbor_dists(self):
             """Return a list of distances between adjacent terminals."""
@@ -105,7 +105,7 @@ class FastTreeTestCase(unittest.TestCase):
             return [self.distance(*i) for i in
                     generate_pairs(self.find_clades(terminal=True))]
         for dist in terminal_neighbor_dists(tree):
-            self.assertTrue(dist > 0.0)
+            self.assertGreater(dist, 0.0)
 
     def test_normal(self):
         self.check("Quality/example.fasta", 3)

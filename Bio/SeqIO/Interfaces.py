@@ -17,50 +17,59 @@ from Bio.SeqRecord import SeqRecord
 
 
 class SequenceIterator:
-    """Base class for building SeqRecord iterators (DEPRECATED).
+    """Base class for building SeqRecord iterators.
 
-    This is no longer used in the Biopython code base, instead all the parsers
-    ended up being implemented as generator functions.
-
-    You should write a __next__ method to return SeqRecord  objects.  You may
-    wish to redefine the __init__ method as well.
+    You should write a parse method that returns a SeqRecord generator.  You
+    may wish to redefine the __init__ method as well.
     """
 
-    def __init__(self, handle, alphabet=generic_alphabet):
+    def __init__(self, source, alphabet=generic_alphabet, mode="t", fmt=None):
         """Create a SequenceIterator object.
 
         Arguments:
-        - handle - input file
+        - source - input file stream, or path to input file
         - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
-        This method MAY be overridden by any subclass, for example if you need
-        to process a header or accept additional arguments.
+        This method MAY be overridden by any subclass.
 
         Note when subclassing:
-        - there should be a single non-optional argument, the handle.
+        - there should be a single non-optional argument, the source.
         - you do not have to require an alphabet.
         - you can add additional optional arguments.
         """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-
-        warnings.warn(
-            "SequenceIterator is deprecated, and we intend to remove it"
-            " in a future release of Biopython. Please contact the Biopython"
-            " developers if you need this class.",
-            BiopythonDeprecationWarning,
-        )
-        self.handle = handle
         self.alphabet = alphabet
+        try:
+            self.stream = open(source, "r" + mode)
+            self.should_close_stream = True
+        except TypeError:  # not a path, assume we received a stream
+            if mode == "t":
+                if source.read(0) != "":
+                    raise StreamModeError(
+                        "%s files must be opened in text mode." % fmt
+                    ) from None
+            elif mode == "b":
+                if source.read(0) != b"":
+                    raise StreamModeError(
+                        "%s files must be opened in binary mode." % fmt
+                    ) from None
+            else:
+                raise ValueError("Unknown mode '%s'" % mode)
+            self.stream = source
+            self.should_close_stream = False
+        try:
+            self.records = self.parse(self.stream)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
     def __next__(self):
-        """Return the next record in the file.
-
-        This method's stub-implementation MUST be overridden by any subclass
-        to actually parse the file and return the next entry as a SeqRecord
-        object.
-        """
-        raise NotImplementedError("The subclass should implement the __next__ method.")
+        try:
+            return next(self.records)
+        except Exception:
+            if self.should_close_stream:
+                self.stream.close()
+            raise
 
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
@@ -77,7 +86,7 @@ class SequenceIterator:
         left as is, which will call the subclass implementation of __next__
         to actually parse the file.
         """
-        return iter(self.__next__, None)
+        return self
 
 
 # Function variant of the SequenceWriter method.

@@ -20,7 +20,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from Bio import StreamModeError
+from .Interfaces import SequenceIterator
 
 
 def _iterate(handle):
@@ -238,26 +238,27 @@ def _get_child_value(node, name, default=None, error=None):
         return default
 
 
-def SnapGeneIterator(source):
-    """Parse a SnapGene file and return a SeqRecord object.
+class SnapGeneIterator(SequenceIterator):
+    """Parser for SnapGene files."""
 
-    Argument source is a file-like object or a path to a file.
+    def __init__(self, source):
+        """Parse a SnapGene file and return a SeqRecord object.
 
-    Note that a SnapGene file can only contain one sequence, so this
-    iterator will always return a single record.
-    """
-    try:
-        handle = open(source, "rb")
-    except TypeError:
-        handle = source
-        if handle.read(0) != b"":
-            raise StreamModeError(
-                "SnapGene files must be opened in binary mode."
-            ) from None
+        Argument source is a file-like object or a path to a file.
 
-    record = SeqRecord(None)
+        Note that a SnapGene file can only contain one sequence, so this
+        iterator will always return a single record.
+        """
+        super().__init__(source, mode="b", fmt="SnapGene")
 
-    try:
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Iterate over the records in the SnapGene file."""
+        record = SeqRecord(None)
         packets = _iterate(handle)
         try:
             packet_type, length, data = next(packets)
@@ -273,11 +274,7 @@ def SnapGeneIterator(source):
             if handler is not None:
                 handler(length, data, record)
 
-    finally:
-        if handle is not source:
-            handle.close()
+        if not record.seq:
+            raise ValueError("No DNA packet in file")
 
-    if not record.seq:
-        raise ValueError("No DNA packet in file")
-
-    yield record
+        yield record

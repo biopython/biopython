@@ -365,8 +365,9 @@ class Atom:
     def get_full_id(self):
         """Return the full id of the atom.
 
-        The full id of an atom is the tuple
-        (structure id, model id, chain id, residue id, atom name, altloc).
+        The full id of an atom is a tuple used to uniquely identify
+        the atom and consists of the following elements:
+        (structure id, model id, chain id, residue id, atom name, altloc)
         """
         return self.parent.get_full_id() + ((self.name, self.altloc),)
 

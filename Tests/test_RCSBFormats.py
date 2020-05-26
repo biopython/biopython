@@ -14,12 +14,15 @@ import warnings
 try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
+
     del dot
     from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.") from None
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB import PDBParser

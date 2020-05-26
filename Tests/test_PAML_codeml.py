@@ -502,7 +502,7 @@ class ModTest(unittest.TestCase):
                                   % (param))
                     self.assertIsInstance(params[param], float)
                     if param != "lnL":
-                        self.assertTrue(params[param] >= 0)
+                        self.assertGreaterEqual(params[param], 0)
 
     def testParseAA(self):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
