@@ -541,7 +541,9 @@ class IndexDictTests(SeqIOTestBaseClass):
             with self.assertRaises(ValueError, msg=msg):
                 SeqIO.index_db(":memory:", format="dummy", key_function=self.add_prefix)
             with self.assertRaises(ValueError, msg=msg):
-                SeqIO.index_db(":memory:", filenames=["dummy"], key_function=self.add_prefix)
+                SeqIO.index_db(
+                    ":memory:", filenames=["dummy"], key_function=self.add_prefix
+                )
             rec_dict.close()
 
             # Saving to file...
@@ -581,39 +583,25 @@ class IndexDictTests(SeqIOTestBaseClass):
                 raw_file = handle.read()
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
-                id_list = [
-                    rec.id.lower() for rec in SeqIO.parse(handle, fmt, alphabet)
-                ]
+                id_list = [rec.id.lower() for rec in SeqIO.parse(handle, fmt, alphabet)]
         else:
             with open(filename, "rb") as handle:
                 raw_file = handle.read()
-            id_list = [
-                rec.id.lower() for rec in SeqIO.parse(filename, fmt, alphabet)
-            ]
+            id_list = [rec.id.lower() for rec in SeqIO.parse(filename, fmt, alphabet)]
 
         if fmt in ["sff"]:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonParserWarning)
-                rec_dict = SeqIO.index(
-                    filename, fmt, alphabet, key_function=str.lower
-                )
+                rec_dict = SeqIO.index(filename, fmt, alphabet, key_function=str.lower)
                 if sqlite3:
                     rec_dict_db = SeqIO.index_db(
-                        ":memory:",
-                        filename,
-                        fmt,
-                        alphabet,
-                        key_function=str.lower,
+                        ":memory:", filename, fmt, alphabet, key_function=str.lower,
                     )
         else:
             rec_dict = SeqIO.index(filename, fmt, alphabet, key_function=str.lower)
             if sqlite3:
                 rec_dict_db = SeqIO.index_db(
-                    ":memory:",
-                    filename,
-                    fmt,
-                    alphabet,
-                    key_function=str.lower,
+                    ":memory:", filename, fmt, alphabet, key_function=str.lower,
                 )
 
         self.assertEqual(set(id_list), set(rec_dict), msg=msg)

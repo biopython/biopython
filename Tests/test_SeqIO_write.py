@@ -35,47 +35,90 @@ test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 # list of formats, exception type, exception message).
 test_records = [
     ([], "zero records", {}),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
-      SeqRecord(Seq("DITHGVG", generic_protein), id="delta")],
-     "three peptides of different lengths", []),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma")],
-     "three proteins alignment", []),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y"),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z")],
-     "three DNA sequence alignment", []),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X",
-                name="The\nMystery\rSequece:\r\nX"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y",
-                description="an%sevil\rdescription right\nhere" % os.linesep),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z")],
-     "3 DNA seq alignment with CR/LF in name/descr",
-     [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line")]),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma")],
-     "alignment with repeated record",
-     [(["stockholm"], ValueError, "Duplicate record identifier: Beta"),
-      (["phylip", "phylip-relaxed", "phylip-sequential"], ValueError, "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
+    (
+        [
+            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
+            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
+            SeqRecord(Seq("DITHGVG", generic_protein), id="delta"),
+        ],
+        "three peptides of different lengths",
+        [],
+    ),
+    (
+        [
+            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
+            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
+            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
+        ],
+        "three proteins alignment",
+        [],
+    ),
+    (
+        [
+            SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X"),
+            SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y"),
+            SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z"),
+        ],
+        "three DNA sequence alignment",
+        [],
+    ),
+    (
+        [
+            SeqRecord(
+                Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna),
+                id="X",
+                name="The\nMystery\rSequece:\r\nX",
+            ),
+            SeqRecord(
+                Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna),
+                id="Y",
+                description="an%sevil\rdescription right\nhere" % os.linesep,
+            ),
+            SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z"),
+        ],
+        "3 DNA seq alignment with CR/LF in name/descr",
+        [
+            (
+                ["genbank"],
+                ValueError,
+                r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line",
+            )
+        ],
+    ),
+    (
+        [
+            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
+            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
+            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
+            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
+        ],
+        "alignment with repeated record",
+        [
+            (["stockholm"], ValueError, "Duplicate record identifier: Beta"),
+            (
+                ["phylip", "phylip-relaxed", "phylip-sequential"],
+                ValueError,
+                "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation",
+            ),
+        ],
+    ),
 ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
 # Add a list of strings,
 test_records[4][0][2].annotations["note"] = [
-    "Note%salso" % os.linesep + "\r\nhas\n evil line\rbreaks!", "Wow"]
+    "Note%salso" % os.linesep + "\r\nhas\n evil line\rbreaks!",
+    "Wow",
+]
 # Add a simple string
 test_records[4][0][2].annotations["comment"] = (
-    "More%sof" % os.linesep + "\r\nthese\n evil line\rbreaks!")
+    "More%sof" % os.linesep + "\r\nthese\n evil line\rbreaks!"
+)
 # Add a float too:
 test_records[4][0][2].annotations["weight"] = 2.5
 
 
 class WriterTests(SeqIOTestBaseClass):
-
     def check(self, records, fmt, descr):
         """General test function with with a little format specific information.
 
@@ -84,32 +127,60 @@ class WriterTests(SeqIOTestBaseClass):
         # TODO - Check the exception messages?
         lengths = len({len(r) for r in records})
         dna = all(set(record.seq.upper()).issubset("ACGTN") for record in records)
-        if not records and fmt in ["stockholm", "phylip", "phylip-relaxed",
-                                   "phylip-sequential", "nexus", "clustal",
-                                   "sff", "mauve"]:
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "Must have at least one sequence")
+        if not records and fmt in [
+            "stockholm",
+            "phylip",
+            "phylip-relaxed",
+            "phylip-sequential",
+            "nexus",
+            "clustal",
+            "sff",
+            "mauve",
+        ]:
+            self.check_write_fails(
+                records, fmt, descr, ValueError, "Must have at least one sequence"
+            )
         elif not records and fmt in ["nib", "xdna"]:
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "Must have one sequence")
+            self.check_write_fails(
+                records, fmt, descr, ValueError, "Must have one sequence"
+            )
         elif lengths > 1 and fmt in AlignIO._FormatToWriter:
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "Sequences must all be the same length")
+            self.check_write_fails(
+                records, fmt, descr, ValueError, "Sequences must all be the same length"
+            )
         elif (not dna) and fmt == "nib":
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "Sequence should contain A,C,G,T,N,a,c,g,t,n only")
+            self.check_write_fails(
+                records,
+                fmt,
+                descr,
+                ValueError,
+                "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            )
         elif len(records) > 1 and fmt in ["nib", "xdna"]:
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "More than one sequence found")
-        elif records and fmt in ["fastq", "fastq-sanger", "fastq-solexa",
-                                 "fastq-illumina", "qual", "phd"]:
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "No suitable quality scores found in "
-                                   "letter_annotations of SeqRecord "
-                                   "(id=%s)." % records[0].id)
+            self.check_write_fails(
+                records, fmt, descr, ValueError, "More than one sequence found"
+            )
+        elif records and fmt in [
+            "fastq",
+            "fastq-sanger",
+            "fastq-solexa",
+            "fastq-illumina",
+            "qual",
+            "phd",
+        ]:
+            self.check_write_fails(
+                records,
+                fmt,
+                descr,
+                ValueError,
+                "No suitable quality scores found in "
+                "letter_annotations of SeqRecord "
+                "(id=%s)." % records[0].id,
+            )
         elif records and fmt == "sff":
-            self.check_write_fails(records, fmt, descr, ValueError,
-                                   "Missing SFF flow information")
+            self.check_write_fails(
+                records, fmt, descr, ValueError, "Missing SFF flow information"
+            )
         else:
             self.check_simple(records, fmt, descr)
 
@@ -130,9 +201,11 @@ class WriterTests(SeqIOTestBaseClass):
             # Using compare_record(record, new_record) is too strict
             if fmt == "nexus":
                 # The nexus parser will dis-ambiguate repeated record ids.
-                self.assertTrue(record.id == new_record.id or
-                                new_record.id.startswith(record.id + ".copy"),
-                                msg=msg)
+                self.assertTrue(
+                    record.id == new_record.id
+                    or new_record.id.startswith(record.id + ".copy"),
+                    msg=msg,
+                )
             else:
                 self.assertEqual(record.id, new_record.id, msg=msg)
             self.assertEqual(str(record.seq), str(new_record.seq), msg=msg)

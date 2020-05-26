@@ -136,31 +136,33 @@ class TitleFunctions(unittest.TestCase):
 
     def test_single_nucleic_files(self):
         """Test Fasta files containing a single nucleotide sequence."""
-        paths = ("Fasta/lupine.nu",
-                 "Fasta/elderberry.nu",
-                 "Fasta/phlox.nu",
-                 "Fasta/centaurea.nu",
-                 "Fasta/wisteria.nu",
-                 "Fasta/sweetpea.nu",
-                 "Fasta/lavender.nu",
-                 "Fasta/f001",
-                 )
+        paths = (
+            "Fasta/lupine.nu",
+            "Fasta/elderberry.nu",
+            "Fasta/phlox.nu",
+            "Fasta/centaurea.nu",
+            "Fasta/wisteria.nu",
+            "Fasta/sweetpea.nu",
+            "Fasta/lavender.nu",
+            "Fasta/f001",
+        )
         for path in paths:
             self.simple_check(path, generic_nucleotide)
 
     def test_multi_dna_files(self):
         """Test Fasta files containing multiple nucleotide sequences."""
-        paths = ("Quality/example.fasta", )
+        paths = ("Quality/example.fasta",)
         for path in paths:
             self.multi_check(path, generic_dna)
 
     def test_single_proteino_files(self):
         """Test Fasta files containing a single protein sequence."""
-        paths = ("Fasta/aster.pro",
-                 "Fasta/rosemary.pro",
-                 "Fasta/rose.pro",
-                 "Fasta/loveliesbleeding.pro",
-                 )
+        paths = (
+            "Fasta/aster.pro",
+            "Fasta/rosemary.pro",
+            "Fasta/rose.pro",
+            "Fasta/loveliesbleeding.pro",
+        )
         for path in paths:
             self.simple_check(path, generic_nucleotide)
 
