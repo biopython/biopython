@@ -28,7 +28,7 @@ class ParseSimplePQR(unittest.TestCase):
         data = "ATOM      1  N   PRO     1      000001  02.000 3.0000 -0.1000  1.0000       N\n"
 
         # Get sole atom of this structure
-        parser = PDBParser(is_pqr=True)   # default initialization
+        parser = PDBParser(is_pqr=True)  # default initialization
         struct = parser.get_structure("test", StringIO(data))
         atom = next(struct.get_atoms())
 
@@ -48,9 +48,10 @@ class ParseSimplePQR(unittest.TestCase):
         data = "ATOM      1  N   PRO     1      00abc1  02.000 3.0000 -0.1000  1.0000       N\n"
 
         # Get sole atom of this structure
-        parser = PDBParser(is_pqr=True)   # default initialization
-        self.assertRaises(PDBConstructionException,
-                          parser.get_structure, "example", StringIO(data))
+        parser = PDBParser(is_pqr=True)  # default initialization
+        self.assertRaises(
+            PDBConstructionException, parser.get_structure, "example", StringIO(data)
+        )
 
     def test_bad_charge(self):
         """Test if missing or malformed charge case is handled correctly."""
@@ -59,7 +60,7 @@ class ParseSimplePQR(unittest.TestCase):
         missing = "ATOM      1  N   PRO     1      000001  02.000 3.0000          1.0000       N\n"
 
         # Malformed
-        parser = PDBParser(PERMISSIVE=True, is_pqr=True)   # default initialization
+        parser = PDBParser(PERMISSIVE=True, is_pqr=True)  # default initialization
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
             structure = parser.get_structure("test", StringIO(malformed))
@@ -76,9 +77,13 @@ class ParseSimplePQR(unittest.TestCase):
         self.assertEqual(atom.get_charge(), None)
 
         # Test PERMISSIVE mode behaviour
-        parser = PDBParser(PERMISSIVE=False, is_pqr=True)   # default initialization
-        self.assertRaises(PDBConstructionException,
-                          parser.get_structure, "example", StringIO(malformed))
+        parser = PDBParser(PERMISSIVE=False, is_pqr=True)  # default initialization
+        self.assertRaises(
+            PDBConstructionException,
+            parser.get_structure,
+            "example",
+            StringIO(malformed),
+        )
 
     def test_bad_radius(self):
         """Test if missing, malformed or negative radius case is handled correctly."""
@@ -88,7 +93,7 @@ class ParseSimplePQR(unittest.TestCase):
         negative = "ATOM      1  N   PRO     1      000001  02.000 3.0000 -0.1000 -1.0000       N\n"
 
         # Malformed
-        parser = PDBParser(PERMISSIVE=True, is_pqr=True)   # default initialization
+        parser = PDBParser(PERMISSIVE=True, is_pqr=True)  # default initialization
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
             structure = parser.get_structure("test", StringIO(malformed))
@@ -113,13 +118,22 @@ class ParseSimplePQR(unittest.TestCase):
         self.assertEqual(atom.get_radius(), None)
 
         # Test PERMISSIVE mode behaviour
-        parser = PDBParser(PERMISSIVE=False, is_pqr=True)   # default initialization
-        self.assertRaises(PDBConstructionException,
-                          parser.get_structure, "example", StringIO(malformed))
-        self.assertRaises(PDBConstructionException,
-                          parser.get_structure, "example", StringIO(negative))
-        self.assertRaises(PDBConstructionException,
-                          parser.get_structure, "example", StringIO(missing))
+        parser = PDBParser(PERMISSIVE=False, is_pqr=True)  # default initialization
+        self.assertRaises(
+            PDBConstructionException,
+            parser.get_structure,
+            "example",
+            StringIO(malformed),
+        )
+        self.assertRaises(
+            PDBConstructionException,
+            parser.get_structure,
+            "example",
+            StringIO(negative),
+        )
+        self.assertRaises(
+            PDBConstructionException, parser.get_structure, "example", StringIO(missing)
+        )
 
 
 class WriteTest(unittest.TestCase):
@@ -131,7 +145,9 @@ class WriteTest(unittest.TestCase):
 
             # Open a parser in permissive mode and parse an example file
             self.pqr_parser = PDBParser(PERMISSIVE=1, is_pqr=True)
-            self.example_structure = self.pqr_parser.get_structure("example", "PQR/1A80.pqr")
+            self.example_structure = self.pqr_parser.get_structure(
+                "example", "PQR/1A80.pqr"
+            )
 
     def test_pdbio_write_pqr_structure(self):
         """Write a full structure using PDBIO."""
@@ -150,11 +166,13 @@ class WriteTest(unittest.TestCase):
             output_struct = self.pqr_parser.get_structure("1a8o", filename)
 
             # Comparisons
-            self.assertEqual(len(output_struct), len(self.example_structure))     # Structure Length
+            self.assertEqual(
+                len(output_struct), len(self.example_structure)
+            )  # Structure Length
 
             original_residues = len(list(self.example_structure.get_residues()))
             parsed_residues = len(list(output_struct.get_residues()))
-            self.assertEqual(parsed_residues, original_residues)     # Number of Residues
+            self.assertEqual(parsed_residues, original_residues)  # Number of Residues
 
             # Atom-wise comparison
             original_atoms = self.example_structure.get_atoms()
