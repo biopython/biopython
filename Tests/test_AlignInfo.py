@@ -13,7 +13,6 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import AlignIO
-from Bio.SubsMat.FreqTable import FreqTable, FREQ
 from Bio.Align.AlignInfo import SummaryInfo
 import math
 
@@ -42,8 +41,7 @@ class AlignInfoTests(unittest.TestCase):
         self.assertNotEqual(c.alphabet, unambiguous_dna)
         self.assertIsInstance(c.alphabet, DNAAlphabet)
 
-        expected = FreqTable({"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25},
-                             FREQ, unambiguous_dna)
+        expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
 
         m = summary.pos_specific_score_matrix(chars_to_ignore=["-"],
                                               axis_seq=c)
@@ -134,8 +132,7 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
             SeqRecord(Seq("TTACACGTGCGC", alpha), id="ID008")])
 
         summary = SummaryInfo(dna_align)
-        expected = FreqTable({"A": 0.325, "G": 0.175, "T": 0.325, "C": 0.175},
-                             FREQ, unambiguous_dna)
+        expected = {"A": 0.325, "G": 0.175, "T": 0.325, "C": 0.175}
         ic = summary.information_content(e_freq_table=expected,
                                          log_base=math.exp(1),
                                          pseudo_count=1)

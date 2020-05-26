@@ -21,7 +21,6 @@ from Bio.Alphabet import Gapped, IUPAC
 from Bio.Align.Applications import ClustalwCommandline
 from Bio import AlignIO
 from Bio.Align import AlignInfo
-from Bio.SubsMat import FreqTable
 
 # create the command line to run clustalw
 # this assumes you've got clustalw somewhere on your path, otherwise
@@ -57,12 +56,8 @@ print(my_pssm)
 
 expect_freq = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 
-freq_table_info = FreqTable.FreqTable(
-    expect_freq, FreqTable.FREQ, IUPAC.unambiguous_dna
-)
-
 info_content = summary_align.information_content(
-    5, 30, chars_to_ignore=["N"], e_freq_table=freq_table_info
+    5, 30, chars_to_ignore=["N"], e_freq_table=expect_freq
 )
 
 print("relative info content: %f" % info_content)

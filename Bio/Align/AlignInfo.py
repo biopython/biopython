@@ -18,7 +18,6 @@ import sys
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
-from Bio.SubsMat import FreqTable
 
 
 # Expected random distributions for 20-letter protein, and
@@ -487,7 +486,7 @@ class SummaryInfo:
            first position in the seq is 203 in the initial sequence, for
            the info content, we need to use zero). This defaults to the entire
            length of the first sequence.
-         - e_freq_table - A FreqTable object specifying the expected frequencies
+         - e_freq_table - A dictionary specifying the expected frequencies
            for each letter in the alphabet we are using (e.g. {'G' : 0.4,
            'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
            included, since these should not have expected frequencies.
@@ -529,8 +528,6 @@ class SummaryInfo:
                     "Protein, supply expected frequencies"
                 )
             del base_alpha
-        elif not isinstance(e_freq_table, FreqTable.FreqTable):
-            raise ValueError("e_freq_table should be a FreqTable object")
 
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
@@ -583,8 +580,8 @@ class SummaryInfo:
          - to_ignore - Letters we are specifically supposed to ignore.
          - pseudo_count - Optional argument specifying the Pseudo count (k)
            to add in order to prevent a frequency of 0 for a letter.
-         - e_freq_table - An optional argument specifying the expected
-           frequencies for each letter. This is a SubsMat.FreqTable instance.
+         - e_freq_table - An optional argument specifying a dictionary with
+           the expected frequencies for each letter.
          - random_expected - Optional argument that specify the frequency to use
            when e_freq_table is not defined.
 
@@ -619,9 +616,6 @@ class SummaryInfo:
                 ) from None
 
         if e_freq_table:
-            if not isinstance(e_freq_table, FreqTable.FreqTable):
-                raise ValueError("e_freq_table should be a FreqTable object")
-
             # check if all the residus in freq_info are in e_freq_table
             for key in freq_info:
                 if key != gap_char and key not in e_freq_table:
@@ -662,8 +656,8 @@ class SummaryInfo:
 
         Arguments:
          - obs_freq - The frequencies observed for each letter in the column.
-         - e_freq_table - An optional argument specifying the expected
-           frequencies for each letter. This is a SubsMat.FreqTable instance.
+         - e_freq_table - An optional argument specifying a dictionary with
+           the expected frequencies for each letter.
          - log_base - The base of the logathrim to use in calculating the
            info content.
 
@@ -671,8 +665,6 @@ class SummaryInfo:
         gap_char = self._get_gap_char()
 
         if e_freq_table:
-            if not isinstance(e_freq_table, FreqTable.FreqTable):
-                raise ValueError("e_freq_table should be a FreqTable object")
             # check the expected freq information to make sure it is good
             for key in obs_freq:
                 if key != gap_char and key not in e_freq_table:
