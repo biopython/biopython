@@ -25,7 +25,6 @@ from test_SeqIO import SeqIOTestBaseClass, SeqIOConverterTestBaseClass
 
 
 class QualityIOTestBaseClass(SeqIOTestBaseClass):
-
     def compare_record(self, old, new, fmt=None, msg=None):
         """Quality aware SeqRecord comparison.
 
@@ -991,14 +990,18 @@ class NonFastqTests(unittest.TestCase):
 
 
 class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
-
     def check_conversion(self, filename, in_format, out_format, alphabet):
         msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
         records = list(SeqIO.parse(filename, in_format, alphabet))
         # Write it out...
         handle = StringIO()
         with warnings.catch_warnings():
-            if out_format in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
+            if out_format in (
+                "fastq",
+                "fastq-sanger",
+                "fastq-solexa",
+                "fastq-illumina",
+            ):
                 warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.write(records, handle, out_format)
         handle.seek(0)
@@ -1010,14 +1013,23 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
         # Finally, use the convert function, and check that agrees:
         handle2 = StringIO()
         with warnings.catch_warnings():
-            if out_format in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
+            if out_format in (
+                "fastq",
+                "fastq-sanger",
+                "fastq-solexa",
+                "fastq-illumina",
+            ):
                 warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.convert(filename, in_format, handle2, out_format, alphabet)
         # We could re-parse this, but it is simpler and stricter:
         self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
 
     def failure_check(self, filename, in_format, out_format, alphabet):
-        msg = "Confirm failure detection converting %s from %s to %s" % (filename, in_format, out_format)
+        msg = "Confirm failure detection converting %s from %s to %s" % (
+            filename,
+            in_format,
+            out_format,
+        )
         # We want the SAME error message from parse/write as convert!
         with self.assertRaises(ValueError, msg=msg) as cm:
             records = list(SeqIO.parse(filename, in_format, alphabet))
@@ -1078,7 +1090,8 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
                 if in_format != fmt:
                     continue
                 if (
-                    in_format in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"]
+                    in_format
+                    in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"]
                     and out_format in ["fasta", "tab"]
                     and filename.startswith("Quality/error_qual_")
                 ):

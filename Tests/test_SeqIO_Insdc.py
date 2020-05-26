@@ -104,7 +104,6 @@ class TestEmblRewrite(unittest.TestCase):
 
 
 class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
-
     def test_conversion(self):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
         tests = [

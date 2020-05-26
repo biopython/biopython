@@ -104,7 +104,9 @@ class SeqIOTestBaseClass(unittest.TestCase):
             old.description == new.description
             or (old.id + " " + old.description).strip() == new.description
             or new.description == "<unknown description>"
-            or new.description == "", msg="'%s' vs '%s' " % (old.description, new.description))
+            or new.description == "",
+            msg="'%s' vs '%s' " % (old.description, new.description),
+        )
         self.assertEqual(len(old.seq), len(new.seq))
         if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
             pass
@@ -152,7 +154,11 @@ class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
 
     def failure_check(self, filename, in_format, out_format, alphabet):
         """Test if SeqIO.convert raises the correct ValueError on broken files."""
-        msg = "Confirm failure detection converting %s from %s to %s" % (filename, in_format, out_format)
+        msg = "Confirm failure detection converting %s from %s to %s" % (
+            filename,
+            in_format,
+            out_format,
+        )
         # We want the SAME error message from parse/write as convert!
         with self.assertRaises(ValueError, msg=msg) as cm:
             records = list(SeqIO.parse(filename, in_format, alphabet))
@@ -274,14 +280,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         ):
             # Jython didn't like us comparing the string of very long UnknownSeq
             # object (out of heap memory error)
-            self.assertEqual(record_one.seq._character, record_two.seq._character, msg=msg)
+            self.assertEqual(
+                record_one.seq._character, record_two.seq._character, msg=msg
+            )
         else:
             self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
         ):
-            self.assertEqual(record_one.letter_annotations[key], record_two.letter_annotations[key], msg=msg)
+            self.assertEqual(
+                record_one.letter_annotations[key],
+                record_two.letter_annotations[key],
+                msg=msg,
+            )
 
     def check_simple_write_read(self, records, t_format, t_count, messages):
         """Check can write/read given records.
