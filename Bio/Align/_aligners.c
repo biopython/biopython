@@ -1782,7 +1782,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             k = PyUnicode_GET_LENGTH(item);
             if (k != 1) break;
             if (PyUnicode_KIND(item) != PyUnicode_1BYTE_KIND) break;
-            character = PyUnicode_DATA(alphabet);
+            character = PyUnicode_DATA(item);
             j = *character;
             if (j < 0 || j >= 128) break;
             if (mapping[j] != MISSING_LETTER) {
