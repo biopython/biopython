@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 # Copyright 2001 Brad Chapman.  All rights reserved.
 #

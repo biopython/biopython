@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # Copyright 2014 by Leighton Pritchard.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its

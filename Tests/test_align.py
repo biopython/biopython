@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright 2000-2001 by Brad Chapman.  All rights reserved.
 # Revisions copyright 2007-2003 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
