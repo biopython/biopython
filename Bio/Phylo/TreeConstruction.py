@@ -383,7 +383,7 @@ class DistanceCalculator:
 
     Output::
 
-        SingleLetterAlphabet() alignment with 5 rows and 13 columns
+        Alignment with 5 rows and 13 columns
         AACGTGGCCACAT Alpha
         AAGGTCGCCACAC Beta
         CAGTTCGCCACAA Gamma
@@ -1134,7 +1134,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
 
     Output::
 
-        SingleLetterAlphabet() alignment with 5 rows and 13 columns
+        Alignment with 5 rows and 13 columns
         AACGTGGCCACAT Alpha
         AAGGTCGCCACAC Beta
         CAGTTCGCCACAA Gamma
