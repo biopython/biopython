@@ -11,6 +11,7 @@ class SeqAnalyzer:
     pass them on to SeqVisualizer. The same goes to protein sequences shorter than 10 aa.
     For further information about said dictionaries please see 'results()' function documentation.
     The operations that the class performs upon received data from SeqAnalysis.database is it:
+
     1. Calculates molecular weight of protein sequences
     2. Calculates isoelectric point for protein sequences
     3. Counts standard aa in protein sequences
