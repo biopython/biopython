@@ -342,6 +342,20 @@ class PDBIO(StructureIO):
                             model_residues_written = 1
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
+
+                                # Check if the atom serial number is an integer
+                                # Not always the case for mmCIF files.
+                                try:
+                                    atom_number = int(atom_number)
+                                except ValueError:
+                                    raise ValueError(
+                                        f'{repr(atom_number)} is not a number.'
+                                        'Atom serial numbers must be numerical'
+                                        ' If you are converting from an mmCIF'
+                                        ' structure, try using'
+                                        ' preserve_atom_numbering=False'
+                                    )
+
                             s = get_atom_line(
                                 atom,
                                 hetfield,
