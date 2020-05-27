@@ -23,7 +23,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 import array
 import sys
 import warnings
-import collections
+import collections.abc
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
