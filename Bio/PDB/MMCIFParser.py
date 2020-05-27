@@ -121,6 +121,8 @@ class MMCIFParser:
         _unassigned = {".", "?"}
 
         mmcif_dict = self._mmcif_dict
+
+        atom_serial_list = mmcif_dict["_atom_site.id"]
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
         residue_id_list = mmcif_dict["_atom_site.label_comp_id"]
         try:
@@ -176,8 +178,9 @@ class MMCIFParser:
 
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
-            # this number should match the '_atom_site.id' index in the MMCIF
             structure_builder.set_line_counter(i)
+
+            serial = atom_serial_list[i]
 
             x = x_list[i]
             y = y_list[i]
@@ -241,7 +244,14 @@ class MMCIFParser:
             coord = numpy.array((x, y, z), "f")
             element = element_list[i].upper() if element_list else None
             structure_builder.init_atom(
-                name, coord, tempfactor, occupancy, altloc, name, element=element
+                name,
+                coord,
+                tempfactor,
+                occupancy,
+                altloc,
+                name,
+                serial_number=serial,
+                element=element
             )
             if aniso_flag == 1 and i < len(aniso_u11):
                 u = (
@@ -361,6 +371,7 @@ class FastMMCIFParser:
         mmcif_dict.update(dict(zip(_anisof, _anisob_tbl)))
 
         # Build structure object
+        atom_serial_list = mmcif_dict["_atom_site.id"]
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
         residue_id_list = mmcif_dict["_atom_site.label_comp_id"]
 
@@ -424,8 +435,9 @@ class FastMMCIFParser:
 
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
-            # this number should match the '_atom_site.id' index in the MMCIF
             structure_builder.set_line_counter(i)
+
+            serial = atom_serial_list[i]
 
             x = x_list[i]
             y = y_list[i]
@@ -490,7 +502,14 @@ class FastMMCIFParser:
             coord = numpy.array((x, y, z), "f")
             element = element_list[i] if element_list else None
             structure_builder.init_atom(
-                name, coord, tempfactor, occupancy, altloc, name, element=element
+                name,
+                coord,
+                tempfactor,
+                occupancy,
+                altloc,
+                name,
+                serial_number=serial,
+                element=element
             )
             if aniso_flag == 1 and i < len(aniso_u11):
                 u = (
