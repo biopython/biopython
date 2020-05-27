@@ -1904,7 +1904,7 @@ class UnknownSeq(Seq):
         also UnknownSeqs with the same character as the spacer, similar to how the
         addition of an UnknownSeq and another UnknownSeq would work.
         """
-        if not isinstance(other, collections.Iterable):  # doesn't detect single strings
+        if not isinstance(other, collections.abc.Iterable):  # doesn't detect single strings
             raise ValueError("Input must be an iterable")
         if isinstance(other, str):
             raise ValueError("Input must be an iterable")
