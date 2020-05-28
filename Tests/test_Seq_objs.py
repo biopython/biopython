@@ -912,40 +912,31 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
 
-    def test_join_Seq_ValueError(self):
-        """Checks that a ValueError is thrown for all non-iterable types."""
+    def test_join_Seq_TypeError(self):
+        """Checks that a TypeError is thrown for all non-iterable types."""
         # No iterable types which contain non-accepted types either.
 
         spacer = Seq("NNNNN")
-        self.assertRaises(ValueError, spacer.join, 5)
-        self.assertRaises(ValueError, spacer.join, "ATG")
-        self.assertRaises(ValueError, spacer.join, Seq("ATG"))
-        self.assertRaises(ValueError, spacer.join, MutableSeq("ATG"))
-        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        self.assertRaises(TypeError, spacer.join, 5)
+        self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
-    def test_join_UnknownSeq_ValueError(self):
-        """Checks that a ValueError is thrown for all non-iterable types."""
+    def test_join_UnknownSeq_TypeError_iter(self):
+        """Checks that a TypeError is thrown for all non-iterable types."""
         # No iterable types which contain non-accepted types either.
 
         spacer = UnknownSeq(5, character="-")
-        self.assertRaises(ValueError, spacer.join, 5)
-        self.assertRaises(ValueError, spacer.join, "ATG")
-        self.assertRaises(ValueError, spacer.join, Seq("ATG"))
-        self.assertRaises(ValueError, spacer.join, MutableSeq("ATG"))
-        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        self.assertRaises(TypeError, spacer.join, 5)
+        self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
-    def test_join_MutableSeq_ValueError(self):
-        """Checks that a ValueError is thrown for all non-iterable types."""
+    def test_join_MutableSeq_TypeError_iter(self):
+        """Checks that a TypeError is thrown for all non-iterable types."""
         # No iterable types which contain non-accepted types either.
 
         spacer = MutableSeq("MMMMM")
-        self.assertRaises(ValueError, spacer.join, 5)
-        self.assertRaises(ValueError, spacer.join, "ATG")
-        self.assertRaises(ValueError, spacer.join, Seq("ATG"))
-        self.assertRaises(ValueError, spacer.join, MutableSeq("ATG"))
-        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        self.assertRaises(TypeError, spacer.join, 5)
+        self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
-    def test_join_Seq_TypeError(self):
+    def test_join_Seq_TypeError_alpha(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
         spacer = Seq("NNNNN", generic_dna)
         self.assertRaises(
@@ -959,7 +950,7 @@ class StringMethodTests(unittest.TestCase):
             [Seq("NNNNN", generic_protein), Seq("NNNNN", generic_protein)],
         )
 
-    def test_join_UnknownSeq_TypeError(self):
+    def test_join_UnknownSeq_TypeError_alpha(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
         spacer = UnknownSeq(5, character="-", alphabet=generic_dna)
         self.assertRaises(
@@ -1012,6 +1003,11 @@ class StringMethodTests(unittest.TestCase):
             seq_concatenated = spacer.join(example_strings_seqs)
             self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
             self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
+            # Now try single sequence arguments, should join the letters
+            for target in example_strings + example_strings_seqs:
+                self.assertEqual(
+                    str(spacer).join(str(target)), str(spacer.join(target))
+                )
 
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
@@ -1059,6 +1055,11 @@ class StringMethodTests(unittest.TestCase):
             seq_concatenated = spacer.join(example_strings_seqs)
             self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
             self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
+            # Now try single sequence arguments, should join the letters
+            for target in example_strings + example_strings_seqs:
+                self.assertEqual(
+                    str(spacer).join(str(target)), str(spacer.join(target))
+                )
 
     def test_join_UnknownSeq_with_file(self):
         """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""

@@ -23,7 +23,6 @@ See also the Seq_ wiki and the chapter in our tutorial:
 import array
 import sys
 import warnings
-import collections.abc
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
@@ -1231,23 +1230,35 @@ class Seq:
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
 
-        Accepts all Seq objects and Strings as objects to be concatenated with the spacer
+        Accepts either a Seq or string (and iterates over the letters), or an
+        iterable containing Seq or string objects. These arguments will be
+        concatenated with the calling sequence as the spacer:
 
         >>> concatenated = Seq('NNNNN').join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
         >>> concatenated
         Seq('AAANNNNNTTTNNNNNPPP')
 
-        Throws error if other is not an iterable and if objects inside of the iterable
-        are not Seq or String objects
+        Joining the letters of a single sequence:
+
+        >>> Seq('NNNNN').join(Seq("ACGT"))
+        Seq('ANNNNNCNNNNNGNNNNNT')
+        >>> Seq('NNNNN').join("ACGT")
+        Seq('ANNNNNCNNNNNGNNNNNT')
         """
-        if not isinstance(other, collections.abc.Iterable):
-            # doesn't detect single strings
-            raise ValueError("Input must be an iterable")
-        if isinstance(other, str):
-            raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
         a = self.alphabet
+        if isinstance(other, (Seq, MutableSeq, UnknownSeq)):
+            if a != other.alphabet:
+                if not Alphabet._check_type_compatible([a, other.alphabet]):
+                    raise TypeError(
+                        f"Incompatible alphabets {a!r} and {other.alphabet!r}"
+                    )
+                a = Alphabet._consensus_alphabet([a, other.alphabet])
+            # No point looping over the seq and checking the alphabet again...
+            return self.__class__(str(self).join(str(other)), a)
+        if isinstance(other, SeqRecord):
+            raise TypeError("Iterable cannot be a SeqRecord")
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
@@ -1259,7 +1270,7 @@ class Seq:
                         )
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
             elif not isinstance(c, str):
-                raise ValueError("Input must be an iterable of Seqs or Strings")
+                raise TypeError("Input must be an iterable of Seqs or Strings")
         temp_data = str(self).join([str(z) for z in other])
         return self.__class__(temp_data, a)
 
@@ -1800,29 +1811,51 @@ class UnknownSeq(Seq):
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
 
-        Accepts Seq/UnknownSeq objects and Strings as objects to be concatenated with
-        the spacer
+        Accepts either a Seq or string (and iterates over the letters), or an
+        iterable containing Seq or string objects. These arguments will be
+        concatenated with the calling sequence as the spacer:
 
         >>> concatenated = UnknownSeq(5).join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
         >>> concatenated
         Seq('AAA?????TTT?????PPP')
 
-        Throws error if other is not an iterable and if objects inside of the iterable
-        are not Seq/UnknownSeq or String objects.
+        If all the inputs are also UnknownSeq using the same character, then it
+        returns a new UnknownSeq:
 
-        Will only return an UnknownSeq object of all of the objects to be joined are
+        >>> UnknownSeq(5).join([UnknownSeq(3), UnknownSeq(3), UnknownSeq(3)])
+        UnknownSeq(19, character='?')
+
+        Examples taking a single sequence and joining the letters:
+
+        >>> UnknownSeq(3).join("ACGT")
+        Seq('A???C???G???T')
+        >>> UnknownSeq(3).join(UnknownSeq(4))
+        UnknownSeq(13, character='?')
+
+        Will only return an UnknownSeq object if all of the objects to be joined are
         also UnknownSeqs with the same character as the spacer, similar to how the
         addition of an UnknownSeq and another UnknownSeq would work.
         """
-        if not isinstance(
-            other, collections.abc.Iterable
-        ):  # doesn't detect single strings
-            raise ValueError("Input must be an iterable")
-        if isinstance(other, str):
-            raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
         a = self.alphabet
+        if isinstance(other, (Seq, MutableSeq)):
+            if a != other.alphabet:
+                if not Alphabet._check_type_compatible([a, other.alphabet]):
+                    raise TypeError(
+                        f"Incompatible alphabets {a!r} and {other.alphabet!r}"
+                    )
+                a = Alphabet._consensus_alphabet([a, other.alphabet])
+            if isinstance(other, UnknownSeq) and self._character == other._character:
+                # Special case, can return an UnknownSeq
+                return self.__class__(
+                    len(other) + len(self) * (len(other) - 1), a, self._character
+                )
+            # No point looping over the seq and checking the alphabet again...
+            return Seq(str(self).join(str(other)), a)
+        if isinstance(other, SeqRecord):
+            raise TypeError("Iterable cannot be a SeqRecord")
+
         type_is_unknown = True
         for c in other:
             if isinstance(c, SeqRecord):
@@ -1839,7 +1872,7 @@ class UnknownSeq(Seq):
             elif isinstance(c, str):
                 type_is_unknown = False
             else:
-                raise ValueError("Input must be an iterable of Seqs or Strings")
+                raise TypeError("Input must be an iterable of Seqs or Strings")
         temp_data = str(self).join([str(z) for z in other])
         if (
             temp_data.count(self._character) == len(temp_data)
@@ -2481,10 +2514,8 @@ class MutableSeq:
         Throws error if other is not an iterable and if objects inside of the iterable
         are not Seq or String objects
         """
-        seq_joined = self.toseq().join(
-            other
-        )  # returns Seq object instead of MutableSeq
-        return seq_joined
+        # returns Seq object instead of MutableSeq
+        return self.toseq().join(other)
 
 
 # The transcribe, backward_transcribe, and translate functions are
