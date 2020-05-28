@@ -145,7 +145,7 @@ DNA = Seq
 
 
 class FormattedSeq:
-    """A linear or ciruclar sequence object for restriction analysis.
+    """A linear or circular sequence object for restriction analysis.
 
     Translates a Bio.Seq into a formatted sequence to be used with Restriction.
 
@@ -171,12 +171,10 @@ class FormattedSeq:
             self.data = _check_bases(stringy)
             self.linear = linear
             self.klass = seq.__class__
-            self.alphabet = seq.alphabet
         elif isinstance(seq, FormattedSeq):
             self.lower = seq.lower
             self.data = seq.data
             self.linear = seq.linear
-            self.alphabet = seq.alphabet
             self.klass = seq.klass
         else:
             raise TypeError("expected Seq or MutableSeq, got %s" % type(seq))
@@ -256,8 +254,8 @@ class FormattedSeq:
 
         """
         if self.lower:
-            return self.klass((self.data[i]).lower(), self.alphabet)
-        return self.klass(self.data[i], self.alphabet)
+            return self.klass(self.data[i].lower())
+        return self.klass(self.data[i])
 
 
 class RestrictionType(type):
