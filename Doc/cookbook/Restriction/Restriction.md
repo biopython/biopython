@@ -63,7 +63,7 @@ To import the enzymes, open a Python shell and type:
 ``` python
 >>> from Bio import Restriction
 >>> dir()
-['Restriction', '__builtins__', '__doc__', '__name__', '__package__']
+['Restriction', '__annotations__', '__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__']
 >>> Restriction.EcoRI
 EcoRI
 >>> Restriction.EcoRI.site
@@ -97,7 +97,7 @@ tutorial.
 
 #### <a name="1.2"></a>1.2  Naming convention
 
-To access an enzyme simply enter it's name. You must respect the usual naming
+To access an enzyme simply enter its name. You must respect the usual naming
 convention with the upper case letters and Latin numbering (in upper case as
 well):
 
@@ -488,8 +488,8 @@ from one or a few supplier(s). Here is how to do it:
 'O','N','Q','S','R','V','Y','X'])
 >>> # This will create a RestrictionBatch with the all enzymes which possess a s
 upplier.
->>> len(rb_supp)  # May 2016
-622
+>>> len(rb_supp)  # May 2020
+621
 ```
 
 The argument `suppliers` take a list of one or several single letter codes
@@ -1493,18 +1493,14 @@ sDNA())
 >>> EcoRI.search(c)
 
 Traceback (most recent call last):
-  File "<pyshell#110>", line 1, in -toplevel-
-    EcoRI.search(b)
-  File "/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py", line 3
-  96, in search
-    cls.dna = FormatedSeq(dna, linear)
-  File "/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py", line 1
-  37, in __init__
-    self.format()
-  File "/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py", line 1
-  53, in format
-    raise AlphabetError, " '%s' is not in the IUPAC alphabet" % s
-AlphabetError: 'X' is not in the IUPAC alphabet
+  File "<stdin>", line 1, in <module>
+  File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 553, in search
+    cls.dna = FormattedSeq(dna, linear)
+  File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 171, in __init__
+    self.data = _check_bases(stringy)
+  File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 122, in _check_bases
+    raise TypeError("Invalid character found in %s" % repr(seq_string))
+TypeError: Invalid character found in 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR'
 >>> d = Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n\
 26 nnnnn nnnnG AATTC rrrrr rrrrr \n\
 51 r', IUPACAmbiguousDNA())
