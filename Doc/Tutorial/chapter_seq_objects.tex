@@ -286,7 +286,16 @@ Or, a more elegant approach is to the use built in \verb|sum| function with its 
 Seq('ACGTAACCGGTT', DNAAlphabet())
 \end{minted}
 
-Unlike the Python string, the Biopython \verb|Seq| does not (currently) have a \verb|.join| method.
+Like Python strings, Biopython \verb|Seq| also has a \verb|.join| method:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> contigs = [Seq("ATG"), Seq("ATCCCG"), Seq("TTGCA")]
+>>> spacer = Seq("N"*10)
+>>> spacer.join(contigs)
+Seq('ATGNNNNNNNNNNATCCCGNNNNNNNNNNTTGCA')
+\end{minted}
 
 \section{Changing case}
 
