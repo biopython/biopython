@@ -419,13 +419,13 @@ class SeqFeature:
         by giving explicit arguments:
 
         >>> f.translate(seq, cds=False)
-        Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('GYTYR*CL**', ProteinAlphabet())
 
         Now use the start_offset argument to change the frame. Note
         this uses python 0-based numbering.
 
         >>> f.translate(seq, start_offset=1, cds=False)
-        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+        Seq('VTLTDNVSD', ProteinAlphabet())
 
         Alternatively use the codon_start qualifier to do the same
         thing. Note: this uses 1-based numbering, which is found
@@ -433,7 +433,7 @@ class SeqFeature:
 
         >>> f.qualifiers['codon_start'] = [2]
         >>> f.translate(seq, cds=False)
-        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+        Seq('VTLTDNVSD', ProteinAlphabet())
         """
         # see if this feature should be translated in a different
         # frame using the "codon_start" qualifier

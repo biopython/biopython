@@ -752,23 +752,23 @@ class Seq:
         >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
         >>> my_aa = my_rna.translate()
         >>> my_aa
-        Seq('VMAIVMGR*KGAR*L', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('VMAIVMGR*KGAR*L', ProteinAlphabet())
         >>> for pep in my_aa.split("*"):
         ...     pep
-        Seq('VMAIVMGR', HasStopCodon(ExtendedIUPACProtein(), '*'))
-        Seq('KGAR', HasStopCodon(ExtendedIUPACProtein(), '*'))
-        Seq('L', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('VMAIVMGR', ProteinAlphabet())
+        Seq('KGAR', ProteinAlphabet())
+        Seq('L', ProteinAlphabet())
         >>> for pep in my_aa.split("*", 1):
         ...     pep
-        Seq('VMAIVMGR', HasStopCodon(ExtendedIUPACProtein(), '*'))
-        Seq('KGAR*L', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('VMAIVMGR', ProteinAlphabet())
+        Seq('KGAR*L', ProteinAlphabet())
 
         See also the rsplit method:
 
         >>> for pep in my_aa.rsplit("*", 1):
         ...     pep
-        Seq('VMAIVMGR*KGAR', HasStopCodon(ExtendedIUPACProtein(), '*'))
-        Seq('L', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('VMAIVMGR*KGAR', ProteinAlphabet())
+        Seq('L', ProteinAlphabet())
         """
         # If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
@@ -1068,7 +1068,7 @@ class Seq:
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
     def translate(
-        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None
+        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
     ):
         """Turn a nucleotide sequence into a protein sequence by creating a new Seq object.
 
@@ -1096,30 +1096,30 @@ class Seq:
            from the protein sequence, regardless of the to_stop option).
            If these tests fail, an exception is raised.
          - gap - Single character string to denote symbol used for gaps.
-           It will try to guess the gap character from the alphabet.
+           Defaults to the minus sign.
 
         e.g. Using the standard table:
 
         >>> coding_dna = Seq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         >>> coding_dna.translate()
-        Seq('VAIVMGR*KGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('VAIVMGR*KGAR*', ProteinAlphabet())
         >>> coding_dna.translate(stop_symbol="@")
-        Seq('VAIVMGR@KGAR@', HasStopCodon(ExtendedIUPACProtein(), '@'))
+        Seq('VAIVMGR@KGAR@', ProteinAlphabet())
         >>> coding_dna.translate(to_stop=True)
-        Seq('VAIVMGR', ExtendedIUPACProtein())
+        Seq('VAIVMGR', ProteinAlphabet())
 
         Now using NCBI table 2, where TGA is not a stop codon:
 
         >>> coding_dna.translate(table=2)
-        Seq('VAIVMGRWKGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('VAIVMGRWKGAR*', ProteinAlphabet())
         >>> coding_dna.translate(table=2, to_stop=True)
-        Seq('VAIVMGRWKGAR', ExtendedIUPACProtein())
+        Seq('VAIVMGRWKGAR', ProteinAlphabet())
 
         In fact, GTG is an alternative start codon under NCBI table 2, meaning
         this sequence could be a complete CDS:
 
         >>> coding_dna.translate(table=2, cds=True)
-        Seq('MAIVMGRWKGAR', ExtendedIUPACProtein())
+        Seq('MAIVMGRWKGAR', ProteinAlphabet())
 
         It isn't a valid CDS under NCBI table 1, due to both the start codon
         and also the in frame stop codons:
@@ -1134,23 +1134,9 @@ class Seq:
 
         >>> coding_dna2 = Seq("TTGGCCATTGTAATGGGCCGC")
         >>> coding_dna2.translate()
-        Seq('LAIVMGR', ExtendedIUPACProtein())
+        Seq('LAIVMGR', ProteinAlphabet())
         >>> coding_dna2.translate(to_stop=True)
-        Seq('LAIVMGR', ExtendedIUPACProtein())
-
-        When translating gapped sequences, the gap character is inferred from
-        the alphabet:
-
-        >>> from Bio.Alphabet import Gapped
-        >>> coding_dna3 = Seq("GTG---GCCATT", Gapped(IUPAC.unambiguous_dna))
-        >>> coding_dna3.translate()
-        Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))
-
-        It is possible to pass the gap character when the alphabet is missing:
-
-        >>> coding_dna4 = Seq("GTG---GCCATT")
-        >>> coding_dna4.translate(gap='-')
-        Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))
+        Seq('LAIVMGR', ProteinAlphabet())
 
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
@@ -1219,15 +1205,7 @@ class Seq:
             str(self), codon_table, stop_symbol, to_stop, cds, gap=gap
         )
 
-        if gap and gap in protein:
-            alphabet = Alphabet.Gapped(codon_table.protein_alphabet, gap)
-        else:
-            alphabet = codon_table.protein_alphabet
-
-        if stop_symbol in protein:
-            alphabet = Alphabet.HasStopCodon(alphabet, stop_symbol)
-
-        return Seq(protein, alphabet)
+        return Seq(protein, Alphabet.generic_protein)
 
     def ungap(self, gap=None):
         """Return a copy of the sequence without the gap character(s).
@@ -1839,7 +1817,7 @@ class UnknownSeq(Seq):
         NNNNNNNNN
         >>> my_protein = my_seq.translate()
         >>> my_protein
-        Seq('XXX', ExtendedIUPACProtein())
+        Seq('XXX', ProteinAlphabet())
         >>> print(my_protein)
         XXX
 
