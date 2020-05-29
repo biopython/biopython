@@ -477,7 +477,7 @@ advantage of one of the \verb|Seq| object's biological methods:
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 >>> messenger_rna.translate()
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGR*KGAR*', ProteinAlphabet())
 \end{minted}
 
 You can also translate directly from the coding strand DNA sequence:
@@ -490,7 +490,7 @@ You can also translate directly from the coding strand DNA sequence:
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 >>> coding_dna.translate()
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGR*KGAR*', ProteinAlphabet())
 \end{minted}
 
 You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about some optional arguments, including different translation tables (Genetic Codes).
@@ -501,7 +501,7 @@ Suppose we are dealing with a mitochondrial sequence.  We need to tell the trans
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
-Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGRWKGAR*', ProteinAlphabet())
 \end{minted}
 
 You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
@@ -509,7 +509,7 @@ You can also specify the table using the NCBI table number which is shorter, and
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate(table=2)
-Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGRWKGAR*', ProteinAlphabet())
 \end{minted}
 
 Now, you may want to translate the nucleotides up to the first in frame stop codon,
@@ -518,13 +518,13 @@ and then stop (as happens in nature):
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate()
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGR*KGAR*', ProteinAlphabet())
 >>> coding_dna.translate(to_stop=True)
-Seq('MAIVMGR', IUPACProtein())
+Seq('MAIVMGR', ProteinAlphabet())
 >>> coding_dna.translate(table=2)
-Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGRWKGAR*', ProteinAlphabet())
 >>> coding_dna.translate(table=2, to_stop=True)
-Seq('MAIVMGRWKGAR', IUPACProtein())
+Seq('MAIVMGRWKGAR', ProteinAlphabet())
 \end{minted}
 \noindent Notice that when you use the \verb|to_stop| argument, the stop codon itself
 is not translated - and the stop symbol is not included at the end of your protein
@@ -535,7 +535,7 @@ You can even specify the stop symbol if you don't like the default asterisk:
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate(table=2, stop_symbol="@")
-Seq('MAIVMGRWKGAR@', HasStopCodon(IUPACProtein(), '@'))
+Seq('MAIVMGRWKGAR@', ProteinAlphabet())
 \end{minted}
 
 Now, suppose you have a complete coding sequence CDS, which is to say a
@@ -559,10 +559,10 @@ for example the gene yaaX in \texttt{E. coli} K12:
 ...            generic_dna)
 >>> gene.translate(table="Bacterial")
 Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
-HasStopCodon(ExtendedIUPACProtein(), '*')
+ProteinAlpabet())
 >>> gene.translate(table="Bacterial", to_stop=True)
 Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
-ExtendedIUPACProtein())
+ProteinAlphabet())
 \end{minted}
 
 \noindent In the bacterial genetic code \texttt{GTG} is a valid start codon,
@@ -574,7 +574,7 @@ sequence is a complete CDS:
 \begin{minted}{pycon}
 >>> gene.translate(table="Bacterial", cds=True)
 Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
-ExtendedIUPACProtein())
+ProteinAlphabet())
 \end{minted}
 
 In addition to telling Biopython to translate an alternative start codon as
