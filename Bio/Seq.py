@@ -862,15 +862,15 @@ class Seq:
     def upper(self):
         """Return an upper case copy of the sequence.
 
-        >>> from Bio.Alphabet import HasStopCodon, generic_protein
+        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_seq = Seq("VHLTPeeK*", HasStopCodon(generic_protein))
+        >>> my_seq = Seq("VHLTPeeK*", generic_protein)
         >>> my_seq
-        Seq('VHLTPeeK*', HasStopCodon(ProteinAlphabet(), '*'))
+        Seq('VHLTPeeK*', ProteinAlphabet())
         >>> my_seq.lower()
-        Seq('vhltpeek*', HasStopCodon(ProteinAlphabet(), '*'))
+        Seq('vhltpeek*', ProteinAlphabet())
         >>> my_seq.upper()
-        Seq('VHLTPEEK*', HasStopCodon(ProteinAlphabet(), '*'))
+        Seq('VHLTPEEK*', ProteinAlphabet())
 
         This will adjust the alphabet if required. See also the lower method.
         """
