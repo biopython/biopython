@@ -1068,7 +1068,7 @@ class Seq:
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
     def translate(
-        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None
+        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
     ):
         """Turn a nucleotide sequence into a protein sequence by creating a new Seq object.
 
@@ -1096,7 +1096,7 @@ class Seq:
            from the protein sequence, regardless of the to_stop option).
            If these tests fail, an exception is raised.
          - gap - Single character string to denote symbol used for gaps.
-           It will try to guess the gap character from the alphabet.
+           Defaults to the minus sign.
 
         e.g. Using the standard table:
 

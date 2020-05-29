@@ -1272,43 +1272,21 @@ class TestTranslating(unittest.TestCase):
                 s += "N"
             return s
 
-        self.assertEqual("IUPACProtein()", repr(self.test_seqs[0].translate().alphabet))
-        self.assertEqual(
-            "ExtendedIUPACProtein()", repr(self.test_seqs[1].translate().alphabet)
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()", repr(self.test_seqs[2].translate().alphabet)
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()", repr(self.test_seqs[3].translate().alphabet)
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()", repr(self.test_seqs[10].translate().alphabet)
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()", repr(self.test_seqs[11].translate().alphabet)
-        )
-        self.assertEqual(
-            "IUPACProtein()", repr(self.test_seqs[12].translate().alphabet)
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()",
-            repr(triple_pad(self.test_seqs[13]).translate().alphabet),
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()", repr(self.test_seqs[14].translate().alphabet)
-        )
-        self.assertEqual(
-            "IUPACProtein()", repr(self.test_seqs[15].translate().alphabet)
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()",
-            repr(triple_pad(self.test_seqs[16]).translate().alphabet),
-        )
-        self.assertEqual(
-            "ExtendedIUPACProtein()",
-            repr(triple_pad(self.test_seqs[17]).translate().alphabet),
-        )
+        self.assertIs(self.test_seqs[0].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[1].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[2].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[3].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[10].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[11].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[12].translate().alphabet, Alphabet.generic_protein)
+
+        self.assertIs(triple_pad(self.test_seqs[13]).translate().alphabet, Alphabet.generic_protein)
+
+        self.assertIs(self.test_seqs[14].translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(self.test_seqs[15].translate().alphabet, Alphabet.generic_protein)
+
+        self.assertIs(triple_pad(self.test_seqs[16]).translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(triple_pad(self.test_seqs[17]).translate().alphabet, Alphabet.generic_protein)
 
     def test_gapped_seq_with_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
@@ -1318,7 +1296,7 @@ class TestTranslating(unittest.TestCase):
     def test_gapped_seq_with_stop_codon_and_gap_char_given(self):
         seq = Seq.Seq("GTG---GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         self.assertEqual("V-AIVMGR*KGAR*", seq.translate(gap="-"))
-        self.assertRaises(TranslationError, seq.translate)
+        self.assertRaises(TranslationError, seq.translate, gap=None)
 
     def test_gapped_seq_with_gap_char_given_and_inferred_from_alphabet(self):
         seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
@@ -1345,61 +1323,32 @@ class TestTranslating(unittest.TestCase):
 
     def test_gapped_seq_no_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
-        self.assertRaises(TranslationError, seq.translate)
-
-    def test_gapped_seq_no_gap_char_given_and_inferred_from_alphabet(self):
-        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
-        self.assertEqual("M-KL", seq.translate())
-
-        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna))
-        self.assertRaises(TranslationError, seq.translate)
-
-        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna, "~"))
-        self.assertEqual("M~KL", seq.translate())
+        self.assertRaises(TranslationError, seq.translate, gap=None)
 
     def test_alphabet_of_translated_gapped_seq(self):
         seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
-        self.assertEqual(
-            "Gapped(ExtendedIUPACProtein(), '-')", repr(seq.translate().alphabet)
-        )
+        self.assertIs(seq.translate().alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna, "-"))
-        self.assertEqual(
-            "Gapped(ExtendedIUPACProtein(), '-')", repr(seq.translate().alphabet)
-        )
+        self.assertIs(seq.translate().alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna, "~"))
-        self.assertEqual(
-            "Gapped(ExtendedIUPACProtein(), '~')", repr(seq.translate().alphabet)
-        )
+        self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG---AAACTG")
-        self.assertEqual(
-            "Gapped(ExtendedIUPACProtein(), '-')", repr(seq.translate(gap="-").alphabet)
-        )
+        self.assertIs(seq.translate(gap="-").alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG~~~AAACTG")
-        self.assertEqual(
-            "Gapped(ExtendedIUPACProtein(), '~')", repr(seq.translate(gap="~").alphabet)
-        )
+        self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG~~~AAACTGTAG")
-        self.assertEqual(
-            "HasStopCodon(Gapped(ExtendedIUPACProtein(), '~'), '*')",
-            repr(seq.translate(gap="~").alphabet),
-        )
+        self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG---AAACTGTGA")
-        self.assertEqual(
-            "HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')",
-            repr(seq.translate(gap="-").alphabet),
-        )
+        self.assertIs(seq.translate(gap="-").alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG---AAACTGTGA")
-        self.assertEqual(
-            "HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@')",
-            repr(seq.translate(gap="-", stop_symbol="@").alphabet),
-        )
+        self.assertIs(seq.translate(gap="-").alphabet, Alphabet.generic_protein)
 
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable."""
