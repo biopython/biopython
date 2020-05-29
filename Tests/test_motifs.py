@@ -13,7 +13,6 @@ import unittest
 import math
 
 from Bio.Alphabet import generic_dna
-from Bio.Alphabet import Gapped
 from Bio.Alphabet import IUPAC
 from Bio import motifs
 from Bio.Seq import Seq
@@ -1514,7 +1513,7 @@ class TestMEME(unittest.TestCase):
         self.assertAlmostEqual(motif.background["T"], 0.30569430569430567)
         self.assertAlmostEqual(motif.evalue, 4.1e-09)
         self.assertEqual(motif.alphabet, "ACGT")
-        self.assertEqual(motif.instances, None)
+        self.assertIsNone(motif.instances)
 
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
@@ -2278,7 +2277,6 @@ class MotifTestPWM(unittest.TestCase):
             Seq("TACAA", IUPAC.unambiguous_dna),
             Seq("TACGC", IUPAC.ambiguous_dna),
             Seq("TACAC", IUPAC.extended_dna),
-            Seq("TACCC", Gapped(IUPAC.unambiguous_dna)),
             Seq("AACCC", IUPAC.unambiguous_dna),
             Seq("AATGC", IUPAC.unambiguous_dna),
             Seq("AATGC", generic_dna),

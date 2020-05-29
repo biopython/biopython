@@ -12,7 +12,7 @@ import warnings
 from Bio import BiopythonWarning
 from Bio import Alphabet
 from Bio import Seq
-from Bio.Alphabet import IUPAC, Gapped
+from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import (
     ambiguous_dna_complement,
     ambiguous_rna_complement,
@@ -37,10 +37,10 @@ test_seqs = [
     Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
     Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
     Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
-    Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
+    Seq.Seq("ATGAAA-CTG", Alphabet.generic_dna),
     Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
     Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
-    Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna, "=")),
+    Seq.Seq("AUGAAA==CUG", Alphabet.generic_rna),
     Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
     Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
     Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
@@ -51,25 +51,13 @@ test_seqs = [
 ]
 protein_seqs = [
     Seq.Seq("ATCGPK", IUPAC.protein),
-    Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-    Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-    Seq.Seq(
-        "MEDG-KRXR*",
-        Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"),
-    ),
-    Seq.MutableSeq(
-        "ME-K-DRXR*XU",
-        Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"),
-    ),
-    Seq.Seq(
-        "MEDG-KRXR@",
-        Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"),
-    ),
-    Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
-    Seq.Seq(
-        "MEDG.KRXR@",
-        Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), "."),
-    ),
+    Seq.Seq("T.CGPK", Alphabet.generic_protein),
+    Seq.Seq("T-CGPK", Alphabet.generic_protein),
+    Seq.Seq("MEDG-KRXR*", Alphabet.generic_protein),
+    Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.generic_protein),
+    Seq.Seq("MEDG-KRXR@", Alphabet.generic_protein),
+    Seq.Seq("ME-KR@", Alphabet.generic_protein),
+    Seq.Seq("MEDG.KRXR@", Alphabet.generic_protein),
 ]
 
 
@@ -175,49 +163,26 @@ class TestSeqStringMethods(unittest.TestCase):
             Seq.Seq("ATCG", IUPAC.ambiguous_dna),
             Seq.Seq("gtca", Alphabet.generic_dna),
             Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
-            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
+            Seq.Seq("CTG-CA", Alphabet.generic_dna),
         ]
         self.rna = [
             Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
             Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
             Seq.Seq("uCAg", Alphabet.generic_rna),
-            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
-            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
+            Seq.MutableSeq("UC-AG", Alphabet.generic_rna),
+            Seq.Seq("U.CAG", Alphabet.generic_rna),
         ]
         self.nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide)]
         self.protein = [
             Seq.Seq("ATCGPK", IUPAC.protein),
             Seq.Seq("atcGPK", Alphabet.generic_protein),
-            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-            Seq.Seq(
-                "MEDG-KRXR*",
-                Alphabet.Gapped(
-                    Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"
-                ),
-            ),
-            Seq.MutableSeq(
-                "ME-K-DRXR*XU",
-                Alphabet.Gapped(
-                    Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"
-                ),
-            ),
-            Seq.Seq(
-                "MEDG-KRXR@",
-                Alphabet.HasStopCodon(
-                    Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"
-                ),
-            ),
-            Seq.Seq(
-                "ME-KR@",
-                Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@"),
-            ),
-            Seq.Seq(
-                "MEDG.KRXR@",
-                Alphabet.Gapped(
-                    Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), "."
-                ),
-            ),
+            Seq.Seq("T.CGPK", Alphabet.generic_protein),
+            Seq.Seq("T-CGPK", Alphabet.generic_protein),
+            Seq.Seq("MEDG-KRXR*", Alphabet.generic_protein),
+            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.generic_protein),
+            Seq.Seq("MEDG-KRXR@", Alphabet.generic_protein),
+            Seq.Seq("ME-KR@", Alphabet.generic_protein),
+            Seq.Seq("MEDG.KRXR@", Alphabet.generic_protein),
         ]
         self.test_chars = ["-", Seq.Seq("-"), Seq.Seq("*"), "-X@"]
 
@@ -350,10 +315,8 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_append_proteins(self):
         self.test_chars.append(Seq.Seq("K", Alphabet.generic_protein))
-        self.test_chars.append(
-            Seq.Seq("K-", Alphabet.Gapped(Alphabet.generic_protein, "-"))
-        )
-        self.test_chars.append(Seq.Seq("K@", Alphabet.Gapped(IUPAC.protein, "@")))
+        self.test_chars.append(Seq.Seq("K-", Alphabet.generic_protein))
+        self.test_chars.append(Seq.Seq("K@", Alphabet.generic_protein))
 
         self.assertEqual(7, len(self.test_chars))
 
@@ -421,15 +384,15 @@ class TestSeqAddition(unittest.TestCase):
             Seq.Seq("ATCG", IUPAC.ambiguous_dna),
             Seq.Seq("gtca", Alphabet.generic_dna),
             Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
-            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
+            Seq.Seq("CTG-CA", Alphabet.generic_dna),
             "TGGTCA",
         ]
         self.rna = [
             Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
             Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
             Seq.Seq("uCAg", Alphabet.generic_rna),
-            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
-            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
+            Seq.MutableSeq("UC-AG", Alphabet.generic_rna),
+            Seq.Seq("U.CAG", Alphabet.generic_rna),
             "UGCAU",
         ]
         self.nuc = [
@@ -439,20 +402,10 @@ class TestSeqAddition(unittest.TestCase):
         self.protein = [
             Seq.Seq("ATCGPK", IUPAC.protein),
             Seq.Seq("atcGPK", Alphabet.generic_protein),
-            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-            Seq.Seq(
-                "MEDG-KRXR*",
-                Alphabet.Gapped(
-                    Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"
-                ),
-            ),
-            Seq.MutableSeq(
-                "ME-K-DRXR*XU",
-                Alphabet.Gapped(
-                    Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"
-                ),
-            ),
+            Seq.Seq("T.CGPK", Alphabet.generic_protein),
+            Seq.Seq("T-CGPK", Alphabet.generic_protein),
+            Seq.Seq("MEDG-KRXR*", Alphabet.generic_protein),
+            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.generic_protein),
             "TEDDF",
         ]
 
@@ -483,13 +436,6 @@ class TestSeqAddition(unittest.TestCase):
                 c = b + a
                 b += a
                 self.assertEqual(c, b)
-
-    def test_exception_when_added_rna_has_more_than_one_gap_type(self):
-        """Test resulting sequence has gap types '-' and '.'."""
-        with self.assertRaises(ValueError):
-            self.rna[3] + self.rna[4]
-        with self.assertRaises(ValueError):
-            self.rna[3] += self.rna[4]
 
     def test_addition_dna_with_dna(self):
         for a in self.dna:
@@ -532,30 +478,6 @@ class TestSeqAddition(unittest.TestCase):
                 c = b + a
                 b += a
                 self.assertEqual(c, b)
-
-    def test_exception_when_added_protein_has_more_than_one_gap_type(self):
-        """Test resulting protein has gap types '-' and '.'."""
-        a = Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, "."))
-        b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
-        with self.assertRaises(ValueError):
-            a + b
-        with self.assertRaises(ValueError):
-            a += b
-
-    def test_exception_when_added_protein_has_several_stop_codon_types(self):
-        """Test resulting protein has stop codon types '*' and '@'."""
-        a = Seq.Seq(
-            "MEDG-KRXR@",
-            Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"),
-        )
-        b = Seq.Seq(
-            "MEDG-KRXR*",
-            Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"),
-        )
-        with self.assertRaises(ValueError):
-            a + b
-        with self.assertRaises(ValueError):
-            a += b
 
     def test_exception_when_adding_protein_with_nucleotides(self):
         for a in self.protein[0:5]:
@@ -1016,9 +938,7 @@ class TestUnknownSeq(unittest.TestCase):
         seq = Seq.UnknownSeq(7, alphabet=Alphabet.generic_dna)
         self.assertEqual("NNNNNNN", str(seq.ungap("-")))
 
-        seq = Seq.UnknownSeq(
-            20, alphabet=Alphabet.generic_dna, character="-"
-        )
+        seq = Seq.UnknownSeq(20, alphabet=Alphabet.generic_dna, character="-")
         self.assertEqual("", seq.ungap("-"))
 
 
@@ -1280,45 +1200,46 @@ class TestTranslating(unittest.TestCase):
         self.assertIs(self.test_seqs[11].translate().alphabet, Alphabet.generic_protein)
         self.assertIs(self.test_seqs[12].translate().alphabet, Alphabet.generic_protein)
 
-        self.assertIs(triple_pad(self.test_seqs[13]).translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(
+            triple_pad(self.test_seqs[13]).translate().alphabet,
+            Alphabet.generic_protein,
+        )
 
         self.assertIs(self.test_seqs[14].translate().alphabet, Alphabet.generic_protein)
         self.assertIs(self.test_seqs[15].translate().alphabet, Alphabet.generic_protein)
 
-        self.assertIs(triple_pad(self.test_seqs[16]).translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(triple_pad(self.test_seqs[17]).translate().alphabet, Alphabet.generic_protein)
+        self.assertIs(
+            triple_pad(self.test_seqs[16]).translate().alphabet,
+            Alphabet.generic_protein,
+        )
+        self.assertIs(
+            triple_pad(self.test_seqs[17]).translate().alphabet,
+            Alphabet.generic_protein,
+        )
 
     def test_gapped_seq_with_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
         self.assertEqual("M-KL", seq.translate(gap="-"))
         self.assertRaises(TranslationError, seq.translate, gap="~")
 
-    def test_gapped_seq_with_stop_codon_and_gap_char_given(self):
         seq = Seq.Seq("GTG---GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         self.assertEqual("V-AIVMGR*KGAR*", seq.translate(gap="-"))
         self.assertRaises(TranslationError, seq.translate, gap=None)
 
-    def test_gapped_seq_with_gap_char_given_and_inferred_from_alphabet(self):
-        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
+        seq = Seq.Seq("ATG---AAACTG", Alphabet.generic_dna)
         self.assertEqual("M-KL", seq.translate(gap="-"))
-        self.assertRaises(ValueError, seq.translate, gap="~")
 
-        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna))
-        self.assertRaises(ValueError, seq.translate, gap="~")
+        seq = Seq.Seq("ATG~~~AAACTG", Alphabet.generic_dna)
         self.assertRaises(TranslationError, seq.translate, gap="-")
 
-    def test_gapped_seq_with_gap_char_given_and_inferred_from_alphabet2(self):
-        """Test using stop codon in sequence."""
-        seq = Seq.Seq("ATG---AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
+        seq = Seq.Seq("ATG---AAACTGTAG", Alphabet.generic_dna)
         self.assertEqual("M-KL*", seq.translate(gap="-"))
-        self.assertRaises(ValueError, seq.translate, gap="~")
 
-        seq = Seq.Seq("ATG---AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
+        seq = Seq.Seq("ATG---AAACTGTAG", Alphabet.generic_dna)
         self.assertEqual("M-KL@", seq.translate(gap="-", stop_symbol="@"))
-        self.assertRaises(ValueError, seq.translate, gap="~")
+        self.assertRaises(TranslationError, seq.translate, gap="~")
 
-        seq = Seq.Seq("ATG~~~AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
-        self.assertRaises(ValueError, seq.translate, gap="~")
+        seq = Seq.Seq("ATG~~~AAACTGTAG", Alphabet.generic_dna)
         self.assertRaises(TranslationError, seq.translate, gap="-")
 
     def test_gapped_seq_no_gap_char_given(self):
@@ -1326,13 +1247,13 @@ class TestTranslating(unittest.TestCase):
         self.assertRaises(TranslationError, seq.translate, gap=None)
 
     def test_alphabet_of_translated_gapped_seq(self):
-        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
+        seq = Seq.Seq("ATG---AAACTG", Alphabet.generic_dna)
         self.assertIs(seq.translate().alphabet, Alphabet.generic_protein)
 
-        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna, "-"))
+        seq = Seq.Seq("ATG---AAACTG", Alphabet.generic_dna)
         self.assertIs(seq.translate().alphabet, Alphabet.generic_protein)
 
-        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna, "~"))
+        seq = Seq.Seq("ATG~~~AAACTG", Alphabet.generic_dna)
         self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
 
         seq = Seq.Seq("ATG---AAACTG")

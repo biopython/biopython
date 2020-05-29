@@ -883,15 +883,13 @@ class Seq:
         alphabets are upper case only, and thus a generic alphabet must be
         substituted.
 
-        >>> from Bio.Alphabet import Gapped, generic_dna
-        >>> from Bio.Alphabet import IUPAC
+        >>> from Bio.Alphabet.IUPAC import unambiguous_dna
         >>> from Bio.Seq import Seq
-        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAG*AAAAAA",
-        ...          Gapped(IUPAC.unambiguous_dna, "*"))
+        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA", unambiguous_dna)
         >>> my_seq
-        Seq('CGGTACGCTTATGTCACGTAG*AAAAAA', Gapped(IUPACUnambiguousDNA(), '*'))
+        Seq('CGGTACGCTTATGTCACGTAGAAAAAA', IUPACUnambiguousDNA())
         >>> my_seq.lower()
-        Seq('cggtacgcttatgtcacgtag*aaaaaa', Gapped(DNAAlphabet(), '*'))
+        Seq('cggtacgcttatgtcacgtagaaaaaa', DNAAlphabet())
 
         See also the upper method.
         """
