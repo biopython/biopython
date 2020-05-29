@@ -382,7 +382,7 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
 class AbstractTrainerTest(unittest.TestCase):
     def setUp(self):
         # set up a bogus HMM and our trainer
-        hmm = MarkovModel.HiddenMarkovModel({}, {}, {}, {}, {})
+        hmm = MarkovModel.HiddenMarkovModel((), (), {}, {}, {}, {}, {})
         self.test_trainer = Trainer.AbstractTrainer(hmm)
 
     def test_ml_estimator(self):

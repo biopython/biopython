@@ -277,7 +277,7 @@ class BaumWelchTrainer(AbstractTrainer):
         emissions = self._markov_model.emission_prob
 
         # loop over the possible combinations of state path letters
-        for k in training_seq.states.alphabet.letters:
+        for k in self._markov_model.initial_prob:
             for l in self._markov_model.transitions_from(k):
                 estimated_counts = 0
                 # now loop over the entire training sequence
@@ -328,9 +328,9 @@ class BaumWelchTrainer(AbstractTrainer):
 
         """
         # loop over the possible combinations of state path letters
-        for k in training_seq.states.alphabet.letters:
+        for k in self._markov_model.state_alphabet:
             # now loop over all of the possible emissions
-            for b in training_seq.emissions.alphabet.letters:
+            for b in self._markov_model.emission_alphabet:
                 expected_times = 0
                 # finally loop over the entire training sequence
                 for i in range(len(training_seq.emissions)):

@@ -89,8 +89,8 @@ class MarkovModelBuilder:
            all of the letters for states that can be emitted by the HMM.
 
         """
-        self._state_alphabet = state_alphabet
-        self._emission_alphabet = emission_alphabet
+        self._state_alphabet = tuple(state_alphabet)
+        self._emission_alphabet = tuple(emission_alphabet)
 
         # probabilities for the initial state, initialized by calling
         # set_initial_probabilities (required)
@@ -155,6 +155,8 @@ class MarkovModelBuilder:
         emission_pseudo = copy.deepcopy(self.emission_pseudo)
 
         return HiddenMarkovModel(
+            self._state_alphabet,
+            self._emission_alphabet,
             initial_prob,
             transition_prob,
             emission_prob,
@@ -455,6 +457,8 @@ class HiddenMarkovModel:
 
     def __init__(
         self,
+        state_alphabet,
+        emission_alphabet,
         initial_prob,
         transition_prob,
         emission_prob,
@@ -467,6 +471,10 @@ class HiddenMarkovModel:
         initiating this class directly.
 
         Arguments:
+         - state_alphabet -- A tuple containing all of the letters that can
+           appear in the states.
+         - emission_alphabet -- A tuple containing all of the letters for
+           states that can be emitted by the HMM.
          - initial_prob - A dictionary of initial probabilities for all states.
          - transition_prob -- A dictionary of transition probabilities for all
            possible transitions in the sequence.
@@ -478,6 +486,9 @@ class HiddenMarkovModel:
            when counting for purposes of estimating emission probabilities.
 
         """
+        self.state_alphabet = state_alphabet
+        self.emission_alphabet = emission_alphabet
+
         self.initial_prob = initial_prob
 
         self._transition_pseudo = transition_pseudo
