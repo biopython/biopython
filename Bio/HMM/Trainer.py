@@ -33,11 +33,11 @@ class TrainingSequence:
         """Initialize a training sequence.
 
         Arguments:
-         - emissions - A Seq object containing the sequence of emissions in
-           the training sequence, and the alphabet of the sequence.
-         - state_path - A Seq object containing the sequence of states and
-           the alphabet of the states. If there is no known state path, then
-           the sequence of states should be an empty string.
+         - emissions - An iterable (e.g., a tuple, list, or Seq object)
+           containing the sequence of emissions in the training sequence.
+         - state_path - An iterable (e.g., a tuple or list) containing the
+           sequence of states. If there is no known state path, then the
+           sequence of states should be an empty iterable.
 
         """
         if len(state_path) > 0 and len(emissions) != len(state_path):
@@ -277,7 +277,7 @@ class BaumWelchTrainer(AbstractTrainer):
         emissions = self._markov_model.emission_prob
 
         # loop over the possible combinations of state path letters
-        for k in training_seq.states.alphabet.letters:
+        for k in self._markov_model.state_alphabet:
             for l in self._markov_model.transitions_from(k):
                 estimated_counts = 0
                 # now loop over the entire training sequence
@@ -328,9 +328,9 @@ class BaumWelchTrainer(AbstractTrainer):
 
         """
         # loop over the possible combinations of state path letters
-        for k in training_seq.states.alphabet.letters:
+        for k in self._markov_model.state_alphabet:
             # now loop over all of the possible emissions
-            for b in training_seq.emissions.alphabet.letters:
+            for b in self._markov_model.emission_alphabet:
                 expected_times = 0
                 # finally loop over the entire training sequence
                 for i in range(len(training_seq.emissions)):
