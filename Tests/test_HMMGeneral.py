@@ -96,8 +96,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         self.assertEqual(self.mm_builder.transition_prob, expected_prob)
 
-        self.assertEqual(self.mm_builder.transition_pseudo, expected_pseudo
-        )
+        self.assertEqual(self.mm_builder.transition_pseudo, expected_pseudo)
 
     def test_set_initial_probabilities(self):
         self.mm_builder.set_initial_probabilities({})
@@ -408,7 +407,7 @@ class AbstractTrainerTest(unittest.TestCase):
 
         log_prob = self.test_trainer.log_likelihood(probs)
         expected_log_prob = -7.31873556778
-        self.assertAlmostEqual(expected_log_prob,  log_prob)
+        self.assertAlmostEqual(expected_log_prob, log_prob)
 
 
 # run the tests
