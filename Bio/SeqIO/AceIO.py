@@ -14,7 +14,7 @@ the contig consensus sequences in an ACE file as SeqRecord objects.
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
+from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna
 from Bio.Sequencing import Ace
 
 
@@ -76,9 +76,7 @@ def AceIterator(source):
             # For consistency with most other file formats, map
             # any * gaps into - gaps.
             assert "-" not in consensus_seq_str
-            consensus_seq = Seq(
-                consensus_seq_str.replace("*", "-"), Gapped(alpha, gap_char="-")
-            )
+            consensus_seq = Seq(consensus_seq_str.replace("*", "-"), alpha)
         else:
             consensus_seq = Seq(consensus_seq_str, alpha)
 
