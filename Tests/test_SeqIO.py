@@ -33,10 +33,7 @@ from Bio import StreamModeError
 protein_alphas = [Alphabet.generic_protein]
 dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
-nucleotide_alphas = [
-    Alphabet.generic_nucleotide,
-    Alphabet.Gapped(Alphabet.generic_nucleotide),
-]
+nucleotide_alphas = [Alphabet.generic_nucleotide]
 no_alpha_formats = {
     "clustal",
     "emboss",
