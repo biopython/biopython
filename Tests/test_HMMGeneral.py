@@ -16,7 +16,6 @@ import unittest
 import math
 
 # biopython
-from Bio import Alphabet
 from Bio.Seq import Seq
 
 
@@ -27,38 +26,30 @@ from Bio.HMM import Trainer
 
 
 # create some simple alphabets
-class NumberAlphabet(Alphabet.Alphabet):
-    """Numbers as the states of the model."""
-
-    letters = ["1", "2"]
-
-
-class LetterAlphabet(Alphabet.Alphabet):
-    """Letters as the emissions of the model."""
-
-    letters = ["A", "B"]
+number_alphabet = ("1", "2")  # Numbers as the states of the model.
+letter_alphabet = ("A", "B")  # Letters as the emissions of the model.
 
 
 class TrainingSequenceTest(unittest.TestCase):
     """Training sequence tests."""
 
     def test_empty_state_training_sequence(self):
-        emission_seq = Seq("AB", LetterAlphabet())
-        state_seq = Seq("", NumberAlphabet())
+        emission_seq = Seq("AB")
+        state_seq = ()
         training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
         self.assertEqual(training_seq.emissions, emission_seq)
         self.assertEqual(training_seq.states, state_seq)
 
     def test_valid_training_sequence(self):
-        emission_seq = Seq("AB", LetterAlphabet())
-        state_seq = Seq("12", NumberAlphabet())
+        emission_seq = Seq("AB")
+        state_seq = ("1", "2")
         training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
         self.assertEqual(training_seq.emissions, emission_seq)
         self.assertEqual(training_seq.states, state_seq)
 
     def test_invalid_training_sequence(self):
-        emission_seq = Seq("AB", LetterAlphabet())
-        state_seq = Seq("1", NumberAlphabet())
+        emission_seq = Seq("AB")
+        state_seq = ("1", )
         with self.assertRaises(ValueError):
             Trainer.TrainingSequence(emission_seq, state_seq)
 
@@ -68,7 +59,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(
-            NumberAlphabet().letters, LetterAlphabet().letters
+            number_alphabet, letter_alphabet
         )
 
     def test_test_initialize(self):
@@ -150,7 +141,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 class HiddenMarkovModelTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(
-            NumberAlphabet().letters, LetterAlphabet().letters
+            number_alphabet, letter_alphabet
         )
 
     def test_transitions_from(self):
@@ -255,10 +246,10 @@ class HiddenMarkovModelTest(unittest.TestCase):
 
         # Check all two letter sequences using a brute force calculation
         model = self.mm_builder.get_markov_model()
-        for first_letter in LetterAlphabet.letters:
-            for second_letter in LetterAlphabet.letters:
+        for first_letter in letter_alphabet:
+            for second_letter in letter_alphabet:
                 observed_emissions = [first_letter, second_letter]
-                viterbi = model.viterbi(observed_emissions, NumberAlphabet().letters)
+                viterbi = model.viterbi(observed_emissions, number_alphabet)
                 self._checkSimpleHmm(
                     prob_initial,
                     prob_transition,
@@ -280,8 +271,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
         letter1 = ord(observed_emissions[0]) - ord("A")
         letter2 = ord(observed_emissions[1]) - ord("A")
 
-        for first_state in NumberAlphabet.letters:
-            for second_state in NumberAlphabet.letters:
+        for first_state in number_alphabet:
+            for second_state in number_alphabet:
                 # compute the probability of the state sequence first_state,
                 # second_state emitting the observed_emissions
                 state1 = ord(first_state) - ord("1")
@@ -336,7 +327,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # run the Viterbi algorithm to find the most probable state path
         model = self.mm_builder.get_markov_model()
         observed_emissions = ["A", "B"]
-        viterbi = model.viterbi(observed_emissions, NumberAlphabet().letters)
+        viterbi = model.viterbi(observed_emissions, number_alphabet)
         seq = viterbi[0]
         prob = viterbi[1]
 
@@ -359,15 +350,15 @@ class HiddenMarkovModelTest(unittest.TestCase):
 class ScaledDPAlgorithmsTest(unittest.TestCase):
     def setUp(self):
         # set up our Markov Model
-        mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet().letters, LetterAlphabet().letters)
+        mm_builder = MarkovModel.MarkovModelBuilder(number_alphabet, letter_alphabet)
         mm_builder.allow_all_transitions()
         mm_builder.set_equal_probabilities()
 
         mm = mm_builder.get_markov_model()
 
         # now set up a test sequence
-        emission_seq = Seq("ABB", LetterAlphabet())
-        state_seq = Seq("", NumberAlphabet())
+        emission_seq = Seq("ABB")
+        state_seq = ()
         training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
 
         # finally set up the DP

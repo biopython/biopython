@@ -12,7 +12,7 @@ import math
 import random
 from collections import defaultdict
 
-from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 
 def _gen_random_array(n):
@@ -168,7 +168,7 @@ class MarkovModelBuilder:
         """Set initial state probabilities.
 
         initial_prob is a dictionary mapping states to probabilities.
-        Suppose, for example, that the state alphabet is ['A', 'B']. Call
+        Suppose, for example, that the state alphabet is ('A', 'B'). Call
         set_initial_prob({'A': 1}) to guarantee that the initial
         state will be 'A'. Call set_initial_prob({'A': 0.5, 'B': 0.5})
         to make each initial state equally probable.
@@ -564,8 +564,8 @@ class HiddenMarkovModel:
         Arguments:
          - sequence -- A Seq object with the emission sequence that we
            want to decode.
-         - state_alphabet -- The alphabet of the possible state sequences
-           that can be generated.
+         - state_alphabet -- An iterable (e.g., tuple or list) containing
+           all of the letters that can appear in the states
 
         """
         # calculate logarithms of the initial, transition, and emission probs
@@ -637,7 +637,7 @@ class HiddenMarkovModel:
         assert last_state != "", "Didn't find the last state to trace from!"
 
         # --- traceback
-        traceback_seq = MutableSeq("", state_alphabet)
+        traceback_seq = []
 
         loop_seq = list(range(1, len(sequence)))
         loop_seq.reverse()
@@ -654,8 +654,9 @@ class HiddenMarkovModel:
 
         # put the traceback sequence in the proper orientation
         traceback_seq.reverse()
+        traceback_seq = "".join(traceback_seq)
 
-        return traceback_seq.toseq(), state_path_prob
+        return Seq(traceback_seq), state_path_prob
 
     def _log_transform(self, probability):
         """Return log transform of the given probability dictionary (PRIVATE).
