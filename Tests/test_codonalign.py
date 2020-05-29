@@ -14,7 +14,7 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped, generic_dna, generic_protein
+from Bio.Alphabet import IUPAC, generic_dna, generic_protein
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import CodonTable
 
@@ -140,7 +140,7 @@ class TestBuildAndIO(unittest.TestCase):
             elif i[1] == "index":
                 # Deliberately using a fancy protein alphabet for testing:
                 nucl = SeqIO.index(i[0][0], "fasta", alphabet=IUPAC.IUPACUnambiguousDNA())
-                prot = AlignIO.read(i[0][1], "clustal", alphabet=Gapped(IUPAC.ExtendedIUPACProtein()))
+                prot = AlignIO.read(i[0][1], "clustal", alphabet=generic_protein)
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
                     caln = codonalign.build(prot, nucl, alphabet=codonalign.default_codon_alphabet, max_score=20)
