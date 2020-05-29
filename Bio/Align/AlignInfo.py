@@ -16,7 +16,6 @@ import math
 import sys
 
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
 
@@ -42,9 +41,7 @@ class SummaryInfo:
         self.alignment = alignment
         self.ic_vector = []
 
-    def dumb_consensus(
-        self, threshold=0.7, ambiguous="X", consensus_alpha=None, require_multiple=0
-    ):
+    def dumb_consensus(self, threshold=0.7, ambiguous="X", require_multiple=False):
         """Output a fast consensus sequence of the alignment.
 
         This doesn't do anything fancy at all. It will just go through the
@@ -62,9 +59,7 @@ class SummaryInfo:
            atom.
          - ambiguous - The ambiguous character to be added when the threshold is
            not reached.
-         - consensus_alpha - The alphabet to return for the consensus sequence.
-           If this is None, then we will try to guess the alphabet.
-         - require_multiple - If set as 1, this will require that more than
+         - require_multiple - If set as True, this will require that more than
            1 sequence be part of an alignment to put it in the consensus (ie.
            not just 1 sequence and gaps).
 
@@ -112,15 +107,9 @@ class SummaryInfo:
             else:
                 consensus += ambiguous
 
-        # we need to guess a consensus alphabet if one isn't specified
-        if consensus_alpha is None:
-            consensus_alpha = self._guess_consensus_alphabet(ambiguous)
+        return Seq(consensus)
 
-        return Seq(consensus, consensus_alpha)
-
-    def gap_consensus(
-        self, threshold=0.7, ambiguous="X", consensus_alpha=None, require_multiple=0
-    ):
+    def gap_consensus(self, threshold=0.7, ambiguous="X", require_multiple=False):
         """Output a fast consensus sequence of the alignment, allowing gaps.
 
         Same as dumb_consensus(), but allows gap on the output.
@@ -132,7 +121,6 @@ class SummaryInfo:
            it takes the same as input.
 
         """
-        # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ""
 
         # find the length of the consensus we are creating
@@ -174,58 +162,7 @@ class SummaryInfo:
             else:
                 consensus += ambiguous
 
-        # we need to guess a consensus alphabet if one isn't specified
-        if consensus_alpha is None:
-            # TODO - Should we make this into a Gapped alphabet?
-            consensus_alpha = self._guess_consensus_alphabet(ambiguous)
-
-        return Seq(consensus, consensus_alpha)
-
-    def _guess_consensus_alphabet(self, ambiguous):
-        """Pick an (ungapped) alphabet for an alignment consesus sequence (PRIVATE).
-
-        This just looks at the sequences we have, checks their type, and
-        returns as appropriate type which seems to make sense with the
-        sequences we've got.
-        """
-        # Start with the (un-gapped version of) the alignment alphabet
-        a = Alphabet._get_base_alphabet(self.alignment._alphabet)
-
-        # Now check its compatible with all the rest of the sequences
-        for record in self.alignment:
-            # Get the (un-gapped version of) the sequence's alphabet
-            alt = Alphabet._get_base_alphabet(record.seq.alphabet)
-            if not isinstance(alt, a.__class__):
-                raise ValueError(
-                    "Alignment contains a sequence with an incompatible alphabet."
-                )
-
-        # Check the ambiguous character we are going to use in the consensus
-        # is in the alphabet's list of valid letters (if defined).
-        if (
-            hasattr(a, "letters")
-            and a.letters is not None
-            and ambiguous not in a.letters
-        ):
-            # We'll need to pick a more generic alphabet...
-            if isinstance(a, IUPAC.IUPACUnambiguousDNA):
-                if ambiguous in IUPAC.IUPACUnambiguousDNA().letters:
-                    a = IUPAC.IUPACUnambiguousDNA()
-                else:
-                    a = Alphabet.generic_dna
-            elif isinstance(a, IUPAC.IUPACUnambiguousRNA):
-                if ambiguous in IUPAC.IUPACUnambiguousRNA().letters:
-                    a = IUPAC.IUPACUnambiguousRNA()
-                else:
-                    a = Alphabet.generic_rna
-            elif isinstance(a, IUPAC.IUPACProtein):
-                if ambiguous in IUPAC.ExtendedIUPACProtein().letters:
-                    a = IUPAC.ExtendedIUPACProtein()
-                else:
-                    a = Alphabet.generic_protein
-            else:
-                a = Alphabet.single_letter_alphabet
-        return a
+        return Seq(consensus)
 
     def replacement_dictionary(self, skip_chars=None):
         """Generate a replacement dictionary to plug into a substitution matrix.
