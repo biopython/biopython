@@ -1207,11 +1207,12 @@ class Seq:
 
         return Seq(protein, Alphabet.generic_protein)
 
-    def ungap(self, gap=None):
+    def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
 
-        The gap character can be specified in two ways - either as an explicit
-        argument, or via the sequence's alphabet. For example:
+        The gap character now defaults to the minus sign, and can only
+        be specified via the method argument. This is no longer possible
+        via sequence's alphabet (as was possible up to Biopython 1.77):
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
@@ -1220,79 +1221,14 @@ class Seq:
         Seq('-ATA--TGAAAT-TTGAAAA', DNAAlphabet())
         >>> my_dna.ungap("-")
         Seq('ATATGAAATTTGAAAA', DNAAlphabet())
-
-        If the gap character is not given as an argument, it will be taken from
-        the sequence's alphabet (if defined). Notice that the returned
-        sequence's alphabet is adjusted since it no longer requires a gapped
-        alphabet:
-
-        >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC, Gapped, HasStopCodon
-        >>> my_pro = Seq("MVVLE=AD*", HasStopCodon(Gapped(IUPAC.protein, "=")))
-        >>> my_pro
-        Seq('MVVLE=AD*', HasStopCodon(Gapped(IUPACProtein(), '='), '*'))
-        >>> my_pro.ungap()
-        Seq('MVVLEAD*', HasStopCodon(IUPACProtein(), '*'))
-
-        Or, with a simpler gapped DNA example:
-
-        >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC, Gapped
-        >>> my_seq = Seq("CGGGTAG=AAAAAA", Gapped(IUPAC.unambiguous_dna, "="))
-        >>> my_seq
-        Seq('CGGGTAG=AAAAAA', Gapped(IUPACUnambiguousDNA(), '='))
-        >>> my_seq.ungap()
-        Seq('CGGGTAGAAAAAA', IUPACUnambiguousDNA())
-
-        As long as it is consistent with the alphabet, although it is
-        redundant, you can still supply the gap character as an argument to
-        this method:
-
-        >>> my_seq
-        Seq('CGGGTAG=AAAAAA', Gapped(IUPACUnambiguousDNA(), '='))
-        >>> my_seq.ungap("=")
-        Seq('CGGGTAGAAAAAA', IUPACUnambiguousDNA())
-
-        However, if the gap character given as the argument disagrees with that
-        declared in the alphabet, an exception is raised:
-
-        >>> my_seq
-        Seq('CGGGTAG=AAAAAA', Gapped(IUPACUnambiguousDNA(), '='))
-        >>> my_seq.ungap("-")
-        Traceback (most recent call last):
-           ...
-        ValueError: Gap '-' does not match '=' from alphabet
-
-        Finally, if a gap character is not supplied, and the alphabet does not
-        define one, an exception is raised:
-
-        >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
-        >>> my_dna = Seq("ATA--TGAAAT-TTGAAAA", generic_dna)
-        >>> my_dna
-        Seq('ATA--TGAAAT-TTGAAAA', DNAAlphabet())
-        >>> my_dna.ungap()
-        Traceback (most recent call last):
-           ...
-        ValueError: Gap character not given and not defined in alphabet
-
         """
         if hasattr(self.alphabet, "gap_char"):
-            if not gap:
-                gap = self.alphabet.gap_char
-            elif gap != self.alphabet.gap_char:
-                raise ValueError(
-                    f"Gap {gap!r} does not match {self.alphabet.gap_char!r}"
-                    " from alphabet"
-                )
-            alpha = Alphabet._ungap(self.alphabet)
+            raise NotImplementedError("We stopped supporting the Gapped class...")
         elif not gap:
-            raise ValueError("Gap character not given and not defined in alphabet")
-        else:
-            alpha = self.alphabet  # modify!
-        if len(gap) != 1 or not isinstance(gap, str):
+            raise ValueError("Gap character required.")
+        elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
-        return Seq(str(self).replace(gap, ""), alpha)
+        return Seq(str(self).replace(gap, ""), self.alphabet)
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
@@ -1828,18 +1764,19 @@ class UnknownSeq(Seq):
             raise ValueError("Proteins cannot be translated!")
         return UnknownSeq(self._length // 3, Alphabet.generic_protein, "X")
 
-    def ungap(self, gap=None):
+    def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
 
-        The gap character can be specified in two ways - either as an explicit
-        argument, or via the sequence's alphabet. For example:
+        The gap character now defaults to the minus sign, and can only
+        be specified via the method argument. This is no longer possible
+        via sequence's alphabet (as was possible up to Biopython 1.77):
 
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import Gapped, generic_dna
-        >>> my_dna = UnknownSeq(20, Gapped(generic_dna, "-"))
+        >>> my_dna = UnknownSeq(20, alphabet=generic_dna)
         >>> my_dna
-        UnknownSeq(20, alphabet=Gapped(DNAAlphabet(), '-'), character='N')
-        >>> my_dna.ungap()
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
+        >>> my_dna.ungap()  # using default
         UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
         >>> my_dna.ungap("-")
         UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
@@ -1847,18 +1784,15 @@ class UnknownSeq(Seq):
         If the UnknownSeq is using the gap character, then an empty Seq is
         returned:
 
-        >>> my_gap = UnknownSeq(20, Gapped(generic_dna, "-"), character="-")
+        >>> my_gap = UnknownSeq(20, generic_dna, character="-")
         >>> my_gap
-        UnknownSeq(20, alphabet=Gapped(DNAAlphabet(), '-'), character='-')
-        >>> my_gap.ungap()
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='-')
+        >>> my_gap.ungap()  # using default
         Seq('', DNAAlphabet())
         >>> my_gap.ungap("-")
         Seq('', DNAAlphabet())
-
-        Notice that the returned sequence's alphabet is adjusted to remove any
-        explicit gap character declaration.
         """
-        # Offload the alphabet stuff
+        # Offload the argument validation
         s = Seq(self._character, self.alphabet).ungap(gap)
         if s:
             return UnknownSeq(self._length, s.alphabet, self._character)

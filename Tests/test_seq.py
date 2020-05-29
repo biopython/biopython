@@ -165,7 +165,7 @@ class TestSeq(unittest.TestCase):
             Seq.Seq("ATC-CCA").ungap("--")
 
         with self.assertRaises(ValueError):
-            Seq.Seq("ATC-CCA").ungap()
+            Seq.Seq("ATC-CCA").ungap(gap=None)
 
 
 class TestSeqStringMethods(unittest.TestCase):
@@ -1013,11 +1013,11 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertRaises(ValueError, seq.translate)
 
     def test_ungap(self):
-        seq = Seq.UnknownSeq(7, alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(), "-"))
+        seq = Seq.UnknownSeq(7, alphabet=Alphabet.generic_dna)
         self.assertEqual("NNNNNNN", str(seq.ungap("-")))
 
         seq = Seq.UnknownSeq(
-            20, alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(), "-"), character="-"
+            20, alphabet=Alphabet.generic_dna, character="-"
         )
         self.assertEqual("", seq.ungap("-"))
 
