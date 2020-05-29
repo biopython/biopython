@@ -33,13 +33,9 @@ class AlignInfoTests(unittest.TestCase):
 
         c = summary.dumb_consensus(ambiguous="N")
         self.assertEqual(str(c), "NNNNNNNN")
-        self.assertNotEqual(c.alphabet, unambiguous_dna)
-        self.assertIsInstance(c.alphabet, DNAAlphabet)
 
         c = summary.gap_consensus(ambiguous="N")
         self.assertEqual(str(c), "NNNNNNNN")
-        self.assertNotEqual(c.alphabet, unambiguous_dna)
-        self.assertIsInstance(c.alphabet, DNAAlphabet)
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
 
