@@ -25,7 +25,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
-from Bio.Alphabet import Gapped
 
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
@@ -165,16 +164,12 @@ handle.name: {handle.name}
         alignment.append(record)
 
         # TODO - What if a specific alphabet has been requested?
-        # TODO - Use an IUPAC alphabet?
         # TODO - Can FASTA output RNA?
         if alphabet == single_letter_alphabet and "sq_type" in query_tags:
             if query_tags["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
             elif query_tags["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
-        if "-" in q:
-            if not hasattr(record.seq.alphabet, "gap_char"):
-                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
 
         # Match
         # =====
@@ -196,9 +191,6 @@ handle.name: {handle.name}
                 record.seq.alphabet = generic_dna
             elif match_tags["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
-        if "-" in m:
-            if not hasattr(record.seq.alphabet, "gap_char"):
-                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
 
         return alignment
 
