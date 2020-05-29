@@ -68,7 +68,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(
-            NumberAlphabet(), LetterAlphabet()
+            NumberAlphabet().letters, LetterAlphabet().letters
         )
 
     def test_test_initialize(self):
@@ -142,7 +142,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_random_probabilities()
 
-        self.assertEqual(len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet.letters))
+        self.assertEqual(len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet))
         # To test this more thoroughly, perhaps mock random.random() and
         # verify that it's being called as expected?
 
@@ -150,7 +150,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 class HiddenMarkovModelTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(
-            NumberAlphabet(), LetterAlphabet()
+            NumberAlphabet().letters, LetterAlphabet().letters
         )
 
     def test_transitions_from(self):
@@ -258,7 +258,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         for first_letter in LetterAlphabet.letters:
             for second_letter in LetterAlphabet.letters:
                 observed_emissions = [first_letter, second_letter]
-                viterbi = model.viterbi(observed_emissions, NumberAlphabet)
+                viterbi = model.viterbi(observed_emissions, NumberAlphabet().letters)
                 self._checkSimpleHmm(
                     prob_initial,
                     prob_transition,
@@ -336,7 +336,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # run the Viterbi algorithm to find the most probable state path
         model = self.mm_builder.get_markov_model()
         observed_emissions = ["A", "B"]
-        viterbi = model.viterbi(observed_emissions, NumberAlphabet)
+        viterbi = model.viterbi(observed_emissions, NumberAlphabet().letters)
         seq = viterbi[0]
         prob = viterbi[1]
 
@@ -359,7 +359,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
 class ScaledDPAlgorithmsTest(unittest.TestCase):
     def setUp(self):
         # set up our Markov Model
-        mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(), LetterAlphabet())
+        mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet().letters, LetterAlphabet().letters)
         mm_builder.allow_all_transitions()
         mm_builder.set_equal_probabilities()
 

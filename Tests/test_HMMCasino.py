@@ -127,7 +127,7 @@ class TestHMMCasino(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mm_builder = MarkovModel.MarkovModelBuilder(
-            DiceTypeAlphabet(), DiceRollAlphabet()
+            DiceTypeAlphabet().letters, DiceRollAlphabet().letters
         )
         cls.mm_builder.allow_all_transitions()
         cls.mm_builder.set_random_probabilities()
@@ -144,7 +144,7 @@ class TestHMMCasino(unittest.TestCase):
             print(trained_mm.transition_prob)
             print(trained_mm.emission_prob)
         test_rolls, test_states = generate_rolls(300)
-        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
+        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet().letters)
         if VERBOSE:
             print("Prediction probability: %f" % prob)
             Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
@@ -171,7 +171,7 @@ class TestHMMCasino(unittest.TestCase):
             print(trained_mm.transition_prob)
             print(trained_mm.emission_prob)
         test_rolls, test_states = generate_rolls(300)
-        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
+        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet().letters)
         if VERBOSE:
             print("Prediction probability: %f" % prob)
             Utilities.pretty_print_prediction(

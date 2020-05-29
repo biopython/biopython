@@ -83,10 +83,10 @@ class MarkovModelBuilder:
         """Initialize a builder to create Markov Models.
 
         Arguments:
-         - state_alphabet -- An alphabet containing all of the letters that
-           can appear in the states
-         - emission_alphabet -- An alphabet containing all of the letters for
-           states that can be emitted by the HMM.
+         - state_alphabet -- An iterable (e.g., tuple or list) containing
+           all of the letters that can appear in the states
+         - emission_alphabet -- An iterable (e.g., tuple or list) containing
+           all of the letters for states that can be emitted by the HMM.
 
         """
         self._state_alphabet = state_alphabet
@@ -114,8 +114,8 @@ class MarkovModelBuilder:
         are all set to 0.
         """
         all_blank = {}
-        for first_state in first_alphabet.letters:
-            for second_state in second_alphabet.letters:
+        for first_state in first_alphabet:
+            for second_state in second_alphabet:
                 all_blank[(first_state, second_state)] = 0
 
         return all_blank
@@ -129,8 +129,8 @@ class MarkovModelBuilder:
         are all set to the value of the class attribute DEFAULT_PSEUDO.
         """
         all_counts = {}
-        for first_state in first_alphabet.letters:
-            for second_state in second_alphabet.letters:
+        for first_state in first_alphabet:
+            for second_state in second_alphabet:
                 all_counts[(first_state, second_state)] = self.DEFAULT_PSEUDO
 
         return all_counts
@@ -186,13 +186,13 @@ class MarkovModelBuilder:
 
         # ensure that all referenced states are valid
         for state in initial_prob:
-            if state not in self._state_alphabet.letters:
+            if state not in self._state_alphabet:
                 raise ValueError(
                     "State %s was not found in the sequence alphabet" % state
                 )
 
         # distribute the residual probability, if any
-        num_states_not_set = len(self._state_alphabet.letters) - len(self.initial_prob)
+        num_states_not_set = len(self._state_alphabet) - len(self.initial_prob)
         if num_states_not_set < 0:
             raise Exception("Initial probabilities can't exceed # of states")
         prob_sum = sum(self.initial_prob.values())
@@ -200,7 +200,7 @@ class MarkovModelBuilder:
             raise Exception("Total initial probability cannot exceed 1.0")
         if num_states_not_set > 0:
             prob = (1.0 - prob_sum) / num_states_not_set
-            for state in self._state_alphabet.letters:
+            for state in self._state_alphabet:
                 if state not in self.initial_prob:
                     self.initial_prob[state] = prob
 
@@ -224,7 +224,7 @@ class MarkovModelBuilder:
         """
         # set initial state probabilities
         new_initial_prob = float(1) / float(len(self.transition_prob))
-        for state in self._state_alphabet.letters:
+        for state in self._state_alphabet:
             self.initial_prob[state] = new_initial_prob
 
         # set the transitions
@@ -242,8 +242,8 @@ class MarkovModelBuilder:
 
         Returns the dictionary containing the initial probabilities.
         """
-        initial_freqs = _gen_random_array(len(self._state_alphabet.letters))
-        for state in self._state_alphabet.letters:
+        initial_freqs = _gen_random_array(len(self._state_alphabet))
+        for state in self._state_alphabet:
             self.initial_prob[state] = initial_freqs.pop()
 
         return self.initial_prob
@@ -339,7 +339,7 @@ class MarkovModelBuilder:
         """
         # check the sanity of adding these states
         for state in [from_state, to_state]:
-            if state not in self._state_alphabet.letters:
+            if state not in self._state_alphabet:
                 raise ValueError(
                     "State %s was not found in the sequence alphabet" % state
                 )
@@ -564,7 +564,6 @@ class HiddenMarkovModel:
 
         viterbi_probs = {}
         pred_state_seq = {}
-        state_letters = state_alphabet.letters
 
         # --- recursion
         # loop over the training squence (i = 1 .. L)
@@ -573,7 +572,7 @@ class HiddenMarkovModel:
         # (Length - 1) not 1 to Length, like in Durbin et al.
         for i in range(0, len(sequence)):
             # loop over all of the possible i-th states in the state path
-            for cur_state in state_letters:
+            for cur_state in state_alphabet:
                 # e_{l}(x_{i})
                 emission_part = log_emission[(cur_state, sequence[i])]
 
@@ -612,7 +611,7 @@ class HiddenMarkovModel:
         # calculate the probability of the state path
         # loop over all states
         all_probs = {}
-        for state in state_letters:
+        for state in state_alphabet:
             # v_{k}(L)
             all_probs[state] = viterbi_probs[(state, len(sequence) - 1)]
 
