@@ -39,12 +39,6 @@ class LetterAlphabet(Alphabet.Alphabet):
     letters = ["A", "B"]
 
 
-# -- helper functions
-def test_assertion(name, result, expected):
-    """Helper function to test an assertion and print out a reasonable error."""
-    assert result == expected, "Expected %s, got %s for %s" % (expected, result, name)
-
-
 class TrainingSequenceTest(unittest.TestCase):
     """Training sequence tests."""
 
@@ -52,15 +46,15 @@ class TrainingSequenceTest(unittest.TestCase):
         emission_seq = Seq("AB", LetterAlphabet())
         state_seq = Seq("", NumberAlphabet())
         training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
-        assert training_seq.emissions == emission_seq
-        assert training_seq.states == state_seq
+        self.assertEqual(training_seq.emissions, emission_seq)
+        self.assertEqual(training_seq.states, state_seq)
 
     def test_valid_training_sequence(self):
         emission_seq = Seq("AB", LetterAlphabet())
         state_seq = Seq("12", NumberAlphabet())
         training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
-        assert training_seq.emissions == emission_seq
-        assert training_seq.states == state_seq
+        self.assertEqual(training_seq.emissions, emission_seq)
+        self.assertEqual(training_seq.states, state_seq)
 
     def test_invalid_training_sequence(self):
         emission_seq = Seq("AB", LetterAlphabet())
@@ -96,20 +90,10 @@ class MarkovModelBuilderTest(unittest.TestCase):
         }
 
         assertions = []
-        test_assertion(
-            "Transition prob", self.mm_builder.transition_prob, expected_transition_prob
-        )
-        test_assertion(
-            "Transition pseudo",
-            self.mm_builder.transition_pseudo,
-            expected_transition_pseudo,
-        )
-        test_assertion(
-            "Emission prob", self.mm_builder.emission_prob, expected_emission_prob
-        )
-        test_assertion(
-            "Emission pseudo", self.mm_builder.emission_pseudo, expected_emission_pseudo
-        )
+        self.assertEqual(self.mm_builder.transition_prob, expected_transition_prob)
+        self.assertEqual(self.mm_builder.transition_pseudo, expected_transition_pseudo)
+        self.assertEqual(self.mm_builder.emission_prob, expected_emission_prob)
+        self.assertEqual(self.mm_builder.emission_pseudo, expected_emission_pseudo)
 
     def test_allow_all_transitions(self):
         """Testing allow_all_transitions."""
@@ -119,19 +103,14 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         expected_pseudo = {("2", "1"): 1, ("1", "1"): 1, ("1", "2"): 1, ("2", "2"): 1}
 
-        test_assertion("Probabilities", self.mm_builder.transition_prob, expected_prob)
+        self.assertEqual(self.mm_builder.transition_prob, expected_prob)
 
-        test_assertion(
-            "Pseudo counts", self.mm_builder.transition_pseudo, expected_pseudo
+        self.assertEqual(self.mm_builder.transition_pseudo, expected_pseudo
         )
 
     def test_set_initial_probabilities(self):
         self.mm_builder.set_initial_probabilities({})
-        test_assertion(
-            "Equal initial probabilities by default",
-            self.mm_builder.initial_prob,
-            {"1": 0.5, "2": 0.5},
-        )
+        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5})
 
         # initial probability sum > 1, should raise an exception
         self.assertRaises(
@@ -144,50 +123,26 @@ class MarkovModelBuilderTest(unittest.TestCase):
         )
 
         self.mm_builder.set_initial_probabilities({"1": 0.2})
-        test_assertion(
-            "One default initial probability",
-            self.mm_builder.initial_prob,
-            {"1": 0.2, "2": 0.8},
-        )
+        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.2, "2": 0.8})
 
         self.mm_builder.set_initial_probabilities({"1": 0.9, "2": 0.1})
-        test_assertion(
-            "Set initial probabilities",
-            self.mm_builder.initial_prob,
-            {"1": 0.9, "2": 0.1},
-        )
+        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.9, "2": 0.1})
 
     def test_set_equal_probabilities(self):
         self.mm_builder.allow_transition("1", "2", 0.05)
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_equal_probabilities()
 
-        test_assertion(
-            "Equal initial probabilities",
-            self.mm_builder.initial_prob,
-            {"1": 0.5, "2": 0.5},
-        )
-        test_assertion(
-            "Equal transition probabilities",
-            self.mm_builder.transition_prob,
-            {("1", "2"): 0.5, ("2", "1"): 0.5},
-        )
-        test_assertion(
-            "Equal emission probabilities",
-            self.mm_builder.emission_prob,
-            {("2", "A"): 0.25, ("1", "B"): 0.25, ("1", "A"): 0.25, ("2", "B"): 0.25},
-        )
+        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5},)
+        self.assertEqual(self.mm_builder.transition_prob, {("1", "2"): 0.5, ("2", "1"): 0.5})
+        self.assertEqual(self.mm_builder.emission_prob, {("2", "A"): 0.25, ("1", "B"): 0.25, ("1", "A"): 0.25, ("2", "B"): 0.25})
 
     def test_set_random_probabilities(self):
         self.mm_builder.allow_transition("1", "2", 0.05)
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_random_probabilities()
 
-        test_assertion(
-            "Number of initial probabilities",
-            len(self.mm_builder.initial_prob),
-            len(self.mm_builder._state_alphabet.letters),
-        )
+        self.assertEqual(len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet.letters))
         # To test this more thoroughly, perhaps mock random.random() and
         # verify that it's being called as expected?
 
@@ -210,25 +165,17 @@ class HiddenMarkovModelTest(unittest.TestCase):
         expected_state_1 = ["2"]
         state_1.sort()
         expected_state_1.sort()
-        test_assertion(
-            "States reached by transitions from state 1", state_1, expected_state_1
-        )
+        self.assertEqual(state_1, expected_state_1)
 
         state_2 = self.mm.transitions_from("2")
         expected_state_2 = ["1", "2"]
         state_2.sort()
         expected_state_2.sort()
-        test_assertion(
-            "States reached by transitions from state 2", state_2, expected_state_2
-        )
+        self.assertEqual(state_2, expected_state_2)
 
         fake_state = self.mm.transitions_from("Fake")
         expected_fake_state = []
-        test_assertion(
-            "States reached by transitions from a fake transition",
-            fake_state,
-            expected_fake_state,
-        )
+        self.assertEqual(fake_state, expected_fake_state)
 
     def test_transitions_to(self):
         """Testing the calculation of transitions_to."""
@@ -242,21 +189,17 @@ class HiddenMarkovModelTest(unittest.TestCase):
         expected_state_1 = ["1", "2"]
         state_1.sort()
         expected_state_1.sort()
-        test_assertion("States with transitions to state 1", state_1, expected_state_1)
+        self.assertEqual(state_1, expected_state_1)
 
         state_2 = self.mm.transitions_to("2")
         expected_state_2 = ["1"]
         state_2.sort()
         expected_state_2.sort()
-        test_assertion("States with transitions to state 2", state_2, expected_state_2)
+        self.assertEqual(state_2, expected_state_2)
 
         fake_state = self.mm.transitions_to("Fake")
         expected_fake_state = []
-        test_assertion(
-            "States with transitions to a fake transition",
-            fake_state,
-            expected_fake_state,
-        )
+        self.assertEqual(fake_state, expected_fake_state)
 
     def test_allow_transition(self):
         """Testing allow_transition."""
@@ -268,29 +211,25 @@ class HiddenMarkovModelTest(unittest.TestCase):
         expected_state_1 = ["2"]
         state_1.sort()
         expected_state_1.sort()
-        test_assertion(
-            "States reached by transitions from state 1", state_1, expected_state_1
-        )
+        self.assertEqual(state_1, expected_state_1)
 
         state_2 = self.mm.transitions_from("2")
         expected_state_2 = []
         state_2.sort()
         expected_state_2.sort()
-        test_assertion(
-            "States reached by transitions from state 2", state_2, expected_state_2
-        )
+        self.assertEqual(state_2, expected_state_2)
 
         state_1 = self.mm.transitions_to("1")
         expected_state_1 = []
         state_1.sort()
         expected_state_1.sort()
-        test_assertion("States with transitions to state 1", state_1, expected_state_1)
+        self.assertEqual(state_1, expected_state_1)
 
         state_2 = self.mm.transitions_to("2")
         expected_state_2 = ["1"]
         state_2.sort()
         expected_state_2.sort()
-        test_assertion("States with transitions to state 2", state_2, expected_state_2)
+        self.assertEqual(state_2, expected_state_2)
 
     def test_simple_hmm(self):
         """Test a simple model with 2 states and 2 symbols."""
@@ -361,8 +300,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
         max_prob = math.log(max_prob)
         seq = viterbi[0]
         prob = viterbi[1]
-        test_assertion("state sequence", str(seq), seq_first_state + seq_second_state)
-        test_assertion("log probability", round(prob, 11), round(max_prob, 11))
+        self.assertEqual(str(seq), seq_first_state + seq_second_state)
+        self.assertEqual(round(prob, 11), round(max_prob, 11))
 
     def test_non_ergodic(self):
         """Non-ergodic model (meaning that some transitions are not allowed)."""
@@ -402,7 +341,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         prob = viterbi[1]
 
         # the most probable path must be from state 1 to state 2
-        test_assertion("most probable path", str(seq), "12")
+        self.assertEqual(str(seq), "12")
 
         # The probability of that path is the probability of starting in
         # state 1, then emitting an A, then transitioning 1 -> 2, then
@@ -414,7 +353,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
             + math.log(prob_1_to_2)
             + math.log(prob_2_B)
         )
-        test_assertion("log probability of most probable path", prob, expected_prob)
+        self.assertEqual(prob, expected_prob)
 
 
 class ScaledDPAlgorithmsTest(unittest.TestCase):
@@ -470,10 +409,7 @@ class AbstractTrainerTest(unittest.TestCase):
         result_tests.append([("C", "C"), float(10) / float(25)])
 
         for test_result in result_tests:
-            assert results[test_result[0]] == test_result[1], (
-                "Got %f, expected %f for %s"
-                % (results[test_result[0]], test_result[1], test_result[0])
-            )
+            self.assertEqual(results[test_result[0]], test_result[1])
 
     def test_log_likelihood(self):
         """Calculate log likelihood."""
@@ -481,9 +417,7 @@ class AbstractTrainerTest(unittest.TestCase):
 
         log_prob = self.test_trainer.log_likelihood(probs)
         expected_log_prob = -7.31873556778
-        assert abs(expected_log_prob - log_prob) < 0.1, (
-            "Bad probability calculated: %s" % log_prob
-        )
+        self.assertAlmostEqual(expected_log_prob,  log_prob)
 
 
 # run the tests
