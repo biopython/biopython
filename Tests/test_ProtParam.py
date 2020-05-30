@@ -51,7 +51,7 @@ class ProtParamTest(unittest.TestCase):
         # This test is somehow useless, since ProteinAnalysis.molecular_weight
         # is internally calling SeqUtils.molecular_weight.
         mw_1 = self.analysis.molecular_weight()
-        mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein))
+        mw_2 = molecular_weight(Seq(self.seq_text), seq_type="protein")
         self.assertAlmostEqual(mw_1, mw_2)
 
     def test_get_monoisotopic_molecular_weight_identical(self):
@@ -60,7 +60,7 @@ class ProtParamTest(unittest.TestCase):
         # is internally calling SeqUtils.molecular_weight.
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
         mw_1 = self.analysis.molecular_weight()
-        mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein), monoisotopic=True)
+        mw_2 = molecular_weight(Seq(self.seq_text), seq_type="protein", monoisotopic=True)
         self.assertAlmostEqual(mw_1, mw_2)
 
     def test_aromaticity(self):
