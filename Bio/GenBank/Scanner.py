@@ -1247,7 +1247,6 @@ class GenBankScanner(InsdcScanner):
             line = self.handle.readline()
 
         self.line = line
-        # Seq("".join(seq_lines), self.alphabet)
         return misc_lines, "".join(seq_lines).replace(" ", "")
 
     def _feed_first_line(self, consumer, line):
