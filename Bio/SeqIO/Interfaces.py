@@ -10,6 +10,9 @@ Unless you are writing a new parser or writer for Bio.SeqIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+
 from Bio import StreamModeError
 from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
@@ -253,10 +256,15 @@ class SequenceWriter:
 
 
 class SequentialSequenceWriter(SequenceWriter):
-    """Base class for sequence writers (OBSOLETE). This class should be subclassed.
+    """Base class for sequential sequence writers (DEPRECATED).
 
-    It is intended for sequential file formats with an (optional)
-    header, repeated records, and an (optional) footer.
+    This class should be subclassed. It is no longer used.
+    It was intended for sequential file formats with an (optional)
+    header, repeated records, and an (optional) footer. It would
+    enforce callign the methods in appropriate order. To update
+    code using ``SequentialSequenceWriter``, just subclass
+    ``SequenceWriter`` and drop the ``._header_written`` etc
+    checks (or reimplement them).
 
     In this case (as with interlaced file formats), the user may
     simply call the write_file() method and be done.
@@ -280,6 +288,11 @@ class SequentialSequenceWriter(SequenceWriter):
         self._header_written = False
         self._record_written = False
         self._footer_written = False
+        warnings.warn(
+            "SequentialSequenceWriter has been deprecated, any class "
+            "subclassing it will need to subclass SequenceWriter instead.",
+            BiopythonDeprecationWarning,
+        )
 
     def write_header(self):
         """Write the file header.
