@@ -338,6 +338,9 @@ class FastaTwoLineWriter(FastaWriter):
     This means we write the sequence information  without line
     wrapping, and will always write a blank line for an empty
     sequence.
+
+    Please use the ``as_fasta_2line`` function instead, or the top level
+    ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
     """
 
     def __init__(self, handle, record2title=None):
