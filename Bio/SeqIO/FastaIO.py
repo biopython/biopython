@@ -18,7 +18,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequentialSequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter
 from .Interfaces import _clean, _get_seq_string
 
 
@@ -253,7 +253,7 @@ class FastaTwoLineIterator(SequenceIterator):
             )
 
 
-class FastaWriter(SequentialSequenceWriter):
+class FastaWriter(SequenceWriter):
     """Class to write Fasta format files (OBSOLETE).
 
     Please use the ``as_fasta`` function instead, or the top level
@@ -303,10 +303,6 @@ class FastaWriter(SequentialSequenceWriter):
 
     def write_record(self, record):
         """Write a single Fasta record to the file."""
-        assert self._header_written
-        assert not self._footer_written
-        self._record_written = True
-
         if self.record2title:
             title = self.clean(self.record2title(record))
         else:
