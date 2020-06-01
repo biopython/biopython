@@ -11,7 +11,7 @@ alphabet for CodonSeq class.
 
 import copy
 
-from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
+from Bio.Alphabet import Alphabet
 from Bio.Data.CodonTable import generic_by_id
 
 default_codon_table = copy.deepcopy(generic_by_id[1])
