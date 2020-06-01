@@ -31,9 +31,7 @@ Methods:
   (all internal)
 
 Attributes:
-  :alphabet: The IUPAC alphabet set (or any other) whose letters you are using.
-             Common sets are: ``IUPAC.protein`` (20-letter protein), ``IUPAC.unambiguous_dna``
-             (4-letter DNA). See ``Bio.Alphabet`` for more.
+  :alphabet: The letters you are using as indices into the table.
   :data: Frequency dictionary.
   :count: Count dictionary. Empty if no counts are provided.
 
@@ -52,7 +50,6 @@ Example of use:
 
 """
 
-from Bio import Alphabet
 
 COUNT = 1
 FREQ = 2
@@ -86,8 +83,7 @@ class FreqTable(dict):
         else:
             raise ValueError("bad dict_type")
         if not alphabet:
-            self.alphabet = Alphabet.Alphabet()
-            self.alphabet.letters = self._alphabet_from_input()
+            self.alphabet = self._alphabet_from_input()
 
 
 def read_count(f):
