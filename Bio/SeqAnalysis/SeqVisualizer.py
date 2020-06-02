@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
 
 
 class SeqVisualizer:
@@ -34,6 +36,22 @@ class SeqVisualizer:
             'extinction_coefficient': 'Extinction coefficient [m^3/(mol*cm)]',
             'amino_acid_comp': 'Amino acid composition [Quantity]',
             'amino_acid_percent': 'Amino acid percent composition [%]'
+        }
+        self.dict_for_title_bar = {
+            'id': 'ID',
+            'sequence_length': 'Comparision of lengths of sequences',
+            'molecular_weight': 'Comparision of molecular weights of sequences',
+            'theoretical_pi': 'Comparision of theoretical isolectric points of sequences',
+            'aromaticity': 'Comparision of aromaticities of sequences',
+            'instability_index': 'Comparision of instability indexes of sequences',
+            'flexibility': 'Comparision of flexibility of sequences',
+            'gravy': 'Comparision of hydrophobicity and hydrophilicity of sequences',
+            'c_term_freq': 'Frequency of amino acids on C terminus',
+            'n_term_freq': 'Frequency of amino acids on N terminus',
+            'secondary_structure_fraction': 'Comparision of secondary structure values of sequences',
+            'extinction_coefficient': 'Comparision of extinction coefficient values of sequences',
+            'amino_acid_comp': 'Comparision of amino acid composition of sequences',
+            'amino_acid_percent': 'Comparision of percent amino acid composition of sequences'
         }
         self.dict_for_title_bar = {
             'id': 'ID',
@@ -88,6 +106,7 @@ class SeqVisualizer:
             'theoretical_pi': 'Theoretical isoelectric point',
             'aromaticity': 'Aromaticity',
             'instability_index': 'Instability index',
+            'flexibility': 'Flexibility',
             'gravy': 'Average hydrophobicity and hydrophilicity',
             'c_term_freq': 'Frequency of C terminus',
             'n_term_freq': 'Frequency of N terminus',
@@ -99,7 +118,7 @@ class SeqVisualizer:
 
     def get_colors(self, for_dict=None) -> Dict:
         """
-        Function creates dictionary of color vectors based on number of sequences that will be plotted.
+        Function creates dictionary of color vectors based on length of list of sequences that will be plotted.
         If dictionary is passed, function will create dictionary of color vectors based on length of dictionary.
 
         :param for_dict: if dictionary is passed, colors are based on it's length
@@ -108,11 +127,6 @@ class SeqVisualizer:
         {id1:[color_vector1], id2:[color_vector2]}
         or if dictionary passed:
         {dict_key1:[color_vector2], dict_key2:[color_vector2])
-
-        :Example:
-        >>> self.ids = ['PG2503', 'XY2120', 'ZF1560']
-        ['PG2503', 'XY2120', 'ZF1560']
-        >>> SeqVisualizer.get_colors()
 
         """
         dict_of_colors = {}  # create dicitonary for colors
@@ -176,21 +190,15 @@ class SeqVisualizer:
             plt.savefig('lol.png')
         self.ids = self.main_dict['id']
 
+    def show_or_save_plot_interactive(self, save, figure):
+        if not save:
+            figure.show()
+        else:
+            figure.write_html('lol.png')
+        self.ids = self.main_dict['id']
+
     def bar(self, single_seq=None, parameter=None, save=False, size=(15, 8), x_ax_title_fontsize=14,
             y_ax_title_fontsize=14, suptitle_fontsize=13, add_legend=True, leg_size=13):
-        """
-
-        :param single_seq:
-        :param parameter:
-        :param save:
-        :param size:
-        :param x_ax_title_fontsize:
-        :param y_ax_title_fontsize:
-        :param suptitle_fontsize:
-        :param add_legend:
-        :param leg_size:
-        :return:
-        """
         if parameter is None or parameter not in self.all_args:
             print('Pass a parameter to plot properly.')
 
@@ -225,9 +233,9 @@ class SeqVisualizer:
 
         elif parameter in self.list_of_dicts_args:
             df = pd.DataFrame(data, index=self.ids).T  # Prepare dataframe directly for plotting
-            df = df.rename_axis(parameter).reset_index()  # add 1st column with ids names
-            df = df.melt(id_vars=[parameter], value_vars=self.ids, var_name='Sequence', value_name='Value')
-            df.plot(x=parameter, y=self.ids, kind="bar", legend=add_legend, rot=0)  # plotting
+            df = df.rename_axis(self.dict_for_x_ax_bar_box[parameter]).reset_index()  # add 1st column with ids names
+            df.plot(x=self.dict_for_x_ax_bar_box[parameter], y=self.ids, kind="bar", legend=add_legend,
+                    rot=0)  # plotting
 
             self.ax_and_sup_title_bar_box(plt, parameter, sup_fontsize=suptitle_fontsize,
                                           x_fontsize=x_ax_title_fontsize,
@@ -237,22 +245,49 @@ class SeqVisualizer:
 
             self.show_or_save_plot(save)
 
+    def bar_interactive(self, single_seq=None, parameter=None, save=False, size=500):
+
+        if parameter is None or parameter not in self.all_args:
+            print('Pass a parameter to plot properly.')
+
+        #  Checking if single sequence is passed
+        if single_seq in list(self.sub_dict.keys()):
+            data = self.sub_dict[single_seq]
+            self.ids = data['id']  # overwriting self.ids value, because of considering single-sequence mode
+            data = data[parameter]
+        else:
+            data = self.main_dict[parameter]
+
+        if parameter in self.lists_args or parameter in self.dicts_args:
+            if parameter in self.lists_args:
+                df = pd.DataFrame({
+                    self.dict_for_x_ax_bar_box[parameter]: self.ids,
+                    self.dict_for_ax_units[parameter]: data
+                }).reset_index()
+            elif parameter in self.dicts_args:
+                df = pd.DataFrame({
+                    self.dict_for_x_ax_bar_box[parameter]: list(data.keys()),
+                    self.dict_for_ax_units[parameter]: list(data.values())
+                }).reset_index()
+            fig = px.bar(df, x=self.dict_for_x_ax_bar_box[parameter], y=self.dict_for_ax_units[parameter],
+                         color=self.dict_for_x_ax_bar_box[parameter], barmode='group', height=size,
+                         title=self.dict_for_title_bar[parameter])
+
+            self.show_or_save_plot_interactive(save, figure=fig)
+
+        elif parameter in self.list_of_dicts_args:
+            df = pd.DataFrame(data, index=self.ids).T  # Prepare dataframe directly for plotting
+            df = df.rename_axis(self.dict_for_x_ax_bar_box[parameter]).reset_index()  # add 1st column with ids names
+            df = df.melt(id_vars=[self.dict_for_x_ax_bar_box[parameter]], value_vars=self.ids, var_name='Sequences',
+                         value_name=self.dict_for_ax_units[parameter])
+
+            fig = px.bar(df, x=self.dict_for_x_ax_bar_box[parameter], y=self.dict_for_ax_units[parameter],
+                         color='Sequences', barmode='group', height=size, title=self.dict_for_title_bar[parameter])
+
+            self.show_or_save_plot_interactive(save, figure=fig)
+
     def box(self, parameter=None, save=False, size=(15, 8), x_ax_title_fontsize=14,
             y_ax_title_fontsize=14, suptitle_fontsize=13, add_legend=True, leg_size=13):
-        """
-        Mode for single sequence would be nonsense in this mode
-
-        :param single_seq:
-        :param parameter:
-        :param save:
-        :param size:
-        :param x_ax_title_fontsize:
-        :param y_ax_title_fontsize:
-        :param suptitle_fontsize:
-        :param add_legend:
-        :param leg_size:
-        :return:
-        """
 
         if parameter is None or parameter not in self.box_args:
             print('Pass a parameter to plot properly.')
@@ -325,14 +360,8 @@ class SeqVisualizer:
         else:
             print('Parameter argument has been passed improperly.')
 
+
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
 
-'''
-melted dataframe for list of dicts
-df = pd.DataFrame(data, index=self.ids).T  # Prepare dataframe directly for plotting
-df = df.rename_axis(parameter).reset_index()  # add 1st column with ids names
-df = df.melt(id_vars=[parameter], value_vars=self.ids, var_name='Sequence', value_name='Value')
-            
-'''
+    doctest.testmod()
