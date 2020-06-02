@@ -94,15 +94,11 @@ class Seq:
         However, will often want to create your own Seq objects directly:
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
-        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...              IUPAC.protein)
+        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF")
         >>> my_seq
-        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
         >>> print(my_seq)
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
-        >>> my_seq.alphabet
-        IUPACProtein()
         """
         # Enforce string storage
         if not isinstance(data, str):
@@ -290,29 +286,6 @@ class Seq:
         Seq('MELKILV', ProteinAlphabet())
 
         When adding two Seq (like) objects, the alphabets are important.
-        Consider this example:
-
-        >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna
-        >>> unamb_dna_seq = Seq("ACGT", unambiguous_dna)
-        >>> ambig_dna_seq = Seq("ACRGT", ambiguous_dna)
-        >>> unamb_dna_seq
-        Seq('ACGT', IUPACUnambiguousDNA())
-        >>> ambig_dna_seq
-        Seq('ACRGT', IUPACAmbiguousDNA())
-
-        If we add the ambiguous and unambiguous IUPAC DNA alphabets, we get
-        the more general ambiguous IUPAC DNA alphabet:
-
-        >>> unamb_dna_seq + ambig_dna_seq
-        Seq('ACGTACRGT', IUPACAmbiguousDNA())
-
-        However, if the default generic alphabet is included, the result is
-        a generic alphabet:
-
-        >>> Seq("") + ambig_dna_seq
-        Seq('ACRGT')
-
         You can't add RNA and DNA sequences:
 
         >>> from Bio.Alphabet import generic_dna, generic_rna
@@ -425,15 +398,13 @@ class Seq:
         """Return the full sequence as a MutableSeq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
-        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAAL",
-        ...              IUPAC.protein)
+        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> my_seq
-        Seq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAAL')
         >>> my_seq.tomutable()
-        MutableSeq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+        MutableSeq('MKQHKAMIVALIVICITAVVAAL')
 
-        Note that the alphabet is preserved.
+        Any alphabet is preserved.
         """
         return MutableSeq(str(self), self.alphabet)
 
@@ -844,13 +815,12 @@ class Seq:
 
         e.g. Removing a nucleotide sequence's polyadenylation (poly-A tail):
 
-        >>> from Bio.Alphabet import IUPAC
         >>> from Bio.Seq import Seq
-        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA", IUPAC.unambiguous_dna)
+        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA")
         >>> my_seq
-        Seq('CGGTACGCTTATGTCACGTAGAAAAAA', IUPACUnambiguousDNA())
+        Seq('CGGTACGCTTATGTCACGTAGAAAAAA')
         >>> my_seq.rstrip("A")
-        Seq('CGGTACGCTTATGTCACGTAG', IUPACUnambiguousDNA())
+        Seq('CGGTACGCTTATGTCACGTAG')
 
         See also the strip and lstrip methods.
         """
@@ -912,29 +882,28 @@ class Seq:
         """Return the complement sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
-        >>> my_dna = Seq("CCCCCGATAG", IUPAC.unambiguous_dna)
+        >>> my_dna = Seq("CCCCCGATAG")
         >>> my_dna
-        Seq('CCCCCGATAG', IUPACUnambiguousDNA())
+        Seq('CCCCCGATAG')
         >>> my_dna.complement()
-        Seq('GGGGGCTATC', IUPACUnambiguousDNA())
+        Seq('GGGGGCTATC')
 
         You can of course used mixed case sequences,
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
-        >>> my_dna = Seq("CCCCCgatA-GD", generic_dna)
+        >>> my_dna = Seq("CCCCCgatA-GD")
         >>> my_dna
-        Seq('CCCCCgatA-GD', DNAAlphabet())
+        Seq('CCCCCgatA-GD')
         >>> my_dna.complement()
-        Seq('GGGGGctaT-CH', DNAAlphabet())
+        Seq('GGGGGctaT-CH')
 
         Note in the above example, ambiguous character D denotes
         G, A or T so its complement is H (for C, T or A).
 
         Trying to complement a protein sequence raises an exception.
 
-        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> from Bio.Alphabet import generic_protein
+        >>> my_protein = Seq("MAIVMGR", generic_protein)
         >>> my_protein.complement()
         Traceback (most recent call last):
            ...
@@ -964,20 +933,19 @@ class Seq:
         """Return the reverse complement sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
-        >>> my_dna = Seq("CCCCCGATAGNR", IUPAC.ambiguous_dna)
+        >>> my_dna = Seq("CCCCCGATAGNR")
         >>> my_dna
-        Seq('CCCCCGATAGNR', IUPACAmbiguousDNA())
+        Seq('CCCCCGATAGNR')
         >>> my_dna.reverse_complement()
-        Seq('YNCTATCGGGGG', IUPACAmbiguousDNA())
+        Seq('YNCTATCGGGGG')
 
         Note in the above example, since R = G or A, its complement
         is Y (which denotes C or T).
 
         You can of course used mixed case sequences,
 
-        >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.Seq import Seq
         >>> my_dna = Seq("CCCCCgatA-G", generic_dna)
         >>> my_dna
         Seq('CCCCCgatA-G', DNAAlphabet())
@@ -986,7 +954,9 @@ class Seq:
 
         Trying to complement a protein sequence raises an exception:
 
-        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.Seq import Seq
+        >>> my_protein = Seq("MAIVMGR", generic_protein)
         >>> my_protein.reverse_complement()
         Traceback (most recent call last):
            ...
@@ -999,17 +969,19 @@ class Seq:
         """Return the RNA sequence from a DNA sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
+        >>> from Bio.Alphabet import generic_dna
         >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG",
-        ...                  IUPAC.unambiguous_dna)
+        ...                  generic_dna)
         >>> coding_dna
-        Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+        Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', DNAAlphabet())
         >>> coding_dna.transcribe()
-        Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+        Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', RNAAlphabet())
 
         Trying to transcribe a protein or RNA sequence raises an exception:
 
-        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.Seq import Seq
+        >>> my_protein = Seq("MAIVMGR", generic_protein)
         >>> my_protein.transcribe()
         Traceback (most recent call last):
            ...
@@ -1032,19 +1004,21 @@ class Seq:
     def back_transcribe(self):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
 
+        >>> from Bio.Alphabet import generic_rna
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
         >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG",
-        ...                     IUPAC.unambiguous_rna)
+        ...                     generic_rna)
         >>> messenger_rna
-        Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+        Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', RNAAlphabet())
         >>> messenger_rna.back_transcribe()
-        Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+        Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', DNAAlphabet())
 
         Trying to back-transcribe a protein or DNA sequence raises an
         exception:
 
-        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.Seq import Seq
+        >>> my_protein = Seq("MAIVMGR", generic_protein)
         >>> my_protein.back_transcribe()
         Traceback (most recent call last):
            ...
@@ -2489,14 +2463,14 @@ class MutableSeq:
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
 
+        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
         >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL",
-        ...                      IUPAC.protein)
+        ...                      generic_protein)
         >>> my_mseq
-        MutableSeq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+        MutableSeq('MKQHKAMIVALIVICITAVVAAL', ProteinAlphabet())
         >>> my_mseq.toseq()
-        Seq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAAL', ProteinAlphabet())
 
         Note that the alphabet is preserved.
         """
