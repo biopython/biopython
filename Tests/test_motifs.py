@@ -12,8 +12,6 @@ import os
 import unittest
 import math
 
-from Bio.Alphabet import generic_dna
-from Bio.Alphabet import IUPAC
 from Bio import motifs
 from Bio.Seq import Seq
 
@@ -2235,18 +2233,12 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
 
-    def test_with_alt_alphabet(self):
-        """Test motif search using alternative instance of alphabet."""
-        self.s = Seq(str(self.s), IUPAC.IUPACUnambiguousDNA())
-        self.test_simple()
-
     def test_with_mixed_case(self):
         """Test if Bio.motifs PWM scoring works with mixed case."""
         counts = self.m.counts
         pwm = counts.normalize(pseudocounts=0.25)
         pssm = pwm.log_odds()
-        # Note we're breaking Seq/Alphabet expectations here:
-        result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT", self.m.alphabet))
+        result = pssm.calculate(Seq("AcGTgTGCGtaGTGCGT"))
         self.assertEqual(6, len(result))
         self.assertAlmostEqual(result[0], -29.18363571, places=5)
         self.assertAlmostEqual(result[1], -38.3365097, places=5)
