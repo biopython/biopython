@@ -257,5 +257,5 @@ setup(
     ext_modules=EXTENSIONS,
     include_package_data=True,  # done via MANIFEST.in under setuptools
     install_requires=REQUIRES,
-    python_requires=">={}".format(".".join(PYVER)),
+    python_requires=">={}".format(".".join(str(x) for x in PYVER)),
 )
