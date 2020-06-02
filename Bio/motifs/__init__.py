@@ -23,7 +23,7 @@ from urllib.request import urlopen, Request
 from Bio import BiopythonDeprecationWarning
 
 
-def create(instances, alphabet=None):
+def create(instances, alphabet="ACGT"):
     """Create a Motif object."""
     instances = Instances(instances, alphabet)
     return Motif(instances=instances, alphabet=alphabet)
@@ -179,15 +179,10 @@ def read(handle, format, strict=True):
 class Instances(list):
     """Class containing a list of sequences that made the motifs."""
 
-    def __init__(self, instances=None, alphabet=None):
+    def __init__(self, instances=None, alphabet="ACGT"):
         """Initialize the class."""
         from Bio.Seq import Seq
 
-        try:
-            # Received an old-style alphabet
-            alphabet = alphabet.letters
-        except AttributeError:
-            pass
         if instances is None:
             instances = []
         self.length = None
@@ -200,24 +195,6 @@ class Instances(list):
                     % (len(instance), self.length)
                 )
                 raise ValueError(message)
-            try:
-                a = instance.alphabet
-            except AttributeError:
-                # The instance is a plain string
-                continue
-            try:
-                # Received an old-style alphabet
-                a = a.letters
-            except AttributeError:
-                pass
-            if a is None:
-                # If we didn't get a meaningful alphabet from the instances,
-                # assume it is DNA.
-                a = "ACGT"
-            if alphabet is None:
-                alphabet = a
-            elif alphabet != a:
-                raise ValueError("Alphabets are inconsistent")
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
@@ -267,7 +244,7 @@ class Instances(list):
 class Motif:
     """A class representing sequence motifs."""
 
-    def __init__(self, alphabet=None, instances=None, counts=None):
+    def __init__(self, alphabet="ACGT", instances=None, counts=None):
         """Initialize the class."""
         from . import matrix
 
@@ -277,12 +254,6 @@ class Motif:
                 ValueError, "Specify either instances or counts, don't specify both"
             )
         elif counts is not None:
-            try:
-                alphabet = alphabet.letters
-            except AttributeError:
-                pass
-            if alphabet is None:
-                alphabet = "ACGT"
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -296,8 +267,6 @@ class Motif:
             self.counts = None
             self.instances = None
             self.length = None
-            if alphabet is None:
-                alphabet = "ACGT"
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None
@@ -361,8 +330,7 @@ class Motif:
             self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
             if sorted(self.alphabet) != ["A", "C", "G", "T"]:
-                # TODO - Should this be a ValueError?
-                raise Exception(
+                raise ValueError(
                     "Setting the background to a single value only works for DNA motifs"
                     " (in which case the value is interpreted as the GC content)"
                 )
