@@ -27,7 +27,6 @@ from Bio.Restriction import (
 )
 from Bio.Restriction import FormattedSeq
 from Bio.Seq import Seq, MutableSeq
-from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
 from Bio import BiopythonWarning
 
 
@@ -81,10 +80,10 @@ class SimpleEnzyme(unittest.TestCase):
 
     def setUp(self):
         """Set up some sequences for later use."""
-        base_seq = Seq("AAAA", IUPACAmbiguousDNA())
-        self.ecosite_seq = base_seq + Seq(EcoRI.site, IUPACAmbiguousDNA()) + base_seq
-        self.smasite_seq = base_seq + Seq(SmaI.site, IUPACAmbiguousDNA()) + base_seq
-        self.kpnsite_seq = base_seq + Seq(KpnI.site, IUPACAmbiguousDNA()) + base_seq
+        base_seq = Seq("AAAA")
+        self.ecosite_seq = base_seq + Seq(EcoRI.site) + base_seq
+        self.smasite_seq = base_seq + Seq(SmaI.site) + base_seq
+        self.kpnsite_seq = base_seq + Seq(KpnI.site) + base_seq
 
     def test_eco_cutting(self):
         """Test basic cutting with EcoRI (5'overhang)."""
@@ -475,9 +474,7 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_batch_analysis(self):
         """Sequence analysis with a restriction batch."""
-        seq = Seq(
-            "AAAA" + EcoRV.site + "AAAA" + EcoRI.site + "AAAA", IUPACAmbiguousDNA()
-        )
+        seq = Seq("AAAA" + EcoRV.site + "AAAA" + EcoRI.site + "AAAA")
         batch = RestrictionBatch([EcoRV, EcoRI])
 
         hits = batch.search(seq)
@@ -491,7 +488,7 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_search_premade_batches(self):
         """Test search with pre-made batches CommOnly, NoComm, AllEnzymes."""
-        seq = Seq("ACCCGAATTCAAAACTGACTGATCGATCGTCGACTG", IUPACAmbiguousDNA())
+        seq = Seq("ACCCGAATTCAAAACTGACTGATCGATCGTCGACTG")
         search = AllEnzymes.search(seq)
         self.assertEqual(search[MluCI], [6])
         # Check if '/' operator works as 'search':
@@ -503,7 +500,7 @@ class RestrictionBatches(unittest.TestCase):
 
     def test_analysis_restrictions(self):
         """Test Fancier restriction analysis."""
-        new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA", IUPACAmbiguousDNA())
+        new_seq = Seq("TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA")
         rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
         ana = Analysis(rb, new_seq, linear=False)
         # Output only the result for enzymes which cut blunt:
@@ -543,7 +540,7 @@ class RestrictionBatches(unittest.TestCase):
         # Fix negative end:
         self.assertEqual((ana._boundaries(1, -1)[:2]), (1, 33))
         # Sites in- and outside of boundaries
-        new_seq = Seq("GAATTCAAAAAAGAATTC", IUPACAmbiguousDNA())
+        new_seq = Seq("GAATTCAAAAAAGAATTC")
         rb = RestrictionBatch([EcoRI])
         ana = Analysis(rb, new_seq)
         # Cut at least inside
