@@ -125,9 +125,7 @@ class SeqRecord:
 
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
-    >>> from Bio.Alphabet import IUPAC
-    >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-    ...                         IUPAC.protein),
+    >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
     ...                    id="YP_025292.1", name="HokC",
     ...                    description="toxic membrane protein")
     >>> print(record)
@@ -135,7 +133,7 @@ class SeqRecord:
     Name: HokC
     Description: toxic membrane protein
     Number of features: 0
-    Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+    Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
     If you want to save SeqRecord objects to a sequence file, use Bio.SeqIO
     for this.  For the special case where you want the SeqRecord turned into
@@ -373,10 +371,8 @@ class SeqRecord:
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> from Bio.Alphabet import IUPAC
         >>> rec = SeqRecord(Seq("MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLAT"
-        ...                     "EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR",
-        ...                     IUPAC.protein),
+        ...                     "EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR"),
         ...                 id="1JOY", name="EnvZ",
         ...                 description="Homodimeric domain of EnvZ from E. coli")
         >>> rec.letter_annotations["secondary_structure"] = "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
@@ -391,7 +387,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 1
         Per letter annotation for: secondary_structure
-        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR')
         >>> rec.letter_annotations["secondary_structure"]
         '  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  '
         >>> print(rec.features[0].location)
@@ -407,7 +403,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 1
         Per letter annotation for: secondary_structure
-        Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())
+        Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD')
         >>> sub.letter_annotations["secondary_structure"]
         'HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH'
         >>> print(sub.features[0].location)
@@ -422,7 +418,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 0
         Per letter annotation for: secondary_structure
-        Seq('MAAGVKQLAD', IUPACProtein())
+        Seq('MAAGVKQLAD')
 
         Or for the last ten letters:
 
@@ -432,7 +428,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 0
         Per letter annotation for: secondary_structure
-        Seq('IIEQFIDYLR', IUPACProtein())
+        Seq('IIEQFIDYLR')
 
         If you omit both, then you get a copy of the original record (although
         lacking the annotations and dbxrefs):
@@ -443,7 +439,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 1
         Per letter annotation for: secondary_structure
-        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR')
 
         Finally, indexing with a simple integer is shorthand for pulling out
         that letter from the sequence directly:
@@ -617,9 +613,7 @@ class SeqRecord:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.Alphabet import IUPAC
-        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...                         IUPAC.protein),
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
         ...                    id="YP_025292.1", name="HokC",
         ...                    description="toxic membrane protein, small")
         >>> print(str(record))
@@ -627,7 +621,7 @@ class SeqRecord:
         Name: HokC
         Description: toxic membrane protein, small
         Number of features: 0
-        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
         In this example you don't actually need to call str explicity, as the
         print command does this automatically:
@@ -637,7 +631,7 @@ class SeqRecord:
         Name: HokC
         Description: toxic membrane protein, small
         Number of features: 0
-        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
         Note that long sequences are shown truncated.
         """
@@ -706,9 +700,7 @@ class SeqRecord:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.Alphabet import IUPAC
-        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...                         IUPAC.protein),
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
         ...                    id="YP_025292.1", name="HokC",
         ...                    description="toxic membrane protein")
         >>> record.format("fasta")
@@ -1172,10 +1164,10 @@ class SeqRecord:
         Note trying to reverse complement a protein SeqRecord raises an
         exception:
 
-        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
-        >>> protein_rec = SeqRecord(Seq("MAIVMGR", IUPAC.protein), id="Test")
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> protein_rec = SeqRecord(Seq("MAIVMGR", generic_protein), id="Test")
         >>> protein_rec.reverse_complement()
         Traceback (most recent call last):
            ...
@@ -1183,10 +1175,9 @@ class SeqRecord:
 
         Also note you can reverse complement a SeqRecord using a MutableSeq:
 
-        >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Seq import MutableSeq
-        >>> from Bio.Alphabet import generic_dna
-        >>> rec = SeqRecord(MutableSeq("ACGT", generic_dna), id="Test")
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> rec = SeqRecord(MutableSeq("ACGT"), id="Test")
         >>> rec.seq[0] = "T"
         >>> print("%s %s" % (rec.id, rec.seq))
         Test TCGT
