@@ -47,7 +47,8 @@ if "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-if sys.version_info[:2] < (3, 6):
+PYVER = (3, 6)
+if sys.version_info[:2] < PYVER:
     sys.stderr.write(
         "Biopython requires Python 3.6 or later. "
         "Python %d.%d detected.\n" % sys.version_info[:2]
@@ -256,4 +257,5 @@ setup(
     ext_modules=EXTENSIONS,
     include_package_data=True,  # done via MANIFEST.in under setuptools
     install_requires=REQUIRES,
+    python_requires=">={}".format(".".join(PYVER)),
 )
