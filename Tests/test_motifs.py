@@ -2270,20 +2270,6 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
         self.assertTrue(math.isnan(result[6]), "Expected nan, not %r" % result[6])
 
-    def test_mixed_alphabets(self):
-        """Test creating motif with mixed alphabets."""
-        # TODO - Can we support this?
-        seqs = [
-            Seq("TACAA", IUPAC.unambiguous_dna),
-            Seq("TACGC", IUPAC.ambiguous_dna),
-            Seq("TACAC", IUPAC.extended_dna),
-            Seq("AACCC", IUPAC.unambiguous_dna),
-            Seq("AATGC", IUPAC.unambiguous_dna),
-            Seq("AATGC", generic_dna),
-        ]
-        # ValueError: Alphabets are inconsistent
-        self.assertRaises(ValueError, motifs.create, seqs)
-
     def test_calculate_pseudocounts(self):
         pseudocounts = motifs.jaspar.calculate_pseudocounts(self.m)
         self.assertAlmostEqual(pseudocounts["A"], 1.695582495781317, places=5)
