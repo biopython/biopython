@@ -215,7 +215,7 @@ class TestReading(unittest.TestCase):
     def test_read_write_clustal(self):
         """Test the base alignment stuff."""
         path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
-        alignment = AlignIO.read(path, "clustal", alphabet=Alphabet.Gapped(IUPAC.unambiguous_dna))
+        alignment = AlignIO.read(path, "clustal", alphabet=Alphabet.generic_dna)
         self.assertEqual(len(alignment), 7)
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "gi|6273285|gb|AF191659.1|AF191")
@@ -243,7 +243,7 @@ class TestReading(unittest.TestCase):
         consensus = align_info.dumb_consensus()
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA")
-        dictionary = align_info.replacement_dictionary(["N"])
+        dictionary = align_info.replacement_dictionary(["N", "-"])
         self.assertEqual(len(dictionary), 16)
         self.assertAlmostEqual(dictionary[("A", "A")], 1395.0, places=1)
         self.assertAlmostEqual(dictionary[("A", "C")], 3.0, places=1)
@@ -261,7 +261,7 @@ class TestReading(unittest.TestCase):
         self.assertAlmostEqual(dictionary[("T", "C")], 12.0, places=1)
         self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
         self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
-        matrix = align_info.pos_specific_score_matrix(consensus, ["N"])
+        matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
@@ -422,7 +422,7 @@ G  0.0 0.0 7.0 0.0
 A  7.0 0.0 0.0 0.0
 """)
 
-        matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N"])
+        matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N", "-"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
@@ -584,7 +584,7 @@ A  7.0 0.0 0.0 0.0
 """)
 
         second_seq = alignment[1].seq
-        matrix = align_info.pos_specific_score_matrix(second_seq, ["N"])
+        matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
@@ -919,8 +919,7 @@ A  7.0 0.0 0.0 0.0
 
     def test_read_fasta(self):
         path = os.path.join(os.curdir, "Quality", "example.fasta")
-        alignment = AlignIO.read(path, "fasta",
-                                 alphabet=Alphabet.Gapped(IUPAC.ambiguous_dna))
+        alignment = AlignIO.read(path, "fasta")
         self.assertEqual(len(alignment), 3)
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_413_324")
