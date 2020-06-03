@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import List, Dict, Union, Optional
+from typing import List, Dict, Union, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -146,7 +146,7 @@ class SeqVisualizer:
 
         self.merged_sequences_dict = merged_sequences  # input dictionary
         self.separated_sequences_dict = separated_sequences
-        self.ids = separated_sequences['id']  # list of sequences ids
+        self.ids = self.merged_sequences_dict['id']  # list of sequences ids
         self.lists_args = ['sequence_length', 'molecular_weight', 'theoretical_pi', 'aromaticity', 'instability_index',
                            'flexibility', 'gravy']
         self.dicts_args = ['c_term_freq', 'n_term_freq']
@@ -376,7 +376,7 @@ class SeqVisualizer:
 
         self.ids = self.merged_sequences_dict['id']
 
-    def bar(self, single_seq: Optional[str] = None, parameter: Optional[str] = None, size: tuple[int, int] = (15, 8),
+    def bar(self, single_seq: Optional[str] = None, parameter: Optional[str] = None, size: Tuple[int, int] = (15, 8),
             x_ax_title_fontsize: int = 14, y_ax_title_fontsize: int = 14, suptitle_fontsize: int = 13,
             add_legend: bool = True, leg_size: int = 13, out: Optional[str] = None, show: bool = True):
         """
@@ -418,6 +418,9 @@ class SeqVisualizer:
         :param show: showing plot, by default True
 
         :return: plot shown or saved
+
+        :raises ValueError: if parameter to plot passed improperly
+
         """
         if parameter is None or parameter not in self.all_args:
             raise ValueError('Pass a parameter to bar plot properly.')
@@ -480,6 +483,8 @@ class SeqVisualizer:
         :param show: showing plot, by default True
 
         :return: plot shown or saved
+
+        :raises ValueError: if parameter to plot passed improperly
         """
 
         if parameter is None or parameter not in self.all_args:
@@ -505,7 +510,7 @@ class SeqVisualizer:
                     self.ax_units[parameter]: list(data.values())
                 }).reset_index()
             fig = px.bar(df, x=self.bar_box_x_ax[parameter], y=self.ax_units[parameter],
-                         color=self.bar_box_x_ax[parameter], barmode='group', height=size,
+                         color=self.bar_box_x_ax[parameter], height=size,
                          title=self.bar_title[parameter])
 
         else:
@@ -522,7 +527,7 @@ class SeqVisualizer:
 
         self.show_or_save_plot_interactive(figure=fig, show=show, out_name=out)
 
-    def box(self, parameter: Optional[str] = None, size: tuple[int, int] = (15, 8), x_ax_title_fontsize: int = 14,
+    def box(self, parameter: Optional[str] = None, size: Tuple[int, int] = (15, 8), x_ax_title_fontsize: int = 14,
             y_ax_title_fontsize: int = 14, suptitle_fontsize: int = 13, add_legend: bool = True, leg_size: int = 13,
             out: Optional[str] = None, show: bool = True):
         """
@@ -561,6 +566,8 @@ class SeqVisualizer:
         :param show: showing plot, by default True
 
         :return: plot shown or saved
+
+        :raises ValueError: if parameter to plot passed improperly
         """
 
         if parameter is None or parameter not in self.box_args:
@@ -588,7 +595,7 @@ class SeqVisualizer:
         self.show_or_save_plot(show, out_name=out)
 
     def scatter(self, single_seq: Optional[str] = None, x_parameter: Optional[str] = None,
-                y_parameter: Optional[str] = None, z_parameter: Optional[str] = 100, size: tuple[int, int] = (15, 8),
+                y_parameter: Optional[str] = None, z_parameter: Optional[str] = 100, size: Tuple[int, int] = (15, 8),
                 x_ax_title_fontsize: int = 14, y_ax_title_fontsize: int = 14, suptitle_fontsize: int = 13,
                 point_annotation: bool = True, add_legend: bool = True, leg_size: int = 13, out: Optional[str] = None,
                 show: bool = True):
@@ -620,6 +627,8 @@ class SeqVisualizer:
         :param show: showing plot, by default True
 
         :return: plot shown or saved
+
+        :raises ValueError: if parameter to plot passed improperly
         """
 
         if x_parameter is None or \
