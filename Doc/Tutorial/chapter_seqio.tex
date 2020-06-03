@@ -137,11 +137,11 @@ print(len(first_record))
 Found 94 records
 The last record
 Z78439.1
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 592
 The first record
 Z78533.1
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
 \end{minted}
 
@@ -177,7 +177,7 @@ Number of features: 5
 /date=30-NOV-2006
 /organism=Cypripedium irapeanum
 /gi=2765658
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 \end{minted}
 
 This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.
@@ -535,7 +535,7 @@ print(seq_record.annotations["keywords"])
 O23729
 CHS3_BROFI
 RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;
-Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())
+Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE')
 Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
 \end{minted}
@@ -617,8 +617,8 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
->>> print(repr(seq_record.seq))
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+>>> seq_record.seq
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
 \end{minted}
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
@@ -756,7 +756,7 @@ As an example, let's use the same GenBank file as before:
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
 >>> orchid_dict.close()
 \end{minted}
 

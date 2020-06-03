@@ -135,7 +135,7 @@ class SeqRecord:
     Name: HokC
     Description: toxic membrane protein
     Number of features: 0
-    Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+    Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
     If you want to save SeqRecord objects to a sequence file, use Bio.SeqIO
     for this.  For the special case where you want the SeqRecord turned into
@@ -391,7 +391,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 1
         Per letter annotation for: secondary_structure
-        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR')
         >>> rec.letter_annotations["secondary_structure"]
         '  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  '
         >>> print(rec.features[0].location)
@@ -407,7 +407,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 1
         Per letter annotation for: secondary_structure
-        Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())
+        Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD')
         >>> sub.letter_annotations["secondary_structure"]
         'HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH'
         >>> print(sub.features[0].location)
@@ -422,7 +422,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 0
         Per letter annotation for: secondary_structure
-        Seq('MAAGVKQLAD', IUPACProtein())
+        Seq('MAAGVKQLAD')
 
         Or for the last ten letters:
 
@@ -432,7 +432,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 0
         Per letter annotation for: secondary_structure
-        Seq('IIEQFIDYLR', IUPACProtein())
+        Seq('IIEQFIDYLR')
 
         If you omit both, then you get a copy of the original record (although
         lacking the annotations and dbxrefs):
@@ -443,7 +443,7 @@ class SeqRecord:
         Description: Homodimeric domain of EnvZ from E. coli
         Number of features: 1
         Per letter annotation for: secondary_structure
-        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR')
 
         Finally, indexing with a simple integer is shorthand for pulling out
         that letter from the sequence directly:
@@ -627,7 +627,7 @@ class SeqRecord:
         Name: HokC
         Description: toxic membrane protein, small
         Number of features: 0
-        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
         In this example you don't actually need to call str explicity, as the
         print command does this automatically:
@@ -637,7 +637,7 @@ class SeqRecord:
         Name: HokC
         Description: toxic membrane protein, small
         Number of features: 0
-        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF')
 
         Note that long sequences are shown truncated.
         """
@@ -680,12 +680,12 @@ class SeqRecord:
         ...                 description="ssDNA-binding protein",
         ...                 dbxrefs=["ASAP:13298", "GI:16131885", "GeneID:948570"])
         >>> print(repr(rec))
-        SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
+        SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF'), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
 
         At the python prompt you can also use this shorthand:
 
         >>> rec
-        SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
+        SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF'), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
 
         Note that long sequences are shown truncated. Also note that any
         annotations, letter_annotations and features are not shown (as they
@@ -1123,7 +1123,7 @@ class SeqRecord:
         >>> print("%s %i" % (plasmid.id, len(plasmid)))
         pBAD30 4923
         >>> plasmid.seq
-        Seq('GCTAGCGGAGTGTATACTGGCTTACTATGTTGGCACTGATGAGGGTGTCAGTGA...ATG', IUPACAmbiguousDNA())
+        Seq('GCTAGCGGAGTGTATACTGGCTTACTATGTTGGCACTGATGAGGGTGTCAGTGA...ATG')
         >>> len(plasmid.features)
         13
 
@@ -1133,7 +1133,7 @@ class SeqRecord:
         >>> print("%s %i" % (rc_plasmid.id, len(rc_plasmid)))
         pBAD30_rc 4923
         >>> rc_plasmid.seq
-        Seq('CATGGGCAAATATTATACGCAAGGCGACAAGGTGCTGATGCCGCTGGCGATTCA...AGC', IUPACAmbiguousDNA())
+        Seq('CATGGGCAAATATTATACGCAAGGCGACAAGGTGCTGATGCCGCTGGCGATTCA...AGC')
         >>> len(rc_plasmid.features)
         13
 

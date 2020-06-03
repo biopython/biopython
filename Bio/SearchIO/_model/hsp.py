@@ -727,7 +727,7 @@ class HSPFragment(_BaseHSP):
     Name: aligned query sequence
     Description: mir_1
     Number of features: 0
-    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet())
+    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG')
 
     # the hit sequence is a SeqRecord object as well
     >>> fragment.hit.__class__
@@ -737,7 +737,7 @@ class HSPFragment(_BaseHSP):
     Name: aligned hit sequence
     Description: Homo sapiens microRNA 520b (MIR520B), microRNA
     Number of features: 0
-    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet())
+    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG')
 
     # when both query and hit are present, we get a MultipleSeqAlignment object
     >>> fragment.aln.__class__
