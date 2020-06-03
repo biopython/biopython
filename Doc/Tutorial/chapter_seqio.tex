@@ -137,11 +137,11 @@ print(len(first_record))
 Found 94 records
 The last record
 Z78439.1
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', DNAAlphabet())
 592
 The first record
 Z78533.1
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', DNAAlphabet())
 740
 \end{minted}
 
@@ -618,7 +618,7 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> print(repr(seq_record.seq))
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', DNAAlphabet())
 \end{minted}
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
@@ -756,7 +756,7 @@ As an example, let's use the same GenBank file as before:
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', DNAAlphabet())
 >>> orchid_dict.close()
 \end{minted}
 
