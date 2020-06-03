@@ -393,7 +393,7 @@ class TreeTests(unittest.TestCase):
         reference = tree.clade[0, 0, 0, 0, 0, 0].references[0]
         self.assertIsInstance(reference, PX.Reference)
         self.assertEqual(reference.doi, "10.1038/nature06614")
-        self.assertEqual(reference.desc, None)
+        self.assertIsNone(reference.desc)
 
     def test_Sequence(self):
         """Instantiation of Sequence objects.
@@ -711,8 +711,8 @@ class MethodTests(unittest.TestCase):
 
     def test_phyloxml_getitem(self):
         """Phyloxml.__getitem__: get phylogenies by name or index."""
-        self.assertTrue(self.phyloxml.phylogenies[9] is self.phyloxml[9])
-        self.assertTrue(self.phyloxml["monitor lizards"] is self.phyloxml[9])
+        self.assertIs(self.phyloxml.phylogenies[9]. self.phyloxml[9])
+        self.assertIs(self.phyloxml["monitor lizards"]. self.phyloxml[9])
         self.assertEqual(len(self.phyloxml[:]), len(self.phyloxml))
 
     def test_events(self):
@@ -729,7 +729,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(evts.duplications, 3)
         self.assertEqual(len(evts), 2)
         del evts["speciations"]
-        self.assertEqual(evts.speciations, None)
+        self.assertIsNone(evts.speciations)
         self.assertEqual(len(evts), 1)
         # Iteration: __iter__, keys, values, items
         self.assertEqual(list(iter(evts)), ["duplications"])
@@ -752,16 +752,16 @@ class MethodTests(unittest.TestCase):
         self.assertRaises(AttributeError, getattr, clade, "taxonomy")
         # None if []
         clade.confidences = []
-        self.assertEqual(clade.confidence, None)
+        self.assertIsNone(clade.confidence)
         clade.taxonomies = []
-        self.assertEqual(clade.taxonomy, None)
+        self.assertIsNone(clade.taxonomy)
         # Phylogeny.confidence
         tree = PX.Phylogeny(True, confidences=[conf])
         self.assertEqual(tree.confidence.type, "bootstrap")
         tree.confidences.append(conf)
         self.assertRaises(AttributeError, getattr, tree, "confidence")
         tree.confidences = []
-        self.assertEqual(tree.confidence, None)
+        self.assertIsNone(tree.confidence)
 
     # Other methods
 
