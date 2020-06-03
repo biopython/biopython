@@ -3,11 +3,12 @@ import re
 from multiprocessing.pool import ThreadPool
 from os.path import isfile, join
 from time import time as timer
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Dict
 from urllib import request, error
 
 from Bio import Entrez
 from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
 
 
 class SeqDownloader:
@@ -270,7 +271,7 @@ class SeqDatabase:
                 seq_data[index] = record
         self.database = seq_data
 
-    def get(self, indexes: Union[str, List] = None) -> List[str]:
+    def get(self, indexes: Union[str, List] = None) -> Union[List[str], Dict[str, SeqRecord]]:
         """
         Allows user to get desired record or list of records data.
 
@@ -279,7 +280,8 @@ class SeqDatabase:
         :return: List of SeqRecord objects
         """
         if indexes is None:
-            records = list(self.database.values())
+            records = self.database
+        # TODO: change to dict
         else:
             if isinstance(indexes, str):
                 keys = [indexes]

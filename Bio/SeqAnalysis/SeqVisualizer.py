@@ -337,7 +337,7 @@ class SeqVisualizer:
         plt.ylabel(self.ax_units[x_parameter], fontsize=y_fontsize)
         return plt
 
-    def show_or_save_plot(self, show: bool = True, out_name: Optional[str] = None):
+    def show_or_save_plot(self, show: bool = False, out_name: Optional[str] = None):
         """
         Method used to show (by default) or save plots.
 
@@ -346,16 +346,18 @@ class SeqVisualizer:
 
         :return: plot showed interactively or saved as .png
         """
-        if show:
-            plt.show()
 
         if out_name is not None:
             plt.tight_layout()
-            plt.savefig(f'{out_name}.png')
+            fig = plt.gcf()
+            fig.savefig(f'Plots/static/{out_name}.png')
+
+        if show:
+            plt.show()
 
         self.ids = self.merged_sequences_dict['id']
 
-    def show_or_save_plot_interactive(self, figure, show: bool = True, out_name: Optional[str] = None):
+    def show_or_save_plot_interactive(self, figure, show: bool = False, out_name: Optional[str] = None):
         """
         Method used to show (by default) or save plots.
 
@@ -369,13 +371,13 @@ class SeqVisualizer:
             figure.show()
 
         if out_name is not None:
-            figure.write_html(f'{out_name}.html')
+            figure.write_html(f'Plots/interactive/{out_name}.html')
 
         self.ids = self.merged_sequences_dict['id']
 
     def bar(self, single_seq: Optional[str] = None, parameter: Optional[str] = None, size: Tuple[int, int] = (15, 8),
             x_ax_title_fontsize: int = 14, y_ax_title_fontsize: int = 14, suptitle_fontsize: int = 13,
-            add_legend: bool = True, leg_size: int = 13, out: Optional[str] = None, show: bool = True):
+            add_legend: bool = True, leg_size: int = 13, out: Optional[str] = None, show: bool = False):
         """
         Method creating bar plot for chosen input parameter. Can work in single sequence mode.
             For parameters:
@@ -467,7 +469,7 @@ class SeqVisualizer:
         self.show_or_save_plot(show=show, out_name=out)
 
     def bar_interactive(self, single_seq: Optional[str] = None, parameter: Optional[str] = None, size: int = 500,
-                        out: Optional[str] = None, show: bool = True):
+                        out: Optional[str] = None, show: bool = False):
         """
         Method creating interactive bar plot for chosen input parameter (for parameters check 'bar' documentation).
         Can work in single sequence mode.
@@ -526,7 +528,7 @@ class SeqVisualizer:
 
     def box(self, parameter: Optional[str] = None, size: Tuple[int, int] = (15, 8), x_ax_title_fontsize: int = 14,
             y_ax_title_fontsize: int = 14, suptitle_fontsize: int = 13, add_legend: bool = True, leg_size: int = 13,
-            out: Optional[str] = None, show: bool = True):
+            out: Optional[str] = None, show: bool = False):
         """
         Method creating box plot for chosen input parameter.
             For parameters:
@@ -595,7 +597,7 @@ class SeqVisualizer:
                 y_parameter: Optional[str] = None, z_parameter: Optional[str] = 100, size: Tuple[int, int] = (15, 8),
                 x_ax_title_fontsize: int = 14, y_ax_title_fontsize: int = 14, suptitle_fontsize: int = 13,
                 point_annotation: bool = True, add_legend: bool = True, leg_size: int = 13, out: Optional[str] = None,
-                show: bool = True):
+                show: bool = False):
         """
         Method used to create plot for chosen parameters (min. 2, max3). Can work in single sequence mode.
         Plotting values only for parameters:
@@ -673,9 +675,3 @@ class SeqVisualizer:
 
         else:
             raise ValueError('Parameters passed to scatter plot improperly.')
-
-
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
