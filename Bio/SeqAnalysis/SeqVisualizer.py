@@ -256,10 +256,7 @@ class SeqVisualizer:
 
         """
         dict_of_colors = {}  # create dicitonary for colors
-        if for_dict is None:
-            list_for_colors = self.ids
-        else:
-            list_for_colors = for_dict
+        list_for_colors = for_dict if for_dict else self.ids
         colors = cm.gist_rainbow(np.linspace(0, 1, len(list_for_colors)))  # create array of colors
         colors = np.delete(colors, -1, axis=1)  # remove alpha column
         colors[:, 0:3] *= 0.8  # darken colors
