@@ -1,4 +1,5 @@
-from testy import SeqAnalyzer
+#!/usr/bin/env python3
+from Bio.SeqAnalysis import SeqAnalyzer
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
