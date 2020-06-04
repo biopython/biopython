@@ -137,8 +137,8 @@ has a sister function for use on files which contain just one record which we'll
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
-SingleLetterAlphabet()), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'),
+id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
 description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... sequence',
 dbxrefs=[])
 \end{minted}
@@ -149,7 +149,7 @@ individually -- starting with the \verb|seq| attribute which gives you a
 
 \begin{minted}{pycon}
 >>> record.seq
-Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', SingleLetterAlphabet())
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
 \end{minted}
 
 \noindent Here \verb|Bio.SeqIO| has defaulted to a generic alphabet, rather
