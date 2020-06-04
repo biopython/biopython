@@ -711,8 +711,8 @@ class MethodTests(unittest.TestCase):
 
     def test_phyloxml_getitem(self):
         """Phyloxml.__getitem__: get phylogenies by name or index."""
-        self.assertIs(self.phyloxml.phylogenies[9]. self.phyloxml[9])
-        self.assertIs(self.phyloxml["monitor lizards"]. self.phyloxml[9])
+        self.assertIs(self.phyloxml.phylogenies[9], self.phyloxml[9])
+        self.assertIs(self.phyloxml["monitor lizards"], self.phyloxml[9])
         self.assertEqual(len(self.phyloxml[:]), len(self.phyloxml))
 
     def test_events(self):
