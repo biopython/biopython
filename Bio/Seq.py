@@ -119,9 +119,7 @@ class Seq:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return (
-                f"{self.__class__.__name__}('{str(self)[:54]}...{str(self)[-3:]}')"
-            )
+            return  f"{self.__class__.__name__}('{str(self)[:54]}...{str(self)[-3:]}')"
         else:
             return f"{self.__class__.__name__}({self._data!r})"
 
