@@ -3,7 +3,7 @@ import os
 import sys
 from typing import List, Tuple
 
-from Bio.SeqAnalysis import database, analyzer, visualizer
+from . import database, analyzer, visualizer
 
 
 def print_success(msg: str):

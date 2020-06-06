@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 import os
-from typing import List, Dict, Union, Optional, Tuple
+from typing import Dict, Union, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
 
 
