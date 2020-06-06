@@ -323,23 +323,30 @@ def majority_consensus(trees, cutoff=0, mcmc=False, n=1):
         key=lambda bitstr: (bitstr_counts[bitstr][0], bitstr.count("1"), str(bitstr)),
         reverse=True,
     )
-    root = BaseTree.Clade()
-    if bitstrs[0].count("1") == len(terms):
-        root.clades.extend(terms)
-    else:
+    if not bitstrs[0].count("1") == len(terms):
         raise ValueError("Taxons in provided trees should be consistent")
     # Make a bitstr-to-clades dict and store root clade
-    bitstr_clades = {bitstrs[0]: root}
     # create inner clades
     possible_starts = queue.Queue()
-    possible_starts.put(bitstrs[0])
+    possible_starts.put([bitstrs[0]])
     clades_used = set()
     consensus_trees = []
     # we will try to produce n different consensus trees, starting with bitstrings
     # that were not compatible with previous trees
     while len(consensus_trees) < n and not possible_starts.empty():
-        bitstr_clades = {possible_starts.get(): root}
-        for bitstr in bitstrs[1:]:
+        root = BaseTree.Clade()
+        root.clades.extend(terms)
+
+        bitstr_clades = {bitstrs[0]: root}
+        new_start = possible_starts.get()
+        new_start_appeared = 0
+        for bitstr in itertools.chain(new_start, bitstrs[1:]):
+            if bitstr == new_start[0]:
+                new_start_appeared += 1
+                if new_start_appeared > 1:
+                    continue
+            if bitstr == bitstrs[0]:
+                continue
             # apply majority rule
             count_in_trees, branch_length_sum = bitstr_counts[bitstr]
             confidence = count_in_trees / tree_count
@@ -359,10 +366,8 @@ def majority_consensus(trees, cutoff=0, mcmc=False, n=1):
             child_bitstrs = []  # multiple independent childs
             for bs in bsckeys:
                 if not bs.iscompatible(bitstr):
-                    print(bitstr)
                     if bitstr not in clades_used:
-                        possible_starts.put(bitstr)
-                        print(bitstr)
+                        possible_starts.put([bitstr])
                     compatible = False
                     break
                 # assign the closest ancestor as its parent
@@ -406,11 +411,12 @@ def majority_consensus(trees, cutoff=0, mcmc=False, n=1):
             # put new clade
             bitstr_clades[bitstr] = clade
             clades_used.add(bitstr)
-            if (len(bitstr_clades) == len(terms) - 1) or (
-                len(bitstr_clades) == len(terms) - 2 and len(root.clades) == 3
-            ):
-                consensus_trees.append(BaseTree.Tree(root=root))
-                break
+            # if (len(bitstr_clades) == len(terms) - 1) or (
+            #     len(bitstr_clades) == len(terms) - 2 and len(root.clades) == 3
+            # ):
+            #     consensus_trees.append(BaseTree.Tree(root=root))
+            #     break
+        consensus_trees.append(BaseTree.Tree(root=root))
     if n == 1:
         return consensus_trees[0]
     return consensus_trees
