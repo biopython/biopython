@@ -11,7 +11,7 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
 
-class SeqDownloader(object):
+class SeqDownloader:
     """
     SeqDownloader class is responsible for downloading fasta files for Uniprot/NCBI IDs
     corresponding to given list or single ID ensuring their uniqueness.
@@ -252,7 +252,7 @@ class SeqDownloader(object):
             http.append(ncbi_id)
 
 
-class SeqDatabase(object):
+class SeqDatabase:
     """
     SeqDatabase class is responsible for creating and giving you access to Dict containing IDs and SeqRecord objects.
     """
