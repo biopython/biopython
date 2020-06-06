@@ -23,10 +23,11 @@ def print_success(msg: str):
 class TestSeqDatabase(unittest.TestCase):
     def setUp(self) -> None:
         # Declaration of variables needed for running tests.
-        self.filename = "SeqAnalysis/database_tests.txt"  # Additional file made only for reading function test.
-        self.dirs = ['Downloads', 'Failed', 'Database']
+        self.test_root_dir = 'SeqAnalysis'
+        self.filename = f"{self.test_root_dir}/database_tests.txt"  # Additional file made only for reading function test.
+        self.dirs = [f'{self.test_root_dir}/Downloads', f'{self.test_root_dir}/Failed', f'{self.test_root_dir}/Database']
         self.test_dir = "test"
-        self.test_tuple = ('SeqAnalysis/Downloads/test/A0A1A2.fasta', 'https://www.uniprot.org/uniprot/A0A1A2.fasta')
+        self.test_tuple = (f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', 'https://www.uniprot.org/uniprot/A0A1A2.fasta')
         self.test_obs = []
         self.test_http = []
 
@@ -54,20 +55,20 @@ class TestSeqDatabase(unittest.TestCase):
         """
         Check if the function create directories correctly
         """
-        downloader.mk_subdirs(self.test_dir)
+        downloader.mk_subdirs(self.test_dir, self.test_root_dir)
         assert os.path.exists(
-            "SeqAnalysis/Downloads/test") is True, \
+            f"{self.test_root_dir}/Downloads/test") is True, \
             "Function execution failure. Check if all test directories were deleted before running test."
         assert os.path.exists(
-            "SeqAnalysis/Failed/test") is True, \
+            f"{self.test_root_dir}/Failed/test") is True, \
             "Function execution failure. Check if all test directories were deleted before running test."
 
     def test_paths_and_urls(self):
         """
         Check if the function create proper tuple of path and url.
         """
-        urls = downloader.paths_and_urls(["A0A1A2"], self.test_dir)
-        assert urls == [('SeqAnalysis/Downloads/test/A0A1A2.fasta',
+        urls = downloader.paths_and_urls(["A0A1A2"], self.test_dir, self.test_root_dir)
+        assert urls == [(f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta',
                          'https://www.uniprot.org/uniprot/A0A1A2.fasta')], \
             "Function execution failure."
 
@@ -76,36 +77,36 @@ class TestSeqDatabase(unittest.TestCase):
         Check if the function returns file path, as well as ,downloads and saves file correctly.
         """
         fetched_url = downloader.fetch_url(self.test_tuple, self.test_obs, self.test_http)
-        assert fetched_url == 'SeqAnalysis/Downloads/test/A0A1A2.fasta', \
+        assert fetched_url == f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', \
             "Function execution failure."
-        assert os.path.exists("SeqAnalysis/Downloads/test/A0A1A2.fasta") is True, \
+        assert os.path.exists(f"{self.test_root_dir}/Downloads/test/A0A1A2.fasta") is True, \
             "Function execution failure."
 
     def test_download_ncbi(self):
         """
         Check if the function downloads and saves NCBI file correctly using Entrez.
         """
-        downloader.download_ncbi("YP_025292.1", self.test_dir, self.test_obs, self.test_http)
-        assert os.path.exists("SeqAnalysis/Downloads/test/YP_025292.1.fasta") is True, \
+        downloader.download_ncbi("YP_025292.1", self.test_dir, self.test_obs, self.test_http, self.test_root_dir)
+        assert os.path.exists(f"{self.test_root_dir}/Downloads/test/YP_025292.1.fasta") is True, \
             "Function execution failure."
 
     def test_downloader_class(self):
         """
         Check if the downloader class downloads and saves files correctly.
         """
-        downloader(["A0A1A2", "YP_025292.1"], self.test_dir)
+        downloader(["A0A1A2", "YP_025292.1"], self.test_dir, self.test_root_dir)
         assert os.path.exists(
-            "SeqAnalysis/Downloads/test/A0A1A2.fasta") is True, \
+            f"{self.test_root_dir}/Downloads/test/A0A1A2.fasta") is True, \
             "Class execution failure. Something wrong with one of the files."
         assert os.path.exists(
-            "SeqAnalysis/Downloads/test/YP_025292.1.fasta") is True, \
+            f"{self.test_root_dir}/Downloads/test/YP_025292.1.fasta") is True, \
             "Class execution failure. Something wrong with one of the files."
 
     def test_get_and_database_class(self):
         """
         Check if the class database creates dict. Also checks if get() function works properly.
         """
-        test_database = database(["A0A1A2", "YP_025292.1"], self.test_dir)
+        test_database = database(["A0A1A2", "YP_025292.1"], self.test_dir, self.test_root_dir)
         assert type(test_database.database) == dict, \
             "Class execution failure."
 
@@ -118,9 +119,9 @@ class TestSeqDatabase(unittest.TestCase):
         """
         Quick cleanup after certain tests and at the end of testing.
         """
-        shutil.rmtree("SeqAnalysis/Database")
-        shutil.rmtree("SeqAnalysis/Downloads")
-        shutil.rmtree("SeqAnalysis/Failed")
+        shutil.rmtree(f"{self.test_root_dir}/Database")
+        shutil.rmtree(f"{self.test_root_dir}/Downloads")
+        shutil.rmtree(f"{self.test_root_dir}/Failed")
 
 
 class TestSeqAnalyzer(unittest.TestCase):
