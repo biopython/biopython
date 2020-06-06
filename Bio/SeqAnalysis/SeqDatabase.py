@@ -284,7 +284,6 @@ class SeqDatabase:
         """
         if indexes is None:
             records = self.database
-        # TODO: change to dict
         else:
             if isinstance(indexes, str):
                 keys = [indexes]
@@ -292,5 +291,5 @@ class SeqDatabase:
                 keys = indexes
             else:
                 raise Exception("Given variable is not either str or List.")
-            records = [self.database.get(key) for key in keys]
+            records = {key: self.database.get(key) for key in keys}
         return records

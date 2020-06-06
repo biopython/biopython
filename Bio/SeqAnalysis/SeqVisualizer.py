@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 from typing import List, Dict, Union, Optional, Tuple
 
 import matplotlib.pyplot as plt
@@ -62,7 +63,7 @@ class SeqVisualizer:
 
     """
 
-    def __init__(self, merged_sequences: Dict[str, Union[list, dict]], separated_sequences: Dict[str, dict]):
+    def __init__(self, merged_sequences: Dict[str, Union[list, dict]], separated_sequences: Dict[str, dict], analysis_root_dir: str):
         """
         Crucial for proper functioning of function is supplying a proper format of dictionaries. Key names in
         merged_sequences should be the same as given below. In separated_sequences keys are sequences IDs
@@ -142,8 +143,9 @@ class SeqVisualizer:
                         'n_term_freq': {'M': 1}
                         }
                 }
+        :param analysis_root_dir: root directory for analysis
         """
-
+        self.analysis_root_dir = analysis_root_dir
         self.merged_sequences_dict = merged_sequences  # input dictionary
         self.separated_sequences_dict = separated_sequences
         self.ids = self.merged_sequences_dict['id']  # list of sequences ids
@@ -350,7 +352,11 @@ class SeqVisualizer:
         if out_name is not None:
             plt.tight_layout()
             fig = plt.gcf()
-            fig.savefig(f'Plots/static/{out_name}.png')
+            if not os.path.exists(f'{self.analysis_root_dir}/Plots'):
+                os.mkdir(f'{self.analysis_root_dir}/Plots')
+            if not os.path.exists(f'{self.analysis_root_dir}/Plots/static'):
+                os.mkdir(f'{self.analysis_root_dir}/Plots/static')
+            fig.savefig(f'{self.analysis_root_dir}/Plots/static/{out_name}.png')
 
         if show:
             plt.show()
@@ -371,7 +377,11 @@ class SeqVisualizer:
             figure.show()
 
         if out_name is not None:
-            figure.write_html(f'Plots/interactive/{out_name}.html')
+            if not os.path.exists(f'{self.analysis_root_dir}/Plots'):
+                os.mkdir(f'{self.analysis_root_dir}/Plots')
+            if not os.path.exists(f'{self.analysis_root_dir}/Plots/interactive'):
+                os.mkdir(f'{self.analysis_root_dir}/Plots/interactive')
+            figure.write_html(f'{self.analysis_root_dir}/Plots/interactive/{out_name}.html')
 
         self.ids = self.merged_sequences_dict['id']
 

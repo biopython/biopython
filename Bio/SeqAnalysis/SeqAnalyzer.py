@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import json
+
 import numpy as np
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
@@ -29,13 +31,14 @@ class SeqAnalyzer:
     14. Calculates 'N' and 'C' terminus amino acid occurrences frequencies
     """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict, analysis_root_dir: str):
         """
         This method is called when an object is created from the class and it allows the class to initialize and
         calculate via static methods usage(median_standard_deviation_average_length, main_calculations
         terminal_aa_counter) attributes of a SeqAnalyzer. Calculated values are rounded to round_values decimal places
 
         :param data: takes in a dict with protein IDs as keys and SeqRecord objects as values
+        :param analysis_root_dir: root directory for analysis
         """
         round_value = 3
         id_seq_dictionary = {
@@ -61,6 +64,8 @@ class SeqAnalyzer:
         self.mol_ext_coefficient \
             = SeqAnalyzer.main_calculations(id_seq_dictionary, round_value)
         self.aa_n_terminus, self.aa_c_terminus = SeqAnalyzer.terminal_aa_counter(id_seq_dictionary, round_value)
+        with open(f'{analysis_root_dir}/results.json', 'w') as res_file:
+            json.dump(self.results(), res_file, indent=4)
 
     @staticmethod
     def median_standard_deviation_average_length(id_seq_dictionary: dict, round_value: int) -> tuple:
