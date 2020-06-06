@@ -1,9 +1,7 @@
 import argparse
-import doctest
 import os
-from pprint import pprint
 
-from Bio.SeqAnalysis import test_analyzer, test_database, SeqDatabase, SeqAnalyzer, SeqVisualizer
+from . import database, analyzer, visualizer
 
 
 def print_success(msg: str):
@@ -24,22 +22,9 @@ Sequences analysis and plotting
 parser = argparse.ArgumentParser(description=sheader, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument('-s', '--sequences', nargs='+', help='list of sequences')
 parser.add_argument('-d', '--directory', help='directory for database')
-parser.add_argument('-t', action='store_true', help='tests')
-parser.add_argument('-o', action='store_true', help='save output')
-parser.add_argument('-v', action='store_true', help='show output')
+parser.add_argument('-o', action='store_true', help='save plots')
+parser.add_argument('-v', action='store_true', help='show plots')
 args = parser.parse_args()
-
-if args.t:
-    with open('test.txt', 'w') as test_file:
-        test_file.write('A0A1A2:B0B1B2@C0C1C2!D0D1D2/E0E1E2|F0F1F2#G0G1G2\nH0H1H2\nI0I1I2$J0J1J2')
-    print('======= Testing SeqDatabase =======')
-    test_database()
-    os.remove('test.txt')
-    print('======= Testing SeqAnalyzer =======')
-    test_analyzer()
-    print('======= Testing SeqVisualizer =======')
-    doctest.testfile('SeqVisualizer.py')
-    exit(0)
 
 if not os.path.exists('Plots'):
     os.mkdir('Plots')
@@ -48,13 +33,13 @@ if not os.path.exists('Plots/interactive'):
 if not os.path.exists('Plots/static'):
     os.mkdir('Plots/static')
 
-database = SeqDatabase(args.sequences, args.directory)
-seqs = database.get()
+db = database(args.sequences, args.directory)
+seqs = db.get()
 print_success(f'Database created successfully, entries = {len(seqs)}')
-analyzer = SeqAnalyzer(seqs)
-results = analyzer.results()
+an = analyzer(seqs)
+results = an.results()
 print_success(f'Analysis performed successfully')
-v = SeqVisualizer(*results)
+v = visualizer(*results)
 
 out = 'def' if args.o else None
 show = True if args.v else False
@@ -82,4 +67,4 @@ v.bar_interactive(parameter='amino_acid_percent', out=out, show=show)
 v.bar_interactive(parameter='instability_index', out=out, show=show)
 v.bar_interactive(parameter='molecular_weight', out=out, show=show)
 
-print_success(f'Visualization performed successfully, plots saved to Plots directory')
+print_success(f'Visualizing performed successfully, plots saved in Plots directory')
