@@ -250,6 +250,8 @@ class SeqDownloader:
 
         except error.HTTPError or TimeoutError or error.URLError:
             http.append(ncbi_id)
+        except FileNotFoundError:
+            http.append(ncbi_id)
 
 
 class SeqDatabase:

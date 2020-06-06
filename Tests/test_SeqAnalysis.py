@@ -30,6 +30,8 @@ class TestSeqDatabase(unittest.TestCase):
         self.test_tuple = (f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', 'https://www.uniprot.org/uniprot/A0A1A2.fasta')
         self.test_obs = []
         self.test_http = []
+        self.test_mk_dirs()
+        self.test_mk_subdirs()
 
     def test_read_list_of_ids(self):
         """
@@ -119,9 +121,15 @@ class TestSeqDatabase(unittest.TestCase):
         """
         Quick cleanup after certain tests and at the end of testing.
         """
-        shutil.rmtree(f"{self.test_root_dir}/Database")
-        shutil.rmtree(f"{self.test_root_dir}/Downloads")
-        shutil.rmtree(f"{self.test_root_dir}/Failed")
+        if os.path.exists(f"{self.test_root_dir}/Database"):
+            shutil.rmtree(f"{self.test_root_dir}/Database")
+        if os.path.exists(f"{self.test_root_dir}/Downloads"):
+            shutil.rmtree(f"{self.test_root_dir}/Downloads")
+        if os.path.exists(f"{self.test_root_dir}/Failed"):
+            shutil.rmtree(f"{self.test_root_dir}/Failed")
+
+    def tearDown(self) -> None:
+        self.rm_dirs()
 
 
 class TestSeqAnalyzer(unittest.TestCase):
