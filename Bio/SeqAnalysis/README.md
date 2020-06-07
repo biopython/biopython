@@ -21,7 +21,7 @@ module or (when it'll come to official biopython) as biopython module.
 To use as single module, you need to extract folder with this module from this biopython branch and install requirements:
 
 ```bash
-pip3 install venv
+pip3 install virtualenv
 
 # extracting module
 git clone --single-branch --branch sequences_analysis https://github.com/moozeq/biopython.git
@@ -52,7 +52,7 @@ proper folders.
 You need to specify name for `BRANCH_FOR_DEVELOPMENT` first:
 
 ```bash
-pip3 install venv
+pip3 install virtualenv
 
 git clone https://github.com/moozeq/biopython.git
 cd biopython
