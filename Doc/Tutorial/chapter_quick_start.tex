@@ -28,13 +28,9 @@ Most of the time when we think about sequences we have in my mind a string of le
 Seq('AGTACACTGGT')
 >>> print(my_seq)
 AGTACACTGGT
->>> my_seq.alphabet
-Alphabet()
 \end{minted}
 
-What we have here is a sequence object with a \emph{generic} alphabet - reflecting the fact we have \emph{not} specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:seq_objects}.
-
-In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
+The \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -109,15 +105,13 @@ for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
 
 \begin{minted}{text}
 gi|2765658|emb|Z78533.1|CIZ78533
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', SingleLetterAlphabet())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
 ...
 gi|2765564|emb|Z78439.1|PBZ78439
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', SingleLetterAlphabet())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 592
 \end{minted}
-
-Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| has defaulted to the rather generic \verb|SingleLetterAlphabet()| rather than something DNA specific.
 
 \subsection{Simple GenBank parsing example}
 

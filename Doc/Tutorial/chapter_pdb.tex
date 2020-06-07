@@ -878,15 +878,14 @@ objects as well.
 The first thing to do is to extract all polypeptides from the structure
 (as above). The sequence of each polypeptide can then easily
 be obtained from the \texttt{Polypeptide} objects. The sequence is
-represented as a Biopython \texttt{Seq} object, and its alphabet is
-defined by a \texttt{ProteinAlphabet} object.
+represented as a Biopython \texttt{Seq} object.
 
 Example:
 
 \begin{minted}{pycon}
 >>> seq = polypeptide.get_sequence()
->>> print(seq)
-Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
+>>> seq
+Seq('SNDIYFNFQRFNETNLILQRDASVSSSGQLRLTNLN')
 \end{minted}
 
 \section{Analyzing structures}
