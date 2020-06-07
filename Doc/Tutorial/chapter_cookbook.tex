@@ -809,10 +809,10 @@ although this is actually quite a small FASTQ file with less than $50,000$ reads
 >>> fq_dict = SeqIO.index("SRR020192.fastq", "fastq")
 >>> len(fq_dict)
 41892
->>> fq_dict.keys()[:4]
+>>> list(fq_dict.keys())[:4]
 ['SRR020192.38240', 'SRR020192.23181', 'SRR020192.40568', 'SRR020192.23186']
 >>> fq_dict["SRR020192.23186"].seq
-Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG', SingleLetterAlphabet())
+Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG')
 \end{minted}
 
 When testing this on a FASTQ file with seven million reads,
