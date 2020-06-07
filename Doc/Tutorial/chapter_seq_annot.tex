@@ -679,6 +679,7 @@ MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
 GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
 NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
 SSAC
+<BLANKLINE>
 \end{minted}
 
 This \verb|format| method takes a single mandatory argument, a lower case string which is
@@ -726,6 +727,7 @@ qualifiers:
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
+<BLANKLINE>
 >>> print(record.features[21])
 type: CDS
 location: [4342:4780](+)
@@ -766,9 +768,7 @@ qualifiers:
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-\end{minted}
-%As above, output is truncated so cannot test this as a doctest:
-\begin{minted}{pycon}
+<BLANKLINE>
 >>> print(sub_record.features[1])
 type: CDS
 location: [42:480](+)
@@ -907,9 +907,7 @@ SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'
 >>> record.dbxrefs
 ['Project:58037']
 >>> record.annotations.keys()
-['molecule_type', 'topology', 'data_file_division', 'date', 'accessions',
-'sequence_version', 'gi', 'keywords', 'source', 'organism', 'taxonomy',
-'references', 'comment']
+['molecule_type', 'topology', 'data_file_division', 'date', 'accessions', 'sequence_version', 'gi', 'keywords', 'source', 'organism', 'taxonomy', 'references', 'comment']
 \end{minted}
 
 You can shift the origin like this:

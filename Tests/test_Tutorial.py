@@ -118,7 +118,10 @@ for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
 
 def _extract(handle):
     line = handle.readline()
-    if line != "\\begin{minted}{pycon}\n":
+    if (
+        line != "\\begin{minted}{pycon}\n"
+        and line != "\\begin{minted}[breaklines,breaksymbolleft=]{pycon}\n"
+    ):
         raise ValueError(
             "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'"
         )
@@ -293,7 +296,7 @@ if __name__ == "__main__":
         for dep in sorted(missing_deps):
             print(" - %s" % dep)
     print("Running Tutorial doctests...")
-    tests = doctest.testmod(optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
+    tests = doctest.testmod(optionflags=doctest.ELLIPSIS)
     if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")
