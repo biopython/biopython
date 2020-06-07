@@ -31,8 +31,6 @@ class TestSeqDatabase(unittest.TestCase):
         self.test_tuple = (f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', 'https://www.uniprot.org/uniprot/A0A1A2.fasta')
         self.test_obs = []
         self.test_http = []
-        self.test_mk_dirs()
-        self.test_mk_subdirs()
 
     def test_read_list_of_ids(self):
         """
@@ -58,6 +56,8 @@ class TestSeqDatabase(unittest.TestCase):
         """
         Check if the function create directories correctly
         """
+        for t_dir in self.dirs:
+            os.mkdir(t_dir)
         downloader.mk_subdirs(self.test_dir, self.test_root_dir)
         assert os.path.exists(
             f"{self.test_root_dir}/Downloads/test") is True, \
@@ -79,6 +79,9 @@ class TestSeqDatabase(unittest.TestCase):
         """
         Check if the function returns file path, as well as ,downloads and saves file correctly.
         """
+        for t_dir in self.dirs:
+            os.mkdir(t_dir)
+            os.mkdir(f'{t_dir}/{self.test_dir}')
         fetched_url = downloader.fetch_url(self.test_tuple, self.test_obs, self.test_http)
         assert fetched_url == f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', \
             "Function execution failure."
@@ -89,6 +92,9 @@ class TestSeqDatabase(unittest.TestCase):
         """
         Check if the function downloads and saves NCBI file correctly using Entrez.
         """
+        for t_dir in self.dirs:
+            os.mkdir(t_dir)
+            os.mkdir(f'{t_dir}/{self.test_dir}')
         downloader.download_ncbi("YP_025292.1", self.test_dir, self.test_obs, self.test_http, self.test_root_dir)
         assert os.path.exists(f"{self.test_root_dir}/Downloads/test/YP_025292.1.fasta") is True, \
             "Function execution failure."
