@@ -124,7 +124,7 @@ Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-Seq('GTTGCTTCTGGCGTGGGTGGGGGGG', SingleLetterAlphabet())
+Seq('GTTGCTTCTGGCGTGGGTGGGGGGG')
 >>> print(record.letter_annotations["phred_quality"])
 [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
@@ -181,7 +181,7 @@ Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-Seq('TTCTGGCGTG', SingleLetterAlphabet())
+Seq('TTCTGGCGTG')
 >>> print(sub_rec.letter_annotations["phred_quality"])
 [26, 26, 26, 26, 26, 26, 24, 26, 22, 26]
 >>> print(sub_rec.format("fastq"))
@@ -217,7 +217,7 @@ Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-UnknownSeq(25, alphabet=SingleLetterAlphabet(), character='?')
+UnknownSeq(25, character='?')
 >>> print(record.letter_annotations["phred_quality"])
 [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
