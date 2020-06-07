@@ -220,8 +220,7 @@ Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost i
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
 \end{minted}
@@ -231,7 +230,7 @@ the sequence string is the same as before, but this time \verb|Bio.SeqIO| has be
 
 \begin{minted}{pycon}
 >>> record.seq
-Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', IUPACAmbiguousDNA())
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
 \end{minted}
 
 The \verb|name| comes from the LOCUS line, while the \verb|id| includes the version suffix.
@@ -702,8 +701,7 @@ For example, taking the same GenBank file used earlier:
 %TODO - support line wrapping in doctest
 \begin{minted}{pycon}
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence',
 dbxrefs=['Project:58037'])
 \end{minted}
@@ -762,8 +760,7 @@ gene/CDS), and see how many features we get:
 %TODO - Line wrapping for doctest?
 \begin{minted}{pycon}
 >>> sub_record
-SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA'), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
 \end{minted}
@@ -931,8 +928,7 @@ Suppose you have a circular genome:
 %TODO - doctest wrapping
 \begin{minted}{pycon}
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
 \end{minted}
@@ -962,8 +958,7 @@ You can shift the origin like this:
 %TODO - doctest wrapping
 \begin{minted}{pycon}
 >>> shifted
-SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
 \end{minted}
