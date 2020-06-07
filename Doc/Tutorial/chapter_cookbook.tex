@@ -1640,12 +1640,9 @@ contains the Clustalw alignment output.
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
->>> from Bio import Alphabet
->>> from Bio.Alphabet import IUPAC
 >>> from Bio.Align import AlignInfo
 >>> filename = "protein.aln"
->>> alpha = Alphabet.Gapped(IUPAC.protein)
->>> c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
+>>> c_align = AlignIO.read(filename, "clustal")
 >>> summary_align = AlignInfo.SummaryInfo(c_align)
 \end{minted}
 
@@ -1662,9 +1659,9 @@ replacements for only charged polar amino acids using:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
-...                                                      "M", "P", "F", "W", "S",
-...                                                      "T", "N", "Q", "Y", "C"])
+>>> replace_info = summary_align.replacement_dictionary(
+...     ["G", "A", "V", "L", "I", "M", "P", "F",
+...      "W", "S", "T", "N", "Q", "Y", "C", "-"])
 \end{minted}
 
 This information about amino acid replacements is represented as a
