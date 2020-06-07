@@ -23,7 +23,8 @@ def print_success(msg: str):
 class TestSeqDatabase(unittest.TestCase):
     def setUp(self) -> None:
         # Declaration of variables needed for running tests.
-        self.test_root_dir = 'SeqAnalysis'
+        cwd = os.getcwd()
+        self.test_root_dir = 'SeqAnalysis' if cwd.endswith('Tests') else 'Tests/SeqAnalysis'
         self.filename = f"{self.test_root_dir}/database_tests.txt"  # Additional file made only for reading function test.
         self.dirs = [f'{self.test_root_dir}/Downloads', f'{self.test_root_dir}/Failed', f'{self.test_root_dir}/Database']
         self.test_dir = "test"
@@ -136,6 +137,8 @@ class TestSeqAnalyzer(unittest.TestCase):
     def setUp(self) -> None:
         # Declaring round value - values are rounded to round_value decimal places
         self.round_value = 3
+        cwd = os.getcwd()
+        self.test_root_dir = 'SeqAnalysis' if cwd.endswith('Tests') else 'Tests/SeqAnalysis'
 
         # Creating test dictionary for testing methods from analyzer class
         self.test_data_dict_of_str = {
@@ -179,7 +182,8 @@ class TestSeqAnalyzer(unittest.TestCase):
 
         :return: returns nothing if class passes tests, else function returns text message
         """
-        results = analyzer(self.test_data_dict_of_seqrecords)
+        results = analyzer(self.test_data_dict_of_seqrecords, self.test_root_dir)
+        os.remove(f'{self.test_root_dir}/results.json')
         assert results.results() == (
         {'median_length': 158.0, 'average_length': 605.667, 'standard_deviation_length': 721.085,
          'id': ['id4', 'id5', 'id6'], 'sequence_length': [158, 36, 1623],

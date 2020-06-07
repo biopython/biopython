@@ -64,7 +64,19 @@ python3 setup.py install
 cp venv/lib/*/site-packages/biopython*/Bio/Align/* Bio/Align
 ```
 
-### Run test file
+### Tests
+
+Tests are in biopython `Tests` directory and are performed during `python3 setup.py test`.
+When wants to run tests only for `SeqAnalysis` module, you need to run them from `unittest`:
+
+```bash
+python3 -m unittest Tests/test_SeqAnalysis.py
+```
+
+When running from Pycharm, set working directory to biopython, go to
+`test_SeqAnalysis.py` file and run tests.
+
+### Run
 
 Running as single module with input from example file, analysis output should appear in `seq_analysis` directory:
 
