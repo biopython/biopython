@@ -13,14 +13,14 @@ and Threonines?
 
 \section{Sequences and Alphabets}
 
-The alphabet object is perhaps the important thing that makes the \verb|Seq| object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio.Alphabet| module. We'll use the \href{http://www.sbcs.qmul.ac.uk/iupac/}{IUPAC alphabets} here to deal with some of our favorite objects: DNA, RNA and Proteins.
+Historically the \verb|Seq| object in Biopython ``.alphabet`` attribute was a
+complex object which captured not just the type of sequence (like DNA, RNA, or
+Protein) but additional information like the expected letters or gap character.
+This has been cut in Biopython 1.78.
 
-\verb|Bio.Alphabet.IUPAC| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``U'' (or ``Sec'' for selenocysteine) and ``O'' (or ``Pyl'' for pyrrolysine), plus the ambiguous symbols ``B'' (or ``Asx'' for asparagine or aspartic acid), ``Z'' (or ``Glx'' for glutamine or glutamic acid), ``J'' (or ``Xle'' for leucine isoleucine) and ``X'' (or ``Xxx'' for an unknown amino acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
-
-The advantages of having an alphabet class are two fold. First, this gives an idea of the type of information the Seq object contains. Secondly, this provides a means of constraining the information, as a means of type checking.
-
-Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
-You can create an ambiguous sequence with the default generic alphabet like this:
+We still need to record the molecule type (DNA, RNA, nucleotide, protein, or
+unknown) for use with some file formats, and this can also be used for type
+checking.
 
 %doctest
 \begin{minted}{pycon}
@@ -32,17 +32,17 @@ Seq('AGTACACTGGT')
 Alphabet()
 \end{minted}
 
-However, where possible you should specify the alphabet explicitly when creating your sequence objects - in this case an unambiguous DNA alphabet object:
+However, where necessary you can specify the alphabet is DNA:
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("AGTACACTGGT", IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> my_seq = Seq("AGTACACTGGT", generic_dna)
 >>> my_seq
 Seq('AGTACACTGGT')
 >>> my_seq.alphabet
-IUPACUnambiguousDNA()
+DNAAlphabet()
 \end{minted}
 
 Unless of course, this really is an amino acid sequence:
@@ -50,12 +50,12 @@ Unless of course, this really is an amino acid sequence:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_prot = Seq("AGTACACTGGT", IUPAC.protein)
+>>> from Bio.Alphabet import generic_protein
+>>> my_prot = Seq("AGTACACTGGT", generic_protein)
 >>> my_prot
 Seq('AGTACACTGGT')
 >>> my_prot.alphabet
-IUPACProtein()
+ProteinAlphabet()
 \end{minted}
 
 \section{Sequences act like strings}
