@@ -1444,7 +1444,7 @@ The \verb|SummaryInfo| object, described in section~\ref{sec:summary_info}, prov
 consensus = summary_align.dumb_consensus()
 \end{minted}
 
-As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object.
+As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is a \verb|Seq| object.
 
 You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
