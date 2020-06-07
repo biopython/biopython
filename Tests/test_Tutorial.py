@@ -293,7 +293,7 @@ if __name__ == "__main__":
         for dep in sorted(missing_deps):
             print(" - %s" % dep)
     print("Running Tutorial doctests...")
-    tests = doctest.testmod()
+    tests = doctest.testmod(optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
     if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")

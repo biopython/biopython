@@ -137,7 +137,10 @@ has a sister function for use on files which contain just one record which we'll
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|', description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'),
+id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
+description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001
+plasmid pPCP1, complete sequence', dbxrefs=[])
 \end{minted}
 
 Now, let's have a look at the key attributes of this \verb|SeqRecord|
@@ -164,7 +167,8 @@ Next, the identifiers and description:
 >>> record.name
 'gi|45478711|ref|NC_005816.1|'
 >>> record.description
-'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence'
+'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1,
+complete sequence'
 \end{minted}
 
 As you can see above, the first word of the FASTA record's title line (after
@@ -221,7 +225,9 @@ Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost i
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'),
+id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus
+str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
 \end{minted}
 
 You should be able to spot some differences already! But taking the attributes individually,
@@ -545,7 +551,8 @@ If you are using Biopython 1.59 or later, the feature location's start and end a
 
 %cont-doctest
 \begin{minted}{pycon}
->>> feature_seq = example_parent[example_feature.location.start:example_feature.location.end].reverse_complement()
+>>> start_pos, end_pos = example_feature.location.start, example_feature.location.end
+>>> feature_seq = example_parent[start_pos:end_pos].reverse_complement()
 >>> print(feature_seq)
 AGCCTTTGCCGTC
 \end{minted}
@@ -619,7 +626,8 @@ will instead raise an explicit error to avoid people being caught out by this:
 >>> record1 == record2
 Traceback (most recent call last):
 ...
-NotImplementedError: SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest.
+NotImplementedError: SeqRecord comparison is deliberately not implemented. Explicitly
+compare the attributes of interest.
 \end{minted}
 
 Instead you should check the attributes you are interested in, for example the
@@ -678,7 +686,6 @@ MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
 GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
 NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
 SSAC
-<BLANKLINE>
 \end{minted}
 
 This \verb|format| method takes a single mandatory argument, a lower case string which is
@@ -702,7 +709,9 @@ For example, taking the same GenBank file used earlier:
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'),
+id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus
+str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
 >>> len(record)
 9609
 >>> len(record.features)
@@ -726,7 +735,6 @@ qualifiers:
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-<BLANKLINE>
 >>> print(record.features[21])
 type: CDS
 location: [4342:4780](+)
@@ -735,12 +743,11 @@ qualifiers:
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-    Key: note, Value: ['similar to many previously sequenced pesticin immunity protein entries of Yersinia pestis plasmid pPCP, e.g. gi| 16082683|,ref|NP_395230.1| (NC_003132) , gi|1200166|emb|CAA90861.1| (Z54145 ) , gi|1488655| emb|CAA63439.1| (X92856) , gi|2996219|gb|AAC62543.1| (AF053945) , and gi|5763814|emb|CAB531 67.1| (AL109969)']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity protein e...
     Key: product, Value: ['pesticin immunity protein']
     Key: protein_id, Value: ['NP_995571.1']
     Key: transl_table, Value: ['11']
-    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSHGIYGKQTTFKQTEFTNIKSNTKKHIALINKDNSWMISLKILGIKRDEYTVCFEDFSLIRPPTYVAIHPLLIKKVKSGNFIVVKEIKKSIPGCTVYYH']
-<BLANKLINE>
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSHGIYGKQTTF...
 \end{minted}
 
 Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
@@ -750,7 +757,9 @@ gene/CDS), and see how many features we get:
 \begin{minted}{pycon}
 >>> sub_record = record[4300:4800]
 >>> sub_record
-SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
+SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA'),
+id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus
+str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
 >>> len(sub_record)
 500
 >>> len(sub_record.features)
@@ -768,7 +777,6 @@ qualifiers:
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-<BLANKLINE>
 \end{minted}
 %As above, output is truncated so cannot test this as a doctest:
 \begin{minted}{pycon}
@@ -780,11 +788,11 @@ qualifiers:
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-    Key: note, Value: ['similar to many previously sequenced pesticin immunity ...']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity protein e...
     Key: product, Value: ['pesticin immunity protein']
     Key: protein_id, Value: ['NP_995571.1']
     Key: transl_table, Value: ['11']
-    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSH...']
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSHGIYGKQTTF...
 \end{minted}
 
 \noindent Notice that their locations have been adjusted to reflect the new parent sequence!
@@ -852,7 +860,8 @@ FASTQ file. Chapter~\ref{chapter:seqio} will explain the \verb|SeqIO| functions:
 >>> print(record.seq)
 CCCTTCTTGTCTTCAGCGTTTCTCC
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 26, 23, 23]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26,
+26, 23, 23]
 \end{minted}
 
 \noindent Let's suppose this was Roche 454 data, and that from other information
@@ -884,7 +893,8 @@ CTCC
 >>> print(edited.seq)
 CCCTTCTTGTCTTCAGCGTTCTCC
 >>> print(edited.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 23, 23]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26,
+26, 23, 23]
 \end{minted}
 
 \noindent Easy and intuitive? We hope so! You can make this shorter with just:
@@ -902,7 +912,9 @@ Suppose you have a circular genome:
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'),
+id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus
+str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
 >>> len(record)
 9609
 >>> len(record.features)
@@ -910,7 +922,9 @@ SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'
 >>> record.dbxrefs
 ['Project:58037']
 >>> record.annotations.keys()
-['molecule_type', 'topology', 'data_file_division', 'date', 'accessions', 'sequence_version', 'gi', 'keywords', 'source', 'organism', 'taxonomy', 'references', 'comment']
+['molecule_type', 'topology', 'data_file_division', 'date', 'accessions',
+'sequence_version', 'gi', 'keywords', 'source', 'organism', 'taxonomy',
+'references', 'comment']
 \end{minted}
 
 You can shift the origin like this:
@@ -919,7 +933,9 @@ You can shift the origin like this:
 \begin{minted}{pycon}
 >>> shifted = record[2000:] + record[:2000]
 >>> shifted
-SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
+SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'),
+id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus
+str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
 >>> len(shifted)
 9609
 \end{minted}
@@ -987,7 +1003,17 @@ Consider this example record:
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
->>> print("%s %i %i %i %i" % (record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)))
+>>> print(
+...     "%s %i %i %i %i"
+...     % (
+...         record.id,
+...         len(record),
+...         len(record.features),
+...         len(record.dbxrefs),
+...         len(record.annotations),
+...     )
+... )
+...
 NC_005816.1 9609 41 1 13
 \end{minted}
 
@@ -997,6 +1023,10 @@ how most of the annotation is dropped (but not the features):
 %cont-doctest
 \begin{minted}{pycon}
 >>> rc = record.reverse_complement(id="TESTING")
->>> print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)))
+>>> print(
+...     "%s %i %i %i %i"
+...     % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations))
+... )
+...
 TESTING 9609 41 0 0
 \end{minted}
