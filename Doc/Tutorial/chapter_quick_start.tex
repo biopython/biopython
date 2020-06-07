@@ -130,15 +130,17 @@ for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
 
 \begin{minted}{text}
 Z78533.1
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
 ...
 Z78439.1
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 592
 \end{minted}
 
-This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, IUPAC Ambiguous DNA.  You'll also notice that a shorter string has been used as the \verb|seq_record.id| in this case.
+You'll notice that a shorter string has been used as the \verb|seq_record.id| in this case.
+
+Actually the FASTA file is a little old fashioned as the NCBI has deprecated the old numeric GI scheme.
 
 \subsection{I love parsing -- please don't stop talking about it!}
 
