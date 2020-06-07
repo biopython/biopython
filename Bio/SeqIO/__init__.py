@@ -678,7 +678,7 @@ def read(handle, format, alphabet=None):
     >>> print("Sequence length %i" % len(record))
     Sequence length 86436
     >>> print("Sequence alphabet %s" % record.seq.alphabet)
-    Sequence alphabet IUPACAmbiguousDNA()
+    Sequence alphabet DNAAlphabet()
 
     If the handle contains no records, or more than one record,
     an exception is raised.  For example:

@@ -125,9 +125,7 @@ class SeqRecord:
 
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
-    >>> from Bio.Alphabet import IUPAC
-    >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-    ...                         IUPAC.protein),
+    >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
     ...                    id="YP_025292.1", name="HokC",
     ...                    description="toxic membrane protein")
     >>> print(record)
@@ -373,10 +371,8 @@ class SeqRecord:
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> from Bio.Alphabet import IUPAC
         >>> rec = SeqRecord(Seq("MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLAT"
-        ...                     "EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR",
-        ...                     IUPAC.protein),
+        ...                     "EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR"),
         ...                 id="1JOY", name="EnvZ",
         ...                 description="Homodimeric domain of EnvZ from E. coli")
         >>> rec.letter_annotations["secondary_structure"] = "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
@@ -617,9 +613,7 @@ class SeqRecord:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.Alphabet import IUPAC
-        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...                         IUPAC.protein),
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
         ...                    id="YP_025292.1", name="HokC",
         ...                    description="toxic membrane protein, small")
         >>> print(str(record))
@@ -706,9 +700,7 @@ class SeqRecord:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.Alphabet import IUPAC
-        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...                         IUPAC.protein),
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF"),
         ...                    id="YP_025292.1", name="HokC",
         ...                    description="toxic membrane protein")
         >>> record.format("fasta")
@@ -1172,10 +1164,10 @@ class SeqRecord:
         Note trying to reverse complement a protein SeqRecord raises an
         exception:
 
-        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import IUPAC
-        >>> protein_rec = SeqRecord(Seq("MAIVMGR", IUPAC.protein), id="Test")
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> protein_rec = SeqRecord(Seq("MAIVMGR", generic_protein), id="Test")
         >>> protein_rec.reverse_complement()
         Traceback (most recent call last):
            ...
@@ -1183,10 +1175,9 @@ class SeqRecord:
 
         Also note you can reverse complement a SeqRecord using a MutableSeq:
 
-        >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Seq import MutableSeq
-        >>> from Bio.Alphabet import generic_dna
-        >>> rec = SeqRecord(MutableSeq("ACGT", generic_dna), id="Test")
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> rec = SeqRecord(MutableSeq("ACGT"), id="Test")
         >>> rec.seq[0] = "T"
         >>> print("%s %s" % (rec.id, rec.seq))
         Test TCGT
