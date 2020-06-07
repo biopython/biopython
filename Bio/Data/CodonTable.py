@@ -13,8 +13,6 @@ using Scripts/update_ncbi_codon_table.py
 Last updated at Version 4.4 (May 2019)
 """
 
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
 
@@ -51,9 +49,6 @@ class TranslationError(Exception):
 class CodonTable:
     """A codon-table, or genetic code."""
 
-    nucleotide_alphabet = Alphabet.generic_nucleotide
-    protein_alphabet = Alphabet.generic_protein
-
     forward_table = {}  # only includes codons which actually code
     back_table = {}  # for back translations
     start_codons = []
@@ -62,16 +57,17 @@ class CodonTable:
     # Not always called from derived classes!
     def __init__(
         self,
-        nucleotide_alphabet=nucleotide_alphabet,
-        protein_alphabet=protein_alphabet,
+        is_dna=False,
         forward_table=forward_table,
         back_table=back_table,
         start_codons=start_codons,
         stop_codons=stop_codons,
     ):
-        """Initialize the class."""
-        self.nucleotide_alphabet = nucleotide_alphabet
-        self.protein_alphabet = protein_alphabet
+        """Initialize the class.
+
+        Legacy argument protein_alphabet is now ignored.
+        """
+        self._is_dna = is_dna  # Default to RNA or generic
         self.forward_table = forward_table
         self.back_table = back_table
         self.start_codons = start_codons
@@ -115,10 +111,7 @@ class CodonTable:
 
         # Use the main four letters (and the conventional ordering)
         # even for ambiguous tables
-        letters = self.nucleotide_alphabet.letters
-        if isinstance(self.nucleotide_alphabet, Alphabet.DNAAlphabet) or (
-            letters is not None and "T" in letters
-        ):
+        if self._is_dna:
             letters = "TCAG"
         else:
             # Should be either RNA or generic nucleotides,
@@ -172,8 +165,7 @@ def make_back_table(table, default_stop_codon):
 class NCBICodonTable(CodonTable):
     """Codon table for generic nucleotide sequences."""
 
-    nucleotide_alphabet = Alphabet.generic_nucleotide
-    protein_alphabet = IUPAC.protein
+    _is_dna = False
 
     def __init__(self, id, names, table, start_codons, stop_codons):
         """Initialize the class."""
@@ -196,13 +188,13 @@ class NCBICodonTable(CodonTable):
 class NCBICodonTableDNA(NCBICodonTable):
     """Codon table for unambiguous DNA sequences."""
 
-    nucleotide_alphabet = IUPAC.unambiguous_dna
+    _is_dna = True
 
 
 class NCBICodonTableRNA(NCBICodonTable):
     """Codon table for unambiguous RNA sequences."""
 
-    nucleotide_alphabet = IUPAC.unambiguous_rna
+    _is_dna = False
 
 
 # ########  Deal with ambiguous forward translations
@@ -214,16 +206,14 @@ class AmbiguousCodonTable(CodonTable):
     def __init__(
         self,
         codon_table,
-        ambiguous_nucleotide_alphabet,
+        is_dna,
         ambiguous_nucleotide_values,
-        ambiguous_protein_alphabet,
         ambiguous_protein_values,
     ):
         """Initialize the class."""
         CodonTable.__init__(
             self,
-            ambiguous_nucleotide_alphabet,
-            ambiguous_protein_alphabet,
+            is_dna,
             AmbiguousForwardTable(
                 codon_table.forward_table,
                 ambiguous_nucleotide_values,
@@ -517,9 +507,8 @@ def register_ncbi_table(name, alt_name, id, table, start_codons, stop_codons):
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons, stop_codons)
     ambig_dna = AmbiguousCodonTable(
         dna,
-        IUPAC.ambiguous_dna,
+        True,  # is_dna=True
         IUPACData.ambiguous_dna_values,
-        IUPAC.extended_protein,
         IUPACData.extended_protein_values,
     )
 
@@ -559,9 +548,8 @@ def register_ncbi_table(name, alt_name, id, table, start_codons, stop_codons):
     _merged_values["T"] = "U"
     ambig_generic = AmbiguousCodonTable(
         generic,
-        Alphabet.NucleotideAlphabet(),
+        False,  # is_dna=False,
         _merged_values,
-        IUPAC.extended_protein,
         IUPACData.extended_protein_values,
     )
 
@@ -571,9 +559,8 @@ def register_ncbi_table(name, alt_name, id, table, start_codons, stop_codons):
 
     ambig_rna = AmbiguousCodonTable(
         rna,
-        IUPAC.ambiguous_rna,
+        False,  # is_dna=False,
         IUPACData.ambiguous_rna_values,
-        IUPAC.extended_protein,
         IUPACData.extended_protein_values,
     )
 
