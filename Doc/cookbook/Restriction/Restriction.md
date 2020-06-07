@@ -127,16 +127,11 @@ KpnI
 
 So what can we do with these restriction enzymes? To see that we will need a
 DNA sequence. Restriction enzymes support both `Bio.Seq.MutableSeq`and
-`Bio.Seq.Seq` objects. You can use any DNA alphabet which complies with the
-IUPAC alphabet.
+`Bio.Seq.Seq` objects. You sequence must comply with the IUPAC alphabet.
 
 ``` python
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
->>> amb = IUPACAmbiguousDNA()
->>> my_seq = Seq('AAAAAAAAAAAAAA', amb)
->>> my_seq
-Seq('AAAAAAAAAAAAAA', IUPACAmbiguousDNA())
+>>> my_seq = Seq('AAAAAAAAAAAAAA')
 ```
 
 Searching a sequence for the presence of restriction site for your preferred
@@ -151,9 +146,9 @@ The results is a list. Here the list is empty since there is obviously no EcoRI
 site in *my_seq*.  Let's try to get a sequence with an EcoRI site.
 
 ``` python
->>> ecoseq = my_seq + Seq(EcoRI.site, amb) + my_seq
+>>> ecoseq = my_seq + Seq(EcoRI.site) + my_seq
 >>> ecoseq
-Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())
+Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA')
 >>> EcoRI.search(ecoseq)
 [16]
 ```
@@ -174,8 +169,7 @@ EcoRI digestion of *ecoseq*, one should do the following:
 
 ``` python
 >>> ecoseq[:15], ecoseq[15:]
-(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAm
-biguousDNA()))
+(Seq('AAAAAAAAAAAAAAG'), Seq('AATTCAAAAAAAAAAAAAA'))
 ```
 
 I hear you thinking "this is a cumbersome and error prone method to get these
@@ -186,16 +180,14 @@ Using it is as simple as before:
 
 ``` python
 >>> EcoRI.catalyse(ecoseq)
-(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAm
-biguousDNA()))
+(Seq('AAAAAAAAAAAAAAG'), Seq('AATTCAAAAAAAAAAAAAA'))
 ```
 
 BTW, you can also use spell it the American way `catalyze`:
 
 ``` python
 >>> EcoRI.catalyze(ecoseq)
-(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAm
-biguousDNA()))
+(Seq('AAAAAAAAAAAAAAG'), Seq('AATTCAAAAAAAAAAAAAA'))
 ```
 
 #### <a name="1.5"></a>1.5 Analysing circular sequences
@@ -211,9 +203,9 @@ the boundaries of the sequence.
 >>> EcoRI.search(ecoseq, linear=False)
 [16]
 >>> EcoRI.catalyse(ecoseq, linear=False)
-(Seq('AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG', IUPACAmbiguousDNA()),)
+(Seq('AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG'),)
 >>> ecoseq  # for memory
-Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())
+Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA')
 ```
 
 OK, this is quite a difference, we only get one fragment, which correspond to
@@ -221,7 +213,7 @@ the linearised sequence. The beginning sequence has been shifted to take this
 fact into account. Moreover we can see another difference:
 
 ``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> EcoRI.search(new_seq)
 []
 >>> EcoRI.search(new_seq, linear=False)
@@ -637,7 +629,7 @@ implement a `catalyse` method, as it would not have a real meaning when used
 with large batch.
 
 ``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> rb.search(new_seq)
 {'KpnI': [], 'EcoRV': [], 'EcoRI': []}
 >>> rb.search(new_seq, linear=False)
@@ -711,12 +703,12 @@ If the third argument is not provided, `Analysis` will assume the sequence is
 linear.
 
 ``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
 >>> Ana = Analysis(rb, new_seq, linear=False)
 >>> Ana
 Analysis(RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI']),Seq('TTCAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)
+AAAAAAAAAAGAA'),False)
 ```
 
 #### <a name="4.2"></a>4.2 Full restriction analysis
@@ -741,7 +733,7 @@ will get a more easy to read output with `print_that` used without argument:
 >>>
 >>> multi_site = Seq.Seq('AAA' + EcoRI.site + 'G' + KpnI.site + EcoRV.site +
                      'CT' + SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' +
-                      EcoRI.site + 'ACGT', IUPACAmbiguousDNA())
+                      EcoRI.site + 'ACGT')
 >>> Analong = Analysis(rb, multi_site)
 >>> Analong.full()
 {BglI: [], BstEII: [], AsuII: [], HinfI: [], SfiI: [], PspPI: [], BsiSI: [27], S
@@ -941,12 +933,12 @@ do_not_cut(self, start, end, dct =None)
 Using these methods is simple:
 
 ``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
 >>> Ana = Analysis(rb, new_seq, linear=False)
 >>> Ana
 Analysis(RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI']),Seq('TTCAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)
+AAAAAAAAAAGAA'),False)
 >>> Ana.blunt()  # output only the result for enzymes which cut blunt
 {'EcoRV': []}
 >>> Ana.full()  # all the enzymes in the RestrictionBatch
@@ -1066,7 +1058,7 @@ linear:
 >>> default_fseq = FormattedSeq(seq)
 >>> circular_fseq = FormattedSeq(seq, linear=False)
 >>> linear_fseq
-FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)
+FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 >>> linear_fseq.is_linear()
 True
 >>> default_fseq.is_linear()
@@ -1074,7 +1066,7 @@ True
 >>> circular_fseq.is_linear()
 False
 >>> circular_fseq
-FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
+FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=False)
 ```
 
 #### <a name="5.2"></a>5.2 Unlike Bio.Seq, FormattedSeq retains information about their shape
@@ -1118,19 +1110,19 @@ FormattedSeq.linearise()   => change the shape of FormattedShape to linear
 
 ``` python
 >>> circular_fseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=False)
 >>> circular_fseq.is_linear()
 False
 >>> circular_fseq == linear_fseq
 False
 >>> newseq = circular_fseq.to_linear()
 >>> circular_fseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=False)
 >>> newseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 >>> circular_fseq.linearise()
 >>> circular_fseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 >>> circular_fseq.is_linear()
 True
 >>> circular_fseq == linear_fseq
@@ -1150,7 +1142,7 @@ opportunity to use the shorthand '/' and '//' with restriction enzymes:
 >>> linear_fseq/EcoRI  # <=> EcoRI.search(linear_fseq)
 [15]
 >>> EcoRI//linear_fseq # <=> linear_fseq//EcoRI <=> EcoRI.catalyse(linear_fseq)
-(Seq('TTCAAAAAAAAAAG', Alphabet()), Seq('AATTCAAAAGAA', Alphabet()))
+(Seq('TTCAAAAAAAAAAG'), Seq('AATTCAAAAGAA'))
 ```
 
 Another way to avoid the overhead due to a repetitive conversion from a `Seq`
@@ -1423,7 +1415,7 @@ a rather useless `Analysis` class:
 >>> # You initiate and use it as before
 >>> rb = RestrictionBatch([], ['A'])
 >>> multi_site = Seq('AAA' + EcoRI.site +'G' + KpnI.site + EcoRV.site + 'CT' +\
-SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT', IUPACAmbiguousDNA())
+SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT')
 >>>
 >>> b = UselessAnalysis(rb, multi_site)
 >>> b.print_that() # Well, I let you discover if you haven't already guessed
@@ -1466,12 +1458,10 @@ recognised at all. Degenerated sequences will not be analysed. If your sequence
 is not fully sequenced, you will certainly miss restriction sites:
 
 ``` python
->>> a = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr', IUPACAmbiguou
-sDNA())
+>>> a = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr')
 >>> EcoRI.search(a)
 [36]
->>> b = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr', IUPACAmbiguou
-sDNA())
+>>> b = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr')
 >>> EcoRI.search(b)
 []
 ```
@@ -1488,8 +1478,7 @@ fragments, upper case sequences upper case fragments), but mixed case will
 return upper case fragments:
 
 ``` python
->>> c = Seq('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr', IUPACAmbiguou
-sDNA())
+>>> c = Seq('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr')
 >>> EcoRI.search(c)
 
 Traceback (most recent call last):
@@ -1503,24 +1492,23 @@ Traceback (most recent call last):
 TypeError: Invalid character found in 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR'
 >>> d = Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n\
 26 nnnnn nnnnG AATTC rrrrr rrrrr \n\
-51 r', IUPACAmbiguousDNA())
+51 r')
 >>> d
-Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r',
- IUPACAmbiguousDNA())
+Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r')
 >>> EcoRI.search(d)
 [36]
 >>> EcoRI.catalyse(d)
-(Seq('AATTCRRRRRRRRRRR', IUPACAmbiguousDNA()), Seq('NNNNNNNNNNNNNNNNNNNNNNNNNNNN
-NNNNNNG', IUPACAmbiguousDNA()))
->>> e = Seq('nnnnGAATTCrr', IUPACAmbiguousDNA())
->>> f = Seq('NNNNGAATTCRR', IUPACAmbiguousDNA())
->>> g = Seq('nnnngaattcrr', IUPACAmbiguousDNA())
+(Seq('AATTCRRRRRRRRRRR'), Seq('NNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNG'))
+>>> e = Seq('nnnnGAATTCrr')
+>>> f = Seq('NNNNGAATTCRR')
+>>> g = Seq('nnnngaattcrr')
 >>> EcoRI.catalyse(e)
-(Seq('NNNNG', IUPACAmbiguousDNA()), Seq('AATTCRR', IUPACAmbiguousDNA()))
+(Seq('NNNNG'), Seq('AATTCRR'))
 >>> EcoRI.catalyse(f)
-(Seq('NNNNG', IUPACAmbiguousDNA()), Seq('AATTCRR', IUPACAmbiguousDNA()))
+(Seq('NNNNG'), Seq('AATTCRR'))
 >>> EcoRI.catalyse(g)
-(Seq('nnnng', IUPACAmbiguousDNA()), Seq('aattcrr', IUPACAmbiguousDNA()))
+(Seq('nnnng'), Seq('aattcrr'))
 ```
 
 Not allowing other letters than IUPAC might seems drastic but this is really to
@@ -1533,7 +1521,7 @@ done to try to determine if a restriction site at the end of a linear sequence
 is valid:
 
 ``` python
->>> d = Seq('GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG', IUPACAmbiguousDNA())
+>>> d = Seq('GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG')
 >>> FokI.site           # site present
 'GGATG'
 >>> FokI.elucidate()        # but cut outside the sequence
@@ -1570,7 +1558,7 @@ True
 'GAACNNNNNNTCC'
 >>> b = Seq('AAAAAAAAAAA'+ AloI.site + 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 >>> b
-Seq('AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', Alphabet())
+Seq('AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 >>> AloI.search(b)  # one site, two cuts -> two positions
 [5, 37]
 ```

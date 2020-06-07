@@ -82,9 +82,9 @@
 <body>
 <h1 id="working-with-restriction-enzymes">Working with restriction enzymes</h1>
 <h2 id="table-of-contents">Table of contents</h2>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#1">The restriction enzymes classes</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#1.1">Importing the enzymes</a></li>
 <li><a href="#1.2">Naming convention</a></li>
 <li><a href="#1.3">Searching for restriction sites</a></li>
@@ -94,7 +94,7 @@
 <li><a href="#1.7">Other facilities provided by the enzyme classes</a></li>
 </ol></li>
 <li><a href="#2">The RestrictionBatch class: a class to deal with several enzymes</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#2.1">Creating a RestrictionBatch</a></li>
 <li><a href="#2.2">Restricting a RestrictionBatch to a particular supplier</a></li>
 <li><a href="#2.3">Adding enzymes to a RestrictionBatch</a></li>
@@ -105,7 +105,7 @@
 </ol></li>
 <li><a href="#3">AllEnzymes and CommOnly: two preconfigured RestrictionBatches</a></li>
 <li><a href="#4">The Analysis class: even simpler restriction analysis</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#4.1">Setting up an Analysis</a></li>
 <li><a href="#4.2">Full restriction analysis</a></li>
 <li><a href="#4.3">Changing the title</a></li>
@@ -114,16 +114,16 @@
 <li><a href="#4.6">More complex analysis</a></li>
 </ol></li>
 <li><a href="#5">Advanced features: the FormattedSeq class</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#5.1">Creating a FormattedSeq</a></li>
 <li><a href="#5.2">Unlike Bio.Seq, FormattedSeq retains information about their shape</a></li>
 <li><a href="#5.3">Changing the shape of a FormattedSeq</a></li>
 <li><a href="#5.4">Using / and // operators with FormattedSeq</a></li>
 </ol></li>
 <li><a href="#6">More advanced features</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#6.1">Updating the enzymes from Rebase</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#6.1.1">Fetching the recent enzyme files manually from Rebase</a></li>
 <li><a href="#6.1.2">Fetching the recent enzyme files with rebase_update.py</a></li>
 <li><a href="#6.1.3">Compiling a new dictionary with ranacompiler.py</a></li>
@@ -131,7 +131,7 @@
 <li><a href="#6.2">Subclassing the class Analysis</a></li>
 </ol></li>
 <li><a href="#7">Limitation and caveat</a>
-<ol type="1">
+<ol class="incremental" type="1">
 <li><a href="#7.1">All DNA are non methylated</a></li>
 <li><a href="#7.2">No support for star activity</a></li>
 <li><a href="#7.3">Safe to use with degenerated DNA</a></li>
@@ -183,46 +183,39 @@
 <span id="cb3-17"><a href="#cb3-17"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
 <p><code>ecori</code> or <code>EcoR1</code> are not enzymes, <code>EcoRI</code> and <code>KpnI</code> are.</p>
 <h4 id="searching-for-restriction-sites"><a name="1.3"></a>1.3 Searching for restriction sites</h4>
-<p>So what can we do with these restriction enzymes? To see that we will need a DNA sequence. Restriction enzymes support both <code>Bio.Seq.MutableSeq</code>and <code>Bio.Seq.Seq</code> objects. You can use any DNA alphabet which complies with the IUPAC alphabet.</p>
+<p>So what can we do with these restriction enzymes? To see that we will need a DNA sequence. Restriction enzymes support both <code>Bio.Seq.MutableSeq</code>and <code>Bio.Seq.Seq</code> objects. You sequence must comply with the IUPAC alphabet.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Seq <span class="im">import</span> Seq</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Alphabet.IUPAC <span class="im">import</span> IUPACAmbiguousDNA</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> amb <span class="op">=</span> IUPACAmbiguousDNA()</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="op">&gt;&gt;&gt;</span> my_seq <span class="op">=</span> Seq(<span class="st">&#39;AAAAAAAAAAAAAA&#39;</span>, amb)</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="op">&gt;&gt;&gt;</span> my_seq</span>
-<span id="cb4-6"><a href="#cb4-6"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAA&#39;</span>, IUPACAmbiguousDNA())</span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> my_seq <span class="op">=</span> Seq(<span class="st">&#39;AAAAAAAAAAAAAA&#39;</span>)</span></code></pre></div>
 <p>Searching a sequence for the presence of restriction site for your preferred enzyme is as simple as:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(my_seq)</span>
 <span id="cb5-2"><a href="#cb5-2"></a>[]</span></code></pre></div>
 <p>The results is a list. Here the list is empty since there is obviously no EcoRI site in <em>my_seq</em>. Let’s try to get a sequence with an EcoRI site.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> ecoseq <span class="op">=</span> my_seq <span class="op">+</span> Seq(EcoRI.site, amb) <span class="op">+</span> my_seq</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> ecoseq <span class="op">=</span> my_seq <span class="op">+</span> Seq(EcoRI.site) <span class="op">+</span> my_seq</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> ecoseq</span>
-<span id="cb6-3"><a href="#cb6-3"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;</span>, IUPACAmbiguousDNA())</span>
+<span id="cb6-3"><a href="#cb6-3"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;</span>)</span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(ecoseq)</span>
 <span id="cb6-5"><a href="#cb6-5"></a>[<span class="dv">16</span>]</span></code></pre></div>
 <p>We therefore have a site at position 16 of the sequence <em>ecoseq</em>. The position returned by the method search is the first base of the downstream segment produced by a restriction (i.e. the first base after the position where the enzyme will cut). The <code>Restriction</code> package follows biological convention (the first base of a sequence is base 1). No need to make difficult conversions between your recorded biological data and the results produced by the enzymes in this package.</p>
 <h4 id="retrieving-the-sequences-produced-by-a-digestion"><a name="1.4"></a>1.4 Retrieving the sequences produced by a digestion</h4>
 <p><code>Seq</code> objects as all Python sequences, have different conventions and the first base of a sequence is base 0. Therefore to get the sequences produced by an EcoRI digestion of <em>ecoseq</em>, one should do the following:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> ecoseq[:<span class="dv">15</span>], ecoseq[<span class="dv">15</span>:]</span>
-<span id="cb7-2"><a href="#cb7-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>, IUPACAm</span>
-<span id="cb7-3"><a href="#cb7-3"></a>biguousDNA()))</span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>))</span></code></pre></div>
 <p>I hear you thinking “this is a cumbersome and error prone method to get these sequences”. To simplify your life, <code>Restriction</code> provides another method to get these sequences without hassle: <code>catalyse</code>. This method will return a tuple containing all the fragments produced by a complete digestion of the sequence. Using it is as simple as before:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(ecoseq)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>, IUPACAm</span>
-<span id="cb8-3"><a href="#cb8-3"></a>biguousDNA()))</span></code></pre></div>
+<span id="cb8-2"><a href="#cb8-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>))</span></code></pre></div>
 <p>BTW, you can also use spell it the American way <code>catalyze</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyze(ecoseq)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>, IUPACAm</span>
-<span id="cb9-3"><a href="#cb9-3"></a>biguousDNA()))</span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2"></a>(Seq(<span class="st">&#39;AAAAAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAA&#39;</span>))</span></code></pre></div>
 <h4 id="analysing-circular-sequences"><a name="1.5"></a>1.5 Analysing circular sequences</h4>
 <p>Now, if you have entered the previous command in your shell you may have noticed that both <code>search</code> and <code>catalyse</code> can take a second argument <code>linear</code> which defaults to <code>True</code>. Using this will allow you to simulate circular sequences such as plasmids. Setting <code>linear</code> to <code>False</code> informs the enzyme to make the search over a circular sequence and to search for potential sites spanning over the boundaries of the sequence.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(ecoseq, linear<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a>[<span class="dv">16</span>]</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(ecoseq, linear<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a>(Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG&#39;</span>, IUPACAmbiguousDNA()),)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>(Seq(<span class="st">&#39;AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG&#39;</span>),)</span>
 <span id="cb10-5"><a href="#cb10-5"></a><span class="op">&gt;&gt;&gt;</span> ecoseq  <span class="co"># for memory</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;</span>, IUPACAmbiguousDNA())</span></code></pre></div>
+<span id="cb10-6"><a href="#cb10-6"></a>Seq(<span class="st">&#39;AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA&#39;</span>)</span></code></pre></div>
 <p>OK, this is quite a difference, we only get one fragment, which correspond to the linearised sequence. The beginning sequence has been shifted to take this fact into account. Moreover we can see another difference:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>, IUPACAmbiguousDNA())</span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(new_seq)</span>
 <span id="cb11-3"><a href="#cb11-3"></a>[]</span>
 <span id="cb11-4"><a href="#cb11-4"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
@@ -230,7 +223,7 @@
 <p>As you can see using <code>linear=False</code>, make a site appearing in the sequence <em>new_seq</em>. This site does not exist in a linear sequence as the EcoRI site is split into two halves at the start and the end of the sequence. In a circular sequence however, the site is effectively present when the beginning and end of the sequence are joined.</p>
 <h4 id="comparing-enzymes-with-each-others"><a name="1.6"></a>1.6 Comparing enzymes with each others</h4>
 <p><code>Restriction</code> enzymes define 4 comparative operators <code>==</code>, <code>!=</code>, <code>&gt;&gt;</code> and <code>%</code>. All these operator compares two enzymes together and either return <code>True</code> or <code>False</code>.</p>
-<dl>
+<dl class="incremental">
 <dt><code>==</code> (test identity)</dt>
 <dd>It will return <code>True</code> if the two sides of the operator are the same. *Same" is defined as: same name, same site, same overhang (i.e. the only thing which is equal to <code>EcoRI</code> is <code>EcoRI</code>).
 </dd>
@@ -501,7 +494,7 @@
 <span id="cb25-27"><a href="#cb25-27"></a>RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>])</span></code></pre></div>
 <h4 id="analysing-sequences-with-a-restrictionbatch"><a name="2.6"></a>2.6 Analysing sequences with a RestrictionBatch</h4>
 <p>To analyse a sequence for potential site, you can use the <code>search</code> method of the batch, the same way you did for restriction enzymes. The results is no longer a list however, but a dictionary. The keys of the dictionary are the names of the enzymes and the value a list of position site. <code>RestrictionBatch</code> does not implement a <code>catalyse</code> method, as it would not have a real meaning when used with large batch.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>, IUPACAmbiguousDNA())</span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="op">&gt;&gt;&gt;</span> rb.search(new_seq)</span>
 <span id="cb26-3"><a href="#cb26-3"></a>{<span class="st">&#39;KpnI&#39;</span>: [], <span class="st">&#39;EcoRV&#39;</span>: [], <span class="st">&#39;EcoRI&#39;</span>: []}</span>
 <span id="cb26-4"><a href="#cb26-4"></a><span class="op">&gt;&gt;&gt;</span> rb.search(new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
@@ -528,12 +521,12 @@
 <p><code>RestrictionBatch</code> can give you a dictionary with the sites for all the enzymes in a batch. However, it is sometime nice to get something a bit easier to read than a Python dictionary. Complex restriction analysis are not easy with <code>RestrictionBatch</code>. Some refinements in the way to search a sequence for restriction sites will help. <code>Analysis</code> provides a serie of command to customise the results obtained from a pair restriction batch/sequence and some facilities to make the output sligthly more human readable.</p>
 <h4 id="setting-up-an-analysis"><a name="4.1"></a>4.1 Setting up an Analysis</h4>
 <p>To build a restriction analysis you will need a <code>RestrictionBatch</code> and a sequence and to tell it if the sequence is linear or circular. The first argument <code>Analysis</code> takes is the restriction batch, the second is the sequence. If the third argument is not provided, <code>Analysis</code> will assume the sequence is linear.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>, IUPACAmbiguousDNA())</span>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
 <span id="cb30-2"><a href="#cb30-2"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([EcoRI, KpnI, EcoRV])</span>
 <span id="cb30-3"><a href="#cb30-3"></a><span class="op">&gt;&gt;&gt;</span> Ana <span class="op">=</span> Analysis(rb, new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb30-4"><a href="#cb30-4"></a><span class="op">&gt;&gt;&gt;</span> Ana</span>
 <span id="cb30-5"><a href="#cb30-5"></a>Analysis(RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>]),Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAA</span></span>
-<span id="cb30-6"><a href="#cb30-6"></a><span class="st">AAAAAAAAAAGAA&#39;</span>, IUPACAmbiguousDNA()),<span class="va">False</span>)</span></code></pre></div>
+<span id="cb30-6"><a href="#cb30-6"></a><span class="st">AAAAAAAAAAGAA&#39;</span>),<span class="va">False</span>)</span></code></pre></div>
 <h4 id="full-restriction-analysis"><a name="4.2"></a>4.2 Full restriction analysis</h4>
 <p>Once you have created your new <code>Analysis</code>, you can use it to get a restriction analysis of your sequence. The way to make a full restriction analysis of the sequence is:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="op">&gt;&gt;&gt;</span> Ana.full()</span>
@@ -546,7 +539,7 @@
 <span id="cb32-5"><a href="#cb32-5"></a><span class="op">&gt;&gt;&gt;</span></span>
 <span id="cb32-6"><a href="#cb32-6"></a><span class="op">&gt;&gt;&gt;</span> multi_site <span class="op">=</span> Seq.Seq(<span class="st">&#39;AAA&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span> <span class="st">&#39;G&#39;</span> <span class="op">+</span> KpnI.site <span class="op">+</span> EcoRV.site <span class="op">+</span></span>
 <span id="cb32-7"><a href="#cb32-7"></a>                     <span class="st">&#39;CT&#39;</span> <span class="op">+</span> SmaI.site <span class="op">+</span> <span class="st">&#39;GT&#39;</span> <span class="op">+</span> FokI.site <span class="op">+</span> <span class="st">&#39;GAAAGGGC&#39;</span> <span class="op">+</span></span>
-<span id="cb32-8"><a href="#cb32-8"></a>                      EcoRI.site <span class="op">+</span> <span class="st">&#39;ACGT&#39;</span>, IUPACAmbiguousDNA())</span>
+<span id="cb32-8"><a href="#cb32-8"></a>                      EcoRI.site <span class="op">+</span> <span class="st">&#39;ACGT&#39;</span>)</span>
 <span id="cb32-9"><a href="#cb32-9"></a><span class="op">&gt;&gt;&gt;</span> Analong <span class="op">=</span> Analysis(rb, multi_site)</span>
 <span id="cb32-10"><a href="#cb32-10"></a><span class="op">&gt;&gt;&gt;</span> Analong.full()</span>
 <span id="cb32-11"><a href="#cb32-11"></a>{BglI: [], BstEII: [], AsuII: [], HinfI: [], SfiI: [], PspPI: [], BsiSI: [<span class="dv">27</span>], S</span>
@@ -710,12 +703,12 @@
 <span id="cb36-16"><a href="#cb36-16"></a>outside(<span class="va">self</span>, start, end, dct<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb36-17"><a href="#cb36-17"></a>do_not_cut(<span class="va">self</span>, start, end, dct <span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
 <p>Using these methods is simple:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>, IUPACAmbiguousDNA())</span>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="op">&gt;&gt;&gt;</span> new_seq <span class="op">=</span> Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA&#39;</span>)</span>
 <span id="cb37-2"><a href="#cb37-2"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([EcoRI, KpnI, EcoRV])</span>
 <span id="cb37-3"><a href="#cb37-3"></a><span class="op">&gt;&gt;&gt;</span> Ana <span class="op">=</span> Analysis(rb, new_seq, linear<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb37-4"><a href="#cb37-4"></a><span class="op">&gt;&gt;&gt;</span> Ana</span>
 <span id="cb37-5"><a href="#cb37-5"></a>Analysis(RestrictionBatch([<span class="st">&#39;EcoRI&#39;</span>, <span class="st">&#39;EcoRV&#39;</span>, <span class="st">&#39;KpnI&#39;</span>]),Seq(<span class="st">&#39;TTCAAAAAAAAAAAAAAAAAA</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a><span class="st">AAAAAAAAAAGAA&#39;</span>, IUPACAmbiguousDNA()),<span class="va">False</span>)</span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="st">AAAAAAAAAAGAA&#39;</span>),<span class="va">False</span>)</span>
 <span id="cb37-7"><a href="#cb37-7"></a><span class="op">&gt;&gt;&gt;</span> Ana.blunt()  <span class="co"># output only the result for enzymes which cut blunt</span></span>
 <span id="cb37-8"><a href="#cb37-8"></a>{<span class="st">&#39;EcoRV&#39;</span>: []}</span>
 <span id="cb37-9"><a href="#cb37-9"></a><span class="op">&gt;&gt;&gt;</span> Ana.full()  <span class="co"># all the enzymes in the RestrictionBatch</span></span>
@@ -777,7 +770,7 @@
 <span id="cb41-5"><a href="#cb41-5"></a><span class="op">&gt;&gt;&gt;</span> default_fseq <span class="op">=</span> FormattedSeq(seq)</span>
 <span id="cb41-6"><a href="#cb41-6"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq <span class="op">=</span> FormattedSeq(seq, linear<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb41-7"><a href="#cb41-7"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq</span>
-<span id="cb41-8"><a href="#cb41-8"></a>FormattedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>, Alphabet()), linear<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb41-8"><a href="#cb41-8"></a>FormattedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb41-9"><a href="#cb41-9"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq.is_linear()</span>
 <span id="cb41-10"><a href="#cb41-10"></a><span class="va">True</span></span>
 <span id="cb41-11"><a href="#cb41-11"></a><span class="op">&gt;&gt;&gt;</span> default_fseq.is_linear()</span>
@@ -785,7 +778,7 @@
 <span id="cb41-13"><a href="#cb41-13"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.is_linear()</span>
 <span id="cb41-14"><a href="#cb41-14"></a><span class="va">False</span></span>
 <span id="cb41-15"><a href="#cb41-15"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb41-16"><a href="#cb41-16"></a>FormattedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>, Alphabet()), linear<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
+<span id="cb41-16"><a href="#cb41-16"></a>FormattedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
 <h4 id="unlike-bio.seq-formattedseq-retains-information-about-their-shape"><a name="5.2"></a>5.2 Unlike Bio.Seq, FormattedSeq retains information about their shape</h4>
 <p><code>FormattedSeq</code> retains information about the shape of the sequence. Therefore unlike with <code>Seq</code> and <code>MutableSeq</code> you don’t need to specify the shape of the sequence when using <code>search()</code> or <code>catalyse()</code>:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(linear_fseq)</span>
@@ -809,19 +802,19 @@
 <span id="cb44-3"><a href="#cb44-3"></a>FormattedSeq.circularise() <span class="op">=&gt;</span> change the shape of FormattedShape to circular</span>
 <span id="cb44-4"><a href="#cb44-4"></a>FormattedSeq.linearise()   <span class="op">=&gt;</span> change the shape of FormattedShape to linear</span></code></pre></div>
 <div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb45-2"><a href="#cb45-2"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>, Alphabet()), linear<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb45-2"><a href="#cb45-2"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb45-3"><a href="#cb45-3"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.is_linear()</span>
 <span id="cb45-4"><a href="#cb45-4"></a><span class="va">False</span></span>
 <span id="cb45-5"><a href="#cb45-5"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq <span class="op">==</span> linear_fseq</span>
 <span id="cb45-6"><a href="#cb45-6"></a><span class="va">False</span></span>
 <span id="cb45-7"><a href="#cb45-7"></a><span class="op">&gt;&gt;&gt;</span> newseq <span class="op">=</span> circular_fseq.to_linear()</span>
 <span id="cb45-8"><a href="#cb45-8"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb45-9"><a href="#cb45-9"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>, Alphabet()), linear<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb45-9"><a href="#cb45-9"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb45-10"><a href="#cb45-10"></a><span class="op">&gt;&gt;&gt;</span> newseq</span>
-<span id="cb45-11"><a href="#cb45-11"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>, Alphabet()), linear<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb45-11"><a href="#cb45-11"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb45-12"><a href="#cb45-12"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.linearise()</span>
 <span id="cb45-13"><a href="#cb45-13"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq</span>
-<span id="cb45-14"><a href="#cb45-14"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>, Alphabet()), linear<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb45-14"><a href="#cb45-14"></a>FormatedSeq(Seq(<span class="st">&#39;TTCAAAAAAAAAAGAATTCAAAAGAA&#39;</span>), linear<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb45-15"><a href="#cb45-15"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq.is_linear()</span>
 <span id="cb45-16"><a href="#cb45-16"></a><span class="va">True</span></span>
 <span id="cb45-17"><a href="#cb45-17"></a><span class="op">&gt;&gt;&gt;</span> circular_fseq <span class="op">==</span> linear_fseq</span>
@@ -835,7 +828,7 @@
 <span id="cb46-3"><a href="#cb46-3"></a><span class="op">&gt;&gt;&gt;</span> linear_fseq<span class="op">/</span>EcoRI  <span class="co"># &lt;=&gt; EcoRI.search(linear_fseq)</span></span>
 <span id="cb46-4"><a href="#cb46-4"></a>[<span class="dv">15</span>]</span>
 <span id="cb46-5"><a href="#cb46-5"></a><span class="op">&gt;&gt;&gt;</span> EcoRI<span class="op">//</span>linear_fseq <span class="co"># &lt;=&gt; linear_fseq//EcoRI &lt;=&gt; EcoRI.catalyse(linear_fseq)</span></span>
-<span id="cb46-6"><a href="#cb46-6"></a>(Seq(<span class="st">&#39;TTCAAAAAAAAAAG&#39;</span>, Alphabet()), Seq(<span class="st">&#39;AATTCAAAAGAA&#39;</span>, Alphabet()))</span></code></pre></div>
+<span id="cb46-6"><a href="#cb46-6"></a>(Seq(<span class="st">&#39;TTCAAAAAAAAAAG&#39;</span>), Seq(<span class="st">&#39;AATTCAAAAGAA&#39;</span>))</span></code></pre></div>
 <p>Another way to avoid the overhead due to a repetitive conversion from a <code>Seq</code> object to a <code>FormattedSeq</code> is to use a <a href="#2"><code>RestrictionBatch</code></a>.</p>
 <p>To conclude, the performance gain achieved when using a <code>FormattedSeq</code> instead of a <code>Seq</code> is not huge. The analysis of a 10 kb sequence by all the enzymes in <code>AllEnzymes</code> (<code>for x in AllEnzymes: x.search(seq)</code>, 867 enzymes) is 7 % faster when using a <code>FormattedSeq</code> than a <code>Seq</code>. Using a <code>RestrictionBatch</code> (<code>AllEnzymes.search(seq)</code>) is about as fast as using a <code>FormattedSeq</code> the first time the search is run. This however is dramatically reduced in subsequent runs with the same sequence (<code>RestrictionBatch</code> keeps in memory the result of their last run while the sequence is not changed).</p>
 <h3 id="more-advanced-features"><a name="6"></a>6. More advanced features</h3>
@@ -999,7 +992,7 @@
 <span id="cb51-80"><a href="#cb51-80"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># You initiate and use it as before</span></span>
 <span id="cb51-81"><a href="#cb51-81"></a><span class="op">&gt;&gt;&gt;</span> rb <span class="op">=</span> RestrictionBatch([], [<span class="st">&#39;A&#39;</span>])</span>
 <span id="cb51-82"><a href="#cb51-82"></a><span class="op">&gt;&gt;&gt;</span> multi_site <span class="op">=</span> Seq(<span class="st">&#39;AAA&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span><span class="st">&#39;G&#39;</span> <span class="op">+</span> KpnI.site <span class="op">+</span> EcoRV.site <span class="op">+</span> <span class="st">&#39;CT&#39;</span> <span class="op">+\</span></span>
-<span id="cb51-83"><a href="#cb51-83"></a>SmaI.site <span class="op">+</span> <span class="st">&#39;GT&#39;</span> <span class="op">+</span> FokI.site <span class="op">+</span> <span class="st">&#39;GAAAGGGC&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span> <span class="st">&#39;ACGT&#39;</span>, IUPACAmbiguousDNA())</span>
+<span id="cb51-83"><a href="#cb51-83"></a>SmaI.site <span class="op">+</span> <span class="st">&#39;GT&#39;</span> <span class="op">+</span> FokI.site <span class="op">+</span> <span class="st">&#39;GAAAGGGC&#39;</span> <span class="op">+</span> EcoRI.site <span class="op">+</span> <span class="st">&#39;ACGT&#39;</span>)</span>
 <span id="cb51-84"><a href="#cb51-84"></a><span class="op">&gt;&gt;&gt;</span></span>
 <span id="cb51-85"><a href="#cb51-85"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> UselessAnalysis(rb, multi_site)</span>
 <span id="cb51-86"><a href="#cb51-86"></a><span class="op">&gt;&gt;&gt;</span> b.print_that() <span class="co"># Well, I let you discover if you haven&#39;t already guessed</span></span></code></pre></div>
@@ -1013,53 +1006,49 @@
 <p>As before no support has been yet implemented to find site mis-recognised by enzymes under high salt concentration conditions, the so-called star activity. This will be implemented as soon as I can get a good source of information for that.</p>
 <h4 id="safe-to-use-with-degenerated-dna"><a name="7.3"></a>7.3 Safe to use with degenerated DNA</h4>
 <p>It is safe to use degenerated DNA as input for the query. You will not be flooded with meaningless results. But this come at a price: GAA<strong><em>N</em></strong>TC will not be recognised as a potential EcoRI site for example, in fact it will not be recognised at all. Degenerated sequences will not be analysed. If your sequence is not fully sequenced, you will certainly miss restriction sites:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a><span class="op">&gt;&gt;&gt;</span> a <span class="op">=</span> Seq(<span class="st">&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr&#39;</span>, IUPACAmbiguou</span>
-<span id="cb52-2"><a href="#cb52-2"></a>sDNA())</span>
-<span id="cb52-3"><a href="#cb52-3"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(a)</span>
-<span id="cb52-4"><a href="#cb52-4"></a>[<span class="dv">36</span>]</span>
-<span id="cb52-5"><a href="#cb52-5"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> Seq(<span class="st">&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr&#39;</span>, IUPACAmbiguou</span>
-<span id="cb52-6"><a href="#cb52-6"></a>sDNA())</span>
-<span id="cb52-7"><a href="#cb52-7"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(b)</span>
-<span id="cb52-8"><a href="#cb52-8"></a>[]</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a><span class="op">&gt;&gt;&gt;</span> a <span class="op">=</span> Seq(<span class="st">&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr&#39;</span>)</span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(a)</span>
+<span id="cb52-3"><a href="#cb52-3"></a>[<span class="dv">36</span>]</span>
+<span id="cb52-4"><a href="#cb52-4"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> Seq(<span class="st">&#39;nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr&#39;</span>)</span>
+<span id="cb52-5"><a href="#cb52-5"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(b)</span>
+<span id="cb52-6"><a href="#cb52-6"></a>[]</span></code></pre></div>
 <h4 id="non-standard-bases-in-dna-are-not-allowed"><a name="7.4"></a>7.4 Non standard bases in DNA are not allowed</h4>
 <p>While you can use degenerated DNA, using non standard base alphabet will make the enzymes choke, even if <code>Bio.Seq.Seq</code> accepts them. However, space-like characters (’ ‘,’‘,’, …) and digit will be removed but will not stop the enzyme analysing the sequence. You can use them but the fragments produced by <code>catalyse</code> will have lost any formatting. <code>catalyse</code> tries to keep the original case of the sequence (i.e lower case sequences will generate lower case fragments, upper case sequences upper case fragments), but mixed case will return upper case fragments:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a><span class="op">&gt;&gt;&gt;</span> c <span class="op">=</span> Seq(<span class="st">&#39;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr&#39;</span>, IUPACAmbiguou</span>
-<span id="cb53-2"><a href="#cb53-2"></a>sDNA())</span>
-<span id="cb53-3"><a href="#cb53-3"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(c)</span>
-<span id="cb53-4"><a href="#cb53-4"></a></span>
-<span id="cb53-5"><a href="#cb53-5"></a>Traceback (most recent call last):</span>
-<span id="cb53-6"><a href="#cb53-6"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
-<span id="cb53-7"><a href="#cb53-7"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">553</span>, <span class="kw">in</span> search</span>
-<span id="cb53-8"><a href="#cb53-8"></a>    cls.dna <span class="op">=</span> FormattedSeq(dna, linear)</span>
-<span id="cb53-9"><a href="#cb53-9"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">171</span>, <span class="kw">in</span> <span class="fu">__init__</span></span>
-<span id="cb53-10"><a href="#cb53-10"></a>    <span class="va">self</span>.data <span class="op">=</span> _check_bases(stringy)</span>
-<span id="cb53-11"><a href="#cb53-11"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">122</span>, <span class="kw">in</span> _check_bases</span>
-<span id="cb53-12"><a href="#cb53-12"></a>    <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">&quot;Invalid character found in </span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> <span class="bu">repr</span>(seq_string))</span>
-<span id="cb53-13"><a href="#cb53-13"></a><span class="pp">TypeError</span>: Invalid character found <span class="kw">in</span> <span class="st">&#39;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR&#39;</span></span>
-<span id="cb53-14"><a href="#cb53-14"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Seq(<span class="st">&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn </span><span class="ch">\n</span><span class="st">\</span></span>
-<span id="cb53-15"><a href="#cb53-15"></a><span class="st">26 nnnnn nnnnG AATTC rrrrr rrrrr </span><span class="ch">\n</span><span class="st">\</span></span>
-<span id="cb53-16"><a href="#cb53-16"></a><span class="st">51 r&#39;</span>, IUPACAmbiguousDNA())</span>
-<span id="cb53-17"><a href="#cb53-17"></a><span class="op">&gt;&gt;&gt;</span> d</span>
-<span id="cb53-18"><a href="#cb53-18"></a>Seq(<span class="st">&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn </span><span class="ch">\n</span><span class="st">26 nnnnn nnnnG AATTC rrrrr rrrrr </span><span class="ch">\n</span><span class="st">51 r&#39;</span>,</span>
-<span id="cb53-19"><a href="#cb53-19"></a> IUPACAmbiguousDNA())</span>
-<span id="cb53-20"><a href="#cb53-20"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(d)</span>
-<span id="cb53-21"><a href="#cb53-21"></a>[<span class="dv">36</span>]</span>
-<span id="cb53-22"><a href="#cb53-22"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(d)</span>
-<span id="cb53-23"><a href="#cb53-23"></a>(Seq(<span class="st">&#39;AATTCRRRRRRRRRRR&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;NNNNNNNNNNNNNNNNNNNNNNNNNNNN</span></span>
-<span id="cb53-24"><a href="#cb53-24"></a><span class="st">NNNNNNG&#39;</span>, IUPACAmbiguousDNA()))</span>
-<span id="cb53-25"><a href="#cb53-25"></a><span class="op">&gt;&gt;&gt;</span> e <span class="op">=</span> Seq(<span class="st">&#39;nnnnGAATTCrr&#39;</span>, IUPACAmbiguousDNA())</span>
-<span id="cb53-26"><a href="#cb53-26"></a><span class="op">&gt;&gt;&gt;</span> f <span class="op">=</span> Seq(<span class="st">&#39;NNNNGAATTCRR&#39;</span>, IUPACAmbiguousDNA())</span>
-<span id="cb53-27"><a href="#cb53-27"></a><span class="op">&gt;&gt;&gt;</span> g <span class="op">=</span> Seq(<span class="st">&#39;nnnngaattcrr&#39;</span>, IUPACAmbiguousDNA())</span>
-<span id="cb53-28"><a href="#cb53-28"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(e)</span>
-<span id="cb53-29"><a href="#cb53-29"></a>(Seq(<span class="st">&#39;NNNNG&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;AATTCRR&#39;</span>, IUPACAmbiguousDNA()))</span>
-<span id="cb53-30"><a href="#cb53-30"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(f)</span>
-<span id="cb53-31"><a href="#cb53-31"></a>(Seq(<span class="st">&#39;NNNNG&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;AATTCRR&#39;</span>, IUPACAmbiguousDNA()))</span>
-<span id="cb53-32"><a href="#cb53-32"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(g)</span>
-<span id="cb53-33"><a href="#cb53-33"></a>(Seq(<span class="st">&#39;nnnng&#39;</span>, IUPACAmbiguousDNA()), Seq(<span class="st">&#39;aattcrr&#39;</span>, IUPACAmbiguousDNA()))</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a><span class="op">&gt;&gt;&gt;</span> c <span class="op">=</span> Seq(<span class="st">&#39;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr&#39;</span>)</span>
+<span id="cb53-2"><a href="#cb53-2"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(c)</span>
+<span id="cb53-3"><a href="#cb53-3"></a></span>
+<span id="cb53-4"><a href="#cb53-4"></a>Traceback (most recent call last):</span>
+<span id="cb53-5"><a href="#cb53-5"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb53-6"><a href="#cb53-6"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">553</span>, <span class="kw">in</span> search</span>
+<span id="cb53-7"><a href="#cb53-7"></a>    cls.dna <span class="op">=</span> FormattedSeq(dna, linear)</span>
+<span id="cb53-8"><a href="#cb53-8"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">171</span>, <span class="kw">in</span> <span class="fu">__init__</span></span>
+<span id="cb53-9"><a href="#cb53-9"></a>    <span class="va">self</span>.data <span class="op">=</span> _check_bases(stringy)</span>
+<span id="cb53-10"><a href="#cb53-10"></a>  File <span class="st">&quot;/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py&quot;</span>, line <span class="dv">122</span>, <span class="kw">in</span> _check_bases</span>
+<span id="cb53-11"><a href="#cb53-11"></a>    <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">&quot;Invalid character found in </span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> <span class="bu">repr</span>(seq_string))</span>
+<span id="cb53-12"><a href="#cb53-12"></a><span class="pp">TypeError</span>: Invalid character found <span class="kw">in</span> <span class="st">&#39;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR&#39;</span></span>
+<span id="cb53-13"><a href="#cb53-13"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Seq(<span class="st">&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn </span><span class="ch">\n</span><span class="st">\</span></span>
+<span id="cb53-14"><a href="#cb53-14"></a><span class="st">26 nnnnn nnnnG AATTC rrrrr rrrrr </span><span class="ch">\n</span><span class="st">\</span></span>
+<span id="cb53-15"><a href="#cb53-15"></a><span class="st">51 r&#39;</span>)</span>
+<span id="cb53-16"><a href="#cb53-16"></a><span class="op">&gt;&gt;&gt;</span> d</span>
+<span id="cb53-17"><a href="#cb53-17"></a>Seq(<span class="st">&#39;1 nnnnn nnnnn nnnnn nnnnn nnnnn </span><span class="ch">\n</span><span class="st">26 nnnnn nnnnG AATTC rrrrr rrrrr </span><span class="ch">\n</span><span class="st">51 r&#39;</span>)</span>
+<span id="cb53-18"><a href="#cb53-18"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.search(d)</span>
+<span id="cb53-19"><a href="#cb53-19"></a>[<span class="dv">36</span>]</span>
+<span id="cb53-20"><a href="#cb53-20"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(d)</span>
+<span id="cb53-21"><a href="#cb53-21"></a>(Seq(<span class="st">&#39;AATTCRRRRRRRRRRR&#39;</span>), Seq(<span class="st">&#39;NNNNNNNNNNNNNNNNNNNNNNNNNNNN</span></span>
+<span id="cb53-22"><a href="#cb53-22"></a><span class="st">NNNNNNG&#39;</span>))</span>
+<span id="cb53-23"><a href="#cb53-23"></a><span class="op">&gt;&gt;&gt;</span> e <span class="op">=</span> Seq(<span class="st">&#39;nnnnGAATTCrr&#39;</span>)</span>
+<span id="cb53-24"><a href="#cb53-24"></a><span class="op">&gt;&gt;&gt;</span> f <span class="op">=</span> Seq(<span class="st">&#39;NNNNGAATTCRR&#39;</span>)</span>
+<span id="cb53-25"><a href="#cb53-25"></a><span class="op">&gt;&gt;&gt;</span> g <span class="op">=</span> Seq(<span class="st">&#39;nnnngaattcrr&#39;</span>)</span>
+<span id="cb53-26"><a href="#cb53-26"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(e)</span>
+<span id="cb53-27"><a href="#cb53-27"></a>(Seq(<span class="st">&#39;NNNNG&#39;</span>), Seq(<span class="st">&#39;AATTCRR&#39;</span>))</span>
+<span id="cb53-28"><a href="#cb53-28"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(f)</span>
+<span id="cb53-29"><a href="#cb53-29"></a>(Seq(<span class="st">&#39;NNNNG&#39;</span>), Seq(<span class="st">&#39;AATTCRR&#39;</span>))</span>
+<span id="cb53-30"><a href="#cb53-30"></a><span class="op">&gt;&gt;&gt;</span> EcoRI.catalyse(g)</span>
+<span id="cb53-31"><a href="#cb53-31"></a>(Seq(<span class="st">&#39;nnnng&#39;</span>), Seq(<span class="st">&#39;aattcrr&#39;</span>))</span></code></pre></div>
 <p>Not allowing other letters than IUPAC might seems drastic but this is really to limit errors. It is not totally fool proof but it does help.</p>
 <h4 id="sites-found-at-the-edge-of-linear-dna-might-not-be-accessible-in-a-real-digestion"><a name="7.5"></a>7.5 Sites found at the edge of linear DNA might not be accessible in a real digestion</h4>
 <p>While sites clearly outsides a sequence will not be reported, nothing has been done to try to determine if a restriction site at the end of a linear sequence is valid:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Seq(<span class="st">&#39;GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG&#39;</span>, IUPACAmbiguousDNA())</span>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Seq(<span class="st">&#39;GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG&#39;</span>)</span>
 <span id="cb54-2"><a href="#cb54-2"></a><span class="op">&gt;&gt;&gt;</span> FokI.site           <span class="co"># site present</span></span>
 <span id="cb54-3"><a href="#cb54-3"></a><span class="co">&#39;GGATG&#39;</span></span>
 <span id="cb54-4"><a href="#cb54-4"></a><span class="op">&gt;&gt;&gt;</span> FokI.elucidate()        <span class="co"># but cut outside the sequence</span></span>
@@ -1081,7 +1070,7 @@
 <span id="cb55-8"><a href="#cb55-8"></a><span class="co">&#39;GAACNNNNNNTCC&#39;</span></span>
 <span id="cb55-9"><a href="#cb55-9"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> Seq(<span class="st">&#39;AAAAAAAAAAA&#39;</span><span class="op">+</span> AloI.site <span class="op">+</span> <span class="st">&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span>)</span>
 <span id="cb55-10"><a href="#cb55-10"></a><span class="op">&gt;&gt;&gt;</span> b</span>
-<span id="cb55-11"><a href="#cb55-11"></a>Seq(<span class="st">&#39;AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span>, Alphabet())</span>
+<span id="cb55-11"><a href="#cb55-11"></a>Seq(<span class="st">&#39;AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span>)</span>
 <span id="cb55-12"><a href="#cb55-12"></a><span class="op">&gt;&gt;&gt;</span> AloI.search(b)  <span class="co"># one site, two cuts -&gt; two positions</span></span>
 <span id="cb55-13"><a href="#cb55-13"></a>[<span class="dv">5</span>, <span class="dv">37</span>]</span></code></pre></div>
 <h3 id="annex-modifying-dir-to-use-with-from-bio.restriction-import"><a name="8"></a>8. Annex: modifying dir() to use with from Bio.Restriction import *</h3>
