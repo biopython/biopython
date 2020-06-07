@@ -60,13 +60,12 @@ ProteinAlphabet()
 
 \section{Sequences act like strings}
 
-In many ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
+In most ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("GATCG", IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCG")
 >>> for index, letter in enumerate(my_seq):
 ...     print("%i %s" % (index, letter))
 0 G
@@ -110,8 +109,7 @@ makes no difference:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC")
 >>> len(my_seq)
 32
 >>> my_seq.count("G")
@@ -125,9 +123,8 @@ While you could use the above snippet of code to calculate a GC\%, note that  th
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
 >>> from Bio.SeqUtils import GC
->>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC")
 >>> GC(my_seq)
 46.875
 \end{minted}
@@ -143,7 +140,6 @@ A more complicated example, let's get a slice of the sequence:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC")
 >>> my_seq[4:12]
 Seq('GATGGGCC')
@@ -222,17 +218,17 @@ Naturally, you can in principle add any two Seq objects together - just like you
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import IUPAC
+>>> from Bio.Alphabet import generic_dna, generic_protein
 >>> from Bio.Seq import Seq
->>> protein_seq = Seq("EVRNAK", IUPAC.protein)
->>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> protein_seq = Seq("EVRNAK", generic_protein)
+>>> dna_seq = Seq("ACGT", generic_dna)
 >>> protein_seq + dna_seq
 Traceback (most recent call last):
 ...
-TypeError: Incompatible alphabets IUPACProtein() and IUPACUnambiguousDNA()
+TypeError: Incompatible alphabets ProteinAlphabet() and DNAAlphabet()
 \end{minted}
 
-If you \emph{really} wanted to do this, you'd have to first give both sequences generic alphabets:
+If you \emph{really} wanted to do this, you'd have to first give both sequences generic alphabets (the default):
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -243,15 +239,16 @@ If you \emph{really} wanted to do this, you'd have to first give both sequences 
 Seq('EVRNAKACGT')
 \end{minted}
 
-Here is an example of adding a generic nucleotide sequence to an unambiguous IUPAC DNA sequence, resulting in an ambiguous nucleotide sequence:
+Here is an example of adding a nucleotide sequence to a DNA sequence,
+resulting in a nucleotide sequence:
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_nucleotide
->>> from Bio.Alphabet import IUPAC
+>>> from Bio.Alphabet import generic_dna
 >>> nuc_seq = Seq("GATCGATGC", generic_nucleotide)
->>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> dna_seq = Seq("ACGT", generic_dna)
 >>> nuc_seq
 Seq('GATCGATGC')
 >>> dna_seq
@@ -265,9 +262,8 @@ You may often have many sequences to add together, which can be done with a for 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> list_of_seqs = [Seq("ACGT", generic_dna), Seq("AACC", generic_dna), Seq("GGTT", generic_dna)]
->>> concatenated = Seq("", generic_dna)
+>>> list_of_seqs = [Seq("ACGT"), Seq("AACC"), Seq("GGTT")]
+>>> concatenated = Seq("")
 >>> for s in list_of_seqs:
 ...      concatenated += s
 ...
@@ -280,9 +276,8 @@ Or, a more elegant approach is to the use built in \verb|sum| function with its 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> list_of_seqs = [Seq("ACGT", generic_dna), Seq("AACC", generic_dna), Seq("GGTT", generic_dna)]
->>> sum(list_of_seqs, Seq("", generic_dna))
+>>> list_of_seqs = [Seq("ACGT"), Seq("AACC"), Seq("GGTT")]
+>>> sum(list_of_seqs, Seq(""))
 Seq('ACGTAACCGGTT')
 \end{minted}
 
@@ -300,7 +295,6 @@ Seq('ATGNNNNNNNNNNATCCCGNNNNNNNNNNTTGCA')
 \section{Changing case}
 
 Python strings have very useful \verb|upper| and \verb|lower| methods for changing the case.
-As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
 For example,
 
 %doctest
@@ -326,21 +320,6 @@ False
 True
 \end{minted}
 
-Note that strictly speaking the IUPAC alphabets are for upper case
-sequences only, thus:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
->>> dna_seq
-Seq('ACGT')
->>> dna_seq.lower()
-Seq('acgt')
-\end{minted}
-
-
 \section{Nucleotide sequences and (reverse) complements}
 \label{sec:seq-reverse-complement}
 
@@ -350,8 +329,8 @@ complement of a \verb|Seq| object using its built-in methods:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", generic_dna)
 >>> my_seq
 Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC')
 >>> my_seq.complement()
@@ -376,8 +355,8 @@ the (reverse)complement of a protein sequence:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> protein_seq = Seq("EVRNAK", IUPAC.protein)
+>>> from Bio.Alphabet import generic_protein
+>>> protein_seq = Seq("EVRNAK", generic_protein)
 >>> protein_seq.complement()
 Traceback (most recent call last):
 ...
@@ -416,8 +395,8 @@ Now let's actually get down to doing a transcription in Biopython.  First, let's
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", generic_dna)
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 >>> template_dna = coding_dna.reverse_complement()
@@ -451,8 +430,8 @@ The \verb|Seq| object also includes a back-transcription method for going from t
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
+>>> from Bio.Alphabet import generic_rna
+>>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", generic_rna)
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 >>> messenger_rna.back_transcribe()
@@ -472,7 +451,6 @@ advantage of one of the \verb|Seq| object's biological methods:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
 >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
@@ -485,8 +463,8 @@ You can also translate directly from the coding strand DNA sequence:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", generic_dna)
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 >>> coding_dna.translate()
@@ -551,10 +529,10 @@ for example the gene yaaX in \texttt{E. coli} K12:
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna
->>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA" + \
-...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT" + \
-...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT" + \
-...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT" + \
+>>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
+...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
+...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
+...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
 ...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA",
 ...            generic_dna)
 >>> gene.translate(table="Bacterial")
@@ -686,24 +664,16 @@ to do your own gene finding:
 Sequence comparison is actually a very complicated topic, and there is no easy
 way to decide if two sequences are equal. The basic problem is the meaning of
 the letters in a sequence are context dependent - the letter ``A'' could be part
-of a DNA, RNA or protein sequence. Biopython uses alphabet objects as part of
-each \verb|Seq| object to try to capture this information - so comparing two
-\verb|Seq| objects could mean considering both the sequence strings \emph{and}
-the alphabets.
+of a DNA, RNA or protein sequence. Biopython can track the molecule type, so
+comparing two \verb|Seq| objects could mean considering this too.
 
-For example, you might argue that the two DNA \verb|Seq| objects
-\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and
-\texttt{Seq("ACGT", IUPAC.ambiguous\_dna)} should be equal, even though
-they do have different alphabets. Depending on the context this could be
-important.
-
-This gets worse -- suppose you think \texttt{Seq("ACGT",
-IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT")} (i.e. the default generic
-alphabet) should be equal. Then, logically, \texttt{Seq("ACGT", IUPAC.protein)}
-and \texttt{Seq("ACGT")} should also be equal. Now, in logic if $A=B$ and
-$B=C$, by transitivity we expect $A=C$. So for logical consistency we'd
-require \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT",
-IUPAC.protein)} to be equal -- which most people would agree is just not right.
+Support you argue \texttt{Seq("ACGT", generic\_dna)`` and \texttt{Seq("ACGT")}
+should be equal (i.e. comparing DNA and the default generic alphabet).
+Then, logically, \texttt{Seq("ACGT", generic_protein)} and \texttt{Seq("ACGT")}
+should also be equal. Now, in logic if $A=B$ and $B=C$, by transitivity we
+expect $A=C$. So for logical consistency we'd require
+\texttt{Seq("ACGT", generic\_dna)} and \texttt{Seq("ACGT", generic\_protein)}
+to be equal -- which most people would agree is just not right.
 This transitivity also has implications for using \verb|Seq| objects as
 Python dictionary keys.
 
@@ -769,8 +739,8 @@ Just like the normal Python string, the \verb|Seq| object is ``read only'', or i
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", generic_dna)
 \end{minted}
 
 Observe what happens if you try to edit the sequence:
@@ -796,8 +766,8 @@ Alternatively, you can create a \verb|MutableSeq| object directly from a string:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import MutableSeq
->>> from Bio.Alphabet import IUPAC
->>> mutable_seq = MutableSeq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> mutable_seq = MutableSeq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", generic_dna)
 \end{minted}
 
 Either way will give you a sequence object which can be changed:
@@ -858,8 +828,8 @@ the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import UnknownSeq
->>> from Bio.Alphabet import IUPAC
->>> unk_dna = UnknownSeq(20, alphabet=IUPAC.ambiguous_dna)
+>>> from Bio.Alphabet import generic_dna
+>>> unk_dna = UnknownSeq(20, alphabet=generic_dna)
 >>> unk_dna
 UnknownSeq(20, character='N')
 >>> print(unk_dna)
