@@ -259,7 +259,6 @@ class TutorialTestCase(unittest.TestCase):
                 name = test.name
                 assert name.startswith("TutorialDocTestHolder.doctest_")
                 failures.append(name[30:])
-                raise ValueError(str(failed))
                 # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
             raise ValueError(
