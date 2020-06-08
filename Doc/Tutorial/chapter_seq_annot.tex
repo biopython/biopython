@@ -714,9 +714,9 @@ SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'
 For this example we're going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
 If you have a look at the GenBank file directly you'll find this gene/CDS has
 location string \texttt{4343..4780}, or in Python counting \texttt{4342:4780}.
-From looking at the file you can work out that these are the twelfth and
-thirteenth entries in the file, so in Python zero-based counting they are
-entries $11$ and $12$ in the \texttt{features} list:
+From looking at the file you can work out that these are the twentieth and
+twenty-first entry in the file, so in Python zero-based counting they are
+entries $20$ and $21$ in the \texttt{features} list:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -740,7 +740,7 @@ qualifiers:
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-    Key: note, Value: ['similar to many previously sequenced pesticin immunity protein e...']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity protein weird_stuff
     Key: product, Value: ['pesticin immunity protein']
     Key: protein_id, Value: ['NP_995571.1']
     Key: transl_table, Value: ['11']
