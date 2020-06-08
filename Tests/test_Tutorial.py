@@ -124,7 +124,7 @@ def _extract(handle):
         if not (line.startswith("\\begin{minted}[") and line.endswith("]{pycon}\n")):
             raise ValueError(
                 "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}' or '\\begin{minted}[options]{pycon}'"
-        )
+            )
     lines = []
     while True:
         line = handle.readline()
