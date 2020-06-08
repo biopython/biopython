@@ -719,7 +719,7 @@ twenty-first entry in the file, so in Python zero-based counting they are
 entries $20$ and $21$ in the \texttt{features} list:
 
 %cont-doctest
-\begin{minted}[breaklines,breakanywhere,breaksymbolleft=,breakanywheresymbolpre=]{pycon}
+\begin{minted}{pycon}
 >>> print(record.features[20])
 type: gene
 location: [4342:4780](+)
@@ -728,6 +728,9 @@ qualifiers:
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
 <BLANKLINE>
+\end{minted}
+%This one is truncated so can't use for doctest
+\begin{minted}[breaklines,breakanywhere,breaksymbolleft=,breakanywheresymbolpre=]{pycon}
 >>> print(record.features[21])
 type: CDS
 location: [4342:4780](+)
