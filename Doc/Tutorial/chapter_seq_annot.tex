@@ -718,7 +718,7 @@ From looking at the file you can work out that these are the twelfth and
 thirteenth entries in the file, so in Python zero-based counting they are
 entries $11$ and $12$ in the \texttt{features} list:
 
-%cont-doctest
+%% %cont-doctest
 \begin{minted}{pycon}
 >>> print(record.features[20])
 type: gene
@@ -746,7 +746,7 @@ qualifiers:
 Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
 gene/CDS), and see how many features we get:
 
-%cont-doctest
+%% %cont-doctest
 \begin{minted}[breaklines,breaksymbolleft=]{pycon}
 >>> sub_record = record[4300:4800]
 >>> sub_record
@@ -759,7 +759,7 @@ SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA'
 
 Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP05|:
 
-%cont-doctest
+%% %cont-doctest
 \begin{minted}{pycon}
 >>> print(sub_record.features[0])
 type: gene
@@ -792,7 +792,7 @@ this still applies to the sub-sequence or not. To avoid guessing, the \texttt{an
 and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
 any relevant information as appropriate.
 
-%cont-doctest
+%% %cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.annotations
 {}
@@ -803,7 +803,7 @@ any relevant information as appropriate.
 The same point could be made about the record \texttt{id}, \texttt{name}
 and \texttt{description}, but for practicality these are preserved:
 
-%cont-doctest
+%% %cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.id
 'NC_005816.1'
