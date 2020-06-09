@@ -1704,7 +1704,9 @@ class UnknownSeq(Seq):
         """
         return UnknownSeq(self._length, self.alphabet._lower(), self._character.lower())
 
-    def translate(self, **kwargs):
+    def translate(
+        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
+    ):
         """Translate an unknown nucleotide sequence into an unknown protein.
 
         e.g.
