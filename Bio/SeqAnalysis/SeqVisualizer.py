@@ -335,7 +335,7 @@ class SeqVisualizer:
 
         plt.title(suptitle, fontsize=sup_fontsize)
         plt.xlabel(self.ax_units[x_parameter], fontsize=x_fontsize)
-        plt.ylabel(self.ax_units[x_parameter], fontsize=y_fontsize)
+        plt.ylabel(self.ax_units[y_parameter], fontsize=y_fontsize)
         return plt
 
     def show_or_save_plot(self, show: bool = False, out_name: Optional[str] = None):
