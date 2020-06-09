@@ -709,7 +709,6 @@ SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'
 41
 \end{minted}
 
-
 For this example we're going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
 If you have a look at the GenBank file directly you'll find this gene/CDS has
 location string \texttt{4343..4780}, or in Python counting \texttt{4342:4780}.
@@ -749,14 +748,8 @@ gene/CDS), and see how many features we get:
 %cont-doctest
 \begin{minted}{pycon}
 >>> sub_record = record[4300:4800]
-\end{minted}
-%TODO - Line wrapping for doctest?
-\begin{minted}{pycon}
 >>> sub_record
-SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
-dbxrefs=[])
+SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
 \end{minted}
 
 %cont-doctest
@@ -779,9 +772,6 @@ qualifiers:
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
 <BLANKLINE>
-\end{minted}
-%As above, output is truncated so cannot test this as a doctest:
-\begin{minted}{pycon}
 >>> print(sub_record.features[1])
 type: CDS
 location: [42:480](+)
@@ -790,11 +780,12 @@ qualifiers:
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-    Key: note, Value: ['similar to many previously sequenced pesticin immunity ...']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity protein entries of Yersinia pestis plasmid pPCP, e.g. gi| 16082683|,ref|NP_395230.1| (NC_003132) , gi|1200166|emb|CAA90861.1| (Z54145 ) , gi|1488655| emb|CAA63439.1| (X92856) , gi|2996219|gb|AAC62543.1| (AF053945) , and gi|5763814|emb|CAB531 67.1| (AL109969)']
     Key: product, Value: ['pesticin immunity protein']
     Key: protein_id, Value: ['NP_995571.1']
     Key: transl_table, Value: ['11']
-    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSH...']
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSHGIYGKQTTFKQTEFTNIKSNTKKHIALINKDNSWMISLKILGIKRDEYTVCFEDFSLIRPPTYVAIHPLLIKKVKSGNFIVVKEIKKSIPGCTVYYH']
+<BLANKLINE>
 \end{minted}
 
 \noindent Notice that their locations have been adjusted to reflect the new parent sequence!
