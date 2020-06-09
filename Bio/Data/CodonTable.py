@@ -65,7 +65,9 @@ class CodonTable:
     ):
         """Initialize the class.
 
-        Legacy argument protein_alphabet is now ignored.
+        Legacy arguments nucleotide_alphabet and protein_alphabet have been replaced
+        by the is_dna argument whic is a boolean. Leave this as False (default) for
+        RNA or generic/mixed nucleotide sequences, set to True only for DNA.
         """
         self._is_dna = is_dna  # Default to RNA or generic
         self.forward_table = forward_table
