@@ -9,9 +9,9 @@
 #
 # %doctest
 # \begin{minted}{pycon}
-# >>> from Bio.Alphabet import generic_dna
 # >>> from Bio.Seq import Seq
-# >>> len("ACGT")
+# >>> s = Seq("ACGT")
+# >>> len(s)
 # 4
 # \end{minted}
 #
@@ -20,7 +20,7 @@
 #
 # %cont-doctest
 # \begin{minted}{pycon}
-# >>> Seq("ACGT") == Seq("ACGT", generic_dna)
+# >>> s == "ACGT"
 # True
 # \end{minted}
 #
