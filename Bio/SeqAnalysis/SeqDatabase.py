@@ -248,7 +248,7 @@ class SeqDownloader:
                 with open(f'{analysis_root_dir}/Downloads/{cdir}/{ncbi_id}.fasta', 'w+') as f:
                     f.write(record)
 
-        except error.HTTPError or TimeoutError or error.URLError:
+        except error.HTTPError or TimeoutError or error.URLError or TypeError:
             http.append(ncbi_id)
         except FileNotFoundError:
             http.append(ncbi_id)

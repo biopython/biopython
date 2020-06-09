@@ -61,7 +61,7 @@ python3 -m venv venv
 source venv/bin/activate
 python3 setup.py build
 python3 setup.py install
-cp venv/lib/*/site-packages/biopython*/Bio/Align/* Bio/Align
+cp -r venv/lib/*/site-packages/biopython*/Bio/Align/* Bio/Align
 ```
 
 ### Tests
