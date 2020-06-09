@@ -9,9 +9,9 @@
 #
 # %doctest
 # \begin{minted}{pycon}
-# >>> from Bio.Alphabet import generic_dna
 # >>> from Bio.Seq import Seq
-# >>> len("ACGT")
+# >>> s = Seq("ACGT")
+# >>> len(s)
 # 4
 # \end{minted}
 #
@@ -20,7 +20,7 @@
 #
 # %cont-doctest
 # \begin{minted}{pycon}
-# >>> Seq("ACGT") == Seq("ACGT", generic_dna)
+# >>> s == "ACGT"
 # True
 # \end{minted}
 #
@@ -56,8 +56,6 @@ import os
 import sys
 import warnings
 
-from lib2to3 import refactor
-from lib2to3.pgen2.tokenize import TokenError
 
 from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 
@@ -75,17 +73,6 @@ if "--offline" in sys.argv:
     online = False
 
 warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-
-fixers = refactor.get_fixers_from_package("lib2to3.fixes")
-fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
-rt = refactor.RefactoringTool(fixers)
-assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == ">>> print(2+2)\n4\n"
-assert (
-    rt.refactor_docstring(
-        '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n', "example2"
-    )
-    == '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
-)
 
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")
@@ -119,9 +106,10 @@ for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
 def _extract(handle):
     line = handle.readline()
     if line != "\\begin{minted}{pycon}\n":
-        raise ValueError(
-            "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'"
-        )
+        if not (line.startswith("\\begin{minted}[") and line.endswith("]{pycon}\n")):
+            raise ValueError(
+                "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}' or '\\begin{minted}[options]{pycon}'"
+            )
     lines = []
     while True:
         line = handle.readline()
@@ -216,11 +204,6 @@ for latex in files:
         if missing:
             missing_deps.update(missing)
             continue
-
-        try:
-            example = rt.refactor_docstring(example, name)
-        except TokenError:
-            raise ValueError("Problem with %s:\n%s" % (name, example)) from None
 
         def funct(n, d, f):
             global tutorial_base

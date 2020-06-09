@@ -92,18 +92,18 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 
 It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
 
-\begin{minted}{python}
-from Bio import SeqIO
-
-for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
-    print(seq_record.id)
-    print(repr(seq_record.seq))
-    print(len(seq_record))
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
+...     print(seq_record.id)
+...     print(repr(seq_record.seq))
+...     print(len(seq_record))
+...
 \end{minted}
 
 \noindent You should get something like this on your screen:
 
-\begin{minted}{text}
+\begin{minted}{pycon}
 gi|2765658|emb|Z78533.1|CIZ78533
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
@@ -117,18 +117,18 @@ Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 
 Now let's load the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk} instead - notice that the code to do this is almost identical to the snippet used above for the FASTA file - the only difference is we change the filename and the format string:
 
-\begin{minted}{python}
-from Bio import SeqIO
-
-for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    print(seq_record.id)
-    print(repr(seq_record.seq))
-    print(len(seq_record))
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+...     print(seq_record.id)
+...     print(repr(seq_record.seq))
+...     print(len(seq_record))
+...
 \end{minted}
 
 \noindent This should give:
 
-\begin{minted}{text}
+\begin{minted}{pycon}
 Z78533.1
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740

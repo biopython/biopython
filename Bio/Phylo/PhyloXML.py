@@ -1254,7 +1254,7 @@ class Sequence(PhyloElement):
     def from_seqrecord(cls, record, is_aligned=None):
         """Create a new PhyloXML Sequence from a SeqRecord object."""
         if is_aligned is None:
-            is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
+            is_aligned = "-" in record.seq
         params = {
             "accession": Accession(record.id, ""),
             "symbol": record.name,
@@ -1400,10 +1400,7 @@ class Sequence(PhyloElement):
 
     def get_alphabet(self):
         """Get the alphabet for the sequence."""
-        alph = self.alphabets.get(self.type, Alphabet.generic_alphabet)
-        if self.mol_seq and self.mol_seq.is_aligned:
-            return Alphabet.Gapped(alph)
-        return alph
+        return self.alphabets.get(self.type, Alphabet.generic_alphabet)
 
 
 class SequenceRelation(PhyloElement):
