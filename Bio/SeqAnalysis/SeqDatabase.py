@@ -1,6 +1,6 @@
+import multiprocessing
 import os
 import re
-from multiprocessing.pool import ThreadPool
 from os.path import isfile, join
 from time import time as timer
 from typing import Union, List, Tuple, Dict
@@ -63,19 +63,18 @@ class SeqDownloader:
             SeqDownloader.mk_dirs(single_dir)
         SeqDownloader.mk_subdirs(analysis_dir, analysis_root_dir)
 
-        obsolete = []
-        http_error = []
-
         print("--------------------------------------Downloading--------------------------------------------")
 
         urls = SeqDownloader.paths_and_urls(clear_ids, analysis_dir, analysis_root_dir)
 
         print("Downloading files. Please wait...")
 
-        ThreadPool(20).imap_unordered(SeqDownloader.fetch_url, urls)
+        with multiprocessing.Pool(multiprocessing.cpu_count()) as workers:
+            results = workers.map(SeqDownloader.fetch_url, urls)
+
         start = timer()
-        for entry in urls:
-            SeqDownloader.fetch_url(entry, obsolete, http_error)
+        http_error = [uniprot_id for path, ret, uniprot_id in results if ret == 'fail']
+        obsolete = [uniprot_id for path, ret, uniprot_id in results if ret == 'obsolete']
 
         Entrez.email = ''
         for idx in clear_ids:
@@ -198,33 +197,32 @@ class SeqDownloader:
         return pu
 
     @staticmethod
-    def fetch_url(entry: Tuple, obs: List, http: List) -> str:
+    def fetch_url(entry: Tuple) -> (str, str, str):
         """
         Fetching files from given urls, then saving in the indicated directory. In case of http error
         or after confirming that entry is obsolete, appends currently handled ID to the appropriate list.
 
         :param entry: Tuple from paths_and_urls method.
-        :param obs: List of obsolete entries.
-        :param http: List of entries failed to download due to http errors.
-        :return: str, path were the file will be saved.
+        :return: path to file, state ('fail'|'obsolete'|'ok'), UniProt ID
         """
         path, url = entry
         uniprot_id = re.sub('[/.]', ' ', path).strip().split()
         # Substitutes "/." in path of the file with space. This allows to split given path and retrieve sequence's ID
+        state = 'ok'
         if not os.path.exists(path):
             try:
                 fasta = request.urlopen(url)
                 fasta = fasta.read().decode()
 
                 if fasta == '':
-                    obs.append(uniprot_id[2])
+                    state = 'obsolete'
                 else:
                     with open(path, 'w+') as f:
                         f.write(fasta)
 
             except error.HTTPError or TimeoutError or error.URLError:
-                http.append(uniprot_id[2])
-        return path
+                state = 'fail'
+        return path, state, uniprot_id[2]
 
     @staticmethod
     def download_ncbi(ncbi_id: str, cdir: str, obs: List, http: List, analysis_root_dir: str):

@@ -82,7 +82,7 @@ class TestSeqDatabase(unittest.TestCase):
         for t_dir in self.dirs:
             os.mkdir(t_dir)
             os.mkdir(f'{t_dir}/{self.test_dir}')
-        fetched_url = downloader.fetch_url(self.test_tuple, self.test_obs, self.test_http)
+        fetched_url = downloader.fetch_url(self.test_tuple)
         assert fetched_url == f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', \
             "Function execution failure."
         assert os.path.exists(f"{self.test_root_dir}/Downloads/test/A0A1A2.fasta") is True, \
