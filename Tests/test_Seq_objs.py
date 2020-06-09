@@ -793,6 +793,9 @@ class StringMethodTests(unittest.TestCase):
                 if str(e) == "Proteins cannot be translated!":
                     continue
                 raise
+            # Try with positional vs named argument:
+            self.assertEqual(example1.translate(11), example1.translate(table=11))
+
             # This is based on the limited example not having stop codons:
             if tran.alphabet not in [extended_protein, protein, generic_protein]:
                 print(tran.alphabet)
@@ -884,7 +887,8 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(values, set("*"))
                         elif t == "X":
                             self.assertGreater(
-                                len(values), 1,
+                                len(values),
+                                1,
                                 "translate('%s') = '%s' not '%s'"
                                 % (c1 + c2 + c3, t, ",".join(values)),
                             )
