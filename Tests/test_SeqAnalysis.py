@@ -9,10 +9,11 @@
 import os
 import shutil
 import unittest
+import filecmp
 
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
-from Bio.SeqAnalysis import database, downloader, analyzer
+from Bio.SeqAnalysis import database, downloader, analyzer, visualizer
 from Bio.SeqRecord import SeqRecord
 
 
@@ -26,9 +27,11 @@ class TestSeqDatabase(unittest.TestCase):
         cwd = os.getcwd()
         self.test_root_dir = 'SeqAnalysis' if cwd.endswith('Tests') else 'Tests/SeqAnalysis'
         self.filename = f"{self.test_root_dir}/database_tests.txt"  # Additional file made only for reading function test.
-        self.dirs = [f'{self.test_root_dir}/Downloads', f'{self.test_root_dir}/Failed', f'{self.test_root_dir}/Database']
+        self.dirs = [f'{self.test_root_dir}/Downloads', f'{self.test_root_dir}/Failed',
+                     f'{self.test_root_dir}/Database']
         self.test_dir = "test"
-        self.test_tuple = (f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', 'https://www.uniprot.org/uniprot/A0A1A2.fasta')
+        self.test_tuple = (
+            f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', 'https://www.uniprot.org/uniprot/A0A1A2.fasta')
         self.test_obs = []
         self.test_http = []
 
@@ -191,69 +194,86 @@ class TestSeqAnalyzer(unittest.TestCase):
         results = analyzer(self.test_data_dict_of_seqrecords, self.test_root_dir)
         os.remove(f'{self.test_root_dir}/results.json')
         assert results.results() == (
-        {'median_length': 158.0, 'average_length': 605.667, 'standard_deviation_length': 721.085,
-         'id': ['id4', 'id5', 'id6'], 'sequence_length': [158, 36, 1623],
-         'molecular_weight': [17245.603, 3884.478, 177765.884], 'theoretical_pi': [5.197, 5.518, 5.556],
-         'instability_index': [28.522, 9.625, 33.646], 'flexibility': [0.994, 1.004, 0.998],
-         'gravy': [0.042, 0.064, 0.074], 'aromaticity': [0.082, 0.056, 0.076], 'c_term_freq': {'M': 1.0, 'G': 0.5},
-         'n_term_freq': {'A': 0.333, 'H': 0.333, 'V': 0.333},
-         'secondary_structure_fraction': [{'Helix': 31.646, 'Turn': 23.418, 'Sheet': 23.418},
-                                          {'Helix': 36.111, 'Turn': 25.0, 'Sheet': 16.667},
-                                          {'Helix': 33.826, 'Turn': 22.058, 'Sheet': 26.802}],
-         'extinction_coefficient': [{'Cysteines reduced': 18450, 'Cysteines residues': 18950},
-                                    {'Cysteines reduced': 1490, 'Cysteines residues': 1490},
-                                    {'Cysteines reduced': 133620, 'Cysteines residues': 134995}], 'amino_acid_comp': [
-            {'A': 10, 'C': 8, 'D': 9, 'E': 11, 'F': 6, 'G': 17, 'H': 9, 'I': 9, 'K': 6, 'L': 12, 'M': 4, 'N': 5,
-             'P': 11, 'Q': 3, 'R': 4, 'S': 4, 'T': 7, 'V': 16, 'W': 2, 'Y': 5},
-            {'A': 1, 'C': 1, 'D': 3, 'E': 2, 'F': 1, 'G': 3, 'H': 1, 'I': 0, 'K': 4, 'L': 2, 'M': 1, 'N': 2, 'P': 3,
-             'Q': 0, 'R': 0, 'S': 1, 'T': 1, 'V': 9, 'W': 0, 'Y': 1},
-            {'A': 129, 'C': 23, 'D': 91, 'E': 98, 'F': 72, 'G': 122, 'H': 25, 'I': 131, 'K': 105, 'L': 171, 'M': 37,
-             'N': 72, 'P': 51, 'Q': 55, 'R': 56, 'S': 113, 'T': 97, 'V': 123, 'W': 14, 'Y': 38}],
-         'amino_acid_percent': [
-             {'A': 6.329, 'C': 5.063, 'D': 5.696, 'E': 6.962, 'F': 3.797, 'G': 10.759, 'H': 5.696, 'I': 5.696,
-              'K': 3.797, 'L': 7.595, 'M': 2.532, 'N': 3.165, 'P': 6.962, 'Q': 1.899, 'R': 2.532, 'S': 2.532, 'T': 4.43,
-              'V': 10.127, 'W': 1.266, 'Y': 3.165},
-             {'A': 2.778, 'C': 2.778, 'D': 8.333, 'E': 5.556, 'F': 2.778, 'G': 8.333, 'H': 2.778, 'I': 0.0, 'K': 11.111,
-              'L': 5.556, 'M': 2.778, 'N': 5.556, 'P': 8.333, 'Q': 0.0, 'R': 0.0, 'S': 2.778, 'T': 2.778, 'V': 25.0,
-              'W': 0.0, 'Y': 2.778},
-             {'A': 7.948, 'C': 1.417, 'D': 5.607, 'E': 6.038, 'F': 4.436, 'G': 7.517, 'H': 1.54, 'I': 8.071, 'K': 6.47,
-              'L': 10.536, 'M': 2.28, 'N': 4.436, 'P': 3.142, 'Q': 3.389, 'R': 3.45, 'S': 6.962, 'T': 5.977, 'V': 7.579,
-              'W': 0.863, 'Y': 2.341}]}, {
-            'id4': {'id': ['id4'], 'sequence_length': [158], 'molecular_weight': [17245.603], 'theoretical_pi': [5.197],
-                    'instability_index': [28.522], 'flexibility': [0.994], 'gravy': [0.042], 'aromaticity': [0.082],
-                    'secondary_structure_fraction': [{'Helix': 31.646, 'Turn': 23.418, 'Sheet': 23.418}],
-                    'extinction_coefficient': [{'Cysteines reduced': 18450, 'Cysteines residues': 18950}],
-                    'amino_acid_comp': [
-                        {'A': 10, 'C': 8, 'D': 9, 'E': 11, 'F': 6, 'G': 17, 'H': 9, 'I': 9, 'K': 6, 'L': 12, 'M': 4,
-                         'N': 5, 'P': 11, 'Q': 3, 'R': 4, 'S': 4, 'T': 7, 'V': 16, 'W': 2, 'Y': 5}],
-                    'amino_acid_percent': [
-                        {'A': 6.329, 'C': 5.063, 'D': 5.696, 'E': 6.962, 'F': 3.797, 'G': 10.759, 'H': 5.696,
-                         'I': 5.696, 'K': 3.797, 'L': 7.595, 'M': 2.532, 'N': 3.165, 'P': 6.962, 'Q': 1.899, 'R': 2.532,
-                         'S': 2.532, 'T': 4.43, 'V': 10.127, 'W': 1.266, 'Y': 3.165}], 'c_term_freq': {'H': 1},
-                    'n_term_freq': {'M': 1}},
-            'id5': {'id': ['id5'], 'sequence_length': [36], 'molecular_weight': [3884.478], 'theoretical_pi': [5.518],
-                    'instability_index': [9.625], 'flexibility': [1.004], 'gravy': [0.064], 'aromaticity': [0.056],
-                    'secondary_structure_fraction': [{'Helix': 36.111, 'Turn': 25.0, 'Sheet': 16.667}],
-                    'extinction_coefficient': [{'Cysteines reduced': 1490, 'Cysteines residues': 1490}],
-                    'amino_acid_comp': [
-                        {'A': 1, 'C': 1, 'D': 3, 'E': 2, 'F': 1, 'G': 3, 'H': 1, 'I': 0, 'K': 4, 'L': 2, 'M': 1, 'N': 2,
-                         'P': 3, 'Q': 0, 'R': 0, 'S': 1, 'T': 1, 'V': 9, 'W': 0, 'Y': 1}], 'amino_acid_percent': [
-                    {'A': 2.778, 'C': 2.778, 'D': 8.333, 'E': 5.556, 'F': 2.778, 'G': 8.333, 'H': 2.778, 'I': 0.0,
-                     'K': 11.111, 'L': 5.556, 'M': 2.778, 'N': 5.556, 'P': 8.333, 'Q': 0.0, 'R': 0.0, 'S': 2.778,
-                     'T': 2.778, 'V': 25.0, 'W': 0.0, 'Y': 2.778}], 'c_term_freq': {'A': 1}, 'n_term_freq': {'G': 1}},
-            'id6': {'id': ['id6'], 'sequence_length': [1623], 'molecular_weight': [177765.884],
-                    'theoretical_pi': [5.556], 'instability_index': [33.646], 'flexibility': [0.998], 'gravy': [0.074],
-                    'aromaticity': [0.076],
-                    'secondary_structure_fraction': [{'Helix': 33.826, 'Turn': 22.058, 'Sheet': 26.802}],
-                    'extinction_coefficient': [{'Cysteines reduced': 133620, 'Cysteines residues': 134995}],
-                    'amino_acid_comp': [
-                        {'A': 129, 'C': 23, 'D': 91, 'E': 98, 'F': 72, 'G': 122, 'H': 25, 'I': 131, 'K': 105, 'L': 171,
-                         'M': 37, 'N': 72, 'P': 51, 'Q': 55, 'R': 56, 'S': 113, 'T': 97, 'V': 123, 'W': 14, 'Y': 38}],
-                    'amino_acid_percent': [
-                        {'A': 7.948, 'C': 1.417, 'D': 5.607, 'E': 6.038, 'F': 4.436, 'G': 7.517, 'H': 1.54, 'I': 8.071,
-                         'K': 6.47, 'L': 10.536, 'M': 2.28, 'N': 4.436, 'P': 3.142, 'Q': 3.389, 'R': 3.45, 'S': 6.962,
-                         'T': 5.977, 'V': 7.579, 'W': 0.863, 'Y': 2.341}], 'c_term_freq': {'V': 1},
-                    'n_term_freq': {'M': 1}}}), \
+            {'median_length': 158.0, 'average_length': 605.667, 'standard_deviation_length': 721.085,
+             'id': ['id4', 'id5', 'id6'], 'sequence_length': [158, 36, 1623],
+             'molecular_weight': [17245.603, 3884.478, 177765.884], 'theoretical_pi': [5.197, 5.518, 5.556],
+             'instability_index': [28.522, 9.625, 33.646], 'flexibility': [0.994, 1.004, 0.998],
+             'gravy': [0.042, 0.064, 0.074], 'aromaticity': [0.082, 0.056, 0.076], 'c_term_freq': {'M': 1.0, 'G': 0.5},
+             'n_term_freq': {'A': 0.333, 'H': 0.333, 'V': 0.333},
+             'secondary_structure_fraction': [{'Helix': 31.646, 'Turn': 23.418, 'Sheet': 23.418},
+                                              {'Helix': 36.111, 'Turn': 25.0, 'Sheet': 16.667},
+                                              {'Helix': 33.826, 'Turn': 22.058, 'Sheet': 26.802}],
+             'extinction_coefficient': [{'Cysteines reduced': 18450, 'Cysteines residues': 18950},
+                                        {'Cysteines reduced': 1490, 'Cysteines residues': 1490},
+                                        {'Cysteines reduced': 133620, 'Cysteines residues': 134995}],
+             'amino_acid_comp': [
+                 {'A': 10, 'C': 8, 'D': 9, 'E': 11, 'F': 6, 'G': 17, 'H': 9, 'I': 9, 'K': 6, 'L': 12, 'M': 4, 'N': 5,
+                  'P': 11, 'Q': 3, 'R': 4, 'S': 4, 'T': 7, 'V': 16, 'W': 2, 'Y': 5},
+                 {'A': 1, 'C': 1, 'D': 3, 'E': 2, 'F': 1, 'G': 3, 'H': 1, 'I': 0, 'K': 4, 'L': 2, 'M': 1, 'N': 2,
+                  'P': 3,
+                  'Q': 0, 'R': 0, 'S': 1, 'T': 1, 'V': 9, 'W': 0, 'Y': 1},
+                 {'A': 129, 'C': 23, 'D': 91, 'E': 98, 'F': 72, 'G': 122, 'H': 25, 'I': 131, 'K': 105, 'L': 171,
+                  'M': 37,
+                  'N': 72, 'P': 51, 'Q': 55, 'R': 56, 'S': 113, 'T': 97, 'V': 123, 'W': 14, 'Y': 38}],
+             'amino_acid_percent': [
+                 {'A': 6.329, 'C': 5.063, 'D': 5.696, 'E': 6.962, 'F': 3.797, 'G': 10.759, 'H': 5.696, 'I': 5.696,
+                  'K': 3.797, 'L': 7.595, 'M': 2.532, 'N': 3.165, 'P': 6.962, 'Q': 1.899, 'R': 2.532, 'S': 2.532,
+                  'T': 4.43,
+                  'V': 10.127, 'W': 1.266, 'Y': 3.165},
+                 {'A': 2.778, 'C': 2.778, 'D': 8.333, 'E': 5.556, 'F': 2.778, 'G': 8.333, 'H': 2.778, 'I': 0.0,
+                  'K': 11.111,
+                  'L': 5.556, 'M': 2.778, 'N': 5.556, 'P': 8.333, 'Q': 0.0, 'R': 0.0, 'S': 2.778, 'T': 2.778, 'V': 25.0,
+                  'W': 0.0, 'Y': 2.778},
+                 {'A': 7.948, 'C': 1.417, 'D': 5.607, 'E': 6.038, 'F': 4.436, 'G': 7.517, 'H': 1.54, 'I': 8.071,
+                  'K': 6.47,
+                  'L': 10.536, 'M': 2.28, 'N': 4.436, 'P': 3.142, 'Q': 3.389, 'R': 3.45, 'S': 6.962, 'T': 5.977,
+                  'V': 7.579,
+                  'W': 0.863, 'Y': 2.341}]}, {
+                'id4': {'id': ['id4'], 'sequence_length': [158], 'molecular_weight': [17245.603],
+                        'theoretical_pi': [5.197],
+                        'instability_index': [28.522], 'flexibility': [0.994], 'gravy': [0.042], 'aromaticity': [0.082],
+                        'secondary_structure_fraction': [{'Helix': 31.646, 'Turn': 23.418, 'Sheet': 23.418}],
+                        'extinction_coefficient': [{'Cysteines reduced': 18450, 'Cysteines residues': 18950}],
+                        'amino_acid_comp': [
+                            {'A': 10, 'C': 8, 'D': 9, 'E': 11, 'F': 6, 'G': 17, 'H': 9, 'I': 9, 'K': 6, 'L': 12, 'M': 4,
+                             'N': 5, 'P': 11, 'Q': 3, 'R': 4, 'S': 4, 'T': 7, 'V': 16, 'W': 2, 'Y': 5}],
+                        'amino_acid_percent': [
+                            {'A': 6.329, 'C': 5.063, 'D': 5.696, 'E': 6.962, 'F': 3.797, 'G': 10.759, 'H': 5.696,
+                             'I': 5.696, 'K': 3.797, 'L': 7.595, 'M': 2.532, 'N': 3.165, 'P': 6.962, 'Q': 1.899,
+                             'R': 2.532,
+                             'S': 2.532, 'T': 4.43, 'V': 10.127, 'W': 1.266, 'Y': 3.165}], 'c_term_freq': {'H': 1},
+                        'n_term_freq': {'M': 1}},
+                'id5': {'id': ['id5'], 'sequence_length': [36], 'molecular_weight': [3884.478],
+                        'theoretical_pi': [5.518],
+                        'instability_index': [9.625], 'flexibility': [1.004], 'gravy': [0.064], 'aromaticity': [0.056],
+                        'secondary_structure_fraction': [{'Helix': 36.111, 'Turn': 25.0, 'Sheet': 16.667}],
+                        'extinction_coefficient': [{'Cysteines reduced': 1490, 'Cysteines residues': 1490}],
+                        'amino_acid_comp': [
+                            {'A': 1, 'C': 1, 'D': 3, 'E': 2, 'F': 1, 'G': 3, 'H': 1, 'I': 0, 'K': 4, 'L': 2, 'M': 1,
+                             'N': 2,
+                             'P': 3, 'Q': 0, 'R': 0, 'S': 1, 'T': 1, 'V': 9, 'W': 0, 'Y': 1}], 'amino_acid_percent': [
+                        {'A': 2.778, 'C': 2.778, 'D': 8.333, 'E': 5.556, 'F': 2.778, 'G': 8.333, 'H': 2.778, 'I': 0.0,
+                         'K': 11.111, 'L': 5.556, 'M': 2.778, 'N': 5.556, 'P': 8.333, 'Q': 0.0, 'R': 0.0, 'S': 2.778,
+                         'T': 2.778, 'V': 25.0, 'W': 0.0, 'Y': 2.778}], 'c_term_freq': {'A': 1},
+                        'n_term_freq': {'G': 1}},
+                'id6': {'id': ['id6'], 'sequence_length': [1623], 'molecular_weight': [177765.884],
+                        'theoretical_pi': [5.556], 'instability_index': [33.646], 'flexibility': [0.998],
+                        'gravy': [0.074],
+                        'aromaticity': [0.076],
+                        'secondary_structure_fraction': [{'Helix': 33.826, 'Turn': 22.058, 'Sheet': 26.802}],
+                        'extinction_coefficient': [{'Cysteines reduced': 133620, 'Cysteines residues': 134995}],
+                        'amino_acid_comp': [
+                            {'A': 129, 'C': 23, 'D': 91, 'E': 98, 'F': 72, 'G': 122, 'H': 25, 'I': 131, 'K': 105,
+                             'L': 171,
+                             'M': 37, 'N': 72, 'P': 51, 'Q': 55, 'R': 56, 'S': 113, 'T': 97, 'V': 123, 'W': 14,
+                             'Y': 38}],
+                        'amino_acid_percent': [
+                            {'A': 7.948, 'C': 1.417, 'D': 5.607, 'E': 6.038, 'F': 4.436, 'G': 7.517, 'H': 1.54,
+                             'I': 8.071,
+                             'K': 6.47, 'L': 10.536, 'M': 2.28, 'N': 4.436, 'P': 3.142, 'Q': 3.389, 'R': 3.45,
+                             'S': 6.962,
+                             'T': 5.977, 'V': 7.579, 'W': 0.863, 'Y': 2.341}], 'c_term_freq': {'V': 1},
+                        'n_term_freq': {'M': 1}}}), \
             "class didn't pass the test"
 
     def test_seqanalyzer_median_standard_deviation_average_length(self):
@@ -308,6 +328,161 @@ class TestSeqAnalyzer(unittest.TestCase):
         results = analyzer.terminal_aa_counter(self.test_data_dict_of_str_only_proper_sequence, self.round_value)
         assert results == ({'A': 0.333, 'H': 0.333, 'V': 0.333}, {'M': 1.0, 'G': 0.5}), \
             "function test_analyzer_terminal_aa_counter() didn't pass the test"
+
+
+class TestSeqVisualizer(unittest.TestCase):
+    def setUp(self) -> None:
+        """
+        Declaration of variables needed for running tests.
+        """
+        cwd = os.getcwd()
+        self.test_root_dir = 'SeqAnalysis' if cwd.endswith('Tests') else 'Tests/SeqAnalysis'
+        self.merged_sequences = {
+            'median_length': 158.0, 'average_length': 605.667, 'standard_deviation_length': 721.085,
+            'id': ['id1', 'id2', 'id3'], 'sequence_length': [158, 36, 1623],
+            'molecular_weight': [17245.603, 3884.478, 177765.884], 'theoretical_pi': [5.197, 5.518, 5.556],
+            'instability_index': [28.522, 9.625, 33.646], 'flexibility': [0.994, 1.004, 0.998],
+            'gravy': [0.042, 0.064, 0.074], 'aromaticity': [0.082, 0.056, 0.076], 'c_term_freq': {'M': 1.0, 'G': 0.5},
+            'n_term_freq': {'A': 0.333, 'H': 0.333, 'V': 0.333},
+            'secondary_structure_fraction': [{'Helix': 31.646, 'Turn': 23.418, 'Sheet': 23.418},
+                                             {'Helix': 36.111, 'Turn': 25.0, 'Sheet': 16.667},
+                                             {'Helix': 33.826, 'Turn': 22.058, 'Sheet': 26.802}],
+            'extinction_coefficient': [{'Cysteines reduced': 18450, 'Cysteines residues': 18950},
+                                       {'Cysteines reduced': 1490, 'Cysteines residues': 1490},
+                                       {'Cysteines reduced': 133620, 'Cysteines residues': 134995}],
+            'amino_acid_comp': [
+                {'A': 10, 'C': 8, 'D': 9, 'E': 11, 'F': 6, 'G': 17, 'H': 9, 'I': 9, 'K': 6, 'L': 12, 'M': 4, 'N': 5,
+                 'P': 11, 'Q': 3, 'R': 4, 'S': 4, 'T': 7, 'V': 16, 'W': 2, 'Y': 5},
+                {'A': 1, 'C': 1, 'D': 3, 'E': 2, 'F': 1, 'G': 3, 'H': 1, 'I': 0, 'K': 4, 'L': 2, 'M': 1, 'N': 2, 'P': 3,
+                 'Q': 0, 'R': 0, 'S': 1, 'T': 1, 'V': 9, 'W': 0, 'Y': 1},
+                {'A': 129, 'C': 23, 'D': 91, 'E': 98, 'F': 72, 'G': 122, 'H': 25, 'I': 131, 'K': 105, 'L': 171, 'M': 37,
+                 'N': 72, 'P': 51, 'Q': 55, 'R': 56, 'S': 113, 'T': 97, 'V': 123, 'W': 14, 'Y': 38}],
+            'amino_acid_percent': [
+                {'A': 6.329, 'C': 5.063, 'D': 5.696, 'E': 6.962, 'F': 3.797, 'G': 10.759, 'H': 5.696, 'I': 5.696,
+                 'K': 3.797, 'L': 7.595, 'M': 2.532, 'N': 3.165, 'P': 6.962, 'Q': 1.899, 'R': 2.532, 'S': 2.532,
+                 'T': 4.43,
+                 'V': 10.127, 'W': 1.266, 'Y': 3.165},
+                {'A': 2.778, 'C': 2.778, 'D': 8.333, 'E': 5.556, 'F': 2.778, 'G': 8.333, 'H': 2.778, 'I': 0.0,
+                 'K': 11.111,
+                 'L': 5.556, 'M': 2.778, 'N': 5.556, 'P': 8.333, 'Q': 0.0, 'R': 0.0, 'S': 2.778, 'T': 2.778, 'V': 25.0,
+                 'W': 0.0, 'Y': 2.778},
+                {'A': 7.948, 'C': 1.417, 'D': 5.607, 'E': 6.038, 'F': 4.436, 'G': 7.517, 'H': 1.54, 'I': 8.071,
+                 'K': 6.47,
+                 'L': 10.536, 'M': 2.28, 'N': 4.436, 'P': 3.142, 'Q': 3.389, 'R': 3.45, 'S': 6.962, 'T': 5.977,
+                 'V': 7.579,
+                 'W': 0.863, 'Y': 2.341}]}
+        self.single_sequences = {
+            'id1': {'id': ['id1'], 'sequence_length': [158], 'molecular_weight': [17245.603], 'theoretical_pi': [5.197],
+                    'instability_index': [28.522], 'flexibility': [0.994], 'gravy': [0.042], 'aromaticity': [0.082],
+                    'secondary_structure_fraction': [{'Helix': 31.646, 'Turn': 23.418, 'Sheet': 23.418}],
+                    'extinction_coefficient': [{'Cysteines reduced': 18450, 'Cysteines residues': 18950}],
+                    'amino_acid_comp': [
+                        {'A': 10, 'C': 8, 'D': 9, 'E': 11, 'F': 6, 'G': 17, 'H': 9, 'I': 9, 'K': 6, 'L': 12, 'M': 4,
+                         'N': 5, 'P': 11, 'Q': 3, 'R': 4, 'S': 4, 'T': 7, 'V': 16, 'W': 2, 'Y': 5}],
+                    'amino_acid_percent': [
+                        {'A': 6.329, 'C': 5.063, 'D': 5.696, 'E': 6.962, 'F': 3.797, 'G': 10.759, 'H': 5.696,
+                         'I': 5.696, 'K': 3.797, 'L': 7.595, 'M': 2.532, 'N': 3.165, 'P': 6.962, 'Q': 1.899, 'R': 2.532,
+                         'S': 2.532, 'T': 4.43, 'V': 10.127, 'W': 1.266, 'Y': 3.165}], 'c_term_freq': {'H': 1},
+                    'n_term_freq': {'M': 1}},
+            'id2': {'id': ['id2'], 'sequence_length': [36], 'molecular_weight': [3884.478], 'theoretical_pi': [5.518],
+                    'instability_index': [9.625], 'flexibility': [1.004], 'gravy': [0.064], 'aromaticity': [0.056],
+                    'secondary_structure_fraction': [{'Helix': 36.111, 'Turn': 25.0, 'Sheet': 16.667}],
+                    'extinction_coefficient': [{'Cysteines reduced': 1490, 'Cysteines residues': 1490}],
+                    'amino_acid_comp': [
+                        {'A': 1, 'C': 1, 'D': 3, 'E': 2, 'F': 1, 'G': 3, 'H': 1, 'I': 0, 'K': 4, 'L': 2, 'M': 1, 'N': 2,
+                         'P': 3, 'Q': 0, 'R': 0, 'S': 1, 'T': 1, 'V': 9, 'W': 0, 'Y': 1}], 'amino_acid_percent': [
+                    {'A': 2.778, 'C': 2.778, 'D': 8.333, 'E': 5.556, 'F': 2.778, 'G': 8.333, 'H': 2.778, 'I': 0.0,
+                     'K': 11.111, 'L': 5.556, 'M': 2.778, 'N': 5.556, 'P': 8.333, 'Q': 0.0, 'R': 0.0, 'S': 2.778,
+                     'T': 2.778, 'V': 25.0, 'W': 0.0, 'Y': 2.778}], 'c_term_freq': {'A': 1}, 'n_term_freq': {'G': 1}},
+            'id3': {'id': ['id3'], 'sequence_length': [1623], 'molecular_weight': [177765.884],
+                    'theoretical_pi': [5.556], 'instability_index': [33.646], 'flexibility': [0.998], 'gravy': [0.074],
+                    'aromaticity': [0.076],
+                    'secondary_structure_fraction': [{'Helix': 33.826, 'Turn': 22.058, 'Sheet': 26.802}],
+                    'extinction_coefficient': [{'Cysteines reduced': 133620, 'Cysteines residues': 134995}],
+                    'amino_acid_comp': [
+                        {'A': 129, 'C': 23, 'D': 91, 'E': 98, 'F': 72, 'G': 122, 'H': 25, 'I': 131, 'K': 105, 'L': 171,
+                         'M': 37, 'N': 72, 'P': 51, 'Q': 55, 'R': 56, 'S': 113, 'T': 97, 'V': 123, 'W': 14, 'Y': 38}],
+                    'amino_acid_percent': [
+                        {'A': 7.948, 'C': 1.417, 'D': 5.607, 'E': 6.038, 'F': 4.436, 'G': 7.517, 'H': 1.54, 'I': 8.071,
+                         'K': 6.47, 'L': 10.536, 'M': 2.28, 'N': 4.436, 'P': 3.142, 'Q': 3.389, 'R': 3.45, 'S': 6.962,
+                         'T': 5.977, 'V': 7.579, 'W': 0.863, 'Y': 2.341}], 'c_term_freq': {'V': 1},
+                    'n_term_freq': {'M': 1}}}
+        self.v = visualizer(self.merged_sequences, self.single_sequences, analysis_root_dir=self.test_root_dir)
+
+    def test_seqvisualizer_class_static_directory(self):
+        """
+        Function that tests if static directory is created properly while creating static plot
+
+        :return: returns nothing if class passes tests, else function returns text message
+        """
+        self.v.bar(parameter='sequence_length', out='bar_temp', show=False)
+        if_path_exists = os.path.exists(f"{self.test_root_dir}/Plots/static")
+        assert if_path_exists is True, \
+            "function test_seqvisualizer_class_static_directory() didn't pass the test"
+
+    def test_seqvisualizer_class_interactive_directory(self):
+        """
+        Function that tests if interactive directory is created properly while creating interactive plot
+
+        :return: returns nothing if class passes tests, else function returns text message
+        """
+        self.v.bar_interactive(parameter='amino_acid_comp', out='bar_interactive_temp', show=False)
+        if_path_exists = os.path.exists(f"{self.test_root_dir}/Plots/interactive")
+        assert if_path_exists is True, \
+            "function test_seqvisualizer_class_interactive_directory() didn't pass the test"
+
+    def test_seqvisualizer_class_static_bar(self):
+        """
+        Function checks if plot is created properly by comparing newly created plot with ready plot, both with same
+        parameters
+
+        :return: returns nothing if class passes tests, else function returns text message
+        """
+        self.v.bar(parameter='sequence_length', out='bar_test', show=False)
+
+        result = filecmp.cmp(f"{self.test_root_dir}/Plots/static/bar_test.png",
+                             f"{self.test_root_dir}/proper_Plots/static/bar.png", shallow=False)
+        assert result is True, \
+            f"function test_seqvisualizer_class_static_bar() didn't pass the test on plot bar"
+
+    def test_seqvisualizer_class_static_box(self):
+        """
+        Function checks if plot is created properly by comparing newly created plot with ready plot, both with same
+        parameters
+
+        :return: returns nothing if class passes tests, else function returns text message
+        """
+        self.v.box(parameter='extinction_coefficient', out='box_test', show=False)
+
+        result = filecmp.cmp(f"{self.test_root_dir}/Plots/static/box_test.png",
+                             f"{self.test_root_dir}/proper_Plots/static/box.png", shallow=False)
+        assert result is True, \
+            f"function test_seqvisualizer_class_static_box() didn't pass the test on plot box"
+
+    def test_seqvisualizer_class_static_scatter(self):
+        """
+        Function checks if plot is created properly by comparing newly created plot with ready plot, both with same
+        parameters
+
+        :return: returns nothing if class passes tests, else function returns text message
+        """
+        self.v.scatter(x_parameter='sequence_length', y_parameter='theoretical_pi', z_parameter='molecular_weight',
+                       size=(12, 7), out='scatter_test', show=False)
+
+        result = filecmp.cmp(f"{self.test_root_dir}/Plots/static/scatter_test.png",
+                             f"{self.test_root_dir}/proper_Plots/static/scatter.png", shallow=False)
+        assert result is True, \
+            f"function test_seqvisualizer_class_static_scatter() didn't pass the test on plot scatter"
+
+    def rm_dirs(self):
+        """
+        Quick cleanup after certain tests and at the end of testing.
+        """
+        if os.path.exists(f"{self.test_root_dir}/Plots"):
+            shutil.rmtree(f"{self.test_root_dir}/Plots")
+
+    def tearDown(self) -> None:
+        self.rm_dirs()
 
 
 if __name__ == "__main__":
