@@ -106,9 +106,10 @@ for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
 def _extract(handle):
     line = handle.readline()
     if line != "\\begin{minted}{pycon}\n":
-        raise ValueError(
-            "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'"
-        )
+        if not (line.startswith("\\begin{minted}[") and line.endswith("]{pycon}\n")):
+            raise ValueError(
+                "Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}' or '\\begin{minted}[options]{pycon}'"
+            )
     lines = []
     while True:
         line = handle.readline()

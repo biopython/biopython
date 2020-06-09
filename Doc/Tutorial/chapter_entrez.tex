@@ -511,20 +511,19 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(record[0]["LinkSetDb"])
-8
+7
 \end{minted}
 \noindent The exact numbers should increase over time:
 \begin{minted}{pycon}
 >>> for linksetdb in record[0]["LinkSetDb"]:
 ...     print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
 ...
-pubmed pubmed_pubmed 162
-pubmed pubmed_pubmed_alsoviewed 3
-pubmed pubmed_pubmed_citedin 430
+pubmed pubmed_pubmed 284
+pubmed pubmed_pubmed_citedin 924
 pubmed pubmed_pubmed_combined 6
 pubmed pubmed_pubmed_five 6
 pubmed pubmed_pubmed_refs 17
-pubmed pubmed_pubmed_reviews 7
+pubmed pubmed_pubmed_reviews 12
 pubmed pubmed_pubmed_reviews_five 6
 \end{minted}
 
