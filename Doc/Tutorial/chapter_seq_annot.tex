@@ -132,15 +132,12 @@ Back in Chapter~\ref{chapter:quick_start} you will have seen the function \verb|
 used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
 has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:seqio} for details):
 
-%TODO - line wrapping for doctest?
-\begin{minted}{pycon}
+%doctest ../Tests/GenBank
+\begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'),
-id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
-description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... sequence',
-dbxrefs=[])
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|', description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
 \end{minted}
 
 Now, let's have a look at the key attributes of this \verb|SeqRecord|
