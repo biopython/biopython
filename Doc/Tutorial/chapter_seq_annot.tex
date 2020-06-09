@@ -144,6 +144,7 @@ Now, let's have a look at the key attributes of this \verb|SeqRecord|
 individually -- starting with the \verb|seq| attribute which gives you a
 \verb|Seq| object:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> record.seq
 Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
@@ -156,13 +157,14 @@ your FASTA file contains, you can tell \verb|Bio.SeqIO| which alphabet to use
 
 Next, the identifiers and description:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> record.id
 'gi|45478711|ref|NC_005816.1|'
 >>> record.name
 'gi|45478711|ref|NC_005816.1|'
 >>> record.description
-'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence'
+'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence'
 \end{minted}
 
 As you can see above, the first word of the FASTA record's title line (after
