@@ -227,7 +227,7 @@ class SeqDownloader:
                     with open(path, 'w+') as f:
                         f.write(fasta)
 
-            except error.HTTPError or TimeoutError or error.URLError:
+            except error.HTTPError or TimeoutError or error.URLError or ConnectionRefusedError:
                 state = 'fail'
         return path, state, uniprot_id[2]
 
