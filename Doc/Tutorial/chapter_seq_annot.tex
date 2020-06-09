@@ -150,11 +150,6 @@ individually -- starting with the \verb|seq| attribute which gives you a
 Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
 \end{minted}
 
-\noindent Here \verb|Bio.SeqIO| has defaulted to a generic alphabet, rather
-than guessing that this is DNA. If you know in advance what kind of sequence
-your FASTA file contains, you can tell \verb|Bio.SeqIO| which alphabet to use
-(see Chapter~\ref{chapter:seqio}).
-
 Next, the identifiers and description:
 
 %cont-doctest
@@ -223,9 +218,6 @@ Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost i
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
 \end{minted}
-
-You should be able to spot some differences already! But taking the attributes individually,
-the sequence string is the same as before, but this time \verb|Bio.SeqIO| has been able to automatically assign a more specific alphabet (see Chapter~\ref{chapter:seqio} for details):
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -852,12 +844,8 @@ FASTQ file. Chapter~\ref{chapter:seqio} will explain the \verb|SeqIO| functions:
 25
 >>> print(record.seq)
 CCCTTCTTGTCTTCAGCGTTTCTCC
-\end{minted}
-%TODO - doctest wrapping
-\begin{minted}{pycon}
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
-26, 26, 26, 23, 23]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 26, 23, 23]
 \end{minted}
 
 \noindent Let's suppose this was Roche 454 data, and that from other information
@@ -888,11 +876,8 @@ CTCC
 24
 >>> print(edited.seq)
 CCCTTCTTGTCTTCAGCGTTCTCC
-\end{minted}
-\begin{minted}{pycon}
 >>> print(edited.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
-26, 26, 23, 23]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 23, 23]
 \end{minted}
 
 \noindent Easy and intuitive? We hope so! You can make this shorter with just:
@@ -909,14 +894,8 @@ Suppose you have a circular genome:
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
-\end{minted}
-%TODO - doctest wrapping
-\begin{minted}{pycon}
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
-dbxrefs=['Project:10638'])
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
 \end{minted}
 
 %cont-doctest
@@ -927,12 +906,8 @@ dbxrefs=['Project:10638'])
 41
 >>> record.dbxrefs
 ['Project:58037']
-\end{minted}
-%TODO - doctest wrapping
-\begin{minted}{pycon}
 >>> record.annotations.keys()
-['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
-'accessions', 'data_file_division', 'date', 'organism', 'gi']
+dict_keys(['molecule_type', 'topology', 'data_file_division', 'date', 'accessions', 'sequence_version', 'gi', 'keywords', 'source', 'organism', 'taxonomy', 'references', 'comment'])
 \end{minted}
 
 You can shift the origin like this:
@@ -940,14 +915,8 @@ You can shift the origin like this:
 %cont-doctest
 \begin{minted}{pycon}
 >>> shifted = record[2000:] + record[:2000]
-\end{minted}
-%TODO - doctest wrapping
-\begin{minted}{pycon}
 >>> shifted
-SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
-dbxrefs=[])
+SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
 \end{minted}
 
 %cont-doctest
@@ -974,14 +943,14 @@ it preserves (erroneously propagating annotation can cause major problems). If
 you want to keep the database cross references or the annotations dictionary,
 this must be done explicitly:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> shifted.dbxrefs = record.dbxrefs[:]
 >>> shifted.annotations = record.annotations.copy()
 >>> shifted.dbxrefs
-['Project:10638']
+['Project:58037']
 >>> shifted.annotations.keys()
-['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
-'accessions', 'data_file_division', 'date', 'organism', 'gi']
+dict_keys(['molecule_type', 'topology', 'data_file_division', 'date', 'accessions', 'sequence_version', 'gi', 'keywords', 'source', 'organism', 'taxonomy', 'references', 'comment'])
 \end{minted}
 
 Also note that in an example like this, you should probably change the record
