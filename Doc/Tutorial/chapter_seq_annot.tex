@@ -654,32 +654,31 @@ The \verb|format()| method of the \verb|SeqRecord| class gives a string
 containing your record formatted using one of the output file formats
 supported by \verb|Bio.SeqIO|, such as FASTA:
 
-\begin{minted}{python}
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_protein
-
-record = SeqRecord(
-    Seq(
-        "MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD"
-        "GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK"
-        "NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM"
-        "SSAC",
-        generic_protein,
-    ),
-    id="gi|14150838|gb|AAK54648.1|AF376133_1",
-    description="chalcone synthase [Cucumis sativus]",
-)
-
-print(record.format("fasta"))
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> record = SeqRecord(
+...     Seq(
+...         "MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD"
+...         "GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK"
+...         "NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM"
+...         "SSAC"
+...     ),
+...     id="gi|14150838|gb|AAK54648.1|AF376133_1",
+...     description="chalcone synthase [Cucumis sativus]",
+... )
+>>> print(record.format("fasta"))
 \end{minted}
 \noindent which should give:
-\begin{minted}{text}
+%cont-doctest
+\begin{minted}{pycon}
 >gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
 MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
 GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
 NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
 SSAC
+<BLANKLINE>
 \end{minted}
 
 This \verb|format| method takes a single mandatory argument, a lower case string which is
@@ -702,18 +701,8 @@ For example, taking the same GenBank file used earlier:
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
-\end{minted}
-%TODO - support line wrapping in doctest
-\begin{minted}{pycon}
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
-IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence',
-dbxrefs=['Project:58037'])
-\end{minted}
-
-%cont-doctest
-\begin{minted}{pycon}
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
 >>> len(record)
 9609
 >>> len(record.features)
