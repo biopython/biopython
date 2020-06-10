@@ -74,6 +74,23 @@ python3 -m SeqAnalysis sequences.txt
 
 IDs in file should be separated. Available delimiters: `';' ':' ',' '\n' '\t'`.
 
+### Errors
+
+On newer MacOS X after running module, when you receive following error:
+
+```bash
+objc[2484]: +[NSNumber initialize] may have been in progress in another thread when fork() was called.
+```
+
+You should follow these [instructions](https://stackoverflow.com/a/52230415) and add this line `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES`
+to your `.zshrc`:
+
+```bash
+echo "export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES" >> ~/.zshrc
+```
+
+Then restart terminal.
+
 ## Development
 
 For development purposes biopython needs to be built and installed. Some files are required to be compiled and copied to
@@ -86,13 +103,18 @@ You need to specify name for `BRANCH_FOR_DEVELOPMENT` first:
 ```bash
 pip3 install virtualenv
 
+# clone and checkout on new dev branch
 git clone https://github.com/moozeq/biopython.git
 cd biopython
 git checkout -b ${BRANCH_FOR_DEVELOPMENT} origin/sequences_analysis
+
+# create virtual environment, build and install biopython and its dependencies
 python3 -m venv venv
 source venv/bin/activate
 python3 setup.py build
 python3 setup.py install
+
+# copy built *.c files which are required for SeqAnalysis module
 cp -r venv/lib/*/site-packages/biopython*/Bio/Align/* Bio/Align
 ```
 
