@@ -13,14 +13,8 @@ and Threonines?
 
 \section{Sequences and Alphabets}
 
-Historically the \verb|Seq| object in Biopython ``.alphabet`` attribute was a
-complex object which captured not just the type of sequence (like DNA, RNA, or
-Protein) but additional information like the expected letters or gap character.
-This has been cut in Biopython 1.78.
-
-We still need to record the molecule type (DNA, RNA, nucleotide, protein, or
-unknown) for use with some file formats, and this can also be used for type
-checking.
+The \verb|Seq| object defaults to using a generic alphabet object,
+this legacy attribute can usually be ignored:
 
 %doctest
 \begin{minted}{pycon}
@@ -57,6 +51,8 @@ Seq('AGTACACTGGT')
 >>> my_prot.alphabet
 ProteinAlphabet()
 \end{minted}
+
+Likewise there is a \verb|generic_rna| for RNA.
 
 \section{Sequences act like strings}
 
