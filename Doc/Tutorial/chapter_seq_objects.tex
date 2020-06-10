@@ -667,7 +667,7 @@ the letters in a sequence are context dependent - the letter ``A'' could be part
 of a DNA, RNA or protein sequence. Biopython can track the molecule type, so
 comparing two \verb|Seq| objects could mean considering this too.
 
-Support you argue \texttt{Seq("ACGT", generic\_dna)`` and \texttt{Seq("ACGT")}
+Suppose you argue \texttt{Seq("ACGT", generic\_dna)`` and \texttt{Seq("ACGT")}
 should be equal (i.e. comparing DNA and the default generic alphabet).
 Then, logically, \texttt{Seq("ACGT", generic_protein)} and \texttt{Seq("ACGT")}
 should also be equal. Now, in logic if $A=B$ and $B=C$, by transitivity we
@@ -677,23 +677,8 @@ to be equal -- which most people would agree is just not right.
 This transitivity also has implications for using \verb|Seq| objects as
 Python dictionary keys.
 
-Now, in everyday use, your sequences will probably all have the same
-alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
-all protein). What you probably want is to just compare the sequences as
-strings -- which you can do explicitly:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> seq1 = Seq("ACGT", IUPAC.unambiguous_dna)
->>> seq2 = Seq("ACGT", IUPAC.ambiguous_dna)
->>> str(seq1) == str(seq2)
-True
->>> str(seq1) == str(seq1)
-True
-\end{minted}
-
+Now, in everyday use, your sequences will generally all be the same type of
+(all DNA, all RNA, or all protein).
 So, what does Biopython do? Well, as of Biopython 1.65, sequence comparison
 only looks at the sequence, essentially ignoring the alphabet:
 
