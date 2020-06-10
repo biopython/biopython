@@ -31,9 +31,6 @@ Sequences analysis and plotting
 parser = argparse.ArgumentParser(description=sa_header, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument('sequences', nargs='?', default='-', type=str, help='sequences as filename or list')
 parser.add_argument('-d', '--directory', help='directory for analysis output', default='seq_analysis')
-parser.add_argument('-a', '--analysis', help='name of analysis', default='analysis')
-parser.add_argument('-s', action='store_true', help='save plots')
-parser.add_argument('-v', action='store_true', help='show plots')
 args = parser.parse_args()
 
 seqs_data = None
@@ -45,7 +42,7 @@ else:
     with open(args.sequences, 'r') as seq_file:
         seqs_data = seq_file.read()
 
-seqs_data = seqs_data.replace(':', ',').replace(';', ',').replace('\n', ',').replace(' ', '').split(',')
+seqs_data = seqs_data.replace(':', ',').replace(';', ',').replace('\n', ',').replace('\t', ',').replace(' ', '').split(',')
 seqs_data = [seq.strip() for seq in seqs_data if seq]
 
 analysis_dir = args.directory
@@ -89,9 +86,9 @@ def visualize(all_seqs: dict, separated_seqs: dict, out: str, show: bool):
     v.bar_interactive(parameter='molecular_weight', out=out, show=show)
 
 
-seqs = create_db(seqs_data, args.analysis)
+seqs = create_db(seqs_data, 'analysis')
 print_success(f'Database created successfully, entries = {len(seqs)}')
 dict_all_sequences, dict_each_sequence = analyze(seqs)
 print_success(f'Analysis performed successfully')
-visualize(dict_all_sequences, dict_each_sequence, 'def' if args.s else None, True if args.v else False)
+visualize(dict_all_sequences, dict_each_sequence, 'def', False)
 print_success(f'Visualizing performed successfully')
