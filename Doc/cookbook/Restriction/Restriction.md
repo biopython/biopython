@@ -127,7 +127,9 @@ KpnI
 
 So what can we do with these restriction enzymes? To see that we will need a
 DNA sequence. Restriction enzymes support both `Bio.Seq.MutableSeq`and
-`Bio.Seq.Seq` objects. You sequence must comply with the IUPAC alphabet.
+`Bio.Seq.Seq` objects. Your sequence must comply with the IUPAC alphabet.
+That means using A, C, G and T or U, plus N for any base, and various
+other standard codes like S for C or G, and V for A, C or G.
 
 ``` python
 >>> from Bio.Seq import Seq

@@ -183,7 +183,7 @@
 <span id="cb3-17"><a href="#cb3-17"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
 <p><code>ecori</code> or <code>EcoR1</code> are not enzymes, <code>EcoRI</code> and <code>KpnI</code> are.</p>
 <h4 id="searching-for-restriction-sites"><a name="1.3"></a>1.3 Searching for restriction sites</h4>
-<p>So what can we do with these restriction enzymes? To see that we will need a DNA sequence. Restriction enzymes support both <code>Bio.Seq.MutableSeq</code>and <code>Bio.Seq.Seq</code> objects. You sequence must comply with the IUPAC alphabet.</p>
+<p>So what can we do with these restriction enzymes? To see that we will need a DNA sequence. Restriction enzymes support both <code>Bio.Seq.MutableSeq</code>and <code>Bio.Seq.Seq</code> objects. Your sequence must comply with the IUPAC alphabet. That means using A, C, G and T or U, plus N for any base, and various other standard codes like S for C or G, and V for A, C or G.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> Bio.Seq <span class="im">import</span> Seq</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> my_seq <span class="op">=</span> Seq(<span class="st">&#39;AAAAAAAAAAAAAA&#39;</span>)</span></code></pre></div>
 <p>Searching a sequence for the presence of restriction site for your preferred enzyme is as simple as:</p>
