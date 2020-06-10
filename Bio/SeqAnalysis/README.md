@@ -74,6 +74,16 @@ python3 -m SeqAnalysis sequences.txt
 
 IDs in file should be separated. Available delimiters: `';' ':' ',' '\n' '\t'`.
 
+Results should be stored in *seq_analysis* directory, where:
+
+- **results.json** are results of analysis stored in json format
+- **sequences.txt** is file with analyzed sequences IDs
+- **Database** contains all *.fasta* files merged into one database
+- **Downloads** contains all sequences as separated *.fasta* files
+- **Failed** contains information about sequences which failed when downloading
+- **Plots/static** contains all static plots in *.png* format
+- **Plots/interactive** contains all interactive plots in *.html* format
+
 ### Errors
 
 On newer MacOS X after running module, when you receive following error:

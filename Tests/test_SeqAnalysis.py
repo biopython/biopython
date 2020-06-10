@@ -85,7 +85,7 @@ class TestSeqDatabase(unittest.TestCase):
         for t_dir in self.dirs:
             os.mkdir(t_dir)
             os.mkdir(f'{t_dir}/{self.test_dir}')
-        fetched_url = downloader.fetch_url(self.test_tuple)
+        fetched_url, ret, uniprot_id = downloader.fetch_url(self.test_tuple)
         assert fetched_url == f'{self.test_root_dir}/Downloads/test/A0A1A2.fasta', \
             "Function execution failure."
         assert os.path.exists(f"{self.test_root_dir}/Downloads/test/A0A1A2.fasta") is True, \
@@ -441,7 +441,7 @@ class TestSeqVisualizer(unittest.TestCase):
         self.v.bar(parameter='sequence_length', out='bar_test', show=False)
 
         result = filecmp.cmp(f"{self.test_root_dir}/Plots/static/bar_test.png",
-                             f"{self.test_root_dir}/proper_Plots/static/bar.png", shallow=False)
+                             f"{self.test_root_dir}/proper_Plots/static/bar_test.png", shallow=False)
         assert result is True, \
             f"function test_seqvisualizer_class_static_bar() didn't pass the test on plot bar"
 
@@ -455,7 +455,7 @@ class TestSeqVisualizer(unittest.TestCase):
         self.v.box(parameter='extinction_coefficient', out='box_test', show=False)
 
         result = filecmp.cmp(f"{self.test_root_dir}/Plots/static/box_test.png",
-                             f"{self.test_root_dir}/proper_Plots/static/box.png", shallow=False)
+                             f"{self.test_root_dir}/proper_Plots/static/box_test.png", shallow=False)
         assert result is True, \
             f"function test_seqvisualizer_class_static_box() didn't pass the test on plot box"
 
@@ -470,7 +470,7 @@ class TestSeqVisualizer(unittest.TestCase):
                        size=(12, 7), out='scatter_test', show=False)
 
         result = filecmp.cmp(f"{self.test_root_dir}/Plots/static/scatter_test.png",
-                             f"{self.test_root_dir}/proper_Plots/static/scatter.png", shallow=False)
+                             f"{self.test_root_dir}/proper_Plots/static/scatter_test.png", shallow=False)
         assert result is True, \
             f"function test_seqvisualizer_class_static_scatter() didn't pass the test on plot scatter"
 
