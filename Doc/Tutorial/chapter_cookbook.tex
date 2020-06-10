@@ -1655,8 +1655,8 @@ replacements for only charged polar amino acids using:
 %cont-doctest
 \begin{minted}{pycon}
 >>> replace_info = summary_align.replacement_dictionary(
-...     ["G", "A", "V", "L", "I", "M", "P", "F",
-...      "W", "S", "T", "N", "Q", "Y", "C", "-"])
+...     skip_chars=["G", "A", "V", "L", "I", "M", "P", "F",
+...                 "W", "S", "T", "N", "Q", "Y", "C", "-"])
 \end{minted}
 
 This information about amino acid replacements is represented as a
