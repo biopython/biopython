@@ -145,7 +145,5 @@ When running from Pycharm, set working directory to biopython, go to
 Running as single module with input from example file, analysis output should appear in `seq_analysis` directory:
 
 ```bash
-source venv/bin/activate
-python3 -m Bio.SeqAnalysis Tests/SeqAnalysis/sequences.txt -o
-mv seq_analysis ..
+python3 -m Bio.SeqAnalysis Tests/SeqAnalysis/sequences.txt
 ```
