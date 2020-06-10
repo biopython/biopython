@@ -682,8 +682,16 @@ Now, in everyday use, your sequences will generally all be the same type of
 So, what does Biopython do? Well, as of Biopython 1.65, sequence comparison
 only looks at the sequence, essentially ignoring the alphabet:
 
-%cont-doctest
+%doctest
 \begin{minted}{pycon}
+>>> from Bio.Alphabet import generic_dna
+>>> from Bio.Seq import Seq
+>>> seq2 = Seq("ACGT")
+>>> seq1 = Seq("ACGT", generic_dna)
+>>> str(seq1) == str(seq2)
+True
+>>> str(seq1) == str(seq1)
+True
 >>> seq1 == seq2
 True
 >>> seq1 == "ACGT"
