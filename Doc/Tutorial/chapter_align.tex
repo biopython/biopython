@@ -621,7 +621,7 @@ This takes an output format specification as a single argument, a lower case str
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> print(format(alignment, "clustal")) # doctest:+ELLIPSIS
+>>> print(format(alignment, "clustal"))
 CLUSTAL X (1.81) multiple sequence alignment
 
 
@@ -849,7 +849,7 @@ Array shape 7 by 52
 \end{minted}
 
 If you will be working heavily with the columns, you can tell NumPy to store
-the array by column (as in Fortran) rather then its default of by row (as in C):
+the array by column (as in Fortran) rather than its default of by row (as in C):
 
 \begin{minted}{pycon}
 >>> align_array = np.array([list(rec) for rec in alignment], np.character, order="F")
@@ -1526,7 +1526,7 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 >>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
 >>> len(alignments)
 2
->>> print(pairwise2.format_alignment(*alignments[0])) # doctest:+ELLIPSIS
+>>> print(pairwise2.format_alignment(*alignments[0]))
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
 || |.|..|..|.|.|||| ......|............|.......||.
 MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
