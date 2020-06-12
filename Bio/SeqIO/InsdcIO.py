@@ -743,42 +743,21 @@ class GenBankWriter(_InsdcWriter):
                 BiopythonWarning,
             )
 
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if not isinstance(a, Alphabet.Alphabet):
-            raise TypeError("Invalid alphabet")
-        elif isinstance(a, Alphabet.ProteinAlphabet):
-            units = "aa"
-        elif isinstance(a, Alphabet.NucleotideAlphabet):
-            units = "bp"
-        else:
-            # Must be something like NucleotideAlphabet or
-            # just the generic Alphabet (default for fasta files)
-            raise ValueError("Need a Nucleotide or Protein alphabet")
-
         # Get the molecule type
-        mol_type = self._get_annotation_str(record, "molecule_type", default=None)
+        mol_type = self._get_annotation_str(record, "molecule_type", default="DNA")
         if mol_type and len(mol_type) > 7:
             # Deal with common cases from EMBL to GenBank
             mol_type = mol_type.replace("unassigned ", "").replace("genomic ", "")
             if len(mol_type) > 7:
                 warnings.warn("Molecule type %r too long" % mol_type, BiopythonWarning)
-                mol_type = None
+                mol_type = "DNA"
         if mol_type in ["protein", "PROTEIN"]:
             mol_type = ""
 
-        if mol_type:
-            pass
-        elif isinstance(a, Alphabet.ProteinAlphabet):
-            mol_type = ""
-        elif isinstance(a, Alphabet.DNAAlphabet):
-            mol_type = "DNA"
-        elif isinstance(a, Alphabet.RNAAlphabet):
-            mol_type = "RNA"
+        if mol_type == "":
+            units = "aa"
         else:
-            # Must be something like NucleotideAlphabet or
-            # just the generic Alphabet (default for fasta files)
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
+            units = "bp"
 
         topology = self._get_topology(record)
 
