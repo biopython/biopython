@@ -411,11 +411,6 @@ def majority_consensus(trees, cutoff=0, mcmc=False, n=1):
             # put new clade
             bitstr_clades[bitstr] = clade
             clades_used.add(bitstr)
-            # if (len(bitstr_clades) == len(terms) - 1) or (
-            #     len(bitstr_clades) == len(terms) - 2 and len(root.clades) == 3
-            # ):
-            #     consensus_trees.append(BaseTree.Tree(root=root))
-            #     break
         consensus_trees.append(BaseTree.Tree(root=root))
     if n == 1:
         return consensus_trees[0]
@@ -757,12 +752,11 @@ def maximum_clade_probability_consensus(trees, n=1, mcmc=False):
 
         for clade in tree.find_clades(terminal=False):
             clade_count = bitstr_counts[_clade_to_bitstr(clade, term_names)][0]
-            # dodać możliwość generatora drzew zamiast listy
             if mcmc:
                 number_of_trees = sum(n for tree, n in trees)
             else:
                 number_of_trees = len(trees)
-            clade_probability = clade_count / len(trees)
+            clade_probability = clade_count / number_of_trees
             probability *= clade_probability
         tree_probabilities.append([tree, probability])
 
