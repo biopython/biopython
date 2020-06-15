@@ -503,6 +503,7 @@ class Parser:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
             seq = "".join(element.text.split())
             self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
+            self.ParsedSeqRecord.annotations['molecule_type'] = 'protein'
 
         # ============================================#
         # Initialize SeqRecord

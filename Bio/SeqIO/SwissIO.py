@@ -95,6 +95,7 @@ def SwissIterator(source):
             if dbxref not in record.dbxrefs:
                 record.dbxrefs.append(dbxref)
         annotations = record.annotations
+        annotations["molecule_type"] = "protein"
         annotations["accessions"] = swiss_record.accessions
         if swiss_record.protein_existence:
             annotations["protein_existence"] = swiss_record.protein_existence

@@ -80,6 +80,7 @@ def PhdIterator(source):
         )
         # Just re-use the comments dictionary as the SeqRecord's annotations
         seq_record.annotations = phd_record.comments
+        seq_record.annotations["molecule_type"] = "DNA"
         # And store the qualities and peak locations as per-letter-annotation
         seq_record.letter_annotations["phred_quality"] = [
             int(site[1]) for site in phd_record.sites

@@ -770,6 +770,7 @@ def _sff_read_seq_record(
         annotations["time"] = _get_read_time(name)
         annotations["region"] = _get_read_region(name)
         annotations["coords"] = _get_read_xy(name)
+    annotations["molecule_type"] = "DNA"
     record = SeqRecord(
         Seq(seq, alphabet), id=name, name=name, description="", annotations=annotations
     )

@@ -54,8 +54,14 @@ def NexusIterator(handle, seq_count=None):
         )
 
     # TODO - Can we extract any annotation too?
+    if n.datatype in ('dna', 'nucleotide'):
+        annotations = {"molecule_type": "DNA"}
+    elif n.datatype == 'rna':
+        annotations = {"molecule_type": "RNA"}
+    elif n.datatype == 'protein':
+        annotations = {"molecule_type": "protein"}
     records = (
-        SeqRecord(n.matrix[new_name], id=new_name, name=old_name, description="")
+        SeqRecord(n.matrix[new_name], id=new_name, name=old_name, description="", annotations=annotations)
         for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
     )
     # All done

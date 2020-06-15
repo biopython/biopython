@@ -744,7 +744,9 @@ class GenBankWriter(_InsdcWriter):
             )
 
         # Get the molecule type
-        mol_type = self._get_annotation_str(record, "molecule_type", default="DNA")
+        mol_type = self._get_annotation_str(record, "molecule_type", None)
+        if mol_type is None:
+            raise ValueError("missing molecule_type in annotations")
         if mol_type and len(mol_type) > 7:
             # Deal with common cases from EMBL to GenBank
             mol_type = mol_type.replace("unassigned ", "").replace("genomic ", "")

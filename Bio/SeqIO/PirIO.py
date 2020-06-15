@@ -182,6 +182,12 @@ class PirIterator(SequenceIterator):
                 description=description,
             )
             record.annotations["PIR-type"] = pir_type
+            if pir_type in ("P1", "F1"):
+                record.annotations["molecule_type"] = "protein"
+            elif pir_type in ("D1", "DL", "DC"):
+                record.annotations["molecule_type"] = "DNA"
+            elif pir_type in ("RL", "RC", "N3"):
+                record.annotations["molecule_type"] = "RNA"
             yield record
 
             if line is None:

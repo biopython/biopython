@@ -14,7 +14,6 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
 
-
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.sax import handler
@@ -255,17 +254,20 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError("Unexpected namespace '%s' for sequence end" % namespace)
         if qname is not None:
             raise RuntimeError("Unexpected qname '%s' for sequence end" % qname)
+        record = self.records[-1]
         if localname == "DNAseq":
             alphabet = Alphabet.generic_dna
+            record.annotations["molecule_type"] = "DNA"
         elif localname == "RNAseq":
             alphabet = Alphabet.generic_rna
+            record.annotations["molecule_type"] = "RNA"
         elif localname == "AAseq":
             alphabet = Alphabet.generic_protein
+            record.annotations["molecule_type"] = "protein"
         else:
             raise RuntimeError(
                 "Failed to find end of sequence (localname = %s)" % localname
             )
-        record = self.records[-1]
         record.seq = Seq(self.data, alphabet)
         self.data = None
         self.endElementNS = self.endEntryElement
@@ -346,9 +348,12 @@ class ContentHandler(handler.ContentHandler):
         if property_name is None:
             raise ValueError("Failed to find name for property element")
         record = self.records[-1]
-        if property_name not in record.annotations:
-            record.annotations[property_name] = []
-        record.annotations[property_name].append(property_value)
+        if property_name == "molecule_type":
+            assert record.annotations[property_name] == property_value
+        else:
+            if property_name not in record.annotations:
+                record.annotations[property_name] = []
+            record.annotations[property_name].append(property_value)
         self.endElementNS = self.endPropertyElement
 
     def endPropertyElement(self, name, qname):
@@ -597,16 +602,27 @@ class SeqXmlWriter(SequenceWriter):
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")
 
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if isinstance(alpha, Alphabet.RNAAlphabet):
-            seqElem = "RNAseq"
-        elif isinstance(alpha, Alphabet.DNAAlphabet):
-            seqElem = "DNAseq"
-        elif isinstance(alpha, Alphabet.ProteinAlphabet):
-            seqElem = "AAseq"
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type is not None:
+            if molecule_type == "DNA":
+                seqElem = "DNAseq"
+            elif molecule_type == "RNA":
+                seqElem = "RNAseq"
+            elif molecule_type == "protein":
+                seqElem = "AAseq"
+            else:
+                raise ValueError("unknown molecule_type '%s'" % molecule_type)
         else:
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
+            # Get the base alphabet (underneath any Gapped or StopCodon encoding)
+            alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
+            if isinstance(alpha, Alphabet.RNAAlphabet):
+                seqElem = "RNAseq"
+            elif isinstance(alpha, Alphabet.DNAAlphabet):
+                seqElem = "DNAseq"
+            elif isinstance(alpha, Alphabet.ProteinAlphabet):
+                seqElem = "AAseq"
+            else:
+                raise ValueError("Need a DNA, RNA or Protein alphabet")
 
         self.xml_generator.startElement(seqElem, AttributesImpl({}))
         self.xml_generator.characters(seq)
