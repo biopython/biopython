@@ -26,7 +26,6 @@ import warnings
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
 from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
@@ -986,14 +985,7 @@ class Seq:
             raise ValueError("Proteins cannot be transcribed!")
         if isinstance(base, Alphabet.RNAAlphabet):
             raise ValueError("RNA cannot be transcribed!")
-
-        if self.alphabet == IUPAC.unambiguous_dna:
-            alphabet = IUPAC.unambiguous_rna
-        elif self.alphabet == IUPAC.ambiguous_dna:
-            alphabet = IUPAC.ambiguous_rna
-        else:
-            alphabet = Alphabet.generic_rna
-        return Seq(str(self).replace("T", "U").replace("t", "u"), alphabet)
+        return Seq(str(self).replace("T", "U").replace("t", "u"), Alphabet.generic_rna)
 
     def back_transcribe(self):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
@@ -1023,14 +1015,7 @@ class Seq:
             raise ValueError("Proteins cannot be back transcribed!")
         if isinstance(base, Alphabet.DNAAlphabet):
             raise ValueError("DNA cannot be back transcribed!")
-
-        if self.alphabet == IUPAC.unambiguous_rna:
-            alphabet = IUPAC.unambiguous_dna
-        elif self.alphabet == IUPAC.ambiguous_rna:
-            alphabet = IUPAC.ambiguous_dna
-        else:
-            alphabet = Alphabet.generic_dna
-        return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
+        return Seq(str(self).replace("U", "T").replace("u", "t"), Alphabet.generic_dna)
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -1125,17 +1110,10 @@ class Seq:
             table_id = int(table)
         except ValueError:
             # Assume its a table name
-            if self.alphabet == IUPAC.unambiguous_dna:
-                # Will use standard IUPAC protein alphabet, no need for X
-                codon_table = CodonTable.unambiguous_dna_by_name[table]
-            elif self.alphabet == IUPAC.unambiguous_rna:
-                # Will use standard IUPAC protein alphabet, no need for X
-                codon_table = CodonTable.unambiguous_rna_by_name[table]
-            else:
-                # This will use the extended IUPAC protein alphabet with X etc.
-                # The same table can be used for RNA or DNA (we use this for
-                # translating strings).
-                codon_table = CodonTable.ambiguous_generic_by_name[table]
+            # This will use the extended IUPAC protein alphabet with X etc.
+            # The same table can be used for RNA or DNA (we use this for
+            # translating strings).
+            codon_table = CodonTable.ambiguous_generic_by_name[table]
         except (AttributeError, TypeError):
             # Assume its a CodonTable object
             if isinstance(table, CodonTable.CodonTable):
@@ -1144,17 +1122,10 @@ class Seq:
                 raise ValueError("Bad table argument") from None
         else:
             # Assume its a table ID
-            if self.alphabet == IUPAC.unambiguous_dna:
-                # Will use standard IUPAC protein alphabet, no need for X
-                codon_table = CodonTable.unambiguous_dna_by_id[table_id]
-            elif self.alphabet == IUPAC.unambiguous_rna:
-                # Will use standard IUPAC protein alphabet, no need for X
-                codon_table = CodonTable.unambiguous_rna_by_id[table_id]
-            else:
-                # This will use the extended IUPAC protein alphabet with X etc.
-                # The same table can be used for RNA or DNA (we use this for
-                # translating strings).
-                codon_table = CodonTable.ambiguous_generic_by_id[table_id]
+            # This will use the extended IUPAC protein alphabet with X etc.
+            # The same table can be used for RNA or DNA (we use this for
+            # translating strings).
+            codon_table = CodonTable.ambiguous_generic_by_id[table_id]
 
         # Deal with gaps for translation
         if hasattr(self.alphabet, "gap_char"):
@@ -1688,9 +1659,9 @@ class UnknownSeq(Seq):
 
         This will adjust the alphabet if required:
 
-        >>> from Bio.Alphabet import IUPAC
+        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import UnknownSeq
-        >>> my_seq = UnknownSeq(20, IUPAC.extended_protein)
+        >>> my_seq = UnknownSeq(20, generic_protein)
         >>> my_seq
         UnknownSeq(20, character='X')
         >>> print(my_seq)
@@ -2398,11 +2369,7 @@ class MutableSeq:
             Alphabet._get_base_alphabet(self.alphabet), Alphabet.ProteinAlphabet
         ):
             raise ValueError("Proteins do not have complements!")
-        if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
-            d = ambiguous_dna_complement
-        elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
-            d = ambiguous_rna_complement
-        elif "U" in self.data and "T" in self.data:
+        if "U" in self.data and "T" in self.data:
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
         elif "U" in self.data:
