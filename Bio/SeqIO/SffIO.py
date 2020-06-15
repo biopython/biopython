@@ -58,7 +58,7 @@ The annotations dictionary also contains any adapter clip positions
 (usually zero), and information about the flows. e.g.
 
     >>> len(record.annotations)
-    11
+    12
     >>> print(record.annotations["flow_key"])
     TCAG
     >>> print(record.annotations["flow_values"][:10])
@@ -121,13 +121,15 @@ example above:
     >>> print("%r..." % record.letter_annotations["phred_quality"][:10])
     [26, 15, 12, 21, 28, 21, 36, 28, 27, 27]...
     >>> len(record.annotations)
-    3
+    4
     >>> print(record.annotations["region"])
     2
     >>> print(record.annotations["coords"])
     (2434, 1658)
     >>> print(record.annotations["time"])
     [2008, 1, 9, 16, 16, 0]
+    >>> print(record.annotations["molecule_type"])
+    DNA
 
 You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
