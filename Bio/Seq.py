@@ -1127,16 +1127,6 @@ class Seq:
             # translating strings).
             codon_table = CodonTable.ambiguous_generic_by_id[table_id]
 
-        # Deal with gaps for translation
-        if hasattr(self.alphabet, "gap_char"):
-            if not gap:
-                gap = self.alphabet.gap_char
-            elif gap != self.alphabet.gap_char:
-                raise ValueError(
-                    f"Gap {gap!r} does not match {self.alphabet.gap_char!r}"
-                    " from alphabet"
-                )
-
         protein = _translate_str(
             str(self), codon_table, stop_symbol, to_stop, cds, gap=gap
         )
