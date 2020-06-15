@@ -130,16 +130,15 @@ class TestSeq(unittest.TestCase):
         u = self.s + t
         self.assertEqual(str(self.s) + "T", str(u))
 
-    def test_concatenation_error(self):
+    def test_concatenation_mixed(self):
         """DNA Seq objects cannot be concatenated with Protein Seq objects."""
-        with self.assertRaises(TypeError):
-            self.s + Seq.Seq("T", IUPAC.protein)
+        self.assertEqual(self.s + Seq.Seq("T", IUPAC.protein), "TCAAAAGGATGCATCATGT")
 
     def test_concatenation_of_ambiguous_and_unambiguous_dna(self):
         """Concatenate Seq object with ambiguous and unambiguous DNA returns ambiguous Seq."""
         t = Seq.Seq("T", IUPAC.ambiguous_dna)
         u = self.s + t
-        self.assertEqual("IUPACAmbiguousDNA()", str(u.alphabet))
+        self.assertEqual(str(self.s) + "T", u)
 
     def test_ungap(self):
         self.assertEqual("ATCCCA", str(Seq.Seq("ATC-CCA").ungap("-")))
@@ -283,8 +282,7 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_radd_method_using_incompatible_alphabets(self):
         rna_seq = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
-        with self.assertRaises(TypeError):
-            self.s.__radd__(rna_seq)
+        self.assertEqual("UCAAAATCAAAAGGATGCATCATG", self.s.__radd__(rna_seq))
 
     def test_radd_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
@@ -450,14 +448,15 @@ class TestSeqAddition(unittest.TestCase):
         self.rna.pop(5)
         for a in self.dna:
             for b in self.rna:
-                with self.assertRaises(TypeError):
-                    a + b
-                with self.assertRaises(TypeError):
-                    b + a
-                with self.assertRaises(TypeError):
-                    a += b
-                with self.assertRaises(TypeError):
-                    b += a
+                self.assertEqual(str(a) + str(b), a + b)
+                self.assertEqual(str(b) + str(a), b + a)
+                # Check in place works
+                c = a
+                c += b
+                self.assertEqual(c, str(a) + str(b))
+                c = b
+                c += a
+                self.assertEqual(c, str(b) + str(a))
 
     def test_addition_proteins(self):
         self.protein.pop(2)
@@ -474,13 +473,11 @@ class TestSeqAddition(unittest.TestCase):
                 b += a
                 self.assertEqual(c, b)
 
-    def test_exception_when_adding_protein_with_nucleotides(self):
+    def test_adding_protein_with_nucleotides(self):
         for a in self.protein[0:5]:
             for b in self.dna[0:3] + self.rna[0:4]:
-                with self.assertRaises(TypeError):
-                    a + b
-                with self.assertRaises(TypeError):
-                    a += b
+                self.assertEqual(str(a) + str(b), a + b)
+                a += b
 
     def test_adding_generic_nucleotide_with_other_nucleotides(self):
         for a in self.nuc:
@@ -651,8 +648,10 @@ class TestMutableSeq(unittest.TestCase):
         )
 
     def test_radd_method_incompatible_alphabets(self):
-        with self.assertRaises(TypeError):
-            self.mutable_s.__radd__(MutableSeq("UCAAAAGGA", IUPAC.ambiguous_rna))
+        self.assertEqual(
+            "UCAAAAGGATCAAAAGGATGCATCATG",
+            self.mutable_s.__radd__(MutableSeq("UCAAAAGGA", IUPAC.ambiguous_rna)),
+        )
 
     def test_radd_method_using_seq_object(self):
         self.assertEqual(
