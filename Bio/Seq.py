@@ -277,36 +277,31 @@ class Seq:
         >>> Seq("MELKI", generic_protein) + "LV"
         Seq('MELKILV')
 
-        When adding two Seq (like) objects, the alphabets are important.
-
-        You can't add RNA and DNA sequences:
+        When adding two Seq (like) objects, if they share the
+        same alphabet it is preserved, but otherwise discarded.
+        This means you can add RNA and DNA, or nucleotide and
+        protein if you really want to. This is a change as of
+        Biopython 1.78, this previously raised a TypeError:
 
         >>> from Bio.Alphabet import generic_dna, generic_rna
         >>> Seq("ACGT", generic_dna) + Seq("ACGU", generic_rna)
-        Traceback (most recent call last):
-           ...
-        TypeError: Incompatible alphabets DNAAlphabet() and RNAAlphabet()
-
-        You can't add nucleotide and protein sequences:
+        Seq('ACGTACGU')
 
         >>> from Bio.Alphabet import generic_dna, generic_protein
         >>> Seq("ACGT", generic_dna) + Seq("MELKI", generic_protein)
-        Traceback (most recent call last):
-           ...
-        TypeError: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
+        Seq('ACGTMELKI')
         """
         if hasattr(other, "alphabet"):
-            # other should be a Seq or a MutableSeq
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                raise TypeError(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
-                )
-            # They should be the same sequence type (or one of them is generic)
-            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
-            return self.__class__(str(self) + str(other), a)
+            if other.alphabet == self.alphabet:
+                # Perfect match, preserve the alphabet
+                return self.__class__(str(self) + str(other), self.alphabet)
+            else:
+                # Discard the alphabet
+                return self.__class__(str(self) + str(other))
         elif isinstance(other, str):
             # other is a plain string - use the current alphabet
             return self.__class__(str(self) + other, self.alphabet)
+
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
         if isinstance(other, SeqRecord):
@@ -328,14 +323,12 @@ class Seq:
         Adding two Seq (like) objects is handled via the __add__ method.
         """
         if hasattr(other, "alphabet"):
-            # other should be a Seq or a MutableSeq
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                raise TypeError(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
-                )
-            # They should be the same sequence type (or one of them is generic)
-            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
-            return self.__class__(str(other) + str(self), a)
+            if other.alphabet == self.alphabet:
+                # Perfect match, preserve the alphabet
+                return self.__class__(str(other) + str(self), self.alphabet)
+            else:
+                # Discard the alphabet
+                return self.__class__(str(other) + str(self))
         elif isinstance(other, str):
             # other is a plain string - use the current alphabet
             return self.__class__(other + str(self), self.alphabet)
@@ -1178,14 +1171,11 @@ class Seq:
 
         a = self.alphabet
         if isinstance(other, (Seq, MutableSeq, UnknownSeq)):
-            if a != other.alphabet:
-                if not Alphabet._check_type_compatible([a, other.alphabet]):
-                    raise TypeError(
-                        f"Incompatible alphabets {a!r} and {other.alphabet!r}"
-                    )
-                a = Alphabet._consensus_alphabet([a, other.alphabet])
-            # No point looping over the seq and checking the alphabet again...
-            return self.__class__(str(self).join(str(other)), a)
+            if a == other.alphabet:
+                return self.__class__(str(self).join(str(other)), a)
+            else:
+                # Drop the alphabet
+                return self.__class__(str(self).join(str(other)))
         if isinstance(other, SeqRecord):
             raise TypeError("Iterable cannot be a SeqRecord")
         for c in other:
@@ -1193,14 +1183,11 @@ class Seq:
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif hasattr(c, "alphabet"):
                 if a != c.alphabet:
-                    if not Alphabet._check_type_compatible([a, c.alphabet]):
-                        raise TypeError(
-                            f"Incompatible alphabets {a!r} and {c.alphabet!r}"
-                        )
-                    a = Alphabet._consensus_alphabet([a, c.alphabet])
+                    # Drop the alphabet
+                    a = Alphabet.generic_alphabet
             elif not isinstance(c, str):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
-        temp_data = str(self).join([str(z) for z in other])
+        temp_data = str(self).join([str(_) for _ in other])
         return self.__class__(temp_data, a)
 
 
@@ -1767,11 +1754,7 @@ class UnknownSeq(Seq):
         a = self.alphabet
         if isinstance(other, (Seq, MutableSeq)):
             if a != other.alphabet:
-                if not Alphabet._check_type_compatible([a, other.alphabet]):
-                    raise TypeError(
-                        f"Incompatible alphabets {a!r} and {other.alphabet!r}"
-                    )
-                a = Alphabet._consensus_alphabet([a, other.alphabet])
+                a = Alphabet.generic_alphabet
             if isinstance(other, UnknownSeq) and self._character == other._character:
                 # Special case, can return an UnknownSeq
                 return self.__class__(
@@ -1788,11 +1771,7 @@ class UnknownSeq(Seq):
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif hasattr(c, "alphabet"):
                 if a != c.alphabet:
-                    if not Alphabet._check_type_compatible([a, c.alphabet]):
-                        raise TypeError(
-                            f"Incompatible alphabets {a!r} and {c.alphabet!r}"
-                        )
-                    a = Alphabet._consensus_alphabet([a, c.alphabet])
+                    a = Alphabet.generic_alphabet
                 if not isinstance(c, UnknownSeq):
                     type_is_unknown = False
             elif isinstance(c, str):
@@ -2035,14 +2014,11 @@ class MutableSeq:
 
         Returns a new MutableSeq object.
         """
+        a = self.alphabet
         if hasattr(other, "alphabet"):
-            # other should be a Seq or a MutableSeq
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                raise TypeError(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
-                )
-            # They should be the same sequence type (or one of them is generic)
-            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
+            if a != other.alphabet:
+                # Drop alphabet unless agree
+                a = Alphabet.generic_alphabet
             if isinstance(other, MutableSeq):
                 # See test_GAQueens.py for an historic usage of a non-string
                 # alphabet!  Adding the arrays should support this.
@@ -2051,7 +2027,7 @@ class MutableSeq:
                 return self.__class__(str(self) + str(other), a)
         elif isinstance(other, str):
             # other is a plain string - use the current alphabet
-            return self.__class__(str(self) + str(other), self.alphabet)
+            return self.__class__(str(self) + str(other), a)
         else:
             raise TypeError
 
@@ -2063,14 +2039,10 @@ class MutableSeq:
         >>> "LV" + MutableSeq("MELKI", generic_protein)
         MutableSeq('LVMELKI')
         """
+        a = self.alphabet
         if hasattr(other, "alphabet"):
-            # other should be a Seq or a MutableSeq
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                raise TypeError(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}"
-                )
-            # They should be the same sequence type (or one of them is generic)
-            a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
+            if a != other.alphabet:
+                a = Alphabet.generic_alphabet
             if isinstance(other, MutableSeq):
                 # See test_GAQueens.py for an historic usage of a non-string
                 # alphabet!  Adding the arrays should support this.

@@ -210,7 +210,10 @@ writing FASTA format sequence files is covered in Chapter~\ref{chapter:seqio}.
 
 \section{Concatenating or adding sequences}
 
-Naturally, you can in principle add any two Seq objects together - just like you can with Python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
+As of Biopython 1.78, you can add any two Seq objects together.
+Any conflicting alphabet attribute will be dropped. This is a
+change in behaviour as older releases would raise a \verb|TypeError|
+for things like adding DNA and protein.
 
 %doctest
 \begin{minted}{pycon}
@@ -219,39 +222,10 @@ Naturally, you can in principle add any two Seq objects together - just like you
 >>> protein_seq = Seq("EVRNAK", generic_protein)
 >>> dna_seq = Seq("ACGT", generic_dna)
 >>> protein_seq + dna_seq
-Traceback (most recent call last):
-...
-TypeError: Incompatible alphabets ProteinAlphabet() and DNAAlphabet()
-\end{minted}
-
-If you \emph{really} wanted to do this, you'd have to first give both sequences generic alphabets (the default):
-
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio.Alphabet import generic_alphabet
->>> protein_seq.alphabet = generic_alphabet
->>> dna_seq.alphabet = generic_alphabet
->>> protein_seq + dna_seq
 Seq('EVRNAKACGT')
 \end{minted}
 
-Here is an example of adding a nucleotide sequence to a DNA sequence,
-resulting in a nucleotide sequence:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_nucleotide
->>> from Bio.Alphabet import generic_dna
->>> nuc_seq = Seq("GATCGATGC", generic_nucleotide)
->>> dna_seq = Seq("ACGT", generic_dna)
->>> nuc_seq
-Seq('GATCGATGC')
->>> dna_seq
-Seq('ACGT')
->>> nuc_seq + dna_seq
-Seq('GATCGATGCACGT')
-\end{minted}
+Deliberately mixing DNA and protein like this is likely a mistake though...
 
 You may often have many sequences to add together, which can be done with a for loop like this:
 

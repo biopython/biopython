@@ -940,52 +940,54 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
-    def test_join_Seq_TypeError_alpha(self):
-        """Checks that a TypeError is thrown for incompatible alphabets."""
+    def test_join_Seq_mixed_alpha(self):
+        """Check Seq can join incompatible alphabets."""
         spacer = Seq("NNNNN", generic_dna)
-        self.assertRaises(
-            TypeError,
-            spacer.join,
-            [Seq("NNNNN", generic_rna), Seq("NNNNN", generic_rna)],
+        self.assertEqual(
+            "N" * 15,
+            spacer.join([Seq("NNNNN", generic_rna), Seq("NNNNN", generic_rna)]),
         )
-        self.assertRaises(
-            TypeError,
-            spacer.join,
-            [Seq("NNNNN", generic_protein), Seq("NNNNN", generic_protein)],
+        self.assertEqual(
+            "N" * 15,
+            spacer.join([Seq("NNNNN", generic_protein), Seq("NNNNN", generic_protein)]),
         )
 
-    def test_join_UnknownSeq_TypeError_alpha(self):
-        """Checks that a TypeError is thrown for incompatible alphabets."""
+    def test_join_UnknownSeq_mixed_alpha(self):
+        """Check UnknownSeq can join incompatible alphabets."""
         spacer = UnknownSeq(5, character="-", alphabet=generic_dna)
-        self.assertRaises(
-            TypeError,
-            spacer.join,
-            [
-                UnknownSeq(5, character="-", alphabet=generic_rna),
-                UnknownSeq(5, character="-", alphabet=generic_rna),
-            ],
+        self.assertEqual(
+            "-" * 15,
+            spacer.join(
+                [
+                    UnknownSeq(5, character="-", alphabet=generic_rna),
+                    UnknownSeq(5, character="-", alphabet=generic_rna),
+                ]
+            ),
         )
-        self.assertRaises(
-            TypeError,
-            spacer.join,
-            [
-                Seq("NNNNN", generic_protein),
-                UnknownSeq(5, character="-", alphabet=generic_protein),
-            ],
+        self.assertEqual(
+            "N" * 5 + "-" * 10,
+            spacer.join(
+                [
+                    Seq("NNNNN", generic_protein),
+                    UnknownSeq(5, character="-", alphabet=generic_protein),
+                ]
+            ),
         )
 
-    def test_join_MutableSeq_TypeError(self):
-        """Checks that a TypeError is thrown for incompatible alphabets."""
+    def test_join_MutableSeq_mixed(self):
+        """Check MutableSeq can join incompatible alphabets."""
         spacer = MutableSeq("NNNNN", generic_dna)
-        self.assertRaises(
-            TypeError,
-            spacer.join,
-            [MutableSeq("NNNNN", generic_rna), MutableSeq("NNNNN", generic_rna)],
+        self.assertEqual(
+            "N" * 15,
+            spacer.join(
+                [MutableSeq("NNNNN", generic_rna), MutableSeq("NNNNN", generic_rna)]
+            ),
         )
         self.assertRaises(
             TypeError,
-            spacer.join,
-            [Seq("NNNNN", generic_protein), MutableSeq("NNNNN", generic_protein)],
+            spacer.join(
+                [Seq("NNNNN", generic_protein), MutableSeq("NNNNN", generic_protein)]
+            ),
         )
 
     def test_join_Seq(self):
@@ -1006,7 +1008,6 @@ class StringMethodTests(unittest.TestCase):
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
             self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
-            self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
             # Now try single sequence arguments, should join the letters
             for target in example_strings + example_strings_seqs:
                 self.assertEqual(
@@ -1058,7 +1059,6 @@ class StringMethodTests(unittest.TestCase):
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
             self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
-            self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
             # Now try single sequence arguments, should join the letters
             for target in example_strings + example_strings_seqs:
                 self.assertEqual(
@@ -1109,7 +1109,6 @@ class StringMethodTests(unittest.TestCase):
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
             self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
-            self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
 
     def test_join_MutableSeq_with_file(self):
         """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
