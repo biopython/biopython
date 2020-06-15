@@ -155,9 +155,6 @@ class Seq:
         Python language, hashes and dictionary support), Biopython now uses
         simple string comparison (with a warning about the change).
 
-        Note that incompatible alphabets (e.g. DNA to RNA) will trigger a
-        warning.
-
         If you still need to support releases prior to Biopython 1.65, please
         just do explicit comparisons:
 
@@ -181,23 +178,10 @@ class Seq:
         True
 
         """
-        if hasattr(other, "alphabet"):
-            # other could be a Seq or a MutableSeq
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
         return str(self) == str(other)
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) < str(other)
         raise TypeError(
@@ -207,12 +191,6 @@ class Seq:
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) <= str(other)
         raise TypeError(
@@ -222,12 +200,6 @@ class Seq:
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) > str(other)
         raise TypeError(
@@ -237,12 +209,6 @@ class Seq:
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
         if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
             return str(self) >= str(other)
         raise TypeError(
@@ -1890,19 +1856,14 @@ class MutableSeq:
         return "".join(self.data)
 
     def __eq__(self, other):
-        """Compare the sequence to another sequence or a string (README).
+        """Compare the sequence to another sequence or a string.
 
-        Currently if compared to another sequence the alphabets must be
-        compatible. Comparing DNA to RNA, or Nucleotide to Protein will raise
-        an exception. Otherwise only the sequence itself is compared, not the
-        precise alphabet.
+        Historically comparing DNA to RNA, or Nucleotide to Protein would
+        raise an exception. This was later downgraded to a warning, but since
+        Biopython 1.78 the alphabet is ignored for comparisons.
 
-        A future release of Biopython will change this (and the Seq object etc)
-        to use simple string comparison. The plan is that comparing sequences
-        with incompatible alphabets (e.g. DNA to RNA) will trigger a warning
-        but not an exception.
-
-        During this transition period, please just do explicit comparisons:
+        If you need to support older Biopython versions, please just do
+        explicit comparisons:
 
         >>> seq1 = MutableSeq("ACGT")
         >>> seq2 = MutableSeq("ACGT")
@@ -1921,26 +1882,14 @@ class MutableSeq:
         True
 
         """
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
-            if isinstance(other, MutableSeq):
-                return self.data == other.data
+        if isinstance(other, MutableSeq):
+            return self.data == other.data
         return str(self) == str(other)
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
-            if isinstance(other, MutableSeq):
-                return self.data < other.data
+        if isinstance(other, MutableSeq):
+            return self.data < other.data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) < str(other)
         raise TypeError(
@@ -1950,14 +1899,8 @@ class MutableSeq:
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
-            if isinstance(other, MutableSeq):
-                return self.data <= other.data
+        if isinstance(other, MutableSeq):
+            return self.data <= other.data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) <= str(other)
         raise TypeError(
@@ -1967,14 +1910,8 @@ class MutableSeq:
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
-            if isinstance(other, MutableSeq):
-                return self.data > other.data
+        if isinstance(other, MutableSeq):
+            return self.data > other.data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) > str(other)
         raise TypeError(
@@ -1984,14 +1921,8 @@ class MutableSeq:
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        if hasattr(other, "alphabet"):
-            if not Alphabet._check_type_compatible([self.alphabet, other.alphabet]):
-                warnings.warn(
-                    f"Incompatible alphabets {self.alphabet!r} and {other.alphabet!r}",
-                    BiopythonWarning,
-                )
-            if isinstance(other, MutableSeq):
-                return self.data >= other.data
+        if isinstance(other, MutableSeq):
+            return self.data >= other.data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) >= str(other)
         raise TypeError(
