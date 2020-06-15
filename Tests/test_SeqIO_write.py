@@ -37,27 +37,27 @@ test_records = [
     ([], "zero records", {}),
     (
         [
-            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
-            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
-            SeqRecord(Seq("DITHGVG", generic_protein), id="delta"),
+            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("DITHGVG", generic_protein), id="delta", annotations={"molecule_type": "protein"}),
         ],
         "three peptides of different lengths",
         [],
     ),
     (
         [
-            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
-            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
-            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
+            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma", annotations={"molecule_type": "protein"}),
         ],
         "three proteins alignment",
         [],
     ),
     (
         [
-            SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X"),
-            SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y"),
-            SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z"),
+            SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna), id="X", annotations={"molecule_type": "DNA"}),
+            SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna), id="Y", annotations={"molecule_type": "DNA"}),
+            SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z", annotations={"molecule_type": "DNA"}),
         ],
         "three DNA sequence alignment",
         [],
@@ -68,13 +68,15 @@ test_records = [
                 Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA", generic_dna),
                 id="X",
                 name="The\nMystery\rSequece:\r\nX",
+                annotations={"molecule_type": "DNA"},
             ),
             SeqRecord(
                 Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA", generic_dna),
                 id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep,
+                annotations={"molecule_type": "DNA"},
             ),
-            SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z"),
+            SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", generic_dna), id="Z", annotations={"molecule_type": "DNA"}),
         ],
         "3 DNA seq alignment with CR/LF in name/descr",
         [
@@ -87,10 +89,10 @@ test_records = [
     ),
     (
         [
-            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha"),
-            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
-            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta"),
-            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma"),
+            SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", generic_protein), id="Alpha", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", generic_protein), id="Beta", annotations={"molecule_type": "protein"}),
+            SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", generic_protein), id="Gamma", annotations={"molecule_type": "protein"}),
         ],
         "alignment with repeated record",
         [

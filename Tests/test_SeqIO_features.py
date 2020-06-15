@@ -571,6 +571,7 @@ class FeatureWriting(unittest.TestCase):
         self.record = SeqRecord(
             Seq("ACGT" * 100, generic_dna), id="Test", name="Test", description="Test"
         )
+        self.record.annotations["molecule_type"] = "DNA"
 
     def write_read_check(self, check_format):
         handle = StringIO()

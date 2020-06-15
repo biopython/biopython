@@ -3914,6 +3914,7 @@ NCBI review. The reference sequence was derived from K00020.1.""",
             "db_source": "REFSEQ: accession NM_010510.1",
             "gi": "6754304",
             "keywords": [""],
+            "molecule_type": "protein",
             "organism": "Mus musculus",
             "pid": "g6754304",
             "sequence_version": 1,
@@ -4725,6 +4726,7 @@ the G-protein-coupled receptors.""",
             "db_source": "REFSEQ: accession NM_001841.1",
             "gi": "4502929",
             "keywords": [""],
+            "molecule_type": "protein",
             "organism": "Homo sapiens",
             "pid": "g4502929",
             "sequence_version": 1,
@@ -4831,6 +4833,7 @@ ALPHA-TOXIN SUBFAMILY.""",
             "db_source": "swissprot: locus SCX3_BUTOC, accession P01485; class: standard. created: Jul 21, 1986. sequence updated: Jul 21, 1986. annotation updated: Oct 16, 2001. xrefs: gi: gi: 69530 xrefs (non-sequence databases): HSSP P01484, InterPro IPR003614, InterPro IPR002061, InterPro IPR001219, Pfam PF00537, PRINTS PR00284, ProDom PD000908, SMART SM00505",
             "gi": "134354",
             "keywords": ["Neurotoxin", "Sodium channel inhibitor", "Amidation"],
+            "molecule_type": "protein",
             "organism": "Buthus occitanus tunetanus",
             "pid": "g134354",
             "source": "Tunisian scorpion",
@@ -5838,6 +5841,7 @@ qualifiers:
             "date": "11-OCT-2001",
             "gi": "15823953",
             "keywords": [""],
+            "molecule_type": "DNA",
             "organism": "Streptomyces avermitilis",
             "sequence_version": 1,
             "source": "Streptomyces avermitilis",
@@ -6018,6 +6022,7 @@ qualifiers:
             "db_source": "pdb: molecule 1MRR, chain 65, release Aug 28, 2012; deposition: Jul 28, 1992; class: Reductase(Acting On Ch2); source: Mmdb_id: 50351, Pdb_id 1: 1MRR; Exp. method: X-Ray Diffraction.",
             "gi": "494379",
             "keywords": [""],
+            "molecule_type": "protein",
             "organism": "Escherichia coli",
             "source": "Escherichia coli",
             "taxonomy": [
@@ -6594,7 +6599,7 @@ KEYWORDS    """
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_structured_comment_parsing(self):
-        """Structued comment parsing."""
+        """Structured comment parsing."""
         # GISAID_EpiFlu(TM)Data, HM138502.gbk has both 'comment' and 'structured_comment'
         path = "GenBank/HM138502.gbk"
         record = SeqIO.read(path, "genbank")
@@ -6766,6 +6771,7 @@ KEYWORDS    """
             record = original[:]
             # TODO - Implement Seq * int
             record.seq = Seq("N" * seq_len, original.seq.alphabet)
+            record.annotations["molecule_type"] = original.annotations["molecule_type"]
             # Set the identifer to the desired name
             record.id = record.name = name
             # Attempt to output the record...
@@ -6806,6 +6812,7 @@ KEYWORDS    """
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
+            annotations={"molecule_type": "DNA"},
         )
         handle = StringIO()
         SeqIO.write(record, handle, "genbank")
@@ -6821,6 +6828,7 @@ KEYWORDS    """
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
+            annotations={"molecule_type": "DNA"},
         )
         record.annotations["date"] = "24-DEC-2015"
         handle = StringIO()
@@ -6837,6 +6845,7 @@ KEYWORDS    """
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
+            annotations={"molecule_type": "DNA"},
         )
         record.annotations["date"] = ["24-DEC-2015"]
         handle = StringIO()
@@ -6850,6 +6859,7 @@ KEYWORDS    """
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
+            annotations={"molecule_type": "DNA"},
         )
         record.annotations["date"] = ["24-DEC-2015", "25-JAN-2016"]
         handle = StringIO()
@@ -6866,6 +6876,7 @@ KEYWORDS    """
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
+            annotations={"molecule_type": "DNA"},
         )
         record.annotations["date"] = datetime(2000, 2, 2)
         handle = StringIO()
@@ -6885,6 +6896,7 @@ KEYWORDS    """
                 id="123456789",
                 name="UnitTest",
                 description="Test case for date parsing",
+                annotations={"molecule_type": "DNA"},
             )
 
             record.annotations["date"] = invalid_date
@@ -7163,6 +7175,7 @@ class OutputTests(unittest.TestCase):
                 id=identifier,
                 name=identifier,
                 description="mad dots",
+                annotations={"molecule_type": "DNA"},
             )
             new = SeqIO.read(StringIO(old.format("gb")), "gb")
             self.assertEqual(old.id, new.id)
@@ -7172,7 +7185,7 @@ class OutputTests(unittest.TestCase):
 
     def test_seqrecord_default_description(self):
         """Read in file using SeqRecord default description."""
-        old = SeqRecord(Seq("ACGT", generic_dna), id="example", name="short")
+        old = SeqRecord(Seq("ACGT", generic_dna), id="example", name="short", annotations={'molecule_type': "DNA"})
         self.assertEqual(old.description, "<unknown description>")
         txt = old.format("gb")
         self.assertIn("DEFINITION  .\n", txt)

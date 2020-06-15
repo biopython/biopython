@@ -1385,11 +1385,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 BiopythonParserWarning,
             )
 
+        molecule_type = None
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
             if "DNA" in self._seq_type.upper() or "MRNA" in self._seq_type.upper():
                 seq_alphabet = generic_dna
-                self.data.annotations["molecule_type"] = "DNA"
+                molecule_type = "DNA"
             # are there ever really RNA sequences in GenBank?
             elif "RNA" in self._seq_type.upper():
                 # Even for data which was from RNA, the sequence string
@@ -1398,12 +1399,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     seq_alphabet = generic_dna
                 else:
                     seq_alphabet = generic_rna
-                self.data.annotations["molecule_type"] = "RNA"
+                molecule_type = "RNA"
             elif (
                 "PROTEIN" in self._seq_type.upper() or self._seq_type == "PRT"
             ):  # PRT is used in EMBL-bank for patents
                 seq_alphabet = generic_protein
-                self.data.annotations["molecule_type"] = "protein"
+                molecule_type = "protein"
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
             elif self._seq_type in ["circular", "linear", "unspecified"]:
@@ -1413,6 +1414,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError(
                     "Could not determine alphabet for seq_type %s" % self._seq_type
                 )
+        # Don't overwrite molecule_type
+        if molecule_type is not None:
+            self.data.annotations["molecule_type"] = self.data.annotations.get("molecule_type", molecule_type)
 
         if not sequence and self._expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)

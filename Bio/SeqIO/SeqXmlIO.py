@@ -349,7 +349,11 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Failed to find name for property element")
         record = self.records[-1]
         if property_name == "molecule_type":
-            assert record.annotations[property_name] == property_value
+            # At this point, record.annotations["molecule_type"] is either
+            # "DNA", "RNA", or "protein"; property_value may be a more detailed
+            # description such as "mRNA" or "genomic DNA".
+            assert record.annotations[property_name] in property_value
+            record.annotations[property_name] = property_value
         else:
             if property_name not in record.annotations:
                 record.annotations[property_name] = []
@@ -604,9 +608,9 @@ class SeqXmlWriter(SequenceWriter):
 
         molecule_type = record.annotations.get("molecule_type")
         if molecule_type is not None:
-            if molecule_type == "DNA":
+            if "DNA" in molecule_type:
                 seqElem = "DNAseq"
-            elif molecule_type == "RNA":
+            elif "RNA" in molecule_type:
                 seqElem = "RNAseq"
             elif molecule_type == "protein":
                 seqElem = "AAseq"
