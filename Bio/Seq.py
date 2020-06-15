@@ -852,23 +852,43 @@ class Seq:
         Note in the above example, ambiguous character D denotes
         G, A or T so its complement is H (for C, T or A).
 
-        Trying to complement a protein sequence raises an exception.
+        Note that if the sequence contains neither T nor U, we
+        assume it is DNA and map any A character to T:
+
+        >>> Seq("CGA").complement()
+        Seq('GCT')
+        >>> Seq("CGAT").complement()
+        Seq('GCTA')
+        >>> Seq("CGAU").complement()
+        Seq('GCUA')
+
+        If you are dealing with RNA which might have no U, use:
+
+        >>> Seq("CGA").complement().transcribe()
+        Seq('GCU')
+
+        If the sequence contains both T and U, an exception is
+        raised:
+
+        >>> Seq("CGAUT").complement()
+        Traceback (most recent call last):
+           ...
+        ValueError: Mixed RNA/DNA found
+
+        Trying to complement a protein sequence gives a meaningless
+        sequence:
 
         >>> from Bio.Alphabet import generic_protein
         >>> my_protein = Seq("MAIVMGR", generic_protein)
         >>> my_protein.complement()
-        Traceback (most recent call last):
-           ...
-        ValueError: Proteins do not have complements!
+        Seq('KTIBKCY')
+
+        Here "M" was interpretted as the IUPAC ambiguity code for
+        "A" or "C", with complement "K" for "T" or "G". Likewise
+        "A" has complement "T". The letter "I" has not defined
+        meaning under the IUPAC convention, and is unchanged.
         """
-        base = Alphabet._get_base_alphabet(self.alphabet)
-        if isinstance(base, Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins do not have complements!")
-        if isinstance(base, Alphabet.DNAAlphabet):
-            ttable = _dna_complement_table
-        elif isinstance(base, Alphabet.RNAAlphabet):
-            ttable = _rna_complement_table
-        elif ("U" in self._data or "u" in self._data) and (
+        if ("U" in self._data or "u" in self._data) and (
             "T" in self._data or "t" in self._data
         ):
             # TODO - Handle this cleanly?
@@ -904,15 +924,32 @@ class Seq:
         >>> my_dna.reverse_complement()
         Seq('C-TatcGGGGG')
 
-        Trying to complement a protein sequence raises an exception:
+        As discussed for the complement method, if the sequence
+        contains neither T nor U, is is assumed to be DNA and
+        will map any letter A to T. If you are dealing with RNA
+        which might have no U, use:
+
+        >>> Seq("CGA").reverse_complement().transcribe()
+        Seq('UCG')
+
+        If the sequence contains both T and U, an exception is raised:
+
+        >>> Seq("CGAUT").reverse_complement()
+        Traceback (most recent call last):
+           ...
+        ValueError: Mixed RNA/DNA found
+
+        Trying to reverse complement a protein sequence will give
+        a meaningless sequence:
 
         >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
         >>> my_protein = Seq("MAIVMGR", generic_protein)
         >>> my_protein.reverse_complement()
-        Traceback (most recent call last):
-           ...
-        ValueError: Proteins do not have complements!
+        Seq('YCKBITK')
+
+        Here "M" was interpretted as the IUPAC ambiguity code for
+        "A" or "C", with complement "K" for "T" or "G" - and so on.
         """
         # Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
@@ -929,21 +966,19 @@ class Seq:
         >>> coding_dna.transcribe()
         Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 
-        Trying to transcribe a protein or RNA sequence raises an exception:
+        Trying to transcribe an RNA sequence should have no effect.
+
+        Trying to transcribe a protein sequence will replace any
+        T for Threonine with U for Selenocysteine, which has no
+        biologically plausible rational. Older versions of Biopython
+        would throw an exception.
 
         >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_protein = Seq("MAIVMGR", generic_protein)
+        >>> my_protein = Seq("MAIVMGRT", generic_protein)
         >>> my_protein.transcribe()
-        Traceback (most recent call last):
-           ...
-        ValueError: Proteins cannot be transcribed!
+        Seq('MAIVMGRU')
         """
-        base = Alphabet._get_base_alphabet(self.alphabet)
-        if isinstance(base, Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins cannot be transcribed!")
-        if isinstance(base, Alphabet.RNAAlphabet):
-            raise ValueError("RNA cannot be transcribed!")
         return Seq(str(self).replace("T", "U").replace("t", "u"), Alphabet.generic_rna)
 
     def back_transcribe(self):
@@ -958,22 +993,17 @@ class Seq:
         >>> messenger_rna.back_transcribe()
         Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 
-        Trying to back-transcribe a protein or DNA sequence raises an
-        exception:
+        Trying to back-transcribe DNA has no effect, but is
+        meaningless for a protein sequence where any "U" for
+        Selenocysteine will become "T" for Threonine. Older
+        versions of Biopython would raise an exception here:
 
         >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_protein = Seq("MAIVMGR", generic_protein)
+        >>> my_protein = Seq("MAIVMGRU", generic_protein)
         >>> my_protein.back_transcribe()
-        Traceback (most recent call last):
-           ...
-        ValueError: Proteins cannot be back transcribed!
+        Seq('MAIVMGRT')
         """
-        base = Alphabet._get_base_alphabet(self.alphabet)
-        if isinstance(base, Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins cannot be back transcribed!")
-        if isinstance(base, Alphabet.DNAAlphabet):
-            raise ValueError("DNA cannot be back transcribed!")
         return Seq(str(self).replace("U", "T").replace("u", "t"), Alphabet.generic_dna)
 
     def translate(
@@ -1061,10 +1091,6 @@ class Seq:
                 "the python string object's translate method. "
                 "Use str(my_seq).translate(...) instead."
             )
-        if isinstance(
-            Alphabet._get_base_alphabet(self.alphabet), Alphabet.ProteinAlphabet
-        ):
-            raise ValueError("Proteins cannot be translated!")
         try:
             table_id = int(table)
         except ValueError:
@@ -1276,7 +1302,6 @@ class UnknownSeq(Seq):
         Seq('XXXXXLV')
         """
         if isinstance(other, UnknownSeq) and other._character == self._character:
-            # TODO - Check the alphabets match
             return UnknownSeq(len(self) + len(other), self.alphabet, self._character)
         # Offload to the base class...
         return Seq(str(self), self.alphabet) + other
@@ -1517,10 +1542,6 @@ class UnknownSeq(Seq):
         >>> print(my_nuc.complement())
         ????????
         """
-        if isinstance(
-            Alphabet._get_base_alphabet(self.alphabet), Alphabet.ProteinAlphabet
-        ):
-            raise ValueError("Proteins do not have complements!")
         return self
 
     def reverse_complement(self):
@@ -1536,10 +1557,6 @@ class UnknownSeq(Seq):
         >>> print(example.reverse_complement())
         NNNNNN
         """
-        if isinstance(
-            Alphabet._get_base_alphabet(self.alphabet), Alphabet.ProteinAlphabet
-        ):
-            raise ValueError("Proteins do not have complements!")
         return self
 
     def transcribe(self):
@@ -1646,10 +1663,6 @@ class UnknownSeq(Seq):
         XXX
 
         """
-        if isinstance(
-            Alphabet._get_base_alphabet(self.alphabet), Alphabet.ProteinAlphabet
-        ):
-            raise ValueError("Proteins cannot be translated!")
         return UnknownSeq(self._length // 3, Alphabet.generic_protein, "X")
 
     def ungap(self, gap="-"):
@@ -2254,16 +2267,9 @@ class MutableSeq:
     def complement(self):
         """Modify the mutable sequence to take on its complement.
 
-        Trying to complement a protein sequence raises an exception.
-
         No return value.
         """
-        if isinstance(
-            Alphabet._get_base_alphabet(self.alphabet), Alphabet.ProteinAlphabet
-        ):
-            raise ValueError("Proteins do not have complements!")
         if "U" in self.data and "T" in self.data:
-            # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
         elif "U" in self.data:
             d = ambiguous_rna_complement
@@ -2276,8 +2282,6 @@ class MutableSeq:
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
-
-        Trying to reverse complement a protein sequence raises an exception.
 
         No return value.
         """
@@ -2348,8 +2352,6 @@ def transcribe(dna):
 
     Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
 
-    Trying to transcribe a protein or RNA sequence raises an exception.
-
     e.g.
 
     >>> transcribe("ACTGN")
@@ -2369,8 +2371,6 @@ def back_transcribe(rna):
     If given a string, returns a new string object.
 
     Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
-
-    Trying to transcribe a protein or DNA sequence raises an exception.
 
     e.g.
 
@@ -2660,6 +2660,11 @@ def reverse_complement(sequence):
 
     >>> reverse_complement("ACTG-NH")
     'DN-CAGT'
+
+    If neither T nor U is present, DNA is assumed and A is mapped to T:
+
+    >>> reverse_complement("A")
+    'T'
     """
     return complement(sequence)[::-1]
 
@@ -2677,6 +2682,11 @@ def complement(sequence):
 
     >>> complement("ACTG-NH")
     'TGAC-ND'
+
+    If neither T nor U is present, DNA is assumed and A is mapped to T:
+
+    >>> complement("A")
+    'T'
     """
     if isinstance(sequence, Seq):
         # Return a Seq

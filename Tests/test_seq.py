@@ -735,11 +735,6 @@ class TestMutableSeq(unittest.TestCase):
         self.mutable_s.reverse_complement()
         self.assertEqual("CATGATGCATCCTTTTGA", str(self.mutable_s))
 
-    def test_reverse_complement_of_protein(self):
-        seq = Seq.MutableSeq("ACTGTCGTCT", Alphabet.generic_protein)
-        with self.assertRaises(ValueError):
-            seq.reverse_complement()
-
     def test_extend_method(self):
         self.mutable_s.extend("GAT")
         self.assertEqual(
@@ -830,19 +825,9 @@ class TestUnknownSeq(unittest.TestCase):
         self.s.complement()
         self.assertEqual("??????", str(self.s))
 
-    def test_complement_of_protein(self):
-        """Check reverse complement fails on a protein."""
-        seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
-        with self.assertRaises(ValueError):
-            seq.complement()
-
     def test_reverse_complement(self):
         self.s.reverse_complement()
         self.assertEqual("??????", str(self.s))
-
-    def test_reverse_complement_of_protein(self):
-        seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
-        self.assertRaises(ValueError, seq.reverse_complement)
 
     def test_transcribe(self):
         self.assertEqual("??????", self.s.transcribe())
@@ -860,10 +845,6 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_translation(self):
         self.assertEqual("XX", str(self.s.translate()))
-
-    def test_translation_of_proteins(self):
-        seq = Seq.UnknownSeq(6, IUPAC.protein)
-        self.assertRaises(ValueError, seq.translate)
 
     def test_ungap(self):
         seq = Seq.UnknownSeq(7, alphabet=Alphabet.generic_dna)
@@ -892,7 +873,8 @@ class TestComplement(unittest.TestCase):
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
             compl_values = str(
-                Seq.Seq(values, alphabet=IUPAC.ambiguous_rna).complement()
+                # Will default to DNA if niether T or U found...
+                Seq.Seq(values).complement().transcribe()
             )
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
@@ -913,15 +895,6 @@ class TestComplement(unittest.TestCase):
     def test_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
-
-    def test_complement_on_proteins(self):
-        """Check complement fails on a protein."""
-        for s in protein_seqs:
-            with self.assertRaises(ValueError):
-                Seq.complement(s)
-
-            with self.assertRaises(ValueError):
-                s.complement()
 
 
 class TestReverseComplement(unittest.TestCase):
@@ -960,15 +933,6 @@ class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
-
-    def test_reverse_complement_on_proteins(self):
-        """Check reverse complement fails on a protein."""
-        for s in protein_seqs:
-            with self.assertRaises(ValueError):
-                Seq.reverse_complement(s)
-
-            with self.assertRaises(ValueError):
-                s.reverse_complement()
 
 
 class TestDoubleReverseComplement(unittest.TestCase):
@@ -1030,22 +994,6 @@ class TestTranscription(unittest.TestCase):
                     repr(nucleotide_seq.transcribe()),
                 )
 
-    def test_transcription_of_rna(self):
-        """Check transcription fails on RNA."""
-        seq = Seq.Seq("AUGAAACUG", IUPAC.ambiguous_rna)
-        with self.assertRaises(ValueError):
-            seq.transcribe()
-
-    def test_transcription_of_proteins(self):
-        """Check transcription fails on a protein."""
-        for s in protein_seqs:
-            with self.assertRaises(ValueError):
-                Seq.transcribe(s)
-
-            if isinstance(s, Seq.Seq):
-                with self.assertRaises(ValueError):
-                    s.transcribe()
-
     def test_back_transcribe_rna_into_dna(self):
         for nucleotide_seq in test_seqs:
             if isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet):
@@ -1066,22 +1014,6 @@ class TestTranscription(unittest.TestCase):
             ):
                 expected = Seq.back_transcribe(nucleotide_seq)
                 self.assertEqual(repr(nucleotide_seq.back_transcribe()), repr(expected))
-
-    def test_back_transcription_of_proteins(self):
-        """Check back-transcription fails on a protein."""
-        for s in protein_seqs:
-            with self.assertRaises(ValueError):
-                Seq.back_transcribe(s)
-
-            if isinstance(s, Seq.Seq):
-                with self.assertRaises(ValueError):
-                    s.back_transcribe()
-
-    def test_back_transcription_of_dna(self):
-        """Check back-transcription fails on DNA."""
-        seq = Seq.Seq("ATGAAACTG", IUPAC.ambiguous_dna)
-        with self.assertRaises(ValueError):
-            seq.back_transcribe()
 
 
 class TestTranslating(unittest.TestCase):
@@ -1238,11 +1170,11 @@ class TestTranslating(unittest.TestCase):
     def test_translation_on_proteins(self):
         """Check translation fails on a protein."""
         for s in protein_seqs:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TranslationError):
                 Seq.translate(s)
 
             if isinstance(s, Seq.Seq):
-                with self.assertRaises(ValueError):
+                with self.assertRaises(TranslationError):
                     s.translate()
 
     def test_translation_of_invalid_codon(self):
