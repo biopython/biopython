@@ -85,7 +85,7 @@ class StringMethodTests(unittest.TestCase):
         Seq("A", generic_protein),
         Seq("A", generic_nucleotide),
         Seq("A", generic_dna),
-        Seq("A", generic_rna),
+        Seq("A", generic_rna),  # This one is a problem for (rev)comp
         UnknownSeq(1),
         UnknownSeq(1, character="n"),
         UnknownSeq(1, generic_rna),
@@ -687,23 +687,11 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
-            # This only does the unambiguous cases
-            if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
+            if "U" in str1 or "u" in str1:
                 mapping = str.maketrans("ACGUacgu", "UGCAugca")
-            elif any(
-                (
-                    "T" in str1,
-                    "t" in str1,
-                    example1.alphabet == generic_dna,
-                    example1.alphabet == generic_nucleotide,
-                )
-            ):
-                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
-            elif "A" not in str1 and "a" not in str1:
-                mapping = str.maketrans("CGcg", "GCgc")
             else:
-                # TODO - look at alphabet?
-                raise ValueError(example1)
+                # Default to DNA, e.g. complement("A") -> "T" not "U"
+                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping), str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
 
@@ -719,23 +707,11 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
-            # This only does the unambiguous cases
-            if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
+            if "U" in str1 or "u" in str1:
                 mapping = str.maketrans("ACGUacgu", "UGCAugca")
-            elif any(
-                (
-                    "T" in str1,
-                    "t" in str1,
-                    example1.alphabet == generic_dna,
-                    example1.alphabet == generic_nucleotide,
-                )
-            ):
-                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
-            elif "A" not in str1 and "a" not in str1:
-                mapping = str.maketrans("CGcg", "GCgc")
             else:
-                # TODO - look at alphabet?
-                continue
+                # Defaults to DNA, so reverse_complement("A") --> "T" not "U"
+                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping)[::-1], str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
 
