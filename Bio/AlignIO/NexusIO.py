@@ -61,7 +61,13 @@ def NexusIterator(handle, seq_count=None):
     elif n.datatype == "protein":
         annotations = {"molecule_type": "protein"}
     records = (
-        SeqRecord(n.matrix[new_name], id=new_name, name=old_name, description="", annotations=annotations)
+        SeqRecord(
+            n.matrix[new_name],
+            id=new_name,
+            name=old_name,
+            description="",
+            annotations=annotations,
+        )
         for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
     )
     # All done
