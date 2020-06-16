@@ -462,7 +462,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertEqual(t.description, "<unknown description>")
         self.assertFalse(t.dbxrefs)
         self.assertFalse(t.features)
-        self.assertFalse(t.annotations)
+        self.assertEqual(t.annotations, {"molecule_type": "protein"})
         self.assertFalse(t.letter_annotations)
 
         t = s.translate(
@@ -479,7 +479,9 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertEqual(t.description, "TestDescription")
         self.assertEqual(t.dbxrefs, ["TestDbxrefs"])
         self.assertFalse(t.features)
-        self.assertEqual(t.annotations, {"organism": "bombyx"})
+        self.assertEqual(
+            t.annotations, {"organism": "bombyx", "molecule_type": "protein"}
+        )
         self.assertFalse(t.letter_annotations)
 
     def test_lt_exception(self):
@@ -551,7 +553,7 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "<unknown description>")
         self.assertFalse(t.dbxrefs)
         self.assertFalse(t.features)
-        self.assertFalse(t.annotations)
+        self.assertEqual(t.annotations, {"molecule_type": "protein"})
         self.assertFalse(t.letter_annotations)
 
     def test_preserve(self):
@@ -569,7 +571,9 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "TestDescription")
         self.assertEqual(t.dbxrefs, ["TestDbxrefs"])
         self.assertFalse(t.features)
-        self.assertEqual(t.annotations, {"organism": "bombyx"})
+        self.assertEqual(
+            t.annotations, {"organism": "bombyx", "molecule_type": "protein"}
+        )
         self.assertFalse(t.letter_annotations)
 
         # Should not preserve these
@@ -595,7 +599,7 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "Baz")
         self.assertEqual(t.dbxrefs, ["Nope"])
         self.assertEqual(len(t.features), 1)
-        self.assertEqual(t.annotations, {"a": "team"})
+        self.assertEqual(t.annotations, {"a": "team", "molecule_type": "protein"})
         self.assertEqual(t.letter_annotations, {"aa": ["Met", "Val"]})
 
 
