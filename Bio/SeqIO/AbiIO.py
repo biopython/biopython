@@ -467,6 +467,7 @@ class AbiIterator(SequenceIterator):
         if self.trim and not is_fsa_file:
             record = _abi_trim(record)
 
+        record.annotations["molecule_type"] = "DNA"
         yield record
 
 

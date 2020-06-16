@@ -95,6 +95,7 @@ def AtomIterator(pdb_id, structure):
         record = SeqRecord(
             Seq("".join(res_out), generic_protein), id=record_id, description=record_id
         )
+        record.annotations["molecule_type"] = "protein"
 
         record.annotations["model"] = model.id
         record.annotations["chain"] = chain.id
@@ -225,6 +226,7 @@ class PdbSeqresIterator(SequenceIterator):
         for chn_id, residues in sorted(chains.items()):
             record = SeqRecord(Seq("".join(residues), generic_protein))
             record.annotations = {"chain": chn_id}
+            record.annotations["molecule_type"] = "protein"
             if chn_id in metadata:
                 m = metadata[chn_id][0]
                 record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
@@ -430,6 +432,7 @@ def CifSeqresIterator(source):
     for chn_id, residues in sorted(chains.items()):
         record = SeqRecord(Seq("".join(residues), generic_protein))
         record.annotations = {"chain": chn_id}
+        record.annotations["molecule_type"] = "protein"
         if chn_id in metadata:
             m = metadata[chn_id][0]
             record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)

@@ -173,12 +173,12 @@ class XdnaIterator(SequenceIterator):
 
     def iterate(self, handle, header):
         """Parse the file and generate SeqRecord objects."""
-        (version, type, topology, length, neg_length, com_length) = unpack(
+        (version, seq_type, topology, length, neg_length, com_length) = unpack(
             ">BBB25xII60xI12x", header
         )
         if version != 0:
             raise ValueError("Unsupported XDNA version")
-        if type not in _seq_types:
+        if seq_type not in _seq_types:
             raise ValueError("Unknown sequence type")
         # Read actual sequence and comment found in all XDNA files
         sequence = _read(handle, length).decode("ASCII")
@@ -189,8 +189,15 @@ class XdnaIterator(SequenceIterator):
 
         # Create record object
         record = SeqRecord(
-            Seq(sequence, _seq_types[type]), description=comment, name=name, id=name
+            Seq(sequence, _seq_types[seq_type]), description=comment, name=name, id=name
         )
+        if seq_type in (1, 2):
+            record.annotations["molecule_type"] = "DNA"
+        elif seq_type == 3:
+            record.annotations["molecule_type"] = "RNA"
+        elif seq_type == 4:
+            record.annotations["molecule_type"] = "protein"
+
         if topology in _seq_topologies:
             record.annotations["topology"] = _seq_topologies[topology]
 

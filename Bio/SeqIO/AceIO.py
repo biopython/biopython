@@ -63,12 +63,14 @@ def AceIterator(source):
         # Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
         # Assume its DNA unless there is a U in it,
+        molecule_type = "DNA"
         if "U" in consensus_seq_str:
             if "T" in consensus_seq_str:
                 # Very odd! Error?
                 alpha = generic_nucleotide
             else:
                 alpha = generic_rna
+                molecule_type = "RNA"
         else:
             alpha = generic_dna
 
@@ -88,6 +90,7 @@ def AceIterator(source):
         # Perhaps as SeqFeature objects?
 
         seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
+        seq_record.annotations["molecule_type"] = molecule_type
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so

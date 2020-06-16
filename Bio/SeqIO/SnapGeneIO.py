@@ -63,6 +63,7 @@ def _parse_dna_packet(length, data, record):
 
     flags, sequence = unpack(">B%ds" % (length - 1), data)
     record.seq = Seq(sequence.decode("ASCII"), alphabet=Alphabet.generic_dna)
+    record.annotations["molecule_type"] = "DNA"
     if flags & 0x01:
         record.annotations["topology"] = "circular"
     else:

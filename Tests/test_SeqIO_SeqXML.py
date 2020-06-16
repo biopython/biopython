@@ -84,6 +84,7 @@ class TestDetailedRead(unittest.TestCase):
         """Check minimal record."""
         minimalRecord = SeqRecord(id="test", seq=Seq("abc"))
         minimalRecord.annotations["source"] = "Ensembl"
+        minimalRecord.annotations["molecule_type"] = "DNA"
 
         self.assertEqual(self.records["rna"][3].name, minimalRecord.name)
         self.assertEqual(self.records["dna"][3].annotations, minimalRecord.annotations)
