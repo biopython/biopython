@@ -252,12 +252,12 @@ class XdnaWriter(SequenceWriter):
 
         self._has_truncated_strings = False
 
-        alptype = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if isinstance(alptype, Alphabet.DNAAlphabet):
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type == "DNA":
             seqtype = 1
-        elif isinstance(alptype, Alphabet.RNAAlphabet):
+        elif molecule_type == "RNA":
             seqtype = 3
-        elif isinstance(alptype, Alphabet.ProteinAlphabet):
+        elif molecule_type == "protein":
             seqtype = 4
         else:
             seqtype = 0
