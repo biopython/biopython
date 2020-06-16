@@ -6,53 +6,12 @@ Chapter~\ref{chapter:seq_annot} will introduce the related \verb|SeqRecord| obje
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
-There are two important differences between \verb|Seq| objects and standard Python strings.
-First of all, they have different methods.  Although the \verb|Seq| object supports many of the same methods as a plain string, its \verb|translate()| method differs by doing biological translation, and there are also additional biologically relevant methods like \verb|reverse_complement()|.
-Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
-and Threonines?
+The most important difference between \verb|Seq| objects and standard Python strings is they have different methods.
+Although the \verb|Seq| object supports many of the same methods as a plain string, its \verb|translate()| method differs by doing biological translation, and there are also additional biologically relevant methods like \verb|reverse_complement()|.
 
 \section{Sequences and Alphabets}
 
-The \verb|Seq| object defaults to using a generic alphabet object,
-this legacy attribute can usually be ignored:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> my_seq = Seq("AGTACACTGGT")
->>> my_seq
-Seq('AGTACACTGGT')
->>> my_seq.alphabet
-Alphabet()
-\end{minted}
-
-However, where necessary you can specify the alphabet is DNA:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> my_seq = Seq("AGTACACTGGT", generic_dna)
->>> my_seq
-Seq('AGTACACTGGT')
->>> my_seq.alphabet
-DNAAlphabet()
-\end{minted}
-
-Unless of course, this really is an amino acid sequence:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_protein
->>> my_prot = Seq("AGTACACTGGT", generic_protein)
->>> my_prot
-Seq('AGTACACTGGT')
->>> my_prot.alphabet
-ProteinAlphabet()
-\end{minted}
-
-Likewise there is a \verb|generic_rna| for RNA.
+Historically the \verb|Seq| object had an important attribute, \verb|alphabet|. This was used for an object describing what the individual characters making up the sequence string meant, and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines and Threonines? Since Biopython 1.78 this role falls to the ``SeqRecord`` object annotation, discussed in the next chapter.
 
 \section{Sequences act like strings}
 
@@ -211,16 +170,12 @@ writing FASTA format sequence files is covered in Chapter~\ref{chapter:seqio}.
 \section{Concatenating or adding sequences}
 
 As of Biopython 1.78, you can add any two Seq objects together.
-Any conflicting alphabet attribute will be dropped. This is a
-change in behaviour as older releases would raise a \verb|TypeError|
-for things like adding DNA and protein.
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna, generic_protein
 >>> from Bio.Seq import Seq
->>> protein_seq = Seq("EVRNAK", generic_protein)
->>> dna_seq = Seq("ACGT", generic_dna)
+>>> protein_seq = Seq("EVRNAK")
+>>> dna_seq = Seq("ACGT")
 >>> protein_seq + dna_seq
 Seq('EVRNAKACGT')
 \end{minted}
@@ -270,8 +225,7 @@ For example,
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> dna_seq = Seq("acgtACGT", generic_dna)
+>>> dna_seq = Seq("acgtACGT")
 >>> dna_seq
 Seq('acgtACGT')
 >>> dna_seq.upper()
@@ -299,8 +253,7 @@ complement of a \verb|Seq| object using its built-in methods:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", generic_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC")
 >>> my_seq
 Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC')
 >>> my_seq.complement()
@@ -318,20 +271,21 @@ Python string) is slice it with -1 step:
 Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG')
 \end{minted}
 
-In all of these operations, the alphabet property is maintained. This is very
-useful in case you accidentally end up trying to do something weird like take
-the (reverse)complement of a protein sequence:
+If you do accidentally end up trying to do something weird like taking the
+(reverse)complement of a protein sequence, the results are biologically
+meaningless:
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_protein
->>> protein_seq = Seq("EVRNAK", generic_protein)
+>>> protein_seq = Seq("EVRNAK")
 >>> protein_seq.complement()
-Traceback (most recent call last):
-...
-ValueError: Proteins do not have complements!
+Seq('EBYNTM')
 \end{minted}
+
+Here the letter ``E'' is not a valid IUPAC ambiguity code for nucleotides,
+so was not complemented. However, ``V'' means ``A'', ``C'' or ``G'' and
+has complement ``B``, and so on.
 
 The example in Section~\ref{sec:SeqIO-reverse-complement} combines the \verb|Seq|
 object's reverse complement method with \verb|Bio.SeqIO| for sequence input/output.
@@ -365,8 +319,7 @@ Now let's actually get down to doing a transcription in Biopython.  First, let's
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", generic_dna)
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 >>> template_dna = coding_dna.reverse_complement()
@@ -395,13 +348,12 @@ If you do want to do a true biological transcription starting with the template 
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 \end{minted}
 
-The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
+The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution:
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_rna
->>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", generic_rna)
+>>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 >>> messenger_rna.back_transcribe()
@@ -433,8 +385,7 @@ You can also translate directly from the coding strand DNA sequence:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", generic_dna)
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 >>> coding_dna.translate()
@@ -498,13 +449,11 @@ for example the gene yaaX in \texttt{E. coli} K12:
 %TODO - handle line wrapping in doctest?
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
 >>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
 ...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
 ...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
 ...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
-...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA",
-...            generic_dna)
+...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA")
 >>> gene.translate(table="Bacterial")
 Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
 ProteinAlpabet())
@@ -637,62 +586,26 @@ the letters in a sequence are context dependent - the letter ``A'' could be part
 of a DNA, RNA or protein sequence. Biopython can track the molecule type, so
 comparing two \verb|Seq| objects could mean considering this too.
 
-Suppose you argue \texttt{Seq("ACGT", generic\_dna)`` and \texttt{Seq("ACGT")}
-should be equal (i.e. comparing DNA and the default generic alphabet).
-Then, logically, \texttt{Seq("ACGT", generic_protein)} and \texttt{Seq("ACGT")}
-should also be equal. Now, in logic if $A=B$ and $B=C$, by transitivity we
-expect $A=C$. So for logical consistency we'd require
-\texttt{Seq("ACGT", generic\_dna)} and \texttt{Seq("ACGT", generic\_protein)}
-to be equal -- which most people would agree is just not right.
-This transitivity also has implications for using \verb|Seq| objects as
-Python dictionary keys.
-
-Now, in everyday use, your sequences will generally all be the same type of
+Should a DNA fragment ``ACG'' and an RNA fragment ``ACG'' be equal? What about
+the peptide ``ACG``? Or the Python string ``ACG``?
+In everyday use, your sequences will generally all be the same type of
 (all DNA, all RNA, or all protein).
-So, what does Biopython do? Well, as of Biopython 1.65, sequence comparison
-only looks at the sequence, essentially ignoring the alphabet:
+Well, as of Biopython 1.65, sequence comparison only looks at the sequence
+and compares like the Python string.
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
->>> seq2 = Seq("ACGT")
->>> seq1 = Seq("ACGT", generic_dna)
->>> str(seq1) == str(seq2)
-True
->>> str(seq1) == str(seq1)
-True
->>> seq1 == seq2
+>>> seq1 = Seq("ACGT")
+>>> "ACGT" == seq1
 True
 >>> seq1 == "ACGT"
 True
 \end{minted}
 
 As an extension to this, using sequence objects as keys in a Python dictionary
-is now equivalent to using the sequence as a plain string for the key.
+is equivalent to using the sequence as a plain string for the key.
 See also Section~\ref{sec:seq-to-string}.
-
-Note if you compare sequences with incompatible alphabets (e.g. DNA vs RNA,
-or nucleotide versus protein), then you will get a warning but for the
-comparison itself only the string of letters in the sequence is used:
-%Can we do a doctest with a warning?
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna, generic_protein
->>> dna_seq = Seq("ACGT", generic_dna)
->>> prot_seq = Seq("ACGT", generic_protein)
->>> dna_seq == prot_seq
-BiopythonWarning: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
-True
-\end{minted}
-
-\noindent
-\emph{WARNING:} Older versions of Biopython instead used to check if the
-\verb|Seq| objects were the same object in memory.
-This is important if you need to support scripts on both old and new
-versions of Biopython. Here make the comparison explicit by wrapping
-your sequence objects with either \verb|str(...)| for string based
-comparison or \verb|id(...)| for object instance based comparison.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
@@ -702,8 +615,7 @@ Just like the normal Python string, the \verb|Seq| object is ``read only'', or i
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
->>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", generic_dna)
+>>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA")
 \end{minted}
 
 Observe what happens if you try to edit the sequence:
@@ -729,8 +641,7 @@ Alternatively, you can create a \verb|MutableSeq| object directly from a string:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import MutableSeq
->>> from Bio.Alphabet import generic_dna
->>> mutable_seq = MutableSeq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", generic_dna)
+>>> mutable_seq = MutableSeq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA")
 \end{minted}
 
 Either way will give you a sequence object which can be changed:
