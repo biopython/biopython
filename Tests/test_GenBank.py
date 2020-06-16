@@ -7185,7 +7185,7 @@ class OutputTests(unittest.TestCase):
 
     def test_seqrecord_default_description(self):
         """Read in file using SeqRecord default description."""
-        old = SeqRecord(Seq("ACGT", generic_dna), id="example", name="short", annotations={'molecule_type': "DNA"})
+        old = SeqRecord(Seq("ACGT", generic_dna), id="example", name="short", annotations={"molecule_type": "DNA"})
         self.assertEqual(old.description, "<unknown description>")
         txt = old.format("gb")
         self.assertIn("DEFINITION  .\n", txt)

@@ -1416,8 +1416,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 )
         # Don't overwrite molecule_type
         if molecule_type is not None:
-            self.data.annotations["molecule_type"] = self.data.annotations.get("molecule_type", molecule_type)
-
+            self.data.annotations["molecule_type"] = self.data.annotations.get(
+                "molecule_type", molecule_type
+            )
         if not sequence and self._expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
         else:
