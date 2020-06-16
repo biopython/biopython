@@ -1164,10 +1164,10 @@ class SeqRecord:
         Note trying to reverse complement a protein SeqRecord raises an
         exception:
 
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> protein_rec = SeqRecord(Seq("MAIVMGR", generic_protein), id="Test")
+        >>> protein_rec = SeqRecord(Seq("MAIVMGR"), id="Test",
+        ...                         annotations={"molecule_type": "protein"})
         >>> protein_rec.reverse_complement()
         Traceback (most recent call last):
            ...
@@ -1187,6 +1187,8 @@ class SeqRecord:
         """
         from Bio.Seq import MutableSeq  # Lazy to avoid circular imports
 
+        if "protein" == self.annotations.get("molecule_type", ""):
+            raise ValueError("Proteins do not have complements!")
         if isinstance(self.seq, MutableSeq):
             # Currently the MutableSeq reverse complement is in situ
             answer = SeqRecord(self.seq.toseq().reverse_complement())
@@ -1296,6 +1298,8 @@ class SeqRecord:
         <BLANKLINE>
 
         """
+        if "protein" == self.annotations.get("molecule_type", ""):
+            raise ValueError("Proteins cannot be translated!")
         answer = SeqRecord(
             self.seq.translate(
                 table=table, stop_symbol=stop_symbol, to_stop=to_stop, cds=cds, gap=gap
@@ -1328,6 +1332,8 @@ class SeqRecord:
         elif annotations:
             # Copy the old annotations
             answer.annotations = self.annotations.copy()
+        # Set/update to protein:
+        answer.annotations["molecule_type"] = "protein"
         if isinstance(letter_annotations, dict):
             answer.letter_annotations = letter_annotations
         elif letter_annotations:
