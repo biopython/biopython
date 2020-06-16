@@ -177,13 +177,13 @@ class TestXdnaWriter(unittest.TestCase):
 
         record = SeqRecord(Seq("ACGT"))
 
-        for alphabet, expected_byte in [
-            (Alphabet.generic_alphabet, 0),
-            (Alphabet.generic_dna, 1),
-            (Alphabet.generic_rna, 3),
-            (Alphabet.generic_protein, 4),
+        for molecule_type, expected_byte in [
+            (None, 0),
+            ("DNA", 1),
+            ("RNA", 3),
+            ("protein", 4),
         ]:
-            record.seq.alphabet = alphabet
+            record.annotations["molecule_type"] = molecule_type
             h.seek(0, 0)
             SeqIO.write([record], h, "xdna")
             buf = bytearray(h.getvalue())
