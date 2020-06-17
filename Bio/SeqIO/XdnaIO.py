@@ -253,11 +253,13 @@ class XdnaWriter(SequenceWriter):
         self._has_truncated_strings = False
 
         molecule_type = record.annotations.get("molecule_type")
-        if molecule_type == "DNA":
+        if molecule_type is None:
+            seqtype = 0
+        elif "DNA" in molecule_type:
             seqtype = 1
-        elif molecule_type == "RNA":
+        elif "RNA" in molecule_type:
             seqtype = 3
-        elif molecule_type == "protein":
+        elif "protein" in molecule_type:
             seqtype = 4
         else:
             seqtype = 0

@@ -613,7 +613,7 @@ class SeqXmlWriter(SequenceWriter):
             seqElem = "DNAseq"
         elif "RNA" in molecule_type:
             seqElem = "RNAseq"
-        elif molecule_type == "protein":
+        elif "protein" in molecule_type:
             seqElem = "AAseq"
         else:
             raise ValueError("unknown molecule_type '%s'" % molecule_type)
