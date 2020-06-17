@@ -607,26 +607,16 @@ class SeqXmlWriter(SequenceWriter):
             raise ValueError("The sequence length should be greater than 0")
 
         molecule_type = record.annotations.get("molecule_type")
-        if molecule_type is not None:
-            if "DNA" in molecule_type:
-                seqElem = "DNAseq"
-            elif "RNA" in molecule_type:
-                seqElem = "RNAseq"
-            elif molecule_type == "protein":
-                seqElem = "AAseq"
-            else:
-                raise ValueError("unknown molecule_type '%s'" % molecule_type)
+        if molecule_type is None:
+            raise ValueError("molecule_type is not defined")
+        elif "DNA" in molecule_type:
+            seqElem = "DNAseq"
+        elif "RNA" in molecule_type:
+            seqElem = "RNAseq"
+        elif molecule_type == "protein":
+            seqElem = "AAseq"
         else:
-            # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-            alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-            if isinstance(alpha, Alphabet.RNAAlphabet):
-                seqElem = "RNAseq"
-            elif isinstance(alpha, Alphabet.DNAAlphabet):
-                seqElem = "DNAseq"
-            elif isinstance(alpha, Alphabet.ProteinAlphabet):
-                seqElem = "AAseq"
-            else:
-                raise ValueError("Need a DNA, RNA or Protein alphabet")
+            raise ValueError("unknown molecule_type '%s'" % molecule_type)
 
         self.xml_generator.startElement(seqElem, AttributesImpl({}))
         self.xml_generator.characters(seq)
