@@ -44,12 +44,6 @@ def UniprotIterator(
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
-    if isinstance(alphabet, Alphabet.NucleotideAlphabet):
-        raise ValueError("Wrong alphabet %r" % alphabet)
-    if isinstance(alphabet, Alphabet.Gapped):
-        if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
-            raise ValueError("Wrong alphabet %r" % alphabet)
-
     try:
         for event, elem in ElementTree.iterparse(source, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
