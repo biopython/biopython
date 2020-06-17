@@ -261,12 +261,15 @@ class PirWriter(SequenceWriter):
         if self.code:
             code = self.code
         else:
-            if isinstance(record.seq.alphabet, type(generic_protein)):
-                code = "P1"
-            elif isinstance(record.seq.alphabet, type(generic_dna)):
+            molecule_type = record.annotations.get("molecule_type")
+            if molecule_type is None:
+                code = "XX"
+            elif "DNA" in molecule_type:
                 code = "D1"
-            elif isinstance(record.seq.alphabet, type(generic_rna)):
+            elif "RNA" in molecule_type:
                 code = "RL"
+            elif "protein" in molecule_type:
+                code = "P1"
             else:
                 code = "XX"
 
