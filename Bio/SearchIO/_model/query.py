@@ -414,9 +414,7 @@ class QueryResult(_BaseSearchObject):
     @property
     def hsps(self):
         """Access the HSP objects contained in the QueryResult."""
-        return sorted(
-            chain.from_iterable(self.hits), key=lambda hsp: hsp.output_index
-        )
+        return sorted(chain.from_iterable(self.hits), key=lambda hsp: hsp.output_index)
 
     @property
     def fragments(self):
