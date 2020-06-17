@@ -885,7 +885,7 @@ class Seq:
 
         Here "M" was interpretted as the IUPAC ambiguity code for
         "A" or "C", with complement "K" for "T" or "G". Likewise
-        "A" has complement "T". The letter "I" has not defined
+        "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
         if ("U" in self._data or "u" in self._data) and (
@@ -967,6 +967,9 @@ class Seq:
         Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 
         Trying to transcribe an RNA sequence should have no effect.
+        If you have a nucleotide sequence which might be DNA or RNA
+        (or even a mixture), calling the transcribe method will ensure
+        any T becomes U.
 
         Trying to transcribe a protein sequence will replace any
         T for Threonine with U for Selenocysteine, which has no
@@ -993,10 +996,13 @@ class Seq:
         >>> messenger_rna.back_transcribe()
         Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 
-        Trying to back-transcribe DNA has no effect, but is
-        meaningless for a protein sequence where any "U" for
-        Selenocysteine will become "T" for Threonine. Older
-        versions of Biopython would raise an exception here:
+        Trying to back-transcribe DNA has no effect, If you have a nucleotide
+        sequence which might be DNA or RNA (or even a mixture), calling the
+        back-transcribe method will ensure any T becomes U.
+
+        Trying to back-transcribe a protein sequence will replace any U for
+        Selenocysteine with T for Threonine, which is biologically meaningless.
+        Older versions of Biopython would raise an exception here:
 
         >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
