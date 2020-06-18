@@ -638,20 +638,15 @@ class TestSeqIO(SeqIOTestBaseClass):
                     base_alpha = None
             if base_alpha is None:
                 good = []
-                bad = []
                 given_alpha = None
             elif isinstance(base_alpha, Alphabet.ProteinAlphabet):
                 good = protein_alphas
-                bad = dna_alphas + rna_alphas + nucleotide_alphas
             elif isinstance(base_alpha, Alphabet.RNAAlphabet):
                 good = nucleotide_alphas + rna_alphas
-                bad = protein_alphas + dna_alphas
             elif isinstance(base_alpha, Alphabet.DNAAlphabet):
                 good = nucleotide_alphas + dna_alphas
-                bad = protein_alphas + rna_alphas
             elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
                 good = nucleotide_alphas
-                bad = protein_alphas
             else:
                 self.assertIn(
                     t_format,
@@ -659,7 +654,6 @@ class TestSeqIO(SeqIOTestBaseClass):
                     "Got %s from %s file" % (repr(base_alpha), t_format),
                 )
                 good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
-                bad = []
             for given_alpha in good:
                 # These should all work...
                 given_base = Alphabet._get_base_alphabet(given_alpha)
@@ -672,18 +666,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                         record = SeqIO.read(h, t_format, given_alpha)
                     self.assertIsInstance(base_alpha, given_base.__class__)
                     self.assertEqual(base_alpha, given_base)
-            for given_alpha in bad:
-                # These should all fail...
-                with open(t_filename, mode) as h:
-                    records6 = SeqIO.parse(h, t_format, given_alpha)
-                    self.assertRaises(
-                        ValueError,
-                        next,
-                        records6,
-                        "Forcing wrong alphabet, %s, should fail (%s)"
-                        % (repr(given_alpha), t_filename),
-                    )
-            del good, bad, given_alpha, base_alpha
+            del good, given_alpha, base_alpha
 
             if t_alignment:
                 alignment = MultipleSeqAlignment(
