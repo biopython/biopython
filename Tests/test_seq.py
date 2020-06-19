@@ -274,14 +274,6 @@ class TestSeqStringMethods(unittest.TestCase):
 
         self.assertEqual(7, len(self.test_chars))
 
-    def test_exception_when_clashing_alphabets(self):
-        """Test by setting up clashing alphabet sequences."""
-        b = Seq.Seq("-", Alphabet.generic_nucleotide)
-        self.assertRaises(TypeError, self.protein[0].strip, b)
-
-        b = Seq.Seq("-", Alphabet.generic_protein)
-        self.assertRaises(TypeError, self.dna[0].strip, b)
-
     def test_stripping_characters(self):
         for a in self.dna + self.rna + self.nuc + self.protein:
             for char in self.test_chars:

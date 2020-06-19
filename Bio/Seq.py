@@ -305,10 +305,7 @@ class Seq:
         """Multiply Seq by integer.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> Seq('ATG') * 2
-        Seq('ATGATG')
-        >>> Seq('ATG', generic_dna) * 2
         Seq('ATGATG')
         """
         if not isinstance(other, int):
@@ -319,10 +316,7 @@ class Seq:
         """Multiply integer by Seq.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> 2 * Seq('ATG')
-        Seq('ATGATG')
-        >>> 2 * Seq('ATG', generic_dna)
         Seq('ATGATG')
         """
         if not isinstance(other, int):
@@ -336,8 +330,7 @@ class Seq:
         included to match the behaviour for regular Python strings.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
-        >>> seq = Seq('ATG', generic_dna)
+        >>> seq = Seq('ATG')
         >>> seq *= 2
         >>> seq
         Seq('ATGATG')
@@ -359,28 +352,6 @@ class Seq:
         Any alphabet is preserved.
         """
         return MutableSeq(str(self), self.alphabet)
-
-    def _get_seq_str_and_check_alphabet(self, other_sequence):
-        """Convert string/Seq/MutableSeq to string, checking alphabet (PRIVATE).
-
-        For a string argument, returns the string.
-
-        For a Seq or MutableSeq, it checks the alphabet is compatible
-        (raising an exception if it isn't), and then returns a string.
-        """
-        try:
-            other_alpha = other_sequence.alphabet
-        except AttributeError:
-            # Assume other_sequence is a string
-            return other_sequence
-
-        # Other should be a Seq or a MutableSeq
-        if not Alphabet._check_type_compatible([self.alphabet, other_alpha]):
-            raise TypeError(
-                f"Incompatible alphabets {self.alphabet!r} and {other_alpha!r}"
-            )
-        # Return as a string
-        return str(other_sequence)
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
@@ -425,9 +396,7 @@ class Seq:
         An overlapping search, as implemented in .count_overlap(),
         would give the answer as three!
         """
-        # If it has one, check the alphabet:
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return str(self).count(sub_str, start, end)
+        return str(self).count(str(sub), start, end)
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
@@ -479,7 +448,7 @@ class Seq:
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
         """
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        sub_str = str(sub)
         self_str = str(self)
         overlap_count = 0
         while True:
@@ -495,30 +464,13 @@ class Seq:
         e.g.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna, generic_rna, generic_protein
-        >>> my_dna = Seq("ATATGAAATTTGAAAA", generic_dna)
+        >>> my_dna = Seq("ATATGAAATTTGAAAA")
         >>> "AAA" in my_dna
         True
         >>> Seq("AAA") in my_dna
         True
-        >>> Seq("AAA", generic_dna) in my_dna
-        True
-
-        Like other Seq methods, this will raise a type error if another Seq
-        (or Seq like) object with an incompatible alphabet is used:
-
-        >>> Seq("AAA", generic_rna) in my_dna
-        Traceback (most recent call last):
-           ...
-        TypeError: Incompatible alphabets DNAAlphabet() and RNAAlphabet()
-        >>> Seq("AAA", generic_protein) in my_dna
-        Traceback (most recent call last):
-           ...
-        TypeError: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
         """
-        # If it has one, check the alphabet:
-        sub_str = self._get_seq_str_and_check_alphabet(char)
-        return sub_str in str(self)
+        return str(char) in str(self)
 
     def find(self, sub, start=0, end=sys.maxsize):
         """Find method, like that of a python string.
@@ -542,9 +494,7 @@ class Seq:
         >>> my_rna.find("AUG")
         3
         """
-        # If it has one, check the alphabet:
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return str(self).find(sub_str, start, end)
+        return str(self).find(str(sub), start, end)
 
     def rfind(self, sub, start=0, end=sys.maxsize):
         """Find from right method, like that of a python string.
@@ -568,9 +518,7 @@ class Seq:
         >>> my_rna.rfind("AUG")
         15
         """
-        # If it has one, check the alphabet:
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return str(self).rfind(sub_str, start, end)
+        return str(self).rfind(str(sub), start, end)
 
     def index(self, sub, start=0, end=sys.maxsize):
         """Like find() but raise ValueError when the substring is not found.
@@ -584,15 +532,11 @@ class Seq:
                    ...
         ValueError: substring not found...
         """
-        # If it has one, check the alphabet:
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return str(self).index(sub_str, start, end)
+        return str(self).index(str(sub), start, end)
 
     def rindex(self, sub, start=0, end=sys.maxsize):
         """Like rfind() but raise ValueError when the substring is not found."""
-        # If it has one, check the alphabet:
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return str(self).rindex(sub_str, start, end)
+        return str(self).rindex(str(sub), start, end)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
         """Return True if the Seq starts with the given prefix, False otherwise.
@@ -616,13 +560,11 @@ class Seq:
         >>> my_rna.startswith(("UCC", "UCA", "UCG"), 1)
         True
         """
-        # If it has one, check the alphabet:
         if isinstance(prefix, tuple):
-            prefix_strs = tuple(self._get_seq_str_and_check_alphabet(p) for p in prefix)
+            prefix_strs = tuple(str(p) for p in prefix)
             return str(self).startswith(prefix_strs, start, end)
         else:
-            prefix_str = self._get_seq_str_and_check_alphabet(prefix)
-            return str(self).startswith(prefix_str, start, end)
+            return str(self).startswith(str(prefix), start, end)
 
     def endswith(self, suffix, start=0, end=sys.maxsize):
         """Return True if the Seq ends with the given suffix, False otherwise.
@@ -646,13 +588,11 @@ class Seq:
         >>> my_rna.endswith(("UCC", "UCA", "UUG"))
         True
         """
-        # If it has one, check the alphabet:
         if isinstance(suffix, tuple):
-            suffix_strs = tuple(self._get_seq_str_and_check_alphabet(p) for p in suffix)
+            suffix_strs = tuple(str(p) for p in suffix)
             return str(self).endswith(suffix_strs, start, end)
         else:
-            suffix_str = self._get_seq_str_and_check_alphabet(suffix)
-            return str(self).endswith(suffix_str, start, end)
+            return str(self).endswith(str(suffix), start, end)
 
     def split(self, sep=None, maxsplit=-1):
         """Split method, like that of a python string.
@@ -692,11 +632,9 @@ class Seq:
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
-        # If it has one, check the alphabet:
-        sep_str = self._get_seq_str_and_check_alphabet(sep)
-        # TODO - If the sep is the defined stop symbol, or gap char,
-        # should we adjust the alphabet?
-        return [Seq(part, self.alphabet) for part in str(self).split(sep_str, maxsplit)]
+        return [
+            Seq(part, self.alphabet) for part in str(self).split(str(sep), maxsplit)
+        ]
 
     def rsplit(self, sep=None, maxsplit=-1):
         """Do a right split method, like that of a python string.
@@ -716,10 +654,8 @@ class Seq:
 
         See also the split method.
         """
-        # If it has one, check the alphabet:
-        sep_str = self._get_seq_str_and_check_alphabet(sep)
         return [
-            Seq(part, self.alphabet) for part in str(self).rsplit(sep_str, maxsplit)
+            Seq(part, self.alphabet) for part in str(self).rsplit(str(sep), maxsplit)
         ]
 
     def strip(self, chars=None):
@@ -735,9 +671,7 @@ class Seq:
 
         See also the lstrip and rstrip methods.
         """
-        # If it has one, check the alphabet:
-        strip_str = self._get_seq_str_and_check_alphabet(chars)
-        return Seq(str(self).strip(strip_str), self.alphabet)
+        return Seq(str(self).strip(str(chars)), self.alphabet)
 
     def lstrip(self, chars=None):
         """Return a new Seq object with leading (left) end stripped.
@@ -752,9 +686,7 @@ class Seq:
 
         See also the strip and rstrip methods.
         """
-        # If it has one, check the alphabet:
-        strip_str = self._get_seq_str_and_check_alphabet(chars)
-        return Seq(str(self).lstrip(strip_str), self.alphabet)
+        return Seq(str(self).lstrip(str(chars)), self.alphabet)
 
     def rstrip(self, chars=None):
         """Return a new Seq object with trailing (right) end stripped.
@@ -776,16 +708,13 @@ class Seq:
 
         See also the strip and lstrip methods.
         """
-        # If it has one, check the alphabet:
-        strip_str = self._get_seq_str_and_check_alphabet(chars)
-        return Seq(str(self).rstrip(strip_str), self.alphabet)
+        return Seq(str(self).rstrip(str(chars)), self.alphabet)
 
     def upper(self):
         """Return an upper case copy of the sequence.
 
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_seq = Seq("VHLTPeeK*", generic_protein)
+        >>> my_seq = Seq("VHLTPeeK*")
         >>> my_seq
         Seq('VHLTPeeK*')
         >>> my_seq.lower()
@@ -1493,7 +1422,7 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(4, character="N").count("NNN")
         1
         """
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        sub_str = str(sub)
         len_self, len_sub_str = self._length, len(sub_str)
         # Handling case where substring not in self
         if set(sub_str) != set(self._character):
@@ -1557,7 +1486,7 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
         True
         """
-        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        sub_str = str(sub)
         len_self, len_sub_str = self._length, len(sub_str)
         # Handling case where substring not in self
         if set(sub_str) != set(self._character):
