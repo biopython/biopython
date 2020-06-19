@@ -12,7 +12,7 @@ import copy
 import numbers
 from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
-from Bio.SubsMat import MatrixInfo
+from Bio.Align import substitution_matrices
 
 
 class _Matrix:
@@ -368,8 +368,8 @@ class DistanceCalculator:
     :Parameters:
         model : str
             Name of the model matrix to be used to calculate distance.
-            The attribute ``dna_matrices`` contains the available model
-            names for DNA sequences and ``protein_matrices`` for protein
+            The attribute ``dna_models`` contains the available model
+            names for DNA sequences and ``protein_models`` for protein
             sequences.
 
     Examples
@@ -422,46 +422,30 @@ class DistanceCalculator:
 
     """
 
-    dna_alphabet = ["A", "T", "C", "G"]
+    protein_alphabet = set("ABCDEFGHIKLMNPQRSTVWXYZ")
 
-    # BLAST nucleic acid scoring matrix
-    blastn = [[5], [-4, 5], [-4, -4, 5], [-4, -4, -4, 5]]
-
-    # transition/transversion scoring matrix
-    trans = [[5], [0, 5], [0, 4, 5], [4, 0, 0, 5]]
-
-    protein_alphabet = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "K",
-        "L",
-        "M",
-        "N",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-    ]
+    dna_models = []
+    protein_models = []
+    matrices = {}
 
     # matrices available
-    dna_matrices = {"blastn": blastn, "trans": trans}
-    protein_models = MatrixInfo.available_matrices
-    protein_matrices = {name: getattr(MatrixInfo, name) for name in protein_models}
-
-    dna_models = list(dna_matrices.keys())
+    names = substitution_matrices.load()
+    for name in names:
+        matrix = substitution_matrices.load(name)
+        if protein_alphabet.issubset(set(matrix.alphabet)):
+            name = name.lower()
+            protein_models.append(name)
+        elif name == "NUC.4.4":
+            # BLAST nucleic acid scoring matrix
+            name = "blastn"
+            dna_models.append(name)
+        elif name == "TRANS":
+            # transition/transversion scoring matrix
+            name = "trans"
+            dna_models.append(name)
+        else:
+            continue
+        matrices[name] = matrix
 
     models = ["identity"] + dna_models + protein_models
 
@@ -477,12 +461,11 @@ class DistanceCalculator:
 
         if model == "identity":
             self.scoring_matrix = None
-        elif model in self.dna_models:
-            self.scoring_matrix = _Matrix(self.dna_alphabet, self.dna_matrices[model])
-        elif model in self.protein_models:
-            self.scoring_matrix = self._build_protein_matrix(
-                self.protein_matrices[model]
-            )
+        elif model in self.models:
+            matrix = self.matrices[model]
+            alphabet = list(matrix.alphabet)
+            lower_triangular = [list(row)[:i+1] for i, row in enumerate(matrix)]
+            self.scoring_matrix = _Matrix(alphabet, lower_triangular)
         else:
             raise ValueError(
                 "Model not supported. Available models: " + ", ".join(self.models)
@@ -547,14 +530,6 @@ class DistanceCalculator:
         for seq1, seq2 in itertools.combinations(msa, 2):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
-
-    def _build_protein_matrix(self, subsmat):
-        """Convert matrix from SubsMat format to _Matrix object (PRIVATE)."""
-        protein_matrix = _Matrix(self.protein_alphabet)
-        for k, v in subsmat.items():
-            aa1, aa2 = k
-            protein_matrix[aa1, aa2] = v
-        return protein_matrix
 
 
 class TreeConstructor:
