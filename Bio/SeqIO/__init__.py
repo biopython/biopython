@@ -573,10 +573,8 @@ def parse(handle, format, alphabet=None):
     >>> for record in SeqIO.parse(filename, "fasta"):
     ...    print("ID %s" % record.id)
     ...    print("Sequence length %i" % len(record))
-    ...    print("Sequence alphabet %s" % record.seq.alphabet)
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
-    Sequence alphabet SingleLetterAlphabet()
 
     For file formats like FASTA where the alphabet cannot be determined, it
     may be useful to specify the alphabet explicitly:
@@ -677,8 +675,6 @@ def read(handle, format, alphabet=None):
     ID AC007323.5
     >>> print("Sequence length %i" % len(record))
     Sequence length 86436
-    >>> print("Sequence alphabet %s" % record.seq.alphabet)
-    Sequence alphabet DNAAlphabet()
 
     If the handle contains no records, or more than one record,
     an exception is raised.  For example:
@@ -956,7 +952,6 @@ def index_db(
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
 
-    >>> from Bio.Alphabet import generic_protein
     >>> from Bio import SeqIO
     >>> files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]
     >>> def get_gi(name):
@@ -965,7 +960,7 @@ def index_db(
     ...     assert i != -1
     ...     return parts[i+1]
     >>> idx_name = ":memory:" #use an in memory SQLite DB for this test
-    >>> records = SeqIO.index_db(idx_name, files, "fasta", generic_protein, get_gi)
+    >>> records = SeqIO.index_db(idx_name, files, "fasta", key_function=get_gi)
     >>> len(records)
     95
     >>> records["7525076"].description
