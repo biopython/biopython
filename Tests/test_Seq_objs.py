@@ -693,7 +693,6 @@ class StringMethodTests(unittest.TestCase):
                 # Default to DNA, e.g. complement("A") -> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping), str(comp))
-            self.assertEqual(comp.alphabet, example1.alphabet)
 
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""

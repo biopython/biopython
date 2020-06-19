@@ -903,7 +903,7 @@ class Seq:
             ttable = _dna_complement_table
         # Much faster on really long sequences than the previous loop based
         # one. Thanks to Michael Palmer, University of Waterloo.
-        return Seq(str(self).translate(ttable), self.alphabet)
+        return Seq(str(self).translate(ttable))
 
     def reverse_complement(self):
         """Return the reverse complement sequence by creating a new Seq object.
@@ -991,7 +991,7 @@ class Seq:
                 raise ValueError("Mixed RNA/DNA found")
             else:
                 raise ValueError("DNA found, RNA expected")
-        return Seq(str(self).translate(_rna_complement_table), self.alphabet)
+        return Seq(str(self).translate(_rna_complement_table))
 
     def reverse_complement_rna(self):
         """Reverse complement of an RNA sequence.
