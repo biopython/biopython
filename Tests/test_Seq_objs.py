@@ -713,7 +713,6 @@ class StringMethodTests(unittest.TestCase):
                 # Defaults to DNA, so reverse_complement("A") --> "T" not "U"
                 mapping = str.maketrans("ACGTacgt", "TGCAtgca")
             self.assertEqual(str1.translate(mapping)[::-1], str(comp))
-            self.assertEqual(comp.alphabet, example1.alphabet)
 
     def test_the_transcription(self):
         """Check obj.transcribe() method."""

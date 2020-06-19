@@ -231,7 +231,7 @@ class Seq:
             return self._data[index]
         else:
             # Return the (sub)sequence as another Seq object
-            return Seq(self._data[index], self.alphabet)
+            return Seq(self._data[index])
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
