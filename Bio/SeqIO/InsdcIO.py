@@ -1146,8 +1146,8 @@ class EmblWriter(_InsdcWriter):
         seq_len = len(data)
 
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if isinstance(a, Alphabet.DNAAlphabet):
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type is not None and "DNA" in molecule_type:
             # TODO - What if we have RNA?
             a_count = data.count("A") + data.count("a")
             c_count = data.count("C") + data.count("c")
@@ -1228,28 +1228,19 @@ class EmblWriter(_InsdcWriter):
 
         # Get the molecule type
         # TODO - record this explicitly in the parser?
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if not isinstance(a, Alphabet.Alphabet):
-            raise TypeError("Invalid alphabet")
-        elif isinstance(a, Alphabet.DNAAlphabet):
-            mol_type = "DNA"
+        # Note often get RNA vs DNA discrepancy in real EMBL/NCBI files
+        mol_type = record.annotations.get("molecule_type")
+        if mol_type is None:
+            raise ValueError("missing molecule_type in annotations")
+        elif "DNA" in mol_type:
             units = "BP"
-        elif isinstance(a, Alphabet.RNAAlphabet):
-            mol_type = "RNA"
+        elif "RNA" in mol_type:
             units = "BP"
-        elif isinstance(a, Alphabet.ProteinAlphabet):
+        elif "PROTEIN" in mol_type.upper():
             mol_type = "PROTEIN"
             units = "AA"
         else:
-            # Must be something like NucleotideAlphabet
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
-
-        if record.annotations.get("molecule_type", None):
-            # Note often get RNA vs DNA discrepancy in real EMBL/NCBI files
-            mol_type = record.annotations["molecule_type"]
-            if mol_type in ["protein"]:
-                mol_type = "PROTEIN"
+            raise ValueError("failed to understand molecule_type '%s'" % mol_type)
 
         # Get the taxonomy division
         division = self._get_data_division(record)
