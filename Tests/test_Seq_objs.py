@@ -768,10 +768,6 @@ class StringMethodTests(unittest.TestCase):
             # Try with positional vs named argument:
             self.assertEqual(example1.translate(11), example1.translate(table=11))
 
-            # This is based on the limited example not having stop codons:
-            if tran.alphabet not in [extended_protein, protein, generic_protein]:
-                print(tran.alphabet)
-                self.fail()
             # TODO - check the actual translation, and all the optional args
 
     def test_the_translation_of_stops(self):

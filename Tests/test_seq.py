@@ -1048,38 +1048,6 @@ class TestTranslating(unittest.TestCase):
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
-    def test_alphabets_of_translated_seqs(self):
-        def triple_pad(s):
-            """Add N to ensure length is a multiple of three (whole codons)."""
-            while len(s) % 3:
-                s += "N"
-            return s
-
-        self.assertIs(self.test_seqs[0].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[1].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[2].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[3].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[10].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[11].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[12].translate().alphabet, Alphabet.generic_protein)
-
-        self.assertIs(
-            triple_pad(self.test_seqs[13]).translate().alphabet,
-            Alphabet.generic_protein,
-        )
-
-        self.assertIs(self.test_seqs[14].translate().alphabet, Alphabet.generic_protein)
-        self.assertIs(self.test_seqs[15].translate().alphabet, Alphabet.generic_protein)
-
-        self.assertIs(
-            triple_pad(self.test_seqs[16]).translate().alphabet,
-            Alphabet.generic_protein,
-        )
-        self.assertIs(
-            triple_pad(self.test_seqs[17]).translate().alphabet,
-            Alphabet.generic_protein,
-        )
-
     def test_gapped_seq_with_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
         self.assertEqual("M-KL", seq.translate(gap="-"))
@@ -1108,31 +1076,6 @@ class TestTranslating(unittest.TestCase):
     def test_gapped_seq_no_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
         self.assertRaises(TranslationError, seq.translate, gap=None)
-
-    def test_alphabet_of_translated_gapped_seq(self):
-        seq = Seq.Seq("ATG---AAACTG", Alphabet.generic_dna)
-        self.assertIs(seq.translate().alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG---AAACTG", Alphabet.generic_dna)
-        self.assertIs(seq.translate().alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG~~~AAACTG", Alphabet.generic_dna)
-        self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG---AAACTG")
-        self.assertIs(seq.translate(gap="-").alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG~~~AAACTG")
-        self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG~~~AAACTGTAG")
-        self.assertIs(seq.translate(gap="~").alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG---AAACTGTGA")
-        self.assertIs(seq.translate(gap="-").alphabet, Alphabet.generic_protein)
-
-        seq = Seq.Seq("ATG---AAACTGTGA")
-        self.assertIs(seq.translate(gap="-").alphabet, Alphabet.generic_protein)
 
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable."""

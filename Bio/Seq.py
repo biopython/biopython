@@ -1167,11 +1167,9 @@ class Seq:
             # translating strings).
             codon_table = CodonTable.ambiguous_generic_by_id[table_id]
 
-        protein = _translate_str(
-            str(self), codon_table, stop_symbol, to_stop, cds, gap=gap
+        return Seq(
+            _translate_str(str(self), codon_table, stop_symbol, to_stop, cds, gap=gap)
         )
-
-        return Seq(protein, Alphabet.generic_protein)
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).

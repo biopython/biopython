@@ -64,10 +64,8 @@ class TestTranscriptionTranslation(unittest.TestCase):
         s = "TCAAAAAGGTGCATCTAGATG"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
         protein = dna.translate(to_stop=True)
-        self.assertIs(protein.alphabet, Alphabet.generic_protein)
         self.assertEqual(str(protein), "SKRCI")
         gapped_protein = dna.translate()
-        self.assertIs(gapped_protein.alphabet, Alphabet.generic_protein)
         self.assertEqual(str(gapped_protein), "SKRCI*M")
         # The table used here has "AGG" as a stop codon:
         p2 = dna.translate(table=2, to_stop=True)
@@ -79,7 +77,6 @@ class TestTranscriptionTranslation(unittest.TestCase):
         r = s.replace("T", "U")
         rna = Seq.Seq(r, IUPAC.unambiguous_rna)
         protein = rna.translate(to_stop=True)
-        self.assertIs(protein.alphabet, Alphabet.generic_protein)
         self.assertEqual(str(protein), "SKRCI")
         gapped_protein = rna.translate()
         self.assertEqual(str(gapped_protein), "SKRCI*M")
