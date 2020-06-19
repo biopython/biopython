@@ -632,9 +632,7 @@ class Seq:
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
-        return [
-            Seq(part, self.alphabet) for part in str(self).split(str(sep), maxsplit)
-        ]
+        return [Seq(part) for part in str(self).split(str(sep), maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
         """Do a right split method, like that of a python string.
@@ -654,9 +652,7 @@ class Seq:
 
         See also the split method.
         """
-        return [
-            Seq(part, self.alphabet) for part in str(self).rsplit(str(sep), maxsplit)
-        ]
+        return [Seq(part) for part in str(self).rsplit(str(sep), maxsplit)]
 
     def strip(self, chars=None):
         """Return a new Seq object with leading and trailing ends stripped.
@@ -671,7 +667,7 @@ class Seq:
 
         See also the lstrip and rstrip methods.
         """
-        return Seq(str(self).strip(str(chars)), self.alphabet)
+        return Seq(str(self).strip(str(chars)))
 
     def lstrip(self, chars=None):
         """Return a new Seq object with leading (left) end stripped.
@@ -686,7 +682,7 @@ class Seq:
 
         See also the strip and rstrip methods.
         """
-        return Seq(str(self).lstrip(str(chars)), self.alphabet)
+        return Seq(str(self).lstrip(str(chars)))
 
     def rstrip(self, chars=None):
         """Return a new Seq object with trailing (right) end stripped.
@@ -708,7 +704,7 @@ class Seq:
 
         See also the strip and lstrip methods.
         """
-        return Seq(str(self).rstrip(str(chars)), self.alphabet)
+        return Seq(str(self).rstrip(str(chars)))
 
     def upper(self):
         """Return an upper case copy of the sequence.
