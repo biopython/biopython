@@ -833,6 +833,8 @@ class Seq:
     def complement(self):
         """Return the complement sequence by creating a new Seq object.
 
+        This method is intended for use with DNA sequences:
+
         >>> from Bio.Seq import Seq
         >>> my_dna = Seq("CCCCCGATAG")
         >>> my_dna
@@ -859,13 +861,15 @@ class Seq:
         Seq('GCT')
         >>> Seq("CGAT").complement()
         Seq('GCTA')
+
+        If you actually have RNA, this currently works but we
+        may deprecate this later. We recommend using the new
+        complement_rna method instead:
+
         >>> Seq("CGAU").complement()
         Seq('GCUA')
-
-        If you are dealing with RNA which might have no U, use:
-
-        >>> Seq("CGA").complement().transcribe()
-        Seq('GCU')
+        >>> Seq("CGAU").complement_rna()
+        Seq('GCUA')
 
         If the sequence contains both T and U, an exception is
         raised:
@@ -904,6 +908,8 @@ class Seq:
     def reverse_complement(self):
         """Return the reverse complement sequence by creating a new Seq object.
 
+        This method is intended for use with DNA sequences:
+
         >>> from Bio.Seq import Seq
         >>> my_dna = Seq("CCCCCGATAGNR")
         >>> my_dna
@@ -926,10 +932,14 @@ class Seq:
 
         As discussed for the complement method, if the sequence
         contains neither T nor U, is is assumed to be DNA and
-        will map any letter A to T. If you are dealing with RNA
-        which might have no U, use:
+        will map any letter A to T.
 
-        >>> Seq("CGA").reverse_complement().transcribe()
+        If you are dealing with RNA you should use the new
+        reverse_complement_rna method instead
+
+        >>> Seq("CGA").reverse_complement()  # defaults to DNA
+        Seq('TCG')
+        >>> Seq("CGA").reverse_complement_rna()
         Seq('UCG')
 
         If the sequence contains both T and U, an exception is raised:
@@ -953,6 +963,45 @@ class Seq:
         """
         # Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
+
+    def complement_rna(self):
+        """Complement of an RNA sequence.
+
+        >>> Seq("CGA").complement()  # defaults to DNA
+        Seq('GCT')
+        >>> Seq("CGA").complement_rna()
+        Seq('GCU')
+
+        If the sequence contains both T and U, an exception is raised:
+
+        >>> Seq("CGAUT").complement_rna()
+        Traceback (most recent call last):
+           ...
+        ValueError: Mixed RNA/DNA found
+
+        If the sequence contains T, an exception is raised:
+
+        >>> Seq("ACGT").complement_rna()
+        Traceback (most recent call last):
+           ...
+        ValueError: DNA found, RNA expected
+        """
+        if "T" in self._data or "t" in self._data:
+            if "U" in self._data or "u" in self._data:
+                raise ValueError("Mixed RNA/DNA found")
+            else:
+                raise ValueError("DNA found, RNA expected")
+        return Seq(str(self).translate(_rna_complement_table), self.alphabet)
+
+    def reverse_complement_rna(self):
+        """Reverse complement of an RNA sequence.
+
+        >>> from Bio.Seq import Seq
+        >>> Seq("ACG").reverse_complement_rna()
+        Seq('CGU')
+        """
+        # Use -1 stride/step to reverse the complement
+        return self.complement_rna()[::-1]
 
     def transcribe(self):
         """Return the RNA sequence from a DNA sequence by creating a new Seq object.
@@ -1550,6 +1599,10 @@ class UnknownSeq(Seq):
         """
         return self
 
+    def complement_rna(self):
+        """Return the complement assuming it is RNA."""
+        return self.complement()
+
     def reverse_complement(self):
         """Return the reverse complement of an unknown sequence.
 
@@ -1564,6 +1617,10 @@ class UnknownSeq(Seq):
         NNNNNN
         """
         return self
+
+    def reverse_complement_rna(self):
+        """Return the reverse complement assuming it is RNA."""
+        return self.reverse_complement()
 
     def transcribe(self):
         """Return an unknown RNA sequence from an unknown DNA sequence.
@@ -2274,6 +2331,11 @@ class MutableSeq:
         """Modify the mutable sequence to take on its complement.
 
         No return value.
+
+        If the sequence contains neither T nor U, DNA is assumed
+        and any A will be mapped to T.
+
+        If the sequence contains both T and U, an exception is raised.
         """
         if "U" in self.data and "T" in self.data:
             raise ValueError("Mixed RNA/DNA found")
@@ -2676,9 +2738,10 @@ def reverse_complement(sequence):
 
 
 def complement(sequence):
-    """Return the complement sequence of a nucleotide string.
+    """Return the complement sequence of a DNA string.
 
     If given a string, returns a new string object.
+
     Given a Seq or a MutableSeq, returns a new Seq object with the same
     alphabet.
 
@@ -2693,6 +2756,9 @@ def complement(sequence):
 
     >>> complement("A")
     'T'
+
+    However, this may not be supported in future. Please use the
+    complement_rna function if you have RNA.
     """
     if isinstance(sequence, Seq):
         # Return a Seq
@@ -2711,10 +2777,35 @@ def complement(sequence):
     if ("U" in sequence or "u" in sequence) and ("T" in sequence or "t" in sequence):
         raise ValueError("Mixed RNA/DNA found")
     elif "U" in sequence or "u" in sequence:
+        # TODO - warning or exception in future?
         ttable = _rna_complement_table
     else:
         ttable = _dna_complement_table
     return sequence.translate(ttable)
+
+
+def complement_rna(sequence):
+    """Return the complement sequence of an RNA string.
+
+    >>> complement("ACG")  # assumed DNA
+    'TGC'
+    >>> complement_rna("ACG")
+    'UGC'
+
+    If the sequence contains a T, and error is raised.
+    """
+    if isinstance(sequence, Seq):
+        # Return a Seq
+        return sequence.complement_rna()
+    elif isinstance(sequence, MutableSeq):
+        # Return a Seq
+        return sequence.toseq().complement_rna()
+    if "T" in sequence or "t" in sequence:
+        if "U" in sequence or "u" in sequence:
+            raise ValueError("Mixed RNA/DNA found")
+        else:
+            raise ValueError("DNA found, expect RNA")
+    return sequence.translate(_rna_complement_table)
 
 
 def _test():
