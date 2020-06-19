@@ -877,8 +877,8 @@ class GenBankWriter(_InsdcWriter):
             data = str(number)
             # TODO - support more complex record reference locations?
             if ref.location and len(ref.location) == 1:
-                a = Alphabet._get_base_alphabet(record.seq.alphabet)
-                if isinstance(a, Alphabet.ProteinAlphabet):
+                molecule_type = record.annotations.get("molecule_type")
+                if molecule_type and "protein" in molecule_type:
                     units = "residues"
                 else:
                     units = "bases"
