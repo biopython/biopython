@@ -428,7 +428,7 @@ class DistanceCalculator:
     blastn = [[5], [-4, 5], [-4, -4, 5], [-4, -4, -4, 5]]
 
     # transition/transversion scoring matrix
-    trans = [[6], [-5, 6], [-5, -1, 6], [-1, -5, -5, 6]]
+    trans = [[5], [0, 5], [0, 4, 5], [4, 0, 0, 5]]
 
     protein_alphabet = [
         "A",
