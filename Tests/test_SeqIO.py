@@ -735,12 +735,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  V- alignment column 600"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
@@ -786,12 +786,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||||||| ...
  AAAAAAA alignment column 155"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
@@ -837,12 +837,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||||| ...
  ---SS alignment column 446"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
@@ -882,12 +882,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  GG alignment column 686"""
         messages = {
             "phylip": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
@@ -917,12 +917,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [655]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "seqxml": "molecule_type is not defined",
@@ -949,12 +949,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [2050]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "seqxml": "molecule_type is not defined",
@@ -981,12 +981,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [623]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "seqxml": "molecule_type is not defined",
@@ -1013,12 +1013,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1002]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "seqxml": "molecule_type is not defined",
@@ -1045,12 +1045,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [2551]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "seqxml": "molecule_type is not defined",
@@ -1077,12 +1077,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [309]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "seqxml": "molecule_type is not defined",
@@ -1109,12 +1109,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [550]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "seqxml": "molecule_type is not defined",
@@ -1141,12 +1141,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [107]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
@@ -1174,12 +1174,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [107]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
@@ -1207,12 +1207,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [107]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
@@ -1240,12 +1240,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [304]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
@@ -1273,12 +1273,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [600]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
@@ -1306,12 +1306,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [473]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
@@ -1340,12 +1340,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [79]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
@@ -1386,12 +1386,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [633, 413, 471]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
@@ -1423,12 +1423,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [378, 382]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
@@ -1457,12 +1457,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [9609]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "seqxml": "molecule_type is not defined",
@@ -1504,12 +1504,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1023, 783, 195, 273]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
@@ -1552,12 +1552,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
@@ -1600,12 +1600,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [123, 353, 504, 274]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
@@ -1648,12 +1648,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
@@ -1682,12 +1682,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [9181]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "seqxml": "molecule_type is not defined",
@@ -1715,12 +1715,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [9181]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "seqxml": "molecule_type is not defined",
@@ -1755,12 +1755,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||| ...
  GCC alignment column 7"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
@@ -1793,12 +1793,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [285, 222]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
@@ -3310,12 +3310,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [315]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "seqxml": "molecule_type is not defined",
@@ -3481,12 +3481,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [111, 27, 7, 754]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
@@ -3515,11 +3515,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [120]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "failed to understand molecule_type 'unspecified'",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "failed to understand molecule_type 'unspecified'",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "seqxml": "unknown molecule_type 'unspecified'",
@@ -3646,12 +3646,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  UU alignment column 103"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
@@ -3702,12 +3702,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||| ...
  SYSEEE alignment column 42"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
@@ -3744,12 +3744,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  CTTTTC alignment column 12"""
         messages = {
             "phylip-relaxed": "Whitespace not allowed in identifier: B. virgini",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
@@ -3791,12 +3791,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  CTTTTC alignment column 38"""
         messages = {
             "phylip-relaxed": "Whitespace not allowed in identifier: B. virgini",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
@@ -3837,12 +3837,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
@@ -3884,12 +3884,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  AAAAAAAAAA alignment column 39"""
         messages = {
             "phylip-relaxed": "Whitespace not allowed in identifier: M. secundu",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
@@ -3930,12 +3930,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
@@ -3975,12 +3975,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||| ...
  -AV alignment column 383"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
@@ -4021,12 +4021,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||| ...
  EEEE alignment column 130"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
@@ -4067,12 +4067,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||| ...
  EEEE alignment column 130"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
@@ -4106,12 +4106,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [124, 124, 119, 125]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
@@ -4149,12 +4149,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  EE alignment column 130"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
@@ -4368,12 +4368,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [303, 306, 267, 330]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
@@ -4413,12 +4413,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||||||||| ...
  HHHHHHH-AAAAL-R- alignment column 297"""
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
@@ -4453,12 +4453,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [294, 294, 294, 294]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
@@ -4681,12 +4681,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
@@ -4729,9 +4729,9 @@ class TestSeqIO(SeqIOTestBaseClass):
         alignment = None
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
             "sff": "Missing SFF flow information",
@@ -4779,9 +4779,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
@@ -4829,9 +4829,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
@@ -4882,9 +4882,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  AGTA alignment column 35"""
         messages = {
             "phylip": "Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
@@ -4912,9 +4912,9 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [41]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "nexus": "Need a DNA, RNA or Protein alphabet",
@@ -4939,9 +4939,9 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [94]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "nexus": "Need a DNA, RNA or Protein alphabet",
@@ -4966,9 +4966,9 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [41]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "nexus": "Need a DNA, RNA or Protein alphabet",
@@ -4993,9 +4993,9 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [46]
         alignment = None
         messages = {
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "nexus": "Need a DNA, RNA or Protein alphabet",
@@ -5043,9 +5043,9 @@ class TestSeqIO(SeqIOTestBaseClass):
  AAGGA alignment column 24"""
         messages = {
             "phylip": "Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation",
-            "embl": "Need a DNA, RNA or Protein alphabet",
+            "embl": "missing molecule_type in annotations",
             "genbank": "missing molecule_type in annotations",
-            "imgt": "Need a DNA, RNA or Protein alphabet",
+            "imgt": "missing molecule_type in annotations",
             "nib": "More than one sequence found",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
