@@ -732,7 +732,6 @@ class StringMethodTests(unittest.TestCase):
                 # TODO - Check for or silence the expected warning?
                 continue
             self.assertEqual(str1.replace("T", "U").replace("t", "u"), str(tran))
-            self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
 
     def test_the_back_transcription(self):
         """Check obj.back_transcribe() method."""
@@ -750,7 +749,6 @@ class StringMethodTests(unittest.TestCase):
                 raise
             str1 = str(example1)
             self.assertEqual(str1.replace("U", "T").replace("u", "t"), str(tran))
-            self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
 
     def test_the_translate(self):
         """Check obj.translate() method."""
