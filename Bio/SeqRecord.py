@@ -1173,6 +1173,22 @@ class SeqRecord:
            ...
         ValueError: Proteins do not have complements!
 
+        If you have RNA without any U bases, it must be annotated as RNA
+        otherwise it will be treated as DNA by default with A mapped to T:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> rna1 = SeqRecord(Seq("ACG"), id="Test")
+        >>> rna2 = SeqRecord(Seq("ACG"), id="Test", annotations={"molecule_type": "RNA"})
+        >>> print(rna1.reverse_complement(id="RC", description="unk").format("fasta"))
+        >RC unk
+        CGT
+        <BLANKLINE>
+        >>> print(rna2.reverse_complement(id="RC", description="RNA").format("fasta"))
+        >RC RNA
+        CGU
+        <BLANKLINE>
+
         Also note you can reverse complement a SeqRecord using a MutableSeq:
 
         >>> from Bio.Seq import MutableSeq
@@ -1187,13 +1203,21 @@ class SeqRecord:
         """
         from Bio.Seq import MutableSeq  # Lazy to avoid circular imports
 
-        if "protein" == self.annotations.get("molecule_type", ""):
+        if "protein" in self.annotations.get("molecule_type", ""):
             raise ValueError("Proteins do not have complements!")
-        if isinstance(self.seq, MutableSeq):
-            # Currently the MutableSeq reverse complement is in situ
-            answer = SeqRecord(self.seq.toseq().reverse_complement())
+        if "RNA" in self.annotations.get("molecule_type", ""):
+            if isinstance(self.seq, MutableSeq):
+                # Does not currently have reverse_complement_rna method:
+                answer = SeqRecord(self.seq.toseq().reverse_complement_rna())
+            else:
+                answer = SeqRecord(self.seq.reverse_complement_rna())
         else:
-            answer = SeqRecord(self.seq.reverse_complement())
+            # Default to DNA
+            if isinstance(self.seq, MutableSeq):
+                # Currently the MutableSeq reverse complement is in situ
+                answer = SeqRecord(self.seq.toseq().reverse_complement())
+            else:
+                answer = SeqRecord(self.seq.reverse_complement())
         if isinstance(id, str):
             answer.id = id
         elif id:
