@@ -717,21 +717,14 @@ class Seq:
         Seq('vhltpeek*')
         >>> my_seq.upper()
         Seq('VHLTPEEK*')
-
-        This will adjust the alphabet if required. See also the lower method.
         """
-        return Seq(str(self).upper(), self.alphabet._upper())
+        return Seq(str(self).upper())
 
     def lower(self):
         """Return a lower case copy of the sequence.
 
-        This will adjust the alphabet if required. Note that the IUPAC
-        alphabets are upper case only, and thus a generic alphabet must be
-        substituted.
-
-        >>> from Bio.Alphabet.IUPAC import unambiguous_dna
         >>> from Bio.Seq import Seq
-        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA", unambiguous_dna)
+        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA")
         >>> my_seq
         Seq('CGGTACGCTTATGTCACGTAGAAAAAA')
         >>> my_seq.lower()
@@ -739,7 +732,7 @@ class Seq:
 
         See also the upper method.
         """
-        return Seq(str(self).lower(), self.alphabet._lower())
+        return Seq(str(self).lower())
 
     def encode(self, encoding="utf-8", errors="strict"):
         """Return an encoded version of the sequence as a bytes object.
