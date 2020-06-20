@@ -1458,7 +1458,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
                 "Tip: use BLAST database version 4 on 32 bit CPU. "
                 "Default = 5",
                 equate=False,
-                checker_function=lambda x: x == 4 or x == 5
+                checker_function=lambda x: x == 4 or x == 5,
             ),
             _Option(
                 ["-dbtype", "dbtype"],
