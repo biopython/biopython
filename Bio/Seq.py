@@ -310,7 +310,7 @@ class Seq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(str(self) * other, self.alphabet)
+        return self.__class__(str(self) * other)
 
     def __rmul__(self, other):
         """Multiply integer by Seq.
@@ -321,7 +321,7 @@ class Seq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(str(self) * other, self.alphabet)
+        return self.__class__(str(self) * other)
 
     def __imul__(self, other):
         """Multiply Seq in-place.
@@ -337,7 +337,7 @@ class Seq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(str(self) * other, self.alphabet)
+        return self.__class__(str(self) * other)
 
     def tomutable(self):  # Needed?  Or use a function?
         """Return the full sequence as a MutableSeq object.
@@ -348,10 +348,8 @@ class Seq:
         Seq('MKQHKAMIVALIVICITAVVAAL')
         >>> my_seq.tomutable()
         MutableSeq('MKQHKAMIVALIVICITAVVAAL')
-
-        Any alphabet is preserved.
         """
-        return MutableSeq(str(self), self.alphabet)
+        return MutableSeq(str(self))
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
@@ -1985,7 +1983,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other, self.alphabet)
+        return self.__class__(self.data * other)
 
     def __rmul__(self, other):
         """Multiply integer by MutableSeq.
@@ -2002,7 +2000,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other, self.alphabet)
+        return self.__class__(self.data * other)
 
     def __imul__(self, other):
         """Multiply MutableSeq in-place.
@@ -2016,7 +2014,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other, self.alphabet)
+        return self.__class__(self.data * other)
 
     def append(self, c):
         """Add a subsequence to the mutable sequence object.
@@ -2287,18 +2285,14 @@ class MutableSeq:
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
 
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL",
-        ...                      generic_protein)
+        >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL")
         >>> my_mseq
         MutableSeq('MKQHKAMIVALIVICITAVVAAL')
         >>> my_mseq.toseq()
         Seq('MKQHKAMIVALIVICITAVVAAL')
-
-        Note that the alphabet is preserved.
         """
-        return Seq("".join(self.data), self.alphabet)
+        return Seq("".join(self.data))
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.

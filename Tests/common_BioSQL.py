@@ -497,12 +497,10 @@ class SeqInterfaceTest(unittest.TestCase):
 
         other = test_seq.toseq()
         self.assertEqual(str(test_seq), str(other))
-        self.assertEqual(test_seq.alphabet, other.alphabet)
         self.assertIsInstance(other, Seq)
 
         other = test_seq.tomutable()
         self.assertEqual(str(test_seq), str(other))
-        self.assertEqual(test_seq.alphabet, other.alphabet)
         self.assertIsInstance(other, MutableSeq)
 
     def test_addition(self):
@@ -529,13 +527,11 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertIsInstance(tripled, Seq)
         self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(test_seq) * 3)
-        self.assertEqual(tripled.alphabet, alphabet)
         # Test DBSeq.__rmul__
         tripled = 3 * test_seq
         self.assertIsInstance(tripled, Seq)
         self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(test_seq) * 3)
-        self.assertEqual(tripled.alphabet, alphabet)
         # Test DBSeq.__imul__
         original = self.item.seq
         tripled = test_seq
@@ -543,7 +539,6 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertIsInstance(tripled, Seq)
         self.assertNotIsInstance(tripled, BioSeq.DBSeq)
         self.assertEqual(tripled, str(original) * 3)
-        self.assertEqual(tripled.alphabet, alphabet)
 
     def test_seq_slicing(self):
         """Check that slices of sequences are retrieved properly."""

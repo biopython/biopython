@@ -130,7 +130,7 @@ class DBSeq(Seq):
     def toseq(self):
         """Return the full sequence as a Seq object."""
         # Note - the method name copies that of the MutableSeq object
-        return Seq(str(self), self.alphabet)
+        return Seq(str(self))
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.

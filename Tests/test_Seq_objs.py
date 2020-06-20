@@ -661,7 +661,6 @@ class StringMethodTests(unittest.TestCase):
             mut = example1.tomutable()
             self.assertIsInstance(mut, MutableSeq)
             self.assertEqual(str(mut), str(example1))
-            self.assertEqual(mut.alphabet, example1.alphabet)
 
     def test_toseq(self):
         """Check obj.toseq() method."""
@@ -673,7 +672,6 @@ class StringMethodTests(unittest.TestCase):
                 continue
             self.assertIsInstance(seq, Seq)
             self.assertEqual(str(seq), str(example1))
-            self.assertEqual(seq.alphabet, example1.alphabet)
 
     def test_the_complement(self):
         """Check obj.complement() method."""
