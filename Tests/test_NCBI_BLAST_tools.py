@@ -258,6 +258,54 @@ class BlastDB(unittest.TestCase):
         )
         self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.psq"))
 
+    def test_fasta_db_prot_legacy(self):
+        """Test makeblastdb wrapper with protein database legacy, version 4."""
+        global exe_names
+        cline = Applications.NcbimakeblastdbCommandline(
+            exe_names["makeblastdb"],
+            blastdb_version=4,
+            input_file="GenBank/NC_005816.faa",
+            dbtype="prot",
+            hash_index=True,
+            max_file_sz="20MB",
+            parse_seqids=True,
+            taxid=10,
+        )
+
+        self.assertEqual(
+            str(cline),
+            _escape_filename(exe_names["makeblastdb"])
+            + " -blastdb_version 4"
+            " -dbtype prot -in GenBank/NC_005816.faa"
+            " -parse_seqids -hash_index -max_file_sz 20MB"
+            " -taxid 10",
+        )
+
+        child = subprocess.Popen(
+            str(cline),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+
+        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.phd"))
+        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.phi"))
+        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.phr"))
+        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.pin"))
+        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.pog"))
+        self.assertTrue(
+            os.path.isfile("GenBank/NC_005816.faa.psd")
+            or os.path.isfile("GenBank/NC_005816.faa.pnd")
+        )
+        self.assertTrue(
+            os.path.isfile("GenBank/NC_005816.faa.psi")
+            or os.path.isfile("GenBank/NC_005816.faa.pni")
+        )
+        self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.psq"))
+
     def test_fasta_db_nucl(self):
         """Test makeblastdb wrapper with nucleotide database."""
         global exe_names
