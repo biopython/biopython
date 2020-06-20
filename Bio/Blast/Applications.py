@@ -1453,6 +1453,14 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             ),
             # makeblastdb specific options
             _Option(
+                ["-blastdb_version", "blastdb_version"],
+                "Version of BLAST database to be created. "
+                "Tip: use BLAST database version 4 on 32 bit CPU. "
+                "Default = 5",
+                equate=False,
+                checker_function=lambda x: x == 4 or x == 5
+            ),
+            _Option(
                 ["-dbtype", "dbtype"],
                 "Molecule type of target db ('nucl' or 'prot').",
                 equate=False,
