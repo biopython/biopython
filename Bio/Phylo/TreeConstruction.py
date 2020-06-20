@@ -426,26 +426,25 @@ class DistanceCalculator:
 
     dna_models = []
     protein_models = []
-    matrices = {}
 
     # matrices available
     names = substitution_matrices.load()
     for name in names:
         matrix = substitution_matrices.load(name)
-        if protein_alphabet.issubset(set(matrix.alphabet)):
-            name = name.lower()
-            protein_models.append(name)
-        elif name == "NUC.4.4":
+        if name == "NUC.4.4":
             # BLAST nucleic acid scoring matrix
             name = "blastn"
-            dna_models.append(name)
-        elif name == "TRANS":
-            # transition/transversion scoring matrix
-            name = "trans"
-            dna_models.append(name)
         else:
-            continue
-        matrices[name] = matrix
+            name = name.lower()
+        if protein_alphabet.issubset(set(matrix.alphabet)):
+            protein_models.append(name)
+        else:
+            dna_models.append(name)
+
+    del protein_alphabet
+    del name
+    del names
+    del matrix
 
     models = ["identity"] + dna_models + protein_models
 
@@ -462,10 +461,12 @@ class DistanceCalculator:
         if model == "identity":
             self.scoring_matrix = None
         elif model in self.models:
-            matrix = self.matrices[model]
-            alphabet = list(matrix.alphabet)
-            lower_triangular = [list(row)[:i+1] for i, row in enumerate(matrix)]
-            self.scoring_matrix = _Matrix(alphabet, lower_triangular)
+            if model == "blastn":
+                name = "NUC.4.4"
+            else:
+                name = model
+            # name passed to substitution_matrices.load is not case-sensitive
+            self.scoring_matrix = substitution_matrices.load(name)
         else:
             raise ValueError(
                 "Model not supported. Available models: " + ", ".join(self.models)
@@ -479,30 +480,7 @@ class DistanceCalculator:
         """
         score = 0
         max_score = 0
-        if self.scoring_matrix:
-            max_score1 = 0
-            max_score2 = 0
-            for i in range(0, len(seq1)):
-                l1 = seq1[i]
-                l2 = seq2[i]
-                if l1 in self.skip_letters or l2 in self.skip_letters:
-                    continue
-                if l1 not in self.scoring_matrix.names:
-                    raise ValueError(
-                        "Bad alphabet '%s' in sequence '%s' at position '%s'"
-                        % (l1, seq1.id, i)
-                    )
-                if l2 not in self.scoring_matrix.names:
-                    raise ValueError(
-                        "Bad alphabet '%s' in sequence '%s' at position '%s'"
-                        % (l2, seq2.id, i)
-                    )
-                max_score1 += self.scoring_matrix[l1, l1]
-                max_score2 += self.scoring_matrix[l2, l2]
-                score += self.scoring_matrix[l1, l2]
-            # Take the higher score if the matrix is asymmetrical
-            max_score = max(max_score1, max_score2)
-        else:
+        if self.scoring_matrix is None:
             # Score by character identity, not skipping any special letters
             score = sum(
                 l1 == l2
@@ -510,6 +488,31 @@ class DistanceCalculator:
                 if l1 not in self.skip_letters and l2 not in self.skip_letters
             )
             max_score = len(seq1)
+        else:
+            max_score1 = 0
+            max_score2 = 0
+            for i in range(0, len(seq1)):
+                l1 = seq1[i]
+                l2 = seq2[i]
+                if l1 in self.skip_letters or l2 in self.skip_letters:
+                    continue
+                try:
+                    max_score1 += self.scoring_matrix[l1, l1]
+                except IndexError:
+                    raise ValueError(
+                        "Bad letter '%s' in sequence '%s' at position '%s'"
+                        % (l1, seq1.id, i)
+                    ) from None
+                try:
+                    max_score2 += self.scoring_matrix[l2, l2]
+                except IndexError:
+                    raise ValueError(
+                        "Bad letter '%s' in sequence '%s' at position '%s'"
+                        % (l2, seq2.id, i)
+                    ) from None
+                score += self.scoring_matrix[l1, l2]
+            # Take the higher score if the matrix is asymmetrical
+            max_score = max(max_score1, max_score2)
         if max_score == 0:
             return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
