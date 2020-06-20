@@ -464,8 +464,7 @@ class DistanceCalculator:
             if model == "blastn":
                 name = "NUC.4.4"
             else:
-                name = model
-            # name passed to substitution_matrices.load is not case-sensitive
+                name = model.upper()
             self.scoring_matrix = substitution_matrices.load(name)
         else:
             raise ValueError(
