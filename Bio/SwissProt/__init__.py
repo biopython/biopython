@@ -17,6 +17,8 @@ Functions:
 """
 
 
+import io
+
 from Bio.SeqFeature import (
     SeqFeature,
     FeatureLocation,
@@ -273,11 +275,14 @@ def read(source):
 def _open(source):
     try:
         handle = open(source)
+        return handle
     except TypeError:
         handle = source
-        if handle.read(0) != "":
-            raise ValueError("SwissProt files must be opened in text mode.") from None
-    return handle
+        if handle.read(0) == "":
+            # handle is text; assume the encoding is compatible with ASCII
+            return handle
+        # handle is binary; SwissProt encoding is always ASCII
+        return io.TextIOWrapper(handle, encoding="ASCII")
 
 
 def _read(handle):
