@@ -181,7 +181,7 @@ class Seq:
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) < str(other)
         raise TypeError(
             f"'<' not supported between instances of '{type(self).__name__}'"
@@ -190,7 +190,7 @@ class Seq:
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) <= str(other)
         raise TypeError(
             f"'<=' not supported between instances of '{type(self).__name__}'"
@@ -199,7 +199,7 @@ class Seq:
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) > str(other)
         raise TypeError(
             f"'>' not supported between instances of '{type(self).__name__}'"
@@ -208,7 +208,7 @@ class Seq:
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) >= str(other)
         raise TypeError(
             f"'>=' not supported between instances of '{type(self).__name__}'"
@@ -1133,7 +1133,7 @@ class Seq:
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
         a = self.alphabet
-        if isinstance(other, (Seq, MutableSeq, UnknownSeq)):
+        if isinstance(other, (Seq, MutableSeq)):
             if a == other.alphabet:
                 return self.__class__(str(self).join(str(other)), a)
             else:
