@@ -1130,28 +1130,20 @@ class Seq:
         >>> Seq('NNNNN').join("ACGT")
         Seq('ANNNNNCNNNNNGNNNNNT')
         """
+        if isinstance(other, (str, Seq, MutableSeq)):
+            return self.__class__(str(self).join(str(other)))
+
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
-        a = self.alphabet
-        if isinstance(other, (Seq, MutableSeq)):
-            if a == other.alphabet:
-                return self.__class__(str(self).join(str(other)), a)
-            else:
-                # Drop the alphabet
-                return self.__class__(str(self).join(str(other)))
         if isinstance(other, SeqRecord):
             raise TypeError("Iterable cannot be a SeqRecord")
+
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
-            elif hasattr(c, "alphabet"):
-                if a != c.alphabet:
-                    # Drop the alphabet
-                    a = Alphabet.generic_alphabet
-            elif not isinstance(c, str):
+            elif not isinstance(c, (str, Seq, MutableSeq)):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
-        temp_data = str(self).join([str(_) for _ in other])
-        return self.__class__(temp_data, a)
+        return self.__class__(str(self).join([str(_) for _ in other]))
 
 
 class UnknownSeq(Seq):
