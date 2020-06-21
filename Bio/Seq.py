@@ -1295,7 +1295,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, self.alphabet)
+        return self.__class__(len(self) * other, self.alphabet, self._character)
 
     def __rmul__(self, other):
         """Multiply integer by UnknownSeq.
@@ -1309,7 +1309,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, self.alphabet)
+        return self.__class__(len(self) * other, self.alphabet, self._character)
 
     def __imul__(self, other):
         """Multiply UnknownSeq in-place.
@@ -1326,7 +1326,7 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, self.alphabet)
+        return self.__class__(len(self) * other, self.alphabet, self._character)
 
     def __getitem__(self, index):
         """Get a subsequence from the UnknownSeq object.
@@ -1554,7 +1554,7 @@ class UnknownSeq(Seq):
         """
         # Offload the alphabet stuff
         s = Seq(self._character, self.alphabet).transcribe()
-        return UnknownSeq(self._length, s.alphabet, self._character)
+        return UnknownSeq(self._length, s.alphabet, character=str(s))
 
     def back_transcribe(self):
         """Return an unknown DNA sequence from an unknown RNA sequence.
@@ -1572,7 +1572,7 @@ class UnknownSeq(Seq):
         """
         # Offload the alphabet stuff
         s = Seq(self._character, self.alphabet).back_transcribe()
-        return UnknownSeq(self._length, s.alphabet, self._character)
+        return UnknownSeq(self._length, s.alphabet, character=str(s))
 
     def upper(self):
         """Return an upper case copy of the sequence.
