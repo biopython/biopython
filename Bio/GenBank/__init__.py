@@ -1420,7 +1420,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 "molecule_type", molecule_type
             )
         if not sequence and self._expected_size:
-            self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
+            self.data.seq = UnknownSeq(
+                self._expected_size,
+                seq_alphabet,
+                character="X" if molecule_type == "protein" else "N",
+            )
         else:
             self.data.seq = Seq(sequence, seq_alphabet)
 
