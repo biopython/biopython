@@ -1285,21 +1285,20 @@ class UnknownSeq(Seq):
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, self.alphabet, self._character)
+        return self.__class__(len(self) * other, character=self._character)
 
     def __rmul__(self, other):
         """Multiply integer by UnknownSeq.
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_dna
         >>> 2 * UnknownSeq(3)
         UnknownSeq(6, character='?')
-        >>> 2 * UnknownSeq(3, generic_dna)
+        >>> 2 * UnknownSeq(3, character="N")
         UnknownSeq(6, character='N')
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, self.alphabet, self._character)
+        return self.__class__(len(self) * other, character=self._character)
 
     def __imul__(self, other):
         """Multiply UnknownSeq in-place.
@@ -1308,15 +1307,14 @@ class UnknownSeq(Seq):
         included to match the behaviour for regular Python strings.
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_dna
-        >>> seq = UnknownSeq(3, generic_dna)
+        >>> seq = UnknownSeq(3, character="N")
         >>> seq *= 2
         >>> seq
         UnknownSeq(6, character='N')
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(len(self) * other, self.alphabet, self._character)
+        return self.__class__(len(self) * other, character=self._character)
 
     def __getitem__(self, index):
         """Get a subsequence from the UnknownSeq object.
@@ -1361,7 +1359,7 @@ class UnknownSeq(Seq):
         # assert new_length == len(("X"*old_length)[index]), \
         #       (index, start, end, step, old_length,
         #        new_length, len(("X"*old_length)[index]))
-        return UnknownSeq(new_length, self.alphabet, self._character)
+        return UnknownSeq(new_length, character=self._character)
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
@@ -1542,9 +1540,8 @@ class UnknownSeq(Seq):
         >>> print(my_rna)
         NNNNNNNNNN
         """
-        # Offload the alphabet stuff
-        s = Seq(self._character, self.alphabet).transcribe()
-        return UnknownSeq(self._length, s.alphabet, character=str(s))
+        s = Seq(self._character).transcribe()
+        return UnknownSeq(self._length, character=str(s))
 
     def back_transcribe(self):
         """Return an unknown DNA sequence from an unknown RNA sequence.
@@ -1560,16 +1557,14 @@ class UnknownSeq(Seq):
         >>> print(my_dna)
         NNNNNNNNNNNNNNNNNNNN
         """
-        # Offload the alphabet stuff
-        s = Seq(self._character, self.alphabet).back_transcribe()
-        return UnknownSeq(self._length, s.alphabet, character=str(s))
+        s = Seq(self._character).back_transcribe()
+        return UnknownSeq(self._length, character=str(s))
 
     def upper(self):
         """Return an upper case copy of the sequence.
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import UnknownSeq
-        >>> my_seq = UnknownSeq(20, generic_dna, character="n")
+        >>> my_seq = UnknownSeq(20, character="n")
         >>> my_seq
         UnknownSeq(20, character='n')
         >>> print(my_seq)
@@ -1579,18 +1574,15 @@ class UnknownSeq(Seq):
         >>> print(my_seq.upper())
         NNNNNNNNNNNNNNNNNNNN
 
-        This will adjust the alphabet if required. See also the lower method.
+        See also the lower method.
         """
-        return UnknownSeq(self._length, self.alphabet._upper(), self._character.upper())
+        return UnknownSeq(self._length, character=self._character.upper())
 
     def lower(self):
         """Return a lower case copy of the sequence.
 
-        This will adjust the alphabet if required:
-
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import UnknownSeq
-        >>> my_seq = UnknownSeq(20, generic_protein)
+        >>> my_seq = UnknownSeq(20, character="X")
         >>> my_seq
         UnknownSeq(20, character='X')
         >>> print(my_seq)
@@ -1602,7 +1594,7 @@ class UnknownSeq(Seq):
 
         See also the upper method.
         """
-        return UnknownSeq(self._length, self.alphabet._lower(), self._character.lower())
+        return UnknownSeq(self._length, character=self._character.lower())
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -1699,40 +1691,26 @@ class UnknownSeq(Seq):
         """
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
-        a = self.alphabet
-        if isinstance(other, (Seq, MutableSeq)):
-            if a != other.alphabet:
-                a = Alphabet.generic_alphabet
+        if isinstance(other, (str, Seq, MutableSeq)):
             if isinstance(other, UnknownSeq) and self._character == other._character:
                 # Special case, can return an UnknownSeq
                 return self.__class__(
-                    len(other) + len(self) * (len(other) - 1), a, self._character
+                    len(other) + len(self) * (len(other) - 1), character=self._character
                 )
-            # No point looping over the seq and checking the alphabet again...
-            return Seq(str(self).join(str(other)), a)
+            return Seq(str(self).join(str(other)))
         if isinstance(other, SeqRecord):
             raise TypeError("Iterable cannot be a SeqRecord")
 
-        type_is_unknown = True
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
-            elif hasattr(c, "alphabet"):
-                if a != c.alphabet:
-                    a = Alphabet.generic_alphabet
-                if not isinstance(c, UnknownSeq):
-                    type_is_unknown = False
-            elif isinstance(c, str):
-                type_is_unknown = False
-            else:
+            elif not isinstance(c, (str, Seq, MutableSeq)):
                 raise TypeError("Input must be an iterable of Seqs or Strings")
-        temp_data = str(self).join([str(z) for z in other])
-        if (
-            temp_data.count(self._character) == len(temp_data)
-            and type_is_unknown is True
-        ):
-            return self.__class__(len(temp_data), a, self._character)
-        return Seq(temp_data, a)
+        temp_data = str(self).join([str(_) for _ in other])
+        if temp_data.count(self._character) == len(temp_data):
+            # Can return an UnknownSeq
+            return self.__class__(len(temp_data), character=self._character)
+        return Seq(temp_data)
 
 
 class MutableSeq:
