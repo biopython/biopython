@@ -1019,7 +1019,6 @@ class StringMethodTests(unittest.TestCase):
         str_concatenated = spacer1.join(example_strings)
 
         self.assertEqual(str(str_concatenated), "".join(example_strings))
-        self.assertEqual(str_concatenated.alphabet, spacer1.alphabet)
 
         for spacer in spacers:
             seq_concatenated = spacer.join(example_strings_seqs)
