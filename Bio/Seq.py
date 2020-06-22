@@ -1108,7 +1108,7 @@ class Seq:
             raise ValueError("Gap character required.")
         elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
-        return Seq(str(self).replace(gap, ""), self.alphabet)
+        return Seq(str(self).replace(gap, ""))
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
