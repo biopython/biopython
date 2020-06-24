@@ -27,6 +27,8 @@ import warnings
 from Bio import BiopythonWarning
 from Bio import Alphabet
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
+from Bio.Data.IUPACData import default_ambiguous_dna_complement, default_ambiguous_rna_complement
+from Bio.Data.IUPACData import default_dna_complement_table, default_rna_complement_table
 from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
 from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
 from Bio.Data import CodonTable
@@ -53,8 +55,15 @@ def _maketrans(complement_mapping):
     return str.maketrans(before, after)
 
 
-_dna_complement_table = _maketrans(ambiguous_dna_complement)
-_rna_complement_table = _maketrans(ambiguous_rna_complement)
+if (
+    default_ambiguous_dna_complement == ambiguous_dna_complement
+    and default_ambiguous_rna_complement == ambiguous_rna_complement
+):
+    _dna_complement_table = default_dna_complement_table
+    _rna_complement_table = default_rna_complement_table
+else:
+    _dna_complement_table = _maketrans(ambiguous_dna_complement)
+    _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
 class Seq:
