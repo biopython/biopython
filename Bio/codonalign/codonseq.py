@@ -1186,14 +1186,28 @@ def _ml(seq1, seq2, cmethod, codon_table):
     Sd *= t
     Nd *= t
     # count differences (with w fixed to 1)
+    def func_w1(
+        params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst, codon_table=codon_table
+    ):
+        """Temporary function, params = [t, k]. w is fixed to 1."""
+        return -_likelihood_func(
+            params[0],
+            params[1],
+            1.0,
+            pi,
+            codon_cnt,
+            codon_lst=codon_lst,
+            codon_table=codon_table,
+        )
     opt_res = minimize(
-        func,
-        [1, 0.1, 2],
+        func_w1,
+        [1, 0.1],
         method="L-BFGS-B",
-        bounds=((1e-10, 20), (1e-10, 20), (1, 1)),
+        bounds=((1e-10, 20), (1e-10, 20)),
         tol=1e-5,
     )
-    t, k, w = opt_res.x
+    t, k = opt_res.x
+    w = 1.0
     Q = _get_Q(pi, k, w, codon_lst, codon_table)
     rhoS = rhoN = 0
     for i, c1 in enumerate(codon_lst):
