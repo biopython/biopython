@@ -1185,6 +1185,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     pass
     Sd *= t
     Nd *= t
+
     # count differences (with w fixed to 1)
     def func_w1(
         params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst, codon_table=codon_table
@@ -1199,6 +1200,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
             codon_lst=codon_lst,
             codon_table=codon_table,
         )
+
     opt_res = minimize(
         func_w1,
         [1, 0.1],
