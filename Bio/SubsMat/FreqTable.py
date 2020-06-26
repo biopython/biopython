@@ -1,7 +1,10 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-# Copyright Iddo Friedberg idoerg@cc.huji.ac.il
+# Copyright 2000 by Iddo Friedberg idoerg@cc.huji.ac.il
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 r"""A class to handle frequency tables or letter count files.
 
 Example files for a DNA alphabet:
