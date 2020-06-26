@@ -1004,7 +1004,7 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-    def test_pdbio_write_residue(self):
+    def test_pdbio_write_residue_w_chain(self):
         """Write a single residue using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
@@ -1021,6 +1021,57 @@ class WriteTest(unittest.TestCase):
             struct2 = self.parser.get_structure("1a8o", filename)
             nresidues = len(list(struct2.get_residues()))
             self.assertEqual(nresidues, 1)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_residue_w_chain(self):
+        """Write a single residue (chain id == B) using PDBIO."""
+
+        io = PDBIO()
+        struct1 = self.structure.copy()  # make copy so we can change it
+        residue1 = list(struct1.get_residues())[0]
+
+        # Modify parent id
+        parent = residue1.parent
+        parent.id = "X"
+
+        # Write full model to temp file
+        io.set_structure(residue1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(nresidues, 1)
+
+            # Assert chain remained the same
+            chain_id = [c.id for c in struct2.get_chains()][0]
+            self.assertEqual(chain_id, "X")
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_residue_wout_chain(self):
+        """Write a single orphan residue using PDBIO."""
+        io = PDBIO()
+        struct1 = self.structure
+        residue1 = list(struct1.get_residues())[0]
+
+        residue1.parent = None  # detach residue
+
+        # Write full model to temp file
+        io.set_structure(residue1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(nresidues, 1)
+
+            # Assert chain is default: "A"
+            chain_id = [c.id for c in struct2.get_chains()][0]
+            self.assertEqual(chain_id, "A")
         finally:
             os.remove(filename)
 
