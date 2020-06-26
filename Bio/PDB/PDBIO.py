@@ -61,7 +61,6 @@ class StructureIO:
 
     def set_structure(self, pdb_object):
         """Check what the user is providing and build a structure."""
-
         # The idea here is to build missing upstream components of
         # the SMCRA object representation. E.g., if the user provides
         # a Residue, build Structure/Model/Chain.
@@ -96,9 +95,7 @@ class StructureIO:
 
                     else:  # Atom
                         sb.init_residue("DUM", " ", 1, " ")  # Dummy residue
-                        sb.structure[0][chain_id].child_list[0].add(
-                            pdb_object.copy()
-                        )
+                        sb.structure[0][chain_id].child_list[0].add(pdb_object.copy())
 
                         # Fix chain identifier if Atom has grandparents.
                         try:

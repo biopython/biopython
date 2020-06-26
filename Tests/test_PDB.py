@@ -1024,9 +1024,8 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-    def test_pdbio_write_residue_w_chain(self):
+    def test_pdbio_write_residue_w_chain_2(self):
         """Write a single residue (chain id == B) using PDBIO."""
-
         io = PDBIO()
         struct1 = self.structure.copy()  # make copy so we can change it
         residue1 = list(struct1.get_residues())[0]
