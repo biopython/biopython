@@ -349,11 +349,11 @@ class PDBIO(StructureIO):
                                     atom_number = int(atom_number)
                                 except ValueError:
                                     raise ValueError(
-                                        f'{repr(atom_number)} is not a number.'
-                                        'Atom serial numbers must be numerical'
-                                        ' If you are converting from an mmCIF'
-                                        ' structure, try using'
-                                        ' preserve_atom_numbering=False'
+                                        f"{repr(atom_number)} is not a number."
+                                        "Atom serial numbers must be numerical"
+                                        " If you are converting from an mmCIF"
+                                        " structure, try using"
+                                        " preserve_atom_numbering=False"
                                     )
 
                             s = get_atom_line(

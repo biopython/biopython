@@ -251,7 +251,7 @@ class MMCIFParser:
                 altloc,
                 name,
                 serial_number=serial,
-                element=element
+                element=element,
             )
             if aniso_flag == 1 and i < len(aniso_u11):
                 u = (
@@ -509,7 +509,7 @@ class FastMMCIFParser:
                 altloc,
                 name,
                 serial_number=serial,
-                element=element
+                element=element,
             )
             if aniso_flag == 1 and i < len(aniso_u11):
                 u = (
