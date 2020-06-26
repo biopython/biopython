@@ -1005,8 +1005,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_preserve_numbering(self):
-        """Test writing PDB and preserve atom numbering"""
-
+        """Test writing PDB and preserve atom numbering."""
         io = PDBIO()
         io.set_structure(self.structure)
 
@@ -1024,8 +1023,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_auto_numbering(self):
-        """Test writing PDB and do not preserve atom numbering"""
-
+        """Test writing PDB and do not preserve atom numbering."""
         io = PDBIO()
         io.set_structure(self.structure)
 

@@ -371,13 +371,9 @@ class CIFtoPDB(unittest.TestCase):
         self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
 
     def test_conversion_not_preserve_numbering(self):
-        """Convert mmCIF to PDB and renumber atom serials"""
-
+        """Convert mmCIF to PDB and renumber atom serials."""
         cif_parser = MMCIFParser(QUIET=1)
-        cif_struct = cif_parser.get_structure(
-            "example",
-            "PDB/a_structure.cif"
-        )
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
 
         pdb_writer = PDBIO()
         pdb_writer.set_structure(cif_struct)
@@ -386,12 +382,9 @@ class CIFtoPDB(unittest.TestCase):
         pdb_writer.save(filename, preserve_atom_numbering=False)
 
     def test_conversion_preserve_numbering(self):
-        """Convert mmCIF to PDB and preserve original serial numbering"""
+        """Convert mmCIF to PDB and preserve original serial numbering."""
         cif_parser = MMCIFParser(QUIET=1)
-        cif_struct = cif_parser.get_structure(
-            "example",
-            "PDB/a_structure.cif"
-        )
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
 
         pdb_writer = PDBIO()
         pdb_writer.set_structure(cif_struct)
