@@ -34,7 +34,7 @@ _atom_site.auth_asym_id
 _atom_site.auth_atom_id 
 _atom_site.pdbx_PDB_model_num 
 ATOM   1   N  N   . MSE A 1 1  ? 19.594 32.367 28.012 1.00 18.03 ? ? ? ? ? ? 151  MSE A N   1 
-ATOM   2   C  CA  . MSE A 1 1  ? 20.255 33.101 26.891 1.00 18.64 ? ? ? ? ? ? 151  MSE A CA  1 
+ATOM   A   C  CA  . MSE A 1 1  ? 20.255 33.101 26.891 1.00 18.64 ? ? ? ? ? ? 151  MSE A CA  1 
 ATOM   3   C  C   . MSE A 1 1  ? 20.351 34.558 27.296 1.00 18.46 ? ? ? ? ? ? 151  MSE A C   1 
 ATOM   4   O  O   . MSE A 1 1  ? 19.362 35.291 27.282 1.00 19.71 ? ? ? ? ? ? 151  MSE A O   1 
 ATOM   5   C  CB  . MSE A 1 1  ? 19.457 32.943 25.591 1.00 16.30 ? ? ? ? ? ? 151  MSE A CB  1 
