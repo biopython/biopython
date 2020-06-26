@@ -375,7 +375,7 @@ class CIFtoPDB(unittest.TestCase):
 
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure(
-            "example", 
+            "example",
             "PDB/a_structure.cif"
         )
 
