@@ -600,7 +600,6 @@ class ResidueDepth(AbstractPropertyMap):
 
     def __init__(self, model, pdb_file=None, msms_exec=None):
         """Initialize the class."""
-
         if msms_exec is None:
             msms_exec = "msms"
 
