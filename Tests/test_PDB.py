@@ -1004,6 +1004,44 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
+    def test_pdbio_write_preserve_numbering(self):
+        """Test writing PDB and preserve atom numbering"""
+
+        io = PDBIO()
+        io.set_structure(self.structure)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            io.save(filename)  # default preserve_atom_numbering=False
+
+            struct = self.parser.get_structure("1a8o", filename)
+            serials = [a.serial_number for a in struct.get_atoms()]
+            og_serials = list(range(1, len(serials) + 1))
+            self.assertEqual(og_serials, serials)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_auto_numbering(self):
+        """Test writing PDB and do not preserve atom numbering"""
+
+        io = PDBIO()
+        io.set_structure(self.structure)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            io.save(filename, preserve_atom_numbering=True)
+
+            struct = self.parser.get_structure("1a8o", filename)
+            serials = [a.serial_number for a in struct.get_atoms()]
+            og_serials = [a.serial_number for a in self.structure.get_atoms()]
+            self.assertEqual(og_serials, serials)
+        finally:
+            os.remove(filename)
+
     def test_pdbio_write_residue(self):
         """Write a single residue using PDBIO."""
         io = PDBIO()
