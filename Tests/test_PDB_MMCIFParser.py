@@ -346,7 +346,7 @@ class CIFtoPDB(unittest.TestCase):
     """Testing conversion between formats: CIF to PDB."""
 
     def test_conversion(self):
-        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare."""
+        """Parse 1LCD.cif, write 1LCD.pdb, parse again and compare."""
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
 
