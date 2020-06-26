@@ -61,38 +61,52 @@ class StructureIO:
 
     def set_structure(self, pdb_object):
         """Check what the user is providing and build a structure."""
+
+        # The idea here is to build missing upstream components of
+        # the SMCRA object representation. E.g., if the user provides
+        # a Residue, build Structure/Model/Chain.
+
         if pdb_object.level == "S":
             structure = pdb_object
-        else:
+        else:  # Not a Structure
             sb = StructureBuilder()
             sb.init_structure("pdb")
             sb.init_seg(" ")
-            # Build parts as necessary
+
             if pdb_object.level == "M":
                 sb.structure.add(pdb_object.copy())
                 self.structure = sb.structure
-            else:
+            else:  # Not a Model
                 sb.init_model(0)
+
                 if pdb_object.level == "C":
                     sb.structure[0].add(pdb_object.copy())
-                else:
-                    sb.init_chain("A")
-                    if pdb_object.level == "R":
+                else:  # Not a Chain
+                    chain_id = "A"  # default
+                    sb.init_chain(chain_id)
+
+                    if pdb_object.level == "R":  # Residue
+                        # Residue extracted from a larger structure?
+                        if pdb_object.parent is not None:
+                            og_chain_id = pdb_object.parent.id
+                            sb.structure[0][chain_id].id = og_chain_id
+                            chain_id = og_chain_id
+
+                        sb.structure[0][chain_id].add(pdb_object.copy())
+
+                    else:  # Atom
+                        sb.init_residue("DUM", " ", 1, " ")  # Dummy residue
+                        sb.structure[0][chain_id].child_list[0].add(
+                            pdb_object.copy()
+                        )
+
+                        # Fix chain identifier if Atom has grandparents.
                         try:
-                            parent_id = pdb_object.parent.id
-                            sb.structure[0]["A"].id = parent_id
-                        except Exception:
+                            og_chain_id = pdb_object.parent.parent.id
+                        except AttributeError:  # pdb_object.parent == None
                             pass
-                        sb.structure[0]["A"].add(pdb_object.copy())
-                    else:
-                        # Atom
-                        sb.init_residue("DUM", " ", 1, " ")
-                        try:
-                            parent_id = pdb_object.parent.parent.id
-                            sb.structure[0]["A"].id = parent_id
-                        except Exception:
-                            pass
-                        sb.structure[0]["A"].child_list[0].add(pdb_object.copy())
+                        else:
+                            sb.structure[0][chain_id].id = og_chain_id
 
             # Return structure
             structure = sb.structure
