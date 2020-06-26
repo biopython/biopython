@@ -785,13 +785,8 @@ class TestComplement(unittest.TestCase):
 
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
-            compl_values = str(
-                # Will default to DNA if neither T or U found...
-                # Turn black code style off
-                # fmt: off
-                Seq.Seq(values).complement().transcribe()
-                # fmt: on
-            )
+            # Will default to DNA if neither T nor U found...
+            compl_values = str(Seq.Seq(values).complement().transcribe())
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
 
