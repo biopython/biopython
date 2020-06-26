@@ -170,6 +170,11 @@ handle.name: {handle.name}
                 record.seq.alphabet = generic_dna
             elif query_tags["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
+        if "sq_type" in query_tags:
+            if query_tags["sq_type"] == "D":
+                record.annotations["molecule_type"] = "DNA"
+            elif query_tags["sq_type"] == "p":
+                record.annotations["molecule_type"] = "protein"
 
         # Match
         # =====
