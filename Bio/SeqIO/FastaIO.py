@@ -312,7 +312,7 @@ class FastaWriter(SequenceWriter):
                 # The description includes the id at the start
                 title = description
             elif description:
-                title = "%s %s" % (id, description)
+                title = "%s|%s" % (id, description)
             else:
                 title = id
 
@@ -389,7 +389,7 @@ def as_fasta(record):
         # The description includes the id at the start
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = "%s|%s" % (id, description)
     else:
         title = id
     assert "\n" not in title
@@ -417,7 +417,7 @@ def as_fasta_2line(record):
         # The description includes the id at the start
         title = description
     elif description:
-        title = "%s %s" % (id, description)
+        title = "%s|%s" % (id, description)
     else:
         title = id
     assert "\n" not in title
