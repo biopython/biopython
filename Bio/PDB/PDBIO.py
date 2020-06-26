@@ -78,21 +78,21 @@ class StructureIO:
                 else:
                     sb.init_chain("A")
                     if pdb_object.level == "R":
+                        parent_id = pdb_object.parent.id
                         try:
-                            parent_id = pdb_object.parent.id
                             sb.structure[0]["A"].id = parent_id
                         except Exception:
                             pass
-                        sb.structure[0]["A"].add(pdb_object.copy())
+                        sb.structure[0][parent_id].add(pdb_object.copy())
                     else:
                         # Atom
                         sb.init_residue("DUM", " ", 1, " ")
+                        parent_id = pdb_object.parent.parent.id
                         try:
-                            parent_id = pdb_object.parent.parent.id
                             sb.structure[0]["A"].id = parent_id
                         except Exception:
                             pass
-                        sb.structure[0]["A"].child_list[0].add(pdb_object.copy())
+                        sb.structure[0][parent_id].child_list[0].add(pdb_object.copy())
 
             # Return structure
             structure = sb.structure
