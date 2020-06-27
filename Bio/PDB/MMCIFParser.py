@@ -180,7 +180,17 @@ class MMCIFParser:
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)
 
-            serial = atom_serial_list[i]
+            # Try coercing serial to int, for compatibility with PDBParser
+            # But do not quit if it fails. mmCIF format specs allow strings.
+            try:
+                serial = int(atom_serial_list[i])
+            except ValueError:
+                serial = atom_serial_list[i]
+                warnings.warn(
+                    "PDBConstructionWarning: "
+                    "Some atom serial numbers are not numerical",
+                    PDBConstructionWarning,
+                )
 
             x = x_list[i]
             y = y_list[i]
