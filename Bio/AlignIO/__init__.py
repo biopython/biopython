@@ -105,7 +105,7 @@ names are also used in Bio.SeqIO and include the following:
   - fasta     - The generic sequence file format where each record starts with
     an identifer line starting with a ">" character, followed by
     lines of sequence.
-  - fasta-m10 - For the pairswise alignments output by Bill Pearson's FASTA
+  - fasta-m10 - For the pairwise alignments output by Bill Pearson's FASTA
     tools when used with the -m 10 command line option for machine
     readable output.
   - ig        - The IntelliGenetics file format, apparently the same as the
