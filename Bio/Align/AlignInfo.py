@@ -276,9 +276,7 @@ class SummaryInfo:
             # letters used...
             set_letters = set()
             for record in self.alignment:
-                # Note the built in set does not have a union_update
-                # which was provided by the sets module's Set
-                set_letters = set_letters.union(record.seq)
+                set_letters.update(record.seq)
             list_letters = sorted(set_letters)
             all_letters = "".join(list_letters)
         return all_letters
@@ -427,7 +425,7 @@ class SummaryInfo:
            for each letter in the alphabet we are using (e.g. {'G' : 0.4,
            'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
            included, since these should not have expected frequencies.
-         - log_base - The base of the logathrim to use in calculating the
+         - log_base - The base of the logarithm to use in calculating the
            information content. This defaults to 2 so the info is in bits.
          - chars_to_ignore - A listing of characters which should be ignored
            in calculating the info content. Defaults to none.
@@ -595,7 +593,7 @@ class SummaryInfo:
          - obs_freq - The frequencies observed for each letter in the column.
          - e_freq_table - An optional argument specifying a dictionary with
            the expected frequencies for each letter.
-         - log_base - The base of the logathrim to use in calculating the
+         - log_base - The base of the logarithm to use in calculating the
            info content.
 
         """
