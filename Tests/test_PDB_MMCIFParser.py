@@ -346,7 +346,7 @@ class CIFtoPDB(unittest.TestCase):
     """Testing conversion between formats: CIF to PDB."""
 
     def test_conversion(self):
-        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare."""
+        """Parse 1LCD.cif, write 1LCD.pdb, parse again and compare."""
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
 
@@ -369,6 +369,29 @@ class CIFtoPDB(unittest.TestCase):
         pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
         cif_atom_elems = [a.element for a in cif_struct.get_atoms()]
         self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
+
+    def test_conversion_not_preserve_numbering(self):
+        """Convert mmCIF to PDB and renumber atom serials."""
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+
+        pdb_writer.save(filename, preserve_atom_numbering=False)
+
+    def test_conversion_preserve_numbering(self):
+        """Convert mmCIF to PDB and preserve original serial numbering."""
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+
+        with self.assertRaises(ValueError):
+            pdb_writer.save(filename, preserve_atom_numbering=True)
 
 
 if __name__ == "__main__":

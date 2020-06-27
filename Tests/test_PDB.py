@@ -115,7 +115,7 @@ class A_ExceptionTest(unittest.TestCase):
         """Check error: Parse an entry with bad x,y,z value."""
         data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
         parser = PDBParser(PERMISSIVE=False)
-        s = parser.get_structure("example", StringIO(data))
+        _ = parser.get_structure("example", StringIO(data))
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
         self.assertRaises(
             PDBConstructionException, parser.get_structure, "example", StringIO(data)
@@ -722,7 +722,7 @@ class ParseReal(unittest.TestCase):
         parser = PDBParser()
         handle = StringIO()
         with self.assertRaises(ValueError) as context_manager:
-            struct = parser.get_structure("MT", handle)
+            _ = parser.get_structure("MT", handle)
         self.assertEqual(str(context_manager.exception), "Empty file.")
 
     def test_residue_sort(self):
@@ -934,7 +934,7 @@ class ParseReal(unittest.TestCase):
 
         parser = PDBParser(PERMISSIVE=False)
         with self.assertRaises(PDBConstructionException):
-            s = parser.get_structure("example", StringIO(data))
+            _ = parser.get_structure("example", StringIO(data))
 
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
@@ -1004,7 +1004,43 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-    def test_pdbio_write_residue_w_chain(self):
+    def test_pdbio_write_preserve_numbering(self):
+        """Test writing PDB and preserve atom numbering."""
+        io = PDBIO()
+        io.set_structure(self.structure)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            io.save(filename)  # default preserve_atom_numbering=False
+
+            struct = self.parser.get_structure("1a8o", filename)
+            serials = [a.serial_number for a in struct.get_atoms()]
+            og_serials = list(range(1, len(serials) + 1))
+            self.assertEqual(og_serials, serials)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_auto_numbering(self):
+        """Test writing PDB and do not preserve atom numbering."""
+        io = PDBIO()
+        io.set_structure(self.structure)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            io.save(filename, preserve_atom_numbering=True)
+
+            struct = self.parser.get_structure("1a8o", filename)
+            serials = [a.serial_number for a in struct.get_atoms()]
+            og_serials = [a.serial_number for a in self.structure.get_atoms()]
+            self.assertEqual(og_serials, serials)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_residue(self):
         """Write a single residue using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
@@ -1024,8 +1060,8 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-    def test_pdbio_write_residue_w_chain_2(self):
-        """Write a single residue (chain id == B) using PDBIO."""
+    def test_pdbio_write_residue_w_chain(self):
+        """Write a single residue (chain id == X) using PDBIO."""
         io = PDBIO()
         struct1 = self.structure.copy()  # make copy so we can change it
         residue1 = list(struct1.get_residues())[0]
@@ -1277,7 +1313,7 @@ class Exposure(unittest.TestCase):
 
     def test_HSExposureCA(self):
         """HSExposureCA."""
-        hse = HSExposureCA(self.model, self.radius)
+        _ = HSExposureCA(self.model, self.radius)
         residues = self.a_residues
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(0, len(residues[1].xtra))
@@ -1302,7 +1338,7 @@ class Exposure(unittest.TestCase):
 
     def test_HSExposureCB(self):
         """HSExposureCB."""
-        hse = HSExposureCB(self.model, self.radius)
+        _ = HSExposureCB(self.model, self.radius)
         residues = self.a_residues
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(2, len(residues[1].xtra))
@@ -1324,7 +1360,7 @@ class Exposure(unittest.TestCase):
 
     def test_ExposureCN(self):
         """HSExposureCN."""
-        hse = ExposureCN(self.model, self.radius)
+        _ = ExposureCN(self.model, self.radius)
         residues = self.a_residues
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(1, len(residues[1].xtra))
@@ -1724,7 +1760,7 @@ class DsspTests(unittest.TestCase):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
         # Read the DSSP data into the pdb object:
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
         # Now compare the xtra attribute of the pdb object
         # residue by residue with the pre-computed values:
         i = 0
@@ -1758,7 +1794,7 @@ class DsspTests(unittest.TestCase):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
         # Read the DSSP data into the pdb object:
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
         # Then compare the RASA values for each residue with the pre-computed values:
         i = 0
         with open("PDB/Sander_RASA.txt") as fh_ref:
@@ -1773,7 +1809,7 @@ class DsspTests(unittest.TestCase):
         # Wilke (procedure similar as for the Sander values above):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Wilke", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Wilke", "DSSP")
         i = 0
         with open("PDB/Wilke_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
@@ -1787,7 +1823,7 @@ class DsspTests(unittest.TestCase):
         # Miller (procedure similar as for the Sander values above):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Miller", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Miller", "DSSP")
         i = 0
         with open("PDB/Miller_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
