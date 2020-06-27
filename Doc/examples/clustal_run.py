@@ -55,7 +55,7 @@ print(my_pssm)
 expect_freq = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 
 info_content = summary_align.information_content(
-    5, 30, chars_to_ignore=["N", "-"], e_freq_table=expect_freq
+    5, 30, chars_to_ignore=["N"], e_freq_table=expect_freq
 )
 
 print("relative info content: %f" % info_content)

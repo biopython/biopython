@@ -164,7 +164,7 @@ class SummaryInfo:
 
         return Seq(consensus)
 
-    def replacement_dictionary(self, skip_chars=None):
+    def replacement_dictionary(self, skip_chars=None, gap="-"):
         """Generate a replacement dictionary to plug into a substitution matrix.
 
         This should look at an alignment, and be able to generate the number
@@ -196,12 +196,19 @@ class SummaryInfo:
         Arguments:
          - skip_chars - A list of characters to skip when creating the dictionary.
            This defaults to an empty list.
+         - gap - Additional gap character to skip, defaults to minus sign.
 
         For instance, you might have Xs (screened stuff) or Ns, and not want
         to include the ambiguity characters in the dictionary.
         """
         # get a starting dictionary based on the alphabet of the alignment
-        rep_dict, skip_items = self._get_base_replacements(skip_chars)
+        if skip_chars:
+            skip = skip_chars[:]  # copy as will edit it
+        else:
+            skip = []
+        if gap and gap not in skip:
+            skip.append(gap)
+        rep_dict, skip = self._get_base_replacements(skip)
 
         # iterate through each record
         for rec_num1 in range(len(self.alignment)):
@@ -216,7 +223,7 @@ class SummaryInfo:
                     self.alignment[rec_num1].annotations.get("weight", 1.0),
                     self.alignment[rec_num2].annotations.get("weight", 1.0),
                     rep_dict,
-                    skip_items,
+                    skip,
                 )
 
         return rep_dict
@@ -318,7 +325,7 @@ class SummaryInfo:
 
         return base_dictionary, skip_items
 
-    def pos_specific_score_matrix(self, axis_seq=None, chars_to_ignore=None):
+    def pos_specific_score_matrix(self, axis_seq=None, chars_to_ignore=None, gap="-"):
         """Create a position specific score matrix object for the alignment.
 
         This creates a position specific score matrix (pssm) which is an
@@ -326,12 +333,12 @@ class SummaryInfo:
 
         Arguments:
          - chars_to_ignore - A list of all characters not to include in
-           the pssm.  If the alignment alphabet declares a gap character,
-           then it will be excluded automatically.
+           the pssm.  Default none, but the gap argument will be added.
          - axis_seq - An optional argument specifying the sequence to
            put on the axis of the PSSM. This should be a Seq object. If nothing
            is specified, the consensus sequence, calculated with default
            parameters, will be used.
+         - gap - Default "-", gap character to also ignore.
 
         Returns:
          - A PSSM (position specific score matrix) object.
@@ -342,15 +349,15 @@ class SummaryInfo:
         assert all_letters
 
         if chars_to_ignore is None:
-            chars_to_ignore = []
-        if not isinstance(chars_to_ignore, list):
+            ignore = []
+        elif isinstance(chars_to_ignore, list):
+            ignore = chars_to_ignore[:]  # copy as will edit it
+        else:
             raise TypeError("chars_to_ignore should be a list.")
+        if gap and gap not in ignore:
+            ignore.append(gap)
 
-        # if we have a gap char, add it to stuff to ignore
-        if isinstance(self.alignment._alphabet, Alphabet.Gapped):
-            chars_to_ignore.append(self.alignment._alphabet.gap_char)
-
-        for char in chars_to_ignore:
+        for char in ignore:
             all_letters = all_letters.replace(char, "")
 
         if axis_seq:
@@ -371,7 +378,7 @@ class SummaryInfo:
                 except IndexError:
                     this_residue = None
 
-                if this_residue and this_residue not in chars_to_ignore:
+                if this_residue and this_residue not in ignore:
                     weight = record.annotations.get("weight", 1.0)
                     try:
                         score_dict[this_residue] += weight
@@ -430,7 +437,8 @@ class SummaryInfo:
          - log_base - The base of the logathrim to use in calculating the
            information content. This defaults to 2 so the info is in bits.
          - chars_to_ignore - A listing of characters which should be ignored
-           in calculating the info content. Defaults to none.
+           in calculating the info content. Defaults to none, gaps are not
+           automatically ignored.
 
         Returns:
          - A number representing the info content for the specified region.

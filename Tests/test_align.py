@@ -243,7 +243,7 @@ class TestReading(unittest.TestCase):
         consensus = align_info.dumb_consensus()
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA")
-        dictionary = align_info.replacement_dictionary(["N", "-"])
+        dictionary = align_info.replacement_dictionary(["N"])
         self.assertEqual(len(dictionary), 16)
         self.assertAlmostEqual(dictionary[("A", "A")], 1395.0, places=1)
         self.assertAlmostEqual(dictionary[("A", "C")], 3.0, places=1)
@@ -261,7 +261,7 @@ class TestReading(unittest.TestCase):
         self.assertAlmostEqual(dictionary[("T", "C")], 12.0, places=1)
         self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
         self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
-        matrix = align_info.pos_specific_score_matrix(consensus, ["N", "-"])
+        matrix = align_info.pos_specific_score_matrix(consensus, ["N"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
