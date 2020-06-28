@@ -12,7 +12,7 @@ import copy
 import numbers
 from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
-from Bio.SubsMat import MatrixInfo
+from Bio.Align import substitution_matrices
 
 
 class _Matrix:
@@ -368,8 +368,8 @@ class DistanceCalculator:
     :Parameters:
         model : str
             Name of the model matrix to be used to calculate distance.
-            The attribute ``dna_matrices`` contains the available model
-            names for DNA sequences and ``protein_matrices`` for protein
+            The attribute ``dna_models`` contains the available model
+            names for DNA sequences and ``protein_models`` for protein
             sequences.
 
     Examples
@@ -422,46 +422,29 @@ class DistanceCalculator:
 
     """
 
-    dna_alphabet = ["A", "T", "C", "G"]
+    protein_alphabet = set("ABCDEFGHIKLMNPQRSTVWXYZ")
 
-    # BLAST nucleic acid scoring matrix
-    blastn = [[5], [-4, 5], [-4, -4, 5], [-4, -4, -4, 5]]
-
-    # transition/transversion scoring matrix
-    trans = [[6], [-5, 6], [-5, -1, 6], [-1, -5, -5, 6]]
-
-    protein_alphabet = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "K",
-        "L",
-        "M",
-        "N",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-    ]
+    dna_models = []
+    protein_models = []
 
     # matrices available
-    dna_matrices = {"blastn": blastn, "trans": trans}
-    protein_models = MatrixInfo.available_matrices
-    protein_matrices = {name: getattr(MatrixInfo, name) for name in protein_models}
+    names = substitution_matrices.load()
+    for name in names:
+        matrix = substitution_matrices.load(name)
+        if name == "NUC.4.4":
+            # BLAST nucleic acid scoring matrix
+            name = "blastn"
+        else:
+            name = name.lower()
+        if protein_alphabet.issubset(set(matrix.alphabet)):
+            protein_models.append(name)
+        else:
+            dna_models.append(name)
 
-    dna_models = list(dna_matrices.keys())
+    del protein_alphabet
+    del name
+    del names
+    del matrix
 
     models = ["identity"] + dna_models + protein_models
 
@@ -477,12 +460,12 @@ class DistanceCalculator:
 
         if model == "identity":
             self.scoring_matrix = None
-        elif model in self.dna_models:
-            self.scoring_matrix = _Matrix(self.dna_alphabet, self.dna_matrices[model])
-        elif model in self.protein_models:
-            self.scoring_matrix = self._build_protein_matrix(
-                self.protein_matrices[model]
-            )
+        elif model in self.models:
+            if model == "blastn":
+                name = "NUC.4.4"
+            else:
+                name = model.upper()
+            self.scoring_matrix = substitution_matrices.load(name)
         else:
             raise ValueError(
                 "Model not supported. Available models: " + ", ".join(self.models)
@@ -496,30 +479,7 @@ class DistanceCalculator:
         """
         score = 0
         max_score = 0
-        if self.scoring_matrix:
-            max_score1 = 0
-            max_score2 = 0
-            for i in range(0, len(seq1)):
-                l1 = seq1[i]
-                l2 = seq2[i]
-                if l1 in self.skip_letters or l2 in self.skip_letters:
-                    continue
-                if l1 not in self.scoring_matrix.names:
-                    raise ValueError(
-                        "Bad alphabet '%s' in sequence '%s' at position '%s'"
-                        % (l1, seq1.id, i)
-                    )
-                if l2 not in self.scoring_matrix.names:
-                    raise ValueError(
-                        "Bad alphabet '%s' in sequence '%s' at position '%s'"
-                        % (l2, seq2.id, i)
-                    )
-                max_score1 += self.scoring_matrix[l1, l1]
-                max_score2 += self.scoring_matrix[l2, l2]
-                score += self.scoring_matrix[l1, l2]
-            # Take the higher score if the matrix is asymmetrical
-            max_score = max(max_score1, max_score2)
-        else:
+        if self.scoring_matrix is None:
             # Score by character identity, not skipping any special letters
             score = sum(
                 l1 == l2
@@ -527,6 +487,31 @@ class DistanceCalculator:
                 if l1 not in self.skip_letters and l2 not in self.skip_letters
             )
             max_score = len(seq1)
+        else:
+            max_score1 = 0
+            max_score2 = 0
+            for i in range(0, len(seq1)):
+                l1 = seq1[i]
+                l2 = seq2[i]
+                if l1 in self.skip_letters or l2 in self.skip_letters:
+                    continue
+                try:
+                    max_score1 += self.scoring_matrix[l1, l1]
+                except IndexError:
+                    raise ValueError(
+                        "Bad letter '%s' in sequence '%s' at position '%s'"
+                        % (l1, seq1.id, i)
+                    ) from None
+                try:
+                    max_score2 += self.scoring_matrix[l2, l2]
+                except IndexError:
+                    raise ValueError(
+                        "Bad letter '%s' in sequence '%s' at position '%s'"
+                        % (l2, seq2.id, i)
+                    ) from None
+                score += self.scoring_matrix[l1, l2]
+            # Take the higher score if the matrix is asymmetrical
+            max_score = max(max_score1, max_score2)
         if max_score == 0:
             return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
@@ -547,14 +532,6 @@ class DistanceCalculator:
         for seq1, seq2 in itertools.combinations(msa, 2):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
-
-    def _build_protein_matrix(self, subsmat):
-        """Convert matrix from SubsMat format to _Matrix object (PRIVATE)."""
-        protein_matrix = _Matrix(self.protein_alphabet)
-        for k, v in subsmat.items():
-            aa1, aa2 = k
-            protein_matrix[aa1, aa2] = v
-        return protein_matrix
 
 
 class TreeConstructor:
