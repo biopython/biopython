@@ -224,6 +224,29 @@ class MultipleSeqAlignment:
         doc="""Dictionary of per-letter-annotation for the sequence.""",
     )
 
+    @property
+    def molecule_type(self):
+        """Consensus molecule type of the alignment, or None. Read only.
+
+        Typically a string DNA, RNA, or protein, or None. This gives the
+        consensus of the record.annotations['molecule_type'] values, or
+        None if they are in conflict. This is a read only property.
+        """
+        values = {_.annotations.get("molecule_type", None) for _ in self}
+        if not values:
+            return None  # no records, no molecule type
+        elif len(values) == 1:
+            # Easy case, perfect consensus
+            return list(values)[0]
+        elif all(_ and "DNA" in _ for _ in values):
+            return "DNA"  # e.g. mix of "DNA" and "gDNA"
+        elif all(_ and "RNA" in _ for _ in values):
+            return "RNA"  # e.g. mix of "RNA" and "mRNA"
+        elif all(_ and "DNA" in _ for _ in values):
+            return "protein"
+        else:
+            return None
+
     def _str_line(self, record, length=50):
         """Return a truncated string representation of a SeqRecord (PRIVATE).
 
