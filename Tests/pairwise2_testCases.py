@@ -17,6 +17,7 @@ import warnings
 
 from Bio import BiopythonWarning
 from Bio import pairwise2
+from Bio.Align import substitution_matrices
 
 
 class TestPairwiseErrorConditions(unittest.TestCase):
@@ -172,7 +173,6 @@ class TestPairwiseLocal(unittest.TestCase):
     """Test some simple local alignments."""
 
     def setUp(self):
-        from Bio.Align import substitution_matrices
         self.blosum62 = substitution_matrices.load("BLOSUM62")
 
     def test_localxs_1(self):
