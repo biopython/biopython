@@ -15,7 +15,6 @@ with or without complementing C extensions.
 import unittest
 import warnings
 
-from Bio.SubsMat.MatrixInfo import blosum62
 from Bio import BiopythonWarning
 from Bio import pairwise2
 
@@ -172,6 +171,10 @@ GAACT
 class TestPairwiseLocal(unittest.TestCase):
     """Test some simple local alignments."""
 
+    def setUp(self):
+        from Bio.Align import substitution_matrices
+        self.blosum62 = substitution_matrices.load("BLOSUM62")
+
     def test_localxs_1(self):
         """Test localxx."""
         aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0))
@@ -212,8 +215,8 @@ zA-Bz
 
     def test_localds_zero_score_segments_symmetric(self):
         """Test if alignment is independent on direction of sequence."""
-        aligns1 = pairwise2.align.localds("CWHISLKM", "CWHGISGLKM", blosum62, -11, -1)
-        aligns2 = pairwise2.align.localds("MKLSIHWC", "MKLGSIGHWC", blosum62, -11, -1)
+        aligns1 = pairwise2.align.localds("CWHISLKM", "CWHGISGLKM", self.blosum62, -11, -1)
+        aligns2 = pairwise2.align.localds("MKLSIHWC", "MKLGSIGHWC", self.blosum62, -11, -1)
         self.assertEqual(len(aligns1), len(aligns2))
 
     def test_localxs_generic(self):
@@ -264,10 +267,10 @@ zA-Bz
 
     def test_blosum62(self):
         """Test localds with blosum62."""
-        self.assertEqual(1, blosum62[("K", "Q")])
-        self.assertEqual(4, blosum62[("A", "A")])
-        self.assertEqual(8, blosum62[("H", "H")])
-        alignments = pairwise2.align.localds("VKAHGKKV", "FQAHCAGV", blosum62, -4, -4)
+        self.assertEqual(1, self.blosum62[("K", "Q")])
+        self.assertEqual(4, self.blosum62[("A", "A")])
+        self.assertEqual(8, self.blosum62[("H", "H")])
+        alignments = pairwise2.align.localds("VKAHGKKV", "FQAHCAGV", self.blosum62, -4, -4)
         for a in alignments:
             self.assertEqual(
                 pairwise2.format_alignment(*a), "2 KAH\n  .||\n2 QAH\n  Score=13\n"
