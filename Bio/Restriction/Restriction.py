@@ -182,7 +182,7 @@ class FormattedSeq:
     def __len__(self):
         """Return length of ``FormattedSeq``.
 
-        ``FormattedSeq`` has a leading space, thus substract 1.
+        ``FormattedSeq`` has a leading space, thus subtract 1.
         """
         return len(self.data) - 1
 

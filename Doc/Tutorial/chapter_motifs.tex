@@ -209,7 +209,7 @@ One of the most popular motif databases is \href{http://jaspar.genereg.net}{JASP
     \item \verb+matrix_id+ - the unique JASPAR motif ID, e.g. 'MA0004.1'
     \item \verb+name+ - the name of the TF, e.g. 'Arnt'
     \item \verb+collection+ - the JASPAR collection to which the motif belongs, e.g. 'CORE'
-    \item \verb+tf_class+ - the structual class of this TF, e.g. 'Zipper-Type'
+    \item \verb+tf_class+ - the structural class of this TF, e.g. 'Zipper-Type'
     \item \verb+tf_family+ - the family to which this TF belongs, e.g. 'Helix-Loop-Helix'
     \item \verb+species+ - the species to which this TF belongs, may have multiple values, these are specified as taxonomy IDs, e.g. 10090
     \item \verb+tax_group+ - the taxonomic supergroup to which this motif belongs, e.g. 'vertebrates'
@@ -421,7 +421,7 @@ In addition to parsing these flat file formats, we can also retrieve motifs from
 ... )
 \end{minted}
 
-Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number seperated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
+Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number separated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
 \begin{minted}{pycon}
 >>> arnt = jdb.fetch_motif_by_id("MA0004")
 \end{minted}

@@ -46,7 +46,7 @@ class IsoelectricPoint:
     :protein_sequence: A ``Bio.Seq`` or string object containing a protein
                        sequence.
     :aa_content: A dictionary with amino acid letters as keys and it's
-                 occurences as integers, e.g. ``{"A": 3, "C": 0, ...}``.
+                 occurrences as integers, e.g. ``{"A": 3, "C": 0, ...}``.
                  Default: ``None``. If ``None``, the dic will be calculated
                  from the given sequence.
 

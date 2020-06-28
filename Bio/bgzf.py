@@ -236,7 +236,7 @@ unicode encodings, such as ASCII, "latin1" (which is a superset of ASCII), or
 potentially other character maps (not implemented).
 
 Furthermore, unlike the default text mode on Python 3, we do not attempt to
-implement univeral new line mode. This transforms the various operating system
+implement universal new line mode. This transforms the various operating system
 new line conventions like Windows (CR LF or "\r\n"), Unix (just LF, "\n"), or
 old Macs (just CR, "\r"), into just LF ("\n"). Here we have the same problem -
 is "\r" at the end of a block an incomplete Windows style new line?

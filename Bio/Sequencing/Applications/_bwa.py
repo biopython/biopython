@@ -547,7 +547,7 @@ class BwaMemCommandline(AbstractCommandline):
             ),
             _Option(
                 ["-c", "c"],
-                "Discard a MEM if it has more than INT occurence in the genome. This is an insensitive parameter. [10000]",
+                "Discard a MEM if it has more than INT occurrence in the genome. This is an insensitive parameter. [10000]",
                 checker_function=lambda x: isinstance(x, int),
                 equate=False,
             ),

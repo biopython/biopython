@@ -277,7 +277,7 @@ class PDBParser:
                         self._handle_PDB_exception(message, global_line_counter)
 
                 if not self.is_pqr:
-                    # init atom with pdb fiels
+                    # init atom with pdb fields
                     try:
                         structure_builder.init_atom(
                             name,

@@ -216,7 +216,7 @@ number of distinct contigs [ gi |
 <!ELEMENT Assembly_snpStat_attlist_placedContigCount (%INTEGER;)>
 
 <!--
-number of sequence postions to a contig with
+number of sequence positions to a contig with
 									unknown chromosomal assignment
 -->
 <!ELEMENT Assembly_snpStat_attlist_unplacedContigCount (%INTEGER;)>

@@ -1393,7 +1393,7 @@ class GenBankScanner(InsdcScanner):
             #    68:79      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
             if len(line) < 79:
-                # JBEI genbank files seem to miss a divison code and date
+                # JBEI genbank files seem to miss a division code and date
                 # See issue #1656 e.g.
                 # LOCUS       pEH010                  5743 bp    DNA     circular
                 warnings.warn(

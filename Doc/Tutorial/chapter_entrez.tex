@@ -161,7 +161,7 @@ For each of these databases, we can use EInfo again to obtain more information:
 >>> record["DbInfo"]["Description"]
 'PubMed bibliographic record'
 \end{minted}
-%These are too changable to use in doctest
+%These are too changeable to use in doctest
 \begin{minted}{pycon}
 >>> record["DbInfo"]["Count"]
 '17989604'
@@ -220,7 +220,7 @@ search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
 (see Section~\ref{sec:entrez-einfo} about EInfo for one way to
 find out which fields you can search in each Entrez database):
 
-% Search results too changable for use in doctest
+% Search results too changeable for use in doctest
 \begin{minted}{pycon}
 >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
 >>> record = Entrez.read(handle)

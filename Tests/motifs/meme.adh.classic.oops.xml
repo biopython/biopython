@@ -130,7 +130,7 @@
 <!ELEMENT regular_expression (#PCDATA)*>
 
 <!-- Contributing site elements -->
-<!-- Contributing sites are motif occurences found during the motif discovery phase -->
+<!-- Contributing sites are motif occurrences found during the motif discovery phase -->
 <!ELEMENT contributing_sites (contributing_site*)>
 <!ELEMENT contributing_site (left_flank, site, right_flank)>
 <!ATTLIST contributing_site sequence_id IDREF #REQUIRED
@@ -146,7 +146,7 @@
 <!ELEMENT right_flank (#PCDATA)>
 
 <!-- Scanned site elements -->
-<!-- Scanned sites are motif occurences found during the sequence scan phase -->
+<!-- Scanned sites are motif occurrences found during the sequence scan phase -->
 <!ELEMENT scanned_sites_summary (scanned_sites*)>
 <!ATTLIST scanned_sites_summary p_thresh CDATA #REQUIRED>
 <!ELEMENT scanned_sites (scanned_site*)>

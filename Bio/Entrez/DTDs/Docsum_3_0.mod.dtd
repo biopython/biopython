@@ -179,7 +179,7 @@
 <!--number of distinct contigs [ gi | accession[.version] ] in the mapset -->
 <!ELEMENT Assembly_snpStat_attlist_placedContigCount (%INTEGER;)>
 
-<!--number of sequence postions to a contig with unknown chromosomal assignment -->
+<!--number of sequence positions to a contig with unknown chromosomal assignment -->
 <!ELEMENT Assembly_snpStat_attlist_unplacedContigCount (%INTEGER;)>
 
 <!--total number of sequence positions in the mapset -->
