@@ -103,7 +103,7 @@ tools.
 
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
 iterate over the alignment rows as SeqRecord objects - rather than working
-with Alignnment objects. Again, if you want to you can specify this is RNA:
+with Alignnment objects.
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm"):
