@@ -24,7 +24,7 @@ from Bio.Seq import Seq, UnknownSeq
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio import StreamModeError
-
+from Bio.Nexus.Nexus import NexusError
 
 # TODO - Check that desired warnings are issued. Used to do that by capturing
 # warnings to stdout and verifying via the print-and-compare check. However,
@@ -372,7 +372,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             # Now ready to read back from the handle...
             try:
                 records2 = list(SeqIO.parse(handle=handle, format=format))
-            except ValueError as e:
+            except (ValueError, NexusError) as e:
                 # This is BAD.  We can't read our own output.
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
@@ -2580,6 +2580,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
+            "nexus": "NM_006141.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "sff": "Missing SFF flow information",
@@ -2641,6 +2642,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
+            "nexus": "AL109817.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "sff": "Missing SFF flow information",
@@ -3259,6 +3261,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
+            "nexus": "X56734.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "sff": "Missing SFF flow information",
@@ -3550,6 +3553,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "nexus": "A04195 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "sff": "Missing SFF flow information",
@@ -3578,6 +3582,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "nexus": "A04195 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "sff": "Missing SFF flow information",

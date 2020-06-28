@@ -123,40 +123,37 @@ class NexusWriter(AlignmentWriter):
         columns = alignment.get_alignment_length()
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
+        mol_type = alignment.molecule_type
+        if not mol_type:
+            # Missing or no consensus
+            raise ValueError("Need a DNA, RNA or Protein alphabet")
+        elif "DNA" in mol_type:
+            datatype = "dna"
+        elif "RNA" in mol_type:
+            datatype = "rna"
+        elif "protein" in mol_type:
+            datatype = "protein"
+        else:
+            # Could this be a generic nucleotide?
+            raise ValueError("Need a DNA, RNA or Protein alphabet")
         minimal_record = (
             "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=%s; end;"
-            % self._classify_alphabet_for_nexus(alignment._alphabet)
+            % datatype
         )
         n = Nexus.Nexus(minimal_record)
         n.alphabet = alignment._alphabet
         for record in alignment:
+            # Sanity test sequences (should this be even stricter?)
+            if datatype == "dna" and "U" in record.seq:
+                raise ValueError(f"{record.id} contains U, but DNA alignment")
+            elif datatype == "rna" and "T" in record.seq:
+                raise ValueError(f"{record.id} contains T, but RNA alignment")
             n.add_sequence(record.id, str(record.seq))
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
             interleave = columns > 1000
         n.write_nexus_data(self.handle, interleave=interleave)
-
-    def _classify_alphabet_for_nexus(self, alphabet):
-        """Return 'protein', 'dna', or 'rna' based on the alphabet (PRIVATE).
-
-        Raises an exception if this is not possible.
-        """
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(alphabet)
-
-        if not isinstance(a, Alphabet.Alphabet):
-            raise TypeError("Invalid alphabet")
-        elif isinstance(a, Alphabet.ProteinAlphabet):
-            return "protein"
-        elif isinstance(a, Alphabet.DNAAlphabet):
-            return "dna"
-        elif isinstance(a, Alphabet.RNAAlphabet):
-            return "rna"
-        else:
-            # Must be something like NucleotideAlphabet or
-            # just the generic Alphabet (default for fasta files)
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
 
 
 if __name__ == "__main__":
