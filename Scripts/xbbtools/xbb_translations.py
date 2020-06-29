@@ -42,7 +42,7 @@ class xbb_translations:
         return reverse_complement(seq)
 
     def frame(self, seq, frame, translation_table=1):
-        """Translate DNA sequence in a choosen frame."""
+        """Translate DNA sequence in a chosen frame."""
         if frame < 0:
             seq = reverse_complement(seq)
         seq = seq[(abs(frame) - 1) :]

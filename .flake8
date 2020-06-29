@@ -71,7 +71,7 @@ per-file-ignores =
 #        D101 missing docstring in public class (207 occurrences)
 #        D102 missing docstring in public method (956 occurrences)
 #        D103 missing docstring in public functions (52 occurrences)
-#        W504 line break after binary operator (97 occurences, may be removed by black)
+#        W504 line break after binary operator (97 occurrences, may be removed by black)
 #        B009 do not call getattr with a constant attribute value,
 #             it is not any safer than normal property access
 #        B010 do not call setattr with a constant attribute value,

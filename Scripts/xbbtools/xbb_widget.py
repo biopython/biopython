@@ -248,7 +248,7 @@ class xbb_widget:
             self.position_ids[i].configure(text="")
 
     def get_length(self):
-        """Return lenght of sequence."""
+        """Return length of sequence."""
         self.sequence_length = len(self.sequence_id.get(1.0, "end"))
         return self.sequence_length
 
@@ -518,7 +518,7 @@ class xbb_widget:
         self.sequence_id.mark_set("insert", f"1.{pos:d}")
 
     def mark(self, start, stop):
-        """Mark and put a tag on choosen subsequence from start to stop."""
+        """Mark and put a tag on chosen subsequence from start to stop."""
         self.sequence_id.focus()
         self.sequence_id.mark_set("insert", f"1.{start:d}")
         self.sequence_id.tag_add("sel", f"1.{start:d}", f"1.{stop:d}")

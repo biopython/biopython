@@ -7229,7 +7229,7 @@ class OutputTests(unittest.TestCase):
         out_lines = out_handle.readlines()
         self.assertEqual(out_lines[0], invalid_line)
 
-    def test_write_tsa_data_divison(self):
+    def test_write_tsa_data_division(self):
         """Make sure we don't kill the TSA data_file_division for TSA files."""
         with open("GenBank/tsa_acropora.gb") as infile:
             rec = SeqIO.read(infile, "genbank")

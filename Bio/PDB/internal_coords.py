@@ -536,7 +536,7 @@ class IC_Chain:
             )
 
         if numpy.any(self.hAtoms_needs_update):
-            # hedra inital coords
+            # hedra initial coords
 
             # supplementary angle radian: angles which add to 180 are supplementary
             sar = numpy.deg2rad(
@@ -618,7 +618,7 @@ class IC_Chain:
         ).reshape(-1, 4)
         # a4rot = rz.dot(self.a4_pre_rotation) # numpy.matmul(self.a4_pre_rotation, rz)
 
-        # now build dihedra inital coords
+        # now build dihedra initial coords
 
         dH1atoms = self.hAtoms[self.dH1ndx]  # fancy indexing so
         dH1atomsR = self.hAtomsR[self.dH1ndx]  # these copy not view
@@ -1899,7 +1899,7 @@ class IC_Residue(object):
                     # elif (lenAKL < maxc
                     #      and al not in posnAltlocs[akMap[akl[0]]]):
                     elif al not in posnAltlocs[akMap[akl[0]]]:
-                        # this postion has fewer altlocs than other positions
+                        # this position has fewer altlocs than other positions
                         # and this position does not have this al,
                         # so just grab first to form angle as could be any
                         alhl.append(sorted(akl)[0])
