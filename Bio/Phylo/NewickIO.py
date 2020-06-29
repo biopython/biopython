@@ -84,7 +84,7 @@ def _format_comment(text):
 
 def _get_comment(clade):
     try:
-        comment = clade.coment
+        comment = clade.comment
     except AttributeError:
         pass
     else:
