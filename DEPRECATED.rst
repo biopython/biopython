@@ -164,7 +164,7 @@ were first added in Release 1.54 (May 2010), with hash warnings present
 from Release 1.62 (August 2013) to Release 1.76 (December 2019).
 
 For backward compatibility and/or to silence warnings about this, please use
-explicit string comparision, str(seq1) == str(seq2), or object comparison,
+explicit string comparison, str(seq1) == str(seq2), or object comparison,
 id(seq1) == id(seq2), as required.
 
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
