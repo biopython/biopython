@@ -140,6 +140,9 @@ class Parser:
 
         lp_count = 0
         rp_count = 0
+        # Initialize the previous token var to empty str
+        token_prev = ""
+
         for match in tokens:
             token = match.group()
 
@@ -184,12 +187,24 @@ class Parser:
                 break
 
             elif token.startswith(":"):
-                # branch length or confidence
+                # branch length and/or confidence
                 value = float(token[1:])
+                # only confidence
+                # ex. (NodeA:98)
                 if self.values_are_confidence:
                     current_clade.confidence = value
+                # both confidence and branch length
                 else:
-                    current_clade.branch_length = value
+                    # Assign the first token encountered to branch length
+                    # (ex. NodeB:055)
+                    if not current_clade.branch_length:
+                        current_clade.branch_length = value
+                    # if branch_length has been assigned, reassign token_prev
+                    # to confidence and current token to branch_length
+                    # (ex. NodeA:98:0.11)
+                    else:
+                        current_clade.branch_length = value
+                        current_clade.confidence = float(token_prev[1:])
 
             elif token == "\n":
                 pass
@@ -197,6 +212,9 @@ class Parser:
             else:
                 # unquoted node label
                 current_clade.name = token
+
+            # Update token_prev var to store current token
+            token_prev = token
 
         if not lp_count == rp_count:
             raise NewickError("Number of open/close parentheses do not match.")
@@ -364,8 +382,14 @@ class Writer:
                     return (":" + format_branch_length) % (
                         clade.branch_length or 0.0
                     ) + _get_comment(clade)
-                else:
+                # If this is an internal node that is not named, no colon in front
+                elif (not hasattr(clade, "name")):
                     return (format_confidence + ":" + format_branch_length) % (
+                        clade.confidence,
+                        clade.branch_length or 0.0,
+                    ) + _get_comment(clade)
+                else:
+                    return (":" + format_confidence + ":" + format_branch_length) % (
                         clade.confidence,
                         clade.branch_length or 0.0,
                     ) + _get_comment(clade)
