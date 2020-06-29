@@ -125,7 +125,7 @@ SECTION II: MOTIF DIAGRAMS
 	  p-value is less than the product of the p-values of the other
 	  (lower-numbered) motif occurrences that it overlaps.
 	- The table also shows the E-value of each sequence.
-	- Spacers and motif occurrences are indicated by
+	- Spacers and motif occurences are indicated by
 	   o -d-    `d' residues separate the end of the preceding motif 
 		    occurrence and the start of the following motif occurrence
 	   o [n]  occurrence of motif `n' with p-value less than 0.0001.

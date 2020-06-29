@@ -47,7 +47,7 @@ try:
     # it is False if we don't have internet or if we run the tests with --offline
 except MissingExternalDependencyError:
     # need to catch this error, because we want to run the tests even offline
-    pass  # 'requires_internet_check.availabe' is now False
+    pass  # 'requires_internet_check.available' is now False
 
 if not requires_internet.check.available:
     # if the tests are running with --offline or if no internet is available,
