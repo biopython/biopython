@@ -52,9 +52,8 @@ per-file-ignores =
     /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
     /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812,BLK100
 
-# =============================
-# per-file-ignores error codes:
-# =============================
+#Explanation of the codes being ignored in Bio/ and Tests/:
+#
 #Bio/*:F401 module imported but unused TODO? (107 occurrences)
 #      F841 local variable is assigned to but never used TODO? (55 occurrences)
 #      D105 missing docstring magic method (121 occurrences)
