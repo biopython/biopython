@@ -21,6 +21,8 @@ EX_NEWICK2 = "Nexus/test.new"
 EX_NEXUS = "Nexus/test_Nexus_input.nex"
 EX_NEXUS2 = "Nexus/bats.nex"
 EX_NEWICK_BOM = "Nexus/ByteOrderMarkFile.nwk"
+EX_NEWICK_ATTR_VAL = "Nexus/attr_rich_val.nwk"
+EX_NEWICK_ATTR_VAL_NO_INT = "Nexus/attr_rich_val_no_internal_name.nwk"
 
 # Example PhyloXML files
 EX_APAF = "PhyloXML/apaf.xml"
@@ -81,6 +83,114 @@ class IOTests(unittest.TestCase):
         # Check internal node labels were retained
         internal_names = {c.name for c in tree2.get_nonterminals() if c is not None}
         self.assertEqual(internal_names, {"E", "F"})
+
+    def test_newick_write_string(self):
+        """Parse and write a newick tree string."""
+        tree = Phylo.read(EX_NEWICK_ATTR_VAL, "newick")
+        str_expect = ('(A:0.11000[&country="USA"],'
+                      '(B:0.23000[&country="USA"],'
+                      '(C:0.16000[&country="Canada"],'
+                      'D:0.14000[&country="Canada"])'
+                      'E:98.00:0.46000[&country="Canada"])'
+                      'F:99.00:0.38000[&country="USA"]):0.00000[&R];')
+        str_retrieve = next(Phylo.NewickIO.Writer([tree]).to_strings())
+        self.assertEqual(str_expect, str_retrieve)
+
+    def test_newick_write_name(self):
+        """Parse and write a Newick tree containing node names."""
+        mem_file = StringIO()
+        tree = Phylo.read(EX_NEWICK_ATTR_VAL, "newick")
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "newick")
+        # Check if node name attributes were written
+        names_expect = [None, "A", "F", "B", "E", "C", "D"]
+        names_retrieve = [c.name for c in tree2.find_clades()]
+        self.assertEqual(names_expect, names_retrieve)
+
+    def test_newick_write_comment(self):
+        """Parse and write a Newick tree containing comments."""
+        mem_file = StringIO()
+        tree = Phylo.read(EX_NEWICK_ATTR_VAL, "newick")
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "newick")
+        # Check if comment node attributes were written
+        comments_expect = ["&R",
+                           '&country="USA"',
+                           '&country="USA"',
+                           '&country="USA"',
+                           '&country="Canada"',
+                           '&country="Canada"',
+                           '&country="Canada"']
+        comments_retrieve = [c.comment for c in tree2.find_clades()]
+        self.assertEqual(comments_expect, comments_retrieve)
+
+    def test_newick_write_branch_length(self):
+        """Parse and write a Newick tree containing branch lengths as values."""
+        mem_file = StringIO()
+        tree = Phylo.read(EX_NEWICK_ATTR_VAL, "newick")
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "newick")
+        # Check if branch length node attributes were written
+        branch_length_expect = [0.00, 0.11, 0.38, 0.23, 0.46, 0.16, 0.14]
+        branch_length_retrieve = [c.branch_length for c in tree2.find_clades()]
+        self.assertEqual(branch_length_expect, branch_length_retrieve)
+
+    def test_newick_write_confidence_value(self):
+        """Parse and write a Newick tree containing confidence as values (ex. IQTREE)."""
+        mem_file = StringIO()
+        tree = Phylo.read(EX_NEWICK_ATTR_VAL_NO_INT, "newick")
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "newick")
+        # Check if confidence value attributes were written
+        confidence_expect = [None, None, 99.0, None, 98.0, None, None]
+        confidence_retrieve = [c.confidence for c in tree2.find_clades()]
+        self.assertEqual(confidence_expect, confidence_retrieve)
+
+    def test_newick_write_confidence_value_internal_node_name(self):
+        """Parse and write a Newick tree containing confidence as values where internal nodes are named."""
+        mem_file = StringIO()
+        tree = Phylo.read(EX_NEWICK_ATTR_VAL, "newick")
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "newick")
+        # Check if confidence value attributes were written
+        confidence_expect = [None, None, 99.0, None, 98.0, None, None]
+        confidence_retrieve = [c.confidence for c in tree2.find_clades()]
+        self.assertEqual(confidence_expect, confidence_retrieve)
+
+    def test_newick_write_confidence_comment(self):
+        """Parse and write a Newick tree containing confidence as comments (ex. RAxML)."""
+        mem_file = StringIO()
+        tree = Phylo.read(StringIO("(A:0.22,(B:0.12,(C:0.02,D:0.02)E:0.1[99])F:0.1[98]);"),
+                          "newick",
+                          comments_are_confidence=True)
+        Phylo.write(tree, mem_file, "newick")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "newick", comments_are_confidence=True)
+        # Check if confidence value comments were written (now in different format)
+        confidence_expect = [None, None, 98, None, 99, None, None]
+        confidence_retrieve = [c.confidence for c in tree2.find_clades()]
+        self.assertEqual(confidence_expect, confidence_retrieve)
+
+    def test_nexus_write_single_tree(self):
+        """Parse and write a single tree Nexus file."""
+        mem_file = StringIO()
+        tree = Phylo.read(EX_NEXUS2, "nexus")
+        Phylo.write(tree, mem_file, "nexus")
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, "nexus")
+        subtree = tree.common_ancestor("Myotis_sp__C2", "Myotis_sp__C3")
+        expect_subtree_data = [0.003316,
+                               0.91,
+                               "(Myotis_sp__C2:0.00175,Myotis_sp__C3:0.00341):0.91:0.00332;"]
+        retrieve_subtree_data = [subtree.branch_length,
+                                 subtree.confidence,
+                                 next(Phylo.NewickIO.Writer(subtree.find_clades()).to_strings())]
+        self.assertEqual(expect_subtree_data, retrieve_subtree_data)
 
     def test_newick_read_scinot(self):
         """Parse Newick branch lengths in scientific notation."""
