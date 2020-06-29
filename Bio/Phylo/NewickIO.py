@@ -383,7 +383,7 @@ class Writer:
                         clade.branch_length or 0.0
                     ) + _get_comment(clade)
                 # If this is an internal node that is not named, no colon in front
-                elif (not hasattr(clade, "name")):
+                elif not hasattr(clade, "name"):
                     return (format_confidence + ":" + format_branch_length) % (
                         clade.confidence,
                         clade.branch_length or 0.0,
