@@ -803,7 +803,7 @@ class Seq:
         >>> my_protein.complement()
         Seq('KTIBKCY')
 
-        Here "M" was interpretted as the IUPAC ambiguity code for
+        Here "M" was interpreted as the IUPAC ambiguity code for
         "A" or "C", with complement "K" for "T" or "G". Likewise
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
@@ -2263,7 +2263,7 @@ class MutableSeq:
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
 
-        >>> from Bio.Seq import Seq
+        >>> from Bio.Seq import MutableSeq
         >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL")
         >>> my_mseq
         MutableSeq('MKQHKAMIVALIVICITAVVAAL')
