@@ -24,7 +24,8 @@ from Bio.Data import IUPACData
 from Bio.Seq import Seq
 
 from Bio.Nexus.StandardData import StandardData
-from Bio.Nexus.Trees import Tree
+
+from Bio.Phylo import NewickIO
 
 
 INTERLEAVE = 70
@@ -1185,7 +1186,13 @@ class Nexus:
                 rooted = False
             elif special == "W":
                 weight = float(value)
-        tree = Tree(name=name, weight=weight, rooted=rooted, tree=opts.rest().strip())
+
+        # Switch parsing to the new NewickIO module
+        tree = next(
+            NewickIO.Parser.from_string(opts.rest().strip()).parse(
+                name=name, weight=weight, rooted=rooted
+            )
+        )
         # if there's an active translation table, translate
         if self.translate:
             for n in tree.get_terminals():
