@@ -112,12 +112,19 @@ class Parser:
         return cls(handle)
 
     def parse(
-        self, values_are_confidence=False, comments_are_confidence=False, rooted=False
+        self,
+        values_are_confidence=False,
+        comments_are_confidence=False,
+        rooted=False,
+        name="",
+        weight=1.0,
     ):
         """Parse the text stream this object was initialized with."""
         self.values_are_confidence = values_are_confidence
         self.comments_are_confidence = comments_are_confidence
         self.rooted = rooted
+        self.name = name
+        self.weight = weight
         buf = ""
         for line in self.handle:
             buf += line.rstrip()
@@ -230,7 +237,9 @@ class Parser:
 
         self.process_clade(current_clade)
         self.process_clade(root_clade)
-        return Newick.Tree(root=root_clade, rooted=self.rooted)
+        return Newick.Tree(
+            root=root_clade, rooted=self.rooted, name=self.name, weight=self.weight
+        )
 
     def new_clade(self, parent=None):
         """Return new Newick.Clade, optionally with temporary reference to parent."""
