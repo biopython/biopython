@@ -1545,8 +1545,8 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
         ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-    def _input_type_checker(command, x):
-        return x in ("asn1_bin", "asn1_txt", "blastdb", "fasta")
+    def _input_type_checker(self, command):
+        return command in ("asn1_bin", "asn1_txt", "blastdb", "fasta")
 
     def _validate(self):
         incompatibles = {
@@ -1556,7 +1556,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
         }
 
         # Copied from _NcbibaseblastCommandline class above.
-        # Code repeated here for python2 and 3 comptaibility,
+        # Code repeated here for python2 and 3 compatibility,
         # because this is not a _NcbibaseblastCommandline subclass.
         for a in incompatibles:
             if self._get_parameter(a):

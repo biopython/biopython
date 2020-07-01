@@ -1271,7 +1271,7 @@ class CompoundLocation:
     def __add__(self, other):
         """Combine locations, or shift the location by an integer offset.
 
-        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
+        >>> from Bio.SeqFeature import FeatureLocation
         >>> f1 = FeatureLocation(15, 17) + FeatureLocation(20, 30)
         >>> print(f1)
         join{[15:17], [20:30]}

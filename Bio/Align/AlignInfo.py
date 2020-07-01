@@ -360,7 +360,7 @@ class SummaryInfo:
         pssm_info = []
         # now start looping through all of the sequences and getting info
         for residue_num in range(len(left_seq)):
-            score_dict = self._get_base_letters(all_letters)
+            score_dict = dict.fromkeys(all_letters, 0)
             for record in self.alignment:
                 try:
                     this_residue = record.seq[residue_num]
@@ -383,14 +383,6 @@ class SummaryInfo:
             pssm_info.append((left_seq[residue_num], score_dict))
 
         return PSSM(pssm_info)
-
-    def _get_base_letters(self, letters):
-        """Create a zeroed dictionary with all of the specified letters (PRIVATE)."""
-        base_info = {}
-        for letter in letters:
-            base_info[letter] = 0
-
-        return base_info
 
     def _get_gap_char(self):
         """Return the gap character used in the alignment (PRIVATE)."""
@@ -525,7 +517,7 @@ class SummaryInfo:
         dictionary where the keys are the letters and the values are the
         frequencies. Pseudo count can be added to prevent a null frequency
         """
-        freq_info = self._get_base_letters(letters)
+        freq_info = dict.fromkeys(letters, 0)
 
         total_count = 0
 
