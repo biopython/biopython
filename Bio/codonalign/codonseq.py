@@ -210,7 +210,7 @@ class CodonSeq(Seq):
                 )
         return "".join(amino_acids)
 
-    def toSeq(self, alphabet=generic_dna):
+    def toSeq(self):
         """Convert DNA to seq object."""
         return Seq(self._data, generic_dna)
 
