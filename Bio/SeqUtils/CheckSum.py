@@ -81,7 +81,7 @@ def crc64(s):
 def gcg(seq):
     """Return the GCG checksum (int) for a sequence (string or Seq object).
 
-    Given a nucleotide or amino-acid secuence (or any string),
+    Given a nucleotide or amino-acid sequence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
     seq type = str.
 
@@ -114,7 +114,7 @@ def gcg(seq):
 def seguid(seq):
     """Return the SEGUID (string) for a sequence (string or Seq object).
 
-    Given a nucleotide or amino-acid secuence (or any string),
+    Given a nucleotide or amino-acid sequence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
 
