@@ -222,7 +222,6 @@ class CodonSeq(Seq):
         alignment containing frameshift.
         """
         ungap_seq = self._data.replace("-", "")
-        codon_lst = [ungap_seq[i : i + 3] for i in self.rf_table]
         relative_pos = [self.rf_table[0]]
         for i in range(1, len(self.rf_table[1:]) + 1):
             relative_pos.append(self.rf_table[i] - self.rf_table[i - 1])
@@ -540,7 +539,6 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                 )
             ]
         elif len(diff_pos) == 2:
-            codon2_aa = codon_table.forward_table[codon2]
             for i in diff_pos:
                 temp_codon = codon1[:i] + codon2[i] + codon1[i + 1 :]
                 SN = [
@@ -562,7 +560,6 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
                     )
                 ]
         elif len(diff_pos) == 3:
-            codon2_aa = codon_table.forward_table[codon2]
             paths = list(permutations([0, 1, 2], 3))
             tmp_codon = []
             for p in paths:
@@ -812,7 +809,6 @@ def _yn00(seq1, seq2, k, codon_table):
         Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
         P = expm(Q * t)
         TV = [0, 0, 0, 0]  # synonymous/nonsynonymous transition/transversion
-        sites = [0, 0]
         codon_npath = {}
         for i, j in zip(seq1, seq2):
             if i != "---" and j != "---":
@@ -992,7 +988,6 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
         0,
         0,
     ]  # transition and transversion counts (synonymous and nonsynonymous)
-    site = 0
     if codon1 == "---" or codon2 == "---":
         return TV
     base_tuple = ("A", "C", "G", "T")
@@ -1043,13 +1038,11 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
                     return [0, 0, 0, weight]
 
         if len(diff_pos) == 1:
-            prob = 1
             TV = [
                 p + q
                 for p, q in zip(TV, count_TV(codon1, codon2, diff_pos[0], codon_table))
             ]
         elif len(diff_pos) == 2:
-            codon2_aa = codon_table.forward_table[codon2]
             tmp_codon = [codon1[:i] + codon2[i] + codon1[i + 1 :] for i in diff_pos]
             path_prob = []
             for i in tmp_codon:
@@ -1078,7 +1071,6 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
                     )
                 ]
         elif len(diff_pos) == 3:
-            codon2_aa = codon_table.forward_table[codon2]
             paths = list(permutations([0, 1, 2], 3))
             path_prob = []
             tmp_codon = []
@@ -1113,12 +1105,6 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_tab
                         TV, count_TV(i[1], codon2, k[1], codon_table, weight=j / 3)
                     )
                 ]
-        if codon1 in codon_table.stop_codons or codon2 in codon_table.stop_codons:
-            site = [0, 3]
-        elif codon_table.forward_table[codon1] == codon_table.forward_table[codon2]:
-            site = [3, 0]
-        else:
-            site = [0, 3]
     return TV
 
 
