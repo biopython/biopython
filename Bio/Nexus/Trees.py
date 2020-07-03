@@ -76,7 +76,7 @@ class Tree(Nodes.Chain):
         self.root = self.add(root)
         if tree:  # use the tree we have
             # if Tree is called from outside Nexus parser, we need to get rid of linebreaks, etc
-            tree = tree.strip().replace("\n", "").replace("\r", "")
+            tree = str.translate(tree, {10: None, 13: None})  # remove "\n" and "\r"
             # there's discrepancy whether newick allows semicolons et the end
             tree = tree.rstrip(";")
             subtree_info, base_info = self._parse(tree)

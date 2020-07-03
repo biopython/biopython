@@ -299,7 +299,8 @@ class MsfIterator(AlignmentIterator):
                 raise ValueError("Unexpected line after GCG MSF alignment: %r" % line)
 
         # Combine list of strings into single string, remap gaps
-        seqs = ["".join(s).replace("~", "-").replace(".", "-") for s in seqs]
+        # ordinal mapping from str.maketrans("~.", "--")
+        seqs = [str.translate("".join(s), {126: 45, 46: 45}) for s in seqs]
 
         # Apply any trailing padding for short sequences
         padded = False

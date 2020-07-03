@@ -105,7 +105,7 @@ class AlignmentWriter:
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ")
+        return str.translate(text, {10: None, 13: None})  # remove "\n" and "\r"
 
 
 class SequentialAlignmentWriter(AlignmentWriter):

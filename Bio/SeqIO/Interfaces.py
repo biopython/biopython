@@ -107,7 +107,7 @@ def _get_seq_string(record):
 # Function variant of the SequenceWriter method.
 def _clean(text):
     """Use this to avoid getting newlines in the output (PRIVATE)."""
-    return text.replace("\n", " ").replace("\r", " ")
+    return str.translate(text, {10: None, 13: None})  # remove "\n" and "\r"
 
 
 class SequenceWriter:
@@ -170,7 +170,7 @@ class SequenceWriter:
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ")
+        return str.translate(text, {10: None, 13: None})  # remove "\n" and "\r"
 
     def write_header(self):
         """Write the file header to the output file."""

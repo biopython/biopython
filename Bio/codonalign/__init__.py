@@ -502,7 +502,9 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len, shift_id_
             qcodon += "$"
             match = re.search(qcodon, sh_nuc)
             if match:
-                qcodon = qcodon.replace("^", "").replace("$", "")
+                qcodon = str.translate(
+                    qcodon, {94: None, 36: None}
+                )  # ord("^"), ord("$")
                 shift_id_pos += 1
                 return qcodon, shift_id_pos
         if not match:
@@ -532,7 +534,9 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len, shift_id_
             qcodon += "$"
             match = re.search(qcodon, sh_nuc)
             if match:
-                qcodon = qcodon.replace("^", "").replace("$", "")
+                qcodon = str.translate(
+                    qcodon, {94: None, 36: None}
+                )  # ord("^"), ord("$")
                 shift_id_pos += 1
                 return qcodon, shift_id_pos
         if not match:
