@@ -28,7 +28,7 @@ Nucleotide4Random = 0.25
 class SummaryInfo:
     """Calculate summary info about the alignment.
 
-    This class should be used to caclculate information summarizing the
+    This class should be used to calculate information summarizing the
     results of an alignment. This may either be straight consensus info
     or more complicated things.
     """
