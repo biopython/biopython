@@ -551,7 +551,7 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
 
     def _identifier_split(self, identifier):
-        """Return (name, start, end) string tuple from an identier (PRIVATE)."""
+        """Return (name, start, end) string tuple from an identifier (PRIVATE)."""
         if "/" in identifier:
             name, start_end = identifier.rsplit("/", 1)
             if start_end.count("-") == 1:
