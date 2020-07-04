@@ -31,6 +31,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Chris Rands
+- Katherine Eaton (first contribution)
 - Peter Cock
 
 25 May 2020: Biopython 1.77

@@ -1,0 +1,18 @@
+#NEXUS
+
+BEGIN TAXA;
+        TITLE  Taxa;
+        DIMENSIONS NTAX=4;
+        TAXLABELS
+            A
+            B
+            C
+            D
+            ;
+END;
+
+BEGIN TREES;
+  Tree tree1 = [&R] (A:0.11[&country="USA"],(B:0.23[&country="USA"],(C:0.16[&country="Canada"],D:0.14[&country="Canada"])E:98:0.46[&country="Canada"])F:99:0.38[&country="USA"]);
+  Tree tree2 = [&U] (A:0.11,(B:0.23,(C:0.16,D:0.14)E:0.46)F:0.38);
+  Tree tree3 = [&R] [&W0.5] (A:0.11,(B:0.23,(C:0.16,D:0.14)E:0.46)F:0.38);
+END;
