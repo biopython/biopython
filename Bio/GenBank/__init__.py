@@ -509,7 +509,7 @@ class FeatureParser:
     Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
 
-    def __init__(self, debug_level=0, use_fuzziness=1, feature_cleaner=_cleaner):
+    def __init__(self, debug_level=0, use_fuzziness=1, feature_cleaner=None):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
@@ -527,7 +527,10 @@ class FeatureParser:
         """
         self._scanner = GenBankScanner(debug_level)
         self.use_fuzziness = use_fuzziness
-        self._cleaner = feature_cleaner
+        if feature_cleaner:
+            self._cleaner = feature_cleaner
+        else:
+            self._cleaner = _cleaner  # default
 
     def parse(self, handle):
         """Parse the specified handle."""
