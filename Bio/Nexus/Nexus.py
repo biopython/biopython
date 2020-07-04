@@ -1197,13 +1197,10 @@ class Nexus:
         if self.translate:
             for n in tree.get_terminals():
                 try:
-                    tree.node(n).data.taxon = safename(
-                        self.translate[int(tree.node(n).data.taxon)]
-                    )
+                    n.name = safename(self.translate[int(n.name)])
                 except (ValueError, KeyError):
                     raise NexusError(
-                        "Unable to substitute %s using 'translate' data."
-                        % tree.node(n).data.taxon
+                        "Unable to substitute %s using 'translate' data." % n.name
                     ) from None
         self.trees.append(tree)
 
