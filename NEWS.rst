@@ -24,14 +24,19 @@ in the ``Bio.SeqIO.QualityIO`` module.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
-PEP8, PEP257 and best practice standard coding style, and more of the code
-style has been reformatted with the ``black`` tool.
+PEP8, PEP257 and best practice standard coding style, and more of the tests
+have been reformatted with the ``black`` tool to match the main code base.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Carlos Pena
 - Chris Rands
+- João Rodrigues
+- Michiel de Hoon
 - Peter Cock
+- Sergio Valqui
+- Zheng Ruan
 
 25 May 2020: Biopython 1.77
 ===========================
@@ -62,8 +67,8 @@ more details.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
-PEP8, PEP257 and best practice standard coding style, and more of the code
-style has been reformatted with the ``black`` tool.
+PEP8, PEP257 and best practice standard coding style, and all the main code
+base has been reformatted with the ``black`` tool.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
