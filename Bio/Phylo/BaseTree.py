@@ -547,11 +547,11 @@ class TreeMixin:
         target_set = set(_combine_args(terminals, *more_terminals))
         current = self.root
         while True:
-            if set(current.get_terminals()) == target_set:
+            if {t.name for t in current.get_terminals()} == target_set:
                 return current
             # Try a narrower subclade
             for subclade in current.clades:
-                if set(subclade.get_terminals()).issuperset(target_set):
+                if {t.name for t in subclade.get_terminals()}.issuperset(target_set):
                     current = subclade
                     break
             else:
