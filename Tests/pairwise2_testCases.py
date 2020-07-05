@@ -158,7 +158,7 @@ GAACT
         self.assertEqual(len(aligns), 1)
 
     def test_list_input(self):
-        """Do a global aligment with sequences supplied as lists."""
+        """Do a global alignment with sequences supplied as lists."""
         aligns = pairwise2.align.globalxx(
             ["Gly", "Ala", "Thr"], ["Gly", "Ala", "Ala", "Cys", "Thr"], gap_char=["---"]
         )

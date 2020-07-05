@@ -16,7 +16,7 @@ from Bio.Alphabet import single_letter_alphabet
 class AlignmentIterator:
     """Base class for building MultipleSeqAlignment iterators.
 
-    You should write a next() method to return Aligment
+    You should write a next() method to return Alignment
     objects.  You may wish to redefine the __init__
     method as well.
     """
@@ -100,7 +100,7 @@ class AlignmentWriter:
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
-        # objecta to the file handle                        #
+        # objects to the file handle                        #
         #####################################################
 
     def clean(self, text):
@@ -161,5 +161,5 @@ class SequentialAlignmentWriter(AlignmentWriter):
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
-        # objecta to the file handle                        #
+        # objects to the file handle                        #
         #####################################################

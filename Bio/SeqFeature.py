@@ -1618,7 +1618,7 @@ class ExactPosition(int, AbstractPosition):
 
     def _flip(self, length):
         """Return a copy of the location after the parent is reversed (PRIVATE)."""
-        # By default perserve any subclass
+        # By default preserve any subclass
         return self.__class__(length - int(self))
 
 

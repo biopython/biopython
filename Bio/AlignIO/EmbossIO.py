@@ -17,7 +17,7 @@ example from the alignret, water and needle tools.
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from Bio.AlignIO.Interfaces import AlignmentIterator
 
 
 class EmbossIterator(AlignmentIterator):
@@ -52,7 +52,6 @@ class EmbossIterator(AlignmentIterator):
         length_of_seqs = None
         number_of_seqs = None
         ids = []
-        seqs = []
         header_dict = {}
 
         while line[0] == "#":

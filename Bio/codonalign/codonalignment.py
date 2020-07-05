@@ -156,7 +156,7 @@ class CodonAlignment(MultipleSeqAlignment):
             )
 
     def get_aln_length(self):
-        """Get aligment length."""
+        """Get alignment length."""
         return self.get_alignment_length() // 3
 
     def toMultipleSeqAlignment(self):
