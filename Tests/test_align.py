@@ -201,13 +201,13 @@ class TestBasics(unittest.TestCase):
 class TestReading(unittest.TestCase):
 
     def test_read_clustal1(self):
-        """Parse an alignment file and get an aligment object."""
+        """Parse an alignment file and get an alignment object."""
         path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(format(alignment, "clustal"), opuntia_clustal)
 
     def test_read_clustal2(self):
-        """Parse an alignment file and get an aligment object."""
+        """Parse an alignment file and get an alignment object."""
         path = os.path.join(os.curdir, "Clustalw", "cw02.aln")
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(format(alignment, "clustal"), cw02_clustal)
@@ -942,7 +942,7 @@ TTGGCAGGCCAAGGCCGATGGATCA EAS54_6_R1_2_1_540_792
 GTTGCTTCTGGCGTGGGTGGGGGGG EAS54_6_R1_2_1_443_348""")
 
     def test_format_conversion(self):
-        """Parse the alignment file and get an aligment object."""
+        """Parse the alignment file and get an alignment object."""
         path = os.path.join(os.curdir, "Clustalw", "opuntia.aln")
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(format(alignment, "fasta"), opuntia_fasta)

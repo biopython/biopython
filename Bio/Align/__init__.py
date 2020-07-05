@@ -181,7 +181,7 @@ class MultipleSeqAlignment:
             raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
-        # Annotations about each colum of the alignment
+        # Annotations about each column of the alignment
         if column_annotations is None:
             column_annotations = {}
         # Handle this via the property set function which will validate it
@@ -287,7 +287,7 @@ class MultipleSeqAlignment:
         """Return a representation of the object for debugging.
 
         The representation cannot be used with eval() to recreate the object,
-        which is usually possible with simple python ojects.  For example:
+        which is usually possible with simple python objects.  For example:
 
         <Bio.Align.MultipleSeqAlignment instance (2 records of length 14,
         SingleLetterAlphabet()) at a3c184c>
@@ -827,7 +827,7 @@ class MultipleSeqAlignment:
             new = MultipleSeqAlignment(self._records[index], self._alphabet)
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
-                # Perserve the column annotations too,
+                # Preserve the column annotations too,
                 for k, v in self.column_annotations.items():
                     new.column_annotations[k] = v
             return new
@@ -849,7 +849,7 @@ class MultipleSeqAlignment:
             )
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
-                # Perserve the column annotations too,
+                # Preserve the column annotations too,
                 for k, v in self.column_annotations.items():
                     new.column_annotations[k] = v[col_index]
             return new
@@ -1022,7 +1022,6 @@ class PairwiseAlignment:
         start1 = end1
         start2 = end2
         for end1, end2 in path[1:]:
-            gap = 0
             if end1 == start1:
                 gap = end2 - start2
                 aligned_seq1 += "-" * gap
@@ -1056,8 +1055,6 @@ class PairwiseAlignment:
     def _format_generalized(self):
         seq1 = self.target
         seq2 = self.query
-        n1 = len(seq1)
-        n2 = len(seq2)
         aligned_seq1 = []
         aligned_seq2 = []
         pattern = []
@@ -1163,8 +1160,6 @@ class PairwiseAlignment:
         qStarts = []
         tStarts = []
         strand = "+"
-        start1 = 0
-        start2 = 0
         start1, start2 = self.path[0]
         for end1, end2 in self.path[1:]:
             count1 = end1 - start1

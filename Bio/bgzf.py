@@ -823,7 +823,7 @@ class BgzfWriter:
             # being split between BGZF blocks, so we restrict to a
             # single byte encoding - like ASCII or latin-1.
             # On output we could probably allow any encoding, as we
-            # don't care about spliting unicode characters between blocks
+            # don't care about splitting unicode characters between blocks
             data = data.encode("latin-1")
         # block_size = 2**16 = 65536
         data_len = len(data)

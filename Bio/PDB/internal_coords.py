@@ -2040,7 +2040,7 @@ class IC_Residue(object):
         # -> updated to process at chain level  (vectorized)
         #
         # for d in self.dihedra.values():
-        #    # populate values and hedra for dihedron ojects
+        #    # populate values and hedra for dihedron objects
         #    d.dihedron_from_atoms()
         # for h in self.hedra.values():
         #    # miss redundant hedra above, needed for some chi1 angles

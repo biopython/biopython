@@ -242,7 +242,7 @@ def _get_aln_slice_coords(parsed_hsp):
     following code should also cope with that.
 
     Note that this code seems to work fine even when the "sq_offset"
-    entries are prsent as a result of using the -X command line option.
+    entries are present as a result of using the -X command line option.
     """
     seq = parsed_hsp["seq"]
     seq_stripped = seq.strip("-")

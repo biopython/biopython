@@ -481,7 +481,7 @@ class _InsdcWriter(SequenceWriter):
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
         """
-        # TODO - Do the line spliting while preserving white space?
+        # TODO - Do the line splitting while preserving white space?
         text = text.strip()
         if len(text) <= max_len:
             return [text]
@@ -560,7 +560,7 @@ class GenBankWriter(_InsdcWriter):
 
         Used in the 'header' of each GenBank record.
         """
-        # TODO - Do the line spliting while preserving white space?
+        # TODO - Do the line splitting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
         self._write_single_line(tag, lines[0])
@@ -646,7 +646,7 @@ class GenBankWriter(_InsdcWriter):
             #    VRT - other vertebrate sequences
             #    INV - invertebrate sequences
             #    PLN - plant, fungal, and algal sequences
-            #    BCT - bacterial sequences [plus archea]
+            #    BCT - bacterial sequences [plus archaea]
             #    VRL - viral sequences
             #    PHG - bacteriophage sequences
             #    SYN - synthetic sequences
@@ -683,7 +683,7 @@ class GenBankWriter(_InsdcWriter):
             #    Unclassified             UNC - map to UNK
             #    Viral                    VRL - common
             #
-            # (plus XXX for submiting which we can map to UNK)
+            # (plus XXX for submitting which we can map to UNK)
             embl_to_gbk = {
                 "FUN": "PLN",
                 "HUM": "PRI",
@@ -987,7 +987,7 @@ class GenBankWriter(_InsdcWriter):
 
         default = record.id
         if default.count(".") == 1 and default[default.index(".") + 1 :].isdigit():
-            # Good, looks like accesion.version and not something
+            # Good, looks like accession.version and not something
             # else like identifier.start-end
             default = record.id.split(".", 1)[0]
         accession = self._get_annotation_str(
@@ -1219,7 +1219,7 @@ class EmblWriter(_InsdcWriter):
                 "Cannot have semi-colon in EMBL accession, %s" % repr(str(accession))
             )
         if " " in accession:
-            # This is out of practicallity... might it be allowed?
+            # This is out of practicality... might it be allowed?
             raise ValueError(
                 "Cannot have spaces in EMBL accession, %s" % repr(str(accession))
             )
@@ -1307,13 +1307,13 @@ class EmblWriter(_InsdcWriter):
             #    Unclassified             UNC (i.e. unknown)
             #    Viral                    VRL
             #
-            # (plus XXX used for submiting data to EMBL)
+            # (plus XXX used for submitting data to EMBL)
             pass
         else:
             # See if this is in GenBank style & can be converted.
             # Generally a problem as the GenBank groups are wider
             # than those of EMBL. Note that GenBank use "BCT" for
-            # both bacteria and acherea thus this maps to EMBL's
+            # both bacteria and archaea thus this maps to EMBL's
             # "PRO" nicely.
             gbk_to_embl = {"BCT": "PRO", "UNK": "UNC"}
             try:
@@ -1397,7 +1397,7 @@ class EmblWriter(_InsdcWriter):
         # DBLINK BioProject:... entries over the older GenBank DBLINK
         # Project:... lines.
         #
-        # In either case, seems EMBL usess just "PR    Project:..."
+        # In either case, seems EMBL uses just "PR    Project:..."
         # regardless of the type of ID (old numeric only, or new
         # with alpha prefix), e.g. for CP002497 NCBI now uses:
         #

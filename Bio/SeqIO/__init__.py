@@ -278,7 +278,7 @@ names are also used in Bio.AlignIO and include the following:
       _pdbx_poly_seq_scheme records.
     - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
     - fasta   - The generic sequence file format where each record starts with
-      an identifer line starting with a ">" character, followed by
+      an identifier line starting with a ">" character, followed by
       lines of sequence.
     - fasta-2line - Stricter interpretation of the FASTA format using exactly
       two lines per record (no line wrapping).

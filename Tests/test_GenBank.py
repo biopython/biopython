@@ -6772,7 +6772,7 @@ KEYWORDS    """
             # TODO - Implement Seq * int
             record.seq = Seq("N" * seq_len, original.seq.alphabet)
             record.annotations["molecule_type"] = original.annotations["molecule_type"]
-            # Set the identifer to the desired name
+            # Set the identifier to the desired name
             record.id = record.name = name
             # Attempt to output the record...
             if not ok:

@@ -40,7 +40,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     following code should also cope with that.
 
     Note that this code seems to work fine even when the "sq_offset"
-    entries are prsent as a result of using the -X command line option.
+    entries are present as a result of using the -X command line option.
     """
     align_stripped = alignment_seq_with_flanking.strip("-")
     display_start = int(annotation["al_display_start"])
@@ -109,8 +109,6 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect")
-        q = "?"  # Just for printing len(q) in debug below
-        m = "?"  # Just for printing len(m) in debug below
         tool = global_tags.get("tool", "").upper()
 
         q = _extract_alignment_region(query_seq, query_tags)

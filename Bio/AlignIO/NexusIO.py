@@ -18,7 +18,7 @@ sequences as SeqRecord objects.
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentWriter
+from Bio.AlignIO.Interfaces import AlignmentWriter
 from Bio import Alphabet
 
 
@@ -60,6 +60,8 @@ def NexusIterator(handle, seq_count=None):
         annotations = {"molecule_type": "RNA"}
     elif n.datatype == "protein":
         annotations = {"molecule_type": "protein"}
+    else:
+        annotations = None
     records = (
         SeqRecord(
             n.matrix[new_name],

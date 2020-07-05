@@ -14,7 +14,7 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from Bio.AlignIO.Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class ClustalWriter(SequentialAlignmentWriter):
@@ -217,7 +217,6 @@ class ClustalIterator(AlignmentIterator):
 
             if line.split(None, 1)[0] in known_headers:
                 # Found concatenated alignment.
-                done = True
                 self._header = line
                 break
 

@@ -446,7 +446,7 @@ class ExonerateTextParser(_BaseExonerateParser):
     def _read_alignment(self):
         """Read the raw alignment block strings, returns them in a list (PRIVATE)."""
         raw_aln_blocks = []
-        # flag to check whether we're in an aligment row
+        # flag to check whether we're in an alignment row
         in_aln_row = False
         # flag for vulgar line, if present, we can parse coordinates from it
         vulgar_comp = None

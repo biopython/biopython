@@ -11,7 +11,7 @@ The Bio.AlignIO interface is deliberately very similar to Bio.SeqIO, and in
 fact the two are connected internally.  Both modules use the same set of file
 format names (lower case strings).  From the user's perspective, you can read
 in a PHYLIP file containing one or more alignments using Bio.AlignIO, or you
-can read in the sequences within these alignmenta using Bio.SeqIO.
+can read in the sequences within these alignments using Bio.SeqIO.
 
 Bio.AlignIO is also documented at http://biopython.org/wiki/AlignIO and by
 a whole chapter in our tutorial:
@@ -103,7 +103,7 @@ names are also used in Bio.SeqIO and include the following:
     which can be used to run the command line tool from Biopython.
   - emboss    - EMBOSS tools' "pairs" and "simple" alignment formats.
   - fasta     - The generic sequence file format where each record starts with
-    an identifer line starting with a ">" character, followed by
+    an identifier line starting with a ">" character, followed by
     lines of sequence.
   - fasta-m10 - For the pairwise alignments output by Bill Pearson's FASTA
     tools when used with the -m 10 command line option for machine
@@ -113,7 +113,7 @@ names are also used in Bio.SeqIO and include the following:
   - msf       - The GCG MSF alignment format, originally from PileUp tool.
   - nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
     read any phylogenetic trees in these files.
-  - phylip    - Interlaced PHYLIP, as used by the PHLIP tools.
+  - phylip    - Interlaced PHYLIP, as used by the PHYLIP tools.
   - phylip-sequential - Sequential PHYLIP.
   - phylip-relaxed - PHYLIP like format allowing longer names.
   - stockholm - A richly annotated alignment file format used by PFAM.
