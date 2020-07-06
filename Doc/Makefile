@@ -1,5 +1,5 @@
 subdirs :=
-BP_VERSION := 1.78
+BP_VERSION := $(shell grep ^__version__ ../Bio/__init__.py | cut -f 2 -d '"')
 
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)
 pdf:  Tutorial.pdf biopdb_faq.pdf
@@ -21,7 +21,7 @@ Tutorial.txt: Tutorial.tex Tutorial/chapter_*.tex version.sh
 	hevea -exec ./version.sh -fix -text Tutorial.tex
 
 version.sh: version.in
-	sed 's/\@VERSION\@/${BP_VERSION}/g' version.in > version.sh
+	sed "s/\@VERSION\@/${BP_VERSION}/g" version.in > version.sh
 	chmod +x version.sh
 
 clean-subdirs: $(subdirs)
