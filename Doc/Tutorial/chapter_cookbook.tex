@@ -1754,6 +1754,45 @@ R  -4  -8  -4  -2   2
 
 Very nice. Now we've got our very own substitution matrix to play with!
 
+% alternative using Array objects
+\begin{minted}{pycon}
+from Bio import AlignIO
+from Bio import Alphabet
+from Bio.Alphabet import IUPAC
+from Bio.Align import AlignInfo
+from Bio import SubsMat
+from Bio.SubsMat import FreqTable
+from Bio.Align.substitution_matrices import Array
+import numpy
+
+
+filename = "protein.aln"
+alpha = Alphabet.Gapped(IUPAC.protein)
+c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
+summary_align = AlignInfo.SummaryInfo(c_align)
+
+replace_info = summary_align.replacement_dictionary([])
+
+my_arm = Array(data=replace_info)
+my_arm += numpy.transpose(my_arm)
+my_arm /= 2.0
+
+my_arm = my_arm.select("DEHKR")
+
+obs_freq_mat = my_arm / numpy.sum(my_arm)
+
+exp_freq_table = numpy.sum(obs_freq_mat, 0)
+
+exp_freq_mat = numpy.multiply.outer(exp_freq_table, exp_freq_table)
+
+subs_mat = obs_freq_mat / exp_freq_mat
+
+lo_mat = numpy.log2(subs_mat)
+
+print(format(lo_mat, "%d"))
+\end{minted}
+
+
 \section{BioSQL -- storing sequences in a relational database}
 \label{sec:BioSQL}
 \href{https://www.biosql.org/}{BioSQL} is a joint effort between the
