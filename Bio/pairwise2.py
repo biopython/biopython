@@ -232,10 +232,10 @@ Some examples:
     <BLANKLINE>
 
 - The alignment function can also use known matrices already included in
-  Biopython (``MatrixInfo`` from ``Bio.SubsMat``):
+  Biopython (in ``Bio.Align.substitution_matrices``):
 
-    >>> from Bio.SubsMat import MatrixInfo as matlist
-    >>> matrix = matlist.blosum62
+    >>> from Bio.Align import substitution_matrices
+    >>> matrix = substitution_matrices.load("BLOSUM62")
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
     ...     print(format_alignment(*a))
     KEVLA

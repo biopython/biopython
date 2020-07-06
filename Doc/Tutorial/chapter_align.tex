@@ -1520,7 +1520,8 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio import SeqIO
->>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
 >>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
@@ -1543,7 +1544,8 @@ where again XX stands for a two letter code for the match and gap functions:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
->>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
 >>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
 >>> print(pairwise2.format_alignment(*alignments[0]))
 3 PADKTNV
@@ -1561,7 +1563,8 @@ aligned parts of the sequences, use the keyword-parameter \verb|full_sequences=T
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
->>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
 >>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
 >>> print(pairwise2.format_alignment(*alignments[0], full_sequences=True))
 LSPADKTNVKAA
@@ -1582,7 +1585,8 @@ part has not been extended:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
->>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
 >>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
 >>> print(pairwise2.format_alignment(*alignments[0]))
 4 PADKTNV
