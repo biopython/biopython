@@ -1622,174 +1622,112 @@ Biopython provides a ton of common substitution matrices, and also provides func
 \subsection{Creating your own substitution matrix from an alignment}
 \label{sec:subs_mat_ex}
 
-A very cool thing that you can do easily with the substitution matrix
-classes is to create your own substitution matrix from an
-alignment. In practice, this is normally done with protein
-alignments. In this example, we'll first get a Biopython alignment
-object and then get a summary object to calculate info about the
-alignment. The file containing \href{examples/protein.aln}{protein.aln}
-(also available online
+You can create your own substitution matrix from an alignment.  In this
+example, we'll first read an protein sequence alignment from the Clustalw file
+\href{examples/protein.aln}{protein.aln} (also available online
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/protein.aln}{here})
-contains the Clustalw alignment output.
 
 %doctest ../Tests/Clustalw
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
->>> from Bio import Alphabet
->>> from Bio.Alphabet import IUPAC
->>> from Bio.Align import AlignInfo
 >>> filename = "protein.aln"
->>> alpha = Alphabet.Gapped(IUPAC.protein)
->>> c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
->>> summary_align = AlignInfo.SummaryInfo(c_align)
+>>> alignment = AlignIO.read(filename, "clustal")
 \end{minted}
 
-Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain
-more information on doing this.
+Section~\ref{sec:align_clustal} contains more information on doing this.
 
-Now that we've got our \verb|summary_align| object, we want to use it
-to find out the number of times different residues substitute for each
-other. To make the example more readable, we'll focus on only amino
-acids with polar charged side chains. Luckily, this can be done easily
-when generating a replacement dictionary, by passing in all of the
-characters that should be ignored. Thus we'll create a dictionary of
-replacements for only charged polar amino acids using:
+The `substitutions` property of the alignment stores the number of times
+different residues substitute for each other:
+%cont-doctest
+\begin{minted}{pycon}
+>>> observed_frequencies = alignment.substitutions
+\end{minted}
+
+To make the example more readable, we'll select only amino acids with polar charged side chains:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
-...                                                      "M", "P", "F", "W", "S",
-...                                                      "T", "N", "Q", "Y", "C"])
+>>> observed_frequencies = observed_frequencies.select("DEHKR")
+>>> print(observed_frequencies)
+       D      E      H      K      R
+D 2360.0  255.5    7.5    0.5   25.0
+E  255.5 3305.0   16.5   27.0    2.0
+H    7.5   16.5 1235.0   16.0    8.5
+K    0.5   27.0   16.0 3218.0  116.5
+R   25.0    2.0    8.5  116.5 2079.0
+<BLANKLINE>
 \end{minted}
+Rows and columns for other amino acids were removed from the matrix.
 
-This information about amino acid replacements is represented as a
-python dictionary which will look something like (the order can vary):
-
-\begin{minted}{python}
-{
-    ("R", "R"): 2079.0,
-    ("R", "H"): 17.0,
-    ("R", "K"): 103.0,
-    ("R", "E"): 2.0,
-    ("R", "D"): 2.0,
-    ("H", "R"): 0,
-    ("D", "H"): 15.0,
-    ("K", "K"): 3218.0,
-    ("K", "H"): 24.0,
-    ("H", "K"): 8.0,
-    ("E", "H"): 15.0,
-    ("H", "H"): 1235.0,
-    ("H", "E"): 18.0,
-    ("H", "D"): 0,
-    ("K", "D"): 0,
-    ("K", "E"): 9.0,
-    ("D", "R"): 48.0,
-    ("E", "R"): 2.0,
-    ("D", "K"): 1.0,
-    ("E", "K"): 45.0,
-    ("K", "R"): 130.0,
-    ("E", "D"): 241.0,
-    ("E", "E"): 3305.0,
-    ("D", "E"): 270.0,
-    ("D", "D"): 2360.0,
-}
-\end{minted}
-
-This information gives us our accepted number of replacements, or how
-often we expect different things to substitute for each other. It
-turns out, amazingly enough, that this is all of the information we
-need to go ahead and create a substitution matrix. First, we use the
-replacement dictionary information to create an Accepted Replacement
-Matrix (ARM):
-
+Next, we normalize the matrix:
 %cont-doctest
 \begin{minted}{pycon}
->>> from Bio import SubsMat
->>> my_arm = SubsMat.SeqMat(replace_info)
+>>> import numpy
+>>> observed_frequencies /= numpy.sum(observed_frequencies)
 \end{minted}
 
-With this accepted replacement matrix, we can go right ahead and
-create our log odds matrix (i.~e.~a standard type Substitution Matrix):
-
+Summing over rows or columns gives the relative frequency of occurrence of
+each residue:
 %cont-doctest
 \begin{minted}{pycon}
->>> my_lom = SubsMat.make_log_odds_matrix(my_arm)
+>>> residue_frequencies = numpy.sum(observed_frequencies, 0)
+>>> print(format(residue_frequencies, "%.4f"))
+D 0.2015
+E 0.2743
+H 0.0976
+K 0.2569
+R 0.1697
+<BLANKLINE>
+>>> numpy.sum(residue_frequencies)
+1.0
 \end{minted}
 
-The log odds matrix you create is customizable with the following
-optional arguments:
-
-\begin{itemize}
-  \item \verb|exp_freq_table| -- You can pass a table of expected
-  frequencies for each alphabet. If supplied, this will be used
-  instead of the passed accepted replacement matrix when calculate
-  expected replacments.
-
-  \item \verb|logbase| - The base of the logarithm taken to create the
-  log odd matrix. Defaults to base 10.
-
-  \item \verb|factor| - The factor to multiply each matrix entry
-  by. This defaults to 10, which normally makes the matrix numbers
-  easy to work with.
-
-  \item \verb|round_digit| - The digit to round to in the matrix. This
-  defaults to 0 (i.~e.~no digits).
-
-\end{itemize}
-
-Once you've got your log odds matrix, you can display it prettily
-using the function \verb|format|. Doing this on our created matrix
-gives:
-
+The expected frequency of residue pairs is then
 %cont-doctest
 \begin{minted}{pycon}
->>> print(my_lom.format())
-D   2
-E  -1   1
-H  -5  -4   3
-K -10  -5  -4   1
-R  -4  -8  -4  -2   2
-   D   E   H   K   R
+>>> expected_frequencies = numpy.multiply.outer(residue_frequencies, residue_frequencies)
+>>> print(format(expected_frequencies, "%.4f"))
+       D      E      H      K      R
+D 0.0406 0.0553 0.0197 0.0518 0.0342
+E 0.0553 0.0752 0.0268 0.0705 0.0465
+H 0.0197 0.0268 0.0095 0.0251 0.0166
+K 0.0518 0.0705 0.0251 0.0660 0.0436
+R 0.0342 0.0465 0.0166 0.0436 0.0288
+<BLANKLINE>
 \end{minted}
 
-Very nice. Now we've got our very own substitution matrix to play with!
-
-% alternative using Array objects
+We can now calculate the log-odds matrix by dividing the observed frequencies by the expected freqencies and taking the logarithm:
+%cont-doctest
 \begin{minted}{pycon}
-from Bio import AlignIO
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
-from Bio.Align import AlignInfo
-from Bio import SubsMat
-from Bio.SubsMat import FreqTable
-from Bio.Align.substitution_matrices import Array
-import numpy
+>>> m = log(observed_frequencies/expected_frequencies)
+>>> print(m)
+      D    E    H     K    R
+D   2.1 -1.5 -5.1 -10.4 -4.2
+E  -1.5  1.7 -4.4  -5.1 -8.3
+H  -5.1 -4.4  3.3  -4.4 -4.7
+K -10.4 -5.1 -4.4   1.9 -2.3
+R  -4.2 -8.3 -4.7  -2.3  2.5
+<BLANKLINE>
+\end{minted}
 
-
-filename = "protein.aln"
-alpha = Alphabet.Gapped(IUPAC.protein)
-c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
-summary_align = AlignInfo.SummaryInfo(c_align)
-
-replace_info = summary_align.replacement_dictionary([])
-
-my_arm = Array(data=replace_info)
-my_arm += numpy.transpose(my_arm)
-my_arm /= 2.0
-
-my_arm = my_arm.select("DEHKR")
-
-obs_freq_mat = my_arm / numpy.sum(my_arm)
-
-exp_freq_table = numpy.sum(obs_freq_mat, 0)
-
-exp_freq_mat = numpy.multiply.outer(exp_freq_table, exp_freq_table)
-
-subs_mat = obs_freq_mat / exp_freq_mat
-
-lo_mat = numpy.log2(subs_mat)
-
-print(format(lo_mat, "%d"))
+This matrix can be used as the substitution matrix when performing alignments. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import PairwiseAligner
+>>> aligner = PairwiseAligner()
+>>> aligner.substitution_matrix = m
+>>> aligner.gap_score = -3.0
+>>> alignments = aligner.align("DEHEK", "DHHKK")
+>>> print(alignments[0])
+DEHEK
+|.|.|
+DHHKK
+<BLANKLINE>
+>>> print("%.2f" % alignments.score)
+-2.18
+>>> score = lo_mat['D','D'] + lo_mat['E','H'] + lo_mat['H','H'] + lo_mat['E','K'] + lo_mat['K','K']
+>>> print("%.2f" % score)
+-2.18
 \end{minted}
 
 
