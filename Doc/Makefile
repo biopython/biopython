@@ -15,10 +15,10 @@ biopdb_faq.pdf: biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 
 Tutorial.html: Tutorial.tex Tutorial/chapter_*.tex version.sh
-	hevea -exec ./version.sh -fix Tutorial.tex
+	hevea -exec ./version.sh -exec xxdate.exe -fix Tutorial.tex
 
 Tutorial.txt: Tutorial.tex Tutorial/chapter_*.tex version.sh
-	hevea -exec ./version.sh -fix -text Tutorial.tex
+	hevea -exec ./version.sh -exec xxdate.exe -fix -text Tutorial.tex
 
 version.sh: version.in
 	sed "s/\@VERSION\@/${BP_VERSION}/g" version.in > version.sh
