@@ -322,15 +322,16 @@ class TestSeqIO(SeqIOTestBaseClass):
                     # Going to write to a handle...
                     mode = self.get_mode(format)
                     if test_type == "IO":
-                      if mode == "t":
-                          handle = exit_stack.enter_context(StringIO())
-                      elif mode == "b":
-                          handle = exit_stack.enter_context(BytesIO())
+                        if mode == "t":
+                            handle = exit_stack.enter_context(StringIO())
+                        elif mode == "b":
+                            handle = exit_stack.enter_context(BytesIO())
 
                     elif test_type == "NamedTemporaryFile":
                         handle = exit_stack.enter_context(
                             NamedTemporaryFile(mode="w+" + mode,
-                              encoding="utf8" if mode == "t" else None))
+                                               encoding="utf8" if mode == "t" else None)
+                        )
                     else:
                         self.fail("test_type is not recognized: %s" % (test_type))
 
@@ -462,15 +463,16 @@ class TestSeqIO(SeqIOTestBaseClass):
                 if len(records) > 1:
                     # Try writing just one record (passing a SeqRecord, not a list)
                     if test_type == "IO":
-                      if mode == "t":
-                          handle =  exit_stack.enter_context(StringIO())
-                      elif mode == "b":
-                          handle = exit_stack.enter_context(BytesIO())
+                        if mode == "t":
+                            handle = exit_stack.enter_context(StringIO())
+                        elif mode == "b":
+                            handle = exit_stack.enter_context(BytesIO())
 
                     elif test_type == "NamedTemporaryFile":
                         handle = exit_stack.enter_context(
                             NamedTemporaryFile(mode="w+" + mode,
-                              encoding="utf8" if mode == "t" else None))
+                                               encoding="utf8" if mode == "t" else None)
+                        )
                     else:
                         self.fail("test_type is not recognized: %s" % (test_type))
 
