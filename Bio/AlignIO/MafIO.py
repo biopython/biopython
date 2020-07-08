@@ -140,10 +140,11 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
     annotations = []
     records = []
 
+    handle_iter = iter(handle)
     while True:
         # allows parsing of the last bundle without duplicating code
         try:
-            line = next(handle)
+            line = next(handle_iter)
         except StopIteration:
             line = ""
 
