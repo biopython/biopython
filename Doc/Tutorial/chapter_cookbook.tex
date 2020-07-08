@@ -1619,11 +1619,11 @@ Biopython provides a ton of common substitution matrices, and also provides func
 
 \subsection{Using common substitution matrices}
 
-\subsection{Creating your own substitution matrix from an alignment}
+\subsection{Calculating a substitution matrix from a multiple sequence alignment}
 \label{sec:subs_mat_ex}
 
 You can create your own substitution matrix from an alignment.  In this
-example, we'll first read an protein sequence alignment from the Clustalw file
+example, we'll first read a protein sequence alignment from the Clustalw file
 \href{examples/protein.aln}{protein.aln} (also available online
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/protein.aln}{here})
 
@@ -1725,7 +1725,7 @@ DHHKK
 <BLANKLINE>
 >>> print("%.2f" % alignments.score)
 -2.18
->>> score = lo_mat['D','D'] + lo_mat['E','H'] + lo_mat['H','H'] + lo_mat['E','K'] + lo_mat['K','K']
+>>> score = m['D','D'] + m['E','H'] + m['H','H'] + m['E','K'] + m['K','K']
 >>> print("%.2f" % score)
 -2.18
 \end{minted}

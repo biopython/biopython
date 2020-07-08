@@ -315,11 +315,21 @@ class Array(numpy.ndarray):
 
     def select(self, alphabet):
         """Subset the array by selecting the letters from the specified alphabet."""
-        indices = [self._convert_key(key) for key in alphabet]
+        ii = []
+        jj = []
+        for i, key in enumerate(alphabet):
+            try:
+                j = self._alphabet.index(key)
+            except ValueError:
+                continue
+            ii.append(i)
+            jj.append(j)
         dims = len(self.shape)
-        indices = numpy.ix_(*[indices]*dims)
-        data = numpy.array(self)[indices]
-        return Array(alphabet, data=data)
+        a = Array(alphabet, dims=dims)
+        ii = numpy.ix_(*[ii]*dims)
+        jj = numpy.ix_(*[jj]*dims)
+        a[ii] = numpy.ndarray.__getitem__(self, jj)
+        return a
 
     def _format_1D(self, fmt):
         _alphabet = self._alphabet

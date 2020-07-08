@@ -2653,9 +2653,42 @@ array([0., 5., 0., 0.])
 {'A': 0.0, 'C': 5.0, 'G': 0.0, 'T': 0.0}
 \end{minted}
 
-While the alphabet of a \verb+Array+ is usually a string, you may also use a tuple of (immutable) objects. This is used for example for a \hyperlink{codonmatrix}{codon substitution matrix}, where the keys are not individual nucleotides or amino acids but instead three-nucleotide codons.
+While the alphabet of an \verb+Array+ is usually a string, you may also use a tuple of (immutable) objects. This is used for example for a \hyperlink{codonmatrix}{codon substitution matrix}, where the keys are not individual nucleotides or amino acids but instead three-nucleotide codons.
 
-\subsection*{Calculating a substitution matrix from a sequence alignment}
+While the \verb+alphabet+ property of an \verb+Array+ is immutable, you can create a new \verb+Array+ object by selecting the letters you are interested in from the alphabet. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> a = Array("ABCD", dims=2, data=numpy.arange(16).reshape(4,4))
+>>> print(a)
+     A    B    C    D
+A  0.0  1.0  2.0  3.0
+B  4.0  5.0  6.0  7.0
+C  8.0  9.0 10.0 11.0
+D 12.0 13.0 14.0 15.0
+<BLANKLINE>
+>>> b = a.select("CAD")
+>>> print(b)
+     C    A    D
+C 10.0  8.0 11.0
+A  2.0  0.0  3.0
+D 14.0 12.0 15.0
+<BLANKLINE>
+\end{minted}
+Note that this also allows you to reorder the alphabet.
+
+Data for letters that are not found in the alphabet are set to zero:
+%cont-doctest
+\begin{minted}{pycon}
+>>> c = a.select("DEC")
+>>> print(c)
+     D   E    C
+D 15.0 0.0 14.0
+E  0.0 0.0  0.0
+C 11.0 0.0 10.0
+<BLANKLINE>
+\end{minted}
+
+\subsection*{Calculating a substitution matrix from a pairwise sequence alignment}
 
 As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of {\it Escherichia coli} and {\it Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
 
