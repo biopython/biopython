@@ -858,6 +858,61 @@ the array by column (as in Fortran) rather than its default of by row (as in C):
 Note that this leaves the original Biopython alignment object and the NumPy array
 in memory as separate objects - editing one will not update the other!
 
+\section{Getting information on the alignment}
+
+\subsection{Substitutions}
+
+The \verb+substitutions+ property of an alignment reports how often letters in the alignment are substituted for each other. This is calculated by taking all pairs of rows in the alignment, counting the number of times two letters are aligned to each other, and summing this over all pairs. For example,
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> from Bio.Align import MultipleSeqAlignment
+>>> alignment = MultipleSeqAlignment(
+...     [
+...         SeqRecord(Seq("ACTCCTA"), id='seq1'),
+...         SeqRecord(Seq("AAT-CTA"), id='seq2'),
+...         SeqRecord(Seq("CCTACT-"), id='seq3'),
+...         SeqRecord(Seq("TCTCCTC"), id='seq4'),
+...     ]
+... )
+...
+>>> print(alignment)
+Alignment with 4 rows and 7 columns
+ACTCCTA seq1
+AAT-CTA seq2
+CCTACT- seq3
+TCTCCTC seq4
+<BLANKLINE>
+>>> alignment.substitutions
+Array([[ 2. ,  4.5,  1. ],
+       [ 4.5, 10. ,  0.5],
+       [ 1. ,  0.5, 12. ]],
+         alphabet='ACT')
+>>> print(alignment.substitutions)
+    A    C    T
+A 2.0  4.5  1.0
+C 4.5 10.0  0.5
+T 1.0  0.5 12.0
+<BLANKLINE>
+\end{minted}
+As the ordering of pairs is arbitrary, counts are divided equally above and below the diagonal. For example, the 9 alignments of \verb+A+ to \verb+C+ are stored as 4.5 at position \verb+['A', 'C']+ and 4.5  at position \verb+['C', 'A']+. This arrangement helps to make the math easier when calculating a substitution matrix from these counts, as described in Section~\ref{sec:subs_mat_ex}.
+
+Note that \verb+alignment.substitutions+ contains entries for the letters appearing in the alignment only. You can use the \verb+select+ method to add entries for missing letters, for example
+%cont-doctest
+\begin{minted}{pycon}
+>>> m = alignment.substitutions.select("ATCG")
+>>> print(m)
+    A    T    C   G
+A 2.0  1.0  4.5 0.0
+T 1.0 12.0  0.5 0.0
+C 4.5  0.5 10.0 0.0
+G 0.0  0.0  0.0 0.0
+<BLANKLINE>
+\end{minted}
+This also allows you to change the order of letters in the alphabet.
+
 \section{Alignment Tools}
 \label{sec:alignment-tools}
 
