@@ -953,6 +953,7 @@ class MultipleSeqAlignment:
         A--A seq2
         ACGT seq3
         TTTC seq4
+        <BLANKLINE>
         >>> m = alignment.substitutions
         >>> print(m)
             A   C   G   T

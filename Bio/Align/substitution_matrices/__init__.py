@@ -326,8 +326,8 @@ class Array(numpy.ndarray):
             jj.append(j)
         dims = len(self.shape)
         a = Array(alphabet, dims=dims)
-        ii = numpy.ix_(*[ii]*dims)
-        jj = numpy.ix_(*[jj]*dims)
+        ii = numpy.ix_(*[ii] * dims)
+        jj = numpy.ix_(*[jj] * dims)
         a[ii] = numpy.ndarray.__getitem__(self, jj)
         return a
 
