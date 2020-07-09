@@ -884,14 +884,10 @@ ACTCCTA seq1
 AAT-CTA seq2
 CCTACT- seq3
 TCTCCTC seq4
->>> alignment.substitutions
-Array([[ 2. ,  4.5,  1. ],
-       [ 4.5, 10. ,  0.5],
-       [ 1. ,  0.5, 12. ]],
-         alphabet='ACT')
+>>> substitutions = alignment.substitutions
 \end{minted}
 \begin{minted}{pycon}
->>> print(alignment.substitutions)
+>>> print(substitutions)
     A    C    T
 A 2.0  4.5  1.0
 C 4.5 10.0  0.5
@@ -903,7 +899,7 @@ As the ordering of pairs is arbitrary, counts are divided equally above and belo
 Note that \verb+alignment.substitutions+ contains entries for the letters appearing in the alignment only. You can use the \verb+select+ method to add entries for missing letters, for example
 %% %cont-doctest
 \begin{minted}{pycon}
->>> m = alignment.substitutions.select("ATCG")
+>>> m = substitutions.select("ATCG")
 >>> print(m)
     A    T    C   G
 A 2.0  1.0  4.5 0.0
