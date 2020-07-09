@@ -1700,7 +1700,7 @@ Here, \verb+residue_frequencies[:, None]+ creates a 2D array consisting of a sin
 We can now calculate the log-odds matrix by dividing the observed frequencies by the expected freqencies and taking the logarithm:
 %cont-doctest
 \begin{minted}{pycon}
->>> m = log(observed_frequencies/expected_frequencies)
+>>> m = numpy.log2(observed_frequencies/expected_frequencies)
 >>> print(m)
       D    E    H     K    R
 D   2.1 -1.5 -5.1 -10.4 -4.2
