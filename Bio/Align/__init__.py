@@ -937,7 +937,7 @@ class MultipleSeqAlignment:
     def substitutions(self):
         """Return an Array with the number of substitutions of letters in the alignment.
 
-        As an example, consider a multiple sequence alignment of three DNA sequences::
+        As an example, consider a multiple sequence alignment of three DNA sequences:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
