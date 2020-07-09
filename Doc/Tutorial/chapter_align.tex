@@ -899,7 +899,7 @@ T 1.0  0.5 12.0
 As the ordering of pairs is arbitrary, counts are divided equally above and below the diagonal. For example, the 9 alignments of \verb+A+ to \verb+C+ are stored as 4.5 at position \verb+['A', 'C']+ and 4.5  at position \verb+['C', 'A']+. This arrangement helps to make the math easier when calculating a substitution matrix from these counts, as described in Section~\ref{sec:subs_mat_ex}.
 
 Note that \verb+alignment.substitutions+ contains entries for the letters appearing in the alignment only. You can use the \verb+select+ method to add entries for missing letters, for example
-%cont-doctest
+%% %cont-doctest
 \begin{minted}{pycon}
 >>> m = alignment.substitutions.select("ATCG")
 >>> print(m)
