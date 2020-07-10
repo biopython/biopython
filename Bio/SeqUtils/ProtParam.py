@@ -125,7 +125,9 @@ class ProteinAnalysis:
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence."""
-        return molecular_weight(self.sequence, monoisotopic=self.monoisotopic)
+        return molecular_weight(
+            self.sequence, seq_type="protein", monoisotopic=self.monoisotopic
+        )
 
     def aromaticity(self):
         """Calculate the aromaticity according to Lobry, 1994.
