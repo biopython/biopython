@@ -1127,60 +1127,49 @@ class PairwiseAlignment:
         query = self.query
         target = self.target
         try:
-            Qname = query.id
+            qName = query.id
         except AttributeError:
-            Qname = "query"
+            qName = "query"
         else:
             query = query.seq
         try:
-            Tname = target.id
+            tName = target.id
         except AttributeError:
-            Tname = "target"
+            tName = "target"
         else:
             target = target.seq
         seq1 = str(target)
         seq2 = str(query)
         n1 = len(seq1)
         n2 = len(seq2)
-        match = 0
-        mismatch = 0
-        repmatch = 0
-        Ns = 0
-        Qgapcount = 0
-        Qgapbases = 0
-        Tgapcount = 0
-        Tgapbases = 0
-        Qsize = n2
-        Qstart = 0
-        Qend = Qsize
-        Tsize = n1
-        Tstart = 0
-        Tend = Tsize
+        # variable names follow those in the PSL file format specification
+        matches = 0
+        misMatches = 0
+        repMatches = 0
+        nCount = 0
+        qNumInsert = 0
+        qBaseInsert = 0
+        tNumInsert = 0
+        tBaseInsert = 0
+        qSize = n2
+        tSize = n1
         blockSizes = []
         qStarts = []
         tStarts = []
         strand = "+"
         start1, start2 = self.path[0]
+        tStart = start1
+        qStart = start2
         for end1, end2 in self.path[1:]:
             count1 = end1 - start1
             count2 = end2 - start2
             if count1 == 0:
-                if start2 == 0:
-                    Qstart += count2
-                elif end2 == n2:
-                    Qend -= count2
-                else:
-                    Qgapcount += 1
-                    Qgapbases += count2
+                qNumInsert += 1
+                qBaseInsert += count2
                 start2 = end2
             elif count2 == 0:
-                if start1 == 0:
-                    Tstart += count1
-                elif end1 == n1:
-                    Tend -= count1
-                else:
-                    Tgapcount += 1
-                    Tgapbases += count1
+                tNumInsert += 1
+                tBaseInsert += count1
                 start1 = end1
             else:
                 assert count1 == count2
@@ -1189,35 +1178,37 @@ class PairwiseAlignment:
                 blockSizes.append(count1)
                 for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
                     if c1 == "N" or c2 == "N":
-                        Ns += 1
+                        nCount += 1
                     elif c1 == c2:
-                        match += 1
+                        matches += 1
                     else:
-                        mismatch += 1
+                        misMatches += 1
                 start1 = end1
                 start2 = end2
+        tEnd = end1
+        qEnd = end2
         blockcount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
         qStarts = ",".join(map(str, qStarts)) + ","
         tStarts = ",".join(map(str, tStarts)) + ","
         words = [
-            str(match),
-            str(mismatch),
-            str(repmatch),
-            str(Ns),
-            str(Qgapcount),
-            str(Qgapbases),
-            str(Tgapcount),
-            str(Tgapbases),
+            str(matches),
+            str(misMatches),
+            str(repMatches),
+            str(nCount),
+            str(qNumInsert),
+            str(qBaseInsert),
+            str(tNumInsert),
+            str(tBaseInsert),
             strand,
-            Qname,
-            str(Qsize),
-            str(Qstart),
-            str(Qend),
-            Tname,
-            str(Tsize),
-            str(Tstart),
-            str(Tend),
+            qName,
+            str(qSize),
+            str(qStart),
+            str(qEnd),
+            tName,
+            str(tSize),
+            str(tStart),
+            str(tEnd),
             str(blockcount),
             blockSizes,
             qStarts,
