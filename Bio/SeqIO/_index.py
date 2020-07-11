@@ -342,7 +342,6 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
-        semi_char = b";"
         sv_marker = b"SV "
         ac_marker = b"AC "
         # Skip any header before first record
@@ -369,14 +368,13 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     key = parts[0].strip()
             elif line[2:].count(b";") in [2, 3]:
                 # Looks like the pre 2006 style, take first word only
-                # Or, with two colons, the KIPO patent variantion
+                # Or, with two colons, the KIPO patent variation
                 key = line[3:].strip().split(None, 1)[0]
                 if key.endswith(b";"):
                     key = key[:-1]
             else:
                 raise ValueError("Did not recognise the ID line layout:\n%r" % line)
             while True:
-                end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
                     end_offset = handle.tell() - len(line)
