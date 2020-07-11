@@ -345,8 +345,9 @@ class SummaryInfo:
             raise TypeError("chars_to_ignore should be a list.")
 
         # if we have a gap char, add it to stuff to ignore
-        if isinstance(self.alignment._alphabet, Alphabet.Gapped):
-            chars_to_ignore.append(self.alignment._alphabet.gap_char)
+        gap_char = self._get_gap_char()
+        if gap_char:
+            chars_to_ignore.append(gap_char)
 
         for char in chars_to_ignore:
             all_letters = all_letters.replace(char, "")
