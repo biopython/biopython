@@ -382,24 +382,24 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
-from . import AbiIO
-from . import AceIO
-from . import FastaIO
-from . import GckIO
-from . import IgIO  # IntelliGenetics or MASE format
-from . import InsdcIO  # EMBL and GenBank
-from . import NibIO
-from . import PdbIO
-from . import PhdIO
-from . import PirIO
-from . import SeqXmlIO
-from . import SffIO
-from . import SnapGeneIO
-from . import SwissIO
-from . import TabIO
-from . import QualityIO  # FastQ and qual files
-from . import UniprotIO
-from . import XdnaIO
+from Bio.SeqIO import AbiIO
+from Bio.SeqIO import AceIO
+from Bio.SeqIO import FastaIO
+from Bio.SeqIO import GckIO
+from Bio.SeqIO import IgIO  # IntelliGenetics or MASE format
+from Bio.SeqIO import InsdcIO  # EMBL and GenBank
+from Bio.SeqIO import NibIO
+from Bio.SeqIO import PdbIO
+from Bio.SeqIO import PhdIO
+from Bio.SeqIO import PirIO
+from Bio.SeqIO import SeqXmlIO
+from Bio.SeqIO import SffIO
+from Bio.SeqIO import SnapGeneIO
+from Bio.SeqIO import SwissIO
+from Bio.SeqIO import TabIO
+from Bio.SeqIO import QualityIO  # FastQ and qual files
+from Bio.SeqIO import UniprotIO
+from Bio.SeqIO import XdnaIO
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -1106,9 +1106,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-# This helpful trick for testing no longer works with the
-# local imports :(
-#
-# if __name__ == "__main__":
-#    from Bio._utils import run_doctest
-#    run_doctest()
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

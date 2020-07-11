@@ -323,7 +323,7 @@ _BYTEFMT = {
     19: "s",  # cString
     20: "2i",  # tag, legacy unsupported
 }
-# header data structure (exluding 4 byte ABIF marker)
+# header data structure (excluding 4 byte ABIF marker)
 _HEADFMT = ">H4sI2H3I"
 # directory data structure
 _DIRFMT = ">4sI2H4I"
@@ -541,8 +541,8 @@ def _abi_trim(seq_record):
             for qual in seq_record.letter_annotations["phred_quality"]
         ]
 
-        # calculate cummulative score
-        # if cummulative value < 0, set it to 0
+        # calculate cumulative score
+        # if cumulative value < 0, set it to 0
         # first value is set to 0, because of the assumption that
         # the first base will always be trimmed out
         cummul_score = [0]
@@ -553,12 +553,12 @@ def _abi_trim(seq_record):
             else:
                 cummul_score.append(score)
                 if not start:
-                    # trim_start = value when cummulative score is first > 0
+                    # trim_start = value when cumulative score is first > 0
                     trim_start = i
                     start = True
 
-        # trim_finish = index of highest cummulative score,
-        # marking the end of sequence segment with highest cummulative score
+        # trim_finish = index of highest cumulative score,
+        # marking the end of sequence segment with highest cumulative score
         trim_finish = cummul_score.index(max(cummul_score))
 
         return seq_record[trim_start:trim_finish]

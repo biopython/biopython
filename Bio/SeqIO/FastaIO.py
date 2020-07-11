@@ -378,7 +378,7 @@ class FastaTwoLineWriter(FastaWriter):
 
 
 def as_fasta(record):
-    """Turn a SeqRecord into a FASTA formated string.
+    """Turn a SeqRecord into a FASTA formatted string.
 
     This is used internally by the SeqRecord's .format("fasta")
     method and by the SeqIO.write(..., ..., "fasta") function.
@@ -406,7 +406,7 @@ def as_fasta(record):
 
 
 def as_fasta_2line(record):
-    """Turn a SeqRecord into a two-line FASTA formated string.
+    """Turn a SeqRecord into a two-line FASTA formatted string.
 
     This is used internally by the SeqRecord's .format("fasta-2line")
     method and by the SeqIO.write(..., ..., "fasta-2line") function.

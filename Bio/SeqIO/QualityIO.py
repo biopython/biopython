@@ -1530,7 +1530,7 @@ class FastqPhredWriter(SequenceWriter):
 
 
 def as_fastq(record):
-    """Turn a SeqRecord into a Sanger FASTQ formated string.
+    """Turn a SeqRecord into a Sanger FASTQ formatted string.
 
     This is used internally by the SeqRecord's .format("fastq")
     method and by the SeqIO.write(..., ..., "fastq") function,
@@ -1668,7 +1668,7 @@ class QualPhredWriter(SequenceWriter):
 
 
 def as_qual(record):
-    """Turn a SeqRecord into a QUAL formated string.
+    """Turn a SeqRecord into a QUAL formatted string.
 
     This is used internally by the SeqRecord's .format("qual")
     method and by the SeqIO.write(..., ..., "qual") function.
@@ -1786,7 +1786,7 @@ class FastqSolexaWriter(SequenceWriter):
 
 
 def as_fastq_solexa(record):
-    """Turn a SeqRecord into a Solexa FASTQ formated string.
+    """Turn a SeqRecord into a Solexa FASTQ formatted string.
 
     This is used internally by the SeqRecord's .format("fastq-solexa")
     method and by the SeqIO.write(..., ..., "fastq-solexa") function.
@@ -1870,7 +1870,7 @@ class FastqIlluminaWriter(SequenceWriter):
 
 
 def as_fastq_illumina(record):
-    """Turn a SeqRecord into an Illumina FASTQ formated string.
+    """Turn a SeqRecord into an Illumina FASTQ formatted string.
 
     This is used internally by the SeqRecord's .format("fastq-illumina")
     method and by the SeqIO.write(..., ..., "fastq-illumina") function.
