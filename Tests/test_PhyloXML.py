@@ -10,7 +10,6 @@ import tempfile
 import unittest
 from itertools import chain
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -675,7 +674,7 @@ class MethodTests(unittest.TestCase):
         )
         srec = pseq.to_seqrecord()
         # TODO: check seqrec-specific traits (see args)
-        #   Seq(letters, alphabet), id, name, description, features
+        #   Seq(letters), id, name, description, features
         pseq2 = PX.Sequence.from_seqrecord(srec)
         # TODO: check the round-tripped attributes again
 
@@ -685,11 +684,10 @@ class MethodTests(unittest.TestCase):
         self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(len(aln), 0)
         # Add sequences to the terminals
-        alphabet = Alphabet.generic_dna
         for tip, seqstr in zip(tree.get_terminals(), ("AA--TTA", "AA--TTG", "AACCTTC")):
             tip.sequences.append(
                 PX.Sequence.from_seqrecord(
-                    SeqRecord(Seq(seqstr, alphabet), id=str(tip)), is_aligned=True
+                    SeqRecord(Seq(seqstr), id=str(tip)), is_aligned=True
                 )
             )
         # Check the alignment
