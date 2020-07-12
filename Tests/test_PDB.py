@@ -37,7 +37,6 @@ except ImportError:
 
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
-from Bio.Alphabet import generic_protein
 from Bio.PDB import (
     PDBParser,
     PPBuilder,
@@ -201,7 +200,6 @@ class ParseTest(unittest.TestCase):
         # Check the sequence
         s = pp.get_sequence()
         self.assertIsInstance(s, Seq)
-        self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
             "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
@@ -220,7 +218,6 @@ class ParseTest(unittest.TestCase):
         # Check the sequence
         s = pp.get_sequence()
         self.assertIsInstance(s, Seq)
-        self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
             "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
@@ -765,7 +762,6 @@ class ParseReal(unittest.TestCase):
             # Check the sequence
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
             self.assertEqual(
                 "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
@@ -784,7 +780,6 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
             # Second fragment
             pp = polypeptides[1]
@@ -792,7 +787,6 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
             # Third fragment
             pp = polypeptides[2]
@@ -800,7 +794,6 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TACQG", str(s))
 
     def test_strict(self):
