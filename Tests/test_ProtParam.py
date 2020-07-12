@@ -9,7 +9,6 @@
 
 import unittest
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
 from Bio.SeqUtils import ProtParam, ProtParamData
 from Bio.SeqUtils import molecular_weight
 
