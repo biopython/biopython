@@ -1528,7 +1528,7 @@ class CompoundLocation:
         """
         # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
-        f_seq = functools.reduce(lambda x, y: x+y, parts)
+        f_seq = functools.reduce(lambda x, y: x + y, parts)
         return f_seq
 
 
