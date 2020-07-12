@@ -28,14 +28,11 @@ class TestBlastRecord(unittest.TestCase):
 
     def test_conversion(self):
         """Converting a Blast record multiple alignment."""
-        from Bio.Alphabet import IUPAC
-
         path = os.path.join("Blast", "text_2010L_blastp_006.txt")
         with open(path) as handle:
             record = self.parser.parse(handle)
-        generic_align = record.multiple_alignment.to_generic(IUPAC.protein)
+        generic_align = record.multiple_alignment.to_generic()
         test_seq = generic_align[0].seq
-        self.assertEqual(test_seq.alphabet, IUPAC.protein)
         self.assertEqual(str(test_seq[:60]), record.multiple_alignment.alignment[0][2])
 
 
