@@ -54,6 +54,7 @@ Classes:
 
 
 from collections import OrderedDict
+import functools
 
 from Bio.Seq import MutableSeq, reverse_complement
 
@@ -339,9 +340,8 @@ class SeqFeature:
         here reverse strand features are not permitted.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> f.extract(seq)
         Seq('VALIVIC')
@@ -351,7 +351,7 @@ class SeqFeature:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import SeqFeature
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> f = SeqFeature(None, type="domain")
         >>> f.extract(seq)
         Traceback (most recent call last):
@@ -392,9 +392,7 @@ class SeqFeature:
         as Seq.translate, refer to that documentation for further information.
 
         Arguments:
-         - parent_sequence - This method will translate DNA or RNA sequences,
-           and those with a nucleotide or generic alphabet. Trying to
-           translate a protein sequence raises an exception.
+         - parent_sequence - A DNA or RNA sequence.
          - table - Which codon table to use if there is no transl_table
            qualifier for this feature. This can be either a name
            (string), an NCBI identifier (integer), or a CodonTable
@@ -408,9 +406,8 @@ class SeqFeature:
            Will override a codon_start qualifier
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
         >>> f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         >>> f.qualifiers['transl_table'] = [11]
 
@@ -483,9 +480,8 @@ class SeqFeature:
         """Return the length of the region where the feature is located.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> len(f)
         7
@@ -1104,9 +1100,8 @@ class FeatureLocation:
         a MutableSeq as the parent sequence will return a Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import FeatureLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> feature_loc = FeatureLocation(8, 15)
         >>> feature_loc.extract(seq)
         Seq('VALIVIC')
@@ -1522,9 +1517,8 @@ class CompoundLocation:
         a MutableSeq as the parent sequence will return a Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> fl1 = FeatureLocation(2, 8)
         >>> fl2 = FeatureLocation(10, 15)
         >>> fl3 = CompoundLocation([fl1,fl2])
@@ -1534,10 +1528,7 @@ class CompoundLocation:
         """
         # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
-        # We use addition rather than a join to avoid alphabet issues:
-        f_seq = parts[0]
-        for part in parts[1:]:
-            f_seq += part
+        f_seq = functools.reduce(lambda x, y: x + y, parts)
         return f_seq
 
 
