@@ -54,8 +54,9 @@ Classes:
 
 
 from collections import OrderedDict
+import functools
 
-from Bio.Seq import Seq, MutableSeq, reverse_complement
+from Bio.Seq import MutableSeq, reverse_complement
 
 
 class SeqFeature:
@@ -1527,7 +1528,7 @@ class CompoundLocation:
         """
         # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
-        f_seq = Seq("").join(parts)
+        f_seq = functools.reduce(lambda x, y: x+y, parts)
         return f_seq
 
 
