@@ -29,7 +29,6 @@ except ImportError:
 
 
 from Bio.Seq import Seq
-from Bio.Alphabet import generic_protein
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
 from Bio.PDB import PPBuilder, CaPPBuilder
@@ -81,13 +80,12 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(s, f_s)  # enough to test this
 
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
 
             # Here non-standard MSE are shown as M
             self.assertEqual(
                 "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                 "NANPDCKTILKALGPGATLEEMMTACQG",
-                str(s),
+                s,
             )
 
             # ==========================================================
@@ -103,8 +101,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
+            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", s)
 
             # Second fragment
             pp = polypeptides[1]
@@ -112,8 +109,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
+            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", s)
 
             # Third fragment
             pp = polypeptides[2]
@@ -121,8 +117,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("TACQG", str(s))
+            self.assertEqual("TACQG", s)
 
         s_atoms = list(structure.get_atoms())
         f_atoms = list(f_structure.get_atoms())
@@ -210,10 +205,9 @@ class ParseReal(unittest.TestCase):
             # Check the sequence
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             # Here non-standard MSE are shown as M
             self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
+                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s
             )
             # ==========================================================
             # Now try strict version with only standard amino acids
@@ -226,9 +220,8 @@ class ParseReal(unittest.TestCase):
             # Check the sequence
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
+                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s
             )
 
         # This structure contains several models with multiple lengths.
@@ -259,8 +252,7 @@ class ParseReal(unittest.TestCase):
             )
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual(refseq, str(s))
+            self.assertEqual(refseq, s)
 
     def test_filehandle(self):
         """Test if the parser can handle file handle as well as filename."""
