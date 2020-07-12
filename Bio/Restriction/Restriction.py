@@ -661,7 +661,7 @@ class NoCut(AbstractCut):
     """Implement the methods specific to the enzymes that do not cut.
 
     These enzymes are generally enzymes that have been only partially
-    characterised and the way they cut the DNA is unknow or enzymes for
+    characterised and the way they cut the DNA is unknown or enzymes for
     which the pattern of cut is to complex to be recorded in Rebase
     (ncuts values of 0 in emboss_e.###).
 
