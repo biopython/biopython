@@ -2212,7 +2212,7 @@ class MotifTestPWM(unittest.TestCase):
         """Define motif and sequence for tests."""
         with open("motifs/SRF.pfm") as handle:
             self.m = motifs.read(handle, "pfm")
-        self.s = Seq("ACGTGTGCGTAGTGCGT", self.m.alphabet)
+        self.s = Seq("ACGTGTGCGTAGTGCGT")
 
     def test_simple(self):
         """Test if Bio.motifs PWM scoring works."""
