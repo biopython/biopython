@@ -29,7 +29,7 @@ def create(instances, alphabet="ACGT"):
     return Motif(instances=instances, alphabet=alphabet)
 
 
-def parse(handle, format, strict=True):
+def parse(handle, fmt, strict=True):
     """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
@@ -77,48 +77,48 @@ def parse(handle, format, strict=True):
     If strict is True (default), the parser will raise a ValueError if the
     file contents does not strictly comply with the specified file format.
     """
-    format = format.lower()
-    if format == "alignace":
+    fmt = fmt.lower()
+    if fmt == "alignace":
         from Bio.motifs import alignace
 
         return alignace.read(handle)
-    elif format == "meme":
+    elif fmt == "meme":
         from Bio.motifs import meme
 
         return meme.read(handle)
-    elif format == "minimal":
+    elif fmt == "minimal":
         from Bio.motifs import minimal
 
         return minimal.read(handle)
-    elif format == "clusterbuster":
+    elif fmt == "clusterbuster":
         from Bio.motifs import clusterbuster
 
         return clusterbuster.read(handle)
-    elif format in ("pfm-four-columns", "pfm-four-rows"):
+    elif fmt in ("pfm-four-columns", "pfm-four-rows"):
         from Bio.motifs import pfm
 
-        return pfm.read(handle, format)
-    elif format == "xms":
+        return pfm.read(handle, fmt)
+    elif fmt == "xms":
         from Bio.motifs import xms
 
         return xms.read(handle)
-    elif format == "mast":
+    elif fmt == "mast":
         from Bio.motifs import mast
 
         return mast.read(handle)
-    elif format == "transfac":
+    elif fmt == "transfac":
         from Bio.motifs import transfac
 
         return transfac.read(handle, strict)
-    elif format in ("pfm", "sites", "jaspar"):
+    elif fmt in ("pfm", "sites", "jaspar"):
         from Bio.motifs import jaspar
 
-        return jaspar.read(handle, format)
+        return jaspar.read(handle, fmt)
     else:
-        raise ValueError("Unknown format %s" % format)
+        raise ValueError("Unknown format %s" % fmt)
 
 
-def read(handle, format, strict=True):
+def read(handle, fmt, strict=True):
     """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
@@ -160,14 +160,14 @@ def read(handle, format, strict=True):
     >>> motif.consensus
     Seq('TCTACGATTGAG')
 
-    Use the Bio.motifs.parse(handle, format) function if you want
+    Use the Bio.motifs.parse(handle, fmt) function if you want
     to read multiple records from the handle.
 
     If strict is True (default), the parser will raise a ValueError if the
     file contents does not strictly comply with the specified file format.
     """
-    format = format.lower()
-    motifs = parse(handle, format, strict)
+    fmt = fmt.lower()
+    motifs = parse(handle, fmt, strict)
     if len(motifs) == 0:
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
@@ -433,7 +433,7 @@ class Motif:
         """
         return self.counts.degenerate_consensus
 
-    def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
+    def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
@@ -489,11 +489,11 @@ class Motif:
         else:
             alpha = "auto"
 
-        frequencies = self.format("transfac")
+        frequencies = format(self, "transfac")
         url = "http://weblogo.threeplusone.com/create.cgi"
         values = {
             "sequences": frequencies,
-            "format": format.lower(),
+            "format": fmt.lower(),
             "stack_width": "medium",
             "stacks_per_line": "40",
             "alphabet": alpha,
@@ -580,7 +580,7 @@ class Motif:
         return self.__format__(format_spec)
 
 
-def write(motifs, format):
+def write(motifs, fmt):
     """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
@@ -590,21 +590,21 @@ def write(motifs, format):
      - transfac : TRANSFAC like files
 
     """
-    format = format.lower()
-    if format in ("pfm", "jaspar"):
+    fmt = fmt.lower()
+    if fmt in ("pfm", "jaspar"):
         from Bio.motifs import jaspar
 
-        return jaspar.write(motifs, format)
-    elif format == "transfac":
+        return jaspar.write(motifs, fmt)
+    elif fmt == "transfac":
         from Bio.motifs import transfac
 
         return transfac.write(motifs)
-    elif format == "clusterbuster":
+    elif fmt == "clusterbuster":
         from Bio.motifs import clusterbuster
 
         return clusterbuster.write(motifs)
     else:
-        raise ValueError("Unknown format type %s" % format)
+        raise ValueError("Unknown format type %s" % fmt)
 
 
 if __name__ == "__main__":
