@@ -16,11 +16,9 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
 from Bio.Application import _escape_filename
-from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
 
-# from Bio.Data.IUPACData import ambiguous_dna_letters
 
 # ###############################################################
 
@@ -214,84 +212,47 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     return aligns
 
 
-# Top level function as this makes it easier to use for debugging:
-def compare_records(old_list, new_list):
-    """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
-    if len(old_list) != len(new_list):
-        raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
-    for old, new in zip(old_list, new_list):
-        # Note the name matching is a bit fuzzy, e.g. truncation and
-        # no spaces in PHYLIP files.
-        if (
-            old.id != new.id
-            and old.name != new.name
-            and (old.id not in new.id)
-            and (new.id not in old.id)
-            and (old.id.replace(" ", "_") != new.id.replace(" ", "_"))
-        ):
-            raise ValueError(
-                "'%s' or '%s' vs '%s' or '%s' records"
-                % (old.id, old.name, new.id, new.name)
-            )
-        if len(old.seq) != len(new.seq):
-            raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-        if str(old.seq).upper() != str(new.seq).upper():
-            if str(old.seq).replace("X", "N") == str(new.seq):
-                raise ValueError("X -> N (protein forced into nucleotide?)")
-            if len(old.seq) < 200:
-                raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
-            else:
-                raise ValueError(
-                    "'%s...%s' vs '%s...%s'"
-                    % (old.seq[:60], old.seq[-10:], new.seq[:60], new.seq[-10:])
-                )
-        if old.features and new.features and len(old.features) != len(new.features):
-            raise ValueError(
-                "%i vs %i features" % (len(old.features), len(new.features))
-            )
-        # TODO - check annotation
-    return True
+class SeqRetTests(unittest.TestCase):
+    """Base class providing SeqRecord comparison method."""
+
+    def compare_records(self, old_records, new_records, msg=None):
+        self.assertEqual(len(old_records), len(new_records), msg)
+        for old, new in zip(old_records, new_records):
+            # Note the name matching is a bit fuzzy, e.g. truncation and
+            # no spaces in PHYLIP files.
+            self.assertTrue((old.id in new.id)
+                         or (new.id in old.id)
+                         or (old.id.replace(" ", "_") == new.id.replace(" ", "_"))
+                         or (old.name == new.name), msg)
+            self.assertEqual(len(old.seq), len(new.seq), msg)
+            if str(old.seq).upper() != str(new.seq).upper():
+                if str(old.seq).replace("X", "N") == str(new.seq):
+                    self.fail("%s: X -> N (protein forced into nucleotide?)" % msg)
+                else:
+                    self.assertEqual(old.seq, new.seq, msg)
+            if old.features and new.features:
+                self.assertEqual(len(old.features), len(new.features), msg)
+            # TODO - check annotation
 
 
-# Top level function as this makes it easier to use for debugging:
-def compare_alignments(old_list, new_list):
-    """Check two lists of Alignments agree, raises a ValueError if mismatch."""
-    if len(old_list) != len(new_list):
-        raise ValueError("%i vs %i alignments" % (len(old_list), len(new_list)))
-    for old, new in zip(old_list, new_list):
-        if len(old) != len(new):
-            raise ValueError("Alignment with %i vs %i records" % (len(old), len(new)))
-        compare_records(old, new)
-    return True
-
-
-class SeqRetSeqIOTests(unittest.TestCase):
+class SeqRetSeqIOTests(SeqRetTests):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
 
     def tearDown(self):
         clean_up()
 
     def check_SeqIO_to_EMBOSS(
-        self, in_filename, in_format, skip_formats=(), alphabet=None
-    ):
+        self, in_filename, in_format, skip_formats=()):
         """Check SeqIO writes files seqret can read back."""
-        if alphabet:
-            records = list(SeqIO.parse(in_filename, in_format, alphabet))
-        else:
-            records = list(SeqIO.parse(in_filename, in_format))
+        records = list(SeqIO.parse(in_filename, in_format))
         for temp_format in ["genbank", "embl", "fasta"]:
             if temp_format in skip_formats:
                 continue
             new_records = list(
                 emboss_piped_SeqIO_convert(records, temp_format, "fasta")
             )
-            try:
-                self.assertTrue(compare_records(records, new_records))
-            except ValueError as err:
-                raise ValueError(
-                    "Disagree on file %s %s in %s format: %s"
-                    % (in_format, in_filename, temp_format, err)
-                ) from None
+            msg = "converting %s from %s to %s" % (in_filename, in_format, temp_format)
+            self.compare_records(records, new_records, msg)
 
     def check_EMBOSS_to_SeqIO(self, filename, old_format, skip_formats=()):
         """Check SeqIO can read read seqret's conversion output."""
@@ -304,19 +265,13 @@ class SeqRetSeqIOTests(unittest.TestCase):
             handle = emboss_convert(filename, old_format, new_format)
             new_records = list(SeqIO.parse(handle, new_format))
             handle.close()
-            try:
-                self.assertTrue(compare_records(old_records, new_records))
-            except ValueError as err:
-                raise ValueError(
-                    "Disagree on %s file %s in %s format: %s"
-                    % (old_format, filename, new_format, err)
-                ) from None
+            msg = "converting %s from %s to %s" % (filename, old_format, new_format)
+            self.compare_records(old_records, new_records, msg)
 
     def check_SeqIO_with_EMBOSS(
-        self, filename, old_format, skip_formats=(), alphabet=None
-    ):
+        self, filename, old_format, skip_formats=()):
         # Check EMBOSS can read Bio.SeqIO output...
-        self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats, alphabet)
+        self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats)
         # Check Bio.SeqIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
 
@@ -361,7 +316,6 @@ class SeqRetSeqIOTests(unittest.TestCase):
         self.check_SeqIO_to_EMBOSS(
             "IntelliGenetics/VIF_mase-pro.txt",
             "ig",
-            alphabet=generic_protein,
             skip_formats=["genbank", "embl"],
         )
         # TODO - What does a % in an ig sequence mean?
@@ -391,11 +345,16 @@ class SeqRetSeqIOTests(unittest.TestCase):
         )
 
 
-class SeqRetAlignIOTests(unittest.TestCase):
+class SeqRetAlignIOTests(SeqRetTests):
     """Check EMBOSS seqret against Bio.AlignIO for converting files."""
 
     def tearDown(self):
         clean_up()
+
+    def compare_alignments(self, old_list, new_list, msg=None):
+        self.assertEqual(len(old_list), len(new_list), msg)
+        for old, new in zip(old_list, new_list):
+            self.compare_records(old, new, msg)
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format, skip_formats=()):
         """Check AlignIO can read seqret's conversion of the file."""
@@ -417,22 +376,13 @@ class SeqRetAlignIOTests(unittest.TestCase):
                     % (old_format, filename, new_format)
                 ) from None
             handle.close()
-            try:
-                self.assertTrue(compare_alignments(old_aligns, new_aligns))
-            except ValueError as err:
-                raise ValueError(
-                    "Disagree on %s file %s in %s format: %s"
-                    % (old_format, filename, new_format, err)
-                ) from None
+            msg = "converting %s from %s to %s" % (filename, old_format, new_format)
+            self.compare_alignments(old_aligns, new_aligns, msg)
 
     def check_AlignIO_to_EMBOSS(
-        self, in_filename, in_format, skip_formats=(), alphabet=None
-    ):
+        self, in_filename, in_format, skip_formats=()):
         """Check Bio.AlignIO can write files seqret can read."""
-        if alphabet:
-            old_aligns = list(AlignIO.parse(in_filename, in_format, alphabet))
-        else:
-            old_aligns = list(AlignIO.parse(in_filename, in_format))
+        old_aligns = list(AlignIO.parse(in_filename, in_format))
 
         formats = ["clustal", "phylip"]
         if len(old_aligns) == 1:
@@ -447,22 +397,23 @@ class SeqRetAlignIOTests(unittest.TestCase):
                     emboss_piped_AlignIO_convert(old_aligns, temp_format, "phylip")
                 )
             except ValueError as e:
-                # e.g. ValueError: Need a DNA, RNA or Protein alphabet
-                # from writing Nexus files...
+                self.assertIn(
+                    str(e),
+                    (
+                        "Need a DNA, RNA or Protein alphabet",
+                        "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-SEQ'), possibly due to truncation",
+                        "Repeated name 'gi|1377497' (originally 'gi|13774975|gb|AAK39115.1|AF35'), possibly due to truncation",
+                        "Repeated name 'gi_1393639' (originally 'gi_13936397_dbj_BAB47195.'), possibly due to truncation",
+                    ),
+                )
                 continue
-            try:
-                self.assertTrue(compare_alignments(old_aligns, new_aligns))
-            except ValueError as err:
-                raise ValueError(
-                    "Disagree on file %s %s in %s format: %s"
-                    % (in_format, in_filename, temp_format, err)
-                ) from None
+            msg = "converting %s from %s to %s" % (in_filename, in_format, temp_format)
+            self.compare_alignments(old_aligns, new_aligns, msg)
 
     def check_AlignIO_with_EMBOSS(
-        self, filename, old_format, skip_formats=(), alphabet=None
-    ):
+        self, filename, old_format, skip_formats=()):
         # Check EMBOSS can read Bio.AlignIO output...
-        self.check_AlignIO_to_EMBOSS(filename, old_format, skip_formats, alphabet)
+        self.check_AlignIO_to_EMBOSS(filename, old_format, skip_formats)
         # Check Bio.AlignIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_AlignIO(filename, old_format, skip_formats)
 
@@ -954,26 +905,26 @@ class TranslationTests(unittest.TestCase):
         examples = [
             Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
             # Unamibguous TA? codons:
-            Seq("TAATACTATTAG", generic_dna),
+            Seq("TAATACTATTAG"),
             # Most of the ambiguous TA? codons:
-            Seq("TANTARTAYTAMTAKTAHTABTADTAV", generic_dna),
+            Seq("TANTARTAYTAMTAKTAHTABTADTAV"),
             # Problem cases,
             #
-            # Seq("TAW", generic_dna),
+            # Seq("TAW"),
             # W = A or T, but EMBOSS does TAW -> X
             # TAA -> Y, TAT ->Y, so in Biopython TAW -> Y
             #
-            # Seq("TAS", generic_dna),
+            # Seq("TAS"),
             # S = C or G, but EMBOSS does TAS -> Y
             # TAG -> *, TAC ->Y, so in Biopython TAS -> X (Y or *)
             #
-            # Seq("AAS", generic_dna),
+            # Seq("AAS"),
             # On table 9, EMBOSS gives N, we give X.
             # S = C or G, so according to my reading of
             # table 9 on the NCBI page, AAC=N, AAG=K
             # suggesting this is a bug in EMBOSS.
             #
-            Seq("ACGGGGGGGGTAAGTGGTGTGTGTGTAGT", generic_dna),
+            Seq("ACGGGGGGGGTAAGTGGTGTGTGTGTAGT"),
         ]
 
         for sequence in examples:
@@ -999,8 +950,7 @@ class TranslationTests(unittest.TestCase):
 
     def translate_all_codons(self, letters):
         sequence = Seq(
-            "".join(c1 + c3 + c3 for c1 in letters for c2 in letters for c3 in letters),
-            generic_nucleotide,
+            "".join(c1 + c3 + c3 for c1 in letters for c2 in letters for c3 in letters)
         )
         self.check(sequence)
 
