@@ -220,10 +220,13 @@ class SeqRetTests(unittest.TestCase):
         for old, new in zip(old_records, new_records):
             # Note the name matching is a bit fuzzy, e.g. truncation and
             # no spaces in PHYLIP files.
-            self.assertTrue((old.id in new.id)
-                         or (new.id in old.id)
-                         or (old.id.replace(" ", "_") == new.id.replace(" ", "_"))
-                         or (old.name == new.name), msg)
+            self.assertTrue(
+                (old.id in new.id)
+                or (new.id in old.id)
+                or (old.id.replace(" ", "_") == new.id.replace(" ", "_"))
+                or (old.name == new.name),
+                msg,
+            )
             self.assertEqual(len(old.seq), len(new.seq), msg)
             if str(old.seq).upper() != str(new.seq).upper():
                 if str(old.seq).replace("X", "N") == str(new.seq):
@@ -241,8 +244,7 @@ class SeqRetSeqIOTests(SeqRetTests):
     def tearDown(self):
         clean_up()
 
-    def check_SeqIO_to_EMBOSS(
-        self, in_filename, in_format, skip_formats=()):
+    def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=()):
         """Check SeqIO writes files seqret can read back."""
         records = list(SeqIO.parse(in_filename, in_format))
         for temp_format in ["genbank", "embl", "fasta"]:
@@ -268,8 +270,7 @@ class SeqRetSeqIOTests(SeqRetTests):
             msg = "converting %s from %s to %s" % (filename, old_format, new_format)
             self.compare_records(old_records, new_records, msg)
 
-    def check_SeqIO_with_EMBOSS(
-        self, filename, old_format, skip_formats=()):
+    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=()):
         # Check EMBOSS can read Bio.SeqIO output...
         self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats)
         # Check Bio.SeqIO can read EMBOSS seqret output...
@@ -379,8 +380,7 @@ class SeqRetAlignIOTests(SeqRetTests):
             msg = "converting %s from %s to %s" % (filename, old_format, new_format)
             self.compare_alignments(old_aligns, new_aligns, msg)
 
-    def check_AlignIO_to_EMBOSS(
-        self, in_filename, in_format, skip_formats=()):
+    def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=()):
         """Check Bio.AlignIO can write files seqret can read."""
         old_aligns = list(AlignIO.parse(in_filename, in_format))
 
@@ -410,8 +410,7 @@ class SeqRetAlignIOTests(SeqRetTests):
             msg = "converting %s from %s to %s" % (in_filename, in_format, temp_format)
             self.compare_alignments(old_aligns, new_aligns, msg)
 
-    def check_AlignIO_with_EMBOSS(
-        self, filename, old_format, skip_formats=()):
+    def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=()):
         # Check EMBOSS can read Bio.AlignIO output...
         self.check_AlignIO_to_EMBOSS(filename, old_format, skip_formats)
         # Check Bio.AlignIO can read EMBOSS seqret output...
