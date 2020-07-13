@@ -12,11 +12,7 @@ the core class to deal with codon alignment in biopython.
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
-from Bio.codonalign.codonalphabet import (
-    default_codon_table,
-    default_codon_alphabet,
-    compare_codon_alphabet,
-)
+from Bio.codonalign import default_codon_table
 from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.codonalign.chisq import chisqprob
 
@@ -24,23 +20,21 @@ from Bio.codonalign.chisq import chisqprob
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
 
-    >>> from Bio.Alphabet import generic_dna
     >>> from Bio.SeqRecord import SeqRecord
-    >>> from Bio.Alphabet import IUPAC, Gapped
-    >>> a = SeqRecord(CodonSeq("AAAACGTCG", alphabet=default_codon_alphabet), id="Alpha")
-    >>> b = SeqRecord(CodonSeq("AAA---TCG", alphabet=default_codon_alphabet), id="Beta")
-    >>> c = SeqRecord(CodonSeq("AAAAGGTGG", alphabet=default_codon_alphabet), id="Gamma")
+    >>> a = SeqRecord(CodonSeq("AAAACGTCG"), id="Alpha")
+    >>> b = SeqRecord(CodonSeq("AAA---TCG"), id="Beta")
+    >>> c = SeqRecord(CodonSeq("AAAAGGTGG"), id="Gamma")
     >>> print(CodonAlignment([a, b, c]))
-    CodonAlphabet(Standard) CodonAlignment with 3 rows and 9 columns (3 codons)
+    CodonAlignment with 3 rows and 9 columns (3 codons)
     AAAACGTCG Alpha
     AAA---TCG Beta
     AAAAGGTGG Gamma
 
     """
 
-    def __init__(self, records="", name=None, alphabet=default_codon_alphabet):
+    def __init__(self, records="", name=None):
         """Initialize the class."""
-        MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
+        MultipleSeqAlignment.__init__(self, records)
 
         # check the type of the alignment to be nucleotide
         for rec in self:
@@ -66,9 +60,8 @@ class CodonAlignment(MultipleSeqAlignment):
         """
         rows = len(self._records)
         lines = [
-            "%s CodonAlignment with %i rows and %i columns (%i codons)"
+            "CodonAlignment with %i rows and %i columns (%i codons)"
             % (
-                str(self._alphabet),
                 rows,
                 self.get_alignment_length(),
                 self.get_aln_length(),
@@ -83,12 +76,12 @@ class CodonAlignment(MultipleSeqAlignment):
             lines.append(self._str_line(self._records[-1], length=60))
         return "\n".join(lines)
 
-    def __getitem__(self, index, alphabet=None):
+    def __getitem__(self, index):
         """Return a CodonAlignment object for single indexing."""
         if isinstance(index, int):
             return self._records[index]
         elif isinstance(index, slice):
-            return CodonAlignment(self._records[index], self._alphabet)
+            return CodonAlignment(self._records[index])
         elif len(index) != 2:
             raise TypeError("Invalid index type.")
         # Handle double indexing
@@ -98,18 +91,7 @@ class CodonAlignment(MultipleSeqAlignment):
         elif isinstance(col_index, int):
             return "".join(str(rec[col_index]) for rec in self._records[row_index])
         else:
-            from Bio.Alphabet import generic_nucleotide
-
-            if alphabet is None:
-                return MultipleSeqAlignment(
-                    (rec[col_index] for rec in self._records[row_index]),
-                    generic_nucleotide,
-                )
-            else:
-                return MultipleSeqAlignment(
-                    (rec[col_index] for rec in self._records[row_index]),
-                    generic_nucleotide,
-                )
+            return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]))
 
     def __add__(self, other):
         """Combine two codonalignments with the same number of rows by adding them.
@@ -126,22 +108,14 @@ class CodonAlignment(MultipleSeqAlignment):
                     "When adding two alignments they must have the same length"
                     " (i.e. same number or rows)"
                 )
-            if compare_codon_alphabet(self._alphabet, other._alphabet):
-                alpha = self._alphabet
-                # merged = (left + right for left, right in zip(self, other))
-                merged = (
-                    SeqRecord(
-                        seq=CodonSeq(
-                            str(left.seq) + str(right.seq), alphabet=left.seq.alphabet
-                        )
-                    )
-                    for left, right in zip(self, other)
+            # merged = (left + right for left, right in zip(self, other))
+            merged = (
+                SeqRecord(
+                    seq=CodonSeq(str(left.seq) + str(right.seq))
                 )
-                return CodonAlignment(merged, alphabet=alpha)
-            else:
-                raise TypeError(
-                    "Only CodonAlignment with the same CodonAlphabet can be combined."
-                )
+                for left, right in zip(self, other)
+            )
+            return CodonAlignment(merged)
         elif isinstance(other, MultipleSeqAlignment):
             if len(self) != len(other):
                 raise ValueError(
@@ -234,7 +208,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return dn_tree, ds_tree
 
     @classmethod
-    def from_msa(cls, align, alphabet=default_codon_alphabet):
+    def from_msa(cls, align):
         """Convert a MultipleSeqAlignment to CodonAlignment.
 
         Function to convert a MultipleSeqAlignment to CodonAlignment.
@@ -242,10 +216,10 @@ class CodonAlignment(MultipleSeqAlignment):
         needed by CodonAlignment is met.
         """
         rec = [
-            SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id)
+            SeqRecord(CodonSeq(str(i.seq)), id=i.id)
             for i in align._records
         ]
-        return cls(rec, alphabet=alphabet)
+        return cls(rec)
 
 
 def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):

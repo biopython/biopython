@@ -14,13 +14,8 @@ from math import log
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_dna, _ungap
 
-from Bio.codonalign.codonalphabet import (
-    CodonAlphabet,
-    default_codon_alphabet,
-    default_codon_table,
-)
+from Bio.codonalign import default_codon_table
 
 
 class CodonSeq(Seq):
@@ -57,9 +52,7 @@ class CodonSeq(Seq):
 
     """
 
-    def __init__(
-        self, data="", alphabet=default_codon_alphabet, gap_char="-", rf_table=None
-    ):
+    def __init__(self, data="", gap_char="-", rf_table=None):
         """Initialize the class."""
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
@@ -73,11 +66,9 @@ class CodonSeq(Seq):
         #   feature ensures the rf_table is independent of where the
         #   codon sequence appears in the alignment
 
-        Seq.__init__(self, data.upper(), alphabet=alphabet)
+        Seq.__init__(self, data.upper())
         self.gap_char = gap_char
 
-        if not isinstance(alphabet, CodonAlphabet):
-            raise TypeError("Input alphabet should be a CodonAlphabet object.")
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
@@ -87,15 +78,6 @@ class CodonSeq(Seq):
                     "three (i.e. a whole number of codons)"
                 )
             self.rf_table = list(filter(lambda x: x % 3 == 0, range(len(seq_ungapped))))
-            # check alphabet
-            # Not use Alphabet._verify_alphabet function because it
-            # only works for single alphabet
-            for i in self.rf_table:
-                if self._data[i : i + 3] not in alphabet.letters:
-                    raise ValueError(
-                        "Sequence contain codon not in the alphabet"
-                        f" ({self._data[i:i + 3]})!"
-                    )
         else:
             # if gap_char in self._data:
             #    assert  len(self) % 3 == 0, \
@@ -108,18 +90,10 @@ class CodonSeq(Seq):
                     "that specify the codon positions of "
                     "the sequence"
                 )
-            seq_ungapped = self._data.replace(gap_char, "")
-            for i in rf_table:
-                if seq_ungapped[i : i + 3] not in alphabet.letters:
-                    raise ValueError(
-                        "Sequence contain undefined letters from alphabet"
-                        f" ({seq_ungapped[i:i + 3]})!"
-                    )
             self.rf_table = rf_table
 
     def __getitem__(self, index):
-        # TODO: handle alphabet elegantly
-        return Seq(self._data[index], alphabet=generic_dna)
+        return Seq(self._data[index])
 
     def get_codon(self, index):
         """Get the index codon from the sequence."""
@@ -150,7 +124,7 @@ class CodonSeq(Seq):
                 return codon_slice
 
             codon_slice = cslice(index)
-            return CodonSeq(codon_slice, alphabet=self.alphabet)
+            return CodonSeq(codon_slice)
 
     def get_codon_num(self):
         """Return the number of codons in the CodonSeq."""
@@ -212,7 +186,7 @@ class CodonSeq(Seq):
 
     def toSeq(self):
         """Convert DNA to seq object."""
-        return Seq(self._data, generic_dna)
+        return Seq(self._data)
 
     def get_full_rf_table(self):
         """Return full rf_table of the CodonSeq records.
@@ -265,30 +239,19 @@ class CodonSeq(Seq):
 
     def ungap(self, gap=None):
         """Return a copy of the sequence without the gap character(s)."""
-        if hasattr(self.alphabet, "gap_char"):
-            if not gap:
-                gap = self.alphabet.gap_char
-            elif gap != self.alphabet.gap_char:
-                raise ValueError(
-                    "Gap %s does not match %s from alphabet"
-                    % (repr(gap), repr(self.alphabet.alphabet.gap_char))
-                )
-            alpha = _ungap(self.alphabet)
-        elif not gap:
-            raise ValueError("Gap character not given and not defined in alphabet")
-        else:
-            alpha = self.alphabet  # modify!
+        if gap is None:
+            raise ValueError("Gap character not given")
         if len(gap) != 1 or not isinstance(gap, str):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
-        return CodonSeq(str(self._data).replace(gap, ""), alpha, rf_table=self.rf_table)
+        return CodonSeq(str(self._data).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
-    def from_seq(cls, seq, alphabet=default_codon_alphabet, rf_table=None):
+    def from_seq(cls, seq, rf_table=None):
         """Get codon sequence from sequence data."""
         if rf_table is None:
-            return cls(seq._data, alphabet=alphabet)
+            return cls(seq._data)
         else:
-            return cls(seq._data, alphabet=alphabet, rf_table=rf_table)
+            return cls(seq._data, rf_table=rf_table)
 
 
 def _get_codon_list(codonseq):
