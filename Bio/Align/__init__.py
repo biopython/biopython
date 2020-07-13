@@ -19,6 +19,7 @@ import warnings
 from Bio import Alphabet
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
+from Bio.Align import substitution_matrices
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
@@ -931,6 +932,82 @@ class MultipleSeqAlignment:
             self._records.sort(key=lambda r: r.id, reverse=reverse)
         else:
             self._records.sort(key=key, reverse=reverse)
+
+    @property
+    def substitutions(self):
+        """Return an Array with the number of substitutions of letters in the alignment.
+
+        As an example, consider a multiple sequence alignment of three DNA sequences:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> seq1 = SeqRecord(Seq("ACGT"), id="seq1")
+        >>> seq2 = SeqRecord(Seq("A--A"), id="seq2")
+        >>> seq3 = SeqRecord(Seq("ACGT"), id="seq3")
+        >>> seq4 = SeqRecord(Seq("TTTC"), id="seq4")
+        >>> alignment = MultipleSeqAlignment([seq1, seq2, seq3, seq4])
+        >>> print(alignment)
+        Alignment with 4 rows and 4 columns
+        ACGT seq1
+        A--A seq2
+        ACGT seq3
+        TTTC seq4
+
+        >>> m = alignment.substitutions
+        >>> print(m)
+            A   C   G   T
+        A 3.0 0.5 0.0 2.5
+        C 0.5 1.0 0.0 2.0
+        G 0.0 0.0 1.0 1.0
+        T 2.5 2.0 1.0 1.0
+        <BLANKLINE>
+
+        Note that the matrix is symmetric, with counts divided equally on both
+        sides of the diagonal. For example, the total number of substitutions
+        between A and T in the alignment is 3.5 + 3.5 = 7.
+
+        Any weights associated with the sequences are taken into account when
+        calculating the substitution matrix.  For example, given the following
+        multiple sequence alignment::
+
+            GTATC  0.5
+            AT--C  0.8
+            CTGTC  1.0
+
+        For the first column we have::
+
+            ('A', 'G') : 0.5 * 0.8 = 0.4
+            ('C', 'G') : 0.5 * 1.0 = 0.5
+            ('A', 'C') : 0.8 * 1.0 = 0.8
+
+        """
+        letters = set.union(*[set(record.seq) for record in self])
+        try:
+            letters.remove("-")
+        except KeyError:
+            pass
+        letters = "".join(sorted(letters))
+        m = substitution_matrices.Array(letters, dims=2)
+        for rec_num1, alignment1 in enumerate(self):
+            seq1 = alignment1.seq
+            weight1 = alignment1.annotations.get("weight", 1.0)
+            for rec_num2, alignment2 in enumerate(self):
+                if rec_num1 == rec_num2:
+                    break
+                seq2 = alignment2.seq
+                weight2 = alignment2.annotations.get("weight", 1.0)
+                for residue1, residue2 in zip(seq1, seq2):
+                    if residue1 == "-":
+                        continue
+                    if residue2 == "-":
+                        continue
+                    m[(residue1, residue2)] += weight1 * weight2
+
+        m += m.transpose()
+        m /= 2.0
+
+        return m
 
 
 class PairwiseAlignment:

@@ -313,6 +313,24 @@ class Array(numpy.ndarray):
         for key in F:
             self[key] = F[key]
 
+    def select(self, alphabet):
+        """Subset the array by selecting the letters from the specified alphabet."""
+        ii = []
+        jj = []
+        for i, key in enumerate(alphabet):
+            try:
+                j = self._alphabet.index(key)
+            except ValueError:
+                continue
+            ii.append(i)
+            jj.append(j)
+        dims = len(self.shape)
+        a = Array(alphabet, dims=dims)
+        ii = numpy.ix_(*[ii] * dims)
+        jj = numpy.ix_(*[jj] * dims)
+        a[ii] = numpy.ndarray.__getitem__(self, jj)
+        return a
+
     def _format_1D(self, fmt):
         _alphabet = self._alphabet
         n = len(_alphabet)
