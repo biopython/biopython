@@ -783,10 +783,7 @@ def _align_shift_recs(recs):
                         v + int(gap_num) for v in full_rf_table[bp + 1 :]
                     ]
                     full_rf_table_lst[j] = full_rf_table
-                    recs[j].seq = CodonSeq(
-                        seq,
-                        rf_table=recs[j].seq.rf_table,
-                    )
+                    recs[j].seq = CodonSeq(seq, rf_table=recs[j].seq.rf_table)
                 add_lst.pop()
                 gap_num += m - k
                 i += p - 1

@@ -214,10 +214,7 @@ class CodonAlignment(MultipleSeqAlignment):
         It is the user's responsibility to ensure all the requirement
         needed by CodonAlignment is met.
         """
-        rec = [
-            SeqRecord(CodonSeq(str(i.seq)), id=i.id)
-            for i in align._records
-        ]
+        rec = [SeqRecord(CodonSeq(str(i.seq)), id=i.id) for i in align._records]
         return cls(rec)
 
 
