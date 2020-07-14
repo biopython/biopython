@@ -118,7 +118,6 @@ import copy
 import math
 
 # BioPython imports
-from Bio import Alphabet
 from Bio.SubsMat import FreqTable
 
 import warnings
@@ -150,7 +149,7 @@ class SeqMat(dict):
         for i in self:
             ab_set.add(i[0])
             ab_set.add(i[1])
-        self.alphabet.letters = "".join(sorted(ab_set))
+        self.alphabet = "".join(sorted(ab_set))
 
     def __init__(self, data=None, alphabet=None, mat_name="", build_later=0):
         """Initialize.
@@ -159,8 +158,8 @@ class SeqMat(dict):
 
         - data: matrix itself
         - mat_name: its name. See below.
-        - alphabet: an instance of Bio.Alphabet, or a subclass. If not
-          supplied, constructor builds its own from that matrix.
+        - alphabet: an iterable over the letters allowed as indices into the
+          matrix. If not supplied, constructor builds its own from that matrix.
         - build_later: skip the matrix size assertion. User will build the
           matrix after creating the instance. Constructor builds a half matrix
           filled with zeroes.
@@ -179,19 +178,17 @@ class SeqMat(dict):
                 self.update(data)
             except ValueError:
                 raise ValueError("Failed to store data in a dictionary")
-        if alphabet is None:
-            alphabet = Alphabet.Alphabet()
-        assert Alphabet.generic_alphabet.contains(alphabet)
-        self.alphabet = alphabet
 
         # If passed alphabet is empty, use the letters in the matrix itself
-        if not self.alphabet.letters:
+        if alphabet is None:
             self._alphabet_from_matrix()
+        else:
+            self.alphabet = "".join(alphabet)
         # Assert matrix size: half or full
         if not build_later:
-            N = len(self.alphabet.letters)
+            N = len(self.alphabet)
             assert len(self) == N ** 2 or len(self) == N * (N + 1) / 2
-        self.ab_list = list(self.alphabet.letters)
+        self.ab_list = list(self.alphabet)
         self.ab_list.sort()
         # Names: a string like "BLOSUM62" or "PAM250"
         self.mat_name = mat_name
@@ -215,9 +212,9 @@ class SeqMat(dict):
         """Convert a full-matrix to a half-matrix (PRIVATE)."""
         # For instance: two entries ('A','C'):13 and ('C','A'):20 will be summed
         # into ('A','C'): 33 and the index ('C','A') will be deleted
-        # alphabet.letters:('A','A') and ('C','C') will remain the same.
+        # ('A','A') and ('C','C') will remain the same.
 
-        N = len(self.alphabet.letters)
+        N = len(self.alphabet)
         # Do nothing if this is already a half-matrix
         if len(self) == N * (N + 1) / 2:
             return
@@ -244,7 +241,7 @@ class SeqMat(dict):
     def sum(self):
         """Return sum of the results."""
         result = {}
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             result[letter] = 0.0
         for pair, value in self.items():
             i1, i2 = pair
@@ -447,7 +444,7 @@ def _build_obs_freq_mat(acc_rep_mat):
 def _exp_freq_table_from_obs_freq(obs_freq_mat):
     """Build expected frequence table from observed frequences (PRIVATE)."""
     exp_freq_table = {}
-    for i in obs_freq_mat.alphabet.letters:
+    for i in obs_freq_mat.alphabet:
         exp_freq_table[i] = 0.0
     for i in obs_freq_mat:
         if i[0] == i[1]:
