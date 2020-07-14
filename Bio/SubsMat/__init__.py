@@ -121,7 +121,16 @@ import math
 from Bio.SubsMat import FreqTable
 
 import warnings
-from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "Bio.SubsMat has been deprecated, and we intend to remove it in a future "
+    "release of Biopython. As an alternative, please consider using "
+    "Bio.Align.substitution_matrices as a replacement, and contact the "
+    "Biopython developers if you still need the Bio.SubsMat module.",
+    BiopythonDeprecationWarning,
+)
+
+
 
 
 log = math.log
