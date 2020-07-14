@@ -119,6 +119,7 @@ import math
 
 # BioPython imports
 from Bio.SubsMat import FreqTable
+from Bio import BiopythonDeprecationWarning
 
 import warnings
 
