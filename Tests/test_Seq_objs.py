@@ -10,10 +10,6 @@ import unittest
 
 from Bio import BiopythonWarning
 from Bio import SeqIO
-from Bio.Alphabet import generic_protein, generic_nucleotide
-from Bio.Alphabet import generic_dna, generic_rna
-from Bio.Alphabet.IUPAC import protein, extended_protein
-from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
@@ -74,27 +70,14 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
 class StringMethodTests(unittest.TestCase):
     _examples = [
         # These are length 9, a multiple of 3 for translation tests:
-        Seq("ACGTGGGGT", generic_protein),
-        Seq("ACGTGGGGT", generic_nucleotide),
-        Seq("ACGTGGGGT", generic_dna),
-        Seq("ACGUGGGGU", generic_rna),
-        Seq("GG", generic_protein),
-        Seq("GG", generic_nucleotide),
-        Seq("GG", generic_dna),
-        Seq("GG", generic_rna),
-        Seq("A", generic_protein),
-        Seq("A", generic_nucleotide),
-        Seq("A", generic_dna),
-        Seq("A", generic_rna),  # This one is a problem for (rev)comp
+        Seq("ACGTGGGGT"),
+        Seq("ACGUGGGGU"),
+        Seq("GG"),
+        Seq("A"),
         UnknownSeq(1),
         UnknownSeq(1, character="n"),
-        UnknownSeq(1, generic_rna),
-        UnknownSeq(1, generic_rna, "n"),
-        UnknownSeq(1, generic_rna, "N"),
-        UnknownSeq(12, generic_rna, "N"),
-        UnknownSeq(12, generic_dna, "N"),
-        UnknownSeq(12, generic_nucleotide, "N"),
-        UnknownSeq(12, generic_protein, "X"),
+        UnknownSeq(1, character="N"),
+        UnknownSeq(12, character="N"),
         UnknownSeq(12, character="X"),
         UnknownSeq(12),
     ]
@@ -160,7 +143,6 @@ class StringMethodTests(unittest.TestCase):
                             % (repr(example1), method_name, repr(example2), i, j)
                         )
                 except TypeError:
-                    # TODO - Check the alphabets do clash!
                     pass
 
                 if start_end:
@@ -223,20 +205,7 @@ class StringMethodTests(unittest.TestCase):
         expected = [
             3,
             3,
-            3,
-            3,
             1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             0,
             0,
@@ -253,7 +222,7 @@ class StringMethodTests(unittest.TestCase):
             # Using search term GG as a string
             self.assertEqual(seq.count_overlap("GG"), exp)
             self.assertEqual(seq.count_overlap("G" * 5), 0)
-            # Using search term GG as a Seq with generic alphabet
+            # Using search term GG as a Seq
             self.assertEqual(seq.count_overlap(Seq("GG")), exp)
             self.assertEqual(seq.count_overlap(Seq("G" * 5)), 0)
 
@@ -294,17 +263,17 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("GG", -2, -10), 0)
 
         # Testing UnknownSeq() with variable start and end arguments
-        alphabet_char_start_end_exp = [
-            (generic_rna, "N", 1, 7, 0),
-            (generic_dna, "N", 1, 7, 0),
-            (generic_rna, "N", -4, None, 0),
-            (generic_dna, "N", -4, None, 0),
-            (generic_protein, "X", 1, 7, 0),
+        char_start_end_exp = [
+            ("N", 1, 7, 0),
+            ("N", 1, 7, 0),
+            ("N", -4, None, 0),
+            ("N", -4, None, 0),
+            ("X", 1, 7, 0),
         ]
 
-        for alpha, char, start, end, exp in alphabet_char_start_end_exp:
+        for char, start, end, exp in char_start_end_exp:
             self.assertEqual(
-                UnknownSeq(12, alpha, char).count_overlap("GG", start, end), exp
+                UnknownSeq(12, character=char).count_overlap("GG", start, end), exp
             )
         self.assertEqual(UnknownSeq(12, character="X").count_overlap("GG", 1, 7), 0)
 
@@ -339,24 +308,11 @@ class StringMethodTests(unittest.TestCase):
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,  # Seq() Tests
             0,
             0,
             0,
-            0,
-            0,
             11,
-            11,
-            11,
-            0,
             0,
             0,
         ]  # UnknownSeq() Tests
@@ -368,7 +324,7 @@ class StringMethodTests(unittest.TestCase):
             # Using search term NN as a string
             self.assertEqual(seq.count_overlap("NN"), exp)
             self.assertEqual(seq.count_overlap("N" * 13), 0)
-            # Using search term NN as a Seq with generic alphabet
+            # Using search term NN as a Seq
             self.assertEqual(seq.count_overlap(Seq("NN")), exp)
             self.assertEqual(seq.count_overlap(Seq("N" * 13)), 0)
 
@@ -409,17 +365,17 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("NN", -10, -2), 0)
 
         # Testing UnknownSeq() with variable start and end arguments
-        alphabet_char_start_end_exp = [
-            (generic_rna, "N", 1, 7, 5),
-            (generic_dna, "N", 1, 7, 5),
-            (generic_rna, "N", -4, None, 3),
-            (generic_dna, "N", -4, None, 3),
-            (generic_protein, "X", 1, 7, 0),
+        char_start_end_exp = [
+            ("N", 1, 7, 5),
+            ("N", 1, 7, 5),
+            ("N", -4, None, 3),
+            ("N", -4, None, 3),
+            ("X", 1, 7, 0),
         ]
 
-        for alpha, char, start, end, exp in alphabet_char_start_end_exp:
+        for char, start, end, exp in char_start_end_exp:
             self.assertEqual(
-                UnknownSeq(12, alpha, char).count_overlap("NN", start, end), exp
+                UnknownSeq(12, character=char).count_overlap("NN", start, end), exp
             )
         self.assertEqual(UnknownSeq(12, character="X").count_overlap("NN", 1, 7), 0)
 
@@ -599,8 +555,6 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             for example2 in self._examples:
                 with warnings.catch_warnings():
-                    # Silence alphabet warning
-                    warnings.simplefilter("ignore", BiopythonWarning)
                     self.assertEqual(
                         str(example1) == str(example2),
                         example1 == example2,
@@ -771,39 +725,30 @@ class StringMethodTests(unittest.TestCase):
     def test_the_translation_of_stops(self):
         """Check obj.translate() method with stop codons."""
         misc_stops = "TAATAGTGAAGAAGG"
-        for nuc in [
-            Seq(misc_stops),
-            Seq(misc_stops, generic_nucleotide),
-            Seq(misc_stops, generic_dna),
-            Seq(misc_stops, unambiguous_dna),
-        ]:
-            self.assertEqual("***RR", str(nuc.translate()))
-            self.assertEqual("***RR", str(nuc.translate(1)))
-            self.assertEqual("***RR", str(nuc.translate("SGC0")))
-            self.assertEqual("**W**", str(nuc.translate(table=2)))
-            self.assertEqual("**WRR", str(nuc.translate(table="Yeast Mitochondrial")))
-            self.assertEqual("**WSS", str(nuc.translate(table=5)))
-            self.assertEqual("**WSS", str(nuc.translate(table=9)))
-            self.assertEqual("**CRR", str(nuc.translate(table="Euplotid Nuclear")))
-            self.assertEqual("***RR", str(nuc.translate(table=11)))
-            self.assertEqual("***RR", str(nuc.translate(table="11")))
-            self.assertEqual("***RR", str(nuc.translate(table="Bacterial")))
-            self.assertEqual("**GRR", str(nuc.translate(table=25)))
-            self.assertEqual("", str(nuc.translate(to_stop=True)))
-            self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
-            self.assertEqual(
-                "*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table))
-            )
-            # These test the Bio.Seq.translate() function - move these?:
-            self.assertEqual(
-                "*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table)
-            )
-            self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
-            self.assertEqual("", translate(str(nuc), to_stop=True))
-            self.assertEqual("***RR", translate(str(nuc), table="Bacterial"))
-            self.assertEqual("***RR", translate(str(nuc), table="11"))
-            self.assertEqual("***RR", translate(str(nuc), table=11))
-            self.assertEqual("**W**", translate(str(nuc), table=2))
+        nuc = Seq(misc_stops)
+        self.assertEqual("***RR", str(nuc.translate()))
+        self.assertEqual("***RR", str(nuc.translate(1)))
+        self.assertEqual("***RR", str(nuc.translate("SGC0")))
+        self.assertEqual("**W**", str(nuc.translate(table=2)))
+        self.assertEqual("**WRR", str(nuc.translate(table="Yeast Mitochondrial")))
+        self.assertEqual("**WSS", str(nuc.translate(table=5)))
+        self.assertEqual("**WSS", str(nuc.translate(table=9)))
+        self.assertEqual("**CRR", str(nuc.translate(table="Euplotid Nuclear")))
+        self.assertEqual("***RR", str(nuc.translate(table=11)))
+        self.assertEqual("***RR", str(nuc.translate(table="11")))
+        self.assertEqual("***RR", str(nuc.translate(table="Bacterial")))
+        self.assertEqual("**GRR", str(nuc.translate(table=25)))
+        self.assertEqual("", str(nuc.translate(to_stop=True)))
+        self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
+        self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
+        # These test the Bio.Seq.translate() function - move these?:
+        self.assertEqual("*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table))
+        self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
+        self.assertEqual("", translate(str(nuc), to_stop=True))
+        self.assertEqual("***RR", translate(str(nuc), table="Bacterial"))
+        self.assertEqual("***RR", translate(str(nuc), table="11"))
+        self.assertEqual("***RR", translate(str(nuc), table=11))
+        self.assertEqual("**W**", translate(str(nuc), table=2))
         self.assertEqual(str(Seq("TAT").translate()), "Y")
         self.assertEqual(str(Seq("TAR").translate()), "*")
         self.assertEqual(str(Seq("TAN").translate()), "X")
@@ -820,25 +765,18 @@ class StringMethodTests(unittest.TestCase):
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
-            for nuc in [
-                Seq(codon),
-                Seq(codon, generic_nucleotide),
-                Seq(codon, generic_dna),
-                Seq(codon, unambiguous_dna),
-            ]:
-                try:
-                    print(nuc.translate())
-                    self.fail("Translating %s should fail" % codon)
-                except TranslationError:
-                    pass
+            nuc = Seq(codon)
+            try:
+                nuc.translate()
+                self.fail("Translating %s should fail" % codon)
+            except TranslationError:
+                pass
 
     def test_the_translation_of_ambig_codons(self):
         """Check obj.translate() method with ambiguous codons."""
-        for letters, ambig_values in [
-            (ambiguous_dna.letters, ambiguous_dna_values),
-            (ambiguous_rna.letters, ambiguous_rna_values),
-        ]:
-            ambig = set(letters)
+        for ambig_values in [ambiguous_dna_values, ambiguous_rna_values]:
+            ambig = set(ambig_values.keys())
+            ambig.remove("X")
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
@@ -872,8 +810,8 @@ class StringMethodTests(unittest.TestCase):
     def test_init_typeerror(self):
         """Check Seq __init__ gives TypeError exceptions."""
         # Only expect it to take strings and unicode - not Seq objects!
-        self.assertRaises(TypeError, Seq, (1066))
-        self.assertRaises(TypeError, Seq, (Seq("ACGT", generic_dna)))
+        self.assertRaises(TypeError, Seq, 1066)
+        self.assertRaises(TypeError, Seq, Seq("ACGT"))
 
     def test_MutableSeq_init_typeerror(self):
         """Check MutableSeq __init__ gives TypeError exceptions."""
@@ -906,27 +844,20 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
-    def test_join_Seq_mixed_alpha(self):
-        """Check Seq can join incompatible alphabets."""
-        spacer = Seq("NNNNN", generic_dna)
-        self.assertEqual(
-            "N" * 15,
-            spacer.join([Seq("NNNNN", generic_rna), Seq("NNNNN", generic_rna)]),
-        )
-        self.assertEqual(
-            "N" * 15,
-            spacer.join([Seq("NNNNN", generic_protein), Seq("NNNNN", generic_protein)]),
-        )
+    def test_join_Seq(self):
+        """Check Seq objects can be joined."""
+        spacer = Seq("NNNNN")
+        self.assertEqual("N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),)
 
-    def test_join_UnknownSeq_mixed_alpha(self):
-        """Check UnknownSeq can join incompatible alphabets."""
-        spacer = UnknownSeq(5, character="-", alphabet=generic_dna)
+    def test_join_UnknownSeq(self):
+        """Check UnknownSeq objects can be joined."""
+        spacer = UnknownSeq(5, character="-")
         self.assertEqual(
             "-" * 15,
             spacer.join(
                 [
-                    UnknownSeq(5, character="-", alphabet=generic_rna),
-                    UnknownSeq(5, character="-", alphabet=generic_rna),
+                    UnknownSeq(5, character="-"),
+                    UnknownSeq(5, character="-"),
                 ]
             ),
         )
@@ -934,25 +865,25 @@ class StringMethodTests(unittest.TestCase):
             "N" * 5 + "-" * 10,
             spacer.join(
                 [
-                    Seq("NNNNN", generic_protein),
-                    UnknownSeq(5, character="-", alphabet=generic_protein),
+                    Seq("NNNNN"),
+                    UnknownSeq(5, character="-"),
                 ]
             ),
         )
 
     def test_join_MutableSeq_mixed(self):
-        """Check MutableSeq can join incompatible alphabets."""
-        spacer = MutableSeq("NNNNN", generic_dna)
+        """Check MutableSeq objects can be joined."""
+        spacer = MutableSeq("NNNNN")
         self.assertEqual(
             "N" * 15,
             spacer.join(
-                [MutableSeq("NNNNN", generic_rna), MutableSeq("NNNNN", generic_rna)]
+                [MutableSeq("NNNNN"), MutableSeq("NNNNN")]
             ),
         )
         self.assertRaises(
             TypeError,
             spacer.join(
-                [Seq("NNNNN", generic_protein), MutableSeq("NNNNN", generic_protein)]
+                [Seq("NNNNN"), MutableSeq("NNNNN")]
             ),
         )
 
@@ -960,10 +891,10 @@ class StringMethodTests(unittest.TestCase):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
-        spacer1 = Seq("", generic_dna)
-        spacers = [spacer1, Seq("NNNNN", generic_dna), Seq("GGG", generic_nucleotide)]
+        spacer1 = Seq("")
+        spacers = [spacer1, Seq("NNNNN"), Seq("GGG")]
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
-        example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
 
         # strings with empty spacer
         str_concatenated = spacer1.join(example_strings)
@@ -1005,15 +936,14 @@ class StringMethodTests(unittest.TestCase):
         """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
-        spacer1 = UnknownSeq(0, character="-", alphabet=generic_dna)
+        spacer1 = UnknownSeq(0, character="-")
         spacers = [
             spacer1,
-            UnknownSeq(5, character="-", alphabet=generic_dna),
-            UnknownSeq(5, character="-", alphabet=generic_nucleotide),
+            UnknownSeq(5, character="-"),
         ]
 
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
-        example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
 
         # strings with empty spacer
         str_concatenated = spacer1.join(example_strings)
@@ -1035,8 +965,8 @@ class StringMethodTests(unittest.TestCase):
         seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
-        spacer = UnknownSeq(0, character="-", alphabet=generic_dna)
-        spacer1 = UnknownSeq(5, character="-", alphabet=generic_dna)
+        spacer = UnknownSeq(0, character="-")
+        spacer1 = UnknownSeq(5, character="-")
         # seq objects with spacer
         seq_concatenated = spacer.join(seqlist)
         # seq objects with empty spacer
@@ -1055,14 +985,14 @@ class StringMethodTests(unittest.TestCase):
         """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
-        spacer1 = MutableSeq("", generic_dna)
+        spacer1 = MutableSeq("")
         spacers = [
             spacer1,
-            MutableSeq("NNNNN", generic_dna),
-            MutableSeq("GGG", generic_nucleotide),
+            MutableSeq("NNNNN"),
+            MutableSeq("GGG"),
         ]
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
-        example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
 
         # strings with empty spacer
         str_concatenated = spacer1.join(example_strings)
