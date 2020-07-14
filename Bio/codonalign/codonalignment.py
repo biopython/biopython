@@ -106,11 +106,8 @@ class CodonAlignment(MultipleSeqAlignment):
                     "When adding two alignments they must have the same length"
                     " (i.e. same number or rows)"
                 )
-            # merged = (left + right for left, right in zip(self, other))
             merged = (
-                SeqRecord(
-                    seq=CodonSeq(str(left.seq) + str(right.seq))
-                )
+                SeqRecord(seq=CodonSeq(str(left.seq) + str(right.seq)))
                 for left, right in zip(self, other)
             )
             return CodonAlignment(merged)

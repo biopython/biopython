@@ -280,12 +280,7 @@ def _get_codon_list(codonseq):
 
 
 def cal_dn_ds(
-    codon_seq1,
-    codon_seq2,
-    method="NG86",
-    codon_table=None,
-    k=1,
-    cfreq=None,
+    codon_seq1, codon_seq2, method="NG86", codon_table=None, k=1, cfreq=None,
 ):
     """Calculate dN and dS of the given two sequences.
 

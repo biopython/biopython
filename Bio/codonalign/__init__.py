@@ -571,13 +571,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
 
 
 def _get_codon_rec(
-    pro,
-    nucl,
-    span_mode,
-    gap_char,
-    codon_table,
-    complete_protein=False,
-    max_score=10,
+    pro, nucl, span_mode, gap_char, codon_table, complete_protein=False, max_score=10,
 ):
     """Generate codon alignment based on regular re match (PRIVATE).
 
