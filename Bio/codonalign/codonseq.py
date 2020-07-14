@@ -130,11 +130,7 @@ class CodonSeq(Seq):
         return len(self.rf_table)
 
     def translate(
-        self,
-        codon_table=None,
-        stop_symbol="*",
-        rf_table=None,
-        ungap_seq=True,
+        self, codon_table=None, stop_symbol="*", rf_table=None, ungap_seq=True
     ):
         """Translate the CodonSeq based on the reading frame in rf_table.
 

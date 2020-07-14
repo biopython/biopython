@@ -87,7 +87,9 @@ class CodonAlignment(MultipleSeqAlignment):
         elif isinstance(col_index, int):
             return "".join(str(rec[col_index]) for rec in self._records[row_index])
         else:
-            return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]))
+            return MultipleSeqAlignment(
+                (rec[col_index] for rec in self._records[row_index])
+            )
 
     def __add__(self, other):
         """Combine two codonalignments with the same number of rows by adding them.
@@ -176,7 +178,8 @@ class CodonAlignment(MultipleSeqAlignment):
         return dn_dm, ds_dm
 
     def get_dn_ds_tree(
-        self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=None):
+        self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=None
+    ):
         """Construct dn tree and ds tree.
 
         Argument:

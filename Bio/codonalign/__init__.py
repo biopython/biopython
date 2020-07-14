@@ -246,12 +246,7 @@ def _get_aa_regex(codon_table, stop="*", unknown="X"):
 
 
 def _check_corr(
-    pro,
-    nucl,
-    gap_char,
-    codon_table,
-    complete_protein=False,
-    anchor_len=10,
+    pro, nucl, gap_char, codon_table, complete_protein=False, anchor_len=10,
 ):
     """Check if the nucleotide can be translated into the protein (PRIVATE).
 
