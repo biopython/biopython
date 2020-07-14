@@ -14,8 +14,7 @@ from math import log
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
-from Bio.codonalign import default_codon_table
+from Bio.Data import CodonTable
 
 
 class CodonSeq(Seq):
@@ -132,7 +131,7 @@ class CodonSeq(Seq):
 
     def translate(
         self,
-        codon_table=default_codon_table,
+        codon_table=None,
         stop_symbol="*",
         rf_table=None,
         ungap_seq=True,
@@ -145,6 +144,8 @@ class CodonSeq(Seq):
         way. ungap_seq should be set to true for this
         purpose.
         """
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
         amino_acids = []
         if ungap_seq:
             tr_seq = self._data.replace(self.gap_char, "")
@@ -227,8 +228,10 @@ class CodonSeq(Seq):
                 pass
         return full_rf_table
 
-    def full_translate(self, codon_table=default_codon_table, stop_symbol="*"):
+    def full_translate(self, codon_table=None, stop_symbol="*"):
         """Apply full translation with gaps considered."""
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
         full_rf_table = self.get_full_rf_table()
         return self.translate(
             codon_table=codon_table,
@@ -237,10 +240,8 @@ class CodonSeq(Seq):
             ungap_seq=False,
         )
 
-    def ungap(self, gap=None):
+    def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s)."""
-        if gap is None:
-            raise ValueError("Gap character not given")
         if len(gap) != 1 or not isinstance(gap, str):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return CodonSeq(str(self._data).replace(gap, ""), rf_table=self.rf_table)
@@ -286,7 +287,7 @@ def cal_dn_ds(
     codon_seq1,
     codon_seq2,
     method="NG86",
-    codon_table=default_codon_table,
+    codon_table=None,
     k=1,
     cfreq=None,
 ):
@@ -339,6 +340,8 @@ def cal_dn_ds(
             "Only F1x4, F3x4 and F61 are acceptable. Used F3x4 in the following."
         )
         cfreq = "F3x4"
+    if codon_table is None:
+        codon_table = CodonTable.generic_by_id[1]
     seq1_codon_lst = _get_codon_list(codon_seq1)
     seq2_codon_lst = _get_codon_list(codon_seq2)
     # remove gaps in seq_codon_lst
@@ -385,7 +388,7 @@ def _ng86(seq1, seq2, k, codon_table):
     return dN, dS
 
 
-def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
+def _count_site_NG86(codon_lst, codon_table, k=1):
     """Count synonymous and non-synonymous sites of a list of codons (PRIVATE).
 
     Arguments:
@@ -447,7 +450,7 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
     return (S_site, N_site)
 
 
-def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
+def _count_diff_NG86(codon1, codon2, codon_table):
     """Count differences between two codons, three-letter string (PRIVATE).
 
     The function will take multiple pathways from codon1 to codon2
@@ -485,7 +488,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
             if k[0] != k[1]:
                 diff_pos.append(i)
 
-        def compare_codon(codon1, codon2, codon_table=default_codon_table, weight=1):
+        def compare_codon(codon1, codon2, codon_table, weight=1):
             """Compare two codon accounting for different pathways."""
             sd = nd = 0
             if len(set(map(codon_table.forward_table.get, [codon1, codon2]))) == 1:
@@ -797,7 +800,7 @@ def _yn00(seq1, seq2, k, codon_table):
         dSdN_pre = dSdN
 
 
-def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
+def _get_TV(codon_lst1, codon_lst2, codon_table):
     """Get TV (PRIVATE).
 
     Arguments:
@@ -860,7 +863,7 @@ def _get_kappa_t(pi, TV, t=False):
         return t
 
 
-def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table=default_codon_table):
+def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table):
     """Site counting method from Ina / Yang and Nielsen (PRIVATE).
 
     Method from `Ina (1995)`_ as modified by `Yang and Nielsen (2000)`_.
@@ -927,7 +930,7 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k, codon_table=default_codon_ta
     return S_sites, N_sites, freqSN
 
 
-def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table=default_codon_table):
+def _count_diff_YN00(codon1, codon2, P, codon_lst, codon_table):
     """Count differences between two codons (three-letter string; PRIVATE).
 
     The function will weighted multiple pathways from codon1 to codon2
@@ -1181,7 +1184,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
     return dN, dS
 
 
-def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
+def _get_pi(seq1, seq2, cmethod, codon_table):
     """Obtain codon frequency dict (pi) from two codon list (PRIVATE).
 
     This function is designed for ML method. Available counting methods
@@ -1232,7 +1235,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
     return pi
 
 
-def _q(i, j, pi, k, w, codon_table=default_codon_table):
+def _q(i, j, pi, k, w, codon_table):
     """Q matrix for codon substitution (PRIVATE).
 
     Arguments:

@@ -11,8 +11,8 @@ the core class to deal with codon alignment in biopython.
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
+from Bio.Data import CodonTable
 
-from Bio.codonalign import default_codon_table
 from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.codonalign.chisq import chisqprob
 
@@ -61,11 +61,7 @@ class CodonAlignment(MultipleSeqAlignment):
         rows = len(self._records)
         lines = [
             "CodonAlignment with %i rows and %i columns (%i codons)"
-            % (
-                rows,
-                self.get_alignment_length(),
-                self.get_aln_length(),
-            )
+            % (rows, self.get_alignment_length(), self.get_aln_length(),)
         ]
 
         if rows <= 60:
@@ -143,7 +139,7 @@ class CodonAlignment(MultipleSeqAlignment):
         alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for rec in self._records]
         return MultipleSeqAlignment(alignments)
 
-    def get_dn_ds_matrix(self, method="NG86", codon_table=default_codon_table):
+    def get_dn_ds_matrix(self, method="NG86", codon_table=None):
         """Available methods include NG86, LWL85, YN00 and ML.
 
         Argument:
@@ -153,6 +149,8 @@ class CodonAlignment(MultipleSeqAlignment):
         """
         from Bio.Phylo.TreeConstruction import DistanceMatrix as DM
 
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
         names = [i.id for i in self._records]
         size = len(self._records)
         dn_matrix = []
@@ -178,9 +176,8 @@ class CodonAlignment(MultipleSeqAlignment):
         return dn_dm, ds_dm
 
     def get_dn_ds_tree(
-        self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=default_codon_table
-    ):
-        """Cnstruct dn tree and ds tree.
+        self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=None):
+        """Construct dn tree and ds tree.
 
         Argument:
          - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
@@ -189,6 +186,8 @@ class CodonAlignment(MultipleSeqAlignment):
         """
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
         dn_dm, ds_dm = self.get_dn_ds_matrix(
             method=dn_ds_method, codon_table=codon_table
         )
@@ -222,7 +221,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return cls(rec)
 
 
-def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
+def mktest(codon_alns, codon_table=None, alpha=0.05):
     """McDonald-Kreitman test for neutrality.
 
     Implement the McDonald-Kreitman test for neutrality (PMID: 1904993)
@@ -237,6 +236,8 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     """
     import copy
 
+    if codon_table is None:
+        codon_table = CodonTable.generic_by_id[1]
     if not all(isinstance(i, CodonAlignment) for i in codon_alns):
         raise TypeError("mktest accepts CodonAlignment list.")
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
@@ -288,7 +289,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     return _G_test([syn_fix, nonsyn_fix, syn_poly, nonsyn_poly])
 
 
-def _get_codon2codon_matrix(codon_table=default_codon_table):
+def _get_codon2codon_matrix(codon_table):
     """Get codon codon substitution matrix (PRIVATE).
 
     Elements in the matrix are number of synonymous and nonsynonymous

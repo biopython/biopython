@@ -163,10 +163,18 @@ class TestBuildAndIO(unittest.TestCase):
 class Test_build(unittest.TestCase):
     def setUp(self):
         # Test set 1
-        seq1 = SeqRecord(Seq("TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG",
-                         ), id="pro1")
-        seq2 = SeqRecord(Seq("TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG",
-                         ), id="pro2")
+        seq1 = SeqRecord(
+            Seq(
+                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG",
+            ),
+            id="pro1",
+        )
+        seq2 = SeqRecord(
+            Seq(
+                "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG",
+            ),
+            id="pro2",
+        )
         pro1 = SeqRecord(Seq("SGTARTKLLLLLAALCAAGGALE"), id="pro1")
         pro2 = SeqRecord(Seq("SGTSRTKRLLLLAALGAAGGALE"), id="pro2")
         aln1 = MultipleSeqAlignment([pro1, pro2])

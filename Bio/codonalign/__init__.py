@@ -13,9 +13,7 @@ from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
 
 from Bio.SeqRecord import SeqRecord
-from Bio.Data.CodonTable import generic_by_id
-
-default_codon_table = copy.deepcopy(generic_by_id[1])
+from Bio.Data import CodonTable
 
 from Bio.codonalign.codonseq import CodonSeq
 from Bio.codonalign.codonalignment import CodonAlignment, mktest
@@ -35,7 +33,7 @@ def build(
     corr_dict=None,
     gap_char="-",
     unknown="X",
-    codon_table=default_codon_table,
+    codon_table=None,
     complete_protein=False,
     anchor_len=10,
     max_score=10,
@@ -162,6 +160,9 @@ def build(
                 exit(1)
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
+    if codon_table is None:
+        codon_table = CodonTable.generic_by_id[1]
+
     codon_aln = []
     shift = False
     for pair in pro_nucl_pair:
@@ -185,6 +186,7 @@ def build(
                 pair[0],
                 pair[1],
                 corr_span,
+                gap_char=gap_char,
                 complete_protein=False,
                 codon_table=codon_table,
                 max_score=max_score,
@@ -246,8 +248,8 @@ def _get_aa_regex(codon_table, stop="*", unknown="X"):
 def _check_corr(
     pro,
     nucl,
-    gap_char="-",
-    codon_table=default_codon_table,
+    gap_char,
+    codon_table,
     complete_protein=False,
     anchor_len=10,
 ):
@@ -577,8 +579,8 @@ def _get_codon_rec(
     pro,
     nucl,
     span_mode,
-    gap_char="-",
-    codon_table=default_codon_table,
+    gap_char,
+    codon_table,
     complete_protein=False,
     max_score=10,
 ):
@@ -733,9 +735,7 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        return SeqRecord(
-            CodonSeq(codon_seq, rf_table=rf_table), id=nucl.id
-        )
+        return SeqRecord(CodonSeq(codon_seq, rf_table=rf_table), id=nucl.id)
 
 
 def _align_shift_recs(recs):
