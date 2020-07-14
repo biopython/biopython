@@ -13,6 +13,8 @@ import warnings
 
 from io import StringIO
 from io import BytesIO
+from tempfile import NamedTemporaryFile
+from contextlib import ExitStack
 
 from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio import SeqIO
@@ -295,6 +297,8 @@ class TestSeqIO(SeqIOTestBaseClass):
     def check_simple_write_read(self, records, t_format, t_count, messages):
         """Check can write/read given records.
 
+        Also checks read/write to NamedTemporaryFile.
+
         messages is dictionary of error messages keyed by output format.
         Set this to a non-dictionary to see the suggested value.
         """
@@ -313,149 +317,172 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Skipping for speed.  Some of the unknown sequences are
                 # rather long, and it seems a bit pointless to record them.
                 continue
-            # Going to write to a handle...
-            mode = self.get_mode(format)
-            if mode == "t":
-                handle = StringIO()
-            elif mode == "b":
-                handle = BytesIO()
+            for test_type in ("IO", "NamedTemporaryFile"):
+                with ExitStack() as exit_stack:
+                    # Going to write to a handle...
+                    mode = self.get_mode(format)
+                    if test_type == "IO":
+                        if mode == "t":
+                            handle = exit_stack.enter_context(StringIO())
+                        elif mode == "b":
+                            handle = exit_stack.enter_context(BytesIO())
 
-            if unequal_length and format in AlignIO._FormatToWriter:
-                msg = "Sequences must all be the same length"
-            elif format in messages:
-                msg = messages[format]
-            elif debug:
-                msg = True
-            else:
-                msg = None
+                    elif test_type == "NamedTemporaryFile":
+                        handle = exit_stack.enter_context(
+                            NamedTemporaryFile(mode="w+" + mode,
+                                               encoding="utf8" if mode == "t" else None)
+                        )
+                    else:
+                        self.fail("test_type is not recognized: %s" % (test_type))
 
-            if msg:
-                # Should fail.
-                # Can't use assertRaisesRegex with some of our msg strings
-                try:
+                    if unequal_length and format in AlignIO._FormatToWriter:
+                        msg = "Sequences must all be the same length"
+                    elif format in messages:
+                        msg = messages[format]
+                    elif debug:
+                        msg = True
+                    else:
+                        msg = None
+
+                    if msg:
+                        # Should fail.
+                        # Can't use assertRaisesRegex with some of our msg strings
+                        try:
+                            with warnings.catch_warnings():
+                                # e.g. data loss
+                                warnings.simplefilter("ignore", BiopythonWarning)
+                                SeqIO.write(sequences=records, handle=handle, format=format)
+                        except (ValueError, TypeError) as e:
+                            if debug:
+                                messages[format] = str(e)
+                            else:
+                                self.assertEqual(
+                                    str(e), msg, "Wrong error on %s -> %s" % (t_format, format)
+                                )
+                        else:
+                            if not debug:
+                                raise ValueError(
+                                    "Expected following error writing to %s:\n%s"
+                                    % (format, msg)
+                                )
+
+                        if records[0].seq.alphabet.letters is not None:
+                            self.assertNotEqual(
+                                format,
+                                t_format,
+                                "Should be able to re-write in the original format!",
+                            )
+                        # Carry on to the next format:
+                        continue
+
+                    # Should pass...
                     with warnings.catch_warnings():
                         # e.g. data loss
                         warnings.simplefilter("ignore", BiopythonWarning)
-                        SeqIO.write(sequences=records, handle=handle, format=format)
-                except (ValueError, TypeError) as e:
-                    if debug:
-                        messages[format] = str(e)
-                    else:
-                        self.assertEqual(
-                            str(e), msg, "Wrong error on %s -> %s" % (t_format, format)
-                        )
-                else:
-                    if not debug:
+                        c = SeqIO.write(sequences=records, handle=handle, format=format)
+                    self.assertEqual(c, len(records))
+
+                    handle.flush()
+                    handle.seek(0)
+                    # Now ready to read back from the handle...
+                    try:
+                        records2 = list(SeqIO.parse(handle=handle, format=format))
+                    except ValueError as e:
+                        # This is BAD.  We can't read our own output.
+                        # I want to see the output when called from the test harness,
+                        # run_tests.py (which can be funny about new lines on Windows)
+                        handle.seek(0)
                         raise ValueError(
-                            "Expected following error writing to %s:\n%s"
-                            % (format, msg)
+                            "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
+                        ) from None
+
+                    self.assertEqual(len(records2), t_count)
+                    for r1, r2 in zip(records, records2):
+                        # Check the bare minimum (ID and sequence) as
+                        # many formats can't store more than that.
+                        self.assertEqual(len(r1), len(r2))
+
+                        # Check the sequence
+                        if format in ["gb", "genbank", "embl", "imgt"]:
+                            # The GenBank/EMBL parsers will convert to upper case.
+                            if isinstance(r1.seq, UnknownSeq) and isinstance(
+                                r2.seq, UnknownSeq
+                            ):
+                                # Jython didn't like us comparing the string of very long
+                                # UnknownSeq object (out of heap memory error)
+                                self.assertEqual(r1.seq._character.upper(), r2.seq._character)
+                            else:
+                                self.assertEqual(str(r1.seq).upper(), str(r2.seq))
+                        elif format == "qual":
+                            self.assertIsInstance(r2.seq, UnknownSeq)
+                            self.assertEqual(len(r2), len(r1))
+                        else:
+                            self.assertEqual(str(r1.seq), str(r2.seq))
+                        # Beware of different quirks and limitations in the
+                        # valid character sets and the identifier lengths!
+                        if format in ["phylip", "phylip-sequential"]:
+                            self.assertEqual(
+                                PhylipIO.sanitize_name(r1.id, 10),
+                                r2.id,
+                                "'%s' vs '%s'" % (r1.id, r2.id),
+                            )
+                        elif format == "phylip-relaxed":
+                            self.assertEqual(
+                                PhylipIO.sanitize_name(r1.id),
+                                r2.id,
+                                "'%s' vs '%s'" % (r1.id, r2.id),
+                            )
+                        elif format == "clustal":
+                            self.assertEqual(
+                                r1.id.replace(" ", "_")[:30],
+                                r2.id,
+                                "'%s' vs '%s'" % (r1.id, r2.id),
+                            )
+                        elif format == "stockholm":
+                            r1_id = r1.id.replace(" ", "_")
+                            if "start" in r1.annotations and "end" in r1.annotations:
+                                suffix = "/%d-%d" % (
+                                    r1.annotations["start"],
+                                    r1.annotations["end"],
+                                )
+                                if not r1_id.endswith(suffix):
+                                    r1_id += suffix
+
+                            self.assertEqual(r1_id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+                        elif format == "maf":
+                            self.assertEqual(
+                                r1.id.replace(" ", "_"), r2.id, "'%s' vs '%s'" % (r1.id, r2.id)
+                            )
+                        elif format in ["fasta", "fasta-2line"]:
+                            self.assertEqual(r1.id.split()[0], r2.id)
+                        elif format == "nib":
+                            self.assertEqual(r2.id, "<unknown id>")
+                        else:
+                            self.assertEqual(r1.id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+
+                if len(records) > 1:
+                    # Try writing just one record (passing a SeqRecord, not a list)
+                    if test_type == "IO":
+                        if mode == "t":
+                            handle = exit_stack.enter_context(StringIO())
+                        elif mode == "b":
+                            handle = exit_stack.enter_context(BytesIO())
+
+                    elif test_type == "NamedTemporaryFile":
+                        handle = exit_stack.enter_context(
+                            NamedTemporaryFile(mode="w+" + mode,
+                                               encoding="utf8" if mode == "t" else None)
                         )
-
-                if records[0].seq.alphabet.letters is not None:
-                    self.assertNotEqual(
-                        format,
-                        t_format,
-                        "Should be able to re-write in the original format!",
-                    )
-                # Carry on to the next format:
-                continue
-
-            # Should pass...
-            with warnings.catch_warnings():
-                # e.g. data loss
-                warnings.simplefilter("ignore", BiopythonWarning)
-                c = SeqIO.write(sequences=records, handle=handle, format=format)
-            self.assertEqual(c, len(records))
-
-            handle.flush()
-            handle.seek(0)
-            # Now ready to read back from the handle...
-            try:
-                records2 = list(SeqIO.parse(handle=handle, format=format))
-            except ValueError as e:
-                # This is BAD.  We can't read our own output.
-                # I want to see the output when called from the test harness,
-                # run_tests.py (which can be funny about new lines on Windows)
-                handle.seek(0)
-                raise ValueError(
-                    "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
-                ) from None
-
-            self.assertEqual(len(records2), t_count)
-            for r1, r2 in zip(records, records2):
-                # Check the bare minimum (ID and sequence) as
-                # many formats can't store more than that.
-                self.assertEqual(len(r1), len(r2))
-
-                # Check the sequence
-                if format in ["gb", "genbank", "embl", "imgt"]:
-                    # The GenBank/EMBL parsers will convert to upper case.
-                    if isinstance(r1.seq, UnknownSeq) and isinstance(
-                        r2.seq, UnknownSeq
-                    ):
-                        # Jython didn't like us comparing the string of very long
-                        # UnknownSeq object (out of heap memory error)
-                        self.assertEqual(r1.seq._character.upper(), r2.seq._character)
                     else:
-                        self.assertEqual(str(r1.seq).upper(), str(r2.seq))
-                elif format == "qual":
-                    self.assertIsInstance(r2.seq, UnknownSeq)
-                    self.assertEqual(len(r2), len(r1))
-                else:
-                    self.assertEqual(str(r1.seq), str(r2.seq))
-                # Beware of different quirks and limitations in the
-                # valid character sets and the identifier lengths!
-                if format in ["phylip", "phylip-sequential"]:
-                    self.assertEqual(
-                        PhylipIO.sanitize_name(r1.id, 10),
-                        r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
-                    )
-                elif format == "phylip-relaxed":
-                    self.assertEqual(
-                        PhylipIO.sanitize_name(r1.id),
-                        r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
-                    )
-                elif format == "clustal":
-                    self.assertEqual(
-                        r1.id.replace(" ", "_")[:30],
-                        r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
-                    )
-                elif format == "stockholm":
-                    r1_id = r1.id.replace(" ", "_")
-                    if "start" in r1.annotations and "end" in r1.annotations:
-                        suffix = "/%d-%d" % (
-                            r1.annotations["start"],
-                            r1.annotations["end"],
-                        )
-                        if not r1_id.endswith(suffix):
-                            r1_id += suffix
+                        self.fail("test_type is not recognized: %s" % (test_type))
 
-                    self.assertEqual(r1_id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
-                elif format == "maf":
-                    self.assertEqual(
-                        r1.id.replace(" ", "_"), r2.id, "'%s' vs '%s'" % (r1.id, r2.id)
-                    )
-                elif format in ["fasta", "fasta-2line"]:
-                    self.assertEqual(r1.id.split()[0], r2.id)
-                elif format == "nib":
-                    self.assertEqual(r2.id, "<unknown id>")
-                else:
-                    self.assertEqual(r1.id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
-
-            if len(records) > 1:
-                # Try writing just one record (passing a SeqRecord, not a list)
-                if mode == "t":
-                    handle = StringIO()
-                elif mode == "b":
-                    handle = BytesIO()
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore", BiopythonWarning)
-                    SeqIO.write(records[0], handle, format)
-                    if mode == "t":
-                        self.assertEqual(handle.getvalue(), records[0].format(format))
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore", BiopythonWarning)
+                        SeqIO.write(records[0], handle, format)
+                        if mode == "t":
+                            handle.flush()
+                            handle.seek(0)
+                            self.assertEqual(handle.read(), records[0].format(format))
         if debug:
             self.fail(
                 "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
