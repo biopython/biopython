@@ -132,8 +132,6 @@ warnings.warn(
 )
 
 
-
-
 log = math.log
 # Matrix types
 NOTYPE = 0
