@@ -845,51 +845,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
     def test_join_Seq(self):
-        """Check Seq objects can be joined."""
+        """Checks if Seq join correctly concatenates sequence with the spacer."""
         spacer = Seq("NNNNN")
         self.assertEqual("N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),)
-
-    def test_join_UnknownSeq(self):
-        """Check UnknownSeq objects can be joined."""
-        spacer = UnknownSeq(5, character="-")
-        self.assertEqual(
-            "-" * 15,
-            spacer.join(
-                [
-                    UnknownSeq(5, character="-"),
-                    UnknownSeq(5, character="-"),
-                ]
-            ),
-        )
-        self.assertEqual(
-            "N" * 5 + "-" * 10,
-            spacer.join(
-                [
-                    Seq("NNNNN"),
-                    UnknownSeq(5, character="-"),
-                ]
-            ),
-        )
-
-    def test_join_MutableSeq_mixed(self):
-        """Check MutableSeq objects can be joined."""
-        spacer = MutableSeq("NNNNN")
-        self.assertEqual(
-            "N" * 15,
-            spacer.join(
-                [MutableSeq("NNNNN"), MutableSeq("NNNNN")]
-            ),
-        )
-        self.assertRaises(
-            TypeError,
-            spacer.join(
-                [Seq("NNNNN"), MutableSeq("NNNNN")]
-            ),
-        )
-
-    def test_join_Seq(self):
-        """Checks if Seq join correctly concatenates sequence with the spacer."""
-        # Only expect it to take Seq objects and/or strings in an iterable!
 
         spacer1 = Seq("")
         spacers = [spacer1, Seq("NNNNN"), Seq("GGG")]
@@ -909,6 +867,65 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(
                     str(spacer).join(str(target)), str(spacer.join(target))
                 )
+
+
+    def test_join_UnknownSeq(self):
+        """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
+        spacer1 = UnknownSeq(5, character="-")
+        spacer2 = UnknownSeq(0, character="-")
+        spacers = [spacer1, spacer2 ]
+
+        self.assertEqual(
+            "-" * 15,
+            spacer1.join(
+                [
+                    UnknownSeq(5, character="-"),
+                    UnknownSeq(5, character="-"),
+                ]
+            ),
+        )
+        self.assertEqual(
+            "N" * 5 + "-" * 10,
+            spacer1.join(
+                [
+                    Seq("NNNNN"),
+                    UnknownSeq(5, character="-"),
+                ]
+            ),
+        )
+
+        example_strings = ["ATG", "ATG", "ATG", "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
+
+        # strings with empty spacer
+        str_concatenated = spacer2.join(example_strings)
+
+        self.assertEqual(str(str_concatenated), "".join(example_strings))
+
+        for spacer in spacers:
+            seq_concatenated = spacer.join(example_strings_seqs)
+            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            # Now try single sequence arguments, should join the letters
+            for target in example_strings + example_strings_seqs:
+                self.assertEqual(
+                    str(spacer).join(str(target)), str(spacer.join(target))
+                )
+
+    def test_join_MutableSeq_mixed(self):
+        """Check MutableSeq objects can be joined."""
+        spacer = MutableSeq("NNNNN")
+        self.assertEqual(
+            "N" * 15,
+            spacer.join(
+                [MutableSeq("NNNNN"), MutableSeq("NNNNN")]
+            ),
+        )
+        self.assertRaises(
+            TypeError,
+            spacer.join(
+                [Seq("NNNNN"), MutableSeq("NNNNN")]
+            ),
+        )
 
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
@@ -931,33 +948,6 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(seq_concatenated1), ref_data1)
         with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, "fasta"))
-
-    def test_join_UnknownSeq(self):
-        """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
-        # Only expect it to take Seq objects and/or strings in an iterable!
-
-        spacer1 = UnknownSeq(0, character="-")
-        spacers = [
-            spacer1,
-            UnknownSeq(5, character="-"),
-        ]
-
-        example_strings = ["ATG", "ATG", "ATG", "ATG"]
-        example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
-
-        # strings with empty spacer
-        str_concatenated = spacer1.join(example_strings)
-
-        self.assertEqual(str(str_concatenated), "".join(example_strings))
-
-        for spacer in spacers:
-            seq_concatenated = spacer.join(example_strings_seqs)
-            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
-            # Now try single sequence arguments, should join the letters
-            for target in example_strings + example_strings_seqs:
-                self.assertEqual(
-                    str(spacer).join(str(target)), str(spacer.join(target))
-                )
 
     def test_join_UnknownSeq_with_file(self):
         """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""
