@@ -11,7 +11,6 @@ import os
 import unittest
 
 from Bio import SeqIO
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import GC, seq1, seq3, GC_skew
@@ -115,11 +114,7 @@ class SeqUtilsTests(unittest.TestCase):
         exp_simple_LCC,
         exp_window_LCC,
     ):
-        for s in [
-            seq_str,
-            Seq(seq_str, single_letter_alphabet),
-            MutableSeq(seq_str, single_letter_alphabet),
-        ]:
+        for s in [seq_str, Seq(seq_str), MutableSeq(seq_str)]:
             self.assertEqual(exp_crc32, crc32(s))
             self.assertEqual(exp_crc64, crc64(s))
             self.assertEqual(exp_gcg, gcg(s))
