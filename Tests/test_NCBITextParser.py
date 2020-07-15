@@ -4,6 +4,8 @@
 # as part of this package.
 """Test for the plain text NCBI BLAST parser."""
 
+# Turn black code style off
+# fmt: off
 import os
 import unittest
 
@@ -14839,3 +14841,5 @@ class TestNCBITextParser(unittest.TestCase):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
+
+# fmt: on
