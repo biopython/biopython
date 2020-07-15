@@ -868,12 +868,11 @@ class StringMethodTests(unittest.TestCase):
                     str(spacer).join(str(target)), str(spacer.join(target))
                 )
 
-
     def test_join_UnknownSeq(self):
         """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
         spacer1 = UnknownSeq(5, character="-")
         spacer2 = UnknownSeq(0, character="-")
-        spacers = [spacer1, spacer2 ]
+        spacers = [spacer1, spacer2]
 
         self.assertEqual(
             "-" * 15,
