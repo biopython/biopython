@@ -800,7 +800,9 @@ class HSPFragment(_BaseHSP):
         """Return object of index idx."""
         if self.aln is not None:
             obj = self.__class__(
-                hit_id=self.hit_id, query_id=self.query_id, molecule_type=self.molecule_type
+                hit_id=self.hit_id,
+                query_id=self.query_id,
+                molecule_type=self.molecule_type,
             )
             # transfer query and hit attributes
             # let SeqRecord handle feature slicing, then retrieve the sliced
