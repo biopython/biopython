@@ -10,7 +10,6 @@ from operator import ge, le
 
 from Bio import BiopythonWarning
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -219,7 +218,7 @@ class HSP(_BaseHSP):
     +====================+======================================================+
     | aln_span           | total number of residues in all HSPFragment objects  |
     +--------------------+------------------------------------------------------+
-    | alphabet           | alphabet used in hit and query SeqRecord objects     |
+    | molecule_type      | molecule_type of the hit and query SeqRecord objects |
     +--------------------+------------------------------------------------------+
     | is_fragmented      | boolean, whether there are multiple fragments or not |
     +--------------------+------------------------------------------------------+
@@ -266,21 +265,22 @@ class HSP(_BaseHSP):
         HSP objects must be initialized with a list containing at least one
         HSPFragment object. If multiple HSPFragment objects are used for
         initialization, they must all have the same ``query_id``,
-        ``query_description``, ``hit_id``, ``hit_description``, and alphabet
-        properties.
+        ``query_description``, ``hit_id``, ``hit_description``, and
+        ``molecule_type`` properties.
 
         """
         if not fragments:
             raise ValueError("HSP objects must have at least one HSPFragment object.")
         # TODO - Move this into the for look in case hsps is a single use
         # iterable?
-        # check that all fragments contain the same IDs, descriptions, alphabet
+        # check that all fragments contain the same IDs, descriptions,
+        # molecule_type
         for attr in (
             "query_id",
             "query_description",
             "hit_id",
             "hit_description",
-            "alphabet",
+            "molecule_type",
         ):
             if len({getattr(frag, attr) for frag in fragments}) != 1:
                 raise ValueError(
@@ -581,8 +581,8 @@ class HSP(_BaseHSP):
 
     query_id = fullcascade("query_id", doc="ID of the query sequence.")
 
-    alphabet = fullcascade(
-        "alphabet", doc="Alphabet used in hit and query SeqRecord objects."
+    molecule_type = fullcascade(
+        "molecule_type", doc="molecule_type of the hit and query SeqRecord objects."
     )
 
     # properties for single-fragment HSPs
@@ -727,6 +727,7 @@ class HSPFragment(_BaseHSP):
     Name: aligned query sequence
     Description: mir_1
     Number of features: 0
+    /molecule_type=DNA
     Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG')
 
     # the hit sequence is a SeqRecord object as well
@@ -737,6 +738,7 @@ class HSPFragment(_BaseHSP):
     Name: aligned hit sequence
     Description: Homo sapiens microRNA 520b (MIR520B), microRNA
     Number of features: 0
+    /molecule_type=DNA
     Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG')
 
     # when both query and hit are present, we get a MultipleSeqAlignment object
@@ -755,10 +757,10 @@ class HSPFragment(_BaseHSP):
         query_id="<unknown id>",
         hit=None,
         query=None,
-        alphabet=single_letter_alphabet,
+        molecule_type=None,
     ):
         """Initialize the class."""
-        self._alphabet = alphabet
+        self._molecule_type = molecule_type
         self.aln_annotation = {}
 
         self._hit_id = hit_id
@@ -798,7 +800,7 @@ class HSPFragment(_BaseHSP):
         """Return object of index idx."""
         if self.aln is not None:
             obj = self.__class__(
-                hit_id=self.hit_id, query_id=self.query_id, alphabet=self.alphabet
+                hit_id=self.hit_id, query_id=self.query_id, molecule_type=self.molecule_type
             )
             # transfer query and hit attributes
             # let SeqRecord handle feature slicing, then retrieve the sliced
@@ -907,14 +909,15 @@ class HSPFragment(_BaseHSP):
             seq.description = seq_desc
             seq.name = seq_name
             seq.features = seq_feats
-            seq.seq.alphabet = self.alphabet
+            seq.annotations["molecule_type"] = self.molecule_type
         elif isinstance(seq, str):
             seq = SeqRecord(
-                Seq(seq, self.alphabet),
+                Seq(seq),
                 id=seq_id,
                 name=seq_name,
                 description=seq_desc,
                 features=seq_feats,
+                annotations={"molecule_type": self.molecule_type},
             )
 
         return seq
@@ -946,37 +949,41 @@ class HSPFragment(_BaseHSP):
     def _aln_get(self):
         if self.query is None and self.hit is None:
             return None
-        elif self.hit is None:
-            return MultipleSeqAlignment([self.query], self.alphabet)
+        if self.hit is None:
+            msa = MultipleSeqAlignment([self.query])
         elif self.query is None:
-            return MultipleSeqAlignment([self.hit], self.alphabet)
+            msa = MultipleSeqAlignment([self.hit])
         else:
-            return MultipleSeqAlignment([self.query, self.hit], self.alphabet)
+            msa = MultipleSeqAlignment([self.query, self.hit])
+        molecule_type = self.molecule_type
+        if molecule_type is not None:
+            msa.molecule_type = molecule_type
+        return msa
 
     aln = property(
         fget=_aln_get,
         doc="Query-hit alignment as a MultipleSeqAlignment object, defaults to None.",
     )
 
-    def _alphabet_get(self):
-        return self._alphabet
+    def _molecule_type_get(self):
+        return self._molecule_type
 
-    def _alphabet_set(self, value):
-        self._alphabet = value
+    def _molecule_type_set(self, value):
+        self._molecule_type = value
         try:
-            self.query.seq.alphabet = value
+            self.query.annotations["molecule_type"] = value
         except AttributeError:
             pass
         try:
-            self.hit.seq.alphabet = value
+            self.hit.annotations["molecule_type"] = value
         except AttributeError:
             pass
 
-    alphabet = property(
-        fget=_alphabet_get,
-        fset=_alphabet_set,
-        doc="Alphabet object used in the fragment's "
-        "sequences and alignment, defaults to single_letter_alphabet.",
+    molecule_type = property(
+        fget=_molecule_type_get,
+        fset=_molecule_type_set,
+        doc="molecule type used in the fragment's "
+        "sequence records and alignment, defaults to None.",
     )
 
     def _aln_span_get(self):

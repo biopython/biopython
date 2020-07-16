@@ -107,7 +107,6 @@ The following object attributes are provided:
 
 import re
 
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -207,8 +206,8 @@ def _set_hsp_seqs(hsp, parsed, program):
     # query and hit sequence types must be the same
     assert parsed["query"]["_type"] == parsed["hit"]["_type"]
     type_val = parsed["query"]["_type"]  # hit works fine too
-    alphabet = generic_dna if type_val == "D" else generic_protein
-    setattr(hsp.fragment, "alphabet", alphabet)
+    molecule_type = "DNA" if type_val == "D" else "protein"
+    setattr(hsp.fragment, "molecule_type", molecule_type)
 
     for seq_type in ("hit", "query"):
         # get and set start and end coordinates
@@ -217,10 +216,10 @@ def _set_hsp_seqs(hsp, parsed, program):
 
         setattr(hsp.fragment, seq_type + "_start", min(start, end) - 1)
         setattr(hsp.fragment, seq_type + "_end", max(start, end))
-        # set seq and alphabet
+        # set seq and molecule type
         setattr(hsp.fragment, seq_type, parsed[seq_type]["seq"])
 
-        if alphabet is not generic_protein:
+        if molecule_type != "protein":
             # get strand from coordinate; start <= end is plus
             # start > end is minus
             if start <= end:

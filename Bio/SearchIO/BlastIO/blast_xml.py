@@ -15,7 +15,6 @@ from xml.etree import ElementTree
 from xml.sax.saxutils import XMLGenerator, escape
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -530,12 +529,12 @@ class BlastXmlParser:
                     setattr(frag, start_type, min(start, end) - 1)
                     setattr(frag, end_type, max(start, end))
 
-            # set alphabet, based on program
+            # set molecule type, based on program
             prog = self._meta.get("program")
             if prog == "blastn":
-                frag.alphabet = generic_dna
+                frag.molecule_type = "DNA"
             elif prog in ["blastp", "blastx", "tblastn", "tblastx"]:
-                frag.alphabet = generic_protein
+                frag.molecule_type = "protein"
 
             hsp = HSP([frag])
             for key, val_info in _ELEM_HSP.items():

@@ -9,8 +9,6 @@ import re
 from itertools import chain
 
 
-from Bio.Alphabet import generic_protein
-
 from ._base import (
     _BaseExonerateParser,
     _BaseExonerateIndexer,
@@ -367,14 +365,14 @@ class ExonerateTextParser(_BaseExonerateParser):
         hsp["query"] = [x["query"] for x in seq_blocks]
         hsp["hit"] = [x["hit"] for x in seq_blocks]
         hsp["aln_annotation"] = {}
-        # set the alphabet
+        # set the molecule type
         # currently only limited to models with protein queries
         if (
             "protein2" in qresult["model"]
             or "coding2" in qresult["model"]
             or "2protein" in qresult["model"]
         ):
-            hsp["alphabet"] = generic_protein
+            hsp["molecule_type"] = "protein"
         # get the annotations if they exist
         for annot_type in ("similarity", "query_annotation", "hit_annotation"):
             try:
