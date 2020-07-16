@@ -129,21 +129,18 @@ class StringMethodTests(unittest.TestCase):
                     )
 
                 try:
-                    try:
-                        i = pre_comp_function(getattr(example1, method_name)(example2))
-                    except ValueError:
-                        i = ValueError
-                    try:
-                        j = pre_comp_function(getattr(str1, method_name)(str2))
-                    except ValueError:
-                        j = ValueError
-                    if i != j:
-                        raise ValueError(
-                            "%s.%s(%s) = %r, not %r"
-                            % (repr(example1), method_name, repr(example2), i, j)
-                        )
-                except TypeError:
-                    pass
+                    i = pre_comp_function(getattr(example1, method_name)(example2))
+                except ValueError:
+                    i = ValueError
+                try:
+                    j = pre_comp_function(getattr(str1, method_name)(str2))
+                except ValueError:
+                    j = ValueError
+                if i != j:
+                    raise ValueError(
+                        "%s.%s(%s) = %r, not %r"
+                        % (repr(example1), method_name, repr(example2), i, j)
+                    )
 
                 if start_end:
                     if isinstance(example1, MutableSeq):
