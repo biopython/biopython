@@ -754,7 +754,7 @@ def _align_shift_recs(recs):
             elif rec.seq._data[int(i) : int(i) + 3] == "---":
                 rf_num[k] += 1
     if len(set(rf_num)) != 1:
-        raise RuntimeError("Number alignable codons unequal in given records")
+        raise RuntimeError("Number of alignable codons unequal in given records")
     i = 0
     rec_num = len(recs)
     while True:
