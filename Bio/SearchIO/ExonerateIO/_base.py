@@ -291,7 +291,7 @@ def _create_hsp(hid, qid, hspd):
         "model",
         "vulgar_comp",
         "cigar_comp",
-        "alphabet",
+        "molecule_type",
     ):
         if attr in hspd:
             setattr(hsp, attr, hspd[attr])

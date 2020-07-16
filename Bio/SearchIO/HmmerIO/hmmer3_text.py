@@ -7,7 +7,6 @@
 
 import re
 
-from Bio.Alphabet import generic_protein
 from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -278,8 +277,8 @@ class Hmmer3TextParser:
                     frag.query_description = qdesc
                 if hdesc:
                     frag.hit_description = hdesc
-                # HMMER3 alphabets are always protein alphabets
-                frag.alphabet = generic_protein
+                # HMMER3 results are always protein
+                frag.molecule_type = "protein"
                 # depending on whether the program is hmmsearch, hmmscan, or phmmer
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
