@@ -229,7 +229,7 @@ class PDBIO(StructureIO):
 
                     warnings.warn(
                         "Missing charge in atom %r written as blank"
-                        % (atom.get_full_id(), ),
+                        % (atom.get_full_id(),),
                         BiopythonWarning,
                     )
                 else:
@@ -247,7 +247,7 @@ class PDBIO(StructureIO):
 
                     warnings.warn(
                         "Missing radius in atom %r written as blank"
-                        % (atom.get_full_id(), ),
+                        % (atom.get_full_id(),),
                         BiopythonWarning,
                     )
                 else:
