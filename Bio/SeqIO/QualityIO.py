@@ -1504,14 +1504,14 @@ class FastqPhredWriter(SequenceWriter):
         assert not self._footer_written
         self._record_written = True
         # TODO - Is an empty sequence allowed in FASTQ format?
-        if record.seq is None:
+        seq = record.seq
+        if seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        seq_str = str(record.seq)
         qualities_str = _get_sanger_quality_str(record)
-        if len(qualities_str) != len(seq_str):
+        if len(qualities_str) != len(seq):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq_str), len(qualities_str))
+                % (record.id, len(seq), len(qualities_str))
             )
 
         # FASTQ files can include a description, just like FASTA files
@@ -1526,7 +1526,7 @@ class FastqPhredWriter(SequenceWriter):
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qualities_str))
 
 
 def as_fastq(record):
@@ -1760,14 +1760,14 @@ class FastqSolexaWriter(SequenceWriter):
         self._record_written = True
 
         # TODO - Is an empty sequence allowed in FASTQ format?
-        if record.seq is None:
+        seq = record.seq
+        if seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        seq_str = str(record.seq)
         qualities_str = _get_solexa_quality_str(record)
-        if len(qualities_str) != len(seq_str):
+        if len(qualities_str) != len(seq):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq_str), len(qualities_str))
+                % (record.id, len(seq), len(qualities_str))
             )
 
         # FASTQ files can include a description, just like FASTA files
@@ -1782,7 +1782,7 @@ class FastqSolexaWriter(SequenceWriter):
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qualities_str))
 
 
 def as_fastq_solexa(record):
@@ -1844,14 +1844,14 @@ class FastqIlluminaWriter(SequenceWriter):
         self._record_written = True
 
         # TODO - Is an empty sequence allowed in FASTQ format?
-        if record.seq is None:
+        seq = record.seq
+        if seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        seq_str = str(record.seq)
         qualities_str = _get_illumina_quality_str(record)
-        if len(qualities_str) != len(seq_str):
+        if len(qualities_str) != len(seq):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq_str), len(qualities_str))
+                % (record.id, len(seq), len(qualities_str))
             )
 
         # FASTQ files can include a description, just like FASTA files
@@ -1866,7 +1866,7 @@ class FastqIlluminaWriter(SequenceWriter):
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qualities_str))
 
 
 def as_fastq_illumina(record):
