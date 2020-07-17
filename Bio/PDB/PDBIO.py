@@ -188,8 +188,8 @@ class PDBIO(StructureIO):
 
                     warnings.warn(
                         "Missing occupancy in atom %r written as blank"
-                        % (atom.get_full_id(), ),
-                        BiopythonWarning
+                        % (atom.get_full_id(),),
+                        BiopythonWarning,
                     )
                 else:
                     raise TypeError(

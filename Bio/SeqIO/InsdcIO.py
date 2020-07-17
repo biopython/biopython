@@ -1220,9 +1220,7 @@ class EmblWriter(_InsdcWriter):
             )
         if " " in accession:
             # This is out of practicality... might it be allowed?
-            raise ValueError(
-                "Cannot have spaces in EMBL accession, '%s'" % accession
-            )
+            raise ValueError("Cannot have spaces in EMBL accession, '%s'" % accession)
 
         topology = self._get_annotation_str(record, "topology", default="")
 

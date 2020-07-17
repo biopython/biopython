@@ -338,9 +338,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             elif int(s) == expected_seq_length and e == "1":
                 pos = _pos(s)
             else:
-                raise ValueError(
-                    "Invalid between location %r" % loc_str
-                ) from None
+                raise ValueError("Invalid between location %r" % loc_str) from None
             return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
