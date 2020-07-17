@@ -41,7 +41,7 @@ code, except the ``Tests/`` folder which we are still gradually updating.
 We use the tool ``flake8`` for automating our code style checks, together with
 various plugins which can be installed as follows::
 
-    $ pip install flake8 flake8-docstrings flake8-black flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes flake8-bugbear flake8-implicit-str-concat
+    $ pip install flake8 flake8-docstrings flake8-black flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes flake8-bugbear flake8-implicit-str-concat flake8-assertive
 
 We use the continuous integration service TravisCI to run these ``flake8``
 checks, but it is better to run them locally before making a pull request.
