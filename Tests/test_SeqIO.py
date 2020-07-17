@@ -378,7 +378,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
                 raise ValueError(
-                    "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
+                    "%s\n\n%r\n\n%r" % (str(e), handle.read(), records)
                 ) from None
 
             self.assertEqual(len(records2), t_count)
@@ -570,32 +570,30 @@ class TestSeqIO(SeqIOTestBaseClass):
                     accs = record.annotations["accessions"]
                     # Check for blanks, or entries with leading/trailing spaces
                     for acc in accs:
-                        self.assertTrue(
-                            acc, "Bad accession in annotations: %s" % repr(acc)
-                        )
+                        self.assertTrue(acc, "Bad accession in annotations: %r" % acc)
                         self.assertEqual(
                             acc,
                             acc.strip(),
-                            "Bad accession in annotations: %s" % repr(acc),
+                            "Bad accession in annotations: %r" % acc,
                         )
                     self.assertEqual(
                         len(set(accs)),
                         len(accs),
-                        "Repeated accession in annotations: %s" % repr(accs),
+                        "Repeated accession in annotations: %r" % accs,
                     )
                 for ref in record.dbxrefs:
                     self.assertTrue(
-                        ref, "Bad cross reference in dbxrefs: %s" % repr(ref)
+                        ref, "Bad cross reference in dbxrefs: %r" % ref
                     )
                     self.assertEqual(
                         ref,
                         ref.strip(),
-                        "Bad cross reference in dbxrefs: %s" % repr(ref),
+                        "Bad cross reference in dbxrefs: %r" % ref,
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
                     len(record.dbxrefs),
-                    "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs),
+                    "Repeated cross reference in dbxrefs: %r" % record.dbxrefs,
                 )
 
                 # Check the lists obtained by the different methods agree
@@ -651,7 +649,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 self.assertIn(
                     t_format,
                     no_alpha_formats,
-                    "Got %s from %s file" % (repr(base_alpha), t_format),
+                    "Got %r from %s file" % (base_alpha, t_format),
                 )
                 good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
             for given_alpha in good:

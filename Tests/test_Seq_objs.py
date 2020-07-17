@@ -124,8 +124,8 @@ class StringMethodTests(unittest.TestCase):
                     j = ValueError
                 if i != j:
                     raise ValueError(
-                        "%s.%s(%s) = %r, not %r"
-                        % (repr(example1), method_name, repr(str2), i, j)
+                        "%r.%s(%r) = %r, not %r"
+                        % (example1, method_name, str2, i, j)
                     )
 
                 try:
@@ -138,8 +138,8 @@ class StringMethodTests(unittest.TestCase):
                     j = ValueError
                 if i != j:
                     raise ValueError(
-                        "%s.%s(%s) = %r, not %r"
-                        % (repr(example1), method_name, repr(example2), i, j)
+                        "%r.%s(%r) = %r, not %r"
+                        % (example1, method_name, example2, i, j)
                     )
 
                 if start_end:
@@ -161,8 +161,8 @@ class StringMethodTests(unittest.TestCase):
                             j = ValueError
                         if i != j:
                             raise ValueError(
-                                "%s.%s(%s, %i) = %r, not %r"
-                                % (repr(example1), method_name, repr(str2), start, i, j)
+                                "%r.%s(%r, %i) = %r, not %r"
+                                % (example1, method_name, str2, start, i, j)
                             )
 
                         for end in self._start_end_values:
@@ -180,11 +180,11 @@ class StringMethodTests(unittest.TestCase):
                                 j = ValueError
                             if i != j:
                                 raise ValueError(
-                                    "%s.%s(%s, %i, %i) = %r, not %r"
+                                    "%r.%s(%r, %i, %i) = %r, not %r"
                                     % (
-                                        repr(example1),
+                                        example1,
                                         method_name,
-                                        repr(str2),
+                                        str2,
                                         start,
                                         end,
                                         i,

@@ -667,7 +667,7 @@ class SeqRecord:
         ...                 id="NP_418483.1", name="b4059",
         ...                 description="ssDNA-binding protein",
         ...                 dbxrefs=["ASAP:13298", "GI:16131885", "GeneID:948570"])
-        >>> print(repr(rec))
+        >>> rec
         SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF'), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
 
         At the python prompt you can also use this shorthand:

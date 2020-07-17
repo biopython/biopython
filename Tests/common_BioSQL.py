@@ -579,7 +579,7 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertEqual(cds_feature.qualifiers["codon_start"], ["1"])
         except KeyError:
             raise KeyError(
-                "Missing expected entries, have %s" % repr(cds_feature.qualifiers)
+                "Missing expected entries, have %r" % cds_feature.qualifiers
             ) from None
 
         self.assertIn("db_xref", cds_feature.qualifiers)
@@ -1122,9 +1122,7 @@ class AutoSeqIOTests(unittest.TestCase):
             if "accessions" in record.annotations:
                 # Only expect FIRST accession to work!
                 key = record.annotations["accessions"][0]
-                assert key, "Blank accession in annotation %s" % repr(
-                    record.annotations
-                )
+                assert key, "Blank accession in annotation %r" % record.annotations
                 if key != record.id:
                     # print(" - Retrieving by accession '%s'," % key)
                     db_rec = db.lookup(accession=key)

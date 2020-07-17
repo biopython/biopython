@@ -91,7 +91,7 @@ class Phyloxml(PhyloElement):
             if tree.name == index:
                 return tree
         else:
-            raise KeyError("no phylogeny found with name " + repr(index))
+            raise KeyError("no phylogeny found with name %r" % index)
 
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""
@@ -912,7 +912,7 @@ class Events(PhyloElement):
         except AttributeError:
             raise KeyError(key) from None
         if val is None:
-            raise KeyError("%s has not been set in this object" % repr(key))
+            raise KeyError("%r has not been set in this object" % key)
         return val
 
     def __setitem__(self, key, val):

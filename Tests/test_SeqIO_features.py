@@ -61,7 +61,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         # Jython didn't like us comparing the string of very long
         # UnknownSeq object (out of heap memory error)
         if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%s vs %s" % (repr(old.seq), repr(new.seq)))
+            raise ValueError("%r vs %r" % (old.seq, new.seq))
     elif str(old.seq).upper() != str(new.seq).upper():
         if len(old.seq) < 200:
             raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
@@ -75,7 +75,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         old.description.split()
     ).intersection(new.description.split()):
         raise ValueError(
-            "%s versus %s" % (repr(old.description), repr(new.description))
+            "%r versus %r" % (old.description, new.description)
         )
     # This only checks common annotation
     # Would a white list be easier?
@@ -144,38 +144,36 @@ def compare_records(old_list, new_list, expect_minor_diffs=False):
 def compare_feature(old, new):
     """Check two SeqFeatures agree."""
     if old.type != new.type:
-        raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
+        raise ValueError("Type %r versus %r" % (old.type, new.type))
     if (
         old.location.nofuzzy_start != new.location.nofuzzy_start
         or old.location.nofuzzy_end != new.location.nofuzzy_end
     ):
         raise ValueError(
-            "%s versus %s:\n%s\nvs:\n%s"
-            % (old.location, new.location, repr(old), repr(new))
+            "%s versus %s:\n%r\nvs:\n%r"
+            % (old.location, new.location, old, new)
         )
     if old.strand is not None and old.strand != new.strand:
-        raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different strand:\n%r\nvs:\n%r" % (old, new))
     if old.ref != new.ref:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref:\n%r\nvs:\n%r" % (old, new))
     if old.ref_db != new.ref_db:
-        raise ValueError("Different ref_db:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref_db:\n%r\nvs:\n%r" % (old, new))
     if old.location_operator != new.location_operator:
-        raise ValueError(
-            "Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new))
-        )
+        raise ValueError("Different location_operator:\n%r\nvs:\n%r" % (old, new))
     if old.location.start != new.location.start or str(old.location.start) != str(
         new.location.start
     ):
         raise ValueError(
-            "Start %s versus %s:\n%s\nvs:\n%s"
-            % (old.location.start, new.location.start, repr(old), repr(new))
+            "Start %s versus %s:\n%r\nvs:\n%r"
+            % (old.location.start, new.location.start, old, new)
         )
     if old.location.end != new.location.end or str(old.location.end) != str(
         new.location.end
     ):
         raise ValueError(
-            "End %s versus %s:\n%s\nvs:\n%s"
-            % (old.location.end, new.location.end, repr(old), repr(new))
+            "End %s versus %s:\n%r\nvs:\n%r"
+            % (old.location.end, new.location.end, old, new)
         )
     # This only checks key shared qualifiers
     # Would a white list be easier?

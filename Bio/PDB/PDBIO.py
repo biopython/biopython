@@ -187,9 +187,9 @@ class PDBIO(StructureIO):
                     from Bio import BiopythonWarning
 
                     warnings.warn(
-                        "Missing occupancy in atom %s written as blank"
-                        % repr(atom.get_full_id()),
-                        BiopythonWarning,
+                        "Missing occupancy in atom %r written as blank"
+                        % (atom.get_full_id(), ),
+                        BiopythonWarning
                     )
                 else:
                     raise TypeError(
@@ -228,8 +228,8 @@ class PDBIO(StructureIO):
                     from Bio import BiopythonWarning
 
                     warnings.warn(
-                        "Missing charge in atom %s written as blank"
-                        % repr(atom.get_full_id()),
+                        "Missing charge in atom %r written as blank"
+                        % (atom.get_full_id(), ),
                         BiopythonWarning,
                     )
                 else:
@@ -246,8 +246,8 @@ class PDBIO(StructureIO):
                     from Bio import BiopythonWarning
 
                     warnings.warn(
-                        "Missing radius in atom %s written as blank"
-                        % repr(atom.get_full_id()),
+                        "Missing radius in atom %r written as blank"
+                        % (atom.get_full_id(), ),
                         BiopythonWarning,
                     )
                 else:

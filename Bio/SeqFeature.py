@@ -271,17 +271,17 @@ class SeqFeature:
 
     def __repr__(self):
         """Represent the feature as a string for debugging."""
-        answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
+        answer = "%s(%r" % (self.__class__.__name__, self.location)
         if self.type:
-            answer += ", type=%s" % repr(self.type)
+            answer += ", type=%r" % self.type
         if self.location_operator:
-            answer += ", location_operator=%s" % repr(self.location_operator)
+            answer += ", location_operator=%r" % self.location_operator
         if self.id and self.id != "<unknown id>":
-            answer += ", id=%s" % repr(self.id)
+            answer += ", id=%r" % self.id
         if self.ref:
-            answer += ", ref=%s" % repr(self.ref)
+            answer += ", ref=%r" % self.ref
         if self.ref_db:
-            answer += ", ref_db=%s" % repr(self.ref_db)
+            answer += ", ref_db=%r" % self.ref_db
         answer += ")"
         return answer
 
@@ -632,8 +632,8 @@ class Reference:
 
     def __repr__(self):
         """Represent the Reference object as a string for debugging."""
-        # TODO - Update this is __init__ later accpets values
-        return "%s(title=%s, ...)" % (self.__class__.__name__, repr(self.title))
+        # TODO - Update this is __init__ later accepts values
+        return "%s(title=%r, ...)" % (self.__class__.__name__, self.title)
 
     def __eq__(self, other):
         """Check if two Reference objects should be considered equal.
@@ -2182,7 +2182,7 @@ class PositionGap:
 
     def __repr__(self):
         """Represent the position gap as a string for debugging."""
-        return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
+        return "%s(%r)" % (self.__class__.__name__, self.gap_size)
 
     def __str__(self):
         """Return a representation of the PositionGap object (with python counting)."""

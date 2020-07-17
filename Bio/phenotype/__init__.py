@@ -140,8 +140,8 @@ def write(plates, handle, format):
         if not isinstance(count, int):
             raise TypeError(
                 "Internal error - the underlying %s "
-                "writer should have returned the record count, not %s"
-                % (format, repr(count))
+                "writer should have returned the record count, not %r"
+                % (format, count)
             )
 
     return count

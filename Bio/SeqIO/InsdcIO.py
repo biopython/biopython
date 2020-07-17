@@ -1216,12 +1216,12 @@ class EmblWriter(_InsdcWriter):
 
         if ";" in accession:
             raise ValueError(
-                "Cannot have semi-colon in EMBL accession, %s" % repr(str(accession))
+                "Cannot have semi-colon in EMBL accession, '%s'" % accession
             )
         if " " in accession:
             # This is out of practicality... might it be allowed?
             raise ValueError(
-                "Cannot have spaces in EMBL accession, %s" % repr(str(accession))
+                "Cannot have spaces in EMBL accession, '%s'" % accession
             )
 
         topology = self._get_annotation_str(record, "topology", default="")

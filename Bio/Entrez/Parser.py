@@ -86,7 +86,7 @@ class NoneElement:
             attributes = self.attributes
         except AttributeError:
             return "NoneElement"
-        return "NoneElement(attributes=%s)" % repr(attributes)
+        return "NoneElement(attributes=%r)" % attributes
 
 
 class IntegerElement(int):
@@ -110,7 +110,7 @@ class IntegerElement(int):
             attributes = self.attributes
         except AttributeError:
             return text
-        return "IntegerElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "IntegerElement(%s, attributes=%r)" % (text, attributes)
 
 
 class StringElement(str):
@@ -133,7 +133,7 @@ class StringElement(str):
         attributes = self.attributes
         if not attributes:
             return text
-        return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "StringElement(%s, attributes=%r)" % (text, attributes)
 
 
 class UnicodeElement(str):
@@ -156,7 +156,7 @@ class UnicodeElement(str):
         attributes = self.attributes
         if not attributes:
             return text
-        return "UnicodeElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "UnicodeElement(%s, attributes=%r)" % (text, attributes)
 
 
 class ListElement(list):
@@ -178,7 +178,7 @@ class ListElement(list):
         attributes = self.attributes
         if not attributes:
             return text
-        return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "ListElement(%s, attributes=%r)" % (text, attributes)
 
     def store(self, value):
         """Append an element to the list, checking tags."""
@@ -211,7 +211,7 @@ class DictionaryElement(dict):
         attributes = self.attributes
         if not attributes:
             return text
-        return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
+        return "DictElement(%s, attributes=%r)" % (text, attributes)
 
     def store(self, value):
         """Add an entry to the dictionary, checking tags."""
