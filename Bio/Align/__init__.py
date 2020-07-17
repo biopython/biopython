@@ -307,8 +307,8 @@ class MultipleSeqAlignment:
         )
         # This version is useful for doing eval(repr(alignment)),
         # but it can be VERY long:
-        # return "%s(%s)" \
-        #       % (self.__class__, repr(self._records))
+        # return "%s(%r)" \
+        #       % (self.__class__, self._records)
 
     def format(self, format_spec):
         """Return the alignment as a string in the specified file format [DEPRECATED].

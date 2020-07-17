@@ -145,12 +145,12 @@ class EmbossIterator(AlignmentIterator):
                         assert seq.replace("-", "") == "", line
                     elif start - seq_starts[index] != len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s"
+                            "Found %i chars so far for sequence %i (%s, %r), line says start %i:\n%s"
                             % (
                                 len(seqs[index].replace("-", "")),
                                 index,
                                 id,
-                                repr(seqs[index]),
+                                seqs[index],
                                 start,
                                 line,
                             )
@@ -160,12 +160,12 @@ class EmbossIterator(AlignmentIterator):
                     # Check the end ...
                     if end != seq_starts[index] + len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s"
+                            "Found %i chars so far for sequence %i (%s, %r, start=%i), file says end %i:\n%s"
                             % (
                                 len(seqs[index].replace("-", "")),
                                 index,
                                 id,
-                                repr(seqs[index]),
+                                seqs[index],
                                 seq_starts[index],
                                 end,
                                 line,

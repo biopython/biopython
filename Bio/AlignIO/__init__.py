@@ -240,8 +240,7 @@ def write(alignments, handle, format):
     if not isinstance(count, int):
         raise RuntimeError(
             "Internal error - the underlying %s "
-            "writer should have returned the alignment count, not %s"
-            % (format, repr(count))
+            "writer should have returned the alignment count, not %r" % (format, count)
         )
 
     return count

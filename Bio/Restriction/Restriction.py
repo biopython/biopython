@@ -119,7 +119,7 @@ def _check_bases(seq_string):
         seq_string = seq_string.replace(c, "")
     # Check only allowed IUPAC letters
     if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")):
-        raise TypeError("Invalid character found in %s" % repr(seq_string))
+        raise TypeError("Invalid character found in %r" % seq_string)
     return " " + seq_string
 
 
@@ -188,7 +188,7 @@ class FormattedSeq:
 
     def __repr__(self):
         """Represent ``FormattedSeq`` class as a string."""
-        return "FormattedSeq(%s, linear=%s)" % (repr(self[1:]), repr(self.linear))
+        return "FormattedSeq(%r, linear=%r)" % (self[1:], self.linear)
 
     def __eq__(self, other):
         """Implement equality operator for ``FormattedSeq`` object."""
@@ -272,7 +272,7 @@ class RestrictionType(type):
         See below.
         """
         if "-" in name:
-            raise ValueError("Problem with hyphen in %s as enzyme name" % repr(name))
+            raise ValueError("Problem with hyphen in %r as enzyme name" % name)
         # 2011/11/26 - Nobody knows what this call was supposed to accomplish,
         # but all unit tests seem to pass without it.
         # super().__init__(cls, name, bases, dct)
@@ -2341,7 +2341,7 @@ class Analysis(RestrictionBatch, PrintFormat):
 
     def __repr__(self):
         """Represent ``Analysis`` class as a string."""
-        return "Analysis(%s,%s,%s)" % (repr(self.rb), repr(self.sequence), self.linear)
+        return "Analysis(%r,%r,%s)" % (self.rb, self.sequence, self.linear)
 
     def _sub_set(self, wanted):
         """Filter result for keys which are in wanted (PRIVATE).

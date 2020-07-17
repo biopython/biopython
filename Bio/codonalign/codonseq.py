@@ -270,8 +270,8 @@ class CodonSeq(Seq):
                 gap = self.alphabet.gap_char
             elif gap != self.alphabet.gap_char:
                 raise ValueError(
-                    "Gap %s does not match %s from alphabet"
-                    % (repr(gap), repr(self.alphabet.alphabet.gap_char))
+                    "Gap %r does not match %r from alphabet"
+                    % (gap, self.alphabet.alphabet.gap_char)
                 )
             alpha = _ungap(self.alphabet)
         elif not gap:
@@ -279,7 +279,7 @@ class CodonSeq(Seq):
         else:
             alpha = self.alphabet  # modify!
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, %s" % repr(gap))
+            raise ValueError("Unexpected gap character, %r" % gap)
         return CodonSeq(str(self._data).replace(gap, ""), alpha, rf_table=self.rf_table)
 
     @classmethod

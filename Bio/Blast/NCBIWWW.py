@@ -332,17 +332,17 @@ def _parse_qblast_ref_page(handle):
     elif not rid:
         # Can this happen?
         raise ValueError(
-            "No RID found in the 'please wait' page. (although RTOE = %s)" % repr(rtoe)
+            "No RID found in the 'please wait' page. (although RTOE = %r)" % rtoe
         )
     elif not rtoe:
         # Can this happen?
         raise ValueError(
-            "No RTOE found in the 'please wait' page. (although RID = %s)" % repr(rid)
+            "No RTOE found in the 'please wait' page. (although RID = %r)" % rid
         )
 
     try:
         return rid, int(rtoe)
     except ValueError:
         raise ValueError(
-            "A non-integer RTOE found in the 'please wait' page, %s" % repr(rtoe)
+            "A non-integer RTOE found in the 'please wait' page, %r" % rtoe
         ) from None

@@ -134,8 +134,7 @@ def compare_feature(old_f, new_f):
             elif isinstance(new_f.qualifiers[key], list):
                 # Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
-                    "%s -> %s" % (repr(old_f.qualifiers[key]),
-                                  repr(new_f.qualifiers[key]))
+                    "%r -> %r" % (old_f.qualifiers[key], new_f.qualifiers[key])
             else:
                 raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:
@@ -181,9 +180,9 @@ def compare_sequence(old, new):
         for j in indices:
             expected = s[i:j]
             assert expected == str(old[i:j]), \
-                "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
+                "Slice %r vs %r" % (expected, old[i:j])
             assert expected == str(new[i:j]), \
-                "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
+                "Slice %r vs %r" % (expected, new[i:j])
             # Slicing with step of 1 should make no difference.
             # Slicing with step 3 might be useful for codons.
             for step in [1, 3]:
@@ -273,7 +272,7 @@ def compare_record(old, new):
             new_comment = new_comment.replace("\n", " ").replace("  ", " ")
             assert old_comment == new_comment, \
                 ("Comment annotation changed by load/retrieve\n"
-                 "Was:%s\nNow:%s" % (repr(old_comment), repr(new_comment)))
+                 "Was:%r\nNow:%r" % (old_comment, new_comment))
         elif key in ["taxonomy", "organism", "source"]:
             # If there is a taxon id recorded, these fields get overwritten
             # by data from the taxon/taxon_name tables.  There is no

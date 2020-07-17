@@ -75,8 +75,7 @@ class _XMLparser(ContentHandler):
         # but that white space doesn't belong to child tags like Hsp_midline
         if self._value.strip():
             raise ValueError(
-                "What should we do with %s before the %s tag?"
-                % (repr(self._value), name)
+                "What should we do with %s before the %r tag?" % (self._value, name)
             )
         self._value = ""
 

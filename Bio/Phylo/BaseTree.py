@@ -441,7 +441,7 @@ class TreeMixin:
         # Validation -- otherwise izip throws a spooky error below
         for p, t in zip(paths, targets):
             if p is None:
-                raise ValueError("target %s is not in this tree" % repr(t))
+                raise ValueError("target %r is not in this tree" % t)
         mrca = self.root
         for level in zip(*paths):
             ref = level[0]
