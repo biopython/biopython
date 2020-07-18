@@ -63,7 +63,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].ct[0].padded_end, 53)
         self.assertEqual(record.contigs[0].ct[0].date, "555456:555432")
         self.assertEqual(record.contigs[0].ct[0].info, ["This is the forst line of comment for c1", "and this the second for c1"])
-        self.assertEqual(record.contigs[0].wa, None)
+        self.assertIsNone(record.contigs[0].wa)
         self.assertEqual(len(record.contigs[0].reads), 2)
         self.assertEqual(record.contigs[0].reads[0].rd.name, "BL060c3-LR5.g.ab1")
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 868)
@@ -77,7 +77,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_end, 853)
         self.assertEqual(record.contigs[0].reads[0].qa.align_clipping_start, 22)
         self.assertEqual(record.contigs[0].reads[0].qa.align_clipping_end, 856)
-        self.assertEqual(record.contigs[0].reads[0].ds, None)
+        self.assertIsNone(record.contigs[0].reads[0].ds)
         self.assertEqual(len(record.contigs[0].reads[0].rt), 4)
         self.assertEqual(record.contigs[0].reads[0].rt[0].name, "BL060c3-LR5.g.ab1")
         self.assertEqual(record.contigs[0].reads[0].rt[0].tag_type, "matchElsewhereHighQual")
@@ -121,9 +121,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_end, 778)
         self.assertEqual(record.contigs[0].reads[1].qa.align_clipping_start, 1)
         self.assertEqual(record.contigs[0].reads[1].qa.align_clipping_end, 856)
-        self.assertEqual(record.contigs[0].reads[1].ds, None)
-        self.assertEqual(record.contigs[0].reads[1].rt, None)
-        self.assertEqual(record.contigs[0].reads[1].wr, None)
+        self.assertIsNone(record.contigs[0].reads[1].ds)
+        self.assertIsNone(record.contigs[0].reads[1].rt)
+        self.assertIsNone(record.contigs[0].reads[1].wr)
 
         self.assertEqual(len(record.contigs[1].reads), 14)
         self.assertEqual(record.contigs[1].name, "Contig2")
@@ -189,8 +189,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[0].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[0].ds.template, "")
         self.assertEqual(record.contigs[1].reads[0].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[0].rt, None)
-        self.assertEqual(record.contigs[1].reads[0].wr, None)
+        self.assertIsNone(record.contigs[1].reads[0].rt)
+        self.assertIsNone(record.contigs[1].reads[0].wr)
 
         # Read 1
         self.assertEqual(record.contigs[1].reads[1].rd.name, "BL060-c1-LR11.g.ab1")
@@ -213,7 +213,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[1].ds.template, "")
         self.assertEqual(record.contigs[1].reads[1].ds.direction, "")
         self.assertEqual(len(record.contigs[1].reads[1].rt), 0)
-        self.assertEqual(record.contigs[1].reads[1].wr, None)
+        self.assertIsNone(record.contigs[1].reads[1].wr)
 
         # Read 2
         self.assertEqual(record.contigs[1].reads[2].rd.name, "BL060-c1-LR9.g.ab1")
@@ -235,8 +235,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[2].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[2].ds.template, "")
         self.assertEqual(record.contigs[1].reads[2].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[2].rt, None)
-        self.assertEqual(record.contigs[1].reads[2].wr, None)
+        self.assertIsNone(record.contigs[1].reads[2].rt)
+        self.assertIsNone(record.contigs[1].reads[2].wr)
 
         # Read 3
         self.assertEqual(record.contigs[1].reads[3].rd.name, "BL060-c1-LR17R.b.ab1")
@@ -259,7 +259,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[3].ds.template, "")
         self.assertEqual(record.contigs[1].reads[3].ds.direction, "")
         self.assertEqual(record.contigs[1].reads[3].rt, [])
-        self.assertEqual(record.contigs[1].reads[3].wr, None)
+        self.assertIsNone(record.contigs[1].reads[3].wr)
 
         # Read 4
         self.assertEqual(record.contigs[1].reads[4].rd.name, "BL060-LR8.5.g.ab1")
@@ -281,8 +281,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[4].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[4].ds.template, "")
         self.assertEqual(record.contigs[1].reads[4].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[4].rt, None)
-        self.assertEqual(record.contigs[1].reads[4].wr, None)
+        self.assertIsNone(record.contigs[1].reads[4].rt)
+        self.assertIsNone(record.contigs[1].reads[4].wr)
 
         # Read 5
         self.assertEqual(record.contigs[1].reads[5].rd.name, "BL060-LR3R.b.ab1")
@@ -304,8 +304,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[5].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[5].ds.template, "")
         self.assertEqual(record.contigs[1].reads[5].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[5].rt, None)
-        self.assertEqual(record.contigs[1].reads[5].wr, None)
+        self.assertIsNone(record.contigs[1].reads[5].rt)
+        self.assertIsNone(record.contigs[1].reads[5].wr)
 
         # Read 6
         self.assertEqual(record.contigs[1].reads[6].rd.name, "BL060-c1-LR3R.b.ab1")
@@ -327,8 +327,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[6].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[6].ds.template, "")
         self.assertEqual(record.contigs[1].reads[6].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[6].rt, None)
-        self.assertEqual(record.contigs[1].reads[6].wr, None)
+        self.assertIsNone(record.contigs[1].reads[6].rt)
+        self.assertIsNone(record.contigs[1].reads[6].wr)
 
         # Read 7
         self.assertEqual(record.contigs[1].reads[7].rd.name, "BL060-LR3R.b.ab1")
@@ -350,8 +350,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[7].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[7].ds.template, "")
         self.assertEqual(record.contigs[1].reads[7].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[7].rt, None)
-        self.assertEqual(record.contigs[1].reads[7].wr, None)
+        self.assertIsNone(record.contigs[1].reads[7].rt)
+        self.assertIsNone(record.contigs[1].reads[7].wr)
 
         # Read 8
         self.assertEqual(record.contigs[1].reads[8].rd.name, "BL060-c1-LR7.g.ab1")
@@ -373,8 +373,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[8].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[8].ds.template, "")
         self.assertEqual(record.contigs[1].reads[8].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[8].rt, None)
-        self.assertEqual(record.contigs[1].reads[8].wr, None)
+        self.assertIsNone(record.contigs[1].reads[8].rt)
+        self.assertIsNone(record.contigs[1].reads[8].wr)
 
         # Read 9
         self.assertEqual(record.contigs[1].reads[9].rd.name, "BL060-LR7.g.ab1")
@@ -396,8 +396,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[9].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[9].ds.template, "")
         self.assertEqual(record.contigs[1].reads[9].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[9].rt, None)
-        self.assertEqual(record.contigs[1].reads[9].wr, None)
+        self.assertIsNone(record.contigs[1].reads[9].rt)
+        self.assertIsNone(record.contigs[1].reads[9].wr)
 
         # Read 10
         self.assertEqual(record.contigs[1].reads[10].rd.name, "BL060c5-LR5.g.ab1")
@@ -419,8 +419,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[10].ds.dye, "big")
         self.assertEqual(record.contigs[1].reads[10].ds.template, "")
         self.assertEqual(record.contigs[1].reads[10].ds.direction, "")
-        self.assertEqual(record.contigs[1].reads[10].rt, None)
-        self.assertEqual(record.contigs[1].reads[10].wr, None)
+        self.assertIsNone(record.contigs[1].reads[10].rt)
+        self.assertIsNone(record.contigs[1].reads[10].wr)
 
         # Read 11
         self.assertEqual(record.contigs[1].reads[11].rd.name, "BL060c2-LR5.g.ab1")
@@ -435,7 +435,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[11].qa.qual_clipping_end, 757)
         self.assertEqual(record.contigs[1].reads[11].qa.align_clipping_start, 10)
         self.assertEqual(record.contigs[1].reads[11].qa.align_clipping_end, 835)
-        self.assertEqual(record.contigs[1].reads[11].ds, None)
+        self.assertIsNone(record.contigs[1].reads[11].ds)
         self.assertEqual(len(record.contigs[1].reads[11].rt), 1)
         self.assertEqual(record.contigs[1].reads[11].rt[0].name, "BL060c2-LR5.g.ab1")
         self.assertEqual(record.contigs[1].reads[11].rt[0].tag_type, "matchElsewhereHighQual")
@@ -443,7 +443,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[11].rt[0].padded_start, 617)
         self.assertEqual(record.contigs[1].reads[11].rt[0].padded_end, 631)
         self.assertEqual(record.contigs[1].reads[11].rt[0].date, "040217:110357")
-        self.assertEqual(record.contigs[1].reads[11].wr, None)
+        self.assertIsNone(record.contigs[1].reads[11].wr)
 
         # Read 12
         self.assertEqual(record.contigs[1].reads[12].rd.name, "BL060c5-LR0R.b.ab1")
@@ -472,7 +472,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[12].rt[0].padded_start, 617)
         self.assertEqual(record.contigs[1].reads[12].rt[0].padded_end, 631)
         self.assertEqual(record.contigs[1].reads[12].rt[0].date, "040217:110357")
-        self.assertEqual(record.contigs[1].reads[12].wr, None)
+        self.assertIsNone(record.contigs[1].reads[12].wr)
 
         # Read 13
         self.assertEqual(record.contigs[1].reads[13].rd.name, "BL060c2-LR0R.b.ab1")
@@ -532,8 +532,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.bs[30].name, "BL060c3-LR0R.b.ab1")
         self.assertEqual(contig.bs[30].padded_start, 823)
         self.assertEqual(contig.bs[30].padded_end, 856)
-        self.assertEqual(contig.ct, None)
-        self.assertEqual(contig.wa, None)
+        self.assertIsNone(contig.ct)
+        self.assertIsNone(contig.wa)
         self.assertEqual(len(contig.reads), 2)
         self.assertEqual(contig.reads[0].rd.name, "BL060c3-LR5.g.ab1")
         self.assertEqual(contig.reads[0].rd.padded_bases, 868)
@@ -547,7 +547,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[0].qa.qual_clipping_end, 853)
         self.assertEqual(contig.reads[0].qa.align_clipping_start, 22)
         self.assertEqual(contig.reads[0].qa.align_clipping_end, 856)
-        self.assertEqual(contig.reads[0].ds, None)
+        self.assertIsNone(contig.reads[0].ds)
         self.assertEqual(len(contig.reads[0].rt), 2)
         self.assertEqual(contig.reads[0].rt[0].name, "BL060c3-LR5.g.ab1")
         self.assertEqual(contig.reads[0].rt[0].tag_type, "matchElsewhereHighQual")
@@ -580,9 +580,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].qa.qual_clipping_end, 778)
         self.assertEqual(contig.reads[1].qa.align_clipping_start, 1)
         self.assertEqual(contig.reads[1].qa.align_clipping_end, 856)
-        self.assertEqual(contig.reads[1].ds, None)
-        self.assertEqual(contig.reads[1].rt, None)
-        self.assertEqual(contig.reads[1].wr, None)
+        self.assertIsNone(contig.reads[1].ds)
+        self.assertIsNone(contig.reads[1].rt)
+        self.assertIsNone(contig.reads[1].wr)
 
         # Second contig
         contig = next(contigs)
@@ -666,8 +666,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[0].ds.dye, "big")
         self.assertEqual(contig.reads[0].ds.template, "")
         self.assertEqual(contig.reads[0].ds.direction, "")
-        self.assertEqual(contig.reads[0].rt, None)
-        self.assertEqual(contig.reads[0].wr, None)
+        self.assertIsNone(contig.reads[0].rt)
+        self.assertIsNone(contig.reads[0].wr)
 
         # Read 1
         self.assertEqual(contig.reads[1].rd.name, "BL060-c1-LR11.g.ab1")
@@ -696,7 +696,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].rt[0].padded_start, 617)
         self.assertEqual(contig.reads[1].rt[0].padded_end, 631)
         self.assertEqual(contig.reads[1].rt[0].date, "040217:110357")
-        self.assertEqual(contig.reads[1].wr, None)
+        self.assertIsNone(contig.reads[1].wr)
 
         # Read 2
         self.assertEqual(contig.reads[2].rd.name, "BL060-c1-LR9.g.ab1")
@@ -718,8 +718,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[2].ds.dye, "big")
         self.assertEqual(contig.reads[2].ds.template, "")
         self.assertEqual(contig.reads[2].ds.direction, "")
-        self.assertEqual(contig.reads[2].rt, None)
-        self.assertEqual(contig.reads[2].wr, None)
+        self.assertIsNone(contig.reads[2].rt)
+        self.assertIsNone(contig.reads[2].wr)
 
         # Read 3
         self.assertEqual(contig.reads[3].rd.name, "BL060-c1-LR17R.b.ab1")
@@ -748,7 +748,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[3].rt[0].padded_start, 617)
         self.assertEqual(contig.reads[3].rt[0].padded_end, 631)
         self.assertEqual(contig.reads[3].rt[0].date, "040217:110357")
-        self.assertEqual(contig.reads[3].wr, None)
+        self.assertIsNone(contig.reads[3].wr)
 
         # Read 4
         self.assertEqual(contig.reads[4].rd.name, "BL060-LR8.5.g.ab1")
@@ -770,8 +770,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[4].ds.dye, "big")
         self.assertEqual(contig.reads[4].ds.template, "")
         self.assertEqual(contig.reads[4].ds.direction, "")
-        self.assertEqual(contig.reads[4].rt, None)
-        self.assertEqual(contig.reads[4].wr, None)
+        self.assertIsNone(contig.reads[4].rt)
+        self.assertIsNone(contig.reads[4].wr)
 
         # Read 5
         self.assertEqual(contig.reads[5].rd.name, "BL060-LR3R.b.ab1")
@@ -793,8 +793,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[5].ds.dye, "big")
         self.assertEqual(contig.reads[5].ds.template, "")
         self.assertEqual(contig.reads[5].ds.direction, "")
-        self.assertEqual(contig.reads[5].rt, None)
-        self.assertEqual(contig.reads[5].wr, None)
+        self.assertIsNone(contig.reads[5].rt)
+        self.assertIsNone(contig.reads[5].wr)
 
         # Read 6
         self.assertEqual(contig.reads[6].rd.name, "BL060-c1-LR3R.b.ab1")
@@ -816,8 +816,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[6].ds.dye, "big")
         self.assertEqual(contig.reads[6].ds.template, "")
         self.assertEqual(contig.reads[6].ds.direction, "")
-        self.assertEqual(contig.reads[6].rt, None)
-        self.assertEqual(contig.reads[6].wr, None)
+        self.assertIsNone(contig.reads[6].rt)
+        self.assertIsNone(contig.reads[6].wr)
 
         # Read 7
         self.assertEqual(contig.reads[7].rd.name, "BL060-LR3R.b.ab1")
@@ -839,8 +839,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[7].ds.dye, "big")
         self.assertEqual(contig.reads[7].ds.template, "")
         self.assertEqual(contig.reads[7].ds.direction, "")
-        self.assertEqual(contig.reads[7].rt, None)
-        self.assertEqual(contig.reads[7].wr, None)
+        self.assertIsNone(contig.reads[7].rt)
+        self.assertIsNone(contig.reads[7].wr)
 
         # Read 8
         self.assertEqual(contig.reads[8].rd.name, "BL060-c1-LR7.g.ab1")
@@ -862,8 +862,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[8].ds.dye, "big")
         self.assertEqual(contig.reads[8].ds.template, "")
         self.assertEqual(contig.reads[8].ds.direction, "")
-        self.assertEqual(contig.reads[8].rt, None)
-        self.assertEqual(contig.reads[8].wr, None)
+        self.assertIsNone(contig.reads[8].rt)
+        self.assertIsNone(contig.reads[8].wr)
 
         # Read 9
         self.assertEqual(contig.reads[9].rd.name, "BL060-LR7.g.ab1")
@@ -885,8 +885,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[9].ds.dye, "big")
         self.assertEqual(contig.reads[9].ds.template, "")
         self.assertEqual(contig.reads[9].ds.direction, "")
-        self.assertEqual(contig.reads[9].rt, None)
-        self.assertEqual(contig.reads[9].wr, None)
+        self.assertIsNone(contig.reads[9].rt)
+        self.assertIsNone(contig.reads[9].wr)
 
         # Read 10
         self.assertEqual(contig.reads[10].rd.name, "BL060c5-LR5.g.ab1")
@@ -908,8 +908,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[10].ds.dye, "big")
         self.assertEqual(contig.reads[10].ds.template, "")
         self.assertEqual(contig.reads[10].ds.direction, "")
-        self.assertEqual(contig.reads[10].rt, None)
-        self.assertEqual(contig.reads[10].wr, None)
+        self.assertIsNone(contig.reads[10].rt)
+        self.assertIsNone(contig.reads[10].wr)
 
         # Read 11
         self.assertEqual(contig.reads[11].rd.name, "BL060c2-LR5.g.ab1")
@@ -924,7 +924,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[11].qa.qual_clipping_end, 757)
         self.assertEqual(contig.reads[11].qa.align_clipping_start, 10)
         self.assertEqual(contig.reads[11].qa.align_clipping_end, 835)
-        self.assertEqual(contig.reads[11].ds, None)
+        self.assertIsNone(contig.reads[11].ds)
         self.assertEqual(len(contig.reads[11].rt), 1)
         self.assertEqual(contig.reads[11].rt[0].name, "BL060c2-LR5.g.ab1")
         self.assertEqual(contig.reads[11].rt[0].tag_type, "matchElsewhereHighQual")
@@ -932,7 +932,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[11].rt[0].padded_start, 617)
         self.assertEqual(contig.reads[11].rt[0].padded_end, 631)
         self.assertEqual(contig.reads[11].rt[0].date, "040217:110357")
-        self.assertEqual(contig.reads[11].wr, None)
+        self.assertIsNone(contig.reads[11].wr)
 
         # Read 12
         self.assertEqual(contig.reads[12].rd.name, "BL060c5-LR0R.b.ab1")
@@ -954,8 +954,8 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[12].ds.dye, "big")
         self.assertEqual(contig.reads[12].ds.template, "")
         self.assertEqual(contig.reads[12].ds.direction, "")
-        self.assertEqual(contig.reads[12].rt, None)
-        self.assertEqual(contig.reads[12].wr, None)
+        self.assertIsNone(contig.reads[12].rt)
+        self.assertIsNone(contig.reads[12].wr)
 
         # Read 13
         self.assertEqual(contig.reads[13].rd.name, "BL060c2-LR0R.b.ab1")
@@ -1012,7 +1012,7 @@ class AceTestTwo(unittest.TestCase):
         record = Ace.read(self.handle)
         self.assertEqual(record.ncontigs, 1)
         self.assertEqual(record.nreads, 6)
-        self.assertEqual(record.wa, None)
+        self.assertIsNone(record.wa)
         self.assertEqual(len(record.contigs), 1)
 
         self.assertEqual(len(record.contigs[0].reads), 6)
@@ -1038,8 +1038,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].af[5].coru, "C")
         self.assertEqual(record.contigs[0].af[5].padded_start, 517)
         self.assertEqual(record.contigs[0].bs, [])
-        self.assertEqual(record.contigs[0].ct, None)
-        self.assertEqual(record.contigs[0].wa, None)
+        self.assertIsNone(record.contigs[0].ct)
+        self.assertIsNone(record.contigs[0].wa)
         self.assertEqual(len(record.contigs[0].reads), 6)
 
         self.assertEqual(record.contigs[0].reads[0].rd.name, "R3")
@@ -1061,8 +1061,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[0].ds.template, "")
         self.assertEqual(record.contigs[0].reads[0].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[0].rt, None)
-        self.assertEqual(record.contigs[0].reads[0].wr, None)
+        self.assertIsNone(record.contigs[0].reads[0].rt)
+        self.assertIsNone(record.contigs[0].reads[0].wr)
 
         self.assertEqual(record.contigs[0].reads[1].rd.name, "R1")
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 864)
@@ -1083,8 +1083,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[1].ds.template, "")
         self.assertEqual(record.contigs[0].reads[1].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[1].rt, None)
-        self.assertEqual(record.contigs[0].reads[1].wr, None)
+        self.assertIsNone(record.contigs[0].reads[1].rt)
+        self.assertIsNone(record.contigs[0].reads[1].wr)
 
         self.assertEqual(record.contigs[0].reads[2].rd.name, "R2")
         self.assertEqual(record.contigs[0].reads[2].rd.padded_bases, 1026)
@@ -1105,8 +1105,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[2].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[2].ds.template, "")
         self.assertEqual(record.contigs[0].reads[2].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[2].rt, None)
-        self.assertEqual(record.contigs[0].reads[2].wr, None)
+        self.assertIsNone(record.contigs[0].reads[2].rt)
+        self.assertIsNone(record.contigs[0].reads[2].wr)
 
         self.assertEqual(record.contigs[0].reads[3].rd.name, "R5")
         self.assertEqual(record.contigs[0].reads[3].rd.padded_bases, 925)
@@ -1127,8 +1127,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[3].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[3].ds.template, "")
         self.assertEqual(record.contigs[0].reads[3].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[3].rt, None)
-        self.assertEqual(record.contigs[0].reads[3].wr, None)
+        self.assertIsNone(record.contigs[0].reads[3].rt)
+        self.assertIsNone(record.contigs[0].reads[3].wr)
 
         self.assertEqual(record.contigs[0].reads[4].rd.name, "R4")
         self.assertEqual(record.contigs[0].reads[4].rd.padded_bases, 816)
@@ -1149,8 +1149,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[4].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[4].ds.template, "")
         self.assertEqual(record.contigs[0].reads[4].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[4].rt, None)
-        self.assertEqual(record.contigs[0].reads[4].wr, None)
+        self.assertIsNone(record.contigs[0].reads[4].rt)
+        self.assertIsNone(record.contigs[0].reads[4].wr)
 
         self.assertEqual(record.contigs[0].reads[5].rd.name, "R6")
         self.assertEqual(record.contigs[0].reads[5].rd.padded_bases, 857)
@@ -1171,8 +1171,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[5].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[5].ds.template, "")
         self.assertEqual(record.contigs[0].reads[5].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[5].rt, None)
-        self.assertEqual(record.contigs[0].reads[5].wr, None)
+        self.assertIsNone(record.contigs[0].reads[5].rt)
+        self.assertIsNone(record.contigs[0].reads[5].wr)
 
     def test_check_record_parser(self):
         """Test to check that record parser parses each contig into a record."""
@@ -1204,8 +1204,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.af[5].coru, "C")
         self.assertEqual(contig.af[5].padded_start, 517)
         self.assertEqual(contig.bs, [])
-        self.assertEqual(contig.ct, None)
-        self.assertEqual(contig.wa, None)
+        self.assertIsNone(contig.ct)
+        self.assertIsNone(contig.wa)
         self.assertEqual(len(contig.reads), 6)
 
         self.assertEqual(contig.reads[0].rd.name, "R3")
@@ -1227,8 +1227,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[0].ds.dye, "")
         self.assertEqual(contig.reads[0].ds.template, "")
         self.assertEqual(contig.reads[0].ds.direction, "")
-        self.assertEqual(contig.reads[0].rt, None)
-        self.assertEqual(contig.reads[0].wr, None)
+        self.assertIsNone(contig.reads[0].rt)
+        self.assertIsNone(contig.reads[0].wr)
 
         self.assertEqual(contig.reads[1].rd.name, "R1")
         self.assertEqual(contig.reads[1].rd.padded_bases, 864)
@@ -1249,8 +1249,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[1].ds.dye, "")
         self.assertEqual(contig.reads[1].ds.template, "")
         self.assertEqual(contig.reads[1].ds.direction, "")
-        self.assertEqual(contig.reads[1].rt, None)
-        self.assertEqual(contig.reads[1].wr, None)
+        self.assertIsNone(contig.reads[1].rt)
+        self.assertIsNone(contig.reads[1].wr)
 
         self.assertEqual(contig.reads[2].rd.name, "R2")
         self.assertEqual(contig.reads[2].rd.padded_bases, 1026)
@@ -1271,8 +1271,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[2].ds.dye, "")
         self.assertEqual(contig.reads[2].ds.template, "")
         self.assertEqual(contig.reads[2].ds.direction, "")
-        self.assertEqual(contig.reads[2].rt, None)
-        self.assertEqual(contig.reads[2].wr, None)
+        self.assertIsNone(contig.reads[2].rt)
+        self.assertIsNone(contig.reads[2].wr)
 
         self.assertEqual(contig.reads[3].rd.name, "R5")
         self.assertEqual(contig.reads[3].rd.padded_bases, 925)
@@ -1293,8 +1293,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[3].ds.dye, "")
         self.assertEqual(contig.reads[3].ds.template, "")
         self.assertEqual(contig.reads[3].ds.direction, "")
-        self.assertEqual(contig.reads[3].rt, None)
-        self.assertEqual(contig.reads[3].wr, None)
+        self.assertIsNone(contig.reads[3].rt)
+        self.assertIsNone(contig.reads[3].wr)
 
         self.assertEqual(contig.reads[4].rd.name, "R4")
         self.assertEqual(contig.reads[4].rd.padded_bases, 816)
@@ -1315,8 +1315,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[4].ds.dye, "")
         self.assertEqual(contig.reads[4].ds.template, "")
         self.assertEqual(contig.reads[4].ds.direction, "")
-        self.assertEqual(contig.reads[4].rt, None)
-        self.assertEqual(contig.reads[4].wr, None)
+        self.assertIsNone(contig.reads[4].rt)
+        self.assertIsNone(contig.reads[4].wr)
 
         self.assertEqual(contig.reads[5].rd.name, "R6")
         self.assertEqual(contig.reads[5].rd.padded_bases, 857)
@@ -1337,8 +1337,8 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[5].ds.dye, "")
         self.assertEqual(contig.reads[5].ds.template, "")
         self.assertEqual(contig.reads[5].ds.direction, "")
-        self.assertEqual(contig.reads[5].rt, None)
-        self.assertEqual(contig.reads[5].wr, None)
+        self.assertIsNone(contig.reads[5].rt)
+        self.assertIsNone(contig.reads[5].wr)
 
         # Make sure there are no more contigs
         self.assertRaises(StopIteration, next, contigs)
@@ -1446,8 +1446,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[0].ds.template, "")
         self.assertEqual(record.contigs[0].reads[0].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[0].rt, None)
-        self.assertEqual(record.contigs[0].reads[0].wr, None)
+        self.assertIsNone(record.contigs[0].reads[0].rt)
+        self.assertIsNone(record.contigs[0].reads[0].wr)
 
         self.assertEqual(record.contigs[0].reads[1].rd.name, "K26-526t")
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 687)
@@ -1468,8 +1468,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[1].ds.template, "")
         self.assertEqual(record.contigs[0].reads[1].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[1].rt, None)
-        self.assertEqual(record.contigs[0].reads[1].wr, None)
+        self.assertIsNone(record.contigs[0].reads[1].rt)
+        self.assertIsNone(record.contigs[0].reads[1].wr)
 
         self.assertEqual(record.contigs[0].reads[2].rd.name, "K26-961c")
         self.assertEqual(record.contigs[0].reads[2].rd.padded_bases, 517)
@@ -1490,8 +1490,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[2].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[2].ds.template, "")
         self.assertEqual(record.contigs[0].reads[2].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[2].rt, None)
-        self.assertEqual(record.contigs[0].reads[2].wr, None)
+        self.assertIsNone(record.contigs[0].reads[2].rt)
+        self.assertIsNone(record.contigs[0].reads[2].wr)
 
         self.assertEqual(record.contigs[0].reads[3].rd.name, "K26-394c")
         self.assertEqual(record.contigs[0].reads[3].rd.padded_bases, 628)
@@ -1512,8 +1512,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[3].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[3].ds.template, "")
         self.assertEqual(record.contigs[0].reads[3].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[3].rt, None)
-        self.assertEqual(record.contigs[0].reads[3].wr, None)
+        self.assertIsNone(record.contigs[0].reads[3].rt)
+        self.assertIsNone(record.contigs[0].reads[3].wr)
 
         self.assertEqual(record.contigs[0].reads[4].rd.name, "K26-291s")
         self.assertEqual(record.contigs[0].reads[4].rd.padded_bases, 556)
@@ -1534,8 +1534,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[4].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[4].ds.template, "")
         self.assertEqual(record.contigs[0].reads[4].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[4].rt, None)
-        self.assertEqual(record.contigs[0].reads[4].wr, None)
+        self.assertIsNone(record.contigs[0].reads[4].rt)
+        self.assertIsNone(record.contigs[0].reads[4].wr)
 
         self.assertEqual(record.contigs[0].reads[5].rd.name, "K26-822c")
         self.assertEqual(record.contigs[0].reads[5].rd.padded_bases, 593)
@@ -1557,8 +1557,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[5].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[5].ds.template, "")
         self.assertEqual(record.contigs[0].reads[5].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[5].rt, None)
-        self.assertEqual(record.contigs[0].reads[5].wr, None)
+        self.assertIsNone(record.contigs[0].reads[5].rt)
+        self.assertIsNone(record.contigs[0].reads[5].wr)
 
         self.assertEqual(record.contigs[0].reads[6].rd.name, "K26-572c")
         self.assertEqual(record.contigs[0].reads[6].rd.padded_bases, 594)
@@ -1579,8 +1579,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[6].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[6].ds.template, "")
         self.assertEqual(record.contigs[0].reads[6].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[6].rt, None)
-        self.assertEqual(record.contigs[0].reads[6].wr, None)
+        self.assertIsNone(record.contigs[0].reads[6].rt)
+        self.assertIsNone(record.contigs[0].reads[6].wr)
 
         self.assertEqual(record.contigs[0].reads[7].rd.name, "K26-766c")
         self.assertEqual(record.contigs[0].reads[7].rd.padded_bases, 603)
@@ -1601,8 +1601,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[7].ds.dye, "")
         self.assertEqual(record.contigs[0].reads[7].ds.template, "")
         self.assertEqual(record.contigs[0].reads[7].ds.direction, "")
-        self.assertEqual(record.contigs[0].reads[7].rt, None)
-        self.assertEqual(record.contigs[0].reads[7].wr, None)
+        self.assertIsNone(record.contigs[0].reads[7].rt)
+        self.assertIsNone(record.contigs[0].reads[7].wr)
 
     def test_check_record_parser(self):
         """Test to check that record parser parses each contig into a record."""
@@ -1688,8 +1688,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[0].ds.dye, "")
         self.assertEqual(contig.reads[0].ds.template, "")
         self.assertEqual(contig.reads[0].ds.direction, "")
-        self.assertEqual(contig.reads[0].rt, None)
-        self.assertEqual(contig.reads[0].wr, None)
+        self.assertIsNone(contig.reads[0].rt)
+        self.assertIsNone(contig.reads[0].wr)
 
         self.assertEqual(contig.reads[1].rd.name, "K26-526t")
         self.assertEqual(contig.reads[1].rd.padded_bases, 687)
@@ -1710,8 +1710,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[1].ds.dye, "")
         self.assertEqual(contig.reads[1].ds.template, "")
         self.assertEqual(contig.reads[1].ds.direction, "")
-        self.assertEqual(contig.reads[1].rt, None)
-        self.assertEqual(contig.reads[1].wr, None)
+        self.assertIsNone(contig.reads[1].rt)
+        self.assertIsNone(contig.reads[1].wr)
 
         self.assertEqual(contig.reads[2].rd.name, "K26-961c")
         self.assertEqual(contig.reads[2].rd.padded_bases, 517)
@@ -1732,8 +1732,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[2].ds.dye, "")
         self.assertEqual(contig.reads[2].ds.template, "")
         self.assertEqual(contig.reads[2].ds.direction, "")
-        self.assertEqual(contig.reads[2].rt, None)
-        self.assertEqual(contig.reads[2].wr, None)
+        self.assertIsNone(contig.reads[2].rt)
+        self.assertIsNone(contig.reads[2].wr)
 
         self.assertEqual(contig.reads[3].rd.name, "K26-394c")
         self.assertEqual(contig.reads[3].rd.padded_bases, 628)
@@ -1754,8 +1754,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[3].ds.dye, "")
         self.assertEqual(contig.reads[3].ds.template, "")
         self.assertEqual(contig.reads[3].ds.direction, "")
-        self.assertEqual(contig.reads[3].rt, None)
-        self.assertEqual(contig.reads[3].wr, None)
+        self.assertIsNone(contig.reads[3].rt)
+        self.assertIsNone(contig.reads[3].wr)
 
         self.assertEqual(contig.reads[4].rd.name, "K26-291s")
         self.assertEqual(contig.reads[4].rd.padded_bases, 556)
@@ -1776,8 +1776,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[4].ds.dye, "")
         self.assertEqual(contig.reads[4].ds.template, "")
         self.assertEqual(contig.reads[4].ds.direction, "")
-        self.assertEqual(contig.reads[4].rt, None)
-        self.assertEqual(contig.reads[4].wr, None)
+        self.assertIsNone(contig.reads[4].rt)
+        self.assertIsNone(contig.reads[4].wr)
 
         self.assertEqual(contig.reads[5].rd.name, "K26-822c")
         self.assertEqual(contig.reads[5].rd.padded_bases, 593)
@@ -1799,8 +1799,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[5].ds.dye, "")
         self.assertEqual(contig.reads[5].ds.template, "")
         self.assertEqual(contig.reads[5].ds.direction, "")
-        self.assertEqual(contig.reads[5].rt, None)
-        self.assertEqual(contig.reads[5].wr, None)
+        self.assertIsNone(contig.reads[5].rt)
+        self.assertIsNone(contig.reads[5].wr)
 
         self.assertEqual(contig.reads[6].rd.name, "K26-572c")
         self.assertEqual(contig.reads[6].rd.padded_bases, 594)
@@ -1821,8 +1821,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[6].ds.dye, "")
         self.assertEqual(contig.reads[6].ds.template, "")
         self.assertEqual(contig.reads[6].ds.direction, "")
-        self.assertEqual(contig.reads[6].rt, None)
-        self.assertEqual(contig.reads[6].wr, None)
+        self.assertIsNone(contig.reads[6].rt)
+        self.assertIsNone(contig.reads[6].wr)
 
         self.assertEqual(contig.reads[7].rd.name, "K26-766c")
         self.assertEqual(contig.reads[7].rd.padded_bases, 603)
@@ -1843,8 +1843,8 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[7].ds.dye, "")
         self.assertEqual(contig.reads[7].ds.template, "")
         self.assertEqual(contig.reads[7].ds.direction, "")
-        self.assertEqual(contig.reads[7].rt, None)
-        self.assertEqual(contig.reads[7].wr, None)
+        self.assertIsNone(contig.reads[7].rt)
+        self.assertIsNone(contig.reads[7].wr)
 
         # Make sure there are no more contigs
         self.assertRaises(StopIteration, next, contigs)
