@@ -22,7 +22,6 @@ from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
-from Bio.Alphabet.IUPAC import ambiguous_dna
 from Bio import SeqIO
 
 
@@ -85,7 +84,7 @@ class NexusTest1(unittest.TestCase):
 
     def test_write_with_dups(self):
         # see issue: biopython/Bio/Nexus/Nexus.py _unique_label() eval error #633
-        records = [SeqRecord(Seq("ATGCTGCTGAT", alphabet=ambiguous_dna), id="foo") for _ in range(4)]
+        records = [SeqRecord(Seq("ATGCTGCTGAT"), id="foo", annotations={"molecule_type": "DNA"}) for _ in range(4)]
         out_file = StringIO()
         self.assertEqual(4, SeqIO.write(records, out_file, "nexus"))
 
@@ -376,8 +375,8 @@ usertype matrix_test stepmatrix=5
 
     def test_write_alignment(self):
         # Default causes no interleave (columns <= 1000)
-        records = [SeqRecord(Seq("ATGCTGCTGA" * 90, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
-        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 90), id=_id, annotations={"molecule_type": "DNA"}) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records)
 
         handle = StringIO()
         NexusWriter(handle).write_alignment(a)
@@ -386,8 +385,8 @@ usertype matrix_test stepmatrix=5
         self.assertIn("ATGCTGCTGA" * 90, data)
 
         # Default causes interleave (columns > 1000)
-        records = [SeqRecord(Seq("ATGCTGCTGA" * 110, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
-        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 110), id=_id, annotations={"molecule_type": "DNA"}) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records)
         handle = StringIO()
         NexusWriter(handle).write_alignment(a)
         handle.seek(0)
@@ -396,8 +395,8 @@ usertype matrix_test stepmatrix=5
         self.assertIn("ATGCTGCTGA" * 7, data)
 
         # Override interleave: True
-        records = [SeqRecord(Seq("ATGCTGCTGA" * 9, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
-        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 9), id=_id, annotations={"molecule_type": "DNA"}) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records)
         handle = StringIO()
         NexusWriter(handle).write_alignment(a, interleave=True)
         handle.seek(0)
@@ -406,8 +405,8 @@ usertype matrix_test stepmatrix=5
         self.assertIn("ATGCTGCTGA" * 7, data)
 
         # Override interleave: False
-        records = [SeqRecord(Seq("ATGCTGCTGA" * 110, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
-        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 110), id=_id, annotations={"molecule_type": "DNA"}) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records)
         handle = StringIO()
         NexusWriter(handle).write_alignment(a, interleave=False)
         handle.seek(0)
@@ -687,10 +686,10 @@ class TestSelf(unittest.TestCase):
         self.assertEqual([], list(NexusIterator(StringIO())))
 
     def test_multiple_output(self):
-        records = [SeqRecord(Seq("ATGCTGCTGAT", alphabet=ambiguous_dna), id="foo"),
-                   SeqRecord(Seq("ATGCTGCAGAT", alphabet=ambiguous_dna), id="bar"),
-                   SeqRecord(Seq("ATGCTGCGGAT", alphabet=ambiguous_dna), id="baz")]
-        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        records = [SeqRecord(Seq("ATGCTGCTGAT"), id="foo", annotations={"molecule_type": "DNA"}),
+                   SeqRecord(Seq("ATGCTGCAGAT"), id="bar", annotations={"molecule_type": "DNA"}),
+                   SeqRecord(Seq("ATGCTGCGGAT"), id="baz", annotations={"molecule_type": "DNA"})]
+        a = MultipleSeqAlignment(records)
 
         handle = StringIO()
         NexusWriter(handle).write_file([a])
