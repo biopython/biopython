@@ -82,6 +82,7 @@ possible, especially the following contributors:
 - Alexander Decurnou (first contribution)
 - Andrei Istrate (first contribution)
 - Andrey Raspopov
+- Artemi Bendandi (first contribution)
 - Austin Varela (first contribution)
 - Chris Daley
 - Chris Rands
@@ -89,6 +90,7 @@ possible, especially the following contributors:
 - Hielke Walinga (first contribution)
 - Kai Blin
 - Karthikeyan Singaravelan (first contribution)
+- Konstantinos Zisis (first contribution)
 - Markus Piotrowski
 - Michiel de Hoon
 - Peter Cock
@@ -133,22 +135,15 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Andrey Raspopov
 - Chris Daley (first contribution)
 - Chris Rands
-- Artemi Bendandi (first contribution)
 - Christian Brueffer
-- Deepak Khatri
 - Ilya Flyamer (first contribution)
 - Jakub Lipinski (first contribution)
 - Michael R. Crusoe (first contribution)
 - Michiel de Hoon
 - Peter Cock
-- Chris Daley (first contribution)
-- Michiel de Hoon
-- Jakub Lipinski (first contribution)
 - Sergio Valqui
-- Konstantinos Zisis (first contribution)
 
 6 November 2019: Biopython 1.75
 ===============================
