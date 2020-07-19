@@ -1119,7 +1119,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     # now superseded by Tm_NN.
 
     warnings.warn(
-        "Tm_staluc may be depreciated in the future. Use Tm_NN instead.",
+        "Tm_staluc is deprecated; please use Tm_NN instead.",
         BiopythonDeprecationWarning,
     )
     if not rna:
