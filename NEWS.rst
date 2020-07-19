@@ -14,6 +14,12 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
 tested on PyPy3.6.1 v7.1.1.
 
+The main change is that ``Bio.Alphabet`` is no longer used. In some cases you
+will now have to specify expected letters, molecule type (DNA, RNA, protein),
+or gap character explicitly. Please consult the updated Tutorial and API
+documentation for guidance. This simplification has sped up many ``Seq``
+object methods.
+
 ``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
 in the ``Bio.SeqIO.QualityIO`` module.
 
