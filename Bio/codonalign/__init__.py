@@ -6,19 +6,17 @@
 
 """Code for dealing with Codon Alignments."""
 
+import copy
 from collections.abc import Mapping, Iterable
 
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
 
-from Bio.Alphabet import _get_base_alphabet
 from Bio.SeqRecord import SeqRecord
+from Bio.Data import CodonTable
 
 from Bio.codonalign.codonseq import CodonSeq
 from Bio.codonalign.codonalignment import CodonAlignment, mktest
-from Bio.codonalign.codonalphabet import CodonAlphabet
-from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
-from Bio.codonalign.codonalphabet import get_codon_alphabet as _get_codon_alphabet
 
 import warnings
 
@@ -35,8 +33,7 @@ def build(
     corr_dict=None,
     gap_char="-",
     unknown="X",
-    codon_table=default_codon_table,
-    alphabet=None,
+    codon_table=None,
     complete_protein=False,
     anchor_len=10,
     max_score=10,
@@ -47,7 +44,6 @@ def build(
      - pro_align  - a protein MultipleSeqAlignment object
      - nucl_seqs - an object returned by SeqIO.parse or SeqIO.index
        or a collection of SeqRecord.
-     - alphabet   - alphabet for the returned codon alignment
      - corr_dict  - a dict that maps protein id to nucleotide id
      - complete_protein - whether the sequence begins with a start
        codon
@@ -56,19 +52,18 @@ def build(
 
     The example below answers this Biostars question: https://www.biostars.org/p/89741/
 
-    >>> from Bio.Alphabet import generic_dna, generic_protein
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
     >>> from Bio.codonalign import build
-    >>> seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=generic_dna), id='pro1')
-    >>> seq2 = SeqRecord(Seq('ATGCGT', alphabet=generic_dna), id='pro2')
-    >>> pro1 = SeqRecord(Seq('MSR', alphabet=generic_protein), id='pro1')
-    >>> pro2 = SeqRecord(Seq('M-R', alphabet=generic_protein), id='pro2')
+    >>> seq1 = SeqRecord(Seq('ATGTCTCGT'), id='pro1')
+    >>> seq2 = SeqRecord(Seq('ATGCGT'), id='pro2')
+    >>> pro1 = SeqRecord(Seq('MSR'), id='pro1')
+    >>> pro2 = SeqRecord(Seq('M-R'), id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print(codon_aln)
-    CodonAlphabet(Standard) CodonAlignment with 2 rows and 9 columns (3 codons)
+    CodonAlignment with 2 rows and 9 columns (3 codons)
     ATGTCTCGT pro1
     ATG---CGT pro2
 
@@ -76,21 +71,11 @@ def build(
     # TODO
     # add an option to allow the user to specify the returned object?
 
-    from Bio.Alphabet import ProteinAlphabet
     from Bio.Align import MultipleSeqAlignment
 
     # check the type of object of pro_align
     if not isinstance(pro_align, MultipleSeqAlignment):
         raise TypeError("the first argument should be a MultipleSeqAlignment object")
-    # check the alphabet of pro_align
-    for pro in pro_align:
-        if not isinstance(_get_base_alphabet(pro.seq.alphabet), ProteinAlphabet):
-            raise TypeError(
-                "Alphabet Error!\nThe input alignment should be "
-                "a *PROTEIN* alignment, found %r" % pro.seq.alphabet
-            )
-    if alphabet is None:
-        alphabet = _get_codon_alphabet(codon_table, gap_char=gap_char)
     # check whether the number of seqs in pro_align and nucl_seqs is
     # the same
     pro_num = len(pro_align)
@@ -175,6 +160,9 @@ def build(
                 exit(1)
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
+    if codon_table is None:
+        codon_table = CodonTable.generic_by_id[1]
+
     codon_aln = []
     shift = False
     for pair in pro_nucl_pair:
@@ -198,7 +186,7 @@ def build(
                 pair[0],
                 pair[1],
                 corr_span,
-                alphabet=alphabet,
+                gap_char=gap_char,
                 complete_protein=False,
                 codon_table=codon_table,
                 max_score=max_score,
@@ -207,9 +195,9 @@ def build(
             if corr_span[1] == 2:
                 shift = True
     if shift:
-        return CodonAlignment(_align_shift_recs(codon_aln), alphabet=alphabet)
+        return CodonAlignment(_align_shift_recs(codon_aln))
     else:
-        return CodonAlignment(codon_aln, alphabet=alphabet)
+        return CodonAlignment(codon_aln)
 
 
 def _codons2re(codons):
@@ -258,37 +246,17 @@ def _get_aa_regex(codon_table, stop="*", unknown="X"):
 
 
 def _check_corr(
-    pro,
-    nucl,
-    gap_char="-",
-    codon_table=default_codon_table,
-    complete_protein=False,
-    anchor_len=10,
+    pro, nucl, gap_char, codon_table, complete_protein=False, anchor_len=10,
 ):
     """Check if the nucleotide can be translated into the protein (PRIVATE).
 
     Expects two SeqRecord objects.
     """
     import re
-    from Bio.Alphabet import NucleotideAlphabet
 
     if not isinstance(pro, SeqRecord) or not isinstance(nucl, SeqRecord):
         raise TypeError(
             "_check_corr accepts two SeqRecord object. Please check your input."
-        )
-
-    def get_alpha(alpha):
-        if hasattr(alpha, "alphabet"):
-            return get_alpha(alpha.alphabet)
-        else:
-            return alpha
-
-    if not isinstance(
-        _get_base_alphabet(get_alpha(nucl.seq.alphabet)), NucleotideAlphabet
-    ):
-        raise TypeError(
-            "Alphabet for nucl should be an instance of NucleotideAlphabet, "
-            f"{str(nucl.seq.alphabet)} detected"
         )
 
     aa2re = _get_aa_regex(codon_table)
@@ -603,14 +571,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
 
 
 def _get_codon_rec(
-    pro,
-    nucl,
-    span_mode,
-    alphabet,
-    gap_char="-",
-    codon_table=default_codon_table,
-    complete_protein=False,
-    max_score=10,
+    pro, nucl, span_mode, gap_char, codon_table, complete_protein=False, max_score=10,
 ):
     """Generate codon alignment based on regular re match (PRIVATE).
 
@@ -678,7 +639,7 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        return SeqRecord(CodonSeq(codon_seq, alphabet=alphabet), id=nucl.id)
+        return SeqRecord(CodonSeq(codon_seq), id=nucl.id)
     elif mode == 2:
         from collections import deque
 
@@ -763,9 +724,7 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        return SeqRecord(
-            CodonSeq(codon_seq, alphabet=alphabet, rf_table=rf_table), id=nucl.id
-        )
+        return SeqRecord(CodonSeq(codon_seq, rf_table=rf_table), id=nucl.id)
 
 
 def _align_shift_recs(recs):
@@ -795,7 +754,7 @@ def _align_shift_recs(recs):
             elif rec.seq._data[int(i) : int(i) + 3] == "---":
                 rf_num[k] += 1
     if len(set(rf_num)) != 1:
-        raise RuntimeError("Number alignable codons unequal in given records")
+        raise RuntimeError("Number of alignable codons unequal in given records")
     i = 0
     rec_num = len(recs)
     while True:
@@ -824,11 +783,7 @@ def _align_shift_recs(recs):
                         v + int(gap_num) for v in full_rf_table[bp + 1 :]
                     ]
                     full_rf_table_lst[j] = full_rf_table
-                    recs[j].seq = CodonSeq(
-                        seq,
-                        rf_table=recs[j].seq.rf_table,
-                        alphabet=recs[j].seq.alphabet,
-                    )
+                    recs[j].seq = CodonSeq(seq, rf_table=recs[j].seq.rf_table)
                 add_lst.pop()
                 gap_num += m - k
                 i += p - 1
@@ -847,22 +802,9 @@ def _align_shift_recs(recs):
                     + [v + int(gap_num) for v in full_rf_table[bp:]]
                 )
                 full_rf_table_lst[j] = full_rf_table
-                recs[j].seq = CodonSeq(
-                    seq, rf_table=recs[j].seq.rf_table, alphabet=recs[j].seq.alphabet
-                )
+                recs[j].seq = CodonSeq(seq, rf_table=recs[j].seq.rf_table)
         i += 1
     return recs
-
-
-# def toCodonAlignment(align, alphabet=default_codon_alphabet):
-#    """Function to convert a MultipleSeqAlignment to CodonAlignment.
-#    It is the user's responsibility to ensure all the requirement
-#    needed by CodonAlignment is met.
-#
-#    """
-#    rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
-#            for i in align._records]
-#    return CodonAlignment(rec, alphabet=align._alphabet)
 
 
 if __name__ == "__main__":
