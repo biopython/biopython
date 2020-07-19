@@ -170,7 +170,6 @@ from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
 
 
-
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation
 # process. Calculation of duplex initiation is quite different in several
