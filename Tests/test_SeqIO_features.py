@@ -13,7 +13,6 @@ import os
 import unittest
 from io import StringIO
 
-from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
@@ -368,7 +367,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)."""
-        s = Seq("GAUCRYWSMKHBVDN", generic_rna)
+        s = Seq("GAUCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
         self.assertEqual(f.strand, None)
         self.assertEqual(f.location.strand, None)
@@ -376,43 +375,43 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna(self):
         """Feature on DNA (simple, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_single_letter_dna(self):
         """Feature on DNA (single letter, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 6))
         self.check(s, f, "Y", "6")
 
     def test_zero_len_dna(self):
         """Feature on DNA (between location, zero length, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_zero_len_dna_end(self):
         """Feature on DNA (between location at end, zero length, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(15, 15))
         self.check(s, f, "", "15^1")
 
     def test_simple_dna_strand0(self):
         """Feature on DNA (simple, strand 0)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=0)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand_none(self):
         """Feature on DNA (simple, strand None)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=None)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand1(self):
         """Feature on DNA (simple, strand +1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=1)
         self.assertEqual(f.strand, +1)
         self.assertEqual(f.location.strand, +1)
@@ -420,7 +419,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_strand_minus(self):
         """Feature on DNA (simple, strand -1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=-1)
         self.assertEqual(f.strand, -1)
         self.assertEqual(f.location.strand, -1)
@@ -428,7 +427,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join(self):
         """Feature on DNA (join, strand +1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=1)
         f = make_join_feature([f1, f2])
@@ -436,7 +435,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_strand_minus(self):
         """Feature on DNA (join, strand -1)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -446,7 +445,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_before(self):
         """Feature on DNA (join, strand -1, before position)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -456,7 +455,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_after(self):
         """Feature on DNA (join, strand -1, after position)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, AfterPosition(15)), strand=-1)
         f = make_join_feature([f1, f2])
@@ -466,7 +465,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_mixed_strand_dna_join(self):
         """Feature on DNA (join, mixed strand)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -476,7 +475,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_mixed_strand_dna_multi_join(self):
         """Feature on DNA (multi-join, mixed strand)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f3 = SeqFeature(FeatureLocation(BeforePosition(0), 5), strand=+1)
@@ -490,13 +489,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_simple(self):
         """Feature on protein (simple)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "FGHIJ", "6..10")
 
     def test_protein_join(self):
         """Feature on protein (join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(5, 10))
         f2 = SeqFeature(FeatureLocation(15, 20))
         f = make_join_feature([f1, f2])
@@ -504,7 +503,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_join_fuzzy(self):
         """Feature on protein (fuzzy join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10))
         f2 = SeqFeature(
             FeatureLocation(
@@ -517,7 +516,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_multi_join(self):
         """Feature on protein (multi-join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(1, 2))
         f2 = SeqFeature(FeatureLocation(8, 9))
         f3 = SeqFeature(FeatureLocation(14, 16))
@@ -531,13 +530,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_between(self):
         """Feature on protein (between location, zero length)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_protein_oneof(self):
         """Feature on protein (one-of positions)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         start = OneOfPosition(5, (ExactPosition(5), ExactPosition(7)))
         end = OneOfPosition(11, (ExactPosition(10), ExactPosition(11)))
         f = SeqFeature(FeatureLocation(start, 10))
@@ -567,7 +566,7 @@ class SeqFeatureCreation(unittest.TestCase):
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
         self.record = SeqRecord(
-            Seq("ACGT" * 100, generic_dna), id="Test", name="Test", description="Test"
+            Seq("ACGT" * 100), id="Test", name="Test", description="Test"
         )
         self.record.annotations["molecule_type"] = "DNA"
 
