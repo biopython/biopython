@@ -46,7 +46,7 @@ class TestGeo(unittest.TestCase):
         ctab_file = os.path.join("SubsMat", "protein_freq.txt")
         with open(ctab_file) as handle:
             ctab_prot = FreqTable.read_freq(handle)
-        self.assertEqual(self.ftab_prot.alphabet.letters, letters)
+        self.assertEqual(self.ftab_prot.alphabet, letters)
         for letter in letters:
             difference = self.ftab_prot[letter] - ctab_prot[letter]
             self.assertAlmostEqual(abs(difference), 0, places=3)

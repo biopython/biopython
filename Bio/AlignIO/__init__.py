@@ -240,8 +240,7 @@ def write(alignments, handle, format):
     if not isinstance(count, int):
         raise RuntimeError(
             "Internal error - the underlying %s "
-            "writer should have returned the alignment count, not %s"
-            % (format, repr(count))
+            "writer should have returned the alignment count, not %r" % (format, count)
         )
 
     return count
@@ -470,16 +469,9 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """
     # TODO - Add optimised versions of important conversions
     # For now just off load the work to SeqIO parse/write
-    with as_handle(in_file) as in_handle:
-        # Don't open the output file until we've checked the input is OK:
-        alignments = parse(in_handle, in_format, None, alphabet)
-
-        # This will check the arguments and issue error messages,
-        # after we have opened the file which is a shame.
-        with as_handle(out_file, "w") as out_handle:
-            count = write(alignments, out_handle, out_format)
-
-    return count
+    # Don't open the output file until we've checked the input is OK:
+    alignments = parse(in_file, in_format, None, alphabet)
+    return write(alignments, out_file, out_format)
 
 
 if __name__ == "__main__":

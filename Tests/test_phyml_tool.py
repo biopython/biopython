@@ -60,8 +60,12 @@ class AppTests(unittest.TestCase):
             self.fail("PhyML wrapper error: %s" % exc)
         finally:
             # Clean up generated files
-            for suffix in ["_phyml_tree.txt", "_phyml_tree",
-                           "_phyml_stats.txt", "_phyml_stats"]:
+            for suffix in [
+                "_phyml_tree.txt",
+                "_phyml_tree",
+                "_phyml_stats.txt",
+                "_phyml_stats",
+            ]:
                 fname = EX_PHYLIP + suffix
                 if os.path.isfile(fname):
                     os.remove(fname)

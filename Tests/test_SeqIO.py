@@ -378,7 +378,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
                 raise ValueError(
-                    "%s\n\n%s\n\n%s" % (str(e), repr(handle.read()), repr(records))
+                    "%s\n\n%r\n\n%r" % (str(e), handle.read(), records)
                 ) from None
 
             self.assertEqual(len(records2), t_count)
@@ -570,32 +570,30 @@ class TestSeqIO(SeqIOTestBaseClass):
                     accs = record.annotations["accessions"]
                     # Check for blanks, or entries with leading/trailing spaces
                     for acc in accs:
-                        self.assertTrue(
-                            acc, "Bad accession in annotations: %s" % repr(acc)
-                        )
+                        self.assertTrue(acc, "Bad accession in annotations: %r" % acc)
                         self.assertEqual(
                             acc,
                             acc.strip(),
-                            "Bad accession in annotations: %s" % repr(acc),
+                            "Bad accession in annotations: %r" % acc,
                         )
                     self.assertEqual(
                         len(set(accs)),
                         len(accs),
-                        "Repeated accession in annotations: %s" % repr(accs),
+                        "Repeated accession in annotations: %r" % accs,
                     )
                 for ref in record.dbxrefs:
                     self.assertTrue(
-                        ref, "Bad cross reference in dbxrefs: %s" % repr(ref)
+                        ref, "Bad cross reference in dbxrefs: %r" % ref
                     )
                     self.assertEqual(
                         ref,
                         ref.strip(),
-                        "Bad cross reference in dbxrefs: %s" % repr(ref),
+                        "Bad cross reference in dbxrefs: %r" % ref,
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
                     len(record.dbxrefs),
-                    "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs),
+                    "Repeated cross reference in dbxrefs: %r" % record.dbxrefs,
                 )
 
                 # Check the lists obtained by the different methods agree
@@ -651,7 +649,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 self.assertIn(
                     t_format,
                     no_alpha_formats,
-                    "Got %s from %s file" % (repr(base_alpha), t_format),
+                    "Got %r from %s file" % (base_alpha, t_format),
                 )
                 good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
             for given_alpha in good:
@@ -747,7 +745,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "clustal",
@@ -798,7 +796,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "clustal",
@@ -849,7 +847,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "clustal",
@@ -894,7 +892,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
         }
         self.perform_test(
@@ -927,7 +925,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -959,7 +957,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -991,7 +989,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1023,7 +1021,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1055,7 +1053,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1087,7 +1085,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1119,7 +1117,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1152,7 +1150,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1185,7 +1183,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1218,7 +1216,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta-2line",
@@ -1251,7 +1249,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1284,7 +1282,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1317,7 +1315,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1351,7 +1349,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1467,7 +1465,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1692,7 +1690,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1725,7 +1723,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -1767,7 +1765,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fasta",
@@ -2580,6 +2578,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
+            "nexus": "NM_006141.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
             "sff": "Missing SFF flow information",
@@ -2641,6 +2640,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
+            "nexus": "AL109817.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
             "sff": "Missing SFF flow information",
@@ -3259,6 +3259,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
+            "nexus": "X56734.1 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
             "sff": "Missing SFF flow information",
@@ -3320,7 +3321,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
 
         self.perform_test(
@@ -3524,7 +3525,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
             "seqxml": "unknown molecule_type 'unspecified'",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "embl",
@@ -3550,6 +3551,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "nexus": "A04195 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "sff": "Missing SFF flow information",
@@ -3578,6 +3580,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "nexus": "A04195 contains T, but RNA alignment",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
             "sff": "Missing SFF flow information",
@@ -3658,7 +3661,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "stockholm",
@@ -3714,7 +3717,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "stockholm",
@@ -3756,7 +3759,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -3803,7 +3806,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -3849,7 +3852,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -3896,7 +3899,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -3942,7 +3945,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -3987,7 +3990,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -4033,7 +4036,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "phylip",
@@ -4079,7 +4082,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "emboss",
@@ -4161,7 +4164,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "emboss",
@@ -4425,7 +4428,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "ig",
@@ -4693,7 +4696,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4736,7 +4739,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4786,7 +4789,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4836,7 +4839,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
         }
         self.perform_test(
@@ -4889,7 +4892,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation",
         }
         self.perform_test(
@@ -4917,7 +4920,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fastq",
@@ -4944,7 +4947,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fastq",
@@ -4971,7 +4974,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fastq-illumina",
@@ -4998,7 +5001,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "imgt": "missing molecule_type in annotations",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
         }
         self.perform_test(
             "fastq-solexa",
@@ -5050,7 +5053,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
-            "nexus": "Need a DNA, RNA or Protein alphabet",
+            "nexus": "Need the molecule type to be defined",
             "phylip-sequential": "Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation",
         }
         self.perform_test(

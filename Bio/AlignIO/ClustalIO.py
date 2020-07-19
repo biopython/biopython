@@ -222,13 +222,13 @@ class ClustalIterator(AlignmentIterator):
 
             for i in range(len(ids)):
                 if line[0] == " ":
-                    raise ValueError("Unexpected line:\n%s" % repr(line))
+                    raise ValueError("Unexpected line:\n%r" % line)
                 fields = line.rstrip().split()
 
                 # We expect there to be two fields, there can be an optional
                 # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%s" % repr(line))
+                    raise ValueError("Could not parse line:\n%r" % line)
 
                 if fields[0] != ids[i]:
                     raise ValueError(

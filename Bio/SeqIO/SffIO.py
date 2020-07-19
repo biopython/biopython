@@ -1369,7 +1369,7 @@ class SffWriter(SequenceWriter):
         # Basics
         name = record.id.encode()
         name_len = len(name)
-        seq = str(record.seq).upper().encode()
+        seq = record.seq.upper().encode()
         seq_len = len(seq)
         # Qualities
         try:
