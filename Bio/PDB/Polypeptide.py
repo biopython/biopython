@@ -52,7 +52,6 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 
 import warnings
 
-from Bio.Alphabet import generic_protein
 from Bio.Data import SCOPData
 from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import PDBException
@@ -299,11 +298,10 @@ class Polypeptide(list):
         :return: polypeptide sequence
         :rtype: L{Seq}
         """
-        s = ""
-        for res in self:
-            s += SCOPData.protein_letters_3to1.get(res.get_resname(), "X")
-        seq = Seq(s, generic_protein)
-        return seq
+        s = "".join(
+            SCOPData.protein_letters_3to1.get(res.get_resname(), "X") for res in self
+        )
+        return Seq(s)
 
     def __repr__(self):
         """Return string representation of the polypeptide.
@@ -313,8 +311,7 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        s = "<Polypeptide start=%s end=%s>" % (start, end)
-        return s
+        return "<Polypeptide start=%s end=%s>" % (start, end)
 
 
 class _PPBuilder:
