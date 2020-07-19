@@ -114,33 +114,6 @@ if emboss_version < (6, 1, 0):
 
 
 # Top level function as this makes it easier to use for debugging:
-def emboss_convert(filename, old_format, new_format):
-    """Run seqret, returns handle."""
-    # Setup, this assumes for all the format names used
-    # Biopython and EMBOSS names are consistent!
-    cline = SeqretCommandline(
-        exes["seqret"],
-        sequence=filename,
-        sformat=old_format,
-        osformat=new_format,
-        auto=True,  # no prompting
-        stdout=True,
-    )
-    # Run the tool,
-    child = subprocess.Popen(
-        str(cline),
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        shell=(sys.platform != "win32"),
-    )
-    child.stdin.close()
-    child.stderr.close()
-    return child.stdout
-
-
-# Top level function as this makes it easier to use for debugging:
 def emboss_piped_SeqIO_convert(records, old_format, new_format):
     """Run seqret, returns records (as a generator)."""
     # Setup, this assumes for all the format names used
@@ -184,31 +157,17 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
         filter=True,
     )
     # Run the tool,
-    child = subprocess.Popen(
+    with subprocess.Popen(
         str(cline),
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
         shell=(sys.platform != "win32"),
-    )
-    try:
+    ) as child:
         AlignIO.write(alignments, child.stdin, old_format)
-    except Exception as err:
         child.stdin.close()
-        child.stderr.close()
-        child.stdout.close()
-        raise
-    child.stdin.close()
-    child.stderr.close()
-    # TODO - Is there a nice way to return an iterator AND
-    # automatically close the handle?
-    try:
         aligns = list(AlignIO.parse(child.stdout, new_format))
-    except Exception as err:
-        child.stdout.close()
-        raise
-    child.stdout.close()
     return aligns
 
 
@@ -264,9 +223,25 @@ class SeqRetSeqIOTests(SeqRetTests):
         for new_format in ["genbank", "fasta", "pir", "embl", "ig"]:
             if new_format in skip_formats:
                 continue
-            handle = emboss_convert(filename, old_format, new_format)
-            new_records = list(SeqIO.parse(handle, new_format))
-            handle.close()
+            cline = SeqretCommandline(
+                exes["seqret"],
+                sequence=filename,
+                sformat=old_format,
+                osformat=new_format,
+                auto=True,  # no prompting
+                stdout=True,
+            )
+            # Run the tool,
+            with subprocess.Popen(
+                str(cline),
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                shell=(sys.platform != "win32"),
+            ) as child:
+                child.stdin.close()
+                new_records = list(SeqIO.parse(child.stdout, new_format))
             msg = "converting %s from %s to %s" % (filename, old_format, new_format)
             self.compare_records(old_records, new_records, msg)
 
@@ -281,9 +256,25 @@ class SeqRetSeqIOTests(SeqRetTests):
         # This lets use check the id, sequence, and quality scores
         for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
             old = SeqIO.read(filename, "abi")
-            handle = emboss_convert(filename, "abi", "fastq-sanger")
-            new = SeqIO.read(handle, "fastq-sanger")
-            handle.close()
+            cline = SeqretCommandline(
+                exes["seqret"],
+                sequence=filename,
+                sformat="abi",
+                osformat="fastq-sanger",
+                auto=True,  # no prompting
+                stdout=True,
+            )
+            # Run the tool,
+            with subprocess.Popen(
+                str(cline),
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                shell=(sys.platform != "win32"),
+            ) as child:
+                child.stdin.close()
+                new = SeqIO.read(child.stdout, "fastq-sanger")
             if emboss_version == (6, 4, 0) and new.id == "EMBOSS_001":
                 # Avoid bug in EMBOSS 6.4.0 (patch forthcoming)
                 pass
@@ -367,16 +358,25 @@ class SeqRetAlignIOTests(SeqRetTests):
         for new_format in formats:
             if new_format in skip_formats:
                 continue
-            handle = emboss_convert(filename, old_format, new_format)
-            try:
-                new_aligns = list(AlignIO.parse(handle, new_format))
-            except Exception:  # TODO - Which exceptions?
-                handle.close()
-                raise ValueError(
-                    "Can't parse %s file %s in %s format."
-                    % (old_format, filename, new_format)
-                ) from None
-            handle.close()
+            cline = SeqretCommandline(
+                exes["seqret"],
+                sequence=filename,
+                sformat=old_format,
+                osformat=new_format,
+                auto=True,  # no prompting
+                stdout=True,
+            )
+            # Run the tool,
+            with subprocess.Popen(
+                str(cline),
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                shell=(sys.platform != "win32"),
+            ) as child:
+                child.stdin.close()
+                new_aligns = list(AlignIO.parse(child.stdout, new_format))
             msg = "converting %s from %s to %s" % (filename, old_format, new_format)
             self.compare_alignments(old_aligns, new_aligns, msg)
 
@@ -400,7 +400,7 @@ class SeqRetAlignIOTests(SeqRetTests):
                 self.assertIn(
                     str(e),
                     (
-                        "Need a DNA, RNA or Protein alphabet",
+                        "Need the molecule type to be defined",
                         "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-SEQ'), possibly due to truncation",
                         "Repeated name 'gi|1377497' (originally 'gi|13774975|gb|AAK39115.1|AF35'), possibly due to truncation",
                         "Repeated name 'gi_1393639' (originally 'gi_13936397_dbj_BAB47195.'), possibly due to truncation",
