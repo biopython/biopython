@@ -107,16 +107,16 @@ class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
     def test_conversion(self):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
         tests = [
-            ("EMBL/U87107.embl", "embl", None),
-            ("EMBL/TRBG361.embl", "embl", None),
-            ("GenBank/NC_005816.gb", "gb", None),
-            ("GenBank/cor6_6.gb", "genbank", None),
+            ("EMBL/U87107.embl", "embl"),
+            ("EMBL/TRBG361.embl", "embl"),
+            ("GenBank/NC_005816.gb", "gb"),
+            ("GenBank/cor6_6.gb", "genbank"),
         ]
-        for filename, fmt, alphabet in tests:
+        for filename, fmt in tests:
             for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
-                self.check_conversion(filename, in_format, out_format, alphabet)
+                self.check_conversion(filename, in_format, out_format)
 
 
 if __name__ == "__main__":
