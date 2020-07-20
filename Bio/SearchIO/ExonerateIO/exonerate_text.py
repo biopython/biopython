@@ -218,9 +218,9 @@ def _clean_blocks(tmp_seq_blocks):
     seq_blocks = []
     for seq_block in tmp_seq_blocks:
         for line_name in seq_block:
-            seq_block[line_name] = str.translate(
-                seq_block[line_name], {123: None, 125: None}
-            )  # ord('{'), ord('}')
+            seq_block[line_name] = (
+                seq_block[line_name].replace("{", "").replace("}", "")
+            )
         seq_blocks.append(seq_block)
 
     return seq_blocks
@@ -270,9 +270,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
     # fend is fstart + number of residues in the sequence, minus gaps
     fend = (
         fstart
-        + len(
-            str.translate(hsp[seq_type][0], {45: None, 60: None, 62: None})
-        )  # ord('-'), ord('<'), ord('>')
+        + len(hsp[seq_type][0].replace("-", "").replace(">", "").replace("<", ""))
         * seq_step
     )
     coords = [(fstart, fend)]

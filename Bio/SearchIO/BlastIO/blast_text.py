@@ -40,7 +40,7 @@ class BlastTextParser:
                 qid, qdesc = rec.query.split(" ", 1)
             except ValueError:
                 qid, qdesc = rec.query, ""
-            qdesc = str.translate(qdesc, {10: None, 13: None})  # remove "\n" and "\r"
+            qdesc = qdesc.replace("\n", "").replace("\r", "")
 
             qresult = QueryResult(id=qid)
             qresult.program = rec.application.lower()
@@ -65,9 +65,8 @@ class BlastTextParser:
                     hid, hdesc = aln.title.split(" ", 1)
                 except ValueError:
                     hid, hdesc = aln.title, ""
-                hdesc = str.translate(
-                    hdesc, {10: None, 13: None}
-                )  # remove "\n" and "\r"
+                hdesc = hdesc.replace("\n", "").replace("\r", "")
+
                 # iterate over the hsps and group them in a list
                 hsp_list = []
                 for bhsp in aln.hsps:

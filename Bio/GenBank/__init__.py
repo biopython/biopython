@@ -600,9 +600,8 @@ class _BaseGenBankConsumer:
         """Split a string of accession numbers into a list (PRIVATE)."""
         # first replace all line feeds with spaces
         # Also, EMBL style accessions are split with ';'
-        accession = str.translate(
-            accession_string, {10: 32, 59: 32}
-        )  # str.maketrans("\n;", "  ")
+        accession = accession_string.replace("\n", " ").replace(";", " ")
+
         return [x.strip() for x in accession.split() if x.strip()]
 
     @staticmethod
