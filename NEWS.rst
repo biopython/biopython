@@ -39,6 +39,7 @@ possible, especially the following contributors:
 - Carlos Pena
 - Chris Rands
 - João Rodrigues
+- João Vitor F Cavalcante (first contribution)
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
