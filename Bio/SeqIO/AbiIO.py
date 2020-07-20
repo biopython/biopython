@@ -22,8 +22,6 @@ import sys
 
 from os.path import basename
 
-from Bio import Alphabet
-from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
@@ -350,10 +348,10 @@ def _get_string_tag(opt_bytes_value, default=None):
 class AbiIterator(SequenceIterator):
     """Parser for Abi files."""
 
-    def __init__(self, source, alphabet=None, trim=False):
+    def __init__(self, source, trim=False):
         """Return an iterator for the Abi file format."""
         self.trim = trim
-        super().__init__(source, alphabet=alphabet, mode="b", fmt="ABI")
+        super().__init__(source, mode="b", fmt="ABI")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -370,15 +368,6 @@ class AbiIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
-        # raise exception if alphabet is not dna
-        if alphabet is not None:
-            if isinstance(
-                Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet
-            ):
-                raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
-            if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
-                raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
@@ -401,12 +390,6 @@ class AbiIterator(SequenceIterator):
             # PBAS2 is base-called sequence, only available in 3530
             if key == "PBAS2":
                 seq = tag_data.decode()
-                ambigs = "KYWMRS"
-                if alphabet is None:
-                    if set(seq).intersection(ambigs):
-                        alphabet = ambiguous_dna
-                    else:
-                        alphabet = unambiguous_dna
             # PCON2 is quality values of base-called sequence
             elif key == "PCON2":
                 qual = [ord(val) for val in tag_data.decode()]
@@ -453,7 +436,7 @@ class AbiIterator(SequenceIterator):
             except AttributeError:
                 file_name = ""
             record = SeqRecord(
-                Seq(seq, alphabet),
+                Seq(seq),
                 id=sample_id,
                 name=file_name,
                 description="",
