@@ -48,7 +48,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Biopython"
-copyright = "1999-2019, The Biopython Contributors"
+copyright = "1999-2020, The Biopython Contributors"
 author = "The Biopython Contributors"
 document = "Biopython API Documentation"
 
