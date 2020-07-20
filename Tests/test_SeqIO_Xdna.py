@@ -9,7 +9,7 @@
 import unittest
 from io import BytesIO
 
-from Bio import Alphabet, SeqIO, BiopythonWarning
+from Bio import SeqIO, BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
 from Bio.SeqRecord import SeqRecord
@@ -24,7 +24,7 @@ class TestXdna(unittest.TestCase):
             "id": "Sample",
             "description": "Sample sequence A",
             "length": 1000,
-            "alphabet": Alphabet.generic_dna,
+            "molecule_type": "DNA",
             "topology": "linear",
             "features": [
                 {
@@ -49,7 +49,7 @@ class TestXdna(unittest.TestCase):
             "id": "Sample",
             "description": "Sample sequence B",
             "length": 1000,
-            "alphabet": Alphabet.generic_dna,
+            "molecule_type": "DNA",
             "topology": "circular",
             "features": [
                 {
@@ -74,7 +74,7 @@ class TestXdna(unittest.TestCase):
             "id": "Sample",
             "description": "Sample Sequence C",
             "length": 1000,
-            "alphabet": Alphabet.generic_protein,
+            "molecule_type": "protein",
             "topology": "linear",
             "features": [
                 {
@@ -103,7 +103,7 @@ class TestXdna(unittest.TestCase):
             self.assertEqual(sample["id"], record.id)
             self.assertEqual(sample["description"], record.description)
             self.assertEqual(sample["length"], len(record))
-            self.assertEqual(sample["alphabet"], record.seq.alphabet)
+            self.assertEqual(sample["molecule_type"], record.annotations["molecule_type"])
             self.assertEqual(sample["topology"], record.annotations["topology"])
 
             self.assertEqual(len(sample["features"]), len(record.features))
