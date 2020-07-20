@@ -14,7 +14,6 @@ from io import StringIO
 from io import BytesIO
 
 from Bio import BiopythonWarning, BiopythonParserWarning
-from Bio.Alphabet import generic_dna, generic_nucleotide
 from Bio.SeqIO import QualityIO
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
@@ -434,7 +433,7 @@ class TestWriteRead(QualityIOTestBaseClass):
     def test_generated(self):
         """Write and read back odd SeqRecord objects."""
         record1 = SeqRecord(
-            Seq("ACGT" * 500, generic_dna),
+            Seq("ACGT" * 500),
             id="Test",
             description="Long " * 500,
             letter_annotations={"phred_quality": [40, 30, 20, 10] * 500},
@@ -459,7 +458,7 @@ class TestWriteRead(QualityIOTestBaseClass):
             letter_annotations={"phred_quality": [40, 50, 60, 62] * 500},
         )
         record5 = SeqRecord(
-            Seq("", generic_dna),
+            Seq(""),
             id="empty_p",
             description="(could have been trimmed lots)",
             letter_annotations={"phred_quality": []},
@@ -990,9 +989,9 @@ class NonFastqTests(unittest.TestCase):
 
 
 class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
-    def check_conversion(self, filename, in_format, out_format, alphabet):
+    def check_conversion(self, filename, in_format, out_format):
         msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
-        records = list(SeqIO.parse(filename, in_format, alphabet))
+        records = list(SeqIO.parse(filename, in_format))
         # Write it out...
         handle = StringIO()
         with warnings.catch_warnings():
@@ -1006,7 +1005,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             SeqIO.write(records, handle, out_format)
         handle.seek(0)
         # Now load it back and check it agrees,
-        records2 = list(SeqIO.parse(handle, out_format, alphabet))
+        records2 = list(SeqIO.parse(handle, out_format))
         self.assertEqual(len(records), len(records2), msg=msg)
         for record1, record2 in zip(records, records2):
             self.compare_record(record1, record2, out_format, msg=msg)
@@ -1020,11 +1019,11 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
                 "fastq-illumina",
             ):
                 warnings.simplefilter("ignore", BiopythonWarning)
-            SeqIO.convert(filename, in_format, handle2, out_format, alphabet)
+            SeqIO.convert(filename, in_format, handle2, out_format)
         # We could re-parse this, but it is simpler and stricter:
         self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
 
-    def failure_check(self, filename, in_format, out_format, alphabet):
+    def failure_check(self, filename, in_format, out_format):
         msg = "Confirm failure detection converting %s from %s to %s" % (
             filename,
             in_format,
@@ -1032,13 +1031,13 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
         )
         # We want the SAME error message from parse/write as convert!
         with self.assertRaises(ValueError, msg=msg) as cm:
-            records = list(SeqIO.parse(filename, in_format, alphabet))
+            records = list(SeqIO.parse(filename, in_format))
             self.write_records(records, out_format)
         err1 = str(cm.exception)
         # Now do the conversion...
         with self.assertRaises(ValueError, msg=msg) as cm:
             handle = StringIO()
-            SeqIO.convert(filename, in_format, handle, out_format, alphabet)
+            SeqIO.convert(filename, in_format, handle, out_format)
         err2 = str(cm.exception)
         # Verify that parse/write and convert give the same failure
         err_msg = "%s: parse/write and convert gave different failures" % msg
@@ -1046,46 +1045,46 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
 
     def test_conversion(self):
         tests = [
-            ("Quality/example.fastq", "fastq", None),
-            ("Quality/example.fastq", "fastq-sanger", generic_dna),
-            ("Quality/tricky.fastq", "fastq", generic_nucleotide),
-            ("Quality/sanger_93.fastq", "fastq-sanger", None),
-            ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
-            ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
-            ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
+            ("Quality/example.fastq", "fastq"),
+            ("Quality/example.fastq", "fastq-sanger"),
+            ("Quality/tricky.fastq", "fastq"),
+            ("Quality/sanger_93.fastq", "fastq-sanger"),
+            ("Quality/sanger_faked.fastq", "fastq-sanger"),
+            ("Quality/solexa_faked.fastq", "fastq-solexa"),
+            ("Quality/illumina_faked.fastq", "fastq-illumina"),
         ]
-        for filename, fmt, alphabet in tests:
+        for filename, fmt in tests:
             for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
-                self.check_conversion(filename, in_format, out_format, alphabet)
+                self.check_conversion(filename, in_format, out_format)
 
     def test_failure_detection(self):
         tests = [
-            ("Quality/error_diff_ids.fastq", "fastq", None),
-            ("Quality/error_long_qual.fastq", "fastq", None),
-            ("Quality/error_no_qual.fastq", "fastq", None),
-            ("Quality/error_qual_del.fastq", "fastq", None),
-            ("Quality/error_qual_escape.fastq", "fastq", None),
-            ("Quality/error_qual_null.fastq", "fastq", None),
-            ("Quality/error_qual_space.fastq", "fastq", None),
-            ("Quality/error_qual_tab.fastq", "fastq", None),
-            ("Quality/error_qual_unit_sep.fastq", "fastq", None),
-            ("Quality/error_qual_vtab.fastq", "fastq", None),
-            ("Quality/error_short_qual.fastq", "fastq", None),
-            ("Quality/error_spaces.fastq", "fastq", None),
-            ("Quality/error_tabs.fastq", "fastq", None),
-            ("Quality/error_trunc_at_plus.fastq", "fastq", None),
-            ("Quality/error_trunc_at_qual.fastq", "fastq", None),
-            ("Quality/error_trunc_at_seq.fastq", "fastq", None),
-            ("Quality/error_trunc_in_title.fastq", "fastq", generic_dna),
-            ("Quality/error_trunc_in_seq.fastq", "fastq", generic_nucleotide),
-            ("Quality/error_trunc_in_plus.fastq", "fastq", None),
-            ("Quality/error_trunc_in_qual.fastq", "fastq", generic_dna),
-            ("Quality/error_double_seq.fastq", "fastq", generic_dna),
-            ("Quality/error_double_qual.fastq", "fastq", generic_dna),
+            ("Quality/error_diff_ids.fastq", "fastq"),
+            ("Quality/error_long_qual.fastq", "fastq"),
+            ("Quality/error_no_qual.fastq", "fastq"),
+            ("Quality/error_qual_del.fastq", "fastq"),
+            ("Quality/error_qual_escape.fastq", "fastq"),
+            ("Quality/error_qual_null.fastq", "fastq"),
+            ("Quality/error_qual_space.fastq", "fastq"),
+            ("Quality/error_qual_tab.fastq", "fastq"),
+            ("Quality/error_qual_unit_sep.fastq", "fastq"),
+            ("Quality/error_qual_vtab.fastq", "fastq"),
+            ("Quality/error_short_qual.fastq", "fastq"),
+            ("Quality/error_spaces.fastq", "fastq"),
+            ("Quality/error_tabs.fastq", "fastq"),
+            ("Quality/error_trunc_at_plus.fastq", "fastq"),
+            ("Quality/error_trunc_at_qual.fastq", "fastq"),
+            ("Quality/error_trunc_at_seq.fastq", "fastq"),
+            ("Quality/error_trunc_in_title.fastq", "fastq"),
+            ("Quality/error_trunc_in_seq.fastq", "fastq"),
+            ("Quality/error_trunc_in_plus.fastq", "fastq"),
+            ("Quality/error_trunc_in_qual.fastq", "fastq"),
+            ("Quality/error_double_seq.fastq", "fastq"),
+            ("Quality/error_double_qual.fastq", "fastq"),
         ]
-        for filename, fmt, alphabet in tests:
+        for filename, fmt in tests:
             for (in_format, out_format) in self.formats:
                 if in_format != fmt:
                     continue
@@ -1098,7 +1097,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
                     # TODO? These conversions don't check for bad characters in the quality,
                     # and in order to pass this strict test they should.
                     continue
-                self.failure_check(filename, in_format, out_format, alphabet)
+                self.failure_check(filename, in_format, out_format)
 
 
 if __name__ == "__main__":
