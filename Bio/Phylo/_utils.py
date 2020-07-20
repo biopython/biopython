@@ -317,7 +317,7 @@ def draw_ascii(tree, file=None, column_width=80):
     file.write("\n")
 
 
-def draw(
+def draw_matplotlib(
     tree,
     label_func=str,
     do_show=True,
@@ -383,16 +383,6 @@ def draw(
             None, the label will be shown in black.
 
     """
-    try:
-        import matplotlib.pyplot as plt
-    except ImportError:
-        try:
-            import pylab as plt
-        except ImportError:
-            raise MissingPythonDependencyError(
-                "Install matplotlib or pylab if you want to use draw."
-            ) from None
-
     import matplotlib.collections as mpcollections
 
     # Arrays that store lines for the plot of clades
@@ -640,3 +630,214 @@ def draw(
 
     if do_show:
         plt.show()
+
+
+def to_ete3(tree, ete_root):
+    """Convert a Tree object to a ete3's Tree."""
+    for node in tree.root:
+        ete_node = ete_root.add_child(name=node.name, dist=node.branch_length)
+        ete_node.add_features(branch_length=node.branch_length)
+
+        if hasattr(node, "confidences"):
+            if len(node.confidences) == 1:
+                confidence = node.confidences[0].value
+                ete_node.add_features(confidence=confidence, support=confidence)
+            else:
+                ete_node.add_features(confidences=node.confidences)
+
+        if hasattr(node, "taxonomy"):
+            ete_node.add_features(taxonomy=node.taxonomy)
+
+        to_ete3(node, ete_node)
+
+
+def draw_ete3(
+    tree,
+    label_func=str,
+    do_show=True,
+    show_confidence=True,
+    branch_labels=None,
+    label_colors=None,
+    *args,
+    **kwargs
+):
+    """Plot the given tree using ete3 or matplotlib (or pylab).
+
+    :Parameters:
+        label_func : callable
+            A function to extract a label from a node. By default this is str(),
+            but you can use a different function to select another string
+            associated with each node. If this function returns None for a node,
+            no label will be shown for that node.
+        do_show : bool
+            Whether to show() the plot automatically.
+        show_confidence : bool
+            Whether to display confidence values, if present on the tree.
+        branch_labels : dict or callable
+            A mapping of each node to the label that will be shown along the
+            branch leading to it. By default this is the confidence value(s) of
+            the node, taken from the ``confidence`` attribute, and can be
+            easily toggled off with this function's ``show_confidence`` option.
+            But if you would like to alter the formatting of confidence values,
+            or label the branches with something other than confidence, then use
+            this option.
+        label_colors : dict or callable
+            A function or a dictionary specifying the color of the tip label.
+            If the tip label can't be found in the dict or label_colors is
+            None, the label will be shown in black.
+
+    """
+    from ete3 import Tree as EteTree, TextFace
+
+    # Create the ete3's tree
+
+    ete_tree = EteTree(dist=0, support=0)
+    ete_tree.add_features(taxonomy="", branch_length=0)
+    to_ete3(tree, ete_tree)
+
+    # Options for displaying branch labels / confidence
+
+    if not branch_labels:
+        if show_confidence:
+
+            def format_branch_label(node):
+                if hasattr(node, "confidences") and len(node.confidences) > 1:
+                    return "/".join(str(cnf.value) for cnf in node.confidences)
+
+                if hasattr(node, "confidence") and node.confidence is not None:
+                    return str(node.confidence)
+
+                return None
+
+        else:
+
+            def format_branch_label(node):
+                return None
+
+    elif isinstance(branch_labels, dict):
+
+        def format_branch_label(node):
+            return branch_labels.get(node)
+
+    else:
+        if not callable(branch_labels):
+            raise TypeError(
+                "branch_labels must be either a dict or a callable (function)"
+            )
+        format_branch_label = branch_labels
+
+    # Options for displaying label colors.
+
+    if label_colors:
+        if callable(label_colors):
+
+            def get_label_color(label):
+                return label_colors(label)
+
+        else:
+            if not isinstance(label_colors, dict):
+                raise TypeError(
+                    "label_colors must be either a dict or a callable (function)"
+                )
+
+            # label_colors is presumed to be a dict
+            def get_label_color(label):
+                return label_colors.get(label, "black")
+
+    else:
+
+        def get_label_color(label):
+            # if label_colors is not specified, use black
+            return "black"
+
+    # Create the labels to add
+
+    # In ete3 a TextFace must be created to color the leaf label
+    # The show_leaf_name property must be set to False to avoid
+    # duplicate labels (the TextFace one and the default label)
+
+    leaf_faces = {}
+    for node in ete_tree.traverse():
+        # Branch labels
+        branch_face = TextFace(format_branch_label(node) or "", fsize=8)
+        node.add_face(branch_face, column=0, position="branch-bottom")
+
+        # Ignore the default value of the __str__ method
+        if label_func is str:
+            label = node.name
+        elif label_func is None:
+            label = ""
+        else:
+            label = label_func(node)
+
+        # Node labels
+        node_face = TextFace(label, fgcolor=get_label_color(label), fsize=10)
+
+        if node.is_leaf():
+            leaf_faces[node] = node_face
+        else:
+            node.add_face(node_face, column=0)
+
+    if do_show:
+        try:
+            from ete3 import TreeStyle
+
+            ts = TreeStyle()
+            ts.show_leaf_name = False
+
+            # Parse and process key word arguments as treeStyle options
+            show_leaves = True
+            for key, value in kwargs.items():
+                if not hasattr(ts, str(key)):
+                    raise AttributeError(
+                        "TreeStyle instance has no attribute {}".format(str(key))
+                    )
+                setattr(ts, str(key), value)
+
+                if str(key) == "show_leaf_name":
+                    show_leaves = ts.show_leaf_name
+                    ts.show_leaf_name = False
+
+            if show_leaves:
+                for key, value in leaf_faces.items():
+                    key.add_face(value, column=0)
+
+            ete_tree.show(tree_style=ts)
+        except ImportError:
+            try:
+                import matplotlib.pyplot as plt
+            except ImportError:
+                try:
+                    import pylab as plt
+                except ImportError:
+                    raise MissingPythonDependencyError(
+                        "Install qt or matplotlib or pylab if you want to use the draw method."
+                    ) from None
+            else:
+                # Show using matplotlib / pylab
+                import tempfile
+
+                with tempfile.NamedTemporaryFile(mode="w", suffix=".png") as tmp:
+                    ete_tree.render(tmp.name)
+                    im = plt.imread(tmp.name)
+                    plt.imshow(im)
+                    plt.show()
+                    tmp.flush()
+
+
+try:
+    import ete3
+
+    draw = draw_ete3
+except ImportError:
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        try:
+            import pylab as plt
+        except ImportError:
+            raise MissingPythonDependencyError(
+                "Install qt or matplotlib or pylab if you want to use the draw method."
+            ) from None
+    else:
+        draw = draw_matplotlib
