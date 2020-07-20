@@ -300,7 +300,10 @@ class TestSeqAddition(unittest.TestCase):
             Seq.Seq("U.CAG"),
             "UGCAU",
         ]
-        self.nuc = [Seq.Seq("ATCG"), "UUUTTTACG", ]
+        self.nuc = [
+            Seq.Seq("ATCG"),
+            "UUUTTTACG",
+        ]
         self.protein = [
             Seq.Seq("ATCGPK"),
             Seq.Seq("atcGPK"),
@@ -458,9 +461,7 @@ class TestMutableSeq(unittest.TestCase):
         mutable_s = self.s.tomutable()
         self.assertIsInstance(mutable_s, MutableSeq, "Converting Seq to mutable")
 
-        array_seq = MutableSeq(
-            array.array("u", "TCAAAAGGATGCATCATG")
-        )
+        array_seq = MutableSeq(array.array("u", "TCAAAAGGATGCATCATG"))
         self.assertIsInstance(array_seq, MutableSeq, "Creating MutableSeq using array")
 
     def test_repr(self):
@@ -565,9 +566,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_setting_slices(self):
         self.assertEqual(
-            MutableSeq("CAAA"),
-            self.mutable_s[1:5],
-            "Slice mutable seq",
+            MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq",
         )
 
         self.mutable_s[1:3] = "GAT"
@@ -586,9 +585,7 @@ class TestMutableSeq(unittest.TestCase):
 
         self.mutable_s[1:3] = array.array("u", "GAT")
         self.assertEqual(
-            MutableSeq("TGATTAAAGGATGCATCATG"),
-            self.mutable_s,
-            "Set slice with array",
+            MutableSeq("TGATTAAAGGATGCATCATG"), self.mutable_s, "Set slice with array",
         )
 
     def test_setting_item(self):
@@ -616,7 +613,9 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_remove_items(self):
         self.mutable_s.remove("G")
-        self.assertEqual(MutableSeq("TCAAAAGATGCATCATG"), self.mutable_s, "Remove first G")
+        self.assertEqual(
+            MutableSeq("TCAAAAGATGCATCATG"), self.mutable_s, "Remove first G"
+        )
 
         self.assertRaises(ValueError, self.mutable_s.remove, "Z")
 
@@ -788,7 +787,9 @@ class TestComplement(unittest.TestCase):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
             compl_values = str(
                 # Will default to DNA if neither T or U found...
-                Seq.Seq(values).complement().transcribe()
+                Seq.Seq(values)
+                .complement()
+                .transcribe()
             )
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
@@ -868,8 +869,7 @@ class TestTranscription(unittest.TestCase):
         for nucleotide_seq in test_seqs:
             expected = Seq.transcribe(nucleotide_seq)
             self.assertEqual(
-                str(nucleotide_seq).replace("t", "u").replace("T", "U"),
-                str(expected),
+                str(nucleotide_seq).replace("t", "u").replace("T", "U"), str(expected),
             )
 
     def test_transcription_dna_string_into_rna(self):
@@ -888,8 +888,7 @@ class TestTranscription(unittest.TestCase):
         for nucleotide_seq in test_seqs:
             expected = Seq.back_transcribe(nucleotide_seq)
             self.assertEqual(
-                str(nucleotide_seq).replace("u", "t").replace("U", "T"),
-                str(expected),
+                str(nucleotide_seq).replace("u", "t").replace("U", "T"), str(expected),
             )
 
     def test_back_transcribe_rna_string_into_dna(self):
