@@ -154,8 +154,8 @@ PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
-The restriction enzyme list in Bio.Restriction has been updated to the August
-2019 release of REBASE.
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
+August 2019 release of REBASE.
 
 ``Bio.SeqIO`` now supports reading and writing files in the native format of
 Christian Marck's DNA Strider program ("xdna" format, also used by Serial
@@ -300,7 +300,7 @@ maximum number of tries and the sleep between them can be configured by
 changing ``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
 (The defaults are 3 tries and 15 seconds, respectively.)
 
-The restriction enzyme list in Bio.Restriction has been updated to the May
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the May
 2019 release of REBASE.
 
 All tests using the older print-and-compare approach have been replaced by
@@ -499,7 +499,7 @@ written out and facilitates conversion between the PDB and mmCIF file formats.
 Bio.Emboss.Applications has been updated to fix a wrong parameter in fuzznuc
 wrapper and include a new wrapper for fuzzpro.
 
-The restriction enzyme list in Bio.Restriction has been updated to the
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
 November 2017 release of REBASE.
 
 New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2)
@@ -715,7 +715,7 @@ The GenBank output now uses colon space to match current NCBI DBLINK lines.
 The Bio.Affy package supports Affymetrix version 4 of the CEL file format,
 in addition to version 3.
 
-The restriction enzyme list in Bio.Restriction has been updated to the
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
 February 2017 release of REBASE.
 
 Bio.PDB.PDBList now can download PDBx/mmCif (new default), PDB (old default),
@@ -882,7 +882,7 @@ updates the taxon table left/right keys when updating the taxonomy.
 There have been some fixes to the MMCIF structure parser which now uses
 identifiers which better match results from the PDB structure parse.
 
-The restriction enzyme list in Bio.Restriction has been updated to the
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
 May 2016 release of REBASE.
 
 The mmCIF parser in Bio.PDB.MMCIFParser has been joined by a second version
