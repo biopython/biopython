@@ -24,7 +24,6 @@ from io import StringIO
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToRandomAccess
-from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
