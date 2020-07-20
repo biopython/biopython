@@ -19,12 +19,13 @@ from Bio.PDB.NACCESS import NACCESS
 
 # Check if NACCESS is installed
 try:
-    subprocess.check_call(["naccess", "-q"],
-                          stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
+    subprocess.check_call(
+        ["naccess", "-q"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
 except OSError:
     raise MissingExternalDependencyError(
-        "Install naccess if you want to use it from Biopython.") from None
+        "Install naccess if you want to use it from Biopython."
+    ) from None
 
 
 class NACCESS_test(unittest.TestCase):
