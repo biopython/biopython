@@ -78,9 +78,6 @@ class MMCIF2Dict(dict):
                     in_token = False
                     yield line[start_i:i]
             elif c in self.quote_chars:
-                if not quote_open_char and in_token and i < len(line) - 1:
-                    if line[i + 1] not in self.whitespace_chars:
-                        raise ValueError("Opening quote in middle of word: " + line)
                 if not quote_open_char and not in_token:
                     quote_open_char = c
                     in_token = True
@@ -117,11 +114,15 @@ class MMCIF2Dict(dict):
                 token_buffer = [line[1:].rstrip()]
                 for line in handle:
                     line = line.rstrip()
-                    if line == ";":
+                    if line.startswith(";"):
+                        yield "\n".join(token_buffer)
+                        line = line[1:]
+                        if line and not line[0] in self.whitespace_chars:
+                            raise ValueError("Missing whitespace")
                         break
                     token_buffer.append(line)
-                yield "\n".join(token_buffer)
-            else:
-                yield from self._splitline(line.strip())
+                else:
+                    raise ValueError("Missing closing semicolon")
+            yield from self._splitline(line.strip())
         if empty:
             raise ValueError("Empty file.")
