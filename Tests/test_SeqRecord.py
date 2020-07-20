@@ -11,7 +11,6 @@ and confirms they are consistent using our different parsers.
 import unittest
 
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
@@ -23,12 +22,10 @@ class SeqRecordCreation(unittest.TestCase):
 
     def test_annotations(self):
         """Pass in annotations to SeqRecords."""
-        rec = SeqRecord(
-            Seq("ACGT", generic_dna), id="Test", name="Test", description="Test"
-        )
+        rec = SeqRecord(Seq("ACGT"), id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
         rec = SeqRecord(
-            Seq("ACGT", generic_dna),
+            Seq("ACGT"),
             id="Test",
             name="Test",
             description="Test",
@@ -38,12 +35,10 @@ class SeqRecordCreation(unittest.TestCase):
 
     def test_letter_annotations(self):
         """Pass in letter annotations to SeqRecords."""
-        rec = SeqRecord(
-            Seq("ACGT", generic_dna), id="Test", name="Test", description="Test"
-        )
+        rec = SeqRecord(Seq("ACGT"), id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
         rec = SeqRecord(
-            Seq("ACGT", generic_dna),
+            Seq("ACGT"),
             id="Test",
             name="Test",
             description="Test",
@@ -57,9 +52,7 @@ class SeqRecordCreation(unittest.TestCase):
         except (TypeError, ValueError) as e:
             pass
         # Now try setting it afterwards to a bad value...
-        rec = SeqRecord(
-            Seq("ACGT", generic_dna), id="Test", name="Test", description="Test"
-        )
+        rec = SeqRecord(Seq("ACGT"), id="Test", name="Test", description="Test")
         try:
             rec.letter_annotations = {"test": [1, 2, 3]}
             self.fail("Changing to bad letter_annotations should fail!")
@@ -68,7 +61,7 @@ class SeqRecordCreation(unittest.TestCase):
         # Now try setting it at creation time to a bad value...
         try:
             rec = SeqRecord(
-                Seq("ACGT", generic_dna),
+                Seq("ACGT"),
                 id="Test",
                 name="Test",
                 description="Test",
@@ -81,14 +74,14 @@ class SeqRecordCreation(unittest.TestCase):
     def test_replacing_seq(self):
         """Replacing .seq if .letter_annotation present."""
         rec = SeqRecord(
-            Seq("ACGT", generic_dna),
+            Seq("ACGT"),
             id="Test",
             name="Test",
             description="Test",
             letter_annotations={"example": [1, 2, 3, 4]},
         )
         try:
-            rec.seq = Seq("ACGTACGT", generic_dna)
+            rec.seq = Seq("ACGTACGT")
             self.fail(
                 "Changing .seq length with letter_annotations present should fail!"
             )
@@ -97,33 +90,33 @@ class SeqRecordCreation(unittest.TestCase):
         # Check we can replace IF the length is the same
         self.assertEqual(str(rec.seq), "ACGT")
         self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
-        rec.seq = Seq("NNNN", generic_dna)
+        rec.seq = Seq("NNNN")
         self.assertEqual(str(rec.seq), "NNNN")
         self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
 
     def test_valid_id(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), id={})
+            SeqRecord(Seq("ACGT"), id={})
 
     def test_valid_name(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), name={})
+            SeqRecord(Seq("ACGT"), name={})
 
     def test_valid_description(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), description={})
+            SeqRecord(Seq("ACGT"), description={})
 
     def test_valid_dbxrefs(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), dbxrefs={})
+            SeqRecord(Seq("ACGT"), dbxrefs={})
 
     def test_valid_annotations(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), annotations=[])
+            SeqRecord(Seq("ACGT"), annotations=[])
 
     def test_valid_features(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), features={})
+            SeqRecord(Seq("ACGT"), features={})
 
 
 class SeqRecordMethods(unittest.TestCase):
@@ -146,7 +139,7 @@ class SeqRecordMethods(unittest.TestCase):
             )
         )
         self.record = SeqRecord(
-            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX"),
             id="TestID",
             name="TestName",
             description="TestDescr",
@@ -162,7 +155,7 @@ class SeqRecordMethods(unittest.TestCase):
             break
 
     def test_contains(self):
-        self.assertIn(Seq("ABC", generic_protein), self.record)
+        self.assertIn(Seq("ABC"), self.record)
 
     def test_str(self):
         expected = """
@@ -199,7 +192,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
 
     def test_format_spaces(self):
         rec = SeqRecord(
-            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+            Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX"),
             id="TestID",
             name="TestName",
             description="TestDescr",
