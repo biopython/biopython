@@ -27,9 +27,8 @@ class TestCellosaurus(unittest.TestCase):
         )
         self.assertEqual(
             record["CC"][0],
-            "Part of: 12th International "
-            "Histocompatibility Workshop "
-            "(12IHW) cell line panel.",
+            "Part of: 12th International Histocompatibility Workshop (12IHW) "
+            "cell line panel.",
         )
         self.assertEqual(record["CC"][1], "Transformant: EBV.")
         self.assertEqual(record["OX"][0], "NCBI_TaxID=9606; ! Homo sapiens")
@@ -75,10 +74,8 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["AC"], "CVCL_2260")
             self.assertEqual(
                 record["SY"],
-                "Clone 1-5c-4; Clone 1-5c-4 WKD of "
-                "Chang Conjunctiva; "
-                "Wong-Kilbourne derivative of "
-                "Chang conjunctiva; ChWK",
+                "Clone 1-5c-4; Clone 1-5c-4 WKD of Chang Conjunctiva; "
+                "Wong-Kilbourne derivative of Chang conjunctiva; ChWK",
             )
             self.assertEqual(len(record["DR"]), 10)
             self.assertEqual(record["DR"][0], ("CLO", "CLO_0002500"))
@@ -96,15 +93,12 @@ class TestCellosaurus(unittest.TestCase):
             self.assertEqual(record["RX"][2], "PubMed=20143388;")
             self.assertEqual(
                 record["WW"][0],
-                "http://iclac.org/"
-                "wp-content/uploads/"
-                "Cross-Contaminations-v7_2.pdf",
+                "http://iclac.org/wp-content/uploads/Cross-Contaminations-v7_2.pdf",
             )
             self.assertEqual(
                 record["CC"][0],
                 "Problematic cell line: Contaminated. "
-                "Shown to be a HeLa derivative "
-                "(PubMed 566722, PubMed 20143388).",
+                "Shown to be a HeLa derivative (PubMed 566722, PubMed 20143388).",
             )
             self.assertEqual(record["CC"][1], "Omics: Transcriptome analysis.")
             self.assertEqual(record["ST"][0], "Source(s): ATCC; KCLB")
