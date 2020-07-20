@@ -9,7 +9,6 @@ import unittest
 from io import StringIO
 
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -66,7 +65,7 @@ class TestEmbl(unittest.TestCase):
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )
-        record = SeqRecord(Seq("A" * 100, generic_dna), "dummy", features=[f])
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
         record.annotations["molecule_type"] = "DNA"
         gbk = record.format("gb")
         self.assertIn(" /empty\n", gbk)
