@@ -1,5 +1,5 @@
 subdirs :=
-BP_VERSION := $(shell grep ^__version__ ../Bio/__init__.py | cut -f 2 -d '"')
+BP_VERSION := $(shell python -c "`grep ^__version__ ../Bio/__init__.py`; print('dev' if 'dev' in __version__ else __version__)")
 
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)
 pdf:  Tutorial.pdf biopdb_faq.pdf
