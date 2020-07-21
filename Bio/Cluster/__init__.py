@@ -226,9 +226,9 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
        In that case, the k-medoids algorithm is fully deterministic.
 
     Return values:
-     - clusterid: array containing the index of the medoids to which each
-       item was assigned in the best k-medoids clustering solution that was
-       found in the npass runs;
+     - clusterid: array containing the index of the items found to be 
+       medoids of clusters to which each item was assigned in the best 
+       k-medoids clustering solution that was found in the npass runs;
      - error: the within-cluster sum of distances for the returned k-means
        clustering solution;
      - nfound: the number of times this solution was found.
