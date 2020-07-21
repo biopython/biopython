@@ -71,10 +71,17 @@ class TestCluster(unittest.TestCase):
         )
 
         # Matrix using int
+        # fmt: off
         data6 = numpy.array(
-            [[1, 2, 3, 4, 5], [3, 3, 1, 2, 1], [4, 2, 0, 5, 0], [2, 2, 0, 5, 0]],
+            [
+                [1, 2, 3, 4, 5],
+                [3, 3, 1, 2, 1],
+                [4, 2, 0, 5, 0],
+                [2, 2, 0, 5, 0]
+            ],
             numpy.int32,
         )
+        # fmt: on
         try:
             treecluster(data1)
         except Exception:
@@ -121,7 +128,13 @@ class TestCluster(unittest.TestCase):
         ]
 
         # Matrix with a bad row
-        data9 = [[23.1, 23.2, 23.3, 23.4, 23.5], None, [23.1, 23.0, 23.0, 23.0, 23.0]]
+        # fmt: off
+        data9 = [
+            [23.1, 23.2, 23.3, 23.4, 23.5],
+            None,
+            [23.1, 23.0, 23.0, 23.0, 23.0]
+        ]
+        # fmt: on
 
         # Various references that don't point to matrices at all
         data10 = "snoopy"
@@ -172,12 +185,24 @@ class TestCluster(unittest.TestCase):
         )
 
         # Normal mask, no errors
+        # fmt: off
         mask1 = numpy.array(
-            [[1, 1, 0, 1, 0], [1, 1, 1, 0, 0], [1, 1, 0, 1, 1], [1, 0, 1, 1, 0]]
+            [
+                [1, 1, 0, 1, 0],
+                [1, 1, 1, 0, 0],
+                [1, 1, 0, 1, 1],
+                [1, 0, 1, 1, 0],
+            ]
         )
 
         # Same mask, no errors; written as a list
-        mask2 = [[1, 1, 0, 1, 0], [1, 1, 1, 0, 0], [1, 1, 0, 1, 1], [1, 0, 1, 1, 0]]
+        mask2 = [
+            [1, 1, 0, 1, 0],
+            [1, 1, 1, 0, 0],
+            [1, 1, 0, 1, 1],
+            [1, 0, 1, 1, 0],
+        ]
+        # fmt: on
 
         # Rows are not contiguous
         mask3 = numpy.array(
@@ -206,10 +231,17 @@ class TestCluster(unittest.TestCase):
         mask4 = mask4[:, ::2]
 
         # Matrix using int16
+        # fmt: off
         mask5 = numpy.array(
-            [[1, 1, 0, 1, 0], [1, 1, 1, 0, 0], [1, 1, 1, 0, 0], [1, 1, 0, 1, 1]],
+            [
+                [1, 1, 0, 1, 0],
+                [1, 1, 1, 0, 0],
+                [1, 1, 1, 0, 0],
+                [1, 1, 0, 1, 1],
+            ],
             numpy.int16,
         )
+        # fmt: on
 
         # Matrix using float
         mask6 = numpy.array(
@@ -252,7 +284,14 @@ class TestCluster(unittest.TestCase):
             self.fail("treecluster failed to accept matrix mask6")
 
         # Ragged mask
-        mask7 = [[1, 1, 0, 1], [1, 1, 1, 0, 0], [1, 1, 0, 1, 1], [1, 1, 0]]
+        # fmt: off
+        mask7 = [
+            [1, 1, 0, 1],
+            [1, 1, 1, 0, 0],
+            [1, 1, 0, 1, 1],
+            [1, 1, 0],
+        ]
+        # fmt: on
 
         # Mask with incorrect number of rows
         mask8 = numpy.array(
@@ -284,7 +323,14 @@ class TestCluster(unittest.TestCase):
         ]
 
         # Matrix with a bad row
-        mask11 = [[1, 1, 0, 1, 0], None, [1, 1, 0, 1, 1], [1, 0, 1, 1, 0]]
+        # fmt: off
+        mask11 = [
+            [1, 1, 0, 1, 0],
+            None,
+            [1, 1, 0, 1, 1],
+            [1, 0, 1, 1, 0],
+        ]
+        # fmt: on
 
         # Array with non-numerical values
         mask12 = numpy.array([["a", "b", "c"], ["e", "f", "g"]], "c")
@@ -337,10 +383,17 @@ class TestCluster(unittest.TestCase):
                 [9.9, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
             numpy.int32,
         )
+        # fmt: on
         nrows, ncols = data.shape
         clusterid = numpy.zeros(nrows, numpy.int32)
 
@@ -505,9 +558,17 @@ class TestCluster(unittest.TestCase):
                 [9.9, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], int
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
+            int,
         )
+        # fmt: on
         nrows, ncols = data.shape
 
         clusterid, error, nfound = kcluster(
@@ -674,10 +735,17 @@ class TestCluster(unittest.TestCase):
                 [9.9, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
             numpy.int32,
         )
+        # fmt: on
 
         # Cluster assignments
         c1 = numpy.array([0], numpy.int32)
@@ -929,9 +997,17 @@ class TestCluster(unittest.TestCase):
                 [9.9, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], int
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
+            int,
         )
+        # fmt: on
 
         # Cluster assignments
         c1 = [0]
@@ -1106,10 +1182,17 @@ class TestCluster(unittest.TestCase):
                 [9.7, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
             numpy.int32,
         )
+        # fmt: on
 
         message = "^argument 1 must be _cluster.Tree, not None$"
         with self.assertRaisesRegex(TypeError, message):
@@ -1264,9 +1347,17 @@ class TestCluster(unittest.TestCase):
                 [9.7, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask1 = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], int
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
+            int,
         )
+        # fmt: on
 
         # Pairwise average-linkage clustering
         tree = treecluster(
@@ -1502,9 +1593,17 @@ class TestCluster(unittest.TestCase):
                 [9.7, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask1 = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], int
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
+            int,
         )
+        # fmt: on
         nrows, ncols = data1.shape
 
         # Pairwise average-linkage clustering
@@ -2125,10 +2224,17 @@ class TestCluster(unittest.TestCase):
                 [9.9, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
             numpy.int32,
         )
+        # fmt: on
         nitems, ndata = data.shape
         nxgrid, nygrid = 10, 10
         clusterids = numpy.ones((nitems, 2), numpy.int32)
@@ -2450,9 +2556,17 @@ class TestCluster(unittest.TestCase):
                 [9.9, 2.0, 0.0, 5.0, 0.0],
             ]
         )
+        # fmt: off
         mask = numpy.array(
-            [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], int
+            [
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+            ],
+            int,
         )
+        # fmt: on
         nrows, ncols = data.shape
 
         clusterid, celldata = somcluster(
