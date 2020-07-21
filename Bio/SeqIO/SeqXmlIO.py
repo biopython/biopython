@@ -20,7 +20,6 @@ from xml.sax import handler
 from xml import sax
 
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
@@ -256,19 +255,16 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError("Unexpected qname '%s' for sequence end" % qname)
         record = self.records[-1]
         if localname == "DNAseq":
-            alphabet = Alphabet.generic_dna
             record.annotations["molecule_type"] = "DNA"
         elif localname == "RNAseq":
-            alphabet = Alphabet.generic_rna
             record.annotations["molecule_type"] = "RNA"
         elif localname == "AAseq":
-            alphabet = Alphabet.generic_protein
             record.annotations["molecule_type"] = "protein"
         else:
             raise RuntimeError(
                 "Failed to find end of sequence (localname = %s)" % localname
             )
-        record.seq = Seq(self.data, alphabet)
+        record.seq = Seq(self.data)
         self.data = None
         self.endElementNS = self.endEntryElement
 
@@ -461,9 +457,9 @@ class SeqXmlIterator(SequenceIterator):
 class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
-    SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
-    i.e. an instance or subclass of Bio.Alphabet.RNAAlphabet,
-    Bio.Alphabet.DNAAlphabet or Bio.Alphabet.ProteinAlphabet.
+    SeqXML requires the SeqRecord annotations to specify the molecule_type;
+    the molecule type is required to contain the term "DNA", "RNA", or
+    "protein".
     """
 
     def __init__(
@@ -596,7 +592,8 @@ class SeqXmlWriter(SequenceWriter):
     def _write_seq(self, record):
         """Write the sequence (PRIVATE).
 
-        Note that SeqXML requires a DNA, RNA or protein alphabet.
+        Note that SeqXML requires the molecule type to contain the term
+        "DNA", "RNA", or "protein".
         """
         if isinstance(record.seq, UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
