@@ -29,6 +29,7 @@ __all__ = (
     "BwaSampeCommandline",
     "BwaBwaswCommandline",
     "BwaMemCommandline",
+    "NovoalignCommandline",
     "SamtoolsViewCommandline",
     "SamtoolsCalmdCommandline",
     "SamtoolsCatCommandline",
