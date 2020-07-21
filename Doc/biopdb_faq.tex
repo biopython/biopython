@@ -1019,9 +1019,8 @@ objects as well.
 
 The first thing to do is to extract all polypeptides from the structure
 (see previous entry). The sequence of each polypeptide can then easily
-be obtained from the \texttt{Polypeptide} objects. The sequence is
-represented as a Biopython \texttt{Seq} object, and its alphabet is
-defined by a \texttt{ProteinAlphabet} object.
+be obtained from the \texttt{Polypeptide} objects as a Biopython \texttt{Seq}
+object.
 
 Example:
 
@@ -1030,7 +1029,7 @@ Example:
 
 >\,{}>\,{}>~print~seq
 
-Seq('SNVVE...',~<class~Bio.Alphabet.ProteinAlphabet>)
+Seq('SNVVE...')
 \end{lyxcode}
 
 \subsubsection*{How do I determine secondary structure?}
