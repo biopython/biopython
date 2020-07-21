@@ -36,7 +36,7 @@ class AffyTest(unittest.TestCase):
     def testAffy3(self):
         with open(self.affy3) as f:
             record = CelFile.read(f)
-            self.assertTrue(len(record.DatHeader) > 0)
+            self.assertGreater(len(record.DatHeader), 0)
             self.assertEqual(record.intensities.shape, (5, 5))
             self.assertEqual(record.intensities.shape, record.stdevs.shape)
             self.assertEqual(record.intensities.shape, record.npix.shape)
