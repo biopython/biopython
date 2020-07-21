@@ -38,6 +38,7 @@ possible, especially the following contributors:
 
 - Carlos Pena
 - Chris Rands
+- Christian Brueffer
 - João Rodrigues
 - João Vitor F Cavalcante (first contribution)
 - Michiel de Hoon
