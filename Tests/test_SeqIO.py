@@ -21,7 +21,6 @@ from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
-from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio import StreamModeError
 
@@ -30,26 +29,6 @@ from Bio import StreamModeError
 # warnings to stdout and verifying via the print-and-compare check. However,
 # there was some frustrating cross-platform inconsistency I couldn't resolve.
 
-protein_alphas = [Alphabet.generic_protein]
-dna_alphas = [Alphabet.generic_dna]
-rna_alphas = [Alphabet.generic_rna]
-nucleotide_alphas = [Alphabet.generic_nucleotide]
-no_alpha_formats = {
-    "clustal",
-    "emboss",
-    "fasta",
-    "fasta-2line",
-    "fastq",
-    "fastq-illumina",
-    "fastq-solexa",
-    "ig",
-    "phylip",
-    "phylip-relaxed",
-    "phylip-sequential",
-    "qual",
-    "stockholm",
-    "tab",
-}
 possible_unknown_seq_formats = {"embl", "genbank", "gb", "imgt", "qual"}
 
 # List of formats including alignment only file formats we can read AND write.
@@ -128,28 +107,28 @@ class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
 
     formats = tuple(SeqIO._converter.keys())
 
-    def check_conversion(self, filename, in_format, out_format, alphabet=None):
+    def check_conversion(self, filename, in_format, out_format):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
         msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
-        records = list(SeqIO.parse(filename, in_format, alphabet))
+        records = list(SeqIO.parse(filename, in_format))
         # Write it out...
         handle = StringIO()
         with warnings.catch_warnings():
             SeqIO.write(records, handle, out_format)
         handle.seek(0)
         # Now load it back and check it agrees,
-        records2 = list(SeqIO.parse(handle, out_format, alphabet))
+        records2 = list(SeqIO.parse(handle, out_format))
         self.assertEqual(len(records), len(records2), msg=msg)
         for record1, record2 in zip(records, records2):
             self.compare_record(record1, record2, msg=msg)
         # Finally, use the convert function, and check that agrees:
         handle2 = StringIO()
         with warnings.catch_warnings():
-            SeqIO.convert(filename, in_format, handle2, out_format, alphabet)
+            SeqIO.convert(filename, in_format, handle2, out_format)
         # We could re-parse this, but it is simpler and stricter:
         self.assertEqual(handle.getvalue(), handle2.getvalue(), msg=msg)
 
-    def failure_check(self, filename, in_format, out_format, alphabet):
+    def failure_check(self, filename, in_format, out_format):
         """Test if SeqIO.convert raises the correct ValueError on broken files."""
         msg = "Confirm failure detection converting %s from %s to %s" % (
             filename,
@@ -158,13 +137,13 @@ class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
         )
         # We want the SAME error message from parse/write as convert!
         with self.assertRaises(ValueError, msg=msg) as cm:
-            records = list(SeqIO.parse(filename, in_format, alphabet))
+            records = list(SeqIO.parse(filename, in_format))
             self.write_records(records, out_format)
         err1 = str(cm.exception)
         # Now do the conversion...
         with self.assertRaises(ValueError, msg=msg) as cm:
             handle = StringIO()
-            SeqIO.convert(filename, in_format, handle, out_format, alphabet)
+            SeqIO.convert(filename, in_format, handle, out_format)
         err2 = str(cm.exception)
         # Verify that parse/write and convert give the same failure
         err_msg = "%s: parse/write and convert gave different failures" % msg
@@ -351,12 +330,6 @@ class TestSeqIO(SeqIOTestBaseClass):
                             % (format, msg)
                         )
 
-                if records[0].seq.alphabet.letters is not None:
-                    self.assertNotEqual(
-                        format,
-                        t_format,
-                        "Should be able to re-write in the original format!",
-                    )
                 # Carry on to the next format:
                 continue
 
@@ -624,47 +597,6 @@ class TestSeqIO(SeqIOTestBaseClass):
                 self.assertIsInstance(record, SeqRecord)
             else:
                 self.assertRaises(ValueError, SeqIO.read, t_filename, t_format)
-
-            # Check alphabets
-            for record in records:
-                base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-                if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
-                    if t_format in no_alpha_formats:
-                        # Too harsh?
-                        self.assertIs(base_alpha, Alphabet.single_letter_alphabet)
-                else:
-                    base_alpha = None
-            if base_alpha is None:
-                good = []
-                given_alpha = None
-            elif isinstance(base_alpha, Alphabet.ProteinAlphabet):
-                good = protein_alphas
-            elif isinstance(base_alpha, Alphabet.RNAAlphabet):
-                good = nucleotide_alphas + rna_alphas
-            elif isinstance(base_alpha, Alphabet.DNAAlphabet):
-                good = nucleotide_alphas + dna_alphas
-            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
-                good = nucleotide_alphas
-            else:
-                self.assertIn(
-                    t_format,
-                    no_alpha_formats,
-                    "Got %r from %s file" % (base_alpha, t_format),
-                )
-                good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
-            for given_alpha in good:
-                # These should all work...
-                given_base = Alphabet._get_base_alphabet(given_alpha)
-                for record in SeqIO.parse(t_filename, t_format, given_alpha):
-                    base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-                    self.assertIsInstance(base_alpha, given_base.__class__)
-                    self.assertEqual(base_alpha, given_base)
-                if t_count == 1:
-                    with open(t_filename, mode) as h:
-                        record = SeqIO.read(h, t_format, given_alpha)
-                    self.assertIsInstance(base_alpha, given_base.__class__)
-                    self.assertEqual(base_alpha, given_base)
-            del good, given_alpha, base_alpha
 
             if t_alignment:
                 alignment = MultipleSeqAlignment(
