@@ -1,5 +1,5 @@
 \chapter{Phylogenetics with Bio.Phylo}
-\label{sec:Phylo}
+\label{chapter:phylo}
 
 The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of SeqIO and AlignIO,
 it aims to provide a common way to work with phylogenetic trees independently of the source data
@@ -18,16 +18,16 @@ Create a simple Newick file named \texttt{simple.dnd} using your favorite text e
 or use \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/simple.dnd}{\texttt{simple.dnd}}
 provided with the Biopython source code:
 
-\begin{verbatim}
+\begin{minted}{text}
 (((A,B),(C,D)),(E,F,G));
-\end{verbatim}
+\end{minted}
 
 This tree has no branch lengths, only a topology and labelled terminals. (If you have a real
 tree file available, you can follow this demo using that instead.)
 
 Launch the Python interpreter of your choice:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ ipython -pylab
 \end{minted}
 
@@ -109,7 +109,7 @@ using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-simple-draw.png}
-\caption{A rooted tree drawn with {\tt Phylo.draw}.}
+\caption{A rooted tree drawn with \texttt{Phylo.draw}.}
 \label{fig:phylo-simple-draw}
 \end{figure}
 \end{latexonly}
@@ -204,7 +204,7 @@ Finally, show our work (see Fig. \ref{fig:phylo-color-draw}):
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-color-draw.png}
-\caption{A colorized tree drawn with {\tt Phylo.draw}.}
+\caption{A colorized tree drawn with \texttt{Phylo.draw}.}
 \label{fig:phylo-color-draw}
 \end{figure}
 \end{latexonly}
@@ -278,6 +278,7 @@ Write a tree or iterable of trees back to file with the \verb|write| function:
 
 %the files tree1.nwk and other_trees.nwk are created and then deleted during the
 %run of test_Tutorial.py
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
@@ -304,7 +305,7 @@ with SeqIO and AlignIO:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Phylo
->>> from StringIO import StringIO
+>>> from io import StringIO
 >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
 >>> tree = Phylo.read(handle, "newick")
 \end{minted}
@@ -364,7 +365,7 @@ customize the output.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.7\textwidth]{images/phylo-draw-example.png}
-\caption{A simple rooted tree plotted with the {\tt draw} function.}
+\caption{A simple rooted tree plotted with the \texttt{draw} function.}
 \label{fig:phylo-draw-example}
 \end{figure}
 \end{latexonly}
@@ -586,8 +587,9 @@ These methods modify the tree in-place. If you want to keep the original tree in
 complete copy of the tree first, using Python's \texttt{copy} module:
 
 \begin{minted}{python}
-tree = Phylo.read('example.xml', 'phyloxml')
+tree = Phylo.read("example.xml", "phyloxml")
 import copy
+
 newtree = copy.deepcopy(tree)
 \end{minted}
 
@@ -782,7 +784,7 @@ releases:
 
     Currently, Bio.Nexus contains some useful features that have not yet been ported to
     Bio.Phylo classes --- notably, calculating a consensus tree. If you find some functionality
-    lacking in Bio.Phylo, try poking throught Bio.Nexus to see if it's there instead.
+    lacking in Bio.Phylo, try poking through Bio.Nexus to see if it's there instead.
 
 \end{description}
 
@@ -795,5 +797,3 @@ for phylogenetics such as DendroPy (\url{https://dendropy.org/}) or
 PyCogent (\url{http://pycogent.org/}). Since these libraries also support
 standard file formats for phylogenetic trees, you can easily transfer data
 between libraries by writing to a temporary file or StringIO object.
-
-

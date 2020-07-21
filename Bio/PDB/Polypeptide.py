@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Polypeptide-related classes (construction and representation).
 
@@ -48,21 +50,36 @@ In this case the selenomethionines (the first and also seventh and sixth from
 last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 import warnings
 
-from Bio.Alphabet import generic_protein
 from Bio.Data import SCOPData
 from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.vectors import calc_dihedral, calc_angle
 
 
-standard_aa_names = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS",
-                     "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
-                     "TRP", "TYR"]
+standard_aa_names = [
+    "ALA",
+    "CYS",
+    "ASP",
+    "GLU",
+    "PHE",
+    "GLY",
+    "HIS",
+    "ILE",
+    "LYS",
+    "LEU",
+    "MET",
+    "ASN",
+    "PRO",
+    "GLN",
+    "ARG",
+    "SER",
+    "THR",
+    "VAL",
+    "TRP",
+    "TYR",
+]
 
 
 aa1 = "ACDEFGHIKLMNPQRSTVWY"
@@ -178,7 +195,7 @@ def is_aa(residue, standard=False):
     False
     """
     # TODO - What about special cases like XXX, can they appear in PDB files?
-    if not isinstance(residue, basestring):
+    if not isinstance(residue, str):
         residue = residue.get_resname()
     residue = residue.upper()
     if standard:
@@ -209,9 +226,9 @@ class Polypeptide(list):
         for i in range(0, lng):
             res = self[i]
             try:
-                n = res['N'].get_vector()
-                ca = res['CA'].get_vector()
-                c = res['C'].get_vector()
+                n = res["N"].get_vector()
+                ca = res["CA"].get_vector()
+                c = res["C"].get_vector()
             except Exception:
                 # Some atoms are missing
                 # Phi/Psi cannot be calculated for this residue
@@ -223,7 +240,7 @@ class Polypeptide(list):
             if i > 0:
                 rp = self[i - 1]
                 try:
-                    cp = rp['C'].get_vector()
+                    cp = rp["C"].get_vector()
                     phi = calc_dihedral(cp, n, ca, c)
                 except Exception:
                     phi = None
@@ -234,7 +251,7 @@ class Polypeptide(list):
             if i < (lng - 1):
                 rn = self[i + 1]
                 try:
-                    nn = rn['N'].get_vector()
+                    nn = rn["N"].get_vector()
                     psi = calc_dihedral(n, ca, c, nn)
                 except Exception:
                     psi = None
@@ -281,11 +298,10 @@ class Polypeptide(list):
         :return: polypeptide sequence
         :rtype: L{Seq}
         """
-        s = ""
-        for res in self:
-            s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
-        seq = Seq(s, generic_protein)
-        return seq
+        s = "".join(
+            SCOPData.protein_letters_3to1.get(res.get_resname(), "X") for res in self
+        )
+        return Seq(s)
 
     def __repr__(self):
         """Return string representation of the polypeptide.
@@ -295,11 +311,10 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        s = "<Polypeptide start=%s end=%s>" % (start, end)
-        return s
+        return "<Polypeptide start=%s end=%s>" % (start, end)
 
 
-class _PPBuilder(object):
+class _PPBuilder:
     """Base class to extract polypeptides.
 
     It checks if two consecutive residues in a chain are connected.
@@ -324,8 +339,10 @@ class _PPBuilder(object):
             # It has an alpha carbon...
             # We probably need to update the hard coded list of
             # non-standard residues, see function is_aa for details.
-            warnings.warn("Assuming residue %s is an unknown modified "
-                          "amino acid" % residue.get_resname())
+            warnings.warn(
+                "Assuming residue %s is an unknown modified amino acid"
+                % residue.get_resname()
+            )
             return True
         else:
             # not a standard AA so skip
@@ -365,9 +382,11 @@ class _PPBuilder(object):
                 continue
             pp = None
             for next_res in chain_it:
-                if accept(prev_res, aa_only) \
-                        and accept(next_res, aa_only) \
-                        and is_connected(prev_res, next_res):
+                if (
+                    accept(prev_res, aa_only)
+                    and accept(next_res, aa_only)
+                    and is_connected(prev_res, next_res)
+                ):
                     if pp is None:
                         pp = Polypeptide()
                         pp.append(prev_res)

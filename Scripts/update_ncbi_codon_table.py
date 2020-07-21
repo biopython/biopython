@@ -18,16 +18,13 @@ and check for any differences in the old tables.
 
 import re
 
-INDENT = len("register_ncbi_table(")
-INDENT2 = INDENT + len("table={")
-
 
 def line_wrap(text, indent=0, max_len=78, string=False):
     """Return a wrapped line if length is larger max_len.
 
     The new parameter 'string' allows to wrap quoted text which is delimited
-    by single quotes. It adds " '" to the end of the line and "'" to the start
-    of the next line.
+    by single quotes. It adds a closing quote to the end of the line and an
+    opening quote to the start of the next line.
     """
     split_len = max_len if not string else max_len - 2
     if len(text) <= max_len:
@@ -37,8 +34,8 @@ def line_wrap(text, indent=0, max_len=78, string=False):
     line, rest = line.rsplit(" ", 1)
     # New:
     if string:
-        line += " '"
-        rest = "'" + rest
+        line += ' "'
+        rest = '"' + rest
     rest = " " * indent + rest + text[split_len:]
     assert len(line) < max_len
     if indent + len(rest) <= max_len:
@@ -47,18 +44,16 @@ def line_wrap(text, indent=0, max_len=78, string=False):
         return line + "\n" + line_wrap(rest, indent, max_len, string)
 
 
-print("""
-##########################################################################
-# Start of auto-generated output from Scripts/update_ncbi_codon_table.py #
-##########################################################################
+print("##########################################################################")
+print("# Start of auto-generated output from Scripts/update_ncbi_codon_table.py #")
+print("##########################################################################")
+print()
 
-"""[1:])
-
-version = ''
+version = ""
 for line in open("gc.prt").readlines():
     if not version and line.startswith("--  Version"):
-        version = line.split('Version', 1)[1].strip()
-        print("# Data from NCBI genetic code table version %s\n" % version)
+        version = line.split("Version", 1)[1].strip()
+        print(f"# Data from NCBI genetic code table version {version}\n")
     if line[:2] == " {":
         names = []
         id = None
@@ -72,49 +67,61 @@ for line in open("gc.prt").readlines():
     elif line == ' Mitochondrial; Mycoplasma; Spiroplasma" ,\n':
         names[-1] = names[-1] + " Mitochondrial; Mycoplasma; Spiroplasma"
     elif line[:4] == "  id":
-        id = int(re.search(r'(\d+)', line).group(1))
+        id = int(re.search(r"(\d+)", line).group(1))
     elif line[:10] == "  ncbieaa ":
-        aa = line[12:12 + 64]
+        aa = line[12 : 12 + 64]
     elif line[:10] == "  sncbieaa":
-        start = line[12:12 + 64]
+        start = line[12 : 12 + 64]
     elif line[:9] == "  -- Base":
-        bases.append(line[12:12 + 64])
+        bases.append(line[12 : 12 + 64])
     elif line[:2] == " }":
         assert names != [] and id is not None and aa is not None
         assert start is not None and bases != []
         if len(names) == 1:
             names.append(None)
         # Use %r instead of %s to include the quotes of the string!
-        print(line_wrap("register_ncbi_table(name=%r," % names[0],
-              indent=INDENT, string=True))
-        print(" " * INDENT + "alt_name=%r, id=%d," % (names[1], id))
-        s = " " * INDENT + "table={"
+        print("register_ncbi_table(")
+        print(line_wrap(f'    name="{names[0]}",', 4, string=True))
+        print(line_wrap("    alt_name=%s," % (repr(names[1]).replace("'", '"'))))
+        print(f"    id={id:d},")
+        print("    table={")
+        s = " " * 8
+        noqa = False
         for i in range(64):
             if aa[i] != "*":
-                t = "'%s%s%s': '%s', " % (bases[0][i], bases[1][i],
-                                          bases[2][i], aa[i])
-                if len(s) + len(t) > 75:
-                    print(s.rstrip())
-                    s = " " * INDENT2 + t
-                else:
-                    s += t
-        print("%s}," % s[:-2])  # remove ', ' from last entry before '}'
-        codons = [bases[0][i] + bases[1][i] + bases[2][i]
-                  for i in range(64) if start[i] == "*"]
-        print(line_wrap(" " * INDENT + "stop_codons=%r,"
-                        % codons, indent=INDENT + 13))
-        codons = [bases[0][i] + bases[1][i] + bases[2][i]
-                  for i in range(64) if start[i] == "M"]
-        print(line_wrap(" " * INDENT + "start_codons=%r)"
-                        % codons, indent=INDENT + 14))
+                s += f'"{bases[0][i]}{bases[1][i]}{bases[2][i]}": "{aa[i]}", '
+            else:
+                # leave a space for stop codons
+                s += " " * 12
+                noqa = True
+            if i % 4 == 3:
+                # Print out in rows of four:
+                if noqa:
+                    s += "  # noqa: E241"
+                print(s.rstrip())
+                s = " " * 8
+                noqa = False
+        assert not s.strip()
+        print("    },")
+        codons = [
+            bases[0][i] + bases[1][i] + bases[2][i]
+            for i in range(64)
+            if start[i] == "*"
+        ]
+        print("    stop_codons=%s," % repr(codons).replace("'", '"'))
+        codons = [
+            bases[0][i] + bases[1][i] + bases[2][i]
+            for i in range(64)
+            if start[i] == "M"
+        ]
+        print("    start_codons=%s," % repr(codons).replace("'", '"'))
+        print(")")
         print("")
-    elif line[:2] == "--" or line in ("\n", "}\n",
-                                      'Genetic-code-table ::= {\n'):
+    elif line[:2] == "--" or line in ("\n", "}\n", "Genetic-code-table ::= {\n"):
         pass
     else:
         raise Exception("Unparsed: " + repr(line))
 
-print("""
-########################################################################
-# End of auto-generated output from Scripts/update_ncbi_codon_table.py #
-########################################################################""")
+print("########################################################################")
+print("# End of auto-generated output from Scripts/update_ncbi_codon_table.py #")
+print("########################################################################")

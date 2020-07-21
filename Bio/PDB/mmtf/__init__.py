@@ -9,19 +9,22 @@ try:
     from mmtf import fetch, parse
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError("Install mmtf to use Bio.PDB.mmtf "
-                                       "(e.g. pip install mmtf-python)")
+
+    raise MissingPythonDependencyError(
+        "Install mmtf to use Bio.PDB.mmtf (e.g. pip install mmtf-python)"
+    ) from None
 from Bio.PDB.mmtf.DefaultParser import StructureDecoder
+from .mmtfio import MMTFIO
 
 
 def get_from_decoded(decoder):
     """Return structure from decoder."""
     structure_decoder = StructureDecoder()
     decoder.pass_data_on(structure_decoder)
-    return structure_decoder.structure_bulder.get_structure()
+    return structure_decoder.structure_builder.get_structure()
 
 
-class MMTFParser(object):
+class MMTFParser:
     """Class to get a Biopython structure from a URL or a filename."""
 
     @staticmethod

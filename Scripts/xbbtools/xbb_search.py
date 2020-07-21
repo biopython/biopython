@@ -12,16 +12,9 @@
 """Search code for graphical Xbbtools tool."""
 
 import re
-
-
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-    import tkColorChooser as colorchooser
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import colorchooser
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import colorchooser
 
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
@@ -29,21 +22,21 @@ from Bio.Seq import reverse_complement
 import xbb_widget
 
 
-class DNAsearch(object):
+class DNAsearch:
     """Class to search a DNA sequence."""
 
     def __init__(self):
         """Set up the alphabet."""
         self.init_alphabet()
-        self.sequence = ''
+        self.sequence = ""
 
     def init_alphabet(self):
         """Expand alphabet values for ambiguous codes."""
         self.alphabet = ambiguous_dna_values
-        other = ''.join(self.alphabet)
-        self.alphabet['N'] = self.alphabet['N'] + other
+        other = "".join(self.alphabet)
+        self.alphabet["N"] = self.alphabet["N"] + other
         for key in self.alphabet:
-            if key == 'N':
+            if key == "N":
                 continue
             if key in self.alphabet[key]:
                 continue
@@ -61,11 +54,11 @@ class DNAsearch(object):
 
     def IUPAC2regex(self, s):
         """Translate search text into pattern."""
-        rx = ''
+        rx = ""
         for i in s:
             r = self.alphabet.get(i, i)
             if len(r) > 1:
-                rx = '%s[%s]' % (rx, r)
+                rx = f"{rx}[{r}]"
             else:
                 rx += r
         return rx
@@ -104,7 +97,7 @@ class DNAsearch(object):
 class XDNAsearch(tk.Toplevel, DNAsearch):
     """Graphical tools to perform the DNA search."""
 
-    def __init__(self, seq='', master=None, highlight=0):
+    def __init__(self, seq="", master=None, highlight=0):
         """Initialize the search GUI."""
         DNAsearch.__init__(self)
         self.master = master
@@ -127,16 +120,16 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         f2.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         f = f2
-        self.forward = ttk.Button(f, text='Search +', command=self.do_search)
+        self.forward = ttk.Button(f, text="Search +", command=self.do_search)
         self.forward.pack(side=tk.LEFT)
         self.forward = ttk.Button(
-            f, text='Search -',
-            command=lambda x=self.do_search: x(other_strand=1))
+            f, text="Search -", command=lambda x=self.do_search: x(other_strand=1)
+        )
         self.forward.pack(side=tk.LEFT)
-        self.cancel = ttk.Button(f, text='Cancel', command=self.exit)
+        self.cancel = ttk.Button(f, text="Cancel", command=self.exit)
         self.cancel.pack(side=tk.LEFT)
-        self.current_color = 'cyan'
-        self.colorb = ttk.Button(f, text='Color', command=self.change_color)
+        self.current_color = "cyan"
+        self.colorb = ttk.Button(f, text="Color", command=self.change_color)
         self.colorb.pack(side=tk.LEFT)
         self.config_color(self.current_color)
 
@@ -147,12 +140,13 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         if not color:
             color = colorchooser.askcolor()[1]
             if not color:
-                color = 'cyan'
+                color = "cyan"
         self.current_color = color
-        self.current_tag = 'searched_%s' % self.current_color
+        self.current_tag = f"searched_{self.current_color}"
         self.master.tag_config(self.current_tag, background=self.current_color)
-        self.master.tag_config(self.current_tag + 'R',
-                               background=self.current_color, underline=1)
+        self.master.tag_config(
+            self.current_tag + "R", background=self.current_color, underline=1
+        )
         self.colors.append(color)
 
     def change_color(self):
@@ -177,27 +171,26 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
             if self.highlight:
                 start, stop = pos, pos + len(self.pattern)
                 if other_strand:
-                    w.tag_add(self.current_tag + 'R', '1.%d' % start,
-                              '1.%s' % stop)
+                    w.tag_add(self.current_tag + "R", f"1.{start:d}", f"1.{stop}")
                 else:
-                    w.tag_add(self.current_tag, '1.%d' % start, '1.%s' % stop)
-                w.see('1.%d' % start)
+                    w.tag_add(self.current_tag, f"1.{start:d}", f"1.{stop}")
+                w.see(f"1.{start:d}")
 
     def exit(self):
         """Clean up on exit."""
         for c in self.colors:
-            self.master.tag_remove('searched_%s' % c, 1.0, tk.END)
-            self.master.tag_remove('searched_%sR' % c, 1.0, tk.END)
+            self.master.tag_remove(f"searched_{c}", 1.0, tk.END)
+            self.master.tag_remove(f"searched_{c}R", 1.0, tk.END)
         self.destroy()
-        del(self)
+        del self
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     win = tk.Tk()
     xbbtools = xbb_widget.xbb_widget()
 
-    seq = 'ATGGTGTGTGTGTACGATCGCCCCCCCCAGTCGATCGATGCATCGTA'
-    xbbtools.insert_sequence(('Test_seq', seq))
+    seq = "ATGGTGTGTGTGTACGATCGCCCCCCCCAGTCGATCGATGCATCGTA"
+    xbbtools.insert_sequence(("Test_seq", seq))
     xbbtools.search()
 
     win.mainloop()

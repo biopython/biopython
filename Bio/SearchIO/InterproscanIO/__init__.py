@@ -33,51 +33,52 @@ interproscan-xml
 The interproscan-xml parser follows the InterProScan XML described here:
 https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats
 
-+--------------+--------------------+----------------------------------------+
-| Object       | Attribute          | XML Element                            |
-+==============+====================+========================================+
-| QueryResult  | target             | `InterPro`                             |
-|              +--------------------+----------------------------------------+
-|              | program            | `InterProScan`                         |
-|              +--------------------+----------------------------------------+
-|              | version            | `protein-matches.interproscan-version` |
-+--------------+--------------------+----------------------------------------+
-| Hit          | accession          | `signature.name`                       |
-|              +--------------------+----------------------------------------+
-|              | id                 | `signature.ac`                         |
-|              +--------------------+----------------------------------------+
-|              | description        | `signature.desc`                       |
-|              +--------------------+----------------------------------------+
-|              | dbxrefs            | `IPR:entry.ac`                         |
-|              |                    | `go-xref.id`                           |
-|              |                    | `pathway-xref.db:pathway-xref.id`      |
-|              +--------------------+----------------------------------------+
-|              | attributes         |                                        |
-|              | ['Target']         | `*-match` / `*-location`               |
-|              | ['Target version'] | `signature-library-release.library`    |
-|              | ['Hit type']       | `signature-library-release.version`    |
-+--------------+--------------------+----------------------------------------+
-| HSP          | bitscore           | `*-location.score`                     |
-|              +--------------------+----------------------------------------+
-|              | evalue             | `*-location.evalue`                    |
-+--------------+--------------------+----------------------------------------+
-| HSPFragment  | query_start        | `*-location.start`                     |
-| (also via    +--------------------+----------------------------------------+
-| HSP)         | query_end          | `*-location.end`                       |
-|              +--------------------+----------------------------------------+
-|              | hit_start          | `*-location.hmm-start`                 |
-|              +--------------------+----------------------------------------+
-|              | hit_end            | `*-location.hmm-end`                   |
-|              +--------------------+----------------------------------------+
-|              | query              | `sequence`                             |
-+--------------+--------------------+----------------------------------------+
++--------------+--------------------+------------------------------------------+
+| Object       | Attribute          | XML Element                              |
++==============+====================+==========================================+
+| QueryResult  | target             | ``InterPro``                             |
+|              +--------------------+------------------------------------------+
+|              | program            | ``InterProScan``                         |
+|              +--------------------+------------------------------------------+
+|              | version            | ``protein-matches.interproscan-version`` |
++--------------+--------------------+------------------------------------------+
+| Hit          | accession          | ``signature.name``                       |
+|              +--------------------+------------------------------------------+
+|              | id                 | ``signature.ac``                         |
+|              +--------------------+------------------------------------------+
+|              | description        | ``signature.desc``                       |
+|              +--------------------+------------------------------------------+
+|              | dbxrefs            | ``IPR:entry.ac``                         |
+|              |                    | ``go-xref.id``                           |
+|              |                    | ``pathway-xref.db:pathway-xref.id``      |
+|              +--------------------+------------------------------------------+
+|              | attributes         |                                          |
+|              | ['Target']         | ``*-match`` / ``*-location``             |
+|              | ['Target version'] | ``signature-library-release.library``    |
+|              | ['Hit type']       | ``signature-library-release.version``    |
++--------------+--------------------+------------------------------------------+
+| HSP          | bitscore           | ``*-location.score``                     |
+|              +--------------------+------------------------------------------+
+|              | evalue             | ``*-location.evalue``                    |
++--------------+--------------------+------------------------------------------+
+| HSPFragment  | query_start        | ``*-location.start``                     |
+| (also via    +--------------------+------------------------------------------+
+| HSP)         | query_end          | ``*-location.end``                       |
+|              +--------------------+------------------------------------------+
+|              | hit_start          | ``*-location.hmm-start``                 |
+|              +--------------------+------------------------------------------+
+|              | hit_end            | ``*-location.hmm-end``                   |
+|              +--------------------+------------------------------------------+
+|              | query              | ``sequence``                             |
++--------------+--------------------+------------------------------------------+
 
 InterProScan XML files may contain a match with multiple locations or multiple
 matches to the same protein with a single location. In both cases, the match
 is uniquely stored as a HIT object and the locations as HSP objects.
 
-`HSP.*start == *start - 1` (Since every start position is 0-based in Biopython)
-`HSP.aln_span ==  query-end - query-start`
+``HSP.*start == *start - 1`` (Since every start position is 0-based in Biopython)
+
+``HSP.aln_span ==  query-end - query-start``
 
 The types of matches or locations (eg. hmmer3-match, hmmer3-location,
 coils-match, panther-location) are stored in hit.attributes['Hit type'].
@@ -91,4 +92,5 @@ from .interproscan_xml import InterproscanXmlParser
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

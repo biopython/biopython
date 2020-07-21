@@ -19,15 +19,13 @@ approach to regression analysis by local fitting", Journal of the American
 Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 """
 
-from __future__ import print_function
-
-from Bio._py3k import range
 
 import numpy
 
 
 try:
     from Bio.Cluster import median
+
     # The function median in Bio.Cluster is faster than the function median
     # in NumPy, as it does not require a full sort.
 except ImportError as x:
@@ -35,7 +33,7 @@ except ImportError as x:
     from numpy import median
 
 
-def lowess(x, y, f=2. / 3., iter=3):
+def lowess(x, y, f=2.0 / 3.0, iter=3):
     """Lowess smoother: Robust locally weighted regression.
 
     The lowess function fits a nonparametric regression curve to a scatterplot.
@@ -99,4 +97,5 @@ def lowess(x, y, f=2. / 3., iter=3):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

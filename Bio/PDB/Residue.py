@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Residue class, used by Structure objects."""
 
@@ -28,6 +30,7 @@ class Residue(Entity):
         self.disordered = 0
         self.resname = resname
         self.segid = segid
+        self.internal_coord = None
         Entity.__init__(self, id)
 
     def __repr__(self):
@@ -46,7 +49,8 @@ class Residue(Entity):
         atom_id = atom.get_id()
         if self.has_id(atom_id):
             raise PDBConstructionException(
-                "Atom %s defined twice in residue %s" % (atom_id, self))
+                "Atom %s defined twice in residue %s" % (atom_id, self)
+            )
         Entity.add(self, atom)
 
     def sort(self):
@@ -56,10 +60,11 @@ class Residue(Entity):
         by name, with any alternative location specifier for disordered
         atoms (altloc) as a tie-breaker.
         """
-        warnings.warn("The custom sort() method will be removed in the "
-                      "future in favour of rich comparison methods. Use the "
-                      "built-in sorted() function instead.",
-                      BiopythonDeprecationWarning)
+        warnings.warn(
+            "The custom sort() method will be removed in the future in favour of rich "
+            "comparison methods. Use the built-in sorted() function instead.",
+            BiopythonDeprecationWarning,
+        )
         self.child_list.sort()
 
     def flag_disordered(self):
@@ -80,7 +85,7 @@ class Residue(Entity):
         undisordered_atom_list = []
         for atom in atom_list:
             if atom.is_disordered():
-                undisordered_atom_list = (undisordered_atom_list + atom.disordered_get_list())
+                undisordered_atom_list += atom.disordered_get_list()
             else:
                 undisordered_atom_list.append(atom)
         return undisordered_atom_list
@@ -91,16 +96,16 @@ class Residue(Entity):
 
     def get_atoms(self):
         """Return atoms."""
-        for a in self:
-            yield a
+        yield from self
 
     def get_atom(self):
         """Return atom."""
-        warnings.warn("`get_atom` has been deprecated and we intend to remove it"
-                      " in a future release of Biopython. Please use `get_atoms` instead.",
-                      BiopythonDeprecationWarning)
-        for a in self:
-            yield a
+        warnings.warn(
+            "`get_atom` has been deprecated and we intend to remove it"
+            " in a future release of Biopython. Please use `get_atoms` instead.",
+            BiopythonDeprecationWarning,
+        )
+        yield from self
 
 
 class DisorderedResidue(DisorderedEntityWrapper):
@@ -133,7 +138,8 @@ class DisorderedResidue(DisorderedEntityWrapper):
             residue.add(atom)
             raise PDBConstructionException(
                 "Blank altlocs in duplicate residue %s (%s, %i, %s)"
-                % (resname, het, resseq, icode))
+                % (resname, het, resseq, icode)
+            )
         residue.add(atom)
 
     def sort(self):
@@ -152,6 +158,6 @@ class DisorderedResidue(DisorderedEntityWrapper):
         # add chain parent to residue
         chain = self.get_parent()
         residue.set_parent(chain)
-        assert(not self.disordered_has_id(resname))
+        assert not self.disordered_has_id(resname)
         self[resname] = residue
         self.disordered_select(resname)

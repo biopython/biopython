@@ -21,18 +21,11 @@ construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
 """
-from __future__ import print_function
-from Bio._py3k import basestring
-
 import os
 import platform
 import sys
 import subprocess
 import re
-
-from subprocess import CalledProcessError as _ProcessCalledError
-
-from Bio import File
 
 
 # Use this regular expression to test the property names are going to
@@ -47,16 +40,44 @@ assert _re_prop_name.match("underscore_ok")
 assert _re_prop_name.match("test_name")
 assert _re_prop_name.match("test2")
 # These are reserved names in Python itself,
-_reserved_names = ["and", "del", "from", "not", "while", "as", "elif",
-                   "global", "or", "with", "assert", "else", "if", "pass",
-                   "yield", "break", "except", "import", "print", "class",
-                   "exec", "in", "raise", "continue", "finally", "is",
-                   "return", "def", "for", "lambda", "try"]
+_reserved_names = [
+    "and",
+    "del",
+    "from",
+    "not",
+    "while",
+    "as",
+    "elif",
+    "global",
+    "or",
+    "with",
+    "assert",
+    "else",
+    "if",
+    "pass",
+    "yield",
+    "break",
+    "except",
+    "import",
+    "print",
+    "class",
+    "exec",
+    "in",
+    "raise",
+    "continue",
+    "finally",
+    "is",
+    "return",
+    "def",
+    "for",
+    "lambda",
+    "try",
+]
 # These are reserved names due to the way the wrappers work
 _local_reserved_names = ["set_parameter"]
 
 
-class ApplicationError(_ProcessCalledError):
+class ApplicationError(subprocess.CalledProcessError):
     """Raised when an application returns a non-zero exit status.
 
     The exit status will be stored in the returncode attribute, similarly
@@ -88,19 +109,25 @@ class ApplicationError(_ProcessCalledError):
         except Exception:  # TODO, ValueError? AttributeError?
             msg = ""
         if msg:
-            return "Non-zero return code %d from %r, message %r" \
-                   % (self.returncode, self.cmd, msg)
+            return "Non-zero return code %d from %r, message %r" % (
+                self.returncode,
+                self.cmd,
+                msg,
+            )
         else:
-            return "Non-zero return code %d from %r" \
-                   % (self.returncode, self.cmd)
+            return "Non-zero return code %d from %r" % (self.returncode, self.cmd)
 
     def __repr__(self):
         """Represent the error as a string."""
-        return "ApplicationError(%i, %s, %s, %s)" \
-               % (self.returncode, self.cmd, self.stdout, self.stderr)
+        return "ApplicationError(%i, %s, %s, %s)" % (
+            self.returncode,
+            self.cmd,
+            self.stdout,
+            self.stderr,
+        )
 
 
-class AbstractCommandline(object):
+class AbstractCommandline:
     r"""Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
@@ -207,7 +234,9 @@ class AbstractCommandline(object):
         try:
             parameters = self.parameters
         except AttributeError:
-            raise AttributeError("Subclass should have defined self.parameters")
+            raise AttributeError(
+                "Subclass should have defined self.parameters"
+            ) from None
         # Create properties for each parameter at run time
         aliases = set()
         for p in parameters:
@@ -217,23 +246,26 @@ class AbstractCommandline(object):
                 continue
             for name in p.names:
                 if name in aliases:
-                    raise ValueError("Parameter alias %s multiply defined"
-                                     % name)
+                    raise ValueError("Parameter alias %s multiply defined" % name)
                 aliases.add(name)
             name = p.names[-1]
             if _re_prop_name.match(name) is None:
-                raise ValueError("Final parameter name %r cannot be used as "
-                                 "an argument or property name in python"
-                                 % name)
+                raise ValueError(
+                    "Final parameter name %r cannot be used as "
+                    "an argument or property name in python" % name
+                )
             if name in _reserved_names:
-                raise ValueError("Final parameter name %r cannot be used as "
-                                 "an argument or property name because it is "
-                                 "a reserved word in python" % name)
+                raise ValueError(
+                    "Final parameter name %r cannot be used as "
+                    "an argument or property name because it is "
+                    "a reserved word in python" % name
+                )
             if name in _local_reserved_names:
-                raise ValueError("Final parameter name %r cannot be used as "
-                                 "an argument or property name due to the "
-                                 "way the AbstractCommandline class works"
-                                 % name)
+                raise ValueError(
+                    "Final parameter name %r cannot be used as "
+                    "an argument or property name due to the "
+                    "way the AbstractCommandline class works" % name
+                )
 
             # Beware of binding-versus-assignment confusion issues
             def getter(name):
@@ -247,12 +279,16 @@ class AbstractCommandline(object):
 
             doc = p.description
             if isinstance(p, _Switch):
-                doc += "\n\nThis property controls the addition of the %s " \
-                       "switch, treat this property as a boolean." % p.names[0]
+                doc += (
+                    "\n\nThis property controls the addition of the %s "
+                    "switch, treat this property as a boolean." % p.names[0]
+                )
             else:
-                doc += "\n\nThis controls the addition of the %s parameter " \
-                       "and its associated value.  Set this property to the " \
-                       "argument value required." % p.names[0]
+                doc += (
+                    "\n\nThis controls the addition of the %s parameter "
+                    "and its associated value.  Set this property to the "
+                    "argument value required." % p.names[0]
+                )
             prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop)  # magic!
         for key, value in kwargs.items():
@@ -268,9 +304,8 @@ class AbstractCommandline(object):
         """
         for p in self.parameters:
             # Check for missing required parameters:
-            if p.is_required and not(p.is_set):
-                raise ValueError("Parameter %s is not set."
-                                 % p.names[-1])
+            if p.is_required and not (p.is_set):
+                raise ValueError("Parameter %s is not set." % p.names[-1])
             # Also repeat the parameter validation here, just in case?
 
     def __str__(self):
@@ -317,8 +352,7 @@ class AbstractCommandline(object):
                 if isinstance(parameter, _Switch):
                     answer += ", %s=True" % parameter.names[-1]
                 else:
-                    answer += ", %s=%r" \
-                              % (parameter.names[-1], parameter.value)
+                    answer += ", %s=%r" % (parameter.names[-1], parameter.value)
         answer += ")"
         return answer
 
@@ -358,9 +392,12 @@ class AbstractCommandline(object):
                 if isinstance(parameter, _Switch):
                     if value is None:
                         import warnings
-                        warnings.warn("For a switch type argument like %s, "
-                                      "we expect a boolean.  None is treated "
-                                      "as FALSE!" % parameter.names[-1])
+
+                        warnings.warn(
+                            "For a switch type argument like %s, "
+                            "we expect a boolean.  None is treated "
+                            "as FALSE!" % parameter.names[-1]
+                        )
                     parameter.is_set = bool(value)
                     set_option = True
                 else:
@@ -385,11 +422,13 @@ class AbstractCommandline(object):
         if check_function is not None:
             is_good = check_function(value)  # May raise an exception
             if is_good not in [0, 1, True, False]:
-                raise ValueError("Result of check_function: %r is of an unexpected value"
-                                 % is_good)
+                raise ValueError(
+                    "Result of check_function: %r is of an unexpected value" % is_good
+                )
             if not is_good:
-                raise ValueError("Invalid parameter value %r for parameter %s"
-                                 % (value, name))
+                raise ValueError(
+                    "Invalid parameter value %r for parameter %s" % (value, name)
+                )
 
     def __setattr__(self, name, value):
         """Set attribute name to value (PRIVATE).
@@ -416,13 +455,12 @@ class AbstractCommandline(object):
         assumed to be parameters, and passed to the self.set_parameter method
         for validation and assignment.
         """
-        if name in ['parameters', 'program_name']:  # Allowed attributes
+        if name in ["parameters", "program_name"]:  # Allowed attributes
             self.__dict__[name] = value
         else:
             self.set_parameter(name, value)  # treat as a parameter
 
-    def __call__(self, stdin=None, stdout=True, stderr=True,
-                 cwd=None, env=None):
+    def __call__(self, stdin=None, stdout=True, stderr=True, cwd=None, env=None):
         """Execute command, wait for it to finish, return (stdout, stderr).
 
         Runs the command line tool and waits for it to finish. If it returns
@@ -456,25 +494,25 @@ class AbstractCommandline(object):
             print("About to run: %s" % water_cmd)
             std_output, err_output = water_cmd()
 
-        This functionality is similar to subprocess.check_output() added in
-        Python 2.7. In general if you require more control over running the
-        command, use subprocess directly.
+        This functionality is similar to subprocess.check_output(). In general
+        if you require more control over running the command, use subprocess
+        directly.
 
-        As of Biopython 1.56, when the program called returns a non-zero error
-        level, a custom ApplicationError exception is raised. This includes
-        any stdout and stderr strings captured as attributes of the exception
-        object, since they may be useful for diagnosing what went wrong.
+        When the program called returns a non-zero error level, a custom
+        ApplicationError exception is raised. This includes any stdout and
+        stderr strings captured as attributes of the exception object, since
+        they may be useful for diagnosing what went wrong.
         """
         if not stdout:
             stdout_arg = open(os.devnull, "w")
-        elif isinstance(stdout, basestring):
+        elif isinstance(stdout, str):
             stdout_arg = open(stdout, "w")
         else:
             stdout_arg = subprocess.PIPE
 
         if not stderr:
             stderr_arg = open(os.devnull, "w")
-        elif isinstance(stderr, basestring):
+        elif isinstance(stderr, str):
             if stdout == stderr:
                 stderr_arg = stdout_arg  # Write both to the same file
             else:
@@ -499,11 +537,16 @@ class AbstractCommandline(object):
                 use_shell = True
             else:
                 use_shell = False
-        child_process = subprocess.Popen(str(self), stdin=subprocess.PIPE,
-                                         stdout=stdout_arg, stderr=stderr_arg,
-                                         universal_newlines=True,
-                                         cwd=cwd, env=env,
-                                         shell=use_shell)
+        child_process = subprocess.Popen(
+            str(self),
+            stdin=subprocess.PIPE,
+            stdout=stdout_arg,
+            stderr=stderr_arg,
+            universal_newlines=True,
+            cwd=cwd,
+            env=env,
+            shell=use_shell,
+        )
         # Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
         if not stdout:
@@ -515,20 +558,19 @@ class AbstractCommandline(object):
         # Particularly important to close handles on Jython and PyPy
         # (where garbage collection is less predictable) and on Windows
         # (where cannot delete files with an open handle):
-        if not stdout or isinstance(stdout, basestring):
+        if not stdout or isinstance(stdout, str):
             # We opened /dev/null or a file
             stdout_arg.close()
-        if not stderr or (isinstance(stderr, basestring) and stdout != stderr):
+        if not stderr or (isinstance(stderr, str) and stdout != stderr):
             # We opened /dev/null or a file
             stderr_arg.close()
 
         if return_code:
-            raise ApplicationError(return_code, str(self),
-                                   stdout_str, stderr_str)
+            raise ApplicationError(return_code, str(self), stdout_str, stderr_str)
         return stdout_str, stderr_str
 
 
-class _AbstractParameter(object):
+class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.
@@ -576,12 +618,18 @@ class _Option(_AbstractParameter):
 
     """
 
-    def __init__(self, names, description, filename=False, checker_function=None,
-                 is_required=False, equate=True):
+    def __init__(
+        self,
+        names,
+        description,
+        filename=False,
+        checker_function=None,
+        is_required=False,
+        equate=True,
+    ):
         self.names = names
-        if not isinstance(description, basestring):
-            raise TypeError("Should be a string: %r for %s"
-                            % (description, names[-1]))
+        if not isinstance(description, str):
+            raise TypeError("Should be a string: %r for %s" % (description, names[-1]))
         # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
@@ -626,7 +674,7 @@ class _Switch(_AbstractParameter):
        (eg ["-a", "--append", "append"]). The first name in list is used
        when building the command line. The last name in the list is a
        "human readable" name describing the option in one word. This
-       must be a valid Python identifer as it is used as the property
+       must be a valid Python identifier as it is used as the property
        name and as a keyword argument, and should therefore follow PEP8
        naming.
      - description -- a description of the option. This is used as
@@ -659,20 +707,25 @@ class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
 
     The names argument should be a list containing one string.
-    This must be a valid Python identifer as it is used as the
+    This must be a valid Python identifier as it is used as the
     property name and as a keyword argument, and should therefore
     follow PEP8 naming.
     """
 
-    def __init__(self, names, description, filename=False,
-                 checker_function=None, is_required=False):
+    def __init__(
+        self,
+        names,
+        description,
+        filename=False,
+        checker_function=None,
+        is_required=False,
+    ):
         # if len(names) != 1:
         #    raise ValueError("The names argument to _Argument should be a "
         #                     "single entry list with a PEP8 property name.")
         self.names = names
-        if not isinstance(description, basestring):
-            raise TypeError("Should be a string: %r for %s"
-                            % (description, names[-1]))
+        if not isinstance(description, str):
+            raise TypeError("Should be a string: %r for %s" % (description, names[-1]))
         # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
@@ -771,6 +824,7 @@ def _escape_filename(filename):
 def _test():
     """Run the Bio.Application module's doctests (PRIVATE)."""
     import doctest
+
     doctest.testmod(verbose=1)
 
 

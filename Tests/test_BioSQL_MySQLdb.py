@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -13,8 +12,8 @@ from common_BioSQL import *  # noqa: F403
 # Import these explicitly to avoid flake8 F405 below:
 from common_BioSQL import load_biosql_ini, check_config
 
-DBDRIVER = 'MySQLdb'
-DBTYPE = 'mysql'
+DBDRIVER = "MySQLdb"
+DBTYPE = "mysql"
 
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 

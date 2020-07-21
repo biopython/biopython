@@ -6,15 +6,16 @@
 """Tests for SeqIO Insdc module."""
 
 import unittest
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
+
 from seq_tests_common import compare_record
+from test_SeqIO import SeqIOConverterTestBaseClass
 
 
 class TestEmbl(unittest.TestCase):
@@ -31,10 +32,15 @@ class TestEmbl(unittest.TestCase):
         record = SeqIO.read("EMBL/DD231055_edited.embl", "embl")
         self.assertEqual(len(record), 315)
         # Multiple keywords:
-        self.assertEqual(record.annotations["keywords"],
-                         ['JP 2005522996-A/12', 'test-data',
-                          'lot and lots of keywords for this example',
-                          'multi-line keywords'])
+        self.assertEqual(
+            record.annotations["keywords"],
+            [
+                "JP 2005522996-A/12",
+                "test-data",
+                "lot and lots of keywords for this example",
+                "multi-line keywords",
+            ],
+        )
         self.assertEqual(record.annotations["topology"], "linear")
 
     def test_annotation3(self):
@@ -54,30 +60,28 @@ class TestEmbl(unittest.TestCase):
         self.assertNotIn("topology", record.annotations)
 
     def test_writing_empty_qualifiers(self):
-        f = SeqFeature(FeatureLocation(5, 20, strand=+1),
-                       type="region",
-                       qualifiers={"empty": None,
-                                   "zero": 0,
-                                   "one": 1,
-                                   "text": "blah"})
-        record = SeqRecord(Seq("A" * 100, generic_dna), "dummy",
-                           features=[f])
+        f = SeqFeature(
+            FeatureLocation(5, 20, strand=+1),
+            type="region",
+            qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
+        )
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
         gbk = record.format("gb")
-        self.assertIn(' /empty\n', gbk)
-        self.assertIn(' /zero=0\n', gbk)
-        self.assertIn(' /one=1\n', gbk)
+        self.assertIn(" /empty\n", gbk)
+        self.assertIn(" /zero=0\n", gbk)
+        self.assertIn(" /one=1\n", gbk)
         self.assertIn(' /text="blah"\n', gbk)
 
 
 class TestEmblRewrite(unittest.TestCase):
-
     def check_rewrite(self, filename):
         old = SeqIO.read(filename, "embl")
 
         # TODO - Check these properties:
         old.dbxrefs = []
-        old.annotations['accessions'] = old.annotations['accessions'][:1]
-        del old.annotations['references']
+        old.annotations["accessions"] = old.annotations["accessions"][:1]
+        del old.annotations["references"]
 
         buffer = StringIO()
         self.assertEqual(1, SeqIO.write(old, buffer, "embl"))
@@ -97,6 +101,22 @@ class TestEmblRewrite(unittest.TestCase):
     def test_annotation3(self):
         """Check writing-and-parsing EMBL file (3)."""
         self.check_rewrite("EMBL/AE017046.embl")
+
+
+class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
+    def test_conversion(self):
+        """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
+        tests = [
+            ("EMBL/U87107.embl", "embl"),
+            ("EMBL/TRBG361.embl", "embl"),
+            ("GenBank/NC_005816.gb", "gb"),
+            ("GenBank/cor6_6.gb", "genbank"),
+        ]
+        for filename, fmt in tests:
+            for (in_format, out_format) in self.formats:
+                if in_format != fmt:
+                    continue
+                self.check_conversion(filename, in_format, out_format)
 
 
 if __name__ == "__main__":

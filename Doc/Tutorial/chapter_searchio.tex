@@ -32,10 +32,10 @@ and the BLAT output file
 or are included with the Biopython source code under the \verb|Doc/examples/|
 folder. Both output files were generated using this sequence:
 
-\begin{verbatim}
+\begin{minted}{text}
 >mystery_seq
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-\end{verbatim}
+\end{minted}
 
 The BLAST result is an XML file generated using \verb|blastn| against the NCBI
 \verb|refseq_rna| database. For BLAT, the sequence database was the February 2009
@@ -235,9 +235,9 @@ blat <unknown version>
 
 For a complete list of accessible attributes, you can check each format-specific
 documentation. Here are the ones
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlastIO-module.html}{for BLAST}
+\href{http://biopython.org/docs/1.77/api/Bio.SearchIO.BlastIO.html}{for BLAST}
 and for
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlatIO-module.html}{BLAT}.
+\href{http://biopython.org/docs/1.77/api/Bio.SearchIO.BlatIO.html}{BLAT}.
 
 Having looked at using \verb|print| on \verb|QueryResult| objects, let's drill
 down deeper. What exactly is a \verb|QueryResult|? In terms of Python objects,
@@ -693,7 +693,7 @@ details. Here are some examples:
 \end{minted}
 
 Check out the \verb|HSP|
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+\href{http://biopython.org/docs/1.77/api/Bio.SearchIO.html#module-Bio.SearchIO#module-Bio.SearchIO}{documentation}
 for a full list of these predefined properties.
 
 Furthermore, each sequence search tool usually computes its own statistics /
@@ -725,13 +725,13 @@ of our HSP are not just regular strings:
 %cont-doctest
 \begin{minted}{pycon}
 >>> blast_hsp.query
-SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='42291', name='aligned query sequence', description='mystery_seq', dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='42291', name='aligned query sequence', description='mystery_seq', dbxrefs=[])
 >>> blast_hsp.hit
-SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
 \end{minted}
 
 They are \verb|SeqRecord| objects you saw earlier in
-Section~\ref{chapter:SeqRecord}! This means that you can do all sorts of
+Section~\ref{chapter:seq_annot}! This means that you can do all sorts of
 interesting things you can do with \verb|SeqRecord| objects on \verb|HSP.query|
 and/or \verb|HSP.hit|.
 
@@ -741,7 +741,7 @@ It should not surprise you now that the \verb|HSP| object has an
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(blast_hsp.aln)
-DNAAlphabet() alignment with 2 rows and 61 columns
+Alignment with 2 rows and 61 columns
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 42291
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
 \end{minted}
@@ -880,7 +880,7 @@ However, you can use their \verb|*_all| counterparts: \verb|query_all|,
 \verb|hit_all|, and \verb|aln_all|. These properties will return a list containing
 \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects from each of the HSP
 fragment. There are other attributes that behave similarly, i.e. they only work
-for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/docs/1.77/api/Bio.SearchIO.html#module-Bio.SearchIO}{documentation}
 for a full list.
 
 Finally, to check whether you have multiple fragments or not, you can use the
@@ -958,7 +958,7 @@ Some examples:
 >>> blast_frag.hit_strand       # hit sequence strand
 1
 >>> blast_frag.hit              # hit sequence, as a SeqRecord object
-SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
 \end{minted}
 
 \section{A note about standards and conventions}
@@ -1172,4 +1172,3 @@ that have all the required attributes. Here, the BLAST XML file provides all the
 default values a BLAST tabular file requires, so it works just fine. However,
 other format conversions are less likely to work since you need to manually
 assign the required attributes first.
-

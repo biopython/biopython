@@ -3,7 +3,7 @@
 # as part of this package.
 #
 
-"""Parser for FSSP files, used in a database of protein fold classifications.
+"""Parser for FSSP files, used in a database of protein fold classifications (DEPRECATED).
 
 This is a module to handle FSSP files. For now it parses only the header,
 summary and alignment sections.
@@ -19,42 +19,51 @@ Functions
     :mult_align: returns a Biopython alignment object.
 
 """
-from __future__ import print_function
 
 import re
+import warnings
 
 from . import fssp_rec
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "Bio.FSSP has been deprecated, and we intend to remove it"
+    " in a future release of Biopython. Please contact the Biopython"
+    " developers if you need this module.",
+    BiopythonDeprecationWarning,
+)
 
 
 fff_rec = fssp_rec.fff_rec
 header_records = {
-    'database': re.compile('^DATABASE'),
-    'pdbid': re.compile('^PDBID'),
-    'header': re.compile('^HEADER'),
-    'compnd': re.compile('^COMPND'),
-    'author': re.compile('^AUTHOR'),
-    'source': re.compile('^SOURCE'),
-    'seqlength': re.compile('^SEQLENGTH'),
-    'nalign': re.compile('^NALIGN')
+    "database": re.compile("^DATABASE"),
+    "pdbid": re.compile("^PDBID"),
+    "header": re.compile("^HEADER"),
+    "compnd": re.compile("^COMPND"),
+    "author": re.compile("^AUTHOR"),
+    "source": re.compile("^SOURCE"),
+    "seqlength": re.compile("^SEQLENGTH"),
+    "nalign": re.compile("^NALIGN"),
 }
 
-summary_title = re.compile('## +SUMMARY')
-summary_rec = re.compile(' *[0-9]+: +[1-9][0-9a-z]{3,3}')
-alignments_title = re.compile('## +ALIGNMENTS')
-alignments_rec = re.compile(' *[0-9]+ +-{0,1}[0-9]+')
-equiv_title = re.compile('## +EQUIVALENCES')
+summary_title = re.compile("## +SUMMARY")
+summary_rec = re.compile(" *[0-9]+: +[1-9][0-9a-z]{3,3}")
+alignments_title = re.compile("## +ALIGNMENTS")
+alignments_rec = re.compile(" *[0-9]+ +-{0,1}[0-9]+")
+equiv_title = re.compile("## +EQUIVALENCES")
 
 
-class FSSPHeader(object):
+class FSSPHeader:
     """Store the FSSP file header's properties."""
 
     def __init__(self):
         """Initialize the class."""
         self.database = None
-        self.pdbid = ''
-        self.header = ''
-        self.compnd = ''
-        self.source = ''
+        self.pdbid = ""
+        self.header = ""
+        self.compnd = ""
+        self.source = ""
         self.author = []
         self.seqlength = 0
         self.nalign = 0
@@ -63,48 +72,48 @@ class FSSPHeader(object):
         """Fill in properties from line."""
         for i in header_records:
             if header_records[i].match(inline):
-                if i == 'database' or i == 'seqlength' or i == 'nalign':
+                if i == "database" or i == "seqlength" or i == "nalign":
                     setattr(self, i, int(inline.split()[1]))
-                elif i == 'compnd' or i == 'author':
+                elif i == "compnd" or i == "author":
                     setattr(self, i, inline.split()[1:])
-                elif i == 'source' or i == 'header':
-                    attr = inline[inline.find(' ') + 1:].strip()
+                elif i == "source" or i == "header":
+                    attr = inline[inline.find(" ") + 1 :].strip()
                     setattr(self, i, attr)
                 else:
                     setattr(self, i, inline.split()[1])
 
 
-class PosAlign(object):
+class PosAlign:
     """Store the position alignments, AminoAcid plus Structure."""
 
     def __init__(self, inStr):
         """Initialize the class."""
         inStr = inStr.strip()
         if len(inStr) != 1 and len(inStr) != 2:
-            raise ValueError('PosAlign: length not 2 chars' + inStr)
-        if inStr == '..':
-            self.aa = '-'
+            raise ValueError("PosAlign: length not 2 chars" + inStr)
+        if inStr == "..":
+            self.aa = "-"
             self.gap = 1
         else:
             self.gap = 0
             self.aa = inStr[0]
             if self.aa == self.aa.lower():
-                self.aa = 'C'
+                self.aa = "C"
             if len(inStr) == 2:
                 self.ss = inStr[1].upper()
             else:
-                self.ss = '0'
+                self.ss = "0"
 
     def __repr__(self):
         """Return position alignments as a string."""
         if self.gap:
-            outstring = '..'
+            outstring = ".."
         else:
             outstring = self.aa + self.ss.lower()
         return outstring
 
 
-class FSSPSumRec(object):
+class FSSPSumRec:
     """Store the summary records from SUMMARY Section of file."""
 
     def __init__(self, in_str):
@@ -115,18 +124,18 @@ class FSSPSumRec(object):
         self.nr = int(in_rec[0][:-1])
         self.pdb1 = in_rec[1][:4]
         if len(in_rec[1]) == 4:
-            self.chain1 = '0'
+            self.chain1 = "0"
         elif len(in_rec[1]) == 5:
             self.chain1 = in_rec[1][4]
         else:
-            raise ValueError('Bad PDB ID 1')
+            raise ValueError("Bad PDB ID 1")
         self.pdb2 = in_rec[2][:4]
         if len(in_rec[2]) == 4:
-            self.chain2 = '0'
+            self.chain2 = "0"
         elif len(in_rec[2]) == 5:
             self.chain2 = in_rec[2][4]
         else:
-            raise ValueError('Bad PDB ID 2')
+            raise ValueError("Bad PDB ID 2")
         self.zscore = float(in_rec[3])
         self.rmsd = float(in_rec[4])
         self.lali = float(in_rec[5])
@@ -136,17 +145,17 @@ class FSSPSumRec(object):
         self.permut = int(in_rec[9])
         self.nfrag = int(in_rec[10])
         self.topo = in_rec[11]
-        self.doc = ''
+        self.doc = ""
         for i in in_rec[12:]:
-            self.doc = self.doc + i + ' '
-        self.doc = self.doc.rstrip() + '\n'
+            self.doc = self.doc + i + " "
+        self.doc = self.doc.rstrip() + "\n"
 
     def __repr__(self):
         """Return the text from the FSSP SUMMARY section."""
         return self.raw
 
 
-class FSSPAlignRec(object):
+class FSSPAlignRec:
     """Store the Alignment records from ALIGNMENTS section of file."""
 
     def __init__(self, in_fff_rec):
@@ -155,11 +164,11 @@ class FSSPAlignRec(object):
         self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
         self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
         self.chain_id = in_fff_rec[fssp_rec.align.chain_id]
-        if self.chain_id == ' ':
-            self.chain_id = '0'
+        if self.chain_id == " ":
+            self.chain_id = "0"
         self.res_name = in_fff_rec[fssp_rec.align.res_name]
         if self.res_name == self.res_name.lower():
-            self.res_name = 'C'
+            self.res_name = "C"
         self.ss1 = in_fff_rec[fssp_rec.align.ss1]
         self.turn3 = in_fff_rec[fssp_rec.align.turn3]
         self.turn4 = in_fff_rec[fssp_rec.align.turn4]
@@ -223,7 +232,7 @@ class FSSPAlignDict(dict):
 
     def sequence(self, num):
         """Return a sequence string."""
-        s = ''
+        s = ""
         for i in sorted(self.abs_res_dict):
             s += self.abs(i).pos_align_dict[num].aa
         return s
@@ -232,20 +241,20 @@ class FSSPAlignDict(dict):
         """Create a FASTA multi alignment record."""
         mult_align_dict = {}
         for j in self.abs(1).pos_align_dict:
-            mult_align_dict[j] = ''
+            mult_align_dict[j] = ""
         for fssp_record in self.values():
             for j in fssp_record.pos_align_dict:
                 mult_align_dict[j] += fssp_record.pos_align_dict[j].aa
-        out_str = ''
+        out_str = ""
         for i in sorted(mult_align_dict):
-            out_str += '> %d\n' % i
+            out_str += "> %d\n" % i
             k = 0
             for j in mult_align_dict[i]:
                 k += 1
                 if k % 72 == 0:
-                    out_str += '\n'
+                    out_str += "\n"
                 out_str += j
-            out_str += '\n'
+            out_str += "\n"
         return out_str
 
 
@@ -281,7 +290,7 @@ def read_fssp(fssp_handle):
         curline = fssp_handle.readline()
 
     if not summary_title.match(curline):
-        raise ValueError('Bad FSSP file: no summary record found')
+        raise ValueError("Bad FSSP file: no summary record found")
     curline = fssp_handle.readline()  # Read the title line, discard
     curline = fssp_handle.readline()  # Read the next line
     # Process the summary records into a list
@@ -292,15 +301,14 @@ def read_fssp(fssp_handle):
 
     # Outer loop: process everything up to the EQUIVALENCES title record
     while not equiv_title.match(curline):
-        while (not alignments_title.match(curline) and
-               not equiv_title.match(curline)):
+        while not alignments_title.match(curline) and not equiv_title.match(curline):
             curline = fssp_handle.readline()
         if not alignments_title.match(curline):
             if equiv_title.match(curline):
                 # print("Reached equiv_title")
                 break
             else:
-                raise ValueError('Bad FSSP file: no alignments title record found')
+                raise ValueError("Bad FSSP file: no alignments title record found")
 
         if equiv_title.match(curline):
             break
@@ -311,13 +319,13 @@ def read_fssp(fssp_handle):
         while alignments_rec.match(curline):
             align_rec = FSSPAlignRec(fff_rec(curline))
             key = align_rec.chain_id + align_rec.res_name + str(align_rec.pdb_res_num)
-            align_list = curline[fssp_rec.align.start_aa_list:].strip().split()
+            align_list = curline[fssp_rec.align.start_aa_list :].strip().split()
             if key not in align_dict:
                 align_dict[key] = align_rec
             align_dict[key].add_align_list(align_list)
             curline = fssp_handle.readline()
             if not curline:
-                print('EOFEOFEOF')
+                print("EOFEOFEOF")
                 raise EOFError
     for i in align_dict.values():
         i.pos_align_list2dict()

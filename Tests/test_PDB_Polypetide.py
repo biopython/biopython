@@ -53,7 +53,44 @@ class PolypeptideTests(unittest.TestCase):
         self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
         self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
         self.assertEqual(str(pp[2].get_sequence()), "TACQG")
-        self.assertEqual([ca.serial_number for ca in pp[0].get_ca_list()], [10, 18, 26, 37, 46, 50, 57, 66, 75, 82, 93, 104, 112, 124, 131, 139, 150, 161, 173, 182, 189, 197, 208, 213, 222, 231, 236, 242, 251, 260, 267, 276, 284])
+        self.assertEqual(
+            [ca.serial_number for ca in pp[0].get_ca_list()],
+            [
+                10,
+                18,
+                26,
+                37,
+                46,
+                50,
+                57,
+                66,
+                75,
+                82,
+                93,
+                104,
+                112,
+                124,
+                131,
+                139,
+                150,
+                161,
+                173,
+                182,
+                189,
+                197,
+                208,
+                213,
+                222,
+                231,
+                236,
+                242,
+                251,
+                260,
+                267,
+                276,
+                284,
+            ],
+        )
         taus = pp[1].get_tau_list()
         self.assertAlmostEqual(taus[0], 0.3597907225123525, places=3)
         self.assertAlmostEqual(taus[1], 0.43239284636769254, places=3)
@@ -64,6 +101,6 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(thetas[2], 2.0702447422720143, places=3)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

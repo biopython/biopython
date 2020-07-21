@@ -9,7 +9,6 @@
 # and *.aln where we have not requested an explicit name?
 """Tests for Clustalw tool."""
 
-from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
 
@@ -24,7 +23,7 @@ from Bio.Application import ApplicationError
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 clustalw_exe = None
 if sys.platform == "win32":
@@ -62,21 +61,21 @@ if sys.platform == "win32":
             if clustalw_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     # Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
     # command, but this does cause them to quit cleanly.  Otherwise they prompt
     # the user for input (causing a lock up).
     output = getoutput("clustalw2 --version")
     # Since "not found" may be in another language, try and be sure this is
     # really the clustalw tool's output
-    if "not found" not in output and "CLUSTAL" in output \
-       and "Multiple Sequence Alignments" in output:
-        clustalw_exe = "clustalw2"
+    if "not found" not in output and "not recognized" not in output:
+        if "CLUSTAL" in output and "Multiple Sequence Alignments" in output:
+            clustalw_exe = "clustalw2"
     if not clustalw_exe:
         output = getoutput("clustalw --version")
-        if "not found" not in output and "CLUSTAL" in output \
-           and "Multiple Sequence Alignments" in output:
-            clustalw_exe = "clustalw"
+        if "not found" not in output and "not recognized" not in output:
+            if "CLUSTAL" in output and "Multiple Sequence Alignments" in output:
+                clustalw_exe = "clustalw"
 
 if not clustalw_exe:
     raise MissingExternalDependencyError(
@@ -243,11 +242,10 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         # records should show the deadlock but is very slow - just thirty
         # seems to lockup on Mac OS X, even 20 on Linux (without the fix).
         input_file = "temp_cw_prot.fasta"
-        handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
-        SeqIO.write(records, handle, "fasta")
-        handle.close()
-        del handle, records
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
+        del records
         output_file = "temp_cw_prot.aln"
 
         cline = ClustalwCommandline(clustalw_exe,
@@ -260,9 +258,8 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp with space.aln"
 
         cline = ClustalwCommandline(clustalw_exe,

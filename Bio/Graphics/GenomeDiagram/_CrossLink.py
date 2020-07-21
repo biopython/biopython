@@ -9,11 +9,12 @@
 from reportlab.lib import colors
 
 
-class CrossLink(object):
+class CrossLink:
     """Hold information for drawing a cross link between features."""
 
-    def __init__(self, featureA, featureB,
-                 color=colors.lightgreen, border=None, flip=False):
+    def __init__(
+        self, featureA, featureB, color=colors.lightgreen, border=None, flip=False
+    ):
         """Create a new cross link.
 
         Arguments featureA and featureB should GenomeDiagram feature objects,
@@ -32,7 +33,7 @@ class CrossLink(object):
         # Initialize attributes
         self.featureA = featureA
         self.featureB = featureB
-        self.color = color            # default color to draw the feature
+        self.color = color  # default color to draw the feature
         self.border = border
         self.flip = flip
 

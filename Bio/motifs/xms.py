@@ -19,35 +19,39 @@ class XMSScanner:
     def __init__(self, doc):
         """Generate motif Record from xms document, an XML-like motif pfm file."""
         self.record = Record()
-        for child in doc.getElementsByTagName('motif'):
+        for child in doc.getElementsByTagName("motif"):
             if child.nodeType == Node.ELEMENT_NODE:
                 self.handle_motif(child)
 
     def handle_motif(self, node):
         """Read the motif's name and column from the node and add the motif record."""
         motif_name = self.get_text(node.getElementsByTagName("name"))
-        nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
+        nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
 
         for column in node.getElementsByTagName("column"):
-            [nucleotide_counts[nucleotide].append(float(nucleotide_count))
-             for nucleotide, nucleotide_count in zip(['A', 'C', 'G', 'T'], self.get_acgt(column))]
+            [
+                nucleotide_counts[nucleotide].append(float(nucleotide_count))
+                for nucleotide, nucleotide_count in zip(
+                    ["A", "C", "G", "T"], self.get_acgt(column)
+                )
+            ]
 
-        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+        motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
         motif.name = motif_name
 
         self.record.append(motif)
 
     def get_property_value(self, node, key_name):
         """Extract the value of the motif's property named key_name from node."""
-        for cur_property in node.getElementsByTagName('prop'):
+        for cur_property in node.getElementsByTagName("prop"):
             right_property = False
             cur_value = None
             for child in cur_property.childNodes:
                 if child.nodeType != Node.ELEMENT_NODE:
                     continue
-                if child.tagName == 'key' and self.get_text([child]) == key_name:
+                if child.tagName == "key" and self.get_text([child]) == key_name:
                     right_property = True
-                if child.tagName == 'value':
+                if child.tagName == "value":
                     cur_value = self.get_text([child])
             if right_property:
                 return cur_value
@@ -56,7 +60,7 @@ class XMSScanner:
     def get_acgt(self, node):
         """Get and return the motif's weights of A, C, G, T."""
         a, c, g, t = 0.0, 0.0, 0.0, 0.0
-        for weight in node.getElementsByTagName('weight'):
+        for weight in node.getElementsByTagName("weight"):
             if weight.getAttribute("symbol") == "adenine":
                 a = float(self.get_text([weight]))
             elif weight.getAttribute("symbol") == "cytosine":
@@ -76,7 +80,7 @@ class XMSScanner:
             elif node.hasChildNodes:
                 retlist.append(self.get_text(node.childNodes))
 
-        return re.sub(r'\s+', ' ', ''.join(retlist))
+        return re.sub(r"\s+", " ", "".join(retlist))
 
 
 class Record(list):

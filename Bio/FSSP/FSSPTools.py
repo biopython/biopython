@@ -15,7 +15,7 @@ new_sum, new_align = filter(sum, align, 'zscore', 4, 7.5)
 from Bio import FSSP
 import copy
 from Bio.Align import MultipleSeqAlignment
-from Bio import Alphabet
+from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -24,8 +24,8 @@ class FSSPAlign(MultipleSeqAlignment):
     """Provision to do single Multi Sequence Alignment from FSSP files."""
 
     def _add_numbering_table(self, new_record):
-        new_record.annotations['abs2pdb'] = {}
-        new_record.annotations['pdb2abs'] = {}
+        new_record.annotations["abs2pdb"] = {}
+        new_record.annotations["pdb2abs"] = {}
 
 
 class FSSPMultAlign(dict):
@@ -42,19 +42,23 @@ def mult_align(sum_dict, align_dict):
     """Return multiple alignment instance (MultipleSeqAlignment)."""
     mult_align_dict = {}
     for j in align_dict.abs(1).pos_align_dict:
-        mult_align_dict[j] = ''
+        mult_align_dict[j] = ""
 
     for i in range(1, len(align_dict) + 1):
         # loop on positions
         for j in align_dict.abs(i).pos_align_dict:
             # loop within a position
             mult_align_dict[j] += align_dict.abs(i).pos_align_dict[j].aa
-    alpha = Alphabet.Gapped(Alphabet.IUPAC.extended_protein)
-    fssp_align = MultipleSeqAlignment([], alphabet=alpha)
+    fssp_align = MultipleSeqAlignment([], alphabet=generic_protein)
     for i in sorted(mult_align_dict):
-        fssp_align.append(SeqRecord(Seq(mult_align_dict[i], alpha),
-                                    sum_dict[i].pdb2 + sum_dict[i].chain2))
+        fssp_align.append(
+            SeqRecord(
+                Seq(mult_align_dict[i], generic_protein),
+                sum_dict[i].pdb2 + sum_dict[i].chain2,
+            )
+        )
     return fssp_align
+
 
 #
 # Warning: this function really slows down when filtering large FSSP files.
@@ -72,9 +76,6 @@ def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
     """
     new_sum_dict = FSSP.FSSPSumDict()
     new_align_dict = copy.deepcopy(align_dict)
-#    for i in align_dict:
-#        new_align_dict[i]  = copy.copy(align_dict[i])
-#    new_align_dict = copy.copy(align_dict)
     for prot_num in sum_dict:
         attr_value = getattr(sum_dict[prot_num], filter_attribute)
         if attr_value >= low_bound and attr_value <= high_bound:
@@ -83,8 +84,9 @@ def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
     for pos_num in new_align_dict.abs_res_dict:
         new_align_dict.abs(pos_num).pos_align_dict = {}
         for prot_num in prot_numbers:
-            new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
-                    align_dict.abs(pos_num).pos_align_dict[prot_num]
+            new_align_dict.abs(pos_num).pos_align_dict[prot_num] = align_dict.abs(
+                pos_num
+            ).pos_align_dict[prot_num]
     return new_sum_dict, new_align_dict
 
 
@@ -104,6 +106,7 @@ def name_filter(sum_dict, align_dict, name_list):
     for pos_num in new_align_dict.abs_res_dict:
         new_align_dict.abs(pos_num).pos_align_dict = {}
         for prot_num in prot_numbers:
-            new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
-                    align_dict.abs(pos_num).pos_align_dict[prot_num]
+            new_align_dict.abs(pos_num).pos_align_dict[prot_num] = align_dict.abs(
+                pos_num
+            ).pos_align_dict[prot_num]
     return new_sum_dict, new_align_dict

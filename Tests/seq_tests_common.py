@@ -4,9 +4,6 @@
 
 """Common code for SeqRecord object tests."""
 
-from Bio._py3k import range
-from Bio._py3k import basestring
-
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
@@ -137,8 +134,7 @@ def compare_feature(old_f, new_f):
             elif isinstance(new_f.qualifiers[key], list):
                 # Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
-                    "%s -> %s" % (repr(old_f.qualifiers[key]),
-                                  repr(new_f.qualifiers[key]))
+                    "%r -> %r" % (old_f.qualifiers[key], new_f.qualifiers[key])
             else:
                 raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:
@@ -184,9 +180,9 @@ def compare_sequence(old, new):
         for j in indices:
             expected = s[i:j]
             assert expected == str(old[i:j]), \
-                "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
+                "Slice %r vs %r" % (expected, old[i:j])
             assert expected == str(new[i:j]), \
-                "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
+                "Slice %r vs %r" % (expected, new[i:j])
             # Slicing with step of 1 should make no difference.
             # Slicing with step 3 might be useful for codons.
             for step in [1, 3]:
@@ -243,14 +239,14 @@ def compare_record(old, new):
     # 'ncbi_taxon' and 'gi'.
     # TODO - address these, see Bug 2681?
     new_keys = set(new.annotations).difference(old.annotations)
-    new_keys = new_keys.difference(['cross_references', 'date',
-                                    'data_file_division', 'ncbi_taxid',
-                                    'gi'])
+    new_keys = new_keys.difference(["cross_references", "date",
+                                    "data_file_division", "ncbi_taxid",
+                                    "gi"])
     assert not new_keys, "Unexpected new annotation keys: %s" \
         % ", ".join(new_keys)
     missing_keys = set(old.annotations).difference(new.annotations)
-    missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
-                                            'structured_comment'])
+    missing_keys = missing_keys.difference(["ncbi_taxid",  # Can't store chimeras
+                                            "structured_comment"])
     assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
         % ", ".join(missing_keys)
 
@@ -275,14 +271,13 @@ def compare_record(old, new):
             old_comment = old_comment.replace("\n", " ").replace("  ", " ")
             new_comment = new_comment.replace("\n", " ").replace("  ", " ")
             assert old_comment == new_comment, \
-                "Comment annotation changed by load/retrieve\n" \
-                "Was:%s\nNow:%s" \
-                % (repr(old_comment), repr(new_comment))
+                ("Comment annotation changed by load/retrieve\n"
+                 "Was:%r\nNow:%r" % (old_comment, new_comment))
         elif key in ["taxonomy", "organism", "source"]:
             # If there is a taxon id recorded, these fields get overwritten
             # by data from the taxon/taxon_name tables.  There is no
             # guarantee that they will be identical after a load/retrieve.
-            assert isinstance(new.annotations[key], basestring) \
+            assert isinstance(new.annotations[key], str) \
                 or isinstance(new.annotations[key], list)
         elif isinstance(old.annotations[key], type(new.annotations[key])):
             assert old.annotations[key] == new.annotations[key], \

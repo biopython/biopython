@@ -13,53 +13,11 @@ This module contains a parser for the EMBOSS pairs/simple file format, for
 example from the alignret, water and needle tools.
 """
 
-from __future__ import print_function
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
-
-
-class EmbossWriter(SequentialAlignmentWriter):
-    """Emboss alignment writer (WORK IN PROGRESS).
-
-    Writes a simplfied version of the EMBOSS pairs/simple file format.
-    A lot of the information their tools record in their headers is not
-    available and is omitted.
-    """
-
-    def write_header(self):
-        """Write header for the file."""
-        handle = self.handle
-        handle.write("########################################\n")
-        handle.write("# Program: Biopython\n")
-        try:
-            handle.write("# Report_file: %s\n" % handle.name)
-        except AttributeError:
-            pass
-        handle.write("########################################\n")
-
-    def write_footer(self):
-        """Write footer for the file."""
-        handle = self.handle
-        handle.write("#---------------------------------------\n")
-        handle.write("#---------------------------------------\n")
-
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
-        handle = self.handle
-        handle.write("#=======================================\n")
-        handle.write("#\n")
-        handle.write("# Aligned_sequences: %i\n" % len(alignment))
-        for i, record in enumerate(alignment):
-            handle.write("# %i: %s\n" % (i + 1, record.id))
-        handle.write("#\n")
-        handle.write("# Length: %i\n" % alignment.get_alignment_length())
-        handle.write("#\n")
-        handle.write("#=======================================\n")
-        handle.write("\n")
-        raise NotImplementedError("The subclass should implement the write_alignment method.")
+from Bio.AlignIO.Interfaces import AlignmentIterator
 
 
 class EmbossIterator(AlignmentIterator):
@@ -94,7 +52,6 @@ class EmbossIterator(AlignmentIterator):
         length_of_seqs = None
         number_of_seqs = None
         ids = []
-        seqs = []
         header_dict = {}
 
         while line[0] == "#":
@@ -117,14 +74,14 @@ class EmbossIterator(AlignmentIterator):
                 length_of_seqs = int(parts[1].strip())
 
             # Parse the rest of the header
-            if key == 'identity':
-                header_dict['identity'] = int(parts[1].strip().split('/')[0])
-            if key == 'similarity':
-                header_dict['similarity'] = int(parts[1].strip().split('/')[0])
-            if key == 'gaps':
-                header_dict['gaps'] = int(parts[1].strip().split('/')[0])
-            if key == 'score':
-                header_dict['score'] = float(parts[1].strip())
+            if key == "identity":
+                header_dict["identity"] = int(parts[1].strip().split("/")[0])
+            if key == "similarity":
+                header_dict["similarity"] = int(parts[1].strip().split("/")[0])
+            if key == "gaps":
+                header_dict["gaps"] = int(parts[1].strip().split("/")[0])
+            if key == "score":
+                header_dict["score"] = float(parts[1].strip())
 
             # And read in another line...
             line = handle.readline()
@@ -134,10 +91,14 @@ class EmbossIterator(AlignmentIterator):
         if length_of_seqs is None:
             raise ValueError("Length of sequences missing!")
 
-        if self.records_per_alignment is not None \
-        and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i"
-                             % (number_of_seqs, self.records_per_alignment))
+        if (
+            self.records_per_alignment is not None
+            and self.records_per_alignment != number_of_seqs
+        ):
+            raise ValueError(
+                "Found %i records in this alignment, told to expect %i"
+                % (number_of_seqs, self.records_per_alignment)
+            )
 
         seqs = ["" for id in ids]
         seq_starts = []
@@ -168,10 +129,12 @@ class EmbossIterator(AlignmentIterator):
                         end = int(end)
 
                     if index < 0 or index >= number_of_seqs:
-                        raise ValueError("Expected index %i in range [0,%i)"
-                                         % (index, number_of_seqs))
+                        raise ValueError(
+                            "Expected index %i in range [0,%i)"
+                            % (index, number_of_seqs)
+                        )
                     # The identifier is truncated...
-                    assert id == ids[index] or id == ids[index][:len(id)]
+                    assert id == ids[index] or id == ids[index][: len(id)]
 
                     if len(seq_starts) == index:
                         # Record the start
@@ -181,17 +144,33 @@ class EmbossIterator(AlignmentIterator):
                     if start >= end:
                         assert seq.replace("-", "") == "", line
                     elif start - seq_starts[index] != len(seqs[index].replace("-", "")):
-                        raise ValueError("Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s"
-                                         % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
-                                            start, line))
+                        raise ValueError(
+                            "Found %i chars so far for sequence %i (%s, %r), line says start %i:\n%s"
+                            % (
+                                len(seqs[index].replace("-", "")),
+                                index,
+                                id,
+                                seqs[index],
+                                start,
+                                line,
+                            )
+                        )
                     seqs[index] += seq
 
                     # Check the end ...
                     if end != seq_starts[index] + len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s"
-                            % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
-                               seq_starts[index], end, line))
+                            "Found %i chars so far for sequence %i (%s, %r, start=%i), file says end %i:\n%s"
+                            % (
+                                len(seqs[index].replace("-", "")),
+                                index,
+                                id,
+                                seqs[index],
+                                seq_starts[index],
+                                end,
+                                line,
+                            )
+                        )
 
                     index += 1
                     if index >= number_of_seqs:
@@ -207,18 +186,24 @@ class EmbossIterator(AlignmentIterator):
                 raise ValueError("Unrecognised EMBOSS pairwise line: %r\n" % line)
 
             line = handle.readline()
-            if line.rstrip() == "#---------------------------------------" \
-            or line.rstrip() == "#=======================================":
+            if (
+                line.rstrip() == "#---------------------------------------"
+                or line.rstrip() == "#======================================="
+            ):
                 # End of alignment
                 self._header = line
                 break
 
         assert index == 0
 
-        if self.records_per_alignment is not None \
-        and self.records_per_alignment != len(ids):
-            raise ValueError("Found %i records in this alignment, told to expect %i"
-                             % (len(ids), self.records_per_alignment))
+        if (
+            self.records_per_alignment is not None
+            and self.records_per_alignment != len(ids)
+        ):
+            raise ValueError(
+                "Found %i records in this alignment, told to expect %i"
+                % (len(ids), self.records_per_alignment)
+            )
 
         records = []
         for id, seq in zip(ids, seqs):
@@ -227,9 +212,10 @@ class EmbossIterator(AlignmentIterator):
                 # for leading gaps, and thus fails to parse.  This old version
                 # is still used as of Dec 2008 behind the EBI SOAP webservice:
                 # http://www.ebi.ac.uk/Tools/webservices/wsdl/WSEmboss.wsdl
-                raise ValueError("Error parsing alignment - sequences of "
-                                 "different length? You could be using an "
-                                 "old version of EMBOSS.")
-            records.append(SeqRecord(Seq(seq, self.alphabet),
-                                     id=id, description=id))
+                raise ValueError(
+                    "Error parsing alignment - sequences of "
+                    "different length? You could be using an "
+                    "old version of EMBOSS."
+                )
+            records.append(SeqRecord(Seq(seq, self.alphabet), id=id, description=id))
         return MultipleSeqAlignment(records, self.alphabet, annotations=header_dict)

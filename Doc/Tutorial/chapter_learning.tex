@@ -1,4 +1,5 @@
 \chapter{Supervised learning methods}
+\label{chapter:learning}
 
 Note the supervised learning methods described in this chapter all require Numerical Python (numpy) to be installed.
 
@@ -9,9 +10,9 @@ Note the supervised learning methods described in this chapter all require Numer
 
 Logistic regression is a supervised learning approach that attempts to distinguish $K$ classes from each other using a weighted sum of some predictor variables $x_i$. The logistic regression model is used to calculate the weights $\beta_i$ of the predictor variables. In Biopython, the logistic regression model is currently implemented for two classes only ($K = 2$); the number of predictor variables has no predefined limit.
 
-As an example, let's try to predict the operon structure in bacteria. An operon is a set of adjacent genes on the same strand of DNA that  are transcribed into a single mRNA molecule. Translation of the single mRNA molecule then yields the individual proteins. For {\it Bacillus subtilis}, whose data we will be using, the average number of genes in an operon is about 2.4.
+As an example, let's try to predict the operon structure in bacteria. An operon is a set of adjacent genes on the same strand of DNA that  are transcribed into a single mRNA molecule. Translation of the single mRNA molecule then yields the individual proteins. For \textit{Bacillus subtilis}, whose data we will be using, the average number of genes in an operon is about 2.4.
 
-As a first step in understanding gene regulation in bacteria, we need to know the operon structure. For about 10\% of the genes in {\it Bacillus subtilis}, the operon structure is known from experiments. A supervised learning method can be used to predict the operon structure for the remaining 90\% of the genes.
+As a first step in understanding gene regulation in bacteria, we need to know the operon structure. For about 10\% of the genes in \textit{Bacillus subtilis}, the operon structure is known from experiments. A supervised learning method can be used to predict the operon structure for the remaining 90\% of the genes.
 
 For such a supervised learning approach, we need to choose some predictor variables $x_i$ that can be measured easily and are somehow related to the operon structure. One predictor variable might be the distance in base pairs between genes. Adjacent genes belonging to the same operon tend to be separated by a relatively short distance, whereas adjacent genes in different operons tend to have a larger space between them to allow for promoter and terminator sequences. Another predictor variable is based on gene expression measurements. By definition, genes belonging to the same operon have equal gene expression profiles, while genes in different operons are expected to have different expression profiles. In practice, the measured expression profiles of genes in the same operon are not quite identical due to the presence of measurement errors. To assess the similarity in the gene expression profiles, we assume that the measurement errors follow a normal distribution and calculate the corresponding log-likelihood score.
 
@@ -39,7 +40,7 @@ In the logistic regression model, the probability of belonging to a class depend
 Using a set of gene pairs for which it is known whether they belong to the same operon (class OP) or to different operons (class NOP), we can calculate the weights $\beta_0$, $\beta_1$, $\beta_2$ by maximizing the log-likelihood corresponding to the probability functions (\ref{eq:OP}) and (\ref{eq:NOP}).
 
 \subsection{Training the logistic regression model}
-\label{subsec:LogisticRegressionTraining}
+\label{sec:LogisticRegressionTraining}
 
 \begin{table}[h]
 \begin{center}
@@ -48,30 +49,30 @@ Using a set of gene pairs for which it is known whether they belong to the same 
 \hline
 Gene pair & Intergene distance ($x_1$) & Gene expression score ($x_2$) & Class\\
 \hline
-{\it cotJA} --- {\it cotJB} & -53 & -200.78 & OP\\
-{\it yesK} --- {\it yesL} & 117 & -267.14 & OP\\
-{\it lplA} --- {\it lplB} & 57 & -163.47 & OP\\
-{\it lplB} --- {\it lplC} & 16 & -190.30 & OP\\
-{\it lplC} --- {\it lplD} & 11 & -220.94 & OP\\
-{\it lplD} --- {\it yetF} & 85 & -193.94 & OP\\
-{\it yfmT} --- {\it yfmS} & 16 & -182.71 & OP\\
-{\it yfmF} --- {\it yfmE} & 15 & -180.41 & OP\\
-{\it citS} --- {\it citT} & -26 & -181.73 & OP\\
-{\it citM} --- {\it yflN} & 58 & -259.87 & OP\\
-{\it yfiI} --- {\it yfiJ} & 126 & -414.53 & NOP\\
-{\it lipB} --- {\it yfiQ} & 191 & -249.57 & NOP\\
-{\it yfiU} --- {\it yfiV} & 113 & -265.28 & NOP\\
-{\it yfhH} --- {\it yfhI} & 145 & -312.99 & NOP\\
-{\it cotY} --- {\it cotX} & 154 & -213.83 & NOP\\
-{\it yjoB} --- {\it rapA} & 147 & -380.85 & NOP\\
-{\it ptsI} --- {\it splA} & 93 & -291.13 & NOP \\
+\textit{cotJA} --- \textit{cotJB} & -53 & -200.78 & OP\\
+\textit{yesK} --- \textit{yesL} & 117 & -267.14 & OP\\
+\textit{lplA} --- \textit{lplB} & 57 & -163.47 & OP\\
+\textit{lplB} --- \textit{lplC} & 16 & -190.30 & OP\\
+\textit{lplC} --- \textit{lplD} & 11 & -220.94 & OP\\
+\textit{lplD} --- \textit{yetF} & 85 & -193.94 & OP\\
+\textit{yfmT} --- \textit{yfmS} & 16 & -182.71 & OP\\
+\textit{yfmF} --- \textit{yfmE} & 15 & -180.41 & OP\\
+\textit{citS} --- \textit{citT} & -26 & -181.73 & OP\\
+\textit{citM} --- \textit{yflN} & 58 & -259.87 & OP\\
+\textit{yfiI} --- \textit{yfiJ} & 126 & -414.53 & NOP\\
+\textit{lipB} --- \textit{yfiQ} & 191 & -249.57 & NOP\\
+\textit{yfiU} --- \textit{yfiV} & 113 & -265.28 & NOP\\
+\textit{yfhH} --- \textit{yfhI} & 145 & -312.99 & NOP\\
+\textit{cotY} --- \textit{cotX} & 154 & -213.83 & NOP\\
+\textit{yjoB} --- \textit{rapA} & 147 & -380.85 & NOP\\
+\textit{ptsI} --- \textit{splA} & 93 & -291.13 & NOP \\
 \hline
 \end{tabular}
 \label{table:training}
 \end{center}
 \end{table}
 
-Table \ref{table:training} lists some of the {\it Bacillus subtilis} gene pairs for which the operon structure is known.
+Table \ref{table:training} lists some of the \textit{Bacillus subtilis} gene pairs for which the operon structure is known.
 Let's calculate the logistic regression model from these data:
 
 %NOTE - can't use this as a doctest in case NumPy is missing (Jython).
@@ -182,7 +183,7 @@ The optional keyword \verb+typecode+ can almost always be ignored. This keyword 
 
 \subsection{Using the logistic regression model for classification}
 
-Classification is performed by calling the \verb+classify+ function. Given a logistic regression model and the values for $x_1$ and $x_2$ (e.g. for a gene pair of unknown operon structure), the \verb+classify+ function returns \verb+1+ or \verb+0+, corresponding to class OP and class NOP, respectively. For example, let's consider the gene pairs {\it yxcE}, {\it yxcD} and {\it yxiB}, {\it yxiA}:
+Classification is performed by calling the \verb+classify+ function. Given a logistic regression model and the values for $x_1$ and $x_2$ (e.g. for a gene pair of unknown operon structure), the \verb+classify+ function returns \verb+1+ or \verb+0+, corresponding to class OP and class NOP, respectively. For example, let's consider the gene pairs \textit{yxcE}, \textit{yxcD} and \textit{yxiB}, \textit{yxiA}:
 
 \begin{table}[h]
 \begin{center}
@@ -191,14 +192,14 @@ Classification is performed by calling the \verb+classify+ function. Given a log
 \hline
 Gene pair & Intergene distance $x_1$ & Gene expression score $x_2$ \\
 \hline
-{\it yxcE} --- {\it yxcD} & 6 & -173.143442352 \\
-{\it yxiB} --- {\it yxiA} & 309 & -271.005880394 \\
+\textit{yxcE} --- \textit{yxcD} & 6 & -173.143442352 \\
+\textit{yxiB} --- \textit{yxiA} & 309 & -271.005880394 \\
 \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-The logistic regression model classifies {\it yxcE}, {\it yxcD} as belonging to the same operon (class OP), while {\it yxiB}, {\it yxiA} are predicted to belong to different operons:
+The logistic regression model classifies \textit{yxcE}, \textit{yxcD} as belonging to the same operon (class OP), while \textit{yxiB}, \textit{yxiA} are predicted to belong to different operons:
 \begin{minted}{pycon}
 >>> print("yxcE, yxcD:", LogisticRegression.classify(model, [6, -173.143442352]))
 yxcE, yxcD: 1
@@ -207,13 +208,13 @@ yxiB, yxiA: 0
 \end{minted}
 (which, by the way, agrees with the biological literature).
 
-To find out how confident we can be in these predictions, we can call the \verb+calculate+ function to obtain the probabilities (equations (\ref{eq:OP}) and \ref{eq:NOP}) for class OP and NOP. For {\it yxcE}, {\it yxcD} we find
+To find out how confident we can be in these predictions, we can call the \verb+calculate+ function to obtain the probabilities (equations (\ref{eq:OP}) and \ref{eq:NOP}) for class OP and NOP. For \textit{yxcE}, \textit{yxcD} we find
 \begin{minted}{pycon}
 >>> q, p = LogisticRegression.calculate(model, [6, -173.143442352])
 >>> print("class OP: probability =", p, "class NOP: probability =", q)
 class OP: probability = 0.993242163503 class NOP: probability = 0.00675783649744
 \end{minted}
-and for {\it yxiB}, {\it yxiA}
+and for \textit{yxiB}, \textit{yxiA}
 \begin{minted}{pycon}
 >>> q, p = LogisticRegression.calculate(model, [309, -271.005880394])
 >>> print("class OP: probability =", p, "class NOP: probability =", q)
@@ -273,7 +274,7 @@ The logistic regression model is similar to linear discriminant analysis. In lin
 
 Another similar approach is a support vector machine with a linear kernel. Such an SVM also uses a linear combination of the predictors, but estimates the coefficients $\beta$ from the predictor variables $x$ near the boundary region between the classes. If the logistic regression model (equations (\ref{eq:OP}) and (\ref{eq:NOP})) is a good description for $x$ away from the boundary region, we expect the logistic regression model to perform better than an SVM with a linear kernel, as it relies on more data. If not, an SVM with a linear kernel may perform better.
 
-Trevor Hastie, Robert Tibshirani, and Jerome Friedman: {\it The Elements of Statistical Learning. Data Mining, Inference, and Prediction}. Springer Series in Statistics, 2001. Chapter 4.4.
+Trevor Hastie, Robert Tibshirani, and Jerome Friedman: \textit{The Elements of Statistical Learning. Data Mining, Inference, and Prediction}. Springer Series in Statistics, 2001. Chapter 4.4.
 
 \section{$k$-Nearest Neighbors}
 
@@ -293,13 +294,13 @@ Using the data in Table \ref{table:training}, we create and initialize a $k$-nea
 >>> model = kNN.train(xs, ys, k)
 \end{minted}
 
-where \verb+xs+ and \verb+ys+ are the same as in Section \ref{subsec:LogisticRegressionTraining}. Here, \verb+k+ is the number of neighbors $k$ that will be considered for the classification. For classification into two classes, choosing an odd number for $k$ lets you avoid tied votes. The function name \verb+train+ is a bit of a misnomer, since no model training is done: this function simply stores \verb+xs+, \verb+ys+, and \verb+k+ in \verb+model+.
+where \verb+xs+ and \verb+ys+ are the same as in Section \ref{sec:LogisticRegressionTraining}. Here, \verb+k+ is the number of neighbors $k$ that will be considered for the classification. For classification into two classes, choosing an odd number for $k$ lets you avoid tied votes. The function name \verb+train+ is a bit of a misnomer, since no model training is done: this function simply stores \verb+xs+, \verb+ys+, and \verb+k+ in \verb+model+.
 
 \subsection{Using a $k$-nearest neighbors model for classification}
 
 To classify new data using the $k$-nearest neighbors model, we use the \verb+classify+ function. This function takes a data point $(x_1,x_2)$ and finds the $k$-nearest neighbors in the training data set \verb+xs+. The data point $(x_1, x_2)$ is then classified based on which category (\verb+ys+) occurs most among the $k$ neighbors.
 
-For the example of the gene pairs {\it yxcE}, {\it yxcD} and {\it yxiB}, {\it yxiA}, we find:
+For the example of the gene pairs \textit{yxcE}, \textit{yxcD} and \textit{yxiB}, \textit{yxiA}, we find:
 \begin{minted}{pycon}
 >>> x = [6, -173.143442352]
 >>> print("yxcE, yxcD:", kNN.classify(model, x))
@@ -308,7 +309,7 @@ yxcE, yxcD: 1
 >>> print("yxiB, yxiA:", kNN.classify(model, x))
 yxiB, yxiA: 0
 \end{minted}
-In agreement with the logistic regression model, {\it yxcE}, {\it yxcD} are classified as belonging to the same operon (class OP), while {\it yxiB}, {\it yxiA} are predicted to belong to different operons.
+In agreement with the logistic regression model, \textit{yxcE}, \textit{yxcD} are classified as belonging to the same operon (class OP), while \textit{yxiB}, \textit{yxiA} are predicted to belong to different operons.
 
 The \verb+classify+ function lets us specify both a distance function and a weight function as optional arguments. The distance function affects which $k$ neighbors are chosen as the nearest neighbors, as these are defined as the neighbors with the smallest distance to the query point $(x, y)$. By default, the Euclidean distance is used. Instead, we could for example use the city-block (Manhattan) distance:
 
@@ -338,14 +339,14 @@ yxcE, yxcD: 1
 \end{minted}
 By default, all neighbors are given an equal weight.
 
-To find out how confident we can be in these predictions, we can call the \verb+calculate+ function, which will calculate the total weight assigned to the classes OP and NOP. For the default weighting scheme, this reduces to the number of neighbors in each category. For {\it yxcE}, {\it yxcD}, we find
+To find out how confident we can be in these predictions, we can call the \verb+calculate+ function, which will calculate the total weight assigned to the classes OP and NOP. For the default weighting scheme, this reduces to the number of neighbors in each category. For \textit{yxcE}, \textit{yxcD}, we find
 \begin{minted}{pycon}
 >>> x = [6, -173.143442352]
 >>> weight = kNN.calculate(model, x)
 >>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
 class OP: weight = 0.0 class NOP: weight = 3.0
 \end{minted}
-which means that all three neighbors of \verb+x1+, \verb+x2+ are in the NOP class. As another example, for {\it yesK}, {\it yesL} we find
+which means that all three neighbors of \verb+x1+, \verb+x2+ are in the NOP class. As another example, for \textit{yesK}, \textit{yesL} we find
 
 \begin{minted}{pycon}
 >>> x = [117, -267.14]
@@ -414,4 +415,3 @@ This section will describe the \verb|Bio.MaximumEntropy| module.
 \section{Markov Models}
 
 This section will describe the \verb|Bio.MarkovModel| and/or \verb|Bio.HMM.MarkovModel| modules.
-

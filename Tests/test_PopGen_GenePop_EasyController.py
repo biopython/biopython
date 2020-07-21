@@ -15,16 +15,17 @@ from Bio.PopGen.GenePop.EasyController import EasyController
 # test_PopGen_GenePop_nodepend tests code that does not require genepop
 
 found = False
-for path in os.environ['PATH'].split(os.pathsep):
+for path in os.environ["PATH"].split(os.pathsep):
     try:
         for filename in os.listdir(path):
-            if filename.startswith('Genepop'):
+            if filename.startswith("Genepop"):
                 found = True
     except os.error:
         pass  # Path doesn't exist - correct to pass
 if not found:
     raise MissingExternalDependencyError(
-        "Install GenePop if you want to use Bio.PopGen.GenePop.")
+        "Install GenePop if you want to use Bio.PopGen.GenePop."
+    )
 
 
 cur_dir = os.path.abspath(".")  # Tests directory
@@ -90,15 +91,15 @@ class AppTest(unittest.TestCase):
         hwe_excess = self.ctrl.test_hw_pop(0, "excess")
         self.assertEqual(hwe_excess["Locus1"], (0.4955, None, -0.16, -0.1623, 5))
 
-# These tests are frequently failing, possibly due to a Genepop problem.
-#    def test_get_avg_fst_pair_locus(self):
-#        """Test get average Fst for pairwise pops on a locus."""
-#        self.assertEqual(len(self.ctrl.get_avg_fst_pair_locus("Locus4")), 45)
-#
-#    def test_get_avg_fst_pair(self):
-#        """Test get pairwise Fst."""
-#        pop_fis =  self.ctrl.get_avg_fst_pair()
-#        self.assertEqual(len(pop_fis), 45)
+    # These tests are frequently failing, possibly due to a Genepop problem.
+    #    def test_get_avg_fst_pair_locus(self):
+    #        """Test get average Fst for pairwise pops on a locus."""
+    #        self.assertEqual(len(self.ctrl.get_avg_fst_pair_locus("Locus4")), 45)
+    #
+    #    def test_get_avg_fst_pair(self):
+    #        """Test get pairwise Fst."""
+    #        pop_fis =  self.ctrl.get_avg_fst_pair()
+    #        self.assertEqual(len(pop_fis), 45)
 
     def test_get_avg_fis(self):
         """Test average Fis."""

@@ -11,11 +11,11 @@ import unittest
 from os import path
 
 from Bio import Seq, SeqIO
-from Bio.Alphabet import generic_dna
 from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
 from Bio.SeqFeature import CompoundLocation, UnknownPosition, SeqFeature
 from Bio.SeqFeature import ExactPosition, WithinPosition, BetweenPosition
+from Bio.SeqFeature import OneOfPosition
 
 
 class TestReference(unittest.TestCase):
@@ -23,17 +23,28 @@ class TestReference(unittest.TestCase):
 
     def test_eq_identical(self):
         """Test two identical references eq() to True."""
-        testfile = path.join('GenBank', 'origin_line.gb')
-        rec1 = SeqIO.read(testfile, 'genbank')
-        rec2 = SeqIO.read(testfile, 'genbank')
+        testfile = path.join("GenBank", "origin_line.gb")
+        rec1 = SeqIO.read(testfile, "genbank")
+        rec2 = SeqIO.read(testfile, "genbank")
 
-        self.assertEqual(rec1.annotations['references'][0], rec1.annotations['references'][0])
-        cmp1, cmp2 = rec1.annotations['references'][0], rec2.annotations['references'][0]
-        self.assertEqual(cmp1, cmp2)
-        self.assertNotEqual(rec1.annotations['references'][0], rec1.annotations['references'][1])
-        self.assertNotEqual(rec1.annotations['references'][0], rec2.annotations['references'][1])
-        self.assertEqual(rec1.annotations['references'][1], rec1.annotations['references'][1])
-        self.assertEqual(rec1.annotations['references'][1], rec2.annotations['references'][1])
+        self.assertEqual(
+            rec1.annotations["references"][0], rec1.annotations["references"][0]
+        )
+        self.assertEqual(
+            rec1.annotations["references"][0], rec2.annotations["references"][0]
+        )
+        self.assertNotEqual(
+            rec1.annotations["references"][0], rec1.annotations["references"][1]
+        )
+        self.assertNotEqual(
+            rec1.annotations["references"][0], rec2.annotations["references"][1]
+        )
+        self.assertEqual(
+            rec1.annotations["references"][1], rec1.annotations["references"][1]
+        )
+        self.assertEqual(
+            rec1.annotations["references"][1], rec2.annotations["references"][1]
+        )
 
 
 class TestFeatureLocation(unittest.TestCase):
@@ -53,8 +64,8 @@ class TestFeatureLocation(unittest.TestCase):
         loc2 = FeatureLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, 'foo', 'bar')
-        loc2 = FeatureLocation(23, 42, 1, 'foo', 'bar')
+        loc1 = FeatureLocation(23, 42, 1, "foo", "bar")
+        loc2 = FeatureLocation(23, 42, 1, "foo", "bar")
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
@@ -75,31 +86,31 @@ class TestFeatureLocation(unittest.TestCase):
         loc2 = (23, 42, 1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, 'foo')
-        loc2 = FeatureLocation(23, 42, 1, 'bar')
+        loc1 = FeatureLocation(23, 42, 1, "foo")
+        loc2 = FeatureLocation(23, 42, 1, "bar")
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, 'foo', 'bar')
-        loc2 = FeatureLocation(23, 42, 1, 'foo', 'baz')
+        loc1 = FeatureLocation(23, 42, 1, "foo", "bar")
+        loc2 = FeatureLocation(23, 42, 1, "foo", "baz")
         self.assertNotEqual(loc1, loc2)
 
     def test_start_before_end(self):
         expected = "must be greater than or equal to start location"
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 23, 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 0, 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, AfterPosition(0), 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         # Features with UnknownPositions should pass check
         FeatureLocation(42, UnknownPosition())
@@ -119,21 +130,31 @@ class TestCompoundLocation(unittest.TestCase):
         self.assertEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
+        loc2 = CompoundLocation(
+            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)]
+        )
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
         """Test two different locations are not equal."""
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
-        loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1) + FeatureLocation(50, 60, 1)
+        loc2 = (
+            FeatureLocation(12, 17, 1)
+            + FeatureLocation(23, 42, 1)
+            + FeatureLocation(50, 60, 1)
+        )
         self.assertNotEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
         loc2 = FeatureLocation(12, 17, -1) + FeatureLocation(23, 42, -1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
-        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], 'order')
+        loc1 = CompoundLocation(
+            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)]
+        )
+        loc2 = CompoundLocation(
+            [FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], "order"
+        )
         self.assertNotEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
@@ -146,15 +167,14 @@ class TestSeqFeature(unittest.TestCase):
 
     def test_translation_checks_cds(self):
         """Test that a CDS feature is subject to respective checks."""
-        seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
         f = SeqFeature(FeatureLocation(0, 30), type="CDS")
-        f.qualifiers['transl_table'] = [11]
+        f.qualifiers["transl_table"] = [11]
         with self.assertRaises(TranslationError):
             f.translate(seq)
 
 
 class TestLocations(unittest.TestCase):
-
     def test_fuzzy(self):
         """Test fuzzy representations."""
         # check the positions alone
@@ -192,6 +212,36 @@ class TestLocations(unittest.TestCase):
         self.assertEqual(location2.nofuzzy_end, 24)
         self.assertEqual(location3.nofuzzy_start, 10)
         self.assertEqual(location3.nofuzzy_end, 40)
+
+
+class TestPositions(unittest.TestCase):
+    def test_pickle(self):
+        """Test pickle behaviour of position instances."""
+        # setup
+        import pickle
+
+        within_pos = WithinPosition(10, left=10, right=13)
+        between_pos = BetweenPosition(24, left=20, right=24)
+        oneof_pos = OneOfPosition(1888, [ExactPosition(1888), ExactPosition(1901)])
+        # test __getnewargs__
+        self.assertEqual(within_pos.__getnewargs__(), (10, 10, 13))
+        self.assertEqual(between_pos.__getnewargs__(), (24, 20, 24))
+        self.assertEqual(
+            oneof_pos.__getnewargs__(),
+            (1888, [ExactPosition(1888), ExactPosition(1901)]),
+        )
+        # test pickle behaviour
+        within_pos2 = pickle.loads(pickle.dumps(within_pos))
+        between_pos2 = pickle.loads(pickle.dumps(between_pos))
+        oneof_pos2 = pickle.loads(pickle.dumps(oneof_pos))
+        self.assertEqual(within_pos, within_pos2)
+        self.assertEqual(between_pos, between_pos2)
+        self.assertEqual(oneof_pos, oneof_pos2)
+        self.assertEqual(within_pos._left, within_pos2._left)
+        self.assertEqual(within_pos._right, within_pos2._right)
+        self.assertEqual(between_pos._left, between_pos2._left)
+        self.assertEqual(between_pos._right, between_pos2._right)
+        self.assertEqual(oneof_pos.position_choices, oneof_pos2.position_choices)
 
 
 if __name__ == "__main__":

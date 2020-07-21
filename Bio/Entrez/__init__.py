@@ -23,6 +23,11 @@ in this case a remote network connection, and provides methods like
 also "What the heck is a handle?" in the Biopython Tutorial and
 Cookbook: http://biopython.org/DIST/docs/tutorial/Tutorial.html
 http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+The handle returned by these functions can be either in text mode or
+in binary mode, depending on the data requested and the results
+returned by NCBI Entrez. Typically, XML data will be in binary mode
+while other data will be in text mode, as required by the downstream
+parser to parse the data.
 
 Unlike a handle to a file on disk from the ``open(filename)`` function,
 which has a ``.name`` attribute giving the filename, the handles from
@@ -46,8 +51,12 @@ Variables:
     - email        Set the Entrez email parameter (default is not set).
     - tool         Set the Entrez tool parameter (default is ``biopython``).
     - api_key      Personal API key from NCBI. If not set, only 3 queries per
-                   seconds are allowed. 10 queries per seconds otherwise with a
-                   valid API key.
+      second are allowed. 10 queries per seconds otherwise with a
+      valid API key.
+    - max_tries    Configures how many times failed requests will be
+      automatically retried on error (default is 3).
+    - sleep_between_tries   The delay, in seconds, before retrying a request on
+      error (default is 15).
 
 Functions:
 
@@ -75,6 +84,7 @@ Functions:
       input citation strings.
 
     - read         Parses the XML results returned by any of the above functions.
+      Alternatively, the XML data can be read from a file opened in binary mode.
       Typical usage is:
 
           >>> from Bio import Entrez
@@ -104,17 +114,13 @@ Functions:
     - _open        Internally used function.
 
 """
-from __future__ import print_function
 
 import time
 import warnings
-
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
-from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
-
-from Bio._py3k import _binary_to_string_handle, _as_bytes
+import io
+from urllib.error import URLError, HTTPError
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 
 email = None
@@ -138,8 +144,8 @@ def epost(db, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
-    variables = {'db': db}
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
+    variables = {"db": db}
     variables.update(keywds)
     return _open(cgi, variables, post=True)
 
@@ -147,7 +153,7 @@ def epost(db, **keywds):
 def efetch(db, **keywords):
     """Fetch Entrez results which are returned as a handle.
 
-    EFetch retrieves records in the requested format from a list of one or
+    EFetch retrieves records in the requested format from a list or set of one or
     more UIs or from user's environment.
 
     See the online documentation for an explanation of the parameters:
@@ -172,8 +178,8 @@ def efetch(db, **keywords):
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-    variables = {'db': db}
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+    variables = {"db": db}
     variables.update(keywords)
     post = False
     try:
@@ -181,13 +187,17 @@ def efetch(db, **keywords):
     except KeyError:
         pass
     else:
-        if isinstance(ids, list):
-            ids = ",".join(ids)
-            variables["id"] = ids
-        elif isinstance(ids, int):
-            ids = str(ids)
-            variables["id"] = ids
+        try:
+            # ids is a single integer or a string representing a single integer
+            ids = str(int(ids))
+        except TypeError:
+            # ids was not a string; try an iterable:
+            ids = ",".join(map(str, ids))
+        except ValueError:
+            # string with commas or string not representing an integer
+            ids = ",".join(map(str, (id.strip() for id in ids.split(","))))
 
+        variables["id"] = ids
         if ids.count(",") >= 200:
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are
             # more than about 200 IDs
@@ -224,9 +234,8 @@ def esearch(db, term, **keywds):
     True
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
-    variables = {'db': db,
-                 'term': term}
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+    variables = {"db": db, "term": term}
     variables.update(keywds)
     return _open(cgi, variables)
 
@@ -264,7 +273,7 @@ def elink(**keywds):
 
     This is explained in much more detail in the Biopython Tutorial.
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -292,7 +301,7 @@ def einfo(**keywds):
     True
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -325,7 +334,7 @@ def esummary(**keywds):
     Crystal Structure Of E. Coli Aconitase B
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -359,7 +368,7 @@ def egquery(**keywds):
     True
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -388,7 +397,7 @@ def espell(**keywds):
     biopython
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -396,20 +405,29 @@ def espell(**keywds):
 
 def _update_ecitmatch_variables(keywds):
     # XML is the only supported value, and it actually returns TXT.
-    variables = {'retmode': 'xml'}
-    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+    variables = {"retmode": "xml"}
+    citation_keys = (
+        "journal_title",
+        "year",
+        "volume",
+        "first_page",
+        "author_name",
+        "key",
+    )
 
     # Accept pre-formatted strings
-    if isinstance(keywds['bdata'], str):
+    if isinstance(keywds["bdata"], str):
         variables.update(keywds)
     else:
         # Alternatively accept a nicer interface
-        variables['db'] = keywds['db']
+        variables["db"] = keywds["db"]
         bdata = []
-        for citation in keywds['bdata']:
-            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
+        for citation in keywds["bdata"]:
+            formatted_citation = "|".join(
+                [citation.get(key, "") for key in citation_keys]
+            )
             bdata.append(formatted_citation)
-        variables['bdata'] = '\r'.join(bdata)
+        variables["bdata"] = "\r".join(bdata)
     return variables
 
 
@@ -439,7 +457,7 @@ def ecitmatch(**keywds):
     >>> handle.close()
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
     variables = _update_ecitmatch_variables(keywds)
     return _open(cgi, variables, ecitmatch=True)
 
@@ -452,6 +470,19 @@ def read(handle, validate=True, escape=False):
     Most XML files returned by NCBI's Entrez Utilities can be parsed by
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
+
+    The handle must be in binary mode. This allows the parser to detect the
+    encoding from the XML file, and to use it to convert all text in the XML
+    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
+    Entrez will automatically return XML data in binary mode. For files,
+    please use mode "rb" when opening the file, as in
+
+        >>> from Bio import Entrez
+        >>> handle = open("Entrez/esearch1.xml", "rb")  # opened in binary mode
+        >>> record = Entrez.read(handle)
+        >>> print(record['QueryTranslation'])
+        biopython[All Fields]
+        >>> handle.close()
 
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
@@ -470,6 +501,7 @@ def read(handle, validate=True, escape=False):
     the tag name in my_element.tag.
     """
     from .Parser import DataHandler
+
     handler = DataHandler(validate, escape)
     record = handler.read(handle)
     return record
@@ -490,6 +522,22 @@ def parse(handle, validate=True, escape=False):
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
 
+    The handle must be in binary mode. This allows the parser to detect the
+    encoding from the XML file, and to use it to convert all text in the XML
+    to the correct Unicode string. The functions in Bio.Entrez to access NCBI
+    Entrez will automatically return XML data in binary mode. For files,
+    please use mode "rb" when opening the file, as in
+
+        >>> from Bio import Entrez
+        >>> handle = open("Entrez/pubmed1.xml", "rb")  # opened in binary mode
+        >>> records = Entrez.parse(handle)
+        >>> for record in records:
+        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...
+        Social justice (San Francisco, Calif.)
+        Biochimica et biophysica acta
+        >>> handle.close()
+
     If validate is True (default), the parser will validate the XML file
     against the DTD, and raise an error if the XML file contains tags that
     are not represented in the DTD. If validate is False, the parser will
@@ -507,6 +555,7 @@ def parse(handle, validate=True, escape=False):
     the tag name in my_element.tag.
     """
     from .Parser import DataHandler
+
     handler = DataHandler(validate, escape)
     records = handler.parse(handle)
     return records
@@ -550,27 +599,38 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     for i in range(max_tries):
         try:
             if post:
-                handle = _urlopen(cgi, data=_as_bytes(options))
+                handle = urlopen(cgi, data=options.encode("utf8"))
             else:
-                handle = _urlopen(cgi)
-        except _URLError as exception:
+                handle = urlopen(cgi)
+        except HTTPError as exception:
             # Reraise if the final try fails
             if i >= max_tries - 1:
                 raise
-
             # Reraise if the exception is triggered by a HTTP 4XX error
-            # indicating some kind of bad request
-            if isinstance(exception, _HTTPError) \
-                    and exception.status // 100 == 4:
+            # indicating some kind of bad request, UNLESS it's specifically a
+            # 429 "Too Many Requests" response. NCBI seems to sometimes
+            # erroneously return 429s even when their rate limit is
+            # honored (and indeed even with the rate-limit-related fudging
+            # higher up in this function in place), so the best we can do is
+            # treat them as a serverside error and try again after sleeping
+            # for a bit.
+            if exception.code // 100 == 4 and exception.code != 429:
                 raise
-
-            # Treat everything else as a transient error and try again after a
-            # brief delay.
+        except URLError:
+            # Reraise if the final try fails
+            if i >= max_tries - 1:
+                raise
+            # Treat as a transient error and try again after a brief delay:
             time.sleep(sleep_between_tries)
         else:
             break
 
-    return _binary_to_string_handle(handle)
+    subtype = handle.headers.get_content_subtype()
+    if subtype == "plain":
+        url = handle.url
+        handle = io.TextIOWrapper(handle, encoding="UTF-8")
+        handle.url = url
+    return handle
 
 
 _open.previous = 0
@@ -593,7 +653,8 @@ def _construct_params(params):
         if email is not None:
             params["email"] = email
         else:
-            warnings.warn("""
+            warnings.warn(
+                """
 Email address is not specified.
 
 To make use of NCBI's E-utilities, NCBI requires you to specify your
@@ -603,7 +664,9 @@ is A.N.Other@example.com, you can specify it as follows:
    Entrez.email = 'A.N.Other@example.com'
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
-E-utilities.""", UserWarning)
+E-utilities.""",
+                UserWarning,
+            )
     if api_key and "api_key" not in params:
         params["api_key"] = api_key
     return params
@@ -611,10 +674,10 @@ E-utilities.""", UserWarning)
 
 def _encode_options(ecitmatch, params):
     # Open a handle to Entrez.
-    options = _urlencode(params, doseq=True)
-    # _urlencode encodes pipes, which NCBI expects in ECitMatch
+    options = urlencode(params, doseq=True)
+    # urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
-        options = options.replace('%7C', '|')
+        options = options.replace("%7C", "|")
     return options
 
 
@@ -627,4 +690,5 @@ def _construct_cgi(cgi, post, options):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

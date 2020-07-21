@@ -31,14 +31,12 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
-from __future__ import print_function
 
+import io
 import time
-from Bio._py3k import _binary_to_string_handle, _as_bytes
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import quote as _quote
+from urllib.request import urlopen
+from urllib.parse import quote
 
 
 # Constant
@@ -73,8 +71,7 @@ def _get_entry_formats(db):
 
 
 def _get_convert_formats():
-    return [pair.split(".") for pair in
-            _get_fields(_BASE_URL + "/convert/")]
+    return [pair.split(".") for pair in _get_fields(_BASE_URL + "/convert/")]
 
 
 def entry(db, id, format=None, field=None):
@@ -108,8 +105,9 @@ def entry(db, id, format=None, field=None):
     if _entry_db_names is None:
         _entry_db_names = _get_entry_dbs()
     if db not in _entry_db_names:
-        raise ValueError("TogoWS entry fetch does not officially support "
-                         "database '%s'." % db)
+        raise ValueError(
+            "TogoWS entry fetch does not officially support database '%s'." % db
+        )
     if field:
         try:
             fields = _entry_db_fields[db]
@@ -120,11 +118,16 @@ def entry(db, id, format=None, field=None):
             # Backwards compatibility fix for TogoWS change Nov/Dec 2013
             field = "title"
             import warnings
-            warnings.warn("TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead.")
+
+            warnings.warn(
+                "TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead."
+            )
         if field not in fields:
-            raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "field '%s' for database '%s'. Only: %s"
-                             % (field, db, ", ".join(sorted(fields))))
+            raise ValueError(
+                "TogoWS entry fetch does not explicitly support "
+                "field '%s' for database '%s'. Only: %s"
+                % (field, db, ", ".join(sorted(fields)))
+            )
     if format:
         try:
             formats = _entry_db_formats[db]
@@ -132,13 +135,15 @@ def entry(db, id, format=None, field=None):
             formats = _get_entry_formats(db)
             _entry_db_formats[db] = formats
         if format not in formats:
-            raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "format '%s' for database '%s'. Only: %s"
-                             % (format, db, ", ".join(sorted(formats))))
+            raise ValueError(
+                "TogoWS entry fetch does not explicitly support "
+                "format '%s' for database '%s'. Only: %s"
+                % (format, db, ", ".join(sorted(formats)))
+            )
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
+    url = _BASE_URL + "/entry/%s/%s" % (db, quote(id))
     if field:
         url += "/" + field
     if format:
@@ -164,9 +169,12 @@ def search_count(db, query):
         # TODO - Make this a ValueError? Right now despite the HTML website
         # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
-        warnings.warn("TogoWS search does not officially support database '%s'. "
-                      "See %s/search/ for options." % (db, _BASE_URL))
-    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+
+        warnings.warn(
+            "TogoWS search does not officially support database '%s'. "
+            "See %s/search/ for options." % (db, _BASE_URL)
+        )
+    url = _BASE_URL + "/search/%s/%s/count" % (db, quote(query))
     handle = _open(url)
     data = handle.read()
     handle.close()
@@ -175,7 +183,9 @@ def search_count(db, query):
     try:
         return int(data.strip())
     except ValueError:
-        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
+        raise ValueError(
+            "Expected an integer from URL %s, got: %r" % (url, data)
+        ) from None
 
 
 def search_iter(db, query, limit=None, batch=100):
@@ -189,6 +199,7 @@ def search_iter(db, query, limit=None, batch=100):
        TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
+
     >>> from Bio import TogoWS
     >>> for id in TogoWS.search_iter("pubmed", "diabetes+human", limit=10):
     ...     print("PubMed ID: %s" %id) # maybe fetch data with entry?
@@ -217,8 +228,7 @@ def search_iter(db, query, limit=None, batch=100):
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
             if identifier in prev_ids:
-                raise RuntimeError("Result %s was in previous batch"
-                                   % identifier)
+                raise RuntimeError("Result %s was in previous batch" % identifier)
             yield identifier
         offset += batch
         remain -= batch
@@ -264,18 +274,25 @@ def search(db, query, offset=None, limit=None, format=None):
         # TODO - Make this a ValueError? Right now despite the HTML website
         # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
-        warnings.warn("TogoWS search does not explicitly support database '%s'. "
-                      "See %s/search/ for options." % (db, _BASE_URL))
-    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
+
+        warnings.warn(
+            "TogoWS search does not explicitly support database '%s'. "
+            "See %s/search/ for options." % (db, _BASE_URL)
+        )
+    url = _BASE_URL + "/search/%s/%s" % (db, quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
         except ValueError:
-            raise ValueError("Offset should be an integer (at least one), not %r" % offset)
+            raise ValueError(
+                "Offset should be an integer (at least one), not %r" % offset
+            ) from None
         try:
             limit = int(limit)
         except ValueError:
-            raise ValueError("Limit should be an integer (at least one), not %r" % limit)
+            raise ValueError(
+                "Limit should be an integer (at least one), not %r" % limit
+            ) from None
         if offset <= 0:
             raise ValueError("Offset should be at least one, not %i" % offset)
         if limit <= 0:
@@ -311,12 +328,13 @@ def convert(data, in_format, out_format):
         raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
     url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
     # TODO - Should we just accept a string not a handle? What about a filename?
-    if hasattr(data, "read"):
+    try:
         # Handle
-        return _open(url, post=data.read())
-    else:
+        data = data.read()
+    except AttributeError:
         # String
-        return _open(url, post=data)
+        pass
+    return _open(url, post=data)
 
 
 def _open(url, post=None):
@@ -336,16 +354,23 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    # print(url)
     if post:
-        handle = _urlopen(url, _as_bytes(post))
+        handle = urlopen(url, post.encode())
     else:
-        handle = _urlopen(url)
+        handle = urlopen(url)
 
     # We now trust TogoWS to have set an HTTP error code, that
     # suffices for my current unit tests. Previously we would
     # examine the start of the data returned back.
-    return _binary_to_string_handle(handle)
+    text_handle = io.TextIOWrapper(handle, encoding="UTF-8")
+    text_handle.url = handle.url
+    return text_handle
 
 
 _open.previous = 0
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest(verbose=0)

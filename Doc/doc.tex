@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage[]{hyperref}
 \usepackage[]{geometry}
+\usepackage{minted}
 \begin{document}
 \section{Chapter XXX Codon Alignment}
 
@@ -27,23 +28,23 @@ to give a \texttt{str} object of nucleotide sequence whose length is a
 multiple of 3 (This can be violated if you have \texttt{rf\_table}
 argument). For example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.CodonAlign import CodonSeq
 >>> codon_seq = CodonSeq("AAATTTCCCGGG")
 >>> codon_seq
 CodonSeq('AAATTTCCCGGG', Gapped(CodonAlphabet(), '-'))
-\end{verbatim}
+\end{minted}
 
 An error will raise up if the input sequence is not a multiple of 3.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> codon_seq = CodonSeq("AAATTTCCCGG")
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
   File "/biopython/Bio/CodonAlign/CodonSeq.py", line 81, in __init__
     assert len(self) % 3 == 0, "Sequence length is not a triple number"
 AssertionError: Sequence length is not a triple number
-\end{verbatim}
+\end{minted}
 
 By default, \texttt{Bio.CodonAlign.default\_codon\_alphabet} will be
 assigned to \texttt{CodonSeq} object if you don't specify any Alphabet.
@@ -54,7 +55,7 @@ codon alphabet by yourself, \texttt{Bio.CodonAlign.CodonAlphabet} also
 provides you an easy solution. All you need is to pick up a
 \texttt{CodonTable} object that is correct for your data. For example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.CodonAlign import CodonSeq
 >>> from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet
 >>> from Bio.Data.CodonTable import generic_by_id
@@ -63,20 +64,20 @@ provides you an easy solution. All you need is to pick up a
 >>> codon_seq1 = CodonSeq("AAA---CCCGGG", alphabet=codon_alphabet)
 >>> codon_seq1
 CodonSeq('AAA---CCCGGG', CodonAlphabet(Vertebrate Mitochondrial))
-\end{verbatim}
+\end{minted}
 
 The slice of \texttt{CodonSeq} is exactly the same with \texttt{Seq} and
 it will always return a \texttt{Seq} object if you sliced a
 \texttt{CodonSeq}. For example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> codon_seq1
 CodonSeq('AAA---CCCGGG', CodonAlphabet(Vertebrate Mitochondrial))
 >>> codon_seq1[:6]
 Seq('AAA---', DNAAlphabet())
 >>> codon_seq1[1:5]
 Seq('AA--', DNAAlphabet())
-\end{verbatim}
+\end{minted}
 
 As you might imagine, \texttt{CodonSeq} is able to be translated into
 amino acid sequence based on the \texttt{CodonAlphabet} within it. In
@@ -91,7 +92,7 @@ you haven't specify the \texttt{rf\_table} when initiate a
 automatically assign a \texttt{rf\_table} to the \texttt{CodonSeq} if
 you don't say anything about it.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> codon_seq1 = CodonSeq("AAACCCGGG")
 >>> codon_seq1
 CodonSeq('AAACCCGGG', CodonAlphabet(Standard))
@@ -104,7 +105,7 @@ CodonSeq('AAACCCGGG', CodonAlphabet(Standard))
 [0, 3, 5]
 >>> codon_seq2.translate()
 'KPR'
-\end{verbatim}
+\end{minted}
 
 In the example, we didn't assign \texttt{rf\_table} to
 \texttt{codon\_seq1}. By default, \texttt{CodonSeq} will automatically
@@ -124,7 +125,7 @@ applied to ungapped nucleotide sequence. This makes \texttt{rf\_table}
 to be interchangeable between \texttt{CodonSeq} with the same sequence
 but different gaps inserted. For example,
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> codon_seq1 = CodonSeq("AAACCC---GGG")
 >>> codon_seq1.rf_table
 [0, 3, 6]
@@ -132,7 +133,7 @@ but different gaps inserted. For example,
 'KPG'
 >>> codon_seq1.full_translate()
 'KP-G'
-\end{verbatim}
+\end{minted}
 
 We can see that the \texttt{rf\_table} of \texttt{codon\_seq1} is still
 \texttt{{[}0, 3, 6{]}}, even though we have gaps added. The
@@ -145,7 +146,7 @@ object, but it is the user's responsibility to ensure all the necessary
 information is correct for a \texttt{CodonSeq} (mainly
 \texttt{rf\_table}).
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> codon_seq = CodonSeq()
 >>> seq = Seq('AAAAAA')
@@ -162,7 +163,7 @@ Traceback (most recent call last):
 AssertionError: Sequence length is not a triple number
 >>> codon_seq.from_seq(seq, rf_table=(0, 2))
 CodonSeq('AAAAA', CodonAlphabet(Standard))
-\end{verbatim}
+\end{minted}
 
 \subsection{X.2 \texttt{CodonAlignment} Class}
 
@@ -173,7 +174,7 @@ apply various analysis upon it. Similar to
 \texttt{CodonAlignment}. However, once you sliced, the returned result
 will always be a \texttt{MultipleSeqAlignment} object.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.CodonAlign import default_codon_alphabet, CodonSeq, CodonAlignment
 >>> from Bio.Alphabet import generic_dna
 >>> from Bio.SeqRecord import SeqRecord
@@ -199,15 +200,15 @@ A-A
 CodonAlphabet(Standard) alignment with 2 rows and 6 columns
 ---TCG Beta
 AGGTGG Gamma
-\end{verbatim}
+\end{minted}
 
 You can write out \texttt{CodonAlignment} object just as what you do
 with \texttt{MultipleSeqAlignment}.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> AlignIO.write(codon_aln, 'example.aln', 'clustal')
-\end{verbatim}
+\end{minted}
 
 An alignment file called \texttt{example.aln} can then be found in your
 current working directory. You can write \texttt{CodonAlignment} out in
@@ -220,7 +221,7 @@ alignment data in as a \texttt{MultipleSeqAlignment} object and convert
 them into \texttt{CodonAlignment} object using \texttt{from\_msa()}
 class method. For example,
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aln = AlignIO.read('example.aln', 'clustal')
 >>> codon_aln = CodonAlignment()
 >>> print codon_aln.from_msa(aln)
@@ -228,7 +229,7 @@ CodonAlphabet(Standard) CodonAlignment with 3 rows and 9 columns (3 codons)
 AAAACGTCG Alpha
 AAA---TCG Beta
 AAAAGGTGG Gamma
-\end{verbatim}
+\end{minted}
 
 Note, the \texttt{from\_msa()} method assume there is no frameshift
 events occurs in your alignment. Its behavior is not guaranteed if your
@@ -252,7 +253,7 @@ the second one is a list of nucleotide \texttt{SeqRecord} object. By
 default, \texttt{CodonAlign.build} assumes the order of the alignment
 and nucleotide sequences are in the same. For example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import CodonAlign
 >>> from Bio.Alphabet import IUPAC
 >>> from Bio.Align import MultipleSeqAlignment
@@ -271,7 +272,7 @@ CodonAlphabet(Standard) CodonAlignment with 3 rows and 12 columns (4 codons)
 AAATTTCCCGGG nucl1
 AAATTACCCGCG nucl2
 ATATTACCCGGG nucl3
-\end{verbatim}
+\end{minted}
 
 In the above example, \texttt{CodonAlign.build} will try to match
 \texttt{nucl1} with \texttt{prot1}, \texttt{nucl2} with \texttt{prot2}
@@ -282,7 +283,7 @@ same.
 \texttt{CodonAlign.build} method is also able to handle key match. In
 this case, records with same id are paired. For example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl1')
 >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl2')
 >>> nucl3 = SeqRecord(Seq('ATATTACCCGGG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl3')
@@ -297,7 +298,7 @@ CodonAlphabet(Standard) CodonAlignment with 3 rows and 12 columns (4 codons)
 AAATTTCCCGGG nucl1
 AAATTACCCGCG nucl2
 ATATTACCCGGG nucl3
-\end{verbatim}
+\end{minted}
 
 This option is handleful if you read nucleotide sequences using
 \texttt{SeqIO.index} method, in which case the nucleotide dict with be
@@ -310,7 +311,7 @@ by generating a \texttt{corr\_dict}. \texttt{corr\_dict} should be a
 dictionary that uses protein record id as key and nucleotide record id
 as item. Let's look at an example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl1')
 >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl2')
 >>> nucl3 = SeqRecord(Seq('ATATTACCCGGG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl3')
@@ -325,7 +326,7 @@ CodonAlphabet(Standard) CodonAlignment with 3 rows and 12 columns (4 codons)
 AAATTTCCCGGG nucl1
 AAATTACCCGCG nucl2
 ATATTACCCGGG nucl3
-\end{verbatim}
+\end{minted}
 
 We can see, even though the second argument of \texttt{CodonAlign.build}
 is not in the same order with \texttt{aln} in the above example, the
@@ -359,7 +360,7 @@ contains id correspondance between protein records and nucleotide
 records. You can then try the following code (make sure the files are in
 your current python working directory):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO, AlignIO
 >>> nucl = SeqIO.parse('egfr_nucl.fa', 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
 >>> prot = AlignIO.read('egfr_pro.aln', 'clustal', alphabet=IUPAC.protein)
@@ -375,7 +376,7 @@ ATGATGATTATCAGCATGTGGATGAGCATATCGCGAGGATTGTGGGACAGCAGCTCC...GTG gi|24657088|ref|
 ------------------------------ATGCGACGCTCCTGGGCGGGCGGCGCC...GCA gi|47522839|ref|NM_214007.1|
 ------------------------------ATGCGACCCTCCGGGACGGCCGGGGCA...GCA gi|41327737|ref|NM_005228.3|
 ------------------------------ATGCGACCCTCAGGGACTGCGAGAACC...GCA gi|6478867|gb|M37394.2|RATEGFR
-\end{verbatim}
+\end{minted}
 
 We can see, while building the codon alignment a mismatch event is
 found. And this is shown as a UserWarning.
@@ -391,7 +392,7 @@ estimate dN and dS. The function to conduct dN, dS estimation is called
 easy to calculate dN and dS. For example (assuming you have EGFR codon
 alignmnet in the python working space):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.CodonAlign.CodonSeq import cal_dn_ds
 >>> print aln
 CodonAlphabet(Standard) CodonAlignment with 6 rows and 4446 columns (1482 codons)
@@ -413,7 +414,7 @@ ATGATGATTATCAGCATGTGGATGAGCATATCGCGAGGATTGTGGGACAGCAGCTCC...GTG gi|24657088|ref|
 >>> dN, dS = cal_dn_ds(aln[0], aln[1], method='ML')
 >>> print dN, dS
 0.0193877676103 0.0217247139962
-\end{verbatim}
+\end{minted}
 
 If you are using maximum likelihood methdo to estimate dN and dS, you
 are also able to specify equilibrium codon frequency to \texttt{cfreq}
@@ -423,7 +424,7 @@ argument. Available options include \texttt{F1x4}, \texttt{F3x4} and
 It is also possible to get dN and dS matrix or a tree from a
 \texttt{CodonAlignment} object.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> dn_matrix, ds_matrix = aln.get_dn_ds_matrxi()
 >>> print dn_matrix
 gi|24657088|ref|NM_057410.3|    0
@@ -447,7 +448,7 @@ Tree(rooted=True)
         Clade(branch_length=0.294630667432, name='Inner1')
             Clade(branch_length=0.0104539152529, name='gi|24657104|ref|NM_057411.3|')
             Clade(branch_length=0.0104539152529, name='gi|24657088|ref|NM_057410.3|')
-\end{verbatim}
+\end{minted}
 
 Another application of codon alignment that \texttt{CodonAlign} supports
 is Mcdonald-Kreitman test. This test compares the within species
@@ -462,7 +463,7 @@ D. yakuba. The data is available from
 \href{http://zruanweb.com/adh.zip}{adh.zip}. A function called
 \texttt{mktest} will be used for the test.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO, AlignIO
 >>> from Bio.Alphabet import IUPAC
 >>> from Bio.CodonAlign import build
@@ -503,7 +504,7 @@ ATGTCGTTTACTTTGACCAACAAGAACGTGATTTTCGTTGCCGGTCTGGGAGGCATT...ATC gi|156859|gb|M17
 
 >>> print mktest([codon_aln[1:12], codon_aln[12:16], codon_aln[16:]])
 0.00206457257254
-\end{verbatim}
+\end{minted}
 
 In the above example, \texttt{codon\_aln{[}1:12{]}} belongs to
 D. melanogaster, \texttt{codon\_aln{[}12:16{]}} belongs to D. simulans

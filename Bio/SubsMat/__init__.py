@@ -1,7 +1,9 @@
 # Copyright 2000-2009 by Iddo Friedberg.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # Iddo Friedberg idoerg@cc.huji.ac.il
 
@@ -110,17 +112,24 @@ Methods for subtraction, addition and multiplication of matrices:
 
 """
 
-
-from __future__ import print_function
-
 import re
 import sys
 import copy
 import math
 
 # BioPython imports
-from Bio import Alphabet
 from Bio.SubsMat import FreqTable
+from Bio import BiopythonDeprecationWarning
+
+import warnings
+
+warnings.warn(
+    "Bio.SubsMat has been deprecated, and we intend to remove it in a future "
+    "release of Biopython. As an alternative, please consider using "
+    "Bio.Align.substitution_matrices as a replacement, and contact the "
+    "Biopython developers if you still need the Bio.SubsMat module.",
+    BiopythonDeprecationWarning,
+)
 
 
 log = math.log
@@ -144,24 +153,21 @@ class SeqMat(dict):
 
     def _alphabet_from_matrix(self):
         """Set alphabet letters from the matrix entries (PRIVATE)."""
-        ab_dict = {}
-        s = ''
+        ab_set = set()
         for i in self:
-            ab_dict[i[0]] = 1
-            ab_dict[i[1]] = 1
-        for i in sorted(ab_dict):
-            s += i
-        self.alphabet.letters = s
+            ab_set.add(i[0])
+            ab_set.add(i[1])
+        self.alphabet = "".join(sorted(ab_set))
 
-    def __init__(self, data=None, alphabet=None, mat_name='', build_later=0):
+    def __init__(self, data=None, alphabet=None, mat_name="", build_later=0):
         """Initialize.
 
         User may supply:
 
         - data: matrix itself
         - mat_name: its name. See below.
-        - alphabet: an instance of Bio.Alphabet, or a subclass. If not
-          supplied, constructor builds its own from that matrix.
+        - alphabet: an iterable over the letters allowed as indices into the
+          matrix. If not supplied, constructor builds its own from that matrix.
         - build_later: skip the matrix size assertion. User will build the
           matrix after creating the instance. Constructor builds a half matrix
           filled with zeroes.
@@ -180,19 +186,17 @@ class SeqMat(dict):
                 self.update(data)
             except ValueError:
                 raise ValueError("Failed to store data in a dictionary")
-        if alphabet is None:
-            alphabet = Alphabet.Alphabet()
-        assert Alphabet.generic_alphabet.contains(alphabet)
-        self.alphabet = alphabet
 
         # If passed alphabet is empty, use the letters in the matrix itself
-        if not self.alphabet.letters:
+        if alphabet is None:
             self._alphabet_from_matrix()
+        else:
+            self.alphabet = "".join(alphabet)
         # Assert matrix size: half or full
         if not build_later:
-            N = len(self.alphabet.letters)
+            N = len(self.alphabet)
             assert len(self) == N ** 2 or len(self) == N * (N + 1) / 2
-        self.ab_list = list(self.alphabet.letters)
+        self.ab_list = list(self.alphabet)
         self.ab_list.sort()
         # Names: a string like "BLOSUM62" or "PAM250"
         self.mat_name = mat_name
@@ -207,7 +211,7 @@ class SeqMat(dict):
 
     def _correct_matrix(self):
         """Sort key tuples (PRIVATE)."""
-        for key in self:
+        for key in list(self):  # iterate over a copy
             if key[0] > key[1]:
                 self[(key[1], key[0])] = self[key]
                 del self[key]
@@ -216,14 +220,14 @@ class SeqMat(dict):
         """Convert a full-matrix to a half-matrix (PRIVATE)."""
         # For instance: two entries ('A','C'):13 and ('C','A'):20 will be summed
         # into ('A','C'): 33 and the index ('C','A') will be deleted
-        # alphabet.letters:('A','A') and ('C','C') will remain the same.
+        # ('A','A') and ('C','C') will remain the same.
 
-        N = len(self.alphabet.letters)
+        N = len(self.alphabet)
         # Do nothing if this is already a half-matrix
         if len(self) == N * (N + 1) / 2:
             return
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i) + 1]:
+            for j in self.ab_list[: self.ab_list.index(i) + 1]:
                 if i != j:
                     self[j, i] = self[j, i] + self[i, j]
                     del self[i, j]
@@ -231,8 +235,8 @@ class SeqMat(dict):
     def _init_zero(self):
         """Initialize the ab_list values to zero (PRIVATE)."""
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i) + 1]:
-                self[j, i] = 0.
+            for j in self.ab_list[: self.ab_list.index(i) + 1]:
+                self[j, i] = 0.0
 
     def make_entropy(self):
         """Calculate and set the entropy attribute."""
@@ -245,7 +249,7 @@ class SeqMat(dict):
     def sum(self):
         """Return sum of the results."""
         result = {}
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             result[letter] = 0.0
         for pair, value in self.items():
             i1, i2 = pair
@@ -256,44 +260,84 @@ class SeqMat(dict):
                 result[i2] += value / 2
         return result
 
-    def print_full_mat(self, f=None, format="%4d", topformat="%4s",
-                       alphabet=None, factor=1, non_sym=None):
-        """Print the full matrix to the file handle f or stdout."""
-        f = f or sys.stdout
-        # create a temporary dictionary, which holds the full matrix for
-        # printing
-        assert non_sym is None or isinstance(non_sym, float) or \
-        isinstance(non_sym, int)
-        full_mat = copy.copy(self)
-        for i in self:
-            if i[0] != i[1]:
-                full_mat[(i[1], i[0])] = full_mat[i]
+    def format(
+        self, fmt="%4d", letterfmt="%4s", alphabet=None, non_sym=None, full=False
+    ):
+        """Create a string with the bottom-half (default) or a full matrix.
+
+        User may pass own alphabet, which should contain all letters in the
+        alphabet of the matrix, but may be in a different order. This
+        order will be the order of the letters on the axes.
+        """
         if not alphabet:
             alphabet = self.ab_list
-        topline = ''
+        lines = []
+        assert non_sym is None or isinstance(non_sym, float) or isinstance(non_sym, int)
+        letterline = ""
         for i in alphabet:
-            topline = topline + topformat % i
-        topline = topline + '\n'
-        f.write(topline)
+            letterline += letterfmt % i
+        if full:
+            lines.append(letterline)
         for i in alphabet:
-            outline = i
+            line = i
+            flag = False
             for j in alphabet:
-                if alphabet.index(j) > alphabet.index(i) and non_sym is not None:
+                if flag:
                     val = non_sym
                 else:
-                    val = full_mat[i, j]
-                    val *= factor
+                    try:
+                        val = self[i, j]
+                    except KeyError:
+                        val = self[j, i]
                 if val <= -999:
-                    cur_str = '  ND'
+                    cur_str = "  ND"
                 else:
-                    cur_str = format % val
+                    cur_str = fmt % val
+                line += cur_str
+                if j == i:
+                    if not full:
+                        break
+                    if non_sym is not None:
+                        flag = True
+            lines.append(line)
+        if not full:
+            lines.append(letterline)
+        return "\n".join(lines)
 
-                outline = outline + cur_str
-            outline = outline + '\n'
-            f.write(outline)
+    def print_full_mat(
+        self,
+        f=None,
+        format="%4d",
+        topformat="%4s",
+        alphabet=None,
+        factor=1,
+        non_sym=None,
+    ):
+        """Print the full matrix to the file handle f or stdout."""
+        warnings.warn(
+            "SeqMat.print_full_mat has been deprecated, and we intend to remove "
+            "it in a future release of Biopython. Instead of\n"
+            "mat.print_full_mat(<arguments>)\n"
+            "please use\n"
+            "print(mat.format(<arguments>, full=True)",
+            BiopythonDeprecationWarning,
+        )
+        if factor == 1:
+            mat = self
+        else:
+            mat = factor * self
+            warnings.warn(
+                "Instead of 'mat.print_full_mat(..., factor, ...)' please "
+                "use 'mat2 = factor * mat; print(mat2.format(..., full=True))'",
+                BiopythonDeprecationWarning,
+            )
+        f = f or sys.stdout
+        text = mat.format(format, topformat, alphabet, non_sym, True)
+        f.write(text + "\n")
 
-    def print_mat(self, f=None, format="%4d", bottomformat="%4s",
-                  alphabet=None, factor=1):
+    def print_mat(
+        self, f=None, format="%4d", bottomformat="%4s", alphabet=None, factor=1
+    ):
         """Print a nice half-matrix.
 
         f=sys.stdout to see on the screen.
@@ -302,70 +346,62 @@ class SeqMat(dict):
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes.
         """
+        warnings.warn(
+            "SeqMat.print_mat has been deprecated, and we intend to remove it "
+            "in a future release of Biopython. Instead of\n"
+            "mat.print_mat(<arguments>)\n"
+            "please use\n"
+            "print(mat.format(<arguments>)",
+            BiopythonDeprecationWarning,
+        )
+        if factor == 1:
+            mat = self
+        else:
+            mat = factor * self
+            warnings.warn(
+                "Instead of 'mat.print_mat(..., factor, ...)' please "
+                "use 'mat2 = factor * mat; print(mat2.format(...))'",
+                BiopythonDeprecationWarning,
+            )
         f = f or sys.stdout
-        if not alphabet:
-            alphabet = self.ab_list
-        bottomline = ''
-        for i in alphabet:
-            bottomline = bottomline + bottomformat % i
-        bottomline = bottomline + '\n'
-        for i in alphabet:
-            outline = i
-            for j in alphabet[:alphabet.index(i) + 1]:
-                try:
-                    val = self[j, i]
-                except KeyError:
-                    val = self[i, j]
-                val *= factor
-                if val == -999:
-                    cur_str = '  ND'
-                else:
-                    cur_str = format % val
-
-                outline = outline + cur_str
-            outline = outline + '\n'
-            f.write(outline)
-        f.write(bottomline)
+        text = self.format(format, bottomformat, alphabet, None, False)
+        f.write(text + "\n")
 
     def __str__(self):
         """Print a nice half-matrix."""
-        output = ""
-        alphabet = self.ab_list
-        n = len(alphabet)
-        for i in range(n):
-            c1 = alphabet[i]
-            output += c1
-            for j in range(i + 1):
-                c2 = alphabet[j]
-                try:
-                    val = self[c2, c1]
-                except KeyError:
-                    val = self[c1, c2]
-                if val == -999:
-                    output += '  ND'
-                else:
-                    output += "%4d" % val
-            output += '\n'
-        output += '%4s' * n % tuple(alphabet) + "\n"
-        return output
+        return self.format()
 
     def __sub__(self, other):
         """Return integer subtraction product of the two matrices."""
         mat_diff = 0
         for i in self:
-            mat_diff += (self[i] - other[i])
+            mat_diff += self[i] - other[i]
         return mat_diff
 
     def __mul__(self, other):
-        """Matrix multiplication.
+        """Element-wise matrix multiplication.
 
-        Returns a matrix for which each entry is the multiplication product of
-        the two matrices passed.
+        Returns a new matrix created by multiplying each element by other (if
+        other is scalar), or by performing element-wise multiplication of the
+        two matrices (if other is a matrix of the same size).
         """
         new_mat = copy.copy(self)
-        for i in self:
-            new_mat[i] *= other[i]
+        try:  # first try and see if other is a matrix
+            for i in self:
+                new_mat[i] *= other[i]
+        except TypeError:  # other is a scalar value
+            for i in self:
+                new_mat[i] *= other
         return new_mat
+
+    def __rmul__(self, other):
+        """Element-wise matrix multiplication.
+
+        Returns a new matrix created by multiplying each element by other (if
+        other is scalar), or by performing element-wise multiplication of the
+        two matrices (if other is a matrix of the same size).
+        """
+        return self.__mul__(other)
 
     def __add__(self, other):
         """Matrix addition."""
@@ -375,24 +411,12 @@ class SeqMat(dict):
         return new_mat
 
 
-class AcceptedReplacementsMatrix(SeqMat):
-    """Accepted replacements matrix."""
-
-
-class ObservedFrequencyMatrix(SeqMat):
-    """Observed frequency matrix."""
-
-
-class ExpectedFrequencyMatrix(SeqMat):
-    """Expected frequency matrix."""
-
-
 class SubstitutionMatrix(SeqMat):
     """Substitution matrix."""
 
     def calculate_relative_entropy(self, obs_freq_mat):
         """Calculate and return relative entropy w.r.t. observed frequency matrix."""
-        relative_entropy = 0.
+        relative_entropy = 0.0
         for key, value in self.items():
             if value > EPSILON:
                 relative_entropy += obs_freq_mat[key] * log(value)
@@ -405,7 +429,7 @@ class LogOddsMatrix(SeqMat):
 
     def calculate_relative_entropy(self, obs_freq_mat):
         """Calculate and return relative entropy w.r.t. observed frequency matrix."""
-        relative_entropy = 0.
+        relative_entropy = 0.0
         for key, value in self.items():
             relative_entropy += obs_freq_mat[key] * value / log(2)
         return relative_entropy
@@ -419,8 +443,7 @@ def _build_obs_freq_mat(acc_rep_mat):
     """
     # Note: acc_rep_mat should already be a half_matrix!!
     total = float(sum(acc_rep_mat.values()))
-    obs_freq_mat = ObservedFrequencyMatrix(alphabet=acc_rep_mat.alphabet,
-                                           build_later=1)
+    obs_freq_mat = SeqMat(alphabet=acc_rep_mat.alphabet, build_later=1)
     for i in acc_rep_mat:
         obs_freq_mat[i] = acc_rep_mat[i] / total
     return obs_freq_mat
@@ -429,14 +452,14 @@ def _build_obs_freq_mat(acc_rep_mat):
 def _exp_freq_table_from_obs_freq(obs_freq_mat):
     """Build expected frequence table from observed frequences (PRIVATE)."""
     exp_freq_table = {}
-    for i in obs_freq_mat.alphabet.letters:
-        exp_freq_table[i] = 0.
+    for i in obs_freq_mat.alphabet:
+        exp_freq_table[i] = 0.0
     for i in obs_freq_mat:
         if i[0] == i[1]:
             exp_freq_table[i[0]] += obs_freq_mat[i]
         else:
-            exp_freq_table[i[0]] += obs_freq_mat[i] / 2.
-            exp_freq_table[i[1]] += obs_freq_mat[i] / 2.
+            exp_freq_table[i[0]] += obs_freq_mat[i] / 2.0
+            exp_freq_table[i[1]] += obs_freq_mat[i] / 2.0
     return FreqTable.FreqTable(exp_freq_table, FreqTable.FREQ)
 
 
@@ -445,8 +468,7 @@ def _build_exp_freq_mat(exp_freq_table):
 
     exp_freq_table: should be a FreqTable instance
     """
-    exp_freq_mat = ExpectedFrequencyMatrix(alphabet=exp_freq_table.alphabet,
-                                           build_later=1)
+    exp_freq_mat = SeqMat(alphabet=exp_freq_table.alphabet, build_later=1)
     for i in exp_freq_mat:
         if i[0] == i[1]:
             exp_freq_mat[i] = exp_freq_table[i[0]] ** 2
@@ -502,8 +524,9 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
 # and rounding factor. Generates a log-odds matrix, calling internal SubsMat
 # functions.
 #
-def make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=2,
-                         factor=1., round_digit=9, keep_nd=0):
+def make_log_odds_matrix(
+    acc_rep_mat, exp_freq_table=None, logbase=2, factor=1.0, round_digit=9, keep_nd=0
+):
     """Make log-odds matrix."""
     obs_freq_mat = _build_obs_freq_mat(acc_rep_mat)
     if not exp_freq_table:
@@ -531,11 +554,11 @@ def read_text_matrix(data_file):
         table.append(i.split())
     # remove records beginning with ``#''
     for rec in table[:]:
-        if (rec.count('#') > 0):
+        if rec.count("#") > 0:
             table.remove(rec)
 
     # remove null lists
-    while (table.count([]) > 0):
+    while table.count([]) > 0:
         table.remove([])
     # build a dictionary
     alphabet = table[0]
@@ -544,7 +567,7 @@ def read_text_matrix(data_file):
         # print(j)
         row = alphabet[j]
         # row = rec[0]
-        if re.compile(r'[A-z\*]').match(rec[0]):
+        if re.compile(r"[A-z\*]").match(rec[0]):
             first_col = 1
         else:
             first_col = 0
@@ -556,8 +579,8 @@ def read_text_matrix(data_file):
         j += 1
     # delete entries with an asterisk
     for i in matrix:
-        if '*' in i:
-            del(matrix[i])
+        if "*" in i:
+            del matrix[i]
     ret_mat = SeqMat(matrix)
     return ret_mat
 
@@ -569,12 +592,12 @@ diagALL = 3
 
 def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
     """Return relative entropy of two matrices."""
-    rel_ent = 0.
+    rel_ent = 0.0
     key_list_1 = sorted(mat_1)
     key_list_2 = sorted(mat_2)
     key_list = []
-    sum_ent_1 = 0.
-    sum_ent_2 = 0.
+    sum_ent_1 = 0.0
+    sum_ent_2 = 0.0
     for i in key_list_1:
         if i in key_list_2:
             key_list.append(i)
@@ -599,7 +622,6 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
         if mat_1[key] > EPSILON and mat_2[key] > EPSILON:
             val_1 = mat_1[key] / sum_ent_1
             val_2 = mat_2[key] / sum_ent_2
-#            rel_ent += mat_1[key] * log(mat_1[key]/mat_2[key])/log(logbase)
             rel_ent += val_1 * log(val_1 / val_2) / log(logbase)
     return rel_ent
 
@@ -609,7 +631,9 @@ def two_mat_correlation(mat_1, mat_2):
     try:
         import numpy
     except ImportError:
-        raise ImportError("Please install Numerical Python (numpy) if you want to use this function")
+        raise ImportError(
+            "Please install Numerical Python (numpy) if you want to use this function"
+        )
     values = []
     assert mat_1.ab_list == mat_2.ab_list
     for ab_pair in mat_1:
@@ -637,75 +661,3 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     # print(mat_1.entropy, mat_2.entropy)
     dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
-
-
-"""
-This isn't working yet. Boo hoo!
-def two_mat_print(mat_1, mat_2, f=None, alphabet=None, factor_1=1, factor_2=1,
-                  format="%4d", bottomformat="%4s", topformat="%4s",
-                  topindent=7*" ", bottomindent=1*" "):
-    f = f or sys.stdout
-    if not alphabet:
-        assert mat_1.ab_list == mat_2.ab_list
-        alphabet = mat_1.ab_list
-    len_alphabet = len(alphabet)
-    print_mat = {}
-    topline = topindent
-    bottomline = bottomindent
-    for i in alphabet:
-        bottomline += bottomformat % i
-        topline += topformat % alphabet[len_alphabet-alphabet.index(i)-1]
-    topline += '\n'
-    bottomline += '\n'
-    f.write(topline)
-    for i in alphabet:
-        for j in alphabet:
-            print_mat[i, j] = -999
-    diag_1 = {}
-    diag_2 = {}
-    for i in alphabet:
-        for j in alphabet[:alphabet.index(i)+1]:
-            if i == j:
-                diag_1[i] = mat_1[(i, i)]
-                diag_2[i] = mat_2[(alphabet[len_alphabet-alphabet.index(i)-1],
-                    alphabet[len_alphabet-alphabet.index(i)-1])]
-            else:
-                if i > j:
-                    key = (j, i)
-                else:
-                    key = (i, j)
-                mat_2_key = [alphabet[len_alphabet-alphabet.index(key[0])-1],
-                    alphabet[len_alphabet-alphabet.index(key[1])-1]]
-                # print(mat_2_key)
-                mat_2_key.sort()
-                mat_2_key = tuple(mat_2_key)
-                # print("%s||%s" % (key, mat_2_key)
-                print_mat[key] = mat_2[mat_2_key]
-                print_mat[(key[1], key[0])] = mat_1[key]
-    for i in alphabet:
-        outline = i
-        for j in alphabet:
-            if i == j:
-                if diag_1[i] == -999:
-                    val_1 = ' ND'
-                else:
-                    val_1 = format % (diag_1[i]*factor_1)
-                if diag_2[i] == -999:
-                    val_2 = ' ND'
-                else:
-                    val_2 = format % (diag_2[i]*factor_2)
-                cur_str = val_1 + "  " + val_2
-            else:
-                if print_mat[(i, j)] == -999:
-                    val = ' ND'
-                elif alphabet.index(i) > alphabet.index(j):
-                    val = format % (print_mat[(i, j)]*factor_1)
-                else:
-                    val = format % (print_mat[(i, j)]*factor_2)
-                cur_str = val
-            outline += cur_str
-        outline += bottomformat % (alphabet[len_alphabet-alphabet.index(i)-1] +
-                                 '\n')
-        f.write(outline)
-    f.write(bottomline)
-"""

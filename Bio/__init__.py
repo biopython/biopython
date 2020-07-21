@@ -15,7 +15,7 @@ http://biopython.org
 import os
 import warnings
 
-__version__ = "1.74.dev0"
+__version__ = "1.78.dev0"
 
 
 class MissingExternalDependencyError(Exception):
@@ -24,8 +24,6 @@ class MissingExternalDependencyError(Exception):
     Used for things like missing command line tools. Important for our unit
     tests to allow skipping tests with missing external dependencies.
     """
-
-    pass
 
 
 class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
@@ -37,7 +35,14 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     ImportError.
     """
 
-    pass
+
+class StreamModeError(ValueError):
+    """Incorrect stream mode (text vs binary).
+
+    This error should be raised when a stream (file or file-like object)
+    argument is in text mode while the receiving function expects binary mode,
+    or vice versa.
+    """
 
 
 class BiopythonWarning(Warning):
@@ -53,8 +58,6 @@ class BiopythonWarning(Warning):
     Consult the warnings module documentation for more details.
     """
 
-    pass
-
 
 class BiopythonParserWarning(BiopythonWarning):
     """Biopython parser warning.
@@ -69,8 +72,6 @@ class BiopythonParserWarning(BiopythonWarning):
 
     Consult the warnings module documentation for more details.
     """
-
-    pass
 
 
 class BiopythonDeprecationWarning(BiopythonWarning):
@@ -89,8 +90,6 @@ class BiopythonDeprecationWarning(BiopythonWarning):
     of Biopython. To avoid removal of this code, please contact the Biopython
     developers via the mailing list or GitHub.
     """
-
-    pass
 
 
 class BiopythonExperimentalWarning(BiopythonWarning):
@@ -113,18 +112,18 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     a subsequent release, and this warning removed from it.
     """
 
-    pass
-
 
 _parent_dir = os.path.dirname(os.path.dirname(__file__))
 if os.path.exists(os.path.join(_parent_dir, "setup.py")):
-    warnings.warn("You may be importing Biopython from inside the source tree."
-                  " This is bad practice and might lead to downstream issues."
-                  " In particular, you might encounter ImportErrors due to"
-                  " missing compiled C extensions. We recommend that you"
-                  " try running your code from outside the source tree."
-                  " If you are outside the source tree then you have a"
-                  " setup.py file in an unexpected directory: {}.".
-                  format(_parent_dir), BiopythonWarning)
+    warnings.warn(
+        "You may be importing Biopython from inside the source tree."
+        " This is bad practice and might lead to downstream issues."
+        " In particular, you might encounter ImportErrors due to"
+        " missing compiled C extensions. We recommend that you"
+        " try running your code from outside the source tree."
+        " If you are outside the source tree then you have a"
+        " setup.py file in an unexpected directory: " + _parent_dir,
+        BiopythonWarning,
+    )
 # See #PR 2007 and issue #1991 for discussion on this warning:
 # https://github.com/biopython/biopython/pull/2007

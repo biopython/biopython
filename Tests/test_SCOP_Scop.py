@@ -7,17 +7,14 @@
 
 """Unit test for Scop."""
 
-from __future__ import print_function
 
 import unittest
-from Bio._py3k import StringIO
-from Bio._py3k import zip
+from io import StringIO
 
 from Bio.SCOP import Scop, cmp_sccs, parse_domain
 
 
 class ScopTests(unittest.TestCase):
-
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
         """Compare the two specified Cla lines for equality.
 
@@ -25,8 +22,8 @@ class ScopTests(unittest.TestCase):
         not matter. For more information, see
         http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html.
         """
-        fields1 = cla_line_1.rstrip().split('\t')
-        fields2 = cla_line_2.rstrip().split('\t')
+        fields1 = cla_line_1.rstrip().split("\t")
+        fields2 = cla_line_2.rstrip().split("\t")
         print(fields1)
         print(fields2)
         # compare the first five fields in a Cla line, which should be exactly
@@ -34,31 +31,23 @@ class ScopTests(unittest.TestCase):
         if fields1[:5] != fields2[:5]:
             return False
         # compare the hierarchy key-value pairs, which are unordered
-        if set(fields1[5].split(',')) != set(fields2[5].split(',')):
+        if set(fields1[5].split(",")) != set(fields2[5].split(",")):
             return False
         return True
 
     def testParse(self):
-        f = open("./SCOP/dir.cla.scop.txt_test")
-        try:
+        with open("./SCOP/dir.cla.scop.txt_test") as f:
             cla = f.read()
-            f.close()
-
-            f = open("./SCOP/dir.des.scop.txt_test")
+        with open("./SCOP/dir.des.scop.txt_test") as f:
             des = f.read()
-            f.close()
-
-            f = open("./SCOP/dir.hie.scop.txt_test")
+        with open("./SCOP/dir.hie.scop.txt_test") as f:
             hie = f.read()
-        finally:
-            f.close()
 
         scop = Scop(StringIO(cla), StringIO(des), StringIO(hie))
 
         cla_out = StringIO()
         scop.write_cla(cla_out)
-        lines = zip(cla.rstrip().split('\n'),
-                    cla_out.getvalue().rstrip().split('\n'))
+        lines = zip(cla.rstrip().split("\n"), cla_out.getvalue().rstrip().split("\n"))
         for expected_line, line in lines:
             self.assertTrue(self._compare_cla_lines(expected_line, line))
 
@@ -95,10 +84,10 @@ class ScopTests(unittest.TestCase):
         s = ">d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}"
         dom = parse_domain(s)
 
-        self.assertEqual(dom.sid, 'd1tpt_1')
-        self.assertEqual(dom.sccs, 'a.46.2.1')
-        self.assertEqual(dom.residues.pdbid, '1tpt')
-        self.assertEqual(dom.description, 'Thymidine phosphorylase {Escherichia coli}')
+        self.assertEqual(dom.sid, "d1tpt_1")
+        self.assertEqual(dom.sccs, "a.46.2.1")
+        self.assertEqual(dom.residues.pdbid, "1tpt")
+        self.assertEqual(dom.description, "Thymidine phosphorylase {Escherichia coli}")
 
         s2 = "d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
         self.assertEqual(s2, str(parse_domain(s2)))
@@ -118,7 +107,7 @@ class ScopTests(unittest.TestCase):
 
     def testConstructFromDirectory(self):
         scop = Scop(dir_path="SCOP", version="test")
-        self.assertTrue(isinstance(scop, Scop))
+        self.assertIsInstance(scop, Scop)
 
         domain = scop.getDomainBySid("d1hbia_")
         self.assertEqual(domain.sunid, 14996)
@@ -128,19 +117,19 @@ class ScopTests(unittest.TestCase):
         domain = scop.getDomainBySid("d1hbia_")
 
         # get the fold
-        fold = domain.getAscendent('cf')
+        fold = domain.getAscendent("cf")
         self.assertEqual(fold.sunid, 46457)
 
         # get the superfamily
-        sf = domain.getAscendent('superfamily')
+        sf = domain.getAscendent("superfamily")
         self.assertEqual(sf.sunid, 46458)
 
         # px has no px ascendent
-        px = domain.getAscendent('px')
+        px = domain.getAscendent("px")
         self.assertEqual(px, None)
 
         # an sf has no px ascendent
-        px2 = sf.getAscendent('px')
+        px2 = sf.getAscendent("px")
         self.assertEqual(px2, None)
 
     def test_get_descendents(self):
@@ -149,21 +138,21 @@ class ScopTests(unittest.TestCase):
         fold = scop.getNodeBySunid(46457)
 
         # get px descendents
-        domains = fold.getDescendents('px')
+        domains = fold.getDescendents("px")
         self.assertEqual(len(domains), 14)
         for d in domains:
-            self.assertEqual(d.type, 'px')
+            self.assertEqual(d.type, "px")
 
-        sfs = fold.getDescendents('superfamily')
+        sfs = fold.getDescendents("superfamily")
         self.assertEqual(len(sfs), 1)
         for d in sfs:
-            self.assertEqual(d.type, 'sf')
+            self.assertEqual(d.type, "sf")
 
         # cl has no cl descendent
-        cl = fold.getDescendents('cl')
+        cl = fold.getDescendents("cl")
         self.assertEqual(cl, [])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

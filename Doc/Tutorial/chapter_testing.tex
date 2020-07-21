@@ -1,5 +1,5 @@
 \chapter{The Biopython testing framework}
-\label{sec:regr_test}
+\label{chapter:testing}
 
 Biopython has a regression testing framework (the file
 \verb|run_tests.py|) based on
@@ -27,42 +27,42 @@ As part of building and installing Biopython you will typically
 run the full test suite at the command line from the Biopython
 source top level directory using the following:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python setup.py test
 \end{minted}
 
 This is actually equivalent to going to the \verb|Tests|
 subdirectory and running:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py
 \end{minted}
 
 You'll often want to run just some of the tests, and this is done
 like this:
 
-\begin{minted}{bash}
-$python run_tests.py test_SeqIO.py test_AlignIO.py
+\begin{minted}{console}
+$ python run_tests.py test_SeqIO.py test_AlignIO.py
 \end{minted}
 
 When giving the list of tests, the \verb|.py| extension is optional,
 so you can also just type:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py test_SeqIO test_AlignIO
 \end{minted}
 
-To run the docstring tests (see section \ref{section:doctest}), you can use
+To run the docstring tests (see section \ref{sec:doctest}), you can use
 
-\begin{minted}{bash}
-$python run_tests.py doctest
+\begin{minted}{console}
+$ python run_tests.py doctest
 \end{minted}
 
 You can also skip any tests which have been setup with an explicit
 online component by adding \verb|--offline|, e.g.
 
-\begin{minted}{bash}
-$python run_tests.py --offline
+\begin{minted}{console}
+$ python run_tests.py --offline
 \end{minted}
 
 By default, \verb|run_tests.py| runs all tests, including the docstring tests.
@@ -86,23 +86,24 @@ of difficulties pinning down user-specific settings (e.g. executable names of th
 Python versions). You may also only be interested in testing Biopython only against
 a subset of the Python versions that we support.
 
-If you are interested in using Tox, you may start with the example \texttt{tox.ini}
-shown below:
+If you are interested in using Tox, you could start with the example
+\texttt{tox.ini} shown below:
 
-\begin{verbatim}
+\begin{minted}{text}
 [tox]
-envlist = py26, py27, pypy, py33, py34, jython
+envlist = pypy,py36,py37
 
 [testenv]
 changedir = Tests
 commands = {envpython} run_tests.py --offline
 deps =
     numpy
-\end{verbatim}
+    reportlab
+\end{minted}
 
-Using the template above, executing \texttt{tox} will test your Biopython code against
-Python2.6, Python2.7, PyPy, Python3.3, Python3.4, and Jython. It assumes that those
-Pythons' executables are named accordingly: python2.6 for Python2.6, and so on.
+Using the template above, executing \texttt{tox} will test your Biopython
+code against PyPy, Python 3.6 and Python3.7. It assumes that those Pythons'
+executables are named accordingly: ``python3.7`` for Python 3.7, and so on.
 
 
 \section{Writing tests}
@@ -125,7 +126,7 @@ optionally a directory with input files used by the test:
 
 Any script with a \verb|test_| prefix in the \verb|Tests| directory will be found and run by \verb|run_tests.py|. Below, we show an example test script \verb|test_Biospam.py|. If you put this script in the Biopython \verb|Tests| directory, then \verb|run_tests.py| will find it and execute the tests contained in it:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py
 test_Ace ... ok
 test_AlignIO ... ok
@@ -139,7 +140,7 @@ test_Clustalw ... ok
 Ran 107 tests in 86.127 seconds
 \end{minted}
 
-\subsection{Writing a test using \verb|unittest|}
+\subsection{Writing a test using {\texttt unittest}}
 
 The \verb|unittest|-framework has been included with Python since version
 2.1, and is documented in the Python Library Reference (which I know you
@@ -148,7 +149,7 @@ are keeping under your pillow, as recommended).  There is also
 for unittest}.
 If you are familiar with the \verb|unittest| system (or something similar
 like the nose test framework), you shouldn't have any trouble.  You may
-find looking at the existing example within Biopython helpful too.
+find looking at the existing examples within Biopython helpful too.
 
 Here's a minimal \verb|unittest|-style test script for \verb|Biospam|,
 which you can copy and paste to get started:
@@ -157,8 +158,8 @@ which you can copy and paste to get started:
 import unittest
 from Bio import Biospam
 
-class BiospamTestAddition(unittest.TestCase):
 
+class BiospamTestAddition(unittest.TestCase):
     def test_addition1(self):
         result = Biospam.addition(2, 3)
         self.assertEqual(result, 5)
@@ -167,8 +168,8 @@ class BiospamTestAddition(unittest.TestCase):
         result = Biospam.addition(9, -1)
         self.assertEqual(result, 8)
 
-class BiospamTestDivision(unittest.TestCase):
 
+class BiospamTestDivision(unittest.TestCase):
     def test_division1(self):
         result = Biospam.division(3.0, 2.0)
         self.assertAlmostEqual(result, 1.5)
@@ -179,7 +180,7 @@ class BiospamTestDivision(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
 \end{minted}
 
@@ -204,14 +205,14 @@ These are the key points of \verb|unittest|-based tests:
   \item At the end of the test script, you can use
 \begin{minted}{python}
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
 \end{minted}
         to execute the tests when the script is run by itself (rather than
         imported from \verb|run_tests.py|).
         If you run this script, then you'll see something like the following:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python test_BiospamMyModule.py
 test_addition1 (__main__.TestAddition) ... ok
 test_addition2 (__main__.TestAddition) ... ok
@@ -232,8 +233,8 @@ OK
 import unittest
 from Bio import Biospam
 
-class BiospamTestAddition(unittest.TestCase):
 
+class BiospamTestAddition(unittest.TestCase):
     def test_addition1(self):
         """An addition test"""
         result = Biospam.addition(2, 3)
@@ -244,8 +245,8 @@ class BiospamTestAddition(unittest.TestCase):
         result = Biospam.addition(9, -1)
         self.assertEqual(result, 8)
 
-class BiospamTestDivision(unittest.TestCase):
 
+class BiospamTestDivision(unittest.TestCase):
     def test_division1(self):
         """Now let's check division"""
         result = Biospam.division(3.0, 2.0)
@@ -258,13 +259,13 @@ class BiospamTestDivision(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
 \end{minted}
 
         Running the script will now show you:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python test_BiospamMyModule.py
 An addition test ... ok
 A second addition test ... ok
@@ -278,7 +279,7 @@ OK
 \end{minted}
 \end{itemize}
 
-If your module contains docstring tests (see section \ref{section:doctest}),
+If your module contains docstring tests (see section \ref{sec:doctest}),
 you \emph{may} want to include those in the tests to be run. You can do so as
 follows by modifying the code under \verb|if __name__ == "__main__":|
 to look like this:
@@ -288,7 +289,7 @@ if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
     doctest_suite = doctest.DocTestSuite(Biospam)
     suite = unittest.TestSuite((unittest_suite, doctest_suite))
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
     runner.run(suite)
 \end{minted}
 
@@ -300,7 +301,7 @@ In general instead include the docstring tests by adding them to the
 \verb|run_tests.py| as explained below.
 
 \section{Writing doctests}
-\label{section:doctest}
+\label{sec:doctest}
 
 Python modules, classes and functions support built in documentation using
 docstrings.  The \href{https://docs.python.org/3/library/doctest.html}{doctest
@@ -318,26 +319,30 @@ have them excluded in the Biopython test suite, you must update
 of \verb|run_tests.py| looks as follows:
 
 \begin{minted}{python}
+# Following modules have historic failures. If you fix one of these
+# please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-DOCTEST_MODULES = [
-    'Bio.AlignIO.MauveIO',
-    ...
+    "Bio.PDB",
+    "Bio.PDB.AbstractPropertyMap",
+    "Bio.Phylo.Applications._Fasttree",
+    "Bio.Phylo._io",
+    "Bio.Phylo.TreeConstruction",
+    "Bio.Phylo._utils",
 ]
 
 # Exclude modules with online activity
-EXCLUDE_DOCTEST_MODULES.extend([
-    'Bio.Entrez',
-    'Bio.TogoWS',
-    ...
-    ])
+# They are not excluded by default, use --offline to exclude them
+ONLINE_DOCTEST_MODULES = [ "Bio.Entrez", "Bio.ExPASy", "Bio.TogoWS"]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
-    EXCLUDE_DOCTEST_MODULES.extend([
-        "Bio.Affy.CelFile",
-        "Bio.KDTree",
-        ...
-    ])
+    EXCLUDE_DOCTEST_MODULES.extend(
+        [
+            "Bio.Affy.CelFile",
+            "Bio.Cluster",
+            # ...
+        ]
+    )
 \end{minted}
 
 Note that we regard doctests primarily as documentation, so you should
@@ -350,7 +355,7 @@ the code will be run from the \verb|Tests| directory, see the
 \verb|Bio.SeqIO| doctests for an example of this.
 
 To run the docstring tests only, use
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py doctest
 \end{minted}
 
@@ -359,7 +364,7 @@ your output will match on all the different versions of Python that
 Biopython supports (e.g. differences in floating point numbers).
 
 \section{Writing doctests in the Tutorial}
-\label{section:doctest-tutorial}
+\label{sec:doctest-tutorial}
 
 This Tutorial you are reading has a lot of code snippets, which are
 often formatted like a doctest. We have our own system in file
@@ -369,11 +374,12 @@ special \verb|%doctest| comment lines before each Python block,
 e.g.
 
 \begin{verbatim}
+
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
->>> len("ACGT")
+>>> s = Seq("ACGT")
+>>> len(s)
 4
 \end{minted}
 \end{verbatim}
@@ -382,10 +388,11 @@ e.g.
 continue from the previous Python block. Here we use the
 magic comment \verb|%cont-doctest| as shown here:
 
-\begin{verbatim} 
+\begin{verbatim}
+
 %cont-doctest
 \begin{minted}{pycon}
->>> Seq("ACGT") == Seq("ACGT", generic_dna)
+>>> s == "ACGT"
 True
 \end{minted}
 \end{verbatim}
@@ -403,12 +410,12 @@ to indicate \verb|import XXX| must work, e.g.
 
 You can run the Tutorial doctests via:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python test_Tutorial.py
 \end{minted}
 
 or:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py test_Tutorial.py
 \end{minted}

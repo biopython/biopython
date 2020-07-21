@@ -12,21 +12,24 @@ One of the most important things in this module is the MultipleSeqAlignment
 class, used in the Bio.AlignIO module.
 
 """
-from __future__ import print_function
 
-import sys  # Only needed to check if we are using Python 2 or 3
+
+import warnings
+
+from Bio import Alphabet
+from Bio import BiopythonDeprecationWarning
+from Bio.Align import _aligners
+from Bio.Align import substitution_matrices
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
-from Bio import Alphabet
 
-from Bio.Align import _aligners
 # Import errors may occur here if a compiled aligners.c file
 # (_aligners.pyd or _aligners.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
 
 
-class MultipleSeqAlignment(object):
+class MultipleSeqAlignment:
     """Represents a classical multiple sequence alignment (MSA).
 
     By this we mean a collection of sequences (usually shown as rows) which
@@ -40,7 +43,7 @@ class MultipleSeqAlignment(object):
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
     >>> print(align)
-    SingleLetterAlphabet() alignment with 7 rows and 156 columns
+    Alignment with 7 rows and 156 columns
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -81,7 +84,7 @@ class MultipleSeqAlignment(object):
     Or, take just the first ten columns as a sub-alignment:
 
     >>> print(align[:, :10])
-    SingleLetterAlphabet() alignment with 7 rows and 10 columns
+    Alignment with 7 rows and 10 columns
     TATACATTAA gi|6273285|gb|AF191659.1|AF191
     TATACATTAA gi|6273284|gb|AF191658.1|AF191
     TATACATTAA gi|6273287|gb|AF191661.1|AF191
@@ -95,7 +98,7 @@ class MultipleSeqAlignment(object):
     and last ten columns:
 
     >>> print(align[:, :10] + align[:, -10:])
-    SingleLetterAlphabet() alignment with 7 rows and 20 columns
+    Alignment with 7 rows and 20 columns
     TATACATTAAGTGTACCAGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAGTGTACCAGA gi|6273284|gb|AF191658.1|AF191
     TATACATTAAGTGTACCAGA gi|6273287|gb|AF191661.1|AF191
@@ -113,8 +116,9 @@ class MultipleSeqAlignment(object):
     reference sequence with special status.
     """
 
-    def __init__(self, records, alphabet=None,
-                 annotations=None, column_annotations=None):
+    def __init__(
+        self, records, alphabet=None, annotations=None, column_annotations=None
+    ):
         """Initialize a new MultipleSeqAlignment object.
 
         Arguments:
@@ -145,7 +149,7 @@ class MultipleSeqAlignment(object):
         ...                              annotations={"tool": "demo"},
         ...                              column_annotations={"stats": "CCCXCCC"})
         >>> print(align)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -167,9 +171,9 @@ class MultipleSeqAlignment(object):
             self.extend(records)
             if alphabet is None:
                 # No alphabet was given, take a consensus alphabet
-                self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for
-                                                              rec in self._records
-                                                              if rec.seq is not None)
+                self._alphabet = Alphabet._consensus_alphabet(
+                    rec.seq.alphabet for rec in self._records if rec.seq is not None
+                )
 
         # Annotations about the whole alignment
         if annotations is None:
@@ -178,7 +182,7 @@ class MultipleSeqAlignment(object):
             raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
-        # Annotations about each colum of the alignment
+        # Annotations about each column of the alignment
         if column_annotations is None:
             column_annotations = {}
         # Handle this via the property set function which will validate it
@@ -186,8 +190,9 @@ class MultipleSeqAlignment(object):
 
     def _set_per_column_annotations(self, value):
         if not isinstance(value, dict):
-            raise TypeError("The per-column-annotations should be a "
-                            "(restricted) dictionary.")
+            raise TypeError(
+                "The per-column-annotations should be a (restricted) dictionary."
+            )
         # Turn this into a restricted-dictionary (and check the entries)
         if len(self):
             # Use the standard method to get the length
@@ -198,7 +203,9 @@ class MultipleSeqAlignment(object):
             # Bit of a problem case... number of columns is undefined
             self._per_col_annotations = None
             if value:
-                raise ValueError("Can't set per-column-annotations without an alignment")
+                raise ValueError(
+                    "Can't set per-column-annotations without an alignment"
+                )
 
     def _get_per_column_annotations(self):
         if self._per_col_annotations is None:
@@ -215,7 +222,8 @@ class MultipleSeqAlignment(object):
     column_annotations = property(
         fget=_get_per_column_annotations,
         fset=_set_per_column_annotations,
-        doc="""Dictionary of per-letter-annotation for the sequence.""")
+        doc="""Dictionary of per-letter-annotation for the sequence.""",
+    )
 
     def _str_line(self, record, length=50):
         """Return a truncated string representation of a SeqRecord (PRIVATE).
@@ -226,14 +234,20 @@ class MultipleSeqAlignment(object):
             if len(record.seq) <= length:
                 return "%s %s" % (record.seq, record.id)
             else:
-                return "%s...%s %s" \
-                    % (record.seq[:length - 3], record.seq[-3:], record.id)
+                return "%s...%s %s" % (
+                    record.seq[: length - 3],
+                    record.seq[-3:],
+                    record.id,
+                )
         else:
             if len(record.seq) <= length:
                 return "%s %s" % (record.seq, record.id)
             else:
-                return "%s...%s %s" \
-                    % (record.seq[:length - 6], record.seq[-3:], record.id)
+                return "%s...%s %s" % (
+                    record.seq[: length - 6],
+                    record.seq[-3:],
+                    record.id,
+                )
 
     def __str__(self):
         """Return a multi-line string summary of the alignment.
@@ -243,14 +257,14 @@ class MultipleSeqAlignment(object):
         are shown, with the record identifiers.  This should fit nicely on a
         single screen. e.g.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], generic_dna)
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> print(align)
-        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        Alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
         ACTGCTAGATAG Gamma
@@ -258,8 +272,10 @@ class MultipleSeqAlignment(object):
         See also the alignment's format method.
         """
         rows = len(self._records)
-        lines = ["%s alignment with %i rows and %i columns"
-                 % (str(self._alphabet), rows, self.get_alignment_length())]
+        lines = [
+            "Alignment with %i rows and %i columns"
+            % (rows, self.get_alignment_length())
+        ]
         if rows <= 20:
             lines.extend(self._str_line(rec) for rec in self._records)
         else:
@@ -272,7 +288,7 @@ class MultipleSeqAlignment(object):
         """Return a representation of the object for debugging.
 
         The representation cannot be used with eval() to recreate the object,
-        which is usually possible with simple python ojects.  For example:
+        which is usually possible with simple python objects.  For example:
 
         <Bio.Align.MultipleSeqAlignment instance (2 records of length 14,
         SingleLetterAlphabet()) at a3c184c>
@@ -283,15 +299,32 @@ class MultipleSeqAlignment(object):
         """
         # A doctest for __repr__ would be nice, but __class__ comes out differently
         # if run via the __main__ trick.
-        return "<%s instance (%i records of length %i, %s) at %x>" % \
-            (self.__class__, len(self._records),
-             self.get_alignment_length(), repr(self._alphabet), id(self))
+        return "<%s instance (%i records of length %i) at %x>" % (
+            self.__class__,
+            len(self._records),
+            self.get_alignment_length(),
+            id(self),
+        )
         # This version is useful for doing eval(repr(alignment)),
         # but it can be VERY long:
-        # return "%s(%s, %s)" \
-        #       % (self.__class__, repr(self._records), repr(self._alphabet))
+        # return "%s(%r)" \
+        #       % (self.__class__, self._records)
 
-    def format(self, format):
+    def format(self, format_spec):
+        """Return the alignment as a string in the specified file format [DEPRECATED].
+
+        This method is deprecated; instead of alignment.format(format_spec),
+        please use format(alignment, format_spec) or an f-string.
+        """
+        warnings.warn(
+            "alignment.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of alignment.format(format_spec), "
+            "please use format(alignment, format_spec) or an f-string.",
+            BiopythonDeprecationWarning,
+        )
+        return self.__format__(format_spec)
+
+    def __format__(self, format_spec):
         """Return the alignment as a string in the specified file format.
 
         The format should be a lower case string supported as an output
@@ -301,13 +334,13 @@ class MultipleSeqAlignment(object):
 
         e.g.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], generic_dna)
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
-        >>> print(align.format("fasta"))
+        >>> print(format(align, "fasta"))
         >Alpha
         ACTGCTAGCTAG
         >Beta
@@ -315,30 +348,17 @@ class MultipleSeqAlignment(object):
         >Gamma
         ACTGCTAGATAG
         <BLANKLINE>
-        >>> print(align.format("phylip"))
+        >>> print(format(align, "phylip"))
          3 12
         Alpha      ACTGCTAGCT AG
         Beta       ACT-CTAGCT AG
         Gamma      ACTGCTAGAT AG
         <BLANKLINE>
-
-        For Python 2.6, 3.0 or later see also the built in format() function.
-        """
-        # See also the __format__ added for Python 2.6 / 3.0, PEP 3101
-        # See also the SeqRecord class and its format() method using Bio.SeqIO
-        return self.__format__(format)
-
-    def __format__(self, format_spec):
-        """Return the alignment as a string in the specified file format.
-
-        This method supports the python format() function added in
-        Python 2.6/3.0.  The format_spec should be a lower case
-        string supported by Bio.AlignIO as an output file format.
-        See also the alignment's format() method.
         """
         if format_spec:
-            from Bio._py3k import StringIO
+            from io import StringIO
             from Bio import AlignIO
+
             handle = StringIO()
             AlignIO.write([self], handle, format_spec)
             return handle.getvalue()
@@ -351,9 +371,9 @@ class MultipleSeqAlignment(object):
 
         e.g.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], generic_dna)
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -389,9 +409,9 @@ class MultipleSeqAlignment(object):
         length. This function will go through and find this length
         by finding the maximum length of sequences in the alignment.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], generic_dna)
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -413,8 +433,7 @@ class MultipleSeqAlignment(object):
 
         return max_length
 
-    def add_sequence(self, descriptor, sequence, start=None, end=None,
-                     weight=1.0):
+    def add_sequence(self, descriptor, sequence, start=None, end=None, weight=1.0):
         """Add a sequence to the alignment.
 
         This doesn't do any kind of alignment, it just adds in the sequence
@@ -445,9 +464,7 @@ class MultipleSeqAlignment(object):
         # populate it with the descriptor.
         # For backwards compatibility, also store this in the
         # SeqRecord's description property.
-        new_record = SeqRecord(new_seq,
-                               id=descriptor,
-                               description=descriptor)
+        new_record = SeqRecord(new_seq, id=descriptor, description=descriptor)
 
         # hack! We really need to work out how to deal with annotations
         # and features in biopython. Right now, I'll just use the
@@ -457,12 +474,12 @@ class MultipleSeqAlignment(object):
         # in BioPerl, but I'm not positive what the best thing to do on
         # this is...
         if start:
-            new_record.annotations['start'] = start
+            new_record.annotations["start"] = start
         if end:
-            new_record.annotations['end'] = end
+            new_record.annotations["end"] = end
 
         # another hack to add weight information to the sequence
-        new_record.annotations['weight'] = weight
+        new_record.annotations["weight"] = weight
 
         self._records.append(new_record)
 
@@ -486,7 +503,7 @@ class MultipleSeqAlignment(object):
 
         >>> align = MultipleSeqAlignment([a, b, c])
         >>> print(align)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -495,7 +512,7 @@ class MultipleSeqAlignment(object):
 
         >>> align.extend([d, e])
         >>> print(align)
-        DNAAlphabet() alignment with 5 rows and 7 columns
+        Alignment with 5 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -537,7 +554,7 @@ class MultipleSeqAlignment(object):
         >>> from Bio import AlignIO
         >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
         >>> print(align)
-        SingleLetterAlphabet() alignment with 7 rows and 156 columns
+        Alignment with 7 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -558,7 +575,7 @@ class MultipleSeqAlignment(object):
 
         >>> align.append(dummy)
         >>> print(align)
-        SingleLetterAlphabet() alignment with 8 rows and 156 columns
+        Alignment with 8 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -586,8 +603,8 @@ class MultipleSeqAlignment(object):
         # private _append method
         if expected_length is not None and len(record) != expected_length:
             # TODO - Use the following more helpful error, but update unit tests
-            # raise ValueError("New sequence is not of length %i" \
-            #                 % self.get_alignment_length())
+            # raise ValueError("New sequence is not of length %i"
+            #                  % self.get_alignment_length())
             raise ValueError("Sequences must all be the same length")
 
         # Using not self.alphabet.contains(record.seq.alphabet) needs fixing
@@ -623,12 +640,12 @@ class MultipleSeqAlignment(object):
         Now, let's look at these two alignments:
 
         >>> print(left)
-        DNAAlphabet() alignment with 3 rows and 5 columns
+        Alignment with 3 rows and 5 columns
         AAAAC Alpha
         AAA-C Beta
         AAAAG Gamma
         >>> print(right)
-        DNAAlphabet() alignment with 3 rows and 2 columns
+        Alignment with 3 rows and 2 columns
         GT Alpha
         GT Beta
         GT Gamma
@@ -637,7 +654,7 @@ class MultipleSeqAlignment(object):
 
         >>> combined = left + right
         >>> print(combined)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -673,8 +690,10 @@ class MultipleSeqAlignment(object):
         if not isinstance(other, MultipleSeqAlignment):
             raise NotImplementedError
         if len(self) != len(other):
-            raise ValueError("When adding two alignments they must have the same length"
-                             " (i.e. same number or rows)")
+            raise ValueError(
+                "When adding two alignments they must have the same length"
+                " (i.e. same number or rows)"
+            )
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
         merged = (left + right for left, right in zip(self, other))
         # Take any common annotation:
@@ -736,7 +755,7 @@ class MultipleSeqAlignment(object):
 
         >>> sub_alignment = align[2:5]
         >>> print(sub_alignment)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAAGGT Gamma
         AAAACGT Delta
         AAA-GGT Epsilon
@@ -746,7 +765,7 @@ class MultipleSeqAlignment(object):
 
         >>> sub_alignment = align[::2]
         >>> print(sub_alignment)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAAAGGT Gamma
         AAA-GGT Epsilon
@@ -755,7 +774,7 @@ class MultipleSeqAlignment(object):
 
         >>> rev_alignment = align[::-1]
         >>> print(rev_alignment)
-        DNAAlphabet() alignment with 5 rows and 7 columns
+        Alignment with 5 rows and 7 columns
         AAA-GGT Epsilon
         AAAACGT Delta
         AAAAGGT Gamma
@@ -791,7 +810,7 @@ class MultipleSeqAlignment(object):
         However, in general you get a sub-alignment,
 
         >>> print(align[1:5, 3:6])
-        DNAAlphabet() alignment with 4 rows and 3 columns
+        Alignment with 4 rows and 3 columns
         -CG Beta
         AGG Gamma
         ACG Delta
@@ -809,7 +828,7 @@ class MultipleSeqAlignment(object):
             new = MultipleSeqAlignment(self._records[index], self._alphabet)
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
-                # Perserve the column annotations too,
+                # Preserve the column annotations too,
                 for k, v in self.column_annotations.items():
                     new.column_annotations[k] = v
             return new
@@ -826,11 +845,12 @@ class MultipleSeqAlignment(object):
             return "".join(rec[col_index] for rec in self._records[row_index])
         else:
             # e.g. sub_align = align[1:4, 5:7], gives another alignment
-            new = MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
-                                       self._alphabet)
+            new = MultipleSeqAlignment(
+                (rec[col_index] for rec in self._records[row_index]), self._alphabet
+            )
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
-                # Perserve the column annotations too,
+                # Preserve the column annotations too,
                 for k, v in self.column_annotations.items():
                     new.column_annotations[k] = v[col_index]
             return new
@@ -863,7 +883,7 @@ class MultipleSeqAlignment(object):
         If you simple try and add these without sorting, you get this:
 
         >>> print(align1 + align2)
-        DNAAlphabet() alignment with 3 rows and 8 columns
+        Alignment with 3 rows and 8 columns
         ACGTCGGT <unknown id>
         ACGGCGTT <unknown id>
         ACGCCGCT Chicken
@@ -876,7 +896,7 @@ class MultipleSeqAlignment(object):
         >>> align1.sort()
         >>> align2.sort()
         >>> print(align1 + align2)
-        DNAAlphabet() alignment with 3 rows and 8 columns
+        Alignment with 3 rows and 8 columns
         ACGCCGCT Chicken
         ACGTCGTT Human
         ACGGCGGT Mouse
@@ -886,13 +906,13 @@ class MultipleSeqAlignment(object):
 
         >>> from Bio.SeqUtils import GC
         >>> print(align1)
-        DNAAlphabet() alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGC Chicken
         ACGT Human
         ACGG Mouse
         >>> align1.sort(key = lambda record: GC(record.seq))
         >>> print(align1)
-        DNAAlphabet() alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGT Human
         ACGC Chicken
         ACGG Mouse
@@ -902,7 +922,7 @@ class MultipleSeqAlignment(object):
 
         >>> align1.sort(reverse=True)
         >>> print(align1)
-        DNAAlphabet() alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGG Mouse
         ACGT Human
         ACGC Chicken
@@ -913,8 +933,84 @@ class MultipleSeqAlignment(object):
         else:
             self._records.sort(key=key, reverse=reverse)
 
+    @property
+    def substitutions(self):
+        """Return an Array with the number of substitutions of letters in the alignment.
 
-class PairwiseAlignment(object):
+        As an example, consider a multiple sequence alignment of three DNA sequences:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> seq1 = SeqRecord(Seq("ACGT"), id="seq1")
+        >>> seq2 = SeqRecord(Seq("A--A"), id="seq2")
+        >>> seq3 = SeqRecord(Seq("ACGT"), id="seq3")
+        >>> seq4 = SeqRecord(Seq("TTTC"), id="seq4")
+        >>> alignment = MultipleSeqAlignment([seq1, seq2, seq3, seq4])
+        >>> print(alignment)
+        Alignment with 4 rows and 4 columns
+        ACGT seq1
+        A--A seq2
+        ACGT seq3
+        TTTC seq4
+
+        >>> m = alignment.substitutions
+        >>> print(m)
+            A   C   G   T
+        A 3.0 0.5 0.0 2.5
+        C 0.5 1.0 0.0 2.0
+        G 0.0 0.0 1.0 1.0
+        T 2.5 2.0 1.0 1.0
+        <BLANKLINE>
+
+        Note that the matrix is symmetric, with counts divided equally on both
+        sides of the diagonal. For example, the total number of substitutions
+        between A and T in the alignment is 3.5 + 3.5 = 7.
+
+        Any weights associated with the sequences are taken into account when
+        calculating the substitution matrix.  For example, given the following
+        multiple sequence alignment::
+
+            GTATC  0.5
+            AT--C  0.8
+            CTGTC  1.0
+
+        For the first column we have::
+
+            ('A', 'G') : 0.5 * 0.8 = 0.4
+            ('C', 'G') : 0.5 * 1.0 = 0.5
+            ('A', 'C') : 0.8 * 1.0 = 0.8
+
+        """
+        letters = set.union(*[set(record.seq) for record in self])
+        try:
+            letters.remove("-")
+        except KeyError:
+            pass
+        letters = "".join(sorted(letters))
+        m = substitution_matrices.Array(letters, dims=2)
+        for rec_num1, alignment1 in enumerate(self):
+            seq1 = alignment1.seq
+            weight1 = alignment1.annotations.get("weight", 1.0)
+            for rec_num2, alignment2 in enumerate(self):
+                if rec_num1 == rec_num2:
+                    break
+                seq2 = alignment2.seq
+                weight2 = alignment2.annotations.get("weight", 1.0)
+                for residue1, residue2 in zip(seq1, seq2):
+                    if residue1 == "-":
+                        continue
+                    if residue2 == "-":
+                        continue
+                    m[(residue1, residue2)] += weight1 * weight2
+
+        m += m.transpose()
+        m /= 2.0
+
+        return m
+
+
+class PairwiseAlignment:
     """Represents a pairwise sequence alignment.
 
     Internally, the pairwise alignment is stored as the path through
@@ -940,14 +1036,6 @@ class PairwiseAlignment(object):
         self.score = score
         self.path = path
 
-    # For Python2 only
-    def __cmp__(self, other):
-        if self.path < other.path:
-            return -1
-        if self.path > other.path:
-            return +1
-        return 0
-
     def __eq__(self, other):
         return self.path == other.path
 
@@ -966,28 +1054,36 @@ class PairwiseAlignment(object):
     def __ge__(self, other):
         return self.path >= other.path
 
-    def __format__(self, format_spec):
-        if format_spec == 'psl':
-            return self._format_psl()
-        return str(self)
+    def _convert_sequence_string(self, sequence):
+        if isinstance(sequence, str):
+            return sequence
+        if isinstance(sequence, Seq):
+            return str(sequence)
+        try:  # check if target is a SeqRecord
+            sequence = sequence.seq
+        except AttributeError:
+            pass
+        else:
+            return str(sequence)
+        try:
+            view = memoryview(sequence)
+        except TypeError:
+            pass
+        else:
+            if view.format == "c":
+                return str(sequence)
+        return None
 
-    def __str__(self):
-        query = self.query
-        target = self.target
-        try:
-            # check if query is a SeqRecord
-            query = query.seq
-        except AttributeError:
-            # query is a Seq object or a plain string
-            pass
-        try:
-            # check if target is a SeqRecord
-            target = target.seq
-        except AttributeError:
-            # target is a Seq object or a plain string
-            pass
-        seq1 = str(target)
-        seq2 = str(query)
+    def __format__(self, format_spec):
+        """Create a human-readable representation of the alignment."""
+        if format_spec == "psl":
+            return self._format_psl()
+        seq1 = self._convert_sequence_string(self.target)
+        if seq1 is None:
+            return self._format_generalized()
+        seq2 = self._convert_sequence_string(self.query)
+        if seq2 is None:
+            return self._format_generalized()
         n1 = len(seq1)
         n2 = len(seq2)
         aligned_seq1 = ""
@@ -997,23 +1093,22 @@ class PairwiseAlignment(object):
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
-            aligned_seq1 += "." * (end - end1) + seq1[:end1]
-            aligned_seq2 += "." * (end - end2) + seq2[:end2]
-            pattern += '.' * end
+            aligned_seq1 += " " * (end - end1) + seq1[:end1]
+            aligned_seq2 += " " * (end - end2) + seq2[:end2]
+            pattern += " " * end
         start1 = end1
         start2 = end2
         for end1, end2 in path[1:]:
-            gap = 0
             if end1 == start1:
                 gap = end2 - start2
-                aligned_seq1 += '-' * gap
+                aligned_seq1 += "-" * gap
                 aligned_seq2 += seq2[start2:end2]
-                pattern += '-' * gap
+                pattern += "-" * gap
             elif end2 == start2:
                 gap = end1 - start1
                 aligned_seq1 += seq1[start1:end1]
-                aligned_seq2 += '-' * gap
-                pattern += '-' * gap
+                aligned_seq2 += "-" * gap
+                pattern += "-" * gap
             else:
                 s1 = seq1[start1:end1]
                 s2 = seq2[start2:end2]
@@ -1021,79 +1116,137 @@ class PairwiseAlignment(object):
                 aligned_seq2 += s2
                 for c1, c2 in zip(s1, s2):
                     if c1 == c2:
-                        pattern += '|'
+                        pattern += "|"
                     else:
-                        pattern += 'X'
+                        pattern += "."
             start1 = end1
             start2 = end2
         n1 -= end1
         n2 -= end2
         n = max(n1, n2)
-        aligned_seq1 += seq1[end1:] + '.' * (n - n1)
-        aligned_seq2 += seq2[end2:] + '.' * (n - n2)
-        pattern += '.' * n
+        aligned_seq1 += seq1[end1:] + " " * (n - n1)
+        aligned_seq2 += seq2[end2:] + " " * (n - n2)
+        pattern += " " * n
+        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+
+    def _format_generalized(self):
+        seq1 = self.target
+        seq2 = self.query
+        aligned_seq1 = []
+        aligned_seq2 = []
+        pattern = []
+        path = self.path
+        end1, end2 = path[0]
+        if end1 > 0 or end2 > 0:
+            if end1 <= end2:
+                for c2 in seq2[: end2 - end1]:
+                    s2 = str(c2)
+                    s1 = " " * len(s2)
+                    aligned_seq1.append(s1)
+                    aligned_seq2.append(s2)
+                    pattern.append(s1)
+            else:  # end1 > end2
+                for c1 in seq1[: end1 - end2]:
+                    s1 = str(c1)
+                    s2 = " " * len(s1)
+                    aligned_seq1.append(s1)
+                    aligned_seq2.append(s2)
+                    pattern.append(s2)
+        start1 = end1
+        start2 = end2
+        for end1, end2 in path[1:]:
+            if end1 == start1:
+                for c2 in seq2[start2:end2]:
+                    s2 = str(c2)
+                    s1 = "-" * len(s2)
+                    aligned_seq1.append(s1)
+                    aligned_seq2.append(s2)
+                    pattern.append(s1)
+                start2 = end2
+            elif end2 == start2:
+                for c1 in seq1[start1:end1]:
+                    s1 = str(c1)
+                    s2 = "-" * len(s1)
+                    aligned_seq1.append(s1)
+                    aligned_seq2.append(s2)
+                    pattern.append(s2)
+                start1 = end1
+            else:
+                for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
+                    s1 = str(c1)
+                    s2 = str(c2)
+                    m1 = len(s1)
+                    m2 = len(s2)
+                    if c1 == c2:
+                        p = "|"
+                    else:
+                        p = "."
+                    if m1 < m2:
+                        space = (m2 - m1) * " "
+                        s1 += space
+                        pattern.append(p * m1 + space)
+                    elif m1 > m2:
+                        space = (m1 - m2) * " "
+                        s2 += space
+                        pattern.append(p * m2 + space)
+                    else:
+                        pattern.append(p * m1)
+                    aligned_seq1.append(s1)
+                    aligned_seq2.append(s2)
+                start1 = end1
+                start2 = end2
+        aligned_seq1 = " ".join(aligned_seq1)
+        aligned_seq2 = " ".join(aligned_seq2)
+        pattern = " ".join(pattern)
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_psl(self):
         query = self.query
         target = self.target
         try:
-            Qname = query.id
+            qName = query.id
         except AttributeError:
-            Qname = "query"
+            qName = "query"
         else:
             query = query.seq
         try:
-            Tname = target.id
+            tName = target.id
         except AttributeError:
-            Tname = "target"
+            tName = "target"
         else:
             target = target.seq
         seq1 = str(target)
         seq2 = str(query)
         n1 = len(seq1)
         n2 = len(seq2)
-        match = 0
-        mismatch = 0
-        repmatch = 0
-        Ns = 0
-        Qgapcount = 0
-        Qgapbases = 0
-        Tgapcount = 0
-        Tgapbases = 0
-        Qsize = n2
-        Qstart = 0
-        Qend = Qsize
-        Tsize = n1
-        Tstart = 0
-        Tend = Tsize
+        # variable names follow those in the PSL file format specification
+        matches = 0
+        misMatches = 0
+        repMatches = 0
+        nCount = 0
+        qNumInsert = 0
+        qBaseInsert = 0
+        tNumInsert = 0
+        tBaseInsert = 0
+        qSize = n2
+        tSize = n1
         blockSizes = []
         qStarts = []
         tStarts = []
-        strand = '+'
-        start1 = 0
-        start2 = 0
+        strand = "+"
         start1, start2 = self.path[0]
+        tStart = start1
+        qStart = start2
         for end1, end2 in self.path[1:]:
             count1 = end1 - start1
             count2 = end2 - start2
             if count1 == 0:
-                if start2 == 0:
-                    Qstart += count2
-                elif end2 == n2:
-                    Qend -= count2
-                else:
-                    Qgapcount += 1
-                    Qgapbases += count2
+                qNumInsert += 1
+                qBaseInsert += count2
                 start2 = end2
             elif count2 == 0:
-                if start1 == 0:
-                    Tstart += count1
-                elif end1 == n1:
-                    Tend -= count1
-                else:
-                    Tgapcount += 1
-                    Tgapbases += count1
+                tNumInsert += 1
+                tBaseInsert += count1
                 start1 = end1
             else:
                 assert count1 == count2
@@ -1101,42 +1254,62 @@ class PairwiseAlignment(object):
                 qStarts.append(start2)
                 blockSizes.append(count1)
                 for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
-                    if c1 == 'N' or c2 == 'N':
-                        Ns += 1
+                    if c1 == "N" or c2 == "N":
+                        nCount += 1
                     elif c1 == c2:
-                        match += 1
+                        matches += 1
                     else:
-                        mismatch += 1
+                        misMatches += 1
                 start1 = end1
                 start2 = end2
+        tEnd = end1
+        qEnd = end2
         blockcount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
         qStarts = ",".join(map(str, qStarts)) + ","
         tStarts = ",".join(map(str, tStarts)) + ","
-        words = [str(match),
-                 str(mismatch),
-                 str(repmatch),
-                 str(Ns),
-                 str(Qgapcount),
-                 str(Qgapbases),
-                 str(Tgapcount),
-                 str(Tgapbases),
-                 strand,
-                 Qname,
-                 str(Qsize),
-                 str(Qstart),
-                 str(Qend),
-                 Tname,
-                 str(Tsize),
-                 str(Tstart),
-                 str(Tend),
-                 str(blockcount),
-                 blockSizes,
-                 qStarts,
-                 tStarts,
-                 ]
+        words = [
+            str(matches),
+            str(misMatches),
+            str(repMatches),
+            str(nCount),
+            str(qNumInsert),
+            str(qBaseInsert),
+            str(tNumInsert),
+            str(tBaseInsert),
+            strand,
+            qName,
+            str(qSize),
+            str(qStart),
+            str(qEnd),
+            tName,
+            str(tSize),
+            str(tStart),
+            str(tEnd),
+            str(blockcount),
+            blockSizes,
+            qStarts,
+            tStarts,
+        ]
         line = "\t".join(words) + "\n"
         return line
+
+    def format(self):
+        """Create a human-readable representation of the alignment (DEPRECATED).
+
+        This method is deprecated; instead of alignment.format(), please use
+        format(alignment) or an f-string.
+        """
+        warnings.warn(
+            "alignment.format has been deprecated, and we intend to remove it in a "
+            "future release of Biopython. Instead of alignment.format(), please use "
+            "format(alignment) or an f-string.",
+            BiopythonDeprecationWarning,
+        )
+        return self.__format__(None)
+
+    def __str__(self):
+        return self.__format__(None)
 
     @property
     def aligned(self):
@@ -1212,7 +1385,7 @@ class PairwiseAlignment(object):
         return tuple(segments1), tuple(segments2)
 
 
-class PairwiseAlignments(object):
+class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
 
     This class also supports indexing, which is fast for increasing indices,
@@ -1257,7 +1430,7 @@ class PairwiseAlignments(object):
             try:
                 alignment = next(self)
             except StopIteration:
-                raise IndexError('index out of range')
+                raise IndexError("index out of range") from None
         return alignment
 
     def __iter__(self):
@@ -1271,9 +1444,6 @@ class PairwiseAlignments(object):
         alignment = PairwiseAlignment(self.seqA, self.seqB, path, self.score)
         self.alignment = alignment
         return alignment
-
-    if sys.version_info[0] < 3:  # Python 2
-        next = __next__
 
 
 class PairwiseAligner(_aligners.PairwiseAligner):
@@ -1303,39 +1473,39 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     >>> from Bio import Align
     >>> aligner = Align.PairwiseAligner()
-    >>> alignments = aligner.align("ACCGT", "ACG")
+    >>> alignments = aligner.align("TACCG", "ACG")
     >>> for alignment in sorted(alignments):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 3.0:
-    ACCGT
-    |-||-
-    A-CG-
+    TACCG
+    -|-||
+    -A-CG
     <BLANKLINE>
     Score = 3.0:
-    ACCGT
-    ||-|-
-    AC-G-
+    TACCG
+    -||-|
+    -AC-G
     <BLANKLINE>
 
     Specify the aligner mode as local to generate local alignments:
 
     >>> aligner.mode = 'local'
-    >>> alignments = aligner.align("ACCGT", "ACG")
+    >>> alignments = aligner.align("TACCG", "ACG")
     >>> for alignment in sorted(alignments):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 3.0:
-    ACCGT
-    |-||.
-    A-CG.
+    TACCG
+     |-||
+     A-CG
     <BLANKLINE>
     Score = 3.0:
-    ACCGT
-    ||-|.
-    AC-G.
+    TACCG
+     ||-|
+     AC-G
     <BLANKLINE>
 
     Do a global alignment.  Identical characters are given 2 points,
@@ -1344,19 +1514,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> aligner.mode = 'global'
     >>> aligner.match_score = 2
     >>> aligner.mismatch_score = -1
-    >>> for alignment in aligner.align("ACCGT", "ACG"):
+    >>> for alignment in aligner.align("TACCG", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 6.0:
-    ACCGT
-    ||-|-
-    AC-G-
+    TACCG
+    -||-|
+    -AC-G
     <BLANKLINE>
     Score = 6.0:
-    ACCGT
-    |-||-
-    A-CG-
+    TACCG
+    -|-||
+    -A-CG
     <BLANKLINE>
 
     Same as above, except now 0.5 points are deducted when opening a
@@ -1366,27 +1536,27 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> aligner.extend_gap_score = -0.1
     >>> aligner.target_end_gap_score = 0.0
     >>> aligner.query_end_gap_score = 0.0
-    >>> for alignment in aligner.align("ACCGT", "ACG"):
+    >>> for alignment in aligner.align("TACCG", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
     ...
     Score = 5.5:
-    ACCGT
-    |-||-
-    A-CG-
+    TACCG
+    -|-||
+    -A-CG
     <BLANKLINE>
     Score = 5.5:
-    ACCGT
-    ||-|-
-    AC-G-
+    TACCG
+    -||-|
+    -AC-G
     <BLANKLINE>
 
     The alignment function can also use known matrices already included in
     Biopython:
 
-    >>> from Bio.SubsMat import MatrixInfo
+    >>> from Bio.Align import substitution_matrices
     >>> aligner = Align.PairwiseAligner()
-    >>> aligner.substitution_matrix = MatrixInfo.blosum62
+    >>> aligner.substitution_matrix = substitution_matrices.load("BLOSUM62")
     >>> alignments = aligner.align("KEVLA", "EVL")
     >>> alignments = list(alignments)
     >>> print("Number of alignments: %d" % len(alignments))
@@ -1400,30 +1570,65 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     -EVL-
     <BLANKLINE>
 
+    You can also set the value of attributes directly during construction
+    of the PairwiseAligner object by providing them as keyword arguemnts:
+
+    >>> aligner = Align.PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
+    >>> for alignment in aligner.align("TACCG", "ACG"):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 6.0:
+    TACCG
+    -||-|
+    -AC-G
+    <BLANKLINE>
+    Score = 6.0:
+    TACCG
+    -|-||
+    -A-CG
+    <BLANKLINE>
+
     """
+
+    def __init__(self, **kwargs):
+        """Initialize a new PairwiseAligner with the keyword arguments as attributes.
+
+        This function subclasses `_aligners.PairwiseAligner` and loops over all
+        the keyword arguments that are given in the constructor to set them
+        as attributes on the object. This will call the `__setattr__` method to
+        do that.
+        """
+        super().__init__()
+        for name, value in kwargs.items():
+            setattr(self, name, value)
 
     def __setattr__(self, key, value):
         if key not in dir(_aligners.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes
-            message = "'PairwiseAligner' object has no attribute '%s'" % key
-            raise AttributeError(message)
+            raise AttributeError("PairwiseAligner object has no attribute '%s'" % key)
         _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
-        seqA = str(seqA)
-        seqB = str(seqB)
+        if isinstance(seqA, Seq):
+            seqA = str(seqA)
+        if isinstance(seqB, Seq):
+            seqB = str(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
     def score(self, seqA, seqB):
         """Return the alignments score of two sequences using PairwiseAligner."""
-        seqA = str(seqA)
-        seqB = str(seqB)
+        if isinstance(seqA, Seq):
+            seqA = str(seqA)
+        if isinstance(seqB, Seq):
+            seqB = str(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

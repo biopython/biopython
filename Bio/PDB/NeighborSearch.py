@@ -1,13 +1,13 @@
 # Copyright (C) 2002, 2004 Thomas Hamelryck (thamelry@binf.ku.dk)
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
-from __future__ import print_function
 
 import numpy
 
@@ -15,7 +15,7 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
 
-class NeighborSearch(object):
+class NeighborSearch:
     """Class for neighbor searching.
 
     This class can be used for two related purposes:
@@ -39,6 +39,7 @@ class NeighborSearch(object):
 
         """
         from Bio.PDB.kdtrees import KDTree
+
         self.atom_list = atom_list
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]
@@ -87,7 +88,7 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        center = numpy.require(center, dtype='d', requirements='C')
+        center = numpy.require(center, dtype="d", requirements="C")
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
         points = self.kdt.search(center, radius)
@@ -133,12 +134,12 @@ if __name__ == "__main__":
 
     from numpy.random import random
 
-    class Atom(object):
+    class Atom:
         """Define atom class for testing."""
 
         def __init__(self):
             """Initialize the class."""
-            self.coord = (100 * random(3))
+            self.coord = 100 * random(3)
 
         def get_coord(self):
             """Return coordinates."""

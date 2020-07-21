@@ -43,7 +43,7 @@ def parse(handle):
         yield record
 
 
-class Record(object):
+class Record:
     """Holds information from a Prodoc record.
 
     Attributes:
@@ -56,13 +56,13 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.accession = ''
+        self.accession = ""
         self.prosite_refs = []
-        self.text = ''
+        self.text = ""
         self.references = []
 
 
-class Reference(object):
+class Reference:
     """Holds information from a Prodoc citation.
 
     Attributes:
@@ -74,18 +74,19 @@ class Reference(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.number = ''
-        self.authors = ''
-        self.citation = ''
+        self.number = ""
+        self.authors = ""
+        self.citation = ""
+
 
 # Below are private functions
 
 
 def __read_prosite_reference_line(record, line):
     line = line.rstrip()
-    if line[-1] != '}':
+    if line[-1] != "}":
         raise ValueError("I don't understand the Prosite reference on line\n%s" % line)
-    acc, name = line[1:-1].split('; ')
+    acc, name = line[1:-1].split("; ")
     record.prosite_refs.append((acc, name))
 
 
@@ -98,7 +99,7 @@ def __read_reference_start(record, line):
     # Read the references
     reference = Reference()
     reference.number = line[1:3].strip()
-    if line[1] == 'E':
+    if line[1] == "E":
         # If it's an electronic reference, then the URL is on the
         # line, instead of the author.
         reference.citation = line[4:].strip()
@@ -111,8 +112,8 @@ def __read_reference_line(record, line):
     if not line.strip():
         return False
     reference = record.references[-1]
-    if line.startswith('     '):
-        if reference.authors[-1] == ',':
+    if line.startswith("     "):
+        if reference.authors[-1] == ",":
             reference.authors += line[4:].rstrip()
         else:
             reference.citation += line[5:]
@@ -122,7 +123,7 @@ def __read_reference_line(record, line):
 
 def __read_copyright_line(record, line):
     # Skip the copyright statement
-    if line.startswith('+----'):
+    if line.startswith("+----"):
         return False
     return True
 
@@ -139,32 +140,32 @@ def __read(handle):
     # Read the accession number
     if not line.startswith("{PDOC"):
         raise ValueError("Line does not start with '{PDOC':\n%s" % line)
-    if line[-1] != '}':
+    if line[-1] != "}":
         raise ValueError("I don't understand accession line\n%s" % line)
     record.accession = line[1:-1]
     # Read the Prosite references
     for line in handle:
-        if line.startswith('{PS'):
+        if line.startswith("{PS"):
             __read_prosite_reference_line(record, line)
         else:
             break
     else:
         raise ValueError("Unexpected end of stream.")
     # Read the actual text
-    if not line.startswith('{BEGIN'):
+    if not line.startswith("{BEGIN"):
         raise ValueError("Line does not start with '{BEGIN':\n%s" % line)
     read_line = __read_text_line
     for line in handle:
-        if line.startswith('{END}'):
+        if line.startswith("{END}"):
             # Clean up the record and return
             for reference in record.references:
                 reference.citation = reference.citation.rstrip()
                 reference.authors = reference.authors.rstrip()
             return record
-        elif line[0] == '[' and line[3] == ']' and line[4] == ' ':
+        elif line[0] == "[" and line[3] == "]" and line[4] == " ":
             __read_reference_start(record, line)
             read_line = __read_reference_line
-        elif line.startswith('+----'):
+        elif line.startswith("+----"):
             read_line = __read_copyright_line
         elif read_line:
             if not read_line(record, line):

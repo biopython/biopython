@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes that deal with macromolecular crystal structures.
 
@@ -25,6 +27,7 @@ from .parse_pdb_header import parse_pdb_header
 
 # Find connected polypeptides in a Structure
 from .Polypeptide import PPBuilder, CaPPBuilder, is_aa, standard_aa_names
+
 # This is also useful :-)
 from Bio.Data.SCOPData import protein_letters_3to1
 
@@ -64,7 +67,7 @@ from .FragmentMapper import FragmentMapper
 from .Dice import extract
 
 # Fast atom neighbor search
-# Depends on KDTree C++ module
+# Depends on kdtrees C module
 try:
     from .NeighborSearch import NeighborSearch
 except ImportError:

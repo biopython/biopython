@@ -1,9 +1,11 @@
 \chapter{Swiss-Prot and ExPASy}
-\label{chapter:swiss_prot}
+\label{chapter:uniprot}
 
 \section{Parsing Swiss-Prot files}
 
-Swiss-Prot (\url{https://web.expasy.org/docs/swiss-prot_guideline.html}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.  We do not (yet) support the UniProtKB XML file format.
+Swiss-Prot (\url{https://web.expasy.org/docs/swiss-prot_guideline.html}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.
+
+Although in the following we focus on the older human readable plain text format, \verb|Bio.SeqIO| can read both this and the newer UniProt XML file format for annotated protein sequences.
 
 \subsection{Parsing Swiss-Prot records}
 
@@ -11,40 +13,34 @@ In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the
 
 To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. There are several ways to do so, depending on where and how the Swiss-Prot record is stored:
 \begin{itemize}
+
 \item Open a Swiss-Prot file locally:
 \begin{minted}{pycon}
 >>> handle = open("myswissprotfile.dat")
 \end{minted} 
+
 \item Open a gzipped Swiss-Prot file:
 \begin{minted}{pycon}
 >>> import gzip
 >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 \end{minted}
+
 \item Open a Swiss-Prot file over the internet:
-%--doctest . internet
 \begin{minted}{pycon}
->>> from urllib.request import urlopen # Python 3 only
->>> from io import TextIOWrapper
->>> 
->>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"))
+>>> from urllib.request import urlopen
+>>> url = "https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"
+>>> handle = urlopen(url)
 \end{minted}
 to open the file stored on the Internet before calling \verb|read|.
 
-Note for Python 2 this can be done by using:
-%--doctest . internet
-\begin{minted}{pycon}
->>> from urllib import urlopen #Python 2 only
->>>
->>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt")
-\end{minted}
 \item Open a Swiss-Prot file over the internet from the ExPASy database
-(see section \ref{subsec:expasy_swissprot}):
+(see section \ref{sec:expasy_swissprot}):
 \begin{minted}{pycon}
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
 \end{minted}
 \end{itemize}
-The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format.
+The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format. The parser will automatically decode the data as ASCII (the encoding used by Swiss-Prot) if the handle was opened in binary mode.
 
 We can use \verb+Bio.SeqIO+ as described in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt} to get file format agnostic \verb|SeqRecord| objects.  Alternatively, we can use \verb+Bio.SwissProt+ get \verb|Bio.SwissProt.Record| objects, which are a much closer match to the underlying file format.
 
@@ -141,7 +137,7 @@ It is equally easy to extract any kind of information you'd like from Swiss-Prot
 
 Swiss-Prot also distributes a file \verb+keywlist.txt+, which lists the keywords and categories used in Swiss-Prot. The file contains entries in the following form:
 
-\begin{verbatim}
+\begin{minted}{text}
 ID   2Fe-2S.
 AC   KW-0001
 DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
@@ -165,7 +161,7 @@ CA   Technical term.
 //
 ID   3Fe-4S.
 ...
-\end{verbatim}
+\end{minted}
 
 The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a Python dictionary.
 
@@ -179,13 +175,13 @@ The entries in this file can be parsed by the \verb+parse+ function in the \verb
 \end{minted}
 
 This prints
-\begin{verbatim}
+\begin{minted}{text}
 2Fe-2S.
 Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron atoms
 complexed to 2 inorganic sulfides and 4 sulfur atoms of cysteines from the
 protein.
 ...
-\end{verbatim}
+\end{minted}
 
 \section{Parsing Prosite records}
 
@@ -265,7 +261,7 @@ Again a \verb|read()| function is provided to read exactly one Prosite documenta
 
 ExPASy's Enzyme database is a repository of information on enzyme nomenclature. A typical Enzyme record looks as follows:
 
-\begin{verbatim}
+\begin{minted}{text}
 ID   3.1.1.34
 DE   Lipoprotein lipase.
 AN   Clearing factor lipase.
@@ -281,7 +277,7 @@ DR   P55031, LIPL_FELCA ;  P06858, LIPL_HUMAN ;  P11152, LIPL_MOUSE ;
 DR   O46647, LIPL_MUSVI ;  P49060, LIPL_PAPAN ;  P49923, LIPL_PIG   ;
 DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
 //
-\end{verbatim}
+\end{minted}
 
 In this example, the first line shows the EC (Enzyme Commission) number of lipoprotein lipase (second line). Alternative names of lipoprotein lipase are "clearing factor lipase", "diacylglycerol lipase", and "diglyceride lipase" (lines 3 through 5). The line starting with "CA" shows the catalytic activity of this enzyme. Comment lines start with "CC". The "PR" line shows references to the Prosite Documentation records, and the "DR" lines show references to Swiss-Prot records. Not of these entries are necessarily present in an Enzyme record.
 
@@ -342,7 +338,7 @@ Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from th
 To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
 
 \subsection{Retrieving a Swiss-Prot record}
-\label{subsec:expasy_swissprot}
+\label{sec:expasy_swissprot}
 
 Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants.
 
@@ -447,10 +443,10 @@ For these functions, an invalid accession number returns an error message in HTM
 
 You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
 
-\begin{verbatim}
+\begin{minted}{text}
 MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
 CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
-\end{verbatim}
+\end{minted}
 
 you can use the following code:
 
@@ -500,4 +496,3 @@ Other ScanProsite parameters can be passed as keyword arguments; see the \href{h
 >>> result.n_match
 7
 \end{minted}
-

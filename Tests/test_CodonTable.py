@@ -23,7 +23,7 @@ from Bio.Data.CodonTable import list_ambiguous_codons, list_possible_proteins
 from Bio.Data.CodonTable import TranslationError
 
 exception_list = []
-ids = [key for key in unambiguous_dna_by_id]
+ids = list(unambiguous_dna_by_id)
 
 # Find codon tables with 'ambiguous' stop codons (coding both for stop and
 # an amino acid) and put them into exception_list
@@ -92,7 +92,7 @@ class BasicSanityTests(unittest.TestCase):
     def test_ambiguous_tables(self):
         """Check if all IDs and all names are present in ambiguous tables."""
         for key, val in generic_by_name.items():
-            self.assertTrue(key in ambiguous_generic_by_name[key].names)
+            self.assertIn(key, ambiguous_generic_by_name[key].names)
         for key, val in generic_by_id.items():
             self.assertEqual(ambiguous_generic_by_id[key].id, key)
 
@@ -102,21 +102,21 @@ class AmbiguousCodonsTests(unittest.TestCase):
 
     def test_list_ambiguous_codons(self):
         """Check if stop codons are properly extended."""
-        self.assertEqual(list_ambiguous_codons(['TGA', 'TAA'],
+        self.assertEqual(list_ambiguous_codons(["TGA", "TAA"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TGA', 'TAA', 'TRA'])
-        self.assertEqual(list_ambiguous_codons(['TAG', 'TGA'],
+                         ["TGA", "TAA", "TRA"])
+        self.assertEqual(list_ambiguous_codons(["TAG", "TGA"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TAG', 'TGA'])
-        self.assertEqual(list_ambiguous_codons(['TAG', 'TAA'],
+                         ["TAG", "TGA"])
+        self.assertEqual(list_ambiguous_codons(["TAG", "TAA"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TAG', 'TAA', 'TAR'])
-        self.assertEqual(list_ambiguous_codons(['UAG', 'UAA'],
+                         ["TAG", "TAA", "TAR"])
+        self.assertEqual(list_ambiguous_codons(["UAG", "UAA"],
                                                IUPACData.ambiguous_rna_values),
-                         ['UAG', 'UAA', 'UAR'])
-        self.assertEqual(list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
+                         ["UAG", "UAA", "UAR"])
+        self.assertEqual(list_ambiguous_codons(["TGA", "TAA", "TAG"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TGA', 'TAA', 'TAG', 'TAR', 'TRA'])
+                         ["TGA", "TAA", "TAG", "TAR", "TRA"])
 
     def test_coding(self):
         """Check a few ambiguous codons for correct coding."""
@@ -671,11 +671,11 @@ class SingleTableTests(unittest.TestCase):
     def test_table32(self):
         """Check table 32: Balanophoraceae Plastid.
 
-        NOTE: This code has one unambiguous stop codon! TAA codes for either
-        stop or W, dependent on the context.
-        Another note: I guess this is wrong. There is a recent publication
-        that shows that TAA is not a stop codon anymore but only coding for
-        W. So table 32 may change in the near future.
+        In v4.4, TAG and TGA were simple stop codons, while TAA
+        coded for either stop or W, dependent on the context.
+
+        In v4.5, TAA and TGA were just simple stop codons. TAG
+        was not a stop codon any more. TAA was just a stop codon.
         """
         dna_table = unambiguous_dna_by_id[32]
         nuc_table = generic_by_id[32]
@@ -687,9 +687,9 @@ class SingleTableTests(unittest.TestCase):
         self.assertEqual(len(dna_table.start_codons), 7)
         for codon in ("TTG", "CTG", "ATT", "ATC", "ATA", "ATG", "GTG"):
             self.assertIn(codon, dna_table.start_codons)
-        self.assertEqual(len(dna_table.stop_codons), 3)
-        self.assertIn("UAR", amb_rna_table.stop_codons)
-        self.assertEqual(nuc_table.forward_table["UAA"], "W")
+        self.assertEqual(len(dna_table.stop_codons), 2)
+        self.assertIn("URA", amb_rna_table.stop_codons)
+        self.assertNotIn("UAA", nuc_table.forward_table)
 
 
 class ErrorConditions(unittest.TestCase):
@@ -698,14 +698,14 @@ class ErrorConditions(unittest.TestCase):
     def test_list_possible_proteins(self):
         """Raise errors in list_possible proteins."""
         table = unambiguous_dna_by_id[1]
-        amb_values = {'T': 'T', 'G': 'G', 'A': 'A', 'R': ('A', 'G')}
+        amb_values = {"T": "T", "G": "G", "A": "A", "R": ("A", "G")}
         with self.assertRaises(TranslationError):
             # Can be stop or amino acid:
-            codon = ['T', 'R', 'R']
+            codon = ["T", "R", "R"]
             list_possible_proteins(codon, table.forward_table, amb_values)
         with self.assertRaises(KeyError):
             # Is a stop codon:
-            codon = ['T', 'G', 'A']
+            codon = ["T", "G", "A"]
             list_possible_proteins(codon, table.forward_table, amb_values)
 
     def test_ambiguous_forward_table(self):
@@ -714,7 +714,7 @@ class ErrorConditions(unittest.TestCase):
         self.assertEqual(table.forward_table.get("ZZZ"), None)
         with self.assertRaises(KeyError):
             table.forward_table["ZZZ"]  # KeyError it's a stop codon
-            table.forward_table['TGA']  # KeyError stop codon
+            table.forward_table["TGA"]  # KeyError stop codon
         with self.assertRaises(TranslationError):
             table.forward_table["WWW"]  # Translation error does not code
 

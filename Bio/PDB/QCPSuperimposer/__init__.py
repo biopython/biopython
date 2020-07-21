@@ -1,7 +1,10 @@
 # Copyright (C) 2015, Anuj Sharma (anuj.sharma80@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Structural alignment using Quaternion Characteristic Polynomial (QCP).
 
 QCPSuperimposer finds the best rotation and translation to put
@@ -10,13 +13,12 @@ eg. useful to superimpose crystal structures. QCP stands for
 Quaternion Characteristic Polynomial, which is used in the algorithm.
 """
 
-from __future__ import print_function
 
-from numpy import dot, sqrt, array, matrix, inner, zeros
+from numpy import dot, sqrt, array, inner
 from .qcprotmodule import FastCalcRMSDAndRotation
 
 
-class QCPSuperimposer(object):
+class QCPSuperimposer:
     """Quaternion Characteristic Polynomial (QCP) Superimposer.
 
     QCPSuperimposer finds the best rotation and translation to put
@@ -61,9 +63,35 @@ class QCPSuperimposer(object):
 
     def _align(self, centered_coords1, centered_coords2):
         (E0, A) = self._inner_product(centered_coords1, centered_coords2)
-        (rmsd, r0, r1, r2, r3, r4, r5, r6, r7, r8, q1, q2, q3, q4) = FastCalcRMSDAndRotation(
-            A[0][0], A[0][1], A[0][2], A[1][0], A[1][1], A[1][2], A[2][0], A[2][1], A[2][2],
-            E0, len(centered_coords1), -1.0)
+        (
+            rmsd,
+            r0,
+            r1,
+            r2,
+            r3,
+            r4,
+            r5,
+            r6,
+            r7,
+            r8,
+            q1,
+            q2,
+            q3,
+            q4,
+        ) = FastCalcRMSDAndRotation(
+            A[0][0],
+            A[0][1],
+            A[0][2],
+            A[1][0],
+            A[1][1],
+            A[1][2],
+            A[2][0],
+            A[2][1],
+            A[2][2],
+            E0,
+            len(centered_coords1),
+            -1.0,
+        )
         rot = array([r0, r1, r2, r3, r4, r5, r6, r7, r8]).reshape(3, 3)
         return (rmsd, rot.T, [q1, q2, q3, q4])
 
@@ -103,8 +131,7 @@ class QCPSuperimposer(object):
         coords = coords - av1
         reference_coords = reference_coords - av2
         #
-        (self.rms, self.rot, self.lquart) = self._align(
-            coords, reference_coords)
+        (self.rms, self.rot, self.lquart) = self._align(coords, reference_coords)
         self.tran = av2 - dot(av1, self.rot)
 
     def get_transformed(self):

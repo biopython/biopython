@@ -1,4 +1,6 @@
-/* This file is part of the Biopython distribution and governed by your
+/* Copyright 2018-2020 by Michiel de Hoon.  All rights reserved.
+ *
+ * This file is part of the Biopython distribution and governed by your
  * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
  * Please see the LICENSE file that should have been included as part of this
  * package.
@@ -67,13 +69,7 @@ Point_init(Point *self, PyObject *args, PyObject *kwds)
 static PyObject*
 Point_repr(Point* self)
 {
-    char string[64];
-    sprintf(string, "%ld: %g", self->index, self->radius);
-#if PY_MAJOR_VERSION >= 3
-    return PyUnicode_FromFormat(string);
-#else
-    return PyString_FromString(string);
-#endif
+    return PyUnicode_FromFormat("%ld: %g", self->index, self->radius);
 }
 
 static char Point_index__doc__[] =
@@ -82,11 +78,7 @@ static char Point_index__doc__[] =
 static PyObject*
 Point_getindex(Point* self, void* closure)
 {
-#if PY_MAJOR_VERSION >= 3
     return PyLong_FromLong(self->index);
-#else
-    return PyInt_FromLong(self->index);
-#endif
 }
 
 static char Point_radius__doc__[] = "the radius";
@@ -175,13 +167,8 @@ Neighbor_init(Neighbor *self, PyObject *args, PyObject *kwds)
 static PyObject*
 Neighbor_repr(Neighbor* self)
 {
-    char string[64];
-    sprintf(string, "(%ld, %ld): %g", self->index1, self->index2, self->radius);
-#if PY_MAJOR_VERSION >= 3
-    return PyUnicode_FromFormat(string);
-#else
-    return PyString_FromString(string);
-#endif
+    return PyUnicode_FromFormat("(%ld, %ld): %g",
+                                self->index1, self->index2, self->radius);
 }
 
 static char Neighbor_index1__doc__[] =
@@ -190,11 +177,7 @@ static char Neighbor_index1__doc__[] =
 static PyObject*
 Neighbor_getindex1(Neighbor* self, void* closure)
 {
-#if PY_MAJOR_VERSION >= 3
     return PyLong_FromLong(self->index1);
-#else
-    return PyInt_FromLong(self->index1);
-#endif
 }
 
 static char Neighbor_index2__doc__[] =
@@ -203,11 +186,7 @@ static char Neighbor_index2__doc__[] =
 static PyObject*
 Neighbor_getindex2(Neighbor* self, void* closure)
 {
-#if PY_MAJOR_VERSION >= 3
     return PyLong_FromLong(self->index2);
-#else
-    return PyInt_FromLong(self->index2);
-#endif
 }
 
 static char Neighbor_radius__doc__[] = "the radius";
@@ -282,7 +261,7 @@ typedef struct Node
 static Node*
 Node_create(double cut_value, int cut_dim, long int start, long int end)
 {
-    Node* node = malloc(sizeof(Node));
+    Node* node = PyMem_Malloc(sizeof(Node));
     if (node == NULL) return NULL;
     node->_left = NULL;
     node->_right = NULL;
@@ -299,7 +278,7 @@ static void Node_destroy(Node* node)
     if (node == NULL) return;
     Node_destroy(node->_left);
     Node_destroy(node->_right);
-    free(node);
+    PyMem_Free(node);
 }
 
 static int Node_is_leaf(Node* node)
@@ -319,15 +298,15 @@ typedef struct
 static Region* Region_create(const double *left, const double *right)
 {
     int i;
-    Region* region = malloc(sizeof(Region));
+    Region* region = PyMem_Malloc(sizeof(Region));
     if (region == NULL) return NULL;
 
     if (left == NULL || right == NULL)
     {
         /* [-INF, INF] */
         for (i = 0; i < DIM; i++) {
-            region->_left[i]=-INF;
-            region->_right[i]=INF;
+            region->_left[i] = -INF;
+            region->_right[i] = INF;
         }
     }
     else
@@ -342,7 +321,7 @@ static Region* Region_create(const double *left, const double *right)
 
 static void Region_destroy(Region* region)
 {
-    if (region) free(region);
+    if (region) PyMem_Free(region);
 }
 
 static int Region_encloses(Region* region, double *coord)
@@ -819,7 +798,7 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
 {
     int localdim;
 
-    if (depth== 0)
+    if (depth == 0)
     {
         /* start with [begin, end+1] */
         offset_begin = 0;
@@ -1038,7 +1017,7 @@ static void
 KDTree_dealloc(KDTree* self)
 {
     Node_destroy(self->_root);
-    if (self->_data_point_list) free(self->_data_point_list);
+    if (self->_data_point_list) PyMem_Free(self->_data_point_list);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -1078,7 +1057,7 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     }
     n = view.shape[0];
 
-    data_point_list = malloc(n*sizeof(DataPoint));
+    data_point_list = PyMem_Malloc(n*sizeof(DataPoint));
     if (data_point_list == NULL) {
         /* KDTree_dealloc will deallocate data already stored in KDTree */
         PyBuffer_Release(&view);
@@ -1091,7 +1070,7 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
         for (j = 0; j < DIM; j++, coords++) {
             value = *coords;
             if (value <= -1e6 || value >= 1e6) {
-                free(data_point_list);
+                PyMem_Free(data_point_list);
                 PyBuffer_Release(&view);
                 PyErr_SetString(PyExc_ValueError,
                     "coordinate values should lie between -1e6 and 1e6");
@@ -1105,7 +1084,7 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     /* build KD tree */
     self = (KDTree*)type->tp_alloc(type, 0);
     if (!self) {
-        free(data_point_list);
+        PyMem_Free(data_point_list);
         return NULL;
     }
     self->_bucket_size = bucket_size;
@@ -1421,8 +1400,6 @@ static PyTypeObject KDTreeType = {
 /* -- Initialization -------------------------------------------------------- */
 /* ========================================================================== */
 
-#if PY_MAJOR_VERSION >= 3
-
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "kdtrees",
@@ -1437,53 +1414,42 @@ static struct PyModuleDef moduledef = {
 
 PyObject *
 PyInit_kdtrees(void)
-
-#else
-
-void
-initkdtrees(void)
-#endif
 {
   PyObject *module;
 
   PointType.tp_new = PyType_GenericNew;
   NeighborType.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&KDTreeType) < 0)
-#if PY_MAJOR_VERSION >= 3
-      return NULL;
-#else
-      return;
-#endif
-  if (PyType_Ready(&PointType) < 0)
-#if PY_MAJOR_VERSION >= 3
-      return NULL;
-#else
-      return;
-#endif
-  if (PyType_Ready(&NeighborType) < 0)
-#if PY_MAJOR_VERSION >= 3
-      return NULL;
-#else
-      return;
-#endif
 
-#if PY_MAJOR_VERSION >= 3
+  if (PyType_Ready(&KDTreeType) < 0)
+      return NULL;
+  if (PyType_Ready(&PointType) < 0)
+      return NULL;
+  if (PyType_Ready(&NeighborType) < 0)
+      return NULL;
+
   module = PyModule_Create(&moduledef);
   if (module == NULL) return NULL;
-#else
-  module = Py_InitModule("kdtrees", NULL);
-  if (module == NULL) return;
-#endif
 
   Py_INCREF(&KDTreeType);
-  Py_INCREF(&PointType);
-  Py_INCREF(&NeighborType);
-  PyModule_AddObject(module, "KDTree", (PyObject*) &KDTreeType);
-  PyModule_AddObject(module, "Point", (PyObject*) &PointType);
-  PyModule_AddObject(module, "Neighbor", (PyObject*) &NeighborType);
+  if (PyModule_AddObject(module, "KDTree", (PyObject*) &KDTreeType) < 0) {
+      Py_DECREF(module);
+      Py_DECREF(&KDTreeType);
+      return NULL;
+  }
 
-  if (PyErr_Occurred()) Py_FatalError("can't initialize module kdtrees");
-#if PY_MAJOR_VERSION >= 3
+  Py_INCREF(&PointType);
+  if (PyModule_AddObject(module, "Point", (PyObject*) &PointType) < 0) {
+      Py_DECREF(module);
+      Py_DECREF(&PointType);
+      return NULL;
+  }
+
+  Py_INCREF(&NeighborType);
+  if (PyModule_AddObject(module, "Neighbor", (PyObject*) &NeighborType) < 0) {
+      Py_DECREF(module);
+      Py_DECREF(&NeighborType);
+      return NULL;
+  }
+
   return module;
-#endif
 }

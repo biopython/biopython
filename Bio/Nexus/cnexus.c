@@ -1,7 +1,9 @@
 /* Copyright 2005 by Frank Kauff.  All rights reserved.
- * This code is part of the Biopython distribution and governed by its
- * license. Please see the LICENSE file that should have been included
- * as part of this package.
+ *
+ * This file is part of the Biopython distribution and governed by your
+ * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+ * Please see the LICENSE file that should have been included as part of this
+ * package.
  *
  * cnexus.c
  *
@@ -29,7 +31,7 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
 
     if (!PyArg_ParseTuple(args, "s", &input))
         return NULL;
-    if (!(scanned=malloc(strlen(input)+1)))
+    if (!(scanned=PyMem_RawMalloc(strlen(input)+1)))
         PyErr_NoMemory();
     scanned_start=scanned;
     for(t=*input;(t=*input);input++)
@@ -64,7 +66,7 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
                 commlevel--;
                 if (commlevel<0) /* error: unmatched ] */
                 {
-                    free(scanned_start);
+                    PyMem_RawFree(scanned_start);
                     return Py_BuildValue("s","]");
                 }
                 continue;
@@ -89,14 +91,14 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
     if (commlevel>0)
     {
         /* error: unmatched [ */
-        free(scanned_start);
+        PyMem_RawFree(scanned_start);
         return Py_BuildValue("s","[");
     }
     else
     {
         *scanned=0; /* end of string */
         cleaninput= Py_BuildValue("s",scanned_start);
-        free(scanned_start);
+        PyMem_RawFree(scanned_start);
         return cleaninput;
     }
 }
@@ -106,8 +108,6 @@ static PyMethodDef cNexusMethods[]=
     {"scanfile",cnexus_scanfile,METH_VARARGS,"Scan file and deal with comments and quotes."},
     {NULL,NULL,0,NULL}
 };
-
-#if PY_MAJOR_VERSION >= 3
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
@@ -126,12 +126,3 @@ PyInit_cnexus(void)
 {
     return PyModule_Create(&moduledef);
 }
-
-
-#else
-
-PyMODINIT_FUNC initcnexus(void)
-{
-    (void) Py_InitModule("cnexus",cNexusMethods);
-}
-#endif

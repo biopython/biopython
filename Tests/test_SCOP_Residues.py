@@ -23,7 +23,7 @@ class ResiduesTests(unittest.TestCase):
         ("A:12-19,A:23-25", (("A", "12", "19"), ("A", "23", "25"))),
         ("12-19,1:23-25", (("", "12", "19"), ("1", "23", "25"))),
         ("0-1,1:-1a-25a,T:", (("", "0", "1"), ("1", "-1a", "25a"), ("T", "", ""))),
-        )
+    )
 
     def testParse(self):
         for loc in self.res:
@@ -54,7 +54,7 @@ class ResiduesTests(unittest.TestCase):
 
             r = Residues("104l A:112-113")
             self.assertEqual(r.pdbid, "104l")
-            self.assertEqual(r.fragments, (('A', '112', '113'),))
+            self.assertEqual(r.fragments, (("A", "112", "113"),))
 
     def testJustPdbId(self):
         r = Residues("1sds")
@@ -65,6 +65,6 @@ class ResiduesTests(unittest.TestCase):
         self.assertRaises(ValueError, Residues, "09324923423hh./;,.389")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

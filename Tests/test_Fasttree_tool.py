@@ -16,8 +16,7 @@ import os
 import itertools
 import unittest
 
-from Bio._py3k import StringIO
-from Bio._py3k import zip
+from io import StringIO
 
 from Bio import SeqIO
 from Bio import Phylo
@@ -28,7 +27,7 @@ from Bio.Application import ApplicationError
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 fasttree_exe = None
 if sys.platform == "win32":
@@ -53,7 +52,7 @@ if sys.platform == "win32":
             if fasttree_exe:
                 break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
     # Website uses 'FastTree', Nate's system had 'fasttree'
     likely_exes = ["FastTree", "fasttree"]
     for filename in likely_exes:
@@ -84,7 +83,7 @@ class FastTreeTestCase(unittest.TestCase):
         self.assertEqual(str(eval(repr(cline))), str(cline))
         out, err = cline()
         self.assertTrue(err.strip().startswith("FastTree"))
-        tree = Phylo.read(StringIO(out), 'newick')
+        tree = Phylo.read(StringIO(out), "newick")
 
         def lookup_by_names(tree):
             names = {}
@@ -95,7 +94,7 @@ class FastTreeTestCase(unittest.TestCase):
                     names[clade.name] = clade
             return names
         names = lookup_by_names(tree)
-        self.assertTrue(len(names) > 0)
+        self.assertGreater(len(names), 0)
 
         def terminal_neighbor_dists(self):
             """Return a list of distances between adjacent terminals."""
@@ -106,17 +105,16 @@ class FastTreeTestCase(unittest.TestCase):
             return [self.distance(*i) for i in
                     generate_pairs(self.find_clades(terminal=True))]
         for dist in terminal_neighbor_dists(tree):
-            self.assertTrue(dist > 0.0)
+            self.assertGreater(dist, 0.0)
 
     def test_normal(self):
         self.check("Quality/example.fasta", 3)
 
     def test_filename_spaces(self):
         path = "Clustalw/temp horses.fasta"  # note spaces in filename
-        handle = open(path, "w")
         records = SeqIO.parse("Phylip/hennigian.phy", "phylip")
-        length = SeqIO.write(records, handle, "fasta")
-        handle.close()
+        with open(path, "w") as handle:
+            length = SeqIO.write(records, handle, "fasta")
         self.assertEqual(length, 10)
         self.check(path, length)
 
@@ -139,7 +137,7 @@ class FastTreeTestCase(unittest.TestCase):
         self.assertEqual(len(records), 1)
         cline = FastTreeCommandline(fasttree_exe, input=path)
         stdout, stderr = cline()
-        self.assertTrue("Unique: 1/1" in stderr)
+        self.assertIn("Unique: 1/1", stderr)
 
     def test_empty(self):
         path = "does_not_exist.fasta"

@@ -5,16 +5,23 @@
 
 """Output of PDB files."""
 
-from Bio._py3k import basestring
 
-from Bio.PDB.StructureBuilder import StructureBuilder  # To allow saving of chains, residues, etc..
-from Bio.Data.IUPACData import atom_weights  # Allowed Elements
+# To allow saving of chains, residues, etc..
+from Bio.PDB.StructureBuilder import StructureBuilder
+
+# Allowed Elements
+from Bio.Data.IUPACData import atom_weights
 
 
-_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
+_ATOM_FORMAT_STRING = (
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
+)
+_PQR_ATOM_FORMAT_STRING = (
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
+)
 
 
-class Select(object):
+class Select:
     """Select everything for PDB output (for use as a base class).
 
     Default selection (everything) during writing - can be used as base class
@@ -45,32 +52,96 @@ class Select(object):
 _select = Select()
 
 
-class PDBIO(object):
-    """Write a Structure object (or a subset of a Structure object) as a PDB file.
+class StructureIO:
+    """Base class to derive structure file format writers from."""
+
+    def __init__(self):
+        """Initialise."""
+        pass
+
+    def set_structure(self, pdb_object):
+        """Check what the user is providing and build a structure."""
+        if pdb_object.level == "S":
+            structure = pdb_object
+        else:
+            sb = StructureBuilder()
+            sb.init_structure("pdb")
+            sb.init_seg(" ")
+            # Build parts as necessary
+            if pdb_object.level == "M":
+                sb.structure.add(pdb_object.copy())
+                self.structure = sb.structure
+            else:
+                sb.init_model(0)
+                if pdb_object.level == "C":
+                    sb.structure[0].add(pdb_object.copy())
+                else:
+                    sb.init_chain("A")
+                    if pdb_object.level == "R":
+                        try:
+                            parent_id = pdb_object.parent.id
+                            sb.structure[0]["A"].id = parent_id
+                        except Exception:
+                            pass
+                        sb.structure[0]["A"].add(pdb_object.copy())
+                    else:
+                        # Atom
+                        sb.init_residue("DUM", " ", 1, " ")
+                        try:
+                            parent_id = pdb_object.parent.parent.id
+                            sb.structure[0]["A"].id = parent_id
+                        except Exception:
+                            pass
+                        sb.structure[0]["A"].child_list[0].add(pdb_object.copy())
+
+            # Return structure
+            structure = sb.structure
+        self.structure = structure
+
+
+class PDBIO(StructureIO):
+    """Write a Structure object (or a subset of a Structure object) as a PDB or PQR file.
 
     Examples
     --------
     >>> from Bio.PDB import PDBParser
-    >>> p=PDBParser()
-    >>> s=p.get_structure("1fat", "1fat.pdb")
+    >>> from Bio.PDB.PDBIO import PDBIO
+    >>> parser = PDBParser()
+    >>> structure = parser.get_structure("1a8o", "PDB/1A8O.pdb")
     >>> io=PDBIO()
-    >>> io.set_structure(s)
-    >>> io.save("out.pdb")
+    >>> io.set_structure(structure)
+    >>> io.save("bio-pdb-pdbio-out.pdb")
+    >>> import os
+    >>> os.remove("bio-pdb-pdbio-out.pdb")  # tidy up
+
 
     """
 
-    def __init__(self, use_model_flag=0):
+    def __init__(self, use_model_flag=0, is_pqr=False):
         """Create the PDBIO object.
 
         :param use_model_flag: if 1, force use of the MODEL record in output.
         :type use_model_flag: int
+        :param is_pqr: if True, build PQR file. Otherwise build PDB file.
+        :type is_pqr: Boolean
         """
         self.use_model_flag = use_model_flag
+        self.is_pqr = is_pqr
 
-    # private mathods
+    # private methods
 
-    def _get_atom_line(self, atom, hetfield, segid, atom_number, resname,
-                       resseq, icode, chain_id, charge="  "):
+    def _get_atom_line(
+        self,
+        atom,
+        hetfield,
+        segid,
+        atom_number,
+        resname,
+        resseq,
+        icode,
+        chain_id,
+        charge="  ",
+    ):
         """Return an ATOM PDB string (PRIVATE)."""
         if hetfield != " ":
             record_type = "HETATM"
@@ -95,66 +166,115 @@ class PDBIO(object):
 
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
-        bfactor = atom.get_bfactor()
-        occupancy = atom.get_occupancy()
-        try:
-            occupancy_str = "%6.2f" % occupancy
-        except TypeError:
-            if occupancy is None:
-                occupancy_str = " " * 6
-                import warnings
-                from Bio import BiopythonWarning
-                warnings.warn("Missing occupancy in atom %s written as blank" %
-                              repr(atom.get_full_id()), BiopythonWarning)
-            else:
-                raise TypeError("Invalid occupancy %r in atom %r"
-                                % (occupancy, atom.get_full_id()))
 
-        args = (record_type, atom_number, name, altloc, resname, chain_id,
-                resseq, icode, x, y, z, occupancy_str, bfactor, segid,
-                element, charge)
-        return _ATOM_FORMAT_STRING % args
+        # PDB Arguments
+        if not self.is_pqr:
+            bfactor = atom.get_bfactor()
+            occupancy = atom.get_occupancy()
+
+        # PQR Arguments
+        else:
+            radius = atom.get_radius()
+            pqr_charge = atom.get_charge()
+
+        if not self.is_pqr:
+            try:
+                occupancy_str = "%6.2f" % occupancy
+            except TypeError:
+                if occupancy is None:
+                    occupancy_str = " " * 6
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing occupancy in atom %r written as blank"
+                        % (atom.get_full_id(),),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid occupancy %r in atom %r"
+                        % (occupancy, atom.get_full_id())
+                    ) from None
+
+            args = (
+                record_type,
+                atom_number,
+                name,
+                altloc,
+                resname,
+                chain_id,
+                resseq,
+                icode,
+                x,
+                y,
+                z,
+                occupancy_str,
+                bfactor,
+                segid,
+                element,
+                charge,
+            )
+            return _ATOM_FORMAT_STRING % args
+
+        else:
+            # PQR case
+            try:
+                pqr_charge = "%7.4f" % pqr_charge
+            except TypeError:
+                if pqr_charge is None:
+                    pqr_charge = " " * 7
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing charge in atom %r written as blank"
+                        % (atom.get_full_id(),),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid charge %r in atom %r"
+                        % (pqr_charge, atom.get_full_id())
+                    ) from None
+            try:
+                radius = "%6.4f" % radius
+            except TypeError:
+                if radius is None:
+                    radius = " " * 6
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing radius in atom %r written as blank"
+                        % (atom.get_full_id(),),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid radius %r in atom %r" % (radius, atom.get_full_id())
+                    ) from None
+
+            args = (
+                record_type,
+                atom_number,
+                name,
+                altloc,
+                resname,
+                chain_id,
+                resseq,
+                icode,
+                x,
+                y,
+                z,
+                pqr_charge,
+                radius,
+                element,
+            )
+
+            return _PQR_ATOM_FORMAT_STRING % args
 
     # Public methods
-
-    def set_structure(self, pdb_object):
-        """Check what the user is providing and build a structure."""
-        if pdb_object.level == "S":
-            structure = pdb_object
-        else:
-            sb = StructureBuilder()
-            sb.init_structure('pdb')
-            sb.init_seg(' ')
-            # Build parts as necessary
-            if pdb_object.level == "M":
-                sb.structure.add(pdb_object.copy())
-                self.structure = sb.structure
-            else:
-                sb.init_model(0)
-                if pdb_object.level == "C":
-                    sb.structure[0].add(pdb_object.copy())
-                else:
-                    sb.init_chain('A')
-                    if pdb_object.level == "R":
-                        try:
-                            parent_id = pdb_object.parent.id
-                            sb.structure[0]['A'].id = parent_id
-                        except Exception:
-                            pass
-                        sb.structure[0]['A'].add(pdb_object.copy())
-                    else:
-                        # Atom
-                        sb.init_residue('DUM', ' ', 1, ' ')
-                        try:
-                            parent_id = pdb_object.parent.parent.id
-                            sb.structure[0]['A'].id = parent_id
-                        except Exception:
-                            pass
-                        sb.structure[0]['A'].child_list[0].add(pdb_object.copy())
-
-            # Return structure
-            structure = sb.structure
-        self.structure = structure
 
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
@@ -179,7 +299,7 @@ class PDBIO(object):
         Typically select is a subclass of L{Select}.
         """
         get_atom_line = self._get_atom_line
-        if isinstance(file, basestring):
+        if isinstance(file, str):
             fp = open(file, "w")
             close_file = 1
         else:
@@ -222,18 +342,42 @@ class PDBIO(object):
                             model_residues_written = 1
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
-                            s = get_atom_line(atom, hetfield, segid, atom_number, resname,
-                                              resseq, icode, chain_id)
+
+                                # Check if the atom serial number is an integer
+                                # Not always the case for mmCIF files.
+                                try:
+                                    atom_number = int(atom_number)
+                                except ValueError:
+                                    raise ValueError(
+                                        f"{repr(atom_number)} is not a number."
+                                        "Atom serial numbers must be numerical"
+                                        " If you are converting from an mmCIF"
+                                        " structure, try using"
+                                        " preserve_atom_numbering=False"
+                                    )
+
+                            s = get_atom_line(
+                                atom,
+                                hetfield,
+                                segid,
+                                atom_number,
+                                resname,
+                                resseq,
+                                icode,
+                                chain_id,
+                            )
                             fp.write(s)
                             if not preserve_atom_numbering:
                                 atom_number += 1
                 if chain_residues_written:
-                    fp.write("TER   %5i      %3s %c%4i%c                                                      \n"
-                             % (atom_number, resname, chain_id, resseq, icode))
+                    fp.write(
+                        "TER   %5i      %3s %c%4i%c                                                      \n"
+                        % (atom_number, resname, chain_id, resseq, icode)
+                    )
 
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
         if write_end:
-            fp.write('END\n')
+            fp.write("END\n")
         if close_file:
             fp.close()

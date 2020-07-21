@@ -8,7 +8,7 @@
 
 import unittest
 
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio.AlignIO.PhylipIO import PhylipIterator, PhylipWriter
 
@@ -129,22 +129,37 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
 
 
 class TestPhylipIO(unittest.TestCase):
-
     def test_one(self):
         handle = StringIO(phylip_text)
         ids = []
         for alignment in PhylipIterator(handle):
             for record in alignment:
                 ids.append(record.id)
-        self.assertEqual(ids, ['V_Harveyi_', 'B_subtilis', 'B_subtilis',
-                               'YA80_HAEIN', 'FLIY_ECOLI', 'E_coli_Gln',
-                               'Deinococcu', 'HISJ_E_COL'])
+        self.assertEqual(
+            ids,
+            [
+                "V_Harveyi_",
+                "B_subtilis",
+                "B_subtilis",
+                "YA80_HAEIN",
+                "FLIY_ECOLI",
+                "E_coli_Gln",
+                "Deinococcu",
+                "HISJ_E_COL",
+            ],
+        )
 
-        expected = """mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
+        expected = (
+            """mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
         fdidlakelc krintqctfv enpldalips lkakkidaim sslsitekrq qeiaftdkly
         aadsrlvvak nsdiqptves lkgkrvgvlq gttqetfgne hwapkgieiv syqgqdniys
         dltagridaafqdevaaseg flkqpvgkdy kfggpsvkde klfgvgtgmg lrkednelre
-        alnkafaemradgtyeklak kyfdfdvygg""".replace(" ", "").replace("\n", "").upper()
+        alnkafaemradgtyeklak kyfdfdvygg""".replace(
+                " ", ""
+            )
+            .replace("\n", "")
+            .upper()
+        )
         self.assertEqual(str(record.seq).replace("-", ""), expected)
 
     def test_two_and_three(self):

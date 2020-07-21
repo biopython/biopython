@@ -2,7 +2,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Test storing biopython objects in a BioSQL relational db."""
-from __future__ import print_function
 
 import os
 import platform
@@ -10,9 +9,7 @@ import unittest
 import tempfile
 import time
 
-from Bio._py3k import StringIO
-from Bio._py3k import zip
-from Bio._py3k import basestring
+from io import StringIO
 
 # Hide annoying warnings from things like bonds in GenBank features,
 # or PostgreSQL schema rules. TODO - test these warnings are raised!
@@ -70,9 +67,9 @@ class TaxonomyTest(unittest.TestCase):
 
         # load the database
         db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
+        self.server = BioSeqDatabase.open_database(
+            driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
+        )
 
         # remove the database if it already exists
         try:
@@ -117,9 +114,9 @@ class TaxonomyTest(unittest.TestCase):
         taxon_record = Entrez.read(handle)
         entrez_tax = []
 
-        for t in taxon_record[0]['LineageEx']:
-            entrez_tax.append(t['ScientificName'])
-        entrez_tax.append(taxon_record[0]['ScientificName'])
+        for t in taxon_record[0]["LineageEx"]:
+            entrez_tax.append(t["ScientificName"])
+        entrez_tax.append(taxon_record[0]["ScientificName"])
         self.db.load(self.iterator, True)
 
         # do some simple tests to make sure we actually loaded the right
@@ -131,7 +128,7 @@ class TaxonomyTest(unittest.TestCase):
         test_record = self.db.lookup(accession="X55053")
 
         # make sure that the ncbi taxonomy id is corrent
-        self.assertEqual(test_record.annotations['ncbi_taxid'], 3702)
+        self.assertEqual(test_record.annotations["ncbi_taxid"], 3702)
         # make sure that the taxonomic lineage is the same as reported
         # using the Entrez module
-        self.assertEqual(test_record.annotations['taxonomy'], entrez_tax)
+        self.assertEqual(test_record.annotations["taxonomy"], entrez_tax)

@@ -1,9 +1,9 @@
 # Copyright 2014-2016 by Marco Galardini.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 r"""phenotype data input/output.
 
 Input
@@ -38,8 +38,7 @@ consider multiple records an error).  For example, when dealing with PM
 JSON files saved by the opm library.
 
 However, if you just want the first record from a file containing multiple
-record, use the next() function on the iterator (or under Python 2, the
-iterator's next() method):
+record, use the next() function on the iterator:
 
     >>> from Bio import phenotype
     >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
@@ -84,9 +83,6 @@ Note that while Bio.phenotype can read the above file formats, it can only
 write in JSON format.
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from . import phen_micro
@@ -94,18 +90,20 @@ from . import phen_micro
 import warnings
 
 
-warnings.warn('Bio.phenotype is an experimental submodule which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
+warnings.warn(
+    "Bio.phenotype is an experimental submodule which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
 
 # Convention for format names is "mainname-format" in lower case.
 
-_FormatToIterator = {"pm-csv": phen_micro.CsvIterator,
-                     "pm-json": phen_micro.JsonIterator,
-                     }
+_FormatToIterator = {
+    "pm-csv": phen_micro.CsvIterator,
+    "pm-json": phen_micro.JsonIterator,
+}
 
-_FormatToWriter = {"pm-json": phen_micro.JsonWriter,
-                   }
+_FormatToWriter = {"pm-json": phen_micro.JsonWriter}
 
 
 def write(plates, handle, format):
@@ -121,7 +119,7 @@ def write(plates, handle, format):
     Returns the number of records written (as an integer).
     """
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
@@ -131,7 +129,7 @@ def write(plates, handle, format):
     if isinstance(plates, phen_micro.PlateRecord):
         plates = [plates]
 
-    with as_handle(handle, 'w') as fp:
+    with as_handle(handle, "w") as fp:
         # Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
@@ -140,9 +138,10 @@ def write(plates, handle, format):
             raise ValueError("Unknown format '%s'" % format)
 
         if not isinstance(count, int):
-            raise TypeError("Internal error - the underlying %s "
-                            "writer should have returned the record count, "
-                            "not %s" % (format, repr(count)))
+            raise TypeError(
+                "Internal error - the underlying %s "
+                "writer should have returned the record count, not %r" % (format, count)
+            )
 
     return count
 
@@ -171,23 +170,21 @@ def parse(handle, format):
     only.
     """
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
-    with as_handle(handle, 'rU') as fp:
+    with as_handle(handle) as fp:
         # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
             i = iterator_generator(fp)
         else:
             raise ValueError("Unknown format '%s'" % format)
-        # This imposes some overhead... wait until we drop Python 2.4 to fix it
-        for r in i:
-            yield r
+        yield from i
 
 
 def read(handle, format):

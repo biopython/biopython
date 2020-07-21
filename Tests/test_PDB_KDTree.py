@@ -4,11 +4,12 @@
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
 #
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
-"""Unit tests for those parts of the Bio.PDB module using Bio.KDTree."""
+"""Unit tests for those parts of the Bio.PDB module using Bio.PDB.kdtrees."""
 
 import unittest
 
@@ -17,27 +18,31 @@ try:
     from numpy.random import random
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 try:
     from Bio.PDB import kdtrees
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "C module Bio.PDB.kdtrees not compiled")
+        "C module Bio.PDB.kdtrees not compiled"
+    ) from None
 
 from Bio.PDB.NeighborSearch import NeighborSearch
 
 
 class NeighborTest(unittest.TestCase):
-
     def test_neighbor_search(self):
         """NeighborSearch: Find nearby randomly generated coordinates.
 
         Based on the self test in Bio.PDB.NeighborSearch.
         """
-        class RandomAtom(object):
+
+        class RandomAtom:
             def __init__(self):
                 self.coord = 100 * random(3)
 
@@ -48,8 +53,8 @@ class NeighborTest(unittest.TestCase):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
-            self.assertTrue(isinstance(hits, list), hits)
-            self.assertTrue(len(hits) >= 0, hits)
+            self.assertIsInstance(hits, list)
+            self.assertGreaterEqual(len(hits), 0)
         x = array([250, 250, 250])  # Far away from our random atoms
         self.assertEqual([], ns.search(x, 5.0, "A"))
         self.assertEqual([], ns.search(x, 5.0, "R"))
@@ -60,10 +65,10 @@ class NeighborTest(unittest.TestCase):
 
 class KDTreeTest(unittest.TestCase):
 
-    nr_points = 5000     # number of points used in test
-    bucket_size = 5      # number of points per tree node
-    radius = 0.05        # radius of search (typically 0.05 or so)
-    query_radius = 10    # radius of search
+    nr_points = 5000  # number of points used in test
+    bucket_size = 5  # number of points per tree node
+    radius = 0.05  # radius of search (typically 0.05 or so)
+    query_radius = 10  # radius of search
 
     def test_KDTree_exceptions(self):
         bucket_size = self.bucket_size
@@ -72,15 +77,17 @@ class KDTreeTest(unittest.TestCase):
         coords = random((nr_points, 3)) * 100000000000000
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(coords, bucket_size)
-        self.assertTrue("coordinate values should lie between -1e6 and 1e6" in str(context.exception))
+        self.assertIn(
+            "coordinate values should lie between -1e6 and 1e6", str(context.exception)
+        )
         with self.assertRaises(Exception) as context:
             kdt = kdtrees.KDTree(random((nr_points, 3 - 2)), bucket_size)
-        self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
+        self.assertIn("expected a Nx3 numpy array", str(context.exception))
 
     def test_KDTree_point_search(self):
         """Test searching all points within a certain radius of center.
 
-        Using the KDTree C module, search all point pairs that are
+        Using the kdtrees C module, search all point pairs that are
         within radius, and compare the results to a manual search.
         """
         bucket_size = self.bucket_size
@@ -179,6 +186,6 @@ class KDTreeTest(unittest.TestCase):
                     self.assertAlmostEqual(neighbor1.radius, neighbor2.radius)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -24,26 +24,28 @@ from copy import deepcopy
 
 def get_indiv(line):
     """Extract the details of the individual information on the line."""
+
     def int_no_zero(val):
         """Return integer of val, or None if is zero."""
         v = int(val)
         if v == 0:
             return None
         return v
-    indiv_name, marker_line = line.split(',')
-    markers = marker_line.replace('\t', ' ').split(' ')
-    markers = [marker for marker in markers if marker != '']
+
+    indiv_name, marker_line = line.split(",")
+    markers = marker_line.replace("\t", " ").split(" ")
+    markers = [marker for marker in markers if marker != ""]
     if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
         marker_len = 3
     try:
-        allele_list = [(int_no_zero(marker[0:marker_len]),
-                       int_no_zero(marker[marker_len:]))
-                       for marker in markers]
+        allele_list = [
+            (int_no_zero(marker[0:marker_len]), int_no_zero(marker[marker_len:]))
+            for marker in markers
+        ]
     except ValueError:  # Haploid
-        allele_list = [(int_no_zero(marker[0:marker_len]),)
-                       for marker in markers]
+        allele_list = [(int_no_zero(marker[0:marker_len]),) for marker in markers]
     return indiv_name, allele_list, marker_len
 
 
@@ -57,21 +59,20 @@ def read(handle):
     # We can now have one loci per line or all loci in a single line
     # separated by either space or comma+space...
     # We will remove all commas on loci... that should not be a problem
-    sample_loci_line = str(next(handle)).rstrip().replace(',', '')
-    all_loci = sample_loci_line.split(' ')
+    sample_loci_line = str(next(handle)).rstrip().replace(",", "")
+    all_loci = sample_loci_line.split(" ")
     record.loci_list.extend(all_loci)
     for line in handle:
         line = line.rstrip()
-        if line.upper() == 'POP':
+        if line.upper() == "POP":
             break
         record.loci_list.append(line)
     else:
-        raise ValueError('No population data found, '
-                         'file probably not GenePop related')
+        raise ValueError("No population data found, file probably not GenePop related")
     record.populations.append([])
     for line in handle:
         line = line.rstrip()
-        if line.upper() == 'POP':
+        if line.upper() == "POP":
             record.populations.append([])
         else:
             indiv_name, allele_list, record.marker_len = get_indiv(line)
@@ -92,7 +93,7 @@ def read(handle):
     return record
 
 
-class Record(object):
+class Record:
     """Hold information from a GenePop record.
 
     Members:
@@ -137,24 +138,24 @@ class Record(object):
 
     def __str__(self):
         """Return (reconstruct) a GenePop textual representation."""
-        rep = [self.comment_line + '\n']
-        rep.append('\n'.join(self.loci_list) + '\n')
+        rep = [self.comment_line + "\n"]
+        rep.append("\n".join(self.loci_list) + "\n")
         for pop in self.populations:
-            rep.append('Pop\n')
+            rep.append("Pop\n")
             for indiv in pop:
                 name, markers = indiv
                 rep.append(name)
-                rep.append(',')
+                rep.append(",")
                 for marker in markers:
-                    rep.append(' ')
+                    rep.append(" ")
                     for al in marker:
                         if al is None:
-                            al = '0'
+                            al = "0"
                         aStr = str(al)
                         while len(aStr) < self.marker_len:
-                            aStr = "".join(['0', aStr])
+                            aStr = "".join(["0", aStr])
                         rep.append(aStr)
-                rep.append('\n')
+                rep.append("\n")
         return "".join(rep)
 
     def split_in_pops(self, pop_names):

@@ -27,11 +27,12 @@ def read(handle, pfm_format):
     Return the record of PFM(s).
     Call the appropriate routine based on the format passed.
     """
-    pfm_format = pfm_format.lower()
-    if pfm_format == "pfm_four_columns":
+    # Supporting underscores here for backward compatibility
+    pfm_format = pfm_format.lower().replace("_", "-")
+    if pfm_format == "pfm-four-columns":
         record = _read_pfm_four_columns(handle)
         return record
-    elif pfm_format == "pfm_four_rows":
+    elif pfm_format == "pfm-four-rows":
         record = _read_pfm_four_rows(handle)
         return record
     else:
@@ -160,9 +161,9 @@ def _read_pfm_four_columns(handle):
     motif_nbr = 0
     motif_nbr_added = 0
 
-    default_nucleotide_order = ['A', 'C', 'G', 'T']
+    default_nucleotide_order = ["A", "C", "G", "T"]
     nucleotide_order = default_nucleotide_order
-    nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
+    nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
 
     for line in handle:
         line = line.strip()
@@ -171,14 +172,14 @@ def _read_pfm_four_columns(handle):
             columns = line.split()
             nbr_columns = len(columns)
 
-            if line.startswith('#'):
+            if line.startswith("#"):
                 # Skip comment lines.
                 continue
-            elif line.startswith('>'):
+            elif line.startswith(">"):
                 # Parse ">AbdA_Cell_FBgn0000014" and "> AHR_si" like lines and put the part after ">" as motif name.
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
-                    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
                     motif_nbr_added = motif_nbr
@@ -186,11 +187,11 @@ def _read_pfm_four_columns(handle):
                 # Reinitialize variables for the new motif.
                 motif_name = line[1:].strip()
                 nucleotide_order = default_nucleotide_order
-            elif columns[0] == 'Gene':
+            elif columns[0] == "Gene":
                 # Parse "Gene   ENSG00000197372" like lines and put the gene name as motif name.
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
-                    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
                     motif_nbr_added = motif_nbr
@@ -198,11 +199,11 @@ def _read_pfm_four_columns(handle):
                 # Reinitialize variables for the new motif.
                 motif_name = columns[1]
                 nucleotide_order = default_nucleotide_order
-            elif columns[0] == 'Motif':
+            elif columns[0] == "Motif":
                 # Parse "Motif  M1734_0.90" like lines.
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
-                    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
                     motif_nbr_added = motif_nbr
@@ -210,13 +211,13 @@ def _read_pfm_four_columns(handle):
                 # Reinitialize variables for the new motif.
                 motif_name = columns[1]
                 nucleotide_order = default_nucleotide_order
-            elif columns[0] == 'Pos':
+            elif columns[0] == "Pos":
                 # Parse "Pos    A   C   G   T" like lines and change nucleotide order if necessary.
                 if nbr_columns == 5:
                     # If the previous line was not a "Gene  ENSG00000197372" like line, a new motif starts here.
                     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                         # Add the previous motif to the record.
-                        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                        motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                         motif.name = motif_name
                         record.append(motif)
                         motif_nbr_added = motif_nbr
@@ -242,16 +243,20 @@ def _read_pfm_four_columns(handle):
 
                 if motif_nbr == motif_nbr_added:
                     # A new motif matrix starts here, so reinitialize variables for the new motif.
-                    nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
+                    nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
                     motif_nbr += 1
 
-                [nucleotide_counts[nucleotide].append(float(nucleotide_count))
-                 for nucleotide, nucleotide_count in zip(nucleotide_order, matrix_columns)]
+                [
+                    nucleotide_counts[nucleotide].append(float(nucleotide_count))
+                    for nucleotide, nucleotide_count in zip(
+                        nucleotide_order, matrix_columns
+                    )
+                ]
         else:
             # Empty lines can be separators between motifs.
             if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                 # Add the previous motif to the record.
-                motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                 motif.name = motif_name
                 record.append(motif)
                 motif_nbr_added = motif_nbr
@@ -262,7 +267,7 @@ def _read_pfm_four_columns(handle):
             # nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
 
     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
-        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+        motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
         motif.name = motif_name
         record.append(motif)
 
@@ -329,30 +334,39 @@ def _read_pfm_four_rows(handle):
     record = Record()
 
     name_pattern = re.compile(r"^>\s*(.+)\s*")
-    row_pattern_with_nucleotide_letter = re.compile(r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\s]+)\s*[]]*\s*")
+    row_pattern_with_nucleotide_letter = re.compile(
+        r"\s*([ACGT])\s*[[]*[|]*\s*([0-9.\s]+)\s*[]]*\s*"
+    )
     row_pattern_without_nucleotide_letter = re.compile(r"\s*([0-9.\s]+)\s*")
 
     motif_name = None
     nucleotide_counts = {}
     row_count = 0
-    nucleotides = ['A', 'C', 'G', 'T']
+    nucleotides = ["A", "C", "G", "T"]
 
     for line in handle:
         line = line.strip()
 
         name_match = name_pattern.match(line)
-        row_match_with_nucleotide_letter = row_pattern_with_nucleotide_letter.match(line)
-        row_match_without_nucleotide_letter = row_pattern_without_nucleotide_letter.match(line)
+        row_match_with_nucleotide_letter = row_pattern_with_nucleotide_letter.match(
+            line
+        )
+        row_match_without_nucleotide_letter = row_pattern_without_nucleotide_letter.match(
+            line
+        )
 
         if name_match:
             motif_name = name_match.group(1)
         elif row_match_with_nucleotide_letter:
             (nucleotide, counts_str) = row_match_with_nucleotide_letter.group(1, 2)
             current_nucleotide_counts = counts_str.split()
-            nucleotide_counts[nucleotide] = [float(current_nucleotide_count) for current_nucleotide_count in current_nucleotide_counts]
+            nucleotide_counts[nucleotide] = [
+                float(current_nucleotide_count)
+                for current_nucleotide_count in current_nucleotide_counts
+            ]
             row_count += 1
             if row_count == 4:
-                motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
 
                 if motif_name:
                     motif.name = motif_name
@@ -363,11 +377,16 @@ def _read_pfm_four_rows(handle):
                 nucleotide_counts = {}
                 row_count = 0
         elif row_match_without_nucleotide_letter:
-            current_nucleotide_counts = row_match_without_nucleotide_letter.group(1).split()
-            nucleotide_counts[nucleotides[row_count]] = [float(current_nucleotide_count) for current_nucleotide_count in current_nucleotide_counts]
+            current_nucleotide_counts = row_match_without_nucleotide_letter.group(
+                1
+            ).split()
+            nucleotide_counts[nucleotides[row_count]] = [
+                float(current_nucleotide_count)
+                for current_nucleotide_count in current_nucleotide_counts
+            ]
             row_count += 1
             if row_count == 4:
-                motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+                motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
 
                 if motif_name:
                     motif.name = motif_name
@@ -385,12 +404,16 @@ def write(motifs):
     """Return the representation of motifs in Cluster Buster position frequency matrix format."""
     lines = []
     for m in motifs:
-        line = '>{0}\n'.format(m.name)
+        line = f">{m.name}\n"
         lines.append(line)
-        for ACGT_counts in zip(m.counts['A'], m.counts['C'], m.counts['G'], m.counts['T']):
-            lines.append('{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n'.format(*ACGT_counts))
+        for ACGT_counts in zip(
+            m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]
+        ):
+            lines.append(
+                "{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts)
+            )
 
     # Finished; glue the lines together.
-    text = ''.join(lines)
+    text = "".join(lines)
 
     return text

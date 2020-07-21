@@ -63,23 +63,21 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 #   the enzymes in the locals() dictionary when evaluating string to see if
 #   it is an enzyme.
 #
-#   This call for some explanations I guess:
+#   This calls for some explanations I guess:
 #       When testing for the presence of a Restriction enzyme in a
 #       RestrictionBatch, the user can use:
 #
 #           1) a class of type 'RestrictionType'
-#           2) a string of the name of the enzyme (it's repr)
+#           2) a string of the name of the enzyme (its repr)
 #               i.e:
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI
 #                   >>> MyBatch = RestrictionBatch(EcoRI)
-#                   >>> #!/usr/bin/env python
 #                   >>> EcoRI in MyBatch        # the class EcoRI.
 #                   True
-#                   >>>
 #                   >>> 'EcoRI' in MyBatch      # a string representation
 #                   True
 #
-#   OK, that's how it is suppose to work. And I find it quite useful.
+#   OK, that's how it is supposed to work. And I find it quite useful.
 #
 #   Now if I leave the code here I got:
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI

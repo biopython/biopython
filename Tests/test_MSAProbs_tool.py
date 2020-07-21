@@ -14,29 +14,28 @@ from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Align.Applications import MSAProbsCommandline
 from Bio.Application import ApplicationError
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 msaprobs_exe = None
 try:
     output = getoutput("msaprobs -version")
     if output.startswith("MSAPROBS version"):
         msaprobs_exe = "msaprobs"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not msaprobs_exe:
     raise MissingExternalDependencyError(
-        "Install msaprobs if you want to use MSAProbs from Biopython.")
+        "Install msaprobs if you want to use MSAProbs from Biopython."
+    )
 
 
 class MSAProbsTestCase(unittest.TestCase):
-
     def setUp(self):
         self.files_to_clean = set()
 
@@ -58,11 +57,11 @@ class MSAProbsTestCase(unittest.TestCase):
         """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
+
 #################################################################
 
 
 class MSAProbsTestErrorConditions(MSAProbsTestCase):
-
     def test_empty_file(self):
         """Test an empty file."""
         input_file = "does_not_exist.fasta"
@@ -71,9 +70,12 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("Cannot open sequence file" in str(err) or
-                            "Cannot open input file" in str(err) or
-                            "Non-zero return code " in str(err), str(err))
+            self.assertTrue(
+                "Cannot open sequence file" in str(err)
+                or "Cannot open input file" in str(err)
+                or "Non-zero return code " in str(err),
+                str(err),
+            )
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -106,20 +108,19 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
+
 #################################################################
 
 
 class MSAProbsTestNormalConditions(MSAProbsTestCase):
-
     def test_simple_fasta(self):
         """Test a simple fasta file."""
         input_file = "Registry/seqs.fasta"
         output_file = "temp_test.aln"
 
-        cline = MSAProbsCommandline(msaprobs_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    clustalw=True)
+        cline = MSAProbsCommandline(
+            msaprobs_exe, infile=input_file, outfile=output_file, clustalw=True
+        )
 
         self.standard_test_procedure(cline)
 
@@ -138,15 +139,13 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp_test.aln"
 
-        cline = MSAProbsCommandline(msaprobs_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    clustalw=True)
+        cline = MSAProbsCommandline(
+            msaprobs_exe, infile=input_file, outfile=output_file, clustalw=True
+        )
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -156,10 +155,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         input_file = "Registry/seqs.fasta"
         output_file = "temp with spaces.aln"
 
-        cline = MSAProbsCommandline(msaprobs_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    clustalw=True)
+        cline = MSAProbsCommandline(
+            msaprobs_exe, infile=input_file, outfile=output_file, clustalw=True
+        )
 
         self.standard_test_procedure(cline)
 

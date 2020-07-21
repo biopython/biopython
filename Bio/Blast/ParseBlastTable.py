@@ -10,17 +10,15 @@ Currently only supports the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 
-import sys
 
-
-class BlastTableEntry(object):
+class BlastTableEntry:
     """Container for Blast Table Entry, the field values from the table."""
 
     def __init__(self, in_rec):
         """Initialize the class."""
         bt_fields = in_rec.split()
-        self.qid = bt_fields[0].split('|')
-        self.sid = bt_fields[1].split('|')
+        self.qid = bt_fields[0].split("|")
+        self.sid = bt_fields[1].split("|")
         self.pid = float(bt_fields[2])
         self.ali_len = int(bt_fields[3])
         self.mis = int(bt_fields[4])
@@ -31,7 +29,7 @@ class BlastTableEntry(object):
         self.bit_score = float(bt_fields[11])
 
 
-class BlastTableRec(object):
+class BlastTableRec:
     """Container for Blast Table record, list of Blast Table Entries."""
 
     def __init__(self):
@@ -49,22 +47,23 @@ class BlastTableRec(object):
         self.entries.append(entry)
 
 
-reader_keywords = {'BLASTP': 'version',
-                   'Iteration': 'iteration',
-                   'Query': 'query',
-                   'Database': 'database',
-                   'Fields': 'fields'}
-
-
-class BlastTableReader(object):
+class BlastTableReader:
     """Reader for the output of blastpgp."""
+
+    reader_keywords = {
+        "BLASTP": "version",
+        "Iteration": "iteration",
+        "Query": "query",
+        "Database": "database",
+        "Fields": "fields",
+    }
 
     def __init__(self, handle):
         """Initialize the class."""
         self.handle = handle
         inline = self.handle.readline()
         # zip forward to start of record
-        while inline and 'BLASTP' not in inline:
+        while inline and "BLASTP" not in inline:
             inline = self.handle.readline()
         self._lookahead = inline
         self._n = 0
@@ -78,7 +77,7 @@ class BlastTableReader(object):
         if not inline:
             return None
         while inline:
-            if inline[0] == '#':
+            if inline[0] == "#":
                 if self._in_header:
                     self._in_header = self._consume_header(inline)
                 else:
@@ -92,19 +91,14 @@ class BlastTableReader(object):
         self._in_header = 1
         return self.table_record
 
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def _consume_entry(self, inline):
         current_entry = BlastTableEntry(inline)
         self.table_record.add_entry(current_entry)
 
     def _consume_header(self, inline):
-        for keyword in reader_keywords:
+        for keyword in self.reader_keywords:
             if keyword in inline:
-                return self._Parse('_parse_%s' % reader_keywords[keyword], inline)
+                return self._Parse("_parse_%s" % self.reader_keywords[keyword], inline)
 
     def _parse_version(self, inline):
         program, version, date = inline.split()[1:]

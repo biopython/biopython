@@ -1,4 +1,4 @@
-subdirs := install
+subdirs :=
 
 
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)

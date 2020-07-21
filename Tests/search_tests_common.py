@@ -6,7 +6,6 @@
 
 """Common code for SearchIO tests."""
 
-from __future__ import print_function
 
 import os
 import gzip
@@ -17,7 +16,6 @@ except ImportError:
     sqlite3 = None
 
 from Bio import SearchIO
-from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
 
@@ -29,24 +27,24 @@ class CheckRaw(unittest.TestCase):
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using keyword arguments, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
-        raw = _as_bytes(raw)
+        raw = raw.encode()
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
         new = idx.get_raw(id)
-        self.assertTrue(isinstance(new, bytes),
-                        "Didn't get bytes from %s get_raw" % self.fmt)
-        self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                         new.replace(b'\r\n', b'\n'))
+        self.assertIsInstance(new, bytes,
+                              "Didn't get bytes from %s get_raw" % self.fmt)
+        self.assertEqual(raw.replace(b"\r\n", b"\n"),
+                         new.replace(b"\r\n", b"\n"))
         idx.close()
 
         # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             new = idx.get_raw(id)
-            self.assertTrue(isinstance(new, bytes),
-                            "Didn't get bytes from %s get_raw" % self.fmt)
-            self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                             new.replace(b'\r\n', b'\n'))
+            self.assertIsInstance(new, bytes,
+                                  "Didn't get bytes from %s get_raw" % self.fmt)
+            self.assertEqual(raw.replace(b"\r\n", b"\n"),
+                             new.replace(b"\r\n", b"\n"))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
@@ -59,16 +57,9 @@ class CheckIndex(unittest.TestCase):
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
-        # check if Python3 installation has sqlite3
-        try:
-            import sqlite3
-        except ImportError:
-            sqlite3 = None
-
         if filename.endswith(".bgz"):
-            handle = gzip.open(filename)
-            parsed = list(SearchIO.parse(handle, format, **kwargs))
-            handle.close()
+            with gzip.open(filename) as handle:
+                parsed = list(SearchIO.parse(handle, format, **kwargs))
         else:
             parsed = list(SearchIO.parse(filename, format, **kwargs))
         # compare values by index
@@ -78,7 +69,7 @@ class CheckIndex(unittest.TestCase):
                          % (len(parsed), filename, len(indexed)))
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
-            db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
+            db_indexed = SearchIO.index_db(":memory:", [filename], format, **kwargs)
             self.assertEqual(len(parsed), len(db_indexed),
                              "Should be %i records in %s, index_db says %i"
                              % (len(parsed), filename, len(db_indexed)))
@@ -111,7 +102,7 @@ def _num_difference(obj_a, obj_b):
     attrs_a = set(obj_a.__dict__)
     attrs_b = set(obj_b.__dict__)
     diff = attrs_a.symmetric_difference(attrs_b)
-    privates = len([x for x in diff if x.startswith('_')])
+    privates = len([x for x in diff if x.startswith("_")])
     return len(diff) - privates
 
 
@@ -127,8 +118,8 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %i vs %i for " \
-            "%r vs %r" % (len(obj_a), len(obj_b), obj_a, obj_b)
+        assert len(obj_a) == len(obj_b), ("length: %i vs %i for %r vs %r"
+                                          % (len(obj_a), len(obj_b), obj_a, obj_b))
 
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
@@ -140,7 +131,7 @@ def compare_attrs(obj_a, obj_b, attrs):
     """Compare attribute values of two objects."""
     for attr in attrs:
         # don't check for contained items, they are handled separately
-        if attr.startswith('_items'):
+        if attr.startswith("_items"):
             continue
         # get attribute values from each objects
         val_a = getattr(obj_a, attr)
@@ -149,7 +140,7 @@ def compare_attrs(obj_a, obj_b, attrs):
         # special case for HSP and HSPFragment {hit,query}
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
-        if attr in ('_hit', '_query') and (val_a is not None and val_b is
+        if attr in ("_hit", "_query") and (val_a is not None and val_b is
                                            not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
@@ -170,7 +161,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
                                                            values_b)
         # if it's an alphabet, check the class names as alphabets are instances
-        elif attr == '_alphabet':
+        elif attr == "_alphabet":
             alph_a = val_a.__class__.__name__
             alph_b = val_b.__class__.__name__
             assert alph_a == alph_b, "%s: %r vs %r" % (attr, alph_a, alph_b)

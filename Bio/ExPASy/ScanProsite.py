@@ -6,8 +6,8 @@
 """Code for calling and parsing ScanProsite from ExPASy."""
 
 # Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
+from urllib.request import urlopen
+from urllib.parse import urlencode
 
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
@@ -29,7 +29,7 @@ class Record(list):
         self.warning = None
 
 
-def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
+def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
@@ -48,15 +48,15 @@ def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
     This function returns a handle to the search results returned by
     ScanProsite. Search results in the XML format can be parsed into a
     Python object, by using the Bio.ExPASy.ScanProsite.read function.
+
     """
-    parameters = {'seq': seq,
-                  'output': output}
+    parameters = {"seq": seq, "output": output}
     for key, value in keywords.items():
         if value is not None:
             parameters[key] = value
-    command = _urlencode(parameters)
+    command = urlencode(parameters)
     url = "%s/cgi-bin/prosite/PSScan.cgi?%s" % (mirror, command)
-    handle = _urlopen(url)
+    handle = urlopen(url)
     return handle
 
 
@@ -69,7 +69,8 @@ def read(handle):
     record = content_handler.record
     return record
 
-# The classess below are considered private
+
+# The classes below are considered private
 
 
 class Parser(ExpatParser):
@@ -91,7 +92,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if data[:5].decode('utf-8') != "<?xml":
+            if data[:5].decode("utf-8") != "<?xml":
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)
@@ -101,12 +102,14 @@ class ContentHandler(handler.ContentHandler):
     """Process and fill in the records, results of the search (PRIVATE)."""
 
     integers = ("start", "stop")
-    strings = ("sequence_ac",
-               "sequence_id",
-               "sequence_db",
-               "signature_ac",
-               "level",
-               "level_tag")
+    strings = (
+        "sequence_ac",
+        "sequence_id",
+        "sequence_db",
+        "signature_ac",
+        "level",
+        "level_tag",
+    )
 
     def __init__(self):
         """Initialize the class."""

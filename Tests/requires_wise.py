@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 # Copyright 2004 by Michael Hoffman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -10,7 +9,7 @@
 import sys
 
 from Bio import MissingExternalDependencyError
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 
 if sys.platform == "win32":
