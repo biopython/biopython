@@ -711,7 +711,7 @@ class ErrorConditions(unittest.TestCase):
     def test_ambiguous_forward_table(self):
         """Raise errors in AmbiguousForwardTable."""
         table = ambiguous_dna_by_id[1]
-        self.assertEqual(table.forward_table.get("ZZZ"), None)
+        self.assertIsNone(table.forward_table.get("ZZZ"))
         with self.assertRaises(KeyError):
             table.forward_table["ZZZ"]  # KeyError it's a stop codon
             table.forward_table["TGA"]  # KeyError stop codon
