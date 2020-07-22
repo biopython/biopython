@@ -638,7 +638,6 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._flows_per_read,
                     rec_dict._proxy._flow_chars,
                     rec_dict._proxy._key_sequence,
-                    alphabet=None,
                     trim=False,
                 )
             elif fmt == "sff-trim":
@@ -647,7 +646,6 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._flows_per_read,
                     rec_dict._proxy._flow_chars,
                     rec_dict._proxy._key_sequence,
-                    alphabet=None,
                     trim=True,
                 )
             elif fmt == "uniprot-xml":

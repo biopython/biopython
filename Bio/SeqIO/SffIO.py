@@ -642,7 +642,7 @@ _valid_UAN_read_name = re.compile(r"^[a-zA-Z0-9]{14}$")
 
 
 def _sff_read_seq_record(
-    handle, number_of_flows_per_read, flow_chars, key_sequence, alphabet, trim=False
+    handle, number_of_flows_per_read, flow_chars, key_sequence, trim=False
 ):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
     # Now on to the reads...
@@ -774,7 +774,7 @@ def _sff_read_seq_record(
         annotations["coords"] = _get_read_xy(name)
     annotations["molecule_type"] = "DNA"
     record = SeqRecord(
-        Seq(seq, alphabet), id=name, name=name, description="", annotations=annotations
+        Seq(seq), id=name, name=name, description="", annotations=annotations
     )
     # Dirty trick to speed up this line:
     # record.letter_annotations["phred_quality"] = quals
@@ -1047,12 +1047,7 @@ class SffIterator(SequenceIterator):
                 # the index_offset so we can skip extra handle.tell() calls:
                 index_offset = 0
             yield _sff_read_seq_record(
-                handle,
-                number_of_flows_per_read,
-                flow_chars,
-                key_sequence,
-                alphabet,
-                trim,
+                handle, number_of_flows_per_read, flow_chars, key_sequence, trim,
             )
         _check_eof(handle, index_offset, index_length)
 
