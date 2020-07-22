@@ -206,9 +206,7 @@ class ParseReal(unittest.TestCase):
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
             # Here non-standard MSE are shown as M
-            self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s
-            )
+            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s)
             # ==========================================================
             # Now try strict version with only standard amino acids
             polypeptides = ppbuild.build_peptides(structure[0], True)
@@ -220,9 +218,7 @@ class ParseReal(unittest.TestCase):
             # Check the sequence
             s = pp.get_sequence()
             self.assertIsInstance(s, Seq)
-            self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s
-            )
+            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s)
 
         # This structure contains several models with multiple lengths.
         # The tests were failing.
