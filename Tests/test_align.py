@@ -243,7 +243,7 @@ class TestReading(unittest.TestCase):
         consensus = align_info.dumb_consensus()
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA")
-        dictionary = align_info.replacement_dictionary(["N", "-"])
+        dictionary = align_info.replacement_dictionary(skip_chars=None, letters="ACGT")
         self.assertEqual(len(dictionary), 16)
         self.assertAlmostEqual(dictionary[("A", "A")], 1395.0, places=1)
         self.assertAlmostEqual(dictionary[("A", "C")], 3.0, places=1)

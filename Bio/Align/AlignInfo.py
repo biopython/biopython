@@ -164,7 +164,7 @@ class SummaryInfo:
 
         return Seq(consensus)
 
-    def replacement_dictionary(self, skip_chars=None):
+    def replacement_dictionary(self, skip_chars=None, letters=None):
         """Generate a replacement dictionary to plug into a substitution matrix.
 
         This should look at an alignment, and be able to generate the number
@@ -194,14 +194,15 @@ class SummaryInfo:
         up with the replacement dictionary.
 
         Arguments:
-         - skip_chars - A list of characters to skip when creating the dictionary.
-           This defaults to an empty list.
-
-        For instance, you might have Xs (screened stuff) or Ns, and not want
-        to include the ambiguity characters in the dictionary.
+         - skip_chars - Not used; setting it to anything other than None
+           will raise a ValueError
+         - letters - An iterable (e.g. a string or list of characters to include.
         """
-        # get a starting dictionary based on the alphabet of the alignment
-        rep_dict, skip_items = self._get_base_replacements(skip_chars)
+        if skip_chars is not None:
+            raise ValueError(
+                "argument skip_chars has been deprecated; instead, please use 'letters' to specify the characters you want to include"
+            )
+        rep_dict = {(letter1, letter2): 0 for letter1 in letters for letter2 in letters}
 
         # iterate through each record
         for rec_num1 in range(len(self.alignment)):
@@ -210,59 +211,32 @@ class SummaryInfo:
             for rec_num2 in range(rec_num1 + 1, len(self.alignment)):
                 # for each pair of records, compare the sequences and add
                 # the pertinent info to the dictionary
-                rep_dict = self._pair_replacement(
+                self._pair_replacement(
                     self.alignment[rec_num1].seq,
                     self.alignment[rec_num2].seq,
                     self.alignment[rec_num1].annotations.get("weight", 1.0),
                     self.alignment[rec_num2].annotations.get("weight", 1.0),
                     rep_dict,
-                    skip_items,
+                    letters,
                 )
 
         return rep_dict
 
-    def _pair_replacement(self, seq1, seq2, weight1, weight2, start_dict, ignore_chars):
+    def _pair_replacement(self, seq1, seq2, weight1, weight2, dictionary, letters):
         """Compare two sequences and generate info on the replacements seen (PRIVATE).
 
         Arguments:
          - seq1, seq2 - The two sequences to compare.
          - weight1, weight2 - The relative weights of seq1 and seq2.
-         - start_dict - The dictionary containing the starting replacement
+         - dictionary - The dictionary containing the starting replacement
            info that we will modify.
-         - ignore_chars - A list of characters to ignore when calculating
-           replacements (ie. '-').
-
-        Returns:
-         - A replacment dictionary which is modified from initial_dict with
-           the information from the sequence comparison.
+         - letters - A list of characters to include when calculating replacements.
 
         """
         # loop through each residue in the sequences
-        for residue_num in range(len(seq1)):
-            residue1 = seq1[residue_num]
-            try:
-                residue2 = seq2[residue_num]
-            # if seq2 is shorter, then we just stop looking at replacements
-            # and return the information
-            except IndexError:
-                return start_dict
-
-            # if the two residues are characters we want to count
-            if (residue1 not in ignore_chars) and (residue2 not in ignore_chars):
-                try:
-                    # add info about the replacement to the dictionary,
-                    # modified by the sequence weights
-                    start_dict[(residue1, residue2)] += weight1 * weight2
-
-                # if we get a key error, then we've got a problem with
-                # alphabets
-                except KeyError:
-                    raise ValueError(
-                        "Residues %s, %s not found in alphabet %s"
-                        % (residue1, residue2, self.alignment._alphabet)
-                    ) from None
-
-        return start_dict
+        for residue1, residue2 in zip(seq1, seq2):
+            if residue1 in letters and residue2 in letters:
+                dictionary[(residue1, residue2)] += weight1 * weight2
 
     def _get_all_letters(self):
         """Return a string containing the expected letters in the alignment (PRIVATE)."""
@@ -280,41 +254,6 @@ class SummaryInfo:
             list_letters = sorted(set_letters)
             all_letters = "".join(list_letters)
         return all_letters
-
-    def _get_base_replacements(self, skip_items=None):
-        """Get a zeroed dictionary of all possible letter combinations (PRIVATE).
-
-        This looks at the type of alphabet and gets the letters for it.
-        It then creates a dictionary with all possible combinations of these
-        letters as keys (ie. ('A', 'G')) and sets the values as zero.
-
-        Returns:
-         - The base dictionary created
-         - A list of alphabet items to skip when filling the dictionary.
-           (Right now the only thing I can imagine in this list is gap
-           characters, but maybe X's or something else might be useful later.
-           This will also include any characters that are specified to be
-           skipped.) Defaults to an empty list.
-
-        """
-        if skip_items is None:
-            skip_items = []
-        base_dictionary = {}
-        all_letters = self._get_all_letters()
-
-        # if we have a gapped alphabet we need to find the gap character
-        # and drop it out
-        if isinstance(self.alignment._alphabet, Alphabet.Gapped):
-            skip_items.append(self.alignment._alphabet.gap_char)
-            all_letters = all_letters.replace(self.alignment._alphabet.gap_char, "")
-
-        # now create the dictionary
-        for first_letter in all_letters:
-            for second_letter in all_letters:
-                if first_letter not in skip_items and second_letter not in skip_items:
-                    base_dictionary[(first_letter, second_letter)] = 0
-
-        return base_dictionary, skip_items
 
     def pos_specific_score_matrix(self, axis_seq=None, chars_to_ignore=None):
         """Create a position specific score matrix object for the alignment.
