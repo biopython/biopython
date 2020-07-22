@@ -41,6 +41,7 @@ possible, especially the following contributors:
 - Christian Brueffer
 - João Rodrigues
 - João Vitor F Cavalcante (first contribution)
+- Marie Crane
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
