@@ -755,7 +755,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertTrue(cline.auto)
         self.assertTrue(not cline.stdout)
         self.assertTrue(not cline.filter)
-        self.assertEqual(cline.outfile, None)
+        self.assertIsNone(cline.outfile)
         self.assertRaises(ValueError, str, cline)
 
     def test_needle_needs_output(self):
@@ -771,7 +771,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertTrue(cline.auto)
         self.assertTrue(not cline.stdout)
         self.assertTrue(not cline.filter)
-        self.assertEqual(cline.outfile, None)
+        self.assertIsNone(cline.outfile)
         self.assertRaises(ValueError, str, cline)
 
     def test_seqtmatchall_piped(self):
@@ -931,7 +931,7 @@ class TranslationTests(unittest.TestCase):
             if len(sequence) % 3 != 0:
                 sequence = sequence[: -(len(sequence) % 3)]
             self.assertEqual(len(sequence) % 3, 0)
-            self.assertTrue(len(sequence) > 0)
+            self.assertGreater(len(sequence), 0)
             self.check(sequence)
 
     def check(self, sequence):
