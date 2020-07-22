@@ -10,6 +10,7 @@ import unittest
 import warnings
 
 from Bio import BiopythonDeprecationWarning
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
     # modules to be tested
@@ -18,7 +19,6 @@ with warnings.catch_warnings():
 
 
 class TestGeo(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         path = os.path.join("FSSP", "1cnv.fssp")
@@ -39,8 +39,9 @@ class TestGeo(unittest.TestCase):
         self.assertEqual(len(self.sum_rec), self.head_rec.nalign)
         alignment = FSSPTools.mult_align(self.sum_rec, self.align_rec)
         name_list = ["2hvm0", "1hvq0", "1nar0", "2ebn0"]
-        sum_newnames, align_newnames = FSSPTools.name_filter(self.sum_rec, self.align_rec,
-                                                             name_list)
+        sum_newnames, align_newnames = FSSPTools.name_filter(
+            self.sum_rec, self.align_rec, name_list
+        )
         self.assertEqual(len(sum_newnames), 4)
         line = """\
    2: 1cnv   2hvm   39.2  1.7  270   273   42      0      0    10 S    hevamine (chitinaseLYSOZYME) 
