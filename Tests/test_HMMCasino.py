@@ -107,7 +107,9 @@ def generate_rolls(num_rolls):
 class TestHMMCasino(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.mm_builder = MarkovModel.MarkovModelBuilder(dice_type_alphabet, dice_roll_alphabet)
+        cls.mm_builder = MarkovModel.MarkovModelBuilder(
+            dice_type_alphabet, dice_roll_alphabet
+        )
         cls.mm_builder.allow_all_transitions()
         cls.mm_builder.set_random_probabilities()
         # get a sequence of rolls to train the markov model with
