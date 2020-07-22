@@ -306,9 +306,7 @@ class SeqRetSeqIOTests(SeqRetTests):
         # NOTE - EMBOSS considers "genbank" to be for nucleotides only,
         # and will turn "X" into "N" for GenBank output.
         self.check_SeqIO_to_EMBOSS(
-            "IntelliGenetics/VIF_mase-pro.txt",
-            "ig",
-            skip_formats=["genbank", "embl"],
+            "IntelliGenetics/VIF_mase-pro.txt", "ig", skip_formats=["genbank", "embl"],
         )
         # TODO - What does a % in an ig sequence mean?
         # e.g. "IntelliGenetics/vpu_nucaligned.txt"
