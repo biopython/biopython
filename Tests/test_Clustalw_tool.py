@@ -95,7 +95,7 @@ class ClustalWTestCase(unittest.TestCase):
 
     def standard_test_procedure(self, cline):
         """Shared test procedure used by all tests."""
-        self.assertTrue(str(eval(repr(cline))) == str(cline))
+        self.assertEqual(str(eval(repr(cline))), str(cline))
         input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
                                       lambda rec: rec.id.replace(":", "_"))  # noqa: E731
 
@@ -112,14 +112,14 @@ class ClustalWTestCase(unittest.TestCase):
 
         output, error = cline()
         self.assertTrue(output.strip().startswith("CLUSTAL"))
-        self.assertTrue(error.strip() == "")
+        self.assertEqual(error.strip(), "")
 
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         # The length of the alignment will depend on the version of clustalw
         # (clustalw 2.1 and clustalw 1.83 are certainly different).
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
+        self.assertEqual(set(input_records.keys()), set(output_records.keys()))
         for record in align:
             self.assertEqual(str(record.seq),
                              str(output_records[record.id].seq))
@@ -157,7 +157,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         """Test an input file containing a single sequence."""
         input_file = "Fasta/f001"
         self.assertTrue(os.path.isfile(input_file))
-        self.assertTrue(len(list(SeqIO.parse(input_file, "fasta"))) == 1)
+        self.assertEqual(len(list(SeqIO.parse(input_file, "fasta"))), 1)
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 
         try:
