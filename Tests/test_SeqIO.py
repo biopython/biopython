@@ -456,7 +456,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         expected_lengths,
         expected_alignment,
         expected_messages,
-        molecule_types={},
+        molecule_types=None,
     ):
         mode = "r" + self.get_mode(t_format)
         with warnings.catch_warnings():
@@ -629,6 +629,8 @@ class TestSeqIO(SeqIOTestBaseClass):
         # They should all have been converted by the parser, but if
         # not reversing the record order might expose an error.  Maybe.
         records.reverse()
+        if molecule_types is None:
+            molecule_types = {}
         self.check_simple_write_read(records, t_format, t_count, expected_messages, molecule_types)
 
     def test_sff1(self):
