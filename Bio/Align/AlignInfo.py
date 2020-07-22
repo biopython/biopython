@@ -199,8 +199,9 @@ class SummaryInfo:
          - letters - An iterable (e.g. a string or list of characters to include.
         """
         if skip_chars is not None:
-            raise ValueError("argument skip_chars has been deprecated; instead, please use 'letters' to specify the characters you want to include")
-        # get a starting dictionary based on the alphabet of the alignment
+            raise ValueError(
+                "argument skip_chars has been deprecated; instead, please use 'letters' to specify the characters you want to include"
+            )
         rep_dict = {(letter1, letter2): 0 for letter1 in letters for letter2 in letters}
 
         # iterate through each record
