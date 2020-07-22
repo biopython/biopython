@@ -103,7 +103,9 @@ class TestXdna(unittest.TestCase):
             self.assertEqual(sample["id"], record.id)
             self.assertEqual(sample["description"], record.description)
             self.assertEqual(sample["length"], len(record))
-            self.assertEqual(sample["molecule_type"], record.annotations["molecule_type"])
+            self.assertEqual(
+                sample["molecule_type"], record.annotations["molecule_type"]
+            )
             self.assertEqual(sample["topology"], record.annotations["topology"])
 
             self.assertEqual(len(sample["features"]), len(record.features))
