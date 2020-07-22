@@ -1,4 +1,3 @@
-
 # Copyright 2001 Brad Chapman.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -49,7 +48,7 @@ class TrainingSequenceTest(unittest.TestCase):
 
     def test_invalid_training_sequence(self):
         emission_seq = Seq("AB")
-        state_seq = ("1", )
+        state_seq = ("1",)
         with self.assertRaises(ValueError):
             Trainer.TrainingSequence(emission_seq, state_seq)
 
@@ -123,16 +122,25 @@ class MarkovModelBuilderTest(unittest.TestCase):
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_equal_probabilities()
 
-        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5},)
-        self.assertEqual(self.mm_builder.transition_prob, {("1", "2"): 0.5, ("2", "1"): 0.5})
-        self.assertEqual(self.mm_builder.emission_prob, {("2", "A"): 0.25, ("1", "B"): 0.25, ("1", "A"): 0.25, ("2", "B"): 0.25})
+        self.assertEqual(
+            self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5},
+        )
+        self.assertEqual(
+            self.mm_builder.transition_prob, {("1", "2"): 0.5, ("2", "1"): 0.5}
+        )
+        self.assertEqual(
+            self.mm_builder.emission_prob,
+            {("2", "A"): 0.25, ("1", "B"): 0.25, ("1", "A"): 0.25, ("2", "B"): 0.25},
+        )
 
     def test_set_random_probabilities(self):
         self.mm_builder.allow_transition("1", "2", 0.05)
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_random_probabilities()
 
-        self.assertEqual(len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet))
+        self.assertEqual(
+            len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet)
+        )
         # To test this more thoroughly, perhaps mock random.random() and
         # verify that it's being called as expected?
 
@@ -291,7 +299,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         seq = viterbi[0]
         prob = viterbi[1]
         self.assertEqual(str(seq), seq_first_state + seq_second_state)
-        self.assertEqual(round(prob, 11), round(max_prob, 11))
+        self.assertAlmostEqual(prob, max_prob, 11)
 
     def test_non_ergodic(self):
         """Non-ergodic model (meaning that some transitions are not allowed)."""
