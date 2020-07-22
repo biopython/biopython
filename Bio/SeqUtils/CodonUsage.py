@@ -107,7 +107,7 @@ class CodonAdaptationIndex:
         for aa in SynonymousCodons:
             codons = SynonymousCodons[aa]
 
-            count_max = max((self.codon_count[codon] for codon in codons))
+            count_max = max(self.codon_count.values())
 
             if count_max == 0:  # the residue does not occur at all
                 for codon in codons:
@@ -177,4 +177,9 @@ class CodonAdaptationIndex:
         This just gives the index when the objects is printed.
         """
         for i in sorted(self.index):
-            print("%s\t%s" % (i, self.index[i] is None and 'None' or "{:.3f}".format(self.index[i])))
+            print("%s\t%s" % (i, self.index[i] is None and "None" or "{:.3f}".format(self.index[i])))
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
