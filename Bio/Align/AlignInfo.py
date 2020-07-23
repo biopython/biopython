@@ -440,9 +440,7 @@ class SummaryInfo:
             # check if all the residus in freq_info are in e_freq_table
             for key in freq_info:
                 if key != gap_char and key not in e_freq_table:
-                    raise ValueError(
-                        "%s not found in expected frequency table" % key
-                    )
+                    raise ValueError("%s not found in expected frequency table" % key)
 
         if total_count == 0:
             # This column must be entirely ignored characters
