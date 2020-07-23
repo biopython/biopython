@@ -269,7 +269,9 @@ class TestAlignIO_reading(unittest.TestCase):
         e_freq = 1.0 / len(letters)
         all_letters = all_letters.upper() + all_letters.lower()
         e_freq_table = dict.fromkeys(all_letters, e_freq)
-        info_content = summary.information_content(e_freq_table=e_freq_table, chars_to_ignore=["N", "X"])
+        info_content = summary.information_content(
+            e_freq_table=e_freq_table, chars_to_ignore=["N", "X"]
+        )
 
     def check_summary_pir(self, alignment):
         letters = IUPACData.unambiguous_dna_letters
