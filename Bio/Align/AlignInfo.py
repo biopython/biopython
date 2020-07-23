@@ -296,7 +296,9 @@ class SummaryInfo:
                     try:
                         score_dict[this_residue] += weight
                     except KeyError:
-                        raise ValueError("Residue %s not found" % this_residue) from None
+                        raise ValueError(
+                            "Residue %s not found" % this_residue
+                        ) from None
 
             pssm_info.append((left_seq[residue_num], score_dict))
 
