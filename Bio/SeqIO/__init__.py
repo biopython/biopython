@@ -631,11 +631,7 @@ def parse(handle, format, alphabet=None):
         return i
     if format in AlignIO._FormatToIterator:
         # Use Bio.AlignIO to read in the alignments
-        i = (
-            r
-            for alignment in AlignIO.parse(handle, format)
-            for r in alignment
-        )
+        i = (r for alignment in AlignIO.parse(handle, format) for r in alignment)
         return i
     raise ValueError("Unknown format '%s'" % format)
 

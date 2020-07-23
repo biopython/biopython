@@ -432,8 +432,7 @@ class SequentialPhylipIterator(PhylipIterator):
                 break
 
         records = (
-            SeqRecord(Seq(s), id=i, name=i, description=i)
-            for (i, s) in zip(ids, seqs)
+            SeqRecord(Seq(s), id=i, name=i, description=i) for (i, s) in zip(ids, seqs)
         )
         return MultipleSeqAlignment(records)
 
