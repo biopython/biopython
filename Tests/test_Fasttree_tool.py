@@ -53,6 +53,7 @@ if sys.platform == "win32":
                 break
 else:
     from subprocess import getoutput
+
     # Website uses 'FastTree', Nate's system had 'fasttree'
     likely_exes = ["FastTree", "fasttree"]
     for filename in likely_exes:
@@ -60,19 +61,22 @@ else:
         output = getoutput("%s -help" % filename)
         # Since "is not recognized" may be in another language, try and be sure this
         # is really the fasttree tool's output
-        if "is not recognized" not in output and "protein_alignment" in output \
-           and "nucleotide_alignment" in output:
+        if (
+            "is not recognized" not in output
+            and "protein_alignment" in output
+            and "nucleotide_alignment" in output
+        ):
             fasttree_exe = filename
             break
 
 if not fasttree_exe:
     raise MissingExternalDependencyError(
         "Install FastTree and correctly set the file path to the program "
-        "if you want to use it from Biopython.")
+        "if you want to use it from Biopython."
+    )
 
 
 class FastTreeTestCase(unittest.TestCase):
-
     def check(self, path, length):
         input_records = SeqIO.to_dict(SeqIO.parse(path, "fasta"))
         self.assertEqual(len(input_records), length)
@@ -93,17 +97,23 @@ class FastTreeTestCase(unittest.TestCase):
                         raise ValueError("Duplicate key: %s" % clade.name)
                     names[clade.name] = clade
             return names
+
         names = lookup_by_names(tree)
         self.assertGreater(len(names), 0)
 
         def terminal_neighbor_dists(self):
             """Return a list of distances between adjacent terminals."""
+
             def generate_pairs(self):
                 pairs = itertools.tee(self)
                 next(pairs[1])  # Advance second iterator one step
                 return zip(pairs[0], pairs[1])
-            return [self.distance(*i) for i in
-                    generate_pairs(self.find_clades(terminal=True))]
+
+            return [
+                self.distance(*i)
+                for i in generate_pairs(self.find_clades(terminal=True))
+            ]
+
         for dist in terminal_neighbor_dists(tree):
             self.assertGreater(dist, 0.0)
 
@@ -124,12 +134,14 @@ class FastTreeTestCase(unittest.TestCase):
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
         message = str(cm.exception)
-        self.assertTrue("invalid format" in message or
-                        "not produced" in message or
-                        "No sequences in file" in message or
-                        "Error parsing header line:" in message or
-                        "Non-zero return code " in message,
-                        msg="Unknown ApplicationError raised: %s" % message)
+        self.assertTrue(
+            "invalid format" in message
+            or "not produced" in message
+            or "No sequences in file" in message
+            or "Error parsing header line:" in message
+            or "Non-zero return code " in message,
+            msg="Unknown ApplicationError raised: %s" % message,
+        )
 
     def test_single(self):
         path = "Fasta/f001"
@@ -145,11 +157,13 @@ class FastTreeTestCase(unittest.TestCase):
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
         message = str(cm.exception)
-        self.assertTrue("Cannot open sequence file" in message or
-                        "Cannot open sequence file" in message or
-                        "Cannot read %s" % path in message or
-                        "Non-zero return code " in message,
-                        msg="Unknown ApplicationError raised: %s" % message)
+        self.assertTrue(
+            "Cannot open sequence file" in message
+            or "Cannot open sequence file" in message
+            or "Cannot read %s" % path in message
+            or "Non-zero return code " in message,
+            msg="Unknown ApplicationError raised: %s" % message,
+        )
 
 
 if __name__ == "__main__":
