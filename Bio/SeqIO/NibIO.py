@@ -52,12 +52,11 @@ import sys
 class NibIterator(SequenceIterator):
     """Parser for nib files."""
 
-    def __init__(self, source, alphabet=None):
+    def __init__(self, source):
         """Iterate over a nib file and yield a SeqRecord.
 
             - source - a file-like object or a path to a file in the nib file
               format as defined by UCSC; the file must be opened in binary mode.
-            - alphabet - always ignored.
 
         Note that a nib file always contains only one sequence record.
         The sequence of the resulting SeqRecord object should match the sequence
@@ -79,8 +78,6 @@ class NibIterator(SequenceIterator):
         nAGAAGagccgcNGgCActtGAnTAtCGTCgcCacCaGncGncTtGNtGG 50
 
         """
-        if alphabet is not None:
-            raise ValueError("Alphabets are ignored.")
         super().__init__(source, mode="b", fmt="Nib")
 
     def parse(self, handle):
