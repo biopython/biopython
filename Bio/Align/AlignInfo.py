@@ -15,14 +15,8 @@ be put into classes in this module.
 import math
 import sys
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 
-
-# Expected random distributions for 20-letter protein, and
-# for 4-letter nucleotide alphabets
-Protein20Random = 0.05
-Nucleotide4Random = 0.25
 
 
 class SummaryInfo:
@@ -255,8 +249,7 @@ class SummaryInfo:
 
         Arguments:
          - chars_to_ignore - A list of all characters not to include in
-           the pssm.  If the alignment alphabet declares a gap character,
-           then it will be excluded automatically.
+           the pssm.
          - axis_seq - An optional argument specifying the sequence to
            put on the axis of the PSSM. This should be a Seq object. If nothing
            is specified, the consensus sequence, calculated with default
@@ -275,10 +268,8 @@ class SummaryInfo:
         if not isinstance(chars_to_ignore, list):
             raise TypeError("chars_to_ignore should be a list.")
 
-        # if we have a gap char, add it to stuff to ignore
-        gap_char = self._get_gap_char()
-        if gap_char:
-            chars_to_ignore.append(gap_char)
+        gap_char = "-"
+        chars_to_ignore.append(gap_char)
 
         for char in chars_to_ignore:
             all_letters = all_letters.replace(char, "")
@@ -305,27 +296,12 @@ class SummaryInfo:
                     weight = record.annotations.get("weight", 1.0)
                     try:
                         score_dict[this_residue] += weight
-                    # if we get a KeyError then we have an alphabet problem
                     except KeyError:
-                        raise ValueError(
-                            "Residue %s not found in alphabet %s"
-                            % (this_residue, self.alignment._alphabet)
-                        ) from None
+                        raise ValueError("Residue %s not found" % this_residue) from None
 
             pssm_info.append((left_seq[residue_num], score_dict))
 
         return PSSM(pssm_info)
-
-    def _get_gap_char(self):
-        """Return the gap character used in the alignment (PRIVATE)."""
-        try:
-            gap_char = self.alignment._alphabet.gap_char
-        except AttributeError:
-            # The alphabet doesn't declare a gap - there could be none
-            # in the sequence... or just a vague alphabet.
-            gap_char = "-"  # Safe?
-
-        return gap_char
 
     def information_content(
         self,
@@ -346,9 +322,9 @@ class SummaryInfo:
            the info content, we need to use zero). This defaults to the entire
            length of the first sequence.
          - e_freq_table - A dictionary specifying the expected frequencies
-           for each letter in the alphabet we are using (e.g. {'G' : 0.4,
-           'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
-           included, since these should not have expected frequencies.
+           for each letter (e.g. {'G' : 0.4, 'C' : 0.4, 'T' : 0.1, 'A' : 0.1}).
+           Gap characters should not be included, since these should not have
+           expected frequencies.
          - log_base - The base of the logarithm to use in calculating the
            information content. This defaults to 2 so the info is in bits.
          - chars_to_ignore - A listing of characters which should be ignored
@@ -439,7 +415,7 @@ class SummaryInfo:
 
         total_count = 0
 
-        gap_char = self._get_gap_char()
+        gap_char = "-"
 
         if pseudo_count < 0:
             raise ValueError(
@@ -504,7 +480,7 @@ class SummaryInfo:
            info content.
 
         """
-        gap_char = self._get_gap_char()
+        gap_char = "-"
 
         if e_freq_table:
             # check the expected freq information to make sure it is good
