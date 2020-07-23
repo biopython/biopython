@@ -252,10 +252,13 @@ class TestAlignIO_reading(unittest.TestCase):
         # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
         if molecule_type == "DNA":
             letters = IUPACData.unambiguous_dna_letters
+            all_letters = IUPACData.ambiguous_dna_letters
         elif molecule_type == "RNA":
             letters = IUPACData.unambiguous_rna_letters
+            all_letters = IUPACData.ambiguous_rna_letters
         elif molecule_type == "protein":
             letters = IUPACData.protein_letters
+            all_letters = IUPACData.protein_letters
         else:
             raise ValueError("Unknown molecule type '%s'" % molecule_type)
         summary = AlignInfo.SummaryInfo(alignment)
@@ -263,12 +266,10 @@ class TestAlignIO_reading(unittest.TestCase):
         # gap_consensus = summary.gap_consensus()
         pssm = summary.pos_specific_score_matrix()
         rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual(
-            "Error in alphabet: not Nucleotide or Protein, supply expected frequencies",
-            str(cm.exception),
-        )
+        e_freq = 1.0 / len(letters)
+        all_letters = all_letters.upper() + all_letters.lower()
+        e_freq_table = dict.fromkeys(all_letters, e_freq)
+        info_content = summary.information_content(e_freq_table=e_freq_table, chars_to_ignore=["N", "X"])
 
     def check_summary_pir(self, alignment):
         letters = IUPACData.unambiguous_dna_letters
@@ -277,7 +278,10 @@ class TestAlignIO_reading(unittest.TestCase):
         # gap_consensus = summary.gap_consensus()
         pssm = summary.pos_specific_score_matrix()
         rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
-        info_content = summary.information_content()
+        e_freq = 1.0 / len(letters)
+        all_letters = letters.upper() + letters.lower()
+        e_freq_table = dict.fromkeys(all_letters, e_freq)
+        info_content = summary.information_content(e_freq_table=e_freq_table)
 
     def test_reading_alignments_clustal1(self):
         path = "Clustalw/cw02.aln"

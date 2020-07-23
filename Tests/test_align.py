@@ -21,10 +21,8 @@ import unittest
 from io import StringIO
 
 # biopython
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 from Bio import AlignIO
 from Bio.Align import MultipleSeqAlignment
@@ -215,7 +213,7 @@ class TestReading(unittest.TestCase):
     def test_read_write_clustal(self):
         """Test the base alignment stuff."""
         path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
-        alignment = AlignIO.read(path, "clustal", alphabet=Alphabet.generic_dna)
+        alignment = AlignIO.read(path, "clustal")
         self.assertEqual(len(alignment), 7)
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "gi|6273285|gb|AF191659.1|AF191")
@@ -744,11 +742,9 @@ A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
 A  7.0 0.0 0.0 0.0
 """)
-        value = align_info.information_content(5, 50, chars_to_ignore=["N"])
-        self.assertAlmostEqual(value, 88.42, places=2)
-        value = align_info.information_content(chars_to_ignore=["N"])
-        self.assertAlmostEqual(value, 287.55, places=2)
         e_freq_table = {"G": 0.25, "C": 0.25, "A": 0.25, "T": 0.25}
+        value = align_info.information_content(5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table)
+        self.assertAlmostEqual(value, 88.42, places=2)
         value = align_info.information_content(e_freq_table=e_freq_table,
                                                chars_to_ignore=["N"])
         self.assertAlmostEqual(value, 287.55, places=2)

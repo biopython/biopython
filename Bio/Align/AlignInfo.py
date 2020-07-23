@@ -15,14 +15,7 @@ be put into classes in this module.
 import math
 import sys
 
-from Bio import Alphabet
 from Bio.Seq import Seq
-
-
-# Expected random distributions for 20-letter protein, and
-# for 4-letter nucleotide alphabets
-Protein20Random = 0.05
-Nucleotide4Random = 0.25
 
 
 class SummaryInfo:
@@ -240,19 +233,11 @@ class SummaryInfo:
 
     def _get_all_letters(self):
         """Return a string containing the expected letters in the alignment (PRIVATE)."""
-        all_letters = self.alignment._alphabet.letters
-        if all_letters is None or (
-            isinstance(self.alignment._alphabet, Alphabet.Gapped)
-            and all_letters == self.alignment._alphabet.gap_char
-        ):
-            # We are dealing with a generic alphabet class where the
-            # letters are not defined!  We must build a list of the
-            # letters used...
-            set_letters = set()
-            for record in self.alignment:
-                set_letters.update(record.seq)
-            list_letters = sorted(set_letters)
-            all_letters = "".join(list_letters)
+        set_letters = set()
+        for record in self.alignment:
+            set_letters.update(record.seq)
+        list_letters = sorted(set_letters)
+        all_letters = "".join(list_letters)
         return all_letters
 
     def pos_specific_score_matrix(self, axis_seq=None, chars_to_ignore=None):
@@ -263,8 +248,7 @@ class SummaryInfo:
 
         Arguments:
          - chars_to_ignore - A list of all characters not to include in
-           the pssm.  If the alignment alphabet declares a gap character,
-           then it will be excluded automatically.
+           the pssm.
          - axis_seq - An optional argument specifying the sequence to
            put on the axis of the PSSM. This should be a Seq object. If nothing
            is specified, the consensus sequence, calculated with default
@@ -283,10 +267,8 @@ class SummaryInfo:
         if not isinstance(chars_to_ignore, list):
             raise TypeError("chars_to_ignore should be a list.")
 
-        # if we have a gap char, add it to stuff to ignore
-        gap_char = self._get_gap_char()
-        if gap_char:
-            chars_to_ignore.append(gap_char)
+        gap_char = "-"
+        chars_to_ignore.append(gap_char)
 
         for char in chars_to_ignore:
             all_letters = all_letters.replace(char, "")
@@ -313,27 +295,14 @@ class SummaryInfo:
                     weight = record.annotations.get("weight", 1.0)
                     try:
                         score_dict[this_residue] += weight
-                    # if we get a KeyError then we have an alphabet problem
                     except KeyError:
                         raise ValueError(
-                            "Residue %s not found in alphabet %s"
-                            % (this_residue, self.alignment._alphabet)
+                            "Residue %s not found" % this_residue
                         ) from None
 
             pssm_info.append((left_seq[residue_num], score_dict))
 
         return PSSM(pssm_info)
-
-    def _get_gap_char(self):
-        """Return the gap character used in the alignment (PRIVATE)."""
-        try:
-            gap_char = self.alignment._alphabet.gap_char
-        except AttributeError:
-            # The alphabet doesn't declare a gap - there could be none
-            # in the sequence... or just a vague alphabet.
-            gap_char = "-"  # Safe?
-
-        return gap_char
 
     def information_content(
         self,
@@ -354,9 +323,9 @@ class SummaryInfo:
            the info content, we need to use zero). This defaults to the entire
            length of the first sequence.
          - e_freq_table - A dictionary specifying the expected frequencies
-           for each letter in the alphabet we are using (e.g. {'G' : 0.4,
-           'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
-           included, since these should not have expected frequencies.
+           for each letter (e.g. {'G' : 0.4, 'C' : 0.4, 'T' : 0.1, 'A' : 0.1}).
+           Gap characters should not be included, since these should not have
+           expected frequencies.
          - log_base - The base of the logarithm to use in calculating the
            information content. This defaults to 2 so the info is in bits.
          - chars_to_ignore - A listing of characters which should be ignored
@@ -382,20 +351,6 @@ class SummaryInfo:
             )
         # determine random expected frequencies, if necessary
         random_expected = None
-        if not e_freq_table:
-            # TODO - What about ambiguous alphabets?
-            base_alpha = Alphabet._get_base_alphabet(self.alignment._alphabet)
-            if isinstance(base_alpha, Alphabet.ProteinAlphabet):
-                random_expected = Protein20Random
-            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
-                random_expected = Nucleotide4Random
-            else:
-                raise ValueError(
-                    "Error in alphabet: not Nucleotide or "
-                    "Protein, supply expected frequencies"
-                )
-            del base_alpha
-
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
         for char in chars_to_ignore:
@@ -461,7 +416,7 @@ class SummaryInfo:
 
         total_count = 0
 
-        gap_char = self._get_gap_char()
+        gap_char = "-"
 
         if pseudo_count < 0:
             raise ValueError(
@@ -475,22 +430,17 @@ class SummaryInfo:
                     weight = record.annotations.get("weight", 1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
-            # getting a key error means we've got a problem with the alphabet
             except KeyError:
                 raise ValueError(
-                    "Residue %s not found in alphabet %s"
-                    % (record.seq[residue_num], self.alignment._alphabet)
+                    "Residue %s not found in letters %s"
+                    % (record.seq[residue_num], letters)
                 ) from None
 
         if e_freq_table:
             # check if all the residus in freq_info are in e_freq_table
             for key in freq_info:
                 if key != gap_char and key not in e_freq_table:
-                    raise ValueError(
-                        "letters in current column %s "
-                        "and not in expected frequency table %s"
-                        % (list(freq_info) - [gap_char], list(e_freq_table))
-                    )
+                    raise ValueError("%s not found in expected frequency table" % key)
 
         if total_count == 0:
             # This column must be entirely ignored characters
@@ -529,7 +479,7 @@ class SummaryInfo:
            info content.
 
         """
-        gap_char = self._get_gap_char()
+        gap_char = "-"
 
         if e_freq_table:
             # check the expected freq information to make sure it is good
