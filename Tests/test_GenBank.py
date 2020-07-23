@@ -169,7 +169,10 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
         length = 1622
         locus = "NM_006141"
-        definition = "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA"
+        definition = (
+            "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 "
+            "(DNCLI2), mRNA"
+        )
         accession = ["NM_006141"]
         titles = ()
         features = [
@@ -198,7 +201,9 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"DNCLI2"'),
                     (
                         "/note=",
-                        '"similar to R. norvegicus and G. gallus dynein light intermediate chain 2, Swiss-Prot Accession Numbers Q62698 and Q90828, respectively"',
+                        '"similar to R. norvegicus and G. gallus dynein light '
+                        'intermediate chain 2, Swiss-Prot Accession Numbers Q62698 and '
+                        'Q90828, respectively"',
                     ),
                     ("/codon_start=", "1"),
                     ("/db_xref=", '"LocusID:1783"'),
@@ -210,7 +215,14 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:5453634"'),
                     (
                         "/translation=",
-                        '"MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVSTRARSKLPSGKNILVFGEDGSGKTTLMTKLQGAEHGKKGRGLEYLYLSVHDEDRDDHTRCNVWILDGDLYHKGLLKFAVSAESLPETLVIFVADMSRPWTVMESLQKWASVLREHIDKMKIPPEKMRELERKFVKDFQDYMEPEEGCQGSPQRRGPLTSGSDEENVALPLGDNVLTHNLGIPVLVVCTKCDAVSVLEKEHDYRDEHLDFIQSHLRRFCLQYGAALIYTSVKEEKNLDLLYKYIVHKTYGFHFTTPALVVEKDAVFIPAGWDNEKKIAILHENFTTVKPEDAYEDFIVKPPVRKLVHDKELAAEDEQVFLMKQQSLLAKQPATPTRASESPARGPSGSPRTQGRGGPASVPSSSPGTSVKKPDPNIKNNAASEGVLASFFNSLLSKKTGSPGSPGAGGVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA"',
+                        '"MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVSTRARSKLPSGKNILVFG'
+                        'EDGSGKTTLMTKLQGAEHGKKGRGLEYLYLSVHDEDRDDHTRCNVWILDGDLYHKGLLKFAV'
+                        'SAESLPETLVIFVADMSRPWTVMESLQKWASVLREHIDKMKIPPEKMRELERKFVKDFQDYM'
+                        'EPEEGCQGSPQRRGPLTSGSDEENVALPLGDNVLTHNLGIPVLVVCTKCDAVSVLEKEHDYR'
+                        'DEHLDFIQSHLRRFCLQYGAALIYTSVKEEKNLDLLYKYIVHKTYGFHFTTPALVVEKDAVF'
+                        'IPAGWDNEKKIAILHENFTTVKPEDAYEDFIVKPPVRKLVHDKELAAEDEQVFLMKQQSLLA'
+                        'KQPATPTRASESPARGPSGSPRTQGRGGPASVPSSSPGTSVKKPDPNIKNNAASEGVLASFF'
+                        'NSLLSKKTGSPGSPGAGGVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA"',
                     ),
                 ),
             ),
@@ -230,7 +242,8 @@ class TestRecordParser(unittest.TestCase):
             accession = ["X55053"]
             titles = (
                 "Direct Submission",
-                "cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana",
+                "cDNA sequence analysis and expression of two cold-regulated genes of "
+                "Arabidopsis thaliana",
             )
             features = [
                 (
@@ -255,7 +268,8 @@ class TestRecordParser(unittest.TestCase):
                         ("/db_xref=", '"SWISS-PROT:P31169"'),
                         (
                             "/translation=",
-                            '"MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNFVKDKTGLNK"',
+                            '"MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNF'
+                            'VKDKTGLNK"',
                         ),
                     ),
                 ),
@@ -270,7 +284,8 @@ class TestRecordParser(unittest.TestCase):
             accession = ["X62281"]
             titles = (
                 "Direct Submission",
-                "Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana",
+                "Structure and expression of kin2, one of two cold- and ABA-induced "
+                "genes of Arabidopsis thaliana",
             )
             features = [
                 (
@@ -298,7 +313,8 @@ class TestRecordParser(unittest.TestCase):
                         ("/db_xref=", '"SWISS-PROT:P31169"'),
                         (
                             "/translation=",
-                            '"MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVNFVKDKTGLNK"',
+                            '"MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVN'
+                            'FVKDKTGLNK"',
                         ),
                     ),
                 ),
@@ -344,7 +360,8 @@ class TestRecordParser(unittest.TestCase):
                         ("/db_xref=", '"GI:167146"'),
                         (
                             "/translation=",
-                            '"MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                            '"MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLV'
+                            'KEKTGMNK"',
                         ),
                     ),
                 ),
@@ -427,7 +444,8 @@ class TestRecordParser(unittest.TestCase):
                         ("/db_xref=", '"GI:1209262"'),
                         (
                             "/translation=",
-                            '"MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                            '"MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLV'
+                            'KEKTGMNK"',
                         ),
                     ),
                 ),
@@ -466,8 +484,9 @@ class TestRecordParser(unittest.TestCase):
                     (
                         ("/gene=", '"BN28a"'),
                         (
-                            "/note=",
-                            '"low temperature-induced; similar to Brassica napus Kin1 in Accession Number M81224"',
+                            '/note=',
+                            '"low temperature-induced; similar to Brassica napus Kin1 '
+                            'in Accession Number M81224"',
                         ),
                         ("/codon_start=", "1"),
                         ("/product=", '"BN28a"'),
@@ -475,7 +494,8 @@ class TestRecordParser(unittest.TestCase):
                         ("/db_xref=", '"GI:10121869"'),
                         (
                             "/translation=",
-                            '"MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK"',
+                            '"MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLV'
+                            'KEKTGMNK"',
                         ),
                     ),
                 ),
@@ -494,7 +514,8 @@ class TestRecordParser(unittest.TestCase):
         definition = "Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195"
         accession = ["AL109817"]
         titles = (
-            "The European IMAGE consortium for integrated Molecular analysis of human gene transcripts",
+            "The European IMAGE consortium for integrated Molecular analysis "
+            "of human gene transcripts",
             "Direct Submission",
         )
         features = [
@@ -509,7 +530,13 @@ class TestRecordParser(unittest.TestCase):
                     ("/clone_lib=", '"Soares fetal liver spleen 1NFLS"'),
                     (
                         "/note=",
-                        '"contains Alu repeat; likely to be be derived from unprocessed nuclear RNA or genomic DNA; encodes putative exons identical to FTCD; formimino transferase cyclodeaminase; formimino transferase (EC 2.1.2.5) /formimino tetrahydro folate cyclodeaminase (EC 4.3.1.4)"',
+                        '"contains Alu repeat; '
+                        'likely to be be derived from unprocessed nuclear RNA '
+                        'or genomic DNA; '
+                        'encodes putative exons identical to FTCD; '
+                        'formimino transferase cyclodeaminase; '
+                        'formimino transferase (EC 2.1.2.5) '
+                        '/formimino tetrahydro folate cyclodeaminase (EC 4.3.1.4)"',
                     ),
                 ),
             ),
@@ -532,7 +559,8 @@ class TestRecordParser(unittest.TestCase):
         definition = "Human fructose transporter (GLUT5) gene, promoter and exon 1"
         accession = ["U05344"]
         titles = (
-            "Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP",
+            "Regulation of expression of the human fructose transporter (GLUT5) by "
+            "cyclic AMP",
             "Direct Submission",
         )
         features = [
@@ -547,8 +575,9 @@ class TestRecordParser(unittest.TestCase):
                     ("/clone=", '"lambda hGT5-157"'),
                     ("/tissue_type=", '"liver"'),
                     (
-                        "/clone_lib=",
-                        '"partial Hae III/Alu I fetal human liver library in lambda Ch4A of Maniatis"',
+                        '/clone_lib=',
+                        '"partial Hae III/Alu I fetal human liver library in lambda '
+                        'Ch4A of Maniatis"',
                     ),
                     ("/dev_stage=", '"fetal"'),
                 ),
@@ -577,7 +606,10 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
         length = 86436
         locus = "AC007323"
-        definition = "Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence"
+        definition = (
+            "Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, "
+            "complete sequence"
+        )
         accession = ["AC007323"]
         titles = (
             "Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I",
@@ -612,13 +644,22 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715633"'),
                     (
                         "/translation=",
-                        '"MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICSYDPWNLRFQSKYKSRDAMWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFCSEGFRGKIGHKRVLVFLDGRYPDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFRLSLLSPMFYTDELMCLPPEILQRTYVICRLEYKGDDADILSAYAIDPTPAFVPNMTSSAGSVVNQSRQRNSGSYNTYSEYDSANHGQQFNENSNIMQQQPLQGSFNPLLEYDFANHGGQWLSDYIDLQQQVPYLAPYENESEMIWKHVIEENFEFLVDERTSMQQHYSDHRPKKPVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPGHTRIDDIPSLNIIEPLHNYKAQEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQSWIVLENAQWNYLKNMIIGVLLFISVISWIILVG"',
+                        '"MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICSYDPWNLRFQSKYKSRDA'
+                        'MWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFCSEGFRGKIGHKRVLVFLDGRY'
+                        'PDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFRLSLLSPMFYTDELMCLPPEILQRTY'
+                        'VICRLEYKGDDADILSAYAIDPTPAFVPNMTSSAGSVVNQSRQRNSGSYNTYSEYDSANHGQ'
+                        'QFNENSNIMQQQPLQGSFNPLLEYDFANHGGQWLSDYIDLQQQVPYLAPYENESEMIWKHVI'
+                        'EENFEFLVDERTSMQQHYSDHRPKKPVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPG'
+                        'HTRIDDIPSLNIIEPLHNYKAQEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQS'
+                        'WIVLENAQWNYLKNMIIGVLLFISVISWIILVG"',
                     ),
                 ),
             ),
             (
                 "CDS",
-                "complement(join(6617..6953,7266..7351,7464..7603,7916..7998,8087..8166,8273..8368))",
+                "complement(join("
+                "6617..6953,7266..7351,7464..7603,7916..7998,8087..8166,8273..8368"
+                "))",
                 (
                     ("/note=", '"hypothetical protein"'),
                     ("/codon_start=", "1"),
@@ -628,7 +669,11 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715650"'),
                     (
                         "/translation=",
-                        '"MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIECERMVCFNHFLSLFGPKVYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLKSPELIIDRSLLLRKSDEESSFSDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEVSRESLLLQVWEFPMSVIFFVDILLLTSNSMALKGQTFKMFSMQIVFCCCYFGISQCKFVFKPVMTESTMTRCIAVCLIAHLIRFLVGQIFEPTIFLIQIGSLLQYMSYFFRIV"',
+                        '"MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIECERMVCFNHFLSLFGPK'
+                        'VYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLKSPELIIDRSLLLRKSDEESSF'
+                        'SDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEVSRESLLLQVWEFPMSVIFFVDILLL'
+                        'TSNSMALKGQTFKMFSMQIVFCCCYFGISQCKFVFKPVMTESTMTRCIAVCLIAHLIRFLVG'
+                        'QIFEPTIFLIQIGSLLQYMSYFFRIV"',
                     ),
                 ),
             ),
@@ -644,17 +689,28 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715649"'),
                     (
                         "/translation=",
-                        '"MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPMMMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNGKMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRHRPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNTQRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPPPSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDNDDGDDGDDDQFAKKGKSSLSLNFNP"',
+                        '"MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPMMMIPPPEKEHMFDKVVT'
+                        'PSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNGKMWRFRYSYWNSSQSYVMTKG'
+                        'WSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRHRPDMSLVQAHQFGNFGFNFNFPTTS'
+                        'QYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNTQRQEFVGYGYGNLAGRCYYTGSPLDHRNI'
+                        'VGSEPLVIDSVPVVPGRLTPVMLPPLPPPPSTAGKRLRLFGVNMECGNDYNQQEESWLVPRG'
+                        'EIGASSSSSSALRLNLSTDHDDDNDDGDDGDDDQFAKKGKSSLSLNFNP"',
                     ),
                 ),
             ),
             (
                 "CDS",
-                "join(23221..24174,24244..24357,24412..24664,24743..25137,25226..25445,25527..25711,25783..25905,25994..26478,26564..26730,26814..26983,27074..27235,27320..27415,27505..28133,28314..28507,28592..28782,28862..30013,30112..30518,30604..30781)",
+                "join("
+                "23221..24174,24244..24357,24412..24664,24743..25137,25226..25445,"
+                "25527..25711,25783..25905,25994..26478,26564..26730,26814..26983,"
+                "27074..27235,27320..27415,27505..28133,28314..28507,28592..28782,"
+                "28862..30013,30112..30518,30604..30781"
+                ")",
                 (
                     (
-                        "/note=",
-                        '"similar to UFD1 protein emb|CAB10321.1; similar to ESTs gb|H36434, gb|AI996152.1"',
+                        '/note=',
+                        '"similar to UFD1 protein emb|CAB10321.1; similar to ESTs '
+                        'gb|H36434, gb|AI996152.1"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -662,18 +718,54 @@ class TestRecordParser(unittest.TestCase):
                     ("/protein_id=", '"AAF26461.1"'),
                     ("/db_xref=", '"GI:6715634"'),
                     (
-                        "/translation=",
-                        '"MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVNESTDENGVINDFFGGIDHILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKENGLQKNGGKRDEFSKEEGDKDRKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRTRNWDEAGNNKKKRECNNYRRDGRDREVRGYWERDKVGSNELVYRSGTWEADHERDVKKVSGGNRECDVKAEENKSKPEERKEKVVEEQARRYQLDVLEQAKAKNTIAFLETGAGKTLIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLVYQVPPNKKHQAEVIRNQTCFQVGHYCGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQVLVMTAQILLNILRHSIIRMETIDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMTASPVNLKGVSSQVDCAIKIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSLHETIKQMIAAVEEAAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRAINYTLAELGQWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEKVAAEVGKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQHTADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDTISKFRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYILMVERYIKSFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAIERTDLSHLKDTSRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAILRPEFSMEKHEKPGGHTEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLHEMGAFTDMLLPDKGSGQDAEKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGKEVCESSKLFHLYMYNVRCVDFGSSKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVARAMITKASLAFKGSLDITENQLSSLKKFHVRLMSIVLDVDVEPSTTPWDPAKAYLFVPVTDNTSMEPIKGINWELVEKITKTTAWDNPLQRARPDVYLGTNERTLGGDRREYGFGKLRHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVRDAFEKEVEEDLSKGKLMMADGCMVAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEGYLGPLEYNTYADYYKQKIYVVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLIKGRGVSYCKNLLSPRFEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRVESMLLAVQLKNLISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQKHEGQLTRMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSFFDEEQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAANHLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAITHASRPSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFARVAVKHKLHLYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQTESSKPGFNSFGLGDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTPETLPMHPVRELQERCQQQAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKLAARNALAALKEKEIAESKEKHINNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRKNWPMPSYRCVKEGGPAHAKRFTFGVRVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLLELLNKTFS"',
+                        '/translation=',
+                        '"MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVNESTDENGVINDFFGGID'
+                        'HILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKENGLQKNGGKRDEFSKEEGDKD'
+                        'RKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRTRNWDEAGNNKKKRECNNYRRDGRDR'
+                        'EVRGYWERDKVGSNELVYRSGTWEADHERDVKKVSGGNRECDVKAEENKSKPEERKEKVVEE'
+                        'QARRYQLDVLEQAKAKNTIAFLETGAGKTLIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLV'
+                        'YQVPPNKKHQAEVIRNQTCFQVGHYCGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQV'
+                        'LVMTAQILLNILRHSIIRMETIDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMT'
+                        'ASPVNLKGVSSQVDCAIKIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSL'
+                        'HETIKQMIAAVEEAAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRA'
+                        'INYTLAELGQWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEK'
+                        'VAAEVGKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQ'
+                        'HTADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDTISK'
+                        'FRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYILMVERYIK'
+                        'SFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAIERTDLSHLKDT'
+                        'SRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAILRPEFSMEKHEKPGGH'
+                        'TEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLHEMGAFTDMLLPDKGSGQDA'
+                        'EKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGKEVCESSKLFHLYMYNVRCVDFGS'
+                        'SKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVARAMITKASLAFKGSLDITENQLSSLKKF'
+                        'HVRLMSIVLDVDVEPSTTPWDPAKAYLFVPVTDNTSMEPIKGINWELVEKITKTTAWDNPLQ'
+                        'RARPDVYLGTNERTLGGDRREYGFGKLRHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVR'
+                        'DAFEKEVEEDLSKGKLMMADGCMVAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEG'
+                        'YLGPLEYNTYADYYKQKIYVVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLI'
+                        'KGRGVSYCKNLLSPRFEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRV'
+                        'ESMLLAVQLKNLISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQ'
+                        'KHEGQLTRMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSF'
+                        'FDEEQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAAN'
+                        'HLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAITHASR'
+                        'PSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFARVAVKHKLH'
+                        'LYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQTESSKPGFNSFGL'
+                        'GDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTPETLPMHPVRELQERCQQ'
+                        'QAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKLAARNALAALKEKEIAESKEKH'
+                        'INNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRKNWPMPSYRCVKEGGPAHAKRFTFGV'
+                        'RVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLLELLNKTFS"',
                     ),
                 ),
             ),
             (
                 "CDS",
-                "complement(join(31084..31126,31223..31304,31341..31515,31635..31700,31790..31897,31984..32049,32133..32161,32249..32372))",
+                "complement(join("
+                "31084..31126,31223..31304,31341..31515,31635..31700,31790..31897,"
+                "31984..32049,32133..32161,32249..32372"
+                "))",
                 (
                     (
-                        "/note=",
-                        '"putative inorganic pyrophosphatase gi|3510259; similar to ESTs gb|T42316, gb|AI994042.1, gb|AI994013.1, emb|Z29202"',
+                        '/note=',
+                        '"putative inorganic pyrophosphatase gi|3510259; similar to '
+                        'ESTs gb|T42316, gb|AI994042.1, gb|AI994013.1, emb|Z29202"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -682,7 +774,10 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715648"'),
                     (
                         "/translation=",
-                        '"MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPGAPQIFNVVVEITKGSKVKYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPIDVLVIMQEPVLPGCFLRARAIGLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPHRLSEIRRFFEDCILFLQCSSLFISIDLSTNKKNENKEVAVNDFLPSESAVEAIQYSMDLYAEYILHTLRR"',
+                        '"MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPGAPQIFNVVVEITKGSKV'
+                        'KYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPIDVLVIMQEPVLPGCFLRARAI'
+                        'GLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPHRLSEIRRFFEDCILFLQCSSLFISI'
+                        'DLSTNKKNENKEVAVNDFLPSESAVEAIQYSMDLYAEYILHTLRR"',
                     ),
                 ),
             ),
@@ -691,8 +786,9 @@ class TestRecordParser(unittest.TestCase):
                 "complement(join(33694..34029,34103..35173,35269..35349,35432..35701,36326..36387,36512..36623,36725..36763))",
                 (
                     (
-                        "/note=",
-                        '"putative late elongated hypocotyl emb|CAA07004; similar to ESTS gb|AI993521.1, gb|AA650979"',
+                        '/note=',
+                        '"putative late elongated hypocotyl emb|CAA07004; similar to '
+                        'ESTS gb|AI993521.1, gb|AA650979"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -701,7 +797,17 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715647"'),
                     (
                         "/translation=",
-                        '"MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGRAWQRIEEHIGTKTAVQIRSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIEIPPPRPKRKPNTPYPRKPGNNGTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFSEKTSTGKENQDENCSGVSTVNKYPLPTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGNDGTTVHSMQNYPWHFHADIVNGNIAKCPQNHPSGMVSQDFMFHPMREETHGHANLQATTASATTTASHQAFPACHSQDDYRSFLQISSTFSNLIMSTLLQNPAAHAAATFAASVWPYASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWASHGLLPVCAPAPITCVPFSTVAVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSDDSDETGVTKLNADSKTNDDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDALDKMEKDKEDVKETDENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARERLPQSFSPPQVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFKPYKRCSMEVKESQVGNINNQSDEKVCKRLRLEGEAST"',
+                        '"MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGRAWQRIEEHIGTKTAVQI'
+                        'RSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIEIPPPRPKRKPNTPYPRKPGNN'
+                        'GTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFSEKTSTGKENQDENCSGVSTVNKYPL'
+                        'PTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGNDGTTVHSMQNYPWHFHADIVNGNIAKCPQ'
+                        'NHPSGMVSQDFMFHPMREETHGHANLQATTASATTTASHQAFPACHSQDDYRSFLQISSTFS'
+                        'NLIMSTLLQNPAAHAAATFAASVWPYASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWA'
+                        'SHGLLPVCAPAPITCVPFSTVAVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSD'
+                        'DSDETGVTKLNADSKTNDDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDAL'
+                        'DKMEKDKEDVKETDENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARE'
+                        'RLPQSFSPPQVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFK'
+                        'PYKRCSMEVKESQVGNINNQSDEKVCKRLRLEGEAST"',
                     ),
                 ),
             ),
@@ -710,8 +816,9 @@ class TestRecordParser(unittest.TestCase):
                 "complement(join(38600..38756,38838..38989,39111..39516,39915..40031,40377..40579))",
                 (
                     (
-                        "/note=",
-                        '"similar to Medicago truncatula MtN2 gi|3193308; similar to EST gb|H77065"',
+                        '/note=',
+                        '"similar to Medicago truncatula MtN2 gi|3193308; similar to '
+                        'EST gb|H77065"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -720,7 +827,12 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715646"'),
                     (
                         "/translation=",
-                        '"MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNHMVIGAYRMAISALILVPFAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFALALIFRTENVKILKTKAGMLKVIGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNNDQDKANNWLLGCLYLTIGTVLLSLWMLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLSLYKSRDVNDWIIDDRFVITVIIYAGVVGQAMTTVATTWGIKKLGAVFASAFFPLTLISATLFDFLILHTPLYLGSVIGSLVTITGLYMFLWGKNKETESSTALSSGMDNEAQYTTPNKDNDSKSPV"',
+                        '"MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNHMVIGAYRMAISALILVP'
+                        'FAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFALALIFRTENVKILKTKAGMLKV'
+                        'IGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNNDQDKANNWLLGCLYLTIGTVLLSLW'
+                        'MLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLSLYKSRDVNDWIIDDRFVITVIIYAGVVGQ'
+                        'AMTTVATTWGIKKLGAVFASAFFPLTLISATLFDFLILHTPLYLGSVIGSLVTITGLYMFLW'
+                        'GKNKETESSTALSSGMDNEAQYTTPNKDNDSKSPV"',
                     ),
                 ),
             ),
@@ -729,8 +841,10 @@ class TestRecordParser(unittest.TestCase):
                 "complement(join(45150..45261,45343..45656,45719..45847,46075..46313,47448..47684,47777..48554,48638..48868))",
                 (
                     (
-                        "/note=",
-                        '"putative pyruvate dehydrogenase E1 alpha subunit gi|2454182; similar to ESTs emb|Z48417, gb|AW039459.1, gb|T15146, emb|Z48416, gb|AF066871, gb|T76832, gb|AI996061.1"',
+                        '/note=',
+                        '"putative pyruvate dehydrogenase E1 alpha subunit gi|2454182; '
+                        'similar to ESTs emb|Z48417, gb|AW039459.1, gb|T15146, '
+                        'emb|Z48416, gb|AF066871, gb|T76832, gb|AI996061.1"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -739,7 +853,17 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715645"'),
                     (
                         "/translation=",
-                        '"MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLSLRRLNHSNATRRSPVVSVQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCAQMYYRGKMFGFVHLYNGQEAVSTGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSELFGKVTGCCRGQGGSMHMFSKEHNMLGGFAFIGEGIPVATGAAFSSKYRREVLKQDCDDVTVAFFGDGTCNNGQFFECLNMAALYKLPIIFVVENNLWAIGMSHLRATSDPEIWKKGPAFGMPGVHVDGMDVLKVREVAKEAVTRARRGEGPTLVECETYRFRGHSLADPDELRDAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEKKIDELVEEAVEFADASPQPGRSQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDEEKEEEVVKGEAEPNKDSVVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEVVSRNPQTGESRGSGYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGTRRNPEVLNSTPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNRVFAFLSFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV"',
+                        '"MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLSLRRLNHSNATRRSPVVS'
+                        'VQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCAQMYYRGKMFGFVHLYNGQEAV'
+                        'STGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSELFGKVTGCCRGQGGSMHMFSKEHNM'
+                        'LGGFAFIGEGIPVATGAAFSSKYRREVLKQDCDDVTVAFFGDGTCNNGQFFECLNMAALYKL'
+                        'PIIFVVENNLWAIGMSHLRATSDPEIWKKGPAFGMPGVHVDGMDVLKVREVAKEAVTRARRG'
+                        'EGPTLVECETYRFRGHSLADPDELRDAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEK'
+                        'KIDELVEEAVEFADASPQPGRSQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDE'
+                        'EKEEEVVKGEAEPNKDSVVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEV'
+                        'VSRNPQTGESRGSGYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGT'
+                        'RRNPEVLNSTPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNR'
+                        'VFAFLSFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV"',
                     ),
                 ),
             ),
@@ -748,8 +872,9 @@ class TestRecordParser(unittest.TestCase):
                 "complement(join(49986..50039,50121..50333,50585..50656))",
                 (
                     (
-                        "/note=",
-                        '"similar to acidic ribosomal protein p1 gi|2252857; similar to ESTs gb|T42111, gb|AI099979, gb|AA728491"',
+                        '/note=',
+                        '"similar to acidic ribosomal protein p1 gi|2252857; '
+                        'similar to ESTs gb|T42111, gb|AI099979, gb|AA728491"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -758,7 +883,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715644"'),
                     (
                         "/translation=",
-                        '"MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWPMLFAKMAEKRNVTDLIMNVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEESDGDLGFGLFD"',
+                        '"MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWPMLFAKMAEKRNVTDLIM'
+                        'NVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEESDGDLGFGLFD"',
                     ),
                 ),
             ),
@@ -774,7 +900,15 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715635"'),
                     (
                         "/translation=",
-                        '"MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWFRKPATQESPVKSSGISPPAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPIATSASKTLAPRRIYYARENYAAVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRKQAKMTLRCMQALVRVQSRVLDQRKRLSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMSREGSSAAEDWDDRPHTIDAVKVMLQRRRDTALRHDKTNLSQAFSQKMWRTVGNQSTEGHHEVELEEERPKWLDRWMATRPWDKRASSRASVDQRVSVKTVEIDTSQPYSRTGAGSPSRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIRSASPRCQRDPREDRDRAAYSYTSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTESAKARIRSHSAPRQRPSTPERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGMLEQQSNYSSCCTESNGVEISPASTSDFRNWLR"',
+                        '"MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWFRKPATQESPVKSSGISP'
+                        'PAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPIATSASKTLAPRRIYYARENYA'
+                        'AVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRKQAKMTLRCMQALVRVQSRVLDQRKR'
+                        'LSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMSREGSSAAEDWDDRPHTIDAVKVMLQRRRD'
+                        'TALRHDKTNLSQAFSQKMWRTVGNQSTEGHHEVELEEERPKWLDRWMATRPWDKRASSRASV'
+                        'DQRVSVKTVEIDTSQPYSRTGAGSPSRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIR'
+                        'SASPRCQRDPREDRDRAAYSYTSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTES'
+                        'AKARIRSHSAPRQRPSTPERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGM'
+                        'LEQQSNYSSCCTESNGVEISPASTSDFRNWLR"',
                     ),
                 ),
             ),
@@ -783,8 +917,10 @@ class TestRecordParser(unittest.TestCase):
                 "complement(57094..58680)",
                 (
                     (
-                        "/note=",
-                        '"putative fatty acid elongase 3-ketoacyl-coA synthase 1 gi|4091810; similar to ESTs gb|T42377, gb|N96054, gb|T44368, gb|AI999379.1, emb|Z26005"',
+                        '/note=',
+                        '"putative fatty acid elongase 3-ketoacyl-coA synthase 1 '
+                        'gi|4091810; similar to ESTs gb|T42377, gb|N96054, gb|T44368, '
+                        'gb|AI999379.1, emb|Z26005"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -793,7 +929,15 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715643"'),
                     (
                         "/translation=",
-                        '"MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLKYVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLTCLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQFQQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEVGILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANPNSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVVRTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQLMFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSRMTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTEEMTGNAWAGSIDQYPVKVVQ"',
+                        '"MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLKYVKLGLHNSCNVTTILF'
+                        'FLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLTCLVFLSFVLTLYVANRSKPVY'
+                        'LVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQFQQRISNRAGLGDETYLPRGITSTPP'
+                        'KLNMSEARAEAEAVMFGALDSLFEKTGIKPAEVGILIVNCSLFNPTPSLSAMIVNHYKMRED'
+                        'IKSYNLGGMGCSAGLISIDLANNLLKANPNSYAVVVSTENITLNWYFGNDRSMLLCNCIFRM'
+                        'GGAAILLSNRRQDRKKSKYSLVNVVRTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAG'
+                        'DALKTNITTLGPMVLPLSEQLMFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLD'
+                        'EVQKNLDLKDWHMEPSRMTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCN'
+                        'SAVWKALRPVSTEEMTGNAWAGSIDQYPVKVVQ"',
                     ),
                 ),
             ),
@@ -809,7 +953,10 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715642"'),
                     (
                         "/translation=",
-                        '"MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQPKEIESRVSDKETASASGEVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKEEIIPFKEIIEALLGNSGDKVQQDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLYQPVQLPLILFVVIRFSMLKIIHYHQFTMAHIKEFVCMWDTHLYKEITNLNIWDTLSSTLVLAIWTVNASHE"',
+                        '"MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQPKEIESRVSDKETASASG'
+                        'EVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKEEIIPFKEIIEALLGNSGDKVQ'
+                        'QDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLYQPVQLPLILFVVIRFSMLKIIHYHQ'
+                        'FTMAHIKEFVCMWDTHLYKEITNLNIWDTLSSTLVLAIWTVNASHE"',
                     ),
                 ),
             ),
@@ -818,8 +965,9 @@ class TestRecordParser(unittest.TestCase):
                 "complement(join(64100..64177,64272..64358,64453..64509,64603..64719,64812..64919,65033..65158,65265..65354,65435..65566,65809..65862,65964..66044,66152..66259,66380..66451,66537..66599,67026..67214))",
                 (
                     (
-                        "/note=",
-                        '"similar to wpk4 protein kinase dbj|BAA34675; similar to ESTs dbj|AB015122, gb|AI997157.1"',
+                        '/note=',
+                        '"similar to wpk4 protein kinase dbj|BAA34675; similar to ESTs '
+                        'dbj|AB015122, gb|AI997157.1"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -828,7 +976,14 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715641"'),
                     (
                         "/translation=",
-                        '"MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKMVEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTACGTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRVRICKAEFSCPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAAFSNSKECLVTEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLGFNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNFSSGLKDVVWNTDAAAEEQKQ"',
+                        '"MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKMV'
+                        'EQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEARRYF'
+                        'QQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTACGTPNY'
+                        'VAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRVRICKAEFSCPPWFSQ'
+                        'GAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAAFSNSKECLV'
+                        'TEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLG'
+                        'FNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNF'
+                        'SSGLKDVVWNTDAAAEEQKQ"',
                     ),
                 ),
             ),
@@ -847,7 +1002,12 @@ class TestRecordParser(unittest.TestCase):
                     ("/db_xref=", '"GI:6715640"'),
                     (
                         "/translation=",
-                        '"MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKKRHYLGTSDTFRSFEPLNEHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATFYCPYCWFKEQATRSTALRTRGVAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSLPMQLHENLHQLQELVKHLKARNSQLDESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVNEEKMLREGVEKFSDTINKNMPWKKILEMGKGIFHTTRNSSDLKDKWRNMVRIIILIWLRSRLTSSSSSQRSEIKMERERNAGVMKKMSPTGTIQRLEFVGWYL"',
+                        '"MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKKRHYLGTSDTFRSFEPLN'
+                        'EHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATFYCPYCWFKEQATRSTALRTRG'
+                        'VAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSLPMQLHENLHQLQELVKHLKARNSQL'
+                        'DESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVNEEKMLREGVEKFSDTINKNMPWKKILEMG'
+                        'KGIFHTTRNSSDLKDKWRNMVRIIILIWLRSRLTSSSSSQRSEIKMERERNAGVMKKMSPTG'
+                        'TIQRLEFVGWYL"',
                     ),
                 ),
             ),
@@ -856,8 +1016,9 @@ class TestRecordParser(unittest.TestCase):
                 "join(72285..72371,72789..72865,72989..73097,73190..73442,73524..73585)",
                 (
                     (
-                        "/note=",
-                        '"similar to SYT gi|2252866; similar to ESTs emb|F14390, gb|H36066, emb|F14391"',
+                        '/note=',
+                        '"similar to SYT gi|2252866; similar to ESTs emb|F14390, '
+                        'gb|H36066, emb|F14391"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -875,8 +1036,9 @@ class TestRecordParser(unittest.TestCase):
                 "complement(join(73807..73990,74036..74145))",
                 (
                     (
-                        "/note=",
-                        '"similar to stress-induced protein OZI1 precursor pir|S59544; similar to EST gb|AI995719.1"',
+                        '/note=',
+                        '"similar to stress-induced protein OZI1 precursor pir|S59544; '
+                        'similar to EST gb|AI995719.1"',
                     ),
                     ("/codon_start=", "1"),
                     ("/evidence=", "not_experimental"),
@@ -1020,7 +1182,62 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.11"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genefinder'', version:''084'', score:''105.71''); /prediction=(method:''genscan'', version:''1.0''); /match=(desc:''BASEMENT MEMBRANE-SPECIFIC HEPARAN SULFATE PROTEOGLYCAN CORE PROTEIN PRECURSOR (HSPG) (PERLECAN) (PLC)'', species:''Homo sapiens (Human)'', ranges:(query:24292..24549, target:SWISS-PROT::P98160:3713..3628, score:''201.00''), (query:24016..24291, target:SWISS-PROT::P98160:3815..3724, score:''139.00''), (query:23857..24006, target:SWISS-PROT::P98160:3866..3817, score:''99.00''), (query:24052..24327, target:SWISS-PROT::P98160:4059..3968, score:''143.00''), (query:24046..24312, target:SWISS-PROT::P98160:4341..4253, score:''116.00''), (query:23806..23901, target:SWISS-PROT::P98160:4177..4146, score:''76.00''), (query:23203..23382, target:SWISS-PROT::P98160:4062..4003, score:''116.00''), (query:22523..22777, target:SWISS-PROT::P98160:4288..4204, score:''112.00''), (query:22235..22300, target:SWISS-PROT::P98160:4358..4337, score:''64.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''GM03359.5prime GM Drosophila melanogaster ovary BlueScript Drosophila melanogaster cDNA clone GM03359 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:25024..25235, target:EMBL::AA801707:438..227, score:''1024.00''), (query:24851..24898, target:EMBL::AA801707:476..429, score:''204.00'')), method:''blastn'', version:''1.4.9''); /match=(desc:''LD08615.5prime LD Drosophila melanogaster embryo BlueScript Drosophila melanogaster cDNA clone LD08615 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:24629..24727, target:EMBL::AA264808:99..1, score:''495.00''), (query:24417..24566, target:EMBL::AA264808:250..101, score:''687.00''), (query:24048..24420, target:EMBL::AA264808:618..246, score:''1847.00''), (query:23986..24036, target:EMBL::AA264808:678..628, score:''237.00'')), method:''blastn'', version:''1.4.9''); /match=(desc:''HL02745.5prime HL Drosophila melanogaster head BlueScript Drosophila melanogaster cDNA clone HL02745 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:23944..24045, target:EMBL::AA697546:103..2, score:''510.00''), (query:23630..23943, target:EMBL::AA697546:416..103, score:''1570.00''), (query:23419..23561, target:EMBL::AA697546:558..416, score:''715.00''), (query:23306..23417, target:EMBL::AA697546:670..559, score:''524.00''), (query:23280..23316, target:EMBL::AA697546:695..659, score:''167.00'')), method:''blastn'', version:''1.4.9''); /match=(desc:''GM08137.5prime GM Drosophila melanogaster ovary BlueScript Drosophila melanogaster cDNA clone GM08137 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:23235..23278, target:EMBL::AA696682:44..1, score:''139.00''), (query:22986..23251, target:EMBL::AA696682:294..29, score:''1321.00'')), method:''blastn'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genefinder'', version:''084'',"
+                        " score:''105.71''); /prediction=(method:''genscan'',"
+                        " version:''1.0''); /match=(desc:''BASEMENT MEMBRANE-SPECIFIC"
+                        " HEPARAN SULFATE PROTEOGLYCAN CORE PROTEIN PRECURSOR (HSPG)"
+                        " (PERLECAN) (PLC)'', species:''Homo sapiens (Human)'',"
+                        " ranges:(query:24292..24549,"
+                        " target:SWISS-PROT::P98160:3713..3628, score:''201.00''),"
+                        " (query:24016..24291, target:SWISS-PROT::P98160:3815..3724,"
+                        " score:''139.00''), (query:23857..24006,"
+                        " target:SWISS-PROT::P98160:3866..3817, score:''99.00''),"
+                        " (query:24052..24327, target:SWISS-PROT::P98160:4059..3968,"
+                        " score:''143.00''), (query:24046..24312,"
+                        " target:SWISS-PROT::P98160:4341..4253, score:''116.00''),"
+                        " (query:23806..23901, target:SWISS-PROT::P98160:4177..4146,"
+                        " score:''76.00''), (query:23203..23382,"
+                        " target:SWISS-PROT::P98160:4062..4003, score:''116.00''),"
+                        " (query:22523..22777, target:SWISS-PROT::P98160:4288..4204,"
+                        " score:''112.00''), (query:22235..22300,"
+                        " target:SWISS-PROT::P98160:4358..4337, score:''64.00'')),"
+                        " method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''GM03359.5prime GM Drosophila melanogaster"
+                        " ovary BlueScript Drosophila melanogaster cDNA clone GM03359"
+                        " 5prime, mRNA sequence'', species:''Drosophila melanogaster"
+                        " (fruit fly)'', ranges:(query:25024..25235,"
+                        " target:EMBL::AA801707:438..227, score:''1024.00''),"
+                        " (query:24851..24898, target:EMBL::AA801707:476..429,"
+                        " score:''204.00'')), method:''blastn'', version:''1.4.9'');"
+                        " /match=(desc:''LD08615.5prime LD Drosophila melanogaster"
+                        " embryo BlueScript Drosophila melanogaster cDNA clone LD08615"
+                        " 5prime, mRNA sequence'', species:''Drosophila melanogaster"
+                        " (fruit fly)'', ranges:(query:24629..24727,"
+                        " target:EMBL::AA264808:99..1, score:''495.00''),"
+                        " (query:24417..24566, target:EMBL::AA264808:250..101,"
+                        " score:''687.00''), (query:24048..24420,"
+                        " target:EMBL::AA264808:618..246, score:''1847.00''),"
+                        " (query:23986..24036, target:EMBL::AA264808:678..628,"
+                        " score:''237.00'')), method:''blastn'', version:''1.4.9'');"
+                        " /match=(desc:''HL02745.5prime HL Drosophila melanogaster head"
+                        " BlueScript Drosophila melanogaster cDNA clone HL02745 5prime,"
+                        " mRNA sequence'', species:''Drosophila melanogaster (fruit"
+                        " fly)'', ranges:(query:23944..24045,"
+                        " target:EMBL::AA697546:103..2, score:''510.00''),"
+                        " (query:23630..23943, target:EMBL::AA697546:416..103,"
+                        " score:''1570.00''), (query:23419..23561,"
+                        " target:EMBL::AA697546:558..416, score:''715.00''),"
+                        " (query:23306..23417, target:EMBL::AA697546:670..559,"
+                        " score:''524.00''), (query:23280..23316,"
+                        " target:EMBL::AA697546:695..659, score:''167.00'')),"
+                        " method:''blastn'', version:''1.4.9'');"
+                        " /match=(desc:''GM08137.5prime GM Drosophila melanogaster"
+                        " ovary BlueScript Drosophila melanogaster cDNA clone GM08137"
+                        " 5prime, mRNA sequence'', species:''Drosophila melanogaster"
+                        " (fruit fly)'', ranges:(query:23235..23278,"
+                        " target:EMBL::AA696682:44..1, score:''139.00''),"
+                        " (query:22986..23251, target:EMBL::AA696682:294..29,"
+                        " score:''1321.00'')), method:''blastn'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72284.1"'),
@@ -1039,7 +1256,31 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.10"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genefinder'', version:''084'', score:''98.50''); /prediction=(method:''genscan'', version:''1.0''); /match=(desc:''BASEMENT MEMBRANE-SPECIFIC HEPARAN SULFATE PROTEOGLYCAN CORE PROTEIN PRECURSOR (HSPG) (PERLECAN) (PLC)'', species:''Homo sapiens (Human)'', ranges:(query:33540..33716, target:SWISS-PROT::P98160:2716..2658, score:''113.00''), (query:32859..32963, target:SWISS-PROT::P98160:3341..3307, score:''63.00''), (query:33150..33215, target:SWISS-PROT::P98160:3530..3509, score:''73.00''), (query:32973..33089, target:SWISS-PROT::P98160:3588..3550, score:''71.00''), (query:32358..32567, target:SWISS-PROT::P98160:3650..3581, score:''107.00''), (query:31222..31323, target:SWISS-PROT::P98160:2620..2587, score:''80.00''), (query:31489..31572, target:SWISS-PROT::P98160:3387..3360, score:''72.00''), (query:31495..31593, target:SWISS-PROT::P98160:3575..3543, score:''60.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''GM02481.5prime GM Drosophila melanogaster ovary BlueScript Drosophila melanogaster cDNA clone GM02481 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:30008..30036, target:EMBL::AA695253:29..1, score:''145.00''), (query:29549..30004, target:EMBL::AA695253:487..32, score:''2262.00'')), method:''blastn'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genefinder'', version:''084'',"
+                        " score:''98.50''); /prediction=(method:''genscan'',"
+                        " version:''1.0''); /match=(desc:''BASEMENT MEMBRANE-SPECIFIC"
+                        " HEPARAN SULFATE PROTEOGLYCAN CORE PROTEIN PRECURSOR (HSPG)"
+                        " (PERLECAN) (PLC)'', species:''Homo sapiens (Human)'',"
+                        " ranges:(query:33540..33716,"
+                        " target:SWISS-PROT::P98160:2716..2658, score:''113.00''),"
+                        " (query:32859..32963, target:SWISS-PROT::P98160:3341..3307,"
+                        " score:''63.00''), (query:33150..33215,"
+                        " target:SWISS-PROT::P98160:3530..3509, score:''73.00''),"
+                        " (query:32973..33089, target:SWISS-PROT::P98160:3588..3550,"
+                        " score:''71.00''), (query:32358..32567,"
+                        " target:SWISS-PROT::P98160:3650..3581, score:''107.00''),"
+                        " (query:31222..31323, target:SWISS-PROT::P98160:2620..2587,"
+                        " score:''80.00''), (query:31489..31572,"
+                        " target:SWISS-PROT::P98160:3387..3360, score:''72.00''),"
+                        " (query:31495..31593, target:SWISS-PROT::P98160:3575..3543,"
+                        " score:''60.00'')), method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''GM02481.5prime GM Drosophila melanogaster"
+                        " ovary BlueScript Drosophila melanogaster cDNA clone GM02481"
+                        " 5prime, mRNA sequence'', species:''Drosophila melanogaster"
+                        " (fruit fly)'', ranges:(query:30008..30036,"
+                        " target:EMBL::AA695253:29..1, score:''145.00''),"
+                        " (query:29549..30004, target:EMBL::AA695253:487..32,"
+                        " score:''2262.00'')), method:''blastn'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72285.1"'),
@@ -1077,7 +1318,9 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.2"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genefinder'', version:''084'', score:''41.82''); /prediction=(method:''genscan'', version:''1.0'')\"",
+                        "\"/prediction=(method:''genefinder'', version:''084'',"
+                        " score:''41.82''); /prediction=(method:''genscan'',"
+                        " version:''1.0'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72287.1"'),
@@ -1096,7 +1339,28 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.3"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genscan'', version:''1.0'', score:''174.91''); /prediction=(method:''genefinder'', version:''084''); /match=(desc:''PROBABLE G PROTEIN-COUPLED RECEPTOR C13B9.4 IN CHROMOSOME III'', species:''Caenorhabditis elegans'', ranges:(query:123671..123775, target:SWISS-PROT::Q09460:107..141, score:''80.00''), (query:123743..123829, target:SWISS-PROT::Q09460:235..263, score:''72.00''), (query:124072..124332, target:SWISS-PROT::Q09460:265..351, score:''161.00''), (query:124392..124691, target:SWISS-PROT::Q09460:349..448, score:''206.00''), (query:124755..124958, target:SWISS-PROT::Q09460:448..515, score:''123.00''), (query:124764..125027, target:SWISS-PROT::Q09460:454..541, score:''108.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''CALCITONIN RECEPTOR PRECURSOR (CT-R)'', species:''Sus scrofa (Pig)'', ranges:(query:124165..124236, target:SWISS-PROT::P25117:191..214, score:''54.00''), (query:124392..124580, target:SWISS-PROT::P25117:233..295, score:''118.00''), (query:124725..124886, target:SWISS-PROT::P25117:318..371, score:''127.00'')), method:''blastx'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genscan'', version:''1.0'',"
+                        " score:''174.91''); /prediction=(method:''genefinder'',"
+                        " version:''084''); /match=(desc:''PROBABLE G PROTEIN-COUPLED"
+                        " RECEPTOR C13B9.4 IN CHROMOSOME III'',"
+                        " species:''Caenorhabditis elegans'',"
+                        " ranges:(query:123671..123775,"
+                        " target:SWISS-PROT::Q09460:107..141, score:''80.00''),"
+                        " (query:123743..123829, target:SWISS-PROT::Q09460:235..263,"
+                        " score:''72.00''), (query:124072..124332,"
+                        " target:SWISS-PROT::Q09460:265..351, score:''161.00''),"
+                        " (query:124392..124691, target:SWISS-PROT::Q09460:349..448,"
+                        " score:''206.00''), (query:124755..124958,"
+                        " target:SWISS-PROT::Q09460:448..515, score:''123.00''),"
+                        " (query:124764..125027, target:SWISS-PROT::Q09460:454..541,"
+                        " score:''108.00'')), method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''CALCITONIN RECEPTOR PRECURSOR (CT-R)'',"
+                        " species:''Sus scrofa (Pig)'', ranges:(query:124165..124236,"
+                        " target:SWISS-PROT::P25117:191..214, score:''54.00''),"
+                        " (query:124392..124580, target:SWISS-PROT::P25117:233..295,"
+                        " score:''118.00''), (query:124725..124886,"
+                        " target:SWISS-PROT::P25117:318..371, score:''127.00'')),"
+                        " method:''blastx'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72288.1"'),
@@ -1115,7 +1379,39 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.4"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genefinder'', version:''084'', score:''61.35''); /prediction=(method:''genscan'', version:''1.0''); /match=(desc:''VACUOLAR PROTON-ATPASE SUBUNIT D'', species:''Oryctolagus cuniculus (Rabbit)'', ranges:(query:129190..129324, target:SPTREMBL::O97755:55..11, score:''130.00''), (query:128778..129176, target:SPTREMBL::O97755:174..42, score:''472.00''), (query:128546..128716, target:SPTREMBL::O97755:231..175, score:''169.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''VACUOLAR ATP SYNTHASE SUBUNIT D (EC 3.6.1.34) (V-ATPASE D SUBUNIT) (V- ATPASE 28 KD ACCESSORY PROTEIN)'', species:''Bos taurus (Bovine)'', ranges:(query:129190..129324, target:SWISS-PROT::P39942:55..11, score:''130.00''), (query:128778..129176, target:SWISS-PROT::P39942:174..42, score:''471.00''), (query:128546..128716, target:SWISS-PROT::P39942:231..175, score:''173.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''GH28048.5prime GH Drosophila melanogaster head pOT2 Drosophila melanogaster cDNA clone GH28048 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:129196..129317, target:EMBL::AI517334:233..112, score:''412.00''), (query:128777..129145, target:EMBL::AI517334:597..229, score:''1251.00'')), method:''blastn'', version:''1.4.9''); /match=(desc:''GH07112.5prime GH Drosophila melanogaster head pOT2 Drosophila melanogaster cDNA clone GH07112 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:129196..129317, target:EMBL::AI108302:223..102, score:''412.00''), (query:128777..129145, target:EMBL::AI108302:587..219, score:''1251.00''), (query:128636..128716, target:EMBL::AI108302:667..587, score:''243.00'')), method:''blastn'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genefinder'', version:''084'',"
+                        " score:''61.35''); /prediction=(method:''genscan'',"
+                        " version:''1.0''); /match=(desc:''VACUOLAR PROTON-ATPASE"
+                        " SUBUNIT D'', species:''Oryctolagus cuniculus (Rabbit)'',"
+                        " ranges:(query:129190..129324, target:SPTREMBL::O97755:55..11,"
+                        " score:''130.00''), (query:128778..129176,"
+                        " target:SPTREMBL::O97755:174..42, score:''472.00''),"
+                        " (query:128546..128716, target:SPTREMBL::O97755:231..175,"
+                        " score:''169.00'')), method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''VACUOLAR ATP SYNTHASE SUBUNIT D (EC 3.6.1.34)"
+                        " (V-ATPASE D SUBUNIT) (V- ATPASE 28 KD ACCESSORY PROTEIN)'',"
+                        " species:''Bos taurus (Bovine)'',"
+                        " ranges:(query:129190..129324,"
+                        " target:SWISS-PROT::P39942:55..11, score:''130.00''),"
+                        " (query:128778..129176, target:SWISS-PROT::P39942:174..42,"
+                        " score:''471.00''), (query:128546..128716,"
+                        " target:SWISS-PROT::P39942:231..175, score:''173.00'')),"
+                        " method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''GH28048.5prime GH Drosophila melanogaster head"
+                        " pOT2 Drosophila melanogaster cDNA clone GH28048 5prime, mRNA"
+                        " sequence'', species:''Drosophila melanogaster (fruit fly)'',"
+                        " ranges:(query:129196..129317, target:EMBL::AI517334:233..112,"
+                        " score:''412.00''), (query:128777..129145,"
+                        " target:EMBL::AI517334:597..229, score:''1251.00'')),"
+                        " method:''blastn'', version:''1.4.9'');"
+                        " /match=(desc:''GH07112.5prime GH Drosophila melanogaster head"
+                        " pOT2 Drosophila melanogaster cDNA clone GH07112 5prime, mRNA"
+                        " sequence'', species:''Drosophila melanogaster (fruit fly)'',"
+                        " ranges:(query:129196..129317, target:EMBL::AI108302:223..102,"
+                        " score:''412.00''), (query:128777..129145,"
+                        " target:EMBL::AI108302:587..219, score:''1251.00''),"
+                        " (query:128636..128716, target:EMBL::AI108302:667..587,"
+                        " score:''243.00'')), method:''blastn'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72289.1"'),
@@ -1134,7 +1430,15 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.5"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genefinder'', version:''084'', score:''48.06''); /prediction=(method:''genscan'', version:''1.0'', score:''132.90''); /match=(desc:''N-ACETYLTRANSFERASE'', species:''Drosophila melanogaster (Fruit fly)'', ranges:(query:132249..132326, target:SPTREMBL::Q94521:60..85, score:''64.00''), (query:132600..132842, target:SPTREMBL::Q94521:171..251, score:''105.00'')), method:''blastx'', version:''1.4.9''); EST embl|AI063093|AI063093 comes from the 3' UTR\"",
+                        "\"/prediction=(method:''genefinder'', version:''084'',"
+                        " score:''48.06''); /prediction=(method:''genscan'',"
+                        " version:''1.0'', score:''132.90'');"
+                        " /match=(desc:''N-ACETYLTRANSFERASE'', species:''Drosophila"
+                        " melanogaster (Fruit fly)'', ranges:(query:132249..132326,"
+                        " target:SPTREMBL::Q94521:60..85, score:''64.00''),"
+                        " (query:132600..132842, target:SPTREMBL::Q94521:171..251,"
+                        " score:''105.00'')), method:''blastx'', version:''1.4.9'');"
+                        " EST embl|AI063093|AI063093 comes from the 3' UTR\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72290.1"'),
@@ -1153,7 +1457,15 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.6"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genscan'', version:''1.0'', score:''119.22''); /prediction=(method:''genefinder'', version:''084''); /match=(desc:''LD41675.5prime LD Drosophila melanogaster embryo pOT2 Drosophila melanogaster cDNA clone LD41675 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:134192..134531, target:EMBL::AI515958:340..1, score:''1691.00''), (query:133879..134139, target:EMBL::AI515958:591..331, score:''1305.00'')), method:''blastn'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genscan'', version:''1.0'',"
+                        " score:''119.22''); /prediction=(method:''genefinder'',"
+                        " version:''084''); /match=(desc:''LD41675.5prime LD Drosophila"
+                        " melanogaster embryo pOT2 Drosophila melanogaster cDNA clone"
+                        " LD41675 5prime, mRNA sequence'', species:''Drosophila"
+                        " melanogaster (fruit fly)'', ranges:(query:134192..134531,"
+                        " target:EMBL::AI515958:340..1, score:''1691.00''),"
+                        " (query:133879..134139, target:EMBL::AI515958:591..331,"
+                        " score:''1305.00'')), method:''blastn'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72291.1"'),
@@ -1172,7 +1484,31 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.7"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genefinder'', version:''084'', score:''66.07''); /prediction=(method:''genscan'', version:''1.0'', score:''145.64''); /match=(desc:''HYPOTHETICAL 40.4 KD TRP-ASP REPEATS CONTAINING PROTEIN C14B1.4 IN CHROMOSOME III'', species:''Caenorhabditis elegans'', ranges:(query:135548..135748, target:SWISS-PROT::Q17963:39..105, score:''120.00''), (query:135957..136586, target:SWISS-PROT::Q17963:105..314, score:''899.00''), (query:136641..136823, target:SWISS-PROT::Q17963:315..375, score:''219.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''LD30385.5prime LD Drosophila melanogaster embryo pOT2 Drosophila melanogaster cDNA clone LD30385 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:135288..135749, target:EMBL::AA950546:102..563, score:''2301.00''), (query:135956..136047, target:EMBL::AA950546:559..650, score:''442.00'')), method:''blastn'', version:''1.4.9''); /match=(desc:''LD10938.5prime LD Drosophila melanogaster embryo BlueScript Drosophila melanogaster cDNA clone LD10938 5prime, mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:136108..136288, target:EMBL::AA392005:776..596, score:''212.00'')), method:''blastn'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genefinder'', version:''084'',"
+                        " score:''66.07''); /prediction=(method:''genscan'',"
+                        " version:''1.0'', score:''145.64'');"
+                        " /match=(desc:''HYPOTHETICAL 40.4 KD TRP-ASP REPEATS"
+                        " CONTAINING PROTEIN C14B1.4 IN CHROMOSOME III'',"
+                        " species:''Caenorhabditis elegans'',"
+                        " ranges:(query:135548..135748,"
+                        " target:SWISS-PROT::Q17963:39..105, score:''120.00''),"
+                        " (query:135957..136586, target:SWISS-PROT::Q17963:105..314,"
+                        " score:''899.00''), (query:136641..136823,"
+                        " target:SWISS-PROT::Q17963:315..375, score:''219.00'')),"
+                        " method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''LD30385.5prime LD Drosophila melanogaster"
+                        " embryo pOT2 Drosophila melanogaster cDNA clone LD30385"
+                        " 5prime, mRNA sequence'', species:''Drosophila melanogaster"
+                        " (fruit fly)'', ranges:(query:135288..135749,"
+                        " target:EMBL::AA950546:102..563, score:''2301.00''),"
+                        " (query:135956..136047, target:EMBL::AA950546:559..650,"
+                        " score:''442.00'')), method:''blastn'', version:''1.4.9'');"
+                        " /match=(desc:''LD10938.5prime LD Drosophila melanogaster"
+                        " embryo BlueScript Drosophila melanogaster cDNA clone LD10938"
+                        " 5prime, mRNA sequence'', species:''Drosophila melanogaster"
+                        " (fruit fly)'', ranges:(query:136108..136288,"
+                        " target:EMBL::AA392005:776..596, score:''212.00'')),"
+                        " method:''blastn'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72292.1"'),
@@ -1206,7 +1542,27 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene=", '"EG:BACR25B3.9"'),
                     (
                         "/note=",
-                        "\"/prediction=(method:''genscan'', version:''1.0''); /prediction=(method:''genefinder'', version:''084''); /match=(desc:''HYPOTHETICAL 135.8 KD PROTEIN'', species:''Drosophila melanogaster (Fruit fly)'', ranges:(query:152096..152785, target:SPTREMBL::Q9XZ29:230..1, score:''1147.00''), (query:151882..152043, target:SPTREMBL::Q9XZ29:277..224, score:''250.00''), (query:149546..151816, target:SPTREMBL::Q9XZ29:1032..276, score:''3735.00''), (query:148953..149465, target:SPTREMBL::Q9XZ29:1202..1032, score:''890.00''), (query:148863..148907, target:SPTREMBL::Q9XZ29:1212..1198, score:''76.00'')), method:''blastx'', version:''1.4.9''); /match=(desc:''LD21815.5prime LD Drosophila melanogaster embryo pOT2 Drosophila melanogaster cDNA clone LD21815 5prime similar to L19117: Drosophila melanogaster (chromosome X 3A6-8) kinesin-like protein of 3A (klp3A) mRNA sequence'', species:''Drosophila melanogaster (fruit fly)'', ranges:(query:152482..152787, target:EMBL::AA816942:460..155, score:''1485.00''), (query:152401..152483, target:EMBL::AA816942:540..458, score:''397.00'')), method:''blastn'', version:''1.4.9'')\"",
+                        "\"/prediction=(method:''genscan'', version:''1.0'');"
+                        " /prediction=(method:''genefinder'', version:''084'');"
+                        " /match=(desc:''HYPOTHETICAL 135.8 KD PROTEIN'',"
+                        " species:''Drosophila melanogaster (Fruit fly)'',"
+                        " ranges:(query:152096..152785, target:SPTREMBL::Q9XZ29:230..1,"
+                        " score:''1147.00''), (query:151882..152043,"
+                        " target:SPTREMBL::Q9XZ29:277..224, score:''250.00''),"
+                        " (query:149546..151816, target:SPTREMBL::Q9XZ29:1032..276,"
+                        " score:''3735.00''), (query:148953..149465,"
+                        " target:SPTREMBL::Q9XZ29:1202..1032, score:''890.00''),"
+                        " (query:148863..148907, target:SPTREMBL::Q9XZ29:1212..1198,"
+                        " score:''76.00'')), method:''blastx'', version:''1.4.9'');"
+                        " /match=(desc:''LD21815.5prime LD Drosophila melanogaster"
+                        " embryo pOT2 Drosophila melanogaster cDNA clone LD21815 5prime"
+                        " similar to L19117: Drosophila melanogaster (chromosome X"
+                        " 3A6-8) kinesin-like protein of 3A (klp3A) mRNA sequence'',"
+                        " species:''Drosophila melanogaster (fruit fly)'',"
+                        " ranges:(query:152482..152787, target:EMBL::AA816942:460..155,"
+                        " score:''1485.00''), (query:152401..152483,"
+                        " target:EMBL::AA816942:540..458, score:''397.00'')),"
+                        " method:''blastn'', version:''1.4.9'')\"",
                     ),
                     ("/codon_start=", "1"),
                     ("/protein_id=", '"CAB72294.1"'),
@@ -1251,7 +1607,8 @@ class TestRecordParser(unittest.TestCase):
         definition = "Human thymopoietin (TMPO) gene, exon 1"
         accession = ["U18266"]
         titles = (
-            "Structure and mapping of the human thymopoietin (TMPO) gene and relationship of TMPO beta to rat lamin-associated polypeptide 2",
+            "Structure and mapping of the human thymopoietin (TMPO) gene and"
+            " relationship of TMPO beta to rat lamin-associated polypeptide 2",
             "Direct Submission",
         )
         features = [
@@ -1266,7 +1623,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/clone=", '"P1.516 (DMPC-HFFno.1B-0943F)"'),
                     (
                         "/clone_lib=",
-                        '"DuPont Merck Hum Fibroblast P1 Library no.1 Series B (compressed) (Genome Systems Inc)"',
+                        '"DuPont Merck Hum Fibroblast P1 Library no.1 Series B'
+                        ' (compressed) (Genome Systems Inc)"',
                     ),
                 ),
             ),
@@ -1388,7 +1746,8 @@ class TestRecordParser(unittest.TestCase):
         definition = "Mesorhizobium loti, complete genome (edited)"
         accession = ["NC_002678"]
         titles = (
-            "Complete genome structure of the nitrogen-fixing symbiotic bacterium Mesorhizobium loti",
+            "Complete genome structure of the nitrogen-fixing symbiotic bacterium"
+            " Mesorhizobium loti",
             "Direct Submission",
         )
         features = [
@@ -1418,8 +1777,10 @@ class TestRecordParser(unittest.TestCase):
         accession = ["NP_001832"]
         titles = (
             "Molecular characterization of a peripheral receptor for cannabinoids",
-            "Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations",
-            "Molecular cloning, expression and function of the murine CB2 peripheral cannabinoid receptor",
+            "Expression of central and peripheral cannabinoid receptors in human immune"
+            " tissues and leukocyte subpopulations",
+            "Molecular cloning, expression and function of the murine CB2 peripheral"
+            " cannabinoid receptor",
         )
         features = [
             (
@@ -1472,7 +1833,8 @@ class TestRecordParser(unittest.TestCase):
         definition = "Neurotoxin III"
         accession = ["P01485"]
         titles = (
-            "Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei",
+            "Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus"
+            " and Buthus occitanus mardochei",
         )
         features = [
             (
@@ -1517,10 +1879,14 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
             length = 2007
             locus = "AB000048"
-            definition = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            definition = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1,"
+                " complete cds"
+            )
             accession = ["AB000048"]
             titles = (
-                "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
+                "Evolutionary pattern of feline panleukopenia virus differs from that"
+                " of canine parvovirus",
                 "Direct Submission",
             )
             features = [
@@ -1554,10 +1920,14 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
             length = 2007
             locus = "AB000049"
-            definition = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            definition = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1,"
+                " complete cds"
+            )
             accession = ["AB000049"]
             titles = (
-                "Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus",
+                "Evolutionary pattern of feline panleukopenia virus differs that of"
+                " canine parvovirus",
                 "Direct Submission",
             )
             features = [
@@ -1596,7 +1966,8 @@ class TestRecordParser(unittest.TestCase):
             )
             accession = ["AB000050"]
             titles = (
-                "Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus",
+                "Evolutionary pattern of feline panleukopenia virus differs from that"
+                " of canine parvovirus",
                 "Direct Submission",
             )
             features = [
@@ -1640,11 +2011,16 @@ class TestRecordParser(unittest.TestCase):
                 record = next(records)
         length = 9609
         locus = "NC_005816"
-        definition = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence"
+        definition = (
+            "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete"
+            " sequence"
+        )
         accession = ["NC_005816"]
         titles = (
-            "Genetics of metabolic variations between Yersinia pestis biovars and the proposal of a new biovar, microtus",
-            "Complete genome sequence of Yersinia pestis strain 91001, an isolate avirulent to humans",
+            "Genetics of metabolic variations between Yersinia pestis biovars and the"
+            " proposal of a new biovar, microtus",
+            "Complete genome sequence of Yersinia pestis strain 91001, an isolate"
+            " avirulent to humans",
             "Direct Submission",
             "Direct Submission",
         )
@@ -1674,7 +2050,11 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP01"'),
                     (
                         "/note=",
-                        '"similar to corresponding CDS from previously sequenced pPCP plasmid of Yersinia pestis KIM (AF053945) and CO92 (AL109969), also many transposase entries for insertion sequence IS100 of Yersinia pestis. Contains IS21-like element transposase, HTH domain (Interpro|IPR007101)"',
+                        '"similar to corresponding CDS from previously sequenced pPCP'
+                        " plasmid of Yersinia pestis KIM (AF053945) and CO92"
+                        " (AL109969), also many transposase entries for insertion"
+                        " sequence IS100 of Yersinia pestis. Contains IS21-like element"
+                        ' transposase, HTH domain (Interpro|IPR007101)"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -1695,7 +2075,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP01"'),
                     (
                         "/note=",
-                        '"Transposase and inactivated derivatives [DNA replication, recombination, and repair]; Region: COG4584"',
+                        '"Transposase and inactivated derivatives [DNA replication,'
+                        ' recombination, and repair]; Region: COG4584"',
                     ),
                     ("/db_xref=", '"CDD:34222"'),
                 ),
@@ -1707,7 +2088,11 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP01"'),
                     (
                         "/note=",
-                        '"Helix-turn-helix domain of Hin and related proteins, a family of DNA-binding domains unique to bacteria and represented by the Hin protein of Salmonella. The basic HTH domain is a simple fold comprised of three core helices that form a right-handed...; Region: HTH_Hin_like; cl01116"',
+                        '"Helix-turn-helix domain of Hin and related proteins, a family'
+                        " of DNA-binding domains unique to bacteria and represented by"
+                        " the Hin protein of Salmonella. The basic HTH domain is a"
+                        " simple fold comprised of three core helices that form a"
+                        ' right-handed...; Region: HTH_Hin_like; cl01116"',
                     ),
                     ("/db_xref=", '"CDD:186341"'),
                 ),
@@ -1733,7 +2118,22 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP02"'),
                     (
                         "/note=",
-                        '"similar to corresponding CDS form previously sequenced pPCP plasmid of Yersinia pestis KIM (AF053945) and CO92 (AL109969), also many ATP-binding protein entries for insertion sequence IS100 of Yersinia pestis. Contains Chaperonin clpA/B (Interpro|IPR001270). Contains ATP/GTP-binding site motif A (P-loop) (Interpro|IPR001687, Molecular Function: ATP binding (GO:0005524)). Contains Bacterial chromosomal replication initiator protein, DnaA (Interpro|IPR001957, Molecular Function: DNA binding (GO:0003677), Molecular Function: DNA replication origin binding (GO:0003688), Molecular Function: ATP binding (GO:0005524), Biological Process: DNA replication initiation (GO:0006270), Biological Process: regulation of DNA replication (GO:0006275)). Contains AAA ATPase (Interpro|IPR003593, Molecular Function: nucleotide binding (GO:0000166))"',
+                        '"similar to corresponding CDS form previously sequenced pPCP'
+                        " plasmid of Yersinia pestis KIM (AF053945) and CO92"
+                        " (AL109969), also many ATP-binding protein entries for"
+                        " insertion sequence IS100 of Yersinia pestis. Contains"
+                        " Chaperonin clpA/B (Interpro|IPR001270). Contains"
+                        " ATP/GTP-binding site motif A (P-loop) (Interpro|IPR001687,"
+                        " Molecular Function: ATP binding (GO:0005524)). Contains"
+                        " Bacterial chromosomal replication initiator protein, DnaA"
+                        " (Interpro|IPR001957, Molecular Function: DNA binding"
+                        " (GO:0003677), Molecular Function: DNA replication origin"
+                        " binding (GO:0003688), Molecular Function: ATP binding"
+                        " (GO:0005524), Biological Process: DNA replication initiation"
+                        " (GO:0006270), Biological Process: regulation of DNA"
+                        " replication (GO:0006275)). Contains AAA ATPase"
+                        " (Interpro|IPR003593, Molecular Function: nucleotide binding"
+                        ' (GO:0000166))"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -1766,7 +2166,11 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP02"'),
                     (
                         "/note=",
-                        '"The AAA+ (ATPases Associated with a wide variety of cellular Activities) superfamily represents an ancient group of ATPases belonging to the ASCE (for additional strand, catalytic E) division of the P-loop NTPase fold. The ASCE division also includes...; Region: AAA; cd00009"',
+                        '"The AAA+ (ATPases Associated with a wide variety of cellular'
+                        " Activities) superfamily represents an ancient group of"
+                        " ATPases belonging to the ASCE (for additional strand,"
+                        " catalytic E) division of the P-loop NTPase fold. The ASCE"
+                        ' division also includes...; Region: AAA; cd00009"',
                     ),
                     ("/db_xref=", '"CDD:99707"'),
                 ),
@@ -1817,7 +2221,13 @@ class TestRecordParser(unittest.TestCase):
                     ("/gene_synonym=", '"rom"'),
                     (
                         "/note=",
-                        '"Best Blastp hit =gi|16082682|ref|NP_395229.1| (NC_003132) putative replication regulatory protein [Yersinia pestis], gi|5763813|emb|CAB531 66.1| (AL109969) putative replication regulatory protein [Yersinia pestis]; similar to gb|AAK91579.1| (AY048853), RNAI modulator protein Rom [Salmonella choleraesuis], Contains Regulatory protein Rop (Interpro|IPR000769)"',
+                        '"Best Blastp hit =gi|16082682|ref|NP_395229.1| (NC_003132)'
+                        " putative replication regulatory protein [Yersinia pestis],"
+                        " gi|5763813|emb|CAB531 66.1| (AL109969) putative replication"
+                        " regulatory protein [Yersinia pestis]; similar to"
+                        " gb|AAK91579.1| (AY048853), RNAI modulator protein Rom"
+                        " [Salmonella choleraesuis], Contains Regulatory protein Rop"
+                        ' (Interpro|IPR000769)"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -1854,7 +2264,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP04"'),
                     (
                         "/note=",
-                        '"Best Blastp hit = gi|321919|pir||JQ1541 hypothetical 16.9K protein - Salmonella typhi murium plasmid NTP16."',
+                        '"Best Blastp hit = gi|321919|pir||JQ1541 hypothetical 16.9K'
+                        ' protein - Salmonella typhi murium plasmid NTP16."',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -1896,7 +2307,12 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP05"'),
                     (
                         "/note=",
-                        '"similar to many previously sequenced pesticin immunity protein entries of Yersinia pestis plasmid pPCP, e.g. gi| 16082683|,ref|NP_395230.1| (NC_003132) , gi|1200166|emb|CAA90861.1| (Z54145 ) , gi|1488655| emb|CAA63439.1| (X92856) , gi|2996219|gb|AAC62543.1| (AF053945) , and gi|5763814|emb|CAB531 67.1| (AL109969)"',
+                        '"similar to many previously sequenced pesticin immunity'
+                        " protein entries of Yersinia pestis plasmid pPCP, e.g. gi|"
+                        " 16082683|,ref|NP_395230.1| (NC_003132) ,"
+                        " gi|1200166|emb|CAA90861.1| (Z54145 ) , gi|1488655|"
+                        " emb|CAA63439.1| (X92856) , gi|2996219|gb|AAC62543.1|"
+                        ' (AF053945) , and gi|5763814|emb|CAB531 67.1| (AL109969)"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -1927,7 +2343,13 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP06"'),
                     (
                         "/note=",
-                        '"Best Blastp hit =|16082684|ref|NP_395231.1| (NC_003132) pesticin [Yersinia pestis], gi|984824|gb|AAA75369.1| (U31974) pesticin [Yersinia pestis], gi|1488654|emb|CAA63438.1| (X92856) pesticin [Yersinia pestis], gi|2996220|gb|AAC62544.1| (AF053945) pesticin [Yersinia pestis], gi|5763815|emb|CAB53168.1| (AL1099 69) pesticin [Yersinia pestis]"',
+                        '"Best Blastp hit =|16082684|ref|NP_395231.1| (NC_003132)'
+                        " pesticin [Yersinia pestis], gi|984824|gb|AAA75369.1| (U31974)"
+                        " pesticin [Yersinia pestis], gi|1488654|emb|CAA63438.1|"
+                        " (X92856) pesticin [Yersinia pestis],"
+                        " gi|2996220|gb|AAC62544.1| (AF053945) pesticin [Yersinia"
+                        " pestis], gi|5763815|emb|CAB53168.1| (AL1099 69) pesticin"
+                        ' [Yersinia pestis]"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -1973,7 +2395,10 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP07"'),
                     (
                         "/note=",
-                        '"Best Blastp hit = gi|16082685|ref|NP_395232.1| (NC_003132) hypothetical protein [Yersinia pestis], gi|5763816|emb|CAB53169.1| (AL109969) hypothetical protein [Yersinia pestis]"',
+                        '"Best Blastp hit = gi|16082685|ref|NP_395232.1| (NC_003132)'
+                        " hypothetical protein [Yersinia pestis],"
+                        " gi|5763816|emb|CAB53169.1| (AL109969) hypothetical protein"
+                        ' [Yersinia pestis]"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -2013,7 +2438,11 @@ class TestRecordParser(unittest.TestCase):
                     ("/EC_number=", '"3.4.23.48"'),
                     (
                         "/note=",
-                        '"outer membrane protease; involved in virulence in many organisms; OmpT; IcsP; SopA; Pla; PgtE; omptin; in Escherichia coli OmpT can degrade antimicrobial peptides; in Yersinia Pla activates plasminogen during infection; in Shigella flexneria SopA cleaves the autotransporter IcsA"',
+                        '"outer membrane protease; involved in virulence in many'
+                        " organisms; OmpT; IcsP; SopA; Pla; PgtE; omptin; in"
+                        " Escherichia coli OmpT can degrade antimicrobial peptides; in"
+                        " Yersinia Pla activates plasminogen during infection; in"
+                        ' Shigella flexneria SopA cleaves the autotransporter IcsA"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -2049,7 +2478,10 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP09"'),
                     (
                         "/note=",
-                        '"Best Blastp hit = gi|16082687|ref|NP_395234.1| (NC_003132) putative transcriptional regulator [Yersinia pestis], gi|5763818|emb|CAB53171.1| (AL109969) putative transcriptional regulator [Yersinia pestis]."',
+                        '"Best Blastp hit = gi|16082687|ref|NP_395234.1| (NC_003132)'
+                        " putative transcriptional regulator [Yersinia pestis],"
+                        " gi|5763818|emb|CAB53171.1| (AL109969) putative"
+                        ' transcriptional regulator [Yersinia pestis]."',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -2070,7 +2502,10 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP09"'),
                     (
                         "/note=",
-                        '"Helix-turn-helix XRE-family like proteins. Prokaryotic DNA binding proteins belonging to the xenobiotic response element family of transcriptional regulators; Region: HTH_XRE; cl09100"',
+                        '"Helix-turn-helix XRE-family like proteins. Prokaryotic DNA'
+                        " binding proteins belonging to the xenobiotic response element"
+                        " family of transcriptional regulators; Region: HTH_XRE;"
+                        ' cl09100"',
                     ),
                     ("/db_xref=", '"CDD:195788"'),
                 ),
@@ -2087,7 +2522,10 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP10"'),
                     (
                         "/note=",
-                        '"Best Blastp hit = gi|16082688|ref|NP_395235.1| (NC_003132) hypothetical protein [ Yersinia pestis], gi|5763819|emb|CAB53172.1| (AL109969) hypothetical protein [Yersinia pestis]"',
+                        '"Best Blastp hit = gi|16082688|ref|NP_395235.1| (NC_003132)'
+                        " hypothetical protein [ Yersinia pestis],"
+                        " gi|5763819|emb|CAB53172.1| (AL109969) hypothetical protein"
+                        ' [Yersinia pestis]"',
                     ),
                     ("/codon_start=", "1"),
                     ("/transl_table=", "11"),
@@ -2108,7 +2546,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/locus_tag=", '"YP_pPCP10"'),
                     (
                         "/note=",
-                        '"Phage derived protein Gp49-like (DUF891); Region: Gp49; cl01470"',
+                        '"Phage derived protein Gp49-like (DUF891); Region: Gp49;'
+                        ' cl01470"',
                     ),
                     ("/db_xref=", '"CDD:194142"'),
                 ),
@@ -2269,11 +2708,17 @@ class TestRecordParser(unittest.TestCase):
             record = next(records)
         length = 375
         locus = "1MRR_A"
-        definition = "Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization"
+        definition = (
+            "Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase"
+            " From Escherichia Coli. Spectroscopic And Crystallographic"
+            " Characterization"
+        )
         accession = ["1MRR_A"]
         titles = (
-            "Three-dimensional structure of the free radical protein of ribonucleotide reductase",
-            "Substitution of manganese for iron in ribonucleotide reductase from Escherichia coli. Spectroscopic and crystallographic characterization",
+            "Three-dimensional structure of the free radical protein of ribonucleotide"
+            " reductase",
+            "Substitution of manganese for iron in ribonucleotide reductase from"
+            " Escherichia coli. Spectroscopic and crystallographic characterization",
             "Direct Submission",
         )
         features = [
@@ -2289,7 +2734,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/region_name=", '"RNRR2"'),
                     (
                         "/note=",
-                        '"Ribonucleotide Reductase, R2/beta subunit, ferritin-like diiron-binding domain; cd01049"',
+                        '"Ribonucleotide Reductase, R2/beta subunit, ferritin-like'
+                        ' diiron-binding domain; cd01049"',
                     ),
                     ("/db_xref=", '"CDD:153108"'),
                 ),
@@ -2472,7 +2918,8 @@ class TestRecordParser(unittest.TestCase):
         accession = ["KBUV00000000"]
         tls = ["KBUV01000001", "KBUV01003714"]
         titles = (
-            "Spatio-temporal dynamics of soil bacterial communities in function of Amazon forest phenology",
+            "Spatio-temporal dynamics of soil bacterial communities in function of"
+            " Amazon forest phenology",
             "Direct Submission",
         )
         features = [
@@ -2484,7 +2931,8 @@ class TestRecordParser(unittest.TestCase):
                     ("/mol_type=", '"genomic DNA"'),
                     (
                         "/isolation_source=",
-                        '"soil samples in a lowland tropical evergreen rain forest in Amazonia"',
+                        '"soil samples in a lowland tropical evergreen rain forest in'
+                        ' Amazonia"',
                     ),
                     ("/db_xref=", '"taxon:410658"'),
                     ("/environmental_sample", ""),
@@ -2550,7 +2998,10 @@ class TestFeatureParser(unittest.TestCase):
         seq = "GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA"
         id = "NM_006141.1"
         name = "NM_006141"
-        description = "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA"
+        description = (
+            "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2"
+            " (DNCLI2), mRNA"
+        )
         annotations = {
             "accessions": ["NM_006141"],
             "comment": """\
@@ -2676,8 +3127,16 @@ gene with suggested similarity to type I fish antifreeze proteins.""",
                 ],
             }
             references = [
-                "location: [0:513]\nauthors: Thomashow,M.F.\ntitle: Direct Submission\njournal: Submitted (01-FEB-1991) M.F. Thomashow, Dept. Crop and Soil Sciences, Dept. Microbiology, Michigan State University, East Lansing, Michigan 48824, USA\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:513]\nauthors: Gilmour,S.J., Artus,N.N. and Thomashow,M.F.\ntitle: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 18 (1), 13-21 (1992)\nmedline id: 92119220\npubmed id: \ncomment: \n",
+                "location: [0:513]\nauthors: Thomashow,M.F.\ntitle: Direct"
+                " Submission\njournal: Submitted (01-FEB-1991) M.F. Thomashow, Dept."
+                " Crop and Soil Sciences, Dept. Microbiology, Michigan State"
+                " University, East Lansing, Michigan 48824, USA\nmedline id: \npubmed"
+                " id: \ncomment: \n",
+                "location: [0:513]\nauthors: Gilmour,S.J., Artus,N.N. and"
+                " Thomashow,M.F.\ntitle: cDNA sequence analysis and expression of two"
+                " cold-regulated genes of Arabidopsis thaliana\njournal: Plant Mol."
+                " Biol. 18 (1), 13-21 (1992)\nmedline id: 92119220\npubmed id:"
+                " \ncomment: \n",
             ]
             features = (
                 (
@@ -2759,8 +3218,14 @@ qualifiers:
                 ],
             }
             references = [
-                "location: [0:880]\nauthors: Borg-Franck,M.E.\ntitle: Direct Submission\njournal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380 Helsinki, FINLAND\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:880]\nauthors: Kurkela,S. and Borg-Franck,M.\ntitle: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 19 (4), 689-692 (1992)\nmedline id: 92329728\npubmed id: \ncomment: \n",
+                "location: [0:880]\nauthors: Borg-Franck,M.E.\ntitle: Direct"
+                " Submission\njournal: Submitted (27-SEP-1991) M.E. Borg-Franck, Inst"
+                " of Biotechnology, University of Helsinki, Karvaamokuja 3, SF-00380"
+                " Helsinki, FINLAND\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:880]\nauthors: Kurkela,S. and Borg-Franck,M.\ntitle:"
+                " Structure and expression of kin2, one of two cold- and ABA-induced"
+                " genes of Arabidopsis thaliana\njournal: Plant Mol. Biol. 19 (4),"
+                " 689-692 (1992)\nmedline id: 92329728\npubmed id: \ncomment: \n",
             ]
             features = (
                 (
@@ -2931,7 +3396,9 @@ qualifiers:
                 "molecule_type": "mRNA",
                 "organism": "Brassica napus",
                 "sequence_version": 1,
-                "source": "Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA",
+                "source": (
+                    "Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA"
+                ),
                 "taxonomy": [
                     "Eukaryota",
                     "Viridiplantae",
@@ -2949,7 +3416,10 @@ qualifiers:
                 ],
             }
             references = [
-                "location: [0:441]\nauthors: Orr,W., Iu,B., White,T., Robert,L.S. and Singh,J.\ntitle: Nucleotide sequence of a winter B. napus Kin 1 cDNA\njournal: Plant Physiol. 98, 1532-1534 (1992)\nmedline id: \npubmed id: \ncomment: \n"
+                "location: [0:441]\nauthors: Orr,W., Iu,B., White,T., Robert,L.S. and"
+                " Singh,J.\ntitle: Nucleotide sequence of a winter B. napus Kin 1"
+                " cDNA\njournal: Plant Physiol. 98, 1532-1534 (1992)\nmedline id:"
+                " \npubmed id: \ncomment: \n"
             ]
             features = (
                 (
@@ -3062,8 +3532,14 @@ qualifiers:
                 ],
             }
             references = [
-                "location: [0:206]\nauthors: Baymiev,A.K., Gimalov,F.R. and Vakhitov,V.A.\ntitle: \njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:206]\nauthors: Baymiev,A.K.\ntitle: Direct Submission\njournal: Submitted (20-MAR-1999) Baymiev A.K., Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre, pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:206]\nauthors: Baymiev,A.K., Gimalov,F.R. and"
+                " Vakhitov,V.A.\ntitle: \njournal: Unpublished\nmedline id: \npubmed"
+                " id: \ncomment: \n",
+                "location: [0:206]\nauthors: Baymiev,A.K.\ntitle: Direct"
+                " Submission\njournal: Submitted (20-MAR-1999) Baymiev A.K.,"
+                " Departament of Biochemistry and Cytochemistry, Ufa Scientific Centre,"
+                " pr. Oktyabrya 69, Ufa, Bashkortostan, Russia, 450054, RUSSIA\nmedline"
+                " id: \npubmed id: \ncomment: \n",
             ]
             features = (
                 (
@@ -3184,7 +3660,10 @@ qualifiers:
                 ],
             }
             references = [
-                "location: [0:282]\nauthors: Kim,J.-B., Kim,H.-U., Park,B.-S., Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.\ntitle: Nucleotide sequences of kin gene in chinese cabbage\njournal: Unpublished (1994)\nmedline id: \npubmed id: \ncomment: \n"
+                "location: [0:282]\nauthors: Kim,J.-B., Kim,H.-U., Park,B.-S.,"
+                " Yun,C.-H., Cho,W.-S., Ryu,J.-C. and Chung,T.-Y.\ntitle: Nucleotide"
+                " sequences of kin gene in chinese cabbage\njournal: Unpublished"
+                " (1994)\nmedline id: \npubmed id: \ncomment: \n"
             ]
             features = (
                 (
@@ -3265,8 +3744,13 @@ qualifiers:
                 ],
             }
             references = [
-                "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle: BN28a, a low temperature-induced gene of Brassica napus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle: Direct Submission\njournal: Submitted (18-AUG-2000) AFNS, University of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G 2P5, Canada\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle:"
+                " BN28a, a low temperature-induced gene of Brassica napus\njournal:"
+                " Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:497]\nauthors: Byass,L.J. and Flanagan,A.M.\ntitle:"
+                " Direct Submission\njournal: Submitted (18-AUG-2000) AFNS, University"
+                " of Alberta, 4-10 Agriculture/Forestry Centre, Edmonton, Alberta T6G"
+                " 2P5, Canada\nmedline id: \npubmed id: \ncomment: \n",
             ]
             features = (
                 (
@@ -3376,8 +3860,19 @@ was derived.""",
             ],
         }
         references = [
-            "location: [0:1326]\nauthors: Auffray,C., Ansorge,W., Ballabio,A., Estivill,X., Gibson,K., Lehrach,H., Poustka,A. and Lundeberg,J.\ntitle: The European IMAGE consortium for integrated Molecular analysis of human gene transcripts\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:1326]\nauthors: Carim,L., Estivill,X., Sumoy,L. and Escarceller,M.\ntitle: Direct Submission\njournal: Submitted (11-AUG-1999) Dept. Genetica Molecular, Institut de Recerca Oncologica (IRO), Hospital Duran i Reynals, Autovia de Castelldefels Km 2,7 L'Hospitalet de Llobregat, 08907 Barcelona, Catalunya, SPAIN. Tel: ++34-93-260-7775 Fax: ++34-93-260-7776 WWW site: http://www.iro.es e-mail enquiries: lsumoy@iro.es, mescarceller@iro.es\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:1326]\nauthors: Auffray,C., Ansorge,W., Ballabio,A.,"
+            " Estivill,X., Gibson,K., Lehrach,H., Poustka,A. and Lundeberg,J.\ntitle:"
+            " The European IMAGE consortium for integrated Molecular analysis of human"
+            " gene transcripts\njournal: Unpublished\nmedline id: \npubmed id:"
+            " \ncomment: \n",
+            "location: [0:1326]\nauthors: Carim,L., Estivill,X., Sumoy,L. and"
+            " Escarceller,M.\ntitle: Direct Submission\njournal: Submitted"
+            " (11-AUG-1999) Dept. Genetica Molecular, Institut de Recerca Oncologica"
+            " (IRO), Hospital Duran i Reynals, Autovia de Castelldefels Km 2,7"
+            " L'Hospitalet de Llobregat, 08907 Barcelona, Catalunya, SPAIN. Tel:"
+            " ++34-93-260-7775 Fax: ++34-93-260-7776 WWW site: http://www.iro.es e-mail"
+            " enquiries: lsumoy@iro.es, mescarceller@iro.es\nmedline id: \npubmed id:"
+            " \ncomment: \n",
         ]
         features = (
             (
@@ -3482,8 +3977,15 @@ qualifiers:
             ],
         }
         references = [
-            "location: [0:741]\nauthors: Mahraoui,L., Takeda,J., Mesonero,J., Chantret,I., Dussaulx,E., Bell,G.I. and Brot-Laroche,E.\ntitle: Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP\njournal: Biochem. J. 301 (Pt 1), 169-175 (1994)\nmedline id: 94311827\npubmed id: \ncomment: \n",
-            "location: [0:741]\nauthors: Takeda,J.\ntitle: Direct Submission\njournal: Submitted (24-JAN-1994) Jun Takeda, Howard Hughes Medical Institute, The University of Chicago, 5841 S. Maryland Ave., Chicago, IL 60637, USA\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:741]\nauthors: Mahraoui,L., Takeda,J., Mesonero,J.,"
+            " Chantret,I., Dussaulx,E., Bell,G.I. and Brot-Laroche,E.\ntitle:"
+            " Regulation of expression of the human fructose transporter (GLUT5) by"
+            " cyclic AMP\njournal: Biochem. J. 301 (Pt 1), 169-175 (1994)\nmedline id:"
+            " 94311827\npubmed id: \ncomment: \n",
+            "location: [0:741]\nauthors: Takeda,J.\ntitle: Direct Submission\njournal:"
+            " Submitted (24-JAN-1994) Jun Takeda, Howard Hughes Medical Institute, The"
+            " University of Chicago, 5841 S. Maryland Ave., Chicago, IL 60637,"
+            " USA\nmedline id: \npubmed id: \ncomment: \n",
         ]
         features = (
             (
@@ -3561,7 +4063,10 @@ qualifiers:
         seq = "AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGG...CTT"
         id = "AC007323.5"
         name = "AC007323"
-        description = "Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence"
+        description = (
+            "Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I,"
+            " complete sequence"
+        )
         annotations = {
             "accessions": ["AC007323"],
             "comment": """\
@@ -3591,11 +4096,41 @@ On Dec 16, 1999 this sequence version replaced gi:5729683.""",
             ],
         }
         references = [
-            "location: [0:86436]\nauthors: Dunn,P., Shinn,P., Brooks,S., Buehler,E., Chao,Q., Johnson-Hopson,C., Khan,S., Kim,C., Altafi,H., Bei,Q., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzales,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,K., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Federspiel,N.A., Theologis,A. and Ecker,J.R.\ntitle: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:86436]\nauthors: Ecker,J.R.\ntitle: Direct Submission\njournal: Submitted (17-APR-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:86436]\nauthors: Ecker,J.R.\ntitle: Direct Submission\njournal: Submitted (11-AUG-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:86436]\nauthors: Ecker,J.R.\ntitle: Direct Submission\njournal: Submitted (16-DEC-1999) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th Street and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:86436]\nauthors: Chao,Q., Brooks,S., Buehler,E., Johnson-Hopson,C., Khan,S., Kim,C., Shinn,P., Altafi,H., Bei,B., Chin,C., Chiou,J., Choi,E., Conn,L., Conway,A., Gonzalez,A., Hansen,N., Howing,B., Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,J., Liu,S., Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J., Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Davis,R., Federspiel,N., Theologis,A. and Ecker,J.\ntitle: Direct Submission\njournal: Submitted (19-JAN-2000) Arabidopsis thaliana Genome Center, Department of Biology, University of Pennsylvania, 38th and Hamilton Walk, Philadelphia, PA 19104-6018, USA\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:86436]\nauthors: Dunn,P., Shinn,P., Brooks,S., Buehler,E.,"
+            " Chao,Q., Johnson-Hopson,C., Khan,S., Kim,C., Altafi,H., Bei,Q., Chin,C.,"
+            " Chiou,J., Choi,E., Conn,L., Conway,A., Gonzales,A., Hansen,N., Howing,B.,"
+            " Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,K., Liu,S.,"
+            " Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J.,"
+            " Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G.,"
+            " Federspiel,N.A., Theologis,A. and Ecker,J.R.\ntitle: Genomic sequence for"
+            " Arabidopsis thaliana BAC T25K16 from chromosome I\njournal:"
+            " Unpublished\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:86436]\nauthors: Ecker,J.R.\ntitle: Direct"
+            " Submission\njournal: Submitted (17-APR-1999) Arabidopsis thaliana Genome"
+            " Center, Department of Biology, University of Pennsylvania, 38th Street"
+            " and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA\nmedline"
+            " id: \npubmed id: \ncomment: \n",
+            "location: [0:86436]\nauthors: Ecker,J.R.\ntitle: Direct"
+            " Submission\njournal: Submitted (11-AUG-1999) Arabidopsis thaliana Genome"
+            " Center, Department of Biology, University of Pennsylvania, 38th Street"
+            " and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA\nmedline"
+            " id: \npubmed id: \ncomment: \n",
+            "location: [0:86436]\nauthors: Ecker,J.R.\ntitle: Direct"
+            " Submission\njournal: Submitted (16-DEC-1999) Arabidopsis thaliana Genome"
+            " Center, Department of Biology, University of Pennsylvania, 38th Street"
+            " and Hamilton Walk, Philadelphia, Pennsylvania 19104-6018, USA\nmedline"
+            " id: \npubmed id: \ncomment: \n",
+            "location: [0:86436]\nauthors: Chao,Q., Brooks,S., Buehler,E.,"
+            " Johnson-Hopson,C., Khan,S., Kim,C., Shinn,P., Altafi,H., Bei,B., Chin,C.,"
+            " Chiou,J., Choi,E., Conn,L., Conway,A., Gonzalez,A., Hansen,N., Howing,B.,"
+            " Koo,T., Lam,B., Lee,J., Lenz,C., Li,J., Liu,A., Liu,J., Liu,S.,"
+            " Mukharsky,N., Nguyen,M., Palm,C., Pham,P., Sakano,H., Schwartz,J.,"
+            " Southwick,A., Thaveri,A., Toriumi,M., Vaysberg,M., Yu,G., Davis,R.,"
+            " Federspiel,N., Theologis,A. and Ecker,J.\ntitle: Direct"
+            " Submission\njournal: Submitted (19-JAN-2000) Arabidopsis thaliana Genome"
+            " Center, Department of Biology, University of Pennsylvania, 38th and"
+            " Hamilton Walk, Philadelphia, PA 19104-6018, USA\nmedline id: \npubmed id:"
+            " \ncomment: \n",
         ]
         features = (
             (
@@ -3935,7 +4470,10 @@ NCBI review. The reference sequence was derived from K00020.1.""",
             ],
         }
         references = [
-            "location: [0:182]\nauthors: Higashi,Y., Sokawa,Y., Watanabe,Y., Kawade,Y., Ohno,S., Takaoka,C. and Taniguchi,T.\ntitle: structure and expression of a cloned cdna for mouse interferon-beta\njournal: J. Biol. Chem. 258, 9522-9529 (1983)\nmedline id: 83265757\npubmed id: \ncomment: \n"
+            "location: [0:182]\nauthors: Higashi,Y., Sokawa,Y., Watanabe,Y., Kawade,Y.,"
+            " Ohno,S., Takaoka,C. and Taniguchi,T.\ntitle: structure and expression of"
+            " a cloned cdna for mouse interferon-beta\njournal: J. Biol. Chem. 258,"
+            " 9522-9529 (1983)\nmedline id: 83265757\npubmed id: \ncomment: \n"
         ]
         features = (
             (
@@ -4085,8 +4623,13 @@ Contig ID=1; Length=154329; Status=Finished.""",
             ],
         }
         references = [
-            "location: [0:154329]\nauthors: Murphy,L., Harris,D. and Barrell,B.\ntitle: Sequencing the distal X chromosome of Drosophila melanogaster\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: Sanger Centre, Wellcome Trust Genome Campus, Hinxton Hall, Hinxton, Cambridge CB10 1SA, U.K.\n",
-            "location: [0:154329]\nauthors: Benos,P.\ntitle: Direct Submission\njournal: Submitted (06-FEB-2000) European Drosophila Genome Sequencing Consortium\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:154329]\nauthors: Murphy,L., Harris,D. and Barrell,B.\ntitle:"
+            " Sequencing the distal X chromosome of Drosophila melanogaster\njournal:"
+            " Unpublished\nmedline id: \npubmed id: \ncomment: Sanger Centre, Wellcome"
+            " Trust Genome Campus, Hinxton Hall, Hinxton, Cambridge CB10 1SA, U.K.\n",
+            "location: [0:154329]\nauthors: Benos,P.\ntitle: Direct"
+            " Submission\njournal: Submitted (06-FEB-2000) European Drosophila Genome"
+            " Sequencing Consortium\nmedline id: \npubmed id: \ncomment: \n",
         ]
         features = (
             (
@@ -4425,8 +4968,15 @@ qualifiers:
             ],
         }
         references = [
-            "location: [0:2509]\nauthors: Harris,C.A., Andryuk,P.J., Cline,S.W., Siekierka,J.J. and Goldstein,G.\ntitle: Structure and mapping of the human thymopoietin (TMPO) gene and relationship of TMPO beta to rat lamin-associated polypeptide 2\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:2509]\nauthors: Harris,C.A.\ntitle: Direct Submission\njournal: Submitted (07-DEC-1994) Crafford A. Harris, Immunobiology Research Institute, Route 22 East, Annandale, NJ 08801-0999, USA\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:2509]\nauthors: Harris,C.A., Andryuk,P.J., Cline,S.W.,"
+            " Siekierka,J.J. and Goldstein,G.\ntitle: Structure and mapping of the"
+            " human thymopoietin (TMPO) gene and relationship of TMPO beta to rat"
+            " lamin-associated polypeptide 2\njournal: Unpublished\nmedline id:"
+            " \npubmed id: \ncomment: \n",
+            "location: [0:2509]\nauthors: Harris,C.A.\ntitle: Direct"
+            " Submission\njournal: Submitted (07-DEC-1994) Crafford A. Harris,"
+            " Immunobiology Research Institute, Route 22 East, Annandale, NJ"
+            " 08801-0999, USA\nmedline id: \npubmed id: \ncomment: \n",
         ]
         features = (
             (
@@ -4555,7 +5105,10 @@ COMPLETENESS: not full length.""",
             ],
         }
         references = [
-            "location: [0:1250660]\nauthors: NCBI Annotation Project.\ntitle: Direct Submission\njournal: Submitted (11-OCT-2001) National Center for Biotechnology Information, NIH, Bethesda, MD 20894, USA\nmedline id: \npubmed id: \ncomment: \n"
+            "location: [0:1250660]\nauthors: NCBI Annotation Project.\ntitle: Direct"
+            " Submission\njournal: Submitted (11-OCT-2001) National Center for"
+            " Biotechnology Information, NIH, Bethesda, MD 20894, USA\nmedline id:"
+            " \npubmed id: \ncomment: \n"
         ]
         features = (
             (
@@ -4657,8 +5210,19 @@ qualifiers:
             "topology": "circular",
         }
         references = [
-            "authors: Kaneko,T., Nakamura,Y., Sato,S., Asamizu,E., Kato,T., Sasamoto,S., Watanabe,A., Idesawa,K., Ishikawa,A., Kawashima,K., Kimura,T., Kishida,Y., Kiyokawa,C., Kohara,M., Matsumoto,M., Matsuno,A., Mochizuki,Y., Nakayama,S., Nakazaki,N., Shimpo,S., Sugimoto,M., Takeuchi,C., Yamada,M. and Tabata,S.\ntitle: Complete genome structure of the nitrogen-fixing symbiotic bacterium Mesorhizobium loti\njournal: DNA Res. 7, 331-338 (2000)\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:180]\nauthors: Kaneko,T.\ntitle: Direct Submission\njournal: Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research Institute, The First Laboratory for Plant Gene Research; Yana 1532-3, Kisarazu, Chiba 292-0812, Japan (E-mail:kaneko@kazusa.or.jp, URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935, Fax:81-438-52-3934)\nmedline id: \npubmed id: \ncomment: \n",
+            "authors: Kaneko,T., Nakamura,Y., Sato,S., Asamizu,E., Kato,T.,"
+            " Sasamoto,S., Watanabe,A., Idesawa,K., Ishikawa,A., Kawashima,K.,"
+            " Kimura,T., Kishida,Y., Kiyokawa,C., Kohara,M., Matsumoto,M., Matsuno,A.,"
+            " Mochizuki,Y., Nakayama,S., Nakazaki,N., Shimpo,S., Sugimoto,M.,"
+            " Takeuchi,C., Yamada,M. and Tabata,S.\ntitle: Complete genome structure of"
+            " the nitrogen-fixing symbiotic bacterium Mesorhizobium loti\njournal: DNA"
+            " Res. 7, 331-338 (2000)\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:180]\nauthors: Kaneko,T.\ntitle: Direct Submission\njournal:"
+            " Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research Institute,"
+            " The First Laboratory for Plant Gene Research; Yana 1532-3, Kisarazu,"
+            " Chiba 292-0812, Japan (E-mail:kaneko@kazusa.or.jp,"
+            " URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935,"
+            " Fax:81-438-52-3934)\nmedline id: \npubmed id: \ncomment: \n",
         ]
         features = (
             (
@@ -4747,9 +5311,22 @@ the G-protein-coupled receptors.""",
             "topology": "linear",
         }
         references = [
-            "location: [0:360]\nauthors: Munro,S., Thomas,K.L. and Abu-Shaar,M.\ntitle: Molecular characterization of a peripheral receptor for cannabinoids\njournal: Nature 365 (6441), 61-65 (1993)\nmedline id: 93368659\npubmed id: 7689702\ncomment: \n",
-            "location: [0:360]\nauthors: Galiegue,S., Mary,S., Marchand,J., Dussossoy,D., Carriere,D., Carayon,P., Bouaboula,M., Shire,D., Le Fur,G. and Casellas,P.\ntitle: Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations\njournal: Eur. J. Biochem. 232 (1), 54-61 (1995)\nmedline id: 96048028\npubmed id: 7556170\ncomment: \n",
-            "location: [0:360]\nauthors: Shire,D., Calandra,B., Rinaldi-Carmona,M., Oustric,D., Pessegue,B., Bonnin-Cabanne,O., Le Fur,G., Caput,D. and Ferrara,P.\ntitle: Molecular cloning, expression and function of the murine CB2 peripheral cannabinoid receptor\njournal: Biochim. Biophys. Acta 1307 (2), 132-136 (1996)\nmedline id: 96283804\npubmed id: 8679694\ncomment: \n",
+            "location: [0:360]\nauthors: Munro,S., Thomas,K.L. and Abu-Shaar,M.\ntitle:"
+            " Molecular characterization of a peripheral receptor for"
+            " cannabinoids\njournal: Nature 365 (6441), 61-65 (1993)\nmedline id:"
+            " 93368659\npubmed id: 7689702\ncomment: \n",
+            "location: [0:360]\nauthors: Galiegue,S., Mary,S., Marchand,J.,"
+            " Dussossoy,D., Carriere,D., Carayon,P., Bouaboula,M., Shire,D., Le Fur,G."
+            " and Casellas,P.\ntitle: Expression of central and peripheral cannabinoid"
+            " receptors in human immune tissues and leukocyte subpopulations\njournal:"
+            " Eur. J. Biochem. 232 (1), 54-61 (1995)\nmedline id: 96048028\npubmed id:"
+            " 7556170\ncomment: \n",
+            "location: [0:360]\nauthors: Shire,D., Calandra,B., Rinaldi-Carmona,M.,"
+            " Oustric,D., Pessegue,B., Bonnin-Cabanne,O., Le Fur,G., Caput,D. and"
+            " Ferrara,P.\ntitle: Molecular cloning, expression and function of the"
+            " murine CB2 peripheral cannabinoid receptor\njournal: Biochim. Biophys."
+            " Acta 1307 (2), 132-136 (1996)\nmedline id: 96283804\npubmed id:"
+            " 8679694\ncomment: \n",
         ]
         features = (
             (
@@ -4829,7 +5406,14 @@ OF THE ACTIVATED CHANNELS, THEREBY BLOCKING NEURONAL TRANSMISSION.
 ALPHA-TOXIN SUBFAMILY.""",
             "data_file_division": "INV",
             "date": "16-OCT-2001",
-            "db_source": "swissprot: locus SCX3_BUTOC, accession P01485; class: standard. created: Jul 21, 1986. sequence updated: Jul 21, 1986. annotation updated: Oct 16, 2001. xrefs: gi: gi: 69530 xrefs (non-sequence databases): HSSP P01484, InterPro IPR003614, InterPro IPR002061, InterPro IPR001219, Pfam PF00537, PRINTS PR00284, ProDom PD000908, SMART SM00505",
+            "db_source": (
+                "swissprot: locus SCX3_BUTOC, accession P01485; class: standard."
+                " created: Jul 21, 1986. sequence updated: Jul 21, 1986. annotation"
+                " updated: Oct 16, 2001. xrefs: gi: gi: 69530 xrefs (non-sequence"
+                " databases): HSSP P01484, InterPro IPR003614, InterPro IPR002061,"
+                " InterPro IPR001219, Pfam PF00537, PRINTS PR00284, ProDom PD000908,"
+                " SMART SM00505"
+            ),
             "gi": "134354",
             "keywords": ["Neurotoxin", "Sodium channel inhibitor", "Amidation"],
             "molecule_type": "protein",
@@ -4850,7 +5434,10 @@ ALPHA-TOXIN SUBFAMILY.""",
             "topology": "linear",
         }
         references = [
-            "location: [0:64]\nauthors: Vargas,O., Gregoire,J., Martin,M.-F., Bechis,G. and Rochat,H.\ntitle: Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei\njournal: Toxicon 20, 79-79 (1982)\nmedline id: \npubmed id: \ncomment: SEQUENCE.\n"
+            "location: [0:64]\nauthors: Vargas,O., Gregoire,J., Martin,M.-F., Bechis,G."
+            " and Rochat,H.\ntitle: Neurotoxins from the venoms of two scorpions:"
+            " Buthus occitanus tunetanus and Buthus occitanus mardochei\njournal:"
+            " Toxicon 20, 79-79 (1982)\nmedline id: \npubmed id: \ncomment: SEQUENCE.\n"
         ]
         features = (
             (
@@ -4943,7 +5530,10 @@ qualifiers:
             seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
             id = "AB000048.1"
             name = "AB000048"
-            description = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            description = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1,"
+                " complete cds"
+            )
             annotations = {
                 "accessions": ["AB000048"],
                 "data_file_division": "VRL",
@@ -4964,8 +5554,16 @@ qualifiers:
                 "topology": "linear",
             }
             references = [
-                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern"
+                " of feline panleukopenia virus differs from that of canine"
+                " parvovirus\njournal: Unpublished\nmedline id: \npubmed id:"
+                " \ncomment: \n",
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct"
+                " Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi,"
+                " Obihiro University of Agriculture and Veterinary Medicine, Veterinary"
+                " Public Health; Inada cho, Obihiro, Hokkaido 080, Japan"
+                " (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392,"
+                " Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
             ]
             features = (
                 (
@@ -5012,7 +5610,10 @@ qualifiers:
             seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
             id = "AB000049.1"
             name = "AB000049"
-            description = "Feline panleukopenia virus DNA for nonstructural protein 1, complete cds"
+            description = (
+                "Feline panleukopenia virus DNA for nonstructural protein 1,"
+                " complete cds"
+            )
             annotations = {
                 "accessions": ["AB000049"],
                 "data_file_division": "VRL",
@@ -5033,8 +5634,16 @@ qualifiers:
                 "topology": "linear",
             }
             references = [
-                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern"
+                " of feline panleukopenia virus differs that of canine"
+                " parvovirus\njournal: Unpublished\nmedline id: \npubmed id:"
+                " \ncomment: \n",
+                "location: [0:2007]\nauthors: Horiuchi,M.\ntitle: Direct"
+                " Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi,"
+                " Obihiro University of Agriculture and Veterinary Medicine, Veterinary"
+                " Public Health; Inada cho, Obihiro, Hokkaido 080, Japan"
+                " (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392,"
+                " Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
             ]
             features = (
                 (
@@ -5103,8 +5712,16 @@ qualifiers:
                 "topology": "linear",
             }
             references = [
-                "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus\njournal: Unpublished\nmedline id: \npubmed id: \ncomment: \n",
-                "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Direct Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi, Obihiro University of Agriculture and Veterinary Medicine, Veterinary Public Health; Inada cho, Obihiro, Hokkaido 080, Japan (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392, Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
+                "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Evolutionary pattern"
+                " of feline panleukopenia virus differs from that of canine"
+                " parvovirus\njournal: Unpublished\nmedline id: \npubmed id:"
+                " \ncomment: \n",
+                "location: [0:1755]\nauthors: Horiuchi,M.\ntitle: Direct"
+                " Submission\njournal: Submitted (22-DEC-1996) Motohiro Horiuchi,"
+                " Obihiro University of Agriculture and Veterinary Medicine, Veterinary"
+                " Public Health; Inada cho, Obihiro, Hokkaido 080, Japan"
+                " (E-mail:horiuchi@obihiro.ac.jp, Tel:0155-49-5392,"
+                " Fax:0155-49-5402)\nmedline id: \npubmed id: \ncomment: \n",
             ]
             features = (
                 (
@@ -5158,7 +5775,10 @@ qualifiers:
         seq = "TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG"
         id = "NC_005816.1"
         name = "NC_005816"
-        description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence"
+        description = (
+            "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete"
+            " sequence"
+        )
         annotations = {
             "accessions": ["NC_005816"],
             "comment": """\
@@ -5184,10 +5804,31 @@ COMPLETENESS: full length.""",
             "topology": "circular",
         }
         references = [
-            "location: [0:9609]\nauthors: Zhou,D., Tong,Z., Song,Y., Han,Y., Pei,D., Pang,X., Zhai,J., Li,M., Cui,B., Qi,Z., Jin,L., Dai,R., Du,Z., Wang,J., Guo,Z., Wang,J., Huang,P. and Yang,R.\ntitle: Genetics of metabolic variations between Yersinia pestis biovars and the proposal of a new biovar, microtus\njournal: J. Bacteriol. 186 (15), 5147-5152 (2004)\nmedline id: \npubmed id: 15262951\ncomment: \n",
-            "location: [0:9609]\nauthors: Song,Y., Tong,Z., Wang,J., Wang,L., Guo,Z., Han,Y., Zhang,J., Pei,D., Zhou,D., Qin,H., Pang,X., Han,Y., Zhai,J., Li,M., Cui,B., Qi,Z., Jin,L., Dai,R., Chen,F., Li,S., Ye,C., Du,Z., Lin,W., Wang,J., Yu,J., Yang,H., Wang,J., Huang,P. and Yang,R.\ntitle: Complete genome sequence of Yersinia pestis strain 91001, an isolate avirulent to humans\njournal: DNA Res. 11 (3), 179-197 (2004)\nmedline id: \npubmed id: 15368893\ncomment: \n",
-            "location: [0:9609]\nauthors: \nconsrtm: NCBI Genome Project\ntitle: Direct Submission\njournal: Submitted (16-MAR-2004) National Center for Biotechnology Information, NIH, Bethesda, MD 20894, USA\nmedline id: \npubmed id: \ncomment: \n",
-            "location: [0:9609]\nauthors: Song,Y., Tong,Z., Wang,L., Han,Y., Zhang,J., Pei,D., Wang,J., Zhou,D., Han,Y., Pang,X., Zhai,J., Chen,F., Qin,H., Wang,J., Li,S., Guo,Z., Ye,C., Du,Z., Lin,W., Wang,J., Yu,J., Yang,H., Wang,J., Huang,P. and Yang,R.\ntitle: Direct Submission\njournal: Submitted (24-APR-2003) The Institute of Microbiology and Epidemiology, Academy of Military Medical Sciences, No. 20, Dongdajie Street, Fengtai District, Beijing 100071, People's Republic of China\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:9609]\nauthors: Zhou,D., Tong,Z., Song,Y., Han,Y., Pei,D.,"
+            " Pang,X., Zhai,J., Li,M., Cui,B., Qi,Z., Jin,L., Dai,R., Du,Z., Wang,J.,"
+            " Guo,Z., Wang,J., Huang,P. and Yang,R.\ntitle: Genetics of metabolic"
+            " variations between Yersinia pestis biovars and the proposal of a new"
+            " biovar, microtus\njournal: J. Bacteriol. 186 (15), 5147-5152"
+            " (2004)\nmedline id: \npubmed id: 15262951\ncomment: \n",
+            "location: [0:9609]\nauthors: Song,Y., Tong,Z., Wang,J., Wang,L., Guo,Z.,"
+            " Han,Y., Zhang,J., Pei,D., Zhou,D., Qin,H., Pang,X., Han,Y., Zhai,J.,"
+            " Li,M., Cui,B., Qi,Z., Jin,L., Dai,R., Chen,F., Li,S., Ye,C., Du,Z.,"
+            " Lin,W., Wang,J., Yu,J., Yang,H., Wang,J., Huang,P. and Yang,R.\ntitle:"
+            " Complete genome sequence of Yersinia pestis strain 91001, an isolate"
+            " avirulent to humans\njournal: DNA Res. 11 (3), 179-197 (2004)\nmedline"
+            " id: \npubmed id: 15368893\ncomment: \n",
+            "location: [0:9609]\nauthors: \nconsrtm: NCBI Genome Project\ntitle: Direct"
+            " Submission\njournal: Submitted (16-MAR-2004) National Center for"
+            " Biotechnology Information, NIH, Bethesda, MD 20894, USA\nmedline id:"
+            " \npubmed id: \ncomment: \n",
+            "location: [0:9609]\nauthors: Song,Y., Tong,Z., Wang,L., Han,Y., Zhang,J.,"
+            " Pei,D., Wang,J., Zhou,D., Han,Y., Pang,X., Zhai,J., Chen,F., Qin,H.,"
+            " Wang,J., Li,S., Guo,Z., Ye,C., Du,Z., Lin,W., Wang,J., Yu,J., Yang,H.,"
+            " Wang,J., Huang,P. and Yang,R.\ntitle: Direct Submission\njournal:"
+            " Submitted (24-APR-2003) The Institute of Microbiology and Epidemiology,"
+            " Academy of Military Medical Sciences, No. 20, Dongdajie Street, Fengtai"
+            " District, Beijing 100071, People's Republic of China\nmedline id:"
+            " \npubmed id: \ncomment: \n",
         ]
         features = (
             (
@@ -6011,14 +6652,22 @@ qualifiers:
         seq = "AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL"
         id = "1MRR_A"
         name = "1MRR_A"
-        description = "Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization"
+        description = (
+            "Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase"
+            " From Escherichia Coli. Spectroscopic And Crystallographic"
+            " Characterization"
+        )
         annotations = {
             "accessions": ["1MRR_A"],
             "comment": """\
 1 Ribonucleotide Reductase R1 Protein.""",
             "data_file_division": "BCT",
             "date": "10-OCT-2012",
-            "db_source": "pdb: molecule 1MRR, chain 65, release Aug 28, 2012; deposition: Jul 28, 1992; class: Reductase(Acting On Ch2); source: Mmdb_id: 50351, Pdb_id 1: 1MRR; Exp. method: X-Ray Diffraction.",
+            "db_source": (
+                "pdb: molecule 1MRR, chain 65, release Aug 28, 2012; deposition: Jul"
+                " 28, 1992; class: Reductase(Acting On Ch2); source: Mmdb_id: 50351,"
+                " Pdb_id 1: 1MRR; Exp. method: X-Ray Diffraction."
+            ),
             "gi": "494379",
             "keywords": [""],
             "molecule_type": "protein",
@@ -6035,9 +6684,18 @@ qualifiers:
             "topology": "linear",
         }
         references = [
-            "location: [0:375]\nauthors: Nordlund,P., Sjoberg,B.M. and Eklund,H.\ntitle: Three-dimensional structure of the free radical protein of ribonucleotide reductase\njournal: Nature 345 (6276), 593-598 (1990)\nmedline id: \npubmed id: 2190093\ncomment: \n",
-            "location: [0:375]\nauthors: Atta,M., Nordlund,P., Aberg,A., Eklund,H. and Fontecave,M.\ntitle: Substitution of manganese for iron in ribonucleotide reductase from Escherichia coli. Spectroscopic and crystallographic characterization\njournal: J. Biol. Chem. 267 (29), 20682-20688 (1992)\nmedline id: \npubmed id: 1328209\ncomment: \n",
-            "location: [0:375]\nauthors: Eklund,H. and Nordlund,P.\ntitle: Direct Submission\njournal: Submitted (28-JUL-1992)\nmedline id: \npubmed id: \ncomment: \n",
+            "location: [0:375]\nauthors: Nordlund,P., Sjoberg,B.M. and"
+            " Eklund,H.\ntitle: Three-dimensional structure of the free radical protein"
+            " of ribonucleotide reductase\njournal: Nature 345 (6276), 593-598"
+            " (1990)\nmedline id: \npubmed id: 2190093\ncomment: \n",
+            "location: [0:375]\nauthors: Atta,M., Nordlund,P., Aberg,A., Eklund,H. and"
+            " Fontecave,M.\ntitle: Substitution of manganese for iron in ribonucleotide"
+            " reductase from Escherichia coli. Spectroscopic and crystallographic"
+            " characterization\njournal: J. Biol. Chem. 267 (29), 20682-20688"
+            " (1992)\nmedline id: \npubmed id: 1328209\ncomment: \n",
+            "location: [0:375]\nauthors: Eklund,H. and Nordlund,P.\ntitle: Direct"
+            " Submission\njournal: Submitted (28-JUL-1992)\nmedline id: \npubmed id:"
+            " \ncomment: \n",
         ]
         features = (
             (
@@ -6604,7 +7262,8 @@ KEYWORDS    """
         record = SeqIO.read(path, "genbank")
         self.assertEqual(
             record.annotations["comment"],
-            "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak of 2009.",
+            "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak"
+            " of 2009.",
         )
         self.assertEqual(
             record.annotations["structured_comment"]["GISAID_EpiFlu(TM)Data"][
@@ -6677,9 +7336,7 @@ KEYWORDS    """
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             record = SeqIO.read(path, "genbank")
-            self.assertFalse(
-                "structured_comment" in record.annotations
-            )
+            self.assertFalse("structured_comment" in record.annotations)
             self.assertTrue(
                 "Structured comment not parsed for AYW00820." in str(caught[0].message)
             )
@@ -6717,7 +7374,8 @@ KEYWORDS    """
                 str(caught[0].message),
                 'The NCBI states double-quote characters like " should be escaped'
                 ' as "" (two double - quotes), but here it was not: '
-                "%r" % 'One missing ""quotation mark" here',
+                "%r"
+                % 'One missing ""quotation mark" here',
             )
         # Check records parsed as expected
         f1 = record.features[0]
@@ -6911,9 +7569,10 @@ KEYWORDS    """
         path = "GenBank/DS830848.gb"
         with open(path) as inhandle:
             data = inhandle.readlines()
-        data[
-            0
-        ] = "LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI 15-OCT-2018\n"
+        data[0] = (
+            "LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI"
+            " 15-OCT-2018\n"
+        )
 
         # Create memory file from modified genbank file
         in_tmp = StringIO()
@@ -6947,9 +7606,10 @@ KEYWORDS    """
             path = "GenBank/DS830848.gb"
             with open(path) as inhandle:
                 data = inhandle.readlines()
-            data[
-                0
-            ] = "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\n"
+            data[0] = (
+                "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI"
+                " 15-OCT-2018\n"
+            )
 
             # Create memory file from modified genbank file
             in_tmp = StringIO()
@@ -7000,28 +7660,32 @@ class LineOneTests(unittest.TestCase):
             ("LOCUS       U00096", None, None, None, None),
             # This example is actually fungal, accession U49845 from Saccharomyces cerevisiae:
             (
-                "LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999",
+                "LOCUS       SCU49845     5028 bp    DNA             PLN      "
+                " 21-JUN-1999",
                 None,
                 "DNA",
                 "PLN",
                 None,
             ),
             (
-                "LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001",
+                "LOCUS       AB070938                6497 bp    DNA     linear   BCT"
+                " 11-OCT-2001",
                 "linear",
                 "DNA",
                 "BCT",
                 None,
             ),
             (
-                "LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008",
+                "LOCUS       NC_005816               9609 bp    DNA     circular BCT"
+                " 21-JUL-2008",
                 "circular",
                 "DNA",
                 "BCT",
                 None,
             ),
             (
-                "LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001",
+                "LOCUS       SCX3_BUTOC                64 aa            linear   INV"
+                " 16-OCT-2001",
                 "linear",
                 None,
                 "INV",
@@ -7036,7 +7700,8 @@ class LineOneTests(unittest.TestCase):
             ),
             # This is a test of the format > 80 chars long
             (
-                "LOCUS       AZZZAA02123456789 1000000000 bp    DNA     linear   PRI 15-OCT-2018",
+                "LOCUS       AZZZAA02123456789 1000000000 bp    DNA     linear   PRI"
+                " 15-OCT-2018",
                 "linear",
                 "DNA",
                 "PRI",
@@ -7184,7 +7849,12 @@ class OutputTests(unittest.TestCase):
 
     def test_seqrecord_default_description(self):
         """Read in file using SeqRecord default description."""
-        old = SeqRecord(Seq("ACGT"), id="example", name="short", annotations={"molecule_type": "DNA"})
+        old = SeqRecord(
+            Seq("ACGT"),
+            id="example",
+            name="short",
+            annotations={"molecule_type": "DNA"},
+        )
         self.assertEqual(old.description, "<unknown description>")
         txt = old.format("gb")
         self.assertIn("DEFINITION  .\n", txt)
@@ -7204,7 +7874,10 @@ class OutputTests(unittest.TestCase):
             lines = handle.readlines()
 
         # futz with the molecule type to make it lower case
-        invalid_line = "LOCUS       NC_005816               9609 bp    dna     circular BCT 21-JUL-2008\n"
+        invalid_line = (
+            "LOCUS       NC_005816               9609 bp    dna     circular BCT"
+            " 21-JUL-2008\n"
+        )
         lines[0] = invalid_line
         fake_handle = StringIO("".join(lines))
 
