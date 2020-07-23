@@ -18,7 +18,6 @@ import sys
 from Bio.Seq import Seq
 
 
-
 class SummaryInfo:
     """Calculate summary info about the alignment.
 
