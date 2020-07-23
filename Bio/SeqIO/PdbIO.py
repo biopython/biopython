@@ -96,7 +96,6 @@ def AtomIterator(pdb_id, structure):
             id=record_id,
             description=record_id,
             annotations={
-                "molecule_type": "protein",
                 "model": model.id,
                 "chain": chain.id,
                 "start": int(rnumbers[0]),
@@ -224,10 +223,7 @@ class PdbSeqresIterator(SequenceIterator):
             raise ValueError("Empty file.")
 
         for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(
-                Seq("".join(residues)),
-                annotations={"chain": chn_id, "molecule_type": "protein"},
-            )
+            record = SeqRecord(Seq("".join(residues)), annotations={"chain": chn_id},)
             if chn_id in metadata:
                 m = metadata[chn_id][0]
                 record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)

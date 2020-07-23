@@ -545,9 +545,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                     for acc in accs:
                         self.assertTrue(acc, "Bad accession in annotations: %r" % acc)
                         self.assertEqual(
-                            acc,
-                            acc.strip(),
-                            "Bad accession in annotations: %r" % acc,
+                            acc, acc.strip(), "Bad accession in annotations: %r" % acc,
                         )
                     self.assertEqual(
                         len(set(accs)),
@@ -555,13 +553,9 @@ class TestSeqIO(SeqIOTestBaseClass):
                         "Repeated accession in annotations: %r" % accs,
                     )
                 for ref in record.dbxrefs:
-                    self.assertTrue(
-                        ref, "Bad cross reference in dbxrefs: %r" % ref
-                    )
+                    self.assertTrue(ref, "Bad cross reference in dbxrefs: %r" % ref)
                     self.assertEqual(
-                        ref,
-                        ref.strip(),
-                        "Bad cross reference in dbxrefs: %r" % ref,
+                        ref, ref.strip(), "Bad cross reference in dbxrefs: %r" % ref,
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
@@ -5192,9 +5186,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [70]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
@@ -5226,9 +5224,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [26, 26, 26, 26]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
@@ -5256,9 +5258,13 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [51]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
@@ -5285,12 +5291,17 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [70]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -5318,12 +5329,17 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [42, 42, 42, 42]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5347,12 +5363,17 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [70]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -5380,12 +5401,17 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [26, 26, 26, 26]
         alignment = None
         messages = {
+            "embl": "missing molecule_type in annotations",
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "genbank": "missing molecule_type in annotations",
+            "imgt": "missing molecule_type in annotations",
+            "nexus": "Need the molecule type to be defined",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
