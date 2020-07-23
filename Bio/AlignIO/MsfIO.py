@@ -316,8 +316,9 @@ class MsfIterator(AlignmentIterator):
                 BiopythonParserWarning,
             )
 
-        records = SeqRecord(
-            Seq(s), id=i, name=i, description=i, annotations={"weight": w},
+        records = (
+            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w},)
+            for (i, s, w) in zip(ids, seqs, weights)
         )
 
         # This will check alignment lengths are self-consistent:

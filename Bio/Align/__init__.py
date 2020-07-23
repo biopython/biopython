@@ -681,7 +681,9 @@ class MultipleSeqAlignment:
         for k, v in self.column_annotations.items():
             if k in other.column_annotations:
                 column_annotations[k] = v + other.column_annotations[k]
-        return MultipleSeqAlignment(merged, annotations=annotations, column_annotations=column_annotations)
+        return MultipleSeqAlignment(
+            merged, annotations=annotations, column_annotations=column_annotations
+        )
 
     def __getitem__(self, index):
         """Access part of the alignment.
