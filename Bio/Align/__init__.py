@@ -155,9 +155,7 @@ class MultipleSeqAlignment:
         {'stats': 'CCCXCCC'}
         """
         if alphabet is not None:
-            raise ValueError(
-                "alphabet is no longer supported; its value should be None"
-            )
+            raise ValueError("The alphabet argument is no longer supported")
 
         self._records = []
         if records:
