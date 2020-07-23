@@ -14,7 +14,6 @@ the contig consensus sequences in an ACE file as SeqRecord objects.
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna
 from Bio.Sequencing import Ace
 
 
@@ -64,23 +63,16 @@ def AceIterator(source):
         consensus_seq_str = ace_contig.sequence
         # Assume its DNA unless there is a U in it,
         molecule_type = "DNA"
-        if "U" in consensus_seq_str:
-            if "T" in consensus_seq_str:
-                # Very odd! Error?
-                alpha = generic_nucleotide
-            else:
-                alpha = generic_rna
-                molecule_type = "RNA"
-        else:
-            alpha = generic_dna
+        if "U" in consensus_seq_str and "T" not in consensus_seq_str:
+            molecule_type = "RNA"
 
         if "*" in consensus_seq_str:
             # For consistency with most other file formats, map
             # any * gaps into - gaps.
             assert "-" not in consensus_seq_str
-            consensus_seq = Seq(consensus_seq_str.replace("*", "-"), alpha)
+            consensus_seq = Seq(consensus_seq_str.replace("*", "-"))
         else:
-            consensus_seq = Seq(consensus_seq_str, alpha)
+            consensus_seq = Seq(consensus_seq_str)
 
         # TODO? - Base segments (BS lines) which indicates which read
         # phrap has chosen to be the consensus at a particular position.
@@ -89,8 +81,12 @@ def AceIterator(source):
         # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
         # Perhaps as SeqFeature objects?
 
-        seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
-        seq_record.annotations["molecule_type"] = molecule_type
+        seq_record = SeqRecord(
+            consensus_seq,
+            id=ace_contig.name,
+            name=ace_contig.name,
+            annotations={"molecule_type": molecule_type},
+        )
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so

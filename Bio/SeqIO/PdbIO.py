@@ -11,7 +11,6 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -92,17 +91,18 @@ def AtomIterator(pdb_id, structure):
         # if len(structure) > 1 :
         #     id = ("Model%s|" % str(model.id)) + id
 
-        record = SeqRecord(
-            Seq("".join(res_out), generic_protein), id=record_id, description=record_id
+        yield SeqRecord(
+            Seq("".join(res_out)),
+            id=record_id,
+            description=record_id,
+            annotations={
+                "molecule_type": "protein",
+                "model": model.id,
+                "chain": chain.id,
+                "start": int(rnumbers[0]),
+                "end": int(rnumbers[-1]),
+            },
         )
-        record.annotations["molecule_type"] = "protein"
-
-        record.annotations["model"] = model.id
-        record.annotations["chain"] = chain.id
-
-        record.annotations["start"] = int(rnumbers[0])
-        record.annotations["end"] = int(rnumbers[-1])
-        yield record
 
 
 class PdbSeqresIterator(SequenceIterator):
@@ -224,9 +224,10 @@ class PdbSeqresIterator(SequenceIterator):
             raise ValueError("Empty file.")
 
         for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues), generic_protein))
-            record.annotations = {"chain": chn_id}
-            record.annotations["molecule_type"] = "protein"
+            record = SeqRecord(
+                Seq("".join(residues)),
+                annotations={"chain": chn_id, "molecule_type": "protein"},
+            )
             if chn_id in metadata:
                 m = metadata[chn_id][0]
                 record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
@@ -430,9 +431,10 @@ def CifSeqresIterator(source):
         metadata[chain_id][-1].update(struct_ref)
 
     for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues), generic_protein))
-        record.annotations = {"chain": chn_id}
-        record.annotations["molecule_type"] = "protein"
+        record = SeqRecord(
+            Seq("".join(residues)),
+            annotations={"chain": chn_id, "molecule_type": "protein"},
+        )
         if chn_id in metadata:
             m = metadata[chn_id][0]
             record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)

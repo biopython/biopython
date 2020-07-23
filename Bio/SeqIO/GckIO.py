@@ -13,7 +13,6 @@ from Textco BioSoftware, Inc.
 
 from struct import unpack
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -87,7 +86,7 @@ def _parse(handle):
     if seq_length > length - 4:
         raise ValueError("Conflicting sequence length values")
     sequence = packet[4:].decode("ASCII")
-    record = SeqRecord(Seq(sequence, alphabet=Alphabet.generic_dna))
+    record = SeqRecord(Seq(sequence), annotations={"molecule_type": "DNA"})
 
     # Skip unknown packet
     _read_packet(handle)

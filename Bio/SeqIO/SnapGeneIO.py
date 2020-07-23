@@ -16,7 +16,6 @@ from re import sub
 from struct import unpack
 from xml.dom.minidom import parseString
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -62,7 +61,7 @@ def _parse_dna_packet(length, data, record):
         raise ValueError("The file contains more than one DNA packet")
 
     flags, sequence = unpack(">B%ds" % (length - 1), data)
-    record.seq = Seq(sequence.decode("ASCII"), alphabet=Alphabet.generic_dna)
+    record.seq = Seq(sequence.decode("ASCII"))
     record.annotations["molecule_type"] = "DNA"
     if flags & 0x01:
         record.annotations["topology"] = "circular"

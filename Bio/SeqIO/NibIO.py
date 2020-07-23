@@ -80,7 +80,7 @@ class NibIterator(SequenceIterator):
 
         """
         if alphabet is not None:
-            raise ValueError("Alphabets are ignored.")
+            raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="b", fmt="Nib")
 
     def parse(self, handle):
