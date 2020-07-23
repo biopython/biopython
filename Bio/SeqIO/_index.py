@@ -44,19 +44,12 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         self._format = format
         # Load the parser class/function once an avoid the dict lookup in each
         # __getitem__ call:
-        i = SeqIO._FormatToIterator[format]
-
-        # TODO - can we simplify this now?
-        def _parse(handle):
-            """Dynamically generated parser function (PRIVATE)."""
-            return next(i(handle))
-
-        self._parse = _parse
+        self._iterator = SeqIO._FormatToIterator[format]
 
     def get(self, offset):
         """Return SeqRecord."""
         # Should be overridden for binary file formats etc:
-        return self._parse(StringIO(self.get_raw(offset).decode()))
+        return next(self._iterator(StringIO(self.get_raw(offset).decode())))
 
 
 ####################
