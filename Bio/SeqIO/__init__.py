@@ -793,9 +793,7 @@ def index(filename, format, alphabet=None, key_function=None):
     Arguments:
      - filename - string giving name of file to be indexed
      - format   - lower case string describing the file format
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, leave as None
      - key_function - Optional callback function which when given a
        SeqRecord identifier string should return a unique key for the
        dictionary.
@@ -905,8 +903,8 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Format required (lower case string)")
     if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %r" % alphabet)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
@@ -923,7 +921,7 @@ def index(filename, format, alphabet=None, key_function=None):
         key_function,
     )
     return _IndexedSeqFileDict(
-        proxy_class(filename, format, alphabet), key_function, repr, "SeqRecord"
+        proxy_class(filename, format), key_function, repr, "SeqRecord"
     )
 
 
@@ -942,9 +940,7 @@ def index_db(
        (optional if reloading an existing index, but must match)
      - format   - lower case string describing the file format
        (optional if reloading an existing index, but must match)
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, leave as None.
      - key_function - Optional callback function which when given a
        SeqRecord identifier string should return a unique
        key for the dictionary.
@@ -991,22 +987,24 @@ def index_db(
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %r" % alphabet)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
 
-    repr = (
-        "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)"
-        % (index_filename, filenames, format, alphabet, key_function)
+    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, key_function=%r)" % (
+        index_filename,
+        filenames,
+        format,
+        key_function,
     )
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
         if filename:
-            return _FormatToRandomAccess[format](filename, format, alphabet)
+            return _FormatToRandomAccess[format](filename, format)
         else:
             return format in _FormatToRandomAccess
 
