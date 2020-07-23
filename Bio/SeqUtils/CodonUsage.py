@@ -175,9 +175,81 @@ class CodonAdaptationIndex:
         """Print out the index used.
 
         This just gives the index when the objects is printed.
+
+        >>> from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
+        >>> from Bio.SeqUtils.CodonUsageIndices import SharpEcoliIndex
+        >>> cai = CodonAdaptationIndex()
+        >>> cai.print_index()
+        >>> cai.set_cai_index({'GCA':None, 'GCC':1.0})
+        >>> cai.print_index()  #doctest: +NORMALIZE_WHITESPACE
+        GCA	None
+        GCC	1.000
+        >>> cai.set_cai_index(SharpEcoliIndex)
+        >>> cai.print_index()  #doctest: +NORMALIZE_WHITESPACE
+        AAA	1.000
+        AAC	1.000
+        AAG	0.253
+        AAT	0.051
+        ACA	0.076
+        ACC	1.000
+        ACG	0.099
+        ACT	0.965
+        AGA	0.004
+        AGC	0.410
+        AGG	0.002
+        AGT	0.085
+        ATA	0.003
+        ATC	1.000
+        ATG	1.000
+        ATT	0.185
+        CAA	0.124
+        CAC	1.000
+        CAG	1.000
+        CAT	0.291
+        CCA	0.135
+        CCC	0.012
+        CCG	1.000
+        CCT	0.070
+        CGA	0.004
+        CGC	0.356
+        CGG	0.004
+        CGT	1.000
+        CTA	0.007
+        CTC	0.037
+        CTG	1.000
+        CTT	0.042
+        GAA	1.000
+        GAC	1.000
+        GAG	0.259
+        GAT	0.434
+        GCA	0.586
+        GCC	0.122
+        GCG	0.424
+        GCT	1.000
+        GGA	0.010
+        GGC	0.724
+        GGG	0.019
+        GGT	1.000
+        GTA	0.495
+        GTC	0.066
+        GTG	0.221
+        GTT	1.000
+        TAC	1.000
+        TAT	0.239
+        TCA	0.077
+        TCC	0.744
+        TCG	0.017
+        TCT	1.000
+        TGC	1.000
+        TGG	1.000
+        TGT	0.500
+        TTA	0.020
+        TTC	1.000
+        TTG	0.020
+        TTT	0.296
         """
         for i in sorted(self.index):
-            print("%s\t%s" % (i, self.index[i] is None and "None" or "{:.3f}".format(self.index[i])))
+            print("%s\t%s" % (i, self.index[i] is None and "None" or "%.3f" % (self.index[i])))
 
 
 if __name__ == "__main__":
