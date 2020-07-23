@@ -374,20 +374,6 @@ class SummaryInfo:
             )
         # determine random expected frequencies, if necessary
         random_expected = None
-        if not e_freq_table:
-            # TODO - What about ambiguous alphabets?
-            base_alpha = Alphabet._get_base_alphabet(self.alignment._alphabet)
-            if isinstance(base_alpha, Alphabet.ProteinAlphabet):
-                random_expected = Protein20Random
-            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
-                random_expected = Nucleotide4Random
-            else:
-                raise ValueError(
-                    "Error in alphabet: not Nucleotide or "
-                    "Protein, supply expected frequencies"
-                )
-            del base_alpha
-
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
         for char in chars_to_ignore:
@@ -467,11 +453,10 @@ class SummaryInfo:
                     weight = record.annotations.get("weight", 1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
-            # getting a key error means we've got a problem with the alphabet
             except KeyError:
                 raise ValueError(
-                    "Residue %s not found in alphabet %s"
-                    % (record.seq[residue_num], self.alignment._alphabet)
+                    "Residue %s not found in letters %s"
+                    % (record.seq[residue_num], letters)
                 ) from None
 
         if e_freq_table:
@@ -479,9 +464,7 @@ class SummaryInfo:
             for key in freq_info:
                 if key != gap_char and key not in e_freq_table:
                     raise ValueError(
-                        "letters in current column %s "
-                        "and not in expected frequency table %s"
-                        % (list(freq_info) - [gap_char], list(e_freq_table))
+                        "%s not found in expected frequency table" % key
                     )
 
         if total_count == 0:
