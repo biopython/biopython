@@ -11,10 +11,13 @@ from Bio import AlignIO
 
 
 class ConvertTests(unittest.TestCase):
-
     def check_convert(self, in_filename, in_format, out_format):
         # Write it out using parse/write
-        msg = "Failed converting %s from %s to %s" % (in_filename, in_format, out_format)
+        msg = "Failed converting %s from %s to %s" % (
+            in_filename,
+            in_format,
+            out_format,
+        )
         handle = StringIO()
         aligns = list(AlignIO.parse(in_filename, in_format, None))
         try:
@@ -41,16 +44,17 @@ class ConvertTests(unittest.TestCase):
         # TODO - convert passing an output filename?
 
     def test_convert(self):
-        tests = [("Clustalw/hedgehog.aln", "clustal"),
-                 ("Nexus/test_Nexus_input.nex", "nexus"),
-                 ("Stockholm/simple.sth", "stockholm"),
-                 ("GFF/multi.fna", "fasta"),
-                 ("Quality/example.fastq", "fastq"),
-                 ("Quality/example.fastq", "fastq-sanger"),
-                 ("Fasta/output001.m10", "fasta-m10"),
-                 ("IntelliGenetics/VIF_mase-pro.txt", "ig"),
-                 ("NBRF/clustalw.pir", "pir"),
-                 ]
+        tests = [
+            ("Clustalw/hedgehog.aln", "clustal"),
+            ("Nexus/test_Nexus_input.nex", "nexus"),
+            ("Stockholm/simple.sth", "stockholm"),
+            ("GFF/multi.fna", "fasta"),
+            ("Quality/example.fastq", "fastq"),
+            ("Quality/example.fastq", "fastq-sanger"),
+            ("Fasta/output001.m10", "fasta-m10"),
+            ("IntelliGenetics/VIF_mase-pro.txt", "ig"),
+            ("NBRF/clustalw.pir", "pir"),
+        ]
         output_formats = ["fasta"] + sorted(AlignIO._FormatToWriter)
         for filename, in_format in tests:
             for out_format in output_formats:
