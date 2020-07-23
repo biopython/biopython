@@ -130,8 +130,10 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - Jakub Lipinski <https://github.com/jakublipinski>
+- Jakub N. <https://github.com/moozeq>
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
+- Jan Solak <https://github.com/s0lczi>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
@@ -159,6 +161,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - João D Ferreira <https://github.com/jdferreira>
 - Jun Aruga <https://github.com/junaruga>
 - Juraj Szász <https:/github.com/sars1492>
+- Kacper Domżał <https://github.com/KacDom>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Katharine Lindner <katel at domain worldpath.net>

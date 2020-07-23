@@ -24,7 +24,6 @@ sa_header = '''
 ╚════██║██╔══╝  ██║▄▄ ██║██╔══██║██║╚██╗██║██╔══██║██║    ╚██╔╝  ╚════██║██║╚════██║
 ███████║███████╗╚██████╔╝██║  ██║██║ ╚████║██║  ██║███████╗██║   ███████║██║███████║
 ╚══════╝╚══════╝ ╚══▀▀═╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝   ╚══════╝╚═╝╚══════╝
-                                                                                    
 Sequences analysis and plotting
 '''
 
@@ -89,7 +88,7 @@ def visualize(all_seqs: dict, separated_seqs: dict, out: str, show: bool):
 seqs = create_db(seqs_data, 'analysis')
 print_success(f'Database created successfully, entries = {len(seqs)}')
 dict_all_sequences, dict_each_sequence = analyze(seqs)
-print_success(f'Analysis performed successfully')
+print_success('Analysis performed successfully')
 visualize(dict_all_sequences, dict_each_sequence, 'def', False)
-print_success(f'Visualizing performed successfully')
+print_success('Visualizing performed successfully')
 print_success(f'Sequences analysis performed successfully, results are stored in {args.directory}')

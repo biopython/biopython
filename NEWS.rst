@@ -44,6 +44,9 @@ possible, especially the following contributors:
 - Chris Rands
 - Deepak Khatri
 - Hielke Walinga (first contribution)
+- Jakub N. (first contribution)
+- Jan Solak (first contribution)
+- Kacper Domżał (first contribution)
 - Kai Blin
 - Markus Piotrowski
 - Peter Cock

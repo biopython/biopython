@@ -331,7 +331,7 @@ class SeqVisualizer:
 
         :return: plot object with all titles added
         """
-        if z_parameter is None or z_parameter is 100:
+        if z_parameter is None or z_parameter == 100:
             suptitle = f'Comparision of {self.scatter_title[x_parameter].lower()} and ' \
                        f'{self.scatter_title[y_parameter].lower()} of sequences'
         else:
