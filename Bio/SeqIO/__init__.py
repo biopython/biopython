@@ -903,6 +903,8 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Format required (lower case string)")
     if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
@@ -985,6 +987,8 @@ def index_db(
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
