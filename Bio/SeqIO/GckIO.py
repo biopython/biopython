@@ -86,7 +86,7 @@ def _parse(handle):
     if seq_length > length - 4:
         raise ValueError("Conflicting sequence length values")
     sequence = packet[4:].decode("ASCII")
-    record = SeqRecord(Seq(sequence), annotations={"molecule_type": "DNA"})
+    record = SeqRecord(Seq(sequence))
 
     # Skip unknown packet
     _read_packet(handle)

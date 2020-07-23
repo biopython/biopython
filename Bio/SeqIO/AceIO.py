@@ -61,10 +61,6 @@ def AceIterator(source):
     for ace_contig in Ace.parse(source):
         # Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
-        # Assume its DNA unless there is a U in it,
-        molecule_type = "DNA"
-        if "U" in consensus_seq_str and "T" not in consensus_seq_str:
-            molecule_type = "RNA"
 
         if "*" in consensus_seq_str:
             # For consistency with most other file formats, map
@@ -81,12 +77,7 @@ def AceIterator(source):
         # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
         # Perhaps as SeqFeature objects?
 
-        seq_record = SeqRecord(
-            consensus_seq,
-            id=ace_contig.name,
-            name=ace_contig.name,
-            annotations={"molecule_type": molecule_type},
-        )
+        seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name,)
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so
