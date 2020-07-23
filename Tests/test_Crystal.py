@@ -11,6 +11,7 @@ import copy
 import warnings
 
 from Bio import BiopythonDeprecationWarning
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
     # modules to be tested
@@ -18,7 +19,6 @@ with warnings.catch_warnings():
 
 
 class ChainTestCase(unittest.TestCase):
-
     def setUp(self):
         self.a = "C A A C T A G G T C A C U A G G T C A G"
         self.b = "C T G A C C T A G T G A C C T A G T T G"
@@ -421,14 +421,16 @@ class ChainTestCase(unittest.TestCase):
 
 
 class CrystalTestCase(unittest.TestCase):
-
     def setUp(self):
 
-        self.crystal = Crystal({"a": "T T G A C T C T C T T A A",
-                                "b": Chain("G A G A G T C A"),
-                                "c": "T T G A C T C T C T T A A",
-                                "d": Chain("G A G A G T C A")
-                                })
+        self.crystal = Crystal(
+            {
+                "a": "T T G A C T C T C T T A A",
+                "b": Chain("G A G A G T C A"),
+                "c": "T T G A C T C T C T T A A",
+                "d": Chain("G A G A G T C A"),
+            }
+        )
 
     def testLen(self):
         self.assertEqual(len(self.crystal), len(self.crystal.data))
@@ -458,16 +460,13 @@ class CrystalTestCase(unittest.TestCase):
         self.assertEqual(len(target.data), 0)
 
     def testKeys(self):
-        self.assertEqual(list(self.crystal.keys()),
-                         list(self.crystal.data.keys()))
+        self.assertEqual(list(self.crystal.keys()), list(self.crystal.data.keys()))
 
     def testValues(self):
-        self.assertEqual(list(self.crystal.values()),
-                         list(self.crystal.data.values()))
+        self.assertEqual(list(self.crystal.values()), list(self.crystal.data.values()))
 
     def testItems(self):
-        self.assertEqual(list(self.crystal.items()),
-                         list(self.crystal.data.items()))
+        self.assertEqual(list(self.crystal.items()), list(self.crystal.data.items()))
 
     def testHasKey(self):
         self.assertIn("b", self.crystal)
@@ -476,7 +475,6 @@ class CrystalTestCase(unittest.TestCase):
 
 
 class HeteroTestCase(unittest.TestCase):
-
     def testInit(self):
         self.assertRaises(CrystalError, Hetero, "abcd")
         self.assertRaises(CrystalError, Hetero, "")
