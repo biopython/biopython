@@ -11,6 +11,8 @@
 
 Examples
 --------
+.. code-block:: python
+
     >>> from Bio.Seq import Seq
     >>> from Bio.Restriction import *
     >>> pBs_mcs = 'GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTCCTG'
@@ -32,7 +34,7 @@ Examples
     HhaI      Hin1II    Hin6I     HinP1I    HpyCH4IV  HpySE526I Hsp92II   HspAI     
     MaeII     MseI      NlaIII    SaqAI     TaiI      Tru1I     Tru9I...
     <BLANKLINE>
-    >>> b = a.blunt()  # Analysis with blunt enzmyes
+    >>> b = a.blunt()  # Analysis with blunt enzymes
     >>> a.print_that(b)  # Print results for blunt cutters
     AccII      :  98.
     AfaI       :  4.
@@ -137,7 +139,7 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 # #    #   types are not kept in the locals() dictionary. It is therefore
 # #    #   impossible to import them.
 # #    #   Now, if you have look at the dictionary, you will see that not all
-# #    #   thet ypes are present as those without corresponding enzymes have
+# #    #   the types are present as those without corresponding enzymes have
 # #    #   been removed by Dictionary_Builder().
 # #    #
 # #    #   The values are tuples which contain
