@@ -32,44 +32,24 @@ from io import BytesIO
 from io import StringIO
 
 from Bio import SeqIO
-from Bio import Alphabet
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
     """Base class for defining random access to sequence files."""
 
-    def __init__(self, filename, format, alphabet):
+    def __init__(self, filename, format):
         """Initialize the class."""
         self._handle = _open_for_random_access(filename)
-        self._alphabet = alphabet
         self._format = format
         # Load the parser class/function once an avoid the dict lookup in each
         # __getitem__ call:
-        i = SeqIO._FormatToIterator[format]
-        # The following alphabet code is a bit nasty... duplicates logic in
-        # Bio.SeqIO.parse()
-        if alphabet is None:
-
-            def _parse(handle):
-                """Dynamically generated parser function (PRIVATE)."""
-                return next(i(handle))
-
-        else:
-            # TODO - Detect alphabet support ONCE at __init__
-            def _parse(handle):
-                """Dynamically generated parser function (PRIVATE)."""
-                try:
-                    return next(i(handle, alphabet=alphabet))
-                except TypeError:
-                    return next(SeqIO._force_alphabet(i(handle), alphabet))
-
-        self._parse = _parse
+        self._iterator = SeqIO._FormatToIterator[format]
 
     def get(self, offset):
         """Return SeqRecord."""
         # Should be overridden for binary file formats etc:
-        return self._parse(StringIO(self.get_raw(offset).decode()))
+        return next(self._iterator(StringIO(self.get_raw(offset).decode())))
 
 
 ####################
@@ -82,9 +62,9 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
 class SffRandomAccess(SeqFileRandomAccess):
     """Random access to a Standard Flowgram Format (SFF) file."""
 
-    def __init__(self, filename, format, alphabet):
+    def __init__(self, filename, format):
         """Initialize the class."""
-        SeqFileRandomAccess.__init__(self, filename, format, alphabet)
+        SeqFileRandomAccess.__init__(self, filename, format)
         (
             header_length,
             index_offset,
@@ -97,8 +77,6 @@ class SffRandomAccess(SeqFileRandomAccess):
 
     def __iter__(self):
         """Load any index block in the file, or build it the slow way (PRIVATE)."""
-        if self._alphabet is None:
-            self._alphabet = Alphabet.generic_dna
         handle = self._handle
         handle.seek(0)
         # Alread did this in __init__ but need handle in right place
@@ -163,11 +141,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         handle = self._handle
         handle.seek(offset)
         return SeqIO.SffIO._sff_read_seq_record(
-            handle,
-            self._flows_per_read,
-            self._flow_chars,
-            self._key_sequence,
-            self._alphabet,
+            handle, self._flows_per_read, self._flow_chars, self._key_sequence,
         )
 
     def get_raw(self, offset):
@@ -189,7 +163,6 @@ class SffTrimedRandomAccess(SffRandomAccess):
             self._flows_per_read,
             self._flow_chars,
             self._key_sequence,
-            self._alphabet,
             trim=True,
         )
 
@@ -202,9 +175,9 @@ class SffTrimedRandomAccess(SffRandomAccess):
 class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
     """Random access to a simple sequential sequence file."""
 
-    def __init__(self, filename, format, alphabet):
+    def __init__(self, filename, format):
         """Initialize the class."""
-        SeqFileRandomAccess.__init__(self, filename, format, alphabet)
+        SeqFileRandomAccess.__init__(self, filename, format)
         marker = {
             "ace": b"CO ",
             "embl": b"ID ",
@@ -520,9 +493,9 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
     """Random access to a IntelliGenetics file."""
 
-    def __init__(self, filename, format, alphabet):
+    def __init__(self, filename, format):
         """Initialize the class."""
-        SeqFileRandomAccess.__init__(self, filename, format, alphabet)
+        SeqFileRandomAccess.__init__(self, filename, format)
         self._marker_re = re.compile(b"^;")
 
     def __iter__(self):

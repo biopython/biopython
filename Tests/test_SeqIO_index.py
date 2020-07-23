@@ -110,7 +110,7 @@ if sqlite3:
         def test_old_contents(self):
             """Check actual filenames in existing indexes."""
             filenames, flag = raw_filenames("Roche/triple_sff.idx")
-            self.assertEqual(flag, None)
+            self.assertIsNone(flag)
             self.assertEqual(
                 filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
             )
@@ -419,7 +419,7 @@ class IndexDictTests(SeqIOTestBaseClass):
         assert chr(0) not in keys, "Bad example in test"
         with self.assertRaises(KeyError, msg=msg):
             rec = rec_dict[chr(0)]
-        self.assertEqual(rec_dict.get(chr(0)), None, msg=msg)
+        self.assertIsNone(rec_dict.get(chr(0)), msg=msg)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1), msg=msg)
         with self.assertRaises(AttributeError, msg=msg):
             rec_dict.iteritems
@@ -565,9 +565,7 @@ class IndexDictTests(SeqIOTestBaseClass):
             rec_dict._con.close()  # hack for PyPy
 
             # Now reload without passing filenames and format
-            rec_dict = SeqIO.index_db(
-                index_tmp, key_function=self.add_prefix
-            )
+            rec_dict = SeqIO.index_db(index_tmp, key_function=self.add_prefix)
             self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
@@ -638,7 +636,6 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._flows_per_read,
                     rec_dict._proxy._flow_chars,
                     rec_dict._proxy._key_sequence,
-                    alphabet=None,
                     trim=False,
                 )
             elif fmt == "sff-trim":
@@ -647,7 +644,6 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._flows_per_read,
                     rec_dict._proxy._flow_chars,
                     rec_dict._proxy._key_sequence,
-                    alphabet=None,
                     trim=True,
                 )
             elif fmt == "uniprot-xml":
@@ -673,6 +669,27 @@ class IndexDictTests(SeqIOTestBaseClass):
             self.assertEqual(True, compare_record(rec1, rec2))
         rec_dict.close()
         del rec_dict
+
+    if sqlite3:
+
+        def test_alpha_fails_db(self):
+            """Reject alphabet argument in Bio.SeqIO.index_db()."""
+            # In historic usage, alphabet=... would be a Bio.Alphabet object.
+            self.assertRaises(
+                ValueError,
+                SeqIO.index_db,
+                ":memory:",
+                ["Fasta/dups.fasta"],
+                "fasta",
+                alphabet="XXX",
+            )
+
+    def test_alpha_fails(self):
+        """Reject alphabet argument in Bio.SeqIO.index()."""
+        # In historic usage, alphabet=... would be a Bio.Alphabet object.
+        self.assertRaises(
+            ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta", alphabet="XXX"
+        )
 
     if sqlite3:
 
