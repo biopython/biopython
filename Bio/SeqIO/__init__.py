@@ -633,7 +633,7 @@ def parse(handle, format, alphabet=None):
         # Use Bio.AlignIO to read in the alignments
         i = (
             r
-            for alignment in AlignIO.parse(handle, format, alphabet=alphabet)
+            for alignment in AlignIO.parse(handle, format)
             for r in alignment
         )
         return i

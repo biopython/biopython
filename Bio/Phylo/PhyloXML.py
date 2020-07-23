@@ -260,7 +260,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         except StopIteration:
             # No aligned sequences were found --> empty MSA
             return MultipleSeqAlignment([])
-        msa = MultipleSeqAlignment([first_seq.to_seqrecord()], first_seq.get_alphabet())
+        msa = MultipleSeqAlignment([first_seq.to_seqrecord()])
         msa.extend(seq.to_seqrecord() for seq in seqs)
         return msa
 

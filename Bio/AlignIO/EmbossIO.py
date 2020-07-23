@@ -217,5 +217,5 @@ class EmbossIterator(AlignmentIterator):
                     "different length? You could be using an "
                     "old version of EMBOSS."
                 )
-            records.append(SeqRecord(Seq(seq, self.alphabet), id=id, description=id))
-        return MultipleSeqAlignment(records, self.alphabet, annotations=header_dict)
+            records.append(SeqRecord(Seq(seq), id=id, description=id))
+        return MultipleSeqAlignment(records, annotations=header_dict)

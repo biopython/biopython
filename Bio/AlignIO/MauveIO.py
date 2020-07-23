@@ -335,7 +335,7 @@ class MauveIterator(AlignmentIterator):
                     else:
                         corrected_id = seq_regions[id]["name"]
 
-                record = SeqRecord(Seq(seq, self.alphabet), id=corrected_id, name=id)
+                record = SeqRecord(Seq(seq), id=corrected_id, name=id)
 
                 record.annotations["start"] = seq_regions[id]["start"]
                 record.annotations["end"] = seq_regions[id]["end"]
@@ -344,6 +344,6 @@ class MauveIterator(AlignmentIterator):
                 )
 
                 records.append(record)
-            return MultipleSeqAlignment(records, self.alphabet)
+            return MultipleSeqAlignment(records)
         else:
             raise StopIteration

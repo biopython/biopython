@@ -24,7 +24,6 @@ which can also be used to store a multiple sequence alignments.
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
@@ -61,7 +60,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     return align_stripped[start:end]
 
 
-def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
+def FastaM10Iterator(handle, seq_count=None):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 
     This is for reading the pairwise alignments output by Bill Pearson's
@@ -92,9 +91,6 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
     part of the alignment itself, and is not included in the resulting
     MultipleSeqAlignment objects returned.
     """
-    if alphabet is None:
-        alphabet = single_letter_alphabet
-
     state_PREAMBLE = -1
     state_NONE = 0
     state_QUERY_HEADER = 1
@@ -133,8 +129,7 @@ handle.name: {handle.name}
 """
             )
 
-        assert alphabet is not None
-        alignment = MultipleSeqAlignment([], alphabet)
+        alignment = MultipleSeqAlignment([])
 
         # TODO - Introduce an annotated alignment class?
         # See also Bio/AlignIO/MafIO.py for same requirement.
@@ -150,7 +145,7 @@ handle.name: {handle.name}
         # Query
         # =====
         record = SeqRecord(
-            Seq(q, alphabet),
+            Seq(q),
             id=query_id,
             name="query",
             description=query_descr,
@@ -161,13 +156,7 @@ handle.name: {handle.name}
         record._al_stop = int(query_tags["al_stop"])
         alignment.append(record)
 
-        # TODO - What if a specific alphabet has been requested?
         # TODO - Can FASTA output RNA?
-        if alphabet == single_letter_alphabet and "sq_type" in query_tags:
-            if query_tags["sq_type"] == "D":
-                record.seq.alphabet = generic_dna
-            elif query_tags["sq_type"] == "p":
-                record.seq.alphabet = generic_protein
         if "sq_type" in query_tags:
             if query_tags["sq_type"] == "D":
                 record.annotations["molecule_type"] = "DNA"
@@ -177,7 +166,7 @@ handle.name: {handle.name}
         # Match
         # =====
         record = SeqRecord(
-            Seq(m, alphabet),
+            Seq(m),
             id=match_id,
             name="match",
             description=match_descr,
@@ -188,12 +177,11 @@ handle.name: {handle.name}
         record._al_stop = int(match_tags["al_stop"])
         alignment.append(record)
 
-        # This is still a very crude way of dealing with the alphabet:
-        if alphabet == single_letter_alphabet and "sq_type" in match_tags:
+        if "sq_type" in match_tags:
             if match_tags["sq_type"] == "D":
-                record.seq.alphabet = generic_dna
+                record.annotations["molecule_type"] = "DNA"
             elif match_tags["sq_type"] == "p":
-                record.seq.alphabet = generic_protein
+                record.annotations["molecule_type"] = "protein"
 
         return alignment
 

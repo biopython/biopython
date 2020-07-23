@@ -318,7 +318,7 @@ class MsfIterator(AlignmentIterator):
 
         records = (
             SeqRecord(
-                Seq(s, self.alphabet),
+                Seq(s),
                 id=i,
                 name=i,
                 description=i,
@@ -328,7 +328,7 @@ class MsfIterator(AlignmentIterator):
         )
 
         # This will check alignment lengths are self-consistent:
-        align = MultipleSeqAlignment(records, self.alphabet)
+        align = MultipleSeqAlignment(records)
         # Check matches the header:
         if align.get_alignment_length() != aln_length:
             raise ValueError(
