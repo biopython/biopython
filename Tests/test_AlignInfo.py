@@ -50,7 +50,6 @@ N  1.0 2.0 0.0 0.0
 N  0.0 2.0 1.0 0.0
 """)
 
-        # Have a generic alphabet, without a declared gap char, so must tell
         # provide the frequencies and chars to ignore explicitly.
         ic = summary.information_content(e_freq_table=expected,
                                          chars_to_ignore=["-"])

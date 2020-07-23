@@ -240,19 +240,11 @@ class SummaryInfo:
 
     def _get_all_letters(self):
         """Return a string containing the expected letters in the alignment (PRIVATE)."""
-        all_letters = self.alignment._alphabet.letters
-        if all_letters is None or (
-            isinstance(self.alignment._alphabet, Alphabet.Gapped)
-            and all_letters == self.alignment._alphabet.gap_char
-        ):
-            # We are dealing with a generic alphabet class where the
-            # letters are not defined!  We must build a list of the
-            # letters used...
-            set_letters = set()
-            for record in self.alignment:
-                set_letters.update(record.seq)
-            list_letters = sorted(set_letters)
-            all_letters = "".join(list_letters)
+        set_letters = set()
+        for record in self.alignment:
+            set_letters.update(record.seq)
+        list_letters = sorted(set_letters)
+        all_letters = "".join(list_letters)
         return all_letters
 
     def pos_specific_score_matrix(self, axis_seq=None, chars_to_ignore=None):
