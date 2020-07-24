@@ -2050,10 +2050,7 @@ class Nexus:
         sitesm = list(zip(*[str(self.matrix[t]) for t in self.taxlabels]))
         sitesm[pos:pos] = [["-"] * len(self.taxlabels)] * n
         mapped = ["".join(x) for x in zip(*sitesm)]
-        listed = [
-            (taxon, Seq(mapped[i]))
-            for i, taxon in enumerate(self.taxlabels)
-        ]
+        listed = [(taxon, Seq(mapped[i])) for i, taxon in enumerate(self.taxlabels)]
         self.matrix = dict(listed)
         self.nchar += n
         # now adjust character sets
