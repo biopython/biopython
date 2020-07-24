@@ -249,9 +249,13 @@ class CodonAdaptationIndex:
         TTT	0.296
         """
         for i in sorted(self.index):
-            print("%s\t%s" % (i, self.index[i] is None and "None" or "%.3f" % (self.index[i])))
+            print(
+                "%s\t%s"
+                % (i, self.index[i] is None and "None" or "%.3f" % (self.index[i]))
+            )
 
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
