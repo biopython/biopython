@@ -130,7 +130,7 @@ same length.
 
 # TODO
 # - define policy on reading aligned sequences with gaps in
-#   (e.g. - and . characters) including how the alphabet interacts
+#   (e.g. - and . characters)
 #
 # - Can we build the to_alignment(...) functionality
 #   into the generic Alignment class instead?
@@ -143,7 +143,6 @@ same length.
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
 from . import StockholmIO
@@ -247,15 +246,12 @@ def write(alignments, handle, format):
 
 
 # This is a generator function!
-def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
+def _SeqIO_to_alignment_iterator(handle, format, seq_count=None):
     """Use Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
 
     Arguments:
      - handle    - handle to the file.
      - format    - string describing the file format.
-     - alphabet  - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. fasta, phylip, clustal)
      - seq_count - Optional integer, number of sequences expected in each
        alignment.  Recommended for fasta format files.
 
@@ -269,59 +265,31 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
 
     if seq_count:
         # Use the count to split the records into batches.
-        seq_record_iterator = SeqIO.parse(handle, format, alphabet)
+        seq_record_iterator = SeqIO.parse(handle, format)
 
         records = []
         for record in seq_record_iterator:
             records.append(record)
             if len(records) == seq_count:
-                yield MultipleSeqAlignment(records, alphabet)
+                yield MultipleSeqAlignment(records)
                 records = []
         if records:
             raise ValueError("Check seq_count argument, not enough sequences?")
     else:
         # Must assume that there is a single alignment using all
         # the SeqRecord objects:
-        records = list(SeqIO.parse(handle, format, alphabet))
+        records = list(SeqIO.parse(handle, format))
         if records:
-            yield MultipleSeqAlignment(records, alphabet)
+            yield MultipleSeqAlignment(records)
 
 
-def _force_alphabet(alignment_iterator, alphabet):
-    """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
-    # Assume the alphabet argument has been pre-validated
-    given_base_class = _get_base_alphabet(alphabet).__class__
-    for align in alignment_iterator:
-        if not isinstance(_get_base_alphabet(align._alphabet), given_base_class):
-            raise ValueError(
-                "Specified alphabet %s clashes with "
-                "that determined from the file, %s"
-                % (repr(alphabet), repr(align._alphabet))
-            )
-        for record in align:
-            if not isinstance(
-                _get_base_alphabet(record.seq.alphabet), given_base_class
-            ):
-                raise ValueError(
-                    "Specified alphabet %s clashes with "
-                    "that determined from the file, %s"
-                    % (repr(alphabet), repr(record.seq.alphabet))
-                )
-            record.seq.alphabet = alphabet
-        align._alphabet = alphabet
-        yield align
-
-
-def parse(handle, format, seq_count=None, alphabet=None):
+def parse(handle, format, seq_count=None):
     """Iterate over an alignment file as MultipleSeqAlignment objects.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
-     - alphabet  - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. fasta, phylip, clustal)
      - seq_count - Optional integer, number of sequences expected in each
        alignment.  Recommended for fasta format files.
 
@@ -355,10 +323,6 @@ def parse(handle, format, seq_count=None, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
-        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
     if seq_count is not None and not isinstance(seq_count, int):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
 
@@ -366,37 +330,24 @@ def parse(handle, format, seq_count=None, alphabet=None):
         # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
-            if alphabet is None:
-                i = iterator_generator(fp, seq_count)
-            else:
-                try:
-                    # Initially assume the optional alphabet argument is supported
-                    i = iterator_generator(fp, seq_count, alphabet=alphabet)
-                except TypeError:
-                    # It isn't supported.
-                    i = _force_alphabet(iterator_generator(fp, seq_count), alphabet)
+            i = iterator_generator(fp, seq_count)
 
         elif format in SeqIO._FormatToIterator:
             # Exploit the existing SeqIO parser to the dirty work!
-            i = _SeqIO_to_alignment_iterator(
-                fp, format, alphabet=alphabet, seq_count=seq_count
-            )
+            i = _SeqIO_to_alignment_iterator(fp, format, seq_count=seq_count)
         else:
             raise ValueError("Unknown format '%s'" % format)
 
         yield from i
 
 
-def read(handle, format, seq_count=None, alphabet=None):
+def read(handle, format, seq_count=None):
     """Turn an alignment file into a single MultipleSeqAlignment object.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
-     - alphabet  - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. fasta, phylip, clustal)
      - seq_count - Optional integer, number of sequences expected in each
        alignment.  Recommended for fasta format files.
 
@@ -434,7 +385,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     You must use the Bio.AlignIO.parse() function if you want to read multiple
     records from the handle.
     """
-    iterator = parse(handle, format, seq_count, alphabet)
+    iterator = parse(handle, format, seq_count)
     try:
         alignment = next(iterator)
     except StopIteration:
@@ -453,7 +404,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     return alignment
 
 
-def convert(in_file, in_format, out_file, out_format, alphabet=None):
+def convert(in_file, in_format, out_file, out_format):
     """Convert between two alignment files, returns number of alignments.
 
     Arguments:
@@ -461,7 +412,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - in_format - input file format, lower case string
      - output - an output handle or filename
      - out_file - output file format, lower case string
-     - alphabet - optional alphabet to assume
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning. This may happen if even the
@@ -470,7 +420,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     # TODO - Add optimised versions of important conversions
     # For now just off load the work to SeqIO parse/write
     # Don't open the output file until we've checked the input is OK:
-    alignments = parse(in_file, in_format, None, alphabet)
+    alignments = parse(in_file, in_format, None)
     return write(alignments, out_file, out_format)
 
 

@@ -287,11 +287,8 @@ class ClustalIterator(AlignmentIterator):
                 % (len(ids), self.records_per_alignment)
             )
 
-        records = (
-            SeqRecord(Seq(s, self.alphabet), id=i, description=i)
-            for (i, s) in zip(ids, seqs)
-        )
-        alignment = MultipleSeqAlignment(records, self.alphabet)
+        records = (SeqRecord(Seq(s), id=i, description=i) for (i, s) in zip(ids, seqs))
+        alignment = MultipleSeqAlignment(records)
         # TODO - Handle alignment annotation better, for now
         # mimic the old parser in Bio.Clustalw
         if version:

@@ -43,7 +43,6 @@ except ImportError:
     # Still want to offer simple parsing/output
     _sqlite = None
 
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -128,7 +127,7 @@ class MafWriter(SequentialAlignmentWriter):
 
 # Invalid function name according to pylint, but kept for compatibility
 # with Bio* conventions.
-def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
+def MafIterator(handle, seq_count=None):
     """Iterate over a MAF file handle as MultipleSeqAlignment objects.
 
     Iterates over lines in a MAF file-like object (handle), yielding
@@ -193,7 +192,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
 
                 records.append(
                     SeqRecord(
-                        Seq(sequence, alphabet),
+                        Seq(sequence),
                         id=line_split[1],
                         name=line_split[1],
                         description="",
@@ -224,7 +223,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                 if seq_count is not None:
                     assert len(records) == seq_count
 
-                alignment = MultipleSeqAlignment(records, alphabet)
+                alignment = MultipleSeqAlignment(records)
                 # TODO - Introduce an annotated alignment class?
                 # See also Bio/AlignIO/FastaIO.py for same requirement.
                 # For now, store the annotation a new private property:
