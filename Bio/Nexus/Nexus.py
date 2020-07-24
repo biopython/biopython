@@ -422,9 +422,7 @@ def combine(matrices):
         for t in combined_only:
             combined.matrix[t] += Seq(combined.missing * m.nchar)
         for t in m_only:
-            combined.matrix[t] = Seq(
-                combined.missing * combined.nchar
-            ) + Seq(
+            combined.matrix[t] = Seq(combined.missing * combined.nchar) + Seq(
                 str(m.matrix[t])
                 .replace(m.gap, combined.gap)
                 .replace(m.missing, combined.missing),
