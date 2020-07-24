@@ -19,7 +19,6 @@ Journal article:
 import re
 import warnings
 
-from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -1209,11 +1208,7 @@ class Sequence(PhyloElement):
 
     """
 
-    alphabets = {
-        "dna": Alphabet.generic_dna,
-        "rna": Alphabet.generic_rna,
-        "protein": Alphabet.generic_protein,
-    }
+    types = {"dna", "rna", "protein"}
     re_symbol = re.compile(r"\S{1,10}")
 
     def __init__(
@@ -1235,7 +1230,7 @@ class Sequence(PhyloElement):
         other=None,
     ):
         """Initialize value for a Sequence object."""
-        _check_str(type, self.alphabets.__contains__)
+        _check_str(type, self.types.__contains__)
         _check_str(symbol, self.re_symbol.match)
         self.type = type
         self.id_ref = id_ref
@@ -1261,11 +1256,12 @@ class Sequence(PhyloElement):
             "name": record.description,
             "mol_seq": MolSeq(str(record.seq), is_aligned),
         }
-        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type == "DNA":
             params["type"] = "dna"
-        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
+        elif molecule_type == "RNA":
             params["type"] = "rna"
-        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
+        elif molecule_type == "protein":
             params["type"] = "protein"
 
         # Unpack record.annotations
@@ -1339,7 +1335,7 @@ class Sequence(PhyloElement):
             return {key: val for key, val in dct.items() if val is not None}
 
         seqrec = SeqRecord(
-            Seq(self.mol_seq.value, self.get_alphabet()),
+            Seq(self.mol_seq.value),
             **clean_dict(
                 {
                     "id": str(self.accession),
@@ -1354,6 +1350,14 @@ class Sequence(PhyloElement):
                 dom.to_seqfeature() for dom in self.domain_architecture.domains
             ]
         # Sequence attributes with no SeqRecord equivalent
+        if self.type == "dna":
+            molecule_type = "DNA"
+        elif self.type == "rna":
+            molecule_type = "RNA"
+        elif self.type == "protein":
+            molecule_type = "protein"
+        else:
+            molecule_type = None
         seqrec.annotations = clean_dict(
             {
                 "id_ref": self.id_ref,
@@ -1367,6 +1371,7 @@ class Sequence(PhyloElement):
                         "type": self.uri.type,
                     }
                 ),
+                "molecule_type": molecule_type,
                 "annotations": self.annotations
                 and [
                     clean_dict(
@@ -1397,10 +1402,6 @@ class Sequence(PhyloElement):
             }
         )
         return seqrec
-
-    def get_alphabet(self):
-        """Get the alphabet for the sequence."""
-        return self.alphabets.get(self.type, Alphabet.generic_alphabet)
 
 
 class SequenceRelation(PhyloElement):
