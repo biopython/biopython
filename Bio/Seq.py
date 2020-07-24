@@ -2400,8 +2400,8 @@ def _translate_str(
     amino_acids = []
     forward_table = table.forward_table
     stop_codons = table.stop_codons
-    if table.nucleotide_alphabet.letters is not None:
-        valid_letters = set(table.nucleotide_alphabet.letters.upper())
+    if table.nucleotide_alphabet is not None:
+        valid_letters = set(table.nucleotide_alphabet.upper())
     else:
         # Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(
