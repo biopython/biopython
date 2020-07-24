@@ -11,6 +11,7 @@ See also the doctests in bgzf.py which are called via run_tests.py
 import unittest
 import gzip
 import os
+import tempfile
 from random import shuffle
 
 from Bio import bgzf
@@ -18,9 +19,8 @@ from Bio import bgzf
 
 class BgzfTests(unittest.TestCase):
     def setUp(self):
-        self.temp_file = "temp.bgzf"
-        if os.path.isfile(self.temp_file):
-            os.remove(self.temp_file)
+        fd, self.temp_file = tempfile.mkstemp()
+        os.close(fd)
 
     def tearDown(self):
         if os.path.isfile(self.temp_file):
