@@ -1262,7 +1262,7 @@ class Sequence(PhyloElement):
                 params["type"] = "dna"
             elif "RNA" in molecule_type:
                 params["type"] = "rna"
-            elif molecule_type == "protein":
+            elif "protein" in molecule_type:
                 params["type"] = "protein"
 
         # Unpack record.annotations
