@@ -1257,12 +1257,13 @@ class Sequence(PhyloElement):
             "mol_seq": MolSeq(str(record.seq), is_aligned),
         }
         molecule_type = record.annotations.get("molecule_type")
-        if molecule_type == "DNA":
-            params["type"] = "dna"
-        elif molecule_type == "RNA":
-            params["type"] = "rna"
-        elif molecule_type == "protein":
-            params["type"] = "protein"
+        if molecule_type is not None:
+            if "DNA" in molecule_type:
+                params["type"] = "dna"
+            elif "RNA" in molecule_type:
+                params["type"] = "rna"
+            elif molecule_type == "protein":
+                params["type"] = "protein"
 
         # Unpack record.annotations
         for key in ("id_ref", "id_source", "location"):
