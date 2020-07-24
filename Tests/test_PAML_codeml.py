@@ -497,9 +497,11 @@ class ModTest(unittest.TestCase):
                     + " for %s-%s" % (seq1, seq2),
                 )
                 for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
-                    self.assertIn(param, params, version_msg +
-                                  ": '%s' not in parsed parameters"
-                                  % (param))
+                    self.assertIn(
+                        param,
+                        params,
+                        version_msg + ": '%s' not in parsed parameters" % (param),
+                    )
                     self.assertIsInstance(params[param], float)
                     if param != "lnL":
                         self.assertGreaterEqual(params[param], 0)
@@ -554,7 +556,7 @@ class ModTest(unittest.TestCase):
         self.assertIn(0, nssites)
         m0 = nssites[0]
         self.assertIn("tree", m0)
-        self.assertTrue(m0["tree"] is not None)
+        self.assertIsNotNone(m0["tree"])
         self.assertNotEqual(len(m0["tree"]), 0)
 
     def testParseM2arel(self):
