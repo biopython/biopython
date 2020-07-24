@@ -19,7 +19,6 @@ import random
 import sys
 
 from Bio import File
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
 
@@ -418,19 +417,17 @@ def combine(matrices):
                 str(m.matrix[t])
                 .replace(m.gap, combined.gap)
                 .replace(m.missing, combined.missing),
-                combined.alphabet,
             )
         # replace date of missing taxa with symbol for missing data
         for t in combined_only:
-            combined.matrix[t] += Seq(combined.missing * m.nchar, combined.alphabet)
+            combined.matrix[t] += Seq(combined.missing * m.nchar)
         for t in m_only:
             combined.matrix[t] = Seq(
-                combined.missing * combined.nchar, combined.alphabet
+                combined.missing * combined.nchar
             ) + Seq(
                 str(m.matrix[t])
                 .replace(m.gap, combined.gap)
                 .replace(m.missing, combined.missing),
-                combined.alphabet,
             )
         combined.taxlabels.extend(m_only)  # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
@@ -781,7 +778,7 @@ class Nexus:
         # print options
         # we first need to test respectcase, then symbols (which depends on respectcase)
         # then datatype (which, if standard, depends on symbols and respectcase in order to generate
-        # dicts for ambiguous values and alphabet
+        # dicts for ambiguous values
         if "respectcase" in options:
             self.respectcase = True
         # adjust symbols to for respectcase
@@ -799,16 +796,12 @@ class Nexus:
             self.datatype = options["datatype"].lower()
 
             if self.datatype == "dna" or self.datatype == "nucleotide":
-                self.alphabet = IUPAC.IUPACAmbiguousDNA()  # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_dna_values.copy()
                 self.unambiguous_letters = IUPACData.unambiguous_dna_letters
             elif self.datatype == "rna":
-                self.alphabet = IUPAC.IUPACAmbiguousDNA()  # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_rna_values.copy()
                 self.unambiguous_letters = IUPACData.unambiguous_rna_letters
             elif self.datatype == "protein":
-                # TODO - Should this not be ExtendedIUPACProtein?
-                self.alphabet = IUPAC.IUPACProtein()  # fresh instance
                 self.ambiguous_values = {
                     "B": "DN",
                     "Z": "EQ",
@@ -817,7 +810,6 @@ class Nexus:
                 # that's how PAUP handles it
                 self.unambiguous_letters = IUPACData.protein_letters + "*"  # stop-codon
             elif self.datatype == "standard":
-                self.alphabet = None
                 self.ambiguous_values = {}
                 if not self.symbols:
                     # PARSER BUG ##
@@ -850,9 +842,16 @@ class Nexus:
             for k, v in rev.items():
                 key = sorted(c for c in k)
                 self.rev_ambiguous_values["".join(key)] = v
-        # overwrite symbols for datype rna,dna,nucleotide
-        if self.datatype in ["dna", "rna", "nucleotide"]:
-            self.symbols = self.alphabet.letters
+        # overwrite symbols for datatype rna,dna,nucleotide
+        if self.datatype in ["dna", "nucleotide"]:
+            self.symbols = IUPACData.ambiguous_dna_letters
+            if self.missing not in self.ambiguous_values:
+                self.ambiguous_values[self.missing] = (
+                    self.unambiguous_letters + self.gap
+                )
+            self.ambiguous_values[self.gap] = self.gap
+        elif self.datatype == "rna":
+            self.symbols = IUPACData.ambiguous_rna_letters
             if self.missing not in self.ambiguous_values:
                 self.ambiguous_values[self.missing] = (
                     self.unambiguous_letters + self.gap
@@ -1056,7 +1055,6 @@ class Nexus:
             if self.datatype != "standard":
                 iupac_seq = Seq(
                     _replace_parenthesized_ambigs(chars, self.rev_ambiguous_values),
-                    self.alphabet,
                 )
                 # first taxon has the reference sequence if matchhar is used
                 if taxcount == 1:
@@ -1071,7 +1069,6 @@ class Nexus:
                                 str(iupac_seq)[:p]
                                 + refseq[p]
                                 + str(iupac_seq)[p + 1 :],
-                                self.alphabet,
                             )
 
                 # Check for invalid characters
@@ -1958,9 +1955,9 @@ class Nexus:
             m = [str(matrix[k]) for k in undelete]
             sitesm = [s for i, s in enumerate(zip(*m)) if i not in exclude]
             if sitesm == []:
-                return {t: Seq("", self.alphabet) for t in undelete}
+                return {t: Seq("") for t in undelete}
             else:
-                m = [Seq(s, self.alphabet) for s in ("".join(x) for x in zip(*sitesm))]
+                m = [Seq(s) for s in ("".join(x) for x in zip(*sitesm))]
                 return dict(zip(undelete, m))
         else:
             return {
@@ -1982,7 +1979,6 @@ class Nexus:
         undelete = [t for t in self.taxlabels if t in cm]
         if seqobjects:
             sitesm = list(zip(*[str(cm[t]) for t in undelete]))
-            alphabet = matrix[list(matrix.keys())[0]].alphabet
         else:
             sitesm = list(zip(*[cm[t] for t in undelete]))
         bootstrapsitesm = [
@@ -1990,7 +1986,7 @@ class Nexus:
         ]
         bootstrapseqs = ["".join(x) for x in zip(*bootstrapsitesm)]
         if seqobjects:
-            bootstrapseqs = [Seq(s, alphabet) for s in bootstrapseqs]
+            bootstrapseqs = [Seq(s) for s in bootstrapseqs]
         return dict(zip(undelete, bootstrapseqs))
 
     def add_sequence(self, name, sequence):
@@ -2016,7 +2012,7 @@ class Nexus:
                 "and matrix keys. Report this as a bug."
             )
 
-        self.matrix[unique_name] = Seq(sequence, self.alphabet)
+        self.matrix[unique_name] = Seq(sequence)
         self.ntax += 1
         self.taxlabels.append(unique_name)
         self.unaltered_taxlabels.append(name)
@@ -2057,7 +2053,7 @@ class Nexus:
         sitesm[pos:pos] = [["-"] * len(self.taxlabels)] * n
         mapped = ["".join(x) for x in zip(*sitesm)]
         listed = [
-            (taxon, Seq(mapped[i], self.alphabet))
+            (taxon, Seq(mapped[i]))
             for i, taxon in enumerate(self.taxlabels)
         ]
         self.matrix = dict(listed)
@@ -2137,7 +2133,7 @@ class Nexus:
                     "Illegal sequence manipulation in "
                     "Nexus.terminal_gap_to_missing in taxon %s" % taxon
                 )
-            self.matrix[taxon] = Seq(sequence, self.alphabet)
+            self.matrix[taxon] = Seq(sequence)
 
 
 try:
