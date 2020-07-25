@@ -19,16 +19,7 @@ import getopt
 
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
-
-
-class ProteinX(Alphabet.ProteinAlphabet):
-    letters = IUPACData.extended_protein_letters + "X"
-
-
-proteinX = ProteinX()
 
 
 class MissingTable:
@@ -44,10 +35,10 @@ class MissingTable:
 
 # Make the codon table given an existing table
 def makeTableX(table):
-    assert table.protein_alphabet == IUPAC.extended_protein
+    assert table.protein_alphabet == IUPACData.extended_protein_letters
     return CodonTable.CodonTable(
         table.nucleotide_alphabet,
-        proteinX,
+        IUPACData.extended_protein_letters + "X",
         MissingTable(table.forward_table),
         table.back_table,
         table.start_codons,
@@ -77,7 +68,7 @@ class NextOrf:
                 s = s[start:stop]
             else:
                 s = s[start:]
-            self.seq = Seq(s, IUPAC.ambiguous_dna)
+            self.seq = Seq(s)
             self.length = len(self.seq)
             self.rseq = None
             CDS = []
@@ -248,7 +239,7 @@ def help():
     for key, table in CodonTable.ambiguous_dna_by_id.items():
         print(f"\t{key} {table._codon_table.names[0]}")
     print("\ne.g.")
-    print("./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas")
+    print("./nextorf.py --minlength 5 --strand plus --output nt --gc 1 test.fas")
     sys.exit(0)
 
 
