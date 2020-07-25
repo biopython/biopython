@@ -727,8 +727,8 @@ usertype matrix_test stepmatrix=5
 [T]    2.43     2.12     2.31      .       2.14     
 [-]    2.43     2.14     2.31     2.14      .       
 ;
-""",
-        )  # noqa : W291
+""",  # noqa : W291
+        )
 
     def test_write_alignment(self):
         # Default causes no interleave (columns <= 1000)
