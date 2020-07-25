@@ -1,0 +1,92 @@
+<application>
+  <component name="WslDistributionsService" version="1">
+    <descriptors>
+      <set>
+        <descriptor>
+          <id>DEBIAN</id>
+          <microsoft-id>Debian</microsoft-id>
+          <executable-path>debian.exe</executable-path>
+          <presentable-name>Debian GNU/Linux</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>KALI</id>
+          <microsoft-id>kali-linux</microsoft-id>
+          <executable-path>kali.exe</executable-path>
+          <presentable-name>Kali Linux</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>OPENSUSE42</id>
+          <microsoft-id>openSUSE-42</microsoft-id>
+          <executable-path>opensuse-42.exe</executable-path>
+          <presentable-name>openSUSE Leap 42</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>SLES12</id>
+          <microsoft-id>SLES-12</microsoft-id>
+          <executable-path>sles-12.exe</executable-path>
+          <presentable-name>SUSE Linux Enterprise Server 12</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>SLES15</id>
+          <microsoft-id>SLES-15</microsoft-id>
+          <executable-path>sles-15.exe</executable-path>
+          <presentable-name>SUSE Linux Enterprise Server 15</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>OPENSUSE15</id>
+          <microsoft-id>openSUSE-Leap-15</microsoft-id>
+          <executable-path>openSUSE-Leap-15.exe</executable-path>
+          <presentable-name>openSUSE Leap 15</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>OPENSUSE15-1</id>
+          <microsoft-id>openSUSE-Leap-15-1</microsoft-id>
+          <executable-path>openSUSE-Leap-15-1.exe</executable-path>
+          <presentable-name>openSUSE Leap 15.1</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>UBUNTU</id>
+          <microsoft-id>Ubuntu</microsoft-id>
+          <executable-path>ubuntu.exe</executable-path>
+          <presentable-name>Ubuntu</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>UBUNTU1604</id>
+          <microsoft-id>Ubuntu-16.04</microsoft-id>
+          <executable-path>ubuntu1604.exe</executable-path>
+          <presentable-name>Ubuntu 16.04</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>UBUNTU1804</id>
+          <microsoft-id>Ubuntu-18.04</microsoft-id>
+          <executable-path>ubuntu1804.exe</executable-path>
+          <presentable-name>Ubuntu 18.04</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>WLINUX</id>
+          <microsoft-id>WLinux</microsoft-id>
+          <executable-path>wlinux.exe</executable-path>
+          <presentable-name>WLinux</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>PENGWIN</id>
+          <microsoft-id>Pengwin</microsoft-id>
+          <executable-path>pengwin.exe</executable-path>
+          <presentable-name>Pengwin</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>PENGWIN_ENTERPRISE</id>
+          <microsoft-id>WLE</microsoft-id>
+          <executable-path>wle.exe</executable-path>
+          <presentable-name>Pengwin Enterprise</presentable-name>
+        </descriptor>
+        <descriptor>
+          <id>ARCH</id>
+          <microsoft-id>Arch</microsoft-id>
+          <executable-path>Arch.exe</executable-path>
+          <presentable-name>Arch Linux</presentable-name>
+        </descriptor>
+      </set>
+    </descriptors>
+  </component>
+</application>
