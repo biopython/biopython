@@ -13,8 +13,6 @@ multiple sequence alignment format.
 You are expected to use this module via the Bio.SeqIO functions.
 """
 
-
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
