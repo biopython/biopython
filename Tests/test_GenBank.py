@@ -7556,7 +7556,7 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
             record = SeqIO.read(path, "genbank")
-            self.assertEqual(None, record.features[-1].location)
+            self.assertIsNone(record.features[-1].location)
 
     def test_dot_lineage(self):
         """Missing taxonomy lineage."""
@@ -7590,12 +7590,11 @@ class GenBankTests(unittest.TestCase):
         record = SeqIO.read(path, "gb")
         self.assertEqual(record.dbxrefs, ["Project:57779", "BioProject:PRJNA57779"])
         gb = record.format("gb")
-        self.assertTrue(
+        self.assertIn(
             """
 DBLINK      Project: 57779
             BioProject: PRJNA57779
-KEYWORDS    """
-            in gb,
+KEYWORDS    """,
             gb,
         )
         embl = record.format("embl")
@@ -7606,12 +7605,11 @@ KEYWORDS    """
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
-        self.assertTrue(
+        self.assertIn(
             """
 DBLINK      BioProject: PRJNA16232
             BioSample: SAMN03004382
-KEYWORDS    """
-            in gb,
+KEYWORDS    """,
             gb,
         )
         # Also check EMBL output
@@ -7624,15 +7622,14 @@ KEYWORDS    """
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertIn("Project:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
-        self.assertTrue(
+        self.assertIn(
             """
 DBLINK      Project: PRJNA16232
             MD5: 387e72e4f7ae804780d06f875ab3bc41
             ENA: ABJB010000000
             ENA: ABJB000000000
             BioSample: SAMN03004382
-KEYWORDS    """
-            in gb,
+KEYWORDS    """,
             gb,
         )
         embl = record.format("embl")
@@ -7720,9 +7717,9 @@ KEYWORDS    """
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             record = SeqIO.read(path, "genbank")
-            self.assertFalse("structured_comment" in record.annotations)
-            self.assertTrue(
-                "Structured comment not parsed for AYW00820." in str(caught[0].message)
+            self.assertNotIn("structured_comment", record.annotations)
+            self.assertIn(
+                "Structured comment not parsed for AYW00820.", str(caught[0].message)
             )
 
     def test_locus_line_topogoly(self):
@@ -7758,8 +7755,7 @@ KEYWORDS    """
                 str(caught[0].message),
                 'The NCBI states double-quote characters like " should be escaped'
                 ' as "" (two double - quotes), but here it was not: '
-                "%r"
-                % 'One missing ""quotation mark" here',
+                "%r" % 'One missing ""quotation mark" here',
             )
         # Check records parsed as expected
         f1 = record.features[0]
