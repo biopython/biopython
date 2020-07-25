@@ -102,12 +102,20 @@ implemented in the respective modules.
 
 Bio.Alphabet
 ------------
-Declared obsolete in Biopython 1.74, please avoid using this module
-explicitly in your code.
+Declared obsolete in Biopython release 1.74, and removed from Biopython in
+release 1.78. This module defined an ``Alphabet`` class and various subclasses,
+which were used as attributes to ``Seq`` and objects to describe what the
+individual characters in the sequence string should be interpreted. For
+example, a string "AGTACACTGGT" could be a DNA sequence or a protein sequence
+that happens to be rich in Alanines, Glycines, Cysteines and Threonines.
+However, as the exact definition of the alphabet and its purpose remained
+unclear, this class was removed from Biopython.
+Starting with Biopython 1.78, the molecule type, if specified in the input
+file, is stored by the ``SeqIO`` parser as ``molecule_type`` in the annotations
+of each ``SeqRecord``. We urge users to use this attribute with caution, as the
+molecule type means different things in different sequence file formats, and in
+a sense the interpretation of ``molecule_type`` can still be ambiguous.
 
-The design of Bio.Aphabet included a number of historic design choices
-which, with the benefit of hindsight, were regretable. While the details
-remain to be agreed, we intend to remove or replace Bio.Alphabet in 2020.
 
 Bio.ExPASy.sprot_search_ful and ExPASy.sprot_search_de
 ------------------------------------------------------
