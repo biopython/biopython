@@ -868,11 +868,11 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(
             "-" * 15,
-            spacer1.join([UnknownSeq(5, character="-"), UnknownSeq(5, character="-"), ]),
+            spacer1.join([UnknownSeq(5, character="-"), UnknownSeq(5, character="-")]),
         )
         self.assertEqual(
             "N" * 5 + "-" * 10,
-            spacer1.join([Seq("NNNNN"), UnknownSeq(5, character="-"), ]),
+            spacer1.join([Seq("NNNNN"), UnknownSeq(5, character="-")]),
         )
 
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
