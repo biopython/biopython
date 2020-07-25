@@ -1137,7 +1137,7 @@ class TestSelf(unittest.TestCase):
         ;
         end;
         """
-        )  # noqa : W291
+        )
         for a in NexusIterator(handle):
             print(a)
             for r in a:
@@ -1167,7 +1167,7 @@ class TestSelf(unittest.TestCase):
         ;
         end;
         """
-        )  # noqa : W291
+        )
         for a in NexusIterator(handle):
             print(a)
             for r in a:
