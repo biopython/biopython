@@ -41,7 +41,6 @@ An error will raise up if the input sequence is not a multiple of 3.
 >>> codon_seq = CodonSeq("AAATTTCCCGG")
 Traceback (most recent call last):
 ...
-    "Sequence length is not a multiple of "
 ValueError: Sequence length is not a multiple of three (i.e. a whole number of codons)
 \end{minted}
 
@@ -134,7 +133,6 @@ CodonSeq('AAAAAA')
 >>> codon_seq.from_seq(seq)
 Traceback (most recent call last):
 ...
-    "Sequence length is not a multiple of "
 ValueError: Sequence length is not a multiple of three (i.e. a whole number of codons)
 >>> codon_seq.from_seq(seq, rf_table=(0, 2))
 CodonSeq('AAAAA')
