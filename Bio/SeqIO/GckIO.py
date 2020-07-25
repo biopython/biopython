@@ -13,7 +13,6 @@ from Textco BioSoftware, Inc.
 
 from struct import unpack
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -87,7 +86,7 @@ def _parse(handle):
     if seq_length > length - 4:
         raise ValueError("Conflicting sequence length values")
     sequence = packet[4:].decode("ASCII")
-    record = SeqRecord(Seq(sequence, alphabet=Alphabet.generic_dna))
+    record = SeqRecord(Seq(sequence))
 
     # Skip unknown packet
     _read_packet(handle)
@@ -97,7 +96,7 @@ def _parse(handle):
     (seq_length, num_features) = unpack(">IH", packet[:6])
     # Check that length in the features packet matches the actual
     # length of the sequence
-    if seq_length != len(record):
+    if seq_length != len(sequence):
         raise ValueError("Conflicting sequence length values")
     # Each feature is stored in a 92-bytes structure.
     if length - 6 != num_features * 92:
