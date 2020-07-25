@@ -176,7 +176,7 @@ class ImgtIterator(SequenceIterator):
 class GenBankCdsFeatureIterator(SequenceIterator):
     """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
 
-    def __init__(self, source, alphabet=None):
+    def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
         Argument source is a file-like object opened in text mode or a path to a file.
@@ -186,8 +186,6 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="GenBank")
 
     def parse(self, handle):
@@ -198,7 +196,7 @@ class GenBankCdsFeatureIterator(SequenceIterator):
 class EmblCdsFeatureIterator(SequenceIterator):
     """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
 
-    def __init__(self, source, alphabet=None):
+    def __init__(self, source):
         """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
         Argument source is a file-like object opened in text mode or a path to a file.
@@ -208,8 +206,6 @@ class EmblCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="EMBL")
 
     def parse(self, handle):

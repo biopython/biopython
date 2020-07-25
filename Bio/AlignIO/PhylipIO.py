@@ -128,8 +128,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                 for chunk in range(0, 5):
                     i = block * 50 + chunk * 10
                     seq_segment = sequence[i : i + 10]
-                    # TODO - Force any gaps to be '-' character?  Look at the
-                    # alphabet...
+                    # TODO - Force any gaps to be '-' character?
                     # TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
                     if i + 10 > length_of_seqs:
@@ -260,10 +259,10 @@ class PhylipIterator(AlignmentIterator):
                 break  # end of file
 
         records = (
-            SeqRecord(Seq("".join(s), self.alphabet), id=i, name=i, description=i)
+            SeqRecord(Seq("".join(s)), id=i, name=i, description=i)
             for (i, s) in zip(ids, seqs)
         )
-        return MultipleSeqAlignment(records, self.alphabet)
+        return MultipleSeqAlignment(records)
 
 
 # Relaxed Phylip
@@ -433,10 +432,9 @@ class SequentialPhylipIterator(PhylipIterator):
                 break
 
         records = (
-            SeqRecord(Seq(s, self.alphabet), id=i, name=i, description=i)
-            for (i, s) in zip(ids, seqs)
+            SeqRecord(Seq(s), id=i, name=i, description=i) for (i, s) in zip(ids, seqs)
         )
-        return MultipleSeqAlignment(records, self.alphabet)
+        return MultipleSeqAlignment(records)
 
 
 def sanitize_name(name, width=None):

@@ -9,10 +9,6 @@ Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seem
 The most important difference between \verb|Seq| objects and standard Python strings is they have different methods.
 Although the \verb|Seq| object supports many of the same methods as a plain string, its \verb|translate()| method differs by doing biological translation, and there are also additional biologically relevant methods like \verb|reverse_complement()|.
 
-\section{Sequences and Alphabets}
-
-Historically the \verb|Seq| object had an important attribute, \verb|alphabet|. This was used for an object describing what the individual characters making up the sequence string meant, and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines and Threonines? Since Biopython 1.78 this role falls to the ``SeqRecord`` object annotation, discussed in the next chapter.
-
 \section{Sequences act like strings}
 
 In most ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
@@ -100,9 +96,7 @@ A more complicated example, let's get a slice of the sequence:
 Seq('GATGGGCC')
 \end{minted}
 
-Two things are interesting to note. First, this follows the normal conventions for Python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in Python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what Python does.
-
-The second thing to notice is that the slice is performed on the sequence data string, but the new object produced is another \verb|Seq| object which retains the alphabet information from the original \verb|Seq| object.
+Note that `Seq` objects follow the usual indexing conventions for Python strings, with the first element of the sequence numbered 0. When you do a slice the first item is included (i.e.~4 in this case) and the last is excluded (12 in this case).
 
 Also like a Python string, you can do slices with a start, stop and \emph{stride} (the step size, which defaults to one).  For example, we can get the first, second and third codon positions of this DNA sequence:
 
@@ -338,7 +332,7 @@ Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 \end{minted}
-\noindent As you can see, all this does is switch T $\rightarrow$ U, and adjust the alphabet.
+\noindent As you can see, all this does is to replace T by U.
 
 If you do want to do a true biological transcription starting with the template strand, then this becomes a two-step process:
 

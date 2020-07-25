@@ -21,11 +21,10 @@ from .Interfaces import SequenceIterator
 class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
 
-    def __init__(self, source, alphabet=None):
+    def __init__(self, source):
         """Iterate over IntelliGenetics records (as SeqRecord objects).
 
         source - file-like object opened in text mode, or a path to a file
-        alphabet - optional alphabet, no longer used.
 
         The optional free format file header lines (which start with two
         semi-colons) are ignored.
@@ -60,8 +59,6 @@ class IgIterator(SequenceIterator):
         SYK_SYK length 330
 
         """
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, mode="t", fmt="IntelliGenetics")
 
     def parse(self, handle):

@@ -124,8 +124,7 @@ class StringMethodTests(unittest.TestCase):
                     j = ValueError
                 if i != j:
                     raise ValueError(
-                        "%r.%s(%r) = %r, not %r"
-                        % (example1, method_name, str2, i, j)
+                        "%r.%s(%r) = %r, not %r" % (example1, method_name, str2, i, j)
                     )
 
                 try:
@@ -181,15 +180,7 @@ class StringMethodTests(unittest.TestCase):
                             if i != j:
                                 raise ValueError(
                                     "%r.%s(%r, %i, %i) = %r, not %r"
-                                    % (
-                                        example1,
-                                        method_name,
-                                        str2,
-                                        start,
-                                        end,
-                                        i,
-                                        j,
-                                    )
+                                    % (example1, method_name, str2, start, end, i, j,)
                                 )
 
     def test_str_count(self):
@@ -739,7 +730,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
         self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
         # These test the Bio.Seq.translate() function - move these?:
-        self.assertEqual("*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table))
+        self.assertEqual(
+            "*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table)
+        )
         self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
         self.assertEqual("", translate(str(nuc), to_stop=True))
         self.assertEqual("***RR", translate(str(nuc), table="Bacterial"))
@@ -844,7 +837,9 @@ class StringMethodTests(unittest.TestCase):
     def test_join_Seq(self):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         spacer = Seq("NNNNN")
-        self.assertEqual("N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),)
+        self.assertEqual(
+            "N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
+        )
 
         spacer1 = Seq("")
         spacers = [spacer1, Seq("NNNNN"), Seq("GGG")]
@@ -873,21 +868,11 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(
             "-" * 15,
-            spacer1.join(
-                [
-                    UnknownSeq(5, character="-"),
-                    UnknownSeq(5, character="-"),
-                ]
-            ),
+            spacer1.join([UnknownSeq(5, character="-"), UnknownSeq(5, character="-"), ]),
         )
         self.assertEqual(
             "N" * 5 + "-" * 10,
-            spacer1.join(
-                [
-                    Seq("NNNNN"),
-                    UnknownSeq(5, character="-"),
-                ]
-            ),
+            spacer1.join([Seq("NNNNN"), UnknownSeq(5, character="-"), ]),
         )
 
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
@@ -911,16 +896,10 @@ class StringMethodTests(unittest.TestCase):
         """Check MutableSeq objects can be joined."""
         spacer = MutableSeq("NNNNN")
         self.assertEqual(
-            "N" * 15,
-            spacer.join(
-                [MutableSeq("NNNNN"), MutableSeq("NNNNN")]
-            ),
+            "N" * 15, spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
         )
         self.assertRaises(
-            TypeError,
-            spacer.join(
-                [Seq("NNNNN"), MutableSeq("NNNNN")]
-            ),
+            TypeError, spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
         )
 
     def test_join_Seq_with_file(self):
