@@ -104,7 +104,7 @@ Bio.Alphabet
 ------------
 Declared obsolete in Biopython release 1.74, and removed from Biopython in
 release 1.78. This module defined an ``Alphabet`` class and various subclasses,
-which were used as attributes to ``Seq`` and objects to describe what the
+which were used as attributes to ``Seq`` and objects to describe how the
 individual characters in the sequence string should be interpreted. For
 example, a string "AGTACACTGGT" could be a DNA sequence or a protein sequence
 that happens to be rich in Alanines, Glycines, Cysteines and Threonines.
