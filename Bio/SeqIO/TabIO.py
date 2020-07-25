@@ -32,8 +32,6 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 example above.
 """
 
-
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
@@ -42,7 +40,7 @@ from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_strin
 class TabIterator(SequenceIterator):
     """Parser for tab-delimited files."""
 
-    def __init__(self, source, alphabet=single_letter_alphabet):
+    def __init__(self, source):
         """Iterate over tab separated lines as SeqRecord objects.
 
         Each line of the file should contain one tab only, dividing the line
@@ -50,7 +48,6 @@ class TabIterator(SequenceIterator):
 
         Arguments:
          - source - file-like object opened in text mode, or a path to a file
-         - alphabet - optional alphabet
 
         The first field is taken as the record's .id and .name (regardless of
         any spaces within the text) and the second field is the sequence.
@@ -74,9 +71,7 @@ class TabIterator(SequenceIterator):
         gi|45478721|ref|NP_995576.1| length 90
 
         """
-        super().__init__(
-            source, alphabet=alphabet, mode="t", fmt="Tab-separated plain-text"
-        )
+        super().__init__(source, mode="t", fmt="Tab-separated plain-text")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -100,7 +95,7 @@ class TabIterator(SequenceIterator):
                 ) from None
             title = title.strip()
             seq = seq.strip()  # removes the trailing new line
-            yield SeqRecord(Seq(seq, alphabet), id=title, name=title, description="")
+            yield SeqRecord(Seq(seq), id=title, name=title, description="")
 
 
 class TabWriter(SequenceWriter):
