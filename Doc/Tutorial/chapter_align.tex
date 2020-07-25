@@ -34,8 +34,6 @@ Both functions expect two mandatory arguments:
 
 \noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambiguous file formats which may contain more than one alignment.
 
-A further optional \verb|alphabet| argument allowing you to specify the expected alphabet. This can be useful as many alignment file formats do not explicitly label the sequences as RNA, DNA or protein -- which means \verb|Bio.AlignIO| will default to using a generic alphabet.
-
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
 
@@ -380,29 +378,28 @@ Note we create some \verb|SeqRecord| objects to construct the alignment from.
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
 >>> from Bio.Align import MultipleSeqAlignment
 >>> align1 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTGCTAGCTAG", generic_dna), id="Alpha"),
-...         SeqRecord(Seq("ACT-CTAGCTAG", generic_dna), id="Beta"),
-...         SeqRecord(Seq("ACTGCTAGDTAG", generic_dna), id="Gamma"),
+...         SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha"),
+...         SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta"),
+...         SeqRecord(Seq("ACTGCTAGDTAG"), id="Gamma"),
 ...     ]
 ... )
 >>> align2 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("GTCAGC-AG", generic_dna), id="Delta"),
-...         SeqRecord(Seq("GACAGCTAG", generic_dna), id="Epsilon"),
-...         SeqRecord(Seq("GTCAGCTAG", generic_dna), id="Zeta"),
+...         SeqRecord(Seq("GTCAGC-AG"), id="Delta"),
+...         SeqRecord(Seq("GACAGCTAG"), id="Epsilon"),
+...         SeqRecord(Seq("GTCAGCTAG"), id="Zeta"),
 ...     ]
 ... )
 >>> align3 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTAGTACAGCTG", generic_dna), id="Eta"),
-...         SeqRecord(Seq("ACTAGTACAGCT-", generic_dna), id="Theta"),
-...         SeqRecord(Seq("-CTACTACAGGTG", generic_dna), id="Iota"),
+...         SeqRecord(Seq("ACTAGTACAGCTG"), id="Eta"),
+...         SeqRecord(Seq("ACTAGTACAGCT-"), id="Theta"),
+...         SeqRecord(Seq("-CTACTACAGGTG"), id="Iota"),
 ...     ]
 ... )
 >>> my_alignments = [align1, align2, align3]
