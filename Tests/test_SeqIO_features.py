@@ -73,9 +73,7 @@ def compare_record(old, new, expect_minor_diffs=False):
     if (old.description or new.description) and not set(
         old.description.split()
     ).intersection(new.description.split()):
-        raise ValueError(
-            "%r versus %r" % (old.description, new.description)
-        )
+        raise ValueError("%r versus %r" % (old.description, new.description))
     # This only checks common annotation
     # Would a white list be easier?
     for key in set(old.annotations).intersection(new.annotations):
@@ -149,8 +147,7 @@ def compare_feature(old, new):
         or old.location.nofuzzy_end != new.location.nofuzzy_end
     ):
         raise ValueError(
-            "%s versus %s:\n%r\nvs:\n%r"
-            % (old.location, new.location, old, new)
+            "%s versus %s:\n%r\nvs:\n%r" % (old.location, new.location, old, new)
         )
     if old.strand is not None and old.strand != new.strand:
         raise ValueError("Different strand:\n%r\nvs:\n%r" % (old, new))
@@ -369,8 +366,8 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         """Feature on RNA (simple, default strand)."""
         s = Seq("GAUCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
-        self.assertEqual(f.strand, None)
-        self.assertEqual(f.location.strand, None)
+        self.assertIsNone(f.strand)
+        self.assertIsNone(f.location.strand)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):
