@@ -272,7 +272,9 @@ class TestSeqIO(SeqIOTestBaseClass):
                 msg=msg,
             )
 
-    def check_simple_write_read(self, records, t_format, t_count, messages, molecule_types):
+    def check_simple_write_read(
+        self, records, t_format, t_count, messages, molecule_types
+    ):
         """Check can write/read given records.
 
         messages is dictionary of error messages keyed by output format.
@@ -336,8 +338,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 else:
                     if not debug:
                         raise ValueError(
-                            "Expected following error writing to %s:\n%s"
-                            % (fmt, msg)
+                            "Expected following error writing to %s:\n%s" % (fmt, msg)
                         )
 
                 # Carry on to the next format:
@@ -556,9 +557,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                     for acc in accs:
                         self.assertTrue(acc, "Bad accession in annotations: %r" % acc)
                         self.assertEqual(
-                            acc,
-                            acc.strip(),
-                            "Bad accession in annotations: %r" % acc,
+                            acc, acc.strip(), "Bad accession in annotations: %r" % acc,
                         )
                     self.assertEqual(
                         len(set(accs)),
@@ -566,13 +565,9 @@ class TestSeqIO(SeqIOTestBaseClass):
                         "Repeated accession in annotations: %r" % accs,
                     )
                 for ref in record.dbxrefs:
-                    self.assertTrue(
-                        ref, "Bad cross reference in dbxrefs: %r" % ref
-                    )
+                    self.assertTrue(ref, "Bad cross reference in dbxrefs: %r" % ref)
                     self.assertEqual(
-                        ref,
-                        ref.strip(),
-                        "Bad cross reference in dbxrefs: %r" % ref,
+                        ref, ref.strip(), "Bad cross reference in dbxrefs: %r" % ref,
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
@@ -631,7 +626,9 @@ class TestSeqIO(SeqIOTestBaseClass):
         records.reverse()
         if molecule_types is None:
             molecule_types = {}
-        self.check_simple_write_read(records, t_format, t_count, expected_messages, molecule_types)
+        self.check_simple_write_read(
+            records, t_format, t_count, expected_messages, molecule_types
+        )
 
     def test_sff1(self):
         sequences = [
