@@ -57,7 +57,11 @@ if False:
 class BackwardsCompatibilityTest(unittest.TestCase):
     def test_backwards_compatibility(self):
         """Check can re-use an old BioSQL SQLite3 database."""
-        original_records = list(SeqIO.parse("GenBank/cor6_6.gb", "gb"))
+        original_records = []
+        for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
+            if record.annotations["molecule_type"] == "mRNA":
+                record.annotations["molecule_type"] = "DNA"
+            original_records.append(record)
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(driver=DBDRIVER, db="BioSQL/cor6_6.db")
         db = server["OLD"]
@@ -65,10 +69,6 @@ class BackwardsCompatibilityTest(unittest.TestCase):
         # Now read them back...
         biosql_records = [db.lookup(name=rec.name) for rec in original_records]
         # And check they agree
-        # Note the old parser used to create BioSQL/cor6_6.db
-        # did not record the molecule_type, so remove it here:
-        for r in original_records:
-            del r.annotations["molecule_type"]
         self.assertTrue(compare_records(original_records, biosql_records))
         server.close()
 

@@ -18,7 +18,6 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from Bio import Alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
@@ -31,7 +30,7 @@ class DBSeq(Seq):
         """Create a new DBSeq object referring to a BioSQL entry.
 
         You wouldn't normally create a DBSeq object yourself, this is done
-        for you when retreiving a DBSeqRecord object from the database.
+        for you when retrieving a DBSeqRecord object from the database.
         """
         self.primary_id = primary_id
         self.adaptor = adaptor
@@ -89,7 +88,7 @@ class DBSeq(Seq):
 
         if i >= j:
             # Trivial case, empty string.
-            return Seq("", self.alphabet)
+            return Seq("")
         elif index.step is None or index.step == 1:
             # Easy case - can return a DBSeq with the start and end adjusted
             return self.__class__(
@@ -100,7 +99,7 @@ class DBSeq(Seq):
             full = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + i, self.start + j
             )
-            return Seq(full[:: index.step], self.alphabet)
+            return Seq(full[:: index.step])
 
     def tostring(self):
         """Return the full sequence as a python string (DEPRECATED).
@@ -138,7 +137,6 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before the addition.
         The returned object is a Seq object, not a DBSeq object.
         """
-        # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
 
     def __radd__(self, other):
@@ -147,7 +145,6 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before the addition.
         The returned object is a Seq object, not a DBSeq object.
         """
-        # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
 
     def __mul__(self, other):
@@ -156,7 +153,6 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before multiplication.
         The returned object is a Seq object, not a DBSeq object.
         """
-        # Let the Seq object deal with the alphabet issues etc
         return self.toseq() * other
 
     def __rmul__(self, other):
@@ -165,7 +161,6 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before multiplication.
         The returned object is a Seq object, not a DBSeq object.
         """
-        # Let the Seq object deal with the alphabet issues etc
         return other * self.toseq()
 
     def __imul__(self, other):
@@ -174,7 +169,6 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before multiplication.
         The returned object is a Seq object, not a DBSeq object.
         """
-        # Let the Seq object deal with the alphabet issues etc
         return self.toseq() * other
 
 
@@ -229,22 +223,27 @@ def _retrieve_seq(adaptor, primary_id):
     # We have no way of knowing if these sequences will use IUPAC
     # alphabets, and we certainly can't assume they are unambiguous!
     if moltype == "dna":
-        alphabet = Alphabet.generic_dna
+        alphabet = "DNA"
     elif moltype == "rna":
-        alphabet = Alphabet.generic_rna
+        alphabet = "RNA"
     elif moltype == "protein":
-        alphabet = Alphabet.generic_protein
+        alphabet = "protein"
     elif moltype == "unknown":
-        # This is used in BioSQL/Loader.py and would happen
-        # for any generic or nucleotide alphabets.
-        alphabet = Alphabet.single_letter_alphabet
+        # This is used in BioSQL/Loader.py
+        alphabet = "unknown"
     else:
         raise AssertionError("Unknown moltype: %s" % moltype)
 
     if have_seq:
         return DBSeq(primary_id, adaptor, alphabet, 0, int(length))
     else:
-        return UnknownSeq(length, alphabet)
+        if alphabet in ("DNA", "RNA"):
+            character = "N"
+        elif alphabet == "protein":
+            character = "X"
+        else:
+            character = "?"
+        return UnknownSeq(length, character=character)
 
 
 def _retrieve_dbxrefs(adaptor, primary_id):
@@ -417,6 +416,7 @@ def _retrieve_location_qualifier_value(adaptor, location_id):
 
 def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}
+    annotations.update(_retrieve_alphabet(adaptor, primary_id))
     annotations.update(_retrieve_qualifier_value(adaptor, primary_id))
     annotations.update(_retrieve_reference(adaptor, primary_id))
     annotations.update(_retrieve_taxon(adaptor, primary_id, taxon_id))
@@ -438,6 +438,29 @@ def _make_unicode_into_string(text):
         return str(text)
     else:
         return text
+
+
+def _retrieve_alphabet(adaptor, primary_id):
+    results = adaptor.execute_and_fetchall(
+        "SELECT alphabet FROM biosequence WHERE bioentry_id = %s",
+        (primary_id,),
+    )
+    assert len(results) == 1
+    alphabets = results[0]
+    assert len(alphabets) == 1
+    alphabet = alphabets[0]
+    if alphabet == "dna":
+        molecule_type = "DNA"
+    elif alphabet == "rna":
+        molecule_type = "RNA"
+    elif alphabet == "protein":
+        molecule_type = "protein"
+    else:
+        molecule_type = None
+    if molecule_type is not None:
+        return {"molecule_type": molecule_type}
+    else:
+        return {}
 
 
 def _retrieve_qualifier_value(adaptor, primary_id):
