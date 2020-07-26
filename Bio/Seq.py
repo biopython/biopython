@@ -236,37 +236,13 @@ class Seq:
     def __add__(self, other):
         """Add another sequence or string to this sequence.
 
-        If adding a string to a Seq, the alphabet is preserved:
-
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
-        >>> Seq("MELKI", generic_protein) + "LV"
+        >>> Seq("MELKI") + "LV"
         Seq('MELKILV')
-
-        When adding two Seq (like) objects, if they share the
-        same alphabet it is preserved, but otherwise discarded.
-        This means you can add RNA and DNA, or nucleotide and
-        protein if you really want to. This is a change as of
-        Biopython 1.78, this previously raised a TypeError:
-
-        >>> from Bio.Alphabet import generic_dna, generic_rna
-        >>> Seq("ACGT", generic_dna) + Seq("ACGU", generic_rna)
-        Seq('ACGTACGU')
-
-        >>> from Bio.Alphabet import generic_dna, generic_protein
-        >>> Seq("ACGT", generic_dna) + Seq("MELKI", generic_protein)
-        Seq('ACGTMELKI')
         """
-        if hasattr(other, "alphabet"):
-            if other.alphabet == self.alphabet:
-                # Perfect match, preserve the alphabet
-                return self.__class__(str(self) + str(other), self.alphabet)
-            else:
-                # Discard the alphabet
-                return self.__class__(str(self) + str(other))
-        elif isinstance(other, str):
-            # other is a plain string - use the current alphabet
-            return self.__class__(str(self) + other, self.alphabet)
+        if isinstance(other, (str, Seq, MutableSeq)):
+            # Discard any alphabet
+            return self.__class__(str(self) + str(other))
 
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
 
@@ -288,16 +264,9 @@ class Seq:
 
         Adding two Seq (like) objects is handled via the __add__ method.
         """
-        if hasattr(other, "alphabet"):
-            if other.alphabet == self.alphabet:
-                # Perfect match, preserve the alphabet
-                return self.__class__(str(other) + str(self), self.alphabet)
-            else:
-                # Discard the alphabet
-                return self.__class__(str(other) + str(self))
-        elif isinstance(other, str):
-            # other is a plain string - use the current alphabet
-            return self.__class__(other + str(self), self.alphabet)
+        if isinstance(other, (str, Seq, MutableSeq)):
+            # Discard any alphabet
+            return self.__class__(str(other) + str(self))
         else:
             raise TypeError
 
