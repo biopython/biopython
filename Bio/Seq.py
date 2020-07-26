@@ -1564,7 +1564,7 @@ class UnknownSeq(Seq):
         XXX
 
         """
-        return UnknownSeq(self._length // 3, Alphabet.generic_protein, "X")
+        return UnknownSeq(self._length // 3, character="X")
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
