@@ -26,15 +26,16 @@ from Bio import SeqFeature
 class DBSeq(Seq):
     """BioSQL equivalent of the Biopython Seq object."""
 
-    def __init__(self, primary_id, adaptor, alphabet, start, length):
+    def __init__(self, primary_id, adaptor, alphabet=None, start=0, length=0):
         """Create a new DBSeq object referring to a BioSQL entry.
 
         You wouldn't normally create a DBSeq object yourself, this is done
         for you when retrieving a DBSeqRecord object from the database.
         """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self.primary_id = primary_id
         self.adaptor = adaptor
-        self.alphabet = alphabet
         self._length = length
         self.start = start
 
@@ -92,7 +93,7 @@ class DBSeq(Seq):
         elif index.step is None or index.step == 1:
             # Easy case - can return a DBSeq with the start and end adjusted
             return self.__class__(
-                self.primary_id, self.adaptor, self.alphabet, self.start + i, j - i
+                self.primary_id, self.adaptor, None, self.start + i, j - i
             )
         else:
             # Tricky.  Will have to create a Seq object because of the stride
@@ -219,27 +220,12 @@ def _retrieve_seq(adaptor, primary_id):
         del seq
     del given_length
 
-    moltype = moltype.lower()  # might be upper case in database
-    # We have no way of knowing if these sequences will use IUPAC
-    # alphabets, and we certainly can't assume they are unambiguous!
-    if moltype == "dna":
-        alphabet = "DNA"
-    elif moltype == "rna":
-        alphabet = "RNA"
-    elif moltype == "protein":
-        alphabet = "protein"
-    elif moltype == "unknown":
-        # This is used in BioSQL/Loader.py
-        alphabet = "unknown"
-    else:
-        raise AssertionError("Unknown moltype: %s" % moltype)
-
     if have_seq:
-        return DBSeq(primary_id, adaptor, alphabet, 0, int(length))
+        return DBSeq(primary_id, adaptor, alphabet=None, start=0, length=int(length))
     else:
-        if alphabet in ("DNA", "RNA"):
+        if moltype in ("dna", "rna"):
             character = "N"
-        elif alphabet == "protein":
+        elif moltype == "protein":
             character = "X"
         else:
             character = "?"

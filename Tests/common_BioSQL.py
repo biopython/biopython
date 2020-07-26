@@ -21,7 +21,6 @@ from Bio import BiopythonWarning
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
-from Bio import Alphabet
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
@@ -480,8 +479,6 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface."""
         test_seq = self.item.seq
-        alphabet = test_seq.alphabet
-        self.assertEqual(alphabet, "DNA")
         data = test_seq.data
         self.assertEqual(type(data), type(""))
         string_rep = str(test_seq)
@@ -512,8 +509,8 @@ class SeqInterfaceTest(unittest.TestCase):
         """Check can add DBSeq objects together."""
         test_seq = self.item.seq
         for other in [
-            Seq("ACGT", test_seq.alphabet),
-            MutableSeq("ACGT", test_seq.alphabet),
+            Seq("ACGT"),
+            MutableSeq("ACGT"),
             "ACGT",
             test_seq,
         ]:
@@ -526,7 +523,6 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_multiplication(self):
         """Check can multiply DBSeq objects by integers."""
         test_seq = self.item.seq
-        alphabet = test_seq.alphabet
         tripled = test_seq * 3
         # Test DBSeq.__mul__
         self.assertIsInstance(tripled, Seq)
@@ -762,7 +758,9 @@ class DupLoadTest(unittest.TestCase):
 
     def test_duplicate_load2(self):
         """Make sure can't import a single record twice (in steps)."""
-        record = SeqRecord(Seq("ATGCTATGACTAT"), id="Test2", annotations={"molecule_type": "DNA"})
+        record = SeqRecord(
+            Seq("ATGCTATGACTAT"), id="Test2", annotations={"molecule_type": "DNA"}
+        )
         count = self.db.load([record])
         self.assertEqual(count, 1)
         try:
