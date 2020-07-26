@@ -738,7 +738,9 @@ class DupLoadTest(unittest.TestCase):
 
     def test_duplicate_load(self):
         """Make sure can't import a single record twice (in one go)."""
-        record = SeqRecord(Seq("ATGCTATGACTAT"), id="Test1", annotations={"molecule_type": "DNA"})
+        record = SeqRecord(
+            Seq("ATGCTATGACTAT"), id="Test1", annotations={"molecule_type": "DNA"}
+        )
         try:
             count = self.db.load([record, record])
         except Exception as err:
@@ -1125,7 +1127,7 @@ class AutoSeqIOTests(unittest.TestCase):
                 elif "protein" in molecule_type:
                     record.annotations["molecule_type"] = "protein"
                 else:
-                    raise Exception("Unknown molecule type '%'" % molecule_type)
+                    raise Exception("Unknown molecule type '%s'" % molecule_type)
             records.append(record)
         count = db.load(records)
         assert count == t_count
