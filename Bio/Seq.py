@@ -1207,40 +1207,35 @@ class UnknownSeq(Seq):
         """Add another sequence or string to this sequence.
 
         Adding two UnknownSeq objects returns another UnknownSeq object
-        provided the character is the same and the alphabets are compatible.
+        provided the character is the same.
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_protein
-        >>> UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein)
+        >>> UnknownSeq(10, character='X') + UnknownSeq(5, character='X')
         UnknownSeq(15, character='X')
 
         If the characters differ, an UnknownSeq object cannot be used, so a
         Seq object is returned:
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_protein
-        >>> UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein,
-        ...                                              character="x")
+        >>> UnknownSeq(10, character='X') + UnknownSeq(5, character="x")
         Seq('XXXXXXXXXXxxxxx')
 
-        If adding a string to an UnknownSeq, a new Seq is returned with the
-        same alphabet:
+        If adding a string to an UnknownSeq, a new Seq is returned:
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_protein
-        >>> UnknownSeq(5, generic_protein) + "LV"
+        >>> UnknownSeq(5, character='X') + "LV"
         Seq('XXXXXLV')
         """
         if isinstance(other, UnknownSeq) and other._character == self._character:
-            return UnknownSeq(len(self) + len(other), self.alphabet, self._character)
+            return UnknownSeq(len(self) + len(other), character=self._character)
         # Offload to the base class...
-        return Seq(str(self), self.alphabet) + other
+        return Seq(str(self)) + other
 
     def __radd__(self, other):
         """Add a sequence on the left."""
         # If other is an UnknownSeq, then __add__ would be called.
         # Offload to the base class...
-        return other + Seq(str(self), self.alphabet)
+        return other + Seq(str(self))
 
     def __mul__(self, other):
         """Multiply UnknownSeq by integer.
