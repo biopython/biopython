@@ -1608,11 +1608,11 @@ class UnknownSeq(Seq):
         Seq('')
         """
         # Offload the argument validation
-        s = Seq(self._character, self.alphabet).ungap(gap)
+        s = Seq(self._character).ungap(gap)
         if s:
-            return UnknownSeq(self._length, s.alphabet, self._character)
+            return UnknownSeq(self._length, character=self._character)
         else:
-            return Seq("", s.alphabet)
+            return Seq("")
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
