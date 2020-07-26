@@ -58,14 +58,14 @@ _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
 class Seq:
-    """Read-only sequence object (essentially a string with an alphabet).
+    """Read-only sequence object (essentially a string with biological methods).
 
     Like normal python strings, our basic sequence object is immutable.
     This prevents you from doing my_seq[5] = "A" for example, but does allow
     Seq objects to be used as dictionary keys.
 
     The Seq object provides a number of string like methods (such as count,
-    find, split and strip), which are alphabet aware where appropriate.
+    find, split and strip).
 
     In addition to the string like sequence, the Seq object has an alphabet
     property. This is an instance of an Alphabet class from Bio.Alphabet,
@@ -75,7 +75,7 @@ class Seq:
 
     The Seq object also provides some biological methods, such as complement,
     reverse_complement, transcribe, back_transcribe and translate (which are
-    not applicable to sequences with a protein alphabet).
+    not applicable to protein sequences).
     """
 
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
@@ -241,7 +241,6 @@ class Seq:
         Seq('MELKILV')
         """
         if isinstance(other, (str, Seq, MutableSeq)):
-            # Discard any alphabet
             return self.__class__(str(self) + str(other))
 
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
@@ -255,8 +254,6 @@ class Seq:
     def __radd__(self, other):
         """Add a sequence on the left.
 
-        If adding a string to a Seq, the alphabet is preserved:
-
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_protein
         >>> "LV" + Seq("MELKI", generic_protein)
@@ -265,7 +262,6 @@ class Seq:
         Adding two Seq (like) objects is handled via the __add__ method.
         """
         if isinstance(other, (str, Seq, MutableSeq)):
-            # Discard any alphabet
             return self.__class__(str(other) + str(self))
         else:
             raise TypeError
@@ -921,10 +917,8 @@ class Seq:
     def back_transcribe(self):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
 
-        >>> from Bio.Alphabet import generic_rna
         >>> from Bio.Seq import Seq
-        >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG",
-        ...                     generic_rna)
+        >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
         >>> messenger_rna
         Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
         >>> messenger_rna.back_transcribe()
@@ -938,9 +932,8 @@ class Seq:
         Selenocysteine with T for Threonine, which is biologically meaningless.
         Older versions of Biopython would raise an exception here:
 
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_protein = Seq("MAIVMGRU", generic_protein)
+        >>> my_protein = Seq("MAIVMGRU")
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
@@ -951,9 +944,9 @@ class Seq:
     ):
         """Turn a nucleotide sequence into a protein sequence by creating a new Seq object.
 
-        This method will translate DNA or RNA sequences, and those with a
-        nucleotide or generic alphabet.  Trying to translate a protein
-        sequence raises an exception.
+        This method will translate DNA or RNA sequences. It should not
+        be used on protein sequences as any result will be biologically
+        meaningless.
 
         Arguments:
          - table - Which codon table to use?  This can be either a name
@@ -1022,7 +1015,7 @@ class Seq:
         (e.g. "TA?" or "T-A") will throw a TranslationError.
 
         NOTE - This does NOT behave like the python string's translate
-        method.  For that use str(my_seq).translate(...) instead.
+        method.  For that use str(my_seq).translate(...) instead
         """
         if isinstance(table, str) and len(table) == 256:
             raise ValueError(
@@ -1035,10 +1028,9 @@ class Seq:
             table_id = int(table)
         except ValueError:
             # Assume its a table name
-            # This will use the extended IUPAC protein alphabet with X etc.
-            # The same table can be used for RNA or DNA (we use this for
-            # translating strings).
+            # The same table can be used for RNA or DNA
             codon_table = CodonTable.ambiguous_generic_by_name[table]
+
         except (AttributeError, TypeError):
             # Assume its a CodonTable object
             if isinstance(table, CodonTable.CodonTable):
@@ -1047,9 +1039,7 @@ class Seq:
                 raise ValueError("Bad table argument") from None
         else:
             # Assume its a table ID
-            # This will use the extended IUPAC protein alphabet with X etc.
-            # The same table can be used for RNA or DNA (we use this for
-            # translating strings).
+            # The same table can be used for RNA or DNA
             codon_table = CodonTable.ambiguous_generic_by_id[table_id]
 
         return Seq(
@@ -1138,8 +1128,8 @@ class UnknownSeq(Seq):
     >>> print(unk_five)
     ?????
 
-    You can add unknown sequence together, provided their alphabets and
-    characters are compatible, and get another memory saving UnknownSeq:
+    You can add unknown sequence together. Provided the characters
+    are compatible, and get another memory saving UnknownSeq:
 
     >>> unk_four = UnknownSeq(4)
     >>> unk_four
@@ -1147,7 +1137,7 @@ class UnknownSeq(Seq):
     >>> unk_four + unk_five
     UnknownSeq(9, character='?')
 
-    If the alphabet or characters don't match up, the addition gives an
+    If the characters don't match up, the addition gives an
     ordinary Seq object:
 
     >>> unk_nnnn = UnknownSeq(4, character="N")
@@ -1597,9 +1587,8 @@ class UnknownSeq(Seq):
         be specified via the method argument. This is no longer possible
         via sequence's alphabet (as was possible up to Biopython 1.77):
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import UnknownSeq
-        >>> my_dna = UnknownSeq(20, alphabet=generic_dna)
+        >>> my_dna = UnknownSeq(20, character='N')
         >>> my_dna
         UnknownSeq(20, character='N')
         >>> my_dna.ungap()  # using default
@@ -1610,7 +1599,7 @@ class UnknownSeq(Seq):
         If the UnknownSeq is using the gap character, then an empty Seq is
         returned:
 
-        >>> my_gap = UnknownSeq(20, generic_dna, character="-")
+        >>> my_gap = UnknownSeq(20, character="-")
         >>> my_gap
         UnknownSeq(20, character='-')
         >>> my_gap.ungap()  # using default
@@ -2050,7 +2039,6 @@ class MutableSeq:
         An overlapping search would give the answer as three!
         """
         try:
-            # TODO - Should we check the alphabet?
             search = str(sub)
         except AttributeError:
             search = sub
@@ -2246,7 +2234,7 @@ def transcribe(dna):
 
     If given a string, returns a new string object.
 
-    Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
+    Given a Seq or MutableSeq, returns a new Seq object.
 
     e.g.
 
@@ -2266,7 +2254,7 @@ def back_transcribe(rna):
 
     If given a string, returns a new string object.
 
-    Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
+    Given a Seq or MutableSeq, returns a new Seq object.
 
     e.g.
 
@@ -2436,7 +2424,7 @@ def translate(
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object. Given a Seq or
-    MutableSeq, returns a Seq object with a protein alphabet.
+    MutableSeq, returns a Seq object.
 
     Arguments:
      - table - Which codon table to use?  This can be either a name
@@ -2547,8 +2535,7 @@ def reverse_complement(sequence):
     """Return the reverse complement sequence of a nucleotide string.
 
     If given a string, returns a new string object.
-    Given a Seq or a MutableSeq, returns a new Seq object with the same
-    alphabet.
+    Given a Seq or a MutableSeq, returns a new Seq object.
 
     Supports unambiguous and ambiguous nucleotide sequences.
 
@@ -2570,8 +2557,7 @@ def complement(sequence):
 
     If given a string, returns a new string object.
 
-    Given a Seq or a MutableSeq, returns a new Seq object with the same
-    alphabet.
+    Given a Seq or a MutableSeq, returns a new Seq object.
 
     Supports unambiguous and ambiguous nucleotide sequences.
 
