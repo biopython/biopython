@@ -168,14 +168,10 @@ class Seq:
         The new behaviour is to use string-like equality:
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> seq1 == seq2
         True
         >>> seq1 == "ACGT"
         True
-        >>> seq1 == Seq("ACGT", generic_dna)
-        True
-
         """
         return str(self) == str(other)
 
@@ -255,8 +251,7 @@ class Seq:
         """Add a sequence on the left.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
-        >>> "LV" + Seq("MELKI", generic_protein)
+        >>> "LV" + Seq("MELKI")
         Seq('LVMELKI')
 
         Adding two Seq (like) objects is handled via the __add__ method.
@@ -763,8 +758,7 @@ class Seq:
         Trying to complement a protein sequence gives a meaningless
         sequence:
 
-        >>> from Bio.Alphabet import generic_protein
-        >>> my_protein = Seq("MAIVMGR", generic_protein)
+        >>> my_protein = Seq("MAIVMGR")
         >>> my_protein.complement()
         Seq('KTIBKCY')
 
@@ -803,9 +797,8 @@ class Seq:
 
         You can of course used mixed case sequences,
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
-        >>> my_dna = Seq("CCCCCgatA-G", generic_dna)
+        >>> my_dna = Seq("CCCCCgatA-G")
         >>> my_dna
         Seq('CCCCCgatA-G')
         >>> my_dna.reverse_complement()
@@ -833,9 +826,8 @@ class Seq:
         Trying to reverse complement a protein sequence will give
         a meaningless sequence:
 
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_protein = Seq("MAIVMGR", generic_protein)
+        >>> my_protein = Seq("MAIVMGR")
         >>> my_protein.reverse_complement()
         Seq('YCKBITK')
 
@@ -888,9 +880,7 @@ class Seq:
         """Return the RNA sequence from a DNA sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
-        >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG",
-        ...                  generic_dna)
+        >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         >>> coding_dna
         Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
         >>> coding_dna.transcribe()
@@ -906,9 +896,8 @@ class Seq:
         biologically plausible rational. Older versions of Biopython
         would throw an exception.
 
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.Seq import Seq
-        >>> my_protein = Seq("MAIVMGRT", generic_protein)
+        >>> my_protein = Seq("MAIVMGRT")
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
@@ -1054,8 +1043,7 @@ class Seq:
         via sequence's alphabet (as was possible up to Biopython 1.77):
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
-        >>> my_dna = Seq("-ATA--TGAAAT-TTGAAAA", generic_dna)
+        >>> my_dna = Seq("-ATA--TGAAAT-TTGAAAA")
         >>> my_dna
         Seq('-ATA--TGAAAT-TTGAAAA')
         >>> my_dna.ungap("-")
@@ -1231,10 +1219,9 @@ class UnknownSeq(Seq):
         """Multiply UnknownSeq by integer.
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_dna
         >>> UnknownSeq(3) * 2
         UnknownSeq(6, character='?')
-        >>> UnknownSeq(3, generic_dna) * 2
+        >>> UnknownSeq(3, character="N") * 2
         UnknownSeq(6, character='N')
         """
         if not isinstance(other, int):
@@ -1467,8 +1454,7 @@ class UnknownSeq(Seq):
         The reverse complement of an unknown nucleotide equals itself:
 
         >>> from Bio.Seq import UnknownSeq
-        >>> from Bio.Alphabet import generic_dna
-        >>> example = UnknownSeq(6, generic_dna)
+        >>> example = UnknownSeq(6, character="N")
         >>> print(example)
         NNNNNN
         >>> print(example.reverse_complement())
@@ -1674,8 +1660,7 @@ class MutableSeq:
     However, this means you cannot use a MutableSeq object as a dictionary key.
 
     >>> from Bio.Seq import MutableSeq
-    >>> from Bio.Alphabet import generic_dna
-    >>> my_seq = MutableSeq("ACTCGTCGTCG", generic_dna)
+    >>> my_seq = MutableSeq("ACTCGTCGTCG")
     >>> my_seq
     MutableSeq('ACTCGTCGTCG')
     >>> my_seq[5]
@@ -1890,10 +1875,7 @@ class MutableSeq:
         matching native Python list multiplication.
 
         >>> from Bio.Seq import MutableSeq
-        >>> from Bio.Alphabet import generic_dna
         >>> MutableSeq('ATG') * 2
-        MutableSeq('ATGATG')
-        >>> MutableSeq('ATG', generic_dna) * 2
         MutableSeq('ATGATG')
         """
         if not isinstance(other, int):
@@ -1907,10 +1889,7 @@ class MutableSeq:
         matching native Python list multiplication.
 
         >>> from Bio.Seq import MutableSeq
-        >>> from Bio.Alphabet import generic_dna
         >>> 2 * MutableSeq('ATG')
-        MutableSeq('ATGATG')
-        >>> 2 * MutableSeq('ATG', generic_dna)
         MutableSeq('ATGATG')
         """
         if not isinstance(other, int):
@@ -1921,8 +1900,7 @@ class MutableSeq:
         """Multiply MutableSeq in-place.
 
         >>> from Bio.Seq import MutableSeq
-        >>> from Bio.Alphabet import generic_dna
-        >>> seq = MutableSeq('ATG', generic_dna)
+        >>> seq = MutableSeq('ATG')
         >>> seq *= 2
         >>> seq
         MutableSeq('ATGATG')
