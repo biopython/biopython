@@ -2033,7 +2033,7 @@ def _fastq_generic2(in_file, out_file, mapping, truncate_char, truncate_msg):
     return count
 
 
-def _fastq_sanger_convert_fastq_sanger(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_fastq_sanger(in_file, out_file):
     """Fast Sanger FASTQ to Sanger FASTQ conversion (PRIVATE).
 
     Useful for removing line wrapping and the redundant second identifier
@@ -2052,7 +2052,7 @@ def _fastq_sanger_convert_fastq_sanger(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_solexa_convert_fastq_solexa(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_fastq_solexa(in_file, out_file):
     """Fast Solexa FASTQ to Solexa FASTQ conversion (PRIVATE).
 
     Useful for removing line wrapping and the redundant second identifier
@@ -2070,7 +2070,7 @@ def _fastq_solexa_convert_fastq_solexa(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_fastq_illumina(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_fastq_illumina(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
     Useful for removing line wrapping and the redundant second identifier
@@ -2088,7 +2088,7 @@ def _fastq_illumina_convert_fastq_illumina(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_fastq_sanger(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_fastq_sanger(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Sanger FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2104,7 +2104,7 @@ def _fastq_illumina_convert_fastq_sanger(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_sanger_convert_fastq_illumina(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_fastq_illumina(in_file, out_file):
     """Fast Sanger FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2129,7 +2129,7 @@ def _fastq_sanger_convert_fastq_illumina(in_file, out_file, alphabet=None):
     )
 
 
-def _fastq_solexa_convert_fastq_sanger(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_fastq_sanger(in_file, out_file):
     """Fast Solexa FASTQ to Sanger FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2148,7 +2148,7 @@ def _fastq_solexa_convert_fastq_sanger(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_sanger_convert_fastq_solexa(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_fastq_solexa(in_file, out_file):
     """Fast Sanger FASTQ to Solexa FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2173,7 +2173,7 @@ def _fastq_sanger_convert_fastq_solexa(in_file, out_file, alphabet=None):
     )
 
 
-def _fastq_solexa_convert_fastq_illumina(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_fastq_illumina(in_file, out_file):
     """Fast Solexa FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2192,7 +2192,7 @@ def _fastq_solexa_convert_fastq_illumina(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_fastq_solexa(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_fastq_solexa(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Solexa FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2208,7 +2208,7 @@ def _fastq_illumina_convert_fastq_solexa(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_convert_fasta(in_file, out_file, alphabet=None):
+def _fastq_convert_fasta(in_file, out_file):
     """Fast FASTQ to FASTA conversion (PRIVATE).
 
     Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
@@ -2229,7 +2229,7 @@ def _fastq_convert_fasta(in_file, out_file, alphabet=None):
     return count
 
 
-def _fastq_convert_tab(in_file, out_file, alphabet=None):
+def _fastq_convert_tab(in_file, out_file):
     """Fast FASTQ to simple tabbed conversion (PRIVATE).
 
     Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
@@ -2282,13 +2282,13 @@ def _fastq_convert_qual(in_file, out_file, mapping):
     return count
 
 
-def _fastq_sanger_convert_qual(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_qual(in_file, out_file):
     """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
     mapping = {chr(q + 33): str(q) for q in range(0, 93 + 1)}
     return _fastq_convert_qual(in_file, out_file, mapping)
 
 
-def _fastq_solexa_convert_qual(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_qual(in_file, out_file):
     """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
     mapping = {
         chr(q + 64): str(int(round(phred_quality_from_solexa(q))))
@@ -2297,7 +2297,7 @@ def _fastq_solexa_convert_qual(in_file, out_file, alphabet=None):
     return _fastq_convert_qual(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_qual(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_qual(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
     mapping = {chr(q + 64): str(q) for q in range(0, 62 + 1)}
     return _fastq_convert_qual(in_file, out_file, mapping)
