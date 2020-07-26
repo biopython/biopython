@@ -107,8 +107,7 @@ class CodonAdaptationIndex:
         for aa in SynonymousCodons:
             codons = SynonymousCodons[aa]
 
-            count_max = max([self.codon_count[codon] for codon in codons])
-            
+            count_max = max(self.codon_count[codon] for codon in codons)
             if count_max == 0:  # the residue does not occur at all
                 for codon in codons:
                     self.index[codon] = None
