@@ -234,7 +234,6 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 import struct
 import re
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import StreamModeError
@@ -919,12 +918,12 @@ class _AddTellHandle:
 class SffIterator(SequenceIterator):
     """Parser for Standard Flowgram Format (SFF) files."""
 
-    def __init__(self, source, alphabet=Alphabet.generic_dna, trim=False):
+    def __init__(self, source, alphabet=None, trim=False):
         """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
             - source - path to an SFF file, e.g. from Roche 454 sequencing,
               or a file-like object opened in binary mode.
-            - alphabet - optional alphabet, defaults to generic DNA.
+            - alphabet - optional alphabet, unused. Leave as None.
             - trim - should the sequences be trimmed?
 
         The resulting SeqRecord objects should match those from a paired FASTA
@@ -984,7 +983,9 @@ class SffIterator(SequenceIterator):
         E3MFGYR02F7Z7G 130
 
         """
-        super().__init__(source, alphabet=alphabet, mode="b", fmt="SFF")
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, mode="b", fmt="SFF")
         self.trim = trim
 
     def parse(self, handle):
@@ -1000,11 +1001,6 @@ class SffIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
-            raise ValueError("Invalid alphabet, SFF files do not hold proteins.")
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
-            raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
         trim = self.trim
         (
             header_length,
@@ -1134,8 +1130,8 @@ def _check_eof(handle, index_offset, index_length):
 class _SffTrimIterator(SffIterator):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
 
-    def __init__(self, source, alphabet=Alphabet.generic_dna):
-        super().__init__(source, alphabet=alphabet, trim=True)
+    def __init__(self, source):
+        super().__init__(source, trim=True)
 
 
 class SffWriter(SequenceWriter):
