@@ -15,7 +15,7 @@ from re import match
 from struct import pack, unpack
 import warnings
 
-from Bio import Alphabet, BiopythonWarning
+from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqRecord import SeqRecord
@@ -23,11 +23,11 @@ from .Interfaces import SequenceIterator, SequenceWriter
 
 
 _seq_types = {
-    0: Alphabet.generic_alphabet,
-    1: Alphabet.generic_dna,
-    2: Alphabet.generic_dna,
-    3: Alphabet.generic_rna,
-    4: Alphabet.generic_protein,
+    0: None,
+    1: "DNA",
+    2: "DNA",
+    3: "RNA",
+    4: "protein",
 }
 
 _seq_topologies = {0: "linear", 1: "circular"}
@@ -188,15 +188,9 @@ class XdnaIterator(SequenceIterator):
         name = comment.split(" ")[0]
 
         # Create record object
-        record = SeqRecord(
-            Seq(sequence, _seq_types[seq_type]), description=comment, name=name, id=name
-        )
-        if seq_type in (1, 2):
-            record.annotations["molecule_type"] = "DNA"
-        elif seq_type == 3:
-            record.annotations["molecule_type"] = "RNA"
-        elif seq_type == 4:
-            record.annotations["molecule_type"] = "protein"
+        record = SeqRecord(Seq(sequence), description=comment, name=name, id=name)
+        if _seq_types[seq_type]:
+            record.annotations["molecule_type"] = _seq_types[seq_type]
 
         if topology in _seq_topologies:
             record.annotations["topology"] = _seq_topologies[topology]
