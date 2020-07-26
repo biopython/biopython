@@ -77,8 +77,9 @@ def SwissIterator(source):
 
     for swiss_record in swiss_records:
         # Convert the SwissProt record to a SeqRecord
+        seq = Seq(swiss_record.sequence)
         record = SeqRecord(
-            Seq(swiss_record.sequence),
+            seq,
             id=swiss_record.accessions[0],
             name=swiss_record.entry_name,
             description=swiss_record.description,

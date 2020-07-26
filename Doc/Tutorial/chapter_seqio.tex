@@ -24,8 +24,6 @@ The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
-\noindent There is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
-
 The \verb|Bio.SeqIO.parse()| function returns an \textit{iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop as shown below.
 
 Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation use the function \verb|Bio.SeqIO.read()| which takes the same arguments.  Provided there is one and only one record in the file, this is returned as a \verb|SeqRecord| object.  Otherwise an exception is raised.
@@ -767,7 +765,7 @@ used in the other \verb|Bio.SeqIO| functions). You can use many other
 simple file formats, including FASTA and FASTQ files (see the example in
 Section~\ref{sec:fastq-indexing}). However, alignment
 formats like PHYLIP or Clustal are not supported. Finally as an optional
-argument you can supply an alphabet, or a key function.
+argument you can supply a key function.
 
 Here is the same example using the FASTA file - all we change is the
 filename and the format name:
@@ -1069,7 +1067,6 @@ Here is an example, where we start by creating a few \verb|SeqRecord| objects th
 \begin{minted}{python}
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_protein
 
 rec1 = SeqRecord(
     Seq(
@@ -1077,7 +1074,6 @@ rec1 = SeqRecord(
         "GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK"
         "NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM"
         "SSAC",
-        generic_protein,
     ),
     id="gi|14150838|gb|AAK54648.1|AF376133_1",
     description="chalcone synthase [Cucumis sativus]",
@@ -1087,7 +1083,6 @@ rec2 = SeqRecord(
     Seq(
         "YPDYYFRITNREHKAELKEKFQRMCDKSMIKKRYMYLTEEILKENPSMCEYMAPSLDARQ"
         "DMVVVEIPKLGKEAAVKAIKEWGQ",
-        generic_protein,
     ),
     id="gi|13919613|gb|AAK33142.1|",
     description="chalcone synthase [Fragaria vesca subsp. bracteata]",
@@ -1102,7 +1097,6 @@ rec3 = SeqRecord(
         "SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW"
         "IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT"
         "TGEGLEWGVLFGFGPGLTVETVVLHSVAT",
-        generic_protein,
     ),
     id="gi|13925890|gb|AAK49457.1|",
     description="chalcone synthase [Nicotiana tabacum]",

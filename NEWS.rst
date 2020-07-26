@@ -30,7 +30,7 @@ more details.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite. There has been further work to follow the Python PEP8,
-PEP257 and best practice standard coding style, and more of the tests have
+PEP257 and best practice standard coding style, and all of the tests have
 been reformatted with the ``black`` tool to match the main code base.
 
 Many thanks to the Biopython developers and community for making this release

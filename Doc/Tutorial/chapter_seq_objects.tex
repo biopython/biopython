@@ -690,14 +690,11 @@ UnknownSeq(20, character='?')
 20
 \end{minted}
 
-You can of course specify an alphabet, meaning for nucleotide sequences
-the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
-
+For DNA or RNA sequences, unknown nucleotides are commonly denoted by the letter ``N'', while for proteins ``X'' is commonly used for unknown amino acids. When creating an `UnknownSeq`, you can specify the character to be used instead of ``?'' to represent unknown letters. For example
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import UnknownSeq
->>> from Bio.Alphabet import generic_dna
->>> unk_dna = UnknownSeq(20, alphabet=generic_dna)
+>>> unk_dna = UnknownSeq(20, character="N")
 >>> unk_dna
 UnknownSeq(20, character='N')
 >>> print(unk_dna)
