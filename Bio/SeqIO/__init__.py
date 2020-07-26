@@ -1048,7 +1048,7 @@ _converter = {
 }
 
 
-def convert(in_file, in_format, out_file, out_format, alphabet=None):
+def convert(in_file, in_format, out_file, out_format, mol_type=None):
     """Convert between two sequence file formats, return number of records.
 
     Arguments:
@@ -1056,7 +1056,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - in_format - input file format, lower case string
      - out_file - an output handle or filename
      - out_format - output file format, lower case string
-     - alphabet - optional alphabet to assume
+     - mol_type - optional molecule type to apply: "DNA", "RNA" or "protein".
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning.
@@ -1091,11 +1091,27 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
+    if mol_type:
+        if not isinstance(mol_type, str):
+            raise TypeError("Molecule type should be a string, not %r" % mol_type)
+        elif "DNA" in mol_type or "RNA" in mol_type or "protein" in mol_type:
+            pass
+        else:
+            raise ValueError("Unexpected molecule type, %r" % mol_type)
     f = _converter.get((in_format, out_format))
     if f:
-        count = f(in_file, out_file, alphabet)
+        count = f(in_file, out_file)
     else:
-        records = parse(in_file, in_format, alphabet)
+        records = parse(in_file, in_format)
+        if mol_type:
+            # Edit the records on the fly to set molecule type
+
+            def over_ride(record):
+                """Over-ride molecule in-place."""
+                record.annotations["molecule_type"] = mol_type
+                return record
+
+            records = (over_ride(_) for _ in records)
         count = write(records, out_file, out_format)
     return count
 
