@@ -1869,20 +1869,12 @@ class MutableSeq:
 
         Returns a new MutableSeq object.
         """
-        a = self.alphabet
-        if hasattr(other, "alphabet"):
-            if a != other.alphabet:
-                # Drop alphabet unless agree
-                a = Alphabet.generic_alphabet
-            if isinstance(other, MutableSeq):
-                # See test_GAQueens.py for an historic usage of a non-string
-                # alphabet!  Adding the arrays should support this.
-                return self.__class__(self.data + other.data, a)
-            else:
-                return self.__class__(str(self) + str(other), a)
-        elif isinstance(other, str):
-            # other is a plain string - use the current alphabet
-            return self.__class__(str(self) + str(other), a)
+        if isinstance(other, MutableSeq):
+            # See test_GAQueens.py for an historic usage of a non-string
+            # alphabet!  Adding the arrays should support this.
+            return self.__class__(self.data + other.data)
+        elif isinstance(other, (str, Seq)):
+            return self.__class__(str(self) + str(other))
         else:
             raise TypeError
 
@@ -1890,23 +1882,15 @@ class MutableSeq:
         """Add a sequence on the left.
 
         >>> from Bio.Seq import MutableSeq
-        >>> from Bio.Alphabet import generic_protein
-        >>> "LV" + MutableSeq("MELKI", generic_protein)
+        >>> "LV" + MutableSeq("MELKI")
         MutableSeq('LVMELKI')
         """
-        a = self.alphabet
-        if hasattr(other, "alphabet"):
-            if a != other.alphabet:
-                a = Alphabet.generic_alphabet
-            if isinstance(other, MutableSeq):
-                # See test_GAQueens.py for an historic usage of a non-string
-                # alphabet!  Adding the arrays should support this.
-                return self.__class__(other.data + self.data, a)
-            else:
-                return self.__class__(str(other) + str(self), a)
-        elif isinstance(other, str):
-            # other is a plain string - use the current alphabet
-            return self.__class__(str(other) + str(self), self.alphabet)
+        if isinstance(other, MutableSeq):
+            # See test_GAQueens.py for an historic usage of a non-string
+            # alphabet!  Adding the arrays should support this.
+            return self.__class__(other.data + self.data)
+        elif isinstance(other, (str, Seq)):
+            return self.__class__(str(other) + str(self))
         else:
             raise TypeError
 
