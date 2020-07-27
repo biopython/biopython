@@ -1116,8 +1116,8 @@ class UnknownSeq(Seq):
     >>> print(unk_five)
     ?????
 
-    You can add unknown sequence together. Provided the characters
-    are compatible, and get another memory saving UnknownSeq:
+    You can add unknown sequence together. Provided the characters are the
+    same, you get another memory saving UnknownSeq:
 
     >>> unk_four = UnknownSeq(4)
     >>> unk_four
@@ -1125,8 +1125,7 @@ class UnknownSeq(Seq):
     >>> unk_four + unk_five
     UnknownSeq(9, character='?')
 
-    If the characters don't match up, the addition gives an
-    ordinary Seq object:
+    If the characters are different, addition gives an ordinary Seq object:
 
     >>> unk_nnnn = UnknownSeq(4, character="N")
     >>> unk_nnnn
