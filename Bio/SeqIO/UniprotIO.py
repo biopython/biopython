@@ -19,9 +19,8 @@ originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
 
-from Bio import Seq
+from Bio.Seq import Seq
 from Bio import SeqFeature
-from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 
 
@@ -29,9 +28,7 @@ NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
-def UniprotIterator(
-    source, alphabet=Alphabet.generic_protein, return_raw_comments=False
-):
+def UniprotIterator(source, alphabet=None, return_raw_comments=False):
     """Iterate over UniProt XML as SeqRecord objects.
 
     parses an XML entry at a time from any UniProt XML file
@@ -41,15 +38,17 @@ def UniprotIterator(
 
     Argument source is a file-like object or a path to a file.
 
+    Optional argument alphabet should not be used anymore.
+
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
     try:
         for event, elem in ElementTree.iterparse(source, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
-                yield Parser(
-                    elem, alphabet=alphabet, return_raw_comments=return_raw_comments
-                ).parse()
+                yield Parser(elem, return_raw_comments=return_raw_comments).parse()
                 elem.clear()
     except ElementTree.ParseError as exception:
         if errors.messages[exception.code] == errors.XML_ERROR_NO_ELEMENTS:
@@ -62,16 +61,16 @@ def UniprotIterator(
 class Parser:
     """Parse a UniProt XML entry to a SeqRecord.
 
+    Optional argument alphabet is no longer used.
+
     return_raw_comments=True to get back the complete comment field in XML format
-    alphabet=Alphabet.ProteinAlphabet()    can be modified if needed, default is protein alphabet.
     """
 
-    def __init__(
-        self, elem, alphabet=Alphabet.generic_protein, return_raw_comments=False
-    ):
+    def __init__(self, elem, alphabet=None, return_raw_comments=False):
         """Initialize the class."""
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self.entry = elem
-        self.alphabet = alphabet
         self.return_raw_comments = return_raw_comments
 
     def parse(self):
@@ -495,8 +494,7 @@ class Parser:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
                 else:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            seq = "".join(element.text.split())
-            self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
+            self.ParsedSeqRecord.seq = Seq("".join(element.text.split()))
             self.ParsedSeqRecord.annotations["molecule_type"] = "protein"
 
         # ============================================#
