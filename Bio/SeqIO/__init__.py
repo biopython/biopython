@@ -576,20 +576,6 @@ def parse(handle, format, alphabet=None):
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
 
-    For file formats like FASTA where the alphabet cannot be determined, it
-    may be useful to specify the alphabet explicitly:
-
-    >>> from Bio import SeqIO
-    >>> from Bio.Alphabet import generic_dna
-    >>> filename = "Fasta/sweetpea.nu"
-    >>> for record in SeqIO.parse(filename, "fasta", generic_dna):
-    ...    print("ID %s" % record.id)
-    ...    print("Sequence length %i" % len(record))
-    ...    print("Sequence alphabet %s" % record.seq.alphabet)
-    ID gi|3176602|gb|U78617.1|LOU78617
-    Sequence length 309
-    Sequence alphabet DNAAlphabet()
-
     If you have a string 'data' containing the file contents, you must
     first turn this into a handle in order to parse it:
 
