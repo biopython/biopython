@@ -358,7 +358,6 @@ are approximately equal.
 
 """
 
-from Bio.Alphabet import single_letter_alphabet
 from Bio.File import as_handle
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
@@ -1318,7 +1317,7 @@ def FastqIlluminaIterator(source, alphabet=None, title2ids=None):
 class QualPhredIterator(SequenceIterator):
     """Parser for QUAL files with PHRED quality scores but no sequence."""
 
-    def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
+    def __init__(self, source, alphabet=None, title2ids=None):
         """For QUAL files which include PHRED quality scores, but no sequence.
 
         For example, consider this short QUAL file::
@@ -1354,22 +1353,11 @@ class QualPhredIterator(SequenceIterator):
         EAS54_6_R1_2_1_443_348 ?????????????????????????
 
         Becase QUAL files don't contain the sequence string itself, the seq
-        property is set to an UnknownSeq object.  As no alphabet was given, this
-        has defaulted to a generic single letter alphabet and the character "?"
-        used.
+        property is set to an UnknownSeq object.  Although the sequence is
+        almost certainly DNA we can't be sure, so the character "?" is used
+        rather than "N".
 
-        By specifying a nucleotide alphabet, "N" is used instead:
-
-        >>> from Bio import SeqIO
-        >>> from Bio.Alphabet import generic_dna
-        >>> with open("Quality/example.qual") as handle:
-        ...     for record in SeqIO.parse(handle, "qual", alphabet=generic_dna):
-        ...         print("%s %s" % (record.id, record.seq))
-        EAS54_6_R1_2_1_413_324 NNNNNNNNNNNNNNNNNNNNNNNNN
-        EAS54_6_R1_2_1_540_792 NNNNNNNNNNNNNNNNNNNNNNNNN
-        EAS54_6_R1_2_1_443_348 NNNNNNNNNNNNNNNNNNNNNNNNN
-
-        However, the quality scores themselves are available as a list of integers
+        The quality scores themselves are available as a list of integers
         in each record's per-letter-annotation:
 
         >>> print(record.letter_annotations["phred_quality"])
@@ -1385,8 +1373,10 @@ class QualPhredIterator(SequenceIterator):
         scores but will replace them with the lowest possible PHRED score of zero.
         This will trigger a warning, previously it raised a ValueError exception.
         """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self.title2ids = title2ids
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="QUAL")
+        super().__init__(source, mode="t", fmt="QUAL")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
