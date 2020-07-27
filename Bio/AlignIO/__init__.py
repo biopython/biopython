@@ -404,7 +404,7 @@ def read(handle, format, seq_count=None):
     return alignment
 
 
-def convert(in_file, in_format, out_file, out_format):
+def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """Convert between two alignment files, returns number of alignments.
 
     Arguments:
@@ -412,15 +412,40 @@ def convert(in_file, in_format, out_file, out_format):
      - in_format - input file format, lower case string
      - output - an output handle or filename
      - out_file - output file format, lower case string
+     - molecule_type - optional molecule type to apply, string containing
+       "DNA", "RNA" or "protein".
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning. This may happen if even the
     conversion is aborted (e.g. an invalid out_format name is given).
     """
+    if molecule_type:
+        if not isinstance(molecule_type, str):
+            raise TypeError("Molecule type should be a string, not %r" % molecule_type)
+        elif (
+            "DNA" in molecule_type
+            or "RNA" in molecule_type
+            or "protein" in molecule_type
+        ):
+            pass
+        else:
+            raise ValueError("Unexpected molecule type, %r" % molecule_type)
+
     # TODO - Add optimised versions of important conversions
     # For now just off load the work to SeqIO parse/write
     # Don't open the output file until we've checked the input is OK:
     alignments = parse(in_file, in_format, None)
+
+    if molecule_type:
+        # Edit the records on the fly to set molecule type
+
+        def over_ride(alignment):
+            """Over-ride molecule in-place."""
+            for record in alignment:
+                record.annotations["molecule_type"] = molecule_type
+            return alignment
+
+        alignments = (over_ride(_) for _ in alignments)
     return write(alignments, out_file, out_format)
 
 

@@ -60,6 +60,29 @@ class ConvertTests(unittest.TestCase):
             for out_format in output_formats:
                 self.check_convert(filename, in_format, out_format)
 
+    def test_clustal_to_nexus_without_mol_type(self):
+        """Converting Clustal to NEXUS without a molecule type."""
+        handle = StringIO()
+        self.assertRaises(
+            ValueError,
+            AlignIO.convert,
+            "Clustalw/protein.aln",
+            "clustal",
+            handle,
+            "nexus",
+        )
+
+    def test_clustal_to_nexus_with_mol_type(self):
+        """Converting Clustal to NEXUS with a molecule type."""
+        handle = StringIO()
+        self.assertEqual(
+            1,
+            AlignIO.convert(
+                "Clustalw/protein.aln", "clustal", handle, "nexus", "protein"
+            ),
+        )
+        self.assertIn(" datatype=protein ", handle.getvalue())
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
