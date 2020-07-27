@@ -1,4 +1,4 @@
-# Copyright 2009-2017 by Peter Cock.  All rights reserved.
+# Copyright 2009-2020 by Peter Cock.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -260,10 +260,8 @@ automatically.
 To illustrate this problem, let's consider an artificial example:
 
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.SeqRecord import SeqRecord
->>> test = SeqRecord(Seq("NACGTACGTA", generic_dna), id="Test",
-... description="Made up!")
+>>> test = SeqRecord(Seq("NACGTACGTA"), id="Test", description="Made up!")
 >>> print(test.format("fasta"))
 >Test Made up!
 NACGTACGTA
@@ -992,12 +990,12 @@ def FastqGeneralIterator(source):
 class FastqPhredIterator(SequenceIterator):
     """Parser for FASTQ files."""
 
-    def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
+    def __init__(self, source, alphabet=None, title2ids=None):
         """Iterate over FASTQ records as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
-         - alphabet - optional alphabet
+         - alphabet - optional alphabet, no longer used. Leave as None.
          - title2ids - A function that, when given the title line from the FASTQ
            file (without the beginning >), will return the id, name and
            description (in that order) for the record as a tuple of strings.
@@ -1056,8 +1054,10 @@ class FastqPhredIterator(SequenceIterator):
         [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
         """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self.title2ids = title2ids
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="Fastq")
+        super().__init__(source, mode="t", fmt="Fastq")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -1067,7 +1067,6 @@ class FastqPhredIterator(SequenceIterator):
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
         title2ids = self.title2ids
-        alphabet = self.alphabet
         assert SANGER_SCORE_OFFSET == ord("!")
         # Originally, I used a list expression for each record:
         #
@@ -1086,9 +1085,7 @@ class FastqPhredIterator(SequenceIterator):
                 descr = title_line
                 id = descr.split()[0]
                 name = id
-            record = SeqRecord(
-                Seq(seq_string, alphabet), id=id, name=name, description=descr
-            )
+            record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
             try:
                 qualities = [q_mapping[letter] for letter in quality_string]
             except KeyError:
@@ -1102,7 +1099,7 @@ class FastqPhredIterator(SequenceIterator):
             yield record
 
 
-def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
+def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     r"""Parse old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
@@ -1236,6 +1233,9 @@ def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None)
     As shown above, the poor quality Solexa reads have been mapped to the
     equivalent PHRED score (e.g. -5 to 1 as shown earlier).
     """
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
+
     q_mapping = {
         chr(letter): letter - SOLEXA_SCORE_OFFSET
         for letter in range(SOLEXA_SCORE_OFFSET - 5, 63 + SOLEXA_SCORE_OFFSET)
@@ -1248,9 +1248,7 @@ def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None)
             descr = title_line
             id = descr.split()[0]
             name = id
-        record = SeqRecord(
-            Seq(seq_string, alphabet), id=id, name=name, description=descr
-        )
+        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
             qualities = [q_mapping[letter] for letter in quality_string]
         # DO NOT convert these into PHRED qualities automatically!
@@ -1262,7 +1260,7 @@ def FastqSolexaIterator(source, alphabet=single_letter_alphabet, title2ids=None)
         yield record
 
 
-def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=None):
+def FastqIlluminaIterator(source, alphabet=None, title2ids=None):
     """Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
@@ -1291,6 +1289,9 @@ def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=Non
 
     NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.
     """
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
+
     q_mapping = {
         chr(letter): letter - SOLEXA_SCORE_OFFSET
         for letter in range(SOLEXA_SCORE_OFFSET, 63 + SOLEXA_SCORE_OFFSET)
@@ -1303,9 +1304,7 @@ def FastqIlluminaIterator(source, alphabet=single_letter_alphabet, title2ids=Non
             descr = title_line
             id = descr.split()[0]
             name = id
-        record = SeqRecord(
-            Seq(seq_string, alphabet), id=id, name=name, description=descr
-        )
+        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
             qualities = [q_mapping[letter] for letter in quality_string]
         except KeyError:
@@ -1893,9 +1892,7 @@ def as_fastq_illumina(record):
     return "@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str)
 
 
-def PairedFastaQualIterator(
-    fasta_source, qual_source, alphabet=single_letter_alphabet, title2ids=None
-):
+def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=None):
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
 
     For example, consider this short QUAL file with PHRED quality scores::
@@ -1958,10 +1955,13 @@ def PairedFastaQualIterator(
     >>> import os
     >>> os.remove("Quality/temp.fastq")
     """
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
+
     from Bio.SeqIO.FastaIO import FastaIterator
 
-    fasta_iter = FastaIterator(fasta_source, alphabet=alphabet, title2ids=title2ids)
-    qual_iter = QualPhredIterator(qual_source, alphabet=alphabet, title2ids=title2ids)
+    fasta_iter = FastaIterator(fasta_source, title2ids=title2ids)
+    qual_iter = QualPhredIterator(qual_source, title2ids=title2ids)
 
     # Using zip wouldn't load everything into memory, but also would not catch
     # any extra records found in only one file.
@@ -2033,7 +2033,7 @@ def _fastq_generic2(in_file, out_file, mapping, truncate_char, truncate_msg):
     return count
 
 
-def _fastq_sanger_convert_fastq_sanger(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_fastq_sanger(in_file, out_file):
     """Fast Sanger FASTQ to Sanger FASTQ conversion (PRIVATE).
 
     Useful for removing line wrapping and the redundant second identifier
@@ -2052,7 +2052,7 @@ def _fastq_sanger_convert_fastq_sanger(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_solexa_convert_fastq_solexa(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_fastq_solexa(in_file, out_file):
     """Fast Solexa FASTQ to Solexa FASTQ conversion (PRIVATE).
 
     Useful for removing line wrapping and the redundant second identifier
@@ -2070,7 +2070,7 @@ def _fastq_solexa_convert_fastq_solexa(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_fastq_illumina(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_fastq_illumina(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
     Useful for removing line wrapping and the redundant second identifier
@@ -2088,7 +2088,7 @@ def _fastq_illumina_convert_fastq_illumina(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_fastq_sanger(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_fastq_sanger(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Sanger FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2104,7 +2104,7 @@ def _fastq_illumina_convert_fastq_sanger(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_sanger_convert_fastq_illumina(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_fastq_illumina(in_file, out_file):
     """Fast Sanger FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2129,7 +2129,7 @@ def _fastq_sanger_convert_fastq_illumina(in_file, out_file, alphabet=None):
     )
 
 
-def _fastq_solexa_convert_fastq_sanger(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_fastq_sanger(in_file, out_file):
     """Fast Solexa FASTQ to Sanger FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2148,7 +2148,7 @@ def _fastq_solexa_convert_fastq_sanger(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_sanger_convert_fastq_solexa(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_fastq_solexa(in_file, out_file):
     """Fast Sanger FASTQ to Solexa FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2173,7 +2173,7 @@ def _fastq_sanger_convert_fastq_solexa(in_file, out_file, alphabet=None):
     )
 
 
-def _fastq_solexa_convert_fastq_illumina(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_fastq_illumina(in_file, out_file):
     """Fast Solexa FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2192,7 +2192,7 @@ def _fastq_solexa_convert_fastq_illumina(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_fastq_solexa(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_fastq_solexa(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Solexa FASTQ conversion (PRIVATE).
 
     Avoids creating SeqRecord and Seq objects in order to speed up this
@@ -2208,7 +2208,7 @@ def _fastq_illumina_convert_fastq_solexa(in_file, out_file, alphabet=None):
     return _fastq_generic(in_file, out_file, mapping)
 
 
-def _fastq_convert_fasta(in_file, out_file, alphabet=None):
+def _fastq_convert_fasta(in_file, out_file):
     """Fast FASTQ to FASTA conversion (PRIVATE).
 
     Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
@@ -2229,7 +2229,7 @@ def _fastq_convert_fasta(in_file, out_file, alphabet=None):
     return count
 
 
-def _fastq_convert_tab(in_file, out_file, alphabet=None):
+def _fastq_convert_tab(in_file, out_file):
     """Fast FASTQ to simple tabbed conversion (PRIVATE).
 
     Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
@@ -2282,13 +2282,13 @@ def _fastq_convert_qual(in_file, out_file, mapping):
     return count
 
 
-def _fastq_sanger_convert_qual(in_file, out_file, alphabet=None):
+def _fastq_sanger_convert_qual(in_file, out_file):
     """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
     mapping = {chr(q + 33): str(q) for q in range(0, 93 + 1)}
     return _fastq_convert_qual(in_file, out_file, mapping)
 
 
-def _fastq_solexa_convert_qual(in_file, out_file, alphabet=None):
+def _fastq_solexa_convert_qual(in_file, out_file):
     """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
     mapping = {
         chr(q + 64): str(int(round(phred_quality_from_solexa(q))))
@@ -2297,7 +2297,7 @@ def _fastq_solexa_convert_qual(in_file, out_file, alphabet=None):
     return _fastq_convert_qual(in_file, out_file, mapping)
 
 
-def _fastq_illumina_convert_qual(in_file, out_file, alphabet=None):
+def _fastq_illumina_convert_qual(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
     mapping = {chr(q + 64): str(q) for q in range(0, 62 + 1)}
     return _fastq_convert_qual(in_file, out_file, mapping)

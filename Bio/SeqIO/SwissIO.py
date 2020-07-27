@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.
+# Copyright 2006-2013,2020 by Peter Cock.
 # Revisions copyright 2008-2009 by Michiel de Hoon.
 # All rights reserved.
 #
@@ -77,9 +77,8 @@ def SwissIterator(source):
 
     for swiss_record in swiss_records:
         # Convert the SwissProt record to a SeqRecord
-        seq = Seq(swiss_record.sequence)
         record = SeqRecord(
-            seq,
+            Seq(swiss_record.sequence),
             id=swiss_record.accessions[0],
             name=swiss_record.entry_name,
             description=swiss_record.description,

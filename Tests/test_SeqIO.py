@@ -5761,6 +5761,27 @@ class TestSeqIO(SeqIOTestBaseClass):
                 with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
 
+    def test_pdb_to_seqxml_with_mol_type(self):
+        """Setting molecule type for PDB to SeqXML."""
+        handle = BytesIO()
+        self.assertEqual(
+            1, SeqIO.convert("PDB/1A8O.pdb", "pdb-seqres", handle, "seqxml", "protein")
+        )
+        self.assertIn(
+            b'<property name="molecule_type" value="protein">', handle.getvalue()
+        )
+
+    def test_clustal_to_nexus_with_mol_type(self):
+        """Setting molecule type for Clustal to NEXUS."""
+        handle = StringIO()
+        self.assertEqual(
+            20,
+            SeqIO.convert(
+                "Clustalw/protein.aln", "clustal", handle, "nexus", "protein"
+            ),
+        )
+        self.assertIn(" datatype=protein ", handle.getvalue())
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
