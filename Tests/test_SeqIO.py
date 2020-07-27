@@ -1,4 +1,4 @@
-# Copyright 2007-2016 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016,2020 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -5710,18 +5710,37 @@ class TestSeqIO(SeqIOTestBaseClass):
                 with self.assertRaisesRegex(ValueError, "Empty file."):
                     list(SeqIO.parse(handle, t_format))
 
-    def test_pdb_to_seqxml_with_mol_type(self):
-        """Setting molecule type for PDB to SeqXML."""
+    def test_fasta_to_seqxml_without_mol_type(self):
+        """Convert FASTA to SeqXML without molecule type."""
+        handle = BytesIO()
+        self.assertRaises(
+            ValueError, SeqIO.convert, "Fasta/rosemary.pro", "fasta", handle, "seqxml"
+        )
+
+    def test_fasta_to_seqxml_with_mol_type(self):
+        """Convert FASTA to SeqXML with molecule type."""
         handle = BytesIO()
         self.assertEqual(
-            1, SeqIO.convert("PDB/1A8O.pdb", "pdb-seqres", handle, "seqxml", "protein")
+            1, SeqIO.convert("Fasta/rosemary.pro", "fasta", handle, "seqxml", "protein")
         )
         self.assertIn(
             b'<property name="molecule_type" value="protein">', handle.getvalue()
         )
 
+    def test_clustal_to_nexus_without_mol_type(self):
+        """Convert Clustal to NEXUS without molecule type."""
+        handle = StringIO()
+        self.assertRaises(
+            ValueError,
+            SeqIO.convert,
+            "Clustalw/protein.aln",
+            "clustal",
+            handle,
+            "nexus",
+        )
+
     def test_clustal_to_nexus_with_mol_type(self):
-        """Setting molecule type for Clustal to NEXUS."""
+        """Convert Clustal to NEXUS with molecule type."""
         handle = StringIO()
         self.assertEqual(
             20,
