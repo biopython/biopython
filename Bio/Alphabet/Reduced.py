@@ -27,14 +27,13 @@ These alphabets have been used with Bio.utils.reduce_sequence, which has been
 removed from Biopython. You can use this is alphabets and tables like this:
 
     >>> from Bio.Seq import Seq
-    >>> from Bio import Alphabet
     >>> from Bio.Alphabet import Reduced
-    >>> my_protein = Seq('MAGSKEWKRFCELTINEA', Alphabet.ProteinAlphabet())
+    >>> my_protein = Seq('MAGSKEWKRFCELTINEA')
 
 Now, we convert this sequence into a sequence which only recognizes polar (P)
 or hydrophobic (H) residues:
 
-    >>> new_protein = Seq('', Alphabet.Reduced.HPModel())
+    >>> new_protein = Seq('')
     >>> for aa in my_protein:
     ...     new_protein += Alphabet.Reduced.hp_model_tab[aa]
     >>> new_protein
