@@ -21,7 +21,6 @@ from Bio import BiopythonWarning
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
-from Bio import Alphabet
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
@@ -253,8 +252,13 @@ def load_database(gb_filename_or_handle):
 
     # get the GenBank file we are going to put into it
     iterator = SeqIO.parse(gb_filename_or_handle, "gb")
+    records = []
+    for record in iterator:
+        if record.annotations.get("molecule_type") == "mRNA":
+            record.annotations["molecule_type"] = "DNA"
+        records.append(record)
     # finally put it in the database
-    count = db.load(iterator)
+    count = db.load(records)
     server.commit()
     server.close()
     return count
@@ -475,8 +479,6 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface."""
         test_seq = self.item.seq
-        alphabet = test_seq.alphabet
-        self.assertIsInstance(alphabet, Alphabet.Alphabet)
         data = test_seq.data
         self.assertEqual(type(data), type(""))
         string_rep = str(test_seq)
@@ -507,8 +509,8 @@ class SeqInterfaceTest(unittest.TestCase):
         """Check can add DBSeq objects together."""
         test_seq = self.item.seq
         for other in [
-            Seq("ACGT", test_seq.alphabet),
-            MutableSeq("ACGT", test_seq.alphabet),
+            Seq("ACGT"),
+            MutableSeq("ACGT"),
             "ACGT",
             test_seq,
         ]:
@@ -521,7 +523,6 @@ class SeqInterfaceTest(unittest.TestCase):
     def test_multiplication(self):
         """Check can multiply DBSeq objects by integers."""
         test_seq = self.item.seq
-        alphabet = test_seq.alphabet
         tripled = test_seq * 3
         # Test DBSeq.__mul__
         self.assertIsInstance(tripled, Seq)
@@ -733,7 +734,9 @@ class DupLoadTest(unittest.TestCase):
 
     def test_duplicate_load(self):
         """Make sure can't import a single record twice (in one go)."""
-        record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna), id="Test1")
+        record = SeqRecord(
+            Seq("ATGCTATGACTAT"), id="Test1", annotations={"molecule_type": "DNA"}
+        )
         try:
             count = self.db.load([record, record])
         except Exception as err:
@@ -755,7 +758,9 @@ class DupLoadTest(unittest.TestCase):
 
     def test_duplicate_load2(self):
         """Make sure can't import a single record twice (in steps)."""
-        record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna), id="Test2")
+        record = SeqRecord(
+            Seq("ATGCTATGACTAT"), id="Test2", annotations={"molecule_type": "DNA"}
+        )
         count = self.db.load([record])
         self.assertEqual(count, 1)
         try:
@@ -772,8 +777,12 @@ class DupLoadTest(unittest.TestCase):
 
     def test_duplicate_id_load(self):
         """Make sure can't import records with same ID (in one go)."""
-        record1 = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna), id="TestA")
-        record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna), id="TestA")
+        record1 = SeqRecord(
+            Seq("ATGCTATGACTAT"), id="TestA", annotations={"molecule_type": "DNA"}
+        )
+        record2 = SeqRecord(
+            Seq("GGGATGCGACTAT"), id="TestA", annotations={"molecule_type": "DNA"}
+        )
         try:
             count = self.db.load([record1, record2])
         except Exception as err:
@@ -835,7 +844,14 @@ class ClosedLoopTest(unittest.TestCase):
         self.loop("GenBank/arab1.gb", "gb")
 
     def loop(self, filename, format):
-        original_records = list(SeqIO.parse(filename, format))
+        original_records = []
+        for record in SeqIO.parse(filename, format):
+            if "RNA" in record.annotations.get("molecule_type", ""):
+                if "U" in record.seq:
+                    record.annotations["molecule_type"] = "RNA"
+                else:
+                    record.annotations["molecule_type"] = "DNA"
+            original_records.append(record)
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(
             driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
@@ -916,7 +932,11 @@ class TransferTest(unittest.TestCase):
         self.trans("GenBank/arab1.gb", "gb")
 
     def trans(self, filename, format):
-        original_records = list(SeqIO.parse(filename, format))
+        original_records = []
+        for record in SeqIO.parse(filename, format):
+            if record.annotations.get("molecule_type") == "mRNA":
+                record.annotations["molecule_type"] = "DNA"
+            original_records.append(record)
         # now open a connection to load the database
         server = BioSeqDatabase.open_database(
             driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
@@ -1004,15 +1024,15 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(test_record.name, "ATCOR66M")
         self.assertEqual(test_record.id, "X55053.1")
         self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA")
-        self.assertIsInstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
-        self.assertEqual(str(test_record.seq[:10]), "AACAAAACAC")
+        self.assertEqual(test_record.annotations["molecule_type"], "DNA")
+        self.assertEqual(test_record.seq[:20], "AACAAAACACACATCAAAAA")
 
         test_record = self.db.lookup(accession="X62281")
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.id, "X62281.1")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene")
-        self.assertIsInstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
-        self.assertEqual(str(test_record.seq[:10]), "ATTTGGCCTA")
+        self.assertEqual(test_record.annotations["molecule_type"], "DNA")
+        self.assertEqual(test_record.seq[:10], "ATTTGGCCTA")
 
     def test_seq_feature(self):
         """In depth check that SeqFeatures are transmitted through the db."""
@@ -1098,13 +1118,24 @@ class AutoSeqIOTests(unittest.TestCase):
     def check(self, t_format, t_filename, t_count=1):
         db = self.db
 
-        iterator = SeqIO.parse(t_filename, t_format)
-        count = db.load(iterator)
+        records = []
+        for record in SeqIO.parse(t_filename, t_format):
+            molecule_type = record.annotations.get("molecule_type")
+            if molecule_type is not None:
+                if "DNA" in molecule_type:
+                    record.annotations["molecule_type"] = "DNA"
+                elif "RNA" in molecule_type:
+                    record.annotations["molecule_type"] = "RNA"
+                elif "protein" in molecule_type:
+                    record.annotations["molecule_type"] = "protein"
+                else:
+                    raise Exception("Unknown molecule type '%s'" % molecule_type)
+            records.append(record)
+        count = db.load(records)
         assert count == t_count
         self.server.commit()
 
-        iterator = SeqIO.parse(t_filename, t_format)
-        for record in iterator:
+        for record in records:
             # print(" - %s, %s" % (checksum_summary(record), record.id))
             key = record.name
             # print(" - Retrieving by name/display_id '%s'," % key)

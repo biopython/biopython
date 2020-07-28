@@ -279,6 +279,9 @@ class TestSeqIO(SeqIOTestBaseClass):
 
         messages is dictionary of error messages keyed by output format.
         Set this to a non-dictionary to see the suggested value.
+
+        molecule_types is a dictionary of molecule types keyed by output
+        format, e.g. {"seqxml": "DNA"}
         """
         if not isinstance(messages, dict):
             debug = True
@@ -4383,6 +4386,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "seqxml": "DNA",
+        }
         self.perform_test(
             "ace",
             False,
@@ -4394,6 +4403,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ace2(self):
@@ -4411,6 +4421,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
         }
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "nexus": "DNA",
+            "seqxml": "DNA",
+        }
         self.perform_test(
             "ace",
             False,
@@ -4422,6 +4439,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ace3(self):
@@ -4439,6 +4457,13 @@ class TestSeqIO(SeqIOTestBaseClass):
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
         }
+        molecule_types = {
+            "embl": "DNA",
+            "genbank": "DNA",
+            "imgt": "DNA",
+            "nexus": "DNA",
+            "seqxml": "DNA",
+        }
         self.perform_test(
             "ace",
             False,
@@ -4450,6 +4475,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             lengths,
             alignment,
             messages,
+            molecule_types,
         )
 
     def test_ig1(self):

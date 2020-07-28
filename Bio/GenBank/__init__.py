@@ -44,7 +44,6 @@ import re
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_dna, generic_rna, generic_protein, generic_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio import SeqFeature
 
@@ -1367,12 +1366,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 pass
 
         # add the sequence information
-        # first, determine the alphabet
-        # we default to an generic alphabet if we don't have a
-        # seq type or have strange sequence information.
-        seq_alphabet = generic_alphabet
 
-        # now set the sequence
         sequence = "".join(self._seq_data)
 
         if (
@@ -1390,21 +1384,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
             if "DNA" in self._seq_type.upper() or "MRNA" in self._seq_type.upper():
-                seq_alphabet = generic_dna
                 molecule_type = "DNA"
             # are there ever really RNA sequences in GenBank?
             elif "RNA" in self._seq_type.upper():
                 # Even for data which was from RNA, the sequence string
-                # is usually given as DNA (T not U).  Bug 2408
-                if "T" in sequence and "U" not in sequence:
-                    seq_alphabet = generic_dna
-                else:
-                    seq_alphabet = generic_rna
+                # is usually given as DNA (T not U).  Bug 3010
                 molecule_type = "RNA"
             elif (
                 "PROTEIN" in self._seq_type.upper() or self._seq_type == "PRT"
             ):  # PRT is used in EMBL-bank for patents
-                seq_alphabet = generic_protein
                 molecule_type = "protein"
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
@@ -1413,7 +1401,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # we have a bug if we get here
             else:
                 raise ValueError(
-                    "Could not determine alphabet for seq_type %s" % self._seq_type
+                    "Could not determine molecule_type for seq_type %s" % self._seq_type
                 )
         # Don't overwrite molecule_type
         if molecule_type is not None:
@@ -1423,11 +1411,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if not sequence and self._expected_size:
             self.data.seq = UnknownSeq(
                 self._expected_size,
-                seq_alphabet,
                 character="X" if molecule_type == "protein" else "N",
             )
         else:
-            self.data.seq = Seq(sequence, seq_alphabet)
+            self.data.seq = Seq(sequence)
 
 
 class _RecordConsumer(_BaseGenBankConsumer):
