@@ -8,7 +8,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Provide objects to represent biological sequences with alphabets.
+"""Provide objects to represent biological sequences.
 
 See also the Seq_ wiki and the chapter in our tutorial:
  - `HTML Tutorial`_
@@ -25,7 +25,6 @@ import sys
 import warnings
 
 from Bio import BiopythonWarning
-from Bio import Alphabet
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
 from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
@@ -67,24 +66,16 @@ class Seq:
     The Seq object provides a number of string like methods (such as count,
     find, split and strip).
 
-    In addition to the string like sequence, the Seq object has an alphabet
-    property. This is an instance of an Alphabet class from Bio.Alphabet,
-    for example generic DNA, or IUPAC DNA. This describes the type of molecule
-    (e.g. RNA, DNA, protein) and may also indicate the expected symbols
-    (letters).
-
     The Seq object also provides some biological methods, such as complement,
     reverse_complement, transcribe, back_transcribe and translate (which are
     not applicable to protein sequences).
     """
 
-    def __init__(self, data, alphabet=Alphabet.generic_alphabet):
+    def __init__(self, data):
         """Create a Seq object.
 
         Arguments:
-         - seq - Sequence, required (string)
-         - alphabet - Optional argument, an Alphabet object from
-           Bio.Alphabet
+         - data - Sequence, required (string)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -106,7 +97,6 @@ class Seq:
                 "be a string (not another Seq object etc)"
             )
         self._data = data
-        self.alphabet = alphabet  # Seq API requirement
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -1049,9 +1039,7 @@ class Seq:
         >>> my_dna.ungap("-")
         Seq('ATATGAAATTTGAAAA')
         """
-        if hasattr(self.alphabet, "gap_char"):
-            raise NotImplementedError("We stopped supporting the Gapped class...")
-        elif not gap:
+        if not gap:
             raise ValueError("Gap character required.")
         elif len(gap) != 1 or not isinstance(gap, str):
             raise ValueError(f"Unexpected gap character, {gap!r}")
@@ -1142,31 +1130,24 @@ class UnknownSeq(Seq):
     Seq('ACGT????')
     """
 
-    def __init__(self, length, alphabet=Alphabet.generic_alphabet, character=None):
+    def __init__(self, length, alphabet=None, character="?"):
         """Create a new UnknownSeq object.
 
-        If character is omitted, it is determined from the alphabet, "N" for
-        nucleotides, "X" for proteins, and "?" otherwise.
+        Arguments:
+         - length - Integer, required.
+         - alphabet - no longer used, must be None.
+         - character - single letter string, default "?". Typically "N"
+           for nucleotides, "X" for proteins, and "?" otherwise.
         """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self._length = int(length)
         if self._length < 0:
             # TODO - Block zero length UnknownSeq?  You can just use a Seq!
             raise ValueError("Length must not be negative.")
-        self.alphabet = alphabet
-        if character:
-            if len(character) != 1:
-                raise ValueError("character argument should be a single letter string.")
-            self._character = character
-        else:
-            base = Alphabet._get_base_alphabet(alphabet)
-            # TODO? Check the case of the letters in the alphabet?
-            # We may have to use "n" instead of "N" etc.
-            if isinstance(base, Alphabet.NucleotideAlphabet):
-                self._character = "N"
-            elif isinstance(base, Alphabet.ProteinAlphabet):
-                self._character = "X"
-            else:
-                self._character = "?"
+        if not character or len(character) != 1:
+            raise ValueError("character argument should be a single letter string.")
+        self._character = character
 
     def __len__(self):
         """Return the stated length of the unknown sequence."""
@@ -1679,7 +1660,7 @@ class MutableSeq:
     or biological methods as the Seq object.
     """
 
-    def __init__(self, data, alphabet=Alphabet.generic_alphabet):
+    def __init__(self, data):
         """Initialize the class."""
         if isinstance(data, str):  # TODO - What about unicode?
             self.data = array.array("u", data)
@@ -1690,7 +1671,6 @@ class MutableSeq:
             )
         else:
             self.data = data  # assumes the input is an array
-        self.alphabet = alphabet
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
