@@ -1804,7 +1804,7 @@ class MutableSeq:
             return self.data[index]
         else:
             # Return the (sub)sequence as another Seq object
-            return MutableSeq(self.data[index], self.alphabet)
+            return MutableSeq(self.data[index])
 
     def __setitem__(self, index, value):
         """Set a subsequence of single letter via value parameter.
