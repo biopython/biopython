@@ -38,8 +38,6 @@ build_script:
   - conda config --set always_yes yes
   - conda config --add channels conda-forge
   - conda config --set channel_priority strict
-  - conda update conda
-  - conda --version
   - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow mysql-connector-python
   - python setup.py build
 
