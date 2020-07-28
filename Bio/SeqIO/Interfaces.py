@@ -14,7 +14,6 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 
 from Bio import StreamModeError
-from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
@@ -26,12 +25,12 @@ class SequenceIterator:
     may wish to redefine the __init__ method as well.
     """
 
-    def __init__(self, source, alphabet=generic_alphabet, mode="t", fmt=None):
+    def __init__(self, source, alphabet=None, mode="t", fmt=None):
         """Create a SequenceIterator object.
 
         Arguments:
         - source - input file stream, or path to input file
-        - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+        - alphabet - no longer used, should be None
 
         This method MAY be overridden by any subclass.
 
@@ -40,7 +39,8 @@ class SequenceIterator:
         - you do not have to require an alphabet.
         - you can add additional optional arguments.
         """
-        self.alphabet = alphabet
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         try:
             self.stream = open(source, "r" + mode)
             self.should_close_stream = True

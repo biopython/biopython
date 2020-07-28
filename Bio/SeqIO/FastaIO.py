@@ -189,14 +189,11 @@ class FastaIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
         title2ids = self.title2ids
         if title2ids:
             for title, sequence in SimpleFastaParser(handle):
                 id, name, descr = title2ids(title)
-                yield SeqRecord(
-                    Seq(sequence, alphabet), id=id, name=name, description=descr
-                )
+                yield SeqRecord(Seq(sequence), id=id, name=name, description=descr)
         else:
             for title, sequence in SimpleFastaParser(handle):
                 try:
@@ -206,10 +203,7 @@ class FastaIterator(SequenceIterator):
                     # Should we use SeqRecord default for no ID?
                     first_word = ""
                 yield SeqRecord(
-                    Seq(sequence, alphabet),
-                    id=first_word,
-                    name=first_word,
-                    description=title,
+                    Seq(sequence), id=first_word, name=first_word, description=title,
                 )
 
 
