@@ -1386,7 +1386,6 @@ class QualPhredIterator(SequenceIterator):
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
         title2ids = self.title2ids
-        alphabet = self.alphabet
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in handle:
             if line[0] == ">":
@@ -1424,10 +1423,7 @@ class QualPhredIterator(SequenceIterator):
 
             # Return the record and then continue...
             record = SeqRecord(
-                UnknownSeq(len(qualities), alphabet),
-                id=id,
-                name=name,
-                description=descr,
+                UnknownSeq(len(qualities)), id=id, name=name, description=descr,
             )
             # Dirty trick to speed up this line:
             # record.letter_annotations["phred_quality"] = qualities
