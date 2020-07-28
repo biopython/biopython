@@ -34,10 +34,12 @@ build_script:
   - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
   - cmd: C:\Miniconda.exe /S /D=C:\Py
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
+  - conda --version
   - conda config --set always_yes yes
   - conda config --add channels conda-forge
   - conda config --set channel_priority strict
   - conda update conda
+  - conda --version
   - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow mysql-connector-python
   - python setup.py build
 
