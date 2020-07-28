@@ -40,7 +40,7 @@ build_script:
   - conda --version
   - conda config --add channels conda-forge
   - conda config --set channel_priority strict
-  - conda install -c conda-forge setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow mysql-connector-python
+  - conda install -c conda-forge setuptools numpy psycopg2 networkx reportlab scipy coverage pillow mysql-connector-python
   - python setup.py build
 
 test_script:
