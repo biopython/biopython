@@ -21,7 +21,6 @@ a database object.
 from time import gmtime, strftime
 
 # biopython
-from Bio import Alphabet
 from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
 from Bio.Seq import UnknownSeq
@@ -702,12 +701,12 @@ class DatabaseLoader:
             # got a sequence, we don't need to write to the table.
             return
 
-        # determine the string representation of the alphabet
-        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
+        molecule_type = record.annotations.get("molecule_type", "")
+        if "DNA" in molecule_type:
             alphabet = "dna"
-        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
+        elif "RNA" in molecule_type:
             alphabet = "rna"
-        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
+        elif "protein" in molecule_type:
             alphabet = "protein"
         else:
             alphabet = "unknown"
@@ -773,7 +772,7 @@ class DatabaseLoader:
         )
         tag_ontology_id = self._get_ontology_id("Annotation Tags")
         for key, value in record.annotations.items():
-            if key in ["references", "comment", "ncbi_taxid", "date"]:
+            if key in ["molecule_type", "references", "comment", "ncbi_taxid", "date"]:
                 # Handled separately
                 continue
             term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
