@@ -336,8 +336,8 @@ making up each alignment as SeqRecords.
 """
 
 # TODO
-# - define policy on reading aligned sequences with gaps in
-#   (e.g. - and . characters) including how the alphabet interacts
+# - define policy on reading aligned sequences with more than
+#   one gap character (see also AlignIO)
 #
 # - How best to handle unique/non unique record.id when writing.
 #   For most file formats reading such files is fine; The stockholm
@@ -380,7 +380,6 @@ making up each alignment as SeqRecords.
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
@@ -562,9 +561,7 @@ def parse(handle, format, alphabet=None):
      - handle   - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format   - lower case string describing the file format.
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, should be None.
 
     Typical usage, opening a file to read in, and looping over the record(s):
 
@@ -602,39 +599,16 @@ def parse(handle, format, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %r" % alphabet)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     iterator_generator = _FormatToIterator.get(format)
     if iterator_generator:
-        if alphabet is None:
-            i = iterator_generator(handle)
-        else:
-            try:
-                i = iterator_generator(handle, alphabet=alphabet)
-            except TypeError:
-                i = _force_alphabet(iterator_generator(handle), alphabet)
-        return i
+        return iterator_generator(handle)
     if format in AlignIO._FormatToIterator:
         # Use Bio.AlignIO to read in the alignments
-        i = (r for alignment in AlignIO.parse(handle, format) for r in alignment)
-        return i
+        return (r for alignment in AlignIO.parse(handle, format) for r in alignment)
     raise ValueError("Unknown format '%s'" % format)
-
-
-def _force_alphabet(record_iterator, alphabet):
-    """Iterate over records, over-riding the alphabet (PRIVATE)."""
-    # Assume the alphabet argument has been pre-validated
-    given_base_class = _get_base_alphabet(alphabet).__class__
-    for record in record_iterator:
-        if isinstance(_get_base_alphabet(record.seq.alphabet), given_base_class):
-            record.seq.alphabet = alphabet
-            yield record
-        else:
-            raise ValueError(
-                "Specified alphabet %r clashes with "
-                "that determined from the file, %r" % (alphabet, record.seq.alphabet)
-            )
 
 
 def read(handle, format, alphabet=None):
@@ -644,9 +618,7 @@ def read(handle, format, alphabet=None):
      - handle   - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format   - string describing the file format.
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, should be None.
 
     This function is for use parsing sequence files containing
     exactly one record.  For example, reading a GenBank file:
