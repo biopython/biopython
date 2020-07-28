@@ -2252,7 +2252,7 @@ class MotifTestPWM(unittest.TestCase):
         counts = self.m.counts
         pwm = counts.normalize(pseudocounts=0.25)
         pssm = pwm.log_odds()
-        result = pssm.calculate(Seq("ACGTGTGCGTAGTGCGTN", self.m.alphabet))
+        result = pssm.calculate(Seq("ACGTGTGCGTAGTGCGTN"))
         self.assertEqual(7, len(result))
         self.assertAlmostEqual(result[0], -29.18363571, places=5)
         self.assertAlmostEqual(result[1], -38.3365097, places=5)
