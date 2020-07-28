@@ -1,4 +1,4 @@
-# Copyright 2008-2017 by Peter Cock.  All rights reserved.
+# Copyright 2008-2017,2020 by Peter Cock.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -80,7 +80,6 @@ class TabIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
         for line in handle:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!

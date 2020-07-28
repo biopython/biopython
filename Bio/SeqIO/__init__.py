@@ -1048,7 +1048,7 @@ _converter = {
 }
 
 
-def convert(in_file, in_format, out_file, out_format, alphabet=None):
+def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """Convert between two sequence file formats, return number of records.
 
     Arguments:
@@ -1056,7 +1056,8 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - in_format - input file format, lower case string
      - out_file - an output handle or filename
      - out_format - output file format, lower case string
-     - alphabet - optional alphabet to assume
+     - molecule_type - optional molecule type to apply, string containing
+       "DNA", "RNA" or "protein".
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning.
@@ -1091,11 +1092,31 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
+    if molecule_type:
+        if not isinstance(molecule_type, str):
+            raise TypeError("Molecule type should be a string, not %r" % molecule_type)
+        elif (
+            "DNA" in molecule_type
+            or "RNA" in molecule_type
+            or "protein" in molecule_type
+        ):
+            pass
+        else:
+            raise ValueError("Unexpected molecule type, %r" % molecule_type)
     f = _converter.get((in_format, out_format))
     if f:
-        count = f(in_file, out_file, alphabet)
+        count = f(in_file, out_file)
     else:
-        records = parse(in_file, in_format, alphabet)
+        records = parse(in_file, in_format)
+        if molecule_type:
+            # Edit the records on the fly to set molecule type
+
+            def over_ride(record):
+                """Over-ride molecule in-place."""
+                record.annotations["molecule_type"] = molecule_type
+                return record
+
+            records = (over_ride(_) for _ in records)
         count = write(records, out_file, out_format)
     return count
 
