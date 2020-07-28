@@ -36,6 +36,8 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda --version
   - conda config --set always_yes yes
+  - conda update conda
+  - conda --version
   - conda config --add channels conda-forge
   - conda config --set channel_priority strict
   - conda install -c conda-forge setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow mysql-connector-python
