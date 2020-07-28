@@ -322,7 +322,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
-        new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
+        new = feature.extract(UnknownSeq(len(parent_seq), character="N"))
         self.assertIsInstance(new, UnknownSeq)
         self.assertEqual(len(new), len(answer_str))
 
