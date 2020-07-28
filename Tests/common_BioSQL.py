@@ -777,8 +777,12 @@ class DupLoadTest(unittest.TestCase):
 
     def test_duplicate_id_load(self):
         """Make sure can't import records with same ID (in one go)."""
-        record1 = SeqRecord(Seq("ATGCTATGACTAT"), id="TestA", annotations={"molecule_type": "DNA"})
-        record2 = SeqRecord(Seq("GGGATGCGACTAT"), id="TestA", annotations={"molecule_type": "DNA"})
+        record1 = SeqRecord(
+            Seq("ATGCTATGACTAT"), id="TestA", annotations={"molecule_type": "DNA"}
+        )
+        record2 = SeqRecord(
+            Seq("GGGATGCGACTAT"), id="TestA", annotations={"molecule_type": "DNA"}
+        )
         try:
             count = self.db.load([record1, record2])
         except Exception as err:
