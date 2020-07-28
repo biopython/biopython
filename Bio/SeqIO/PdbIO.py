@@ -11,7 +11,6 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -92,9 +91,8 @@ def AtomIterator(pdb_id, structure):
         # if len(structure) > 1 :
         #     id = ("Model%s|" % str(model.id)) + id
 
-        record = SeqRecord(
-            Seq("".join(res_out), generic_protein), id=record_id, description=record_id
-        )
+        record = SeqRecord(Seq("".join(res_out)), id=record_id, description=record_id)
+        # TODO: Test PDB files with DNA and RNA too:
         record.annotations["molecule_type"] = "protein"
 
         record.annotations["model"] = model.id
@@ -224,8 +222,9 @@ class PdbSeqresIterator(SequenceIterator):
             raise ValueError("Empty file.")
 
         for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues), generic_protein))
+            record = SeqRecord(Seq("".join(residues)))
             record.annotations = {"chain": chn_id}
+            # TODO: Test PDB files with DNA and RNA too:
             record.annotations["molecule_type"] = "protein"
             if chn_id in metadata:
                 m = metadata[chn_id][0]
@@ -430,8 +429,9 @@ def CifSeqresIterator(source):
         metadata[chain_id][-1].update(struct_ref)
 
     for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues), generic_protein))
+        record = SeqRecord(Seq("".join(residues)))
         record.annotations = {"chain": chn_id}
+        # TODO: Test PDB files with DNA and RNA too:
         record.annotations["molecule_type"] = "protein"
         if chn_id in metadata:
             m = metadata[chn_id][0]
