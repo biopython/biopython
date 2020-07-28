@@ -1401,7 +1401,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # we have a bug if we get here
             else:
                 raise ValueError(
-                    "Could not determine alphabet for seq_type %s" % self._seq_type
+                    "Could not determine molecule_type for seq_type %s" % self._seq_type
                 )
         # Don't overwrite molecule_type
         if molecule_type is not None:
