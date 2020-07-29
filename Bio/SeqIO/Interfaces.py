@@ -11,6 +11,8 @@ use this module.  It provides base classes to try and simplify things.
 """
 
 import warnings
+from abc import ABC, abstractmethod
+
 from Bio import BiopythonDeprecationWarning
 
 from Bio import StreamModeError
@@ -18,7 +20,7 @@ from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
 
-class SequenceIterator:
+class SequenceIterator(ABC):
     """Base class for building SeqRecord iterators.
 
     You should write a parse method that returns a SeqRecord generator.  You
@@ -90,6 +92,10 @@ class SequenceIterator:
         to actually parse the file.
         """
         return self
+
+    @abstractmethod
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord iterator."""
 
 
 # Function variant of the SequenceWriter method.
