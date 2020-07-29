@@ -55,9 +55,9 @@ except ImportError:
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
-# Following modules have historic failures. If you fix one of these
-# please remove here!
-EXCLUDE_DOCTEST_MODULES = []
+# Bio.Alphabet has been removed from Biopython. Importing it will raise an
+# informative ImportError.
+EXCLUDE_DOCTEST_MODULES = ["Bio.Alphabet"]
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
