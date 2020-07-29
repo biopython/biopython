@@ -38,7 +38,7 @@ class TestPBDListGetList(unittest.TestCase):
         entries = pdblist.get_all_entries()
         # As number of entries constantly grow, test checks if a certain number was
         # exceeded
-        self.assertTrue(len(entries) > 100000)
+        self.assertGreater(len(entries), 100000)
 
     def test_get_all_obsolete(self):
         """Tests the Bio.PDB.PDBList.get_all_obsolete method."""
@@ -47,7 +47,7 @@ class TestPBDListGetList(unittest.TestCase):
         entries = pdblist.get_all_obsolete()
         # As number of obsolete entries constantly grow, test checks if a certain number
         # was exceeded
-        self.assertTrue(len(entries) > 3000)
+        self.assertGreater(len(entries), 3000)
 
 
 class TestPDBListGetStructure(unittest.TestCase):
