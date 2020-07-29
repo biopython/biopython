@@ -19,4 +19,6 @@ for examples showing how to transition from Bio.Alphabet to molecule type
 annotations.
 """
 
-raise RuntimeError("Bio.Alphabet has been removed from Biopython. In many cases, the alphabet can simply be ignored and removed from scripts. In a few cases, you may need to specify the ``molecule_type`` as an annotation on a SeqRecord for your script to work correctly. Please see https://github.com/biopython/biopython/issues/3156 for more information.")
+raise ImportError(
+    "Bio.Alphabet has been removed from Biopython. In many cases, the alphabet can simply be ignored and removed from scripts. In a few cases, you may need to specify the ``molecule_type`` as an annotation on a SeqRecord for your script to work correctly. Please see https://github.com/biopython/biopython/issues/3156 for more information."
+)
