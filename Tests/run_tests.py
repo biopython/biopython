@@ -56,7 +56,7 @@ except ImportError:
 VERBOSITY = 0
 
 # Bio.Alphabet has been removed from Biopython. Importing it will raise an
-# informative RuntimeException.
+# informative ImportError.
 EXCLUDE_DOCTEST_MODULES = [
     "Bio.Alphabet"
 ]
