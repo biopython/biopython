@@ -1242,7 +1242,7 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
 
     for title_line, seq_string, quality_string in FastqGeneralIterator(source):
         if title2ids:
-            id, name, descr = title_line
+            id, name, descr = title2ids(title_line)
         else:
             descr = title_line
             id = descr.split()[0]
