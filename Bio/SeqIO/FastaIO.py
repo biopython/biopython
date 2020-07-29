@@ -17,8 +17,15 @@ You are expected to use this module via the Bio.SeqIO functions.
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
-from .Interfaces import _clean, _get_seq_string
+from .Interfaces import (
+    SequenceIterator,
+    SequenceWriter,
+    Title2IDsFuncType,
+    _clean,
+    _get_seq_string,
+)
+
+from typing import Optional, TextIO, Union, Callable
 
 
 def SimpleFastaParser(handle):
@@ -137,7 +144,12 @@ def FastaTwoLineParser(handle):
 class FastaIterator(SequenceIterator):
     """Parser for Fasta files."""
 
-    def __init__(self, source, alphabet=None, title2ids=None):
+    def __init__(
+        self,
+        source: Union[str, TextIO],
+        alphabet=None,
+        title2ids: Optional[Title2IDsFuncType] = None,
+    ) -> None:
         """Iterate over Fasta records as SeqRecord objects.
 
         Arguments:

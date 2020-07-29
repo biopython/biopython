@@ -202,6 +202,22 @@ EXTENSIONS = [
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
 ]
 
+USE_MYPYC = False
+# To compile with mypyc, a mypyc checkout must be present on the PYTHONPATH
+if os.getenv("BIOPYTHON_USE_MYPYC", None) == "1":
+    USE_MYPYC = True
+
+if USE_MYPYC:
+    mypyc_targets = [
+        "Bio/SeqIO/PhdIO.py",
+        "Bio/SeqIO/QualityIO.py",
+    ]
+
+    from mypyc.build import mypycify
+
+    opt_level = os.getenv("MYPYC_OPT_LEVEL", "3")
+    EXTENSIONS.extend(mypycify(mypyc_targets, opt_level=opt_level))
+
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
 # tell us the version of Biopython already installed (if any).

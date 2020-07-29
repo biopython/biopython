@@ -38,7 +38,7 @@ class NeighborSearch:
            with this to optimize speed if you feel like it.
 
         """
-        from Bio.PDB.kdtrees import KDTree
+        from Bio.PDB.kdtrees import KDTree  # type: ignore
 
         self.atom_list = atom_list
         # get the coordinates

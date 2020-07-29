@@ -24,6 +24,8 @@ import array
 import sys
 import warnings
 
+from typing import Optional, Union
+
 from Bio import BiopythonWarning
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
@@ -71,7 +73,7 @@ class Seq:
     not applicable to protein sequences).
     """
 
-    def __init__(self, data):
+    def __init__(self, data: str) -> None:
         """Create a Seq object.
 
         Arguments:
@@ -1130,7 +1132,7 @@ class UnknownSeq(Seq):
     Seq('ACGT????')
     """
 
-    def __init__(self, length, alphabet=None, character="?"):
+    def __init__(self, length: int, alphabet=None, character: str = "?") -> None:
         """Create a new UnknownSeq object.
 
         Arguments:

@@ -9,6 +9,7 @@
 
 
 import os
+from typing import Optional
 
 
 def find_test_dir(start_dir=None):
@@ -46,7 +47,7 @@ def find_test_dir(start_dir=None):
     )
 
 
-def run_doctest(target_dir=None, *args, **kwargs):
+def run_doctest(target_dir: Optional[str] = None, *args, **kwargs):
     """Run doctest for the importing module."""
     import doctest
 

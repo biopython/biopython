@@ -79,6 +79,9 @@ the annotation attribute of each record::
 
 
 import re
+
+from typing import List
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -229,7 +232,7 @@ class MauveWriter(SequentialAlignmentWriter):
 class MauveIterator(AlignmentIterator):
     """Mauve xmfa alignment iterator."""
 
-    _ids = []  # for caching IDs between __next__ calls
+    _ids: List[str] = []  # for caching IDs between __next__ calls
 
     def __next__(self):
         """Parse the next alignment from the handle."""

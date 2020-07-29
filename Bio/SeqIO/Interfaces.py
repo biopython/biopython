@@ -11,13 +11,17 @@ use this module.  It provides base classes to try and simplify things.
 """
 
 import warnings
+
 from abc import ABC, abstractmethod
+from typing import Any, Callable, Iterator, IO, Union, TextIO, Tuple, Optional
 
 from Bio import BiopythonDeprecationWarning
 
 from Bio import StreamModeError
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
+
+Title2IDsFuncType = Callable[[str], Tuple[str, str, str]]
 
 
 class SequenceIterator(ABC):
@@ -27,7 +31,9 @@ class SequenceIterator(ABC):
     may wish to redefine the __init__ method as well.
     """
 
-    def __init__(self, source, alphabet=None, mode="t", fmt=None):
+    def __init__(
+        self, source: Union[TextIO, str], alphabet=None, mode="t", fmt=None,
+    ):
         """Create a SequenceIterator object.
 
         Arguments:
@@ -43,10 +49,10 @@ class SequenceIterator(ABC):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        try:
+        if isinstance(source, str):
             self.stream = open(source, "r" + mode)
             self.should_close_stream = True
-        except TypeError:  # not a path, assume we received a stream
+        else:
             if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
@@ -94,12 +100,12 @@ class SequenceIterator(ABC):
         return self
 
     @abstractmethod
-    def parse(self, handle):
+    def parse(self, handle: IO[Any]) -> Iterator[SeqRecord]:
         """Start parsing the file, and return a SeqRecord iterator."""
 
 
 # Function variant of the SequenceWriter method.
-def _get_seq_string(record):
+def _get_seq_string(record: SeqRecord) -> str:
     """Use this to catch errors like the sequence being None (PRIVATE)."""
     if not isinstance(record, SeqRecord):
         raise TypeError("Expected a SeqRecord object")
@@ -111,7 +117,7 @@ def _get_seq_string(record):
 
 
 # Function variant of the SequenceWriter method.
-def _clean(text):
+def _clean(text: str) -> str:
     """Use this to avoid getting newlines in the output (PRIVATE)."""
     return text.replace("\n", " ").replace("\r", " ")
 
@@ -134,30 +140,32 @@ class SequenceWriter:
     the number of records.
     """
 
-    def __init__(self, target, mode="w"):
+    def __init__(self, target: Union[str, IO[Any]], mode: str = "w") -> None:
         """Create the writer object."""
         if mode == "w":
-            try:
-                target.write("")
-            except TypeError:
-                # target was opened in binary mode
-                raise StreamModeError("File must be opened in text mode.") from None
-            except AttributeError:
+            if isinstance(target, str):
                 # target is a path
                 handle = open(target, mode)
             else:
-                handle = target
+                try:
+                    handle = target
+                    target.write("")
+                except TypeError:
+                    # target was opened in binary mode
+                    raise StreamModeError("File must be opened in text mode.") from None
         elif mode == "wb":
-            try:
-                target.write(b"")
-            except TypeError:
-                # target was opened in text mode
-                raise StreamModeError("File must be opened in binary mode.") from None
-            except AttributeError:
+            if isinstance(target, str):
                 # target is a path
                 handle = open(target, mode)
             else:
                 handle = target
+                try:
+                    target.write(b"")
+                except TypeError:
+                    # target was opened in text mode
+                    raise StreamModeError(
+                        "File must be opened in binary mode."
+                    ) from None
         else:
             raise RuntimeError("Unknown mode '%s'" % mode)
 
@@ -174,7 +182,7 @@ class SequenceWriter:
             raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
         return str(record.seq)
 
-    def clean(self, text):
+    def clean(self, text: str) -> str:
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ")
 

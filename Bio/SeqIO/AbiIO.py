@@ -22,6 +22,8 @@ import sys
 
 from os.path import basename
 
+from typing import List
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
@@ -326,7 +328,7 @@ _HEADFMT = ">H4sI2H3I"
 # directory data structure
 _DIRFMT = ">4sI2H4I"
 
-__global_tag_listing = []
+__global_tag_listing: List[str] = []
 for tag in _INSTRUMENT_SPECIFIC_TAGS.values():
     __global_tag_listing += tag.keys()
 

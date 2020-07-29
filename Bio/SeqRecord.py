@@ -16,8 +16,11 @@
 
 
 from io import StringIO
+from typing import Dict, Union, TYPE_CHECKING
 from Bio import StreamModeError
 
+if TYPE_CHECKING:
+    from Bio.Seq import Seq, MutableSeq, UnknownSeq
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
 
@@ -159,7 +162,7 @@ class SeqRecord:
 
     def __init__(
         self,
-        seq,
+        seq: Union["Seq", "MutableSeq"],
         id="<unknown id>",
         name="<unknown name>",
         description="<unknown description>",
@@ -167,7 +170,7 @@ class SeqRecord:
         features=None,
         annotations=None,
         letter_annotations=None,
-    ):
+    ) -> None:
         """Create a SeqRecord.
 
         Arguments:
@@ -226,7 +229,7 @@ class SeqRecord:
             # annotations about each letter in the sequence
             if seq is None:
                 # Should we allow this and use a normal unrestricted dict?
-                self._per_letter_annotations = _RestrictedDict(length=0)
+                self._per_letter_annotations: Dict[str, str] = _RestrictedDict(length=0)
             else:
                 try:
                     self._per_letter_annotations = _RestrictedDict(length=len(seq))

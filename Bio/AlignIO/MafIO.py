@@ -41,7 +41,7 @@ except ImportError:
     # Not present on Jython, but should be included in Python 2.5
     # or later (unless compiled from source without its dependencies)
     # Still want to offer simple parsing/output
-    _sqlite = None
+    _sqlite = None  # type: ignore
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
