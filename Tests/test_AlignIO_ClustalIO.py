@@ -12,8 +12,8 @@ from Bio.AlignIO.ClustalIO import ClustalIterator, ClustalWriter
 
 # This is a truncated version of the example in Tests/cw02.aln
 # Notice the inclusion of sequence numbers (right hand side)
-aln_example1 = \
-"""CLUSTAL W (1.81) multiple sequence alignment
+aln_example1 = """\
+CLUSTAL W (1.81) multiple sequence alignment
 
 
 gi|4959044|gb|AAD34209.1|AF069      MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN 50
@@ -40,8 +40,8 @@ gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
 # This example is a truncated version of the dataset used here:
 # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
 # with the last record repeated twice (deliberate toture test)
-aln_example2 = \
-"""CLUSTAL X (1.83) multiple sequence alignment
+aln_example2 = """\
+CLUSTAL X (1.83) multiple sequence alignment
 
 
 V_Harveyi_PATH                 --MKNWIKVAVAAIA--LSAA------------------TVQAATEVKVG
@@ -80,8 +80,8 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 """  # noqa : W291
 
 
-aln_example3 = \
-"""CLUSTAL 2.0.9 multiple sequence alignment
+aln_example3 = """\
+CLUSTAL 2.0.9 multiple sequence alignment
 
 
 Test1seq             ------------------------------------------------------------
@@ -145,17 +145,16 @@ AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
                      *************************  
 """  # noqa : W291
 
-aln_example4 = \
-"""Kalign (2.0) alignment in ClustalW format
+aln_example4 = """\
+Kalign (2.0) alignment in ClustalW format
 
 Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
 AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 
-"""  # noqa: E122 not clear to me, why this comes up here
+"""
 
 
 class TestClustalIO(unittest.TestCase):
-
     def test_one(self):
         alignments = list(ClustalIterator(StringIO(aln_example1)))
         self.assertEqual(1, len(alignments))
@@ -164,12 +163,14 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(2, len(alignment))
         self.assertEqual(alignment[0].id, "gi|4959044|gb|AAD34209.1|AF069")
         self.assertEqual(alignment[1].id, "gi|671626|emb|CAA85685.1|")
-        self.assertEqual(str(alignment[0].seq),
-                         "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN"
-                         "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW"
-                         "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT"
-                         "SENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTE"
-                         "VPTTRAQRRA")
+        self.assertEqual(
+            str(alignment[0].seq),
+            "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN"
+            "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW"
+            "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT"
+            "SENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTE"
+            "VPTTRAQRRA",
+        )
 
     def test_two(self):
         alignments = list(ClustalIterator(StringIO(aln_example2)))
@@ -178,10 +179,12 @@ class TestClustalIO(unittest.TestCase):
         alignment = alignments[0]
         self.assertEqual(9, len(alignment))
         self.assertEqual(alignment[-1].id, "HISJ_E_COLI")
-        self.assertEqual(str(alignment[-1].seq),
-                         "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG"
-                         "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS"
-                         "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV")
+        self.assertEqual(
+            str(alignment[-1].seq),
+            "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG"
+            "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS"
+            "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV",
+        )
 
     def test_cat_one_two(self):
         alignments = list(ClustalIterator(StringIO(aln_example2 + aln_example1)))
@@ -197,13 +200,17 @@ class TestClustalIO(unittest.TestCase):
 
     def test_write_read(self):
         """Checking write/read."""
-        alignments = (list(ClustalIterator(StringIO(aln_example1)))
-                      + list(ClustalIterator(StringIO(aln_example2))) * 2)
+        alignments = (
+            list(ClustalIterator(StringIO(aln_example1)))
+            + list(ClustalIterator(StringIO(aln_example2))) * 2
+        )
         handle = StringIO()
         self.assertEqual(3, ClustalWriter(handle).write_file(alignments))
         handle.seek(0)
         for i, a in enumerate(ClustalIterator(handle)):
-            self.assertEqual(a.get_alignment_length(), alignments[i].get_alignment_length())
+            self.assertEqual(
+                a.get_alignment_length(), alignments[i].get_alignment_length()
+            )
 
     def test_write_read_single(self):
         """Testing write/read when there is only one sequence."""

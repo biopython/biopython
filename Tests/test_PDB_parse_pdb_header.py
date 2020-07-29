@@ -14,7 +14,9 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio.PDB.parse_pdb_header import parse_pdb_header, _parse_remark_465
 
@@ -76,6 +78,18 @@ class ParseReal(unittest.TestCase):
                 "res_name": "A",
                 "chain": "2",
                 "ssseq": 11,
+                "insertion": None,
+            },
+        )
+
+        info = _parse_remark_465("1  DG B     9")
+        self.assertEqual(
+            info,
+            {
+                "model": 1,
+                "res_name": "DG",
+                "chain": "B",
+                "ssseq": 9,
                 "insertion": None,
             },
         )

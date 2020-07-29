@@ -19,15 +19,13 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 import datetime
 import struct
 import sys
-import warnings
 
 from os.path import basename
 
-from Bio import BiopythonParserWarning
-from Bio import Alphabet
-from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from .Interfaces import SequenceIterator
+
 
 # dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number
@@ -323,7 +321,7 @@ _BYTEFMT = {
     19: "s",  # cString
     20: "2i",  # tag, legacy unsupported
 }
-# header data structure (exluding 4 byte ABIF marker)
+# header data structure (excluding 4 byte ABIF marker)
 _HEADFMT = ">H4sI2H3I"
 # directory data structure
 _DIRFMT = ">4sI2H4I"
@@ -344,30 +342,19 @@ def _get_string_tag(opt_bytes_value, default=None):
     try:
         return opt_bytes_value.decode()
     except UnicodeDecodeError:
-        # If we are in this 'except' block, a .decode call must have been
-        # attempted, and so we must be on Python 3, which means opt_bytes_value
-        # is a byte string.
         return opt_bytes_value.decode(encoding=sys.getdefaultencoding())
 
 
-def AbiIterator(source, alphabet=None, trim=False):
-    """Return an iterator for the Abi file format."""
-    # raise exception is alphabet is not dna
-    if alphabet is not None:
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
-            raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
-            raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
+class AbiIterator(SequenceIterator):
+    """Parser for Abi files."""
 
-    try:
-        handle = open(source, "rb")
-    except TypeError:
-        handle = source
-        if handle.read(0) != b"":
-            raise ValueError("ABI files must be opened in binary mode.") from None
+    def __init__(self, source, trim=False):
+        """Return an iterator for the Abi file format."""
+        self.trim = trim
+        super().__init__(source, mode="b", fmt="ABI")
 
-    try:
-
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         # check if input file is a valid Abi file
         marker = handle.read(4)
         if not marker:
@@ -376,7 +363,11 @@ def AbiIterator(source, alphabet=None, trim=False):
 
         if marker != b"ABIF":
             raise OSError("File should start ABIF, not %r" % marker)
+        records = self.iterate(handle)
+        return records
 
+    def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
@@ -399,12 +390,6 @@ def AbiIterator(source, alphabet=None, trim=False):
             # PBAS2 is base-called sequence, only available in 3530
             if key == "PBAS2":
                 seq = tag_data.decode()
-                ambigs = "KYWMRS"
-                if alphabet is None:
-                    if set(seq).intersection(ambigs):
-                        alphabet = ambiguous_dna
-                    else:
-                        alphabet = unambiguous_dna
             # PCON2 is quality values of base-called sequence
             elif key == "PCON2":
                 qual = [ord(val) for val in tag_data.decode()]
@@ -451,7 +436,7 @@ def AbiIterator(source, alphabet=None, trim=False):
             except AttributeError:
                 file_name = ""
             record = SeqRecord(
-                Seq(seq, alphabet),
+                Seq(seq),
                 id=sample_id,
                 name=file_name,
                 description="",
@@ -459,14 +444,11 @@ def AbiIterator(source, alphabet=None, trim=False):
                 letter_annotations={"phred_quality": qual},
             )
 
-        if not trim or is_fsa_file:
-            yield record
-        else:
-            yield _abi_trim(record)
+        if self.trim and not is_fsa_file:
+            record = _abi_trim(record)
 
-    finally:
-        if handle is not source:
-            handle.close()
+        record.annotations["molecule_type"] = "DNA"
+        yield record
 
 
 def _AbiTrimIterator(handle):
@@ -542,8 +524,8 @@ def _abi_trim(seq_record):
             for qual in seq_record.letter_annotations["phred_quality"]
         ]
 
-        # calculate cummulative score
-        # if cummulative value < 0, set it to 0
+        # calculate cumulative score
+        # if cumulative value < 0, set it to 0
         # first value is set to 0, because of the assumption that
         # the first base will always be trimmed out
         cummul_score = [0]
@@ -554,12 +536,12 @@ def _abi_trim(seq_record):
             else:
                 cummul_score.append(score)
                 if not start:
-                    # trim_start = value when cummulative score is first > 0
+                    # trim_start = value when cumulative score is first > 0
                     trim_start = i
                     start = True
 
-        # trim_finish = index of highest cummulative score,
-        # marking the end of sequence segment with highest cummulative score
+        # trim_finish = index of highest cumulative score,
+        # marking the end of sequence segment with highest cumulative score
         trim_finish = cummul_score.index(max(cummul_score))
 
         return seq_record[trim_start:trim_finish]

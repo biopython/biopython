@@ -35,8 +35,7 @@ with the notable exception of existing module names which are not lower case.
 - http://www.python.org/dev/peps/pep-0257/
 
 We have adopted the code formating tool ``black`` to which automates a lot of
-coding style choices like line breaks and spacing. This applies to all our
-code, except the ``Tests/`` folder which we are still gradually updating.
+coding style choices like line breaks and spacing.
 
 We use the tool ``flake8`` for automating our code style checks, together with
 various plugins which can be installed as follows::

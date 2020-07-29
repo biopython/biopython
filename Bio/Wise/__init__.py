@@ -72,7 +72,7 @@ def align(
 ):
     """Run an alignment. Returns a filehandle."""
     if not pair or len(pair) != 2:
-        raise ValueError("Expected pair of filename, not %s" % repr(pair))
+        raise ValueError("Expected pair of filename, not %r" % pair)
 
     output_file = tempfile.NamedTemporaryFile(mode="r")
     input_files = (

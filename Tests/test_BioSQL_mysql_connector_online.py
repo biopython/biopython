@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -16,6 +15,7 @@ from common_BioSQL import load_biosql_ini, check_config
 from common_BioSQL_online import share_config
 
 import requires_internet
+
 requires_internet.check()
 
 DBDRIVER = "mysql.connector"

@@ -24,23 +24,10 @@ import os
 import random
 import unittest
 
-# biopython
-from Bio import Alphabet
-from Bio.Seq import MutableSeq
-from Bio.Seq import Seq
-
 # HMM stuff we are testing
 from Bio.HMM import MarkovModel
 from Bio.HMM import Trainer
 from Bio.HMM import Utilities
-
-
-if os.name == "java":
-    from Bio import MissingExternalDependencyError
-    # This is a slight miss-use of MissingExternalDependencyError,
-    # but it will do in the short term to skip this unit test on Jython
-    raise MissingExternalDependencyError("This test can cause a fatal error "
-                                         "on Jython with some versions of Java")
 
 
 # whether we should print everything out. Set this to zero for
@@ -49,12 +36,8 @@ VERBOSE = 0
 
 
 # -- set up our alphabets
-class DiceRollAlphabet(Alphabet.Alphabet):
-    letters = ["1", "2", "3", "4", "5", "6"]
-
-
-class DiceTypeAlphabet(Alphabet.Alphabet):
-    letters = ["F", "L"]
+dice_roll_alphabet = ("1", "2", "3", "4", "5", "6")
+dice_type_alphabet = ("F", "L")
 
 
 # -- useful functions
@@ -100,8 +83,8 @@ def generate_rolls(num_rolls):
     """
     # start off in the fair state
     cur_state = "F"
-    roll_seq = MutableSeq("", DiceRollAlphabet())
-    state_seq = MutableSeq("", DiceTypeAlphabet())
+    roll_seq = []
+    state_seq = []
     # generate the sequence
     for roll in range(num_rolls):
         state_seq.append(cur_state)
@@ -113,20 +96,20 @@ def generate_rolls(num_rolls):
         # now give us a chance to switch to a new state
         chance_num = random.random()
         if cur_state == "F":
-            if chance_num <= .05:
+            if chance_num <= 0.05:
                 cur_state = "L"
         elif cur_state == "L":
-            if chance_num <= .1:
+            if chance_num <= 0.1:
                 cur_state = "F"
-    return roll_seq.toseq(), state_seq.toseq()
+    return roll_seq, state_seq
 
 
 class TestHMMCasino(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
-        cls.mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
-                                                        DiceRollAlphabet())
+        cls.mm_builder = MarkovModel.MarkovModelBuilder(
+            dice_type_alphabet, dice_roll_alphabet
+        )
         cls.mm_builder.allow_all_transitions()
         cls.mm_builder.set_random_probabilities()
         # get a sequence of rolls to train the markov model with
@@ -142,14 +125,14 @@ class TestHMMCasino(unittest.TestCase):
             print(trained_mm.transition_prob)
             print(trained_mm.emission_prob)
         test_rolls, test_states = generate_rolls(300)
-        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
+        predicted_states, prob = trained_mm.viterbi(test_rolls, dice_type_alphabet)
         if VERBOSE:
             print("Prediction probability: %f" % prob)
             Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
 
     def test_baum_welch_training_without(self):
         """Baum-Welch training without known state sequences."""
-        training_seq = Trainer.TrainingSequence(self.rolls, Seq("", DiceTypeAlphabet()))
+        training_seq = Trainer.TrainingSequence(self.rolls, ())
 
         def stop_training(log_likelihood_change, num_iterations):
             """Tell the training model when to stop."""
@@ -169,10 +152,12 @@ class TestHMMCasino(unittest.TestCase):
             print(trained_mm.transition_prob)
             print(trained_mm.emission_prob)
         test_rolls, test_states = generate_rolls(300)
-        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
+        predicted_states, prob = trained_mm.viterbi(test_rolls, dice_type_alphabet)
         if VERBOSE:
             print("Prediction probability: %f" % prob)
-            Utilities.pretty_print_prediction(self.test_rolls, test_states, predicted_states)
+            Utilities.pretty_print_prediction(
+                self.test_rolls, test_states, predicted_states
+            )
 
 
 if __name__ == "__main__":

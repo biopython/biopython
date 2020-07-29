@@ -102,12 +102,20 @@ implemented in the respective modules.
 
 Bio.Alphabet
 ------------
-Declared obsolete in Biopython 1.74, please avoid using this module
-explicitly in your code.
+Declared obsolete in Biopython release 1.74, and removed from Biopython in
+release 1.78. This module defined an ``Alphabet`` class and various subclasses,
+which were used as attributes to ``Seq`` and objects to describe how the
+individual characters in the sequence string should be interpreted. For
+example, a string "AGTACACTGGT" could be a DNA sequence or a protein sequence
+that happens to be rich in Alanines, Glycines, Cysteines and Threonines.
+However, as the exact definition of the alphabet and its purpose remained
+unclear, this class was removed from Biopython.
+Starting with Biopython 1.78, the molecule type, if specified in the input
+file, is stored by the ``SeqIO`` parser as ``molecule_type`` in the annotations
+of each ``SeqRecord``. We urge users to use this attribute with caution, as the
+molecule type means different things in different sequence file formats, and in
+a sense the interpretation of ``molecule_type`` can still be ambiguous.
 
-The design of Bio.Aphabet included a number of historic design choices
-which, with the benefit of hindsight, were regretable. While the details
-remain to be agreed, we intend to remove or replace Bio.Alphabet in 2020.
 
 Bio.ExPASy.sprot_search_ful and ExPASy.sprot_search_de
 ------------------------------------------------------
@@ -160,11 +168,11 @@ use string-like equality testing and hashing (ingoring any difference in
 alphabet except to issue warnings).
 
 Prior releases used Python's object comparison. Warnings of this change
-were first added in Release 1.54 (May 2010), with hash warnings added in
-Release 1.62 (August 2013).
+were first added in Release 1.54 (May 2010), with hash warnings present
+from Release 1.62 (August 2013) to Release 1.76 (December 2019).
 
-For backward compatibility and/or to silence the warnings, please use
-explicit string comparision, str(seq1) == str(seq2), or object comparison,
+For backward compatibility and/or to silence warnings about this, please use
+explicit string comparison, str(seq1) == str(seq2), or object comparison,
 id(seq1) == id(seq2), as required.
 
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
@@ -255,6 +263,9 @@ Bio.SeqIO.Interfaces
 --------------------
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61, and
 removed in Release 1.64.
+
+Class SequentialSequenceWriter was declared obsolete in Release 1.77, and
+deprecated in Release 1.78.
 
 Bio.HotRand
 -----------
@@ -797,6 +808,8 @@ Bio.SubsMat
 -----------
 The methods letter_sum and all_letters_sum were removed from the SeqMat class
 in Bio.SubsMat in Release 1.57.
+The Bio.SubsMat module was deprecated in Release 1.78. As an alternative,
+please consider using Bio.Align.substitution_matrices.
 
 Bio.Align
 ---------
@@ -821,10 +834,10 @@ removed in Release 1.61.
 
 Bio.KDTree
 ----------
-This module was declared obsolete in Release 1.72, and deprecated in Release
-1.74. As of Release 1.72, KDTree data structures and the functionality
-previously available in ``Bio.KDTree`` are provided in a new module
-``Bio.PDB.kdtrees``.
+This module was declared obsolete in Release 1.72, deprecated in Release 1.74,
+and removed in Release 1.77. As of Release 1.72, KDTree data structures and
+the functionality previously available in ``Bio.KDTree`` are provided in a new
+module ``Bio.PDB.kdtrees``.
 
 Bio.trie, Bio.triefind
 ----------------------

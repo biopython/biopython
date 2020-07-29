@@ -1,5 +1,6 @@
 # Copyright 2003-2009 by Bartek Wilczynski.  All rights reserved.
 # Copyright 2012-2013 by Michiel JL de Hoon.  All rights reserved.
+# Revisions copyright 2019 by Victor Lin.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -22,13 +23,13 @@ from urllib.request import urlopen, Request
 from Bio import BiopythonDeprecationWarning
 
 
-def create(instances, alphabet=None):
+def create(instances, alphabet="ACGT"):
     """Create a Motif object."""
     instances = Instances(instances, alphabet)
     return Motif(instances=instances, alphabet=alphabet)
 
 
-def parse(handle, format, strict=True):
+def parse(handle, fmt, strict=True):
     """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
@@ -76,48 +77,48 @@ def parse(handle, format, strict=True):
     If strict is True (default), the parser will raise a ValueError if the
     file contents does not strictly comply with the specified file format.
     """
-    format = format.lower()
-    if format == "alignace":
+    fmt = fmt.lower()
+    if fmt == "alignace":
         from Bio.motifs import alignace
 
         return alignace.read(handle)
-    elif format == "meme":
+    elif fmt == "meme":
         from Bio.motifs import meme
 
         return meme.read(handle)
-    elif format == "minimal":
+    elif fmt == "minimal":
         from Bio.motifs import minimal
 
         return minimal.read(handle)
-    elif format == "clusterbuster":
+    elif fmt == "clusterbuster":
         from Bio.motifs import clusterbuster
 
         return clusterbuster.read(handle)
-    elif format in ("pfm-four-columns", "pfm-four-rows"):
+    elif fmt in ("pfm-four-columns", "pfm-four-rows"):
         from Bio.motifs import pfm
 
-        return pfm.read(handle, format)
-    elif format == "xms":
+        return pfm.read(handle, fmt)
+    elif fmt == "xms":
         from Bio.motifs import xms
 
         return xms.read(handle)
-    elif format == "mast":
+    elif fmt == "mast":
         from Bio.motifs import mast
 
         return mast.read(handle)
-    elif format == "transfac":
+    elif fmt == "transfac":
         from Bio.motifs import transfac
 
         return transfac.read(handle, strict)
-    elif format in ("pfm", "sites", "jaspar"):
+    elif fmt in ("pfm", "sites", "jaspar"):
         from Bio.motifs import jaspar
 
-        return jaspar.read(handle, format)
+        return jaspar.read(handle, fmt)
     else:
-        raise ValueError("Unknown format %s" % format)
+        raise ValueError("Unknown format %s" % fmt)
 
 
-def read(handle, format, strict=True):
+def read(handle, fmt, strict=True):
     """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
@@ -133,10 +134,10 @@ def read(handle, format, strict=True):
     Or a single-motif MEME file,
 
     >>> from Bio import motifs
-    >>> with open("motifs/meme.out") as handle:
+    >>> with open("motifs/meme.psp_test.classic.zoops.xml") as handle:
     ...     m = motifs.read(handle, "meme")
     >>> m.consensus
-    Seq('CTCAATCGTA')
+    Seq('GCTTATGTAA')
 
     If the handle contains no records, or more than one record,
     an exception is raised:
@@ -159,14 +160,14 @@ def read(handle, format, strict=True):
     >>> motif.consensus
     Seq('TCTACGATTGAG')
 
-    Use the Bio.motifs.parse(handle, format) function if you want
+    Use the Bio.motifs.parse(handle, fmt) function if you want
     to read multiple records from the handle.
 
     If strict is True (default), the parser will raise a ValueError if the
     file contents does not strictly comply with the specified file format.
     """
-    format = format.lower()
-    motifs = parse(handle, format, strict)
+    fmt = fmt.lower()
+    motifs = parse(handle, fmt, strict)
     if len(motifs) == 0:
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
@@ -178,15 +179,10 @@ def read(handle, format, strict=True):
 class Instances(list):
     """Class containing a list of sequences that made the motifs."""
 
-    def __init__(self, instances=None, alphabet=None):
+    def __init__(self, instances=None, alphabet="ACGT"):
         """Initialize the class."""
         from Bio.Seq import Seq
 
-        try:
-            # Received an old-style alphabet
-            alphabet = alphabet.letters
-        except AttributeError:
-            pass
         if instances is None:
             instances = []
         self.length = None
@@ -199,24 +195,6 @@ class Instances(list):
                     % (len(instance), self.length)
                 )
                 raise ValueError(message)
-            try:
-                a = instance.alphabet
-            except AttributeError:
-                # The instance is a plain string
-                continue
-            try:
-                # Received an old-style alphabet
-                a = a.letters
-            except AttributeError:
-                pass
-            if a is None:
-                # If we didn't get a meaningful alphabet from the instances,
-                # assume it is DNA.
-                a = "ACGT"
-            if alphabet is None:
-                alphabet = a
-            elif alphabet != a:
-                raise ValueError("Alphabets are inconsistent")
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
@@ -266,7 +244,7 @@ class Instances(list):
 class Motif:
     """A class representing sequence motifs."""
 
-    def __init__(self, alphabet=None, instances=None, counts=None):
+    def __init__(self, alphabet="ACGT", instances=None, counts=None):
         """Initialize the class."""
         from . import matrix
 
@@ -276,12 +254,6 @@ class Motif:
                 ValueError, "Specify either instances or counts, don't specify both"
             )
         elif counts is not None:
-            try:
-                alphabet = alphabet.letters
-            except AttributeError:
-                pass
-            if alphabet is None:
-                alphabet = "ACGT"
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -295,8 +267,6 @@ class Motif:
             self.counts = None
             self.instances = None
             self.length = None
-            if alphabet is None:
-                alphabet = "ACGT"
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None
@@ -360,8 +330,7 @@ class Motif:
             self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
             if sorted(self.alphabet) != ["A", "C", "G", "T"]:
-                # TODO - Should this be a ValueError?
-                raise Exception(
+                raise ValueError(
                     "Setting the background to a single value only works for DNA motifs"
                     " (in which case the value is interpreted as the GC content)"
                 )
@@ -464,7 +433,7 @@ class Motif:
         """
         return self.counts.degenerate_consensus
 
-    def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
+    def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
@@ -520,11 +489,11 @@ class Motif:
         else:
             alpha = "auto"
 
-        frequencies = self.format("transfac")
+        frequencies = format(self, "transfac")
         url = "http://weblogo.threeplusone.com/create.cgi"
         values = {
             "sequences": frequencies,
-            "format": format.lower(),
+            "format": fmt.lower(),
             "stack_width": "medium",
             "stacks_per_line": "40",
             "alphabet": alpha,
@@ -611,7 +580,7 @@ class Motif:
         return self.__format__(format_spec)
 
 
-def write(motifs, format):
+def write(motifs, fmt):
     """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
@@ -621,21 +590,21 @@ def write(motifs, format):
      - transfac : TRANSFAC like files
 
     """
-    format = format.lower()
-    if format in ("pfm", "jaspar"):
+    fmt = fmt.lower()
+    if fmt in ("pfm", "jaspar"):
         from Bio.motifs import jaspar
 
-        return jaspar.write(motifs, format)
-    elif format == "transfac":
+        return jaspar.write(motifs, fmt)
+    elif fmt == "transfac":
         from Bio.motifs import transfac
 
         return transfac.write(motifs)
-    elif format == "clusterbuster":
+    elif fmt == "clusterbuster":
         from Bio.motifs import clusterbuster
 
         return clusterbuster.write(motifs)
     else:
-        raise ValueError("Unknown format type %s" % format)
+        raise ValueError("Unknown format type %s" % fmt)
 
 
 if __name__ == "__main__":

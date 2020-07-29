@@ -19,7 +19,6 @@ from copy import deepcopy
 from search_tests_common import compare_search_obj
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import single_letter_alphabet, generic_dna
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -155,8 +154,8 @@ class QueryResultCases(unittest.TestCase):
         # contains should work with hit ids or hit objects
         self.assertIn("hit1", self.qresult)
         self.assertIn(hit21, self.qresult)
-        self.assertFalse("hit5" in self.qresult)
-        self.assertFalse(hit41 in self.qresult)
+        self.assertNotIn("hit5", self.qresult)
+        self.assertNotIn(hit41, self.qresult)
 
     def test_contains_alt(self):
         """Test QueryResult.__contains__, with alternative IDs."""
@@ -196,8 +195,8 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(hit11, query["hit1"])
         self.assertEqual(hit11, query["alt1"])
         self.assertEqual(hit11, query["alt11"])
-        self.assertTrue(hit11.id != "alt1")
-        self.assertTrue(hit11.id != "alt11")
+        self.assertNotEqual(hit11.id, "alt1")
+        self.assertNotEqual(hit11.id, "alt11")
         hit11._id_alt = []
 
     def test_setitem_ok_alt_existing(self):
@@ -319,7 +318,7 @@ class QueryResultCases(unittest.TestCase):
         query = QueryResult([hit11])
         self.assertEqual(hit11, query["hit1"])
         self.assertEqual(hit11, query["alt1"])
-        self.assertTrue(hit11.id != "alt1")
+        self.assertNotEqual(hit11.id, "alt1")
         hit11._id_alt = []
 
     def test_delitem_string_ok(self):
@@ -516,7 +515,7 @@ class QueryResultCases(unittest.TestCase):
         filter_func = lambda hit: len(hit) > 50  # noqa: E731
         filtered = self.qresult.hit_filter(filter_func)
         self.assertEqual(0, len(filtered))
-        self.assertTrue(isinstance(filtered, QueryResult))
+        self.assertIsInstance(filtered, QueryResult)
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual("refseq_rna", filtered.target)
 
@@ -589,7 +588,7 @@ class QueryResultCases(unittest.TestCase):
         filter_func = lambda hsp: len(hsp) > 50  # noqa: E731
         filtered = self.qresult.hsp_filter(filter_func)
         self.assertEqual(0, len(filtered))
-        self.assertTrue(isinstance(filtered, QueryResult))
+        self.assertIsInstance(filtered, QueryResult)
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual("refseq_rna", filtered.target)
 
@@ -1089,7 +1088,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
     def test_alignment(self):
         """Test HSP.alignment property."""
         aln = self.hsp.aln
-        self.assertTrue(isinstance(aln, MultipleSeqAlignment))
+        self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(2, len(aln))
         self.assertTrue("ATCAGT", str(aln[0].seq))
         self.assertTrue("AT-ACT", str(aln[1].seq))
@@ -1218,21 +1217,21 @@ class HSPMultipleFragmentCases(unittest.TestCase):
                     self.assertEqual(getattr(fragment, attr_name), new_value)
                     self.assertNotEqual(getattr(fragment, attr_name), value)
 
-    def test_alphabet(self):
-        """Test HSP.alphabet getter."""
-        self.assertTrue(self.hsp.alphabet is single_letter_alphabet)
+    def test_molecule_type(self):
+        """Test HSP.molecule_type getter."""
+        self.assertTrue(self.hsp.molecule_type is None)
 
-    def test_alphabet_set(self):
-        """Test HSP.alphabet setter."""
+    def test_molecule_type_set(self):
+        """Test HSP.molecule_type setter."""
         # test initial values
-        self.assertTrue(self.hsp.alphabet is single_letter_alphabet)
+        self.assertTrue(self.hsp.molecule_type is None)
         for frag in self.hsp.fragments:
-            self.assertTrue(frag.alphabet is single_letter_alphabet)
-        self.hsp.alphabet = generic_dna
+            self.assertTrue(frag.molecule_type is None)
+        self.hsp.molecule_type = "DNA"
         # test values after setting
-        self.assertTrue(self.hsp.alphabet is generic_dna)
+        self.assertTrue(self.hsp.molecule_type == "DNA")
         for frag in self.hsp.fragments:
-            self.assertTrue(frag.alphabet is generic_dna)
+            self.assertTrue(frag.molecule_type == "DNA")
 
     def test_range(self):
         """Test HSP range properties."""
@@ -1278,7 +1277,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
                 attr_name = "%s_%s" % (seq_type, attr)
                 self.assertTrue(getattr(fragment, attr_name) is None)
         self.assertTrue(fragment.aln is None)
-        self.assertTrue(fragment.alphabet is single_letter_alphabet)
+        self.assertTrue(fragment.molecule_type is None)
         self.assertEqual(fragment.aln_annotation, {})
 
     def test_seqmodel(self):
@@ -1350,9 +1349,9 @@ class HSPFragmentCases(unittest.TestCase):
         hit_seq = SeqRecord(Seq("ATGCTAGCTACA"))
         query_seq = SeqRecord(Seq("ATG--AGCTAGG"))
         hsp = HSPFragment("hit_id", "query_id", hit_seq, query_seq)
-        self.assertTrue(isinstance(hsp.query, SeqRecord))
-        self.assertTrue(isinstance(hsp.hit, SeqRecord))
-        self.assertTrue(isinstance(hsp.aln, MultipleSeqAlignment))
+        self.assertIsInstance(hsp.query, SeqRecord)
+        self.assertIsInstance(hsp.hit, SeqRecord)
+        self.assertIsInstance(hsp.aln, MultipleSeqAlignment)
 
     def test_init_wrong_seqtypes(self):
         """Test HSPFragment.__init__, wrong sequence argument types."""
@@ -1366,34 +1365,35 @@ class HSPFragmentCases(unittest.TestCase):
     def test_seqmodel(self):
         """Test HSPFragment sequence attribute types and default values."""
         # check hit
-        self.assertTrue(isinstance(self.fragment.hit, SeqRecord))
+        self.assertIsInstance(self.fragment.hit, SeqRecord)
         self.assertEqual("<unknown description>", self.fragment.hit.description)
         self.assertEqual("aligned hit sequence", self.fragment.hit.name)
-        self.assertEqual(single_letter_alphabet, self.fragment.hit.seq.alphabet)
+        self.assertEqual(None, self.fragment.hit.annotations["molecule_type"])
         # check query
-        self.assertTrue(isinstance(self.fragment.query, SeqRecord))
+        self.assertIsInstance(self.fragment.query, SeqRecord)
         self.assertEqual("<unknown description>", self.fragment.query.description)
         self.assertEqual("aligned query sequence", self.fragment.query.name)
-        self.assertEqual(single_letter_alphabet, self.fragment.query.seq.alphabet)
+        self.assertEqual(None, self.fragment.query.annotations["molecule_type"])
         # check alignment
-        self.assertTrue(isinstance(self.fragment.aln, MultipleSeqAlignment))
-        self.assertEqual(single_letter_alphabet, self.fragment.aln._alphabet)
+        self.assertIsInstance(self.fragment.aln, MultipleSeqAlignment)
+        with self.assertRaises(AttributeError):
+            self.fragment.aln.molecule_type
 
-    def test_alphabet_no_seq(self):
-        """Test HSPFragment alphabet property, query and hit sequences not present."""
-        self.assertTrue(self.fragment.alphabet is single_letter_alphabet)
-        self.fragment.alphabet = generic_dna
-        self.assertTrue(self.fragment.alphabet is generic_dna)
+    def test_molecule_type_no_seq(self):
+        """Test HSPFragment molecule_type property, query and hit sequences not present."""
+        self.assertTrue(self.fragment.molecule_type is None)
+        self.fragment.molecule_type = "DNA"
+        self.assertTrue(self.fragment.molecule_type == "DNA")
 
-    def test_alphabet_with_seq(self):
-        """Test HSPFragment alphabet property, query or hit sequences present."""
-        self.assertTrue(self.fragment.alphabet is single_letter_alphabet)
+    def test_molecule_type_with_seq(self):
+        """Test HSPFragment molecule_type property, query or hit sequences present."""
+        self.assertTrue(self.fragment.molecule_type is None)
         self.fragment._hit = SeqRecord(Seq("AAA"))
         self.fragment._query = SeqRecord(Seq("AAA"))
-        self.fragment.alphabet = generic_dna
-        self.assertTrue(self.fragment.alphabet is generic_dna)
-        self.assertTrue(self.fragment.hit.seq.alphabet is generic_dna)
-        self.assertTrue(self.fragment.query.seq.alphabet is generic_dna)
+        self.fragment.molecule_type = "DNA"
+        self.assertTrue(self.fragment.molecule_type == "DNA")
+        self.assertTrue(self.fragment.hit.annotations["molecule_type"] == "DNA")
+        self.assertTrue(self.fragment.query.annotations["molecule_type"] == "DNA")
 
     def test_seq_unequal_hit_query_len(self):
         """Test HSPFragment sequence setter with unequal hit and query lengths."""
@@ -1422,7 +1422,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment.__getitem__."""
         # getitem is supported when alignment is present
         sliced_fragment = self.fragment[:5]
-        self.assertTrue(isinstance(sliced_fragment, HSPFragment))
+        self.assertIsInstance(sliced_fragment, HSPFragment)
         self.assertEqual(5, len(sliced_fragment))
         self.assertEqual("ATGCT", str(sliced_fragment.hit.seq))
         self.assertEqual("ATG--", str(sliced_fragment.query.seq))

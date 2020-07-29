@@ -54,6 +54,7 @@ Classes:
 
 
 from collections import OrderedDict
+import functools
 
 from Bio.Seq import MutableSeq, reverse_complement
 
@@ -270,17 +271,17 @@ class SeqFeature:
 
     def __repr__(self):
         """Represent the feature as a string for debugging."""
-        answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
+        answer = "%s(%r" % (self.__class__.__name__, self.location)
         if self.type:
-            answer += ", type=%s" % repr(self.type)
+            answer += ", type=%r" % self.type
         if self.location_operator:
-            answer += ", location_operator=%s" % repr(self.location_operator)
+            answer += ", location_operator=%r" % self.location_operator
         if self.id and self.id != "<unknown id>":
-            answer += ", id=%s" % repr(self.id)
+            answer += ", id=%r" % self.id
         if self.ref:
-            answer += ", ref=%s" % repr(self.ref)
+            answer += ", ref=%r" % self.ref
         if self.ref_db:
-            answer += ", ref_db=%s" % repr(self.ref_db)
+            answer += ", ref_db=%r" % self.ref_db
         answer += ")"
         return answer
 
@@ -339,19 +340,18 @@ class SeqFeature:
         here reverse strand features are not permitted.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> f.extract(seq)
-        Seq('VALIVIC', ProteinAlphabet())
+        Seq('VALIVIC')
 
         If the FeatureLocation is None, e.g. when parsing invalid locus
         locations in the GenBank parser, extract() will raise a ValueError.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import SeqFeature
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> f = SeqFeature(None, type="domain")
         >>> f.extract(seq)
         Traceback (most recent call last):
@@ -392,9 +392,7 @@ class SeqFeature:
         as Seq.translate, refer to that documentation for further information.
 
         Arguments:
-         - parent_sequence - This method will translate DNA or RNA sequences,
-           and those with a nucleotide or generic alphabet. Trying to
-           translate a protein sequence raises an exception.
+         - parent_sequence - A DNA or RNA sequence.
          - table - Which codon table to use if there is no transl_table
            qualifier for this feature. This can be either a name
            (string), an NCBI identifier (integer), or a CodonTable
@@ -408,9 +406,8 @@ class SeqFeature:
            Will override a codon_start qualifier
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
         >>> f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         >>> f.qualifiers['transl_table'] = [11]
 
@@ -419,13 +416,13 @@ class SeqFeature:
         by giving explicit arguments:
 
         >>> f.translate(seq, cds=False)
-        Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        Seq('GYTYR*CL**')
 
         Now use the start_offset argument to change the frame. Note
         this uses python 0-based numbering.
 
         >>> f.translate(seq, start_offset=1, cds=False)
-        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+        Seq('VTLTDNVSD')
 
         Alternatively use the codon_start qualifier to do the same
         thing. Note: this uses 1-based numbering, which is found
@@ -433,7 +430,7 @@ class SeqFeature:
 
         >>> f.qualifiers['codon_start'] = [2]
         >>> f.translate(seq, cds=False)
-        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+        Seq('VTLTDNVSD')
         """
         # see if this feature should be translated in a different
         # frame using the "codon_start" qualifier
@@ -483,14 +480,13 @@ class SeqFeature:
         """Return the length of the region where the feature is located.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> len(f)
         7
         >>> f.extract(seq)
-        Seq('VALIVIC', ProteinAlphabet())
+        Seq('VALIVIC')
         >>> len(f.extract(seq))
         7
 
@@ -636,8 +632,8 @@ class Reference:
 
     def __repr__(self):
         """Represent the Reference object as a string for debugging."""
-        # TODO - Update this is __init__ later accpets values
-        return "%s(title=%s, ...)" % (self.__class__.__name__, repr(self.title))
+        # TODO - Update this is __init__ later accepts values
+        return "%s(title=%r, ...)" % (self.__class__.__name__, self.title)
 
     def __eq__(self, other):
         """Check if two Reference objects should be considered equal.
@@ -1104,12 +1100,11 @@ class FeatureLocation:
         a MutableSeq as the parent sequence will return a Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import FeatureLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> feature_loc = FeatureLocation(8, 15)
         >>> feature_loc.extract(seq)
-        Seq('VALIVIC', ProteinAlphabet())
+        Seq('VALIVIC')
 
         """
         if self.ref or self.ref_db:
@@ -1271,7 +1266,7 @@ class CompoundLocation:
     def __add__(self, other):
         """Combine locations, or shift the location by an integer offset.
 
-        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
+        >>> from Bio.SeqFeature import FeatureLocation
         >>> f1 = FeatureLocation(15, 17) + FeatureLocation(20, 30)
         >>> print(f1)
         join{[15:17], [20:30]}
@@ -1522,22 +1517,18 @@ class CompoundLocation:
         a MutableSeq as the parent sequence will return a Seq object.
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_protein
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
-        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL")
         >>> fl1 = FeatureLocation(2, 8)
         >>> fl2 = FeatureLocation(10, 15)
         >>> fl3 = CompoundLocation([fl1,fl2])
         >>> fl3.extract(seq)
-        Seq('QHKAMILIVIC', ProteinAlphabet())
+        Seq('QHKAMILIVIC')
 
         """
         # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
-        # We use addition rather than a join to avoid alphabet issues:
-        f_seq = parts[0]
-        for part in parts[1:]:
-            f_seq += part
+        f_seq = functools.reduce(lambda x, y: x + y, parts)
         return f_seq
 
 
@@ -1618,7 +1609,7 @@ class ExactPosition(int, AbstractPosition):
 
     def _flip(self, length):
         """Return a copy of the location after the parent is reversed (PRIVATE)."""
-        # By default perserve any subclass
+        # By default preserve any subclass
         return self.__class__(length - int(self))
 
 
@@ -2191,7 +2182,7 @@ class PositionGap:
 
     def __repr__(self):
         """Represent the position gap as a string for debugging."""
-        return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
+        return "%s(%r)" % (self.__class__.__name__, self.gap_size)
 
     def __str__(self):
         """Return a representation of the PositionGap object (with python counting)."""

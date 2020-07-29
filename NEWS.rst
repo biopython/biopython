@@ -8,8 +8,47 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.77
+(In progress, not yet released): Biopython 1.78
 ===============================================
+
+This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
+tested on PyPy3.6.1 v7.1.1.
+
+The main change is that ``Bio.Alphabet`` is no longer used. In some cases you
+will now have to specify expected letters, molecule type (DNA, RNA, protein),
+or gap character explicitly. Please consult the updated Tutorial and API
+documentation for guidance. This simplification has sped up many ``Seq``
+object methods.
+
+``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
+in the ``Bio.SeqIO.QualityIO`` module.
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite. There has been further work to follow the Python PEP8,
+PEP257 and best practice standard coding style, and all of the tests have
+been reformatted with the ``black`` tool to match the main code base.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Carlos Pena
+- Chris Rands
+- Christian Brueffer
+- João Rodrigues
+- João Vitor F Cavalcante (first contribution)
+- Marie Crane
+- Michiel de Hoon
+- Peter Cock
+- Sergio Valqui
+- Zheng Ruan
+
+25 May 2020: Biopython 1.77
+===========================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8 It has also been
 tested on PyPy3.6.1 v7.1.1-beta0.
@@ -24,6 +63,12 @@ which adds Cephalodiscidae mitochondrial as table 33.
 
 Updated ``Bio.Restriction`` to the January 2020 release of REBASE.
 
+A major contribution by Rob Miller to ``Bio.PDB`` provides new methods to
+handle protein structure transformations using dihedral angles (internal
+coordinates). The new framework supports lossless interconversion between
+internal and cartesian coordinates, which, among other uses, simplifies the
+analysis and manipulation of coordinates of proteins structures.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -31,24 +76,32 @@ more details.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite. There has been further work to follow the Python
-PEP8, PEP257 and best practice standard coding style, and more of the code
-style has been reformatted with the ``black`` tool.
+PEP8, PEP257 and best practice standard coding style, and all the main code
+base has been reformatted with the ``black`` tool.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Alexander Decurnou (first contribution)
 - Andrei Istrate (first contribution)
 - Andrey Raspopov
+- Artemi Bendandi (first contribution)
 - Austin Varela (first contribution)
+- Chris Daley
 - Chris Rands
 - Deepak Khatri
 - Hielke Walinga (first contribution)
 - Kai Blin
+- Karthikeyan Singaravelan (first contribution)
+- Konstantinos Zisis (first contribution)
 - Markus Piotrowski
+- Michiel de Hoon
 - Peter Cock
 - Rob Miller
 - Sergio Valqui
+- Steve Bond
 - Sujan Dulal (first contribution)
+- Tianyi Shi (first contribution)
 
 20 December 2019: Biopython 1.76
 ================================
@@ -85,22 +138,15 @@ style has been reformatted with the ``black`` tool.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Andrey Raspopov
 - Chris Daley (first contribution)
 - Chris Rands
-- Artemi Bendandi (first contribution)
 - Christian Brueffer
-- Deepak Khatri
 - Ilya Flyamer (first contribution)
 - Jakub Lipinski (first contribution)
 - Michael R. Crusoe (first contribution)
 - Michiel de Hoon
 - Peter Cock
-- Chris Daley (first contribution)
-- Michiel de Hoon
-- Jakub Lipinski (first contribution)
 - Sergio Valqui
-- Konstantinos Zisis (first contribution)
 
 6 November 2019: Biopython 1.75
 ===============================
@@ -111,8 +157,8 @@ PyPy2.7.13 v7.1.1 and PyPy3.6.1 v7.1.1-beta0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
-The restriction enzyme list in Bio.Restriction has been updated to the August
-2019 release of REBASE.
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
+August 2019 release of REBASE.
 
 ``Bio.SeqIO`` now supports reading and writing files in the native format of
 Christian Marck's DNA Strider program ("xdna" format, also used by Serial
@@ -135,6 +181,11 @@ PDB/mmCIF/MMTF in Biopython allows conversion between all three file formats.
 Values from mmCIF files are now read in as a list even when they consist of a
 single value. This change improves consistency and reduces the likelihood of
 making an error, but will require user code to be updated accordingly.
+
+`Bio.motifs.meme` has been updated to parse XML output files from MEME over
+the plain-text output file. The goal of this change is to parse a more
+structured data source with minimal loss of functionality upon future MEME
+releases.
 
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
@@ -191,6 +242,7 @@ possible, especially the following contributors:
 - Peter Kerpedjiev
 - Sergio Valqui
 - Spencer Bliven
+- Victor Lin
 
 
 16 July 2019: Biopython 1.74
@@ -251,7 +303,7 @@ maximum number of tries and the sleep between them can be configured by
 changing ``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
 (The defaults are 3 tries and 15 seconds, respectively.)
 
-The restriction enzyme list in Bio.Restriction has been updated to the May
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the May
 2019 release of REBASE.
 
 All tests using the older print-and-compare approach have been replaced by
@@ -450,7 +502,7 @@ written out and facilitates conversion between the PDB and mmCIF file formats.
 Bio.Emboss.Applications has been updated to fix a wrong parameter in fuzznuc
 wrapper and include a new wrapper for fuzzpro.
 
-The restriction enzyme list in Bio.Restriction has been updated to the
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
 November 2017 release of REBASE.
 
 New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2)
@@ -666,7 +718,7 @@ The GenBank output now uses colon space to match current NCBI DBLINK lines.
 The Bio.Affy package supports Affymetrix version 4 of the CEL file format,
 in addition to version 3.
 
-The restriction enzyme list in Bio.Restriction has been updated to the
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
 February 2017 release of REBASE.
 
 Bio.PDB.PDBList now can download PDBx/mmCif (new default), PDB (old default),
@@ -833,7 +885,7 @@ updates the taxon table left/right keys when updating the taxonomy.
 There have been some fixes to the MMCIF structure parser which now uses
 identifiers which better match results from the PDB structure parse.
 
-The restriction enzyme list in Bio.Restriction has been updated to the
+The restriction enzyme list in ``Bio.Restriction`` has been updated to the
 May 2016 release of REBASE.
 
 The mmCIF parser in Bio.PDB.MMCIFParser has been joined by a second version

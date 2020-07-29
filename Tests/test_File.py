@@ -21,8 +21,8 @@ class RandomAccess(unittest.TestCase):
     def test_plain(self):
         """Test plain text file."""
         with File._open_for_random_access("Quality/example.fastq") as handle:
-            self.assertTrue("r" in handle.mode)
-            self.assertTrue("b" in handle.mode)
+            self.assertIn("r", handle.mode)
+            self.assertIn("b", handle.mode)
 
     def test_bgzf(self):
         """Test BGZF compressed file."""
@@ -59,13 +59,16 @@ class AsHandleTestCase(unittest.TestCase):
                 self.assertEqual(
                     fp,
                     handle,
-                    "as_handle should return argument when given a file-like object",
+                    "as_handle should "
+                    "return argument when given a "
+                    "file-like object",
                 )
                 self.assertFalse(handle.closed)
 
             self.assertFalse(
                 handle.closed,
-                "Exiting as_handle given a file-like object should not close the file",
+                "Exiting as_handle given a file-like object "
+                "should not close the file",
             )
 
     def test_string_path(self):

@@ -19,7 +19,6 @@ Journal article:
 import re
 import warnings
 
-from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -91,7 +90,7 @@ class Phyloxml(PhyloElement):
             if tree.name == index:
                 return tree
         else:
-            raise KeyError("no phylogeny found with name " + repr(index))
+            raise KeyError("no phylogeny found with name %r" % index)
 
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""
@@ -248,7 +247,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     def to_alignment(self):
         """Construct an alignment from the aligned sequences in this tree."""
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def is_aligned_seq(elem):
             if isinstance(elem, Sequence) and elem.mol_seq.is_aligned:
                 return True
@@ -260,7 +259,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         except StopIteration:
             # No aligned sequences were found --> empty MSA
             return MultipleSeqAlignment([])
-        msa = MultipleSeqAlignment([first_seq.to_seqrecord()], first_seq.get_alphabet())
+        msa = MultipleSeqAlignment([first_seq.to_seqrecord()])
         msa.extend(seq.to_seqrecord() for seq in seqs)
         return msa
 
@@ -711,24 +710,16 @@ class Confidence(PhyloElement):
         """Conduct reverse multiplication between values of two Confidence objects."""
         return other * self.value
 
-    def __div__(self, other):
-        """Conduct division between values of two Confidence objects."""
-        return self.value.__div__(other)
-
-    def __rdiv__(self, other):
-        """Conduct revers division between values of two Confidence objects."""
-        return other.__div__(self.value)
-
     def __truediv__(self, other):
-        """Rational-style division in Py3.0+."""
-        return self.value / other
+        """Conduct division between values of two Confidence objects."""
+        return self.value.__truediv__(other)
 
     def __rtruediv__(self, other):
-        """Conduct revers Rational-style division."""
-        return other / self.value
+        """Conduct reverse division between values of two Confidence objects."""
+        return other.__rtruediv__(self.value)
 
     def __floordiv__(self, other):
-        """C-style and old-style division in Py3.0+."""
+        """C-style and old-style division."""
         return self.value.__floordiv__(other)
 
     def __rfloordiv__(self, other):
@@ -920,7 +911,7 @@ class Events(PhyloElement):
         except AttributeError:
             raise KeyError(key) from None
         if val is None:
-            raise KeyError("%s has not been set in this object" % repr(key))
+            raise KeyError("%r has not been set in this object" % key)
         return val
 
     def __setitem__(self, key, val):
@@ -1217,11 +1208,7 @@ class Sequence(PhyloElement):
 
     """
 
-    alphabets = {
-        "dna": Alphabet.generic_dna,
-        "rna": Alphabet.generic_rna,
-        "protein": Alphabet.generic_protein,
-    }
+    types = {"dna", "rna", "protein"}
     re_symbol = re.compile(r"\S{1,10}")
 
     def __init__(
@@ -1243,7 +1230,7 @@ class Sequence(PhyloElement):
         other=None,
     ):
         """Initialize value for a Sequence object."""
-        _check_str(type, self.alphabets.__contains__)
+        _check_str(type, self.types.__contains__)
         _check_str(symbol, self.re_symbol.match)
         self.type = type
         self.id_ref = id_ref
@@ -1262,19 +1249,21 @@ class Sequence(PhyloElement):
     def from_seqrecord(cls, record, is_aligned=None):
         """Create a new PhyloXML Sequence from a SeqRecord object."""
         if is_aligned is None:
-            is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
+            is_aligned = "-" in record.seq
         params = {
             "accession": Accession(record.id, ""),
             "symbol": record.name,
             "name": record.description,
             "mol_seq": MolSeq(str(record.seq), is_aligned),
         }
-        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
-            params["type"] = "dna"
-        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
-            params["type"] = "rna"
-        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            params["type"] = "protein"
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type is not None:
+            if "DNA" in molecule_type:
+                params["type"] = "dna"
+            elif "RNA" in molecule_type:
+                params["type"] = "rna"
+            elif "protein" in molecule_type:
+                params["type"] = "protein"
 
         # Unpack record.annotations
         for key in ("id_ref", "id_source", "location"):
@@ -1341,13 +1330,13 @@ class Sequence(PhyloElement):
             }
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
             return {key: val for key, val in dct.items() if val is not None}
 
         seqrec = SeqRecord(
-            Seq(self.mol_seq.value, self.get_alphabet()),
+            Seq(self.mol_seq.value),
             **clean_dict(
                 {
                     "id": str(self.accession),
@@ -1362,6 +1351,14 @@ class Sequence(PhyloElement):
                 dom.to_seqfeature() for dom in self.domain_architecture.domains
             ]
         # Sequence attributes with no SeqRecord equivalent
+        if self.type == "dna":
+            molecule_type = "DNA"
+        elif self.type == "rna":
+            molecule_type = "RNA"
+        elif self.type == "protein":
+            molecule_type = "protein"
+        else:
+            molecule_type = None
         seqrec.annotations = clean_dict(
             {
                 "id_ref": self.id_ref,
@@ -1375,6 +1372,7 @@ class Sequence(PhyloElement):
                         "type": self.uri.type,
                     }
                 ),
+                "molecule_type": molecule_type,
                 "annotations": self.annotations
                 and [
                     clean_dict(
@@ -1405,13 +1403,6 @@ class Sequence(PhyloElement):
             }
         )
         return seqrec
-
-    def get_alphabet(self):
-        """Get the alphabet for the sequence."""
-        alph = self.alphabets.get(self.type, Alphabet.generic_alphabet)
-        if self.mol_seq and self.mol_seq.is_aligned:
-            return Alphabet.Gapped(alph)
-        return alph
 
 
 class SequenceRelation(PhyloElement):

@@ -50,7 +50,6 @@ import sys
 from Bio.SeqUtils import ProtParamData  # Local
 from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
 
@@ -75,9 +74,9 @@ class ProteinAnalysis:
     def __init__(self, prot_sequence, monoisotopic=False):
         """Initialize the class."""
         if prot_sequence.islower():
-            self.sequence = Seq(prot_sequence.upper(), IUPAC.protein)
+            self.sequence = Seq(prot_sequence.upper())
         else:
-            self.sequence = Seq(prot_sequence, IUPAC.protein)
+            self.sequence = Seq(prot_sequence)
         self.amino_acids_content = None
         self.amino_acids_percent = None
         self.length = len(self.sequence)
@@ -125,7 +124,9 @@ class ProteinAnalysis:
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence."""
-        return molecular_weight(self.sequence, monoisotopic=self.monoisotopic)
+        return molecular_weight(
+            self.sequence, seq_type="protein", monoisotopic=self.monoisotopic
+        )
 
     def aromaticity(self):
         """Calculate the aromaticity according to Lobry, 1994.

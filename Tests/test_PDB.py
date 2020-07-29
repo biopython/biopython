@@ -31,11 +31,12 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
-from Bio.Alphabet import generic_protein
 from Bio.PDB import (
     PDBParser,
     PPBuilder,
@@ -113,7 +114,7 @@ class A_ExceptionTest(unittest.TestCase):
         """Check error: Parse an entry with bad x,y,z value."""
         data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
         parser = PDBParser(PERMISSIVE=False)
-        s = parser.get_structure("example", StringIO(data))
+        _ = parser.get_structure("example", StringIO(data))
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
         self.assertRaises(
             PDBConstructionException, parser.get_structure, "example", StringIO(data)
@@ -198,8 +199,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assertTrue(isinstance(s, Seq))
-        self.assertEqual(s.alphabet, generic_protein)
+        self.assertIsInstance(s, Seq)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
             "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
@@ -217,8 +217,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assertTrue(isinstance(s, Seq))
-        self.assertEqual(s.alphabet, generic_protein)
+        self.assertIsInstance(s, Seq)
         self.assertEqual(
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
             "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
@@ -679,11 +678,12 @@ class ParseTest(unittest.TestCase):
         self.assertGreaterEqual(struct2, struct)
 
         # Model
-        self.assertTrue(model == model)  # __eq__ same type
-        self.assertFalse(struct[0] == struct[1])
 
-        self.assertFalse(struct[0] == [])  # __eq__ diff. types
-        self.assertFalse(struct == model)
+        self.assertEqual(model, model)  # __eq__ same type
+        self.assertNotEqual(struct[0], struct[1])
+
+        self.assertNotEqual(struct[0], [])  # __eq__ diff. types
+        self.assertNotEqual(struct, model)
 
         # residues with same ID string should not be equal if the parent is not equal
         res1, res2, res3 = residues[0], residues[-1], struct2[1]["A"][44]
@@ -691,7 +691,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(
             res2, res3
         )  # Equality of identical residues with different structure ID
-        self.assertFalse(res1 == res2)
+        self.assertNotEqual(res1, res2)
         self.assertGreater(res1, res2)
         self.assertGreaterEqual(res1, res2)
         self.assertLess(res2, res1)
@@ -710,22 +710,6 @@ class ParseTest(unittest.TestCase):
         self.assertLessEqual(atom2, atom1)
         self.assertLessEqual(atom2, atom3)
 
-        # In Py2 this will be True/False, in Py3 it will raise a TypeError.
-        try:
-            self.assertTrue(atom1 < res1)  # __gt__ diff. types
-        except TypeError:
-            pass
-
-        try:
-            self.assertTrue(struct > model)  # __gt__ diff. types
-        except TypeError:
-            pass
-
-        try:
-            self.assertFalse(struct >= [])  # __le__ diff. types
-        except TypeError:
-            pass
-
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
@@ -735,7 +719,7 @@ class ParseReal(unittest.TestCase):
         parser = PDBParser()
         handle = StringIO()
         with self.assertRaises(ValueError) as context_manager:
-            struct = parser.get_structure("MT", handle)
+            _ = parser.get_structure("MT", handle)
         self.assertEqual(str(context_manager.exception), "Empty file.")
 
     def test_residue_sort(self):
@@ -777,8 +761,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 220)
             # Check the sequence
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
+            self.assertIsInstance(s, Seq)
             # Here non-standard MSE are shown as M
             self.assertEqual(
                 "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
@@ -796,24 +779,21 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
+            self.assertIsInstance(s, Seq)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
             # Second fragment
             pp = polypeptides[1]
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
+            self.assertIsInstance(s, Seq)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
             # Third fragment
             pp = polypeptides[2]
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
+            self.assertIsInstance(s, Seq)
             self.assertEqual("TACQG", str(s))
 
     def test_strict(self):
@@ -916,9 +896,42 @@ class ParseReal(unittest.TestCase):
             "O O O O O O O O O O O O O O O O O O O O O",
         )
 
+    def test_duplicated_residue_permissive(self):
+        """Throw (silent) exception on duplicated residue."""
+        data = (
+            "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
+            "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
+            "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
+            "END\n"
+        )
+
+        parser = PDBParser()
+        with warnings.catch_warnings(record=True) as w:
+            s = parser.get_structure("example", StringIO(data))
+            self.assertEqual(len(w), 1)
+
+        reslist = list(s.get_residues())
+        n_res = len(reslist)
+        resids = [r.id[1] for r in reslist]
+        self.assertEqual(n_res, 2)
+        self.assertEqual(resids, [5, 6])
+
+    def test_duplicated_residue_strict(self):
+        """Throw exception on duplicated residue."""
+        data = (
+            "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
+            "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
+            "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
+            "END\n"
+        )
+
+        parser = PDBParser(PERMISSIVE=False)
+        with self.assertRaises(PDBConstructionException):
+            _ = parser.get_structure("example", StringIO(data))
+
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
-        # comment for D202 flake8 vs black disagreement
+
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 3)
             for idx, model in enumerate(struct):
@@ -981,6 +994,42 @@ class WriteTest(unittest.TestCase):
             nresidues = len(list(struct2.get_residues()))
             self.assertEqual(len(struct2), 1)
             self.assertEqual(nresidues, 158)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_preserve_numbering(self):
+        """Test writing PDB and preserve atom numbering."""
+        io = PDBIO()
+        io.set_structure(self.structure)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            io.save(filename)  # default preserve_atom_numbering=False
+
+            struct = self.parser.get_structure("1a8o", filename)
+            serials = [a.serial_number for a in struct.get_atoms()]
+            og_serials = list(range(1, len(serials) + 1))
+            self.assertEqual(og_serials, serials)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_auto_numbering(self):
+        """Test writing PDB and do not preserve atom numbering."""
+        io = PDBIO()
+        io.set_structure(self.structure)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            io.save(filename, preserve_atom_numbering=True)
+
+            struct = self.parser.get_structure("1a8o", filename)
+            serials = [a.serial_number for a in struct.get_atoms()]
+            og_serials = [a.serial_number for a in self.structure.get_atoms()]
+            self.assertEqual(og_serials, serials)
         finally:
             os.remove(filename)
 
@@ -1207,7 +1256,7 @@ class Exposure(unittest.TestCase):
 
     def test_HSExposureCA(self):
         """HSExposureCA."""
-        hse = HSExposureCA(self.model, self.radius)
+        _ = HSExposureCA(self.model, self.radius)
         residues = self.a_residues
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(0, len(residues[1].xtra))
@@ -1232,7 +1281,7 @@ class Exposure(unittest.TestCase):
 
     def test_HSExposureCB(self):
         """HSExposureCB."""
-        hse = HSExposureCB(self.model, self.radius)
+        _ = HSExposureCB(self.model, self.radius)
         residues = self.a_residues
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(2, len(residues[1].xtra))
@@ -1254,7 +1303,7 @@ class Exposure(unittest.TestCase):
 
     def test_ExposureCN(self):
         """HSExposureCN."""
-        hse = ExposureCN(self.model, self.radius)
+        _ = ExposureCN(self.model, self.radius)
         residues = self.a_residues
         self.assertEqual(0, len(residues[0].xtra))
         self.assertEqual(1, len(residues[1].xtra))
@@ -1585,15 +1634,15 @@ class CopyTests(unittest.TestCase):
 
     def test_atom_copy(self):
         aa = self.a.copy()
-        self.assertFalse(self.a is aa)
-        self.assertFalse(self.a.get_coord() is aa.get_coord())
+        self.assertIsNot(self.a, aa)
+        self.assertIsNot(self.a.get_coord(), aa.get_coord())
 
     def test_entity_copy(self):
         """Make a copy of a residue."""
         for e in (self.s, self.m, self.c, self.r):
             ee = e.copy()
-            self.assertFalse(e is ee)
-            self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+            self.assertIsNot(e, ee)
+            self.assertIsNot(e.get_list()[0], ee.get_list()[0])
 
 
 def eprint(*args, **kwargs):
@@ -1654,7 +1703,7 @@ class DsspTests(unittest.TestCase):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
         # Read the DSSP data into the pdb object:
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
         # Now compare the xtra attribute of the pdb object
         # residue by residue with the pre-computed values:
         i = 0
@@ -1667,7 +1716,7 @@ class DsspTests(unittest.TestCase):
                     # Then convert each element to float where possible:
                     xtra_list_ref = list(map(will_it_float, xtra_list_ref))
                     # The xtra attribute is a dict.
-                    # To compare with the pre-comouted values first sort according to keys:
+                    # To compare with the pre-computed values first sort according to keys:
                     xtra_itemts = sorted(
                         res.xtra.items(), key=lambda s: s[0]
                     )  # noqa: E731
@@ -1688,7 +1737,7 @@ class DsspTests(unittest.TestCase):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
         # Read the DSSP data into the pdb object:
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Sander", "DSSP")
         # Then compare the RASA values for each residue with the pre-computed values:
         i = 0
         with open("PDB/Sander_RASA.txt") as fh_ref:
@@ -1703,7 +1752,7 @@ class DsspTests(unittest.TestCase):
         # Wilke (procedure similar as for the Sander values above):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Wilke", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Wilke", "DSSP")
         i = 0
         with open("PDB/Wilke_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
@@ -1717,7 +1766,7 @@ class DsspTests(unittest.TestCase):
         # Miller (procedure similar as for the Sander values above):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
-        trash_var = DSSP(m, "PDB/2BEG.dssp", "dssp", "Miller", "DSSP")
+        _ = DSSP(m, "PDB/2BEG.dssp", "dssp", "Miller", "DSSP")
         i = 0
         with open("PDB/Miller_RASA.txt") as fh_ref:
             ref_lines = fh_ref.readlines()
@@ -1770,9 +1819,7 @@ class ResidueDepthTests(unittest.TestCase):
         biopy_radii = []
         for atom in model.get_atoms():
             biopy_radii.append(_get_atom_radius(atom, rtype="united"))
-
-        assert len(msms_radii) == len(biopy_radii)
-        self.assertSequenceEqual(msms_radii, biopy_radii)
+        self.assertListEqual(msms_radii, biopy_radii)
 
 
 if __name__ == "__main__":

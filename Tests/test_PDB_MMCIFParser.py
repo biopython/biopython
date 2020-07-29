@@ -23,11 +23,12 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
 
-    raise MissingPythonDependencyError("Install NumPy if you want to use Bio.PDB.") from None
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 
 from Bio.Seq import Seq
-from Bio.Alphabet import generic_protein
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
 from Bio.PDB import PPBuilder, CaPPBuilder
@@ -78,14 +79,13 @@ class ParseReal(unittest.TestCase):
 
             self.assertEqual(s, f_s)  # enough to test this
 
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
+            self.assertIsInstance(s, Seq)
 
             # Here non-standard MSE are shown as M
             self.assertEqual(
                 "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                 "NANPDCKTILKALGPGATLEEMMTACQG",
-                str(s),
+                s,
             )
 
             # ==========================================================
@@ -100,27 +100,24 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
+            self.assertIsInstance(s, Seq)
+            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", s)
 
             # Second fragment
             pp = polypeptides[1]
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
+            self.assertIsInstance(s, Seq)
+            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", s)
 
             # Third fragment
             pp = polypeptides[2]
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual("TACQG", str(s))
+            self.assertIsInstance(s, Seq)
+            self.assertEqual("TACQG", s)
 
         s_atoms = list(structure.get_atoms())
         f_atoms = list(f_structure.get_atoms())
@@ -207,12 +204,9 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 51)
             # Check the sequence
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
+            self.assertIsInstance(s, Seq)
             # Here non-standard MSE are shown as M
-            self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
-            )
+            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s)
             # ==========================================================
             # Now try strict version with only standard amino acids
             polypeptides = ppbuild.build_peptides(structure[0], True)
@@ -223,11 +217,8 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(pp[-1].get_id()[1], 51)
             # Check the sequence
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual(
-                "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", str(s)
-            )
+            self.assertIsInstance(s, Seq)
+            self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", s)
 
         # This structure contains several models with multiple lengths.
         # The tests were failing.
@@ -256,9 +247,8 @@ class ParseReal(unittest.TestCase):
                 "KTDSCQGDSGGPLVCSLQGRMTLTGIVSWGRGCALKDKPGVYTRVSHFLPWIRSHTKE"
             )
             s = pp.get_sequence()
-            self.assertTrue(isinstance(s, Seq))
-            self.assertEqual(s.alphabet, generic_protein)
-            self.assertEqual(refseq, str(s))
+            self.assertIsInstance(s, Seq)
+            self.assertEqual(refseq, s)
 
     def test_filehandle(self):
         """Test if the parser can handle file handle as well as filename."""
@@ -344,7 +334,7 @@ class CIFtoPDB(unittest.TestCase):
     """Testing conversion between formats: CIF to PDB."""
 
     def test_conversion(self):
-        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare."""
+        """Parse 1LCD.cif, write 1LCD.pdb, parse again and compare."""
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
 
@@ -367,6 +357,29 @@ class CIFtoPDB(unittest.TestCase):
         pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
         cif_atom_elems = [a.element for a in cif_struct.get_atoms()]
         self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
+
+    def test_conversion_not_preserve_numbering(self):
+        """Convert mmCIF to PDB and renumber atom serials."""
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+
+        pdb_writer.save(filename, preserve_atom_numbering=False)
+
+    def test_conversion_preserve_numbering(self):
+        """Convert mmCIF to PDB and preserve original serial numbering."""
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/a_structure.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+
+        with self.assertRaises(ValueError):
+            pdb_writer.save(filename, preserve_atom_numbering=True)
 
 
 if __name__ == "__main__":

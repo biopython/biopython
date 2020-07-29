@@ -2,7 +2,7 @@
 \label{chapter:seqio}
 
 In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick_start} and also used in Chapter~\ref{chapter:seq_annot}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
-See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
+See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/docs/\bpversion/api/Bio.SeqIO.html}{online}):
 
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
@@ -23,8 +23,6 @@ The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data
 \item The first argument is a \textit{handle} to read the data from, or a filename. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
-
-\noindent There is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
 
 The \verb|Bio.SeqIO.parse()| function returns an \textit{iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop as shown below.
 
@@ -54,7 +52,7 @@ for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(len(seq_record))
 \end{minted}
 
-Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}).
+Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/docs/\bpversion/api/Bio.SeqIO.html}{online}).
 
 Another very common way to use a Python iterator is within a list comprehension (or
 a generator expression).  For example, if all you wanted to extract from the file was
@@ -137,11 +135,11 @@ print(len(first_record))
 Found 94 records
 The last record
 Z78439.1
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 592
 The first record
 Z78533.1
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
 \end{minted}
 
@@ -177,7 +175,7 @@ Number of features: 5
 /date=30-NOV-2006
 /organism=Cypripedium irapeanum
 /gi=2765658
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 \end{minted}
 
 This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.
@@ -535,7 +533,7 @@ print(seq_record.annotations["keywords"])
 O23729
 CHS3_BROFI
 RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;
-Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())
+Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE')
 Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
 \end{minted}
@@ -617,8 +615,8 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
->>> print(repr(seq_record.seq))
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+>>> seq_record.seq
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
 \end{minted}
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
@@ -756,7 +754,7 @@ As an example, let's use the same GenBank file as before:
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
 >>> orchid_dict.close()
 \end{minted}
 
@@ -767,7 +765,7 @@ used in the other \verb|Bio.SeqIO| functions). You can use many other
 simple file formats, including FASTA and FASTQ files (see the example in
 Section~\ref{sec:fastq-indexing}). However, alignment
 formats like PHYLIP or Clustal are not supported. Finally as an optional
-argument you can supply an alphabet, or a key function.
+argument you can supply a key function.
 
 Here is the same example using the FASTA file - all we change is the
 filename and the format name:
@@ -1069,7 +1067,6 @@ Here is an example, where we start by creating a few \verb|SeqRecord| objects th
 \begin{minted}{python}
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_protein
 
 rec1 = SeqRecord(
     Seq(
@@ -1077,7 +1074,6 @@ rec1 = SeqRecord(
         "GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK"
         "NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM"
         "SSAC",
-        generic_protein,
     ),
     id="gi|14150838|gb|AAK54648.1|AF376133_1",
     description="chalcone synthase [Cucumis sativus]",
@@ -1087,7 +1083,6 @@ rec2 = SeqRecord(
     Seq(
         "YPDYYFRITNREHKAELKEKFQRMCDKSMIKKRYMYLTEEILKENPSMCEYMAPSLDARQ"
         "DMVVVEIPKLGKEAAVKAIKEWGQ",
-        generic_protein,
     ),
     id="gi|13919613|gb|AAK33142.1|",
     description="chalcone synthase [Fragaria vesca subsp. bracteata]",
@@ -1102,7 +1097,6 @@ rec3 = SeqRecord(
         "SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW"
         "IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT"
         "TGEGLEWGVLFGFGPGLTVETVVLHSVAT",
-        generic_protein,
     ),
     id="gi|13925890|gb|AAK49457.1|",
     description="chalcone synthase [Nicotiana tabacum]",

@@ -1782,7 +1782,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             k = PyUnicode_GET_LENGTH(item);
             if (k != 1) break;
             if (PyUnicode_KIND(item) != PyUnicode_1BYTE_KIND) break;
-            character = PyUnicode_DATA(alphabet);
+            character = PyUnicode_DATA(item);
             j = *character;
             if (j < 0 || j >= 128) break;
             if (mapping[j] != MISSING_LETTER) {
@@ -6359,6 +6359,10 @@ sequence_converter(PyObject* argument, void* pointer)
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
+        else {
+            indices = view->buf;
+            PyMem_Free(indices);
+        }
         return 1;
     }
 
@@ -6405,7 +6409,6 @@ sequence_converter(PyObject* argument, void* pointer)
         }
         indices = convert_sequence_to_ints(aligner->mapping, n, view->buf);
         if (!indices) return 0;
-        PyBuffer_Release(view); /* view->obj is now NULL */
         view->itemsize = 1;
         view->len = n;
         view->buf = indices;

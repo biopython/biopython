@@ -11,11 +11,10 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from .Interfaces import SequenceIterator
 
 
 def AtomIterator(pdb_id, structure):
@@ -92,9 +91,9 @@ def AtomIterator(pdb_id, structure):
         # if len(structure) > 1 :
         #     id = ("Model%s|" % str(model.id)) + id
 
-        record = SeqRecord(
-            Seq("".join(res_out), generic_protein), id=record_id, description=record_id
-        )
+        record = SeqRecord(Seq("".join(res_out)), id=record_id, description=record_id)
+        # TODO: Test PDB files with DNA and RNA too:
+        record.annotations["molecule_type"] = "protein"
 
         record.annotations["model"] = model.id
         record.annotations["chain"] = chain.id
@@ -104,56 +103,62 @@ def AtomIterator(pdb_id, structure):
         yield record
 
 
-def PdbSeqresIterator(source):
-    """Return SeqRecord objects for each chain in a PDB file.
+class PdbSeqresIterator(SequenceIterator):
+    """Parser for PDB files."""
 
-    Arguments:
-     - source - input stream opened in text mode, or a path to a file
+    def __init__(self, source):
+        """Return SeqRecord objects for each chain in a PDB file.
 
-    The sequences are derived from the SEQRES lines in the
-    PDB file header, not the atoms of the 3D structure.
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
 
-    Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
+        The sequences are derived from the SEQRES lines in the
+        PDB file header, not the atoms of the 3D structure.
 
-    See: http://www.wwpdb.org/documentation/format23/sect3.html
+        Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
 
-    This gets called internally via Bio.SeqIO for the SEQRES based interpretation
-    of the PDB file format:
+        See: http://www.wwpdb.org/documentation/format23/sect3.html
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-seqres"):
-    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...     print(record.dbxrefs)
-    ...
-    Record id 1A8O:A, chain A
-    ['UNP:P12497', 'UNP:POL_HV1N5']
+        This gets called internally via Bio.SeqIO for the SEQRES based interpretation
+        of the PDB file format:
 
-    Equivalently,
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-seqres"):
+        ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...     print(record.dbxrefs)
+        ...
+        Record id 1A8O:A, chain A
+        ['UNP:P12497', 'UNP:POL_HV1N5']
 
-    >>> with open("PDB/1A8O.pdb") as handle:
-    ...     for record in PdbSeqresIterator(handle):
-    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
-    ...         print(record.dbxrefs)
-    ...
-    Record id 1A8O:A, chain A
-    ['UNP:P12497', 'UNP:POL_HV1N5']
+        Equivalently,
 
-    Note the chain is recorded in the annotations dictionary, and any PDB DBREF
-    lines are recorded in the database cross-references list.
-    """
-    # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
-    from Bio.SeqUtils import seq1
+        >>> with open("PDB/1A8O.pdb") as handle:
+        ...     for record in PdbSeqresIterator(handle):
+        ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+        ...         print(record.dbxrefs)
+        ...
+        Record id 1A8O:A, chain A
+        ['UNP:P12497', 'UNP:POL_HV1N5']
 
-    chains = collections.defaultdict(list)
-    metadata = collections.defaultdict(list)
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("PDB files must be opened in text mode.") from None
+        Note the chain is recorded in the annotations dictionary, and any PDB DBREF
+        lines are recorded in the database cross-references list.
+        """
+        super().__init__(source, mode="t", fmt="PDB")
 
-    try:
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Iterate over the records in the PDB file."""
+        # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
+        # Not sure if this is really needed; Python can handle circular dependencies.
+        from Bio.SeqUtils import seq1
+
+        chains = collections.defaultdict(list)
+        metadata = collections.defaultdict(list)
+
         rec_name = None
         for line in handle:
             rec_name = line[0:6].strip()
@@ -217,8 +222,10 @@ def PdbSeqresIterator(source):
             raise ValueError("Empty file.")
 
         for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues), generic_protein))
+            record = SeqRecord(Seq("".join(residues)))
             record.annotations = {"chain": chn_id}
+            # TODO: Test PDB files with DNA and RNA too:
+            record.annotations["molecule_type"] = "protein"
             if chn_id in metadata:
                 m = metadata[chn_id][0]
                 record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
@@ -237,9 +244,6 @@ def PdbSeqresIterator(source):
             else:
                 record.id = chn_id
             yield record
-    finally:
-        if handle is not source:
-            handle.close()
 
 
 def PdbAtomIterator(source):
@@ -425,8 +429,10 @@ def CifSeqresIterator(source):
         metadata[chain_id][-1].update(struct_ref)
 
     for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues), generic_protein))
+        record = SeqRecord(Seq("".join(residues)))
         record.annotations = {"chain": chn_id}
+        # TODO: Test PDB files with DNA and RNA too:
+        record.annotations["molecule_type"] = "protein"
         if chn_id in metadata:
             m = metadata[chn_id][0]
             record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)

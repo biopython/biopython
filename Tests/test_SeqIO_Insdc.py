@@ -9,12 +9,13 @@ import unittest
 from io import StringIO
 
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
+
 from seq_tests_common import compare_record
+from test_SeqIO import SeqIOConverterTestBaseClass
 
 
 class TestEmbl(unittest.TestCase):
@@ -64,7 +65,8 @@ class TestEmbl(unittest.TestCase):
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )
-        record = SeqRecord(Seq("A" * 100, generic_dna), "dummy", features=[f])
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
         gbk = record.format("gb")
         self.assertIn(" /empty\n", gbk)
         self.assertIn(" /zero=0\n", gbk)
@@ -99,6 +101,22 @@ class TestEmblRewrite(unittest.TestCase):
     def test_annotation3(self):
         """Check writing-and-parsing EMBL file (3)."""
         self.check_rewrite("EMBL/AE017046.embl")
+
+
+class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
+    def test_conversion(self):
+        """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
+        tests = [
+            ("EMBL/U87107.embl", "embl"),
+            ("EMBL/TRBG361.embl", "embl"),
+            ("GenBank/NC_005816.gb", "gb"),
+            ("GenBank/cor6_6.gb", "genbank"),
+        ]
+        for filename, fmt in tests:
+            for (in_format, out_format) in self.formats:
+                if in_format != fmt:
+                    continue
+                self.check_conversion(filename, in_format, out_format)
 
 
 if __name__ == "__main__":

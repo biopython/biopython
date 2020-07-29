@@ -11,7 +11,7 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in Python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/DIST/docs/api/}{API documentation}) or ultimately the code itself.
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/docs/\bpversion/api/}{API documentation}) or ultimately the code itself.
 
 \section{Working with sequences}
 \label{sec:sequences}
@@ -28,13 +28,9 @@ Most of the time when we think about sequences we have in my mind a string of le
 Seq('AGTACACTGGT')
 >>> print(my_seq)
 AGTACACTGGT
->>> my_seq.alphabet
-Alphabet()
 \end{minted}
 
-What we have here is a sequence object with a \emph{generic} alphabet - reflecting the fact we have \emph{not} specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:seq_objects}.
-
-In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
+The \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -96,55 +92,53 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 
 It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
 
-\begin{minted}{python}
-from Bio import SeqIO
-
-for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
-    print(seq_record.id)
-    print(repr(seq_record.seq))
-    print(len(seq_record))
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
+...     print(seq_record.id)
+...     print(repr(seq_record.seq))
+...     print(len(seq_record))
+...
 \end{minted}
 
 \noindent You should get something like this on your screen:
 
-\begin{minted}{text}
+\begin{minted}{pycon}
 gi|2765658|emb|Z78533.1|CIZ78533
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', SingleLetterAlphabet())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
 ...
 gi|2765564|emb|Z78439.1|PBZ78439
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', SingleLetterAlphabet())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 592
 \end{minted}
-
-Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| has defaulted to the rather generic \verb|SingleLetterAlphabet()| rather than something DNA specific.
 
 \subsection{Simple GenBank parsing example}
 
 Now let's load the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk} instead - notice that the code to do this is almost identical to the snippet used above for the FASTA file - the only difference is we change the filename and the format string:
 
-\begin{minted}{python}
-from Bio import SeqIO
-
-for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    print(seq_record.id)
-    print(repr(seq_record.seq))
-    print(len(seq_record))
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+...     print(seq_record.id)
+...     print(repr(seq_record.seq))
+...     print(len(seq_record))
+...
 \end{minted}
 
 \noindent This should give:
 
-\begin{minted}{text}
+\begin{minted}{pycon}
 Z78533.1
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC')
 740
 ...
 Z78439.1
-Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
+Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC')
 592
 \end{minted}
 
-This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, IUPAC Ambiguous DNA.  You'll also notice that a shorter string has been used as the \verb|seq_record.id| in this case.
+You'll notice that a shorter string has been used as the \verb|seq_record.id| in this case.
 
 \subsection{I love parsing -- please don't stop talking about it!}
 

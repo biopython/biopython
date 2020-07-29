@@ -16,8 +16,9 @@ from Bio import SeqIO
 
 
 class TestMauveIO(unittest.TestCase):
-    MAUVE_TEST_DATA_DIR = os.path.join(os.path.dirname(
-        os.path.realpath(__file__)), "Mauve")
+    MAUVE_TEST_DATA_DIR = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "Mauve"
+    )
     SIMPLE_XMFA = os.path.join(MAUVE_TEST_DATA_DIR, "simple.xmfa")
     SIMPLE_FA = os.path.join(MAUVE_TEST_DATA_DIR, "simple.fa")
 
@@ -28,7 +29,18 @@ class TestMauveIO(unittest.TestCase):
                 for record in alignment:
                     ids.append(record.id)
 
-        self.assertEqual(ids, ["1/0-5670", "2/0-5670", "1/5670-9940", "2/7140-11410", "1/9940-14910", "2/5670-7140", "2/11410-12880"])
+        self.assertEqual(
+            ids,
+            [
+                "1/0-5670",
+                "2/0-5670",
+                "1/5670-9940",
+                "2/7140-11410",
+                "1/9940-14910",
+                "2/5670-7140",
+                "2/11410-12880",
+            ],
+        )
 
         expected = """ATTCGCACAT AAGAATGTAC CTTGCTGTAA TTTATACTCA
             GCAGGTGGTG CAGACATCAT AACAAAAGAA GACTCTTGTT GTACTAGATA TTGTGTAGCA
@@ -55,8 +67,10 @@ class TestMauveIO(unittest.TestCase):
             ATGCATATAG GCATTAATTT TCTTGTCTCT TCAGCATGAG CAAGCATTTC TCTCAAATTC
             CAGGATACAG TTCCTAGAAT CTCTTCCTTA GCATTAGGTG CTTCTGAAGG TAGTACATAA
             AATGCAGATT TGCATTTCTT AAGAGCAGTC TTAGCTTCCT CAAGTGTATA """
-        self.assertEqual(str(record.seq).replace("-", ""),
-                         expected.replace(" ", "").replace("\n", ""))
+        self.assertEqual(
+            str(record.seq).replace("-", ""),
+            expected.replace(" ", "").replace("\n", ""),
+        )
 
     def test_sequence_positions(self):
         with open(self.SIMPLE_FA) as handle:
@@ -72,8 +86,9 @@ class TestMauveIO(unittest.TestCase):
                     # seqs 0, 1 are ids 1, 2
                     actual = seqs[int(record.name) - 1].seq
                     # Slice out portion mentioned in file
-                    actual = actual[record.annotations["start"]:
-                                    record.annotations["end"]]
+                    actual = actual[
+                        record.annotations["start"] : record.annotations["end"]
+                    ]
 
                     if record.annotations["strand"] < 0:
                         actual = actual.reverse_complement()

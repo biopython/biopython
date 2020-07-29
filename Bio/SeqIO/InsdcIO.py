@@ -37,9 +37,10 @@ from Bio import BiopythonWarning
 
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
-from Bio import Alphabet
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio import SeqIO
 from Bio import SeqFeature
+from .Interfaces import SequenceIterator, SequenceWriter
+
 
 # NOTE
 # ====
@@ -49,188 +50,165 @@ from Bio import SeqFeature
 # However, all the writing code is in this file.
 
 
-def GenBankIterator(source):
-    """Break up a Genbank file into SeqRecord objects.
+class GenBankIterator(SequenceIterator):
+    """Parser for GenBank files."""
 
-    Argument source is a file-like object opened in text mode or a path to a file.
+    def __init__(self, source):
+        """Break up a Genbank file into SeqRecord objects.
 
-    Every section from the LOCUS line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+        Argument source is a file-like object opened in text mode or a path to a file.
+        Every section from the LOCUS line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    Note that for genomes or chromosomes, there is typically only
-    one record.
+        Note that for genomes or chromosomes, there is typically only
+        one record.
 
-    This gets called internally by Bio.SeqIO for the GenBank file format:
+        This gets called internally by Bio.SeqIO for the GenBank file format:
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
-    ...     print(record.id)
-    ...
-    X55053.1
-    X62281.1
-    M81224.1
-    AJ237582.1
-    L31939.1
-    AF297471.1
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
+        ...     print(record.id)
+        ...
+        X55053.1
+        X62281.1
+        M81224.1
+        AJ237582.1
+        L31939.1
+        AF297471.1
 
-    Equivalently,
+        Equivalently,
 
-    >>> with open("GenBank/cor6_6.gb") as handle:
-    ...     for record in GenBankIterator(handle):
-    ...         print(record.id)
-    ...
-    X55053.1
-    X62281.1
-    M81224.1
-    AJ237582.1
-    L31939.1
-    AF297471.1
+        >>> with open("GenBank/cor6_6.gb") as handle:
+        ...     for record in GenBankIterator(handle):
+        ...         print(record.id)
+        ...
+        X55053.1
+        X62281.1
+        M81224.1
+        AJ237582.1
+        L31939.1
+        AF297471.1
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("GenBank files must be opened in text mode.") from None
+        """
+        super().__init__(source, mode="t", fmt="GenBank")
 
-    try:
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         records = GenBankScanner(debug=0).parse_records(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        return records
 
 
-def EmblIterator(source):
-    """Break up an EMBL file into SeqRecord objects.
+class EmblIterator(SequenceIterator):
+    """Parser for EMBL files."""
 
-    Argument source is a file-like object opened in text mode or a path to a file.
-    Every section from the LOCUS line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+    def __init__(self, source):
+        """Break up an EMBL file into SeqRecord objects.
 
-    Note that for genomes or chromosomes, there is typically only
-    one record.
+        Argument source is a file-like object opened in text mode or a path to a file.
+        Every section from the LOCUS line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    This gets called internally by Bio.SeqIO for the EMBL file format:
+        Note that for genomes or chromosomes, there is typically only
+        one record.
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("EMBL/epo_prt_selection.embl", "embl"):
-    ...     print(record.id)
-    ...
-    A00022.1
-    A00028.1
-    A00031.1
-    A00034.1
-    A00060.1
-    A00071.1
-    A00072.1
-    A00078.1
-    CQ797900.1
+        This gets called internally by Bio.SeqIO for the EMBL file format:
 
-    Equivalently,
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("EMBL/epo_prt_selection.embl", "embl"):
+        ...     print(record.id)
+        ...
+        A00022.1
+        A00028.1
+        A00031.1
+        A00034.1
+        A00060.1
+        A00071.1
+        A00072.1
+        A00078.1
+        CQ797900.1
 
-    >>> with open("EMBL/epo_prt_selection.embl") as handle:
-    ...     for record in EmblIterator(handle):
-    ...         print(record.id)
-    ...
-    A00022.1
-    A00028.1
-    A00031.1
-    A00034.1
-    A00060.1
-    A00071.1
-    A00072.1
-    A00078.1
-    CQ797900.1
+        Equivalently,
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("EMBL files must be opened in text mode.") from None
+        >>> with open("EMBL/epo_prt_selection.embl") as handle:
+        ...     for record in EmblIterator(handle):
+        ...         print(record.id)
+        ...
+        A00022.1
+        A00028.1
+        A00031.1
+        A00034.1
+        A00060.1
+        A00071.1
+        A00072.1
+        A00078.1
+        CQ797900.1
 
-    try:
+        """
+        super().__init__(source, mode="t", fmt="EMBL")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         records = EmblScanner(debug=0).parse_records(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        return records
 
 
-def ImgtIterator(source):
-    """Break up an IMGT file into SeqRecord objects.
+class ImgtIterator(SequenceIterator):
+    """Parser for IMGT files."""
 
-    Argument source is a file-like object opened in text mode or a path to a file.
-    Every section from the LOCUS line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+    def __init__(self, source):
+        """Break up an IMGT file into SeqRecord objects.
 
-    Note that for genomes or chromosomes, there is typically only
-    one record.
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("IMGT files must be opened in text mode.") from None
+        Argument source is a file-like object opened in text mode or a path to a file.
+        Every section from the LOCUS line to the terminating // becomes
+        a single SeqRecord with associated annotation and features.
 
-    try:
+        Note that for genomes or chromosomes, there is typically only
+        one record.
+        """
+        super().__init__(source, mode="t", fmt="IMGT")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         records = _ImgtScanner(debug=0).parse_records(handle)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        return records
 
 
-def GenBankCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
-    """Break up a Genbank file into SeqRecord objects for each CDS feature.
+class GenBankCdsFeatureIterator(SequenceIterator):
+    """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
 
-    Argument source is a file-like object opened in text mode or a path to a file.
+    def __init__(self, source):
+        """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
-    Every section from the LOCUS line to the terminating // can contain
-    many CDS features.  These are returned as with the stated amino acid
-    translation sequence (if given).
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("GenBank files must be opened in text mode.") from None
+        Argument source is a file-like object opened in text mode or a path to a file.
 
-    try:
-        records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        Every section from the LOCUS line to the terminating // can contain
+        many CDS features.  These are returned as with the stated amino acid
+        translation sequence (if given).
+        """
+        super().__init__(source, mode="t", fmt="GenBank")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        return GenBankScanner(debug=0).parse_cds_features(handle)
 
 
-def EmblCdsFeatureIterator(source, alphabet=Alphabet.generic_protein):
-    """Break up a EMBL file into SeqRecord objects for each CDS feature.
+class EmblCdsFeatureIterator(SequenceIterator):
+    """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
 
-    Argument source is a file-like object opened in text mode or a path to a file.
+    def __init__(self, source):
+        """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
-    Every section from the LOCUS line to the terminating // can contain
-    many CDS features.  These are returned as with the stated amino acid
-    translation sequence (if given).
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("EMBL files must be opened in text mode.") from None
+        Argument source is a file-like object opened in text mode or a path to a file.
 
-    try:
-        records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
-        yield from records
-    finally:
-        if handle is not source:
-            handle.close()
+        Every section from the LOCUS line to the terminating // can contain
+        many CDS features.  These are returned as with the stated amino acid
+        translation sequence (if given).
+        """
+        super().__init__(source, mode="t", fmt="EMBL")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        return EmblScanner(debug=0).parse_cds_features(handle)
 
 
 def _insdc_feature_position_string(pos, offset=0):
@@ -367,7 +345,7 @@ def _insdc_location_string(location, rec_length):
             return loc
 
 
-class _InsdcWriter(SequentialSequenceWriter):
+class _InsdcWriter(SequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
 
     MAX_WIDTH = 80
@@ -498,7 +476,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
         """
-        # TODO - Do the line spliting while preserving white space?
+        # TODO - Do the line splitting while preserving white space?
         text = text.strip()
         if len(text) <= max_len:
             return [text]
@@ -577,7 +555,7 @@ class GenBankWriter(_InsdcWriter):
 
         Used in the 'header' of each GenBank record.
         """
-        # TODO - Do the line spliting while preserving white space?
+        # TODO - Do the line splitting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
         self._write_single_line(tag, lines[0])
@@ -663,7 +641,7 @@ class GenBankWriter(_InsdcWriter):
             #    VRT - other vertebrate sequences
             #    INV - invertebrate sequences
             #    PLN - plant, fungal, and algal sequences
-            #    BCT - bacterial sequences [plus archea]
+            #    BCT - bacterial sequences [plus archaea]
             #    VRL - viral sequences
             #    PHG - bacteriophage sequences
             #    SYN - synthetic sequences
@@ -700,7 +678,7 @@ class GenBankWriter(_InsdcWriter):
             #    Unclassified             UNC - map to UNK
             #    Viral                    VRL - common
             #
-            # (plus XXX for submiting which we can map to UNK)
+            # (plus XXX for submitting which we can map to UNK)
             embl_to_gbk = {
                 "FUN": "PLN",
                 "HUM": "PRI",
@@ -760,42 +738,23 @@ class GenBankWriter(_InsdcWriter):
                 BiopythonWarning,
             )
 
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if not isinstance(a, Alphabet.Alphabet):
-            raise TypeError("Invalid alphabet")
-        elif isinstance(a, Alphabet.ProteinAlphabet):
-            units = "aa"
-        elif isinstance(a, Alphabet.NucleotideAlphabet):
-            units = "bp"
-        else:
-            # Must be something like NucleotideAlphabet or
-            # just the generic Alphabet (default for fasta files)
-            raise ValueError("Need a Nucleotide or Protein alphabet")
-
         # Get the molecule type
-        mol_type = self._get_annotation_str(record, "molecule_type", default=None)
+        mol_type = self._get_annotation_str(record, "molecule_type", None)
+        if mol_type is None:
+            raise ValueError("missing molecule_type in annotations")
         if mol_type and len(mol_type) > 7:
             # Deal with common cases from EMBL to GenBank
             mol_type = mol_type.replace("unassigned ", "").replace("genomic ", "")
             if len(mol_type) > 7:
                 warnings.warn("Molecule type %r too long" % mol_type, BiopythonWarning)
-                mol_type = None
+                mol_type = "DNA"
         if mol_type in ["protein", "PROTEIN"]:
             mol_type = ""
 
-        if mol_type:
-            pass
-        elif isinstance(a, Alphabet.ProteinAlphabet):
-            mol_type = ""
-        elif isinstance(a, Alphabet.DNAAlphabet):
-            mol_type = "DNA"
-        elif isinstance(a, Alphabet.RNAAlphabet):
-            mol_type = "RNA"
+        if mol_type == "":
+            units = "aa"
         else:
-            # Must be something like NucleotideAlphabet or
-            # just the generic Alphabet (default for fasta files)
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
+            units = "bp"
 
         topology = self._get_topology(record)
 
@@ -913,8 +872,8 @@ class GenBankWriter(_InsdcWriter):
             data = str(number)
             # TODO - support more complex record reference locations?
             if ref.location and len(ref.location) == 1:
-                a = Alphabet._get_base_alphabet(record.seq.alphabet)
-                if isinstance(a, Alphabet.ProteinAlphabet):
+                molecule_type = record.annotations.get("molecule_type")
+                if molecule_type and "protein" in molecule_type:
                     units = "residues"
                 else:
                     units = "bases"
@@ -1023,7 +982,7 @@ class GenBankWriter(_InsdcWriter):
 
         default = record.id
         if default.count(".") == 1 and default[default.index(".") + 1 :].isdigit():
-            # Good, looks like accesion.version and not something
+            # Good, looks like accession.version and not something
             # else like identifier.start-end
             default = record.id.split(".", 1)[0]
         accession = self._get_annotation_str(
@@ -1181,9 +1140,8 @@ class EmblWriter(_InsdcWriter):
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
 
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if isinstance(a, Alphabet.DNAAlphabet):
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type is not None and "DNA" in molecule_type:
             # TODO - What if we have RNA?
             a_count = data.count("A") + data.count("a")
             c_count = data.count("C") + data.count("c")
@@ -1252,40 +1210,29 @@ class EmblWriter(_InsdcWriter):
 
         if ";" in accession:
             raise ValueError(
-                "Cannot have semi-colon in EMBL accession, %s" % repr(str(accession))
+                "Cannot have semi-colon in EMBL accession, '%s'" % accession
             )
         if " " in accession:
-            # This is out of practicallity... might it be allowed?
-            raise ValueError(
-                "Cannot have spaces in EMBL accession, %s" % repr(str(accession))
-            )
+            # This is out of practicality... might it be allowed?
+            raise ValueError("Cannot have spaces in EMBL accession, '%s'" % accession)
 
         topology = self._get_annotation_str(record, "topology", default="")
 
         # Get the molecule type
         # TODO - record this explicitly in the parser?
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if not isinstance(a, Alphabet.Alphabet):
-            raise TypeError("Invalid alphabet")
-        elif isinstance(a, Alphabet.DNAAlphabet):
-            mol_type = "DNA"
+        # Note often get RNA vs DNA discrepancy in real EMBL/NCBI files
+        mol_type = record.annotations.get("molecule_type")
+        if mol_type is None:
+            raise ValueError("missing molecule_type in annotations")
+        elif "DNA" in mol_type:
             units = "BP"
-        elif isinstance(a, Alphabet.RNAAlphabet):
-            mol_type = "RNA"
+        elif "RNA" in mol_type:
             units = "BP"
-        elif isinstance(a, Alphabet.ProteinAlphabet):
+        elif "PROTEIN" in mol_type.upper():
             mol_type = "PROTEIN"
             units = "AA"
         else:
-            # Must be something like NucleotideAlphabet
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
-
-        if record.annotations.get("molecule_type", None):
-            # Note often get RNA vs DNA discrepancy in real EMBL/NCBI files
-            mol_type = record.annotations["molecule_type"]
-            if mol_type in ["protein"]:
-                mol_type = "PROTEIN"
+            raise ValueError("failed to understand molecule_type '%s'" % mol_type)
 
         # Get the taxonomy division
         division = self._get_data_division(record)
@@ -1352,13 +1299,13 @@ class EmblWriter(_InsdcWriter):
             #    Unclassified             UNC (i.e. unknown)
             #    Viral                    VRL
             #
-            # (plus XXX used for submiting data to EMBL)
+            # (plus XXX used for submitting data to EMBL)
             pass
         else:
             # See if this is in GenBank style & can be converted.
             # Generally a problem as the GenBank groups are wider
             # than those of EMBL. Note that GenBank use "BCT" for
-            # both bacteria and acherea thus this maps to EMBL's
+            # both bacteria and archaea thus this maps to EMBL's
             # "PRO" nicely.
             gbk_to_embl = {"BCT": "PRO", "UNK": "UNC"}
             try:
@@ -1442,7 +1389,7 @@ class EmblWriter(_InsdcWriter):
         # DBLINK BioProject:... entries over the older GenBank DBLINK
         # Project:... lines.
         #
-        # In either case, seems EMBL usess just "PR    Project:..."
+        # In either case, seems EMBL uses just "PR    Project:..."
         # regardless of the type of ID (old numeric only, or new
         # with alpha prefix), e.g. for CP002497 NCBI now uses:
         #
@@ -1511,6 +1458,22 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
+
+
+def _genbank_convert_fasta(in_file, out_file):
+    """Fast GenBank to FASTA (PRIVATE)."""
+    # We don't need to parse the features...
+    records = GenBankScanner().parse_records(in_file, do_features=False)
+    # For FASTA output we can ignore the alphabet too
+    return SeqIO.write(records, out_file, "fasta")
+
+
+def _embl_convert_fasta(in_file, out_file):
+    """Fast EMBL to FASTA (PRIVATE)."""
+    # We don't need to parse the features...
+    records = EmblScanner().parse_records(in_file, do_features=False)
+    # For FASTA output we can ignore the alphabet too
+    return SeqIO.write(records, out_file, "fasta")
 
 
 if __name__ == "__main__":

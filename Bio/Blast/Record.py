@@ -291,15 +291,12 @@ class MultipleAlignment:
         """Initialize the class."""
         self.alignment = []
 
-    def to_generic(self, alphabet):
+    def to_generic(self):
         """Retrieve generic alignment object for the given alignment.
 
         Instead of the tuples, this returns a MultipleSeqAlignment object
         from Bio.Align, through which you can manipulate and query
         the object.
-
-        alphabet is the specified alphabet for the sequences in the code (for
-        example IUPAC.IUPACProtein).
 
         Thanks to James Casbon for the code.
         """
@@ -320,9 +317,9 @@ class MultipleAlignment:
                 seq_parts[n] += seq
                 n += 1
 
-        generic = MultipleSeqAlignment([], alphabet)
+        generic = MultipleSeqAlignment([])
         for (name, seq) in zip(seq_names, seq_parts):
-            generic.append(SeqRecord(Seq(seq, alphabet), name))
+            generic.append(SeqRecord(Seq(seq), name))
 
         return generic
 

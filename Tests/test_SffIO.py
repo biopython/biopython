@@ -82,15 +82,23 @@ class TestUAN(unittest.TestCase):
 
     def test_time(self):
         for record in self.records:
-            self.assertEqual(record.annotations["time"], self.test_annotations[record.name]["time"])
+            self.assertEqual(
+                record.annotations["time"], self.test_annotations[record.name]["time"]
+            )
 
     def test_region(self):
         for record in self.records:
-            self.assertEqual(record.annotations["region"], self.test_annotations[record.name]["region"])
+            self.assertEqual(
+                record.annotations["region"],
+                self.test_annotations[record.name]["region"],
+            )
 
     def test_coords(self):
         for record in self.records:
-            self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
+            self.assertEqual(
+                record.annotations["coords"],
+                self.test_annotations[record.name]["coords"],
+            )
 
 
 class TestErrors(unittest.TestCase):
@@ -118,42 +126,49 @@ class TestErrors(unittest.TestCase):
             self.assertTrue(False, "Test SFF header only did not raise exception")
 
     def test_30bytes(self):
-        self.check_bad_header(b"x" * 30,
-                              "File too small to hold a valid SFF header.")
+        self.check_bad_header(b"x" * 30, "File too small to hold a valid SFF header.")
 
     def test_31bytes(self):
-        self.check_bad_header(b"x" * 31,
-                              ("SFF file did not start '.sff', but 'xxxx'",
-                               "SFF file did not start '.sff', but b'xxxx'"))
+        self.check_bad_header(
+            b"x" * 31,
+            (
+                "SFF file did not start '.sff', but 'xxxx'",
+                "SFF file did not start '.sff', but b'xxxx'",
+            ),
+        )
 
     def test_31bytes_index_header(self):
-        self.check_bad_header(b".srt" + b"x" * 27,
-                              "Handle seems to be at SFF index block, not start")
+        self.check_bad_header(
+            b".srt" + b"x" * 27, "Handle seems to be at SFF index block, not start"
+        )
 
     def test_31bytes_bad_ver(self):
-        self.check_bad_header(b".sff1.00" + b"x" * 23,
-                              "Unsupported SFF version in header, 49.46.48.48")
+        self.check_bad_header(
+            b".sff1.00" + b"x" * 23, "Unsupported SFF version in header, 49.46.48.48"
+        )
 
     def test_31bytes_bad_flowgram(self):
-        self.check_bad_header(b".sff\x00\x00\x00\x01" + b"x" * 23,
-                              "Flowgram format code 120 not supported")
+        self.check_bad_header(
+            b".sff\x00\x00\x00\x01" + b"x" * 23,
+            "Flowgram format code 120 not supported",
+        )
 
     def test_bad_index_offset(self):
         bad = self.good[:12] + b"\x00\x00\x00\x00" + self.good[16:]
-        self.check_bad_header(bad,
-                              "Index offset 0 but index length 764")
+        self.check_bad_header(bad, "Index offset 0 but index length 764")
 
     def test_bad_index_length(self):
         bad = self.good[:16] + b"\x00\x00\x00\x00" + self.good[20:]
-        self.check_bad_header(bad,
-                              "Index offset 16824 but index length 0")
+        self.check_bad_header(bad, "Index offset 16824 but index length 0")
 
     def test_bad_index_eof(self):
         # Semi-random edit to the index offset value,
         bad = self.good[:13] + b"\x01" + self.good[14:]
-        self.check_bad_header(bad,
-                              "Gap of 65536 bytes after final record end 16824, "
-                              "before 82360 where index starts?")
+        self.check_bad_header(
+            bad,
+            "Gap of 65536 bytes after final record end 16824, "
+            "before 82360 where index starts?",
+        )
 
     def test_no_index(self):
         # Does a lot of work to create a no-index SFF file
@@ -174,7 +189,9 @@ class TestErrors(unittest.TestCase):
             except ValueError as err:
                 self.assertEqual(str(err), "No index present in this SFF file")
             else:
-                self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
+                self.assertTrue(
+                    False, "Test _sff_find_roche_index did not raise exception"
+                )
 
     def test_unknown_index(self):
         # TODO - Add SFF file with no index,
@@ -183,10 +200,17 @@ class TestErrors(unittest.TestCase):
             try:
                 values = _sff_find_roche_index(handle)
             except ValueError as err:
-                self.assertTrue(str(err) in ("Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
-                                             "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'"))
+                self.assertIn(
+                    str(err),
+                    (
+                        "Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
+                        "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'",
+                    ),
+                )
             else:
-                self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
+                self.assertTrue(
+                    False, "Test _sff_find_roche_index did not raise exception"
+                )
 
     def check_sff_read_roche_index(self, data, msg):
         handle = BytesIO(data)
@@ -198,29 +222,36 @@ class TestErrors(unittest.TestCase):
             self.assertTrue(False, "_sff_read_roche_index did not raise exception")
 
     def test_premature_end_of_index(self):
-        self.check_sff_read_roche_index(self.good[:-50],
-                                        "Premature end of file!")
+        self.check_sff_read_roche_index(self.good[:-50], "Premature end of file!")
 
     def test_index_name_no_null(self):
         self.assertEqual(self.good[17502:17503], b"\x00")
-        self.check_sff_read_roche_index(self.good[:17502] + b"x" + self.good[17503:],
-                                        "Expected a null terminator to the read name.")
+        self.check_sff_read_roche_index(
+            self.good[:17502] + b"x" + self.good[17503:],
+            "Expected a null terminator to the read name.",
+        )
 
     def test_index_mft_version(self):
         self.assertEqual(self.good[16824:16832], b".mft1.00")
-        self.check_sff_read_roche_index(self.good[:16828] + b"\x01\x02\x03\x04" + self.good[16832:],
-                                        "Unsupported version in .mft index header, 1.2.3.4")
+        self.check_sff_read_roche_index(
+            self.good[:16828] + b"\x01\x02\x03\x04" + self.good[16832:],
+            "Unsupported version in .mft index header, 1.2.3.4",
+        )
 
     def test_index_mft_data_size(self):
         self.assertEqual(self.good[16824:16832], b".mft1.00")
-        self.check_sff_read_roche_index(self.good[:16836] + b"\x00\x00\x00\x00" + self.good[16840:],
-                                        "Problem understanding .mft index header, 764 != 8 + 8 + 548 + 0")
+        self.check_sff_read_roche_index(
+            self.good[:16836] + b"\x00\x00\x00\x00" + self.good[16840:],
+            "Problem understanding .mft index header, 764 != 8 + 8 + 548 + 0",
+        )
 
     def test_index_lengths(self):
         # Reduce the number of reads from 10 to 9 so index loading fails...
         self.assertEqual(self.good[20:24], b"\x00\x00\x00\x0A")
-        self.check_sff_read_roche_index(self.good[:20] + b"\x00\x00\x00\x09" + self.good[24:],
-                                        "Problem with index length? 17568 vs 17588")
+        self.check_sff_read_roche_index(
+            self.good[:20] + b"\x00\x00\x00\x09" + self.good[24:],
+            "Problem with index length? 17568 vs 17588",
+        )
 
     def test_no_manifest_xml(self):
         with open("Roche/E3MFGYR02_no_manifest.sff", "rb") as handle:
@@ -250,7 +281,9 @@ class TestIndex(unittest.TestCase):
         with open(filename, "rb") as handle:
             self.assertEqual(len(index1), len(list(SffIterator(handle))))
         with open(filename, "rb") as handle:
-            self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
+            self.assertEqual(
+                len(index1), len(list(SffIterator(BytesIO(handle.read()))))
+            )
 
 
 class TestAlternativeIndexes(unittest.TestCase):
@@ -302,6 +335,7 @@ class TestConcatenated(unittest.TestCase):
 
     def test_parses_gzipped_stream(self):
         import gzip
+
         count = 0
         with gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", "rb") as fh:
             for record in SeqIO.parse(fh, "sff"):
@@ -315,9 +349,12 @@ class TestConcatenated(unittest.TestCase):
             for record in SeqIO.parse("Roche/invalid_greek_E3MFGYR02.sff", "sff"):
                 count += 1
         except ValueError as err:
-            self.assertTrue("Additional data at end of SFF file, perhaps "
-                            "multiple SFF files concatenated? "
-                            "See offset 65296" in str(err), err)
+            self.assertTrue(
+                "Additional data at end of SFF file, perhaps "
+                "multiple SFF files concatenated? "
+                "See offset 65296" in str(err),
+                err,
+            )
             caught = True
         self.assertTrue(caught, "Didn't spot concatenation")
         self.assertEqual(count, 24)
@@ -326,9 +363,12 @@ class TestConcatenated(unittest.TestCase):
         try:
             d = SeqIO.index("Roche/invalid_greek_E3MFGYR02.sff", "sff")
         except ValueError as err:
-            self.assertTrue("Additional data at end of SFF file, perhaps "
-                            "multiple SFF files concatenated? "
-                            "See offset 65296" in str(err), err)
+            self.assertTrue(
+                "Additional data at end of SFF file, perhaps "
+                "multiple SFF files concatenated? "
+                "See offset 65296" in str(err),
+                err,
+            )
         else:
             raise ValueError("Indxing Roche/invalid_greek_E3MFGYR02.sff should fail")
 
@@ -339,10 +379,13 @@ class TestConcatenated(unittest.TestCase):
             for record in SeqIO.parse("Roche/invalid_paired_E3MFGYR02.sff", "sff"):
                 count += 1
         except ValueError as err:
-            self.assertTrue("Your SFF file is invalid, post index 5 byte "
-                            "null padding region ended '.sff' which could "
-                            "be the start of a concatenated SFF file? "
-                            "See offset 54371" in str(err), err)
+            self.assertTrue(
+                "Your SFF file is invalid, post index 5 byte "
+                "null padding region ended '.sff' which could "
+                "be the start of a concatenated SFF file? "
+                "See offset 54371" in str(err),
+                err,
+            )
             caught = True
         self.assertTrue(caught, "Didn't spot concatenation")
         self.assertEqual(count, 20)
@@ -351,10 +394,13 @@ class TestConcatenated(unittest.TestCase):
         try:
             d = SeqIO.index("Roche/invalid_paired_E3MFGYR02.sff", "sff")
         except ValueError as err:
-            self.assertTrue("Your SFF file is invalid, post index 5 byte "
-                            "null padding region ended '.sff' which could "
-                            "be the start of a concatenated SFF file? "
-                            "See offset 54371" in str(err), err)
+            self.assertTrue(
+                "Your SFF file is invalid, post index 5 byte "
+                "null padding region ended '.sff' which could "
+                "be the start of a concatenated SFF file? "
+                "See offset 54371" in str(err),
+                err,
+            )
         else:
             raise ValueError("Indxing Roche/invalid_paired_E3MFGYR02.sff should fail")
 
@@ -379,13 +425,23 @@ class TestSelf(unittest.TestCase):
         filename = "Roche/E3MFGYR02_random_10_reads.qual"
         qual_trim = list(SeqIO.parse(filename, "qual"))
 
-        for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim):
+        for s, sT, f, q, fT, qT in zip(
+            sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim
+        ):
             self.assertEqual(len({s.id, f.id, q.id}), 1)  # All values are the same
             self.assertEqual(str(s.seq), str(f.seq))
-            self.assertEqual(s.letter_annotations["phred_quality"], q.letter_annotations["phred_quality"])
-            self.assertEqual(len({s.id, sT.id, fT.id, qT.id}), 1)  # All values are the same
+            self.assertEqual(
+                s.letter_annotations["phred_quality"],
+                q.letter_annotations["phred_quality"],
+            )
+            self.assertEqual(
+                len({s.id, sT.id, fT.id, qT.id}), 1
+            )  # All values are the same
             self.assertEqual(str(sT.seq), str(fT.seq))
-            self.assertEqual(sT.letter_annotations["phred_quality"], qT.letter_annotations["phred_quality"])
+            self.assertEqual(
+                sT.letter_annotations["phred_quality"],
+                qT.letter_annotations["phred_quality"],
+            )
 
     def test_write(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"

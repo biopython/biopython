@@ -11,7 +11,7 @@ The file format was produced by the GCG PileUp and and LocalPileUp tools,
 and later tools such as T-COFFEE and MUSCLE support it as an optional
 output format.
 
-The original GCG toola would write gaps at ends of each sequence which could
+The original GCG tool would write gaps at ends of each sequence which could
 be missing data as tildes (``~``), whereas internal gaps were periods (``.``)
 instead. This parser replaces both with minus signs (``-``) for consistency
 with the rest of ``Bio.AlignIO``.
@@ -317,18 +317,12 @@ class MsfIterator(AlignmentIterator):
             )
 
         records = (
-            SeqRecord(
-                Seq(s, self.alphabet),
-                id=i,
-                name=i,
-                description=i,
-                annotations={"weight": w},
-            )
+            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w},)
             for (i, s, w) in zip(ids, seqs, weights)
         )
 
         # This will check alignment lengths are self-consistent:
-        align = MultipleSeqAlignment(records, self.alphabet)
+        align = MultipleSeqAlignment(records)
         # Check matches the header:
         if align.get_alignment_length() != aln_length:
             raise ValueError(

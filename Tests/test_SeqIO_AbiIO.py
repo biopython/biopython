@@ -317,7 +317,7 @@ class TestAbi(unittest.TestCase):
         record = SeqIO.read("Abi/A6_1-DB3.ab1", "abi")
         self.assertEqual(set(record.annotations),
                          {"polymer", "run_finish", "sample_well", "run_start",
-                          "machine_model", "dye", "abif_raw"})
+                          "machine_model", "dye", "abif_raw", "molecule_type"})
 
         self.assertEqual(set(record.annotations["abif_raw"]),
                          {"RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1",

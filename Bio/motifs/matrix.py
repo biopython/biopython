@@ -12,7 +12,6 @@ and position-specific scoring matrices.
 """
 
 import math
-import platform
 
 try:
     import numpy as np

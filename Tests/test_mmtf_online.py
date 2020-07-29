@@ -13,6 +13,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.mmtf import MMTFParser
 
 import requires_internet
+
 requires_internet.check()
 
 

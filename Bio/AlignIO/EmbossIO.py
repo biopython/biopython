@@ -17,50 +17,7 @@ example from the alignret, water and needle tools.
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
-
-
-class EmbossWriter(SequentialAlignmentWriter):
-    """Emboss alignment writer (WORK IN PROGRESS).
-
-    Writes a simplfied version of the EMBOSS pairs/simple file format.
-    A lot of the information their tools record in their headers is not
-    available and is omitted.
-    """
-
-    def write_header(self):
-        """Write header for the file."""
-        handle = self.handle
-        handle.write("########################################\n")
-        handle.write("# Program: Biopython\n")
-        try:
-            handle.write("# Report_file: %s\n" % handle.name)
-        except AttributeError:
-            pass
-        handle.write("########################################\n")
-
-    def write_footer(self):
-        """Write footer for the file."""
-        handle = self.handle
-        handle.write("#---------------------------------------\n")
-        handle.write("#---------------------------------------\n")
-
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
-        handle = self.handle
-        handle.write("#=======================================\n")
-        handle.write("#\n")
-        handle.write("# Aligned_sequences: %i\n" % len(alignment))
-        for i, record in enumerate(alignment):
-            handle.write("# %i: %s\n" % (i + 1, record.id))
-        handle.write("#\n")
-        handle.write("# Length: %i\n" % alignment.get_alignment_length())
-        handle.write("#\n")
-        handle.write("#=======================================\n")
-        handle.write("\n")
-        raise NotImplementedError(
-            "The subclass should implement the write_alignment method."
-        )
+from Bio.AlignIO.Interfaces import AlignmentIterator
 
 
 class EmbossIterator(AlignmentIterator):
@@ -95,7 +52,6 @@ class EmbossIterator(AlignmentIterator):
         length_of_seqs = None
         number_of_seqs = None
         ids = []
-        seqs = []
         header_dict = {}
 
         while line[0] == "#":
@@ -189,12 +145,12 @@ class EmbossIterator(AlignmentIterator):
                         assert seq.replace("-", "") == "", line
                     elif start - seq_starts[index] != len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s"
+                            "Found %i chars so far for sequence %i (%s, %r), line says start %i:\n%s"
                             % (
                                 len(seqs[index].replace("-", "")),
                                 index,
                                 id,
-                                repr(seqs[index]),
+                                seqs[index],
                                 start,
                                 line,
                             )
@@ -204,12 +160,12 @@ class EmbossIterator(AlignmentIterator):
                     # Check the end ...
                     if end != seq_starts[index] + len(seqs[index].replace("-", "")):
                         raise ValueError(
-                            "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s"
+                            "Found %i chars so far for sequence %i (%s, %r, start=%i), file says end %i:\n%s"
                             % (
                                 len(seqs[index].replace("-", "")),
                                 index,
                                 id,
-                                repr(seqs[index]),
+                                seqs[index],
                                 seq_starts[index],
                                 end,
                                 line,
@@ -261,5 +217,5 @@ class EmbossIterator(AlignmentIterator):
                     "different length? You could be using an "
                     "old version of EMBOSS."
                 )
-            records.append(SeqRecord(Seq(seq, self.alphabet), id=id, description=id))
-        return MultipleSeqAlignment(records, self.alphabet, annotations=header_dict)
+            records.append(SeqRecord(Seq(seq), id=id, description=id))
+        return MultipleSeqAlignment(records, annotations=header_dict)

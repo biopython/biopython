@@ -26,20 +26,23 @@ quiet_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.STDOUT}
 try:
     try:
         # Newer versions of DSSP
-        version_string = subprocess.check_output(["dssp", "--version"],
-                                                 universal_newlines=True)
+        version_string = subprocess.check_output(
+            ["dssp", "--version"], universal_newlines=True
+        )
         dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
     except subprocess.CalledProcessError:
         # Older versions of DSSP
         subprocess.check_call(["dssp", "-h"], **quiet_kwargs)
 except OSError:
     try:
-        version_string = subprocess.check_output(["mkdssp", "--version"],
-                                                 universal_newlines=True)
+        version_string = subprocess.check_output(
+            ["mkdssp", "--version"], universal_newlines=True
+        )
         dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
     except OSError:
         raise MissingExternalDependencyError(
-            "Install dssp if you want to use it from Biopython.") from None
+            "Install dssp if you want to use it from Biopython."
+        ) from None
 
 
 class DSSP_test(unittest.TestCase):
@@ -55,6 +58,7 @@ class DSSP_test(unittest.TestCase):
 
     # Only run mmCIF tests if DSSP version installed supports mmcif
     if StrictVersion(dssp_version) >= StrictVersion("2.2.0"):
+
         def test_dssp_with_mmcif_file(self):
             """Test DSSP generation from MMCIF."""
             p = MMCIFParser()

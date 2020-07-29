@@ -25,9 +25,6 @@ def crc32(seq):
     1688586483
 
     """
-    # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
-    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    # TODO - Should we return crc32(x) & 0xffffffff here?
     try:
         # Assume it's a Seq object
         return _crc32(str(seq).encode())
@@ -84,7 +81,7 @@ def crc64(s):
 def gcg(seq):
     """Return the GCG checksum (int) for a sequence (string or Seq object).
 
-    Given a nucleotide or amino-acid secuence (or any string),
+    Given a nucleotide or amino-acid sequence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
     seq type = str.
 
@@ -117,7 +114,7 @@ def gcg(seq):
 def seguid(seq):
     """Return the SEGUID (string) for a sequence (string or Seq object).
 
-    Given a nucleotide or amino-acid secuence (or any string),
+    Given a nucleotide or amino-acid sequence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
 

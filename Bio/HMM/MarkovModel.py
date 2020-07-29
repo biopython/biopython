@@ -10,11 +10,9 @@
 import copy
 import math
 import random
+from collections import defaultdict
 
-# TODO - Take advantage of defaultdict once Python 2.4 is dead?
-# from collections import defaultdict
-
-from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 
 def _gen_random_array(n):
@@ -28,12 +26,9 @@ def _calculate_emissions(emission_probs):
     """Calculate which symbols can be emitted in each state (PRIVATE)."""
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
-    emissions = {}
+    emissions = defaultdict(list)
     for state, symbol in emission_probs:
-        try:
-            emissions[state].append(symbol)
-        except KeyError:
-            emissions[state] = [symbol]
+        emissions[state].append(symbol)
 
     return emissions
 
@@ -47,12 +42,9 @@ def _calculate_from_transitions(trans_probs):
     lists of destination states reachable from the source state via a
     transition.
     """
-    transitions = {}
+    transitions = defaultdict(list)
     for from_state, to_state in trans_probs:
-        try:
-            transitions[from_state].append(to_state)
-        except KeyError:
-            transitions[from_state] = [to_state]
+        transitions[from_state].append(to_state)
 
     return transitions
 
@@ -66,12 +58,9 @@ def _calculate_to_transitions(trans_probs):
     lists of source states from which the destination is reachable via a
     transition.
     """
-    transitions = {}
+    transitions = defaultdict(list)
     for from_state, to_state in trans_probs:
-        try:
-            transitions[to_state].append(from_state)
-        except KeyError:
-            transitions[to_state] = [from_state]
+        transitions[to_state].append(from_state)
 
     return transitions
 
@@ -94,14 +83,14 @@ class MarkovModelBuilder:
         """Initialize a builder to create Markov Models.
 
         Arguments:
-         - state_alphabet -- An alphabet containing all of the letters that
-           can appear in the states
-         - emission_alphabet -- An alphabet containing all of the letters for
-           states that can be emitted by the HMM.
+         - state_alphabet -- An iterable (e.g., tuple or list) containing
+           all of the letters that can appear in the states
+         - emission_alphabet -- An iterable (e.g., tuple or list) containing
+           all of the letters for states that can be emitted by the HMM.
 
         """
-        self._state_alphabet = state_alphabet
-        self._emission_alphabet = emission_alphabet
+        self._state_alphabet = tuple(state_alphabet)
+        self._emission_alphabet = tuple(emission_alphabet)
 
         # probabilities for the initial state, initialized by calling
         # set_initial_probabilities (required)
@@ -125,8 +114,8 @@ class MarkovModelBuilder:
         are all set to 0.
         """
         all_blank = {}
-        for first_state in first_alphabet.letters:
-            for second_state in second_alphabet.letters:
+        for first_state in first_alphabet:
+            for second_state in second_alphabet:
                 all_blank[(first_state, second_state)] = 0
 
         return all_blank
@@ -140,8 +129,8 @@ class MarkovModelBuilder:
         are all set to the value of the class attribute DEFAULT_PSEUDO.
         """
         all_counts = {}
-        for first_state in first_alphabet.letters:
-            for second_state in second_alphabet.letters:
+        for first_state in first_alphabet:
+            for second_state in second_alphabet:
                 all_counts[(first_state, second_state)] = self.DEFAULT_PSEUDO
 
         return all_counts
@@ -166,6 +155,8 @@ class MarkovModelBuilder:
         emission_pseudo = copy.deepcopy(self.emission_pseudo)
 
         return HiddenMarkovModel(
+            self._state_alphabet,
+            self._emission_alphabet,
             initial_prob,
             transition_prob,
             emission_prob,
@@ -177,7 +168,7 @@ class MarkovModelBuilder:
         """Set initial state probabilities.
 
         initial_prob is a dictionary mapping states to probabilities.
-        Suppose, for example, that the state alphabet is ['A', 'B']. Call
+        Suppose, for example, that the state alphabet is ('A', 'B'). Call
         set_initial_prob({'A': 1}) to guarantee that the initial
         state will be 'A'. Call set_initial_prob({'A': 0.5, 'B': 0.5})
         to make each initial state equally probable.
@@ -197,13 +188,13 @@ class MarkovModelBuilder:
 
         # ensure that all referenced states are valid
         for state in initial_prob:
-            if state not in self._state_alphabet.letters:
+            if state not in self._state_alphabet:
                 raise ValueError(
                     "State %s was not found in the sequence alphabet" % state
                 )
 
         # distribute the residual probability, if any
-        num_states_not_set = len(self._state_alphabet.letters) - len(self.initial_prob)
+        num_states_not_set = len(self._state_alphabet) - len(self.initial_prob)
         if num_states_not_set < 0:
             raise Exception("Initial probabilities can't exceed # of states")
         prob_sum = sum(self.initial_prob.values())
@@ -211,7 +202,7 @@ class MarkovModelBuilder:
             raise Exception("Total initial probability cannot exceed 1.0")
         if num_states_not_set > 0:
             prob = (1.0 - prob_sum) / num_states_not_set
-            for state in self._state_alphabet.letters:
+            for state in self._state_alphabet:
                 if state not in self.initial_prob:
                     self.initial_prob[state] = prob
 
@@ -235,7 +226,7 @@ class MarkovModelBuilder:
         """
         # set initial state probabilities
         new_initial_prob = float(1) / float(len(self.transition_prob))
-        for state in self._state_alphabet.letters:
+        for state in self._state_alphabet:
             self.initial_prob[state] = new_initial_prob
 
         # set the transitions
@@ -253,8 +244,8 @@ class MarkovModelBuilder:
 
         Returns the dictionary containing the initial probabilities.
         """
-        initial_freqs = _gen_random_array(len(self._state_alphabet.letters))
-        for state in self._state_alphabet.letters:
+        initial_freqs = _gen_random_array(len(self._state_alphabet))
+        for state in self._state_alphabet:
             self.initial_prob[state] = initial_freqs.pop()
 
         return self.initial_prob
@@ -350,7 +341,7 @@ class MarkovModelBuilder:
         """
         # check the sanity of adding these states
         for state in [from_state, to_state]:
-            if state not in self._state_alphabet.letters:
+            if state not in self._state_alphabet:
                 raise ValueError(
                     "State %s was not found in the sequence alphabet" % state
                 )
@@ -466,6 +457,8 @@ class HiddenMarkovModel:
 
     def __init__(
         self,
+        state_alphabet,
+        emission_alphabet,
         initial_prob,
         transition_prob,
         emission_prob,
@@ -478,6 +471,10 @@ class HiddenMarkovModel:
         initiating this class directly.
 
         Arguments:
+         - state_alphabet -- A tuple containing all of the letters that can
+           appear in the states.
+         - emission_alphabet -- A tuple containing all of the letters for
+           states that can be emitted by the HMM.
          - initial_prob - A dictionary of initial probabilities for all states.
          - transition_prob -- A dictionary of transition probabilities for all
            possible transitions in the sequence.
@@ -489,6 +486,9 @@ class HiddenMarkovModel:
            when counting for purposes of estimating emission probabilities.
 
         """
+        self.state_alphabet = state_alphabet
+        self.emission_alphabet = emission_alphabet
+
         self.initial_prob = initial_prob
 
         self._transition_pseudo = transition_pseudo
@@ -564,8 +564,8 @@ class HiddenMarkovModel:
         Arguments:
          - sequence -- A Seq object with the emission sequence that we
            want to decode.
-         - state_alphabet -- The alphabet of the possible state sequences
-           that can be generated.
+         - state_alphabet -- An iterable (e.g., tuple or list) containing
+           all of the letters that can appear in the states
 
         """
         # calculate logarithms of the initial, transition, and emission probs
@@ -575,7 +575,6 @@ class HiddenMarkovModel:
 
         viterbi_probs = {}
         pred_state_seq = {}
-        state_letters = state_alphabet.letters
 
         # --- recursion
         # loop over the training squence (i = 1 .. L)
@@ -584,7 +583,7 @@ class HiddenMarkovModel:
         # (Length - 1) not 1 to Length, like in Durbin et al.
         for i in range(0, len(sequence)):
             # loop over all of the possible i-th states in the state path
-            for cur_state in state_letters:
+            for cur_state in state_alphabet:
                 # e_{l}(x_{i})
                 emission_part = log_emission[(cur_state, sequence[i])]
 
@@ -623,7 +622,7 @@ class HiddenMarkovModel:
         # calculate the probability of the state path
         # loop over all states
         all_probs = {}
-        for state in state_letters:
+        for state in state_alphabet:
             # v_{k}(L)
             all_probs[state] = viterbi_probs[(state, len(sequence) - 1)]
 
@@ -638,7 +637,7 @@ class HiddenMarkovModel:
         assert last_state != "", "Didn't find the last state to trace from!"
 
         # --- traceback
-        traceback_seq = MutableSeq("", state_alphabet)
+        traceback_seq = []
 
         loop_seq = list(range(1, len(sequence)))
         loop_seq.reverse()
@@ -655,8 +654,9 @@ class HiddenMarkovModel:
 
         # put the traceback sequence in the proper orientation
         traceback_seq.reverse()
+        traceback_seq = "".join(traceback_seq)
 
-        return traceback_seq.toseq(), state_path_prob
+        return Seq(traceback_seq), state_path_prob
 
     def _log_transform(self, probability):
         """Return log transform of the given probability dictionary (PRIVATE).

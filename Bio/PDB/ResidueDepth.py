@@ -598,8 +598,11 @@ def ca_depth(residue, surface):
 class ResidueDepth(AbstractPropertyMap):
     """Calculate residue and CA depth for all residues."""
 
-    def __init__(self, model, pdb_file=None):
+    def __init__(self, model, pdb_file=None, msms_exec=None):
         """Initialize the class."""
+        if msms_exec is None:
+            msms_exec = "msms"
+
         # Issue warning if pdb_file is given
         if pdb_file is not None:
             warnings.warn(
@@ -614,7 +617,7 @@ class ResidueDepth(AbstractPropertyMap):
         # get_residue
         residue_list = Selection.unfold_entities(model, "R")
         # make surface from PDB file using MSMS
-        surface = get_surface(model)
+        surface = get_surface(model, MSMS=msms_exec)
         # calculate rdepth for each residue
         for residue in residue_list:
             if not is_aa(residue):

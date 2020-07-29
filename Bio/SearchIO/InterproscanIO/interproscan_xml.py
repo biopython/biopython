@@ -8,11 +8,9 @@
 """Bio.SearchIO parser for InterProScan XML output formats."""
 # for more info: https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats
 
-import sys
 import re
 from xml.etree import ElementTree
 
-from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
@@ -140,7 +138,7 @@ class InterproscanXmlParser:
         for hsp_elem in root_hsp_elem:
             # create frag and assign attributes
             frag = HSPFragment(hit_id, query_id)
-            setattr(frag, "alphabet", generic_protein)
+            setattr(frag, "molecule_type", "protein")
             if query_seq is not None:
                 setattr(frag, "query", query_seq)
             for key, (attr, caster) in _ELEM_FRAG.items():

@@ -33,6 +33,8 @@ into \verb|SeqRecord| objects.
 
 \section{Substitution Matrices}
 
+\textbf{Please note that Bio.SubsMat was deprecated in Release 1.78.} As an alternative, please consider using \verb|Bio.Align.substitution_matrices| (described in section~\ref{sec:substitution_matrices}).
+
 \subsection{SubsMat}
 
 This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices.
@@ -43,7 +45,7 @@ The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| whe
 \begin{enumerate}
   \item Attributes
   \begin{enumerate}
-    \item \verb|self.alphabet|: a class as defined in Bio.Alphabet
+    \item \verb|self.alphabet|: a string consisting of the alphabet letters.
 
     \item \verb|self.ab_list|: a list of the alphabet's letters, sorted. Needed mainly for internal purposes
   \end{enumerate}
@@ -60,11 +62,11 @@ __init__(self, data=None, alphabet=None, mat_name="", build_later=0)
     \begin{enumerate}
 
       \item \verb|data|: can be either a dictionary, or another SeqMat instance.
-      \item \verb|alphabet|: a Bio.Alphabet instance. If not provided, construct an alphabet from data.
+      \item \verb|alphabet|: an iterable (e.g., a string) over the alphabet letters.
 
       \item \verb|mat_name|: matrix name, such as "BLOSUM62" or "PAM250"
 
-      \item \verb|build_later|: default false. If true, user may supply only alphabet and empty dictionary, if intending to build the matrix later. this skips the sanity check of alphabet size vs. matrix size.
+      \item \verb|build_later|: default false. If true, user may supply only alphabet and empty dictionary, if intending to build the matrix later. This skips the sanity check of alphabet size vs. matrix size.
 
     \end{enumerate}
 
@@ -102,7 +104,7 @@ C 7  22  27
   A   B   C
 \end{minted}
 
-    The \verb|alphabet| optional argument is a string of all characters in the alphabet. If supplied, the order of letters along the axes is taken from the string, rather than by alphabetical order.
+    The \verb|alphabet| optional argument is an iterable (e.g. a string) over all letters in the alphabet. If supplied, the order of letters along the axes is taken from the string, rather than by alphabetical order.
 
   \end{enumerate}
 
@@ -127,9 +129,7 @@ as order doesn't matter, user can already provide only one entry:
 ('A','C'): 22
 \end{minted}
 
- A SeqMat instance may be initialized with either a full (first method of counting: 10, 12) or half (the latter method, 22) matrices. A full protein
-   alphabet matrix would be of the size 20x20 = 400. A half matrix of that alphabet would be 20x20/2 + 20/2 = 210. That is because same-letter entries don't
-   change. (The matrix diagonal). Given an alphabet size of N:
+ A SeqMat instance may be initialized with either a full (first method of counting: 10, 12) or half (the latter method, 22) matrices. A full protein alphabet matrix would be of the size 20x20 = 400. A half matrix of that alphabet would be 20x20/2 + 20/2 = 210. That is because same-letter entries don't change. (The matrix diagonal). Given an alphabet size of N:
 
    \begin{enumerate}
      \item Full matrix size: N*N
@@ -137,7 +137,7 @@ as order doesn't matter, user can already provide only one entry:
      \item Half matrix size: N(N+1)/2
    \end{enumerate}
 
-The SeqMat constructor automatically generates a half-matrix, if a full matrix is passed. If a half matrix is passed, letters in the key should be provided in alphabetical order: ('A','C') and not ('C',A').
+The SeqMat constructor automatically generates a half-matrix, if a full matrix is passed.
 
 At this point, if all you wish to do is generate a log-odds matrix, please go to the section titled Example of Use. The following text describes the nitty-gritty of internal functions, to be used by people who wish to investigate their nucleotide/amino-acid frequency data more thoroughly.
 
@@ -159,8 +159,7 @@ EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
 \end{minted}
 
   \begin{enumerate}
-    \item \verb|exp_freq_table|: should be a FreqTable instance. See section~\ref{sec:freq_table} for detailed information on FreqTable. Briefly, the expected frequency table has the frequencies of appearance for each member of the alphabet. It is
-  implemented as a dictionary with the alphabet letters as keys, and each letter's frequency as a value. Values sum to 1.
+    \item \verb|exp_freq_table|: should be a FreqTable instance. See section~\ref{sec:freq_table} for detailed information on FreqTable. Briefly, the expected frequency table has the frequencies of appearance for each letter in the alphabet. It is implemented as a dictionary with the alphabet letters as keys, and each letter's frequency as a value. Values sum to 1.
   \end{enumerate}
 
 The expected frequency table can (and generally should) be generated from the observed frequency matrix. So in most cases you will generate \verb|exp_freq_table| using:
@@ -223,7 +222,7 @@ make_log_odds_matrix(
 \label{sec:freq_table}
 
 \begin{minted}{python}
-FreqTable.FreqTable(UserDict.UserDict)
+FreqTable.FreqTable(dict)
 \end{minted}
 
 \begin{enumerate}
@@ -232,7 +231,7 @@ FreqTable.FreqTable(UserDict.UserDict)
 
 
   \begin{enumerate}
-    \item \verb|alphabet|: A Bio.Alphabet instance.
+    \item \verb|alphabet|: A string containing the letters in the alphabet.
     \item \verb|data|: frequency dictionary
     \item \verb|count|: count dictionary (in case counts are provided).
   \end{enumerate}
@@ -244,7 +243,7 @@ FreqTable.FreqTable(UserDict.UserDict)
   \end{enumerate}
 
   \item Example of use:
-  The expected count of the residues in the database is sitting in a file, whitespace delimited, in the following format (example given for a 3-letter alphabet):
+  The expected count of the residues in the database is sitting in a file, whitespace delimited, in the following format (example given for an alphabet consisting of three letters):
 
 \begin{minted}{text}
 A   35
@@ -263,7 +262,7 @@ C  0.5
 \end{minted}
 
 Conversely, the residue frequencies or counts can be passed as a dictionary.
-Example of a count dictionary (3-letter alphabet):
+Example of a count dictionary (same alphabet of three letters):
 
 \begin{minted}{python}
 {"A": 35, "B": 65, "C": 100}

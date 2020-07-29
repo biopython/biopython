@@ -332,11 +332,7 @@ EXCLUDE_DOCTEST_MODULES = [
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
-ONLINE_DOCTEST_MODULES = [
-    "Bio.Entrez",
-    "Bio.ExPASy",
-    "Bio.TogoWS",
-]
+ONLINE_DOCTEST_MODULES = [ "Bio.Entrez", "Bio.ExPASy", "Bio.TogoWS"]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
@@ -381,9 +377,9 @@ e.g.
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
->>> len("ACGT")
+>>> s = Seq("ACGT")
+>>> len(s)
 4
 \end{minted}
 \end{verbatim}
@@ -396,7 +392,7 @@ magic comment \verb|%cont-doctest| as shown here:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> Seq("ACGT") == Seq("ACGT", generic_dna)
+>>> s == "ACGT"
 True
 \end{minted}
 \end{verbatim}

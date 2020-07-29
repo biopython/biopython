@@ -87,58 +87,54 @@ Sequence codes and their meanings:
 
 """
 
-
-from Bio.Alphabet import (
-    single_letter_alphabet,
-    generic_protein,
-    generic_dna,
-    generic_rna,
-)
-from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
-_pir_alphabets = {
-    "P1": generic_protein,
-    "F1": generic_protein,
-    "D1": generic_dna,
-    "DL": generic_dna,
-    "DC": generic_dna,
-    "RL": generic_rna,
-    "RC": generic_rna,
-    "N3": generic_rna,
-    "XX": single_letter_alphabet,
+_pir_mol_type = {
+    "P1": "protein",
+    "F1": "protein",
+    "D1": "DNA",
+    "DL": "DNA",
+    "DC": "DNA",
+    "RL": "RNA",
+    "RC": "RNA",
+    "N3": "RNA",
+    "XX": None,
 }
 
 
-def PirIterator(source):
-    """Iterate over a PIR file and yield SeqRecord objects.
+class PirIterator(SequenceIterator):
+    """Parser for PIR files."""
 
-    source - file-like object or a path to a file.
+    def __init__(self, source):
+        """Iterate over a PIR file and yield SeqRecord objects.
 
-    Examples
-    --------
-    >>> with open("NBRF/DMB_prot.pir") as handle:
-    ...    for record in PirIterator(handle):
-    ...        print("%s length %i" % (record.id, len(record)))
-    HLA:HLA00489 length 263
-    HLA:HLA00490 length 94
-    HLA:HLA00491 length 94
-    HLA:HLA00492 length 80
-    HLA:HLA00493 length 175
-    HLA:HLA01083 length 188
+        source - file-like object or a path to a file.
 
-    """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("PIR files must be opened in binary mode.") from None
+        Examples
+        --------
+        >>> with open("NBRF/DMB_prot.pir") as handle:
+        ...    for record in PirIterator(handle):
+        ...        print("%s length %i" % (record.id, len(record)))
+        HLA:HLA00489 length 263
+        HLA:HLA00490 length 94
+        HLA:HLA00491 length 94
+        HLA:HLA00492 length 80
+        HLA:HLA00493 length 175
+        HLA:HLA01083 length 188
 
-    try:
+        """
+        super().__init__(source, mode="t", fmt="Pir")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
+
+    def iterate(self, handle):
+        """Iterate over the records in the PIR file."""
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in handle:
             if line[0] == ">":
@@ -148,7 +144,7 @@ def PirIterator(source):
 
         while True:
             pir_type = line[1:3]
-            if pir_type not in _pir_alphabets or line[3] != ";":
+            if pir_type not in _pir_mol_type or line[3] != ";":
                 raise ValueError(
                     "Records should start with '>XX;' where XX is a valid sequence type"
                 )
@@ -173,23 +169,19 @@ def PirIterator(source):
 
             # Return the record and then continue...
             record = SeqRecord(
-                Seq(seq[:-1], _pir_alphabets[pir_type]),
-                id=identifier,
-                name=identifier,
-                description=description,
+                Seq(seq[:-1]), id=identifier, name=identifier, description=description,
             )
             record.annotations["PIR-type"] = pir_type
+            if _pir_mol_type[pir_type]:
+                record.annotations["molecule_type"] = _pir_mol_type[pir_type]
             yield record
 
             if line is None:
                 return  # StopIteration
         raise ValueError("Unrecognised PIR record format.")
-    finally:
-        if handle is not source:
-            handle.close()
 
 
-class PirWriter(SequentialSequenceWriter):
+class PirWriter(SequenceWriter):
     """Class to write PIR format files."""
 
     def __init__(self, handle, wrap=60, record2title=None, code=None):
@@ -229,7 +221,7 @@ class PirWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
+        super().__init__(handle)
         self.wrap = None
         if wrap:
             if wrap < 1:
@@ -240,10 +232,6 @@ class PirWriter(SequentialSequenceWriter):
 
     def write_record(self, record):
         """Write a single PIR record to the file."""
-        assert self._header_written
-        assert not self._footer_written
-        self._record_written = True
-
         if self.record2title:
             title = self.clean(self.record2title(record))
         else:
@@ -259,18 +247,21 @@ class PirWriter(SequentialSequenceWriter):
         if self.code:
             code = self.code
         else:
-            if isinstance(record.seq.alphabet, type(generic_protein)):
-                code = "P1"
-            elif isinstance(record.seq.alphabet, type(generic_dna)):
+            molecule_type = record.annotations.get("molecule_type")
+            if molecule_type is None:
+                code = "XX"
+            elif "DNA" in molecule_type:
                 code = "D1"
-            elif isinstance(record.seq.alphabet, type(generic_rna)):
+            elif "RNA" in molecule_type:
                 code = "RL"
+            elif "protein" in molecule_type:
+                code = "P1"
             else:
                 code = "XX"
 
-        if code not in _pir_alphabets:
+        if code not in _pir_mol_type:
             raise TypeError(
-                "Sequence code must be one of " + _pir_alphabets.keys() + "."
+                "Sequence code must be one of " + _pir_mol_type.keys() + "."
             )
         assert "\n" not in title
         assert "\r" not in description

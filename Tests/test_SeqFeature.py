@@ -11,7 +11,6 @@ import unittest
 from os import path
 
 from Bio import Seq, SeqIO
-from Bio.Alphabet import generic_dna
 from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
 from Bio.SeqFeature import CompoundLocation, UnknownPosition, SeqFeature
@@ -99,19 +98,19 @@ class TestFeatureLocation(unittest.TestCase):
         expected = "must be greater than or equal to start location"
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 23, 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 0, 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             FeatureLocation(42, AfterPosition(0), 1)
-        assert expected in str(err.exception)
+        self.assertIn(expected, str(err.exception))
 
         # Features with UnknownPositions should pass check
         FeatureLocation(42, UnknownPosition())
@@ -168,7 +167,7 @@ class TestSeqFeature(unittest.TestCase):
 
     def test_translation_checks_cds(self):
         """Test that a CDS feature is subject to respective checks."""
-        seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA")
         f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         f.qualifiers["transl_table"] = [11]
         with self.assertRaises(TranslationError):

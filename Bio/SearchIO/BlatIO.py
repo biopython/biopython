@@ -182,7 +182,6 @@ HSP and HSPFragment documentation for more details on these properties.
 import re
 from math import log
 
-from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -356,8 +355,8 @@ def _create_hsp(hid, qid, psl):
         qseqlist = psl.get("qseqs")
         qseq = "" if not qseqlist else qseqlist[idx]
         frag = HSPFragment(hid, qid, hit=hseq, query=qseq)
-        # set alphabet
-        frag.alphabet = generic_dna
+        # set molecule type
+        frag.molecule_type = "DNA"
         # set coordinates
         frag.query_start = qcoords[0]
         frag.query_end = qcoords[1]

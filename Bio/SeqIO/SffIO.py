@@ -58,7 +58,7 @@ The annotations dictionary also contains any adapter clip positions
 (usually zero), and information about the flows. e.g.
 
     >>> len(record.annotations)
-    11
+    12
     >>> print(record.annotations["flow_key"])
     TCAG
     >>> print(record.annotations["flow_values"][:10])
@@ -121,13 +121,15 @@ example above:
     >>> print("%r..." % record.letter_annotations["phred_quality"][:10])
     [26, 15, 12, 21, 28, 21, 36, 28, 27, 27]...
     >>> len(record.annotations)
-    3
+    4
     >>> print(record.annotations["region"])
     2
     >>> print(record.annotations["coords"])
     (2434, 1658)
     >>> print(record.annotations["time"])
     [2008, 1, 9, 16, 16, 0]
+    >>> print(record.annotations["molecule_type"])
+    DNA
 
 You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
@@ -229,14 +231,14 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
 
-
-from Bio import Alphabet
-from Bio.Seq import Seq
-from Bio.SeqIO.Interfaces import SequenceWriter
-from Bio.SeqRecord import SeqRecord
 import struct
-import sys
 import re
+
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio import StreamModeError
+from .Interfaces import SequenceIterator, SequenceWriter
+
 
 _null = b"\0"
 _sff = b".sff"
@@ -306,7 +308,7 @@ def _sff_file_header(handle):
             flowgram_format,
         ) = struct.unpack(fmt, data)
     except TypeError:
-        raise ValueError("SFF files must NOT be opened in text mode, binary required.")
+        raise StreamModeError("SFF files must be opened in binary mode.")
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
@@ -639,7 +641,7 @@ _valid_UAN_read_name = re.compile(r"^[a-zA-Z0-9]{14}$")
 
 
 def _sff_read_seq_record(
-    handle, number_of_flows_per_read, flow_chars, key_sequence, alphabet, trim=False
+    handle, number_of_flows_per_read, flow_chars, key_sequence, trim=False
 ):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
     # Now on to the reads...
@@ -769,8 +771,9 @@ def _sff_read_seq_record(
         annotations["time"] = _get_read_time(name)
         annotations["region"] = _get_read_region(name)
         annotations["coords"] = _get_read_xy(name)
+    annotations["molecule_type"] = "DNA"
     record = SeqRecord(
-        Seq(seq, alphabet), id=name, name=name, description="", annotations=annotations
+        Seq(seq), id=name, name=name, description="", annotations=annotations
     )
     # Dirty trick to speed up this line:
     # record.letter_annotations["phred_quality"] = quals
@@ -912,91 +915,93 @@ class _AddTellHandle:
         return self._handle.close()
 
 
-# This is a generator function!
-def SffIterator(source, alphabet=Alphabet.generic_dna, trim=False):
-    """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
+class SffIterator(SequenceIterator):
+    """Parser for Standard Flowgram Format (SFF) files."""
 
-        - source - path to an SFF file, e.g. from Roche 454 sequencing,
-          or a file-like object opened in binary mode.
-        - alphabet - optional alphabet, defaults to generic DNA.
-        - trim - should the sequences be trimmed?
+    def __init__(self, source, alphabet=None, trim=False):
+        """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
-    The resulting SeqRecord objects should match those from a paired FASTA
-    and QUAL file converted from the SFF file using the Roche 454 tool
-    ssfinfo. i.e. The sequence will be mixed case, with the trim regions
-    shown in lower case.
+            - source - path to an SFF file, e.g. from Roche 454 sequencing,
+              or a file-like object opened in binary mode.
+            - alphabet - optional alphabet, unused. Leave as None.
+            - trim - should the sequences be trimmed?
 
-    This function is used internally via the Bio.SeqIO functions:
+        The resulting SeqRecord objects should match those from a paired FASTA
+        and QUAL file converted from the SFF file using the Roche 454 tool
+        ssfinfo. i.e. The sequence will be mixed case, with the trim regions
+        shown in lower case.
 
-    >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
-    ...     print("%s %i" % (record.id, len(record)))
-    ...
-    E3MFGYR02JWQ7T 265
-    E3MFGYR02JA6IL 271
-    E3MFGYR02JHD4H 310
-    E3MFGYR02GFKUC 299
-    E3MFGYR02FTGED 281
-    E3MFGYR02FR9G7 261
-    E3MFGYR02GAZMS 278
-    E3MFGYR02HHZ8O 221
-    E3MFGYR02GPGB1 269
-    E3MFGYR02F7Z7G 219
+        This function is used internally via the Bio.SeqIO functions:
 
-    You can also call it directly:
+        >>> from Bio import SeqIO
+        >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
+        ...     print("%s %i" % (record.id, len(record)))
+        ...
+        E3MFGYR02JWQ7T 265
+        E3MFGYR02JA6IL 271
+        E3MFGYR02JHD4H 310
+        E3MFGYR02GFKUC 299
+        E3MFGYR02FTGED 281
+        E3MFGYR02FR9G7 261
+        E3MFGYR02GAZMS 278
+        E3MFGYR02HHZ8O 221
+        E3MFGYR02GPGB1 269
+        E3MFGYR02F7Z7G 219
 
-    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
-    ...     for record in SffIterator(handle):
-    ...         print("%s %i" % (record.id, len(record)))
-    ...
-    E3MFGYR02JWQ7T 265
-    E3MFGYR02JA6IL 271
-    E3MFGYR02JHD4H 310
-    E3MFGYR02GFKUC 299
-    E3MFGYR02FTGED 281
-    E3MFGYR02FR9G7 261
-    E3MFGYR02GAZMS 278
-    E3MFGYR02HHZ8O 221
-    E3MFGYR02GPGB1 269
-    E3MFGYR02F7Z7G 219
+        You can also call it directly:
 
-    Or, with the trim option:
+        >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+        ...     for record in SffIterator(handle):
+        ...         print("%s %i" % (record.id, len(record)))
+        ...
+        E3MFGYR02JWQ7T 265
+        E3MFGYR02JA6IL 271
+        E3MFGYR02JHD4H 310
+        E3MFGYR02GFKUC 299
+        E3MFGYR02FTGED 281
+        E3MFGYR02FR9G7 261
+        E3MFGYR02GAZMS 278
+        E3MFGYR02HHZ8O 221
+        E3MFGYR02GPGB1 269
+        E3MFGYR02F7Z7G 219
 
-    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
-    ...     for record in SffIterator(handle, trim=True):
-    ...         print("%s %i" % (record.id, len(record)))
-    ...
-    E3MFGYR02JWQ7T 260
-    E3MFGYR02JA6IL 265
-    E3MFGYR02JHD4H 292
-    E3MFGYR02GFKUC 295
-    E3MFGYR02FTGED 277
-    E3MFGYR02FR9G7 256
-    E3MFGYR02GAZMS 271
-    E3MFGYR02HHZ8O 150
-    E3MFGYR02GPGB1 221
-    E3MFGYR02F7Z7G 130
+        Or, with the trim option:
 
-    """
-    if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
-        raise ValueError("Invalid alphabet, SFF files do not hold proteins.")
-    if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
-        raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
+        >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+        ...     for record in SffIterator(handle, trim=True):
+        ...         print("%s %i" % (record.id, len(record)))
+        ...
+        E3MFGYR02JWQ7T 260
+        E3MFGYR02JA6IL 265
+        E3MFGYR02JHD4H 292
+        E3MFGYR02GFKUC 295
+        E3MFGYR02FTGED 277
+        E3MFGYR02FR9G7 256
+        E3MFGYR02GAZMS 271
+        E3MFGYR02HHZ8O 150
+        E3MFGYR02GPGB1 221
+        E3MFGYR02F7Z7G 130
 
-    try:
-        handle = open(source, "rb")
-    except TypeError:
-        if source.read(0) != b"":
-            raise ValueError("SFF files must be opened in binary mode.") from None
+        """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, mode="b", fmt="SFF")
+        self.trim = trim
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
         try:
-            if 0 != source.tell():
-                raise ValueError("Not at start of file, offset %i" % source.tell())
-            handle = source
+            if 0 != handle.tell():
+                raise ValueError("Not at start of file, offset %i" % handle.tell())
         except AttributeError:
             # Probably a network handle or something like that
-            handle = _AddTellHandle(source)
+            handle = _AddTellHandle(handle)
+        records = self.iterate(handle)
+        return records
 
-    try:
+    def iterate(self, handle):
+        """Parse the file and generate SeqRecord objects."""
+        trim = self.trim
         (
             header_length,
             index_offset,
@@ -1038,17 +1043,9 @@ def SffIterator(source, alphabet=Alphabet.generic_dna, trim=False):
                 # the index_offset so we can skip extra handle.tell() calls:
                 index_offset = 0
             yield _sff_read_seq_record(
-                handle,
-                number_of_flows_per_read,
-                flow_chars,
-                key_sequence,
-                alphabet,
-                trim,
+                handle, number_of_flows_per_read, flow_chars, key_sequence, trim,
             )
         _check_eof(handle, index_offset, index_length)
-    finally:
-        if handle is not source:
-            handle.close()
 
 
 def _check_eof(handle, index_offset, index_length):
@@ -1130,10 +1127,11 @@ def _check_eof(handle, index_offset, index_length):
         raise ValueError("Additional data at end of SFF file, see offset %i" % offset)
 
 
-# This is a generator function!
-def _SffTrimIterator(handle, alphabet=Alphabet.generic_dna):
+class _SffTrimIterator(SffIterator):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
-    return SffIterator(handle, alphabet, trim=True)
+
+    def __init__(self, source):
+        super().__init__(source, trim=True)
 
 
 class SffWriter(SequenceWriter):
@@ -1150,7 +1148,7 @@ class SffWriter(SequenceWriter):
            reading this data).
 
         """
-        SequenceWriter.__init__(self, target, "wb")
+        super().__init__(target, "wb")
         self._xml = xml
         if index:
             self._index = []
@@ -1362,7 +1360,7 @@ class SffWriter(SequenceWriter):
         # Basics
         name = record.id.encode()
         name_len = len(name)
-        seq = str(record.seq).upper().encode()
+        seq = record.seq.upper().encode()
         seq_len = len(seq)
         # Qualities
         try:

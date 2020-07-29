@@ -45,7 +45,7 @@ class XpkEntry:
 
         try:
             self.fields["entrynum"] = datlist[0]
-        except IndexError as e:
+        except IndexError:
             pass
 
 

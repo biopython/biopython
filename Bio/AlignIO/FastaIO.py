@@ -24,8 +24,6 @@ which can also be used to store a multiple sequence alignments.
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
-from Bio.Alphabet import Gapped
 
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
@@ -41,7 +39,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     following code should also cope with that.
 
     Note that this code seems to work fine even when the "sq_offset"
-    entries are prsent as a result of using the -X command line option.
+    entries are present as a result of using the -X command line option.
     """
     align_stripped = alignment_seq_with_flanking.strip("-")
     display_start = int(annotation["al_display_start"])
@@ -62,7 +60,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     return align_stripped[start:end]
 
 
-def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
+def FastaM10Iterator(handle, seq_count=None):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 
     This is for reading the pairwise alignments output by Bill Pearson's
@@ -93,9 +91,6 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
     part of the alignment itself, and is not included in the resulting
     MultipleSeqAlignment objects returned.
     """
-    if alphabet is None:
-        alphabet = single_letter_alphabet
-
     state_PREAMBLE = -1
     state_NONE = 0
     state_QUERY_HEADER = 1
@@ -110,8 +105,6 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect")
-        q = "?"  # Just for printing len(q) in debug below
-        m = "?"  # Just for printing len(m) in debug below
         tool = global_tags.get("tool", "").upper()
 
         q = _extract_alignment_region(query_seq, query_tags)
@@ -136,8 +129,7 @@ handle.name: {handle.name}
 """
             )
 
-        assert alphabet is not None
-        alignment = MultipleSeqAlignment([], alphabet)
+        alignment = MultipleSeqAlignment([])
 
         # TODO - Introduce an annotated alignment class?
         # See also Bio/AlignIO/MafIO.py for same requirement.
@@ -153,7 +145,7 @@ handle.name: {handle.name}
         # Query
         # =====
         record = SeqRecord(
-            Seq(q, alphabet),
+            Seq(q),
             id=query_id,
             name="query",
             description=query_descr,
@@ -164,22 +156,17 @@ handle.name: {handle.name}
         record._al_stop = int(query_tags["al_stop"])
         alignment.append(record)
 
-        # TODO - What if a specific alphabet has been requested?
-        # TODO - Use an IUPAC alphabet?
         # TODO - Can FASTA output RNA?
-        if alphabet == single_letter_alphabet and "sq_type" in query_tags:
+        if "sq_type" in query_tags:
             if query_tags["sq_type"] == "D":
-                record.seq.alphabet = generic_dna
+                record.annotations["molecule_type"] = "DNA"
             elif query_tags["sq_type"] == "p":
-                record.seq.alphabet = generic_protein
-        if "-" in q:
-            if not hasattr(record.seq.alphabet, "gap_char"):
-                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
+                record.annotations["molecule_type"] = "protein"
 
         # Match
         # =====
         record = SeqRecord(
-            Seq(m, alphabet),
+            Seq(m),
             id=match_id,
             name="match",
             description=match_descr,
@@ -190,15 +177,11 @@ handle.name: {handle.name}
         record._al_stop = int(match_tags["al_stop"])
         alignment.append(record)
 
-        # This is still a very crude way of dealing with the alphabet:
-        if alphabet == single_letter_alphabet and "sq_type" in match_tags:
+        if "sq_type" in match_tags:
             if match_tags["sq_type"] == "D":
-                record.seq.alphabet = generic_dna
+                record.annotations["molecule_type"] = "DNA"
             elif match_tags["sq_type"] == "p":
-                record.seq.alphabet = generic_protein
-        if "-" in m:
-            if not hasattr(record.seq.alphabet, "gap_char"):
-                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
+                record.annotations["molecule_type"] = "protein"
 
         return alignment
 

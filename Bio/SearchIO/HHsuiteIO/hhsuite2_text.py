@@ -11,7 +11,6 @@ import warnings
 
 from Bio.SearchIO._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from Bio.Alphabet import generic_protein
 
 __all__ = ("Hhsuite2TextParser",)
 
@@ -164,7 +163,7 @@ class Hhsuite2TextParser:
             T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
 
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def match_is_valid(match):
             """Return True if match is not a Consensus column (PRIVATE).
 
@@ -200,7 +199,7 @@ class Hhsuite2TextParser:
             hit_id = block["hit_id"]
 
             frag = HSPFragment(hit_id, query_id)
-            frag.alphabet = generic_protein
+            frag.molecule_type = "protein"
             frag.query_start = block["query_start"] - 1
             frag.query_end = block["query_end"]
             frag.hit_start = block["hit_start"] - 1

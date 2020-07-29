@@ -22,7 +22,6 @@ See also Bio.SeqIO.index_db() and the examples in the main tutorial.
 """
 
 
-from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 
 
@@ -41,7 +40,7 @@ def get_accession_num(seq_record):
 # This is *not* suitable for FASTA files with millions of entries.
 
 
-rec_iterator = SeqIO.parse("ls_orchid.fasta", "fasta", generic_dna)
+rec_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 orchid_dict = SeqIO.to_dict(rec_iterator, get_accession_num)
 
 for id_num in orchid_dict:
@@ -57,7 +56,7 @@ for id_num in orchid_dict:
 # This is suitable for FASTA files with millions of entries.
 
 
-orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta", generic_dna)
+orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta")
 
 for id_num in orchid_dict:
     print("id number: %s" % id_num)

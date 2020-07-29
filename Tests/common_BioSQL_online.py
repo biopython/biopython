@@ -20,7 +20,6 @@ from Bio import BiopythonWarning
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqFeature import SeqFeature
-from Bio import Alphabet
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
@@ -67,9 +66,9 @@ class TaxonomyTest(unittest.TestCase):
 
         # load the database
         db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
+        self.server = BioSeqDatabase.open_database(
+            driver=DBDRIVER, user=DBUSER, passwd=DBPASSWD, host=DBHOST, db=TESTDB
+        )
 
         # remove the database if it already exists
         try:

@@ -209,7 +209,7 @@ One of the most popular motif databases is \href{http://jaspar.genereg.net}{JASP
     \item \verb+matrix_id+ - the unique JASPAR motif ID, e.g. 'MA0004.1'
     \item \verb+name+ - the name of the TF, e.g. 'Arnt'
     \item \verb+collection+ - the JASPAR collection to which the motif belongs, e.g. 'CORE'
-    \item \verb+tf_class+ - the structual class of this TF, e.g. 'Zipper-Type'
+    \item \verb+tf_class+ - the structural class of this TF, e.g. 'Zipper-Type'
     \item \verb+tf_family+ - the family to which this TF belongs, e.g. 'Helix-Loop-Helix'
     \item \verb+species+ - the species to which this TF belongs, may have multiple values, these are specified as taxonomy IDs, e.g. 10090
     \item \verb+tax_group+ - the taxonomic supergroup to which this motif belongs, e.g. 'vertebrates'
@@ -421,7 +421,7 @@ In addition to parsing these flat file formats, we can also retrieve motifs from
 ... )
 \end{minted}
 
-Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number seperated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
+Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number separated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
 \begin{minted}{pycon}
 >>> arnt = jdb.fetch_motif_by_id("MA0004")
 \end{minted}
@@ -595,7 +595,7 @@ To parse this file (stored as \verb+meme.dna.oops.txt+), use
 
 %cont-doctest
 \begin{minted}{pycon}
->>> with open("meme.dna.oops.txt") as handle:
+>>> with open("meme.INO_up800.classic.oops.xml") as handle:
 ...     record = motifs.parse(handle, "meme")
 ...
 \end{minted}
@@ -606,15 +606,15 @@ The header information is stored in attributes:
 %cont-doctest
 \begin{minted}{pycon}
 >>> record.version
-'3.0'
+'5.0.1'
 >>> record.datafile
-'INO_up800.s'
+'common/INO_up800.s'
 >>> record.command
-'meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s'
+'meme common/INO_up800.s -oc results/meme10 -mod oops -dna -revcomp -bfile common/yeast.nc.6.freq -nmotifs 2 -objfun classic -minw 8 -nostatus '
 >>> record.alphabet
 'ACGT'
 >>> record.sequences
-['CHO1', 'CHO2', 'FAS1', 'FAS2', 'ACC1', 'INO1', 'OPI3']
+['sequence_0', 'sequence_1', 'sequence_2', 'sequence_3', 'sequence_4', 'sequence_5', 'sequence_6']
 \end{minted}
 The record is an object of the \verb+Bio.motifs.meme.Record+ class.
 The class inherits from list, and you can think of \verb+record+ as a list of Motif objects:
@@ -625,9 +625,9 @@ The class inherits from list, and you can think of \verb+record+ as a list of Mo
 2
 >>> motif = record[0]
 >>> print(motif.consensus)
-TTCACATGCCGC
+GCGGCATGTGAAA
 >>> print(motif.degenerate_consensus)
-TTCACATGSCNC
+GSKGCATGTGAAA
 \end{minted}
 In addition to these generic motif attributes, each motif also stores its
 specific information as calculated by MEME. For example,
@@ -637,19 +637,21 @@ specific information as calculated by MEME. For example,
 >>> motif.num_occurrences
 7
 >>> motif.length
-12
+13
 >>> evalue = motif.evalue
 >>> print("%3.1g" % evalue)
 0.2
 >>> motif.name
-'Motif 1'
+'GSKGCATGTGAAA'
+>>> motif.id
+'motif_1'
 \end{minted}
 In addition to using an index into the record, as we did above,
 you can also find it by its name:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> motif = record["Motif 1"]
+>>> motif = record["GSKGCATGTGAAA"]
 \end{minted}
 Each motif has an attribute \verb+.instances+ with the sequence instances
 in which the motif was found, providing some information on each instance:
@@ -659,20 +661,22 @@ in which the motif was found, providing some information on each instance:
 >>> len(motif.instances)
 7
 >>> motif.instances[0]
-Instance('TTCACATGCCGC', 'ACGT')
+Instance('GCGGCATGTGAAA')
 >>> motif.instances[0].motif_name
-'Motif 1'
+'GSKGCATGTGAAA'
 >>> motif.instances[0].sequence_name
 'INO1'
+>>> motif.instances[0].sequence_id
+'sequence_5'
 >>> motif.instances[0].start
 620
 >>> motif.instances[0].strand
-'-'
+'+'
 >>> motif.instances[0].length
-12
+13
 >>> pvalue = motif.instances[0].pvalue
 >>> print("%5.3g" % pvalue)
-1.85e-08
+1.21e-08
 \end{minted}
 
 \subsubsection*{MAST}
@@ -1511,7 +1515,7 @@ running the following piece of code:
 %doctest ../Tests/motifs
 \begin{minted}{pycon}
 >>> from Bio import motifs
->>> with open("meme.out") as handle:
+>>> with open("meme.psp_test.classic.zoops.xml") as handle:
 ...     motifsM = motifs.parse(handle, "meme")
 ...
 \end{minted}
@@ -1524,7 +1528,7 @@ Besides the most wanted list of motifs, the result object contains more useful i
 \begin{itemize}
 \item \verb|.alphabet|
 \item \verb|.datafile|
-\item \verb|.sequence_names|
+\item \verb|.sequences|
 \item \verb|.version|
 \item \verb|.command|
 \end{itemize}
@@ -1536,17 +1540,19 @@ functionality, by adding additional information about the instances.
 %cont-doctest
 \begin{minted}{pycon}
 >>> motifsM[0].consensus
-Seq('CTCAATCGTA')
+Seq('GCTTATGTAA')
 >>> motifsM[0].instances[0].sequence_name
-'SEQ10;'
+'iYFL005W'
+>>> motifsM[0].instances[0].sequence_id
+'sequence_15'
 >>> motifsM[0].instances[0].start
-3
+480
 >>> motifsM[0].instances[0].strand
 '+'
 \end{minted}
 \begin{minted}{pycon}
 >>> motifsM[0].instances[0].pvalue
-8.71e-07
+1.97e-06
 \end{minted}
 
 

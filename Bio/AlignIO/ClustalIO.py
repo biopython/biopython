@@ -14,7 +14,7 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from Bio.AlignIO.Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 
 class ClustalWriter(SequentialAlignmentWriter):
@@ -217,19 +217,18 @@ class ClustalIterator(AlignmentIterator):
 
             if line.split(None, 1)[0] in known_headers:
                 # Found concatenated alignment.
-                done = True
                 self._header = line
                 break
 
             for i in range(len(ids)):
                 if line[0] == " ":
-                    raise ValueError("Unexpected line:\n%s" % repr(line))
+                    raise ValueError("Unexpected line:\n%r" % line)
                 fields = line.rstrip().split()
 
                 # We expect there to be two fields, there can be an optional
                 # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%s" % repr(line))
+                    raise ValueError("Could not parse line:\n%r" % line)
 
                 if fields[0] != ids[i]:
                     raise ValueError(
@@ -288,11 +287,8 @@ class ClustalIterator(AlignmentIterator):
                 % (len(ids), self.records_per_alignment)
             )
 
-        records = (
-            SeqRecord(Seq(s, self.alphabet), id=i, description=i)
-            for (i, s) in zip(ids, seqs)
-        )
-        alignment = MultipleSeqAlignment(records, self.alphabet)
+        records = (SeqRecord(Seq(s), id=i, description=i) for (i, s) in zip(ids, seqs))
+        alignment = MultipleSeqAlignment(records)
         # TODO - Handle alignment annotation better, for now
         # mimic the old parser in Bio.Clustalw
         if version:

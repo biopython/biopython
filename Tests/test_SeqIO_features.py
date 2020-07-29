@@ -13,7 +13,6 @@ import os
 import unittest
 from io import StringIO
 
-from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
@@ -61,7 +60,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         # Jython didn't like us comparing the string of very long
         # UnknownSeq object (out of heap memory error)
         if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%s vs %s" % (repr(old.seq), repr(new.seq)))
+            raise ValueError("%r vs %r" % (old.seq, new.seq))
     elif str(old.seq).upper() != str(new.seq).upper():
         if len(old.seq) < 200:
             raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
@@ -74,9 +73,7 @@ def compare_record(old, new, expect_minor_diffs=False):
     if (old.description or new.description) and not set(
         old.description.split()
     ).intersection(new.description.split()):
-        raise ValueError(
-            "%s versus %s" % (repr(old.description), repr(new.description))
-        )
+        raise ValueError("%r versus %r" % (old.description, new.description))
     # This only checks common annotation
     # Would a white list be easier?
     for key in set(old.annotations).intersection(new.annotations):
@@ -144,38 +141,35 @@ def compare_records(old_list, new_list, expect_minor_diffs=False):
 def compare_feature(old, new):
     """Check two SeqFeatures agree."""
     if old.type != new.type:
-        raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
+        raise ValueError("Type %r versus %r" % (old.type, new.type))
     if (
         old.location.nofuzzy_start != new.location.nofuzzy_start
         or old.location.nofuzzy_end != new.location.nofuzzy_end
     ):
         raise ValueError(
-            "%s versus %s:\n%s\nvs:\n%s"
-            % (old.location, new.location, repr(old), repr(new))
+            "%s versus %s:\n%r\nvs:\n%r" % (old.location, new.location, old, new)
         )
     if old.strand is not None and old.strand != new.strand:
-        raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different strand:\n%r\nvs:\n%r" % (old, new))
     if old.ref != new.ref:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref:\n%r\nvs:\n%r" % (old, new))
     if old.ref_db != new.ref_db:
-        raise ValueError("Different ref_db:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref_db:\n%r\nvs:\n%r" % (old, new))
     if old.location_operator != new.location_operator:
-        raise ValueError(
-            "Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new))
-        )
+        raise ValueError("Different location_operator:\n%r\nvs:\n%r" % (old, new))
     if old.location.start != new.location.start or str(old.location.start) != str(
         new.location.start
     ):
         raise ValueError(
-            "Start %s versus %s:\n%s\nvs:\n%s"
-            % (old.location.start, new.location.start, repr(old), repr(new))
+            "Start %s versus %s:\n%r\nvs:\n%r"
+            % (old.location.start, new.location.start, old, new)
         )
     if old.location.end != new.location.end or str(old.location.end) != str(
         new.location.end
     ):
         raise ValueError(
-            "End %s versus %s:\n%s\nvs:\n%s"
-            % (old.location.end, new.location.end, repr(old), repr(new))
+            "End %s versus %s:\n%r\nvs:\n%r"
+            % (old.location.end, new.location.end, old, new)
         )
     # This only checks key shared qualifiers
     # Would a white list be easier?
@@ -317,19 +311,19 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertEqual(location_str, _get_location_string(feature, len(parent_seq)))
 
         new = feature.extract(parent_seq)
-        self.assertTrue(isinstance(new, Seq))
+        self.assertIsInstance(new, Seq)
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(str(parent_seq))
-        self.assertTrue(isinstance(new, str))
+        self.assertIsInstance(new, str)
         self.assertEqual(new, answer_str)
 
         new = feature.extract(parent_seq.tomutable())
-        self.assertTrue(isinstance(new, Seq))  # Not MutableSeq!
+        self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
-        new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
-        self.assertTrue(isinstance(new, UnknownSeq))
+        new = feature.extract(UnknownSeq(len(parent_seq), character="N"))
+        self.assertIsInstance(new, UnknownSeq)
         self.assertEqual(len(new), len(answer_str))
 
         if _get_location_string(feature, 1326) != location_str:
@@ -364,55 +358,57 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         if len(feature):
             self.assertEqual(feature.location.start, min(feature.location))
             self.assertEqual(feature.location.end, max(feature.location) + 1)
-        self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
+        self.assertLessEqual(
+            len(feature), feature.location.end - feature.location.start
+        )
 
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)."""
-        s = Seq("GAUCRYWSMKHBVDN", generic_rna)
+        s = Seq("GAUCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
-        self.assertEqual(f.strand, None)
-        self.assertEqual(f.location.strand, None)
+        self.assertIsNone(f.strand)
+        self.assertIsNone(f.location.strand)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):
         """Feature on DNA (simple, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_single_letter_dna(self):
         """Feature on DNA (single letter, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 6))
         self.check(s, f, "Y", "6")
 
     def test_zero_len_dna(self):
         """Feature on DNA (between location, zero length, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_zero_len_dna_end(self):
         """Feature on DNA (between location at end, zero length, default strand)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(15, 15))
         self.check(s, f, "", "15^1")
 
     def test_simple_dna_strand0(self):
         """Feature on DNA (simple, strand 0)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=0)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand_none(self):
         """Feature on DNA (simple, strand None)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=None)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand1(self):
         """Feature on DNA (simple, strand +1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=1)
         self.assertEqual(f.strand, +1)
         self.assertEqual(f.location.strand, +1)
@@ -420,7 +416,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_strand_minus(self):
         """Feature on DNA (simple, strand -1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10), strand=-1)
         self.assertEqual(f.strand, -1)
         self.assertEqual(f.location.strand, -1)
@@ -428,7 +424,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join(self):
         """Feature on DNA (join, strand +1)."""
-        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        s = Seq("GATCRYWSMKHBVDN")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=1)
         f = make_join_feature([f1, f2])
@@ -436,7 +432,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_strand_minus(self):
         """Feature on DNA (join, strand -1)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -446,7 +442,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_before(self):
         """Feature on DNA (join, strand -1, before position)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -456,7 +452,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_simple_dna_join_after(self):
         """Feature on DNA (join, strand -1, after position)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, AfterPosition(15)), strand=-1)
         f = make_join_feature([f1, f2])
@@ -466,7 +462,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_mixed_strand_dna_join(self):
         """Feature on DNA (join, mixed strand)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
@@ -476,7 +472,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_mixed_strand_dna_multi_join(self):
         """Feature on DNA (multi-join, mixed strand)."""
-        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        s = Seq("AAAAACCCCCTTTTTGGGGG")
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f3 = SeqFeature(FeatureLocation(BeforePosition(0), 5), strand=+1)
@@ -490,13 +486,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_simple(self):
         """Feature on protein (simple)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "FGHIJ", "6..10")
 
     def test_protein_join(self):
         """Feature on protein (join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(5, 10))
         f2 = SeqFeature(FeatureLocation(15, 20))
         f = make_join_feature([f1, f2])
@@ -504,7 +500,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_join_fuzzy(self):
         """Feature on protein (fuzzy join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10))
         f2 = SeqFeature(
             FeatureLocation(
@@ -517,7 +513,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_multi_join(self):
         """Feature on protein (multi-join)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f1 = SeqFeature(FeatureLocation(1, 2))
         f2 = SeqFeature(FeatureLocation(8, 9))
         f3 = SeqFeature(FeatureLocation(14, 16))
@@ -531,13 +527,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
     def test_protein_between(self):
         """Feature on protein (between location, zero length)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_protein_oneof(self):
         """Feature on protein (one-of positions)."""
-        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         start = OneOfPosition(5, (ExactPosition(5), ExactPosition(7)))
         end = OneOfPosition(11, (ExactPosition(10), ExactPosition(11)))
         f = SeqFeature(FeatureLocation(start, 10))
@@ -567,8 +563,9 @@ class SeqFeatureCreation(unittest.TestCase):
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
         self.record = SeqRecord(
-            Seq("ACGT" * 100, generic_dna), id="Test", name="Test", description="Test"
+            Seq("ACGT" * 100), id="Test", name="Test", description="Test"
         )
+        self.record.annotations["molecule_type"] = "DNA"
 
     def write_read_check(self, check_format):
         handle = StringIO()

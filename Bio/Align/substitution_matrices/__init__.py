@@ -1,22 +1,15 @@
+# Copyright 2019 by Michiel de Hoon.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Substitution matrices."""
 
 import os
 import string
 import numpy
-
-from Bio import BiopythonExperimentalWarning
-
-
-import warnings
-
-warnings.warn(
-    "Bio.Align.substitution_matrices is an experimental module "
-    "which may still undergo significant changes. In particular, "
-    "the location of this module may change, and the Array class "
-    "defined in this module may be moved to other existing or new "
-    "modules in Biopython.",
-    BiopythonExperimentalWarning,
-)
 
 
 class Array(numpy.ndarray):
@@ -319,6 +312,24 @@ class Array(numpy.ndarray):
                     self[key] = E[key]
         for key in F:
             self[key] = F[key]
+
+    def select(self, alphabet):
+        """Subset the array by selecting the letters from the specified alphabet."""
+        ii = []
+        jj = []
+        for i, key in enumerate(alphabet):
+            try:
+                j = self._alphabet.index(key)
+            except ValueError:
+                continue
+            ii.append(i)
+            jj.append(j)
+        dims = len(self.shape)
+        a = Array(alphabet, dims=dims)
+        ii = numpy.ix_(*[ii] * dims)
+        jj = numpy.ix_(*[jj] * dims)
+        a[ii] = numpy.ndarray.__getitem__(self, jj)
+        return a
 
     def _format_1D(self, fmt):
         _alphabet = self._alphabet

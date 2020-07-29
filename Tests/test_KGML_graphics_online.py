@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # Copyright 2014 by Leighton Pritchard.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -16,12 +15,14 @@ from Bio.Graphics.ColorSpiral import ColorSpiral
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError
+
 try:
     from reportlab.pdfgen.canvas import Canvas
     from reportlab.lib.pagesizes import A4
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install reportlab if you want to use Bio.Graphics.") from None
+        "Install reportlab if you want to use Bio.Graphics."
+    ) from None
 
 # Do we have PIL?
 try:
@@ -29,7 +30,8 @@ try:
 except ImportError:
     raise MissingExternalDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
-        "if you want to use bitmaps from KGML.") from None
+        "if you want to use bitmaps from KGML."
+    ) from None
 
 
 # Biopython Bio.KEGG.KGML
@@ -40,6 +42,7 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 from test_KGML_graphics import PathwayData
 
 import requires_internet
+
 requires_internet.check()
 
 
@@ -61,7 +64,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
         self.data = [
             PathwayData("01100", (3628, 1726, 1746, 149)),
             PathwayData("03070", (81, 72, 8, 1), True),
-            ]
+        ]
 
     def test_render_KGML_import_map(self):
         """Basic rendering of KGML: use imported imagemap.

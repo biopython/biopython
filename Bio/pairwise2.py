@@ -70,7 +70,7 @@ start and end positions of the alignment:
    >>> print(alignments)
    [Alignment(seqA='ACCGT', seqB='A-CG-', score=3, start=0, end=5), ...
 
-You can access each element of an aligment by index or name:
+You can access each element of an alignment by index or name:
 
    >>> alignments[0][2]
    3
@@ -232,10 +232,10 @@ Some examples:
     <BLANKLINE>
 
 - The alignment function can also use known matrices already included in
-  Biopython (``MatrixInfo`` from ``Bio.SubsMat``):
+  Biopython (in ``Bio.Align.substitution_matrices``):
 
-    >>> from Bio.SubsMat import MatrixInfo as matlist
-    >>> matrix = matlist.blosum62
+    >>> from Bio.Align import substitution_matrices
+    >>> matrix = substitution_matrices.load("BLOSUM62")
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
     ...     print(format_alignment(*a))
     KEVLA
@@ -973,7 +973,7 @@ def _recover_alignments(
         # and stop the backtrace (dead_end) if a gap in seqB follows.
         #
         # Attention: This may fail, if the gap-penalties for both strands are
-        # different. In this case the second aligment may be the only optimal
+        # different. In this case the second alignment may be the only optimal
         # alignment. Thus it can happen that no alignment is returned. For
         # this case a workaround was implemented, which reverses the input and
         # the matrices (this happens in _reverse_matrices) and repeats the
@@ -985,7 +985,7 @@ def _recover_alignments(
             cache = (ali_seqA[:], ali_seqB[:], end, row, col, col_gap)
 
             # If trace is empty we have reached at least one border of the
-            # matrix or the end of a local aligment. Just add the rest of
+            # matrix or the end of a local alignment. Just add the rest of
             # the sequence(s) and fill with gaps if necessary.
             if not trace:
                 if col and col_gap:

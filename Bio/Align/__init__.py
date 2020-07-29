@@ -16,9 +16,9 @@ class, used in the Bio.AlignIO module.
 
 import warnings
 
-from Bio import Alphabet
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
+from Bio.Align import substitution_matrices
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
@@ -42,7 +42,7 @@ class MultipleSeqAlignment:
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
     >>> print(align)
-    SingleLetterAlphabet() alignment with 7 rows and 156 columns
+    Alignment with 7 rows and 156 columns
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
     TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -83,7 +83,7 @@ class MultipleSeqAlignment:
     Or, take just the first ten columns as a sub-alignment:
 
     >>> print(align[:, :10])
-    SingleLetterAlphabet() alignment with 7 rows and 10 columns
+    Alignment with 7 rows and 10 columns
     TATACATTAA gi|6273285|gb|AF191659.1|AF191
     TATACATTAA gi|6273284|gb|AF191658.1|AF191
     TATACATTAA gi|6273287|gb|AF191661.1|AF191
@@ -97,7 +97,7 @@ class MultipleSeqAlignment:
     and last ten columns:
 
     >>> print(align[:, :10] + align[:, -10:])
-    SingleLetterAlphabet() alignment with 7 rows and 20 columns
+    Alignment with 7 rows and 20 columns
     TATACATTAAGTGTACCAGA gi|6273285|gb|AF191659.1|AF191
     TATACATTAAGTGTACCAGA gi|6273284|gb|AF191658.1|AF191
     TATACATTAAGTGTACCAGA gi|6273287|gb|AF191661.1|AF191
@@ -124,10 +124,8 @@ class MultipleSeqAlignment:
          - records - A list (or iterator) of SeqRecord objects, whose
                      sequences are all the same length.  This may be an be an
                      empty list.
-         - alphabet - The alphabet for the whole alignment, typically a gapped
-                      alphabet, which should be a super-set of the individual
-                      record alphabets.  If omitted, a consensus alphabet is
-                      used.
+         - alphabet - For backward compatibility only; its value should always
+                      be None.
          - annotations - Information about the whole alignment (dictionary).
          - column_annotations - Per column annotation (restricted dictionary).
                       This holds Python sequences (lists, strings, tuples)
@@ -137,18 +135,17 @@ class MultipleSeqAlignment:
         You would normally load a MSA from a file using Bio.AlignIO, but you
         can do this from a list of SeqRecord objects too:
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
-        >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
-        >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
+        >>> a = SeqRecord(Seq("AAAACGT"), id="Alpha")
+        >>> b = SeqRecord(Seq("AAA-CGT"), id="Beta")
+        >>> c = SeqRecord(Seq("AAAAGGT"), id="Gamma")
         >>> align = MultipleSeqAlignment([a, b, c],
         ...                              annotations={"tool": "demo"},
         ...                              column_annotations={"stats": "CCCXCCC"})
         >>> print(align)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -158,21 +155,11 @@ class MultipleSeqAlignment:
         {'stats': 'CCCXCCC'}
         """
         if alphabet is not None:
-            if not isinstance(alphabet, (Alphabet.Alphabet, Alphabet.AlphabetEncoder)):
-                raise ValueError("Invalid alphabet argument")
-            self._alphabet = alphabet
-        else:
-            # Default while we add sequences, will take a consensus later
-            self._alphabet = Alphabet.single_letter_alphabet
+            raise ValueError("The alphabet argument is no longer supported")
 
         self._records = []
         if records:
             self.extend(records)
-            if alphabet is None:
-                # No alphabet was given, take a consensus alphabet
-                self._alphabet = Alphabet._consensus_alphabet(
-                    rec.seq.alphabet for rec in self._records if rec.seq is not None
-                )
 
         # Annotations about the whole alignment
         if annotations is None:
@@ -181,7 +168,7 @@ class MultipleSeqAlignment:
             raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
-        # Annotations about each colum of the alignment
+        # Annotations about each column of the alignment
         if column_annotations is None:
             column_annotations = {}
         # Handle this via the property set function which will validate it
@@ -256,14 +243,13 @@ class MultipleSeqAlignment:
         are shown, with the record identifiers.  This should fit nicely on a
         single screen. e.g.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([])
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> print(align)
-        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        Alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
         ACTGCTAGATAG Gamma
@@ -272,8 +258,8 @@ class MultipleSeqAlignment:
         """
         rows = len(self._records)
         lines = [
-            "%s alignment with %i rows and %i columns"
-            % (str(self._alphabet), rows, self.get_alignment_length())
+            "Alignment with %i rows and %i columns"
+            % (rows, self.get_alignment_length())
         ]
         if rows <= 20:
             lines.extend(self._str_line(rec) for rec in self._records)
@@ -287,10 +273,10 @@ class MultipleSeqAlignment:
         """Return a representation of the object for debugging.
 
         The representation cannot be used with eval() to recreate the object,
-        which is usually possible with simple python ojects.  For example:
+        which is usually possible with simple python objects.  For example:
 
-        <Bio.Align.MultipleSeqAlignment instance (2 records of length 14,
-        SingleLetterAlphabet()) at a3c184c>
+        <Bio.Align.MultipleSeqAlignment instance (2 records of length 14)
+        at a3c184c>
 
         The hex string is the memory address of the object, see help(id).
         This provides a simple way to visually distinguish alignments of
@@ -298,17 +284,16 @@ class MultipleSeqAlignment:
         """
         # A doctest for __repr__ would be nice, but __class__ comes out differently
         # if run via the __main__ trick.
-        return "<%s instance (%i records of length %i, %s) at %x>" % (
+        return "<%s instance (%i records of length %i) at %x>" % (
             self.__class__,
             len(self._records),
             self.get_alignment_length(),
-            repr(self._alphabet),
             id(self),
         )
         # This version is useful for doing eval(repr(alignment)),
         # but it can be VERY long:
-        # return "%s(%s, %s)" \
-        #       % (self.__class__, repr(self._records), repr(self._alphabet))
+        # return "%s(%r)" \
+        #       % (self.__class__, self._records)
 
     def format(self, format_spec):
         """Return the alignment as a string in the specified file format [DEPRECATED].
@@ -334,9 +319,8 @@ class MultipleSeqAlignment:
 
         e.g.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([])
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -371,9 +355,8 @@ class MultipleSeqAlignment:
 
         e.g.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([])
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -409,9 +392,8 @@ class MultipleSeqAlignment:
         length. This function will go through and find this length
         by finding the maximum length of sequences in the alignment.
 
-        >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([])
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -457,7 +439,7 @@ class MultipleSeqAlignment:
 
         In general providing a SeqRecord and calling .append is preferred.
         """
-        new_seq = Seq(sequence, self._alphabet)
+        new_seq = Seq(sequence)
 
         # We are now effectively using the SeqRecord's .id as
         # the primary identifier (e.g. in Bio.SeqIO) so we should
@@ -486,24 +468,23 @@ class MultipleSeqAlignment:
     def extend(self, records):
         """Add more SeqRecord objects to the alignment as rows.
 
-        They must all have the same length as the original alignment, and have
-        alphabets compatible with the alignment's alphabet. For example,
+        They must all have the same length as the original alignment. For
+        example,
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
-        >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
-        >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
-        >>> d = SeqRecord(Seq("AAAACGT", generic_dna), id="Delta")
-        >>> e = SeqRecord(Seq("AAA-GGT", generic_dna), id="Epsilon")
+        >>> a = SeqRecord(Seq("AAAACGT"), id="Alpha")
+        >>> b = SeqRecord(Seq("AAA-CGT"), id="Beta")
+        >>> c = SeqRecord(Seq("AAAAGGT"), id="Gamma")
+        >>> d = SeqRecord(Seq("AAAACGT"), id="Delta")
+        >>> e = SeqRecord(Seq("AAA-GGT"), id="Epsilon")
 
         First we create a small alignment (three rows):
 
         >>> align = MultipleSeqAlignment([a, b, c])
         >>> print(align)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -512,7 +493,7 @@ class MultipleSeqAlignment:
 
         >>> align.extend([d, e])
         >>> print(align)
-        DNAAlphabet() alignment with 5 rows and 7 columns
+        Alignment with 5 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -548,13 +529,12 @@ class MultipleSeqAlignment:
         """Add one more SeqRecord object to the alignment as a new row.
 
         This must have the same length as the original alignment (unless this is
-        the first record), and have an alphabet compatible with the alignment's
-        alphabet.
+        the first record).
 
         >>> from Bio import AlignIO
         >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
         >>> print(align)
-        SingleLetterAlphabet() alignment with 7 rows and 156 columns
+        Alignment with 7 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -575,7 +555,7 @@ class MultipleSeqAlignment:
 
         >>> align.append(dummy)
         >>> print(align)
-        SingleLetterAlphabet() alignment with 8 rows and 156 columns
+        Alignment with 8 rows and 156 columns
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
         TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
@@ -607,10 +587,6 @@ class MultipleSeqAlignment:
             #                  % self.get_alignment_length())
             raise ValueError("Sequences must all be the same length")
 
-        # Using not self.alphabet.contains(record.seq.alphabet) needs fixing
-        # for AlphabetEncoders (e.g. gapped versus ungapped).
-        if not Alphabet._check_type_compatible([self._alphabet, record.seq.alphabet]):
-            raise ValueError("New sequence's alphabet is incompatible")
         self._records.append(record)
 
     def __add__(self, other):
@@ -620,16 +596,15 @@ class MultipleSeqAlignment:
         about adding them - by row or by column. Using the extend method adds by row.
         Using the addition operator adds by column. For example,
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> a1 = SeqRecord(Seq("AAAAC", generic_dna), id="Alpha")
-        >>> b1 = SeqRecord(Seq("AAA-C", generic_dna), id="Beta")
-        >>> c1 = SeqRecord(Seq("AAAAG", generic_dna), id="Gamma")
-        >>> a2 = SeqRecord(Seq("GT", generic_dna), id="Alpha")
-        >>> b2 = SeqRecord(Seq("GT", generic_dna), id="Beta")
-        >>> c2 = SeqRecord(Seq("GT", generic_dna), id="Gamma")
+        >>> a1 = SeqRecord(Seq("AAAAC"), id="Alpha")
+        >>> b1 = SeqRecord(Seq("AAA-C"), id="Beta")
+        >>> c1 = SeqRecord(Seq("AAAAG"), id="Gamma")
+        >>> a2 = SeqRecord(Seq("GT"), id="Alpha")
+        >>> b2 = SeqRecord(Seq("GT"), id="Beta")
+        >>> c2 = SeqRecord(Seq("GT"), id="Gamma")
         >>> left = MultipleSeqAlignment([a1, b1, c1],
         ...                             annotations={"tool": "demo", "name": "start"},
         ...                             column_annotations={"stats": "CCCXC"})
@@ -640,12 +615,12 @@ class MultipleSeqAlignment:
         Now, let's look at these two alignments:
 
         >>> print(left)
-        DNAAlphabet() alignment with 3 rows and 5 columns
+        Alignment with 3 rows and 5 columns
         AAAAC Alpha
         AAA-C Beta
         AAAAG Gamma
         >>> print(right)
-        DNAAlphabet() alignment with 3 rows and 2 columns
+        Alignment with 3 rows and 2 columns
         GT Alpha
         GT Beta
         GT Gamma
@@ -654,7 +629,7 @@ class MultipleSeqAlignment:
 
         >>> combined = left + right
         >>> print(combined)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -694,7 +669,6 @@ class MultipleSeqAlignment:
                 "When adding two alignments they must have the same length"
                 " (i.e. same number or rows)"
             )
-        alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
         merged = (left + right for left, right in zip(self, other))
         # Take any common annotation:
         annotations = {}
@@ -705,7 +679,9 @@ class MultipleSeqAlignment:
         for k, v in self.column_annotations.items():
             if k in other.column_annotations:
                 column_annotations[k] = v + other.column_annotations[k]
-        return MultipleSeqAlignment(merged, alpha, annotations, column_annotations)
+        return MultipleSeqAlignment(
+            merged, annotations=annotations, column_annotations=column_annotations
+        )
 
     def __getitem__(self, index):
         """Access part of the alignment.
@@ -718,7 +694,7 @@ class MultipleSeqAlignment:
         align[r,c] gives a single character as a string
         align[r] gives a row as a SeqRecord
         align[r,:] gives a row as a SeqRecord
-        align[:,c] gives a column as a Seq (using the alignment's alphabet)
+        align[:,c] gives a column as a Seq
 
         align[:] and align[:,:] give a copy of the alignment
 
@@ -729,16 +705,15 @@ class MultipleSeqAlignment:
 
         We'll use the following example alignment here for illustration:
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
-        >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
-        >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
-        >>> d = SeqRecord(Seq("AAAACGT", generic_dna), id="Delta")
-        >>> e = SeqRecord(Seq("AAA-GGT", generic_dna), id="Epsilon")
-        >>> align = MultipleSeqAlignment([a, b, c, d, e], generic_dna)
+        >>> a = SeqRecord(Seq("AAAACGT"), id="Alpha")
+        >>> b = SeqRecord(Seq("AAA-CGT"), id="Beta")
+        >>> c = SeqRecord(Seq("AAAAGGT"), id="Gamma")
+        >>> d = SeqRecord(Seq("AAAACGT"), id="Delta")
+        >>> e = SeqRecord(Seq("AAA-GGT"), id="Epsilon")
+        >>> align = MultipleSeqAlignment([a, b, c, d, e])
 
         You can access a row of the alignment as a SeqRecord using an integer
         index (think of the alignment as a list of SeqRecord objects here):
@@ -755,7 +730,7 @@ class MultipleSeqAlignment:
 
         >>> sub_alignment = align[2:5]
         >>> print(sub_alignment)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAAGGT Gamma
         AAAACGT Delta
         AAA-GGT Epsilon
@@ -765,7 +740,7 @@ class MultipleSeqAlignment:
 
         >>> sub_alignment = align[::2]
         >>> print(sub_alignment)
-        DNAAlphabet() alignment with 3 rows and 7 columns
+        Alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAAAGGT Gamma
         AAA-GGT Epsilon
@@ -774,7 +749,7 @@ class MultipleSeqAlignment:
 
         >>> rev_alignment = align[::-1]
         >>> print(rev_alignment)
-        DNAAlphabet() alignment with 5 rows and 7 columns
+        Alignment with 5 rows and 7 columns
         AAA-GGT Epsilon
         AAAACGT Delta
         AAAAGGT Gamma
@@ -810,7 +785,7 @@ class MultipleSeqAlignment:
         However, in general you get a sub-alignment,
 
         >>> print(align[1:5, 3:6])
-        DNAAlphabet() alignment with 4 rows and 3 columns
+        Alignment with 4 rows and 3 columns
         -CG Beta
         AGG Gamma
         ACG Delta
@@ -825,10 +800,10 @@ class MultipleSeqAlignment:
             return self._records[index]
         elif isinstance(index, slice):
             # e.g. sub_align = align[i:j:k]
-            new = MultipleSeqAlignment(self._records[index], self._alphabet)
+            new = MultipleSeqAlignment(self._records[index])
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
-                # Perserve the column annotations too,
+                # Preserve the column annotations too,
                 for k, v in self.column_annotations.items():
                     new.column_annotations[k] = v
             return new
@@ -846,11 +821,11 @@ class MultipleSeqAlignment:
         else:
             # e.g. sub_align = align[1:4, 5:7], gives another alignment
             new = MultipleSeqAlignment(
-                (rec[col_index] for rec in self._records[row_index]), self._alphabet
+                (rec[col_index] for rec in self._records[row_index])
             )
             if self.column_annotations and len(new) == len(self):
                 # All rows kept (although could have been reversed)
-                # Perserve the column annotations too,
+                # Preserve the column annotations too,
                 for k, v in self.column_annotations.items():
                     new.column_annotations[k] = v[col_index]
             return new
@@ -865,25 +840,24 @@ class MultipleSeqAlignment:
         This is useful if you want to add two alignments which use the same
         record identifiers, but in a different order. For example,
 
-        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Align import MultipleSeqAlignment
         >>> align1 = MultipleSeqAlignment([
-        ...              SeqRecord(Seq("ACGT", generic_dna), id="Human"),
-        ...              SeqRecord(Seq("ACGG", generic_dna), id="Mouse"),
-        ...              SeqRecord(Seq("ACGC", generic_dna), id="Chicken"),
+        ...              SeqRecord(Seq("ACGT"), id="Human"),
+        ...              SeqRecord(Seq("ACGG"), id="Mouse"),
+        ...              SeqRecord(Seq("ACGC"), id="Chicken"),
         ...          ])
         >>> align2 = MultipleSeqAlignment([
-        ...              SeqRecord(Seq("CGGT", generic_dna), id="Mouse"),
-        ...              SeqRecord(Seq("CGTT", generic_dna), id="Human"),
-        ...              SeqRecord(Seq("CGCT", generic_dna), id="Chicken"),
+        ...              SeqRecord(Seq("CGGT"), id="Mouse"),
+        ...              SeqRecord(Seq("CGTT"), id="Human"),
+        ...              SeqRecord(Seq("CGCT"), id="Chicken"),
         ...          ])
 
         If you simple try and add these without sorting, you get this:
 
         >>> print(align1 + align2)
-        DNAAlphabet() alignment with 3 rows and 8 columns
+        Alignment with 3 rows and 8 columns
         ACGTCGGT <unknown id>
         ACGGCGTT <unknown id>
         ACGCCGCT Chicken
@@ -896,7 +870,7 @@ class MultipleSeqAlignment:
         >>> align1.sort()
         >>> align2.sort()
         >>> print(align1 + align2)
-        DNAAlphabet() alignment with 3 rows and 8 columns
+        Alignment with 3 rows and 8 columns
         ACGCCGCT Chicken
         ACGTCGTT Human
         ACGGCGGT Mouse
@@ -906,13 +880,13 @@ class MultipleSeqAlignment:
 
         >>> from Bio.SeqUtils import GC
         >>> print(align1)
-        DNAAlphabet() alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGC Chicken
         ACGT Human
         ACGG Mouse
         >>> align1.sort(key = lambda record: GC(record.seq))
         >>> print(align1)
-        DNAAlphabet() alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGT Human
         ACGC Chicken
         ACGG Mouse
@@ -922,7 +896,7 @@ class MultipleSeqAlignment:
 
         >>> align1.sort(reverse=True)
         >>> print(align1)
-        DNAAlphabet() alignment with 3 rows and 4 columns
+        Alignment with 3 rows and 4 columns
         ACGG Mouse
         ACGT Human
         ACGC Chicken
@@ -932,6 +906,82 @@ class MultipleSeqAlignment:
             self._records.sort(key=lambda r: r.id, reverse=reverse)
         else:
             self._records.sort(key=key, reverse=reverse)
+
+    @property
+    def substitutions(self):
+        """Return an Array with the number of substitutions of letters in the alignment.
+
+        As an example, consider a multiple sequence alignment of three DNA sequences:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> seq1 = SeqRecord(Seq("ACGT"), id="seq1")
+        >>> seq2 = SeqRecord(Seq("A--A"), id="seq2")
+        >>> seq3 = SeqRecord(Seq("ACGT"), id="seq3")
+        >>> seq4 = SeqRecord(Seq("TTTC"), id="seq4")
+        >>> alignment = MultipleSeqAlignment([seq1, seq2, seq3, seq4])
+        >>> print(alignment)
+        Alignment with 4 rows and 4 columns
+        ACGT seq1
+        A--A seq2
+        ACGT seq3
+        TTTC seq4
+
+        >>> m = alignment.substitutions
+        >>> print(m)
+            A   C   G   T
+        A 3.0 0.5 0.0 2.5
+        C 0.5 1.0 0.0 2.0
+        G 0.0 0.0 1.0 1.0
+        T 2.5 2.0 1.0 1.0
+        <BLANKLINE>
+
+        Note that the matrix is symmetric, with counts divided equally on both
+        sides of the diagonal. For example, the total number of substitutions
+        between A and T in the alignment is 3.5 + 3.5 = 7.
+
+        Any weights associated with the sequences are taken into account when
+        calculating the substitution matrix.  For example, given the following
+        multiple sequence alignment::
+
+            GTATC  0.5
+            AT--C  0.8
+            CTGTC  1.0
+
+        For the first column we have::
+
+            ('A', 'G') : 0.5 * 0.8 = 0.4
+            ('C', 'G') : 0.5 * 1.0 = 0.5
+            ('A', 'C') : 0.8 * 1.0 = 0.8
+
+        """
+        letters = set.union(*[set(record.seq) for record in self])
+        try:
+            letters.remove("-")
+        except KeyError:
+            pass
+        letters = "".join(sorted(letters))
+        m = substitution_matrices.Array(letters, dims=2)
+        for rec_num1, alignment1 in enumerate(self):
+            seq1 = alignment1.seq
+            weight1 = alignment1.annotations.get("weight", 1.0)
+            for rec_num2, alignment2 in enumerate(self):
+                if rec_num1 == rec_num2:
+                    break
+                seq2 = alignment2.seq
+                weight2 = alignment2.annotations.get("weight", 1.0)
+                for residue1, residue2 in zip(seq1, seq2):
+                    if residue1 == "-":
+                        continue
+                    if residue2 == "-":
+                        continue
+                    m[(residue1, residue2)] += weight1 * weight2
+
+        m += m.transpose()
+        m /= 2.0
+
+        return m
 
 
 class PairwiseAlignment:
@@ -1023,7 +1073,6 @@ class PairwiseAlignment:
         start1 = end1
         start2 = end2
         for end1, end2 in path[1:]:
-            gap = 0
             if end1 == start1:
                 gap = end2 - start2
                 aligned_seq1 += "-" * gap
@@ -1057,8 +1106,6 @@ class PairwiseAlignment:
     def _format_generalized(self):
         seq1 = self.target
         seq2 = self.query
-        n1 = len(seq1)
-        n2 = len(seq2)
         aligned_seq1 = []
         aligned_seq2 = []
         pattern = []
@@ -1131,62 +1178,49 @@ class PairwiseAlignment:
         query = self.query
         target = self.target
         try:
-            Qname = query.id
+            qName = query.id
         except AttributeError:
-            Qname = "query"
+            qName = "query"
         else:
             query = query.seq
         try:
-            Tname = target.id
+            tName = target.id
         except AttributeError:
-            Tname = "target"
+            tName = "target"
         else:
             target = target.seq
         seq1 = str(target)
         seq2 = str(query)
         n1 = len(seq1)
         n2 = len(seq2)
-        match = 0
-        mismatch = 0
-        repmatch = 0
-        Ns = 0
-        Qgapcount = 0
-        Qgapbases = 0
-        Tgapcount = 0
-        Tgapbases = 0
-        Qsize = n2
-        Qstart = 0
-        Qend = Qsize
-        Tsize = n1
-        Tstart = 0
-        Tend = Tsize
+        # variable names follow those in the PSL file format specification
+        matches = 0
+        misMatches = 0
+        repMatches = 0
+        nCount = 0
+        qNumInsert = 0
+        qBaseInsert = 0
+        tNumInsert = 0
+        tBaseInsert = 0
+        qSize = n2
+        tSize = n1
         blockSizes = []
         qStarts = []
         tStarts = []
         strand = "+"
-        start1 = 0
-        start2 = 0
         start1, start2 = self.path[0]
+        tStart = start1
+        qStart = start2
         for end1, end2 in self.path[1:]:
             count1 = end1 - start1
             count2 = end2 - start2
             if count1 == 0:
-                if start2 == 0:
-                    Qstart += count2
-                elif end2 == n2:
-                    Qend -= count2
-                else:
-                    Qgapcount += 1
-                    Qgapbases += count2
+                qNumInsert += 1
+                qBaseInsert += count2
                 start2 = end2
             elif count2 == 0:
-                if start1 == 0:
-                    Tstart += count1
-                elif end1 == n1:
-                    Tend -= count1
-                else:
-                    Tgapcount += 1
-                    Tgapbases += count1
+                tNumInsert += 1
+                tBaseInsert += count1
                 start1 = end1
             else:
                 assert count1 == count2
@@ -1195,35 +1229,37 @@ class PairwiseAlignment:
                 blockSizes.append(count1)
                 for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
                     if c1 == "N" or c2 == "N":
-                        Ns += 1
+                        nCount += 1
                     elif c1 == c2:
-                        match += 1
+                        matches += 1
                     else:
-                        mismatch += 1
+                        misMatches += 1
                 start1 = end1
                 start2 = end2
+        tEnd = end1
+        qEnd = end2
         blockcount = len(blockSizes)
         blockSizes = ",".join(map(str, blockSizes)) + ","
         qStarts = ",".join(map(str, qStarts)) + ","
         tStarts = ",".join(map(str, tStarts)) + ","
         words = [
-            str(match),
-            str(mismatch),
-            str(repmatch),
-            str(Ns),
-            str(Qgapcount),
-            str(Qgapbases),
-            str(Tgapcount),
-            str(Tgapbases),
+            str(matches),
+            str(misMatches),
+            str(repMatches),
+            str(nCount),
+            str(qNumInsert),
+            str(qBaseInsert),
+            str(tNumInsert),
+            str(tBaseInsert),
             strand,
-            Qname,
-            str(Qsize),
-            str(Qstart),
-            str(Qend),
-            Tname,
-            str(Tsize),
-            str(Tstart),
-            str(Tend),
+            qName,
+            str(qSize),
+            str(qStart),
+            str(qEnd),
+            tName,
+            str(tSize),
+            str(tStart),
+            str(tEnd),
             str(blockcount),
             blockSizes,
             qStarts,

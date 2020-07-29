@@ -14,18 +14,16 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
 
-
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.sax import handler
 from xml import sax
 
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequentialSequenceWriter
+from .Interfaces import SequenceIterator, SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -33,7 +31,7 @@ class ContentHandler(handler.ContentHandler):
 
     def __init__(self):
         """Create a handler to handle XML events."""
-        handler.ContentHandler.__init__(self)
+        super().__init__()
         self.source = None
         self.sourceVersion = None
         self.seqXMLversion = None
@@ -255,18 +253,18 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError("Unexpected namespace '%s' for sequence end" % namespace)
         if qname is not None:
             raise RuntimeError("Unexpected qname '%s' for sequence end" % qname)
+        record = self.records[-1]
         if localname == "DNAseq":
-            alphabet = Alphabet.generic_dna
+            record.annotations["molecule_type"] = "DNA"
         elif localname == "RNAseq":
-            alphabet = Alphabet.generic_rna
+            record.annotations["molecule_type"] = "RNA"
         elif localname == "AAseq":
-            alphabet = Alphabet.generic_protein
+            record.annotations["molecule_type"] = "protein"
         else:
             raise RuntimeError(
                 "Failed to find end of sequence (localname = %s)" % localname
             )
-        record = self.records[-1]
-        record.seq = Seq(self.data, alphabet)
+        record.seq = Seq(self.data)
         self.data = None
         self.endElementNS = self.endEntryElement
 
@@ -346,9 +344,16 @@ class ContentHandler(handler.ContentHandler):
         if property_name is None:
             raise ValueError("Failed to find name for property element")
         record = self.records[-1]
-        if property_name not in record.annotations:
-            record.annotations[property_name] = []
-        record.annotations[property_name].append(property_value)
+        if property_name == "molecule_type":
+            # At this point, record.annotations["molecule_type"] is either
+            # "DNA", "RNA", or "protein"; property_value may be a more detailed
+            # description such as "mRNA" or "genomic DNA".
+            assert record.annotations[property_name] in property_value
+            record.annotations[property_name] = property_value
+        else:
+            if property_name not in record.annotations:
+                record.annotations[property_name] = []
+            record.annotations[property_name].append(property_value)
         self.endElementNS = self.endPropertyElement
 
     def endPropertyElement(self, name, qname):
@@ -372,9 +377,10 @@ class ContentHandler(handler.ContentHandler):
             self.data += data
 
 
-class SeqXmlIterator:
-    """Breaks seqXML file into SeqRecords.
+class SeqXmlIterator(SequenceIterator):
+    """Parser for seqXML files.
 
+    Parses seqXML files and creates SeqRecords.
     Assumes valid seqXML please validate beforehand.
     It is assumed that all information for one record can be found within a
     record element or above. Two types of methods are called when the start
@@ -389,95 +395,71 @@ class SeqXmlIterator:
 
     def __init__(self, stream_or_path, namespace=None):
         """Create the object and initialize the XML parser."""
+        # Make sure we got a binary handle. If we got a text handle, then
+        # the parser will still run but unicode characters will be garbled
+        # if the text handle was opened with a different encoding than the
+        # one specified in the XML file. With a binary handle, the correct
+        # encoding is picked up by the parser from the XML file.
         self.parser = sax.make_parser()
         content_handler = ContentHandler()
         self.parser.setContentHandler(content_handler)
         self.parser.setFeature(handler.feature_namespaces, True)
-        try:
-            handle = open(stream_or_path, "rb")
-        except TypeError:  # not a path, assume we received a stream
-            # Make sure we got a binary handle. If we got a text handle, then
-            # the parser will still run but unicode characters will be garbled
-            # if the text handle was opened with a different encoding than the
-            # one specified in the XML file. With a binary handle, the correct
-            # encoding is picked up by the parser from the XML file.
-            if stream_or_path.read(0) != b"":
-                raise TypeError(
-                    "SeqXML files should be opened in binary mode"
-                ) from None
-            self.handle = stream_or_path
-            self.should_close_handle = False
-        else:  # we received a path
-            self.handle = handle
-            self.should_close_handle = True
-        # Read until we see the seqXML element with the seqXMLversion
+        super().__init__(stream_or_path, mode="b", fmt="SeqXML")
+
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        parser = self.parser
+        content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK
-        try:
-            while True:
-                # Read in another block of the file...
-                text = self.handle.read(BLOCK)
-                if not text:
-                    if content_handler.startElementNS is None:
-                        raise ValueError("Empty file.")
-                    else:
-                        raise ValueError("XML file contains no data.")
-                self.parser.feed(text)
-                seqXMLversion = content_handler.seqXMLversion
-                if seqXMLversion is not None:
-                    break
-        except Exception:
-            if self.should_close_handle:
-                self.handle.close()
-            raise
+        while True:
+            # Read in another block of the file...
+            text = handle.read(BLOCK)
+            if not text:
+                if content_handler.startElementNS is None:
+                    raise ValueError("Empty file.")
+                else:
+                    raise ValueError("XML file contains no data.")
+            parser.feed(text)
+            seqXMLversion = content_handler.seqXMLversion
+            if seqXMLversion is not None:
+                break
         self.seqXMLversion = seqXMLversion
         self.source = content_handler.source
         self.sourceVersion = content_handler.sourceVersion
         self.ncbiTaxID = content_handler.ncbiTaxID
         self.speciesName = content_handler.speciesName
+        records = self.iterate(handle)
+        return records
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
+    def iterate(self, handle):
         """Iterate over the records in the XML file."""
-        content_handler = self.parser.getContentHandler()
+        parser = self.parser
+        content_handler = parser.getContentHandler()
         records = content_handler.records
         BLOCK = self.BLOCK
-        try:
-            while True:
-                # Read in another block of the file...
-                text = self.handle.read(BLOCK)
-                if not text:
-                    break
-                self.parser.feed(text)
-                if len(records) > 1:
-                    # Then at least the first record is finished
-                    record = records.pop(0)
-                    return record
-        except Exception:
-            if self.should_close_handle:
-                self.handle.close()
-            raise
+        while True:
+            if len(records) > 1:
+                # Then at least the first record is finished
+                record = records.pop(0)
+                yield record
+            # Read in another block of the file...
+            text = handle.read(BLOCK)
+            if not text:
+                break
+            parser.feed(text)
         # We have reached the end of the XML file;
         # send out the remaining records
-        try:
-            record = records.pop(0)
-        except IndexError:
-            pass
-        else:
-            return record
-        self.parser.close()
-        if self.should_close_handle:
-            self.handle.close()
-        raise StopIteration
+        yield from records
+        records.clear()
+        parser.close()
 
 
-class SeqXmlWriter(SequentialSequenceWriter):
+class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
-    SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
-    i.e. an instance or subclass of Bio.Alphabet.RNAAlphabet,
-    Bio.Alphabet.DNAAlphabet or Bio.Alphabet.ProteinAlphabet.
+    SeqXML requires the SeqRecord annotations to specify the molecule_type;
+    the molecule type is required to contain the term "DNA", "RNA", or
+    "protein".
     """
 
     def __init__(
@@ -496,7 +478,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
          - ncbiTaxId - The NCBI taxonomy identifier of the species of origin.
 
         """
-        SequentialSequenceWriter.__init__(self, target, "wb")
+        super().__init__(target, "wb")
         handle = self.handle
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()
@@ -507,7 +489,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
     def write_header(self):
         """Write root node with document metadata."""
-        SequentialSequenceWriter.write_header(self)
         attrs = {
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
             "xsi:noNamespaceSchemaLocation": "http://www.seqxml.org/0.4/seqxml.xsd",
@@ -557,8 +538,6 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
     def write_footer(self):
         """Close the root node and finish the XML document."""
-        SequentialSequenceWriter.write_footer(self)
-
         self.xml_generator.endElement("seqXML")
         self.xml_generator.endDocument()
 
@@ -613,7 +592,8 @@ class SeqXmlWriter(SequentialSequenceWriter):
     def _write_seq(self, record):
         """Write the sequence (PRIVATE).
 
-        Note that SeqXML requires a DNA, RNA or protein alphabet.
+        Note that SeqXML requires the molecule type to contain the term
+        "DNA", "RNA", or "protein".
         """
         if isinstance(record.seq, UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
@@ -623,16 +603,17 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")
 
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if isinstance(alpha, Alphabet.RNAAlphabet):
-            seqElem = "RNAseq"
-        elif isinstance(alpha, Alphabet.DNAAlphabet):
+        molecule_type = record.annotations.get("molecule_type")
+        if molecule_type is None:
+            raise ValueError("molecule_type is not defined")
+        elif "DNA" in molecule_type:
             seqElem = "DNAseq"
-        elif isinstance(alpha, Alphabet.ProteinAlphabet):
+        elif "RNA" in molecule_type:
+            seqElem = "RNAseq"
+        elif "protein" in molecule_type:
             seqElem = "AAseq"
         else:
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
+            raise ValueError("unknown molecule_type '%s'" % molecule_type)
 
         self.xml_generator.startElement(seqElem, AttributesImpl({}))
         self.xml_generator.characters(seq)

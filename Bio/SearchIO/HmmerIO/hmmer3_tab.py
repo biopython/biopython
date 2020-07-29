@@ -7,7 +7,6 @@
 
 from itertools import chain
 
-from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
@@ -68,7 +67,7 @@ class Hmmer3TabParser:
         # strand is always 0, since HMMER now only handles protein
         frag = {}
         frag["hit_strand"] = frag["query_strand"] = 0
-        frag["alphabet"] = generic_protein
+        frag["molecule_type"] = "protein"
 
         return {"qresult": qresult, "hit": hit, "hsp": hsp, "frag": frag}
 

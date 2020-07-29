@@ -119,7 +119,7 @@ def _check_bases(seq_string):
         seq_string = seq_string.replace(c, "")
     # Check only allowed IUPAC letters
     if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")):
-        raise TypeError("Invalid character found in %s" % repr(seq_string))
+        raise TypeError("Invalid character found in %r" % seq_string)
     return " " + seq_string
 
 
@@ -145,7 +145,7 @@ DNA = Seq
 
 
 class FormattedSeq:
-    """A linear or ciruclar sequence object for restriction analysis.
+    """A linear or circular sequence object for restriction analysis.
 
     Translates a Bio.Seq into a formatted sequence to be used with Restriction.
 
@@ -171,12 +171,10 @@ class FormattedSeq:
             self.data = _check_bases(stringy)
             self.linear = linear
             self.klass = seq.__class__
-            self.alphabet = seq.alphabet
         elif isinstance(seq, FormattedSeq):
             self.lower = seq.lower
             self.data = seq.data
             self.linear = seq.linear
-            self.alphabet = seq.alphabet
             self.klass = seq.klass
         else:
             raise TypeError("expected Seq or MutableSeq, got %s" % type(seq))
@@ -184,13 +182,13 @@ class FormattedSeq:
     def __len__(self):
         """Return length of ``FormattedSeq``.
 
-        ``FormattedSeq`` has a leading space, thus substract 1.
+        ``FormattedSeq`` has a leading space, thus subtract 1.
         """
         return len(self.data) - 1
 
     def __repr__(self):
         """Represent ``FormattedSeq`` class as a string."""
-        return "FormattedSeq(%s, linear=%s)" % (repr(self[1:]), repr(self.linear))
+        return "FormattedSeq(%r, linear=%r)" % (self[1:], self.linear)
 
     def __eq__(self, other):
         """Implement equality operator for ``FormattedSeq`` object."""
@@ -256,8 +254,8 @@ class FormattedSeq:
 
         """
         if self.lower:
-            return self.klass((self.data[i]).lower(), self.alphabet)
-        return self.klass(self.data[i], self.alphabet)
+            return self.klass(self.data[i].lower())
+        return self.klass(self.data[i])
 
 
 class RestrictionType(type):
@@ -274,7 +272,7 @@ class RestrictionType(type):
         See below.
         """
         if "-" in name:
-            raise ValueError("Problem with hyphen in %s as enzyme name" % repr(name))
+            raise ValueError("Problem with hyphen in %r as enzyme name" % name)
         # 2011/11/26 - Nobody knows what this call was supposed to accomplish,
         # but all unit tests seem to pass without it.
         # super().__init__(cls, name, bases, dct)
@@ -303,7 +301,7 @@ class RestrictionType(type):
         else:
             raise TypeError
 
-    def __div__(cls, other):
+    def __truediv__(cls, other):
         """Override '/' operator to use as search method.
 
         >>> from Bio.Restriction import EcoRI
@@ -314,7 +312,7 @@ class RestrictionType(type):
         """
         return cls.search(other)
 
-    def __rdiv__(cls, other):
+    def __rtruediv__(cls, other):
         """Override division with reversed operands to use as search method.
 
         >>> from Bio.Restriction import EcoRI
@@ -322,20 +320,6 @@ class RestrictionType(type):
         [2]
 
         Returns RE.search(other).
-        """
-        return cls.search(other)
-
-    def __truediv__(cls, other):
-        """Override Python 3 division operator to use as search method.
-
-        Like __div__.
-        """
-        return cls.search(other)
-
-    def __rtruediv__(cls, other):
-        """As __truediv___, with reversed operands.
-
-        Like __rdiv__.
         """
         return cls.search(other)
 
@@ -2240,7 +2224,7 @@ class RestrictionBatch(set):
         It works but it is slow, so it has really an interest when splitting
         over multiple conditions.
         """
-        # This comment stops black style adding a blank line here, which causes flake8 D202.
+
         def splittest(element):
             for klass in classes:
                 b = bool.get(klass.__name__, True)
@@ -2357,7 +2341,7 @@ class Analysis(RestrictionBatch, PrintFormat):
 
     def __repr__(self):
         """Represent ``Analysis`` class as a string."""
-        return "Analysis(%s,%s,%s)" % (repr(self.rb), repr(self.sequence), self.linear)
+        return "Analysis(%r,%r,%s)" % (self.rb, self.sequence, self.linear)
 
     def _sub_set(self, wanted):
         """Filter result for keys which are in wanted (PRIVATE).

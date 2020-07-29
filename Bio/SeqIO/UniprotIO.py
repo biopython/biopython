@@ -19,9 +19,8 @@ originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
 
-from Bio import Seq
+from Bio.Seq import Seq
 from Bio import SeqFeature
-from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 
 
@@ -29,9 +28,7 @@ NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
-def UniprotIterator(
-    source, alphabet=Alphabet.generic_protein, return_raw_comments=False
-):
+def UniprotIterator(source, alphabet=None, return_raw_comments=False):
     """Iterate over UniProt XML as SeqRecord objects.
 
     parses an XML entry at a time from any UniProt XML file
@@ -41,21 +38,17 @@ def UniprotIterator(
 
     Argument source is a file-like object or a path to a file.
 
+    Optional argument alphabet should not be used anymore.
+
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
-    if isinstance(alphabet, Alphabet.NucleotideAlphabet):
-        raise ValueError("Wrong alphabet %r" % alphabet)
-    if isinstance(alphabet, Alphabet.Gapped):
-        if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
-            raise ValueError("Wrong alphabet %r" % alphabet)
-
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
     try:
         for event, elem in ElementTree.iterparse(source, events=("start", "end")):
             if event == "end" and elem.tag == NS + "entry":
-                yield Parser(
-                    elem, alphabet=alphabet, return_raw_comments=return_raw_comments
-                ).parse()
+                yield Parser(elem, return_raw_comments=return_raw_comments).parse()
                 elem.clear()
     except ElementTree.ParseError as exception:
         if errors.messages[exception.code] == errors.XML_ERROR_NO_ELEMENTS:
@@ -68,16 +61,16 @@ def UniprotIterator(
 class Parser:
     """Parse a UniProt XML entry to a SeqRecord.
 
+    Optional argument alphabet is no longer used.
+
     return_raw_comments=True to get back the complete comment field in XML format
-    alphabet=Alphabet.ProteinAlphabet()    can be modified if needed, default is protein alphabet.
     """
 
-    def __init__(
-        self, elem, alphabet=Alphabet.generic_protein, return_raw_comments=False
-    ):
+    def __init__(self, elem, alphabet=None, return_raw_comments=False):
         """Initialize the class."""
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self.entry = elem
-        self.alphabet = alphabet
         self.return_raw_comments = return_raw_comments
 
     def parse(self):
@@ -252,11 +245,11 @@ class Parser:
 
             if element.attrib["type"] in simple_comments:
                 ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
-                for text_element in element.getiterator(NS + "text"):
+                for text_element in element.iter(NS + "text"):
                     if text_element.text:
                         append_to_annotations(ann_key, text_element.text)
             elif element.attrib["type"] == "subcellular location":
-                for subloc_element in element.getiterator(NS + "subcellularLocation"):
+                for subloc_element in element.iter(NS + "subcellularLocation"):
                     for el in subloc_element:
                         if el.text:
                             ann_key = "comment_%s_%s" % (
@@ -265,34 +258,30 @@ class Parser:
                             )
                             append_to_annotations(ann_key, el.text)
             elif element.attrib["type"] == "interaction":
-                for interact_element in element.getiterator(NS + "interactant"):
+                for interact_element in element.iter(NS + "interactant"):
                     ann_key = "comment_%s_intactId" % element.attrib["type"]
                     append_to_annotations(ann_key, interact_element.attrib["intactId"])
             elif element.attrib["type"] == "alternative products":
-                for alt_element in element.getiterator(NS + "isoform"):
+                for alt_element in element.iter(NS + "isoform"):
                     ann_key = "comment_%s_isoform" % element.attrib["type"].replace(
                         " ", ""
                     )
-                    for id_element in alt_element.getiterator(NS + "id"):
+                    for id_element in alt_element.iter(NS + "id"):
                         append_to_annotations(ann_key, id_element.text)
             elif element.attrib["type"] == "mass spectrometry":
                 ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
                 start = end = 0
-                for el in element.getiterator(NS + "location"):
-                    pos_els = list(el.getiterator(NS + "position"))
+                for el in element.iter(NS + "location"):
+                    pos_els = list(el.iter(NS + "position"))
                     # this try should be avoided, maybe it is safer to skip position parsing for mass spectrometry
                     try:
                         if pos_els:
                             end = int(pos_els[0].attrib["position"])
                             start = end - 1
                         else:
-                            start = int(
-                                list(el.getiterator(NS + "begin"))[0].attrib["position"]
-                            )
+                            start = int(next(el.iter(NS + "begin")).attrib["position"])
                             start -= 1
-                            end = int(
-                                list(el.getiterator(NS + "end"))[0].attrib["position"]
-                            )
+                            end = int(next(el.iter(NS + "end")).attrib["position"])
                     except (ValueError, KeyError):
                         # undefined positions or erroneously mapped
                         pass
@@ -307,9 +296,9 @@ class Parser:
             elif element.attrib["type"] == "sequence caution":
                 pass  # not parsed: few information, complex structure
             elif element.attrib["type"] == "online information":
-                for link_element in element.getiterator(NS + "link"):
+                for link_element in element.iter(NS + "link"):
                     ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
-                    for id_element in link_element.getiterator(NS + "link"):
+                    for id_element in link_element.iter(NS + "link"):
                         append_to_annotations(
                             ann_key,
                             "%s@%s"
@@ -443,7 +432,7 @@ class Parser:
         def _parse_position(element, offset=0):
             try:
                 position = int(element.attrib["position"]) + offset
-            except KeyError as err:
+            except KeyError:
                 position = None
             status = element.attrib.get("status", "")
             if status == "unknown":
@@ -505,8 +494,8 @@ class Parser:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
                 else:
                     self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            seq = "".join(element.text.split())
-            self.ParsedSeqRecord.seq = Seq.Seq(seq, self.alphabet)
+            self.ParsedSeqRecord.seq = Seq("".join(element.text.split()))
+            self.ParsedSeqRecord.annotations["molecule_type"] = "protein"
 
         # ============================================#
         # Initialize SeqRecord

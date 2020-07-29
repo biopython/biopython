@@ -47,10 +47,11 @@ if "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-if sys.version_info[:2] < (3, 6):
+MIN_PY_VER = (3, 6)
+if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
-        "Biopython requires Python 3.6 or later. "
-        "Python %d.%d detected.\n" % sys.version_info[:2]
+        ("Biopython requires Python %i.%i or later. " % MIN_PY_VER)
+        + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
 
@@ -137,7 +138,6 @@ PACKAGES = [
     "Bio.Graphics",
     "Bio.Graphics.GenomeDiagram",
     "Bio.HMM",
-    "Bio.KDTree",
     "Bio.KEGG",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
@@ -200,9 +200,6 @@ EXTENSIONS = [
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
-    Extension(
-        "Bio.KDTree._CKDTree", ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]
-    ),
 ]
 
 # We now define the Biopython version number in Bio/__init__.py
@@ -260,4 +257,5 @@ setup(
     ext_modules=EXTENSIONS,
     include_package_data=True,  # done via MANIFEST.in under setuptools
     install_requires=REQUIRES,
+    python_requires=">=%i.%i" % MIN_PY_VER,
 )

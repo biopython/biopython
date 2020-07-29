@@ -10,6 +10,7 @@
 import os
 import gzip
 import unittest
+
 try:
     import sqlite3
 except ImportError:
@@ -31,20 +32,18 @@ class CheckRaw(unittest.TestCase):
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
         new = idx.get_raw(id)
-        self.assertTrue(isinstance(new, bytes),
-                        "Didn't get bytes from %s get_raw" % self.fmt)
-        self.assertEqual(raw.replace(b"\r\n", b"\n"),
-                         new.replace(b"\r\n", b"\n"))
+        self.assertIsInstance(new, bytes, "Didn't get bytes from %s get_raw" % self.fmt)
+        self.assertEqual(raw.replace(b"\r\n", b"\n"), new.replace(b"\r\n", b"\n"))
         idx.close()
 
         # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             new = idx.get_raw(id)
-            self.assertTrue(isinstance(new, bytes),
-                            "Didn't get bytes from %s get_raw" % self.fmt)
-            self.assertEqual(raw.replace(b"\r\n", b"\n"),
-                             new.replace(b"\r\n", b"\n"))
+            self.assertIsInstance(
+                new, bytes, "Didn't get bytes from %s get_raw" % self.fmt
+            )
+            self.assertEqual(raw.replace(b"\r\n", b"\n"), new.replace(b"\r\n", b"\n"))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
@@ -64,15 +63,21 @@ class CheckIndex(unittest.TestCase):
             parsed = list(SearchIO.parse(filename, format, **kwargs))
         # compare values by index
         indexed = SearchIO.index(filename, format, **kwargs)
-        self.assertEqual(len(parsed), len(indexed),
-                         "Should be %i records in %s, index says %i"
-                         % (len(parsed), filename, len(indexed)))
+        self.assertEqual(
+            len(parsed),
+            len(indexed),
+            "Should be %i records in %s, index says %i"
+            % (len(parsed), filename, len(indexed)),
+        )
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
             db_indexed = SearchIO.index_db(":memory:", [filename], format, **kwargs)
-            self.assertEqual(len(parsed), len(db_indexed),
-                             "Should be %i records in %s, index_db says %i"
-                             % (len(parsed), filename, len(db_indexed)))
+            self.assertEqual(
+                len(parsed),
+                len(db_indexed),
+                "Should be %i records in %s, index_db says %i"
+                % (len(parsed), filename, len(db_indexed)),
+            )
 
         for qres in parsed:
             idx_qres = indexed[qres.id]
@@ -118,8 +123,12 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), ("length: %i vs %i for %r vs %r"
-                                          % (len(obj_a), len(obj_b), obj_a, obj_b))
+        assert len(obj_a) == len(obj_b), "length: %i vs %i for %r vs %r" % (
+            len(obj_a),
+            len(obj_b),
+            obj_a,
+            obj_b,
+        )
 
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
@@ -140,16 +149,21 @@ def compare_attrs(obj_a, obj_b, attrs):
         # special case for HSP and HSPFragment {hit,query}
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
-        if attr in ("_hit", "_query") and (val_a is not None and val_b is
-                                           not None):
+        if attr in ("_hit", "_query") and (val_a is not None and val_b is not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
-                assert str(val_a.seq) == str(val_b.seq), \
-                    "%s: %r vs %r" % (attr, val_a, val_b)
+                assert str(val_a.seq) == str(val_b.seq), "%s: %r vs %r" % (
+                    attr,
+                    val_a,
+                    val_b,
+                )
             elif isinstance(val_a, list) and isinstance(val_b, list):
                 for seq_a, seq_b in zip(val_a, val_b):
-                    assert str(seq_a.seq) == str(seq_b.seq), \
-                        "%s: %r vs %r" % (attr, seq_a, seq_b)
+                    assert str(seq_a.seq) == str(seq_b.seq), "%s: %r vs %r" % (
+                        attr,
+                        seq_a,
+                        seq_b,
+                    )
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
@@ -158,8 +172,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             keys_b = sorted(val_b)
             values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
-            assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
-                                                           values_b)
+            assert values_a == values_b, "%s: %r vs %r" % (attr, values_a, values_b)
         # if it's an alphabet, check the class names as alphabets are instances
         elif attr == "_alphabet":
             alph_a = val_a.__class__.__name__

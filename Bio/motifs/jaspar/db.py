@@ -283,7 +283,7 @@ class JASPAR5:
             just use the first column sum.
             """
             if min_sites:
-                num_sites = sum(motif.counts[nt][0] for nt in motif.alphabet.letters)
+                num_sites = sum(motif.counts[nt][0] for nt in motif.alphabet)
                 if num_sites < min_sites:
                     continue
 

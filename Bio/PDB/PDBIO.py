@@ -187,8 +187,8 @@ class PDBIO(StructureIO):
                     from Bio import BiopythonWarning
 
                     warnings.warn(
-                        "Missing occupancy in atom %s written as blank"
-                        % repr(atom.get_full_id()),
+                        "Missing occupancy in atom %r written as blank"
+                        % (atom.get_full_id(),),
                         BiopythonWarning,
                     )
                 else:
@@ -228,8 +228,8 @@ class PDBIO(StructureIO):
                     from Bio import BiopythonWarning
 
                     warnings.warn(
-                        "Missing charge in atom %s written as blank"
-                        % repr(atom.get_full_id()),
+                        "Missing charge in atom %r written as blank"
+                        % (atom.get_full_id(),),
                         BiopythonWarning,
                     )
                 else:
@@ -246,8 +246,8 @@ class PDBIO(StructureIO):
                     from Bio import BiopythonWarning
 
                     warnings.warn(
-                        "Missing radius in atom %s written as blank"
-                        % repr(atom.get_full_id()),
+                        "Missing radius in atom %r written as blank"
+                        % (atom.get_full_id(),),
                         BiopythonWarning,
                     )
                 else:
@@ -342,6 +342,20 @@ class PDBIO(StructureIO):
                             model_residues_written = 1
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
+
+                                # Check if the atom serial number is an integer
+                                # Not always the case for mmCIF files.
+                                try:
+                                    atom_number = int(atom_number)
+                                except ValueError:
+                                    raise ValueError(
+                                        f"{repr(atom_number)} is not a number."
+                                        "Atom serial numbers must be numerical"
+                                        " If you are converting from an mmCIF"
+                                        " structure, try using"
+                                        " preserve_atom_numbering=False"
+                                    )
+
                             s = get_atom_line(
                                 atom,
                                 hetfield,

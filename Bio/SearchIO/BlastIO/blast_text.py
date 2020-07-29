@@ -12,7 +12,6 @@ parser (which is now deprecated).
 
 """
 
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._legacy import NCBIStandalone
 
@@ -48,11 +47,11 @@ class BlastTextParser:
             qresult.seq_len = rec.query_letters
             qresult.version = rec.version
 
-            # determine alphabet based on program
+            # determine molecule_type based on program
             if qresult.program == "blastn":
-                alphabet = generic_dna
+                molecule_type = "DNA"
             elif qresult.program in ["blastp", "blastx", "tblastn", "tblastx"]:
-                alphabet = generic_protein
+                molecule_type = "protein"
 
             # iterate over the 'alignments' (hits) and the hit table
             for idx, aln in enumerate(rec.alignments):
@@ -71,7 +70,7 @@ class BlastTextParser:
                 hsp_list = []
                 for bhsp in aln.hsps:
                     frag = HSPFragment(hid, qid)
-                    frag.alphabet = alphabet
+                    frag.molecule_type = molecule_type
                     # set alignment length
                     frag.aln_span = bhsp.identities[1]
                     # set frames
