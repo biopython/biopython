@@ -120,7 +120,6 @@ PACKAGES = [
     "Bio.Align.Applications",
     "Bio.Align.substitution_matrices",
     "Bio.AlignIO",
-    "Bio.Alphabet",
     "Bio.Application",
     "Bio.Blast",
     "Bio.CAPS",
