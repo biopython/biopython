@@ -418,6 +418,35 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning. This may happen if even the
     conversion is aborted (e.g. an invalid out_format name is given).
+
+    Some output formats require the molecule type be specified where this
+    cannot be determined by the parser. For example, converting to FASTA,
+    Clustal, or PHYLIP format to NEXUS:
+
+    >>> from io import StringIO
+    >>> from Bio import AlignIO
+    >>> handle = StringIO()
+    >>> AlignIO.convert("Phylip/horses.phy", "phylip", handle, "nexus", "DNA")
+    1
+    >>> print(handle.getvalue())
+    #NEXUS
+    begin data;
+    dimensions ntax=10 nchar=40;
+    format datatype=dna missing=? gap=-;
+    matrix
+    Mesohippus   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Hypohippus   AAACCCCCCCAAAAAAAAACAAAAAAAAAAAAAAAAAAAA
+    Archaeohip   CAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAA
+    Parahippus   CAAACAACAACAAAAAAAACAAAAAAAAAAAAAAAAAAAA
+    Merychippu   CCAACCACCACCCCACACCCAAAAAAAAAAAAAAAAAAAA
+    'M. secundu' CCAACCACCACCCACACCCCAAAAAAAAAAAAAAAAAAAA
+    Nannipus     CCAACCACAACCCCACACCCAAAAAAAAAAAAAAAAAAAA
+    Neohippari   CCAACCCCCCCCCCACACCCAAAAAAAAAAAAAAAAAAAA
+    Calippus     CCAACCACAACCCACACCCCAAAAAAAAAAAAAAAAAAAA
+    Pliohippus   CCCACCCCCCCCCACACCCCAAAAAAAAAAAAAAAAAAAA
+    ;
+    end;
+    <BLANKLINE>
     """
     if molecule_type:
         if not isinstance(molecule_type, str):
