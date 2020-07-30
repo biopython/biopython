@@ -641,7 +641,6 @@ def _get_codon_rec(
     elif mode == 2:
         from collections import deque
 
-        codon_seq = ""
         shift_pos = deque([])
         shift_start = []
         match = span_mode[2]
@@ -665,6 +664,7 @@ def _get_codon_rec(
                 i = shift_pos[shift_start.index(i)][1]
             if i >= match.end():
                 break
+        codon_seq = CodonSeq()
         aa_num = 0
         for aa in pro.seq:
             if aa == "-":
@@ -720,7 +720,8 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        return SeqRecord(CodonSeq(codon_seq, rf_table=rf_table), id=nucl.id)
+        codon_seq.rf_table = rf_table
+        return SeqRecord(codon_seq, id=nucl.id)
 
 
 def _align_shift_recs(recs):
