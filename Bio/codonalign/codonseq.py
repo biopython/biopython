@@ -70,13 +70,13 @@ class CodonSeq(Seq):
 
         # check the length of the alignment to be a triple
         if rf_table is None:
-            seq_ungapped = self._data.replace(gap_char, "")
-            if len(self) % 3 != 0:
+            length = len(self)
+            if length % 3 != 0:
                 raise ValueError(
                     "Sequence length is not a multiple of "
                     "three (i.e. a whole number of codons)"
                 )
-            self.rf_table = list(filter(lambda x: x % 3 == 0, range(len(seq_ungapped))))
+            self.rf_table = list(range(0, length - self.count(gap_char), 3))
         else:
             # if gap_char in self._data:
             #    assert  len(self) % 3 == 0, \
