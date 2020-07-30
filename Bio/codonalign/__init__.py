@@ -589,7 +589,6 @@ def _get_codon_rec(
     from Bio.Seq import Seq
 
     nucl_seq = nucl.seq.ungap(gap_char)
-    codon_seq = ""
     span = span_mode[0]
     mode = span_mode[1]
     aa2re = _get_aa_regex(codon_table)
@@ -600,11 +599,12 @@ def _get_codon_rec(
                 f"Nucleotide Record {nucl.id} do not match!"
             )
         aa_num = 0
+        codon_seq = CodonSeq()
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
             elif complete_protein and aa_num == 0:
-                this_codon = nucl_seq._data[span[0] : span[0] + 3]
+                this_codon = nucl_seq[span[0] : span[0] + 3]
                 if not re.search(
                     _codons2re[codon_table.start_codons], this_codon.upper()
                 ):
@@ -622,10 +622,8 @@ def _get_codon_rec(
                 codon_seq += this_codon
                 aa_num += 1
             else:
-                this_codon = nucl_seq._data[
-                    (span[0] + 3 * aa_num) : (span[0] + 3 * (aa_num + 1))
-                ]
-                if not str(Seq(this_codon.upper()).translate(table=codon_table)) == aa:
+                this_codon = nucl_seq[span[0] + 3 * aa_num : span[0] + 3 * (aa_num + 1)]
+                if this_codon.upper().translate(table=codon_table) != aa:
                     max_score -= 1
                     warnings.warn(
                         "%s(%s %d) does not correspond to %s(%s)"
@@ -639,10 +637,11 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        return SeqRecord(CodonSeq(codon_seq), id=nucl.id)
+        return SeqRecord(codon_seq, id=nucl.id)
     elif mode == 2:
         from collections import deque
 
+        codon_seq = ""
         shift_pos = deque([])
         shift_start = []
         match = span_mode[2]
