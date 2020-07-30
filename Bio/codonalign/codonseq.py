@@ -91,9 +91,6 @@ class CodonSeq(Seq):
                 )
             self.rf_table = rf_table
 
-    def __getitem__(self, index):
-        return Seq(self._data[index])
-
     def get_codon(self, index):
         """Get the index codon from the sequence."""
         if len({i % 3 for i in self.rf_table}) != 1:
@@ -103,9 +100,9 @@ class CodonSeq(Seq):
             )
         if isinstance(index, int):
             if index != -1:
-                return self._data[index * 3 : (index + 1) * 3]
+                return str(self[index * 3 : (index + 1) * 3])
             else:
-                return self._data[index * 3 :]
+                return str(self[index * 3 :])
         else:
             # This slice ensures that codon will always be the unit
             # in slicing (it won't change to other codon if you are
@@ -119,8 +116,8 @@ class CodonSeq(Seq):
                 aa_slice = aa_index[p]
                 codon_slice = ""
                 for i in aa_slice:
-                    codon_slice += self._data[i * 3 : i * 3 + 3]
-                return codon_slice
+                    codon_slice += self[i * 3 : i * 3 + 3]
+                return str(codon_slice)
 
             codon_slice = cslice(index)
             return CodonSeq(codon_slice)
