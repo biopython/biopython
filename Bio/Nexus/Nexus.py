@@ -1593,10 +1593,8 @@ class Nexus:
             if comment:
                 fh.write("[" + comment + "]\n")
             fh.write("begin data;\n")
-            fh.write(
-                "\tdimensions ntax=%d nchar=%d;\n" % (ntax_adjusted, nchar_adjusted)
-            )
-            fh.write("\tformat datatype=" + self.datatype)
+            fh.write("dimensions ntax=%d nchar=%d;\n" % (ntax_adjusted, nchar_adjusted))
+            fh.write("format datatype=" + self.datatype)
             if self.respectcase:
                 fh.write(" respectcase")
             if self.missing:
