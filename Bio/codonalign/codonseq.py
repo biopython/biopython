@@ -214,7 +214,7 @@ class CodonSeq(Seq):
             elif relative_pos[codon_num] > 0:
                 full_rf_table.append(i + 0.0)
             try:
-                this_len = 3 - self.count("-", i, i+3)
+                this_len = 3 - self.count("-", i, i + 3)
                 relative_pos[codon_num] -= this_len
             except Exception:  # TODO: IndexError?
                 # we probably reached the last codon

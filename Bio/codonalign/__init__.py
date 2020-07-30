@@ -671,7 +671,9 @@ def _get_codon_rec(
                 codon_seq += "---"
             elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq[rf_table[0] : rf_table[0] + 3]
-                if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
+                if not re.search(
+                    _codons2re[codon_table.start_codons], this_codon.upper()
+                ):
                     max_score -= 1
                     warnings.warn(
                         f"start codon of {pro.id}({aa} {aa_num}) does not "
