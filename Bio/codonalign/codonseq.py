@@ -237,15 +237,15 @@ class CodonSeq(Seq):
         """Return a copy of the sequence without the gap character(s)."""
         if len(gap) != 1 or not isinstance(gap, str):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
-        return CodonSeq(str(self._data).replace(gap, ""), rf_table=self.rf_table)
+        return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
     def from_seq(cls, seq, rf_table=None):
         """Get codon sequence from sequence data."""
         if rf_table is None:
-            return cls(seq._data)
+            return cls(str(seq))
         else:
-            return cls(seq._data, rf_table=rf_table)
+            return cls(str(seq), rf_table=rf_table)
 
 
 def _get_codon_list(codonseq):

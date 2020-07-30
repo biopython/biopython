@@ -789,7 +789,7 @@ def _align_shift_recs(recs):
                 full_rf_table = full_rf_table_lst[j]
                 bp = full_rf_table.index(k)
                 inter_rf = []
-                for t in filter(lambda x: x % 3 == 0, range(len(gaps))):
+                for t in range(0, len(gaps), 3):
                     inter_rf.append(k + t + 3.0)
                 full_rf_table = (
                     full_rf_table[:bp]
