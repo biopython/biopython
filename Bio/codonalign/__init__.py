@@ -670,10 +670,8 @@ def _get_codon_rec(
             if aa == "-":
                 codon_seq += "---"
             elif complete_protein and aa_num == 0:
-                this_codon = str(nucl_seq[rf_table[0] : rf_table[0] + 3])
-                if not re.search(
-                    _codons2re[codon_table.start_codons], this_codon.upper()
-                ):
+                this_codon = nucl_seq[rf_table[0] : rf_table[0] + 3]
+                if not re.search(_codons2re[codon_table.start_codons], this_codon.upper()):
                     max_score -= 1
                     warnings.warn(
                         f"start codon of {pro.id}({aa} {aa_num}) does not "
@@ -691,22 +689,22 @@ def _get_codon_rec(
                     start = rf_table[aa_num]
                     end = start + (3 - shift_val)
                     ngap = shift_val
-                    this_codon = str(nucl_seq[start:end]) + "-" * ngap
+                    this_codon = nucl_seq[start:end] + "-" * ngap
                 elif rf_table[aa_num] - rf_table[aa_num - 1] - 3 > 0:
                     max_score -= 1
                     start = rf_table[aa_num - 1] + 3
                     end = rf_table[aa_num]
                     ngap = 3 - (rf_table[aa_num] - rf_table[aa_num - 1] - 3)
                     this_codon = (
-                        str(nucl_seq[start:end])
+                        nucl_seq[start:end]
                         + "-" * ngap
-                        + str(nucl_seq[rf_table[aa_num] : rf_table[aa_num] + 3])
+                        + nucl_seq[rf_table[aa_num] : rf_table[aa_num] + 3]
                     )
                 else:
                     start = rf_table[aa_num]
                     end = start + 3
-                    this_codon = str(nucl_seq[start:end])
-                    if str(Seq(this_codon.upper()).translate(table=codon_table)) != aa:
+                    this_codon = nucl_seq[start:end]
+                    if this_codon.upper().translate(table=codon_table) != aa:
                         max_score -= 1
                         warnings.warn(
                             f"Codon of {pro.id}({aa} {aa_num}) does not "
