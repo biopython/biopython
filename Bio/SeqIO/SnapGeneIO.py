@@ -109,6 +109,18 @@ def _parse_cookie_packet(length, data, record):
         raise ValueError("The file is not a valid SnapGene file")
 
 
+def _parse_location(rangespec, strand, record):
+    start, end = [int(x) for x in rangespec.split("-")]
+    # Account for SnapGene's 1-based coordinates
+    start = start - 1
+    if start > end:
+        # Range wrapping the end of the sequence
+        location = FeatureLocation(start, len(record), strand=strand) + FeatureLocation(0, end, strand=strand)
+    else:
+        location = FeatureLocation(start, end, strand=strand)
+    return location
+
+
 def _parse_features_packet(length, data, record):
     """Parse a sequence features packet.
 
@@ -135,13 +147,10 @@ def _parse_features_packet(length, data, record):
         location = None
         for segment in feature.getElementsByTagName("Segment"):
             rng = _get_attribute_value(segment, "range")
-            start, end = [int(x) for x in rng.split("-")]
-            # Account for SnapGene's 1-based coordinates
-            start = start - 1
             if not location:
-                location = FeatureLocation(start, end, strand=strand)
+                location = _parse_location(rng, strand, record)
             else:
-                location = location + FeatureLocation(start, end, strand=strand)
+                location = location + _parse_location(rng, strand, record)
         if not location:
             raise ValueError("Missing feature location")
 
@@ -182,8 +191,6 @@ def _parse_primers_packet(length, data, record):
             rng = _get_attribute_value(
                 site, "location", error="Missing binding site location"
             )
-            start, end = [int(x) for x in rng.split("-")]
-
             strand = int(_get_attribute_value(site, "boundStrand", default="0"))
             if strand == 1:
                 strand = -1
@@ -191,7 +198,7 @@ def _parse_primers_packet(length, data, record):
                 strand = +1
 
             feature = SeqFeature(
-                FeatureLocation(start, end, strand=strand),
+                _parse_location(rng, strand, record),
                 type="primer_bind",
                 qualifiers=quals,
             )
