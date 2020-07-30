@@ -41,7 +41,7 @@ class TestSnapGene(unittest.TestCase):
                 },
             ],
         },
-        "sample-b": {
+        "sample-e": {
             "file": "SnapGene/sample-e.dna",
             "name": "Sample",
             "id": "Sample",
@@ -63,6 +63,80 @@ class TestSnapGene(unittest.TestCase):
                     "end": 241,
                     "strand": 1,
                     "label": "FeatureA",
+                },
+            ],
+        },
+        "pFA-KanMX4": {
+            "file": "SnapGene/pFA-KanMX4.dna",
+            "name": "<unknown name>",
+            "id": "<unknown id>",
+            "description": "<unknown description>",
+            "length": 3941,
+            "date": datetime.datetime(2020, 7, 30, 0, 0),
+            "topology": "circular",
+            "features": [
+                {
+                    "type": "promoter",
+                    "start": 0,
+                    "end": 3941,
+                    "strand": 1,
+                    "label": "SP6 promoter"
+                },
+                {
+                    "type": "promoter",
+                    "start": 1578,
+                    "end": 1597,
+                    "strand": -1,
+                    "label": "T7 promoter"
+                },
+                {
+                    "type": "promoter",
+                    "start": 3474,
+                    "end": 3579,
+                    "strand": -1,
+                    "label": "AmpR promoter"
+                },
+                {
+                    "type": "terminator",
+                    "start": 1273,
+                    "end": 1471,
+                    "strand": 1,
+                    "label": "TEF terminator"
+                },
+                {
+                    "type": "promoter",
+                    "start": 114,
+                    "end": 458,
+                    "strand": 1,
+                    "label": "TEF promoter"
+                },
+                {
+                    "type": "rep_origin",
+                    "start": 1854,
+                    "end": 2443,
+                    "strand": -1,
+                    "label": "ori"
+                },
+                {
+                    "type": "CDS",
+                    "start": 458,
+                    "end": 1268,
+                    "strand": 1,
+                    "label": "KanR"
+                },
+                {
+                    "type": "CDS",
+                    "start": 2613,
+                    "end": 3474,
+                    "strand": -1,
+                    "label": "AmpR"
+                },
+                {
+                    "type": "gene",
+                    "start": 114,
+                    "end": 1471,
+                    "strand": 1,
+                    "label": "kanMX"
                 },
             ],
         },
