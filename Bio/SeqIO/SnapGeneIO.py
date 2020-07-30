@@ -75,7 +75,7 @@ def _parse_notes_packet(length, data, record):
     This type of packet contains some metadata about the sequence. They
     are stored as a XML string with a 'Notes' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     type = _get_child_value(xml, "Type")
     if type == "Synthetic":
         record.annotations["data_file_division"] = "SYN"
@@ -116,7 +116,7 @@ def _parse_features_packet(length, data, record):
     which are in a dedicated Primers packet). The data is a XML string
     starting with a 'Features' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     for feature in xml.getElementsByTagName("Feature"):
         quals = {}
 
@@ -170,7 +170,7 @@ def _parse_primers_packet(length, data, record):
     stores primer binding features. The data is a XML string starting
     with a 'Primers' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     for primer in xml.getElementsByTagName("Primer"):
         quals = {}
 
