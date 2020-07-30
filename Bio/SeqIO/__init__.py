@@ -1049,6 +1049,16 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     >EAS54_6_R1_2_1_443_348
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
+
+    Note some formats require a binary handle (bytes) rather than a text mode
+    handle (strings), and may require you to specify the molecule type when it
+    cannot be determined by the parser:
+
+    >>> from Bio import SeqIO
+    >>> from io import BytesIO
+    >>> handle = BytesIO()
+    >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "seqxml", "DNA")
+    3
     """
     if molecule_type:
         if not isinstance(molecule_type, str):
