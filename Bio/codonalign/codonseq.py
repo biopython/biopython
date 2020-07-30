@@ -78,7 +78,7 @@ class CodonSeq(Seq):
                 )
             self.rf_table = list(range(0, length - self.count(gap_char), 3))
         else:
-            # if gap_char in self._data:
+            # if gap_char in self:
             #    assert  len(self) % 3 == 0, \
             #            "Gapped sequence length is not a triple number"
             if not isinstance(rf_table, (tuple, list)):
@@ -141,9 +141,9 @@ class CodonSeq(Seq):
             codon_table = CodonTable.generic_by_id[1]
         amino_acids = []
         if ungap_seq:
-            tr_seq = self._data.replace(self.gap_char, "")
+            tr_seq = str(self).replace(self.gap_char, "")
         else:
-            tr_seq = self._data
+            tr_seq = str(self)
         if rf_table is None:
             rf_table = self.rf_table
         p = -1  # initiation
@@ -180,7 +180,7 @@ class CodonSeq(Seq):
 
     def toSeq(self):
         """Convert DNA to seq object."""
-        return Seq(self._data)
+        return Seq(str(self))
 
     def get_full_rf_table(self):
         """Return full rf_table of the CodonSeq records.
@@ -189,21 +189,21 @@ class CodonSeq(Seq):
         it translate gaps in CodonSeq. It is helpful to construct
         alignment containing frameshift.
         """
-        ungap_seq = self._data.replace("-", "")
+        ungap_seq = str(self).replace("-", "")
         relative_pos = [self.rf_table[0]]
         for i in range(1, len(self.rf_table[1:]) + 1):
             relative_pos.append(self.rf_table[i] - self.rf_table[i - 1])
         full_rf_table = []
         codon_num = 0
-        for i in filter(lambda x: x % 3 == 0, range(len(self._data))):
-            if self._data[i : i + 3] == self.gap_char * 3:
+        for i in range(0, len(self), 3):
+            if self[i : i + 3] == self.gap_char * 3:
                 full_rf_table.append(i + 0.0)
             elif relative_pos[codon_num] == 0:
                 full_rf_table.append(i)
                 codon_num += 1
             elif relative_pos[codon_num] in (-1, -2):
                 # check the gap status of previous codon
-                gap_stat = len(self._data[i - 3 : i].replace("-", ""))
+                gap_stat = 3 - self.count("-", i - 3, i)
                 if gap_stat == 3:
                     full_rf_table.append(i + relative_pos[codon_num])
                 elif gap_stat == 2:
@@ -214,7 +214,7 @@ class CodonSeq(Seq):
             elif relative_pos[codon_num] > 0:
                 full_rf_table.append(i + 0.0)
             try:
-                this_len = len(self._data[i : i + 3].replace("-", ""))
+                this_len = 3 - self.count("-", i, i+3)
                 relative_pos[codon_num] -= this_len
             except Exception:  # TODO: IndexError?
                 # we probably reached the last codon
