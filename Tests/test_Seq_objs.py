@@ -472,7 +472,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_split(self):
         """Check matches the python string rstrip method."""
-        # Calling (r)split should return a list of Seq-like objects, we'll
+        # Calling split should return a list of Seq-like objects, we'll
         # just apply str() to each of them so it matches the string method
         self._test_method(
             "split", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
@@ -480,7 +480,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
-        # Calling (r)split should return a list of Seq-like objects, we'll
+        # Calling rsplit should return a list of Seq-like objects, we'll
         # just apply str() to each of them so it matches the string method
         self._test_method(
             "rsplit", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
@@ -488,7 +488,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_lsplit(self):
         """Check matches the python string rstrip method."""
-        # Calling (r)split should return a list of Seq-like objects, we'll
+        # Calling lsplit should return a list of Seq-like objects, we'll
         # just apply str() to each of them so it matches the string method
         self._test_method(
             "lsplit", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
