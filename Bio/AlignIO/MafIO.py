@@ -35,6 +35,8 @@ A 1-column wide alignment would have ``start == end``.
 import os
 from itertools import islice
 
+from typing import cast, Dict, Union
+
 try:
     from sqlite3 import dbapi2 as _sqlite
 except ImportError:
@@ -196,7 +198,7 @@ def MafIterator(handle, seq_count=None):
                         id=line_split[1],
                         name=line_split[1],
                         description="",
-                        annotations=anno,
+                        annotations=cast(Dict[str, Union[str, int]], anno),
                     )
                 )
             elif line.startswith("i"):

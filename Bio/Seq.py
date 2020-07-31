@@ -24,7 +24,7 @@ import array
 import sys
 import warnings
 
-from typing import Optional, Union
+from typing import overload, Optional, Union
 
 from Bio import BiopythonWarning
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
@@ -206,6 +206,14 @@ class Seq:
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
         return len(self._data)  # Seq API requirement
+
+    @overload
+    def __getitem__(self, index: int) -> str:
+        ...
+
+    @overload
+    def __getitem__(self, index: slice) -> "Seq":
+        ...
 
     def __getitem__(self, index):  # Seq API requirement
         """Return a subsequence of single letter, use my_seq[index].
@@ -1773,6 +1781,14 @@ class MutableSeq:
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
         return len(self.data)
+
+    @overload
+    def __getitem__(self, index: int) -> str:
+        ...
+
+    @overload
+    def __getitem__(self, index: slice) -> "MutableSeq":
+        ...
 
     def __getitem__(self, index):
         """Return a subsequence of single letter, use my_seq[index].

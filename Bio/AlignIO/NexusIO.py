@@ -14,6 +14,7 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
+from typing import cast, Dict, Union
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
@@ -67,7 +68,7 @@ def NexusIterator(handle, seq_count=None):
             id=new_name,
             name=old_name,
             description="",
-            annotations=annotations,
+            annotations=cast(Dict[str, Union[str, int]], annotations),
         )
         for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
     )
