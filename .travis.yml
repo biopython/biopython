@@ -31,7 +31,7 @@ matrix:
       before_install: echo "Going to run basic checks"
     - stage: basics
       python: 3.7
-      env: TOXENV=sdist,bdist_wheel,mypy
+      env: TOXENV=sdist,bdist_wheel
       services:
       addons:
         apt:
@@ -77,7 +77,7 @@ matrix:
             - *default_packages
     - stage: test
       python: 3.8
-      env: TOXENV=py38-nocov
+      env: TOXENV=py38-nocov,mypy
       arch: arm64
       services:
       addons:

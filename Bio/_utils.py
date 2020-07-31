@@ -9,8 +9,34 @@
 
 
 import os
-from typing import TypeVar, Callable, Optional, cast
-from typing_extensions import Protocol
+from typing import TYPE_CHECKING, TypeVar, Callable, Optional, cast
+
+if (
+    TYPE_CHECKING
+):  # only because we don't want to depend on typing_extension for Python < 3.8
+    from typing import Protocol
+
+    # workaround type checking method attributes from https://github.com/python/mypy/issues/2087#issuecomment-587741762
+
+    F = TypeVar("F", bound=Callable[..., object])
+
+    class _FunctionWithPrevious(Protocol[F]):
+        previous: Optional[int]
+        __call__: F
+
+    def function_with_previous(func: F) -> _FunctionWithPrevious[F]:
+        """Decorate a function as having an attribute named 'previous'."""
+        function_with_previous = cast(_FunctionWithPrevious[F], func)
+        # Make sure the cast isn't a lie.
+        function_with_previous.previous = None
+        return function_with_previous
+
+    # end workaround
+else:
+
+    def function_with_previous(func: F):
+        """No-op."""
+        return func
 
 
 def find_test_dir(start_dir=None):
@@ -66,28 +92,6 @@ def run_doctest(target_dir: Optional[str] = None, *args, **kwargs):
         # and revert back to initial directory
         os.chdir(cur_dir)
     print("Done")
-
-
-# workaround type checking method attributes from https://github.com/python/mypy/issues/2087#issuecomment-587741762
-
-# Note: can use a more restrictive bound if wanted.
-F = TypeVar("F", bound=Callable[..., object])
-
-
-class _FunctionWithPrevious(Protocol[F]):
-    previous: Optional[int]
-    __call__: F
-
-
-def function_with_previous(func: F) -> _FunctionWithPrevious[F]:
-    """Decorate a function as having an attribute named 'previous'."""
-    function_with_previous = cast(_FunctionWithPrevious[F], func)
-    # Make sure the cast isn't a lie.
-    function_with_previous.previous = None
-    return function_with_previous
-
-
-# end workaround
 
 
 if __name__ == "__main__":

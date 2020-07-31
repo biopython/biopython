@@ -109,7 +109,7 @@ def can_import(module_name):
 # (and likely will pin specific version numbers), using
 # setup.py's install_requires is preferred for a library
 # (and should try not to be overly narrow with versions).
-REQUIRES = ["numpy", "typing_extensions"]
+REQUIRES = ["numpy"]
 
 # --- set up the packages we are going to install
 # standard biopython packages

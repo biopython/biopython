@@ -36,7 +36,7 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
-  - conda install coverage setuptools numpy typing_extensions
+  - conda install coverage setuptools numpy
   - python setup.py build
 
 test_script:
