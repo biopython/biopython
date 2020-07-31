@@ -490,7 +490,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s < 1
 
-    def test_less_than_comparison_without_alphabet(self):
+    def test_less_than_comparison_with_str(self):
         self.assertLessEqual(self.mutable_s[:-1], "TCAAAAGGATGCATCATG")
 
     def test_less_than_or_equal_comparison(self):
@@ -501,7 +501,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s <= 1
 
-    def test_less_than_or_equal_comparison_without_alphabet(self):
+    def test_less_than_or_equal_comparison_with_str(self):
         self.assertLessEqual(self.mutable_s[:-1], "TCAAAAGGATGCATCATG")
 
     def test_greater_than_comparison(self):
@@ -512,7 +512,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s > 1
 
-    def test_greater_than_comparison_without_alphabet(self):
+    def test_greater_than_comparison_with_str(self):
         self.assertGreater(self.mutable_s, "TCAAAAGGATGCATCAT")
 
     def test_greater_than_or_equal_comparison(self):
@@ -523,7 +523,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s >= 1
 
-    def test_greater_than_or_equal_comparison_without_alphabet(self):
+    def test_greater_than_or_equal_comparison_with_str(self):
         self.assertGreaterEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
 
     def test_add_method(self):
@@ -537,7 +537,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s.__radd__(self.mutable_s),
         )
 
-    def test_radd_method_incompatible_alphabets(self):
+    def test_radd_method_using_mutalbeseq_object(self):
         self.assertEqual(
             "UCAAAAGGATCAAAAGGATGCATCATG",
             self.mutable_s.__radd__(MutableSeq("UCAAAAGGA")),
@@ -795,7 +795,7 @@ class TestComplement(unittest.TestCase):
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
 
-    def test_complement_incompatible_alphabets(self):
+    def test_complement_incompatible_letters(self):
         seq = Seq.Seq("CAGGTU")
         with self.assertRaises(ValueError):
             seq.complement()
