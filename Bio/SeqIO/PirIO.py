@@ -200,7 +200,8 @@ class PirWriter(SequenceWriter):
            record.description is used.
          - code - Optional sequence code must be one of P1, F1,
            D1, DL, DC, RL, RC, N3 and XX. By default None is used,
-           which means auto detection based on record alphabet.
+           which means auto detection based on the molecule type
+           in the record annotation.
 
         You can either use::
 
