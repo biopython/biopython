@@ -39,6 +39,7 @@ possible, especially the following contributors:
 - Carlos Pena
 - Chris Rands
 - Christian Brueffer
+- Damien Goutte-Gattat
 - João Rodrigues
 - João Vitor F Cavalcante (first contribution)
 - Marie Crane
