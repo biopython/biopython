@@ -80,63 +80,63 @@ class TestSnapGene(unittest.TestCase):
                     "start": 0,
                     "end": 3941,
                     "strand": 1,
-                    "label": "SP6 promoter"
+                    "label": "SP6 promoter",
                 },
                 {
                     "type": "promoter",
                     "start": 1578,
                     "end": 1597,
                     "strand": -1,
-                    "label": "T7 promoter"
+                    "label": "T7 promoter",
                 },
                 {
                     "type": "promoter",
                     "start": 3474,
                     "end": 3579,
                     "strand": -1,
-                    "label": "AmpR promoter"
+                    "label": "AmpR promoter",
                 },
                 {
                     "type": "terminator",
                     "start": 1273,
                     "end": 1471,
                     "strand": 1,
-                    "label": "TEF terminator"
+                    "label": "TEF terminator",
                 },
                 {
                     "type": "promoter",
                     "start": 114,
                     "end": 458,
                     "strand": 1,
-                    "label": "TEF promoter"
+                    "label": "TEF promoter",
                 },
                 {
                     "type": "rep_origin",
                     "start": 1854,
                     "end": 2443,
                     "strand": -1,
-                    "label": "ori"
+                    "label": "ori",
                 },
                 {
                     "type": "CDS",
                     "start": 458,
                     "end": 1268,
                     "strand": 1,
-                    "label": "KanR"
+                    "label": "KanR",
                 },
                 {
                     "type": "CDS",
                     "start": 2613,
                     "end": 3474,
                     "strand": -1,
-                    "label": "AmpR"
+                    "label": "AmpR",
                 },
                 {
                     "type": "gene",
                     "start": 114,
                     "end": 1471,
                     "strand": 1,
-                    "label": "kanMX"
+                    "label": "kanMX",
                 },
             ],
         },

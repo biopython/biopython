@@ -115,7 +115,9 @@ def _parse_location(rangespec, strand, record):
     start = start - 1
     if start > end:
         # Range wrapping the end of the sequence
-        location = FeatureLocation(start, len(record), strand=strand) + FeatureLocation(0, end, strand=strand)
+        l1 = FeatureLocation(start, len(record), strand=strand)
+        l2 = FeatureLocation(0, end, strand=strand)
+        location = l1 + l2
     else:
         location = FeatureLocation(start, end, strand=strand)
     return location
