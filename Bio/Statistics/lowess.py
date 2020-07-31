@@ -23,14 +23,7 @@ Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 import numpy
 
 
-try:
-    from Bio.Cluster import median
-
-    # The function median in Bio.Cluster is faster than the function median
-    # in NumPy, as it does not require a full sort.
-except ImportError:
-    # Use the median function in NumPy if Bio.Cluster is not available
-    from numpy import median
+from numpy import median
 
 
 def lowess(x, y, f=2.0 / 3.0, iter=3):
