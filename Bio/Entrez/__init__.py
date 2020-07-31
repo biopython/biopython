@@ -122,6 +122,7 @@ from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
+from Bio._utils import function_with_previous
 
 email = None
 max_tries = 3
@@ -561,6 +562,7 @@ def parse(handle, validate=True, escape=False):
     return records
 
 
+@function_with_previous
 def _open(cgi, params=None, post=None, ecitmatch=False):
     """Build the URL and open a handle to it (PRIVATE).
 

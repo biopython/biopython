@@ -24,7 +24,7 @@ except ImportError:
 
 from Bio.Seq import Seq
 
-from . import _pwm
+from . import _pwm  # type: ignore
 
 
 def _calculate(score_dict, sequence, m):

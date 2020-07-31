@@ -505,7 +505,8 @@ where the alignment occurs.
         return new_alignment_function(attr)
 
 
-align = align()
+align = align()  # type: ignore
+# this needs refactoring so it can be type checked properly
 
 
 def _align(
@@ -1417,7 +1418,7 @@ _python_make_score_matrix_fast = _make_score_matrix_fast
 _python_rint = rint
 
 try:
-    from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
+    from .cpairwise2 import rint, _make_score_matrix_fast  # type: ignore  # noqa
 except ImportError:
     warnings.warn(
         "Import of C module failed. Falling back to pure Python "

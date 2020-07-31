@@ -2883,5 +2883,8 @@ for node_type in "ObjectProperty", "Class", "DatatypeProperty":
         obo = element.attrib[
             "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"
         ].split("/")[-1]
-        cdao = element.find("{http://www.w3.org/2000/01/rdf-schema#}label").text
+        label = element.find("{http://www.w3.org/2000/01/rdf-schema#}label")
+        if label is None:
+            raise Exception("Unable to find label")
+        cdao = label.text
         cdao_elements[cdao] = obo

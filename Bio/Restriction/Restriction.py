@@ -2662,19 +2662,19 @@ for TYPE, (bases, enzymes) in typedict.items():
     #
     #   First eval the bases.
     #
-    bases = tuple(eval(x) for x in bases)
+    bases2 = tuple(eval(x) for x in bases)
     #
     #   now create the particular value of RestrictionType for the classes
     #   in enzymes.
     #
-    T = type.__new__(RestrictionType, "RestrictionType", bases, {})
+    T = type.__new__(RestrictionType, "RestrictionType", bases2, {})
     for k in enzymes:
         #
         #   Now, we go through all the enzymes and assign them their type.
         #   enzymedict[k] contains the values of the attributes for this
         #   particular class (self.site, self.ovhg,....).
         #
-        newenz = T(k, bases, enzymedict[k])
+        newenz = T(k, bases2, enzymedict[k])
         #
         #   we add the enzymes to the corresponding batch.
         #
@@ -2702,4 +2702,4 @@ __all__ = (
     "CommOnly",
     "NonComm",
 ) + tuple(names)
-del k, enzymes, TYPE, bases, names
+del k, enzymes, TYPE, bases, bases2, names

@@ -33,7 +33,7 @@ except AttributeError:
         # cElementTree needs the pure-Python xml.etree.ElementTree
         from xml.etree import ElementTree as ET_py
 
-        ElementTree._namespace_map = ET_py._namespace_map
+        ElementTree._namespace_map = ET_py._namespace_map  # type: ignore
 
     def register_namespace(prefix, uri):
         """Set the namespace for ElementTree."""

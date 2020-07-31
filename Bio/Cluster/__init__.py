@@ -24,7 +24,7 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-from . import _cluster
+from . import _cluster  # type: ignore
 
 __all__ = (
     "Node",
