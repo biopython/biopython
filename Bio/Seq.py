@@ -95,7 +95,7 @@ class Seq:
                 "The sequence data given to a Seq object should "
                 "be a string (not another Seq object etc)"
             )
-        self._data = data
+        self._data = data.encode("ASCII")
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -105,7 +105,7 @@ class Seq:
             # Note total length is 54+3+3=60
             return f"{self.__class__.__name__}('{str(self[:54])}...{str(self[-3:])}')"
         else:
-            return f"{self.__class__.__name__}({self._data!r})"
+            return f"{self.__class__.__name__}('{str(self)}')"
 
     def __str__(self):
         """Return the full sequence as a python string, use str(my_seq).
@@ -124,7 +124,7 @@ class Seq:
                 as_string = str(seq_obj)
 
         """
-        return self._data
+        return self._data.decode("ASCII")
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
@@ -213,10 +213,10 @@ class Seq:
         """
         if isinstance(index, int):
             # Return a single letter as a string
-            return self._data[index]
+            return chr(self._data[index])
         else:
             # Return the (sub)sequence as another Seq object
-            return Seq(self._data[index])
+            return Seq(self._data[index].decode("ASCII"))
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -756,12 +756,12 @@ class Seq:
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
-        if ("U" in self._data or "u" in self._data) and (
-            "T" in self._data or "t" in self._data
+        if (b"U" in self._data or b"u" in self._data) and (
+            b"T" in self._data or b"t" in self._data
         ):
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif "U" in self._data or "u" in self._data:
+        elif b"U" in self._data or b"u" in self._data:
             ttable = _rna_complement_table
         else:
             ttable = _dna_complement_table
@@ -848,8 +848,8 @@ class Seq:
            ...
         ValueError: DNA found, RNA expected
         """
-        if "T" in self._data or "t" in self._data:
-            if "U" in self._data or "u" in self._data:
+        if b"T" in self._data or b"t" in self._data:
+            if b"U" in self._data or b"u" in self._data:
                 raise ValueError("Mixed RNA/DNA found")
             else:
                 raise ValueError("DNA found, RNA expected")
