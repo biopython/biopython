@@ -583,9 +583,9 @@ class TestMutableSeq(unittest.TestCase):
             "Set slice with MutableSeq",
         )
 
-        self.mutable_s[1:3] = array.array("u", "GAT")
+        self.mutable_s[1:3] = bytearray("GAT", "ASCII")
         self.assertEqual(
-            MutableSeq("TGATTAAAGGATGCATCATG"), self.mutable_s, "Set slice with array",
+            MutableSeq("TGATTAAAGGATGCATCATG"), self.mutable_s, "Set slice with bytearray",
         )
 
     def test_setting_item(self):

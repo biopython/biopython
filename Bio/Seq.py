@@ -20,7 +20,6 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 
-import array
 import sys
 import warnings
 
@@ -128,7 +127,7 @@ class Seq:
         return self._data
 
     def __hash__(self):
-        """Hash of the sequence as a string (ignoring alphabet) for comparison.
+        """Hash of the sequence as a string for comparison.
 
         See Seq object comparison documentation (method ``__eq__`` in
         particular) as this has changed in Biopython 1.65. Older versions
@@ -1633,9 +1632,9 @@ class UnknownSeq(Seq):
 
 
 class MutableSeq:
-    """An editable sequence object (with an alphabet).
+    """An editable sequence object.
 
-    Unlike normal python strings and our basic sequence object (the Seq class)
+    Unlike normal python strings and our basic sequence object (the Seq class),
     which are immutable, the MutableSeq lets you edit the sequence in place.
     However, this means you cannot use a MutableSeq object as a dictionary key.
 
@@ -1662,12 +1661,12 @@ class MutableSeq:
 
     def __init__(self, data):
         """Initialize the class."""
-        if isinstance(data, str):  # TODO - What about unicode?
-            self.data = array.array("u", data)
+        if isinstance(data, str):
+            self.data = bytearray(data, "ASCII")
         elif isinstance(data, (Seq, int, float)):
             raise TypeError(
                 "The sequence data given to a MutableSeq object "
-                "should be a string or an array (not a Seq object etc)"
+                "should be a string or a bytearray (not a Seq object etc)"
             )
         else:
             self.data = data  # assumes the input is an array
@@ -1690,8 +1689,7 @@ class MutableSeq:
         which needs to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
-        # See test_GAQueens.py for an historic usage of a non-string alphabet!
-        return "".join(self.data)
+        return self.data.decode("ASCII")
 
     def __eq__(self, other):
         """Compare the sequence to another sequence or a string.
@@ -1781,7 +1779,7 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Return a single letter as a string
-            return self.data[index]
+            return chr(self.data[index])
         else:
             # Return the (sub)sequence as another Seq object
             return MutableSeq(self.data[index])
@@ -1796,15 +1794,15 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Replacing a single letter with a new string
-            self.data[index] = value
+            self.data[index] = ord(value)
         else:
             # Replacing a sub-sequence
             if isinstance(value, MutableSeq):
                 self.data[index] = value.data
-            elif isinstance(value, type(self.data)):
+            elif isinstance(value, bytearray):
                 self.data[index] = value
             else:
-                self.data[index] = array.array("u", str(value))
+                self.data[index] = value.encode("ASCII")
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -1823,8 +1821,6 @@ class MutableSeq:
         Returns a new MutableSeq object.
         """
         if isinstance(other, MutableSeq):
-            # See test_GAQueens.py for an historic usage of a non-string
-            # alphabet!  Adding the arrays should support this.
             return self.__class__(self.data + other.data)
         elif isinstance(other, (str, Seq)):
             return self.__class__(str(self) + str(other))
@@ -1839,8 +1835,6 @@ class MutableSeq:
         MutableSeq('LVMELKI')
         """
         if isinstance(other, MutableSeq):
-            # See test_GAQueens.py for an historic usage of a non-string
-            # alphabet!  Adding the arrays should support this.
             return self.__class__(other.data + self.data)
         elif isinstance(other, (str, Seq)):
             return self.__class__(str(other) + str(self))
@@ -1898,7 +1892,7 @@ class MutableSeq:
 
         No return value.
         """
-        self.data.append(c)
+        self.data.append(ord(c))
 
     def insert(self, i, c):
         """Add a subsequence to the mutable sequence object at a given index.
@@ -1913,7 +1907,7 @@ class MutableSeq:
 
         No return value.
         """
-        self.data.insert(i, c)
+        self.data.insert(i, ord(c))
 
     def pop(self, i=(-1)):
         """Remove a subsequence of a single letter at given index.
@@ -1932,7 +1926,7 @@ class MutableSeq:
         """
         c = self.data[i]
         del self.data[i]
-        return c
+        return chr(c)
 
     def remove(self, item):
         """Remove a subsequence of a single letter from mutable sequence.
@@ -1947,6 +1941,7 @@ class MutableSeq:
 
         No return value.
         """
+        item = ord(item)
         for i in range(len(self.data)):
             if self.data[i] == item:
                 del self.data[i]
@@ -1995,24 +1990,17 @@ class MutableSeq:
 
         An overlapping search would give the answer as three!
         """
-        try:
-            search = str(sub)
-        except AttributeError:
-            search = sub
+        if isinstance(sub, Seq):
+            s = str(sub).encode("ASCII")
+        elif isinstance(sub, MutableSeq):
+            s = sub.data
+        elif not isinstance(sub, (bytes, bytearray)):
+            try:
+                s = sub.encode("ASCII")
+            except TypeError:
+                raise TypeError("expected a string, Seq or MutableSeq")
 
-        if not isinstance(search, str):
-            raise TypeError("expected a string, Seq or MutableSeq")
-
-        if len(search) == 1:
-            # Try and be efficient and work directly from the array.
-            count = 0
-            for c in self.data[start:end]:
-                if c == search:
-                    count += 1
-            return count
-        else:
-            # TODO - Can we do this more efficiently?
-            return str(self).count(search, start, end)
+        return self.data.count(s, start, end)
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
@@ -2077,25 +2065,50 @@ class MutableSeq:
                 return overlap_count
 
     def index(self, item):
-        """Return first occurrence position of a single entry (i.e. letter).
+        """Return first occurrence position of a sequence.
 
         >>> my_seq = MutableSeq("ACTCGACGTCG")
         >>> my_seq.index("A")
         0
-        >>> my_seq.index("T")
+        >>> my_seq.index("TC")
         2
-        >>> my_seq.index(Seq("T"))
-        2
+        >>> my_seq.index(Seq("CGA"))
+        3
 
-        Note unlike a Biopython Seq object, or Python string, multi-letter
-        subsequences are not supported.  Instead this acts like an array or
-        a list of the entries. There is therefore no ``.rindex()`` method.
         """
-        # TODO?: return self.data.index(i)
-        for i in range(len(self.data)):
-            if self.data[i] == item:
-                return i
-        raise ValueError("MutableSeq.index(x): x not in list")
+        if isinstance(item, Seq):
+            s = str(item).encode("ASCII")
+        elif isinstance(item, MutableSeq):
+            s = item.data
+        elif not isinstance(item, (bytes, bytearray)):
+            s = item.encode("ASCII")
+        try:
+            return self.data.index(s)
+        except ValueError:
+            raise ValueError("MutableSeq.index(item): item not in list")
+
+    def rindex(self, item):
+        """Return last occurrence position of a sequence.
+
+        >>> my_seq = MutableSeq("ACTCGACGTCG")
+        >>> my_seq.rindex("A")
+        5
+        >>> my_seq.rindex("TC")
+        8
+        >>> my_seq.rindex(Seq("CGA"))
+        3
+
+        """
+        if isinstance(item, Seq):
+            s = str(item).encode("ASCII")
+        elif isinstance(item, MutableSeq):
+            s = item.data
+        elif not isinstance(item, (bytes, bytearray)):
+            s = item.encode("ASCII")
+        try:
+            return self.data.rindex(s)
+        except ValueError:
+            raise ValueError("MutableSeq.rindex(item): item not in list")
 
     def reverse(self):
         """Modify the mutable sequence to reverse itself.
@@ -2114,16 +2127,16 @@ class MutableSeq:
 
         If the sequence contains both T and U, an exception is raised.
         """
-        if "U" in self.data and "T" in self.data:
+        if b"U" in self.data and b"T" in self.data:
             raise ValueError("Mixed RNA/DNA found")
-        elif "U" in self.data:
+        elif b"U" in self.data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        mixed = d.copy()  # We're going to edit this to be mixed case!
-        mixed.update((x.lower(), y.lower()) for x, y in d.items())
-        self.data = [mixed[_] for _ in self.data]
-        self.data = array.array("u", self.data)
+        mixed = {ord(x): ord(y) for x, y in d.items()}
+        mixed.update({ord(x.lower()): ord(y.lower()) for x, y in d.items()})
+        for i, c in enumerate(self.data):
+            self.data[i] = mixed[c]
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
@@ -2147,11 +2160,9 @@ class MutableSeq:
         No return value.
         """
         if isinstance(other, MutableSeq):
-            for c in other.data:
-                self.data.append(c)
+            self.data.extend(other.data)
         else:
-            for c in other:
-                self.data.append(c)
+            self.data.extend(other.encode("ASCII"))
 
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
@@ -2163,7 +2174,7 @@ class MutableSeq:
         >>> my_mseq.toseq()
         Seq('MKQHKAMIVALIVICITAVVAAL')
         """
-        return Seq("".join(self.data))
+        return Seq(self.data.decode("ASCII"))
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
