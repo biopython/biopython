@@ -128,7 +128,7 @@ class Seq:
         return self._data
 
     def __hash__(self):
-        """Hash of the sequence as a string (ignoring alphabet) for comparison.
+        """Hash of the sequence as a string for comparison.
 
         See Seq object comparison documentation (method ``__eq__`` in
         particular) as this has changed in Biopython 1.65. Older versions
@@ -1030,7 +1030,7 @@ class Seq:
 
         The gap character now defaults to the minus sign, and can only
         be specified via the method argument. This is no longer possible
-        via sequence's alphabet (as was possible up to Biopython 1.77):
+        via the sequence's alphabet (as was possible up to Biopython 1.77):
 
         >>> from Bio.Seq import Seq
         >>> my_dna = Seq("-ATA--TGAAAT-TTGAAAA")
@@ -1551,7 +1551,7 @@ class UnknownSeq(Seq):
 
         The gap character now defaults to the minus sign, and can only
         be specified via the method argument. This is no longer possible
-        via sequence's alphabet (as was possible up to Biopython 1.77):
+        via the sequence's alphabet (as was possible up to Biopython 1.77):
 
         >>> from Bio.Seq import UnknownSeq
         >>> my_dna = UnknownSeq(20, character='N')
@@ -1633,7 +1633,7 @@ class UnknownSeq(Seq):
 
 
 class MutableSeq:
-    """An editable sequence object (with an alphabet).
+    """An editable sequence object.
 
     Unlike normal python strings and our basic sequence object (the Seq class)
     which are immutable, the MutableSeq lets you edit the sequence in place.
