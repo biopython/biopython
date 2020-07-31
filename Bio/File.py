@@ -469,7 +469,6 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             "INSERT INTO meta_data (key, value) VALUES (?,?);",
             ("filenames_relative_to_index", "True"),
         )
-        # TODO - Record the alphabet?
         # TODO - Record the file size and modified date?
         con.execute("CREATE TABLE file_data (file_number INTEGER, name TEXT);")
         con.execute(
