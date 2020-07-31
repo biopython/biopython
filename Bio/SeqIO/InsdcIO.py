@@ -1464,7 +1464,6 @@ def _genbank_convert_fasta(in_file, out_file):
     """Fast GenBank to FASTA (PRIVATE)."""
     # We don't need to parse the features...
     records = GenBankScanner().parse_records(in_file, do_features=False)
-    # For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_file, "fasta")
 
 
@@ -1472,7 +1471,6 @@ def _embl_convert_fasta(in_file, out_file):
     """Fast EMBL to FASTA (PRIVATE)."""
     # We don't need to parse the features...
     records = EmblScanner().parse_records(in_file, do_features=False)
-    # For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_file, "fasta")
 
 
