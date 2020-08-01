@@ -803,7 +803,6 @@ class StringMethodTests(unittest.TestCase):
 
     def test_MutableSeq_init_typeerror(self):
         """Check MutableSeq __init__ gives TypeError exceptions."""
-        self.assertRaises(TypeError, MutableSeq, (Seq("A")))
         self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)

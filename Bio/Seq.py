@@ -91,12 +91,11 @@ class Seq(bytes):
         >>> print(my_seq)
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
-        # Enforce string storage
         if isinstance(data, int):
-            raise TypeError("Expected Seq, MutableSeq, string, or bytes object")
-        try:
+            raise TypeError("Expected Seq, MutableSeq, string, bytes, or bytearray object")
+        if isinstance(data, (bytes, bytearray)):
             seq = super().__new__(cls, data)
-        except TypeError:
+        else:
             seq = super().__new__(cls, data, "ASCII")
         return seq
 
@@ -1547,10 +1546,12 @@ class UnknownSeq(Seq):
 
         See also the lstrip and rstrip methods.
         """
-        if self._character in chars:
+        if chars is None:
+            if self._character.iswhite():
+                return Seq(b"")
+        elif self._character in str(chars):
             return Seq(b"")
-        else:
-            return Seq(str(self))
+        return UnknownSeq(self._length, character=self._character)
 
     def lstrip(self, chars=""):
         """Return a new UnknownSeq object with the leading end stripped.
@@ -1706,7 +1707,7 @@ class UnknownSeq(Seq):
         return Seq(temp_data)
 
 
-class MutableSeq:
+class MutableSeq(bytearray):
     """An editable sequence object.
 
     Unlike normal python strings and our basic sequence object (the Seq class),
@@ -1736,15 +1737,12 @@ class MutableSeq:
 
     def __init__(self, data):
         """Initialize the class."""
-        if isinstance(data, str):
-            self.data = bytearray(data, "ASCII")
-        elif isinstance(data, (Seq, int, float)):
-            raise TypeError(
-                "The sequence data given to a MutableSeq object "
-                "should be a string or a bytearray (not a Seq object etc)"
-            )
-        else:
-            self.data = data  # assumes the input is an array
+        if isinstance(data, (int, UnknownSeq)):
+            raise TypeError("Expected Seq, MutableSeq, string, bytes, or bytearray object")
+        try:
+            super().__init__(data)
+        except TypeError:
+            super().__init__(data, "ASCII")
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -1764,7 +1762,7 @@ class MutableSeq:
         which needs to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
-        return self.data.decode("ASCII")
+        return self.decode("ASCII")
 
     def __eq__(self, other):
         """Compare the sequence to another sequence or a string.
@@ -1793,15 +1791,15 @@ class MutableSeq:
         True
 
         """
-        if isinstance(other, MutableSeq):
-            return self.data == other.data
         return str(self) == str(other)
+
+    def __ne__(self, other):
+        # override the base class
+        return str(self) != str(other)
 
     def __lt__(self, other):
         """Implement the less-than operand."""
-        if isinstance(other, MutableSeq):
-            return self.data < other.data
-        if isinstance(other, (str, Seq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) < str(other)
         raise TypeError(
             f"'<' not supported between instances of '{type(self).__name__}'"
@@ -1810,9 +1808,7 @@ class MutableSeq:
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
-        if isinstance(other, MutableSeq):
-            return self.data <= other.data
-        if isinstance(other, (str, Seq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) <= str(other)
         raise TypeError(
             f"'<=' not supported between instances of '{type(self).__name__}'"
@@ -1821,9 +1817,7 @@ class MutableSeq:
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
-        if isinstance(other, MutableSeq):
-            return self.data > other.data
-        if isinstance(other, (str, Seq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) > str(other)
         raise TypeError(
             f"'>' not supported between instances of '{type(self).__name__}'"
@@ -1832,18 +1826,12 @@ class MutableSeq:
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
-        if isinstance(other, MutableSeq):
-            return self.data >= other.data
-        if isinstance(other, (str, Seq, UnknownSeq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return str(self) >= str(other)
         raise TypeError(
             f"'>=' not supported between instances of '{type(self).__name__}'"
             f" and '{type(other).__name__}'"
         )
-
-    def __len__(self):
-        """Return the length of the sequence, use len(my_seq)."""
-        return len(self.data)
 
     def __getitem__(self, index):
         """Return a subsequence of single letter, use my_seq[index].
@@ -1852,12 +1840,13 @@ class MutableSeq:
         >>> my_seq[5]
         'A'
         """
-        if isinstance(index, int):
+        data = bytearray.__getitem__(self, index)
+        if isinstance(data, int):
             # Return a single letter as a string
-            return chr(self.data[index])
+            return chr(data)
         else:
             # Return the (sub)sequence as another Seq object
-            return MutableSeq(self.data[index])
+            return Seq(data)
 
     def __setitem__(self, index, value):
         """Set a subsequence of single letter via value parameter.
@@ -1869,36 +1858,29 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Replacing a single letter with a new string
-            self.data[index] = ord(value)
-        else:
-            # Replacing a sub-sequence
-            if isinstance(value, MutableSeq):
-                self.data[index] = value.data
-            elif isinstance(value, bytearray):
-                self.data[index] = value
-            else:
-                self.data[index] = value.encode("ASCII")
+            value = ord(value)
+        try:
+            bytearray.__setitem__(self, index, value)
+        except TypeError:
+            bytearray.__setitem__(self, index, value.encode("ASCII"))
 
-    def __delitem__(self, index):
-        """Delete a subsequence of single letter.
-
-        >>> my_seq = MutableSeq('ACTCGACGTCG')
-        >>> del my_seq[0]
-        >>> my_seq
-        MutableSeq('CTCGACGTCG')
-        """
-        # Could be deleting a single letter, or a slice
-        del self.data[index]
+    def __iter__(self):
+        for c in bytearray.__iter__(self):
+            yield chr(c)
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
 
         Returns a new MutableSeq object.
         """
-        if isinstance(other, MutableSeq):
-            return self.__class__(self.data + other.data)
-        elif isinstance(other, (str, Seq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return self.__class__(str(self) + str(other))
+
+        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
+
+        if isinstance(other, SeqRecord):
+            # Get the SeqRecord's __radd__ to handle this
+            return NotImplemented
         else:
             raise TypeError
 
@@ -1909,12 +1891,14 @@ class MutableSeq:
         >>> "LV" + MutableSeq("MELKI")
         MutableSeq('LVMELKI')
         """
-        if isinstance(other, MutableSeq):
-            return self.__class__(other.data + self.data)
-        elif isinstance(other, (str, Seq)):
+        if isinstance(other, (str, Seq, MutableSeq)):
             return self.__class__(str(other) + str(self))
         else:
             raise TypeError
+
+    def __iadd__(self, other):
+        """Override base class."""
+        return self + other
 
     def __mul__(self, other):
         """Multiply MutableSeq by integer.
@@ -1928,7 +1912,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other)
+        return self.__class__(bytearray.__mul__(self, other))
 
     def __rmul__(self, other):
         """Multiply integer by MutableSeq.
@@ -1942,7 +1926,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other)
+        return self.__class__(bytearray.__rmul__(self, other))
 
     def __imul__(self, other):
         """Multiply MutableSeq in-place.
@@ -1955,73 +1939,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other)
-
-    def append(self, c):
-        """Add a subsequence to the mutable sequence object.
-
-        >>> my_seq = MutableSeq('ACTCGACGTCG')
-        >>> my_seq.append('A')
-        >>> my_seq
-        MutableSeq('ACTCGACGTCGA')
-
-        No return value.
-        """
-        self.data.append(ord(c))
-
-    def insert(self, i, c):
-        """Add a subsequence to the mutable sequence object at a given index.
-
-        >>> my_seq = MutableSeq('ACTCGACGTCG')
-        >>> my_seq.insert(0,'A')
-        >>> my_seq
-        MutableSeq('AACTCGACGTCG')
-        >>> my_seq.insert(8,'G')
-        >>> my_seq
-        MutableSeq('AACTCGACGGTCG')
-
-        No return value.
-        """
-        self.data.insert(i, ord(c))
-
-    def pop(self, i=(-1)):
-        """Remove a subsequence of a single letter at given index.
-
-        >>> my_seq = MutableSeq('ACTCGACGTCG')
-        >>> my_seq.pop()
-        'G'
-        >>> my_seq
-        MutableSeq('ACTCGACGTC')
-        >>> my_seq.pop()
-        'C'
-        >>> my_seq
-        MutableSeq('ACTCGACGT')
-
-        Returns the last character of the sequence.
-        """
-        c = self.data[i]
-        del self.data[i]
-        return chr(c)
-
-    def remove(self, item):
-        """Remove a subsequence of a single letter from mutable sequence.
-
-        >>> my_seq = MutableSeq('ACTCGACGTCG')
-        >>> my_seq.remove('C')
-        >>> my_seq
-        MutableSeq('ATCGACGTCG')
-        >>> my_seq.remove('A')
-        >>> my_seq
-        MutableSeq('TCGACGTCG')
-
-        No return value.
-        """
-        item = ord(item)
-        for i in range(len(self.data)):
-            if self.data[i] == item:
-                del self.data[i]
-                return
-        raise ValueError("MutableSeq.remove(x): x not in list")
+        return self.__class__(bytearray.__imul__(self, other))
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
@@ -2044,38 +1962,353 @@ class MutableSeq:
         e.g.
 
         >>> from Bio.Seq import MutableSeq
-        >>> my_mseq = MutableSeq("AAAATGA")
-        >>> print(my_mseq.count("A"))
+        >>> my_seq = MutableSeq("AAAATGA")
+        >>> print(my_seq.count("A"))
         5
-        >>> print(my_mseq.count("ATG"))
+        >>> print(my_seq.count("ATG"))
         1
-        >>> print(my_mseq.count(Seq("AT")))
+        >>> print(my_seq.count(Seq("AT")))
         1
-        >>> print(my_mseq.count("AT", 2, -1))
+        >>> print(my_seq.count("AT", 2, -1))
         1
 
-        HOWEVER, please note because that python strings, Seq objects and
-        MutableSeq objects do a non-overlapping search, this may not give
+        HOWEVER, please note because python strings and Seq objects (and
+        MutableSeq objects) do a non-overlapping search, this may not give
         the answer you expect:
 
         >>> "AAAA".count("AA")
         2
-        >>> print(MutableSeq("AAAA").count("AA"))
+        >>> print(Seq("AAAA").count("AA"))
         2
 
-        An overlapping search would give the answer as three!
+        An overlapping search, as implemented in .count_overlap(),
+        would give the answer as three!
         """
-        if isinstance(sub, Seq):
-            s = str(sub).encode("ASCII")
-        elif isinstance(sub, MutableSeq):
-            s = sub.data
-        elif not isinstance(sub, (bytes, bytearray)):
-            try:
-                s = sub.encode("ASCII")
-            except TypeError:
-                raise TypeError("expected a string, Seq or MutableSeq")
+        return str(self).count(str(sub), start, end)
 
-        return self.data.count(s, start, end)
+    def __contains__(self, char):
+        """Implement the 'in' keyword, like a python string.
+
+        e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_dna = MutableSeq("ATATGAAATTTGAAAA")
+        >>> "AAA" in my_dna
+        True
+        >>> Seq("AAA") in my_dna
+        True
+        >>> MutableSeq("AAA") in my_dna
+        True
+        """
+        return str(char) in str(self)
+
+    def find(self, sub, start=0, end=sys.maxsize):
+        """Find method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Returns an integer, the index of the first occurrence of substring
+        argument sub in the (sub)sequence given by [start:end].
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the first typical start codon, AUG, in an RNA sequence:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.find("AUG")
+        3
+        """
+        return str(self).find(str(sub), start, end)
+
+    def startswith(self, prefix, start=0, end=sys.maxsize):
+        """Return True if the MutableSeq starts with the given prefix, False otherwise.
+
+        This behaves like the python string method of the same name.
+
+        Return True if the sequence starts with the specified prefix
+        (a string or another Seq object), False otherwise.
+        With optional start, test sequence beginning at that position.
+        With optional end, stop comparing sequence at that position.
+        prefix can also be a tuple of strings to try.  e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.startswith("GUC")
+        True
+        >>> my_rna.startswith("AUG")
+        False
+        >>> my_rna.startswith("AUG", 3)
+        True
+        >>> my_rna.startswith(("UCC", "UCA", "UCG"), 1)
+        True
+        """
+        if isinstance(prefix, tuple):
+            prefix_strs = tuple(str(p) for p in prefix)
+            return str(self).startswith(prefix_strs, start, end)
+        else:
+            return str(self).startswith(str(prefix), start, end)
+
+    def endswith(self, suffix, start=0, end=sys.maxsize):
+        """Return True if the MutableSeq ends with the given suffix, False otherwise.
+
+        This behaves like the python string method of the same name.
+
+        Return True if the sequence ends with the specified suffix
+        (a string or another Seq object), False otherwise.
+        With optional start, test sequence beginning at that position.
+        With optional end, stop comparing sequence at that position.
+        suffix can also be a tuple of strings to try.  e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.endswith("UUG")
+        True
+        >>> my_rna.endswith("AUG")
+        False
+        >>> my_rna.endswith("AUG", 0, 18)
+        True
+        >>> my_rna.endswith(("UCC", "UCA", "UUG"))
+        True
+        """
+        if isinstance(suffix, tuple):
+            suffix_strs = tuple(str(p) for p in suffix)
+            return str(self).endswith(suffix_strs, start, end)
+        else:
+            return str(self).endswith(str(suffix), start, end)
+
+    def rfind(self, sub, start=0, end=sys.maxsize):
+        """Find from right method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Returns an integer, the index of the first occurrence of substring
+        argument sub in the (sub)sequence given by [start:end].
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the first typical start codon, AUG, in an RNA sequence:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.find("AUG")
+        3
+        """
+        return str(self).rfind(str(sub), start, end)
+
+    def split(self, sep=None, maxsplit=-1):
+        """Split method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Return a list of the 'words' in the string (as Seq objects),
+        using sep as the delimiter string.  If maxsplit is given, at
+        most maxsplit splits are done.  If maxsplit is omitted, all
+        splits are made.
+
+        Following the python string method, sep will by default be any
+        white space (tabs, spaces, newlines) but this is unlikely to
+        apply to biological sequences.
+
+        e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_rna = MutableSeq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_aa = my_rna.translate()
+        >>> my_aa
+        MutableSeq('VMAIVMGR*KGAR*L')
+        >>> for pep in my_aa.split("*"):
+        ...     pep
+        MutableSeq('VMAIVMGR')
+        MutableSeq('KGAR')
+        MutableSeq('L')
+        >>> for pep in my_aa.split("*", 1):
+        ...     pep
+        MutableSeq('VMAIVMGR')
+        MutableSeq('KGAR*L')
+
+        See also the rsplit method:
+
+        >>> for pep in my_aa.rsplit("*", 1):
+        ...     pep
+        MutableSeq('VMAIVMGR*KGAR')
+        MutableSeq('L')
+        """
+        return [MutableSeq(part) for part in str(self).split(str(sep), maxsplit)]
+
+    def rsplit(self, sep=None, maxsplit=-1):
+        """Do a right split method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Return a list of the 'words' in the string (as MutableSeq objects),
+        using sep as the delimiter string.  If maxsplit is given, at
+        most maxsplit splits are done COUNTING FROM THE RIGHT.
+        If maxsplit is omitted, all splits are made.
+
+        Following the python string method, sep will by default be any
+        white space (tabs, spaces, newlines) but this is unlikely to
+        apply to biological sequences.
+
+        e.g. print(my_seq.rsplit("*",1))
+
+        See also the split method.
+        """
+        return [MutableSeq(part) for part in str(self).rsplit(str(sep), maxsplit)]
+
+    def strip(self, chars=None):
+        """Return a new MutableSeq object with leading and trailing ends stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If
+        omitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+
+        e.g. print(my_seq.strip("-"))
+
+        See also the lstrip and rstrip methods.
+        """
+        return MutableSeq(str(self).strip(str(chars)))
+
+    def lstrip(self, chars=None):
+        """Return a new MutableSeq object with leading (left) end stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If
+        omitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+
+        e.g. print(my_seq.lstrip("-"))
+
+        See also the strip and rstrip methods.
+        """
+        return MutableSeq(str(self).lstrip(str(chars)))
+
+    def rstrip(self, chars=None):
+        """Return a new MutableSeq object with trailing (right) end stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If
+        omitted or None (default) then as for the python string method,
+        this defaults to removing any white space.
+
+        e.g. Removing a nucleotide sequence's polyadenylation (poly-A tail):
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA")
+        >>> my_seq
+        Seq('CGGTACGCTTATGTCACGTAGAAAAAA')
+        >>> my_seq.rstrip("A")
+        Seq('CGGTACGCTTATGTCACGTAG')
+
+        See also the strip and lstrip methods.
+        """
+        return MutableSeq(str(self).rstrip(str(chars)))
+
+    def upper(self):
+        """Return an upper case copy of the sequence.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("VHLTPeeK*")
+        >>> my_seq
+        MutableSeq('VHLTPeeK*')
+        >>> my_seq.lower()
+        MutableSeq('vhltpeek*')
+        >>> my_seq.upper()
+        MutableSeq('VHLTPEEK*')
+        """
+        return MutableSeq(bytearray.upper(self))
+
+    def lower(self):
+        """Return a lower case copy of the sequence.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_seq = MutableSeq("CGGTACGCTTATGTCACGTAGAAAAAA")
+        >>> my_seq
+        MutableSeq('CGGTACGCTTATGTCACGTAGAAAAAA')
+        >>> my_seq.lower()
+        MutableSeq('cggtacgcttatgtcacgtagaaaaaa')
+
+        See also the upper method.
+        """
+        return MutableSeq(bytearray.lower(self))
+
+    def append(self, c):
+        """Add a subsequence to the mutable sequence object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.append('A')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGA')
+
+        No return value.
+        """
+        bytearray.append(self, ord(c))
+
+    def insert(self, i, c):
+        """Add a subsequence to the mutable sequence object at a given index.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.insert(0,'A')
+        >>> my_seq
+        MutableSeq('AACTCGACGTCG')
+        >>> my_seq.insert(8,'G')
+        >>> my_seq
+        MutableSeq('AACTCGACGGTCG')
+
+        No return value.
+        """
+        bytearray.insert(self, i, ord(c))
+
+    def pop(self, i=(-1)):
+        """Remove a subsequence of a single letter at given index.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.pop()
+        'G'
+        >>> my_seq
+        MutableSeq('ACTCGACGTC')
+        >>> my_seq.pop()
+        'C'
+        >>> my_seq
+        MutableSeq('ACTCGACGT')
+
+        Returns the last character of the sequence.
+        """
+        c = bytearray.pop(self, i)
+        return chr(c)
+
+    def remove(self, item):
+        """Remove a subsequence of a single letter from mutable sequence.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.remove('C')
+        >>> my_seq
+        MutableSeq('ATCGACGTCG')
+        >>> my_seq.remove('A')
+        >>> my_seq
+        MutableSeq('TCGACGTCG')
+
+        No return value.
+        """
+        item = ord(item)
+        try:
+            bytearray.remove(self, item)
+        except ValueError:
+            raise ValueError("MutableSeq.remove(x): x not in list") from None
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
@@ -2154,11 +2387,11 @@ class MutableSeq:
         if isinstance(item, Seq):
             s = str(item).encode("ASCII")
         elif isinstance(item, MutableSeq):
-            s = item.data
+            s = item
         elif not isinstance(item, (bytes, bytearray)):
             s = item.encode("ASCII")
         try:
-            return self.data.index(s)
+            return bytearray.index(self, s)
         except ValueError:
             raise ValueError("MutableSeq.index(item): item not in list")
 
@@ -2177,11 +2410,11 @@ class MutableSeq:
         if isinstance(item, Seq):
             s = str(item).encode("ASCII")
         elif isinstance(item, MutableSeq):
-            s = item.data
+            s = item
         elif not isinstance(item, (bytes, bytearray)):
             s = item.encode("ASCII")
         try:
-            return self.data.rindex(s)
+            return bytearray.rindex(self, s)
         except ValueError:
             raise ValueError("MutableSeq.rindex(item): item not in list")
 
@@ -2190,7 +2423,7 @@ class MutableSeq:
 
         No return value.
         """
-        self.data.reverse()
+        bytearray.reverse(self)
 
     def complement(self):
         """Modify the mutable sequence to take on its complement.
@@ -2202,16 +2435,16 @@ class MutableSeq:
 
         If the sequence contains both T and U, an exception is raised.
         """
-        if b"U" in self.data and b"T" in self.data:
+        if "U" in self and "T" in self:
             raise ValueError("Mixed RNA/DNA found")
-        elif b"U" in self.data:
+        elif "U" in self:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        mixed = {ord(x): ord(y) for x, y in d.items()}
-        mixed.update({ord(x.lower()): ord(y.lower()) for x, y in d.items()})
-        for i, c in enumerate(self.data):
-            self.data[i] = mixed[c]
+        mixed = {x: ord(y) for x, y in d.items()}
+        mixed.update({x.lower(): ord(y.lower()) for x, y in d.items()})
+        for i, c in enumerate(self):
+            bytearray.__setitem__(self, i, mixed[c])
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
@@ -2219,7 +2452,7 @@ class MutableSeq:
         No return value.
         """
         self.complement()
-        self.data.reverse()
+        self.reverse()
 
     def extend(self, other):
         """Add a sequence to the original mutable sequence object.
@@ -2234,10 +2467,10 @@ class MutableSeq:
 
         No return value.
         """
-        if isinstance(other, MutableSeq):
-            self.data.extend(other.data)
-        else:
-            self.data.extend(other.encode("ASCII"))
+        try:
+            bytearray.extend(self, other)
+        except TypeError:
+            bytearray.extend(self, other.encode("ASCII"))
 
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
@@ -2249,7 +2482,130 @@ class MutableSeq:
         >>> my_mseq.toseq()
         Seq('MKQHKAMIVALIVICITAVVAAL')
         """
-        return Seq(self.data.decode("ASCII"))
+        return Seq(self.decode("ASCII"))
+
+    def translate(
+        self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
+    ):
+        """Turn a nucleotide sequence into a protein sequence by creating a new MutableSeq object.
+
+        This method will translate DNA or RNA sequences. It should not
+        be used on protein sequences as any result will be biologically
+        meaningless.
+
+        Arguments:
+         - table - Which codon table to use?  This can be either a name
+           (string), an NCBI identifier (integer), or a CodonTable
+           object (useful for non-standard genetic codes).  This
+           defaults to the "Standard" table.
+         - stop_symbol - Single character string, what to use for
+           terminators.  This defaults to the asterisk, "*".
+         - to_stop - Boolean, defaults to False meaning do a full
+           translation continuing on past any stop codons (translated as the
+           specified stop_symbol).  If True, translation is terminated at
+           the first in frame stop codon (and the stop_symbol is not
+           appended to the returned protein sequence).
+         - cds - Boolean, indicates this is a complete CDS.  If True,
+           this checks the sequence starts with a valid alternative start
+           codon (which will be translated as methionine, M), that the
+           sequence length is a multiple of three, and that there is a
+           single in frame stop codon at the end (this will be excluded
+           from the protein sequence, regardless of the to_stop option).
+           If these tests fail, an exception is raised.
+         - gap - Single character string to denote symbol used for gaps.
+           Defaults to the minus sign.
+
+        e.g. Using the standard table:
+
+        >>> coding_dna = MutableSeq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        >>> coding_dna.translate()
+        MutableSeq('VAIVMGR*KGAR*')
+        >>> coding_dna.translate(stop_symbol="@")
+        MutableSeq('VAIVMGR@KGAR@')
+        >>> coding_dna.translate(to_stop=True)
+        MutableSeq('VAIVMGR')
+
+        Now using NCBI table 2, where TGA is not a stop codon:
+
+        >>> coding_dna.translate(table=2)
+        MutableSeq('VAIVMGRWKGAR*')
+        >>> coding_dna.translate(table=2, to_stop=True)
+        MutableSeq('VAIVMGRWKGAR')
+
+        In fact, GTG is an alternative start codon under NCBI table 2, meaning
+        this sequence could be a complete CDS:
+
+        >>> coding_dna.translate(table=2, cds=True)
+        MutableSeq('MAIVMGRWKGAR')
+
+        It isn't a valid CDS under NCBI table 1, due to both the start codon
+        and also the in frame stop codons:
+
+        >>> coding_dna.translate(table=1, cds=True)
+        Traceback (most recent call last):
+            ...
+        Bio.Data.CodonTable.TranslationError: First codon 'GTG' is not a start codon
+
+        If the sequence has no in-frame stop codon, then the to_stop argument
+        has no effect:
+
+        >>> coding_dna2 = MutableSeq("TTGGCCATTGTAATGGGCCGC")
+        >>> coding_dna2.translate()
+        MutableSeq('LAIVMGR')
+        >>> coding_dna2.translate(to_stop=True)
+        MutableSeq('LAIVMGR')
+
+        NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
+        or a stop codon.  These are translated as "X".  Any invalid codon
+        (e.g. "TA?" or "T-A") will throw a TranslationError.
+        """
+        if isinstance(table, bytes):
+            return bytes.translate(self, table)
+
+        if isinstance(table, CodonTable.CodonTable):
+            codon_table = table
+        else:
+            try:
+                table_id = int(table)
+            except ValueError:
+                # Assume it's a table name
+                # The same table can be used for RNA or DNA
+                try:
+                    codon_table = CodonTable.ambiguous_generic_by_name.get(table)
+                except TypeError:
+                    codon_table = None
+            else:
+                # Assume it's a table ID
+                # The same table can be used for RNA or DNA
+                try:
+                    codon_table = CodonTable.ambiguous_generic_by_id.get(table_id)
+                except TypeError:
+                    codon_table = None
+            if codon_table is None:
+                raise ValueError("Bad table argument") from None
+        return MutableSeq(
+            _translate_str(str(self), codon_table, stop_symbol, to_stop, cds, gap=gap)
+        )
+
+    def ungap(self, gap="-"):
+        """Return a copy of the sequence without the gap character(s).
+
+        The gap character now defaults to the minus sign, and can only
+        be specified via the method argument. This is no longer possible
+        via sequence's alphabet (as was possible up to Biopython 1.77):
+
+        >>> from Bio.Seq import Seq
+        >>> my_dna = Seq("-ATA--TGAAAT-TTGAAAA")
+        >>> my_dna
+        Seq('-ATA--TGAAAT-TTGAAAA')
+        >>> my_dna.ungap("-")
+        Seq('ATATGAAATTTGAAAA')
+        """
+        if not gap:
+            raise ValueError("Gap character required.")
+        elif len(gap) != 1 or not isinstance(gap, str):
+            raise ValueError(f"Unexpected gap character, {gap!r}")
+        return Seq(str(self).replace(gap, ""))
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
