@@ -92,7 +92,9 @@ class Seq(bytes):
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
         if isinstance(data, int):
-            raise TypeError("Expected Seq, MutableSeq, string, bytes, or bytearray object")
+            raise TypeError(
+                "Expected Seq, MutableSeq, string, bytes, or bytearray object"
+            )
         if isinstance(data, (bytes, bytearray)):
             seq = super().__new__(cls, data)
         else:
@@ -1738,7 +1740,9 @@ class MutableSeq(bytearray):
     def __init__(self, data):
         """Initialize the class."""
         if isinstance(data, (int, UnknownSeq)):
-            raise TypeError("Expected Seq, MutableSeq, string, bytes, or bytearray object")
+            raise TypeError(
+                "Expected Seq, MutableSeq, string, bytes, or bytearray object"
+            )
         try:
             super().__init__(data)
         except TypeError:
