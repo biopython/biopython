@@ -1531,16 +1531,63 @@ class UnknownSeq(Seq):
         """
         return UnknownSeq(self._length, character=self._character.lower())
 
-    def strip(self, chars=""):
+    def strip(self, chars=None):
+        """Return a new UnknownSeq object with leading and trailing ends stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If omitted
+        or None (default), and the UnknownSeq uses a whitespace character to
+        represent the unknown sequence, an empty UnknownSeq object is returned.
+        If chars is given and not None, and chars includes the character used to
+        represent the unknown sequence, an empty UnknownSeq object is returned.
+        In all other cases, a copy of the UnknownSeq object is returned.
+      
+        e.g. print(my_seq.strip("-"))
+
+        See also the lstrip and rstrip methods.
+        """
         if self._character in chars:
             return Seq(b"")
         else:
             return Seq(str(self))
 
     def lstrip(self, chars=""):
+        """Return a new UnknownSeq object with the leading end stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If omitted
+        or None (default), and the UnknownSeq uses a whitespace character to
+        represent the unknown sequence, an empty UnknownSeq object is returned.
+        If chars is given and not None, and chars includes the character used to
+        represent the unknown sequence, an empty UnknownSeq object is returned.
+        In all other cases, a copy of the UnknownSeq object is returned.
+      
+        e.g. print(my_seq.lstrip("-"))
+
+        The lstrip method is provided for consistency with string objects; its
+        effect is identical to that of the strip method.
+        """
         return self.strip(chars)
 
     def rstrip(self, chars=""):
+        """Return a new UnknownSeq object with the trailing end stripped.
+
+        This behaves like the python string method of the same name.
+
+        Optional argument chars defines which characters to remove.  If omitted
+        or None (default), and the UnknownSeq uses a whitespace character to
+        represent the unknown sequence, an empty UnknownSeq object is returned.
+        If chars is given and not None, and chars includes the character used to
+        represent the unknown sequence, an empty UnknownSeq object is returned.
+        In all other cases, a copy of the UnknownSeq object is returned.
+      
+        e.g. print(my_seq.rstrip("-"))
+
+        The rstrip method is provided for consistency with string objects; its
+        effect is identical to that of the strip method.
+        """
         return self.strip(chars)
 
     def translate(
