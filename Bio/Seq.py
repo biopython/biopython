@@ -1542,7 +1542,7 @@ class UnknownSeq(Seq):
         If chars is given and not None, and chars includes the character used to
         represent the unknown sequence, an empty UnknownSeq object is returned.
         In all other cases, a copy of the UnknownSeq object is returned.
-      
+
         e.g. print(my_seq.strip("-"))
 
         See also the lstrip and rstrip methods.
@@ -1563,7 +1563,7 @@ class UnknownSeq(Seq):
         If chars is given and not None, and chars includes the character used to
         represent the unknown sequence, an empty UnknownSeq object is returned.
         In all other cases, a copy of the UnknownSeq object is returned.
-      
+
         e.g. print(my_seq.lstrip("-"))
 
         The lstrip method is provided for consistency with string objects; its
@@ -1582,7 +1582,7 @@ class UnknownSeq(Seq):
         If chars is given and not None, and chars includes the character used to
         represent the unknown sequence, an empty UnknownSeq object is returned.
         In all other cases, a copy of the UnknownSeq object is returned.
-      
+
         e.g. print(my_seq.rstrip("-"))
 
         The rstrip method is provided for consistency with string objects; its
