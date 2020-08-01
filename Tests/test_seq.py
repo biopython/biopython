@@ -59,11 +59,6 @@ class TestSeq(unittest.TestCase):
         """Test converting Seq to string."""
         self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
 
-    def test_construction_using_a_seq_object(self):
-        """Test using a Seq object to initialize another Seq object."""
-        with self.assertRaises(TypeError):
-            Seq.Seq(self.s)
-
     def test_repr(self):
         """Test representation of Seq object."""
         self.assertEqual("Seq('TCAAAAGGATGCATCATG')", repr(self.s))
@@ -955,7 +950,7 @@ class TestTranslating(unittest.TestCase):
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable."""
         seq = Seq.Seq("ATCGTA")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             seq.translate(table=ambiguous_dna_complement)
 
     def test_translation_of_string(self):

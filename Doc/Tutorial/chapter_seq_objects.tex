@@ -190,16 +190,6 @@ You may often have many sequences to add together, which can be done with a for 
 Seq('ACGTAACCGGTT')
 \end{minted}
 
-Or, a more elegant approach is to the use built in \verb|sum| function with its optional start value argument (which otherwise defaults to zero):
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> list_of_seqs = [Seq("ACGT"), Seq("AACC"), Seq("GGTT")]
->>> sum(list_of_seqs, Seq(""))
-Seq('ACGTAACCGGTT')
-\end{minted}
-
 Like Python strings, Biopython \verb|Seq| also has a \verb|.join| method:
 
 %doctest

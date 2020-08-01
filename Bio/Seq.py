@@ -31,14 +31,14 @@ from Bio.Data import CodonTable
 
 
 def _maketrans(complement_mapping):
-    """Make a python string translation table (PRIVATE).
+    """Make a translation table for bytes (PRIVATE).
 
     Arguments:
      - complement_mapping - a dictionary such as ambiguous_dna_complement
        and ambiguous_rna_complement from Data.IUPACData.
 
-    Returns a translation table (a string of length 256) for use with the
-    python string's translate method to use in a (reverse) complement.
+    Returns a translation table (a bytes object of length 256) for use with
+    the translate method to use in a (reverse) complement.
 
     Compatible with lower case and upper case sequences.
 
@@ -48,14 +48,16 @@ def _maketrans(complement_mapping):
     after = "".join(complement_mapping.values())
     before += before.lower()
     after += after.lower()
-    return str.maketrans(before, after)
+    before = before.encode("ASCII")
+    after = after.encode("ASCII")
+    return bytes.maketrans(before, after)
 
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
-class Seq:
+class Seq(bytes):
     """Read-only sequence object (essentially a string with biological methods).
 
     Like normal python strings, our basic sequence object is immutable.
@@ -70,11 +72,11 @@ class Seq:
     not applicable to protein sequences).
     """
 
-    def __init__(self, data):
+    def __new__(cls, data):
         """Create a Seq object.
 
         Arguments:
-         - data - Sequence, required (string)
+         - data - Sequence, required (bytes or string)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -90,12 +92,13 @@ class Seq:
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
         # Enforce string storage
-        if not isinstance(data, str):
-            raise TypeError(
-                "The sequence data given to a Seq object should "
-                "be a string (not another Seq object etc)"
-            )
-        self._data = data.encode("ASCII")
+        if isinstance(data, int):
+            raise TypeError("Expected Seq, MutableSeq, string, or bytes object")
+        try:
+            seq = super().__new__(cls, data)
+        except TypeError:
+            seq = super().__new__(cls, data, "ASCII")
+        return seq
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -124,7 +127,7 @@ class Seq:
                 as_string = str(seq_obj)
 
         """
-        return self._data.decode("ASCII")
+        return self.decode("ASCII")
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
@@ -164,6 +167,10 @@ class Seq:
         """
         return str(self) == str(other)
 
+    def __ne__(self, other):
+        # override the base class
+        return str(self) != str(other)
+
     def __lt__(self, other):
         """Implement the less-than operand."""
         if isinstance(other, (str, Seq, MutableSeq)):
@@ -200,10 +207,6 @@ class Seq:
             f" and '{type(other).__name__}'"
         )
 
-    def __len__(self):
-        """Return the length of the sequence, use len(my_seq)."""
-        return len(self._data)  # Seq API requirement
-
     def __getitem__(self, index):  # Seq API requirement
         """Return a subsequence of single letter, use my_seq[index].
 
@@ -211,12 +214,17 @@ class Seq:
         >>> my_seq[5]
         'A'
         """
-        if isinstance(index, int):
+        data = bytes.__getitem__(self, index)
+        if isinstance(data, int):
             # Return a single letter as a string
-            return chr(self._data[index])
+            return chr(data)
         else:
             # Return the (sub)sequence as another Seq object
-            return Seq(self._data[index].decode("ASCII"))
+            return Seq(data)
+
+    def __iter__(self):
+        for c in bytes.__iter__(self):
+            yield chr(c)
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -651,7 +659,11 @@ class Seq:
 
         See also the strip and lstrip methods.
         """
-        return Seq(str(self).rstrip(str(chars)))
+        try:
+            data = bytes.rstrip(self, chars)
+        except TypeError:
+            data = bytes.rstrip(self, chars.encode("ASCII"))
+        return Seq(data)
 
     def upper(self):
         """Return an upper case copy of the sequence.
@@ -756,18 +768,16 @@ class Seq:
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
-        if (b"U" in self._data or b"u" in self._data) and (
-            b"T" in self._data or b"t" in self._data
-        ):
+        if ("U" in self or "u" in self) and ("T" in self or "t" in self):
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif b"U" in self._data or b"u" in self._data:
+        elif "U" in self or "u" in self:
             ttable = _rna_complement_table
         else:
             ttable = _dna_complement_table
         # Much faster on really long sequences than the previous loop based
         # one. Thanks to Michael Palmer, University of Waterloo.
-        return Seq(str(self).translate(ttable))
+        return Seq(bytes.translate(self, ttable))
 
     def reverse_complement(self):
         """Return the reverse complement sequence by creating a new Seq object.
@@ -848,12 +858,12 @@ class Seq:
            ...
         ValueError: DNA found, RNA expected
         """
-        if b"T" in self._data or b"t" in self._data:
-            if b"U" in self._data or b"u" in self._data:
+        if "T" in self or "t" in self:
+            if "U" in self or "u" in self:
                 raise ValueError("Mixed RNA/DNA found")
             else:
                 raise ValueError("DNA found, RNA expected")
-        return Seq(str(self).translate(_rna_complement_table))
+        return Seq(bytes.translate(self, _rna_complement_table))
 
     def reverse_complement_rna(self):
         """Reverse complement of an RNA sequence.
@@ -991,35 +1001,31 @@ class Seq:
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
         (e.g. "TA?" or "T-A") will throw a TranslationError.
-
-        NOTE - This does NOT behave like the python string's translate
-        method.  For that use str(my_seq).translate(...) instead
         """
-        if isinstance(table, str) and len(table) == 256:
-            raise ValueError(
-                "The Seq object translate method DOES NOT take "
-                "a 256 character string mapping table like "
-                "the python string object's translate method. "
-                "Use str(my_seq).translate(...) instead."
-            )
-        try:
-            table_id = int(table)
-        except ValueError:
-            # Assume its a table name
-            # The same table can be used for RNA or DNA
-            codon_table = CodonTable.ambiguous_generic_by_name[table]
+        if isinstance(table, bytes):
+            return bytes.translate(self, table)
 
-        except (AttributeError, TypeError):
-            # Assume its a CodonTable object
-            if isinstance(table, CodonTable.CodonTable):
-                codon_table = table
-            else:
-                raise ValueError("Bad table argument") from None
+        if isinstance(table, CodonTable.CodonTable):
+            codon_table = table
         else:
-            # Assume its a table ID
-            # The same table can be used for RNA or DNA
-            codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-
+            try:
+                table_id = int(table)
+            except ValueError:
+                # Assume it's a table name
+                # The same table can be used for RNA or DNA
+                try:
+                    codon_table = CodonTable.ambiguous_generic_by_name.get(table)
+                except TypeError:
+                    codon_table = None
+            else:
+                # Assume it's a table ID
+                # The same table can be used for RNA or DNA
+                try:
+                    codon_table = CodonTable.ambiguous_generic_by_id.get(table_id)
+                except TypeError:
+                    codon_table = None
+            if codon_table is None:
+                raise ValueError("Bad table argument") from None
         return Seq(
             _translate_str(str(self), codon_table, stop_symbol, to_stop, cds, gap=gap)
         )
@@ -1129,7 +1135,7 @@ class UnknownSeq(Seq):
     Seq('ACGT????')
     """
 
-    def __init__(self, length, alphabet=None, character="?"):
+    def __new__(cls, length, alphabet=None, character="?"):
         """Create a new UnknownSeq object.
 
         Arguments:
@@ -1140,13 +1146,16 @@ class UnknownSeq(Seq):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        self._length = int(length)
-        if self._length < 0:
+        # Use an empty bytes object as a placeholder
+        seq = super().__new__(cls, b"")
+        seq._length = int(length)
+        if seq._length < 0:
             # TODO - Block zero length UnknownSeq?  You can just use a Seq!
             raise ValueError("Length must not be negative.")
         if not character or len(character) != 1:
             raise ValueError("character argument should be a single letter string.")
-        self._character = character
+        seq._character = character
+        return seq
 
     def __len__(self):
         """Return the stated length of the unknown sequence."""
@@ -1159,6 +1168,13 @@ class UnknownSeq(Seq):
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
         return f"UnknownSeq({self._length}, character={self._character!r})"
+
+    def __reduce__(self):
+        return UnknownSeq, (self._length, None, self._character)
+
+    def __iter__(self):
+        for i in range(self._length):
+            yield self._character
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1514,6 +1530,18 @@ class UnknownSeq(Seq):
         See also the upper method.
         """
         return UnknownSeq(self._length, character=self._character.lower())
+
+    def strip(self, chars=""):
+        if self._character in chars:
+            return Seq(b"")
+        else:
+            return Seq(str(self))
+
+    def lstrip(self, chars=""):
+        return self.strip(chars)
+
+    def rstrip(self, chars=""):
+        return self.strip(chars)
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"

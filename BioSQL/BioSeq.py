@@ -26,7 +26,7 @@ from Bio import SeqFeature
 class DBSeq(Seq):
     """BioSQL equivalent of the Biopython Seq object."""
 
-    def __init__(self, primary_id, adaptor, alphabet=None, start=0, length=0):
+    def __new__(cls, primary_id, adaptor, alphabet=None, start=0, length=0):
         """Create a new DBSeq object referring to a BioSQL entry.
 
         You wouldn't normally create a DBSeq object yourself, this is done
@@ -34,10 +34,12 @@ class DBSeq(Seq):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        self.primary_id = primary_id
-        self.adaptor = adaptor
-        self._length = length
-        self.start = start
+        seq = super().__new__(cls, b"")
+        seq.primary_id = primary_id
+        seq.adaptor = adaptor
+        seq._length = length
+        seq.start = start
+        return seq
 
     def __len__(self):
         """Return the length of the sequence."""
