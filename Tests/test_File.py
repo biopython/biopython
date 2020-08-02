@@ -118,6 +118,13 @@ class AsHandleTestCase(unittest.TestCase):
             self.assertIs(s, handle)
 
 
+class BaseClassTests(unittest.TestCase):
+    """Tests for _IndexedSeqFileProxy base class."""
+
+    def test_instance_exception(self):
+        self.assertRaises(TypeError, File._IndexedSeqFileProxy)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
