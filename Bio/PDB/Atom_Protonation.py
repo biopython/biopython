@@ -98,7 +98,29 @@ class Atom:
         self.radius = radius
 
         # For atom sorting (protein backbone atoms first)
-        self._sorting_keys = {"N": 0, "CA": 1, "C": 2, "O": 3}
+        self._sorting_keys = {'N': 0, 
+                              'HN': 1, 'CA': 2, 'HA': 3, 'CB': 4, 
+                              'HB1': 5, 'HB2': 6, 'CG': 7, 'OD1': 8, 
+                              'OD2': 9, 'C': 10, 'O': 11, 'HG': 12, 
+                              'CD1': 13, 'HD11': 14, 'HD12': 15, 
+                              'HD13': 16, 'CD2': 17, 'HD21': 18, 
+                              'HD22': 19, 'HD23': 20, 'CD': 21, 
+                              'HD1': 22, 'HD2': 23, 'HG1': 24, 
+                              'HG2': 25, 'OE1': 26, 'NE2': 27, 
+                              'HE21': 28, 'HE22': 29, 'OG': 30,
+                                'CE1': 31, 'HE1': 32, 'CZ': 33, 
+                              'HZ': 34, 'CE2': 35, 'HE2': 36, 'HA1': 37, 
+                              'HA2': 38, 'OH': 39, 'HH': 40, 'HB': 41, 
+                              'CG1': 42, 'HG11': 43, 'HG12': 44, 'HG13': 45, 
+                              'CG2': 46, 'HG21': 47, 'HG22': 48, 'HG23': 49, 
+                              'HB3': 50, 'ND2': 51, 'HD3': 52, 'NE': 53, 'HE': 54, 
+                              'NH1': 55, 'HH11': 56, 'HH12': 57, 'NH2': 58, 'HH21': 59, 
+                              'HH22': 60, 'OG1': 61, 'ND1': 62, 'SG': 63, 'CE': 64, 
+                              'NZ': 65, 'HZ1': 66, 'HZ2': 67, 'HZ3': 68, 'OE2': 69, 
+                              'NE1': 70, 'CE3': 71, 'HE3': 72, 'CZ3': 73, 'CZ2': 74, 
+                              'CH2': 75, 'HH2': 76, 'HNT': 77, 'CAT': 78, 'HT1': 79, 
+                              'HT2': 80, 'HT3': 81}
+                           
 
     # Sorting Methods
     # standard across different objects and allows direct comparison
