@@ -47,6 +47,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Sergio Valqui
 - Zheng Ruan
+- Yogesh Kulkarni (first contribution)
 
 25 May 2020: Biopython 1.77
 ===========================
