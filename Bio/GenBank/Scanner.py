@@ -1632,16 +1632,27 @@ class GenBankScanner(InsdcScanner):
                     # Need to call consumer.dblink() for each line, e.g.
                     # DBLINK      Project: 57779
                     #             BioProject: PRJNA57779
-                    consumer.dblink(data.strip())
+                    line = data.strip()
                     # Read in the next line, and see if its more of the DBLINK section:
                     while True:
-                        line = next(line_iter)
-                        if line[: self.GENBANK_INDENT] == self.GENBANK_SPACER:
-                            # Add this continuation to the data string
-                            consumer.dblink(line[self.GENBANK_INDENT :].strip())
+                        next_line = next(line_iter)
+                        if next_line[: self.GENBANK_INDENT] == self.GENBANK_SPACER:
+                            # No new tag on next line, continue to add dbrefs
+                            if next_line.count(":") == 0:
+                                # This is a continuation of previous dbref
+                                line += " " + next_line.strip()
+                            else:
+                                # Add this continuation to the data string
+                                consumer.dblink(line.strip())
+                                line = next_line
+                            continue
                         else:
+                            # Add this continuation to the data string
+                            consumer.dblink(line.strip())
                             # End of the DBLINK, leave this text in the variable "line"
+                            line = next_line
                             break
+                        line = next(line_iter)
                 elif line_type == "REFERENCE":
                     if self.debug > 1:
                         print("Found reference [" + data + "]")
