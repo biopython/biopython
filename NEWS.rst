@@ -46,8 +46,8 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
-- Zheng Ruan
 - Yogesh Kulkarni (first contribution)
+- Zheng Ruan
 
 25 May 2020: Biopython 1.77
 ===========================
