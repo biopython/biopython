@@ -1,5 +1,3 @@
-This pull request addresses issue #...
-
 <!--- Please read each of the following items and confirm by replacing
  !--the [ ] with a [X] --->
 
@@ -13,3 +11,5 @@ tests and style checks pass with these changes.
 - [ ] I have added my name to the alphabetical contributors listings in the files
 ``NEWS.rst`` and ``CONTRIB.rst`` as part of this pull request, am listed
 already, or do not wish to be listed. (*This acknowledgement is optional.*)
+
+Resolves issue #...
