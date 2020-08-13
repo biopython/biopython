@@ -329,7 +329,7 @@ class PDBParser:
                         line[63:70],
                     )
                 ]
-                # U"s are scaled by 10^4
+                # U's are scaled by 10^4
                 anisou_array = (numpy.array(anisou, "f") / 10000.0).astype("f")
                 structure_builder.set_anisou(anisou_array)
             elif record_type == "MODEL ":
@@ -366,7 +366,7 @@ class PDBParser:
                         line[63:70],
                     )
                 ]
-                # U sigma"s are scaled by 10^4
+                # U sigma's are scaled by 10^4
                 siguij_array = (numpy.array(siguij, "f") / 10000.0).astype("f")
                 structure_builder.set_siguij(siguij_array)
             elif record_type == "SIGATM":
