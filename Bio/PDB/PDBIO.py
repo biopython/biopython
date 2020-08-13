@@ -378,6 +378,6 @@ class PDBIO(StructureIO):
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
         if write_end:
-            fp.write("END\n")
+            fp.write("END   \n")
         if close_file:
             fp.close()

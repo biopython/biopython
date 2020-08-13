@@ -141,6 +141,12 @@ class PDBParser:
 
     def _parse_coordinates(self, coords_trailer):
         """Parse the atomic data in the PDB file (PRIVATE)."""
+        allowed_records = {
+            "ATOM  ", "HETATM", "MODEL ", "ENDMDL", "TER   ", "ANISOU",
+            "SIGATM", "SIGUIJ",  # older 2.3 format specs
+            "MASTER",  # bookkeeping records after coordinates
+        }
+
         local_line_counter = 0
         structure_builder = self.structure_builder
         current_model_id = 0
@@ -150,12 +156,15 @@ class PDBParser:
         current_segid = None
         current_residue_id = None
         current_resname = None
+
         for i in range(0, len(coords_trailer)):
             line = coords_trailer[i].rstrip("\n")
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
             structure_builder.set_line_counter(global_line_counter)
-            if record_type == "ATOM  " or record_type == "HETATM":
+            if not line.strip():
+                continue  # skip empty lines
+            elif record_type == "ATOM  " or record_type == "HETATM":
                 # Initialize the Model - there was no explicit MODEL record
                 if not model_open:
                     structure_builder.init_model(current_model_id)
@@ -374,6 +383,14 @@ class PDBParser:
                 ]
                 sigatm_array = numpy.array(sigatm, "f")
                 structure_builder.set_sigatm(sigatm_array)
+            elif record_type not in allowed_records:
+                warnings.warn(
+                    "Ignoring unrecognized record '{}' at line {}".format(
+                        record_type,
+                        global_line_counter
+                    ),
+                    PDBConstructionWarning,
+                )
             local_line_counter += 1
         # EOF (does not end in END or CONECT)
         self.line_counter = self.line_counter + local_line_counter

@@ -74,25 +74,26 @@ class A_ExceptionTest(unittest.TestCase):
             p = PDBParser(PERMISSIVE=True)
             p.get_structure("example", "PDB/a_structure.pdb")
 
-            self.assertEqual(len(w), 14)
+            self.assertEqual(len(w), 15)
             for wrn, msg in zip(
                 w,
                 [
                     # Expected warning messages:
                     "Used element 'N' for Atom (name=N) with given element ''",
                     "Used element 'C' for Atom (name=CA) with given element ''",
-                    "Atom names ' CA ' and 'CA  ' differ only in spaces at line 17.",
+                    "Atom names ' CA ' and 'CA  ' differ only in spaces at line 18.",
                     "Used element 'CA' for Atom (name=CA  ) with given element ''",
-                    "Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.",
-                    "disordered atom found with blank altloc before line 33.",
-                    "Residue (' ', 4, ' ') redefined at line 43.",
-                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 43.",
-                    "Residue (' ', 10, ' ') redefined at line 75.",
-                    "Residue (' ', 14, ' ') redefined at line 106.",
-                    "Residue (' ', 16, ' ') redefined at line 135.",
-                    "Residue (' ', 80, ' ') redefined at line 633.",
-                    "Residue (' ', 81, ' ') redefined at line 646.",
-                    "Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 902.",
+                    "Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 22.",
+                    "disordered atom found with blank altloc before line 34.",
+                    "Residue (' ', 4, ' ') redefined at line 44.",
+                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 44.",
+                    "Residue (' ', 10, ' ') redefined at line 76.",
+                    "Residue (' ', 14, ' ') redefined at line 107.",
+                    "Residue (' ', 16, ' ') redefined at line 136.",
+                    "Residue (' ', 80, ' ') redefined at line 634.",
+                    "Residue (' ', 81, ' ') redefined at line 647.",
+                    "Ignoring unrecognized record 'ATOM 1' at line 777",
+                    "Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 904.",
                 ],
             ):
                 self.assertIn(msg, str(wrn))
@@ -902,7 +903,7 @@ class ParseReal(unittest.TestCase):
             "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
             "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
             "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
-            "END\n"
+            "END   \n"
         )
 
         parser = PDBParser()
@@ -922,7 +923,7 @@ class ParseReal(unittest.TestCase):
             "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
             "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
             "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
-            "END\n"
+            "END   \n"
         )
 
         parser = PDBParser(PERMISSIVE=False)

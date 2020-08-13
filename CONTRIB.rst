@@ -144,7 +144,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
-- Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
 - Joerg Schaarschmidt <https://github.com/schaarj>
@@ -157,6 +156,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jose Blanca <https://github.com/JoseBlanca>
 - Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
+- João Rodrigues <https://github.com/joaorodrigues>
 - João Vitor F Cavalcante <https://github.com/jvfe>
 - Jun Aruga <https://github.com/junaruga>
 - Juraj Szász <https:/github.com/sars1492>
