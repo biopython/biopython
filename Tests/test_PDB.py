@@ -902,7 +902,7 @@ class ParseReal(unittest.TestCase):
             "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
             "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
             "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
-            "END\n"
+            "END   \n"
         )
 
         parser = PDBParser()
@@ -922,7 +922,7 @@ class ParseReal(unittest.TestCase):
             "HETATM 6289  O   HOH     5      28.182  -5.239  31.370  1.00 22.99           O\n"
             "HETATM 6513  O   HOH     6      21.829   3.361  14.003  1.00 14.25           O\n"
             "HETATM 6607  O   HOH     5      33.861  40.044  18.022  1.00 18.73           O\n"
-            "END\n"
+            "END   \n"
         )
 
         parser = PDBParser(PERMISSIVE=False)
