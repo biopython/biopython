@@ -141,11 +141,11 @@ class PDBParser:
 
     def _parse_coordinates(self, coords_trailer):
         """Parse the atomic data in the PDB file (PRIVATE)."""
-        allowed_records = set((
-            'ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER   ', 'ANISOU',
-            'SIGATM', 'SIGUIJ',  # older 2.3 format specs
-            'MASTER',  # bookkeeping records after coordinates
-        ))
+        allowed_records = {
+            "ATOM  ", "HETATM", "MODEL ", "ENDMDL", "TER   ", "ANISOU",
+            "SIGATM", "SIGUIJ",  # older 2.3 format specs
+            "MASTER",  # bookkeeping records after coordinates
+        }
 
         local_line_counter = 0
         structure_builder = self.structure_builder
@@ -329,7 +329,7 @@ class PDBParser:
                         line[63:70],
                     )
                 ]
-                # U's are scaled by 10^4
+                # U"s are scaled by 10^4
                 anisou_array = (numpy.array(anisou, "f") / 10000.0).astype("f")
                 structure_builder.set_anisou(anisou_array)
             elif record_type == "MODEL ":
@@ -366,7 +366,7 @@ class PDBParser:
                         line[63:70],
                     )
                 ]
-                # U sigma's are scaled by 10^4
+                # U sigma"s are scaled by 10^4
                 siguij_array = (numpy.array(siguij, "f") / 10000.0).astype("f")
                 structure_builder.set_siguij(siguij_array)
             elif record_type == "SIGATM":
@@ -385,7 +385,7 @@ class PDBParser:
                 structure_builder.set_sigatm(sigatm_array)
             elif record_type not in allowed_records:
                 warnings.warn(
-                    "Ignoring unrecognized record '{}' at line {}".format(
+                    "Ignoring unrecognized record "{}" at line {}".format(
                         record_type,
                         global_line_counter
                     ),
