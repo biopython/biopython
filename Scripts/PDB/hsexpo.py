@@ -5,9 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This program calculates solvent exposure for all amino
-acids in a PDB file using 5 different methods:
+"""Calculates solvent exposure for a PDB file using one of 5 different methods.
 
     -DSSP (DSSP needs to be installed)
     -Residue depth (MSMS needs to be installed)
@@ -45,7 +43,7 @@ ap.add_argument(
     default="HSEb",
 )
 ap.add_argument(
-    "-o", "--out", dest="outfile", help="output to PDB file (B factor=exposure)"
+    "-o", "--out", dest="outfile", help="output to PDB file (B factor=exposure)",
 )
 ap.add_argument(
     "-r",
