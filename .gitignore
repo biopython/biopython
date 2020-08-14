@@ -26,6 +26,7 @@ dist
 *.pyc
 *.pyo
 *.py-e
+*.pyd
 
 #Ignore all Jython class files (present if using Jython)
 *.class
