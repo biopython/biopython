@@ -5,17 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from optparse import OptionParser
-
-from Bio.PDB import *
-import sys
-
-__docformat__ = "restructuredtext en"
-
-
-__doc__ = """
-This program calculates solvent exposure for all amino
-acids in a PDB file using 5 different methods:
+"""Calculates solvent exposure for a PDB file using one of 5 different methods.
 
     -DSSP (DSSP needs to be installed)
     -Residue depth (MSMS needs to be installed)
@@ -24,100 +14,106 @@ acids in a PDB file using 5 different methods:
     -HSEbeta half sphere exposure
 
 A PDB file can be written out with the exposure in the B factor field.
-See --help for all options.
+See --help for all args.
 """
 
-if len(sys.argv) == 1:
-    print(__doc__)
-    sys.exit()
 
-# Get the user's options
-parser = OptionParser(usage="usage: %prog [options] <PDB file>")
+import argparse
+import sys
 
-parser.add_option(
+from Bio.PDB import (
+    DSSP,
+    ExposureCN,
+    HSExposureCA,
+    HSExposureCB,
+    PDBParser,
+    PDBIO,
+    ResidueDepth,
+    Selection,
+)
+
+ap = argparse.ArgumentParser(description=__doc__)
+ap.add_argument("pdbfile", help="Input structure in PDB format.")
+ap.add_argument(
     "-t",
     "--type",
     dest="exp",
-    help="exposure type (HSEAU, HSEAD, HSEBU, HSEBD,\
-                  CN, DSSPr, DSSPa, RD, RDa)",
+    choices=["HSEAU", "HSEAD", "HSEBU", "HSEBD", "CN", "DSSPr", "DSSPa", "RD", "RDa"],
+    help="Exposure Type",
     default="HSEb",
 )
-
-parser.add_option(
-    "-o", "--out", dest="outfile", help="output to PDB file (B factor=exposure)"
+ap.add_argument(
+    "-o", "--out", dest="outfile", help="output to PDB file (B factor=exposure)",
 )
-
-parser.add_option(
+ap.add_argument(
     "-r",
     "--radius",
     dest="radius",
-    type="float",
+    type=float,
     help="sphere radius (default 13.0 A)",
     default=13.0,
 )
-
-parser.add_option(
+ap.add_argument(
     "-m",
     "--model",
     dest="model",
-    type="int",
-    help="model number (default 0)",
+    type=int,
+    help="PDB model number (default 0)",
     default=0,
 )
-
-(options, args) = parser.parse_args()
-
-pdbfile = args[0]
+ap.add_argument("--dssp", help="Path to the DSSP executable", default="dssp")
+ap.add_argument("--msms", help="Path to the MSMS executable", default=None)
+args = ap.parse_args()
 
 # Get the structure
 p = PDBParser()
-s = p.get_structure("X", pdbfile)
+s = p.get_structure("X", args.pdbfile)
 
 # First model by default
-m = s[options.model]
+m = s[args.model]
 
-RADIUS = options.radius
+RADIUS = args.radius
 
 # d=dictionary of exposures
 # k=position in ntuple containing the desired exposure
 
 format = "%4i"
 
-options.exp = options.exp.upper()
+args.exp = args.exp.upper()
 
-if options.exp[0] == "H" and options.exp[3] == "A":
+if args.exp[0] == "H" and args.exp[3] == "A":
     hse = HSExposureCA(m, RADIUS)
-    if options.exp[-1] == "D":
+    if args.exp[-1] == "D":
         k = "EXP_HSE_A_D"
     else:
         k = "EXP_HSE_A_U"
-elif options.exp[0] == "H" and options.exp[3] == "B":
+elif args.exp[0] == "H" and args.exp[3] == "B":
     hse = HSExposureCB(m, RADIUS)
     # hse.write_pymol_script()
-    if options.exp[-1] == "D":
+    if args.exp[-1] == "D":
         k = "EXP_HSE_B_U"
     else:
         k = "EXP_HSE_B_D"
-elif options.exp == "CN":
+elif args.exp == "CN":
     hse = ExposureCN(m, RADIUS)
     k = "EXP_CN"
-elif options.exp == "ANGLE":
+elif args.exp == "ANGLE":
     hse = HSExposureCA(m, RADIUS)
     k = "EXP_CB_PCB_ANGLE"
     format = "%4.1f"
-elif options.exp == "DSSPR":
-    d = DSSP(m, pdbfile)
+elif args.exp == "DSSPR":
+    d = DSSP(m, args.pdbfile, dssp=args.dssp)
     k = "EXP_DSSP_RASA"
     format = "%.4f"
-elif options.exp == "DSSPA":
-    d = DSSP(m, pdbfile)
+elif args.exp == "DSSPA":
+    d = DSSP(m, args.pdbfile, dssp=args.dssp)
     k = "EXP_DSSP_ASA"
-elif options.exp == "RD":
-    d = ResidueDepth(m, pdbfile)
+elif args.exp == "RD":
+    d = ResidueDepth(m, args.pdbfile, msms_exec=args.msms)
     k = "EXP_RD"
     format = "%4.1f"
-elif options.exp == "RDA":
-    d = ResidueDepth(m, pdbfile)
+elif args.exp == "RDA":
+    d = ResidueDepth(m, args.pdbfile, msms_exec=args.msms)
     k = "EXP_RD_CA"
     format = "%4.1f"
 else:
@@ -132,7 +128,7 @@ for r in residue_list:
 
         exposure = r.xtra[k]
 
-        if options.exp == "DSSPR":
+        if args.exp == "DSSPR":
             # to 0=exposed, 1=buried
             exposure = 1 - exposure
 
@@ -151,7 +147,7 @@ for r in residue_list:
     for atom in r.get_iterator():
         atom.set_bfactor(exposure)
 
-if options.outfile:
+if args.outfile:
     io = PDBIO()
     io.set_structure(s)
-    io.save(options.outfile)
+    io.save(args.outfile)
