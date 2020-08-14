@@ -12,4 +12,7 @@ tests and style checks pass with these changes.
 ``NEWS.rst`` and ``CONTRIB.rst`` as part of this pull request, am listed
 already, or do not wish to be listed. (*This acknowledgement is optional.*)
 
-Resolves issue #...
+<!--- Briefly describe the changes included in this pull request below
+ !--- starting with the words 'Closes issue #... --->
+
+Closes issue #...
