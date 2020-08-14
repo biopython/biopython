@@ -23,12 +23,17 @@ matrix:
   include:
     - stage: basics
       python: 3.7
-      env: TOXENV=flake8
+      env: SKIP=black
       services:
       addons:
         apt:
           packages:
-      before_install: echo "Going to run basic checks"
+      before_install: echo "Going to run style checks using pre-commit"
+      install:
+        - pip install pre-commit
+        - pre-commit install
+      script:
+        - pre-commit run -a
     - stage: basics
       python: 3.7
       env: TOXENV=style,sdist,bdist_wheel
