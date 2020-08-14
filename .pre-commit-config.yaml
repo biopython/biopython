@@ -4,18 +4,20 @@ repos:
     rev: v2.3.0
     hooks:
     -   id: check-executables-have-shebangs
+        files: \.(py|sh)$
+        exclude: ^Tests/
     -   id: check-json
     # -   id: check-yaml
     -   id: debug-statements
-    # -   id: trailing-whitespace
-    #     files: \.(py|txt|html|css|js)$
+    -   id: trailing-whitespace
+        files: \.py$
     #     exclude: ^Tests/
     -   id: end-of-file-fixer
-        files: \.(py|txt|html|css|js)$
+        files: \.py$
         exclude: ^Tests/
     -   id: mixed-line-ending
-        files: \.(py|txt|html|css|js)$
-        exclude: ^Tests/
+        # files: \.(py|txt|html|css|js)$
+        # exclude: ^Tests/
 # -   repo: https://github.com/pre-commit/mirrors-mypy
 #     rev: v0.730
 #     hooks:
@@ -33,12 +35,38 @@ repos:
     rev: 19.10b0
     hooks:
     -   id: black
-        exclude: ^Tests/
+        additional_dependencies: [
+            'restructuredtext_lint',
+            'doc8',
+            'pygments',
+            'docutils==0.14'
+        ]
+        # exclude: ^Tests/
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:
     -   id: flake8
-        exclude: '^Tests/|hsexpo'
+        additional_dependencies: [
+            'flake8-blind-except',
+            'flake8-bugbear',
+            # 'flake8-coding==1.3.2',
+            'flake8-commas',
+            'flake8-comprehensions',
+            # 'flake8-debugger==3.2.1',
+            # 'flake8-deprecated==1.3',
+            'flake8-docstrings',
+            'flake8-implicit-str-concat',
+            # 'flake8-isort==2.7.0',
+            # 'flake8-pep3101==1.2.1',
+            'flake8-pie',
+            # 'flake8-polyfill==1.0.2',
+            # 'flake8-print==3.1.4',
+            'flake8-quotes',
+            'flake8-rst-docstrings',
+            'flake8-sfs',
+            'pydocstyle>=5.0.0',
+        ]
+        # exclude: '^Tests/'
 -   repo: https://github.com/asottile/blacken-docs
     rev: v1.6.0
     hooks:
