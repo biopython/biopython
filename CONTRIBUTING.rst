@@ -77,6 +77,23 @@ chapter in the Biopython Tutorial for more information on our test framework:
 http://biopython.org/DIST/docs/tutorial/Tutorial.html
 
 
+Local Development
+-----------------
+
+To simplify the contribution, we provide a `pre-commit
+<https://pre-commit.com/>`_ configuration. Pre-commit is a Python package which
+automatically hooks into git. When you run "git commit" within the biopython
+repository, it will automatically run various fast checks and automatically
+apply simple formatting changes such as black before the commit happens. In
+order to install it, run
+
+    $ pip install pre-commit
+
+    # Acitvate pre-commit for biopython
+    $ cd biopython-repository
+    $ pre-commit install
+
+
 Local Testing
 -------------
 
