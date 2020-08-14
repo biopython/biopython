@@ -17,12 +17,6 @@ repos:
     hooks:
     -   id: black
         args: [--check]
-        additional_dependencies: [
-            'restructuredtext_lint',
-            'doc8',
-            'pygments',
-            'docutils==0.14'
-        ]
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:
