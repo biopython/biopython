@@ -8,8 +8,6 @@ repos:
         exclude: ^Tests/
     -   id: check-json
     -   id: debug-statements
-    -   id: trailing-whitespace
-        files: \.py$
     -   id: end-of-file-fixer
         files: \.py$
         exclude: ^Tests/
