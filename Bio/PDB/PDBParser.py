@@ -148,9 +148,11 @@ class PDBParser:
             "ENDMDL",
             "TER   ",
             "ANISOU",
+            # These are older 2.3 format specs:
             "SIGATM",
-            "SIGUIJ",  # older 2.3 format specs
-            "MASTER",  # bookkeeping records after coordinates
+            "SIGUIJ",
+            # bookkeeping records after coordinates:
+            "MASTER",
         }
 
         local_line_counter = 0
