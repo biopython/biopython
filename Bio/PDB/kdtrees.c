@@ -1401,9 +1401,9 @@ static PyTypeObject KDTreeType = {
 /* ========================================================================== */
 
 PyDoc_STRVAR(module_doc,
-"KDTree implementation for fast neighbor searches in 3D structures.\n\
-This module implements three objects: KDTree, Point, and Neighbor. \n\
-Refer to their docstrings for more documentation on usage and implementation."
+"KDTree implementation for fast neighbor searches in 3D structures.\n\n\
+This module implements three objects: KDTree, Point, and Neighbor. Refer \
+to their docstrings for more documentation on usage and implementation."
 );
 
 static struct PyModuleDef moduledef = {
