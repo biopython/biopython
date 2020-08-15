@@ -266,7 +266,7 @@ class Entity:
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
-            self._generate_full_id()
+            self.full_id = self._generate_full_id()
         return self.full_id
 
     def transform(self, rot, tran):
