@@ -13,6 +13,6 @@ tests and style checks pass with these changes.
 already, or do not wish to be listed. (*This acknowledgement is optional.*)
 
 <!--- Briefly describe the changes included in this pull request below
- !--- starting with the words 'Closes issue #... --->
+ !--- starting with 'Closes issue #...' if appropriate --->
 
 Closes issue #...
