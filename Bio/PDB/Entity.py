@@ -384,6 +384,16 @@ class DisorderedEntityWrapper:
         return self.selected_child <= other
 
     # Public methods
+    def copy(self):
+        """Copy disorderd entity recursively."""
+        shallow = copy(self)
+        shallow.child_dict = {}
+        shallow.detach_parent()
+
+        for child in self.disordered_get_list():
+            shallow.disordered_add(child.copy())
+
+        return shallow
 
     def get_id(self):
         """Return the id."""
