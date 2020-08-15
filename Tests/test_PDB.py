@@ -1262,11 +1262,6 @@ class CopyTests(unittest.TestCase):
             self.assertIsNot(e.get_list()[0], ee.get_list()[0])
 
 
-def eprint(*args, **kwargs):
-    """Print to stderr."""
-    print(*args, file=sys.stderr, **kwargs)
-
-
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
