@@ -51,9 +51,9 @@ class DSSP_tool_test(unittest.TestCase):
     """Test calling DSSP from Bio.PDB."""
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
 
-        self.dssp_version = "0.0.0"
+        cls.dssp_version = "0.0.0"
         is_dssp_available = False
         # Check if DSSP is installed
         quiet_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.STDOUT}
@@ -63,7 +63,7 @@ class DSSP_tool_test(unittest.TestCase):
                 version_string = subprocess.check_output(
                     ["dssp", "--version"], universal_newlines=True
                 )
-                self.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 is_dssp_available = True
             except subprocess.CalledProcessError:
                 # Older versions of DSSP
@@ -74,16 +74,18 @@ class DSSP_tool_test(unittest.TestCase):
                 version_string = subprocess.check_output(
                     ["mkdssp", "--version"], universal_newlines=True
                 )
-                self.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                cls.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
                 is_dssp_available = True
             except OSError:
                 pass
 
         if not is_dssp_available:
-            self.skipTest("Install dssp if you want to use it from Biopython.")
+            raise unittest.SkipTest(
+                "Install dssp if you want to use it from Biopython."
+            )
 
-        self.pdbparser = PDBParser()
-        self.cifparser = MMCIFParser()
+        cls.pdbparser = PDBParser()
+        cls.cifparser = MMCIFParser()
 
     def test_dssp(self):
         """Test DSSP generation from PDB."""

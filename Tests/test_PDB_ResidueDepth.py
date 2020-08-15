@@ -25,17 +25,19 @@ class MSMS_tests(unittest.TestCase):
     """Test calling MSMS via Bio.PDB.ResidueDepth."""
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         # Check if MSMS is installed
         try:
             v = subprocess.check_output(
                 ["msms", "-h"], universal_newlines=True, stderr=subprocess.STDOUT
             )
         except OSError:
-            self.skipTest("Install MSMS if you want to use it in Biopython.")
+            raise unittest.SkipTest(
+                "Install MSMS if you want to use it from Biopython."
+            )
 
-        self.pdbparser = PDBParser()
-        self.cifparser = MMCIFParser()
+        cls.pdbparser = PDBParser()
+        cls.cifparser = MMCIFParser()
 
     def check_msms(self, prot_file, first_100_residues):
         """Wrap calls to MSMS and the respective tests."""
