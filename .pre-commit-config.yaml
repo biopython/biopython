@@ -40,3 +40,9 @@ repos:
     hooks:
     -   id: rstcheck
         args: [--report=warning]
+-   repo: https://github.com/PyCQA/doc8
+    rev: 0.8.1
+    hooks:
+    -   id: doc8
+        additional_dependencies: [pygments]
+        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt]
