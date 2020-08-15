@@ -51,7 +51,6 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
-from Bio.PDB.ResidueDepth import _get_atom_radius
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -1607,31 +1606,6 @@ class CopyTests(unittest.TestCase):
 def eprint(*args, **kwargs):
     """Print to stderr."""
     print(*args, file=sys.stderr, **kwargs)
-
-
-class ResidueDepthTests(unittest.TestCase):
-    """Tests for ResidueDepth module, except for running MSMS itself."""
-
-    def test_pdb_to_xyzr(self):
-        """Test generation of xyzr (atomic radii) file."""
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            p = PDBParser(PERMISSIVE=1)
-            structure = p.get_structure("example", "PDB/1A8O.pdb")
-
-        # Read radii produced with original shell script
-        with open("PDB/1A8O.xyzr") as handle:
-            msms_radii = []
-            for line in handle:
-                fields = line.split()
-                radius = float(fields[3])
-                msms_radii.append(radius)
-
-        model = structure[0]
-        biopy_radii = []
-        for atom in model.get_atoms():
-            biopy_radii.append(_get_atom_radius(atom, rtype="united"))
-        self.assertListEqual(msms_radii, biopy_radii)
 
 
 if __name__ == "__main__":
