@@ -142,9 +142,17 @@ class PDBParser:
     def _parse_coordinates(self, coords_trailer):
         """Parse the atomic data in the PDB file (PRIVATE)."""
         allowed_records = {
-            "ATOM  ", "HETATM", "MODEL ", "ENDMDL", "TER   ", "ANISOU",
-            "SIGATM", "SIGUIJ",  # older 2.3 format specs
-            "MASTER",  # bookkeeping records after coordinates
+            "ATOM  ",
+            "HETATM",
+            "MODEL ",
+            "ENDMDL",
+            "TER   ",
+            "ANISOU",
+            # These are older 2.3 format specs:
+            "SIGATM",
+            "SIGUIJ",
+            # bookkeeping records after coordinates:
+            "MASTER",
         }
 
         local_line_counter = 0
@@ -386,8 +394,7 @@ class PDBParser:
             elif record_type not in allowed_records:
                 warnings.warn(
                     "Ignoring unrecognized record '{}' at line {}".format(
-                        record_type,
-                        global_line_counter
+                        record_type, global_line_counter
                     ),
                     PDBConstructionWarning,
                 )

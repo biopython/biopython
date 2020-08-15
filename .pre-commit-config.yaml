@@ -5,26 +5,16 @@ repos:
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
-        exclude: ^Tests/
     -   id: check-json
     -   id: debug-statements
-    -   id: trailing-whitespace
-        files: \.py$
     -   id: end-of-file-fixer
         files: \.py$
-        exclude: ^Tests/
     -   id: mixed-line-ending
 -   repo: https://github.com/psf/black
     rev: 19.10b0
     hooks:
     -   id: black
         args: [--check]
-        additional_dependencies: [
-            'restructuredtext_lint',
-            'doc8',
-            'pygments',
-            'docutils==0.14'
-        ]
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:
@@ -32,14 +22,11 @@ repos:
         additional_dependencies: [
             'flake8-blind-except',
             'flake8-bugbear',
-            'flake8-commas',
             'flake8-comprehensions',
             'flake8-docstrings',
             'flake8-implicit-str-concat',
-            'flake8-pie',
             'flake8-quotes',
             'flake8-rst-docstrings',
-            'flake8-sfs',
             'pydocstyle>=5.0.0',
         ]
 -   repo: https://github.com/asottile/blacken-docs
@@ -48,3 +35,22 @@ repos:
     -   id: blacken-docs
         additional_dependencies: [black==19.10b0]
         exclude: ^.github/
+-   repo: https://github.com/myint/rstcheck
+    rev: ''
+    hooks:
+    -   id: rstcheck
+        args: [--report=warning]
+-   repo: https://github.com/PyCQA/doc8
+    rev: 0.8.1
+    hooks:
+    -   id: doc8
+        additional_dependencies: [pygments]
+        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt]
+-   repo: local
+    hooks:
+    -   id: doi-link-style
+        name: Enforce https://doi.org/ style
+        description: Check DOI link style, see https://www.crossref.org/display-guidelines/
+        entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
+        language: pygrep
+        files: \.(rst|tex)$
