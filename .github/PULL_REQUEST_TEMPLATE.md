@@ -4,8 +4,8 @@
 - [ ] I hereby agree to dual licence this and any previous contributions under both
 the _Biopython License Agreement_ **AND** the _BSD 3-Clause License_.
 
-- [ ] I have read the ``CONTRIBUTING.rst`` file, have run ``flake8`` locally, and
-understand that AppVeyor and TravisCI will be used to confirm the Biopython unit
+- [ ] I have read the ``CONTRIBUTING.rst`` file, have run ``pre-commit`` locally,
+and understand that AppVeyor and TravisCI will be used to confirm the Biopython unit
 tests and style checks pass with these changes.
 
 - [ ] I have added my name to the alphabetical contributors listings in the files
