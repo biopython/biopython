@@ -801,7 +801,7 @@ an optional external dependency on the mmtf-python library.
 Module Bio.pairwise2 has been re-written (contributed by Markus Piotrowski).
 It is now faster, addresses some problems with local alignments, and also
 now allows gap insertions after deletions, and vice versa, inspired by the
-http://dx.doi.org/10.1101/031500 preprint from Flouri et al.
+https://doi.org/10.1101/031500 preprint from Flouri et al.
 
 The two sample graphical tools SeqGui (Sequence Graphical User Interface)
 and xbbtools were rewritten (SeqGui) or updated (xbbtools) using the tkinter
@@ -1502,7 +1502,7 @@ as a Python re-implementation of chi2 was added as the Bio.Phylo.PAML module.
 
 Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
 format offering basic annotation support. See Schmitt et al (2011) in
-Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
+Briefings in Bioinformatics, https://doi.org/10.1093/bib/bbr025
 
 Bio.SeqIO now includes read support for ABI files ("Sanger" capillary
 sequencing trace files, containing called sequence with PHRED qualities).
