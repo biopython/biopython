@@ -313,7 +313,7 @@ class ParseReal(unittest.TestCase):
 
     def test_header(self):
         """Test if the parser populates header data."""
-        parser = MMCIFParser()
+        parser = MMCIFParser(QUIET=1)
 
         structure = parser.get_structure("example", "PDB/a_structure.cif")
         self.assertEqual("", structure.header["idcode"])
