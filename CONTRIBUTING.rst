@@ -34,28 +34,12 @@ with the notable exception of existing module names which are not lower case.
 - http://www.python.org/dev/peps/pep-0008/
 - http://www.python.org/dev/peps/pep-0257/
 
-We have adopted the code formating tool ``black`` to which automates a lot of
-coding style choices like line breaks and spacing.
+To facilitate style checking, we make use of ``pre-commit`` to automatically
+run various ``flake8`` plugins as well as ``black``. We use the continuous
+integration service TravisCI to run these checks, but we strongly suggest you
+install and run ``pre-commit`` in your local machine (see below).
 
-We use the tool ``flake8`` for automating our code style checks, together with
-various plugins which can be installed as follows::
-
-    $ pip install flake8 flake8-docstrings flake8-black flake8-blind-except flake8-rst-docstrings flake8-comprehensions flake8-quotes flake8-bugbear flake8-implicit-str-concat
-
-We use the continuous integration service TravisCI to run these ``flake8``
-checks, but it is better to run them locally before making a pull request.
-We currently strongly suggest you then install the ``flake8`` git pre-commit
-hook which will check our basic coding conventions as you work::
-
-    $ flake8 --install-hook git
-    $ git config --bool flake8.strict true
-
-For testing, you can also run ``flake8`` directly from the command line as
-follows::
-
-    $ flake8
-
-For docstrings (Python's in-code documentation) in addition to PEP257 we are
+For docstrings (Python's in-code documentation), in addition to PEP257 we are
 using reStructuredText (RST) markup language which allows basic formatting
 like *italics* and **bold** once rendered into HTML webpages for our online
 API documentation.
@@ -80,16 +64,15 @@ http://biopython.org/DIST/docs/tutorial/Tutorial.html
 Local Development
 -----------------
 
-To simplify the contribution, we provide a `pre-commit
+As mentioned above, to simplify your contributions, we provide a `pre-commit
 <https://pre-commit.com/>`_ configuration. Pre-commit is a Python package which
 automatically hooks into git. When you run "git commit" within the biopython
-repository, it will automatically run various fast checks and automatically
-apply simple formatting changes such as black before the commit happens. In
-order to install it, run
+repository, it will automatically run various fast checks (including flake8 and
+black) before the commit happens. In order to install it, run
 
     $ pip install pre-commit
 
-    # Acitvate pre-commit for biopython
+    # Activate pre-commit for biopython
     $ cd biopython-repository
     $ pre-commit install
 
