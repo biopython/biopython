@@ -575,33 +575,6 @@ class ParseTest(unittest.TestCase):
             "N C C O C C C N C N N N C C O C S",
         )
 
-    def test_pdbio_write_truncated(self):
-        """Test parsing of truncated lines."""
-        io = PDBIO()
-        struct = self.structure
-        # Write to temp file
-        io.set_structure(struct)
-        filenumber, filename = tempfile.mkstemp()
-        os.close(filenumber)
-        try:
-            io.save(filename)
-            # Check if there are lines besides 'ATOM', 'TER' and 'END'
-            with open(filename) as handle:
-                record_set = {l[0:6] for l in handle}
-            record_set -= {
-                "ATOM  ",
-                "HETATM",
-                "MODEL ",
-                "ENDMDL",
-                "TER\n",
-                "TER   ",
-                "END\n",
-                "END   ",
-            }
-            self.assertEqual(record_set, set())
-        finally:
-            os.remove(filename)
-
     # Tests for sorting methods
     def test_comparison_entities(self):
         """Test comparing and sorting the several SMCRA objects."""
