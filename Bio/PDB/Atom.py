@@ -495,3 +495,11 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy > self.last_occupancy:
             self.last_occupancy = occupancy
             self.disordered_select(altloc)
+
+    def transform(self, rot, tran):
+        """Apply rotation and translation to all children.
+
+        See the documentation of Atom.transform for details.
+        """
+        for child in self:
+            child.coord = numpy.dot(child.coord, rot) + tran
