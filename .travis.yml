@@ -18,7 +18,9 @@ services:
   - mysql
   - postgresql
 language: python
-cache: pip
+cache:
+ - pip
+ - $HOME/.cache/pre-commit
 matrix:
   include:
     - stage: basics
