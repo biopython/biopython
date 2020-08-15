@@ -28,10 +28,10 @@ class WriteTest(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.io = PDBIO()
+        self.parser = PDBParser(PERMISSIVE=1)
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            self.parser = PDBParser(PERMISSIVE=1)
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
 
     def test_pdbio_write_structure(self):
@@ -262,6 +262,43 @@ class WriteTest(unittest.TestCase):
                 "END   ",
             }
             self.assertEqual(record_set, set())
+        finally:
+            os.remove(filename)
+
+    def test_model_numbering(self):
+        """Preserve model serial numbers during I/O."""
+
+        def confirm_numbering(struct):
+            self.assertEqual(len(struct), 3)
+            for idx, model in enumerate(struct):
+                self.assertEqual(model.serial_num, idx + 1)
+                self.assertEqual(model.serial_num, model.id + 1)
+
+        def confirm_single_end(fname):
+            """Ensure there is only one END statement in multi-model files."""
+            with open(fname) as handle:
+                end_stment = []
+                for iline, line in enumerate(handle):
+                    if line.strip() == "END":
+                        end_stment.append((line, iline))
+            self.assertEqual(len(end_stment), 1)  # Only one?
+            self.assertEqual(end_stment[0][1], iline)  # Last line of the file?
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            struct1 = self.parser.get_structure("1lcd", "PDB/1LCD.pdb")
+
+        confirm_numbering(struct1)
+
+        # Round trip: serialize and parse again
+        self.io.set_structure(struct1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            self.io.save(filename)
+            struct2 = self.parser.get_structure("1lcd", filename)
+            confirm_numbering(struct2)
+            confirm_single_end(filename)
         finally:
             os.remove(filename)
 
