@@ -72,6 +72,9 @@ class MMCIFIO(StructureIO):
     def set_dict(self, dic):
         """Set the mmCIF dictionary to be written out."""
         self.dic = dic
+        # Remove self.structure if it has been set
+        if hasattr(self, "structure"):
+            delattr(self, "structure")
 
     def save(self, filepath, select=_select, preserve_atom_numbering=False):
         """Save the structure to a file.
