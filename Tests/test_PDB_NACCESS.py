@@ -22,12 +22,6 @@ import warnings
 
 try:
     import numpy
-    from numpy import dot  # Missing on old PyPy's micronumpy
-
-    del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
-
-    del svd, det
 except ImportError:
     from Bio import MissingPythonDependencyError
 
