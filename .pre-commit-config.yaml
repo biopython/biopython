@@ -5,12 +5,10 @@ repos:
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
-        exclude: ^Tests/
     -   id: check-json
     -   id: debug-statements
     -   id: end-of-file-fixer
         files: \.py$
-        exclude: ^Tests/
     -   id: mixed-line-ending
 -   repo: https://github.com/psf/black
     rev: 19.10b0
