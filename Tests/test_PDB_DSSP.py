@@ -36,35 +36,6 @@ from Bio.PDB import PDBParser, MMCIFParser
 from Bio.PDB import DSSP, make_dssp_dict
 
 
-DSSP_VERSION = "0.0.0"  # to be updated by get_dssp_version and used in tests
-
-
-def get_dssp_version():
-    """Return the DSSP version, if known, as DSSP <2.2.0 does not support mmcif files."""
-    global DSSP_VERSION
-
-    # Check if DSSP is installed
-    quiet_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.STDOUT}
-    try:
-        try:
-            # Newer versions of DSSP
-            version_string = subprocess.check_output(
-                ["dssp", "--version"], universal_newlines=True
-            )
-            DSSP_VERSION = re.search(r"\s*([\d.]+)", version_string).group(1)
-        except subprocess.CalledProcessError:
-            # Older versions of DSSP
-            subprocess.check_call(["dssp", "-h"], **quiet_kwargs)
-    except OSError:
-        try:
-            version_string = subprocess.check_output(
-                ["mkdssp", "--version"], universal_newlines=True
-            )
-            DSSP_VERSION = re.search(r"\s*([\d.]+)", version_string).group(1)
-        except OSError:
-            pass
-
-
 def will_it_float(s):  # well played, whoever this was :)
     """Convert the input into a float if it is a number.
 
@@ -79,15 +50,41 @@ def will_it_float(s):  # well played, whoever this was :)
 class DSSP_tool_test(unittest.TestCase):
     """Test calling DSSP from Bio.PDB."""
 
-    def setUp(self):
-        get_dssp_version()
+    @classmethod
+    def setUpClass(self):
+
+        self.dssp_version = "0.0.0"
+        is_dssp_available = False
+        # Check if DSSP is installed
+        quiet_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.STDOUT}
+        try:
+            try:
+                # Newer versions of DSSP
+                version_string = subprocess.check_output(
+                    ["dssp", "--version"], universal_newlines=True
+                )
+                self.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                is_dssp_available = True
+            except subprocess.CalledProcessError:
+                # Older versions of DSSP
+                subprocess.check_call(["dssp", "-h"], **quiet_kwargs)
+                is_dssp_available = True
+        except OSError:
+            try:
+                version_string = subprocess.check_output(
+                    ["mkdssp", "--version"], universal_newlines=True
+                )
+                self.dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                is_dssp_available = True
+            except OSError:
+                pass
+
+        if not is_dssp_available:
+            self.skipTest("Install dssp if you want to use it from Biopython.")
 
         self.pdbparser = PDBParser()
         self.cifparser = MMCIFParser()
 
-    @unittest.skipIf(
-        DSSP_VERSION == "0.0.0", "Install dssp if you want to use it from Biopython."
-    )
     def test_dssp(self):
         """Test DSSP generation from PDB."""
         pdbfile = "PDB/2BEG.pdb"
@@ -96,17 +93,21 @@ class DSSP_tool_test(unittest.TestCase):
         self.assertEqual(len(dssp), 130)
 
     # Only run mmCIF tests if DSSP version installed supports mmcif
-    @unittest.skipIf(DSSP_VERSION < StrictVersion("2.2.0"), "DSSP <= 2.2.0")
     def test_dssp_with_mmcif_file(self):
         """Test DSSP generation from MMCIF."""
+        if self.dssp_version < StrictVersion("2.2.0"):
+            self.skipTest("Test requires DSSP version 2.2.0 or greater")
+
         pdbfile = "PDB/2BEG.cif"
         model = self.cifparser.get_structure("2BEG", pdbfile)[0]
         dssp = DSSP(model, pdbfile)
         self.assertEqual(len(dssp), 130)
 
-    @unittest.skipIf(DSSP_VERSION < StrictVersion("2.2.0"), "DSSP <= 2.2.0")
     def test_dssp_with_mmcif_file_and_nonstandard_residues(self):
         """Test DSSP generation from MMCIF with non-standard residues."""
+        if self.dssp_version < StrictVersion("2.2.0"):
+            self.skipTest("Test requires DSSP version 2.2.0 or greater")
+
         pdbfile = "PDB/1AS5.cif"
         model = self.cifparser.get_structure("1AS5", pdbfile)[0]
         dssp = DSSP(model, pdbfile)
