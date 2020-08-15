@@ -46,3 +46,11 @@ repos:
     -   id: doc8
         additional_dependencies: [pygments]
         args: [--quiet,--ignore-path=Doc/examples/ec_*.txt]
+-   repo: local
+    hooks:
+    -   id: doi-link-style
+        name: Enforce https://doi.org/ style
+        description: Check DOI link style, see https://www.crossref.org/display-guidelines/
+        entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
+        language: pygrep
+        files: \.(rst|tex)$
