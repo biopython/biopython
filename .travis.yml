@@ -33,7 +33,7 @@ matrix:
       before_install: echo "Going to run style checks using pre-commit"
       install:
         - pip install pre-commit
-        - pre-commit install
+        - pre-commit install --install-hooks
       script:
         - pre-commit run -a
     - stage: basics
