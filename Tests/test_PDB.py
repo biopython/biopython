@@ -37,20 +37,10 @@ except ImportError:
 
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
-from Bio.PDB import (
-    PDBParser,
-    PPBuilder,
-    CaPPBuilder,
-    PDBIO,
-    Select,
-    MMCIFParser,
-    MMCIFIO,
-)
-from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+from Bio.PDB import PDBParser
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
-from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -184,42 +174,6 @@ class ParseTest(unittest.TestCase):
             warnings.simplefilter("ignore", PDBConstructionWarning)
             p = PDBParser(PERMISSIVE=1)
             self.structure = p.get_structure("example", "PDB/a_structure.pdb")
-
-    def test_c_n(self):
-        """Extract polypeptides using C-N."""
-        ppbuild = PPBuilder()
-        polypeptides = ppbuild.build_peptides(self.structure[1])
-        self.assertEqual(len(polypeptides), 2)
-        pp = polypeptides[0]
-        # Check the start and end positions
-        self.assertEqual(pp[0].get_id()[1], 2)
-        self.assertEqual(pp[-1].get_id()[1], 86)
-        # Check the sequence
-        s = pp.get_sequence()
-        self.assertIsInstance(s, Seq)
-        self.assertEqual(
-            "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
-            "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
-            str(s),
-        )
-
-    def test_ca_ca(self):
-        """Extract polypeptides using CA-CA."""
-        ppbuild = CaPPBuilder()
-        polypeptides = ppbuild.build_peptides(self.structure[1])
-        self.assertEqual(len(polypeptides), 2)
-        pp = polypeptides[0]
-        # Check the start and end positions
-        self.assertEqual(pp[0].get_id()[1], 2)
-        self.assertEqual(pp[-1].get_id()[1], 86)
-        # Check the sequence
-        s = pp.get_sequence()
-        self.assertIsInstance(s, Seq)
-        self.assertEqual(
-            "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
-            "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
-            str(s),
-        )
 
     def test_structure(self):
         """Verify the structure of the parsed example PDB file."""
@@ -715,57 +669,6 @@ class ParseReal(unittest.TestCase):
                 "After N, CA, C, O should be alphabet: %s" % new,
             )
 
-    def test_c_n(self):
-        """Extract polypeptides from 1A80."""
-        parser = PDBParser(PERMISSIVE=False)
-        structure = parser.get_structure("example", "PDB/1A8O.pdb")
-        self.assertEqual(len(structure), 1)
-        for ppbuild in [PPBuilder(), CaPPBuilder()]:
-            # ==========================================================
-            # First try allowing non-standard amino acids,
-            polypeptides = ppbuild.build_peptides(structure[0], False)
-            self.assertEqual(len(polypeptides), 1)
-            pp = polypeptides[0]
-            # Check the start and end positions
-            self.assertEqual(pp[0].get_id()[1], 151)
-            self.assertEqual(pp[-1].get_id()[1], 220)
-            # Check the sequence
-            s = pp.get_sequence()
-            self.assertIsInstance(s, Seq)
-            # Here non-standard MSE are shown as M
-            self.assertEqual(
-                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
-                "NANPDCKTILKALGPGATLEEMMTACQG",
-                str(s),
-            )
-            # ==========================================================
-            # Now try strict version with only standard amino acids
-            # Should ignore MSE 151 at start, and then break the chain
-            # at MSE 185, and MSE 214,215
-            polypeptides = ppbuild.build_peptides(structure[0], True)
-            self.assertEqual(len(polypeptides), 3)
-            # First fragment
-            pp = polypeptides[0]
-            self.assertEqual(pp[0].get_id()[1], 152)
-            self.assertEqual(pp[-1].get_id()[1], 184)
-            s = pp.get_sequence()
-            self.assertIsInstance(s, Seq)
-            self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
-            # Second fragment
-            pp = polypeptides[1]
-            self.assertEqual(pp[0].get_id()[1], 186)
-            self.assertEqual(pp[-1].get_id()[1], 213)
-            s = pp.get_sequence()
-            self.assertIsInstance(s, Seq)
-            self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
-            # Third fragment
-            pp = polypeptides[2]
-            self.assertEqual(pp[0].get_id()[1], 216)
-            self.assertEqual(pp[-1].get_id()[1], 220)
-            s = pp.get_sequence()
-            self.assertIsInstance(s, Seq)
-            self.assertEqual("TACQG", str(s))
-
     def test_strict(self):
         """Parse 1A8O.pdb file in strict mode."""
         parser = PDBParser(PERMISSIVE=False)
@@ -898,42 +801,6 @@ class ParseReal(unittest.TestCase):
         parser = PDBParser(PERMISSIVE=False)
         with self.assertRaises(PDBConstructionException):
             _ = parser.get_structure("example", StringIO(data))
-
-    def test_model_numbering(self):
-        """Preserve model serial numbers during I/O."""
-
-        def confirm_numbering(struct):
-            self.assertEqual(len(struct), 3)
-            for idx, model in enumerate(struct):
-                self.assertEqual(model.serial_num, idx + 1)
-                self.assertEqual(model.serial_num, model.id + 1)
-
-        def confirm_single_end(fname):
-            """Ensure there is only one END statement in multi-model files."""
-            with open(fname) as handle:
-                end_stment = []
-                for iline, line in enumerate(handle):
-                    if line.strip() == "END":
-                        end_stment.append((line, iline))
-            self.assertEqual(len(end_stment), 1)  # Only one?
-            self.assertEqual(end_stment[0][1], iline)  # Last line of the file?
-
-        parser = PDBParser(QUIET=1)
-        struct1 = parser.get_structure("1lcd", "PDB/1LCD.pdb")
-        confirm_numbering(struct1)
-
-        # Round trip: serialize and parse again
-        io = PDBIO()
-        io.set_structure(struct1)
-        filenumber, filename = tempfile.mkstemp()
-        os.close(filenumber)
-        try:
-            io.save(filename)
-            struct2 = parser.get_structure("1lcd", filename)
-            confirm_numbering(struct2)
-            confirm_single_end(filename)
-        finally:
-            os.remove(filename)
 
 
 class Atom_Element(unittest.TestCase):
