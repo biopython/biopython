@@ -1,4 +1,5 @@
 # Copyright 2017 by Francesco Gastaldello. All rights reserved.
+# Revisions copyright 2020 Joao Rodrigues. All rights reserved.
 #
 # Converted by Francesco Gastaldello from an older unit test copyright 2004
 # by Thomas Hamelryck.
@@ -7,26 +8,73 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
+
 """Unit tests for the Bio.PDB.Polypetide module."""
 
 import unittest
 
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder
+from Bio.Seq import Seq
 
 
 class PolypeptideTests(unittest.TestCase):
     """Test Polypetide module."""
 
-    def test_polypeptide(self):
-        """Tests on polypetide class and methods."""
-        p = PDBParser(PERMISSIVE=True)
+    @classmethod
+    def setUpClass(self):
         pdb1 = "PDB/1A8O.pdb"
-        s = p.get_structure("scr", pdb1)
+        self.parser = PDBParser(PERMISSIVE=True)
+        self.structure = self.parser.get_structure("scr", pdb1)
+
+    def test_ppbuilder_real(self):
+        """Test PPBuilder on real PDB file."""
         ppb = PPBuilder()
-        pp = ppb.build_peptides(s)
-        self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
-        self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
-        self.assertEqual(str(pp[2].get_sequence()), "TACQG")
+        pp = ppb.build_peptides(self.structure)
+
+        self.assertEqual(len(pp), 3)
+
+        # Check termini
+        self.assertEqual(pp[0][0].get_id()[1], 152)
+        self.assertEqual(pp[0][-1].get_id()[1], 184)
+        self.assertEqual(pp[1][0].get_id()[1], 186)
+        self.assertEqual(pp[1][-1].get_id()[1], 213)
+        self.assertEqual(pp[2][0].get_id()[1], 216)
+        self.assertEqual(pp[2][-1].get_id()[1], 220)
+
+        # Now check sequences
+        pp0_seq = pp[0].get_sequence()
+        pp1_seq = pp[1].get_sequence()
+        pp2_seq = pp[2].get_sequence()
+        self.assertIsInstance(pp0_seq, Seq)
+        self.assertEqual(str(pp0_seq), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
+        self.assertEqual(str(pp1_seq), "TETLLVQNANPDCKTILKALGPGATLEE")
+        self.assertEqual(str(pp2_seq), "TACQG")
+
+    def test_ppbuilder_real_nonstd(self):
+        """Test PPBuilder on real PDB file allowing non-standard amino acids."""
+        ppb = PPBuilder()
+        pp = ppb.build_peptides(self.structure, False)
+
+        self.assertEqual(len(pp), 1)
+
+        # Check the start and end positions
+        self.assertEqual(pp[0][0].get_id()[1], 151)
+        self.assertEqual(pp[0][-1].get_id()[1], 220)
+
+        # Check the sequence
+        s = pp[0].get_sequence()
+        self.assertIsInstance(s, Seq)
+        # Here non-standard MSE are shown as M
+        self.assertEqual(
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
+            str(s),
+        )
+
+    def test_ppbuilder_torsion(self):
+        """Test phi/psi angles calculated with PPBuilder."""
+        ppb = PPBuilder()
+        pp = ppb.build_peptides(self.structure)
+
         phi_psi = pp[0].get_phi_psi_list()
         self.assertEqual(phi_psi[0][0], None)
         self.assertAlmostEqual(phi_psi[0][1], -0.46297171497725553, places=3)
@@ -34,6 +82,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(phi_psi[1][1], 2.1337707832637109, places=3)
         self.assertAlmostEqual(phi_psi[2][0], -2.4052232743651878, places=3)
         self.assertAlmostEqual(phi_psi[2][1], 2.3807316946081554, places=3)
+
         phi_psi = pp[1].get_phi_psi_list()
         self.assertEqual(phi_psi[0][0], None)
         self.assertAlmostEqual(phi_psi[0][1], -0.6810077089092923, places=3)
@@ -41,6 +90,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(phi_psi[1][1], -0.58689987042756309, places=3)
         self.assertAlmostEqual(phi_psi[2][0], -1.7467679151684763, places=3)
         self.assertAlmostEqual(phi_psi[2][1], -1.5655066256698336, places=3)
+
         phi_psi = pp[2].get_phi_psi_list()
         self.assertEqual(phi_psi[0][0], None)
         self.assertAlmostEqual(phi_psi[0][1], -0.73222884210889716, places=3)
@@ -48,11 +98,18 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(phi_psi[1][1], -0.69681334592782884, places=3)
         self.assertAlmostEqual(phi_psi[2][0], -1.8497413300164958, places=3)
         self.assertAlmostEqual(phi_psi[2][1], 0.34762889834809058, places=3)
+
+    def test_cappbuilder_real(self):
+        """Test CaPPBuilder on real PDB file."""
         ppb = CaPPBuilder()
-        pp = ppb.build_peptides(s)
-        self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
-        self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
-        self.assertEqual(str(pp[2].get_sequence()), "TACQG")
+        pp = ppb.build_peptides(self.structure)
+
+        pp0_seq = pp[0].get_sequence()
+        pp1_seq = pp[1].get_sequence()
+        pp2_seq = pp[2].get_sequence()
+        self.assertEqual(str(pp0_seq), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
+        self.assertEqual(str(pp1_seq), "TETLLVQNANPDCKTILKALGPGATLEE")
+        self.assertEqual(str(pp2_seq), "TACQG")
         self.assertEqual(
             [ca.serial_number for ca in pp[0].get_ca_list()],
             [
@@ -91,6 +148,32 @@ class PolypeptideTests(unittest.TestCase):
                 284,
             ],
         )
+
+    def test_cappbuilder_real_nonstd(self):
+        """Test CaPPBuilder on real PDB file allowing non-standard amino acids."""
+        ppb = CaPPBuilder()
+        pp = ppb.build_peptides(self.structure, False)
+
+        self.assertEqual(len(pp), 1)
+
+        # Check the start and end positions
+        self.assertEqual(pp[0][0].get_id()[1], 151)
+        self.assertEqual(pp[0][-1].get_id()[1], 220)
+
+        # Check the sequence
+        s = pp[0].get_sequence()
+        self.assertIsInstance(s, Seq)
+        # Here non-standard MSE are shown as M
+        self.assertEqual(
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
+            str(s),
+        )
+
+    def test_cappbuilder_tau(self):
+        """Test tau angles calculated with CaPPBuilder."""
+        ppb = CaPPBuilder()
+        pp = ppb.build_peptides(self.structure)
+
         taus = pp[1].get_tau_list()
         self.assertAlmostEqual(taus[0], 0.3597907225123525, places=3)
         self.assertAlmostEqual(taus[1], 0.43239284636769254, places=3)
