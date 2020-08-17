@@ -266,7 +266,7 @@ class Entity:
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
-            self._reset_full_id()
+            self.full_id = self._generate_full_id()
         return self.full_id
 
     def transform(self, rot, tran):
@@ -384,6 +384,16 @@ class DisorderedEntityWrapper:
         return self.selected_child <= other
 
     # Public methods
+    def copy(self):
+        """Copy disorderd entity recursively."""
+        shallow = copy(self)
+        shallow.child_dict = {}
+        shallow.detach_parent()
+
+        for child in self.disordered_get_list():
+            shallow.disordered_add(child.copy())
+
+        return shallow
 
     def get_id(self):
         """Return the id."""

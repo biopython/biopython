@@ -369,7 +369,10 @@ class Atom:
         the atom and consists of the following elements:
         (structure id, model id, chain id, residue id, atom name, altloc)
         """
-        return self.parent.get_full_id() + ((self.name, self.altloc),)
+        try:
+            return self.parent.get_full_id() + ((self.name, self.altloc),)
+        except AttributeError:
+            return (None, None, None, None, self.name, self.altloc)
 
     def get_coord(self):
         """Return atomic coordinates."""
@@ -492,3 +495,11 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy > self.last_occupancy:
             self.last_occupancy = occupancy
             self.disordered_select(altloc)
+
+    def transform(self, rot, tran):
+        """Apply rotation and translation to all children.
+
+        See the documentation of Atom.transform for details.
+        """
+        for child in self:
+            child.coord = numpy.dot(child.coord, rot) + tran
