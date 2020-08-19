@@ -109,10 +109,11 @@ class MMCIFParser:
         self._update_header_entry(
             "resolution", ["_refine.ls_d_res_high", "_refine_hist.d_res_high"]
         )
-        try:
-            self.header["resolution"] = float(self.header["resolution"])
-        except ValueError:
-            self.header["resolution"] = None
+        if self.header["resolution"] is not None:
+            try:
+                self.header["resolution"] = float(self.header["resolution"])
+            except ValueError:
+                self.header["resolution"] = None
 
         return self.header
 
