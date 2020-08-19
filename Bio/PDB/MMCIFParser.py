@@ -92,7 +92,7 @@ class MMCIFParser:
             "idcode": "",
             "deposition_date": "",
             "structure_method": "",
-            "resolution": 0.0,
+            "resolution": None,
         }
 
         self._update_header_entry(
@@ -109,7 +109,10 @@ class MMCIFParser:
         self._update_header_entry(
             "resolution", ["_refine.ls_d_res_high", "_refine_hist.d_res_high"]
         )
-        self.header["resolution"] = float(self.header["resolution"])
+        try:
+            self.header["resolution"] = float(self.header["resolution"])
+        except ValueError:
+            self.header["resolution"] = None
 
         return self.header
 
