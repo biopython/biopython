@@ -236,7 +236,7 @@ class XdnaWriter(SequenceWriter):
         try:
             record = next(records)
         except StopIteration:
-            raise ValueError("Must have one sequence")
+            raise ValueError("Must have one sequence") from None
 
         try:
             next(records)

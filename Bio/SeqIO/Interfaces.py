@@ -58,7 +58,7 @@ class SequenceIterator(ABC):
                         "%s files must be opened in binary mode." % fmt
                     ) from None
             else:
-                raise ValueError("Unknown mode '%s'" % mode)
+                raise ValueError("Unknown mode '%s'" % mode) from None
             self.stream = source
             self.should_close_stream = False
         try:

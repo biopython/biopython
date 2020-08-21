@@ -308,7 +308,7 @@ def _sff_file_header(handle):
             flowgram_format,
         ) = struct.unpack(fmt, data)
     except TypeError:
-        raise StreamModeError("SFF files must be opened in binary mode.")
+        raise StreamModeError("SFF files must be opened in binary mode.") from None
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
@@ -1166,7 +1166,7 @@ class SffWriter(SequenceWriter):
                     "A handle with a seek/tell methods is required in order "
                     "to record the total record count in the file header "
                     "(once it is known at the end)."
-                )
+                ) from None
         if self._index is not None and not (
             hasattr(self.handle, "seek") and hasattr(self.handle, "tell")
         ):
@@ -1197,7 +1197,7 @@ class SffWriter(SequenceWriter):
             self._flow_chars = record.annotations["flow_chars"].encode()
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
-            raise ValueError("Missing SFF flow information")
+            raise ValueError("Missing SFF flow information") from None
         self.write_header()
         self.write_record(record)
         count = 1
@@ -1366,7 +1366,9 @@ class SffWriter(SequenceWriter):
         try:
             quals = record.letter_annotations["phred_quality"]
         except KeyError:
-            raise ValueError("Missing PHRED qualities information for %s" % record.id)
+            raise ValueError(
+                "Missing PHRED qualities information for %s" % record.id
+            ) from None
         # Flow
         try:
             flow_values = record.annotations["flow_values"]
@@ -1377,9 +1379,11 @@ class SffWriter(SequenceWriter):
             ):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
-            raise ValueError("Missing SFF flow information for %s" % record.id)
+            raise ValueError(
+                "Missing SFF flow information for %s" % record.id
+            ) from None
         except AttributeError:
-            raise ValueError("Header not written yet?")
+            raise ValueError("Header not written yet?") from None
         # Clipping
         try:
             clip_qual_left = record.annotations["clip_qual_left"]
@@ -1405,7 +1409,9 @@ class SffWriter(SequenceWriter):
                     "Negative SFF clip_adapter_right value for %s" % record.id
                 )
         except KeyError:
-            raise ValueError("Missing SFF clipping information for %s" % record.id)
+            raise ValueError(
+                "Missing SFF clipping information for %s" % record.id
+            ) from None
 
         # Capture information for index
         if self._index is not None:
