@@ -315,6 +315,7 @@ class ParseReal(unittest.TestCase):
         """Test if the parser populates header data."""
         parser = MMCIFParser(QUIET=1)
 
+        # test default values
         structure = parser.get_structure("example", "PDB/a_structure.cif")
         self.assertEqual("", structure.header["idcode"])
         self.assertEqual("", structure.header["head"])
@@ -322,12 +323,17 @@ class ParseReal(unittest.TestCase):
         self.assertEqual("", structure.header["structure_method"])
         self.assertEqual(None, structure.header["resolution"])
 
+        # test extracting fields
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual("1A8O", structure.header["idcode"])
         self.assertEqual("Viral protein", structure.header["head"])
         self.assertEqual("", structure.header["deposition_date"])
         self.assertEqual("X-RAY DIFFRACTION", structure.header["structure_method"])
         self.assertEqual(1.7, structure.header["resolution"])
+
+        # test not confused by '.'
+        structure = parser.get_structure("example", "PDB/1SSU_mod.cif")
+        self.assertEqual(None, structure.header["resolution"])
 
 
 class CIFtoPDB(unittest.TestCase):

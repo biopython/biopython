@@ -1,5 +1,8 @@
 data_1SSU
 #
+_refine.ls_d_res_high                            . 
+_refine.ls_d_res_low                             ? 
+#
 loop_
 _atom_site.group_PDB
 _atom_site.id
