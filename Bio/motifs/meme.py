@@ -75,17 +75,16 @@ class Motif(motifs.Motif):
 class Instance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof."""
 
-    def __new__(cls, *args, **kwds):
+    def __init__(self, *args, **kwds):
         """Initialize the class."""
-        seq = super().__new__(cls, *args, **kwds)
-        seq.sequence_name = ""
-        seq.sequence_id = ""
-        seq.start = 0
-        seq.pvalue = 1.0
-        seq.strand = 0
-        seq.length = 0
-        seq.motif_name = ""
-        return seq
+        Seq.Seq.__init__(self, *args, **kwds)
+        self.sequence_name = ""
+        self.sequence_id = ""
+        self.start = 0
+        self.pvalue = 1.0
+        self.strand = 0
+        self.length = 0
+        self.motif_name = ""
 
 
 class Record(list):

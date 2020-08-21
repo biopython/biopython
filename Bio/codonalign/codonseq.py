@@ -51,7 +51,7 @@ class CodonSeq(Seq):
 
     """
 
-    def __new__(cls, data="", gap_char="-", rf_table=None):
+    def __init__(self, data="", gap_char="-", rf_table=None):
         """Initialize the class."""
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
@@ -65,21 +65,21 @@ class CodonSeq(Seq):
         #   feature ensures the rf_table is independent of where the
         #   codon sequence appears in the alignment
 
-        seq = super().__new__(cls, data.upper())
-        seq.gap_char = gap_char
+        Seq.__init__(self, data.upper())
+        self.gap_char = gap_char
 
         # check the length of the alignment to be a triple
         if rf_table is None:
-            length = len(seq)
+            length = len(self)
             if length % 3 != 0:
                 raise ValueError(
                     "Sequence length is not a multiple of "
                     "three (i.e. a whole number of codons)"
                 )
-            seq.rf_table = list(range(0, length - seq.count(gap_char), 3))
+            self.rf_table = list(range(0, length - self.count(gap_char), 3))
         else:
-            # if gap_char in seq:
-            #    assert len(seq) % 3 == 0, \
+            # if gap_char in self:
+            #    assert  len(self) % 3 == 0, \
             #            "Gapped sequence length is not a triple number"
             if not isinstance(rf_table, (tuple, list)):
                 raise TypeError("rf_table should be a tuple or list object")
@@ -89,8 +89,7 @@ class CodonSeq(Seq):
                     "that specify the codon positions of "
                     "the sequence"
                 )
-            seq.rf_table = rf_table
-        return seq
+            self.rf_table = rf_table
 
     def get_codon(self, index):
         """Get the index codon from the sequence."""

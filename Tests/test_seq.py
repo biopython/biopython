@@ -950,7 +950,7 @@ class TestTranslating(unittest.TestCase):
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable."""
         seq = Seq.Seq("ATCGTA")
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             seq.translate(table=ambiguous_dna_complement)
 
     def test_translation_of_string(self):
