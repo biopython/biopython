@@ -1366,7 +1366,9 @@ class SffWriter(SequenceWriter):
         try:
             quals = record.letter_annotations["phred_quality"]
         except KeyError:
-            raise ValueError("Missing PHRED qualities information for %s" % record.id) from None
+            raise ValueError(
+                "Missing PHRED qualities information for %s" % record.id
+            ) from None
         # Flow
         try:
             flow_values = record.annotations["flow_values"]
@@ -1377,7 +1379,9 @@ class SffWriter(SequenceWriter):
             ):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
-            raise ValueError("Missing SFF flow information for %s" % record.id) from None
+            raise ValueError(
+                "Missing SFF flow information for %s" % record.id
+            ) from None
         except AttributeError:
             raise ValueError("Header not written yet?") from None
         # Clipping
@@ -1405,7 +1409,9 @@ class SffWriter(SequenceWriter):
                     "Negative SFF clip_adapter_right value for %s" % record.id
                 )
         except KeyError:
-            raise ValueError("Missing SFF clipping information for %s" % record.id) from None
+            raise ValueError(
+                "Missing SFF clipping information for %s" % record.id
+            ) from None
 
         # Capture information for index
         if self._index is not None:
