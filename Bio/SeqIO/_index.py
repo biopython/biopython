@@ -565,7 +565,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                     # Ignore blank lines
                     continue
                 else:
-                    raise err
+                    raise
             else:
                 yield key.decode(), start_offset, len(line)
 

@@ -536,7 +536,7 @@ def _get_phred_quality(record):
         raise ValueError(
             "No suitable quality scores found in "
             "letter_annotations of SeqRecord (id=%s)." % record.id
-        )
+        ) from None
 
 
 # Only map 0 to 93, we need to give a warning on truncating at 93
@@ -642,7 +642,7 @@ def _get_sanger_quality_str(record):
         raise ValueError(
             "No suitable quality scores found in "
             "letter_annotations of SeqRecord (id=%s)." % record.id
-        )
+        ) from None
     # Try and use the precomputed mapping:
     try:
         return "".join(_solexa_to_sanger_quality_str[qs] for qs in qualities)
@@ -717,7 +717,7 @@ def _get_illumina_quality_str(record):
         raise ValueError(
             "No suitable quality scores found in "
             "letter_annotations of SeqRecord (id=%s)." % record.id
-        )
+        ) from None
     # Try and use the precomputed mapping:
     try:
         return "".join(_solexa_to_illumina_quality_str[qs] for qs in qualities)
@@ -792,7 +792,7 @@ def _get_solexa_quality_str(record):
         raise ValueError(
             "No suitable quality scores found in "
             "letter_annotations of SeqRecord (id=%s)." % record.id
-        )
+        ) from None
     # Try and use the precomputed mapping:
     try:
         return "".join(_phred_to_solexa_quality_str[qp] for qp in qualities)
@@ -1622,9 +1622,9 @@ class QualPhredWriter(SequenceWriter):
             qualities_strs = [("%i" % round(q, 0)) for q in qualities]
         except TypeError as e:
             if None in qualities:
-                raise TypeError("A quality value of None was found")
+                raise TypeError("A quality value of None was found") from None
             else:
-                raise e
+                raise
 
         if wrap > 5:
             # Fast wrapping
@@ -1675,9 +1675,9 @@ def as_qual(record):
         qualities_strs = [("%i" % round(q, 0)) for q in qualities]
     except TypeError as e:
         if None in qualities:
-            raise TypeError("A quality value of None was found")
+            raise TypeError("A quality value of None was found") from None
         else:
-            raise e
+            raise
 
     # Safe wrapping
     while qualities_strs:
@@ -2249,7 +2249,7 @@ def _fastq_convert_qual(in_file, out_file, mapping):
             try:
                 qualities_strs = [mapping[ascii] for ascii in qual]
             except KeyError:
-                raise ValueError("Invalid character in quality string")
+                raise ValueError("Invalid character in quality string") from None
             data = " ".join(qualities_strs)
             while len(data) > 60:
                 # Know quality scores are either 1 or 2 digits, so there
