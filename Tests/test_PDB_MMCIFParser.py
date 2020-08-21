@@ -320,7 +320,7 @@ class ParseReal(unittest.TestCase):
         self.assertEqual("", structure.header["head"])
         self.assertEqual("", structure.header["deposition_date"])
         self.assertEqual("", structure.header["structure_method"])
-        self.assertEqual(0.0, structure.header["resolution"])
+        self.assertEqual(None, structure.header["resolution"])
 
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual("1A8O", structure.header["idcode"])
