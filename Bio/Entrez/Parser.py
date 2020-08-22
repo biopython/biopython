@@ -422,7 +422,7 @@ class DataHandler:
         self.parser = None
         if self.element is not None:
             # No more XML data, but there is still some unfinished business
-            raise CorruptedXMLError("Incomplete XML file?")
+            raise CorruptedXMLError("Premature end of data")
 
         # Send out the remaining records
         yield from records
