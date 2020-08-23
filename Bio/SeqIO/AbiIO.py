@@ -382,7 +382,7 @@ class AbiIterator(SequenceIterator):
         sample_id = "<unknown id>"
 
         raw = {}
-        seq = qual = sample_id = None
+        seq = qual = None
         for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
             key = tag_name + str(tag_number)
 
