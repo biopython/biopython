@@ -446,7 +446,7 @@ class AbiIterator(SequenceIterator):
         if qual:
             # Expect this to be missing for FSA files.
             record.letter_annotations["phred_quality"] = qual
-        elif self.trim:
+        elif not is_fsa_file and not qual and self.trim:
             raise ValueError(
                 "The 'abi-trim' format can not be used for files without"
                 " quality values."
