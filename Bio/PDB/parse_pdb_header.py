@@ -186,7 +186,7 @@ def _parse_pdb_header_list(header):
         "deposition_date": "1909-01-08",
         "release_date": "1909-01-08",
         "structure_method": "unknown",
-        "resolution": 0.0,
+        "resolution": None,
         "structure_reference": "unknown",
         "journal_reference": "unknown",
         "author": "",
@@ -322,6 +322,7 @@ def _parse_pdb_header_list(header):
             # print(key)
             pass
     if pdbh_dict["structure_method"] == "unknown":
-        if pdbh_dict["resolution"] > 0.0:
+        res = pdbh_dict["resolution"]
+        if res is not None and res > 0.0:
             pdbh_dict["structure_method"] = "x-ray diffraction"
     return pdbh_dict
