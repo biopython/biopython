@@ -482,6 +482,13 @@ class DisorderedAtom(DisorderedEntityWrapper):
         """Return disordered atom identifier."""
         return "<Disordered Atom %s>" % self.get_id()
 
+    def disordered_get_list(self):
+        """Return list of atom instances.
+
+        Sorts children by altloc (empty, then alphabetical).
+        """
+        return sorted(self.child_dict.values(), key=lambda a: ord(a.altloc))
+
     def disordered_add(self, atom):
         """Add a disordered atom."""
         # Add atom to dict, use altloc as key
