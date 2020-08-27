@@ -1050,9 +1050,8 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
 
-    Note some formats require a binary handle (bytes) rather than a text mode
-    handle (strings), and may require you to specify the molecule type when it
-    cannot be determined by the parser:
+    Note some formats like SeqXML require you to specify the molecule type
+    when it cannot be determined by the parser:
 
     >>> from Bio import SeqIO
     >>> from io import BytesIO
