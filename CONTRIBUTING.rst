@@ -68,7 +68,7 @@ As mentioned above, to simplify your contributions, we provide a `pre-commit
 <https://pre-commit.com/>`_ configuration. Pre-commit is a Python package which
 automatically hooks into git. When you run "git commit" within the biopython
 repository, it will automatically run various fast checks (including flake8 and
-black) before the commit happens. In order to install it, run
+black) before the commit happens. In order to install it, run::
 
     $ pip install pre-commit
 
