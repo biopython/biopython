@@ -57,7 +57,7 @@ mean(int n, double a[])
 	}
 
     for (i = nstep4; i < n; i++) result += a[i];
-    result = result + sum[0] + sum[1] + sum[2] + sum[3];
+    result += (sum[0] + sum[1]) + (sum[2] + sum[3]);
 	
     return result / n;
 }
