@@ -38,15 +38,16 @@
 
 double
 mean(int n, double a[])
+// Add 4 elements at once instead of 1. The advantages are:
+// 1. less loop overhead
+// 2. compile with -O2 -> use SSE/AVX. 
+// 3. without AVX, still faster because 4 independent additions -> parallel instruction possible
+// 4. smaller floating-point error
 {
     double result = 0.;
     int i;
 	double sum[4] = {0.,0.,0.,0.};
 	
-	// Add 4 elements at once instead of 1. The advantages are:
-	// 1. less loop overhead
-	// 2. compile with -O2 -> use SSE/AVX
-	// 3. without AVX, still faster because 4 independent additions -> parallel instruction possible
 	int nstep4 = n - n % 4;
 	for (i=0; i<nstep4; i+=4) {	
 		sum[0] += a[i];
