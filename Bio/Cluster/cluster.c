@@ -37,14 +37,28 @@
 /* ************************************************************************ */
 
 double
-mean(int n, double x[])
+mean(int n, double a[])
 {
     double result = 0.;
     int i;
+	double sum[4] = {0.,0.,0.,0.};
+	
+	// Add 4 elements at once instead of 1. The advantages are:
+	// 1. less loop overhead
+	// 2. compile with -O2 -> use SSE/AVX
+	// 3. without AVX, still faster because 4 independent additions -> parallel instruction possible
+	int nstep4 = n - n % 4;
+	for (i=0; i<nstep4; i+=4) {	
+		sum[0] += a[i];
+		sum[1] += a[i + 1];
+		sum[2] += a[i + 2];
+		sum[3] += a[i + 3];
+	}
 
-    for (i = 0; i < n; i++) result += x[i];
-    result /= n;
-    return result;
+    for (i = nstep4; i < n; i++) result += a[i];
+    result = result + sum[0] + sum[1] + sum[2] + sum[3];
+	
+    return result / n;
 }
 
 /* ************************************************************************ */
