@@ -1006,11 +1006,13 @@ class FeatureLocation:
         )
 
     def _shift(self, offset):
-        """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
+        """Return a copy of the FeatureLocation shifted by an offset (PRIVATE).
+
+        Returns self when location is relative to an external reference.
+        """
         # TODO - What if offset is a fuzzy position?
         if self.ref or self.ref_db:
-            # TODO - Return self?
-            raise ValueError("Feature references another sequence.")
+            return self
         return FeatureLocation(
             start=self._start._shift(offset),
             end=self._end._shift(offset),
@@ -1018,10 +1020,12 @@ class FeatureLocation:
         )
 
     def _flip(self, length):
-        """Return a copy of the location after the parent is reversed (PRIVATE)."""
+        """Return a copy of the location after the parent is reversed (PRIVATE).
+
+        Returns self when location is relative to an external reference.
+        """
         if self.ref or self.ref_db:
-            # TODO - Return self?
-            raise ValueError("Feature references another sequence.")
+            return self
         # Note this will flip the start and end too!
         if self.strand == +1:
             flip_strand = -1
