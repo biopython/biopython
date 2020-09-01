@@ -276,9 +276,6 @@ class Seq:
     def __imul__(self, other):
         """Multiply Seq in-place.
 
-        Note although Seq is immutable, the in-place method is
-        included to match the behaviour for regular Python strings.
-
         >>> from Bio.Seq import Seq
         >>> seq = Seq('ATG')
         >>> seq *= 2
@@ -1223,9 +1220,6 @@ class UnknownSeq(Seq):
 
     def __imul__(self, other):
         """Multiply UnknownSeq in-place.
-
-        Note although UnknownSeq is immutable, the in-place method is
-        included to match the behaviour for regular Python strings.
 
         >>> from Bio.Seq import UnknownSeq
         >>> seq = UnknownSeq(3, character="N")
