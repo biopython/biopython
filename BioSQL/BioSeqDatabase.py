@@ -596,7 +596,7 @@ class Adaptor:
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
         return self.execute_one(
-            """SELECT SUBSTR(seq, %s, %s) FROM biosequence WHERE bioentry_id = %s""",
+            "SELECT SUBSTR(seq, %s, %s) FROM biosequence WHERE bioentry_id = %s",
             (start + 1, length, seqid),
         )[0]
 
