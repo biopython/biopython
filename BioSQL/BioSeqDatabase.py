@@ -596,10 +596,10 @@ class Adaptor:
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
         return self.execute_one(
-                """select SUBSTR(seq, %s, %s)
+            """select SUBSTR(seq, %s, %s)
                      from biosequence where bioentry_id = %s""",
-                (start + 1, length, seqid),
-            )[0]
+            (start + 1, length, seqid),
+        )[0]
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
