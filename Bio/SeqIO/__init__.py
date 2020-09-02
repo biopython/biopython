@@ -150,8 +150,8 @@ CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
 >>> record_dict.close()
 
 Here the original file and what Biopython would output differ in the line
-wrapping. Also note that the get_raw method will return a bytes string,
-hence the use of decode to turn it into a (unicode) string.
+wrapping. Also note that the get_raw method will return a bytes object,
+hence the use of decode to turn it into a string.
 
 Also note that the get_raw method will preserve the newline endings. This
 example FASTQ file uses Unix style endings (b"\n" only),

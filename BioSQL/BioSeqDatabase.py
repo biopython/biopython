@@ -595,16 +595,10 @@ class Adaptor:
         #    """select SUBSTRING(seq FROM %s FOR %s)
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
-        #
-        # Convert to a string on returning for databases that give back
-        # unicode. Shouldn't need unicode for sequences so this seems safe.
-        return str(
-            self.execute_one(
-                """select SUBSTR(seq, %s, %s)
-                     from biosequence where bioentry_id = %s""",
-                (start + 1, length, seqid),
-            )[0]
-        )
+        return self.execute_one(
+            "SELECT SUBSTR(seq, %s, %s) FROM biosequence WHERE bioentry_id = %s",
+            (start + 1, length, seqid),
+        )[0]
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
@@ -630,7 +624,7 @@ class MysqlConnectorAdaptor(Adaptor):
 
     @staticmethod
     def _bytearray_to_str(s):
-        """If s is bytes or bytearray, convert to a unicode string (PRIVATE)."""
+        """If s is bytes or bytearray, convert to a string (PRIVATE)."""
         if isinstance(s, (bytes, bytearray)):
             return s.decode()
         return s
