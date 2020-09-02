@@ -799,7 +799,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_init_typeerror(self):
         """Check Seq __init__ gives TypeError exceptions."""
-        # Only expect it to take strings and unicode - not Seq objects!
+        # Only expect it to take strings - not Seq objects!
         self.assertRaises(TypeError, Seq, 1066)
         self.assertRaises(TypeError, Seq, Seq("ACGT"))
 

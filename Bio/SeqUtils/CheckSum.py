@@ -29,7 +29,7 @@ def crc32(seq):
         # Assume it's a Seq object
         return _crc32(str(seq).encode())
     except AttributeError:
-        # Assume it's a string/unicode
+        # Assume it's a string
         return _crc32(seq.encode())
 
 

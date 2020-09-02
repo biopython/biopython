@@ -407,23 +407,7 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations.update(_retrieve_reference(adaptor, primary_id))
     annotations.update(_retrieve_taxon(adaptor, primary_id, taxon_id))
     annotations.update(_retrieve_comment(adaptor, primary_id))
-    # Convert values into strings in cases of unicode from the database.
-    # BioSQL could eventually be expanded to be unicode aware.
-    str_anns = {}
-    for key, val in annotations.items():
-        if isinstance(val, list):
-            val = [_make_unicode_into_string(x) for x in val]
-        elif isinstance(val, str):
-            val = str(val)
-        str_anns[key] = val
-    return str_anns
-
-
-def _make_unicode_into_string(text):
-    if isinstance(text, str):
-        return str(text)
-    else:
-        return text
+    return annotations
 
 
 def _retrieve_alphabet(adaptor, primary_id):
