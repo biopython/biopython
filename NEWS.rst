@@ -18,7 +18,7 @@ The main change is that ``Bio.Alphabet`` is no longer used. In some cases you
 will now have to specify expected letters, molecule type (DNA, RNA, protein),
 or gap character explicitly. Please consult the updated Tutorial and API
 documentation for guidance. This simplification has sped up many ``Seq``
-object methods.
+object methods. See https://biopython.org/wiki/Alphabet for more information.
 
 ``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
 in the ``Bio.SeqIO.QualityIO`` module.
