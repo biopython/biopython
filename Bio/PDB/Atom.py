@@ -186,13 +186,25 @@ class Atom:
         return hash(self.get_full_id())
 
     def _assign_element(self, element):
-        """Guess element from atom name if not recognised (PRIVATE)."""
-        if not element or element.capitalize() not in IUPACData.atom_weights:
-            # Inorganic elements have their name shifted left by one position
-            #  (is a convention in PDB, but not part of the standard).
-            # isdigit() check on last two characters to avoid mis-assignment of
-            # hydrogens atoms (GLN HE21 for example)
+        """Guess element from atom name if not recognised (PRIVATE).
 
+        There is little documentation about extracting/encoding element
+        information in atom names, but some conventions seem to prevail:
+
+            - C, N, O, S, H, P, F atom names start with a blank space (e.g. " CA ")
+              unless the name is 4 characters long (e.g. HE21 in glutamine). In both
+              these cases, the element is the first character.
+
+            - Inorganic elements do not have a blank space (e.g. "CA  " for calcium)
+              but one must check the full name to differentiate between e.g. helium
+              ("HE  ") and long-name hydrogens (e.g. "HE21").
+
+            - Atoms with unknown or ambiguous elements are marked with 'X', e.g.
+              PDB 4cpa. If we fail to identify an element, we should mark it as
+              such.
+
+        """
+        if not element or element.capitalize() not in IUPACData.atom_weights:
             if self.fullname[0].isalpha() and not self.fullname[2:].isdigit():
                 putative_element = self.name.strip()
             else:
@@ -214,17 +226,16 @@ class Atom:
                     "Could not assign element %r for Atom (name=%s) with given element %r"
                     % (putative_element, self.name, element)
                 )
-                element = ""
+                element = "X"  # mark as unknown/ambiguous
             warnings.warn(msg, PDBConstructionWarning)
 
         return element
 
     def _assign_atom_mass(self):
         """Return atom weight (PRIVATE)."""
-        # Needed for Bio/Struct/Geometry.py C.O.M. function
-        if self.element:
+        try:
             return IUPACData.atom_weights[self.element.capitalize()]
-        else:
+        except (AttributeError, KeyError):
             return float("NaN")
 
     # Special methods
