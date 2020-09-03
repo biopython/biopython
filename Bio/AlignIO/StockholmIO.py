@@ -455,16 +455,13 @@ class StockholmIterator(AlignmentIterator):
                     # Might be interleaved blocks, so can't check length yet
                 elif line[:5] == "#=GS ":
                     # Generic per-Sequence annotation, free text
-                    # Format: "#=GS <seqname> <feature> <free text>"
-                    gsannotation = line[5:].strip().split(None, 2)
-                    print(gsannotation)
-                    seq_id = gsannotation[0]
-                    feature = gsannotation[1]
-                    # Free text can sometimes be empty, which a one line split throws an error for.
-                    # See https://github.com/biopython/biopython/issues/2982 for more details
-                    if len(gsannotation) == 3:
-                        text = gsannotation[2]
-                    elif len(gsannotation) == 2:
+                    # Format: "#=GS <seqname> <feature> <free text>
+                    try:
+                        seq_id, feature, text = line[5:].strip().split(None, 2)
+                    except ValueError:
+                        # Free text can sometimes be empty, which a one line split throws an error for.
+                        # See https://github.com/biopython/biopython/issues/2982 for more details
+                        seq_id, feature = line[5:].strip().split(None, 1)
                         text = ""
                     # if seq_id not in ids:
                     #    ids.append(seq_id)
