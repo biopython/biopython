@@ -48,6 +48,7 @@ possible, especially the following contributors:
 - João Rodrigues
 - João Vitor F Cavalcante (first contribution)
 - Marie Crane
+- Markus Piotrowski
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui

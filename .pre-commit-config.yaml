@@ -41,11 +41,11 @@ repos:
     -   id: rstcheck
         args: [--report=warning]
 -   repo: https://github.com/PyCQA/doc8
-    rev: 0.8.1
+    rev: ''
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
-        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt]
+        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
 -   repo: local
     hooks:
     -   id: doi-link-style
