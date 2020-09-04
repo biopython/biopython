@@ -455,7 +455,7 @@ class StockholmIterator(AlignmentIterator):
                     # Might be interleaved blocks, so can't check length yet
                 elif line[:5] == "#=GS ":
                     # Generic per-Sequence annotation, free text
-                    # Format: "#=GS <seqname> <feature> <free text>
+                    # Format: "#=GS <seqname> <feature> <free text>"
                     try:
                         seq_id, feature, text = line[5:].strip().split(None, 2)
                     except ValueError:
