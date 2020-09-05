@@ -3,10 +3,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
-# Nice link:
-# http://www.ebi.ac.uk/help/formats_frame.html
-
 r"""Sequence input/output as SeqRecord objects.
 
 Bio.SeqIO is also documented at SeqIO_ and by a whole chapter in our tutorial:
