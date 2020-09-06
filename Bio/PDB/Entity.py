@@ -9,7 +9,10 @@
 It is a simple container class, with list and dictionary like properties.
 """
 
+from collections import deque
 from copy import copy
+
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
@@ -291,6 +294,43 @@ class Entity:
         """
         for o in self.get_list():
             o.transform(rot, tran)
+
+    def center_of_mass(self, geometrical=False):
+        """Return the center of mass of the Entity as a numpy array.
+
+        If geometrical is True, returns the center of geometry instead.
+        """
+        # Recursively iterate through children until we get all atom coordinates
+
+        if not len(self):
+            raise ValueError("{} does not have children".format(self))
+
+        maybe_disordered = {"R", "C"}  # to know when to use get_unpacked_list
+        only_atom_level = {"A"}
+
+        entities = deque([self])  # start with [self] to avoid auto-unpacking
+        while True:
+
+            e = entities.popleft()
+            if e.level in maybe_disordered:
+                entities += e.get_unpacked_list()
+            elif e.level == "A":
+                entities.append(e)
+                continue
+            else:
+                entities += e.child_list
+
+            elevels = {e.level for e in entities}
+            if elevels == only_atom_level:
+                break  # nothing else to unpack
+
+        coords = np.asarray([a.coord for a in entities], dtype=np.float32)
+        if geometrical:
+            masses = None
+        else:
+            masses = np.asarray([a.mass for a in entities], dtype=np.float32)
+
+        return np.average(coords, axis=0, weights=masses)
 
     def copy(self):
         """Copy entity recursively."""
