@@ -7,9 +7,10 @@
 
 """Atom class, used in Structure objects."""
 
-import numpy
 import warnings
 import copy
+
+import numpy as np
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -247,7 +248,7 @@ class Atom:
 
         """
         diff = self.coord - other.coord
-        return numpy.sqrt(numpy.dot(diff, diff))
+        return np.sqrt(np.dot(diff, diff))
 
     # set methods
 
@@ -426,7 +427,7 @@ class Atom:
             atom.transform(rotation, translation)
 
         """
-        self.coord = numpy.dot(self.coord, rot) + tran
+        self.coord = np.dot(self.coord, rot) + tran
 
     def get_vector(self):
         """Return coordinates as Vector.
@@ -509,4 +510,4 @@ class DisorderedAtom(DisorderedEntityWrapper):
         See the documentation of Atom.transform for details.
         """
         for child in self:
-            child.coord = numpy.dot(child.coord, rot) + tran
+            child.coord = np.dot(child.coord, rot) + tran
