@@ -54,8 +54,8 @@ def _maketrans(complement_mapping):
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
-_rna_complement_table[ord('T')] = _rna_complement_table[ord('U')]
-_rna_complement_table[ord('t')] = _rna_complement_table[ord('u')]
+_rna_complement_table[ord("T")] = _rna_complement_table[ord("U")]
+_rna_complement_table[ord("t")] = _rna_complement_table[ord("u")]
 
 
 class Seq:
