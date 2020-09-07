@@ -33,6 +33,7 @@
 #include <limits.h>
 #include <string.h>
 #include "cluster.h"
+#include "mysort.h"
 
 /* ************************************************************************ */
 
@@ -168,36 +169,14 @@ static const double* sortdata = NULL; /* used in the quicksort algorithm */
 
 /* ---------------------------------------------------------------------- */
 
-static int
-compare(const void* a, const void* b)
-/* Helper function for sort. Previously, this was a nested function under
- * sort, which is not allowed under ANSI C.
- */
-{
-    const int i1 = *(const int*)a;
-    const int i2 = *(const int*)b;
-    const double term1 = sortdata[i1];
-    const double term2 = sortdata[i2];
-
-    if (term1 < term2) return -1;
-    if (term1 > term2) return +1;
-    return 0;
-}
-
-/* ---------------------------------------------------------------------- */
-
 void
-sort(int n, const double data[], int index[])
+sort_index(int n, const double data[], int index[])
 /* Sets up an index table given the data, such that data[index[]] is in
  * increasing order. Sorting is done on the indices; the array data
  * is unchanged.
  */
 {
-    int i;
-
-    sortdata = data;
-    for (i = 0; i < n; i++) index[i] = i;
-    qsort(index, n, sizeof(int), compare);
+	fastsort_index(n, data, index);
 }
 
 /* ********************************************************************** */
@@ -227,7 +206,7 @@ getrank(int n, const double data[], const double weight[])
         return NULL;
     }
     /* Call sort to get an index table */
-    sort(n, data, index);
+    sort_index(n, data, index);
     /* Build a rank table */
     k = 0;
     j = index[0];
@@ -919,7 +898,7 @@ positive integer if the singular value decomposition fails to converge.
                 const double s = w[j];
                 for (i = 0; i < nrows; i++) u[i][j] *= s;
             }
-            sort(ncolumns, w, index);
+            sort_index(ncolumns, w, index);
             for (i = 0; i < ncolumns/2; i++) {
                 j = index[i];
                 index[i] = index[ncolumns-1-i];
@@ -941,7 +920,7 @@ positive integer if the singular value decomposition fails to converge.
                 const double s = w[j];
                 for (i = 0; i < nrows; i++) v[i][j] *= s;
             }
-            sort(nrows, w, index);
+            sort_index(nrows, w, index);
             for (i = 0; i < nrows/2; i++) {
                 j = index[i];
                 index[i] = index[nrows-1-i];
