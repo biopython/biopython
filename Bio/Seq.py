@@ -54,6 +54,8 @@ def _maketrans(complement_mapping):
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
+_rna_complement_table[ord("T")] = _rna_complement_table[ord("U")]
+_rna_complement_table[ord("t")] = _rna_complement_table[ord("u")]
 
 
 class Seq:
@@ -832,25 +834,11 @@ class Seq:
         >>> Seq("CGA").complement_rna()
         Seq('GCU')
 
-        If the sequence contains both T and U, an exception is raised:
+        Any T in the sequence is treated as a U:
 
         >>> Seq("CGAUT").complement_rna()
-        Traceback (most recent call last):
-           ...
-        ValueError: Mixed RNA/DNA found
-
-        If the sequence contains T, an exception is raised:
-
-        >>> Seq("ACGT").complement_rna()
-        Traceback (most recent call last):
-           ...
-        ValueError: DNA found, RNA expected
+        Seq('GCUAA')
         """
-        if "T" in self._data or "t" in self._data:
-            if "U" in self._data or "u" in self._data:
-                raise ValueError("Mixed RNA/DNA found")
-            else:
-                raise ValueError("DNA found, RNA expected")
         return Seq(str(self).translate(_rna_complement_table))
 
     def reverse_complement_rna(self):
@@ -2557,7 +2545,7 @@ def complement_rna(sequence):
     >>> complement_rna("ACG")
     'UGC'
 
-    If the sequence contains a T, and error is raised.
+    Any T in the sequence is treated as a U.
     """
     if isinstance(sequence, Seq):
         # Return a Seq
@@ -2565,11 +2553,6 @@ def complement_rna(sequence):
     elif isinstance(sequence, MutableSeq):
         # Return a Seq
         return sequence.toseq().complement_rna()
-    if "T" in sequence or "t" in sequence:
-        if "U" in sequence or "u" in sequence:
-            raise ValueError("Mixed RNA/DNA found")
-        else:
-            raise ValueError("DNA found, expect RNA")
     return sequence.translate(_rna_complement_table)
 
 

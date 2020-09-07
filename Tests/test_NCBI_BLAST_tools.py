@@ -274,8 +274,7 @@ class BlastDB(unittest.TestCase):
 
         self.assertEqual(
             str(cline),
-            _escape_filename(exe_names["makeblastdb"])
-            + " -blastdb_version 4"
+            _escape_filename(exe_names["makeblastdb"]) + " -blastdb_version 4"
             " -dbtype prot -in GenBank/NC_005816.faa"
             " -parse_seqids -hash_index -max_file_sz 20MB"
             " -taxid 10",
