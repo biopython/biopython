@@ -186,7 +186,7 @@ fastsort_recursive(double a[], int l, int r)
 {
 	int pivot, first_end, second_start;
 	while (l < r) {
-		if (r - l <= 70) {	// determined through experiments and benchmarks, not randomly. 70-150 works fine on random/mixed (hard) data
+		if (r - l <= 70) {	/* determined through experiments and benchmarks, not randomly. 70-150 works fine on random/mixed (hard) data */
 			insertion_sort(a, l, r);
 			return;
 		}
@@ -217,7 +217,7 @@ fastsort(int n, double a[])
 	fastsort_recursive(a, 0, n - 1);
 }
 
-//****************************************//
+
 //****************************************//
 //****************************************//
 //****************************************//
@@ -375,7 +375,7 @@ fastsort_recursive_index(const double a[], int index[], int l, int r)
 {
 	int pivot, first_end, second_start;
 	while (l < r) {
-		if (r - l <= 70) {	// determined through experiments and benchmarks, not randomly. 70-150 works fine on random/mixed (hard) data
+		if (r - l <= 70) {	/* determined through experiments and benchmarks, not randomly. 70-150 works fine on random/mixed (hard) data */
 			insertion_sort_index(a, index, l, r);
 			return;
 		}
@@ -393,14 +393,14 @@ fastsort_recursive_index(const double a[], int index[], int l, int r)
 			r = first_end;
 		}
 	}
-}
-
+}    
 
 //***************
 void
 fastsort_index(int n, const double a[], int index[])
 {
-	for (int i = 0; i < n; i++) index[i] = i;
+	int i;
+	for (i = 0; i < n; i++) index[i] = i;
 	fastsort_recursive_index(a, index, 0, n - 1);
 }
 
