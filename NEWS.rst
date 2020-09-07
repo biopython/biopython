@@ -8,11 +8,19 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.78
+(In progress, not yet released): Biopython 1.79
 -===============================================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
 tested on PyPy3.6.1 v7.1.1.
+
+Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
+unambiguously guessed from the atom name, in accordance with PDB structures.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- João Rodrigues
 
 4 September 2020: Biopython 1.78
 ================================
