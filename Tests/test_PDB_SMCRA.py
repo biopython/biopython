@@ -485,16 +485,6 @@ class CenterOfMassTests(unittest.TestCase):
 
         self.assertTrue(numpy.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
 
-    def test_structure_w_disordered_com(self):
-        """Calculate DisorderedAtom center of mass."""
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = self.parser.get_structure("b", "PDB/disordered.pdb")
-
-        com = s.center_of_mass()
-
-        self.assertTrue(numpy.allclose(com, [54.545, 19.868, 31.212], atol=1e-3))
-
     def test_structure_cog(self):
         """Calculate Structure center of geometry."""
         cog = self.structure.center_of_mass(geometric=True)
@@ -502,7 +492,7 @@ class CenterOfMassTests(unittest.TestCase):
         self.assertTrue(numpy.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
 
     def test_chain_cog(self):
-        """Calculate Chain center of geometry."""
+        """Calculate center of geometry of individual chains."""
         expected = {
             "A": [20.271, 30.191, 23.563],
             "B": [19.272, 21.163, 33.711],
@@ -513,40 +503,11 @@ class CenterOfMassTests(unittest.TestCase):
             cog = chain.center_of_mass(geometric=True)
             self.assertTrue(numpy.allclose(cog, expected[chain.id], atol=1e-3))
 
-    def test_disordered_cog(self):
-        """Calculate DisorderedAtom center of geometry."""
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = self.parser.get_structure("b", "PDB/disordered.pdb")
-
-        arg27 = s[0]["A"][27]
-
-        # Detach all children but NH1
-        for atom in list(arg27):
-            if atom.name != "NH1":
-                arg27.detach_child(atom.name)
-
-        res_cog = arg27.center_of_mass(geometric=True)
-        self.assertTrue(numpy.allclose(res_cog, [59.555, 21.033, 25.954], atol=1e-3))
-
-        # Now compare to DisorderedAtom.center_of_mass
-        da_cog = arg27["NH1"].center_of_mass(geometric=True)
-        self.assertTrue(numpy.allclose(res_cog, da_cog, atol=1e-3))
-
-    def test_com_fails_on_atom(self):
-        """Atom.center_of_mass fails."""
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = self.parser.get_structure("b", "PDB/disordered.pdb")
-
-        with self.assertRaises(AttributeError):
-            s[0]["A"][27]["CA"].center_of_mass()
-
     def test_com_empty_structure(self):
-        """Center of mass of empty structure raises error."""
+        """Center of mass of empty structure raises ValueError."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = self.parser.get_structure("b", "PDB/disordered.pdb")
+            s = self.parser.get_structure("b", "PDB/disordered.pdb")  # smaller
 
         for child in list(s):
             s.detach_child(child.id)
