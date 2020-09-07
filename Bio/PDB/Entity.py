@@ -310,13 +310,9 @@ class Entity:
 
         entities = deque([self])  # start with [self] to avoid auto-unpacking
         while True:
-
             e = entities.popleft()
             if e.level in maybe_disordered:
                 entities += e.get_unpacked_list()
-            elif e.level == "A":
-                entities.append(e)
-                continue
             else:
                 entities += e.child_list
 
