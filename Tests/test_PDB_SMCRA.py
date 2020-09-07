@@ -53,6 +53,15 @@ class Atom_Element(unittest.TestCase):
         self.assertEqual("D", atoms[4].element)  # Deuterium
         self.assertEqual("CA", atoms[8].element)  # Calcium
 
+    def test_assign_unknown_element(self):
+        """Unknown element is assigned 'X'."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            a = Atom.Atom(
+                "XE1", None, None, None, None, " XE1", None  # serial 5170 - 4CP4
+            )
+        self.assertEqual(a.element, "X")
+
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
         parser = PDBParser(PERMISSIVE=True)
