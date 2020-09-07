@@ -295,10 +295,10 @@ class Entity:
         for o in self.get_list():
             o.transform(rot, tran)
 
-    def center_of_mass(self, geometrical=False):
+    def center_of_mass(self, geometric=False):
         """Return the center of mass of the Entity as a numpy array.
 
-        If geometrical is True, returns the center of geometry instead.
+        If geometric is True, returns the center of geometry instead.
         """
         # Recursively iterate through children until we get all atom coordinates
 
@@ -325,7 +325,7 @@ class Entity:
                 break  # nothing else to unpack
 
         coords = np.asarray([a.coord for a in entities], dtype=np.float32)
-        if geometrical:
+        if geometric:
             masses = None
         else:
             masses = np.asarray([a.mass for a in entities], dtype=np.float32)

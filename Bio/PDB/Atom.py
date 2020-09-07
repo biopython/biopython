@@ -222,7 +222,7 @@ class Atom:
 
     def _assign_atom_mass(self):
         """Return atom weight (PRIVATE)."""
-        # Needed for Bio/Struct/Geometry.py C.O.M. function
+        # Needed for C.O.M. function
         if self.element:
             return IUPACData.atom_weights[self.element.capitalize()]
         else:
@@ -486,10 +486,10 @@ class DisorderedAtom(DisorderedEntityWrapper):
     # This is a separate method from Entity.center_of_mass since DisorderedAtoms
     # will be unpacked by Residue.get_unpacked_list(). Here we allow for a very
     # specific use case that is much simpler than the general implementation.
-    def center_of_mass(self, geometrical=False):
+    def center_of_mass(self, geometric=False):
         """Return the center of mass of the DisorderedAtom as a numpy array.
 
-        If geometrical is True, returns the center of geometry instead.
+        If geometric is True, returns the center of geometry instead.
         """
         children = self.disordered_get_list()
 
@@ -497,7 +497,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
             raise ValueError("{} does not have children".format(self))
 
         coords = np.asarray([a.coord for a in children], dtype=np.float32)
-        if geometrical:
+        if geometric:
             masses = None
         else:
             masses = np.asarray([a.mass for a in children], dtype=np.float32)

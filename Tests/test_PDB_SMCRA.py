@@ -478,7 +478,7 @@ class CenterOfMassTests(unittest.TestCase):
 
     def test_structure_cog(self):
         """Calculate Structure center of geometry."""
-        cog = self.structure.center_of_mass(geometrical=True)
+        cog = self.structure.center_of_mass(geometric=True)
 
         self.assertTrue(numpy.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
 
@@ -491,7 +491,7 @@ class CenterOfMassTests(unittest.TestCase):
         }
 
         for chain in self.structure[0].get_chains():  # one model only
-            cog = chain.center_of_mass(geometrical=True)
+            cog = chain.center_of_mass(geometric=True)
             self.assertTrue(numpy.allclose(cog, expected[chain.id], atol=1e-3))
 
     def test_disordered_cog(self):
@@ -507,7 +507,7 @@ class CenterOfMassTests(unittest.TestCase):
             if atom.name != "NH1":
                 arg27.detach_child(atom.name)
 
-        res_cog = arg27.center_of_mass(geometrical=True)
+        res_cog = arg27.center_of_mass(geometric=True)
         self.assertTrue(numpy.allclose(res_cog, [59.555, 21.033, 25.954], atol=1e-3))
 
         # Now compare to DisorderedAtom.center_of_mass
