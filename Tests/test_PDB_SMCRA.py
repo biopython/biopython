@@ -476,6 +476,16 @@ class CenterOfMassTests(unittest.TestCase):
 
         self.assertTrue(numpy.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
 
+    def test_structure_w_disordered_com(self):
+        """Calculate DisorderedAtom center of mass."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s = self.parser.get_structure("b", "PDB/disordered.pdb")
+
+        com = s.center_of_mass()
+
+        self.assertTrue(numpy.allclose(com, [54.545, 19.868, 31.212], atol=1e-3))
+
     def test_structure_cog(self):
         """Calculate Structure center of geometry."""
         cog = self.structure.center_of_mass(geometric=True)
@@ -511,7 +521,7 @@ class CenterOfMassTests(unittest.TestCase):
         self.assertTrue(numpy.allclose(res_cog, [59.555, 21.033, 25.954], atol=1e-3))
 
         # Now compare to DisorderedAtom.center_of_mass
-        da_cog = arg27["NH1"].center_of_mass()
+        da_cog = arg27["NH1"].center_of_mass(geometric=True)
         self.assertTrue(numpy.allclose(res_cog, da_cog, atol=1e-3))
 
     def test_com_fails_on_atom(self):
