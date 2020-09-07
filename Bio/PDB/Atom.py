@@ -497,10 +497,10 @@ class DisorderedAtom(DisorderedEntityWrapper):
     # This is a separate method from Entity.center_of_mass since DisorderedAtoms
     # will be unpacked by Residue.get_unpacked_list(). Here we allow for a very
     # specific use case that is much simpler than the general implementation.
-    def center_of_mass(self, geometric=False):
+    def center_of_mass(self):
         """Return the center of mass of the DisorderedAtom as a numpy array.
 
-        If geometric is True, returns the center of geometry instead.
+        Assumes all child atoms have the same mass (same element).
         """
         children = self.disordered_get_list()
 
@@ -508,12 +508,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
             raise ValueError("{} does not have children".format(self))
 
         coords = np.asarray([a.coord for a in children], dtype=np.float32)
-        if geometric:
-            masses = None
-        else:
-            masses = np.asarray([a.mass for a in children], dtype=np.float32)
-
-        return np.average(coords, axis=0, weights=masses)
+        return np.average(coords, axis=0, weights=None)
 
     def disordered_get_list(self):
         """Return list of atom instances.
