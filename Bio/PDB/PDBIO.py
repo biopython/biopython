@@ -9,9 +9,6 @@
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-# Allowed Elements
-from Bio.Data.IUPACData import atom_weights
-
 
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
@@ -161,8 +158,8 @@ class PDBIO(StructureIO):
 
         if atom.element:
             element = atom.element.strip().upper()
-            if element.capitalize() not in atom_weights:
-                raise ValueError("Unrecognised element %r" % atom.element)
+            if len(element) > 2:
+                raise ValueError("Element string is too long: %r" % atom.element)
             element = element.rjust(2)
         else:
             element = "  "
