@@ -103,7 +103,7 @@ tools.
 
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
 iterate over the alignment rows as SeqRecord objects - rather than working
-with Alignnment objects. Again, if you want to you can specify this is RNA:
+with Alignnment objects.
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm"):
@@ -440,7 +440,13 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == "#=GS ":
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
-                    seq_id, feature, text = line[5:].strip().split(None, 2)
+                    try:
+                        seq_id, feature, text = line[5:].strip().split(None, 2)
+                    except ValueError:
+                        # Free text can sometimes be empty, which a one line split throws an error for.
+                        # See https://github.com/biopython/biopython/issues/2982 for more details
+                        seq_id, feature = line[5:].strip().split(None, 1)
+                        text = ""
                     # if seq_id not in ids:
                     #    ids.append(seq_id)
                     if seq_id not in gs:

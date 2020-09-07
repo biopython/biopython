@@ -9,7 +9,13 @@ https://www.open-bio.org/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 (In progress, not yet released): Biopython 1.78
-===============================================
+-===============================================
+
+This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
+tested on PyPy3.6.1 v7.1.1.
+
+4 September 2020: Biopython 1.78
+================================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
 tested on PyPy3.6.1 v7.1.1.
@@ -18,10 +24,13 @@ The main change is that ``Bio.Alphabet`` is no longer used. In some cases you
 will now have to specify expected letters, molecule type (DNA, RNA, protein),
 or gap character explicitly. Please consult the updated Tutorial and API
 documentation for guidance. This simplification has sped up many ``Seq``
-object methods.
+object methods. See https://biopython.org/wiki/Alphabet for more information.
 
 ``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
 in the ``Bio.SeqIO.QualityIO`` module.
+
+The ``SeqFeature`` object's ``.extract()`` method can now be used for
+trans-spliced locations via an optional dictionary of references.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
@@ -36,6 +45,7 @@ been reformatted with the ``black`` tool to match the main code base.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Adam Sjøgren (first contribution)
 - Carlos Pena
 - Chris Daley
 - Chris Rands
@@ -44,6 +54,7 @@ possible, especially the following contributors:
 - João Rodrigues
 - João Vitor F Cavalcante (first contribution)
 - Marie Crane
+- Markus Piotrowski
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui

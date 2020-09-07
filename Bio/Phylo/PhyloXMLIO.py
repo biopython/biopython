@@ -665,7 +665,7 @@ class Parser:
 
 
 def _serialize(value):
-    """Convert a Python primitive to a phyloXML-compatible Unicode string (PRIVATE)."""
+    """Convert a Python primitive to a phyloXML-compatible string (PRIVATE)."""
     if isinstance(value, float):
         return str(value).upper()
     elif isinstance(value, bool):

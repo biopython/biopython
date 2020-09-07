@@ -128,25 +128,3 @@ class NeighborSearch:
             next_level_pair_list = self._get_unique_parent_pairs(next_level_pair_list)
             if level == l:
                 return next_level_pair_list
-
-
-if __name__ == "__main__":
-
-    from numpy.random import random
-
-    class Atom:
-        """Define atom class for testing."""
-
-        def __init__(self):
-            """Initialize the class."""
-            self.coord = 100 * random(3)
-
-        def get_coord(self):
-            """Return coordinates."""
-            return self.coord
-
-    for i in range(0, 20):
-        # Make a list of 100 atoms
-        al = [Atom() for j in range(100)]
-        ns = NeighborSearch(al)
-        print("Found %i" % len(ns.search_all(5.0)))

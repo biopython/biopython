@@ -10,7 +10,9 @@ import unittest
 
 from os import path
 
-from Bio import Seq, SeqIO
+from Bio import Seq
+from Bio import SeqIO
+from Bio import SeqRecord
 from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
 from Bio.SeqFeature import CompoundLocation, UnknownPosition, SeqFeature
@@ -242,6 +244,74 @@ class TestPositions(unittest.TestCase):
         self.assertEqual(between_pos._left, between_pos2._left)
         self.assertEqual(between_pos._right, between_pos2._right)
         self.assertEqual(oneof_pos.position_choices, oneof_pos2.position_choices)
+
+
+class TestExtract(unittest.TestCase):
+    def test_reference_in_location_record(self):
+        """Test location with reference to another record."""
+        parent_record = SeqRecord.SeqRecord(seq=Seq.Seq("actg"))
+        another_record = SeqRecord.SeqRecord(seq=Seq.Seq("gtcagctac"))
+        location = FeatureLocation(5, 8, ref="ANOTHER.7")
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
+        ):
+            location.extract(parent_record)
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), not found in references",
+        ):
+            location.extract(parent_record, references={"SOMEOTHER.2": another_record})
+        self.assertEqual(
+            location.extract(parent_record, references={"ANOTHER.7": another_record}),
+            "cta",
+        )
+
+    def test_reference_in_location_sequence(self):
+        """Test location with reference to another sequence."""
+        parent_sequence = Seq.Seq("actg")
+        another_sequence = Seq.Seq("gtcagctac")
+        location = FeatureLocation(5, 8, ref="ANOTHER.7")
+        self.assertEqual(
+            location.extract(
+                parent_sequence, references={"ANOTHER.7": another_sequence}
+            ),
+            "cta",
+        )
+
+    def test_reference_in_compound_location_record(self):
+        """Test compound location with reference to another record."""
+        parent_record = SeqRecord.SeqRecord(Seq.Seq("aaccaaccaaccaaccaa"))
+        another_record = SeqRecord.SeqRecord(Seq.Seq("ttggttggttggttggtt"))
+        location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), references mandatory",
+        ):
+            location.extract(parent_record)
+        with self.assertRaisesRegexp(
+            ValueError,
+            r"Feature references another sequence \(ANOTHER\.7\), not found in references",
+        ):
+            location.extract(parent_record, references={"SOMEOTHER.2": another_record})
+        self.assertEqual(
+            location.extract(
+                parent_record, references={"ANOTHER.7": another_record}
+            ).seq,
+            "ccaatgg",
+        )
+
+    def test_reference_in_compound_location_sequence(self):
+        """Test compound location with reference to another sequence."""
+        parent_sequence = Seq.Seq("aaccaaccaaccaaccaa")
+        another_sequence = Seq.Seq("ttggttggttggttggtt")
+        location = FeatureLocation(2, 6) + FeatureLocation(5, 8, ref="ANOTHER.7")
+        self.assertEqual(
+            location.extract(
+                parent_sequence, references={"ANOTHER.7": another_sequence}
+            ),
+            "ccaatgg",
+        )
 
 
 if __name__ == "__main__":

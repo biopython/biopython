@@ -138,29 +138,6 @@ class StringElement(str):
         return "StringElement(%s, attributes=%r)" % (text, attributes)
 
 
-class UnicodeElement(str):
-    """NCBI Entrez XML element mapped to a unicode string."""
-
-    def __new__(cls, value, tag, attributes, key=None):
-        """Create a UnicodeElement."""
-        self = str.__new__(cls, value)
-        self.tag = tag
-        if key is None:
-            self.key = tag
-        else:
-            self.key = key
-        self.attributes = attributes
-        return self
-
-    def __repr__(self):
-        """Return a string representation of the object."""
-        text = str.__repr__(self)
-        attributes = self.attributes
-        if not attributes:
-            return text
-        return "UnicodeElement(%s, attributes=%r)" % (text, attributes)
-
-
 class ListElement(list):
     """NCBI Entrez XML element mapped to a list."""
 
@@ -284,8 +261,8 @@ class DataHandler:
 
     from Bio import Entrez
 
-    global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
-    global_xsd_dir = os.path.join(str(Entrez.__path__[0]), "XSDs")
+    global_dtd_dir = os.path.join(Entrez.__path__[0], "DTDs")
+    global_xsd_dir = os.path.join(Entrez.__path__[0], "XSDs")
     local_dtd_dir = ""
     local_xsd_dir = ""
 
@@ -496,8 +473,8 @@ class DataHandler:
         """Handle start of an XML element."""
         if tag in self.items:
             assert tag == "Item"
-            name = str(attrs["Name"])  # convert from Unicode
-            itemtype = str(attrs["Type"])  # convert from Unicode
+            name = attrs["Name"]
+            itemtype = attrs["Type"]
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
@@ -653,15 +630,11 @@ class DataHandler:
         self.attributes = None
         if tag in self.items:
             assert tag == "Item"
-            key = str(attributes["Name"])  # convert from Unicode
+            key = attributes["Name"]
             del attributes["Name"]
         else:
             key = tag
-        # Convert Unicode strings to plain strings if possible
-        try:
-            value = StringElement(value, tag, attributes, key)
-        except UnicodeEncodeError:
-            value = UnicodeElement(value, tag, attributes, key)
+        value = StringElement(value, tag, attributes, key)
         if element is None:
             self.record = element
         else:
@@ -707,7 +680,7 @@ class DataHandler:
         attributes = self.attributes
         self.attributes = None
         assert tag == "Item"
-        key = str(attributes["Name"])  # convert from Unicode
+        key = attributes["Name"]
         del attributes["Name"]
         if self.data:
             value = int("".join(self.data))
