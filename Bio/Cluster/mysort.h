@@ -35,7 +35,7 @@ cheap_random()
 }
 
 /* Another way to choose pivot is using median of left, middle, and right values*/
-inline int
+static inline int
 median_index_of3(const double arr[], const int a, const int b, const int c)
 {
 	if (arr[a] < arr[b]) {
@@ -54,7 +54,7 @@ median_index_of3(const double arr[], const int a, const int b, const int c)
 //****************************	MAIN SORTING PART
 
 /* Insertion sort is best when the array is small*/
-inline void
+void
 insertion_sort(double a[], int l, int r)
 {
 	if (r <= l) return;
@@ -226,7 +226,7 @@ fastsort(int n, double a[])
 //******** SORTING INDEX *****************//
 /* Return array index[] such that a[index[]] is sorted */
 
-inline int
+static inline int
 median_index_of3_index(const double arr[], int index[], const int a, const int b, const int c)
 {
 	if (arr[index[a]] < arr[index[b]]) {
@@ -243,7 +243,7 @@ median_index_of3_index(const double arr[], int index[], const int a, const int b
 
 
 /* Insertion sort is best when the array is small*/
-inline void
+void
 insertion_sort_index(const double a[], int index[], int l, int r)
 {
 	if (r <= l) return;
