@@ -15,6 +15,7 @@ import warnings
 import numpy as np
 
 from Bio.PDB import PDBParser, PDBIO
+from Bio.PDB.Atom import DisorderedAtom
 
 
 class TestDisordered(unittest.TestCase):
@@ -134,6 +135,12 @@ class TestDisordered(unittest.TestCase):
         # Now compare to DisorderedAtom.center_of_mass
         da_cog = arg27["NH1"].center_of_mass()
         self.assertTrue(np.allclose(res_cog, da_cog, atol=1e-3))
+
+    def test_empty_disordered(self):
+        """Raise ValueError on center of mass calculation of empty DisorderedAtom."""
+        da = DisorderedAtom("dummy")
+        with self.assertRaises(ValueError):
+            da.center_of_mass()
 
 
 if __name__ == "__main__":
