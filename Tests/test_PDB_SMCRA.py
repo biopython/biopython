@@ -469,6 +469,53 @@ class CopyTests(unittest.TestCase):
             self.assertIsNot(e.get_list()[0], ee.get_list()[0])
 
 
+class CenterOfMassTests(unittest.TestCase):
+    """Tests calculating centers of mass/geometry."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.parser = parser = PDBParser()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            cls.structure = parser.get_structure("a", "PDB/1LCD.pdb")
+
+    def test_structure_com(self):
+        """Calculate Structure center of mass."""
+        com = self.structure.center_of_mass()
+
+        self.assertTrue(numpy.allclose(com, [19.870, 25.455, 28.753], atol=1e-3))
+
+    def test_structure_cog(self):
+        """Calculate Structure center of geometry."""
+        cog = self.structure.center_of_mass(geometric=True)
+
+        self.assertTrue(numpy.allclose(cog, [19.882, 25.842, 28.333], atol=1e-3))
+
+    def test_chain_cog(self):
+        """Calculate center of geometry of individual chains."""
+        expected = {
+            "A": [20.271, 30.191, 23.563],
+            "B": [19.272, 21.163, 33.711],
+            "C": [19.610, 20.599, 32.708],
+        }
+
+        for chain in self.structure[0].get_chains():  # one model only
+            cog = chain.center_of_mass(geometric=True)
+            self.assertTrue(numpy.allclose(cog, expected[chain.id], atol=1e-3))
+
+    def test_com_empty_structure(self):
+        """Center of mass of empty structure raises ValueError."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s = self.parser.get_structure("b", "PDB/disordered.pdb")  # smaller
+
+        for child in list(s):
+            s.detach_child(child.id)
+
+        with self.assertRaises(ValueError):
+            s.center_of_mass()
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

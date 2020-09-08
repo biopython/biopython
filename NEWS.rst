@@ -17,6 +17,9 @@ tested on PyPy3.6.1 v7.1.1.
 Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
 unambiguously guessed from the atom name, in accordance with PDB structures.
 
+Bio.PDB entities now have a ``center_of_mass()`` method that calculates either
+centers of gravity or geometry.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
