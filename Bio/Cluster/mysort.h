@@ -1,5 +1,6 @@
 #pragma once
 #include <string.h>
+#include <limits.h>
 
 /*
 * C qsort() is very slow, much slower than C++ std::sort().
@@ -11,7 +12,7 @@
 * with mostly random data, and much faster with structured/sorted data 
 */
 
-static const int INF = 2147483647;	// 2^31 - 1
+static const int INF = INT_MAX; // 2^31 - 1
 
 /*	we use macro instead of function to avoid extra pointer dereference. */
 static double TEMP_SWAP_F64;
@@ -217,7 +218,7 @@ fastsort(int n, double a[])
 	fastsort_recursive(a, 0, n - 1);
 }
 
-
+//****************************************//
 //****************************************//
 //****************************************//
 //****************************************//
