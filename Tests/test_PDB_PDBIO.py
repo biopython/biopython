@@ -302,6 +302,40 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
+    def test_pdbio_write_x_element(self):
+        """Write a structure with atomic element X with PDBIO."""
+        struct1 = self.structure
+
+        # Change element of one atom
+        atom = next(struct1.get_atoms())
+        atom.element = "X"  # X is assigned in Atom.py as last resort
+
+        self.io.set_structure(struct1)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        try:
+            self.io.save(filename)
+        finally:
+            os.remove(filename)
+
+    def test_pdbio_write_unk_element(self):
+        """PDBIO raises ValueError when writing unrecognised atomic elements."""
+        struct1 = self.structure
+
+        atom = next(struct1.get_atoms())
+        atom.element = "1"
+
+        self.io.set_structure(struct1)
+
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+
+        with self.assertRaises(ValueError):
+            self.io.save(filename)
+        os.remove(filename)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
