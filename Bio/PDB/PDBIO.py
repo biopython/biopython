@@ -161,7 +161,7 @@ class PDBIO(StructureIO):
 
         if atom.element:
             element = atom.element.strip().upper()
-            if element.capitalize() not in atom_weights:
+            if element.capitalize() not in atom_weights and element != "X":
                 raise ValueError("Unrecognised element %r" % atom.element)
             element = element.rjust(2)
         else:
