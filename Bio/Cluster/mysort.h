@@ -54,7 +54,7 @@ median_index_of3(const double arr[], const int a, const int b, const int c)
 //****************************	MAIN SORTING PART
 
 /* Insertion sort is best when the array is small*/
-void
+static void
 insertion_sort(double a[], int l, int r)
 {
 	if (r <= l) return;
@@ -182,7 +182,7 @@ fastsort_partition(double a[], const int left, const int right, int* first_end_p
 	*second_start_ptr = low;
 }
 
-void
+static void
 fastsort_recursive(double a[], int l, int r)
 {
 	int pivot, first_end, second_start;
@@ -243,7 +243,7 @@ median_index_of3_index(const double arr[], int index[], const int a, const int b
 
 
 /* Insertion sort is best when the array is small*/
-void
+static void
 insertion_sort_index(const double a[], int index[], int l, int r)
 {
 	if (r <= l) return;
@@ -371,7 +371,7 @@ fastsort_partition_index(const double a[], int index[], const int left, const in
 
 
 //***************
-void
+static void
 fastsort_recursive_index(const double a[], int index[], int l, int r)
 {
 	int pivot, first_end, second_start;
