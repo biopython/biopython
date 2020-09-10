@@ -43,8 +43,8 @@ class AppTests(unittest.TestCase):
 
     def test_phyml(self):
         """Run PhyML using the wrapper."""
-        if not os.getenv('PHYMLCPUS'):
-            os.putenv('PHYMLCPUS', '1')
+        if not os.getenv("PHYMLCPUS"):
+            os.putenv("PHYMLCPUS", "1")
         cmd = PhymlCommandline(phyml_exe, input=EX_PHYLIP, datatype="aa")
         # Smoke test
         try:
