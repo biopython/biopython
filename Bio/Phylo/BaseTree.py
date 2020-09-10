@@ -16,6 +16,9 @@ import copy
 import itertools
 import random
 import re
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 # General tree-traversal algorithms
