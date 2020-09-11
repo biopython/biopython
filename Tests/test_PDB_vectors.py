@@ -144,7 +144,7 @@ class VectorTests(unittest.TestCase):
         rot = rotmat(v1, v2)
         angle, axis = m2rotaxis(rot)
         self.assertTrue(numpy.allclose(axis.get_array(), [-1.0, 0.0, 0.0]))
-        self.assertTrue(abs(angle - numpy.pi / 2) < 1e-5)
+        self.assertLess(abs(angle - numpy.pi / 2), 1e-5)
 
     def test_m2rotaxis_180(self):
         """Test 180 deg rotation."""
@@ -152,8 +152,8 @@ class VectorTests(unittest.TestCase):
         v2 = Vector([-1.0, -0.8, 0])
         rot = rotmat(v1, v2)
         angle, axis = m2rotaxis(rot)
-        self.assertTrue(abs(axis * v1) < 1e-5)  # axis orthogonal to v1
-        self.assertTrue(abs(angle - numpy.pi) < 1e-5)
+        self.assertLess(abs(axis * v1), 1e-5)  # axis orthogonal to v1
+        self.assertLess(abs(angle - numpy.pi), 1e-5)
 
     def test_m2rotaxis_0(self):
         """Test 0 deg rotation. Axis must be [1, 0, 0] as per Vector documentation."""
@@ -162,7 +162,7 @@ class VectorTests(unittest.TestCase):
         rot = rotmat(v1, v2)
         angle, axis = m2rotaxis(rot)
         self.assertTrue(numpy.allclose(axis.get_array(), [1, 0, 0]))
-        self.assertTrue(abs(angle) < 1e-5)
+        self.assertLess(abs(angle), 1e-5)
 
     def test_Vector_angles(self):
         """Test Vector angles."""
