@@ -43,7 +43,7 @@ class AppTests(unittest.TestCase):
 
     def test_phyml(self):
         """Run PhyML using the wrapper."""
-        # Configure phyml to run in single threaded mode by default
+        # Stabilize phyml tests by running in single threaded mode by default
         if not os.getenv("PHYMLCPUS"):
             os.putenv("PHYMLCPUS", "1")
         cmd = PhymlCommandline(phyml_exe, input=EX_PHYLIP, datatype="aa")
