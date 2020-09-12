@@ -12,8 +12,8 @@ from collections.abc import Mapping, Iterable
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
 
-from Bio.SeqRecord import SeqRecord
 from Bio.Data import CodonTable
+from Bio.Seq import Seq
 
 from Bio.codonalign.codonseq import CodonSeq
 from Bio.codonalign.codonalignment import CodonAlignment, mktest
@@ -43,7 +43,7 @@ def build(
     Arguments:
      - pro_align  - a protein MultipleSeqAlignment object
      - nucl_seqs - an object returned by SeqIO.parse or SeqIO.index
-       or a collection of SeqRecord.
+       or a collection of Seq objects.
      - corr_dict  - a dict that maps protein id to nucleotide id
      - complete_protein - whether the sequence begins with a start
        codon
@@ -53,13 +53,12 @@ def build(
     The example below answers this Biostars question: https://www.biostars.org/p/89741/
 
     >>> from Bio.Seq import Seq
-    >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
     >>> from Bio.codonalign import build
-    >>> seq1 = SeqRecord(Seq('ATGTCTCGT'), id='pro1')
-    >>> seq2 = SeqRecord(Seq('ATGCGT'), id='pro2')
-    >>> pro1 = SeqRecord(Seq('MSR'), id='pro1')
-    >>> pro2 = SeqRecord(Seq('M-R'), id='pro2')
+    >>> seq1 = Seq('ATGTCTCGT', id='pro1')
+    >>> seq2 = Seq('ATGCGT', id='pro2')
+    >>> pro1 = Seq('MSR', id='pro1')
+    >>> pro2 = Seq('M-R', id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print(codon_aln)
@@ -88,8 +87,8 @@ def build(
             nucl_num = len(nucl_seqs)
         if pro_num > nucl_num:
             raise ValueError(
-                f"Higher Number of SeqRecords in Protein Alignment ({pro_num}) "
-                f"than the Number of Nucleotide SeqRecords ({nucl_num}) are found!"
+                f"More Seq objects in the protein Alignment ({pro_num}) "
+                f"than Seq objects with nucleotide sequences ({nucl_num})"
             )
 
         # Determine the protein sequences and nucl sequences
@@ -195,9 +194,10 @@ def build(
             if corr_span[1] == 2:
                 shift = True
     if shift:
-        return CodonAlignment(_align_shift_recs(codon_aln))
+        result = CodonAlignment(_align_shift_recs(codon_aln))
     else:
-        return CodonAlignment(codon_aln)
+        result = CodonAlignment(codon_aln)
+    return result
 
 
 def _codons2re(codons):
@@ -250,22 +250,22 @@ def _check_corr(
 ):
     """Check if the nucleotide can be translated into the protein (PRIVATE).
 
-    Expects two SeqRecord objects.
+    Expects two Seq objects.
     """
     import re
 
-    if not isinstance(pro, SeqRecord) or not isinstance(nucl, SeqRecord):
+    if not isinstance(pro, Seq) or not isinstance(nucl, Seq):
         raise TypeError(
-            "_check_corr accepts two SeqRecord object. Please check your input."
+            "_check_corr accepts two Seq objects. Please check your input."
         )
 
     aa2re = _get_aa_regex(codon_table)
     pro_re = ""
-    for aa in pro.seq:
+    for aa in pro:
         if aa != gap_char:
             pro_re += aa2re[aa]
 
-    nucl_seq = str(nucl.seq.upper().ungap(gap_char))
+    nucl_seq = str(nucl.upper().ungap(gap_char))
     match = re.search(pro_re, nucl_seq)
     if match:
         # mode = 0, direct match
@@ -274,7 +274,7 @@ def _check_corr(
         # Might caused by mismatches or frameshift, using anchors to
         # have a try
         # anchor_len = 10 # adjust this value to test performance
-        pro_seq = str(pro.seq).replace(gap_char, "")
+        pro_seq = str(pro).replace(gap_char, "")
         anchors = [
             pro_seq[i : (i + anchor_len)] for i in range(0, len(pro_seq), anchor_len)
         ]
@@ -435,8 +435,8 @@ def _check_corr(
                 return (match.span(), 2, match)
             else:
                 raise RuntimeError(
-                    f"Protein SeqRecord ({pro.id}) and "
-                    f"Nucleotide SeqRecord ({nucl.id}) do not match!"
+                    f"Protein Seq ({pro.id}) and "
+                    f"Nucleotide Seq ({nucl.id}) do not match!"
                 )
 
 
@@ -588,19 +588,19 @@ def _get_codon_rec(
     import re
     from Bio.Seq import Seq
 
-    nucl_seq = nucl.seq.ungap(gap_char)
+    nucl_seq = nucl.ungap(gap_char)
     span = span_mode[0]
     mode = span_mode[1]
     aa2re = _get_aa_regex(codon_table)
     if mode in (0, 1):
-        if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
+        if len(pro.ungap(gap_char)) * 3 != (span[1] - span[0]):
             raise ValueError(
                 f"Protein Record {pro.id} and "
                 f"Nucleotide Record {nucl.id} do not match!"
             )
         aa_num = 0
-        codon_seq = CodonSeq()
-        for aa in pro.seq:
+        codon_seq = ""
+        for aa in pro:
             if aa == "-":
                 codon_seq += "---"
             elif complete_protein and aa_num == 0:
@@ -637,7 +637,7 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        return SeqRecord(codon_seq, id=nucl.id)
+        return CodonSeq(codon_seq, id=nucl.id)
     elif mode == 2:
         from collections import deque
 
@@ -664,9 +664,9 @@ def _get_codon_rec(
                 i = shift_pos[shift_start.index(i)][1]
             if i >= match.end():
                 break
-        codon_seq = CodonSeq()
+        codon_seq = ""
         aa_num = 0
-        for aa in pro.seq:
+        for aa in pro:
             if aa == "-":
                 codon_seq += "---"
             elif complete_protein and aa_num == 0:
@@ -684,7 +684,7 @@ def _get_codon_rec(
                     aa_num += 1
             else:
                 if (
-                    aa_num < len(pro.seq.ungap("-")) - 1
+                    aa_num < len(pro.ungap("-")) - 1
                     and rf_table[aa_num + 1] - rf_table[aa_num] - 3 < 0
                 ):
                     max_score -= 1
@@ -720,8 +720,8 @@ def _get_codon_rec(
                     )
                 codon_seq += this_codon
                 aa_num += 1
-        codon_seq.rf_table = rf_table
-        return SeqRecord(codon_seq, id=nucl.id)
+        # codon_seq.rf_table = rf_table
+        return CodonSeq(codon_seq, id=nucl.id, rf_table=rf_table)
 
 
 def _align_shift_recs(recs):
@@ -741,14 +741,14 @@ def _align_shift_recs(recs):
                 return lst[idx + p], p
             p += 1
 
-    full_rf_table_lst = [rec.seq.get_full_rf_table() for rec in recs]
+    full_rf_table_lst = [rec.get_full_rf_table() for rec in recs]
     rf_num = [0] * len(recs)
     for k, rec in enumerate(recs):
-        for i in rec.seq.get_full_rf_table():
+        for i in rec.get_full_rf_table():
             if isinstance(i, int):
                 rf_num[k] += 1
             # isinstance(i, float) should be True
-            elif rec.seq[int(i) : int(i) + 3] == "---":
+            elif rec[int(i) : int(i) + 3] == "---":
                 rf_num[k] += 1
     if len(set(rf_num)) != 1:
         raise RuntimeError("Number of alignable codons unequal in given records")
@@ -763,7 +763,7 @@ def _align_shift_recs(recs):
             break
         for j, k in enumerate(col_rf_lst):
             add_lst.append((j, int(k)))
-            if isinstance(k, float) and recs[j].seq[int(k) : int(k) + 3] != "---":
+            if isinstance(k, float) and recs[j][int(k) : int(k) + 3] != "---":
                 m, p = find_next_int(k, full_rf_table_lst[j])
                 if (m - k) % 3 != 0:
                     gap_num = 3 - (m - k) % 3
@@ -771,23 +771,23 @@ def _align_shift_recs(recs):
                     gap_num = 0
                 if gap_num != 0:
                     gaps = "-" * int(gap_num)
-                    seq = CodonSeq(rf_table=recs[j].seq.rf_table)
-                    seq += recs[j].seq[: int(k)] + gaps + recs[j].seq[int(k) :]
+                    seq = CodonSeq(rf_table=recs[j].rf_table)
+                    seq += recs[j][: int(k)] + gaps + recs[j][int(k) :]
                     full_rf_table = full_rf_table_lst[j]
                     bp = full_rf_table.index(k)
                     full_rf_table = full_rf_table[:bp] + [
                         v + int(gap_num) for v in full_rf_table[bp + 1 :]
                     ]
                     full_rf_table_lst[j] = full_rf_table
-                    recs[j].seq = seq
+                    recs[j] = seq
                 add_lst.pop()
                 gap_num += m - k
                 i += p - 1
         if len(add_lst) != rec_num:
             for j, k in add_lst:
-                seq = CodonSeq(rf_table=recs[j].seq.rf_table)
+                seq = CodonSeq(rf_table=recs[j].rf_table)
                 gaps = "-" * int(gap_num)
-                seq += recs[j].seq[: int(k)] + gaps + recs[j].seq[int(k) :]
+                seq += recs[j][: int(k)] + gaps + recs[j][int(k) :]
                 full_rf_table = full_rf_table_lst[j]
                 bp = full_rf_table.index(k)
                 inter_rf = []
@@ -799,7 +799,7 @@ def _align_shift_recs(recs):
                     + [v + int(gap_num) for v in full_rf_table[bp:]]
                 )
                 full_rf_table_lst[j] = full_rf_table
-                recs[j].seq = seq
+                recs[j] = seq
         i += 1
     return recs
 

@@ -6,8 +6,7 @@
 # package.
 """Bio.SeqIO support for the "pir" (aka PIR or NBRF) file format.
 
-This module is for reading and writing PIR or NBRF format files as
-SeqRecord objects.
+This module is for reading and writing PIR or NBRF format files as Seq objects.
 
 You are expected to use this module via the Bio.SeqIO functions, or if
 the file contains a sequence alignment, optionally via Bio.AlignIO instead.
@@ -88,7 +87,6 @@ Sequence codes and their meanings:
 """
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter
 
 
@@ -109,7 +107,7 @@ class PirIterator(SequenceIterator):
     """Parser for PIR files."""
 
     def __init__(self, source):
-        """Iterate over a PIR file and yield SeqRecord objects.
+        """Iterate over a PIR file and yield Seq objects.
 
         source - file-like object or a path to a file.
 
@@ -129,7 +127,7 @@ class PirIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="Pir")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
@@ -168,9 +166,7 @@ class PirIterator(SequenceIterator):
                 )
 
             # Return the record and then continue...
-            record = SeqRecord(
-                Seq(seq[:-1]), id=identifier, name=identifier, description=description,
-            )
+            record = Seq(seq[:-1], id=identifier, name=identifier, description=description)
             record.annotations["PIR-type"] = pir_type
             if _pir_mol_type[pir_type]:
                 record.annotations["molecule_type"] = _pir_mol_type[pir_type]
@@ -268,7 +264,7 @@ class PirWriter(SequenceWriter):
 
         self.handle.write(">%s;%s\n%s\n" % (code, title, description))
 
-        data = self._get_seq_string(record)  # Catches sequence being None
+        data = str(record)
 
         assert "\n" not in data
         assert "\r" not in data

@@ -22,7 +22,6 @@ from io import StringIO
 
 # biopython
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import AlignInfo
 from Bio import AlignIO
 from Bio.Align import MultipleSeqAlignment
@@ -173,14 +172,14 @@ class TestBasics(unittest.TestCase):
         """Basic tests on a simple alignment of three sequences."""
         alignment = MultipleSeqAlignment([])
         letters = "AbcDefGhiJklMnoPqrStuVwxYz"
-        alignment.append(SeqRecord(Seq(letters), id="mixed"))
-        alignment.append(SeqRecord(Seq(letters.lower()), id="lower"))
-        alignment.append(SeqRecord(Seq(letters.upper()), id="upper"))
+        alignment.append(Seq(letters, id="mixed"))
+        alignment.append(Seq(letters.lower(), id="lower"))
+        alignment.append(Seq(letters.upper(), id="upper"))
         self.assertEqual(alignment.get_alignment_length(), 26)
         self.assertEqual(len(alignment), 3)
-        self.assertEqual(str(alignment[0].seq), letters)
-        self.assertEqual(str(alignment[1].seq), letters.lower())
-        self.assertEqual(str(alignment[2].seq), letters.upper())
+        self.assertEqual(str(alignment[0]), letters)
+        self.assertEqual(str(alignment[1]), letters.lower())
+        self.assertEqual(str(alignment[2]), letters.upper())
         self.assertEqual(alignment[0].id, "mixed")
         self.assertEqual(alignment[1].id, "lower")
         self.assertEqual(alignment[2].id, "upper")
@@ -218,7 +217,7 @@ class TestReading(unittest.TestCase):
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "gi|6273285|gb|AF191659.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             Seq(
                 "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA"
             ),
@@ -226,37 +225,37 @@ class TestReading(unittest.TestCase):
         seq_record = alignment[1]
         self.assertEqual(seq_record.description, "gi|6273284|gb|AF191658.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         seq_record = alignment[2]
         self.assertEqual(seq_record.description, "gi|6273287|gb|AF191661.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         seq_record = alignment[3]
         self.assertEqual(seq_record.description, "gi|6273286|gb|AF191660.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             "TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         seq_record = alignment[4]
         self.assertEqual(seq_record.description, "gi|6273290|gb|AF191664.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         seq_record = alignment[5]
         self.assertEqual(seq_record.description, "gi|6273289|gb|AF191663.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA",
         )
         seq_record = alignment[6]
         self.assertEqual(seq_record.description, "gi|6273291|gb|AF191665.1|AF191")
         self.assertEqual(
-            seq_record.seq,
+            seq_record,
             "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
         self.assertEqual(alignment.get_alignment_length(), 156)
@@ -613,7 +612,7 @@ A  7.0 0.0 0.0 0.0
 """,
         )
 
-        second_seq = alignment[1].seq
+        second_seq = alignment[1]
         matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
         self.assertEqual(
             str(matrix),
@@ -960,13 +959,13 @@ A  7.0 0.0 0.0 0.0
         self.assertEqual(len(alignment), 3)
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_413_324")
-        self.assertEqual(seq_record.seq, "CCCTTCTTGTCTTCAGCGTTTCTCC")
+        self.assertEqual(seq_record, "CCCTTCTTGTCTTCAGCGTTTCTCC")
         seq_record = alignment[1]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_540_792")
-        self.assertEqual(seq_record.seq, "TTGGCAGGCCAAGGCCGATGGATCA")
+        self.assertEqual(seq_record, "TTGGCAGGCCAAGGCCGATGGATCA")
         seq_record = alignment[2]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_443_348")
-        self.assertEqual(seq_record.seq, "GTTGCTTCTGGCGTGGGTGGGGGGG")
+        self.assertEqual(seq_record, "GTTGCTTCTGGCGTGGGTGGGGGGG")
         self.assertEqual(alignment.get_alignment_length(), 25)
         align_info = AlignInfo.SummaryInfo(alignment)
         consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)

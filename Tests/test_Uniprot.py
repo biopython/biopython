@@ -8,8 +8,8 @@
 import os
 import unittest
 
+from Bio.Seq import Seq
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
 
 from seq_tests_common import compare_reference, compare_record
 
@@ -27,15 +27,27 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
-        self.assertIsInstance(seq_record, SeqRecord)
+        self.assertIsInstance(seq_record, Seq)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(seq_record.id, "Q91G55")
         self.assertEqual(seq_record.name, "043L_IIV6")
         self.assertEqual(seq_record.description, "Uncharacterized protein 043L")
+        self.assertEqual(seq_record.dbxrefs, ['DOI:10.1006/viro.2001.0963',
+                                              'DOI:10.1186/1743-422X-4-11',
+                                              'EMBL:AF303741',
+                                              'GeneId:1733003',
+                                              'MEDLINE:21342589',
+                                              'NCBI Taxonomy:176652',
+                                              'PubMed:11448171',
+                                              'PubMed:17239238',
+                                              'RefSeq:NP_149506.1',
+                                              'Swiss-Prot:043L_IIV6',
+                                              'Swiss-Prot:Q91G55']
+                                             )
         self.assertEqual(
-            repr(seq_record.seq),
-            "Seq('MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKI...IPI')",
+            repr(seq_record),
+            "Seq('MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKI...IPI', id='Q91G55', name='043L_IIV6', description='Uncharacterized protein 043L')"
         )
 
         # self.assertEqual(seq_record.accessions, ['Q91G55']) #seq_record.accessions does not exist
@@ -127,15 +139,15 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
-        self.assertIsInstance(seq_record, SeqRecord)
+        self.assertIsInstance(seq_record, Seq)
 
         # test general record entries
         self.assertEqual(seq_record.id, "O44185")
         self.assertEqual(seq_record.name, "FLP13_CAEEL")
         self.assertEqual(seq_record.description, "FMRFamide-like neuropeptides 13")
         self.assertEqual(
-            repr(seq_record.seq),
-            "Seq('MMTSLLTISMFVVAIQAFDSSEIRMLDEQYDTKNPFFQFLENSKRSDRPTRAMD...GRK')",
+            repr(seq_record),
+            "Seq('MMTSLLTISMFVVAIQAFDSSEIRMLDEQYDTKNPFFQFLENSKRSDRPTRAMD...GRK', id='O44185', name='FLP13_CAEEL', description='FMRFamide-like neuropeptides 13')"
         )
 
         self.assertEqual(len(seq_record.annotations["references"]), 7)
@@ -426,7 +438,7 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "swiss")
 
-        self.assertIsInstance(seq_record, SeqRecord)
+        self.assertIsInstance(seq_record, Seq)
 
         # test ProteinExistence (the numerical value describing the evidence for the existence of the protein)
         self.assertEqual(seq_record.annotations["protein_existence"], 1)
@@ -445,7 +457,7 @@ class TestUniprot(unittest.TestCase):
         with open(datafile) as handle:
             seq_record = SeqIO.read(handle, "swiss")
 
-        self.assertIsInstance(seq_record, SeqRecord)
+        self.assertIsInstance(seq_record, Seq)
 
         # test Sequence version
         self.assertEqual(seq_record.annotations["sequence_version"], 34)
@@ -457,7 +469,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual(len(old), len(new))
-        self.assertEqual(str(old.seq), str(new.seq))
+        self.assertEqual(old, new)
         for key in set(old.annotations).intersection(new.annotations):
             if key == "references":
                 self.assertEqual(len(old.annotations[key]), len(new.annotations[key]))
@@ -571,7 +583,7 @@ class TestUniprot(unittest.TestCase):
         for txt, xml, fas, id in zip(txt_list, xml_list, fas_list, ids):
             self.assertEqual(txt.id, id)
             self.assertIn(txt.id, fas.id.split("|"))
-            self.assertEqual(str(txt.seq), str(fas.seq))
+            self.assertEqual(txt, fas)
             self.compare_txt_xml(txt, xml)
 
     def test_multi_ex_index(self):

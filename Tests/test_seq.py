@@ -57,7 +57,7 @@ class TestSeq(unittest.TestCase):
 
     def test_as_string(self):
         """Test converting Seq to string."""
-        self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
+        self.assertEqual("TCAAAAGGATGCATCATG", self.s)
 
     def test_repr(self):
         """Test representation of Seq object."""
@@ -82,7 +82,7 @@ class TestSeq(unittest.TestCase):
 
     def test_slicing(self):
         """Test slicing of Seq."""
-        self.assertEqual("AA", str(self.s[3:5]))
+        self.assertEqual("AA", self.s[3:5])
 
     def test_reverse(self):
         """Test reverse using -1 stride."""
@@ -90,9 +90,9 @@ class TestSeq(unittest.TestCase):
 
     def test_extract_third_nucleotide(self):
         """Test extracting every third nucleotide (slicing with stride 3)."""
-        self.assertEqual("TAGTAA", str(self.s[0::3]))
-        self.assertEqual("CAGGTT", str(self.s[1::3]))
-        self.assertEqual("AAACCG", str(self.s[2::3]))
+        self.assertEqual("TAGTAA", self.s[0::3])
+        self.assertEqual("CAGGTT", self.s[1::3])
+        self.assertEqual("AAACCG", self.s[2::3])
 
     def test_concatenation_of_seq(self):
         t = Seq.Seq("T")
@@ -453,7 +453,7 @@ class TestMutableSeq(unittest.TestCase):
         mutable_s = MutableSeq("TCAAAAGGATGCATCATG")
         self.assertIsInstance(mutable_s, MutableSeq, "Creating MutableSeq")
 
-        mutable_s = self.s.tomutable()
+        mutable_s = MutableSeq(self.s)
         self.assertIsInstance(mutable_s, MutableSeq, "Converting Seq to mutable")
 
         array_seq = MutableSeq(array.array("u", "TCAAAAGGATGCATCATG"))
@@ -554,7 +554,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(18, len(self.mutable_s))
 
     def test_converting_to_immutable(self):
-        self.assertIsInstance(self.mutable_s.toseq(), Seq.Seq)
+        self.assertIsInstance(Seq.Seq(self.mutable_s), Seq.Seq)
 
     def test_first_nucleotide(self):
         self.assertEqual("T", self.mutable_s[0])
@@ -640,16 +640,25 @@ class TestMutableSeq(unittest.TestCase):
     def test_complement_rna(self):
         seq = Seq.MutableSeq("AUGaaaCUG")
         seq.complement()
+        self.assertEqual("TACtttGAC", str(seq))
+        seq = Seq.MutableSeq("AUGaaaCUG")
+        seq.rna_complement()
         self.assertEqual("UACuuuGAC", str(seq))
 
     def test_complement_mixed_aphabets(self):
         seq = Seq.MutableSeq("AUGaaaCTG")
-        with self.assertRaises(ValueError):
-            seq.complement()
+        seq.complement()
+        self.assertEqual("TACtttGAC", str(seq))
+        seq = Seq.MutableSeq("AUGaaaCTG")
+        seq.rna_complement()
+        self.assertEqual("UACuuuGAC", str(seq))
 
     def test_complement_rna_string(self):
         seq = Seq.MutableSeq("AUGaaaCUG")
         seq.complement()
+        self.assertEqual("TACtttGAC", str(seq))
+        seq = Seq.MutableSeq("AUGaaaCUG")
+        seq.rna_complement()
         self.assertEqual("UACuuuGAC", str(seq))
 
     def test_complement_dna_string(self):
@@ -730,8 +739,8 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertEqual(3, self.s.count("??"))
         self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("?"))
         self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("??"))
-        self.assertEqual(4, Seq.UnknownSeq(6, character="?").count("?", start=2))
-        self.assertEqual(2, Seq.UnknownSeq(6, character="?").count("??", start=2))
+        self.assertEqual(4, Seq.UnknownSeq(6, character="?").count("?", 2))
+        self.assertEqual(2, Seq.UnknownSeq(6, character="?").count("??", 2))
 
     def test_complement(self):
         self.s.complement()
@@ -783,7 +792,6 @@ class TestComplement(unittest.TestCase):
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
             compl_values = str(
-                # Will default to DNA if neither T or U found...
                 # Turn black code style off
                 # fmt: off
                 Seq.Seq(values).complement().transcribe()
@@ -792,22 +800,27 @@ class TestComplement(unittest.TestCase):
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
 
-    def test_complement_incompatible_alphabets(self):
+    def test_complement_hybrid_sequence(self):
         seq = Seq.Seq("CAGGTU")
-        with self.assertRaises(ValueError):
-            seq.complement()
+        self.assertEqual("GTCCAA", Seq.complement(seq))
+        self.assertEqual("GUCCAA", Seq.rna_complement(seq))
+        self.assertEqual("AACCTG", Seq.reverse_complement(seq))
+        self.assertEqual("AACCUG", Seq.rna_reverse_complement(seq))
 
     def test_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
-        self.assertRaises(ValueError, Seq.complement, seq)
+        self.assertEqual("TACTTTGAC", Seq.complement(seq))
+        self.assertEqual("UACUUUGAC", Seq.rna_complement(seq))
 
     def test_complement_of_rna(self):
         seq = "AUGAAACUG"
-        self.assertEqual("UACUUUGAC", Seq.complement(seq))
+        self.assertEqual("TACTTTGAC", Seq.complement(seq))
+        self.assertEqual("UACUUUGAC", Seq.rna_complement(seq))
 
     def test_complement_of_dna(self):
         seq = "ATGAAACTG"
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
+        self.assertEqual("UACUUUGAC", Seq.rna_complement(seq))
 
 
 class TestReverseComplement(unittest.TestCase):
@@ -816,7 +829,7 @@ class TestReverseComplement(unittest.TestCase):
         test_seqs_copy.pop(13)
 
         for nucleotide_seq in test_seqs_copy:
-            if isinstance(nucleotide_seq, Seq.Seq):
+            if not isinstance(nucleotide_seq, Seq.MutableSeq):
                 expected = Seq.reverse_complement(nucleotide_seq)
                 self.assertEqual(
                     repr(expected), repr(nucleotide_seq.reverse_complement())
@@ -835,11 +848,11 @@ class TestReverseComplement(unittest.TestCase):
 
     def test_reverse_complement_of_mixed_dna_rna(self):
         seq = "AUGAAACTG"  # U and T
-        self.assertRaises(ValueError, Seq.reverse_complement, seq)
+        self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
 
     def test_reverse_complement_of_rna(self):
         seq = "AUGAAACUG"
-        self.assertEqual("CAGUUUCAU", Seq.reverse_complement(seq))
+        self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
 
     def test_reverse_complement_of_dna(self):
         seq = "ATGAAACTG"
@@ -849,17 +862,22 @@ class TestReverseComplement(unittest.TestCase):
 class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):
         """Test double reverse complement preserves the sequence."""
-        sorted_amb_rna = sorted(ambiguous_rna_values)
+        # DNA sequence
         sorted_amb_dna = sorted(ambiguous_dna_values)
-        for sequence in [
-            Seq.Seq("".join(sorted_amb_rna)),
-            Seq.Seq("".join(sorted_amb_dna)),
-            Seq.Seq("".join(sorted_amb_rna).replace("X", "")),
-            Seq.Seq("".join(sorted_amb_dna).replace("X", "")),
-            Seq.Seq("AWGAARCKG"),
-        ]:  # Note no U or T
-            reversed_sequence = sequence.reverse_complement()
-            self.assertEqual(str(sequence), str(reversed_sequence.reverse_complement()))
+        s = Seq.Seq("".join(sorted_amb_dna))
+        self.assertEqual(s, s.reverse_complement().reverse_complement())
+        s = Seq.Seq("".join(sorted_amb_dna).replace("X", ""))
+        self.assertEqual(s, s.reverse_complement().reverse_complement())
+        # RNA sequence
+        sorted_amb_rna = sorted(ambiguous_rna_values)
+        s = Seq.Seq("".join(sorted_amb_rna))
+        self.assertEqual(s, s.rna_reverse_complement().rna_reverse_complement())
+        s = Seq.Seq("".join(sorted_amb_rna).replace("X", ""))
+        self.assertEqual(s, s.rna_reverse_complement().rna_reverse_complement())
+        # Sequence without T or U
+        s = Seq.Seq("AWGAARCKG")
+        self.assertEqual(s, s.rna_reverse_complement().rna_reverse_complement())
+        self.assertEqual(s, s.reverse_complement().reverse_complement())
 
 
 class TestTranscription(unittest.TestCase):

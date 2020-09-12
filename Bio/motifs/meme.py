@@ -77,7 +77,6 @@ class Instance(Seq.Seq):
 
     def __init__(self, *args, **kwds):
         """Initialize the class."""
-        Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.sequence_id = ""
         self.start = 0

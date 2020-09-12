@@ -56,7 +56,7 @@ Classes:
 from collections import OrderedDict
 import functools
 
-from Bio.Seq import MutableSeq, reverse_complement
+from Bio.Seq import Seq, MutableSeq, reverse_complement
 
 
 class SeqFeature:
@@ -327,7 +327,7 @@ class SeqFeature:
             qualifiers=OrderedDict(self.qualifiers.items()),
         )
 
-    def extract(self, parent_sequence):
+    def extract(self, parent_sequence, references=None):
         """Extract the feature's sequence from supplied parent sequence.
 
         The parent_sequence can be a Seq like object or a string, and will
@@ -337,7 +337,9 @@ class SeqFeature:
         This should cope with complex locations including complements, joins
         and fuzzy positions. Even mixed strand features should work! This
         also covers features on protein sequences (e.g. domains), although
-        here reverse strand features are not permitted.
+        here reverse strand features are not permitted. If the
+        location refers to other records, they must be supplied in the
+        optional dictionary references.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -365,7 +367,7 @@ class SeqFeature:
                 "The feature's .location is None. Check the "
                 "sequence file for a valid location."
             )
-        return self.location.extract(parent_sequence)
+        return self.location.extract(parent_sequence, references=references)
 
     def translate(
         self,
@@ -1006,9 +1008,9 @@ class FeatureLocation:
     def _shift(self, offset):
         """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
         # TODO - What if offset is a fuzzy position?
-        if self.ref or self.ref_db:
-            # TODO - Return self?
-            raise ValueError("Feature references another sequence.")
+        # if self.ref or self.ref_db:
+        #     # TODO - Return self?
+        #     raise ValueError("Feature references another sequence.")
         return FeatureLocation(
             start=self._start._shift(offset),
             end=self._end._shift(offset),
@@ -1017,9 +1019,9 @@ class FeatureLocation:
 
     def _flip(self, length):
         """Return a copy of the location after the parent is reversed (PRIVATE)."""
-        if self.ref or self.ref_db:
+        # if self.ref or self.ref_db:
             # TODO - Return self?
-            raise ValueError("Feature references another sequence.")
+        #     raise ValueError("Feature references another sequence.")
         # Note this will flip the start and end too!
         if self.strand == +1:
             flip_strand = -1
@@ -1092,12 +1094,14 @@ class FeatureLocation:
                 return None
             raise
 
-    def extract(self, parent_sequence):
+    def extract(self, parent_sequence, references=None):
         """Extract the sequence from supplied parent sequence using the FeatureLocation object.
 
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
         a MutableSeq as the parent sequence will return a Seq object.
+        If the location refers to other records, they must be supplied
+        in the optional dictionary references.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import FeatureLocation
@@ -1108,12 +1112,28 @@ class FeatureLocation:
 
         """
         if self.ref or self.ref_db:
-            # TODO - Take a dictionary as an optional argument?
-            raise ValueError("Feature references another sequence.")
+            if not references:
+                raise ValueError(
+                    f"Feature references another sequence ({self.ref}),"
+                    " references mandatory"
+                )
+            elif self.ref not in references:
+                # KeyError?
+                raise ValueError(
+                    f"Feature references another sequence ({self.ref}),"
+                    " not found in references"
+                )
+            parent_sequence = references[self.ref]
+            try:
+                # If was a SeqRecord, just take the sequence
+                # (should focus on the annotation of the feature)
+                parent_sequence = parent_sequence.seq
+            except AttributeError:
+                pass
         if isinstance(parent_sequence, MutableSeq):
             # This avoids complications with reverse complements
             # (the MutableSeq reverse complement acts in situ)
-            parent_sequence = parent_sequence.toseq()
+            parent_sequence = Seq(parent_sequence)
         f_seq = parent_sequence[self.nofuzzy_start : self.nofuzzy_end]
         if self.strand == -1:
             try:
@@ -1509,12 +1529,14 @@ class CompoundLocation:
         """Not present in CompoundLocation, dummy method for API compatibility."""
         return None
 
-    def extract(self, parent_sequence):
+    def extract(self, parent_sequence, references=None):
         """Extract the sequence from supplied parent sequence using the CompoundLocation object.
 
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
         a MutableSeq as the parent sequence will return a Seq object.
+        If the location refers to other records, they must be supplied
+        in the optional dictionary references.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
@@ -1527,7 +1549,9 @@ class CompoundLocation:
 
         """
         # This copes with mixed strand features & all on reverse:
-        parts = [loc.extract(parent_sequence) for loc in self.parts]
+        parts = [
+            loc.extract(parent_sequence, references=references) for loc in self.parts
+        ]
         f_seq = functools.reduce(lambda x, y: x + y, parts)
         return f_seq
 
@@ -2193,3 +2217,4 @@ if __name__ == "__main__":
     from Bio._utils import run_doctest
 
     run_doctest()
+

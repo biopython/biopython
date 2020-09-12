@@ -53,7 +53,7 @@ class ProbconsApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
     def test_Probcons_alignment_clustalw(self):
@@ -71,7 +71,7 @@ class ProbconsApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
     def test_Probcons_complex_commandline(self):

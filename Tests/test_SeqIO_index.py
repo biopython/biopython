@@ -21,7 +21,7 @@ import warnings
 from io import BytesIO
 from io import StringIO
 
-from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToRandomAccess
 
@@ -425,11 +425,11 @@ class IndexDictTests(SeqIOTestBaseClass):
             rec_dict.iteritems
         for key, rec in rec_dict.items():
             self.assertIn(key, keys, msg=msg)
-            self.assertIsInstance(rec, SeqRecord, msg=msg)
+            self.assertIsInstance(rec, Seq, msg=msg)
             self.assertIn(rec.id, ids, msg=msg)
         for rec in rec_dict.values():
             self.assertIn(key, keys, msg=msg)
-            self.assertIsInstance(rec, SeqRecord, msg=msg)
+            self.assertIsInstance(rec, Seq, msg=msg)
             self.assertIn(rec.id, ids, msg=msg)
 
     def simple_check(self, filename, fmt, comp):

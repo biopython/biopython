@@ -295,7 +295,7 @@ class TestAlternativeIndexes(unittest.TestCase):
         self.assertEqual(len(self.sff), len(new_sff))
         for old, new in zip(self.sff, new_sff):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(old.seq), str(new.seq))
+            self.assertEqual(old, new)
 
     def test_alt_index_at_end(self):
         with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
@@ -429,7 +429,7 @@ class TestSelf(unittest.TestCase):
             sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim
         ):
             self.assertEqual(len({s.id, f.id, q.id}), 1)  # All values are the same
-            self.assertEqual(str(s.seq), str(f.seq))
+            self.assertEqual(s, f)
             self.assertEqual(
                 s.letter_annotations["phred_quality"],
                 q.letter_annotations["phred_quality"],
@@ -437,7 +437,7 @@ class TestSelf(unittest.TestCase):
             self.assertEqual(
                 len({s.id, sT.id, fT.id, qT.id}), 1
             )  # All values are the same
-            self.assertEqual(str(sT.seq), str(fT.seq))
+            self.assertEqual(sT, fT)
             self.assertEqual(
                 sT.letter_annotations["phred_quality"],
                 qT.letter_annotations["phred_quality"],
@@ -530,7 +530,7 @@ if False:
     with open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
         records2 = list(SffIterator(handle))
     for old, new in zip(records, records2):
-        assert str(old.seq) == str(new.seq)
+        assert old == new
     with open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
         i = list(_sff_do_slow_index(handle))
 
@@ -564,7 +564,7 @@ if False:
     with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
         records2 = list(SffIterator(handle))
     for old, new in zip(records, records2):
-        assert str(old.seq) == str(new.seq)
+        assert old == new
     with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
         j = list(_sff_do_slow_index(handle))
 
@@ -591,7 +591,7 @@ if False:
     with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
         records2 = list(SffIterator(handle))
     for old, new in zip(records, records2):
-        assert str(old.seq) == str(new.seq)
+        assert old == new
     with unittest.TestCase.assertRaises(None, ValueError):
         with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
             print(ReadRocheXmlManifest(handle))

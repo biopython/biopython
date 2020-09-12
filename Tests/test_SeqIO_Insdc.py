@@ -11,7 +11,6 @@ from io import StringIO
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio.SeqRecord import SeqRecord
 
 
 from seq_tests_common import compare_record
@@ -65,9 +64,9 @@ class TestEmbl(unittest.TestCase):
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )
-        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record = Seq("A" * 100, "dummy", features=[f])
         record.annotations["molecule_type"] = "DNA"
-        gbk = record.format("gb")
+        gbk = format(record, "gb")
         self.assertIn(" /empty\n", gbk)
         self.assertIn(" /zero=0\n", gbk)
         self.assertIn(" /one=1\n", gbk)

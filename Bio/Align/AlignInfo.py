@@ -72,12 +72,12 @@ class SummaryInfo:
             for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] != "-" and record.seq[n] != ".":
-                        if record.seq[n] not in atom_dict:
-                            atom_dict[record.seq[n]] = 1
+                if n < len(record):
+                    if record[n] != "-" and record[n] != ".":
+                        if record[n] not in atom_dict:
+                            atom_dict[record[n]] = 1
                         else:
-                            atom_dict[record.seq[n]] += 1
+                            atom_dict[record[n]] += 1
 
                         num_atoms = num_atoms + 1
 
@@ -128,11 +128,11 @@ class SummaryInfo:
             for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
-                if n < len(record.seq):
-                    if record.seq[n] not in atom_dict:
-                        atom_dict[record.seq[n]] = 1
+                if n < len(record):
+                    if record[n] not in atom_dict:
+                        atom_dict[record[n]] = 1
                     else:
-                        atom_dict[record.seq[n]] += 1
+                        atom_dict[record[n]] += 1
 
                     num_atoms += 1
 
@@ -205,8 +205,8 @@ class SummaryInfo:
                 # for each pair of records, compare the sequences and add
                 # the pertinent info to the dictionary
                 self._pair_replacement(
-                    self.alignment[rec_num1].seq,
-                    self.alignment[rec_num2].seq,
+                    self.alignment[rec_num1],
+                    self.alignment[rec_num2],
                     self.alignment[rec_num1].annotations.get("weight", 1.0),
                     self.alignment[rec_num2].annotations.get("weight", 1.0),
                     rep_dict,
@@ -235,7 +235,7 @@ class SummaryInfo:
         """Return a string containing the expected letters in the alignment (PRIVATE)."""
         set_letters = set()
         for record in self.alignment:
-            set_letters.update(record.seq)
+            set_letters.update(record)
         list_letters = sorted(set_letters)
         all_letters = "".join(list_letters)
         return all_letters
@@ -285,7 +285,7 @@ class SummaryInfo:
             score_dict = dict.fromkeys(all_letters, 0)
             for record in self.alignment:
                 try:
-                    this_residue = record.seq[residue_num]
+                    this_residue = record[residue_num]
                 # if we hit an index error we've run out of sequence and
                 # should not add new residues
                 except IndexError:
@@ -340,14 +340,14 @@ class SummaryInfo:
         """
         # if no end was specified, then we default to the end of the sequence
         if end is None:
-            end = len(self.alignment[0].seq)
+            end = len(self.alignment[0])
         if chars_to_ignore is None:
             chars_to_ignore = []
 
-        if start < 0 or end > len(self.alignment[0].seq):
+        if start < 0 or end > len(self.alignment[0]):
             raise ValueError(
                 "Start (%s) and end (%s) are not in the range %s to %s"
-                % (start, end, 0, len(self.alignment[0].seq))
+                % (start, end, 0, len(self.alignment[0]))
             )
         # determine random expected frequencies, if necessary
         random_expected = None
@@ -426,14 +426,14 @@ class SummaryInfo:
         # collect the count info into the dictionary for all the records
         for record in all_records:
             try:
-                if record.seq[residue_num] not in to_ignore:
+                if record[residue_num] not in to_ignore:
                     weight = record.annotations.get("weight", 1.0)
-                    freq_info[record.seq[residue_num]] += weight
+                    freq_info[record[residue_num]] += weight
                     total_count += weight
             except KeyError:
                 raise ValueError(
                     "Residue %s not found in letters %s"
-                    % (record.seq[residue_num], letters)
+                    % (record[residue_num], letters)
                 ) from None
 
         if e_freq_table:
@@ -590,6 +590,6 @@ def print_info_content(summary_info, fout=None, rep_record=0):
     fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
-    rep_sequence = summary_info.alignment[rep_record].seq
+    rep_sequence = summary_info.alignment[rep_record]
     for pos, ic in enumerate(summary_info.ic_vector):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos], ic))

@@ -11,7 +11,6 @@ import unittest
 from itertools import chain
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
 
@@ -672,10 +671,10 @@ class MethodTests(unittest.TestCase):
                 ],
             ),
         )
-        srec = pseq.to_seqrecord()
+        srec = pseq.to_seq()
         # TODO: check seqrec-specific traits (see args)
         #   Seq(letters), id, name, description, features
-        pseq2 = PX.Sequence.from_seqrecord(srec)
+        pseq2 = PX.Sequence.from_seq(srec)
         # TODO: check the round-tripped attributes again
 
     def test_to_alignment(self):
@@ -686,8 +685,8 @@ class MethodTests(unittest.TestCase):
         # Add sequences to the terminals
         for tip, seqstr in zip(tree.get_terminals(), ("AA--TTA", "AA--TTG", "AACCTTC")):
             tip.sequences.append(
-                PX.Sequence.from_seqrecord(
-                    SeqRecord(Seq(seqstr), id=str(tip)), is_aligned=True
+                PX.Sequence.from_seq(
+                    Seq(seqstr, id=str(tip)), is_aligned=True
                 )
             )
         # Check the alignment

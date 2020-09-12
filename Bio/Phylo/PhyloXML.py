@@ -22,7 +22,6 @@ import warnings
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonWarning
 
 from Bio.Phylo import BaseTree
@@ -259,8 +258,8 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         except StopIteration:
             # No aligned sequences were found --> empty MSA
             return MultipleSeqAlignment([])
-        msa = MultipleSeqAlignment([first_seq.to_seqrecord()])
-        msa.extend(seq.to_seqrecord() for seq in seqs)
+        msa = MultipleSeqAlignment([first_seq.to_seq()])
+        msa.extend(seq.to_seq() for seq in seqs)
         return msa
 
     # Singular property for plural attribute
@@ -1246,15 +1245,15 @@ class Sequence(PhyloElement):
         self.other = other or []
 
     @classmethod
-    def from_seqrecord(cls, record, is_aligned=None):
-        """Create a new PhyloXML Sequence from a SeqRecord object."""
+    def from_seq(cls, record, is_aligned=None):
+        """Create a new PhyloXML Sequence from a Seq object."""
         if is_aligned is None:
-            is_aligned = "-" in record.seq
+            is_aligned = "-" in record
         params = {
             "accession": Accession(record.id, ""),
             "symbol": record.name,
             "name": record.description,
-            "mol_seq": MolSeq(str(record.seq), is_aligned),
+            "mol_seq": MolSeq(str(record), is_aligned),
         }
         molecule_type = record.annotations.get("molecule_type")
         if molecule_type is not None:
@@ -1292,7 +1291,7 @@ class Sequence(PhyloElement):
         # Unpack record.features
         if record.features:
             params["domain_architecture"] = DomainArchitecture(
-                length=len(record.seq),
+                length=len(record),
                 domains=[
                     ProteinDomain.from_seqfeature(feat) for feat in record.features
                 ],
@@ -1300,12 +1299,12 @@ class Sequence(PhyloElement):
 
         return Sequence(**params)
 
-    def to_seqrecord(self):
-        """Create a SeqRecord object from this Sequence instance.
+    def to_seq(self):
+        """Create a Seq object from this Sequence instance.
 
         The seqrecord.annotations dictionary is packed like so::
 
-            { # Sequence attributes with no SeqRecord equivalent:
+            { # Sequence attributes with no Seq equivalent:
               'id_ref': self.id_ref,
               'id_source': self.id_source,
               'location': self.location,
@@ -1335,8 +1334,7 @@ class Sequence(PhyloElement):
             """Remove None-valued items from a dictionary."""
             return {key: val for key, val in dct.items() if val is not None}
 
-        seqrec = SeqRecord(
-            Seq(self.mol_seq.value),
+        seqrec = Seq(self.mol_seq.value,
             **clean_dict(
                 {
                     "id": str(self.accession),
@@ -1350,7 +1348,7 @@ class Sequence(PhyloElement):
             seqrec.features = [
                 dom.to_seqfeature() for dom in self.domain_architecture.domains
             ]
-        # Sequence attributes with no SeqRecord equivalent
+        # Sequence attributes with no Seq equivalent
         if self.type == "dna":
             molecule_type = "DNA"
         elif self.type == "rna":

@@ -22,7 +22,6 @@ Parameters         Holds information from the parameters.
 # XXX finish printable BLAST output
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
 
@@ -319,7 +318,7 @@ class MultipleAlignment:
 
         generic = MultipleSeqAlignment([])
         for (name, seq) in zip(seq_names, seq_parts):
-            generic.append(SeqRecord(Seq(seq), name))
+            generic.append(Seq(seq, name))
 
         return generic
 

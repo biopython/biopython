@@ -7,7 +7,7 @@
 # Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
-r"""Sequence input/output as SeqRecord objects.
+r"""Sequence input/output as Seq objects.
 
 Bio.SeqIO is also documented at SeqIO_ and by a whole chapter in our tutorial:
 
@@ -22,7 +22,7 @@ Input
 -----
 The main function is Bio.SeqIO.parse(...) which takes an input file handle
 (or in recent versions of Biopython alternatively a filename as a string),
-and format string.  This returns an iterator giving SeqRecord objects:
+and format string.  This returns an iterator giving Seq objects:
 
 >>> from Bio import SeqIO
 >>> for record in SeqIO.parse("Fasta/f002", "fasta"):
@@ -36,10 +36,10 @@ format with its default settings.  You may want more control, in which case
 you need to create a format specific sequence iterator directly.
 
 Some of these parsers are wrappers around low-level parsers which build up
-SeqRecord objects for the consistent SeqIO interface. In cases where the
-run-time is critical, such as large FASTA or FASTQ files, calling these
-underlying parsers will be much faster - in this case these generator
-functions which return tuples of strings:
+Seq objects for the consistent SeqIO interface. In cases where the run-time
+is critical, such as large FASTA or FASTQ files, calling these underlying
+parsers will be much faster - in this case these generator functions which
+return tuples of strings:
 
 >>> from Bio.SeqIO.FastaIO import SimpleFastaParser
 >>> from Bio.SeqIO.QualityIO import FastqGeneralIterator
@@ -48,7 +48,7 @@ functions which return tuples of strings:
 Input - Single Records
 ----------------------
 If you expect your file to contain one-and-only-one record, then we provide
-the following 'helper' function which will return a single SeqRecord, or
+the following 'helper' function which will return a single Seq object, or
 raise an exception if there are no records or more than one record:
 
 >>> from Bio import SeqIO
@@ -119,7 +119,7 @@ this. For example "fasta", "fastq", "qual" and even the binary format "sff"
 work, but alignment formats like "phylip", "clustalw" and "nexus" will not.
 
 In most cases you can also use SeqIO.index to get the record from the file
-as a raw string (not a SeqRecord). This can be useful for example to extract
+as a raw string (not a Seq object). This can be useful for example to extract
 a sub-set of records from a file where SeqIO cannot output the file format
 (e.g. the plain text SwissProt format, "swiss") or where it is important to
 keep the output 100% identical to the input). For example,
@@ -137,7 +137,7 @@ GGATGACTGTTACAGGCTTAGCTTTGTGTGAAANCCAGTCACCTTTCTCCTAGGTAATGAGTAGTGCTGT
 TCATATTACTNTAAGTTCTATAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGG
 AATTGNTTTGCCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
 <BLANKLINE>
->>> print(record_dict["gi|1348917|gb|G26685|G26685"].format("fasta"))
+>>> print(format(record_dict["gi|1348917|gb|G26685|G26685"], "fasta"))
 >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
 CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATC
 TTACTCTTTCATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTT
@@ -196,7 +196,7 @@ Input - Alignments
 ------------------
 You can read in alignment files as alignment objects using Bio.AlignIO.
 Alternatively, reading in an alignment file format via Bio.SeqIO will give
-you a SeqRecord for each row of each alignment:
+you a Seq objectfor each row of each alignment:
 
 >>> from Bio import SeqIO
 >>> for record in SeqIO.parse("Clustalw/hedgehog.aln", "clustal"):
@@ -210,10 +210,9 @@ gi|56122354|gb|AAV74328.1| 447
 
 Output
 ------
-Use the function Bio.SeqIO.write(...), which takes a complete set of
-SeqRecord objects (either as a list, or an iterator), an output file handle
-(or in recent versions of Biopython an output filename as a string) and of
-course the file format::
+Use the function Bio.SeqIO.write(...), which takes a complete set of Seq
+objects (either as a list, or an iterator), an output file handle (or an
+output filename as a string) and of course the file format::
 
   from Bio import SeqIO
   records = ...
@@ -332,7 +331,7 @@ write to all of them.
 
 You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phylip" and "stockholm", which gives you access to the individual sequences
-making up each alignment as SeqRecords.
+making up each alignment as Seq objects.
 """
 
 # TODO
@@ -349,7 +348,7 @@ making up each alignment as SeqRecords.
 # FAO BioPython Developers
 # ------------------------
 # The way I envision this SeqIO system working as that for any sequence file
-# format we have an iterator that returns SeqRecord objects.
+# format we have an iterator that returns Seq objects.
 #
 # This also applies to interlaced file formats (like clustal - although that
 # is now handled via Bio.AlignIO instead) where the file cannot be read record
@@ -359,12 +358,12 @@ making up each alignment as SeqRecords.
 # These file format specific sequence iterators may be implemented as:
 #    - Classes which take a handle for __init__ and provide the __iter__ method
 #    - Functions that take a handle, and return an iterator object
-#    - Generator functions that take a handle, and yield SeqRecord objects
+#    - Generator functions that take a handle, and yield Seq objects
 #
-# It is then trivial to turn this iterator into a list of SeqRecord objects,
-# an in memory dictionary, or a multiple sequence alignment object.
+# It is then trivial to turn this iterator into a list of Seq objects, an in
+# memory dictionary, or a multiple sequence alignment object.
 #
-# For building the dictionary by default the id property of each SeqRecord is
+# For building the dictionary by default the id property of each Seq object is
 # used as the key.  You should always populate the id property, and it should
 # be unique in most cases. For some file formats the accession number is a good
 # choice.  If the file itself contains ambiguous identifiers, don't try and
@@ -378,8 +377,8 @@ making up each alignment as SeqRecords.
 # --Peter
 
 from Bio.File import as_handle
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
+from Bio.Seq import Seq
 
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
@@ -485,8 +484,7 @@ def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
     Arguments:
-     - sequences - A list (or iterator) of SeqRecord objects, or a single
-       SeqRecord.
+     - sequences - A list (or iterator) of Seq objects, or a single Seq object.
      - handle    - File handle object to write to, or filename as string.
      - format    - lower case string describing the file format to write.
 
@@ -505,13 +503,13 @@ def write(sequences, handle, format):
     if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
-    if isinstance(handle, SeqRecord):
-        raise TypeError("Check arguments, handle should NOT be a SeqRecord")
+    if isinstance(handle, Seq):
+        raise TypeError("Check arguments, handle should NOT be a Seq")
     if isinstance(handle, list):
-        # e.g. list of SeqRecord objects
+        # e.g. list of Seq objects
         raise TypeError("Check arguments, handle should NOT be a list")
 
-    if isinstance(sequences, SeqRecord):
+    if isinstance(sequences, Seq):
         # This raised an exception in older versions of Biopython
         sequences = [sequences]
 
@@ -555,7 +553,7 @@ def write(sequences, handle, format):
 
 
 def parse(handle, format, alphabet=None):
-    r"""Turn a sequence file into an iterator returning SeqRecords.
+    r"""Turn a sequence file into an iterator returning Seq objects.
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
@@ -580,7 +578,7 @@ def parse(handle, format, alphabet=None):
     >>> from Bio import SeqIO
     >>> from io import StringIO
     >>> for record in SeqIO.parse(StringIO(data), "fasta"):
-    ...     print("%s %s" % (record.id, record.seq))
+    ...     print("%s %s" % (record.id, record))
     Alpha ACCGGATGTA
     Beta AGGCTCGGTTA
 
@@ -612,7 +610,7 @@ def parse(handle, format, alphabet=None):
 
 
 def read(handle, format, alphabet=None):
-    """Turn a sequence file into a single SeqRecord.
+    """Turn a sequence file into a single Seq object.
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
@@ -668,16 +666,16 @@ def to_dict(sequences, key_function=None):
     """Turn a sequence iterator or list into a dictionary.
 
     Arguments:
-     - sequences  - An iterator that returns SeqRecord objects,
-       or simply a list of SeqRecord objects.
-     - key_function - Optional callback function which when given a
-       SeqRecord should return a unique key for the dictionary.
+     - sequences  - An iterator that returns Seq objects, or simply a list 
+       of Seq objects.
+     - key_function - Optional callback function which, when given a Seq
+       object, should return a unique key for the dictionary.
 
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
 
     If key_function is omitted then record.id is used, on the assumption
-    that the records objects returned are SeqRecords with a unique id.
+    that the sequences returned are Seq objects with a unique id.
 
     If there are duplicate keys, an error is raised.
 
@@ -705,7 +703,7 @@ def to_dict(sequences, key_function=None):
     >>> filename = "GenBank/cor6_6.gb"
     >>> format = "genbank"
     >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(filename, format),
-    ...               key_function = lambda rec : seguid(rec.seq))
+    ...               key_function = lambda rec : seguid(rec))
     >>> for key, record in sorted(seguid_dict.items()):
     ...     print("%s %s" % (key, record.id))
     /wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1
@@ -716,7 +714,7 @@ def to_dict(sequences, key_function=None):
     uVEYeAQSV5EDQOnFoeMmVea+Oow AF297471.1
 
     This approach is not suitable for very large sets of sequences, as all
-    the SeqRecord objects are held in memory. Instead, consider using the
+    the Seq objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
 
     Since Python 3.6, the default dict class maintains key order, meaning
@@ -748,15 +746,14 @@ def index(filename, format, alphabet=None, key_function=None):
      - filename - string giving name of file to be indexed
      - format   - lower case string describing the file format
      - alphabet - no longer used, leave as None
-     - key_function - Optional callback function which when given a
-       SeqRecord identifier string should return a unique key for the
-       dictionary.
+     - key_function - Optional callback function which when given a Seq
+       identifier string should return a unique key for the dictionary.
 
     This indexing function will return a dictionary like object, giving the
-    SeqRecord objects as values.
+    Seq objects as values.
 
-    As of Biopython 1.69, this will preserve the ordering of the records in
-    file when iterating over the entries.
+    This will preserve the ordering of the records in file when iterating
+    over the entries.
 
     >>> from Bio import SeqIO
     >>> records = SeqIO.index("Quality/example.fastq", "fastq")
@@ -764,7 +761,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> list(records)  # make a list of the keys
     ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']
-    >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
+    >>> print(format(records["EAS54_6_R1_2_1_540_792"], "fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
@@ -781,14 +778,14 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records = SeqIO.index("Quality/example.fastq.bgz", "fastq")
     >>> len(records)
     3
-    >>> print(records["EAS54_6_R1_2_1_540_792"].seq)
+    >>> print(records["EAS54_6_R1_2_1_540_792"])
     TTGGCAGGCCAAGGCCGATGGATCA
     >>> records.close()
 
     When you call the index function, it will scan through the file, noting
     the location of each record. When you access a particular record via the
     dictionary methods, the code will jump to the appropriate part of the
-    file and then parse that section into a SeqRecord.
+    file and then parse that section into a Seq object.
 
     Note that not all the input formats supported by Bio.SeqIO can be used
     with this index function. It is designed to work only with sequential
@@ -804,7 +801,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> list(records)  # make a list of the keys
     ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']
-    >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
+    >>> print(format(records["EAS54_6_R1_2_1_540_792"], "fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
@@ -823,7 +820,7 @@ def index(filename, format, alphabet=None, key_function=None):
     3
     >>> list(records)  # make a list of the keys
     [(413, 324), (540, 792), (443, 348)]
-    >>> print(records[(540, 792)].format("fasta"))
+    >>> print(format(records[(540, 792)], "fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
@@ -840,7 +837,7 @@ def index(filename, format, alphabet=None, key_function=None):
     to use as the dictionary key.
 
     Notice that unlike the to_dict() function, here the key_function does
-    not get given the full SeqRecord to use to generate the key. Doing so
+    not get given the full Seq object to use to generate the key. Doing so
     would impose a severe performance penalty as it would require the file
     to be completely parsed while building the index. Right now this is
     usually avoided.
@@ -875,7 +872,7 @@ def index(filename, format, alphabet=None, key_function=None):
         key_function,
     )
     return _IndexedSeqFileDict(
-        proxy_class(filename, format), key_function, repr, "SeqRecord"
+        proxy_class(filename, format), key_function, repr, "Seq"
     )
 
 
@@ -895,12 +892,11 @@ def index_db(
      - format   - lower case string describing the file format
        (optional if reloading an existing index, but must match)
      - alphabet - no longer used, leave as None.
-     - key_function - Optional callback function which when given a
-       SeqRecord identifier string should return a unique
-       key for the dictionary.
+     - key_function - Optional callback function which when given a Seq
+       identifier string should return a unique key for the dictionary.
 
     This indexing function will return a dictionary like object, giving the
-    SeqRecord objects as values:
+    Seq objects as values:
 
     >>> from Bio import SeqIO
     >>> files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]

@@ -17,7 +17,6 @@ from Bio import AlignIO
 from Bio import MissingExternalDependencyError
 from Bio.Application import _escape_filename
 from Bio.Seq import Seq, translate
-from Bio.SeqRecord import SeqRecord
 
 
 # ###############################################################
@@ -172,7 +171,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
 
 
 class SeqRetTests(unittest.TestCase):
-    """Base class providing SeqRecord comparison method."""
+    """Base class providing Seq comparison method."""
 
     def compare_records(self, old_records, new_records, msg=None):
         self.assertEqual(len(old_records), len(new_records), msg)
@@ -186,12 +185,12 @@ class SeqRetTests(unittest.TestCase):
                 or (old.name == new.name),
                 msg,
             )
-            self.assertEqual(len(old.seq), len(new.seq), msg)
-            if str(old.seq).upper() != str(new.seq).upper():
-                if str(old.seq).replace("X", "N") == str(new.seq):
+            self.assertEqual(len(old), len(new), msg)
+            if str(old).upper() != str(new).upper():
+                if str(old).replace("X", "N") == str(new):
                     self.fail("%s: X -> N (protein forced into nucleotide?)" % msg)
                 else:
-                    self.assertEqual(old.seq, new.seq, msg)
+                    self.assertEqual(old, new, msg)
             if old.features and new.features:
                 self.assertEqual(len(old.features), len(new.features), msg)
             # TODO - check annotation
@@ -280,7 +279,7 @@ class SeqRetSeqIOTests(SeqRetTests):
                 pass
             else:
                 self.assertEqual(old.id, new.id)
-            self.assertEqual(str(old.seq), str(new.seq))
+            self.assertEqual(old, new)
             if emboss_version < (6, 3, 0) and new.letter_annotations[
                 "phred_quality"
             ] == [1] * len(old):
@@ -456,17 +455,17 @@ class PairwiseAlignmentTests(unittest.TestCase):
                 )
             if local:
                 # Local alignment
-                self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
+                self.assertIn(str(alignment[0]).replace("-", ""), query_seq)
                 self.assertIn(
-                    str(alignment[1].seq).replace("-", "").upper(),
-                    str(target.seq).upper(),
+                    str(alignment[1]).replace("-", "").upper(),
+                    str(target).upper(),
                 )
             else:
                 # Global alignment
-                self.assertEqual(str(query_seq), str(alignment[0].seq).replace("-", ""))
+                self.assertEqual(query_seq, str(alignment[0]).replace("-", ""))
                 self.assertEqual(
-                    str(target.seq).upper(),
-                    str(alignment[1].seq).replace("-", "").upper(),
+                    str(target).upper(),
+                    str(alignment[1]).replace("-", "").upper(),
                 )
         return True
 
@@ -501,8 +500,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we can parse the output...
         align = AlignIO.read(cline.outfile, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0], "ACCCGGGCGCGGT")
+        self.assertEqual(align[1], "ACCCGAGCGCGGT")
         # Clean up,
         os.remove(cline.outfile)
 
@@ -538,8 +537,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we could read it's output
         align = AlignIO.read(child.stdout, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0], "ACCCGGGCGCGGT")
+        self.assertEqual(align[1], "ACCCGAGCGCGGT")
         # Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
@@ -573,8 +572,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we can parse the output...
         align = AlignIO.read(filename, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0], "ACCCGGGCGCGGT")
+        self.assertEqual(align[1], "ACCCGAGCGCGGT")
         # Clean up,
         os.remove(filename)
 
@@ -610,8 +609,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         # Check we could read it's output
         align = AlignIO.read(child.stdout, "emboss")
         self.assertEqual(len(align), 2)
-        self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
-        self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
+        self.assertEqual(align[0], "ACCCGGGCGCGGT")
+        self.assertEqual(align[1], "ACCCGAGCGCGGT")
         # Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
@@ -829,7 +828,7 @@ def emboss_translate(sequence, table=None, frame=None):
         # There are limits on command line string lengths...
         # use a temp file instead.
         filename = "Emboss/temp_transeq.txt"
-        SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
+        SeqIO.write(Seq(str(sequence), id="Test"), filename, "fasta")
         cline += " -sequence %s" % filename
 
     cline += " -auto"  # no prompting
@@ -865,7 +864,7 @@ def emboss_translate(sequence, table=None, frame=None):
     else:
         if not record.id.startswith("asis"):
             raise ValueError(str(cline))
-    return str(record.seq)
+    return str(record)
 
 
 # Top level function as this makes it easier to use for debugging:

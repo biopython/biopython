@@ -21,7 +21,6 @@ from xml.parsers.expat import errors
 
 from Bio.Seq import Seq
 from Bio import SeqFeature
-from Bio.SeqRecord import SeqRecord
 
 
 NS = "{http://uniprot.org/uniprot}"
@@ -29,10 +28,10 @@ REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
 def UniprotIterator(source, alphabet=None, return_raw_comments=False):
-    """Iterate over UniProt XML as SeqRecord objects.
+    """Iterate over UniProt XML as Seq objects.
 
     parses an XML entry at a time from any UniProt XML file
-    returns a SeqRecord for each iteration
+    returns a Seq for each iteration
 
     This generator can be used in Bio.SeqIO
 
@@ -59,7 +58,7 @@ def UniprotIterator(source, alphabet=None, return_raw_comments=False):
 
 
 class Parser:
-    """Parse a UniProt XML entry to a SeqRecord.
+    """Parse a UniProt XML entry to a Seq object.
 
     Optional argument alphabet is no longer used.
 
@@ -72,26 +71,32 @@ class Parser:
             raise ValueError("The alphabet argument is no longer supported")
         self.entry = elem
         self.return_raw_comments = return_raw_comments
+        self._id = ""
+        self._name = ""
+        self._description = ""
+        self._annotations = {}
+        self._features = []
+        self._dbxrefs = []
 
     def parse(self):
         """Parse the input."""
         assert self.entry.tag == NS + "entry"
 
         def append_to_annotations(key, value):
-            if key not in self.ParsedSeqRecord.annotations:
-                self.ParsedSeqRecord.annotations[key] = []
-            if value not in self.ParsedSeqRecord.annotations[key]:
-                self.ParsedSeqRecord.annotations[key].append(value)
+            if key not in self._annotations:
+                self._annotations[key] = []
+            if value not in self._annotations[key]:
+                self._annotations[key].append(value)
 
         def _parse_name(element):
-            self.ParsedSeqRecord.name = element.text
-            self.ParsedSeqRecord.dbxrefs.append(self.dbname + ":" + element.text)
+            self._name = element.text
+            self._dbxrefs.append(self.dbname + ":" + element.text)
 
         def _parse_accession(element):
             append_to_annotations(
                 "accessions", element.text
             )  # to cope with SwissProt plain text parser
-            self.ParsedSeqRecord.dbxrefs.append(self.dbname + ":" + element.text)
+            self._dbxrefs.append(self.dbname + ":" + element.text)
 
         def _parse_protein(element):
             """Parse protein names (PRIVATE)."""
@@ -110,7 +115,7 @@ class Parser:
                         )
                         append_to_annotations(ann_key, rec_name.text)
                         if (rec_name.tag == NS + "fullName") and not descr_set:
-                            self.ParsedSeqRecord.description = rec_name.text
+                            self._description = rec_name.text
                             descr_set = True
                 elif protein_element.tag == NS + "component":
                     pass  # not parsed
@@ -125,7 +130,7 @@ class Parser:
                         genename_element.attrib["type"],
                     )
                     if genename_element.attrib["type"] == "primary":
-                        self.ParsedSeqRecord.annotations[
+                        self._annotations[
                             ann_key
                         ] = genename_element.text
                     else:
@@ -149,7 +154,7 @@ class Parser:
                                 "organism_name", organism_element.text
                             )
                 elif organism_element.tag == NS + "dbReference":
-                    self.ParsedSeqRecord.dbxrefs.append(
+                    self._dbxrefs.append(
                         organism_element.attrib["type"]
                         + ":"
                         + organism_element.attrib["id"]
@@ -164,7 +169,7 @@ class Parser:
                 organism_name = sci_name
             elif com_name:
                 organism_name = com_name
-            self.ParsedSeqRecord.annotations["organism"] = organism_name
+            self._annotations["organism"] = organism_name
 
         def _parse_organismHost(element):
             for organism_element in element:
@@ -311,7 +316,7 @@ class Parser:
                 append_to_annotations(ann_key, ElementTree.tostring(element))
 
         def _parse_dbReference(element):
-            self.ParsedSeqRecord.dbxrefs.append(
+            self._dbxrefs.append(
                 element.attrib["type"] + ":" + element.attrib["id"]
             )
             # e.g.
@@ -352,7 +357,7 @@ class Parser:
                                         feature.location = SeqFeature.FeatureLocation(
                                             start, end
                                         )
-                                        # self.ParsedSeqRecord.features.append(feature)
+                                        # self._features.append(feature)
 
             for ref_element in element:
                 if ref_element.tag == NS + "property":
@@ -384,7 +389,7 @@ class Parser:
                             for person_element in cit_element:
                                 authors.append(person_element.attrib["name"])
                         elif cit_element.tag == NS + "dbReference":
-                            self.ParsedSeqRecord.dbxrefs.append(
+                            self._dbxrefs.append(
                                 cit_element.attrib["type"]
                                 + ":"
                                 + cit_element.attrib["id"]
@@ -478,7 +483,7 @@ class Parser:
                         ] = feature_element.text
                     except Exception:  # TODO - Which exceptions?
                         pass  # skip unparsable tag
-            self.ParsedSeqRecord.features.append(feature)
+            self._features.append(feature)
 
         def _parse_proteinExistence(element):
             append_to_annotations("proteinExistence", element.attrib["type"])
@@ -491,16 +496,13 @@ class Parser:
         def _parse_sequence(element):
             for k, v in element.attrib.items():
                 if k in ("length", "mass", "version"):
-                    self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
+                    self._annotations["sequence_%s" % k] = int(v)
                 else:
-                    self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
-            self.ParsedSeqRecord.seq = Seq("".join(element.text.split()))
-            self.ParsedSeqRecord.annotations["molecule_type"] = "protein"
+                    self._annotations["sequence_%s" % k] = v
+            self._seq = "".join(element.text.split())
+            self._annotations["molecule_type"] = "protein"
 
         # ============================================#
-        # Initialize SeqRecord
-        self.ParsedSeqRecord = SeqRecord("", id="")
-
         # Entry attribs parsing
         # Unknown dataset should not happen!
         self.dbname = self.entry.attrib.get("dataset", "UnknownDataset")
@@ -508,14 +510,14 @@ class Parser:
         for k, v in self.entry.attrib.items():
             if k in ("version"):
                 # original
-                # self.ParsedSeqRecord.annotations["entry_%s" % k] = int(v)
-                # To cope with swissProt plain text parser. this can cause errors
+                # self._annotations["entry_%s" % k] = int(v)
+                # To cope with SwissProt plain text parser. this can cause errors
                 # if the attrib has the same name of an other annotation
-                self.ParsedSeqRecord.annotations[k] = int(v)
+                self._annotations[k] = int(v)
             else:
-                # self.ParsedSeqRecord.annotations["entry_%s" % k] = v
+                # self._annotations["entry_%s" % k] = v
                 # to cope with swissProt plain text parser:
-                self.ParsedSeqRecord.annotations[k] = v
+                self._annotations[k] = v
 
         # Top-to-bottom entry children parsing
         for element in self.entry:
@@ -553,10 +555,12 @@ class Parser:
                 pass
 
         # remove duplicate dbxrefs
-        self.ParsedSeqRecord.dbxrefs = sorted(set(self.ParsedSeqRecord.dbxrefs))
+        self._dbxrefs = sorted(set(self._dbxrefs))
 
         # use first accession as id
-        if not self.ParsedSeqRecord.id:
-            self.ParsedSeqRecord.id = self.ParsedSeqRecord.annotations["accessions"][0]
+        if not self._id:
+            self._id = self._annotations["accessions"][0]
 
-        return self.ParsedSeqRecord
+        return Seq(self._seq, id=self._id, name=self._name,
+                   description=self._description, annotations=self._annotations,
+                   features=self._features, dbxrefs=self._dbxrefs)

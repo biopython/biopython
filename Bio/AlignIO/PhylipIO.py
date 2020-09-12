@@ -38,7 +38,6 @@ for reading and writing. Older versions did nothing special with a dot/period.
 import string
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -69,7 +68,7 @@ class PhylipWriter(SequentialAlignmentWriter):
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
         for record in alignment:
-            if length_of_seqs != len(record.seq):
+            if length_of_seqs != len(record):
                 raise ValueError("Sequences must all be the same length")
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
@@ -102,7 +101,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                     % (name, record.id)
                 )
             names.append(name)
-            sequence = str(record.seq)
+            sequence = str(record)
             if "." in sequence:
                 # Do this check here (once per record, not once per block)
                 raise ValueError(_NO_DOTS)
@@ -259,7 +258,7 @@ class PhylipIterator(AlignmentIterator):
                 break  # end of file
 
         records = (
-            SeqRecord(Seq("".join(s)), id=i, name=i, description=i)
+            Seq("".join(s), id=i, name=i, description=i)
             for (i, s) in zip(ids, seqs)
         )
         return MultipleSeqAlignment(records)
@@ -313,7 +312,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
         for record in alignment:
-            if length_of_seqs != len(record.seq):
+            if length_of_seqs != len(record):
                 raise ValueError("Sequences must all be the same length")
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
@@ -339,7 +338,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         # happy.
         handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
         for name, record in zip(names, alignment):
-            sequence = str(record.seq)
+            sequence = str(record)
             if "." in sequence:
                 raise ValueError(_NO_DOTS)
             handle.write(name[:id_width].ljust(id_width))
@@ -431,9 +430,7 @@ class SequentialPhylipIterator(PhylipIterator):
                 self._header = line
                 break
 
-        records = (
-            SeqRecord(Seq(s), id=i, name=i, description=i) for (i, s) in zip(ids, seqs)
-        )
+        records = (Seq(s, id=i, name=i, description=i) for (i, s) in zip(ids, seqs))
         return MultipleSeqAlignment(records)
 
 

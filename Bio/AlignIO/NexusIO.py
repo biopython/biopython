@@ -11,14 +11,14 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
-sequences as SeqRecord objects.
+sequences as Seq objects.
 """
 
 
-from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentWriter
+from Bio.Seq import Seq
 
 
 # You can get a couple of example files here:
@@ -27,7 +27,7 @@ from Bio.AlignIO.Interfaces import AlignmentWriter
 
 # This is a generator function!
 def NexusIterator(handle, seq_count=None):
-    """Return SeqRecord objects from a Nexus file.
+    """Return Seq objects from a Nexus file.
 
     Thus uses the Bio.Nexus module to do the hard work.
 
@@ -62,8 +62,8 @@ def NexusIterator(handle, seq_count=None):
     else:
         annotations = None
     records = (
-        SeqRecord(
-            n.matrix[new_name],
+        Seq(
+            str(n.matrix[new_name]),
             id=new_name,
             name=old_name,
             description="",
@@ -132,11 +132,11 @@ class NexusWriter(AlignmentWriter):
         n = Nexus.Nexus(minimal_record)
         for record in alignment:
             # Sanity test sequences (should this be even stricter?)
-            if datatype == "dna" and "U" in record.seq:
+            if datatype == "dna" and "U" in record:
                 raise ValueError(f"{record.id} contains U, but DNA alignment")
-            elif datatype == "rna" and "T" in record.seq:
+            elif datatype == "rna" and "T" in record:
                 raise ValueError(f"{record.id} contains T, but RNA alignment")
-            n.add_sequence(record.id, str(record.seq))
+            n.add_sequence(record.id, str(record))
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:

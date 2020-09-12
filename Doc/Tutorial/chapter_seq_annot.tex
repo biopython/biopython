@@ -56,22 +56,20 @@ To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
->>> from Bio.SeqRecord import SeqRecord
->>> simple_seq_r = SeqRecord(simple_seq)
 \end{minted}
 
 Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> simple_seq_r.id
-'<unknown id>'
->>> simple_seq_r.id = "AC12345"
->>> simple_seq_r.description = "Made up sequence I wish I could write a paper about"
->>> print(simple_seq_r.description)
+>>> simple_seq.id
+''
+>>> simple_seq.id = "AC12345"
+>>> simple_seq.description = "Made up sequence I wish I could write a paper about"
+>>> print(simple_seq.description)
 Made up sequence I wish I could write a paper about
->>> simple_seq_r.seq
-Seq('GATC')
+>>> simple_seq
+Seq('GATC', id='AC12345', description='Made up sequence I wish I could write a paper about')
 \end{minted}
 
 Including an identifier is very important if you want to output your \verb|SeqRecord| to a file.  You would normally include this when creating the object:
@@ -79,9 +77,7 @@ Including an identifier is very important if you want to output your \verb|SeqRe
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> simple_seq = Seq("GATC")
->>> from Bio.SeqRecord import SeqRecord
->>> simple_seq_r = SeqRecord(simple_seq, id="AC12345")
+>>> simple_seq = Seq("GATC", id="AC12345")
 \end{minted}
 
 As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annotations|. This is used
@@ -90,10 +86,10 @@ Adding annotations is easy, and just involves dealing directly with the annotati
 
 %cont-doctest
 \begin{minted}{pycon}
->>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
->>> print(simple_seq_r.annotations)
+>>> simple_seq.annotations["evidence"] = "None. I just made it up."
+>>> print(simple_seq.annotations)
 {'evidence': 'None. I just made it up.'}
->>> print(simple_seq_r.annotations["evidence"])
+>>> print(simple_seq.annotations["evidence"])
 None. I just made it up.
 \end{minted}
 
@@ -103,11 +99,11 @@ a string, list or tuple) which has the same length as the sequence:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> simple_seq_r.letter_annotations["phred_quality"] = [40, 40, 38, 30]
->>> print(simple_seq_r.letter_annotations)
-{'phred_quality': [40, 40, 38, 30]}
->>> print(simple_seq_r.letter_annotations["phred_quality"])
-[40, 40, 38, 30]
+>>> simple_seq.letter_annotations["phred_quality"] = (40, 40, 38, 30)
+>>> print(simple_seq.letter_annotations)
+{'phred_quality': (40, 40, 38, 30)}
+>>> print(simple_seq.letter_annotations["phred_quality"])
+(40, 40, 38, 30)
 \end{minted}
 
 The \verb|dbxrefs| and \verb|features| attributes are just Python lists, and
@@ -137,20 +133,13 @@ has a sister function for use on files which contain just one record which we'll
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|', description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|', description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence')
 \end{minted}
 
-Now, let's have a look at the key attributes of this \verb|SeqRecord|
-individually -- starting with the \verb|seq| attribute which gives you a
-\verb|Seq| object:
+Now, let's have a look at the key attributes of this \verb|Seq| object
+individually.
 
-%cont-doctest
-\begin{minted}{pycon}
->>> record.seq
-Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
-\end{minted}
-
-Next, the identifiers and description:
+First, the identifiers and description:
 
 %cont-doctest
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
@@ -192,7 +181,7 @@ FASTA file:
 
 In this case our example FASTA file was from the NCBI, and they have a fairly well defined set of conventions for formatting their FASTA lines. This means it would be possible to parse this information and extract the GI number and accession for example. However, FASTA files from other sources vary, so this isn't possible in general.
 
-\subsection{SeqRecord objects from GenBank files}
+\subsection{Seq objects from GenBank files}
 
 As in the previous example, we're going to look at the whole sequence for \textit{Yersinia pestis biovar Microtus} str. 91001 plasmid pPCP1, originally downloaded from the NCBI, but this time as a GenBank file.
 Again, this file is included with the Biopython unit tests under the GenBank folder, or online \href{https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb}{\texttt{NC\_005816.gb}} from our website.
@@ -216,13 +205,7 @@ Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost i
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
-\end{minted}
-
-%cont-doctest
-\begin{minted}{pycon}
->>> record.seq
-Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence')
 \end{minted}
 
 The \verb|name| comes from the LOCUS line, while the \verb|id| includes the version suffix.
@@ -576,51 +559,26 @@ The \verb|SeqRecord| objects can be very complex, but here's a simple example:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqRecord import SeqRecord
->>> record1 = SeqRecord(Seq("ACGT"), id="test")
->>> record2 = SeqRecord(Seq("ACGT"), id="test")
+>>> record1 = Seq("ACGT", id="test1")
+>>> record2 = Seq("ACGT", id="test2")
 \end{minted}
 
-What happens when you try to compare these ``identical'' records?
-
-%this is not a doctest:
-\begin{minted}{pycon}
->>> record1 == record2
-...
-\end{minted}
-
-Perhaps surprisingly older versions of Biopython would use Python's default object
-comparison for the \verb|SeqRecord|, meaning \verb|record1 == record2| would
-only return \verb|True| if these variables pointed at the same object in memory.
-In this example, \verb|record1 == record2| would have returned \verb|False|
-here!
-
-%this is not a doctest:
-\begin{minted}{pycon}
->>> record1 == record2  # on old versions of Biopython!
-False
-\end{minted}
-
-As of Biopython 1.67, \verb|SeqRecord| comparison like \verb|record1 == record2|
-will instead raise an explicit error to avoid people being caught out by this:
+What happens when you try to compare these records with identical sequences but  a different attribute \verb+id+?
 
 %cont-doctest
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> record1 == record2
-Traceback (most recent call last):
-...
-NotImplementedError: SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest.
+True
 \end{minted}
+i.e. only the sequences are compared.
 
 Instead you should check the attributes you are interested in, for example the
-identifier and the sequence:
+identifier:
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> record1.id == record2.id
-True
->>> record1.seq == record2.seq
-True
+False
 \end{minted}
 
 Beware that comparing complex objects quickly gets complicated (see also
@@ -647,18 +605,15 @@ supported by \verb|Bio.SeqIO|, such as FASTA:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqRecord import SeqRecord
->>> record = SeqRecord(
-...     Seq(
+>>> record = Seq(
 ...         "MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD"
 ...         "GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK"
 ...         "NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM"
-...         "SSAC"
-...     ),
+...         "SSAC",
 ...     id="gi|14150838|gb|AAK54648.1|AF376133_1",
 ...     description="chalcone synthase [Cucumis sativus]",
 ... )
->>> print(record.format("fasta"))
+>>> print(format(record, "fasta"))
 \end{minted}
 \noindent which should give:
 %cont-doctest
@@ -692,7 +647,7 @@ For example, taking the same GenBank file used earlier:
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence')
 >>> len(record)
 9609
 >>> len(record.features)
@@ -739,7 +694,7 @@ gene/CDS), and see how many features we get:
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> sub_record = record[4300:4800]
 >>> sub_record
-SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
+Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA', id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence')
 >>> len(sub_record)
 500
 >>> len(sub_record.features)
@@ -810,7 +765,7 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial."
->>> print(sub_record.format("genbank"))
+>>> print(format(sub_record, "genbank"))
 ...
 \end{minted}
 
@@ -836,10 +791,10 @@ FASTQ file. Chapter~\ref{chapter:seqio} will explain the \verb|SeqIO| functions:
 >>> record = next(SeqIO.parse("example.fastq", "fastq"))
 >>> len(record)
 25
->>> print(record.seq)
+>>> print(record)
 CCCTTCTTGTCTTCAGCGTTTCTCC
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 26, 23, 23]
+(26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 26, 23, 23)
 \end{minted}
 
 \noindent Let's suppose this was Roche 454 data, and that from other information
@@ -850,15 +805,15 @@ third \texttt{T}:
 %cont-doctest
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> left = record[:20]
->>> print(left.seq)
+>>> print(left)
 CCCTTCTTGTCTTCAGCGTT
 >>> print(left.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26]
+(26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26)
 >>> right = record[21:]
->>> print(right.seq)
+>>> print(right)
 CTCC
 >>> print(right.letter_annotations["phred_quality"])
-[26, 26, 23, 23]
+(26, 26, 23, 23)
 \end{minted}
 
 \noindent Now add the two parts together:
@@ -868,10 +823,10 @@ CTCC
 >>> edited = left + right
 >>> len(edited)
 24
->>> print(edited.seq)
+>>> print(edited)
 CCCTTCTTGTCTTCAGCGTTCTCC
 >>> print(edited.letter_annotations["phred_quality"])
-[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 23, 23]
+(26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 23, 23)
 \end{minted}
 
 \noindent Easy and intuitive? We hope so! You can make this shorter with just:
@@ -889,7 +844,7 @@ Suppose you have a circular genome:
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
-SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=['Project:58037'])
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence')
 >>> len(record)
 9609
 >>> len(record.features)
@@ -906,7 +861,7 @@ You can shift the origin like this:
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> shifted = record[2000:] + record[:2000]
 >>> shifted
-SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'), id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence', dbxrefs=[])
+Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA', id='NC_005816.1', name='NC_005816', description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence')
 >>> len(shifted)
 9609
 \end{minted}

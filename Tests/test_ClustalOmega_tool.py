@@ -76,7 +76,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
             len(set(input_records.keys())), len(set(output_records.keys()))
         )
         for record in align:
-            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+            self.assertEqual(record, output_records[record.id])
 
         # TODO - Try and parse this with Bio.Nexus?
         if cline.guidetree_out:

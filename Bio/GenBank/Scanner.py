@@ -35,7 +35,6 @@ from collections import OrderedDict
 
 from Bio.File import as_handle
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonParserWarning
 
 
@@ -485,7 +484,7 @@ class InsdcScanner:
         return True
 
     def parse(self, handle, do_features=True):
-        """Return a SeqRecord (with SeqFeatures if do_features=True).
+        """Return a Seq object (with SeqFeatures if do_features=True).
 
         See also the method parse_records() for use on multi-record files.
         """
@@ -502,11 +501,12 @@ class InsdcScanner:
             return None
 
     def parse_records(self, handle, do_features=True):
-        """Parse records, return a SeqRecord object iterator.
+        """Parse records, return a Seq object iterator.
 
-        Each record (from the ID/LOCUS line to the // line) becomes a SeqRecord
+        Each record (from the ID/LOCUS line to the // line) becomes one Seq
+        object.
 
-        The SeqRecord objects include SeqFeatures if do_features=True
+        The Seq objects include SeqFeatures if do_features=True.
 
         This method is intended for use in Bio.SeqIO
         """
@@ -531,9 +531,9 @@ class InsdcScanner:
     def parse_cds_features(
         self, handle, alphabet=None, tags2id=("protein_id", "locus_tag", "product"),
     ):
-        """Parse CDS features, return SeqRecord object iterator.
+        """Parse CDS features, return Seq object iterator.
 
-        Each CDS feature becomes a SeqRecord.
+        Each CDS feature becomes one Seq object.
 
         Arguments:
          - alphabet - Obsolete, should be left as None.
@@ -563,13 +563,12 @@ class InsdcScanner:
                 # Now go though those features...
                 for key, location_string, qualifiers in feature_tuples:
                     if key == "CDS":
-                        # Create SeqRecord
-                        # ================
-                        # SeqRecord objects cannot be created with annotations, they
-                        # must be added afterwards.  So create an empty record and
-                        # then populate it:
-                        record = SeqRecord(seq=None)
-                        annotations = record.annotations
+                        # Create Seq object
+                        # =================
+                        seq = None
+                        dbxrefs = []
+                        features = []
+                        annotations = {}
                         annotations["molecule_type"] = "protein"
                         # Should we add a location object to the annotations?
                         # I *think* that only makes sense for SeqFeatures with their
@@ -586,11 +585,11 @@ class InsdcScanner:
                                 qualifier_data = qualifier_data[1:-1]
                             # Append the data to the annotation qualifier...
                             if qualifier_name == "translation":
-                                assert record.seq is None, "Multiple translations!"
-                                record.seq = Seq(qualifier_data.replace("\n", ""))
+                                assert seq is None, "Multiple translations!"
+                                seq = qualifier_data.replace("\n", "")
                             elif qualifier_name == "db_xref":
                                 # its a list, possibly empty.  Its safe to extend
-                                record.dbxrefs.append(qualifier_data)
+                                dbxrefs.append(qualifier_data)
                             else:
                                 if qualifier_data is not None:
                                     qualifier_data = qualifier_data.replace(
@@ -605,18 +604,20 @@ class InsdcScanner:
                         # Fill in the ID, Name, Description
                         # =================================
                         try:
-                            record.id = annotations[tags2id[0]]
+                            id = annotations[tags2id[0]]
                         except KeyError:
-                            pass
+                            id = None
                         try:
-                            record.name = annotations[tags2id[1]]
+                            name = annotations[tags2id[1]]
                         except KeyError:
-                            pass
+                            name = None
                         try:
-                            record.description = annotations[tags2id[2]]
+                            description = annotations[tags2id[2]]
                         except KeyError:
-                            pass
+                            description = None
 
+                        record = Seq(seq, id=id, name=name, description=description, annotations=annotations, features=features)
+                        record.dbxrefs = dbxrefs
                         yield record
 
 
@@ -1794,7 +1795,7 @@ class GenBankScanner(InsdcScanner):
                                 ):
                                     warnings.warn(
                                         "Structured comment not parsed for %s. Is it malformed?"
-                                        % consumer.data.name,
+                                        % consumer._name,
                                         BiopythonParserWarning,
                                     )
                                     continue

@@ -80,7 +80,6 @@ the annotation attribute of each record::
 
 import re
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
@@ -146,8 +145,8 @@ class MauveWriter(SequentialAlignmentWriter):
         self.handle.write("=\n")
 
     def _write_record(self, record, record_idx=0):
-        """Write a single SeqRecord to the file (PRIVATE)."""
-        if self._length_of_sequences != len(record.seq):
+        """Write a single Seq object to the file (PRIVATE)."""
+        if self._length_of_sequences != len(record):
             raise ValueError("Sequences must all be the same length")
 
         seq_name = record.name
@@ -222,8 +221,8 @@ class MauveWriter(SequentialAlignmentWriter):
             # alignment.
             id_line = id_line.replace("\n", " ").replace("\r", " ")
             self.handle.write(id_line + "\n")
-            for i in range(0, len(record.seq), 80):
-                self.handle.write("%s\n" % str(record.seq[i : i + 80]))
+            for i in range(0, len(record), 80):
+                self.handle.write("%s\n" % str(record[i : i + 80]))
 
 
 class MauveIterator(AlignmentIterator):
@@ -335,7 +334,7 @@ class MauveIterator(AlignmentIterator):
                     else:
                         corrected_id = seq_regions[id]["name"]
 
-                record = SeqRecord(Seq(seq), id=corrected_id, name=id)
+                record = Seq(seq, id=corrected_id, name=id)
 
                 record.annotations["start"] = seq_regions[id]["start"]
                 record.annotations["end"] = seq_regions[id]["end"]

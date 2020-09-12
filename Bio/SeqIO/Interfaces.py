@@ -14,15 +14,14 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 
 from Bio import StreamModeError
-from Bio.Seq import Seq, MutableSeq
-from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq, MutableSeq, UnknownSeq
 
 
 class SequenceIterator:
-    """Base class for building SeqRecord iterators.
+    """Base class for building Seq iterators.
 
-    You should write a parse method that returns a SeqRecord generator.  You
-    may wish to redefine the __init__ method as well.
+    You should write a parse method that returns a Seq generator.  You may
+    wish to redefine the __init__ method as well.
     """
 
     def __init__(self, source, alphabet=None, mode="t", fmt=None):
@@ -75,15 +74,15 @@ class SequenceIterator:
             raise
 
     def __iter__(self):
-        """Iterate over the entries as a SeqRecord objects.
+        """Iterate over the entries as Seq objects.
 
         Example usage for Fasta files::
 
             with open("example.fasta","r") as myFile:
                 myFastaReader = FastaIterator(myFile)
-                for record in myFastaReader:
-                    print(record.id)
-                    print(record.seq)
+                for sequence in myFastaReader:
+                    print(sequence.id)
+                    print(sequence)
 
         This method SHOULD NOT be overridden by any subclass. It should be
         left as is, which will call the subclass implementation of __next__
@@ -95,13 +94,9 @@ class SequenceIterator:
 # Function variant of the SequenceWriter method.
 def _get_seq_string(record):
     """Use this to catch errors like the sequence being None (PRIVATE)."""
-    if not isinstance(record, SeqRecord):
-        raise TypeError("Expected a SeqRecord object")
-    if record.seq is None:
-        raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
-    elif not isinstance(record.seq, (Seq, MutableSeq)):
-        raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
-    return str(record.seq)
+    if not isinstance(record, (Seq, MutableSeq)):
+        raise TypeError("Expected a Seq object")
+    return str(record)
 
 
 # Function variant of the SequenceWriter method.
@@ -160,13 +155,9 @@ class SequenceWriter:
 
     def _get_seq_string(self, record):
         """Use this to catch errors like the sequence being None (PRIVATE)."""
-        if not isinstance(record, SeqRecord):
-            raise TypeError("Expected a SeqRecord object")
-        if record.seq is None:
-            raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
-        elif not isinstance(record.seq, (Seq, MutableSeq)):
-            raise TypeError("SeqRecord (id=%s) has an invalid sequence." % record.id)
-        return str(record.seq)
+        if not isinstance(record, (Seq, MutableSeq)):
+            raise TypeError("Expected a Seq object")
+        return str(record)
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
@@ -191,7 +182,7 @@ class SequenceWriter:
     def write_record(self, record):
         """Write a single record to the output file.
 
-        record - a SeqRecord object
+        record - a Seq object
         """
         raise NotImplementedError("This method should be implemented")
         ##################################################
@@ -202,7 +193,7 @@ class SequenceWriter:
     def write_records(self, records, maxcount=None):
         """Write records to the output file, and return the number of records.
 
-        records - A list or iterator returning SeqRecord objects
+        records - A list or iterator returning Seq objects
         maxcount - The maximum number of records allowed by the
         file format, or None if there is no maximum.
         """
@@ -227,7 +218,7 @@ class SequenceWriter:
     def write_file(self, records, mincount=0, maxcount=None):
         """Write a complete file with the records, and return the number of records.
 
-        records - A list or iterator returning SeqRecord objects
+        records - A list or iterator returning Seq objects
         """
         ##################################################
         # You MUST implement this method in the subclass #
@@ -329,7 +320,7 @@ class SequentialSequenceWriter(SequenceWriter):
     def write_record(self, record):
         """Write a single record to the output file.
 
-        record - a SeqRecord object
+        record - a Seq object
 
         Once you have called write_header() you can call write_record()
         and/or write_records() as many times as needed.  Then call
@@ -343,7 +334,7 @@ class SequentialSequenceWriter(SequenceWriter):
     def write_records(self, records):
         """Write multiple record to the output file.
 
-        records - A list or iterator returning SeqRecord objects
+        records - A list or iterator returning Seq objects
 
         Once you have called write_header() you can call write_record()
         and/or write_records() as many times as needed.  Then call
@@ -365,7 +356,7 @@ class SequentialSequenceWriter(SequenceWriter):
     def write_file(self, records):
         """Use this to write an entire file containing the given records.
 
-        records - A list or iterator returning SeqRecord objects
+        records - A list or iterator returning Seq objects
 
         This method can only be called once.  Returns the number of records
         written.

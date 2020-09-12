@@ -67,16 +67,16 @@ class Wrapping(unittest.TestCase):
         expected = SeqIO.read("Fasta/aster.pro", "fasta")
 
         record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta")
+        self.assertEqual(expected, record)
         self.assertEqual(expected.id, record.id)
         self.assertEqual(expected.name, record.name)
         self.assertEqual(expected.description, record.description)
-        self.assertEqual(expected.seq, record.seq)
 
         record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta-2line")
+        self.assertEqual(expected, record)
         self.assertEqual(expected.id, record.id)
         self.assertEqual(expected.name, record.name)
         self.assertEqual(expected.description, record.description)
-        self.assertEqual(expected.seq, record.seq)
 
 
 class TitleFunctions(unittest.TestCase):
@@ -95,13 +95,13 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual(record.id, idn, msg=msg)
         self.assertEqual(record.name, name, msg=msg)
         self.assertEqual(record.description, descr, msg=msg)
-        self.assertEqual(str(record.seq), seq, msg=msg)
+        self.assertEqual(str(record), seq, msg=msg)
         # Now check using Bio.SeqIO (default settings)
         record = SeqIO.read(filename, "fasta")
         self.assertEqual(record.id, title.split()[0], msg=msg)
         self.assertEqual(record.name, title.split()[0], msg=msg)
         self.assertEqual(record.description, title, msg=msg)
-        self.assertEqual(str(record.seq), seq, msg=msg)
+        self.assertEqual(str(record), seq, msg=msg)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
@@ -116,7 +116,7 @@ class TitleFunctions(unittest.TestCase):
             self.assertEqual(new.id, idn, msg=msg)
             self.assertEqual(new.name, name, msg=msg)
             self.assertEqual(new.description, descr, msg=msg)
-            self.assertEqual(str(new.seq), str(old.seq), msg=msg)
+            self.assertEqual(str(new), str(old), msg=msg)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
@@ -125,7 +125,7 @@ class TitleFunctions(unittest.TestCase):
         handle = StringIO(">\nACGT")
         record = SeqIO.read(handle, "fasta")
         handle.close()
-        self.assertEqual(str(record.seq), "ACGT")
+        self.assertEqual(str(record), "ACGT")
         self.assertEqual("", record.id)
         self.assertEqual("", record.name)
         self.assertEqual("", record.description)

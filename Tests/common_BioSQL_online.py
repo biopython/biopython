@@ -21,7 +21,6 @@ from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqFeature import SeqFeature
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
 
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
@@ -107,7 +106,7 @@ class TaxonomyTest(unittest.TestCase):
         self.assertEqual({3704, 3711, 3708, 3702}, set(values))
 
     def test_load_database_with_tax_lookup(self):
-        """Load SeqRecord objects and fetch the taxonomy information from NCBI."""
+        """Load Seq objects and fetch the taxonomy information from NCBI."""
         handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
 
         taxon_record = Entrez.read(handle)

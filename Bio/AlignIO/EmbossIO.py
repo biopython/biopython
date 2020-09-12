@@ -15,7 +15,6 @@ example from the alignret, water and needle tools.
 
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentIterator
 
@@ -217,5 +216,5 @@ class EmbossIterator(AlignmentIterator):
                     "different length? You could be using an "
                     "old version of EMBOSS."
                 )
-            records.append(SeqRecord(Seq(seq), id=id, description=id))
+            records.append(Seq(seq, id=id, description=id))
         return MultipleSeqAlignment(records, annotations=header_dict)

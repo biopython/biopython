@@ -123,9 +123,7 @@ class PrankApplication(unittest.TestCase):
                 # Old versions of Prank reduced name to 9 chars
                 self.assertTrue(old.id == new.id or old.id[:9] == new.id)
                 # infile1 has alignment gaps in it
-                self.assertEqual(
-                    str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
-                )
+                self.assertEqual(str(new).replace("-", ""), str(old).replace("-", ""))
         except NexusError:
             # See bug 3119,
             # Bio.Nexus can't parse output from prank v100701 (1 July 2010)
@@ -198,7 +196,7 @@ class PrankConversion(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         for old_r, new_r in zip(old, new):
             self.assertEqual(old_r.id, new_r.id)
-            self.assertEqual(str(old_r.seq), str(new_r.seq))
+            self.assertEqual(old_r, new_r)
         os.remove(filename)
 
     def test_convert_to_fasta(self):

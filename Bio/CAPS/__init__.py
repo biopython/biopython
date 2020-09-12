@@ -71,7 +71,7 @@ class CAPSMap:
         """
         if enzymes is None:
             enzymes = []
-        self.sequences = [rec.seq for rec in alignment]
+        self.sequences = [rec for rec in alignment]
         self.size = len(self.sequences)
         self.length = len(self.sequences[0])
         for seq in self.sequences:

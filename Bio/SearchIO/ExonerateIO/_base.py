@@ -123,10 +123,10 @@ def _adjust_aa_seq(fraglist):
 
         # fragment should have a length that is a multiple of 3
         # assert len(frag) % 3 == 0
-        qseq = str(frag.query.seq)
+        qseq = str(frag.query)
         q_triplets_pre, q_triplets, q_triplets_post = _make_triplets(qseq, phase)
 
-        hseq = str(frag.hit.seq)
+        hseq = str(frag.hit)
         h_triplets_pre, h_triplets, h_triplets_post = _make_triplets(hseq, phase)
 
         # get one letter codes
@@ -201,10 +201,10 @@ def _split_fragment(frag):
         # coordinates for the split strand
         qstart, hstart = qpos, hpos
         qpos += (
-            len(split) - sum(str(split.query.seq).count(x) for x in ("-", "<", ">"))
+            len(split) - sum(split.query.count(x) for x in ("-", "<", ">"))
         ) * qstep
         hpos += (
-            len(split) - sum(str(split.hit.seq).count(x) for x in ("-", "<", ">"))
+            len(split) - sum(split.hit.count(x) for x in ("-", "<", ">"))
         ) * hstep
 
         split.hit_start = min(hstart, hpos)
@@ -215,7 +215,7 @@ def _split_fragment(frag):
         # account for frameshift length
         abs_slice = slice(abs_pos + s_start, abs_pos + s_stop)
         if len(frag.aln_annotation) == 2:
-            seqs = (str(frag[abs_slice].query.seq), str(frag[abs_slice].hit.seq))
+            seqs = (frag[abs_slice].query, frag[abs_slice].hit)
         elif len(frag.aln_annotation) == 3:
             seqs = (
                 frag[abs_slice].aln_annotation["query_annotation"],

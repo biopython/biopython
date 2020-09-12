@@ -13,7 +13,6 @@ from io import StringIO
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
-from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from test_SeqIO import SeqIOTestBaseClass
 
@@ -29,44 +28,37 @@ test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 
 # This is a list of three-tuples.  Each tuple contains a
-# list of SeqRecord objects, a description (string), and
+# list of Seq objects, a description (string), and
 # a list of tuples for expected failures (each with a
 # list of formats, exception type, exception message).
 test_records = [
     ([], "zero records", {}),
     (
         [
-            SeqRecord(
-                Seq("CHSMAIKLSSEHNIPSGIANAL"),
+            Seq("CHSMAIKLSSEHNIPSGIANAL",
                 id="Alpha",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("HNGFTALEGEIHHLTHGEKVAF"),
+            Seq("HNGFTALEGEIHHLTHGEKVAF",
                 id="Gamma",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("DITHGVG"), id="delta", annotations={"molecule_type": "protein"}
-            ),
+            Seq("DITHGVG", id="delta", annotations={"molecule_type": "protein"}),
         ],
         "three peptides of different lengths",
         [],
     ),
     (
         [
-            SeqRecord(
-                Seq("CHSMAIKLSSEHNIPSGIANAL"),
+            Seq("CHSMAIKLSSEHNIPSGIANAL",
                 id="Alpha",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("VHGMAHPLGAFYNTPHGVANAI"),
+            Seq("VHGMAHPLGAFYNTPHGVANAI",
                 id="Beta",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("HNGFTALEGEIHHLTHGEKVAF"),
+            Seq("HNGFTALEGEIHHLTHGEKVAF",
                 id="Gamma",
                 annotations={"molecule_type": "protein"},
             ),
@@ -76,18 +68,15 @@ test_records = [
     ),
     (
         [
-            SeqRecord(
-                Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA"),
+            Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",
                 id="X",
                 annotations={"molecule_type": "DNA"},
             ),
-            SeqRecord(
-                Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA"),
+            Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",
                 id="Y",
                 annotations={"molecule_type": "DNA"},
             ),
-            SeqRecord(
-                Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT"),
+            Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",
                 id="Z",
                 annotations={"molecule_type": "DNA"},
             ),
@@ -97,20 +86,17 @@ test_records = [
     ),
     (
         [
-            SeqRecord(
-                Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA"),
+            Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",
                 id="X",
                 name="The\nMystery\rSequece:\r\nX",
                 annotations={"molecule_type": "DNA"},
             ),
-            SeqRecord(
-                Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA"),
+            Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",
                 id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep,
                 annotations={"molecule_type": "DNA"},
             ),
-            SeqRecord(
-                Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT"),
+            Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",
                 id="Z",
                 annotations={"molecule_type": "DNA"},
             ),
@@ -126,23 +112,19 @@ test_records = [
     ),
     (
         [
-            SeqRecord(
-                Seq("CHSMAIKLSSEHNIPSGIANAL"),
+            Seq("CHSMAIKLSSEHNIPSGIANAL",
                 id="Alpha",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("VHGMAHPLGAFYNTPHGVANAI"),
+            Seq("VHGMAHPLGAFYNTPHGVANAI",
                 id="Beta",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("VHGMAHPLGAFYNTPHGVANAI"),
+            Seq("VHGMAHPLGAFYNTPHGVANAI",
                 id="Beta",
                 annotations={"molecule_type": "protein"},
             ),
-            SeqRecord(
-                Seq("HNGFTALEGEIHHLTHGEKVAF"),
+            Seq("HNGFTALEGEIHHLTHGEKVAF",
                 id="Gamma",
                 annotations={"molecule_type": "protein"},
             ),
@@ -181,7 +163,7 @@ class WriterTests(SeqIOTestBaseClass):
         """
         # TODO - Check the exception messages?
         lengths = len({len(r) for r in records})
-        dna = all(set(record.seq.upper()).issubset("ACGTN") for record in records)
+        dna = all(set(record.upper()).issubset("ACGTN") for record in records)
         if not records and fmt in [
             "stockholm",
             "phylip",
@@ -229,7 +211,7 @@ class WriterTests(SeqIOTestBaseClass):
                 descr,
                 ValueError,
                 "No suitable quality scores found in "
-                "letter_annotations of SeqRecord "
+                "letter_annotations of Seq object "
                 "(id=%s)." % records[0].id,
             )
         elif records and fmt == "sff":
@@ -263,7 +245,7 @@ class WriterTests(SeqIOTestBaseClass):
                 )
             else:
                 self.assertEqual(record.id, new_record.id, msg=msg)
-            self.assertEqual(str(record.seq), str(new_record.seq), msg=msg)
+            self.assertEqual(record, new_record, msg=msg)
         handle.close()
 
     def check_write_fails(self, records, fmt, descr, err_type, err_msg=""):
@@ -286,7 +268,7 @@ class WriterTests(SeqIOTestBaseClass):
 
     def test_bad_handle(self):
         handle = os.devnull
-        record = SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL"), id="Alpha")
+        record = Seq("CHSMAIKLSSEHNIPSGIANAL", id="Alpha")
         records = [record]
         fmt = "fasta"
         # These deliberately mix up the handle and record order:

@@ -9,8 +9,7 @@ import unittest
 
 from Bio import CAPS
 from Bio.Restriction import EcoRI, AluI
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq, MutableSeq
 from Bio.Align import MultipleSeqAlignment
 
 
@@ -18,7 +17,7 @@ def createAlignment(sequences):
     """Create an Alignment object from a list of sequences."""
     return MultipleSeqAlignment(
         (
-            SeqRecord(Seq(s), id="sequence%i" % (i + 1))
+            Seq(s, id="sequence%i" % (i + 1))
             for (i, s) in enumerate(sequences)
         ),
     )
@@ -78,13 +77,14 @@ class TestCAPS(unittest.TestCase):
         self.assertEqual(map.dcuts, [])
 
     def test_uneven(self):
-        alignment = [
-            "aaaaaaaaaaaaaa",
-            "aaaaaaaaaaaaaa",  # we'll change this below
-            "aaaaaaaaaaaaaa",
-        ]
-        align = createAlignment(alignment)
-        align[1].seq = align[1].seq[:8]  # evil
+        align = MultipleSeqAlignment(
+            (
+                MutableSeq("aaaaaaaaaaaaaa", id="sequence1"),
+                MutableSeq("aaaaaaaaaaaaaa", id="sequence2"),
+                MutableSeq("aaaaaaaaaaaaaa", id="sequence3"),
+            ),
+        )
+        align[1].remove("a")
         self.assertRaises(CAPS.AlignmentHasDifferentLengthsError, CAPS.CAPSMap, align)
 
 

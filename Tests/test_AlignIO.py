@@ -15,7 +15,6 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align import AlignInfo, MultipleSeqAlignment
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Data import IUPACData
 
 test_write_read_alignment_formats = sorted(AlignIO._FormatToWriter)
@@ -33,9 +32,9 @@ class TestAlignIO_exceptions(unittest.TestCase):
         """Check that writing duplicated IDs after truncation fails for PHYLIP."""
         handle = StringIO()
         sequences = [
-            SeqRecord(Seq("AAAA"), id="longsequencename1"),
-            SeqRecord(Seq("AAAA"), id="longsequencename2"),
-            SeqRecord(Seq("AAAA"), id="other_sequence"),
+            Seq("AAAA", id="longsequencename1"),
+            Seq("AAAA", id="longsequencename2"),
+            Seq("AAAA", id="other_sequence"),
         ]
         alignment = MultipleSeqAlignment(sequences)
         with self.assertRaises(ValueError) as cm:
@@ -78,7 +77,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 # Check the bare minimum (ID and sequence) as
                 # many formats can't store more than that.
                 # Check the sequence:
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(str(r1), str(r2))
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -224,7 +223,7 @@ class TestAlignIO_reading(unittest.TestCase):
         items = []
         for record in alignment:
             name = record.id
-            sequence = str(record.seq)
+            sequence = str(record)
             if len(sequence) > max_len:
                 sequence = sequence[: max_len - 6] + "..." + sequence[-3:]
             item = (name, sequence)

@@ -165,10 +165,10 @@ class CodonAdaptationIndex:
             # iterate over sequence and count all the codons in the FastaFile.
             for cur_record in SeqIO.parse(handle, "fasta"):
                 # make sure the sequence is lower case
-                if str(cur_record.seq).islower():
-                    dna_sequence = str(cur_record.seq).upper()
+                if str(cur_record).islower():
+                    dna_sequence = str(cur_record).upper()
                 else:
-                    dna_sequence = str(cur_record.seq)
+                    dna_sequence = str(cur_record)
                 for i in range(0, len(dna_sequence), 3):
                     codon = dna_sequence[i : i + 3]
                     if codon in self.codon_count:

@@ -319,7 +319,7 @@ the desired \verb|description|:
 >>> first_record = next(record_iterator)
 >>> first_record.id = "new_id"
 >>> first_record.description = first_record.id + " " + "desired new description"
->>> print(first_record.format("fasta")[:200])
+>>> print(format(first_record, "fasta")[:200])
 >new_id desired new description
 CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAA
 CGATCGAGTGAATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGT
@@ -612,11 +612,11 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 
 %cont-doctest
 \begin{minted}{pycon}
->>> seq_record = orchid_dict["Z78475.1"]
->>> print(seq_record.description)
+>>> seq = orchid_dict["Z78475.1"]
+>>> print(seq.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
->>> seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
+>>> seq
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', id='Z78475.1', name='Z78475', description='P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA')
 \end{minted}
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
@@ -707,7 +707,7 @@ Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argume
 >>> from Bio import SeqIO
 >>> from Bio.SeqUtils.CheckSum import seguid
 >>> seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
-...                             lambda rec : seguid(rec.seq))
+...                             lambda seq : seguid(seq))
 >>> record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
 >>> print(record.id)
 Z78532.1
@@ -750,11 +750,11 @@ As an example, let's use the same GenBank file as before:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> seq_record = orchid_dict["Z78475.1"]
->>> print(seq_record.description)
+>>> seq = orchid_dict["Z78475.1"]
+>>> print(seq.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
->>> seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
+>>> seq
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', id='Z78475.1', name='Z78475', description='P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA')
 >>> orchid_dict.close()
 \end{minted}
 

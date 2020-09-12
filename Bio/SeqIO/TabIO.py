@@ -33,7 +33,6 @@ example above.
 """
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
 
@@ -41,7 +40,7 @@ class TabIterator(SequenceIterator):
     """Parser for tab-delimited files."""
 
     def __init__(self, source):
-        """Iterate over tab separated lines as SeqRecord objects.
+        """Iterate over tab separated lines as Seq objects.
 
         Each line of the file should contain one tab only, dividing the line
         into an identifier and the full sequence.
@@ -74,12 +73,12 @@ class TabIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="Tab-separated plain-text")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         for line in handle:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!
@@ -94,7 +93,7 @@ class TabIterator(SequenceIterator):
                 ) from None
             title = title.strip()
             seq = seq.strip()  # removes the trailing new line
-            yield SeqRecord(Seq(seq), id=title, name=title, description="")
+            yield Seq(seq, id=title, name=title, description="")
 
 
 class TabWriter(SequenceWriter):

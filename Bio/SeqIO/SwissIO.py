@@ -10,14 +10,13 @@
 
 You are expected to use this module via the Bio.SeqIO functions.
 See also the Bio.SwissProt module which offers more than just accessing
-the sequences as SeqRecord objects.
+the sequences as Seq objects.
 
 See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
 """
 
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import SeqFeature
 from Bio import SwissProt
 
@@ -55,12 +54,12 @@ def _make_position(location_string, offset=0):
 
 
 def SwissIterator(source):
-    """Break up a Swiss-Prot/UniProt file into SeqRecord objects.
+    """Break up a Swiss-Prot/UniProt file into Seq objects.
 
     Argument source is a file-like object or a path to a file.
 
     Every section from the ID line to the terminating // becomes
-    a single SeqRecord with associated annotation and features.
+    a single Seq with associated annotation and features.
 
     This parser is for the flat file "swiss" format as used by:
      - Swiss-Prot aka SwissProt
@@ -76,9 +75,8 @@ def SwissIterator(source):
     swiss_records = SwissProt.parse(source)
 
     for swiss_record in swiss_records:
-        # Convert the SwissProt record to a SeqRecord
-        record = SeqRecord(
-            Seq(swiss_record.sequence),
+        # Convert the SwissProt record to a Seq object
+        record = Seq(swiss_record.sequence,
             id=swiss_record.accessions[0],
             name=swiss_record.entry_name,
             description=swiss_record.description,

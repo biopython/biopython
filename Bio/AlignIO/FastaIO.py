@@ -22,7 +22,6 @@ which can also be used to store a multiple sequence alignments.
 
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
 
@@ -144,16 +143,15 @@ handle.name: {handle.name}
 
         # Query
         # =====
-        record = SeqRecord(
-            Seq(q),
+        record = Seq(q,
             id=query_id,
             name="query",
             description=query_descr,
             annotations={"original_length": int(query_tags["sq_len"])},
         )
         # TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(query_tags["al_start"])
-        record._al_stop = int(query_tags["al_stop"])
+        record.annotations["al_start"] = int(query_tags["al_start"])
+        record.annotations["al_stop"] = int(query_tags["al_stop"])
         alignment.append(record)
 
         # TODO - Can FASTA output RNA?
@@ -165,16 +163,15 @@ handle.name: {handle.name}
 
         # Match
         # =====
-        record = SeqRecord(
-            Seq(m),
+        record = Seq(m,
             id=match_id,
             name="match",
             description=match_descr,
             annotations={"original_length": int(match_tags["sq_len"])},
         )
         # TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(match_tags["al_start"])
-        record._al_stop = int(match_tags["al_stop"])
+        record.annotations["al_start"] = int(match_tags["al_start"])
+        record.annotations["al_stop"] = int(match_tags["al_stop"])
         alignment.append(record)
 
         if "sq_type" in match_tags:

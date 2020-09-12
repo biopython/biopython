@@ -13,12 +13,11 @@ from itertools import permutations
 from math import log
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Data import CodonTable
 
 
 class CodonSeq(Seq):
-    """CodonSeq is designed to be within the SeqRecords of a CodonAlignment class.
+    """CodonSeq is designed to be within the Seq objects of a CodonAlignment class.
 
     CodonSeq is useful as it allows the user to specify
     reading frame when translate CodonSeq
@@ -51,7 +50,10 @@ class CodonSeq(Seq):
 
     """
 
-    def __init__(self, data="", gap_char="-", rf_table=None):
+    def __new__(cls, data="", gap_char="-", rf_table=None, **kwargs):
+        return super().__new__(cls, data.upper())
+
+    def __init__(self, data="", id="", gap_char="-", rf_table=None, **kwargs):
         """Initialize the class."""
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
@@ -65,7 +67,7 @@ class CodonSeq(Seq):
         #   feature ensures the rf_table is independent of where the
         #   codon sequence appears in the alignment
 
-        Seq.__init__(self, data.upper())
+        self.id = id
         self.gap_char = gap_char
 
         # check the length of the alignment to be a triple
@@ -293,8 +295,8 @@ def cal_dn_ds(
     .. _`Yang and Nielsen (2000)`: https://doi.org/10.1093/oxfordjournals.molbev.a026236
 
     Arguments:
-     - codon_seq1 - CodonSeq or or SeqRecord that contains a CodonSeq
-     - codon_seq2 - CodonSeq or or SeqRecord that contains a CodonSeq
+     - codon_seq1 - CodonSeq or or Seq object that contains a CodonSeq
+     - codon_seq2 - CodonSeq or or Seq object that contains a CodonSeq
      - w  - transition/transversion ratio
      - cfreq - Current codon frequency vector can only be specified
        when you are using ML method. Possible ways of
@@ -303,9 +305,8 @@ def cal_dn_ds(
     """
     if isinstance(codon_seq1, CodonSeq) and isinstance(codon_seq2, CodonSeq):
         pass
-    elif isinstance(codon_seq1, SeqRecord) and isinstance(codon_seq2, SeqRecord):
-        codon_seq1 = codon_seq1.seq
-        codon_seq2 = codon_seq2.seq
+    elif isinstance(codon_seq1, Seq) and isinstance(codon_seq2, Seq):
+        pass
     else:
         raise TypeError(
             "cal_dn_ds accepts two CodonSeq objects or SeqRecord "

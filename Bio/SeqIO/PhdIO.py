@@ -18,23 +18,23 @@ from the Biopython unit tests:
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Phd/phd1", "phd"):
     ...     print(record.id)
-    ...     print("%s..." % record.seq[:10])
-    ...     print("%s..." % record.letter_annotations["phred_quality"][:10])
+    ...     print(record)
+    ...     print(record.letter_annotations["phred_quality"])
     34_222_(80-A03-19).b.ab1
     ctccgtcgga...
-    [9, 9, 10, 19, 22, 37, 28, 28, 24, 22]...
+    (9, 9, 10, 19, 22, 37, 28, 28, 24, 22, ...
     425_103_(81-A03-19).g.ab1
     cgggatccca...
-    [14, 17, 22, 10, 10, 10, 15, 8, 8, 9]...
+    (14, 17, 22, 10, 10, 10, 15, 8, 8, 9, ...
     425_7_(71-A03-19).b.ab1
     acataaatca...
-    [10, 10, 10, 10, 8, 8, 6, 6, 6, 6]...
+    (10, 10, 10, 10, 8, 8, 6, 6, 6, 6, ...
 
 Since PHRED files contain quality scores, you can save them as FASTQ or as
 QUAL files, for example using Bio.SeqIO.write(...), or simply with the format
-method of the SeqRecord object:
+method of the Seq object:
 
-    >>> print(record[:50].format("fastq"))
+    >>> print(format(record[:50], "fastq"))
     @425_7_(71-A03-19).b.ab1
     acataaatcaaattactnaccaacacacaaaccngtctcgcgtagtggag
     +
@@ -43,7 +43,7 @@ method of the SeqRecord object:
 
 Or,
 
-    >>> print(record[:50].format("qual"))
+    >>> print(format(record[:50], "qual"))
     >425_7_(71-A03-19).b.ab1
     10 10 10 10 8 8 6 6 6 6 8 7 6 6 6 8 3 0 3 6 6 6 8 6 6 6 6 7
     10 13 6 6 3 0 3 8 8 8 8 10 8 8 8 6 6 6 6 6 6 6
@@ -53,14 +53,14 @@ Note these examples only show the first 50 bases to keep the output short.
 """
 
 
-from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
+from Bio.Seq import Seq
 from Bio.SeqIO import QualityIO
 from .Interfaces import SequenceWriter
 
 
 def PhdIterator(source):
-    """Return SeqRecord objects from a PHD file.
+    """Return Seq objects from a PHD file.
 
     Arguments:
      - source - input stream opened in text mode, or a path to a file
@@ -69,26 +69,26 @@ def PhdIterator(source):
     """
     phd_records = Phd.parse(source)
     for phd_record in phd_records:
-        # Convert the PHY record into a SeqRecord...
+        # Convert the PHY record into a Seq object...
         # The "filename" can contain spaces, e.g. 'HWI-EAS94_4_1_1_602_99 1'
         # from unit test example file phd_solexa.
         # This will cause problems if used as the record identifier
         # (e.g. output for FASTQ format).
         name = phd_record.file_name.split(None, 1)[0]
-        seq_record = SeqRecord(
-            phd_record.seq, id=name, name=name, description=phd_record.file_name
+        seq_record = Seq(
+            str(phd_record.seq), id=name, name=name, description=phd_record.file_name
         )
-        # Just re-use the comments dictionary as the SeqRecord's annotations
+        # Just re-use the comments dictionary as the Seq object's annotations
         seq_record.annotations = phd_record.comments
         seq_record.annotations["molecule_type"] = "DNA"
         # And store the qualities and peak locations as per-letter-annotation
-        seq_record.letter_annotations["phred_quality"] = [
+        seq_record.letter_annotations["phred_quality"] = tuple(
             int(site[1]) for site in phd_record.sites
-        ]
+        )
         try:
-            seq_record.letter_annotations["peak_location"] = [
+            seq_record.letter_annotations["peak_location"] = tuple(
                 int(site[2]) for site in phd_record.sites
-            ]
+            )
         except IndexError:
             # peak locations are not always there according to
             # David Gordon (the Consed author)
@@ -106,17 +106,17 @@ class PhdWriter(SequenceWriter):
 
     def write_record(self, record):
         """Write a single Phd record to the file."""
-        assert record.seq, "No sequence present in SeqRecord"
+        assert len(record), "No sequence present in Seq"
         # This method returns the 'phred_quality' scores or converted
         # 'solexa_quality' scores if present, else raises a value error
         phred_qualities = QualityIO._get_phred_quality(record)
         peak_locations = record.letter_annotations.get("peak_location")
-        if len(record.seq) != len(phred_qualities):
+        if len(record) != len(phred_qualities):
             raise ValueError(
                 "Number of phd quality scores does not match length of sequence"
             )
         if peak_locations:
-            if len(record.seq) != len(peak_locations):
+            if len(record) != len(peak_locations):
                 raise ValueError(
                     "Number of peak location scores does not "
                     "match length of sequence"
@@ -142,7 +142,7 @@ class PhdWriter(SequenceWriter):
                 self.handle.write("%s: %s\n" % (annot.upper(), value))
 
         self.handle.write("END_COMMENT\nBEGIN_DNA\n")
-        for i, site in enumerate(record.seq):
+        for i, site in enumerate(record):
             if peak_locations:
                 self.handle.write(
                     "%s %i %i\n" % (site, round(phred_qualities[i]), peak_locations[i])

@@ -83,7 +83,7 @@ class StringMethodTests(unittest.TestCase):
     ]
     for seq in _examples[:]:
         if isinstance(seq, Seq):
-            _examples.append(seq.tomutable())
+            _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
     def _test_method(self, method_name, pre_comp_function=None, start_end=False):
@@ -595,63 +595,45 @@ class StringMethodTests(unittest.TestCase):
                         else:
                             self.assertEqual(str(example1[i:j:step]), str1[i:j:step])
 
-    def test_tomutable(self):
-        """Check obj.tomutable() method."""
-        for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
-            mut = example1.tomutable()
-            self.assertIsInstance(mut, MutableSeq)
-            self.assertEqual(str(mut), str(example1))
-
     def test_toseq(self):
-        """Check obj.toseq() method."""
+        """Check creating a Seq object from a Seq or MutableSeq object."""
         for example1 in self._examples:
-            try:
-                seq = example1.toseq()
-            except AttributeError:
-                self.assertIsInstance(example1, Seq)
-                continue
+            seq = Seq(example1)
             self.assertIsInstance(seq, Seq)
             self.assertEqual(str(seq), str(example1))
 
+    def test_tomutable(self):
+        """Check creating a MutableSeq object from a Seq or MutableSeq object."""
+        for example1 in self._examples:
+            mut = MutableSeq(example1)
+            self.assertIsInstance(mut, MutableSeq)
+            self.assertEqual(mut, example1)
+
     def test_the_complement(self):
         """Check obj.complement() method."""
-        mapping = ""
+        rna_mapping = str.maketrans("ACGTUacgtu", "UGCAAugcaa")
+        dna_mapping = str.maketrans("ACGTUacgtu", "TGCAAtgcaa")
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try:
-                comp = example1.complement()
-            except ValueError as e:
-                self.assertEqual(str(e), "Proteins do not have complements!")
-                continue
             str1 = str(example1)
-            if "U" in str1 or "u" in str1:
-                mapping = str.maketrans("ACGUacgu", "UGCAugca")
-            else:
-                # Default to DNA, e.g. complement("A") -> "T" not "U"
-                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
-            self.assertEqual(str1.translate(mapping), str(comp))
+            comp = example1.complement()
+            self.assertEqual(str1.translate(dna_mapping), str(comp))
+            comp = example1.rna_complement()
+            self.assertEqual(str1.translate(rna_mapping), str(comp))
 
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
-        mapping = ""
+        rna_mapping = str.maketrans("ACGTUacgtu", "UGCAAugcaa")
+        dna_mapping = str.maketrans("ACGTUacgtu", "TGCAAtgcaa")
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            try:
-                comp = example1.reverse_complement()
-            except ValueError as e:
-                self.assertEqual(str(e), "Proteins do not have complements!")
-                continue
             str1 = str(example1)
-            if "U" in str1 or "u" in str1:
-                mapping = str.maketrans("ACGUacgu", "UGCAugca")
-            else:
-                # Defaults to DNA, so reverse_complement("A") --> "T" not "U"
-                mapping = str.maketrans("ACGTacgt", "TGCAtgca")
-            self.assertEqual(str1.translate(mapping)[::-1], str(comp))
+            comp = example1.reverse_complement()
+            self.assertEqual(str1.translate(dna_mapping)[::-1], str(comp))
+            comp = example1.rna_reverse_complement()
+            self.assertEqual(str1.translate(rna_mapping)[::-1], str(comp))
 
     def test_the_transcription(self):
         """Check obj.transcribe() method."""
@@ -803,7 +785,6 @@ class StringMethodTests(unittest.TestCase):
 
     def test_MutableSeq_init_typeerror(self):
         """Check MutableSeq __init__ gives TypeError exceptions."""
-        self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
 
@@ -902,7 +883,7 @@ class StringMethodTests(unittest.TestCase):
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
         filename = "Fasta/f003"
-        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
+        seqlist = [seq for seq in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
         spacer = Seq("NNNNN")
@@ -918,13 +899,11 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, "fasta"))
 
     def test_join_UnknownSeq_with_file(self):
         """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""
         filename = "Fasta/f003"
-        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
+        seqlist = [seq for seq in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
         spacer = UnknownSeq(0, character="-")
@@ -940,8 +919,6 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, "fasta"))
 
     def test_join_MutableSeq(self):
         """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
@@ -968,7 +945,7 @@ class StringMethodTests(unittest.TestCase):
     def test_join_MutableSeq_with_file(self):
         """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
         filename = "Fasta/f003"
-        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
+        seqlist = list(SeqIO.parse(filename, "fasta"))
         seqlist_as_strings = [str(_) for _ in seqlist]
 
         spacer = MutableSeq("NNNNN")
@@ -984,8 +961,6 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, "fasta"))
 
     # TODO - Addition...
 
@@ -996,9 +971,9 @@ class FileBasedTests(unittest.TestCase):
     def test_unknown_seq_ungap(self):
         """Test ungap() works properly on UnknownSeq instances."""
         rec = SeqIO.read("GenBank/NT_019265.gb", "genbank")
-        self.assertIsInstance(rec.seq, UnknownSeq)
+        self.assertIsInstance(rec, UnknownSeq)
 
-        ungapped_seq = rec.features[1].extract(rec.seq).ungap("-")
+        ungapped_seq = rec.features[1].extract(rec).ungap("-")
         self.assertIsInstance(ungapped_seq, UnknownSeq)
 
 

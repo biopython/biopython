@@ -8,7 +8,6 @@ import unittest
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import AlignIO
 from Bio.Align.AlignInfo import SummaryInfo
 from Bio.Data import IUPACData
@@ -59,9 +58,9 @@ N  0.0 2.0 1.0 0.0
     def test_proteins(self):
         a = MultipleSeqAlignment(
             [
-                SeqRecord(Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-"), id="ID001"),
-                SeqRecord(Seq("MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*"), id="ID002"),
-                SeqRecord(Seq("MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*"), id="ID003"),
+                Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-", id="ID001"),
+                Seq("MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*", id="ID002"),
+                Seq("MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*", id="ID003"),
             ]
         )
         self.assertEqual(32, a.get_alignment_length())
@@ -126,14 +125,14 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
         # http://biologie.univ-mrs.fr/upload/p202/01.4.PSSM_theory.pdf
         dna_align = MultipleSeqAlignment(
             [
-                SeqRecord(Seq("AACCACGTTTAA"), id="ID001"),
-                SeqRecord(Seq("CACCACGTGGGT"), id="ID002"),
-                SeqRecord(Seq("CACCACGTTCGC"), id="ID003"),
-                SeqRecord(Seq("GCGCACGTGGGG"), id="ID004"),
-                SeqRecord(Seq("TCGCACGTTGTG"), id="ID005"),
-                SeqRecord(Seq("TGGCACGTGTTT"), id="ID006"),
-                SeqRecord(Seq("TGACACGTGGGA"), id="ID007"),
-                SeqRecord(Seq("TTACACGTGCGC"), id="ID008"),
+                Seq("AACCACGTTTAA", id="ID001"),
+                Seq("CACCACGTGGGT", id="ID002"),
+                Seq("CACCACGTTCGC", id="ID003"),
+                Seq("GCGCACGTGGGG", id="ID004"),
+                Seq("TCGCACGTTGTG", id="ID005"),
+                Seq("TGGCACGTGTTT", id="ID006"),
+                Seq("TGACACGTGGGA", id="ID007"),
+                Seq("TTACACGTGCGC", id="ID008"),
             ]
         )
 

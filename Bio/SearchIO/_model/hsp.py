@@ -11,7 +11,6 @@ from operator import ge, le
 from Bio import BiopythonWarning
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 from Bio.SearchIO._utils import (
     singleitem,
@@ -134,8 +133,7 @@ class HSP(_BaseHSP):
     +----------------------+---------------------+-----------------------------+
     | fragments            | fragment            | HSPFragment objects         |
     +----------------------+---------------------+-----------------------------+
-    | hit_all              | hit                 | hit sequence as SeqRecord   |
-    |                      |                     | objects                     |
+    | hit_all              | hit                 | hit sequence as Seq objects |
     +----------------------+---------------------+-----------------------------+
     | hit_features_all     | hit_features        | SeqFeatures of all hit      |
     |                      |                     | fragments                   |
@@ -158,7 +156,7 @@ class HSP(_BaseHSP):
     |                      |                     | coordinates of each hit     |
     |                      |                     | fragment                    |
     +----------------------+---------------------+-----------------------------+
-    | query_all            | query               | query sequence as SeqRecord |
+    | query_all            | query               | query sequence as Seq       |
     |                      |                     | object                      |
     +----------------------+---------------------+-----------------------------+
     | query_features_all   | query_features      | SeqFeatures of all query    |
@@ -218,7 +216,7 @@ class HSP(_BaseHSP):
     +====================+======================================================+
     | aln_span           | total number of residues in all HSPFragment objects  |
     +--------------------+------------------------------------------------------+
-    | molecule_type      | molecule_type of the hit and query SeqRecord objects |
+    | molecule_type      | molecule_type of the hit and query Seq objects       |
     +--------------------+------------------------------------------------------+
     | is_fragmented      | boolean, whether there are multiple fragments or not |
     +--------------------+------------------------------------------------------+
@@ -582,16 +580,16 @@ class HSP(_BaseHSP):
     query_id = fullcascade("query_id", doc="ID of the query sequence.")
 
     molecule_type = fullcascade(
-        "molecule_type", doc="molecule_type of the hit and query SeqRecord objects."
+        "molecule_type", doc="molecule_type of the hit and query Seq objects."
     )
 
     # properties for single-fragment HSPs
     fragment = singleitem(doc="HSPFragment object, first fragment.")
 
-    hit = singleitem("hit", doc="Hit sequence as a SeqRecord object, first fragment.")
+    hit = singleitem("hit", doc="Hit sequence as a Seq object, first fragment.")
 
     query = singleitem(
-        "query", doc="Query sequence as a SeqRecord object, first fragment."
+        "query", doc="Query sequence as a Seq object, first fragment."
     )
 
     aln = singleitem(
@@ -629,11 +627,11 @@ class HSP(_BaseHSP):
     fragments = allitems(doc="List of all HSPFragment objects.")
 
     hit_all = allitems(
-        "hit", doc="List of all fragments' hit sequences as SeqRecord objects."
+        "hit", doc="List of all fragments' hit sequences as Seq objects."
     )
 
     query_all = allitems(
-        "query", doc="List of all fragments' query sequences as SeqRecord objects."
+        "query", doc="List of all fragments' query sequences as Seq objects."
     )
 
     aln_all = allitems(
@@ -704,7 +702,7 @@ class HSPFragment(_BaseHSP):
     HSPFragment forms the core of any parsed search output file. Depending on
     the search output file format, it may contain the actual query and/or hit
     sequences that produces the search hits. These sequences are stored as
-    SeqRecord objects (see SeqRecord):
+    Seq objects:
 
     >>> from Bio import SearchIO
     >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
@@ -719,27 +717,27 @@ class HSPFragment(_BaseHSP):
                  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
            Hit - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 
-    # the query sequence is a SeqRecord object
+    # the query sequence is a Seq object
     >>> fragment.query.__class__
-    <class 'Bio.SeqRecord.SeqRecord'>
-    >>> print(fragment.query)
+    <class 'Bio.Seq.Seq'>
+    >>> print(format(fragment.query, 'debug'))
+    CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG
     ID: 33211
     Name: aligned query sequence
     Description: mir_1
     Number of features: 0
     /molecule_type=DNA
-    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG')
 
-    # the hit sequence is a SeqRecord object as well
+    # the hit sequence is a Seq object as well
     >>> fragment.hit.__class__
-    <class 'Bio.SeqRecord.SeqRecord'>
-    >>> print(fragment.hit)
+    <class 'Bio.Seq.Seq'>
+    >>> print(format(fragment.hit, 'debug'))
+    CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG
     ID: gi|262205317|ref|NR_030195.1|
     Name: aligned hit sequence
     Description: Homo sapiens microRNA 520b (MIR520B), microRNA
     Number of features: 0
     /molecule_type=DNA
-    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG')
 
     # when both query and hit are present, we get a MultipleSeqAlignment object
     >>> fragment.aln.__class__
@@ -805,7 +803,7 @@ class HSPFragment(_BaseHSP):
                 molecule_type=self.molecule_type,
             )
             # transfer query and hit attributes
-            # let SeqRecord handle feature slicing, then retrieve the sliced
+            # let Seq handle feature slicing, then retrieve the sliced
             # features into the sliced HSPFragment
             if self.query is not None:
                 obj.query = self.query[idx]
@@ -838,14 +836,8 @@ class HSPFragment(_BaseHSP):
         lines.append("  Fragments: 1 (%s columns)" % aln_span)
         # sequences
         if self.query is not None and self.hit is not None:
-            try:
-                qseq = str(self.query.seq)
-            except AttributeError:  # query is None
-                qseq = "?"
-            try:
-                hseq = str(self.hit.seq)
-            except AttributeError:  # hit is None
-                hseq = "?"
+            qseq = str(self.query)
+            hseq = str(self.hit)
 
             # similarity line
             simil = ""
@@ -878,7 +870,7 @@ class HSPFragment(_BaseHSP):
         """Check the given sequence for attribute setting (PRIVATE).
 
         :param seq: sequence to check
-        :type seq: string or SeqRecord
+        :type seq: string or Seq
         :param seq_type: sequence type
         :type seq_type: string, choice of 'hit' or 'query'
 
@@ -887,9 +879,9 @@ class HSPFragment(_BaseHSP):
         if seq is None:
             return seq  # return immediately if seq is None
         else:
-            if not isinstance(seq, (str, SeqRecord)):
+            if not isinstance(seq, (str, Seq)):
                 raise TypeError(
-                    "%s sequence must be a string or a SeqRecord object." % seq_type
+                    "%s sequence must be a string or a Seq object." % seq_type
                 )
         # check length if the opposite sequence is not None
         opp_type = "hit" if seq_type == "query" else "query"
@@ -906,15 +898,14 @@ class HSPFragment(_BaseHSP):
         seq_feats = getattr(self, "%s_features" % seq_type)
         seq_name = "aligned %s sequence" % seq_type
 
-        if isinstance(seq, SeqRecord):
+        if isinstance(seq, Seq):
             seq.id = seq_id
             seq.description = seq_desc
             seq.name = seq_name
             seq.features = seq_feats
             seq.annotations["molecule_type"] = self.molecule_type
         elif isinstance(seq, str):
-            seq = SeqRecord(
-                Seq(seq),
+            seq = Seq(seq,
                 id=seq_id,
                 name=seq_name,
                 description=seq_desc,
@@ -933,7 +924,7 @@ class HSPFragment(_BaseHSP):
     hit = property(
         fget=_hit_get,
         fset=_hit_set,
-        doc="Hit sequence as a SeqRecord object, defaults to None.",
+        doc="Hit sequence as a Seq object, defaults to None.",
     )
 
     def _query_get(self):
@@ -945,7 +936,7 @@ class HSPFragment(_BaseHSP):
     query = property(
         fget=_query_get,
         fset=_query_set,
-        doc="Query sequence as a SeqRecord object, defaults to None.",
+        doc="Query sequence as a Seq object, defaults to None.",
     )
 
     def _aln_get(self):

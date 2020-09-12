@@ -714,7 +714,7 @@ class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
 
     def setUp(self):
-        """Test setup, just loads a GenBank file as a SeqRecord."""
+        """Test setup, just loads a GenBank file as a Seq object."""
         with open(os.path.join("GenBank", "NC_005816.gb")) as handle:
             self.record = SeqIO.read(handle, "genbank")
 
@@ -804,7 +804,7 @@ class DiagramTest(unittest.TestCase):
                 gdd.write_to_string(output)
 
     def test_partial_diagram(self):
-        """Construct and draw SVG and PDF for just part of a SeqRecord."""
+        """Construct and draw SVG and PDF for just part of a Seq object."""
         genbank_entry = self.record
         start = 6500
         end = 8750
@@ -940,7 +940,7 @@ class DiagramTest(unittest.TestCase):
         ]:
             index = 0
             while True:
-                index = genbank_entry.seq.find(site, start=index)
+                index = genbank_entry.find(site, start=index)
                 if index == -1:
                     break
                 feature = SeqFeature(FeatureLocation(index, index + 6), strand=None)
@@ -977,14 +977,14 @@ class DiagramTest(unittest.TestCase):
 
         step = len(genbank_entry) // 200
         gds_at_gc.new_graph(
-            apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
+            apply_to_window(genbank_entry, step, calc_gc_content, step),
             "GC content",
             style="line",
             color=colors.lightgreen,
             altcolor=colors.darkseagreen,
         )
         gds_at_gc.new_graph(
-            apply_to_window(genbank_entry.seq, step, calc_at_content, step),
+            apply_to_window(genbank_entry, step, calc_at_content, step),
             "AT content",
             style="line",
             color=colors.orange,
@@ -1206,7 +1206,7 @@ class DiagramTest(unittest.TestCase):
         step = len(genbank_entry) // 200
         gdgs1 = GraphSet("GC skew")
 
-        graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
+        graphdata1 = apply_to_window(genbank_entry, step, calc_gc_skew, step)
         gdgs1.new_graph(
             graphdata1,
             "GC Skew",
@@ -1222,7 +1222,7 @@ class DiagramTest(unittest.TestCase):
 
         gdgs2 = GraphSet("GC and AT Content")
         gdgs2.new_graph(
-            apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
+            apply_to_window(genbank_entry, step, calc_gc_content, step),
             "GC content",
             style="line",
             color=colors.lightgreen,
@@ -1230,7 +1230,7 @@ class DiagramTest(unittest.TestCase):
         )
 
         gdgs2.new_graph(
-            apply_to_window(genbank_entry.seq, step, calc_at_content, step),
+            apply_to_window(genbank_entry, step, calc_at_content, step),
             "AT content",
             style="line",
             color=colors.orange,
@@ -1248,7 +1248,7 @@ class DiagramTest(unittest.TestCase):
         gdgs3 = GraphSet("Di-nucleotide count")
         step = len(genbank_entry) // 400  # smaller step
         gdgs3.new_graph(
-            apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
+            apply_to_window(genbank_entry, step, calc_dinucleotide_counts, step),
             "Di-nucleotide count",
             style="heat",
             color=colors.red,

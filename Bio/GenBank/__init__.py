@@ -9,11 +9,11 @@
 
 Rather than using Bio.GenBank, you are now encouraged to use Bio.SeqIO with
 the "genbank" or "embl" format names to parse GenBank or EMBL files into
-SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
+Seq and SeqFeature objects (see the Biopython tutorial for details).
 
 Using Bio.GenBank directly to parse GenBank files is only useful if you want
 to obtain GenBank-specific Record objects, which is a much closer
-representation to the raw file contents than the SeqRecord alternative from
+representation to the raw file contents than the Seq alternative from
 the FeatureParser (used in Bio.SeqIO).
 
 To use the Bio.GenBank parser, there are two helper functions:
@@ -29,7 +29,7 @@ be deprecated in a future release.
 Classes:
  - Iterator              Iterate through a file of GenBank entries
  - ErrorFeatureParser    Catch errors caused during parsing.
- - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
+ - FeatureParser         Parse GenBank data into Seq and SeqFeature objects.
  - RecordParser          Parse GenBank data into a Record object.
 
 Exceptions:
@@ -442,7 +442,7 @@ class Iterator:
 
     This class is likely to be deprecated in a future release of Biopython.
     Please use Bio.SeqIO.parse(..., format="gb") or Bio.GenBank.parse(...)
-    for SeqRecord and GenBank specific Record objects respectively instead.
+    for Seq and GenBank specific Record objects respectively instead.
     """
 
     def __init__(self, handle, parser=None):
@@ -678,7 +678,7 @@ class _BaseGenBankConsumer:
 
 
 class _FeatureConsumer(_BaseGenBankConsumer):
-    """Create a SeqRecord object with Features to return (PRIVATE).
+    """Create a Seq object with Features to return (PRIVATE).
 
     Attributes:
      - use_fuzziness - specify whether or not to parse with fuzziness in
@@ -689,12 +689,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     """
 
     def __init__(self, use_fuzziness, feature_cleaner=None):
-        from Bio.SeqRecord import SeqRecord
-
         _BaseGenBankConsumer.__init__(self)
-        self.data = SeqRecord(None, id=None)
-        self.data.id = None
-        self.data.description = ""
+        self._id = ""
+        self._name = ""
+        self._description = ""
+        self._annotations = {}
+        self._features = []
+        self._dbxrefs = []
+        self._letter_annotations = {}
 
         self._use_fuzziness = use_fuzziness
         self._feature_cleaner = feature_cleaner
@@ -707,7 +709,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def locus(self, locus_name):
         """Set the locus name is set as the name of the Sequence."""
-        self.data.name = locus_name
+        self._name = locus_name
 
     def size(self, content):
         """Record the sequence length."""
@@ -729,7 +731,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ParserFailureError(
                     "Unexpected topology %r should be linear or circular" % topology
                 )
-            self.data.annotations["topology"] = topology
+            self._annotations["topology"] = topology
 
     def molecule_type(self, mol_type):
         """Validate and record the molecule type (for round-trip etc)."""
@@ -750,22 +752,22 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     BiopythonParserWarning,
                 )
 
-            self.data.annotations["molecule_type"] = mol_type
+            self._annotations["molecule_type"] = mol_type
 
     def data_file_division(self, division):
-        self.data.annotations["data_file_division"] = division
+        self._annotations["data_file_division"] = division
 
     def date(self, submit_date):
-        self.data.annotations["date"] = submit_date
+        self._annotations["date"] = submit_date
 
     def definition(self, definition):
         """Set the definition as the description of the sequence."""
-        if self.data.description:
+        if self._description == "":
+            self._description = definition
+        else:
             # Append to any existing description
             # e.g. EMBL files with two DE lines.
-            self.data.description += " " + definition
-        else:
-            self.data.description = definition
+            self._description += " " + definition
 
     def accession(self, acc_num):
         """Set the accession number as the id of the sequence.
@@ -780,35 +782,35 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # On the off chance there was more than one accession line:
             for acc in new_acc_nums:
                 # Prevent repeat entries
-                if acc not in self.data.annotations["accessions"]:
-                    self.data.annotations["accessions"].append(acc)
+                if acc not in self._annotations["accessions"]:
+                    self._annotations["accessions"].append(acc)
         except KeyError:
-            self.data.annotations["accessions"] = new_acc_nums
+            self._annotations["accessions"] = new_acc_nums
 
         # if we haven't set the id information yet, add the first acc num
-        if not self.data.id:
+        if not self._id:
             if len(new_acc_nums) > 0:
-                # self.data.id = new_acc_nums[0]
+                # self._id = new_acc_nums[0]
                 # Use the FIRST accession as the ID, not the first on this line!
-                self.data.id = self.data.annotations["accessions"][0]
+                self._id = self._annotations["accessions"][0]
 
     def tls(self, content):
-        self.data.annotations["tls"] = content.split("-")
+        self._annotations["tls"] = content.split("-")
 
     def tsa(self, content):
-        self.data.annotations["tsa"] = content.split("-")
+        self._annotations["tsa"] = content.split("-")
 
     def wgs(self, content):
-        self.data.annotations["wgs"] = content.split("-")
+        self._annotations["wgs"] = content.split("-")
 
     def add_wgs_scafld(self, content):
-        self.data.annotations.setdefault("wgs_scafld", []).append(content.split("-"))
+        self._annotations.setdefault("wgs_scafld", []).append(content.split("-"))
 
     def nid(self, content):
-        self.data.annotations["nid"] = content
+        self._annotations["nid"] = content
 
     def pid(self, content):
-        self.data.annotations["pid"] = content
+        self._annotations["pid"] = content
 
     def version(self, version_id):
         # Want to use the versioned accession as the record.id
@@ -821,7 +823,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.version_suffix(version_id.split(".")[1])
         elif version_id:
             # For backwards compatibility...
-            self.data.id = version_id
+            self._id = version_id
 
     def project(self, content):
         """Handle the information from the PROJECT line as a list of projects.
@@ -834,13 +836,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
             PROJECT     GenomeProject:13543  GenomeProject:99999
 
-        This is stored as dbxrefs in the SeqRecord to be consistent with the
+        This is stored as dbxrefs in the Seq object to be consistent with the
         projected switch of this line to DBLINK in future GenBank versions.
         Note the NCBI plan to replace "GenomeProject:28471" with the shorter
         "Project:28471" as part of this transition.
         """
         content = content.replace("GenomeProject:", "Project:")
-        self.data.dbxrefs.extend(p for p in content.split() if p)
+        self._dbxrefs.extend(p for p in content.split() if p)
 
     def dblink(self, content):
         """Store DBLINK cross references as dbxrefs in our record object.
@@ -872,8 +874,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # we don't want to add the same cross reference twice.
         while ": " in content:
             content = content.replace(": ", ":")
-        if content.strip() not in self.data.dbxrefs:
-            self.data.dbxrefs.append(content.strip())
+        if content.strip() not in self._dbxrefs:
+            self._dbxrefs.append(content.strip())
 
     def version_suffix(self, version):
         """Set the version to overwrite the id.
@@ -893,24 +895,24 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
         # Scanner calls consumer.version_suffix(1)
         assert version.isdigit()
-        self.data.annotations["sequence_version"] = int(version)
+        self._annotations["sequence_version"] = int(version)
 
     def db_source(self, content):
-        self.data.annotations["db_source"] = content.rstrip()
+        self._annotations["db_source"] = content.rstrip()
 
     def gi(self, content):
-        self.data.annotations["gi"] = content
+        self._annotations["gi"] = content
 
     def keywords(self, content):
-        if "keywords" in self.data.annotations:
+        if "keywords" in self._annotations:
             # Multi-line keywords, append to list
             # Note EMBL states "A keyword is never split between lines."
-            self.data.annotations["keywords"].extend(self._split_keywords(content))
+            self._annotations["keywords"].extend(self._split_keywords(content))
         else:
-            self.data.annotations["keywords"] = self._split_keywords(content)
+            self._annotations["keywords"] = self._split_keywords(content)
 
     def segment(self, content):
-        self.data.annotations["segment"] = content
+        self._annotations["segment"] = content
 
     def source(self, content):
         # Note that some software (e.g. VectorNTI) may produce an empty
@@ -921,27 +923,27 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             source_info = content[:-1]
         else:
             source_info = content
-        self.data.annotations["source"] = source_info
+        self._annotations["source"] = source_info
 
     def organism(self, content):
-        self.data.annotations["organism"] = content
+        self._annotations["organism"] = content
 
     def taxonomy(self, content):
         """Record (another line of) the taxonomy lineage."""
         lineage = self._split_taxonomy(content)
         try:
-            self.data.annotations["taxonomy"].extend(lineage)
+            self._annotations["taxonomy"].extend(lineage)
         except KeyError:
-            self.data.annotations["taxonomy"] = lineage
+            self._annotations["taxonomy"] = lineage
 
     def reference_num(self, content):
         """Signal the beginning of a new reference object."""
         # if we have a current reference that hasn't been added to
         # the list of references, add it.
         if self._cur_reference is not None:
-            self.data.annotations["references"].append(self._cur_reference)
+            self._annotations["references"].append(self._cur_reference)
         else:
-            self.data.annotations["references"] = []
+            self._annotations["references"] = []
 
         self._cur_reference = SeqFeature.Reference()
 
@@ -981,7 +983,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         else:
             raise ValueError(
                 "Could not parse base info %s in record %s"
-                % (ref_base_info, self.data.id)
+                % (ref_base_info, self._id)
             )
 
         self._cur_reference.location = all_locations
@@ -1052,12 +1054,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def comment(self, content):
         try:
-            self.data.annotations["comment"] += "\n" + "\n".join(content)
+            self._annotations["comment"] += "\n" + "\n".join(content)
         except KeyError:
-            self.data.annotations["comment"] = "\n".join(content)
+            self._annotations["comment"] = "\n".join(content)
 
     def structured_comment(self, content):
-        self.data.annotations["structured_comment"] = content
+        self._annotations["structured_comment"] = content
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line."""
@@ -1067,14 +1069,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """Indicate we've got to the start of the feature table."""
         # make sure we've added on our last reference object
         if self._cur_reference is not None:
-            self.data.annotations["references"].append(self._cur_reference)
+            self._annotations["references"].append(self._cur_reference)
             self._cur_reference = None
 
     def feature_key(self, content):
         # start a new feature
         self._cur_feature = SeqFeature.SeqFeature()
         self._cur_feature.type = content
-        self.data.features.append(self._cur_feature)
+        self._features.append(self._cur_feature)
 
     def location(self, content):
         """Parse out location information from the location string.
@@ -1328,7 +1330,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         #
         # NOTE - This code assumes the scanner will return all the CONTIG
         # lines already combined into one long string!
-        self.data.annotations["contig"] = content
+        self._annotations["contig"] = content
 
     def origin_name(self, content):
         pass
@@ -1352,16 +1354,16 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def record_end(self, content):
         """Clean up when we've finished the record."""
         # Try and append the version number to the accession for the full id
-        if not self.data.id:
-            if "accessions" in self.data.annotations:
+        if not self._id:
+            if "accessions" in self._annotations:
                 raise ValueError(
                     "Problem adding version number to accession: "
-                    + str(self.data.annotations["accessions"])
+                    + str(self._annotations["accessions"])
                 )
-            self.data.id = self.data.name  # Good fall back?
-        elif self.data.id.count(".") == 0:
+            self._id = self._name  # Good fall back?
+        elif self._id.count(".") == 0:
             try:
-                self.data.id += ".%i" % self.data.annotations["sequence_version"]
+                self._id += ".%i" % self._annotations["sequence_version"]
             except KeyError:
                 pass
 
@@ -1376,7 +1378,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         ):
             warnings.warn(
                 "Expected sequence length %i, found %i (%s)."
-                % (self._expected_size, len(sequence), self.data.id),
+                % (self._expected_size, len(sequence), self._id),
                 BiopythonParserWarning,
             )
 
@@ -1405,16 +1407,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 )
         # Don't overwrite molecule_type
         if molecule_type is not None:
-            self.data.annotations["molecule_type"] = self.data.annotations.get(
+            self._annotations["molecule_type"] = self._annotations.get(
                 "molecule_type", molecule_type
             )
         if not sequence and self._expected_size:
-            self.data.seq = UnknownSeq(
-                self._expected_size,
+            sequence = UnknownSeq(self._expected_size,
                 character="X" if molecule_type == "protein" else "N",
             )
         else:
-            self.data.seq = Seq(sequence)
+            sequence = Seq(sequence)
+        sequence.id = self._id
+        sequence.name = self._name
+        sequence.description = self._description
+        sequence.features = self._features
+        sequence.annotations = self._annotations
+        sequence.dbxrefs = self._dbxrefs
+        sequence.letter_annotations.update(self._letter_annotations)
+        self.data = sequence
 
 
 class _RecordConsumer(_BaseGenBankConsumer):
@@ -1708,8 +1717,7 @@ def parse(handle):
     ...         print(record.accession)
     ['NC_000932']
 
-    To get SeqRecord objects use Bio.SeqIO.parse(..., format="gb")
-    instead.
+    To get Seq objects use Bio.SeqIO.parse(..., format="gb") instead.
     """
     return iter(Iterator(handle, RecordParser()))
 
@@ -1723,7 +1731,7 @@ def read(handle):
     ...     print(record.accession)
     ['NC_000932']
 
-    To get a SeqRecord object use Bio.SeqIO.read(..., format="gb")
+    To get a Seq object use Bio.SeqIO.read(..., format="gb")
     instead.
     """
     iterator = parse(handle)

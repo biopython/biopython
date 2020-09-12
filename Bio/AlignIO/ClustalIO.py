@@ -12,7 +12,6 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -74,7 +73,7 @@ class ClustalWriter(SequentialAlignmentWriter):
                 # identifier when output in the file by replacing
                 # them with underscores:
                 line = record.id[0:30].replace(" ", "_").ljust(36)
-                line += str(record.seq[cur_char : (cur_char + show_num)])
+                line += str(record[cur_char : (cur_char + show_num)])
                 output += line + "\n"
 
             # now we need to print out the star info, if we've got it
@@ -287,7 +286,7 @@ class ClustalIterator(AlignmentIterator):
                 % (len(ids), self.records_per_alignment)
             )
 
-        records = (SeqRecord(Seq(s), id=i, description=i) for (i, s) in zip(ids, seqs))
+        records = (Seq(s, id=i, description=i) for (i, s) in zip(ids, seqs))
         alignment = MultipleSeqAlignment(records)
         # TODO - Handle alignment annotation better, for now
         # mimic the old parser in Bio.Clustalw

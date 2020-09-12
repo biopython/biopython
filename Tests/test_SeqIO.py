@@ -20,7 +20,6 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
 from Bio.Align import MultipleSeqAlignment
 from Bio import StreamModeError
@@ -42,12 +41,12 @@ test_write_read_alignment_formats = [
     "stockholm",
     "phylip-relaxed",
 ]
-for format in sorted(SeqIO._FormatToWriter):
-    if format not in test_write_read_alignment_formats:
-        test_write_read_alignment_formats.append(format)
-for format in sorted(AlignIO._FormatToWriter):
-    if format not in test_write_read_alignment_formats:
-        test_write_read_alignment_formats.append(format)
+for fmt in sorted(SeqIO._FormatToWriter):
+    if fmt not in test_write_read_alignment_formats:
+        test_write_read_alignment_formats.append(fmt)
+for fmt in sorted(AlignIO._FormatToWriter):
+    if fmt not in test_write_read_alignment_formats:
+        test_write_read_alignment_formats.append(fmt)
 test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
@@ -75,7 +74,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
         raise RuntimeError("Failed to find file mode for %s" % fmt)
 
     def compare_record(self, old, new, *args, msg=None, **kwargs):
-        """Compare old SeqRecord to new SeqRecord."""
+        """Compare old Seq object to new Seq object."""
         self.assertEqual(old.id, new.id, msg=msg)
         self.assertTrue(
             old.description == new.description
@@ -84,20 +83,20 @@ class SeqIOTestBaseClass(unittest.TestCase):
             or new.description == "",
             msg="'%s' vs '%s' " % (old.description, new.description),
         )
-        self.assertEqual(len(old.seq), len(new.seq))
-        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
+        self.assertEqual(len(old), len(new))
+        if isinstance(old, UnknownSeq) or isinstance(new, UnknownSeq):
             pass
         else:
-            if len(old.seq) < 200:
-                err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
+            if len(old) < 200:
+                err_msg = "'%s' vs '%s'" % (old, new)
             else:
-                err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
+                err_msg = "'%s...' vs '%s...'" % (old[:100], new[:100])
             if msg is not None:
                 err_msg = "%s: %s" % (msg, err_msg)
-            self.assertEqual(str(old.seq), str(new.seq), msg=err_msg)
+            self.assertEqual(str(old), str(new), msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
-        """Check if two lists of SeqRecords are equal."""
+        """Check if two lists of Seq objects are equal."""
         self.assertEqual(len(old_list), len(new_list))
         for old, new in zip(old_list, new_list):
             self.compare_record(old, new, *args, **kwargs)
@@ -240,28 +239,22 @@ class TestZipped(unittest.TestCase):
 
 class TestSeqIO(SeqIOTestBaseClass):
     def setUp(self):
-        self.addTypeEqualityFunc(SeqRecord, self.compare_record)
+        self.addTypeEqualityFunc(Seq, self.compare_record)
 
     def compare_record(self, record_one, record_two, msg=None):
-        """Attempt strict SeqRecord comparison."""
-        self.assertIsInstance(record_one, SeqRecord, msg=msg)
-        self.assertIsInstance(record_two, SeqRecord, msg=msg)
-        self.assertIsNotNone(record_one.seq, msg=msg)
-        self.assertIsNotNone(record_two.seq, msg=msg)
+        """Attempt strict Seq comparison."""
+        self.assertIsInstance(record_one, Seq, msg=msg)
+        self.assertIsInstance(record_two, Seq, msg=msg)
         self.assertEqual(record_one.id, record_two.id, msg=msg)
         self.assertEqual(record_one.name, record_two.name, msg=msg)
         self.assertEqual(record_one.description, record_two.description, msg=msg)
         self.assertEqual(len(record_one), len(record_two), msg=msg)
-        if isinstance(record_one.seq, UnknownSeq) and isinstance(
-            record_two.seq, UnknownSeq
-        ):
+        if isinstance(record_one, UnknownSeq) and isinstance( record_two, UnknownSeq):
             # Jython didn't like us comparing the string of very long UnknownSeq
             # object (out of heap memory error)
-            self.assertEqual(
-                record_one.seq._character, record_two.seq._character, msg=msg
-            )
+            self.assertEqual( record_one._character, record_two._character, msg=msg)
         else:
-            self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
+            self.assertEqual(str(record_one), str(record_two), msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
@@ -292,8 +285,8 @@ class TestSeqIO(SeqIOTestBaseClass):
         for fmt in test_write_read_alignment_formats:
             if (
                 fmt not in possible_unknown_seq_formats
-                and isinstance(records[0].seq, UnknownSeq)
-                and len(records[0].seq) > 100
+                and isinstance(records[0], UnknownSeq)
+                and len(records[0]) > 100
             ):
                 # Skipping for speed.  Some of the unknown sequences are
                 # rather long, and it seems a bit pointless to record them.
@@ -377,19 +370,17 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Check the sequence
                 if fmt in ["gb", "genbank", "embl", "imgt"]:
                     # The GenBank/EMBL parsers will convert to upper case.
-                    if isinstance(r1.seq, UnknownSeq) and isinstance(
-                        r2.seq, UnknownSeq
-                    ):
+                    if isinstance(r1, UnknownSeq) and isinstance(r2, UnknownSeq):
                         # Jython didn't like us comparing the string of very long
                         # UnknownSeq object (out of heap memory error)
-                        self.assertEqual(r1.seq._character.upper(), r2.seq._character)
+                        self.assertEqual(r1._character.upper(), r2._character)
                     else:
-                        self.assertEqual(str(r1.seq).upper(), str(r2.seq))
+                        self.assertEqual(str(r1).upper(), str(r2))
                 elif fmt == "qual":
-                    self.assertIsInstance(r2.seq, UnknownSeq)
+                    self.assertIsInstance(r2, UnknownSeq)
                     self.assertEqual(len(r2), len(r1))
                 else:
-                    self.assertEqual(str(r1.seq), str(r2.seq))
+                    self.assertEqual(str(r1), str(r2))
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -428,12 +419,12 @@ class TestSeqIO(SeqIOTestBaseClass):
                 elif fmt in ["fasta", "fasta-2line"]:
                     self.assertEqual(r1.id.split()[0], r2.id)
                 elif fmt == "nib":
-                    self.assertEqual(r2.id, "<unknown id>")
+                    self.assertEqual(r2.id, "")
                 else:
                     self.assertEqual(r1.id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
 
             if len(records1) > 1:
-                # Try writing just one record (passing a SeqRecord, not a list)
+                # Try writing just one record (passing a Seq object, not a list)
                 if mode == "t":
                     handle = StringIO()
                 elif mode == "b":
@@ -442,7 +433,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                     warnings.simplefilter("ignore", BiopythonWarning)
                     SeqIO.write(records1[0], handle, fmt)
                     if mode == "t":
-                        self.assertEqual(handle.getvalue(), records1[0].format(fmt))
+                        self.assertEqual(handle.getvalue(), format(records1[0], fmt))
         if debug:
             self.fail(
                 "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
@@ -541,14 +532,12 @@ class TestSeqIO(SeqIOTestBaseClass):
                 record = records[i]
 
                 # Check returned expected object type
-                self.assertIsInstance(record, SeqRecord)
+                self.assertIsInstance(record, Seq)
                 if t_format in possible_unknown_seq_formats:
-                    if (not isinstance(record.seq, Seq)) and (
-                        not isinstance(record.seq, UnknownSeq)
+                    if (not isinstance(record, Seq)) and (
+                        not isinstance(record, UnknownSeq)
                     ):
                         self.failureException("Expected a Seq or UnknownSeq object")
-                else:
-                    self.assertIsInstance(record.seq, Seq)
                 self.assertIsInstance(record.id, str)
                 self.assertIsInstance(record.name, str)
                 self.assertIsInstance(record.description, str)
@@ -589,11 +578,11 @@ class TestSeqIO(SeqIOTestBaseClass):
                 if i < 3:
                     self.assertEqual(record.id, expected_ids[i])
                     self.assertEqual(record.name, expected_names[i])
-                    if record.seq is None:
+                    if False and record.data is None:
                         length = None
-                        seq = record.seq
+                        seq = None
                     else:
-                        seq = str(record.seq)
+                        seq = str(record)
                         length = len(seq)
                         if length > 50:
                             seq = str(seq[:40]) + "..." + str(seq[-7:])
@@ -603,7 +592,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             # Check Bio.SeqIO.read(...)
             if t_count == 1:
                 record = SeqIO.read(t_filename, format=t_format)
-                self.assertIsInstance(record, SeqRecord)
+                self.assertIsInstance(record, Seq)
             else:
                 self.assertRaises(ValueError, SeqIO.read, t_filename, t_format)
 
@@ -618,7 +607,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # sequence lengths all agree too.
                 for i in range(t_count):
                     self.assertEqual(records[i], alignment[i])
-                    self.assertEqual(len(records[i].seq), alignment_len)
+                    self.assertEqual(len(records[i]), alignment_len)
 
                 self.assertEqual(str(alignment_summary(alignment)), expected_alignment)
 
@@ -667,7 +656,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "---------MSPQTETKASVGFKAGVKEYKLTYYTPEYET...PAMD---",
         ]
         ids = ["gi|4959044|gb|AAD34209.1|AF069", "gi|671626|emb|CAA85685.1|"]
-        names = ["<unknown name>", "<unknown name>"]
+        names = ["", ""]
         lengths = [601, 601]
         alignment = """\
  M- alignment column 0
@@ -685,12 +674,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -721,7 +710,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "gi|6273287|gb|AF191661.1|AF191",
             "gi|6273291|gb|AF191665.1|AF191",
         ]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [156, 156, 156, 156]
         alignment = """\
  TTTTTTT alignment column 0
@@ -739,12 +728,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|6273291|gb|AF191665.1|AF191).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|6273291|gb|AF191665.1|AF191).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|6273291|gb|AF191665.1|AF191).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|6273291|gb|AF191665.1|AF191).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|6273291|gb|AF191665.1|AF191).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -775,7 +764,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "gi|74100009|gb|AAZ99217.1|",
             "gi|56122354|gb|AAV74328.1|",
         ]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [447, 447, 447, 447]
         alignment = """\
  M---- alignment column 0
@@ -793,12 +782,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|56122354|gb|AAV74328.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|56122354|gb|AAV74328.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|56122354|gb|AAV74328.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|56122354|gb|AAV74328.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|56122354|gb|AAV74328.1|).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -822,7 +811,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAAC...AGAGTAG",
         ]
         ids = ["AT3G20900.1-CDS", "AT3G20900.1-SEQ"]
-        names = ["<unknown name>", "<unknown name>"]
+        names = ["", ""]
         lengths = [687, 687]
         alignment = """\
  -A alignment column 0
@@ -841,12 +830,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         messages = {
             "phylip": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AT3G20900.1-SEQ).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AT3G20900.1-SEQ).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AT3G20900.1-SEQ).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AT3G20900.1-SEQ).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AT3G20900.1-SEQ).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
             "phylip-sequential": "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
@@ -879,11 +868,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5049839|gb|AI730987.1|AI730987).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5049839|gb|AI730987.1|AI730987).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5049839|gb|AI730987.1|AI730987).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5049839|gb|AI730987.1|AI730987).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5049839|gb|AI730987.1|AI730987).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -914,11 +903,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4218935|gb|AF074388.1|AF074388).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4218935|gb|AF074388.1|AF074388).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4218935|gb|AF074388.1|AF074388).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4218935|gb|AF074388.1|AF074388).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4218935|gb|AF074388.1|AF074388).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -949,11 +938,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5052071|gb|AF067555.1|AF067555).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5052071|gb|AF067555.1|AF067555).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5052071|gb|AF067555.1|AF067555).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5052071|gb|AF067555.1|AF067555).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5052071|gb|AF067555.1|AF067555).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -984,11 +973,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1019,11 +1008,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5817701|gb|AF142731.1|AF142731).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5817701|gb|AF142731.1|AF142731).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5817701|gb|AF142731.1|AF142731).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5817701|gb|AF142731.1|AF142731).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5817701|gb|AF142731.1|AF142731).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1054,11 +1043,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3176602|gb|U78617.1|LOU78617).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3176602|gb|U78617.1|LOU78617).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3176602|gb|U78617.1|LOU78617).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3176602|gb|U78617.1|LOU78617).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3176602|gb|U78617.1|LOU78617).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1089,11 +1078,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5690369|gb|AF158246.1|AF158246).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5690369|gb|AF158246.1|AF158246).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5690369|gb|AF158246.1|AF158246).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5690369|gb|AF158246.1|AF158246).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|5690369|gb|AF158246.1|AF158246).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1124,12 +1113,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1160,12 +1149,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1196,12 +1185,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3298468|dbj|BAA31520.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1232,12 +1221,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|2781234|pdb|1JLY|B).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|2781234|pdb|1JLY|B).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|2781234|pdb|1JLY|B).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|2781234|pdb|1JLY|B).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|2781234|pdb|1JLY|B).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1268,12 +1257,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|4959044|gb|AAD34209.1|AF069992_1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1304,12 +1293,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|671626|emb|CAA85685.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1341,12 +1330,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "protein",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3318709|pdb|1A91|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3318709|pdb|1A91|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3318709|pdb|1A91|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3318709|pdb|1A91|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|3318709|pdb|1A91|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1390,12 +1379,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|1592936|gb|G29385|G29385).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|1592936|gb|G29385|G29385).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|1592936|gb|G29385|G29385).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|1592936|gb|G29385|G29385).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|1592936|gb|G29385|G29385).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1430,12 +1419,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AKH_HAEIN/1-382).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AKH_HAEIN/1-382).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AKH_HAEIN/1-382).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AKH_HAEIN/1-382).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AKH_HAEIN/1-382).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1468,11 +1457,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478711|ref|NC_005816.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478711|ref|NC_005816.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478711|ref|NC_005816.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478711|ref|NC_005816.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478711|ref|NC_005816.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1518,12 +1507,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=ref|NC_005816.1|:c8360-8088).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=ref|NC_005816.1|:c8360-8088).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=ref|NC_005816.1|:c8360-8088).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=ref|NC_005816.1|:c8360-8088).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=ref|NC_005816.1|:c8360-8088).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1570,12 +1559,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1622,12 +1611,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [123, 353, 504, 274]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|7525099|ref|NP_051123.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|7525099|ref|NP_051123.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|7525099|ref|NP_051123.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|7525099|ref|NP_051123.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|7525099|ref|NP_051123.1|).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1674,12 +1663,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [340, 260, 64, 90]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|45478721|ref|NP_995576.1|).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1712,11 +1701,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|NC_001802.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|NC_001802.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|NC_001802.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|NC_001802.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|NC_001802.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1748,11 +1737,11 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nexus": "DNA",
         }
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|nc_001802.1|).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|nc_001802.1|).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|nc_001802.1|).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|nc_001802.1|).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|9629357|ref|nc_001802.1|).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1791,12 +1780,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||| ...
  GCC alignment column 7"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=test3).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=test3).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=test3).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=test3).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=test3).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1826,14 +1815,14 @@ class TestSeqIO(SeqIOTestBaseClass):
         alignment = None
         messages = {
             "embl": "missing molecule_type in annotations",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|129628|sp|P07175|PARA_AGRTU).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|129628|sp|P07175|PARA_AGRTU).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "genbank": "missing molecule_type in annotations",
             "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|129628|sp|P07175|PARA_AGRTU).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|129628|sp|P07175|PARA_AGRTU).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
@@ -1872,14 +1861,14 @@ class TestSeqIO(SeqIOTestBaseClass):
         messages = {
             "phylip-relaxed": "Whitespace not allowed in identifier: one should be punished, for (that)!",
             "embl": "Cannot have spaces in EMBL accession, 'one should be punished, for (that)!'",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=t9).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=t9).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=t9).",
             "genbank": "Invalid whitespace in 'one should be punished, for (that)!' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'one should be punished, for (that)!'",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=t9).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=t9).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -1903,12 +1892,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [348]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q13454).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q13454).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q13454).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q13454).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q13454).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1931,12 +1920,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [198]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P54101).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P54101).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P54101).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P54101).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P54101).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1959,12 +1948,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [255]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P42655).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P42655).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P42655).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P42655).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P42655).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -1987,12 +1976,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [104]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P0A186).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P0A186).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P0A186).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0A186).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P0A186).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P0A186).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2015,12 +2004,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [115]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P24973).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P24973).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P24973).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P24973).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P24973).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2043,12 +2032,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [339]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P39896).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P39896).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P39896).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P39896).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P39896).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2071,12 +2060,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [211]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=O95832).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=O95832).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=O95832).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=O95832).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=O95832).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2099,12 +2088,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [365]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P01892).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P01892).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P01892).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P01892).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P01892).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2127,12 +2116,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [394]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=O23729).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=O23729).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=O23729).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=O23729).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=O23729).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2155,12 +2144,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [388]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2183,12 +2172,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [700]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P16235).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P16235).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P16235).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P16235).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P16235).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2211,12 +2200,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [153]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q9Y736).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q9Y736).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q9Y736).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q9Y736).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q9Y736).",
             "seqxml": "ncbiTaxID should be of type string or int",
             "sff": "Missing SFF flow information",
         }
@@ -2240,12 +2229,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [102]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P82909).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P82909).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P82909).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P82909).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P82909).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2268,12 +2257,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [38]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P60137).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P60137).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P60137).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60137).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P60137).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P60137).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2296,12 +2285,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [457]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=IPI00383150).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=IPI00383150).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=IPI00383150).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=IPI00383150).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=IPI00383150).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2324,12 +2313,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [380]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P01100).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P01100).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P01100).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P01100).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P01100).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2352,12 +2341,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [920]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q62671).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q62671).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q62671).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q62671).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q62671).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2380,12 +2369,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [116]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q91G55).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q91G55).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q91G55).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q91G55).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q91G55).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2412,12 +2401,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [116, 118, 302]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P0C9J6).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P0C9J6).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P0C9J6).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P0C9J6).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P0C9J6).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -2441,12 +2430,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [388]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2469,12 +2458,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [388]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Q13639).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2497,12 +2486,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [196]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2525,12 +2514,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [196]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=H2CNN8).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=H2CNN8).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2553,12 +2542,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [291]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2581,12 +2570,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [291]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=F2CXE6).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=F2CXE6).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2609,12 +2598,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1622]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NM_006141.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NM_006141.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NM_006141.1).",
             "nexus": "NM_006141.1 contains T, but RNA alignment",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NM_006141.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NM_006141.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2642,12 +2631,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [513, 880, 441, 497]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AF297471.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AF297471.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AF297471.1).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AF297471.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AF297471.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -2671,12 +2660,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1326]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AL109817.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AL109817.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AL109817.1).",
             "nexus": "AL109817.1 contains T, but RNA alignment",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AL109817.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AL109817.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2699,11 +2688,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [741]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=U05344.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=U05344.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=U05344.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=U05344.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=U05344.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2726,11 +2715,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [86436]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AC007323.5).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AC007323.5).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AC007323.5).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AC007323.5).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AC007323.5).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2753,12 +2742,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [182]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2781,12 +2770,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [182]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NP_034640.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2809,11 +2798,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [154329]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AL138972.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AL138972.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AL138972.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AL138972.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AL138972.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2836,11 +2825,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [2509]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=U18266.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=U18266.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=U18266.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=U18266.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=U18266.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2864,7 +2853,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1250660]
         alignment = None
         messages = {
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NT_019265.6)."
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NT_019265.6)."
         }
         self.perform_test(
             "genbank",
@@ -2886,11 +2875,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [180]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NC_002678.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NC_002678.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NC_002678.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NC_002678.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NC_002678.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2913,12 +2902,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [360]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NP_001832.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NP_001832.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NP_001832.1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NP_001832.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NP_001832.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2941,12 +2930,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [64]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=P01485).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=P01485).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=P01485).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=P01485).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=P01485).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2970,11 +2959,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [9609]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NC_005816.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NC_005816.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NC_005816.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NC_005816.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NC_005816.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -2997,11 +2986,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [154478]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NC_000932.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NC_000932.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NC_000932.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NC_000932.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NC_000932.1).",
             "sff": "Missing SFF flow information",
         }
 
@@ -3026,11 +3015,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [4923]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=pBAD30).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=pBAD30).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=pBAD30).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=pBAD30).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=pBAD30).",
             "sff": "Missing SFF flow information",
         }
 
@@ -3058,12 +3047,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [2007, 2007, 1755]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AB000050.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AB000050.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AB000050.1).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AB000050.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AB000050.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3090,11 +3079,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [5386]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NC_001422.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NC_001422.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NC_001422.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NC_001422.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NC_001422.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3117,12 +3106,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [367]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NP_416719.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NP_416719.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NP_416719.1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NP_416719.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NP_416719.1).",
             "sff": "Missing SFF flow information",
         }
         # Generated with Entrez.efetch("protein", id="16130152",
@@ -3148,12 +3137,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [375]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1MRR_A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1MRR_A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1MRR_A).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=1MRR_A).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=1MRR_A).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=1MRR_A).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1MRR_A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1MRR_A).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=1MRR_A).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=1MRR_A).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3177,7 +3166,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1311]
         alignment = None
         messages = {
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DS830848.1)."
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=DS830848.1)."
         }
         self.perform_test(
             "genbank",
@@ -3199,7 +3188,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1311]
         alignment = None
         messages = {
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DS830848.1)."
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=DS830848.1)."
         }
         self.perform_test(
             "embl",
@@ -3226,12 +3215,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [14, 14, 58, 496]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=CQ797900.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=CQ797900.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=CQ797900.1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=CQ797900.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=CQ797900.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3260,12 +3249,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [358, 65, 25, 25]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=NRP00210945).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=NRP00210945).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=NRP00210945).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=NRP00210945).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=NRP00210945).",
             "seqxml": "Sequence type is UnknownSeq but SeqXML requires sequence",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
@@ -3290,12 +3279,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1859]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=X56734.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=X56734.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=X56734.1).",
             "nexus": "X56734.1 contains T, but RNA alignment",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=X56734.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=X56734.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3318,11 +3307,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [315]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3352,11 +3341,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=DD231055.1).",
             "sff": "Missing SFF flow information",
         }
 
@@ -3381,11 +3370,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [4870]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AL031232).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AL031232).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AL031232).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AL031232).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AL031232).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3408,11 +3397,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [8840]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=U87107.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=U87107.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=U87107.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=U87107.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=U87107.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3435,11 +3424,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1545]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AAA03323.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AAA03323.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AAA03323.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AAA03323.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AAA03323.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3462,11 +3451,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [9609]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AE017046.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AE017046.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AE017046.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AE017046.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AE017046.1).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3492,7 +3481,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [958952, 87191216]
         alignment = None
         messages = {
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2)."
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AL954800.2)."
         }
         self.perform_test(
             "embl",
@@ -3520,14 +3509,14 @@ class TestSeqIO(SeqIOTestBaseClass):
         alignment = None
         messages = {
             "embl": "missing molecule_type in annotations",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=DI500020).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=DI500020).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=DI500020).",
             "genbank": "missing molecule_type in annotations",
             "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=DI500020).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=DI500020).",
             "seqxml": "molecule_type is not defined",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
@@ -3554,12 +3543,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         alignment = None
         messages = {
             "embl": "failed to understand molecule_type 'unspecified'",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Test).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Test).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Test).",
             "imgt": "failed to understand molecule_type 'unspecified'",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Test).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Test).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Test).",
             "seqxml": "unknown molecule_type 'unspecified'",
             "sff": "Missing SFF flow information",
             "nexus": "Need the molecule type to be defined",
@@ -3585,12 +3574,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [51]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
             "nexus": "A04195 contains T, but RNA alignment",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3614,12 +3603,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [51]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
             "nexus": "A04195 contains T, but RNA alignment",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=A04195).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -3647,12 +3636,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [3503, 3291, 2903, 822]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=HLA03131.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=HLA03131.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=HLA03131.1).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=HLA03131.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=HLA03131.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3693,12 +3682,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  UU alignment column 103"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=AE007476.1).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=AE007476.1).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=AE007476.1).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=AE007476.1).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=AE007476.1).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3750,14 +3739,14 @@ class TestSeqIO(SeqIOTestBaseClass):
  SYSEEE alignment column 42"""
         messages = {
             "embl": "missing molecule_type in annotations",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "genbank": "missing molecule_type in annotations",
             "imgt": "missing molecule_type in annotations",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3800,12 +3789,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "genbank": "Invalid whitespace in 'B. virgini' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'B. virgini'",
             "phylip-relaxed": "Whitespace not allowed in identifier: B. virgini",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3853,12 +3842,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "genbank": "Invalid whitespace in 'B. virgini' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'B. virgini'",
             "phylip-relaxed": "Whitespace not allowed in identifier: B. virgini",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=B.subtilis).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3902,12 +3891,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -3955,12 +3944,12 @@ class TestSeqIO(SeqIOTestBaseClass):
             "genbank": "Invalid whitespace in 'M. secundu' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'M. secundu'",
             "phylip-relaxed": "Whitespace not allowed in identifier: M. secundu",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Pliohippus).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Pliohippus).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Pliohippus).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Pliohippus).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Pliohippus).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4004,12 +3993,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||| ...
  AAAAAAAAAA alignment column 39"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=J).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4052,12 +4041,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  ||| ...
  -AV alignment column 383"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=CATH_HUMAN).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=CATH_HUMAN).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=CATH_HUMAN).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=CATH_HUMAN).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=CATH_HUMAN).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4101,12 +4090,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||| ...
  EEEE alignment column 130"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4132,7 +4121,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----C...AGDRSHE",
         ]
         ids = ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [131, 131, 131, 131]
         molecule_types = {
             "embl": "mRNA",
@@ -4150,12 +4139,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||| ...
  EEEE alignment column 130"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_237).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4181,7 +4170,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEALEIVR...AVLQKRQ",
         ]
         ids = ["ref_rec", "gi|94968718|receiver", "ref_rec", "gi|94970041|receiver"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [124, 124, 119, 125]
         molecule_types = {
             "embl": "mRNA",
@@ -4191,12 +4180,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=gi|94970041|receiver).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=gi|94970041|receiver).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=gi|94970041|receiver).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=gi|94970041|receiver).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=gi|94970041|receiver).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4220,7 +4209,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE",
         ]
         ids = ["IXI_234", "IXI_235"]
-        names = ["<unknown name>", "<unknown name>"]
+        names = ["", ""]
         lengths = [131, 131]
         molecule_types = {
             "embl": "mRNA",
@@ -4238,12 +4227,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  EE alignment column 130"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_235).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_235).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_235).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_235).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=IXI_235).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4482,12 +4471,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=SYK_SYK).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=SYK_SYK).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=SYK_SYK).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=SYK_SYK).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=SYK_SYK).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4531,12 +4520,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  |||||||||||||||| ...
  HHHHHHH-AAAAL-R- alignment column 297"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=SYK).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=SYK).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=SYK).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=SYK).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=SYK).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4573,12 +4562,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         }
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=CPZANT).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=CPZANT).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=CPZANT).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=CPZANT).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=CPZANT).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4608,12 +4597,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1089, 1009, 546, 619]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01135).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01135).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01135).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01135).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01135).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4642,12 +4631,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [366, 366, 366, 366]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00484).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00484).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00484).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00484).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00484).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4676,12 +4665,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [786, 564, 279, 279]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00488).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00488).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00488).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00488).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA00488).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4710,12 +4699,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [263, 94, 94, 188]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01083).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01083).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01083).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01083).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=HLA:HLA01083).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4749,12 +4738,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  || ...
  -- alignment column 2526"""
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=815Parelaphostrongylus_odocoil).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=815Parelaphostrongylus_odocoil).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=815Parelaphostrongylus_odocoil).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=815Parelaphostrongylus_odocoil).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=815Parelaphostrongylus_odocoil).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -4805,12 +4794,12 @@ class TestSeqIO(SeqIOTestBaseClass):
  CAG alignment column 24"""
         messages = {
             "phylip": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=EAS54_6_R1_2_1_443_348).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=EAS54_6_R1_2_1_443_348).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=EAS54_6_R1_2_1_443_348).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=EAS54_6_R1_2_1_443_348).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=EAS54_6_R1_2_1_443_348).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
             "phylip-sequential": "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
@@ -5218,16 +5207,16 @@ class TestSeqIO(SeqIOTestBaseClass):
             "G",
         ]
         ids = ["ENSMUSG00000076441", "fake1", "fake2", "minimal"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [2460, 18, 14, 1]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=minimal).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=minimal).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=minimal).",
             "nib": "More than one sequence found",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=minimal).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=minimal).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5252,19 +5241,19 @@ class TestSeqIO(SeqIOTestBaseClass):
             "UGUGGGAUGAGGUAGUAGGUUGUAUAGUUUUAGGGUCAUACCCGCAAC",
         ]
         ids = ["gga-let-7a-1", "fake1", "fake2", "empty description"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [90, 18, 6, 48]
         alignment = None
         messages = {
             "embl": "Cannot have spaces in EMBL accession, 'empty description'",
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=empty description).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=empty description).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=empty description).",
             "genbank": "Invalid whitespace in 'empty description' for LOCUS line",
             "imgt": "Cannot have spaces in EMBL accession, 'empty description'",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=empty description).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=empty description).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5289,16 +5278,16 @@ class TestSeqIO(SeqIOTestBaseClass):
             "PPPWAKKVFIEDVIIAGSKEFVEEFIWPAVQSE",
         ]
         ids = ["ENSMUSP00000099904", "fake1", "fake2", "UniprotProtein"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [412, 29, 30, 33]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=UniprotProtein).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=UniprotProtein).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=UniprotProtein).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=UniprotProtein).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=UniprotProtein).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5383,16 +5372,16 @@ class TestSeqIO(SeqIOTestBaseClass):
     def test_pdb_atom1(self):
         sequences = ["MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLL...MMTACQG"]
         ids = ["1A8O:A"]
-        names = ["<unknown name>"]
+        names = [""]
         lengths = [70]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "seqxml": "source should be of type string",
             "sff": "Missing SFF flow information",
         }
@@ -5417,16 +5406,16 @@ class TestSeqIO(SeqIOTestBaseClass):
             "LVFFAEDVGSNKGAIIGLMVGGVVIA",
         ]
         ids = ["2BEG:A", "2BEG:B", "2BEG:C", "2BEG:E"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [26, 26, 26, 26]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "seqxml": "source should be of type string",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
@@ -5447,16 +5436,16 @@ class TestSeqIO(SeqIOTestBaseClass):
     def test_pdb_atom3(self):
         sequences = ["MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEA...LNYIPNR"]
         ids = ["????:A"]
-        names = ["<unknown name>"]
+        names = [""]
         lengths = [51]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=????:A).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=????:A).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=????:A).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=????:A).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=????:A).",
             "seqxml": "source should be of type string",
             "sff": "Missing SFF flow information",
         }
@@ -5480,12 +5469,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [70]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -5513,12 +5502,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [42, 42, 42, 42]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5538,16 +5527,16 @@ class TestSeqIO(SeqIOTestBaseClass):
     def test_cif_atom1(self):
         sequences = ["MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLL...MMTACQG"]
         ids = ["1A8O:A"]
-        names = ["<unknown name>"]
+        names = [""]
         lengths = [70]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -5571,16 +5560,16 @@ class TestSeqIO(SeqIOTestBaseClass):
             "LVFFAEDVGSNKGAIIGLMVGGVVIA",
         ]
         ids = ["2BEG:A", "2BEG:B", "2BEG:C", "2BEG:E"]
-        names = ["<unknown name>", "<unknown name>", "<unknown name>", "<unknown name>"]
+        names = ["", "", "", ""]
         lengths = [26, 26, 26, 26]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5604,12 +5593,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [70]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=1A8O:A).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -5637,12 +5626,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [42, 42, 42, 42]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=2BEG:E).",
             "sff": "Missing SFF flow information",
             "xdna": "More than one sequence found",
         }
@@ -5666,11 +5655,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1000]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
@@ -5693,11 +5682,11 @@ class TestSeqIO(SeqIOTestBaseClass):
         lengths = [1000]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+            "fastq": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "phd": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
+            "qual": "No suitable quality scores found in letter_annotations of Seq object (id=Sample).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(

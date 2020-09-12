@@ -54,11 +54,11 @@ class GenBankIterator(SequenceIterator):
     """Parser for GenBank files."""
 
     def __init__(self, source):
-        """Break up a Genbank file into SeqRecord objects.
+        """Break up a Genbank file into Seq objects.
 
         Argument source is a file-like object opened in text mode or a path to a file.
         Every section from the LOCUS line to the terminating // becomes
-        a single SeqRecord with associated annotation and features.
+        a single Seq object with associated annotation and features.
 
         Note that for genomes or chromosomes, there is typically only
         one record.
@@ -93,7 +93,7 @@ class GenBankIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="GenBank")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = GenBankScanner(debug=0).parse_records(handle)
         return records
 
@@ -102,11 +102,11 @@ class EmblIterator(SequenceIterator):
     """Parser for EMBL files."""
 
     def __init__(self, source):
-        """Break up an EMBL file into SeqRecord objects.
+        """Break up an EMBL file into Seq objects.
 
         Argument source is a file-like object opened in text mode or a path to a file.
         Every section from the LOCUS line to the terminating // becomes
-        a single SeqRecord with associated annotation and features.
+        a single Seq object with associated annotation and features.
 
         Note that for genomes or chromosomes, there is typically only
         one record.
@@ -147,7 +147,7 @@ class EmblIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="EMBL")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = EmblScanner(debug=0).parse_records(handle)
         return records
 
@@ -156,11 +156,11 @@ class ImgtIterator(SequenceIterator):
     """Parser for IMGT files."""
 
     def __init__(self, source):
-        """Break up an IMGT file into SeqRecord objects.
+        """Break up an IMGT file into Seq objects.
 
         Argument source is a file-like object opened in text mode or a path to a file.
         Every section from the LOCUS line to the terminating // becomes
-        a single SeqRecord with associated annotation and features.
+        a single Seq object with associated annotation and features.
 
         Note that for genomes or chromosomes, there is typically only
         one record.
@@ -168,16 +168,16 @@ class ImgtIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="IMGT")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = _ImgtScanner(debug=0).parse_records(handle)
         return records
 
 
 class GenBankCdsFeatureIterator(SequenceIterator):
-    """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
+    """Parser for GenBank files, creating a Seq object for each CDS feature."""
 
     def __init__(self, source):
-        """Break up a Genbank file into SeqRecord objects for each CDS feature.
+        """Break up a Genbank file into Seq objects for each CDS feature.
 
         Argument source is a file-like object opened in text mode or a path to a file.
 
@@ -188,15 +188,15 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="GenBank")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         return GenBankScanner(debug=0).parse_cds_features(handle)
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
-    """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
+    """Parser for EMBL files, creating a Seq object for each CDS feature."""
 
     def __init__(self, source):
-        """Break up a EMBL file into SeqRecord objects for each CDS feature.
+        """Break up a EMBL file into Seq objects for each CDS feature.
 
         Argument source is a file-like object opened in text mode or a path to a file.
 
@@ -207,7 +207,7 @@ class EmblCdsFeatureIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="EMBL")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         return EmblScanner(debug=0).parse_cds_features(handle)
 
 
@@ -954,7 +954,7 @@ class GenBankWriter(_InsdcWriter):
         # Loosely based on code from Howard Salis
         # TODO - Force lower case?
 
-        if isinstance(record.seq, UnknownSeq):
+        if isinstance(record, UnknownSeq) or not record.defined:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -1126,7 +1126,7 @@ class EmblWriter(_InsdcWriter):
     def _write_sequence(self, record):
         handle = self.handle  # save looking up this multiple times
 
-        if isinstance(record.seq, UnknownSeq):
+        if isinstance(record, UnknownSeq):
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:

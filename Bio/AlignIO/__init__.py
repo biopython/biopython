@@ -277,7 +277,7 @@ def _SeqIO_to_alignment_iterator(handle, format, seq_count=None):
             raise ValueError("Check seq_count argument, not enough sequences?")
     else:
         # Must assume that there is a single alignment using all
-        # the SeqRecord objects:
+        # the Seq objects:
         records = list(SeqIO.parse(handle, format))
         if records:
             yield MultipleSeqAlignment(records)

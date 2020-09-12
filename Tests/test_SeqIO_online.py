@@ -51,7 +51,7 @@ class ExPASyTests(unittest.TestCase):
         handle.close()
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)
-        self.assertEqual(seguid(record.seq), "5Y08l+HJRDIlhLKzFEfkcKd1dkM")
+        self.assertEqual(seguid(record), "5Y08l+HJRDIlhLKzFEfkcKd1dkM")
 
 
 class EntrezTests(unittest.TestCase):
@@ -76,7 +76,7 @@ class EntrezTests(unittest.TestCase):
                 "%s got %s, %s" % (entry, record.name, record.id),
             )
             self.assertEqual(len(record), length)
-            self.assertEqual(seguid(record.seq), checksum)
+            self.assertEqual(seguid(record), checksum)
 
 
 for database, formats, entry, length, checksum in [

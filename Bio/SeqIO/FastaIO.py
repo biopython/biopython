@@ -5,8 +5,8 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 #
-# This module is for reading and writing FASTA format files as SeqRecord
-# objects.  The code is partly inspired  by earlier Biopython modules,
+# This module is for reading and writing FASTA format files as Seq objects.
+# The code is partly inspired  by earlier Biopython modules,
 # Bio.Fasta.* and the now deprecated Bio.SeqIO.FASTA
 
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
@@ -16,7 +16,6 @@ You are expected to use this module via the Bio.SeqIO functions.
 
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter
 from .Interfaces import _clean, _get_seq_string
 
@@ -138,7 +137,7 @@ class FastaIterator(SequenceIterator):
     """Parser for Fasta files."""
 
     def __init__(self, source, alphabet=None, title2ids=None):
-        """Iterate over Fasta records as SeqRecord objects.
+        """Iterate over Fasta records as Seq objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -183,35 +182,33 @@ class FastaIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="Fasta")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         title2ids = self.title2ids
         if title2ids:
             for title, sequence in SimpleFastaParser(handle):
                 id, name, descr = title2ids(title)
-                yield SeqRecord(Seq(sequence), id=id, name=name, description=descr)
+                yield Seq(sequence, id=id, name=name, description=descr)
         else:
             for title, sequence in SimpleFastaParser(handle):
                 try:
                     first_word = title.split(None, 1)[0]
                 except IndexError:
                     assert not title, repr(title)
-                    # Should we use SeqRecord default for no ID?
+                    # Should we use Seq default for no ID?
                     first_word = ""
-                yield SeqRecord(
-                    Seq(sequence), id=first_word, name=first_word, description=title,
-                )
+                yield Seq(sequence, id=first_word, name=first_word, description=title)
 
 
 class FastaTwoLineIterator(SequenceIterator):
     """Parser for Fasta files with exactly two lines per record."""
 
     def __init__(self, source):
-        """Iterate over two-line Fasta records (as SeqRecord objects).
+        """Iterate over two-line Fasta records (as Seq objects).
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -225,22 +222,20 @@ class FastaTwoLineIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="FASTA")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         for title, sequence in FastaTwoLineParser(handle):
             try:
                 first_word = title.split(None, 1)[0]
             except IndexError:
                 assert not title, repr(title)
-                # Should we use SeqRecord default for no ID?
+                # Should we use Seq default for no ID?
                 first_word = ""
-            yield SeqRecord(
-                Seq(sequence), id=first_word, name=first_word, description=title,
-            )
+            yield Seq(sequence, id=first_word, name=first_word, description=title)
 
 
 class FastaWriter(SequenceWriter):
@@ -368,9 +363,9 @@ class FastaTwoLineWriter(FastaWriter):
 
 
 def as_fasta(record):
-    """Turn a SeqRecord into a FASTA formatted string.
+    """Turn a Seq object into a FASTA formatted string.
 
-    This is used internally by the SeqRecord's .format("fasta")
+    This is used internally by the Seq object's .format("fasta")
     method and by the SeqIO.write(..., ..., "fasta") function.
     """
     id = _clean(record.id)
@@ -396,9 +391,9 @@ def as_fasta(record):
 
 
 def as_fasta_2line(record):
-    """Turn a SeqRecord into a two-line FASTA formatted string.
+    """Turn a Seq object into a two-line FASTA formatted string.
 
-    This is used internally by the SeqRecord's .format("fasta-2line")
+    This is used internally by the Seq object's .format("fasta-2line")
     method and by the SeqIO.write(..., ..., "fasta-2line") function.
     """
     id = _clean(record.id)

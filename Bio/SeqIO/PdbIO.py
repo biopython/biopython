@@ -13,12 +13,11 @@ import warnings
 from Bio import BiopythonParserWarning
 from Bio.Data.SCOPData import protein_letters_3to1
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
 def AtomIterator(pdb_id, structure):
-    """Return SeqRecords from Structure objects.
+    """Return Seq objects from Structure objects.
 
     Base function for sequence parsers that read structures Bio.PDB parsers.
 
@@ -86,12 +85,12 @@ def AtomIterator(pdb_id, structure):
             # No gaps
             res_out = [restype(x) for x in residues]
         record_id = "%s:%s" % (pdb_id, chn_id)
-        # ENH - model number in SeqRecord id if multiple models?
+        # ENH - model number in Seq id if multiple models?
         # id = "Chain%s" % str(chain.id)
         # if len(structure) > 1 :
         #     id = ("Model%s|" % str(model.id)) + id
 
-        record = SeqRecord(Seq("".join(res_out)), id=record_id, description=record_id)
+        record = Seq("".join(res_out), id=record_id, description=record_id)
         # TODO: Test PDB files with DNA and RNA too:
         record.annotations["molecule_type"] = "protein"
 
@@ -107,7 +106,7 @@ class PdbSeqresIterator(SequenceIterator):
     """Parser for PDB files."""
 
     def __init__(self, source):
-        """Return SeqRecord objects for each chain in a PDB file.
+        """Return Seq objects for each chain in a PDB file.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -146,7 +145,7 @@ class PdbSeqresIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="PDB")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
@@ -222,7 +221,7 @@ class PdbSeqresIterator(SequenceIterator):
             raise ValueError("Empty file.")
 
         for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues)))
+            record = Seq("".join(residues))
             record.annotations = {"chain": chn_id}
             # TODO: Test PDB files with DNA and RNA too:
             record.annotations["molecule_type"] = "protein"
@@ -247,7 +246,7 @@ class PdbSeqresIterator(SequenceIterator):
 
 
 def PdbAtomIterator(source):
-    """Return SeqRecord objects for each chain in a PDB file.
+    """Return Seq objects for each chain in a PDB file.
 
     Argument source is a file-like object or a path to a file.
 
@@ -334,7 +333,7 @@ STRUCT_REF_SEQ_FIELDS = (
 
 
 def CifSeqresIterator(source):
-    """Return SeqRecord objects for each chain in an mmCIF file.
+    """Return Seq objects for each chain in an mmCIF file.
 
     Argument source is a file-like object or a path to a file.
 
@@ -429,7 +428,7 @@ def CifSeqresIterator(source):
         metadata[chain_id][-1].update(struct_ref)
 
     for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq("".join(residues)))
+        record = Seq("".join(residues))
         record.annotations = {"chain": chn_id}
         # TODO: Test PDB files with DNA and RNA too:
         record.annotations["molecule_type"] = "protein"
@@ -454,7 +453,7 @@ def CifSeqresIterator(source):
 
 
 def CifAtomIterator(source):
-    """Return SeqRecord objects for each chain in an mmCIF file.
+    """Return Seq objects for each chain in an mmCIF file.
 
     Argument source is a file-like object or a path to a file.
 

@@ -61,8 +61,8 @@ class EMBLTests(unittest.TestCase):
                 ["EMBL sequence line missing coordinates"] * 3,
             )
             self.assertEqual(len(rec), 154)
-            self.assertEqual(rec.seq[:10], "MVLSEGEWQL")
-            self.assertEqual(rec.seq[-10:], "AKYKELGYQG")
+            self.assertEqual(rec[:10], "MVLSEGEWQL")
+            self.assertEqual(rec[-10:], "AKYKELGYQG")
 
     def test_embl_wrong_dr_line(self):
         """Test files with wrong DR lines."""

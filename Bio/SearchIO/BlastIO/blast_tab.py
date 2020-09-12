@@ -786,13 +786,9 @@ class BlastTabWriter:
 
     def _adjust_output(self, field, value):
         """Adjust formatting of given field and value to mimic native tab output (PRIVATE)."""
-        # qseq and sseq are stored as SeqRecord, but here we only need the str
-        if field in ("qseq", "sseq"):
-            value = str(value.seq)
-
         # evalue formatting, adapted from BLAST+ source:
         # src/objtools/align_format/align_format_util.cpp#L668
-        elif field == "evalue":
+        if field == "evalue":
             if value < 1.0e-180:
                 value = "0.0"
             elif value < 1.0e-99:

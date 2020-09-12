@@ -5,7 +5,7 @@ This chapter is about Multiple Sequence Alignments, by which we mean a collectio
 multiple sequences which have been aligned together -- usually with the insertion of gap
 characters, and addition of leading or trailing gaps -- such that all the sequence
 strings are the same length. Such an alignment can be regarded as a matrix of letters,
-where each row is held as a \verb|SeqRecord| object internally.
+where each row is held as a \verb|Seq| object internally.
 
 We will introduce the \verb|MultipleSeqAlignment| object which holds this kind of data,
 and the \verb|Bio.AlignIO| module for reading and writing them as various file formats
@@ -90,7 +90,7 @@ AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 \end{minted}
 
-You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|SeqRecord| objects:
+You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|Seq| objects:
 
 %doctest examples
 \begin{minted}{pycon}
@@ -99,7 +99,7 @@ You'll notice in the above output the sequences have been truncated.  We could i
 >>> print("Alignment length %i" % alignment.get_alignment_length())
 Alignment length 52
 >>> for record in alignment:
-...     print("%s - %s" % (record.seq, record.id))
+...     print("%s - %s" % (record, record.id))
 ...
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
@@ -162,7 +162,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 \end{minted}
 
 All that has changed in this code is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.
-However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
+However, as you should expect, if you check each \verb|Seq| object there is no annotation nor database cross-references because these are not included in the FASTA file format.
 
 Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
 
@@ -342,7 +342,7 @@ For example, using the third example as the input data:
 >>> for alignment in AlignIO.parse(handle, "fasta", seq_count=2):
 ...     print("Alignment length %i" % alignment.get_alignment_length())
 ...     for record in alignment:
-...         print("%s - %s" % (record.seq, record.id))
+...         print("%s - %s" % (record, record.id))
 ...     print()
 ...
 \end{minted}
@@ -374,32 +374,31 @@ Note that this optional \verb|seq_count| argument assumes each alignment in the 
 We've talked about using \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| for alignment input (reading files), and now we'll look at \verb|Bio.AlignIO.write()| which is for alignment output (writing files).  This is a function taking three arguments: some \verb|MultipleSeqAlignment| objects (or for backwards compatibility the obsolete \verb|Alignment| objects), a handle or filename to write to, and a sequence format.
 
 Here is an example, where we start by creating a few \verb|MultipleSeqAlignment| objects the hard way (by hand, rather than by loading them from a file).
-Note we create some \verb|SeqRecord| objects to construct the alignment from.
+Note we create some \verb|Seq| objects to construct the alignment from.
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqRecord import SeqRecord
 >>> from Bio.Align import MultipleSeqAlignment
 >>> align1 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha"),
-...         SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta"),
-...         SeqRecord(Seq("ACTGCTAGDTAG"), id="Gamma"),
+...         Seq("ACTGCTAGCTAG", id="Alpha"),
+...         Seq("ACT-CTAGCTAG", id="Beta"),
+...         Seq("ACTGCTAGDTAG", id="Gamma"),
 ...     ]
 ... )
 >>> align2 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("GTCAGC-AG"), id="Delta"),
-...         SeqRecord(Seq("GACAGCTAG"), id="Epsilon"),
-...         SeqRecord(Seq("GTCAGCTAG"), id="Zeta"),
+...         Seq("GTCAGC-AG", id="Delta"),
+...         Seq("GACAGCTAG", id="Epsilon"),
+...         Seq("GTCAGCTAG", id="Zeta"),
 ...     ]
 ... )
 >>> align3 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTAGTACAGCTG"), id="Eta"),
-...         SeqRecord(Seq("ACTAGTACAGCT-"), id="Theta"),
-...         SeqRecord(Seq("-CTACTACAGGTG"), id="Iota"),
+...         Seq("ACTAGTACAGCTG", id="Eta"),
+...         Seq("ACTAGTACAGCT-", id="Theta"),
+...         Seq("-CTACTACAGGTG", id="Iota"),
 ...     ]
 ... )
 >>> my_alignments = [align1, align2, align3]
@@ -630,7 +629,7 @@ COATB_BPI22/32-83                   DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRL
 
 Without an output format specification, \verb|format| returns the same output as \verb|str|.
 
-As described in Section~\ref{sec:SeqRecord-format}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
+As described in Section~\ref{sec:SeqRecord-format}, the \verb|Seq| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
 
 Internally \verb|format| is calling \verb|Bio.AlignIO.write()| with a \verb|StringIO| handle.  You can do this in your own code if for example you are using an
 older version of Biopython:
@@ -662,8 +661,8 @@ with them.
 
 \subsection{Slicing alignments}
 First of all, in some senses the alignment objects act like a Python \verb|list| of
-\verb|SeqRecord| objects (the rows). With this model in mind hopefully the actions
-of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecord|)
+\verb|Seq| objects (the rows). With this model in mind hopefully the actions
+of \verb|len()| (the number of rows) and iteration (each row as a \verb|Seq|)
 make sense:
 
 %doctest examples
@@ -673,7 +672,7 @@ make sense:
 >>> print("Number of rows: %i" % len(alignment))
 Number of rows: 7
 >>> for record in alignment:
-...     print("%s - %s" % (record.seq, record.id))
+...     print("%s - %s" % (record, record.id))
 ...
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
@@ -685,7 +684,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
 \end{minted}
 
 You can also use the list-like \verb|append| and \verb|extend| methods to add
-more rows to the alignment (as \verb|SeqRecord| objects). Keeping the list
+more rows to the alignment (as \verb|Seq| objects). Keeping the list
 metaphor in mind, simple slicing of the alignment should also make sense -
 it selects some of the rows giving back another alignment object:
 
@@ -721,7 +720,7 @@ T
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(alignment[2].seq[6])
+>>> print(alignment[2][6])
 T
 \end{minted}
 
@@ -811,7 +810,7 @@ FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 Another common use of alignment addition would be to combine alignments for
 several different genes into a meta-alignment. Watch out though - the identifiers
 need to match up (see Section~\ref{sec:SeqRecord-addition} for how adding
-\verb|SeqRecord| objects works). You may find it helpful to first sort the
+\verb|Seq| objects works). You may find it helpful to first sort the
 alignment rows alphabetically by id:
 
 %cont-doctest
@@ -864,14 +863,13 @@ The \verb+substitutions+ property of an alignment reports how often letters in t
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqRecord import SeqRecord
 >>> from Bio.Align import MultipleSeqAlignment
 >>> alignment = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTCCTA"), id='seq1'),
-...         SeqRecord(Seq("AAT-CTA"), id='seq2'),
-...         SeqRecord(Seq("CCTACT-"), id='seq3'),
-...         SeqRecord(Seq("TCTCCTC"), id='seq4'),
+...         Seq("ACTCCTA", id='seq1'),
+...         Seq("AAT-CTA", id='seq2'),
+...         Seq("CCTACT-", id='seq3'),
+...         Seq("TCTCCTC", id='seq4'),
 ...     ]
 ... )
 ...
@@ -1232,7 +1230,7 @@ because by default MUSCLE will read in the input sequence from standard input!
 Note this is a bit more advanced and fiddly, so don't bother with this technique
 unless you need to.
 
-First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
+First, we'll need some unaligned sequences in memory as \verb|Seq| objects.
 For this demonstration I'm going to use a filtered version of the original FASTA
 file (using a generator expression), taking just six of the seven sequences:
 
@@ -1507,7 +1505,7 @@ stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 >>> from Bio import SeqIO
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
+>>> alignments = pairwise2.align.globalxx(seq1, seq2)
 \end{minted}
 
 As you see, we call the alignment function with \verb|align.globalxx|. The tricky
@@ -1554,7 +1552,7 @@ last example can now also be written as:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> alignments = pairwise2.align.globalxx(sequenceA=seq1.seq, sequenceB=seq2.seq)
+>>> alignments = pairwise2.align.globalxx(sequenceA=seq1, sequenceB=seq2)
 \end{minted}
 
 Better alignments are usually obtained by penalizing gaps: higher costs
@@ -1571,7 +1569,7 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 >>> blosum62 = substitution_matrices.load("BLOSUM62")
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
+>>> alignments = pairwise2.align.globalds(seq1, seq2, blosum62, -10, -0.5)
 >>> len(alignments)
 2
 >>> print(pairwise2.format_alignment(*alignments[0]))
@@ -2260,7 +2258,7 @@ stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
 >>> aligner = Align.PairwiseAligner()
->>> score = aligner.score(seq1.seq, seq2.seq)
+>>> score = aligner.score(seq1, seq2)
 >>> print(score)
 72.0
 \end{minted}
@@ -2269,7 +2267,7 @@ showing an alignment score of 72.0. To see the individual alignments, do
 
 %cont-doctest
 \begin{minted}{pycon}
->>> alignments = aligner.align(seq1.seq, seq2.seq)
+>>> alignments = aligner.align(seq1, seq2)
 \end{minted}
 In this example, the total number of optimal alignments is huge (more than $4 \times 10^{37}$), and calling \verb+len(alignments)+ will raise an \verb+OverflowError+:
 
@@ -2318,10 +2316,10 @@ and a gap extension penalty of 0.5:
 >>> aligner.open_gap_score = -10
 >>> aligner.extend_gap_score = -0.5
 >>> aligner.substitution_matrix = substitution_matrices.load("BLOSUM62")
->>> score = aligner.score(seq1.seq, seq2.seq)
+>>> score = aligner.score(seq1, seq2)
 >>> print(score)
 292.5
->>> alignments = aligner.align(seq1.seq, seq2.seq)
+>>> alignments = aligner.align(seq1, seq2)
 >>> len(alignments)
 2
 >>> print(alignments[0].score)
@@ -2760,7 +2758,7 @@ Next, we read in the 16S ribosomal RNA gene sequence of {\it Escherichia coli} a
 >>> from Bio import SeqIO
 >>> sequence1 = SeqIO.read('ecoli.fa', 'fasta')
 >>> sequence2 = SeqIO.read('bsubtilis.fa', 'fasta')
->>> alignments = aligner.align(sequence1.seq, sequence2.seq)
+>>> alignments = aligner.align(sequence1, sequence2)
 \end{minted}
 The number of alignments generated is very large:
 

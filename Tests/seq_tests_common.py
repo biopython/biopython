@@ -2,13 +2,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Common code for SeqRecord object tests."""
+"""Common code for Seq object tests."""
 
-from Bio.Seq import UnknownSeq
+from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
 from Bio.SeqFeature import FeatureLocation, CompoundLocation, SeqFeature
-from Bio.SeqRecord import SeqRecord
 
 
 def checksum_summary(record):
@@ -149,10 +148,7 @@ def compare_sequence(old, new):
     assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
     assert str(old) == str(new), "%s vs %s" % (old, new)
 
-    if isinstance(old, UnknownSeq):
-        assert isinstance(new, UnknownSeq)
-    else:
-        assert not isinstance(new, UnknownSeq)
+    assert old.defined == new.defined
 
     ln = len(old)
     s = str(old)
@@ -179,8 +175,8 @@ def compare_sequence(old, new):
     for i in indices:
         for j in indices:
             expected = s[i:j]
-            assert expected == str(old[i:j]), "Slice %r vs %r" % (expected, old[i:j])
-            assert expected == str(new[i:j]), "Slice %r vs %r" % (expected, new[i:j])
+            assert expected == str(old[i:j]), "Slice %s vs %s" % (expected, old[i:j])
+            assert expected == str(new[i:j]), "Slice %s vs %s" % (expected, new[i:j])
             # Slicing with step of 1 should make no difference.
             # Slicing with step 3 might be useful for codons.
             for step in [1, 3]:
@@ -215,11 +211,11 @@ def compare_features(old_list, new_list):
 
 
 def compare_record(old, new):
-    """Compare two SeqRecord or DBSeqRecord objects."""
-    assert isinstance(old, SeqRecord)
-    assert isinstance(new, SeqRecord)
+    """Compare two Seq or DBSeq objects."""
+    assert isinstance(old, Seq)
+    assert isinstance(new, Seq)
     # Sequence:
-    compare_sequence(old.seq, new.seq)
+    compare_sequence(old, new)
     # Basics:
     assert old.id == new.id
     assert old.name == new.name
@@ -306,7 +302,7 @@ def compare_record(old, new):
 
 
 def compare_records(old_list, new_list):
-    """Compare two lists of SeqRecord objects."""
+    """Compare two lists of Seq objects."""
     assert isinstance(old_list, list)
     assert isinstance(new_list, list)
     assert len(old_list) == len(new_list)

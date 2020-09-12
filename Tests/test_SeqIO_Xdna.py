@@ -12,7 +12,6 @@ from io import BytesIO
 from Bio import SeqIO, BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
-from Bio.SeqRecord import SeqRecord
 
 
 class TestXdna(unittest.TestCase):
@@ -177,7 +176,7 @@ class TestXdnaWriter(unittest.TestCase):
         """Write correct sequence type."""
         h = BytesIO()
 
-        record = SeqRecord(Seq("ACGT"))
+        record = Seq("ACGT")
 
         for molecule_type, expected_byte in [
             (None, 0),
@@ -198,7 +197,7 @@ class TestXdnaWriter(unittest.TestCase):
         h = BytesIO()
 
         # Fabricate a record with > 255 features
-        record = SeqRecord(Seq("ACGT"))
+        record = Seq("ACGT")
         for i in range(260):
             feature = SeqFeature(FeatureLocation(1, 2), type="misc_feature")
             record.features.append(feature)

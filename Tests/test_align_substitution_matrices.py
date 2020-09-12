@@ -138,7 +138,7 @@ Z  0.0
         path = os.path.join("Align", "ecoli.fa")
         records = SeqIO.parse(path, "fasta")
         for record in records:
-            for nucleotide in record.seq:
+            for nucleotide in record:
                 counts[nucleotide] += 1
         letters = sorted(counts.keys())
         self.assertEqual(letters, sorted(nucleotide_alphabet))
@@ -163,7 +163,7 @@ Z  0.0
         path = os.path.join("Align", "bsubtilis.fa")
         records = SeqIO.parse(path, "fasta")
         for record in records:
-            for nucleotide in record.seq:
+            for nucleotide in record:
                 counts[nucleotide] += 1
         letters = sorted(counts.keys())
         self.assertEqual(letters, sorted(nucleotide_alphabet))
@@ -192,7 +192,7 @@ Z  0.0
         path = os.path.join("Align", "cow.fa")
         records = SeqIO.parse(path, "fasta")
         for record in records:
-            for aminoacid in record.seq:
+            for aminoacid in record:
                 counts[aminoacid] += 1
         letters = sorted(counts.keys())
         self.assertEqual(letters, list(protein_alphabet))
@@ -233,7 +233,7 @@ Z  0.0
         path = os.path.join("Align", "pig.fa")
         records = SeqIO.parse(path, "fasta")
         for record in records:
-            for aminoacid in record.seq:
+            for aminoacid in record:
                 counts[aminoacid] += 1
         letters = sorted(counts.keys())
         self.assertEqual(letters, list(protein_alphabet))
@@ -298,8 +298,8 @@ class TestScoringMatrices(unittest.TestCase):
         cow_records = SeqIO.parse(cow_path, "fasta")
         pig_records = SeqIO.parse(pig_path, "fasta")
         for cow_record, pig_record in zip(cow_records, pig_records):
-            cow_sequence = str(cow_record.seq)
-            pig_sequence = str(pig_record.seq)
+            cow_sequence = str(cow_record)
+            pig_sequence = str(pig_record)
             alignments = aligner.align(cow_sequence, pig_sequence)
             assert len(alignments) == 1
             alignment = alignments[0]

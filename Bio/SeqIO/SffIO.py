@@ -16,7 +16,7 @@ For example, to iterate over the records in an SFF file,
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
-    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
+    ...     print("%s %i %s..." % (record.id, len(record), record[:20]))
     ...
     E3MFGYR02JWQ7T 265 tcagGGTCTACATGTTGGTT...
     E3MFGYR02JA6IL 271 tcagTTTTTTTTGGAAAGGA...
@@ -29,15 +29,15 @@ For example, to iterate over the records in an SFF file,
     E3MFGYR02GPGB1 269 tcagAAGCAGTGGTATCAAC...
     E3MFGYR02F7Z7G 219 tcagAATCATCCACTTTTTA...
 
-Each SeqRecord object will contain all the annotation from the SFF file,
+Each Seq object will contain all the annotation from the SFF file,
 including the PHRED quality scores.
 
     >>> print("%s %i" % (record.id, len(record)))
     E3MFGYR02F7Z7G 219
-    >>> print("%s..." % record.seq[:10])
+    >>> print("%s..." % record[:10])
     tcagAATCAT...
-    >>> print("%r..." % (record.letter_annotations["phred_quality"][:10]))
-    [22, 21, 23, 28, 26, 15, 12, 21, 28, 21]...
+    >>> print("%r..." % (record.letter_annotations["phred_quality"][:10], ))
+    (22, 21, 23, 28, 26, 15, 12, 21, 28, 21)...
 
 Notice that the sequence is given in mixed case, the central upper case region
 corresponds to the trimmed sequence. This matches the output of the Roche
@@ -47,11 +47,11 @@ tools (and the 3rd party tool sff_extract) for SFF to FASTA.
     4
     >>> print(record.annotations["clip_qual_right"])
     134
-    >>> print(record.seq[:4])
+    >>> print(record[:4])
     tcag
-    >>> print("%s...%s" % (record.seq[4:20], record.seq[120:134]))
+    >>> print("%s...%s" % (record[4:20], record[120:134]))
     AATCATCCACTTTTTA...CAAAACACAAACAG
-    >>> print(record.seq[134:])
+    >>> print(record[134:])
     atcttatcaacaaaactcaaagttcctaactgagacacgcaacaggggataagacaaggcacacaggggataggnnnnnnnnnnn
 
 The annotations dictionary also contains any adapter clip positions
@@ -98,7 +98,7 @@ except for the PHRED quality scores and anything encoded in the read names):
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
-    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
+    ...     print("%s %i %s..." % (record.id, len(record), record[:20]))
     ...
     E3MFGYR02JWQ7T 260 GGTCTACATGTTGGTTAACC...
     E3MFGYR02JA6IL 265 TTTTTTTTGGAAAGGAAAAC...
@@ -116,10 +116,10 @@ example above:
 
     >>> print("%s %i" % (record.id, len(record)))
     E3MFGYR02F7Z7G 130
-    >>> print("%s..." % record.seq[:10])
+    >>> print("%s..." % record[:10])
     AATCATCCAC...
-    >>> print("%r..." % record.letter_annotations["phred_quality"][:10])
-    [26, 15, 12, 21, 28, 21, 36, 28, 27, 27]...
+    >>> print("%r..." % (record.letter_annotations["phred_quality"][:10], ))
+    (26, 15, 12, 21, 28, 21, 36, 28, 27, 27)...
     >>> len(record.annotations)
     4
     >>> print(record.annotations["region"])
@@ -158,7 +158,7 @@ which is a little slower. For example,
     >>> from Bio import SeqIO
     >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff")
     >>> record = reads["E3MFGYR02JHD4H"]
-    >>> print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
+    >>> print("%s %i %s..." % (record.id, len(record), record[:20]))
     E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
     >>> reads.close()
 
@@ -167,14 +167,14 @@ Or, using the trimmed reads:
     >>> from Bio import SeqIO
     >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim")
     >>> record = reads["E3MFGYR02JHD4H"]
-    >>> print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
+    >>> print("%s %i %s..." % (record.id, len(record), record[:20]))
     E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
     >>> reads.close()
 
 You can also use the Bio.SeqIO.write() function with the "sff" format. Note
 that this requires all the flow information etc, and thus is probably only
-useful for SeqRecord objects originally from reading another SFF file (and
-not the trimmed SeqRecord objects from parsing an SFF file as "sff-trim").
+useful for Seq objects originally from reading another SFF file (and not the
+trimmed Seq objects from parsing an SFF file as "sff-trim").
 
 As an example, let's pretend this example SFF file represents some DNA which
 was pre-amplified with a PCR primers AAAGANNNNN. The following script would
@@ -185,21 +185,21 @@ degenerate bit of this pretend primer):
     >>> from Bio import SeqIO
     >>> records = (record for record in
     ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
-    ...            if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
+    ...            if record[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
     ...
     >>> count = SeqIO.write(records, "temp_filtered.sff", "sff")
     >>> print("Selected %i records" % count)
     Selected 2 records
 
 Of course, for an assembly you would probably want to remove these primers.
-If you want FASTA or FASTQ output, you could just slice the SeqRecord. However,
+If you want FASTA or FASTQ output, you could just slice the Seq object. However,
 if you want SFF output we have to preserve all the flow information - the trick
 is just to adjust the left clip position!
 
     >>> from Bio import SeqIO
     >>> def filter_and_trim(records, primer):
     ...     for record in records:
-    ...         if record.seq[record.annotations["clip_qual_left"]:].startswith(primer):
+    ...         if record[record.annotations["clip_qual_left"]:].startswith(primer):
     ...             record.annotations["clip_qual_left"] += len(primer)
     ...             yield record
     ...
@@ -214,12 +214,12 @@ We can check the results, note the lower case clipped region now includes the "A
 sequence:
 
     >>> for record in SeqIO.parse("temp_filtered.sff", "sff"):
-    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
+    ...     print("%s %i %s..." % (record.id, len(record), record[:20]))
     ...
     E3MFGYR02JHD4H 310 tcagaaagaCAAGTGGTATC...
     E3MFGYR02GAZMS 278 tcagaaagaAGTAAGGTAAA...
     >>> for record in SeqIO.parse("temp_filtered.sff", "sff-trim"):
-    ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
+    ...     print("%s %i %s..." % (record.id, len(record), record[:20]))
     ...
     E3MFGYR02JHD4H 287 CAAGTGGTATCAACGCAGAG...
     E3MFGYR02GAZMS 266 AGTAAGGTAAATAACAAACG...
@@ -235,7 +235,6 @@ import struct
 import re
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import StreamModeError
 from .Interfaces import SequenceIterator, SequenceWriter
 
@@ -643,7 +642,7 @@ _valid_UAN_read_name = re.compile(r"^[a-zA-Z0-9]{14}$")
 def _sff_read_seq_record(
     handle, number_of_flows_per_read, flow_chars, key_sequence, trim=False
 ):
-    """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
+    """Parse the next read in the file, return data as a Seq object (PRIVATE)."""
     # Now on to the reads...
     # the read header format (fixed part):
     # read_header_length     H
@@ -694,7 +693,7 @@ def _sff_read_seq_record(
     temp_fmt = ">%iB" % seq_len  # used for flow index and quals
     flow_index = handle.read(seq_len)  # unpack later if needed
     seq = handle.read(seq_len).decode()  # TODO - Use bytes in Seq?
-    quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
+    quals = tuple(struct.unpack(temp_fmt, handle.read(seq_len)))
     # now any padding...
     padding = (read_flow_size + seq_len * 3) % 8
     if padding:
@@ -723,7 +722,7 @@ def _sff_read_seq_record(
         clip_right = clip_adapter_right
     else:
         clip_right = seq_len
-    # Now build a SeqRecord
+    # Now build a Seq object
     if trim:
         if clip_left >= clip_right:
             # Raise an error?
@@ -735,7 +734,7 @@ def _sff_read_seq_record(
                 BiopythonParserWarning,
             )
             seq = ""
-            quals = []
+            quals = ()
         else:
             seq = seq[clip_left:clip_right].upper()
             quals = quals[clip_left:clip_right]
@@ -772,12 +771,8 @@ def _sff_read_seq_record(
         annotations["region"] = _get_read_region(name)
         annotations["coords"] = _get_read_xy(name)
     annotations["molecule_type"] = "DNA"
-    record = SeqRecord(
-        Seq(seq), id=name, name=name, description="", annotations=annotations
-    )
-    # Dirty trick to speed up this line:
-    # record.letter_annotations["phred_quality"] = quals
-    dict.__setitem__(record._per_letter_annotations, "phred_quality", quals)
+    record = Seq(seq, id=name, name=name, description="", annotations=annotations)
+    record.letter_annotations["phred_quality"] = quals
     # Return the record and then continue...
     return record
 
@@ -919,17 +914,17 @@ class SffIterator(SequenceIterator):
     """Parser for Standard Flowgram Format (SFF) files."""
 
     def __init__(self, source, alphabet=None, trim=False):
-        """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
+        """Iterate over Standard Flowgram Format (SFF) reads (as Seq objects).
 
             - source - path to an SFF file, e.g. from Roche 454 sequencing,
               or a file-like object opened in binary mode.
             - alphabet - optional alphabet, unused. Leave as None.
             - trim - should the sequences be trimmed?
 
-        The resulting SeqRecord objects should match those from a paired FASTA
-        and QUAL file converted from the SFF file using the Roche 454 tool
-        ssfinfo. i.e. The sequence will be mixed case, with the trim regions
-        shown in lower case.
+        The resulting Seq objects should match those from a paired FASTA and
+        QUAL file converted from the SFF file using the Roche 454 tool ssfinfo.
+        i.e. The sequence will be mixed case, with the trim regions shown in
+        lower case.
 
         This function is used internally via the Bio.SeqIO functions:
 
@@ -989,7 +984,7 @@ class SffIterator(SequenceIterator):
         self.trim = trim
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         try:
             if 0 != handle.tell():
                 raise ValueError("Not at start of file, offset %i" % handle.tell())
@@ -1000,7 +995,7 @@ class SffIterator(SequenceIterator):
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         trim = self.trim
         (
             header_length,
@@ -1128,7 +1123,7 @@ def _check_eof(handle, index_offset, index_length):
 
 
 class _SffTrimIterator(SffIterator):
-    """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
+    """Iterate over SFF reads (as Seq objects) with trimming (PRIVATE)."""
 
     def __init__(self, source):
         super().__init__(source, trim=True)
@@ -1360,7 +1355,7 @@ class SffWriter(SequenceWriter):
         # Basics
         name = record.id.encode()
         name_len = len(name)
-        seq = record.seq.upper().encode()
+        seq = record.upper().encode()
         seq_len = len(seq)
         # Qualities
         try:

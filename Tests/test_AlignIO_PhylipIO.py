@@ -160,7 +160,7 @@ class TestPhylipIO(unittest.TestCase):
             .replace("\n", "")
             .upper()
         )
-        self.assertEqual(str(record.seq).replace("-", ""), expected)
+        self.assertEqual(str(record).replace("-", ""), expected)
 
     def test_two_and_three(self):
         handle = StringIO(phylip_text2)
@@ -177,7 +177,7 @@ class TestPhylipIO(unittest.TestCase):
 
         for i in range(0, 5):
             self.assertEqual(list2[0][i].id, list3[0][i].id)
-            self.assertEqual(str(list2[0][i].seq), str(list3[0][i].seq))
+            self.assertEqual(list2[0][i], list3[0][i])
 
     def test_four(self):
         handle = StringIO(phylip_text4)
@@ -219,7 +219,7 @@ class TestPhylipIO(unittest.TestCase):
             self.assertEqual(len(a1), len(a2))
             for r1, r2 in zip(a1, a2):
                 self.assertEqual(r1.id, r2.id)
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(r1, r2)
 
 
 if __name__ == "__main__":

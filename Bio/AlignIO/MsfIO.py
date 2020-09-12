@@ -22,7 +22,6 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator
 
@@ -317,7 +316,7 @@ class MsfIterator(AlignmentIterator):
             )
 
         records = (
-            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w},)
+            Seq(s, id=i, name=i, description=i, annotations={"weight": w},)
             for (i, s, w) in zip(ids, seqs, weights)
         )
 

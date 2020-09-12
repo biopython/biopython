@@ -18,7 +18,6 @@ import warnings
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter
 
 
@@ -143,7 +142,7 @@ class XdnaIterator(SequenceIterator):
     """Parser for Xdna files."""
 
     def __init__(self, source):
-        """Parse a Xdna file and return a SeqRecord object.
+        """Parse a Xdna file and return a Seq object.
 
         Argument source is a file-like object in binary mode or a path to a file.
 
@@ -154,13 +153,13 @@ class XdnaIterator(SequenceIterator):
         super().__init__(source, mode="b", fmt="Xdna")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         # Parse fixed-size header and do some rudimentary checks
         #
         # The "neg_length" value is the length of the part of the sequence
         # before the nucleotide considered as the "origin" (nucleotide number 1,
         # which in DNA Strider is not always the first nucleotide).
-        # Biopython's SeqRecord has no such concept of a sequence origin as far
+        # Biopython's Seq object has no such concept of a sequence origin as far
         # as I know, so we ignore that value. SerialCloner has no such concept
         # either and always generates files with a neg_length of zero.
         header = handle.read(112)
@@ -172,7 +171,7 @@ class XdnaIterator(SequenceIterator):
         return records
 
     def iterate(self, handle, header):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         (version, seq_type, topology, length, neg_length, com_length) = unpack(
             ">BBB25xII60xI12x", header
         )
@@ -188,7 +187,7 @@ class XdnaIterator(SequenceIterator):
         name = comment.split(" ")[0]
 
         # Create record object
-        record = SeqRecord(Seq(sequence), description=comment, name=name, id=name)
+        record = Seq(sequence, description=comment, name=name, id=name)
         if _seq_types[seq_type]:
             record.annotations["molecule_type"] = _seq_types[seq_type]
 
@@ -199,7 +198,7 @@ class XdnaIterator(SequenceIterator):
             # This is an XDNA file with an optional annotation section.
 
             # Skip the overhangs as I don't know how to represent
-            # them in the SeqRecord model.
+            # them in the Seq model.
             _read_overhang(handle)  # right-side overhang
             _read_overhang(handle)  # left-side overhang
 
@@ -286,7 +285,7 @@ class XdnaWriter(SequenceWriter):
         )
 
         # Actual sequence and comment
-        self.handle.write(str(record.seq).encode("ASCII"))
+        self.handle.write(record.encode("ASCII"))
         self.handle.write(comment.encode("ASCII"))
 
         self.handle.write(pack(">B", 0))  # Annotation section marker

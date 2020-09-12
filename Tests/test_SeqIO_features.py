@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""SeqFeature related tests for SeqRecord objects from Bio.SeqIO.
+"""SeqFeature related tests for Seq objects from Bio.SeqIO.
 
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
@@ -16,7 +16,6 @@ from io import StringIO
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
-from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition
 from Bio.SeqFeature import OneOfPosition, WithinPosition, UnknownPosition
@@ -54,18 +53,18 @@ def compare_record(old, new, expect_minor_diffs=False):
             "'%s' or '%s' vs '%s' or '%s' records"
             % (old.id, old.name, new.id, new.name)
         )
-    if len(old.seq) != len(new.seq):
-        raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-    if isinstance(old.seq, UnknownSeq) and isinstance(new.seq, UnknownSeq):
+    if len(old) != len(new):
+        raise ValueError("%i vs %i" % (len(old), len(new)))
+    if isinstance(old, UnknownSeq) and isinstance(new, UnknownSeq):
         # Jython didn't like us comparing the string of very long
         # UnknownSeq object (out of heap memory error)
-        if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%r vs %r" % (old.seq, new.seq))
-    elif str(old.seq).upper() != str(new.seq).upper():
-        if len(old.seq) < 200:
-            raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
+        if old._character.upper() != new._character:
+            raise ValueError("%r vs %r" % (old, new))
+    elif str(old).upper() != str(new).upper():
+        if len(old) < 200:
+            raise ValueError("'%s' vs '%s'" % (old, new))
         else:
-            raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
+            raise ValueError("'%s...' vs '%s...'" % (seq[:100], seq[:100]))
     if old.features and new.features:
         if not compare_features(old.features, new.features):
             return False
@@ -129,7 +128,7 @@ def compare_record(old, new, expect_minor_diffs=False):
 
 
 def compare_records(old_list, new_list, expect_minor_diffs=False):
-    """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
+    """Check two lists of Seq object agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list):
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list):
@@ -318,7 +317,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertIsInstance(new, str)
         self.assertEqual(new, answer_str)
 
-        new = feature.extract(parent_seq.tomutable())
+        new = feature.extract(MutableSeq(parent_seq))
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
@@ -562,9 +561,7 @@ class SeqFeatureCreation(unittest.TestCase):
 
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
-        self.record = SeqRecord(
-            Seq("ACGT" * 100), id="Test", name="Test", description="Test"
-        )
+        self.record = Seq("ACGT" * 100, id="Test", name="Test", description="Test")
         self.record.annotations["molecule_type"] = "DNA"
 
     def write_read_check(self, check_format):
@@ -1125,7 +1122,7 @@ class NC_000932(unittest.TestCase):
             if r.id in self.skip_trans_test:
                 continue
             # Get the nucleotides and translate them
-            nuc = f.extract(gb_record.seq)
+            nuc = f.extract(gb_record)
             self.assertEqual(len(nuc), len(f))
             try:
                 pro = nuc.translate(table=self.table, cds=True)
@@ -1135,9 +1132,9 @@ class NC_000932(unittest.TestCase):
                 print(f)
                 raise
             if pro[-1] == "*":
-                self.assertEqual(str(pro)[:-1], str(r.seq))
+                self.assertEqual(str(pro)[:-1], str(r))
             else:
-                self.assertEqual(str(pro), str(r.seq))
+                self.assertEqual(str(pro), str(r))
 
 
 class NC_005816(NC_000932):
@@ -1169,15 +1166,13 @@ class NC_005816(NC_000932):
         ffn_records = list(SeqIO.parse(self.ffn_filename, "fasta"))
         self.assertEqual(len(faa_records), len(ffn_records))
         for faa, fna in zip(faa_records, ffn_records):
-            translation = fna.seq.translate(self.table, cds=True)
+            translation = fna.translate(self.table, cds=True)
             if faa.id in self.skip_trans_test:
                 continue
-            if (str(translation) != str(faa.seq)) and (
-                str(translation) != str(faa.seq) + "*"
+            if (str(translation) != str(faa)) and (
+                str(translation) != str(faa) + "*"
             ):
-                t = SeqRecord(
-                    translation, id="Translation", description="Table %s" % self.table
-                )
+                t = Seq(str(translation), id="Translation", description="Table %s" % self.table)
                 raise ValueError(
                     "FAA vs FNA translation problem:\n%s\n%s\n%s\n"
                     % (fna.format("fasta"), t.format("fasta"), faa.format("fasta"))
@@ -1210,9 +1205,9 @@ class NC_005816(NC_000932):
         # This assumes they are in the same order...
         for fa_record, f in zip(fa_records, features):
             # TODO - check the FASTA ID line against the co-ordinates?
-            f_seq = f.extract(gb_record.seq)
-            self.assertEqual(len(fa_record.seq), len(f_seq))
-            self.assertEqual(str(fa_record.seq), str(f_seq))
+            f_seq = f.extract(gb_record)
+            self.assertEqual(len(fa_record), len(f_seq))
+            self.assertEqual(str(fa_record), str(f_seq))
             self.assertEqual(len(f_seq), len(f))
 
 

@@ -7,14 +7,13 @@
 """Bio.SeqIO support for the "ig" (IntelliGenetics or MASE) file format.
 
 This module is for reading and writing IntelliGenetics format files as
-SeqRecord objects.  This file format appears to be the same as the MASE
-multiple sequence alignment format.
+Seq objects.  This file format appears to be the same as the MASE multiple
+sequence alignment format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 """
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
@@ -22,7 +21,7 @@ class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
 
     def __init__(self, source):
-        """Iterate over IntelliGenetics records (as SeqRecord objects).
+        """Iterate over IntelliGenetics records (as Seq objects).
 
         source - file-like object opened in text mode, or a path to a file
 
@@ -31,7 +30,7 @@ class IgIterator(SequenceIterator):
 
         The free format commentary lines at the start of each record (which
         start with a semi-colon) are recorded as a single string with embedded
-        new line characters in the SeqRecord's annotations dictionary under the
+        new line characters in the Seq object's annotations dictionary under the
         key 'comment'.
 
         Examples
@@ -62,7 +61,7 @@ class IgIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="IntelliGenetics")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
@@ -81,8 +80,8 @@ class IgIterator(SequenceIterator):
         while line:
             # Now iterate over the records
 
-            # Try and agree with SeqRecord convention from the GenBank parser,
-            # (and followed in the SwissProt parser) which stores the comments
+            # Try and agree with Seq convention from the GenBank parser (and
+            # followed in the SwissProt parser) which stores the comments
             # as a long string with newlines under annotations key 'comment'.
 
             # Note some examples use "; ..." and others ";..."
@@ -111,8 +110,7 @@ class IgIterator(SequenceIterator):
                 )
 
             # Return the record and then continue...
-            yield SeqRecord(
-                Seq(seq_str),
+            yield Seq(seq_str,
                 id=title,
                 name=title,
                 annotations={"comment": "\n".join(comment_lines)},

@@ -19,7 +19,6 @@ import shutil
 from Bio.AlignIO.MafIO import MafIndex
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 from seq_tests_common import compare_record
 
@@ -191,13 +190,11 @@ if sqlite3:
         def test_records_begin(self):
             recs = {}
 
-            recs[0] = SeqRecord(
-                Seq(
+            recs[0] = Seq(
                     "TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAA"
                     "CACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTA"
                     "AAAATGATTAAACAACATTTCTGCTGCTCGCTCACATTCTTCAT"
-                    "AGAAGATGACATAATGTATTTTCCTTTTGGTT"
-                ),
+                    "AGAAGATGACATAATGTATTTTCCTTTTGGTT",
                 id="mm9.chr10",
                 name="mm9.chr10",
                 description="",
@@ -209,13 +206,11 @@ if sqlite3:
                 },
             )
 
-            recs[1] = SeqRecord(
-                Seq(
+            recs[1] = Seq(
                     "TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGG"
                     "TTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCA"
                     "GAATTGGTTACACTGTGTTCTTGACCTTTGCTTGTTTTCTCCAT"
-                    "GGAAACTGATGTCAAATACTTTCCCTTTGGTT"
-                ),
+                    "GGAAACTGATGTCAAATACTTTCCCTTTGGTT",
                 id="oryCun1.scaffold_133159",
                 name="oryCun1.scaffold_133159",
                 description="",
@@ -235,8 +230,7 @@ if sqlite3:
         def test_records_end(self):
             recs = {}
 
-            recs[0] = SeqRecord(
-                Seq("TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt"),
+            recs[0] = Seq("TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt",
                 id="mm9.chr10",
                 name="mm9.chr10",
                 description="",
@@ -248,8 +242,7 @@ if sqlite3:
                 },
             )
 
-            recs[1] = SeqRecord(
-                Seq("TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
+            recs[1] = Seq("TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT",
                 id="ponAbe2.chr6",
                 name="ponAbe2.chr6",
                 description="",
@@ -261,8 +254,7 @@ if sqlite3:
                 },
             )
 
-            recs[2] = SeqRecord(
-                Seq("TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
+            recs[2] = Seq("TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT",
                 id="panTro2.chr6",
                 name="panTro2.chr6",
                 description="",
@@ -274,8 +266,7 @@ if sqlite3:
                 },
             )
 
-            recs[3] = SeqRecord(
-                Seq("TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
+            recs[3] = Seq("TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT",
                 id="hg18.chr6",
                 name="hg18.chr6",
                 description="",
@@ -287,8 +278,7 @@ if sqlite3:
                 },
             )
 
-            recs[4] = SeqRecord(
-                Seq("TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT"),
+            recs[4] = Seq("TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT",
                 id="canFam2.chr1",
                 name="canFam2.chr1",
                 description="",
@@ -300,8 +290,7 @@ if sqlite3:
                 },
             )
 
-            recs[5] = SeqRecord(
-                Seq("TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----"),
+            recs[5] = Seq("TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----",
                 id="ornAna1.chr2",
                 name="ornAna1.chr2",
                 description="",
@@ -518,7 +507,7 @@ if sqlite3:
             e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
-            seq_dict = {seqrec.id: seqrec.seq for seqrec in ali}
+            seq_dict = {seqrec.id: seqrec for seqrec in ali}
             correct_lengths = {
                 "mm9.chr10": 53,
                 "hg18.chr6": 53,
@@ -556,7 +545,7 @@ if sqlite3:
             e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
-            seq_dict = {seqrec.id: seqrec.seq for seqrec in ali}
+            seq_dict = {seqrec.id: seqrec for seqrec in ali}
             correct_sequences = {
                 "mm9.chr10": "GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
                 "hg18.chr6": "GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
@@ -611,7 +600,7 @@ if sqlite3:
             e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014644, 3014689], [3014644 + 45, 3014689 + 53])
-            seq_dict = {seqrec.id: seqrec.seq for seqrec in ali}
+            seq_dict = {seqrec.id: seqrec for seqrec in ali}
             correct_sequences = {
                 "mm9.chr10": "CCTGTACCCTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTGGGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
                 "hg18.chr6": "CCTATACCTTTCTTTTATGAGAATTTTGTTTTAATCCTAAACTTTTGGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
@@ -658,8 +647,8 @@ if sqlite3:
             result = self.idx.get_spliced((0, 1000), (500, 1500), 1)
 
             self.assertEqual(len(result), 1)
-            self.assertEqual(len(result[0].seq), 1000)
-            self.assertEqual(str(result[0].seq), "N" * 1000)
+            self.assertEqual(len(result[0]), 1000)
+            self.assertEqual(result[0], "N" * 1000)
 
         def test_correct_retrieval_1(self):
             """Correct retrieval of Cnksr3 in mouse.
@@ -702,9 +691,9 @@ if sqlite3:
                 1,
             )
 
-            cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta").seq).upper()
+            cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta")).upper()
             mm9_seq = "".join(
-                [str(x.seq) for x in result if x.id.startswith("mm9")]
+                [str(x) for x in result if x.id.startswith("mm9")]
             ).replace("-", "")
 
             self.assertEqual(mm9_seq, cnksr3)

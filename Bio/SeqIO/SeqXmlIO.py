@@ -6,8 +6,8 @@
 # package.
 """Bio.SeqIO support for the "seqxml" file format, SeqXML.
 
-This module is for reading and writing SeqXML format files as
-SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
+This module is for reading and writing SeqXML format files as Seq objects, and
+is expected to be used via the Bio.SeqIO API.
 
 SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
@@ -22,7 +22,6 @@ from xml import sax
 
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter
 
 
@@ -107,7 +106,7 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Expected to find the start of an entry element")
         if qname is not None:
             raise RuntimeError("Unexpected qname for entry element")
-        record = SeqRecord("", id=None)
+        record = Seq("", id=None)
         if self.speciesName is not None:
             record.annotations["organism"] = self.speciesName
         if self.ncbiTaxID is not None:
@@ -264,7 +263,8 @@ class ContentHandler(handler.ContentHandler):
             raise RuntimeError(
                 "Failed to find end of sequence (localname = %s)" % localname
             )
-        record.seq = Seq(self.data)
+        record = Seq(self.data, id=record.id, description=record.description, annotations=record.annotations, dbxrefs=record.dbxrefs)
+        self.records[-1] = record
         self.data = None
         self.endElementNS = self.endEntryElement
 
@@ -380,7 +380,7 @@ class ContentHandler(handler.ContentHandler):
 class SeqXmlIterator(SequenceIterator):
     """Parser for seqXML files.
 
-    Parses seqXML files and creates SeqRecords.
+    Parses seqXML files and creates Seq objects.
     Assumes valid seqXML please validate beforehand.
     It is assumed that all information for one record can be found within a
     record element or above. Two types of methods are called when the start
@@ -407,7 +407,7 @@ class SeqXmlIterator(SequenceIterator):
         super().__init__(stream_or_path, mode="b", fmt="SeqXML")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         parser = self.parser
         content_handler = parser.getContentHandler()
         BLOCK = self.BLOCK
@@ -455,9 +455,9 @@ class SeqXmlIterator(SequenceIterator):
 
 
 class SeqXmlWriter(SequenceWriter):
-    """Writes SeqRecords into seqXML file.
+    """Writes Seq objects into seqXML file.
 
-    SeqXML requires the SeqRecord annotations to specify the molecule_type;
+    SeqXML requires the Seq annotations to specify the molecule_type;
     the molecule type is required to contain the term "DNA", "RNA", or
     "protein".
     """
@@ -595,10 +595,10 @@ class SeqXmlWriter(SequenceWriter):
         Note that SeqXML requires the molecule type to contain the term
         "DNA", "RNA", or "protein".
         """
-        if isinstance(record.seq, UnknownSeq):
+        if isinstance(record, UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
 
-        seq = str(record.seq)
+        seq = str(record)
 
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")

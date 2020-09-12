@@ -775,7 +775,7 @@ class Astral:
             astral_file = os.path.join(self.path, astral_file)
 
         if astral_file:
-            # Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY
+            # Build a dictionary of Seq objects in the FASTA file, IN MEMORY
             self.fasta_dict = SeqIO.to_dict(SeqIO.parse(astral_file, "fasta"))
 
         self.astral_file = astral_file
@@ -853,9 +853,9 @@ class Astral:
         return data
 
     def getSeqBySid(self, domain):
-        """Get the seq record of a given domain from its sid."""
+        """Get the Seq record of a given domain from its sid."""
         if self.db_handle is None:
-            return self.fasta_dict[domain].seq
+            return self.fasta_dict[domain]
         else:
             cur = self.db_handle.cursor()
             cur.execute("SELECT seq FROM astral WHERE sid=%s", domain)
@@ -899,7 +899,7 @@ class Astral:
         for dom in self.fasta_dict:
             cur.execute(
                 "INSERT INTO astral (sid,seq) values (%s,%s)",
-                (dom, self.fasta_dict[dom].seq.data),
+                (dom, self.fasta_dict[dom]),
             )
 
         for i in astralBibIds:

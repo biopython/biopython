@@ -16,7 +16,6 @@ from Bio import FSSP
 import copy
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 
 class FSSPAlign(MultipleSeqAlignment):
@@ -51,7 +50,7 @@ def mult_align(sum_dict, align_dict):
     fssp_align = MultipleSeqAlignment([])
     for i in sorted(mult_align_dict):
         fssp_align.append(
-            SeqRecord(Seq(mult_align_dict[i]), sum_dict[i].pdb2 + sum_dict[i].chain2)
+            Seq(mult_align_dict[i], sum_dict[i].pdb2 + sum_dict[i].chain2)
         )
     return fssp_align
 

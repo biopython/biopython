@@ -14,7 +14,7 @@ scope of this file as they are already covered in test_Entrez.py.
 from Bio import Entrez
 from Bio import Medline
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
 
 import doctest
 import os
@@ -138,7 +138,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn("id=186972394", url)
         record = SeqIO.read(handle, "genbank")
         handle.close()
-        self.assertIsInstance(record, SeqRecord)
+        self.assertIsInstance(record, Seq)
         self.assertEqual("EU490707.1", record.id)
         self.assertEqual(1302, len(record))
 

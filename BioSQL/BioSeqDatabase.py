@@ -17,6 +17,7 @@ database, and is compatible with the BioSQL standards.
 """
 import os
 
+from Bio.Seq import Seq, UnknownSeq
 from Bio import BiopythonDeprecationWarning
 
 from . import BioSeq
@@ -595,16 +596,28 @@ class Adaptor:
         #    """select SUBSTRING(seq FROM %s FOR %s)
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
-        #
-        # Convert to a string on returning for databases that give back
-        # unicode. Shouldn't need unicode for sequences so this seems safe.
-        return str(
-            self.execute_one(
+        seq = self.execute_one(
                 """select SUBSTR(seq, %s, %s)
                      from biosequence where bioentry_id = %s""",
                 (start + 1, length, seqid),
             )[0]
-        )
+        if seq is None:
+            # UnknownSeq
+            moltype = self.execute_one(
+                "SELECT alphabet FROM biosequence WHERE bioentry_id = %s",
+                (seqid,),
+            )[0]
+            if moltype in ("dna", "rna"):
+                character = "N"
+            elif moltype == "protein":
+                character = "X"
+            else:
+                character = "?"
+            seq = character * length
+            defined = False
+        else:
+            defined = True
+        return seq, defined
 
     def execute_and_fetch_col0(self, sql, args=None):
         """Return a list of values from the first column in the row."""
@@ -692,49 +705,36 @@ class BioSeqDatabase:
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
 
     def get_Seq_by_id(self, name):
-        """Get a DBSeqRecord object by its name.
+        """Get a DBSeq object by its name.
 
         Example: seq_rec = db.get_Seq_by_id('ROA1_HUMAN')
-
-        The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_display_id(self.dbid, name)
-        return BioSeq.DBSeqRecord(self.adaptor, seqid)
+        return BioSeq.DBSeq(self.adaptor, seqid)
 
     def get_Seq_by_acc(self, name):
-        """Get a DBSeqRecord object by accession number.
+        """Get a DBSeq object by accession number.
 
         Example: seq_rec = db.get_Seq_by_acc('X77802')
-
-        The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_accession(self.dbid, name)
-        return BioSeq.DBSeqRecord(self.adaptor, seqid)
+        return BioSeq.DBSeq(self.adaptor, seqid)
 
     def get_Seq_by_ver(self, name):
-        """Get a DBSeqRecord object by version number.
+        """Get a DBSeq object by version number.
 
         Example: seq_rec = db.get_Seq_by_ver('X77802.1')
-
-        The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_version(self.dbid, name)
-        return BioSeq.DBSeqRecord(self.adaptor, seqid)
+        return BioSeq.DBSeq(self.adaptor, seqid)
 
     def get_Seqs_by_acc(self, name):
-        """Get a list of DBSeqRecord objects by accession number.
+        """Get a list of DBSeq objects by accession number.
 
         Example: seq_recs = db.get_Seq_by_acc('X77802')
-
-        The name of this method is misleading since it returns a list of
-        DBSeqRecord objects rather than a list of DBSeq ojbects, and presumably
-        was to mirror BioPerl.
         """
         seqids = self.adaptor.fetch_seqids_by_accession(self.dbid, name)
-        return [BioSeq.DBSeqRecord(self.adaptor, seqid) for seqid in seqids]
+        return [BioSeq.DBSeq(self.adaptor, seqid) for seqid in seqids]
 
     def get_all_primary_ids(self):
         """All the primary_ids of the sequences in the database (OBSOLETE).
@@ -755,13 +755,13 @@ class BioSeqDatabase:
         return list(self.keys())
 
     def __getitem__(self, key):
-        """Return a DBSeqRecord for one of the sequences in the sub-database.
+        """Return a DBSeq for one of the sequences in the sub-database.
 
         Arguments:
          - key - The internal id for the sequence
 
         """
-        record = BioSeq.DBSeqRecord(self.adaptor, key)
+        record = BioSeq.DBSeq(self.adaptor, key)
         if record._biodatabase_id != self.dbid:
             raise KeyError("Entry %r does exist, but not in current name space" % key)
         return record
@@ -807,17 +807,17 @@ class BioSeqDatabase:
         return iter(self)
 
     def values(self):
-        """Iterate over DBSeqRecord objects in the namespace (sub database)."""
+        """Iterate over DBSeq objects in the namespace (sub database)."""
         for key in self:
             yield self[key]
 
     def items(self):
-        """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
+        """Iterate over (id, DBSeq) for the namespace (sub database)."""
         for key in self:
             yield key, self[key]
 
     def lookup(self, **kwargs):
-        """Return a DBSeqRecord using an acceptable identifier.
+        """Return a DBSeq using an acceptable identifier.
 
         Arguments:
          - kwargs - A single key-value pair where the key is one
@@ -835,15 +835,12 @@ class BioSeqDatabase:
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
         seqid = lookup_func(self.dbid, v)
-        return BioSeq.DBSeqRecord(self.adaptor, seqid)
+        return BioSeq.DBSeq(self.adaptor, seqid)
 
     def get_Seq_by_primary_id(self, seqid):
-        """Get a DBSeqRecord by the primary (internal) id (OBSOLETE).
+        """Get a DBSeq record by the primary (internal) id (OBSOLETE).
 
         Rather than db.get_Seq_by_primary_id(my_id) use db[my_id]
-
-        The name of this method is misleading since it returns a DBSeqRecord
-        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         import warnings
 
@@ -855,10 +852,10 @@ class BioSeqDatabase:
         return self[seqid]
 
     def load(self, record_iterator, fetch_NCBI_taxonomy=False):
-        """Load a set of SeqRecords into the BioSQL database.
+        """Load a set of Seq objects into the BioSQL database.
 
-        record_iterator is either a list of SeqRecord objects, or an
-        Iterator object that returns SeqRecord objects (such as the
+        record_iterator is either a list of Seq objects, or an
+        Iterator object that returns Seq objects (such as the
         output from the Bio.SeqIO.parse() function), which will be
         used to populate the database.
 

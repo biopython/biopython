@@ -736,8 +736,8 @@ class BlatPslWriter:
                 line.append(",".join(str(x) for x in hstarts) + ",")
 
                 if self.pslx:
-                    line.append(",".join(str(x.seq) for x in hsp.query_all) + ",")
-                    line.append(",".join(str(x.seq) for x in hsp.hit_all) + ",")
+                    line.append(",".join(str(x) for x in hsp.query_all) + ",")
+                    line.append(",".join(str(x) for x in hsp.hit_all) + ",")
 
                 qresult_lines.append("\t".join(str(x) for x in line))
 

@@ -17,7 +17,7 @@ except ImportError:
     sqlite3 = None
 
 from Bio import SearchIO
-from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
 
 
 class CheckRaw(unittest.TestCase):
@@ -151,8 +151,8 @@ def compare_attrs(obj_a, obj_b, attrs):
         # comparing using compare_record is too slow
         if attr in ("_hit", "_query") and (val_a is not None and val_b is not None):
             # compare seq directly if it's a contiguous hsp
-            if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
-                assert str(val_a.seq) == str(val_b.seq), "%s: %r vs %r" % (
+            if isinstance(val_a, Seq) and isinstance(val_b, Seq):
+                assert val_a == val_b, "%s: %r vs %r" % (
                     attr,
                     val_a,
                     val_b,

@@ -12,7 +12,6 @@ import unittest
 
 from Bio import SeqIO
 from Bio.Seq import Seq, MutableSeq
-from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import GC, seq1, seq3, GC_skew
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
@@ -57,17 +56,17 @@ class SeqUtilsTests(unittest.TestCase):
                 end = feature.location.end.position
                 table = int(feature.qualifiers["transl_table"][0])
                 if feature.strand == -1:
-                    seq = record.seq[start:end].reverse_complement()
+                    seq = record[start:end].reverse_complement()
                 else:
-                    seq = record.seq[start:end]
+                    seq = record[start:end]
                 # Double check we have the CDS sequence expected
                 # TODO - Use any cds_start option if/when added to deal with the met
                 a = "M" + str(seq[3:].translate(table))
                 b = feature.qualifiers["translation"][0] + "*"
                 self.assertEqual(a, b, "%r vs %r" % (a, b))
                 records.append(
-                    SeqRecord(
-                        seq,
+                    Seq(
+                        str(seq),
                         id=feature.qualifiers["protein_id"][0],
                         description=feature.qualifiers["product"][0],
                     )

@@ -12,8 +12,8 @@ the core class to deal with codon alignment in biopython.
 import warnings
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.SeqRecord import SeqRecord
 from Bio.Data import CodonTable
+from Bio.Seq import Seq
 from Bio import BiopythonWarning
 
 
@@ -24,10 +24,9 @@ from Bio.codonalign.chisq import chisqprob
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
 
-    >>> from Bio.SeqRecord import SeqRecord
-    >>> a = SeqRecord(CodonSeq("AAAACGTCG"), id="Alpha")
-    >>> b = SeqRecord(CodonSeq("AAA---TCG"), id="Beta")
-    >>> c = SeqRecord(CodonSeq("AAAAGGTGG"), id="Gamma")
+    >>> a = CodonSeq("AAAACGTCG", id="Alpha")
+    >>> b = CodonSeq("AAA---TCG", id="Beta")
+    >>> c = CodonSeq("AAAAGGTGG", id="Gamma")
     >>> print(CodonAlignment([a, b, c]))
     CodonAlignment with 3 rows and 9 columns (3 codons)
     AAAACGTCG Alpha
@@ -39,12 +38,13 @@ class CodonAlignment(MultipleSeqAlignment):
     def __init__(self, records="", name=None):
         """Initialize the class."""
         MultipleSeqAlignment.__init__(self, records)
+        names = [i.id for i in self._records]
 
         # check the type of the alignment to be nucleotide
         for rec in self:
-            if not isinstance(rec.seq, CodonSeq):
+            if not isinstance(rec, CodonSeq):
                 raise TypeError(
-                    "CodonSeq objects are expected in each SeqRecord in CodonAlignment"
+                    "The CodonAlignment is expected to contain CodonSeq objects only"
                 )
 
         if self.get_alignment_length() % 3 != 0:
@@ -115,7 +115,7 @@ class CodonAlignment(MultipleSeqAlignment):
                 BiopythonWarning,
             )
             merged = (
-                SeqRecord(seq=CodonSeq(str(left.seq) + str(right.seq)))
+                CodonSeq(str(left) + str(right))
                 for left, right in zip(self, other)
             )
             return CodonAlignment(merged)
@@ -140,10 +140,10 @@ class CodonAlignment(MultipleSeqAlignment):
         """Convert the CodonAlignment to a MultipleSeqAlignment.
 
         Return a MultipleSeqAlignment containing all the
-        SeqRecord in the CodonAlignment using Seq to store
+        Seq objects in the CodonAlignment using Seq to store
         sequences
         """
-        alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for rec in self._records]
+        alignments = [Seq(rec, id=rec.id) for rec in self._records]
         return MultipleSeqAlignment(alignments)
 
     def get_dn_ds_matrix(self, method="NG86", codon_table=None):
@@ -222,7 +222,7 @@ class CodonAlignment(MultipleSeqAlignment):
         It is the user's responsibility to ensure all the requirement
         needed by CodonAlignment is met.
         """
-        rec = [SeqRecord(CodonSeq(str(i.seq)), id=i.id) for i in align._records]
+        rec = [CodonSeq(str(i), id=i.id) for i in align._records]
         return cls(rec)
 
 
@@ -260,7 +260,7 @@ def mktest(codon_alns, codon_table=None, alpha=0.05):
     for codon_aln in codon_alns:
         codon_lst.append([])
         for i in codon_aln:
-            codon_lst[-1].append(_get_codon_list(i.seq))
+            codon_lst[-1].append(_get_codon_list(i))
     codon_set = []
     for i in range(codon_num):
         uniq_codons = []

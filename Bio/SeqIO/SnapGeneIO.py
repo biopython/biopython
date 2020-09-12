@@ -18,7 +18,6 @@ from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
@@ -49,165 +48,6 @@ def _iterate(handle):
             raise ValueError("Unexpected end of packet")
 
         yield (packet_type, length, data)
-
-
-def _parse_dna_packet(length, data, record):
-    """Parse a DNA sequence packet.
-
-    A DNA sequence packet contains a single byte flag followed by the
-    sequence itself.
-    """
-    if record.seq:
-        raise ValueError("The file contains more than one DNA packet")
-
-    flags, sequence = unpack(">B%ds" % (length - 1), data)
-    record.seq = Seq(sequence.decode("ASCII"))
-    record.annotations["molecule_type"] = "DNA"
-    if flags & 0x01:
-        record.annotations["topology"] = "circular"
-    else:
-        record.annotations["topology"] = "linear"
-
-
-def _parse_notes_packet(length, data, record):
-    """Parse a 'Notes' packet.
-
-    This type of packet contains some metadata about the sequence. They
-    are stored as a XML string with a 'Notes' root node.
-    """
-    xml = parseString(data.decode("ASCII"))
-    type = _get_child_value(xml, "Type")
-    if type == "Synthetic":
-        record.annotations["data_file_division"] = "SYN"
-    else:
-        record.annotations["data_file_division"] = "UNC"
-
-    date = _get_child_value(xml, "LastModified")
-    if date:
-        record.annotations["date"] = datetime.strptime(date, "%Y.%m.%d")
-
-    acc = _get_child_value(xml, "AccessionNumber")
-    if acc:
-        record.id = acc
-
-    comment = _get_child_value(xml, "Comments")
-    if comment:
-        record.name = comment.split(" ", 1)[0]
-        record.description = comment
-        if not acc:
-            record.id = record.name
-
-
-def _parse_cookie_packet(length, data, record):
-    """Parse a SnapGene cookie packet.
-
-    Every SnapGene file starts with a packet of this type. It acts as
-    a magic cookie identifying the file as a SnapGene file.
-    """
-    cookie, seq_type, exp_version, imp_version = unpack(">8sHHH", data)
-    if cookie.decode("ASCII") != "SnapGene":
-        raise ValueError("The file is not a valid SnapGene file")
-
-
-def _parse_features_packet(length, data, record):
-    """Parse a sequence features packet.
-
-    This packet stores sequence features (except primer binding sites,
-    which are in a dedicated Primers packet). The data is a XML string
-    starting with a 'Features' root node.
-    """
-    xml = parseString(data.decode("ASCII"))
-    for feature in xml.getElementsByTagName("Feature"):
-        quals = {}
-
-        type = _get_attribute_value(feature, "type", default="misc_feature")
-        label = _get_attribute_value(feature, "name")
-        if label:
-            quals["label"] = [label]
-
-        strand = +1
-        directionality = int(
-            _get_attribute_value(feature, "directionality", default="1")
-        )
-        if directionality == 2:
-            strand = -1
-
-        location = None
-        for segment in feature.getElementsByTagName("Segment"):
-            rng = _get_attribute_value(segment, "range")
-            start, end = [int(x) for x in rng.split("-")]
-            # Account for SnapGene's 1-based coordinates
-            start = start - 1
-            if not location:
-                location = FeatureLocation(start, end, strand=strand)
-            else:
-                location = location + FeatureLocation(start, end, strand=strand)
-        if not location:
-            raise ValueError("Missing feature location")
-
-        for qualifier in feature.getElementsByTagName("Q"):
-            qname = _get_attribute_value(
-                qualifier, "name", error="Missing qualifier name"
-            )
-            qvalues = []
-            for value in qualifier.getElementsByTagName("V"):
-                if value.hasAttribute("text"):
-                    qvalues.append(_decode(value.attributes["text"].value))
-                elif value.hasAttribute("predef"):
-                    qvalues.append(_decode(value.attributes["predef"].value))
-                elif value.hasAttribute("int"):
-                    qvalues.append(int(value.attributes["int"].value))
-            quals[qname] = qvalues
-
-        feature = SeqFeature(location, type=type, qualifiers=quals)
-        record.features.append(feature)
-
-
-def _parse_primers_packet(length, data, record):
-    """Parse a Primers packet.
-
-    A Primers packet is similar to a Features packet but specifically
-    stores primer binding features. The data is a XML string starting
-    with a 'Primers' root node.
-    """
-    xml = parseString(data.decode("ASCII"))
-    for primer in xml.getElementsByTagName("Primer"):
-        quals = {}
-
-        name = _get_attribute_value(primer, "name")
-        if name:
-            quals["label"] = [name]
-
-        for site in primer.getElementsByTagName("BindingSite"):
-            rng = _get_attribute_value(
-                site, "location", error="Missing binding site location"
-            )
-            start, end = [int(x) for x in rng.split("-")]
-
-            strand = int(_get_attribute_value(site, "boundStrand", default="0"))
-            if strand == 1:
-                strand = -1
-            else:
-                strand = +1
-
-            feature = SeqFeature(
-                FeatureLocation(start, end, strand=strand),
-                type="primer_bind",
-                qualifiers=quals,
-            )
-            record.features.append(feature)
-
-
-_packet_handlers = {
-    0x00: _parse_dna_packet,
-    0x05: _parse_primers_packet,
-    0x06: _parse_notes_packet,
-    0x0A: _parse_features_packet,
-}
-
-
-# Helper functions to process the XML data in
-# some of the segments
 
 
 def _decode(text):
@@ -242,7 +82,7 @@ class SnapGeneIterator(SequenceIterator):
     """Parser for SnapGene files."""
 
     def __init__(self, source):
-        """Parse a SnapGene file and return a SeqRecord object.
+        """Parse a SnapGene file and return a Seq object.
 
         Argument source is a file-like object or a path to a file.
 
@@ -252,14 +92,163 @@ class SnapGeneIterator(SequenceIterator):
         super().__init__(source, mode="b", fmt="SnapGene")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
+    def _parse_cookie_packet(self, length, data):
+        """Parse a SnapGene cookie packet.
+
+        Every SnapGene file starts with a packet of this type. It acts as
+        a magic cookie identifying the file as a SnapGene file.
+        """
+        cookie, seq_type, exp_version, imp_version = unpack(">8sHHH", data)
+        if cookie.decode("ASCII") != "SnapGene":
+            raise ValueError("The file is not a valid SnapGene file")
+
+    def _parse_dna_packet(self, length, data):
+        """Parse a DNA sequence packet.
+
+        A DNA sequence packet contains a single byte flag followed by the
+        sequence itself.
+        """
+        if self.seq:
+            raise ValueError("The file contains more than one DNA packet")
+
+        flags, sequence = unpack(">B%ds" % (length - 1), data)
+        self.seq = sequence.decode("ASCII")
+        self.annotations["molecule_type"] = "DNA"
+        if flags & 0x01:
+            self.annotations["topology"] = "circular"
+        else:
+            self.annotations["topology"] = "linear"
+
+    def _parse_primers_packet(self, length, data):
+        """Parse a Primers packet.
+
+        A Primers packet is similar to a Features packet but specifically
+        stores primer binding features. The data is a XML string starting
+        with a 'Primers' root node.
+        """
+        xml = parseString(data.decode("ASCII"))
+        for primer in xml.getElementsByTagName("Primer"):
+            quals = {}
+
+            name = _get_attribute_value(primer, "name")
+            if name:
+                quals["label"] = [name]
+
+            for site in primer.getElementsByTagName("BindingSite"):
+                rng = _get_attribute_value(
+                    site, "location", error="Missing binding site location"
+                )
+                start, end = [int(x) for x in rng.split("-")]
+
+                strand = int(_get_attribute_value(site, "boundStrand", default="0"))
+                if strand == 1:
+                    strand = -1
+                else:
+                    strand = +1
+
+                feature = SeqFeature(
+                    FeatureLocation(start, end, strand=strand),
+                    type="primer_bind",
+                    qualifiers=quals,
+                )
+                self.features.append(feature)
+
+    def _parse_notes_packet(self, length, data):
+        """Parse a 'Notes' packet.
+
+        This type of packet contains some metadata about the sequence. They
+        are stored as a XML string with a 'Notes' root node.
+        """
+        xml = parseString(data.decode("ASCII"))
+        type = _get_child_value(xml, "Type")
+        if type == "Synthetic":
+            self.annotations["data_file_division"] = "SYN"
+        else:
+            self.annotations["data_file_division"] = "UNC"
+
+        date = _get_child_value(xml, "LastModified")
+        if date:
+            self.annotations["date"] = datetime.strptime(date, "%Y.%m.%d")
+
+        acc = _get_child_value(xml, "AccessionNumber")
+        if acc:
+            self.id = acc
+
+        comment = _get_child_value(xml, "Comments")
+        if comment:
+            self.name = comment.split(" ", 1)[0]
+            self.description = comment
+            if not acc:
+                self.id = self.name
+
+    def _parse_features_packet(self, length, data):
+        """Parse a sequence features packet.
+
+        This packet stores sequence features (except primer binding sites,
+        which are in a dedicated Primers packet). The data is a XML string
+        starting with a 'Features' root node.
+        """
+        xml = parseString(data.decode("ASCII"))
+        for feature in xml.getElementsByTagName("Feature"):
+            quals = {}
+
+            type = _get_attribute_value(feature, "type", default="misc_feature")
+            label = _get_attribute_value(feature, "name")
+            if label:
+                quals["label"] = [label]
+
+            strand = +1
+            directionality = int(
+                _get_attribute_value(feature, "directionality", default="1")
+            )
+            if directionality == 2:
+                strand = -1
+
+            location = None
+            for segment in feature.getElementsByTagName("Segment"):
+                rng = _get_attribute_value(segment, "range")
+                start, end = [int(x) for x in rng.split("-")]
+                # Account for SnapGene's 1-based coordinates
+                start = start - 1
+                if not location:
+                    location = FeatureLocation(start, end, strand=strand)
+                else:
+                    location = location + FeatureLocation(start, end, strand=strand)
+            if not location:
+                raise ValueError("Missing feature location")
+
+            for qualifier in feature.getElementsByTagName("Q"):
+                qname = _get_attribute_value(
+                    qualifier, "name", error="Missing qualifier name"
+                )
+                qvalues = []
+                for value in qualifier.getElementsByTagName("V"):
+                    if value.hasAttribute("text"):
+                        qvalues.append(_decode(value.attributes["text"].value))
+                    elif value.hasAttribute("predef"):
+                        qvalues.append(_decode(value.attributes["predef"].value))
+                    elif value.hasAttribute("int"):
+                        qvalues.append(int(value.attributes["int"].value))
+                quals[qname] = qvalues
+
+            feature = SeqFeature(location, type=type, qualifiers=quals)
+            self.features.append(feature)
+
     def iterate(self, handle):
         """Iterate over the records in the SnapGene file."""
-        record = SeqRecord(None)
+        self.id = None
+        self.name = None
+        self.description = None
+        self.seq = None
+        self.annotations = {}
+        self.features = []
+
         packets = _iterate(handle)
+
         try:
             packet_type, length, data = next(packets)
         except StopIteration:
@@ -267,14 +256,19 @@ class SnapGeneIterator(SequenceIterator):
 
         if packet_type != 0x09:
             raise ValueError("The file does not start with a SnapGene cookie packet")
-        _parse_cookie_packet(length, data, record)
+        self._parse_cookie_packet(length, data)
 
         for (packet_type, length, data) in packets:
-            handler = _packet_handlers.get(packet_type)
-            if handler is not None:
-                handler(length, data, record)
+            if packet_type == 0x00:
+                self._parse_dna_packet(length, data)
+            elif packet_type == 0x05:
+                self._parse_primers_packet(length, data)
+            elif packet_type == 0x06:
+                self._parse_notes_packet(length, data)
+            elif packet_type == 0x0A:
+                self._parse_features_packet(length, data)
 
-        if not record.seq:
+        if self.seq is None:
             raise ValueError("No DNA packet in file")
 
-        yield record
+        yield Seq(self.seq, id=self.id, name=self.name, description=self.description, annotations=self.annotations, features=self.features)

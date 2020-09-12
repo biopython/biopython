@@ -22,7 +22,6 @@ from Bio import BiopythonWarning
 from Bio import BiopythonParserWarning
 
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 
 # GenBank stuff to test:
@@ -103,25 +102,25 @@ class TestBasics(unittest.TestCase):
         s = GenBank.Scanner.GenBankScanner()
         c = GenBank._FeatureConsumer(True)
         s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG531_PATCH")
+        self.assertEqual(c._name, "HG531_PATCH")
         self.assertEqual(c._expected_size, 1000000)
         line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
         s = GenBank.Scanner.GenBankScanner()
         c = GenBank._FeatureConsumer(True)
         s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG531_PATCH")
+        self.assertEqual(c._name, "HG531_PATCH")
         self.assertEqual(c._expected_size, 759984)
         line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
         s = GenBank.Scanner.GenBankScanner()
         c = GenBank._FeatureConsumer(True)
         s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG506_HG1000_1_PATCH")
+        self.assertEqual(c._name, "HG506_HG1000_1_PATCH")
         self.assertEqual(c._expected_size, 814959)
         line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
         s = GenBank.Scanner.GenBankScanner()
         c = GenBank._FeatureConsumer(True)
         s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG506_HG1000_1_PATCH")
+        self.assertEqual(c._name, "HG506_HG1000_1_PATCH")
         self.assertEqual(c._expected_size, 1219964)
 
 
@@ -3354,7 +3353,7 @@ class TestFeatureParser(unittest.TestCase):
         features,
         dbxrefs,
     ):
-        self.assertEqual(self.shorten(record.seq), seq)
+        self.assertEqual(self.shorten(record), seq)
         self.assertEqual(record.id, id)
         self.assertEqual(record.name, name)
         self.assertEqual(record.description, description)
@@ -7496,19 +7495,19 @@ class GenBankTests(unittest.TestCase):
                 seq_record = SeqIO.read(handle, "genbank")
         seq_features = seq_record.features
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.lower()),
+            str(seq_features[1].extract(seq_record).lower()),
             "atgccctataaaacccagggctgccttggaaaaggcgcaaccccaaccccctcgagccgcggcatataa",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.lower()),
+            str(seq_features[2].extract(seq_record).lower()),
             "atgccgcggctcgagggggttggggttgcgccttttccaaggcagccctgggttttatag",
         )
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.translate()),
+            str(seq_features[1].extract(seq_record).translate()),
             "MPYKTQGCLGKGATPTPSSRGI*",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.translate()),
+            str(seq_features[2].extract(seq_record).translate()),
             "MPRLEGVGVAPFPRQPWVL*",
         )
 
@@ -7579,9 +7578,9 @@ class GenBankTests(unittest.TestCase):
         path = "GenBank/NC_005816.gb"
         record = SeqIO.read(path, "gb")
         self.assertEqual(record.dbxrefs, ["Project:58037"])
-        gb = record.format("gb")
+        gb = format(record, "gb")
         self.assertIn("\nDBLINK      Project: 58037\n", gb)
-        embl = record.format("embl")
+        embl = format(record, "embl")
         self.assertIn("XX\nPR   Project:58037;\nXX\n", embl)
 
     def test_dblink_two(self):
@@ -7589,7 +7588,7 @@ class GenBankTests(unittest.TestCase):
         path = "GenBank/NP_416719.gbwithparts"
         record = SeqIO.read(path, "gb")
         self.assertEqual(record.dbxrefs, ["Project:57779", "BioProject:PRJNA57779"])
-        gb = record.format("gb")
+        gb = format(record, "gb")
         self.assertIn(
             """
 DBLINK      Project: 57779
@@ -7597,14 +7596,14 @@ DBLINK      Project: 57779
 KEYWORDS    """,
             gb,
         )
-        embl = record.format("embl")
+        embl = format(record, "embl")
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
         """Parse GenBank/EMBL paired records with PR project entry: GenBank."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
-        gb = record.format("gb")
+        gb = format(record, "gb")
         self.assertIn(
             """
 DBLINK      BioProject: PRJNA16232
@@ -7613,7 +7612,7 @@ KEYWORDS    """,
             gb,
         )
         # Also check EMBL output
-        embl = record.format("embl")
+        embl = format(record, "embl")
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_dbline_embl_gb(self):
@@ -7621,7 +7620,7 @@ KEYWORDS    """,
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertIn("Project:PRJNA16232", record.dbxrefs)
-        gb = record.format("gb")
+        gb = format(record, "gb")
         self.assertIn(
             """
 DBLINK      Project: PRJNA16232
@@ -7632,7 +7631,7 @@ DBLINK      Project: PRJNA16232
 KEYWORDS    """,
             gb,
         )
-        embl = record.format("embl")
+        embl = format(record, "embl")
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_structured_comment_parsing(self):
@@ -7657,7 +7656,7 @@ KEYWORDS    """,
         )
         path = "GenBank/HM138502_output.gbk"
         with open(path) as ifile:
-            self.assertEqual(record.format("gb"), ifile.read())
+            self.assertEqual(format(record, "gb"), ifile.read())
         # FluData structured comment
         path = "GenBank/EU851978.gbk"
         record = SeqIO.read(path, "genbank")
@@ -7667,7 +7666,7 @@ KEYWORDS    """,
         self.assertEqual(len(record.annotations["structured_comment"]["FluData"]), 5)
         path = "GenBank/EU851978_output.gbk"
         with open(path) as ifile:
-            self.assertEqual(record.format("gb"), ifile.read())
+            self.assertEqual(format(record, "gb"), ifile.read())
         # Assembly-Data structured comment
         path = "GenBank/KF527485.gbk"
         record = SeqIO.read(path, "genbank")
@@ -7682,7 +7681,7 @@ KEYWORDS    """,
         )
         path = "GenBank/KF527485_output.gbk"
         with open(path) as ifile:
-            self.assertEqual(record.format("gb"), ifile.read())
+            self.assertEqual(format(record, "gb"), ifile.read())
         # No structured comment in NC_000932.gb, just a regular comment
         path = "GenBank/NC_000932.gb"
         record = SeqIO.read(path, "genbank")
@@ -7806,9 +7805,8 @@ KEYWORDS    """,
             ("old_max_name_length_was_26", 9, True),
         ]:  # 1 digit
             # Make the length match the desired target
-            record = original[:]
+            record = original[:0] + "N" * seq_len
             # TODO - Implement Seq * int
-            record.seq = Seq("N" * seq_len)
             record.annotations["molecule_type"] = original.annotations["molecule_type"]
             # Set the identifier to the desired name
             record.id = record.name = name
@@ -7816,13 +7814,13 @@ KEYWORDS    """,
             if not ok:
                 # e.g. ValueError:
                 # Locus identifier 'excessively_long_at_22' is too long
-                self.assertRaises(ValueError, record.format, "gb")
+                self.assertRaises(ValueError, record.__format__, "gb")
                 continue
             with warnings.catch_warnings():
                 # e.g. BiopythonWarning: Stealing space from length
                 # field to allow long name in LOCUS line
                 warnings.simplefilter("ignore", BiopythonWarning)
-                # output = record.format("gb")
+                # output = format(record, "gb")
                 handle = StringIO()
                 self.assertEqual(1, SeqIO.write(record, handle, "gb"))
             handle.seek(0)
@@ -7844,10 +7842,9 @@ KEYWORDS    """,
 
     def test_genbank_date_default(self):
         """Check if default date is handled correctly."""
-        sequence_object = Seq("ATGC")
         # check if default value is inserted correctly
-        record = SeqRecord(
-            sequence_object,
+        record = Seq(
+            "ATGC",
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
@@ -7861,9 +7858,8 @@ KEYWORDS    """,
 
     def test_genbank_date_correct(self):
         """Check if user provided date is inserted correctly."""
-        sequence_object = Seq("ATGC")
-        record = SeqRecord(
-            sequence_object,
+        record = Seq(
+            "ATGC",
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
@@ -7878,9 +7874,8 @@ KEYWORDS    """,
 
     def test_genbank_date_list(self):
         """Check if date lists are handled correctly."""
-        sequence_object = Seq("ATGC")
-        record = SeqRecord(
-            sequence_object,
+        record = Seq(
+            "ATGC",
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
@@ -7893,8 +7888,8 @@ KEYWORDS    """,
         gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
-        record = SeqRecord(
-            sequence_object,
+        record = Seq(
+            "ATGC",
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
@@ -7909,9 +7904,8 @@ KEYWORDS    """,
 
     def test_genbank_date_datetime(self):
         """Check if datetime objects are handled correctly."""
-        sequence_object = Seq("ATGC")
-        record = SeqRecord(
-            sequence_object,
+        record = Seq(
+            "ATGC",
             id="123456789",
             name="UnitTest",
             description="Test case for date parsing",
@@ -7928,10 +7922,9 @@ KEYWORDS    """,
         """Check if invalid dates are treated as default."""
         invalid_dates = ("invalid date", "29-2-1981", "35-1-2018", "1-1-80", "1-9-99")
 
-        sequence_object = Seq("ATGC")
         for invalid_date in invalid_dates:
-            record = SeqRecord(
-                sequence_object,
+            record = Seq(
+                "ATGC",
                 id="123456789",
                 name="UnitTest",
                 description="Test case for date parsing",
@@ -7975,7 +7968,7 @@ KEYWORDS    """,
             record_in = SeqIO.read(out_tmp, "genbank")
             self.assertEqual(record_in.id, "DS830848.1")
             self.assertEqual(record_in.name, "AZZZAA021234567891234")
-            self.assertEqual(len(record_in.seq), 2147483647)
+            self.assertEqual(len(record_in), 2147483647)
 
     if sys.maxsize > 2147483647:
 
@@ -8012,7 +8005,7 @@ KEYWORDS    """,
                 record_in = SeqIO.read(out_tmp, "genbank")
                 self.assertEqual(record_in.id, "DS830848.1")
                 self.assertEqual(record_in.name, "AZZZAA02123456789")
-                self.assertEqual(len(record_in.seq), 10000000000)
+                self.assertEqual(len(record_in), 10000000000)
 
             def read_longer_than_maxsize():
                 path = "GenBank/DS830848.gb"
@@ -8098,17 +8091,17 @@ class LineOneTests(unittest.TestCase):
                 scanner = GenBank.Scanner.GenBankScanner()
                 consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
                 scanner._feed_first_line(consumer, line)
-                t = consumer.data.annotations.get("topology", None)
+                t = consumer._annotations.get("topology", None)
                 self.assertEqual(
                     t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
                 )
-                mt = consumer.data.annotations.get("molecule_type", None)
+                mt = consumer._annotations.get("molecule_type", None)
                 self.assertEqual(
                     mt,
                     mol_type,
                     "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
                 )
-                d = consumer.data.annotations.get("data_file_division", None)
+                d = consumer._annotations.get("data_file_division", None)
                 self.assertEqual(
                     d, div, "Wrong division %r not %r from %r" % (d, div, line)
                 )
@@ -8170,17 +8163,17 @@ class LineOneTests(unittest.TestCase):
             scanner = GenBank.Scanner.EmblScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)
-            t = consumer.data.annotations.get("topology", None)
+            t = consumer._annotations.get("topology", None)
             self.assertEqual(
                 t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
             )
-            mt = consumer.data.annotations.get("molecule_type", None)
+            mt = consumer._annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
                 "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
             )
-            d = consumer.data.annotations.get("data_file_division", None)
+            d = consumer._annotations.get("data_file_division", None)
             self.assertEqual(
                 d, div, "Wrong division %r not %r from %r" % (d, div, line)
             )
@@ -8196,17 +8189,17 @@ class LineOneTests(unittest.TestCase):
             scanner = GenBank.Scanner._ImgtScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)
-            t = consumer.data.annotations.get("topology", None)
+            t = consumer._annotations.get("topology", None)
             self.assertEqual(
                 t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
             )
-            mt = consumer.data.annotations.get("molecule_type", None)
+            mt = consumer._annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
                 "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
             )
-            d = consumer.data.annotations.get("data_file_division", None)
+            d = consumer._annotations.get("data_file_division", None)
             self.assertEqual(
                 d, div, "Wrong division %r not %r from %r" % (d, div, line)
             )
@@ -8218,35 +8211,34 @@ class OutputTests(unittest.TestCase):
     def test_mad_dots(self):
         """Writing and reading back accesssion.version variants."""
         for identifier in ["example", "example.1a", "example.1.2", "example.1-2"]:
-            old = SeqRecord(
-                Seq("ACGT"),
+            old = Seq(
+                "ACGT",
                 id=identifier,
                 name=identifier,
                 description="mad dots",
                 annotations={"molecule_type": "DNA"},
             )
-            new = SeqIO.read(StringIO(old.format("gb")), "gb")
+            new = SeqIO.read(StringIO(format(old, "gb")), "gb")
             self.assertEqual(old.id, new.id)
             self.assertEqual(old.name, new.name)
             self.assertEqual(old.description, new.description)
-            self.assertEqual(old.seq, new.seq)
+            self.assertEqual(old, new)
 
     def test_seqrecord_default_description(self):
-        """Read in file using SeqRecord default description."""
-        old = SeqRecord(
-            Seq("ACGT"),
+        """Read in file using Seq default description."""
+        old = Seq("ACGT",
             id="example",
             name="short",
             annotations={"molecule_type": "DNA"},
         )
-        self.assertEqual(old.description, "<unknown description>")
-        txt = old.format("gb")
+        self.assertEqual(old.description, "")
+        txt = format(old, "gb")
         self.assertIn("DEFINITION  .\n", txt)
         new = SeqIO.read(StringIO(txt), "gb")
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual("", new.description)
-        self.assertEqual(old.seq, new.seq)
+        self.assertEqual(old, new)
 
     # Evil hack with 000 to manipulate sort order to ensure this is
     # tested first (otherwise something silences the warning)
@@ -8342,7 +8334,7 @@ class GenBankScannerTests(unittest.TestCase):
         # number of records, should be 10
         self.assertEqual(len(l_cds_f), 10)
         # Seq ID
-        self.assertEqual(l_cds_f[0].id, "<unknown id>")
+        self.assertEqual(l_cds_f[0].id, None)
         self.assertEqual(l_cds_f[0].name, "YP_pPCP01")
 
         # Test parse CDS features on
@@ -8359,7 +8351,7 @@ class GenBankScannerTests(unittest.TestCase):
         # Seq ID
         self.assertEqual(l_cds_combined[0].id, "rps12")
         self.assertEqual(l_cds_combined[0].description, "ribosomal protein S12")
-        self.assertEqual(l_cds_combined[94].id, "<unknown id>")
+        self.assertEqual(l_cds_combined[94].id, None)
         self.assertEqual(l_cds_combined[94].description, "hypothetical protein")
 
     def test_genbank_interaction(self):

@@ -65,7 +65,7 @@ class TCoffeeApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
     def test_TCoffee_pir(self):
@@ -88,7 +88,7 @@ class TCoffeeApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
     def test_TCoffee_clustalw(self):
@@ -114,7 +114,7 @@ class TCoffeeApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
     def test_TCoffee_phylip(self):
@@ -141,7 +141,7 @@ class TCoffeeApplication(unittest.TestCase):
             # TCoffee does strict 10 character truncation as per original PHYLIP
             self.assertEqual(old.id[:10], new.id[:10])
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
     def test_TCoffee_msf(self):
@@ -167,7 +167,7 @@ class TCoffeeApplication(unittest.TestCase):
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(
-                str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                str(new).replace("-", ""), str(old).replace("-", "")
             )
 
 

@@ -47,7 +47,7 @@ strings, with one character for each letter in the associated sequence:
 
     >>> for record in align:
     ...     print(record.id)
-    ...     print(record.seq)
+    ...     print(record)
     ...     print(record.letter_annotations['secondary_structure'])
     AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -56,7 +56,7 @@ strings, with one character for each letter in the associated sequence:
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
-Any general annotation for each row is recorded in the SeqRecord's annotations
+Any general annotation for each row is recorded in the Seq object's annotations
 dictionary.  Any per-column annotation for the entire alignment in in the
 alignment's column annotations dictionary, such as the secondary structure
 consensus in this example:
@@ -69,7 +69,7 @@ consensus in this example:
 You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
-    >>> print(align.format("fasta"))
+    >>> print(format(align, "fasta"))
     >AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
     GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -81,7 +81,7 @@ using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 Most output formats won't be able to hold the annotation possible in a
 Stockholm file:
 
-    >>> print(align.format("stockholm"))
+    >>> print(format(align, "stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -102,13 +102,13 @@ allows this simpler layout, and it is more likely to be understood by other
 tools.
 
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
-iterate over the alignment rows as SeqRecord objects - rather than working
-with Alignnment objects. Again, if you want to you can specify this is RNA:
+iterate over the alignment rows as Seq objects - rather than working with
+Alignnment objects. Again, if you want to you can specify this is RNA:
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm"):
     ...     print(record.id)
-    ...     print(record.seq)
+    ...     print(record)
     ...     print(record.letter_annotations['secondary_structure'])
     AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -117,11 +117,11 @@ with Alignnment objects. Again, if you want to you can specify this is RNA:
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
-Remember that if you slice a SeqRecord, the per-letter-annotations like the
+Remember that if you slice a Seq object, the per-letter-annotations like the
 secondary structure string here, are also sliced:
 
     >>> sub_record = record[10:20]
-    >>> print(sub_record.seq)
+    >>> print(sub_record)
     AUCGUUUUAC
     >>> print(sub_record.letter_annotations['secondary_structure'])
     -------<<<
@@ -137,7 +137,7 @@ slicing specific columns of an alignment will slice any per-column-annotations:
 
 You can also see this in the Stockholm output of this partial-alignment:
 
-    >>> print(part_align.format("stockholm"))
+    >>> print(format(part_align, "stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UCAACACUCU
@@ -157,7 +157,6 @@ You can also see this in the Stockholm output of this partial-alignment:
 from collections import OrderedDict
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -218,8 +217,8 @@ class StockholmWriter(SequentialAlignmentWriter):
         self.handle.write("//\n")
 
     def _write_record(self, record):
-        """Write a single SeqRecord to the file (PRIVATE)."""
-        if self._length_of_sequences != len(record.seq):
+        """Write a single Seq object to the file (PRIVATE)."""
+        if self._length_of_sequences != len(record):
             raise ValueError("Sequences must all be the same length")
 
         # For the case for stockholm to stockholm, try and use record.name
@@ -247,7 +246,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         if seq_name in self._ids_written:
             raise ValueError("Duplicate record identifier: %s" % seq_name)
         self._ids_written.append(seq_name)
-        self.handle.write("%s %s\n" % (seq_name, str(record.seq)))
+        self.handle.write("%s %s\n" % (seq_name, str(record)))
 
         # The recommended placement for GS lines (per sequence annotation)
         # is above the alignment (as a header block) or just below the
@@ -295,7 +294,7 @@ class StockholmWriter(SequentialAlignmentWriter):
 
         # GR = per row per column sequence annotation
         for key, value in record.letter_annotations.items():
-            if key in self.pfam_gr_mapping and len(str(value)) == len(record.seq):
+            if key in self.pfam_gr_mapping and len(str(value)) == len(record):
                 data = self.clean(str(value))
                 if data:
                     self.handle.write(
@@ -316,7 +315,7 @@ class StockholmIterator(AlignmentIterator):
 
     This parser will detect if the Stockholm file follows the PFAM
     conventions for sequence specific meta-data (lines starting #=GS
-    and #=GR) and populates the SeqRecord fields accordingly.
+    and #=GR) and populates the Seq fields accordingly.
 
     Any annotation which does not follow the PFAM conventions is currently
     ignored.
@@ -492,8 +491,7 @@ class StockholmIterator(AlignmentIterator):
                         "Sequences have different lengths, or repeated identifier"
                     )
                 name, start, end = self._identifier_split(seq_id)
-                record = SeqRecord(
-                    Seq(seq),
+                record = Seq(seq,
                     id=seq_id,
                     name=name,
                     description=seq_id,

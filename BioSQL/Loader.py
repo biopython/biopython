@@ -28,7 +28,7 @@ from Bio.SeqFeature import UnknownPosition
 
 
 class DatabaseLoader:
-    """Object used to load SeqRecord objects into a BioSQL database."""
+    """Object used to load Seq objects into a BioSQL database."""
 
     def __init__(self, adaptor, dbid, fetch_NCBI_taxonomy=False):
         """Initialize with connection information for the database.
@@ -54,7 +54,7 @@ class DatabaseLoader:
         self.fetch_NCBI_taxonomy = fetch_NCBI_taxonomy
 
     def load_seqrecord(self, record):
-        """Load a Biopython SeqRecord into the database."""
+        """Load an annotated Biopython Seq object into the database."""
         bioentry_id = self._load_bioentry_table(record)
         self._load_bioentry_date(record, bioentry_id)
         self._load_biosequence(record, bioentry_id)
@@ -71,7 +71,7 @@ class DatabaseLoader:
     def _get_ontology_id(self, name, definition=None):
         """Return identifier for the named ontology (PRIVATE).
 
-        This looks through the onotology table for a the given entry name.
+        This looks through the ontology table for a the given entry name.
         If it is not found, a row is added for this ontology (using the
         definition if supplied).  In either case, the id corresponding to
         the provided name is returned, so that you can reference it in
@@ -130,7 +130,7 @@ class DatabaseLoader:
         """Get the taxon id for this record (PRIVATE).
 
         Arguments:
-         - record - a SeqRecord object
+         - record - an annotated Seq object
 
         This searches the taxon/taxon_name tables using the
         NCBI taxon ID, scientific name and common name to find
@@ -391,7 +391,7 @@ class DatabaseLoader:
 
         Otherwise the NCBI taxon ID, scientific name and common name are
         recorded as a minimal stub entry in the taxon and taxon_name tables.
-        Any partial information about the lineage from the SeqRecord is NOT
+        Any partial information about the lineage from the Seq object is NOT
         recorded.  This should mean that (re)running the BioSQL script
         load_ncbi_taxonomy.pl can fill in the taxonomy lineage.
 
@@ -592,7 +592,7 @@ class DatabaseLoader:
         """Fill the bioentry table with sequence information (PRIVATE).
 
         Arguments:
-         - record - SeqRecord object to add to the database.
+         - record - annotated Seq object to add to the database.
 
         """
         # get the pertinent info and insert it
@@ -671,7 +671,7 @@ class DatabaseLoader:
     def _load_bioentry_date(self, record, bioentry_id):
         """Add the effective date of the entry into the database (PRIVATE).
 
-        record - a SeqRecord object with an annotated date
+        record - a Seq object with an annotated date
         bioentry_id - corresponding database identifier
         """
         # dates are GenBank style, like:
@@ -689,14 +689,14 @@ class DatabaseLoader:
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_biosequence(self, record, bioentry_id):
-        """Record SeqRecord's sequence and alphabet in DB (PRIVATE).
+        """Record Seq object's sequence and alphabet in DB (PRIVATE).
 
         Arguments:
-         - record - a SeqRecord object with a seq property
+         - record - a Seq object
          - bioentry_id - corresponding database identifier
 
         """
-        if record.seq is None:
+        if len(record) == 0:
             # The biosequence table entry is optional, so if we haven't
             # got a sequence, we don't need to write to the table.
             return
@@ -711,23 +711,23 @@ class DatabaseLoader:
         else:
             alphabet = "unknown"
 
-        if isinstance(record.seq, UnknownSeq):
+        if isinstance(record, UnknownSeq) or record.defined is False:
             seq_str = None
         else:
-            seq_str = str(record.seq)
+            seq_str = str(record)
 
         sql = (
             "INSERT INTO biosequence (bioentry_id, version, "
             "length, seq, alphabet) "
             "VALUES (%s, 0, %s, %s, %s)"
         )
-        self.adaptor.execute(sql, (bioentry_id, len(record.seq), seq_str, alphabet))
+        self.adaptor.execute(sql, (bioentry_id, len(record), seq_str, alphabet))
 
     def _load_comment(self, record, bioentry_id):
-        """Record a SeqRecord's annotated comment in the database (PRIVATE).
+        """Record a Seq object's annotated comment in the database (PRIVATE).
 
         Arguments:
-         - record - a SeqRecord object with an annotated comment
+         - record - a Seq object with an annotated comment
          - bioentry_id - corresponding database identifier
 
         """
@@ -749,14 +749,14 @@ class DatabaseLoader:
             self.adaptor.execute(sql, (bioentry_id, comment, index + 1))
 
     def _load_annotations(self, record, bioentry_id):
-        """Record a SeqRecord's misc annotations in the database (PRIVATE).
+        """Record a Seq object's misc annotations in the database (PRIVATE).
 
         The annotation strings are recorded in the bioentry_qualifier_value
         table, except for special cases like the reference, comment and
         taxonomy which are handled with their own tables.
 
         Arguments:
-         - record - a SeqRecord object with an annotations dictionary
+         - record - a Seq object with an annotations dictionary
          - bioentry_id - corresponding database identifier
 
         """
@@ -796,10 +796,10 @@ class DatabaseLoader:
                 #      % (key, type(value))
 
     def _load_reference(self, reference, rank, bioentry_id):
-        """Record SeqRecord's annotated references in the database (PRIVATE).
+        """Record Seq object's annotated references in the database (PRIVATE).
 
         Arguments:
-         - record - a SeqRecord object with annotated references
+         - record - a Seq object with annotated references
          - bioentry_id - corresponding database identifier
 
         """

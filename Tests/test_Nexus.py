@@ -19,7 +19,6 @@ import sys
 from io import StringIO
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
-from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
 from Bio import SeqIO
@@ -86,8 +85,7 @@ class NexusTest1(unittest.TestCase):
     def test_write_with_dups(self):
         # see issue: biopython/Bio/Nexus/Nexus.py _unique_label() eval error #633
         records = [
-            SeqRecord(
-                Seq("ATGCTGCTGAT"), id="foo", annotations={"molecule_type": "DNA"}
+                Seq("ATGCTGCTGAT", id="foo", annotations={"molecule_type": "DNA"}
             )
             for _ in range(4)
         ]
@@ -733,9 +731,7 @@ usertype matrix_test stepmatrix=5
     def test_write_alignment(self):
         # Default causes no interleave (columns <= 1000)
         records = [
-            SeqRecord(
-                Seq("ATGCTGCTGA" * 90), id=_id, annotations={"molecule_type": "DNA"}
-            )
+            Seq("ATGCTGCTGA" * 90, id=_id, annotations={"molecule_type": "DNA"})
             for _id in ["foo", "bar", "baz"]
         ]
         a = MultipleSeqAlignment(records)
@@ -748,9 +744,7 @@ usertype matrix_test stepmatrix=5
 
         # Default causes interleave (columns > 1000)
         records = [
-            SeqRecord(
-                Seq("ATGCTGCTGA" * 110), id=_id, annotations={"molecule_type": "DNA"}
-            )
+            Seq("ATGCTGCTGA" * 110, id=_id, annotations={"molecule_type": "DNA"})
             for _id in ["foo", "bar", "baz"]
         ]
         a = MultipleSeqAlignment(records)
@@ -763,9 +757,7 @@ usertype matrix_test stepmatrix=5
 
         # Override interleave: True
         records = [
-            SeqRecord(
-                Seq("ATGCTGCTGA" * 9), id=_id, annotations={"molecule_type": "DNA"}
-            )
+            Seq("ATGCTGCTGA" * 9, id=_id, annotations={"molecule_type": "DNA"})
             for _id in ["foo", "bar", "baz"]
         ]
         a = MultipleSeqAlignment(records)
@@ -778,9 +770,7 @@ usertype matrix_test stepmatrix=5
 
         # Override interleave: False
         records = [
-            SeqRecord(
-                Seq("ATGCTGCTGA" * 110), id=_id, annotations={"molecule_type": "DNA"}
-            )
+            Seq("ATGCTGCTGA" * 110, id=_id, annotations={"molecule_type": "DNA"})
             for _id in ["foo", "bar", "baz"]
         ]
         a = MultipleSeqAlignment(records)
@@ -1141,7 +1131,7 @@ class TestSelf(unittest.TestCase):
         for a in NexusIterator(handle):
             print(a)
             for r in a:
-                print("%r %s %s" % (r.seq, r.name, r.id))
+                print("%r %s %s" % (r, r.name, r.id))
         print("Done")
 
     def test_repeated_names_with_taxa(self):
@@ -1171,7 +1161,7 @@ class TestSelf(unittest.TestCase):
         for a in NexusIterator(handle):
             print(a)
             for r in a:
-                print("%r %s %s" % (r.seq, r.name, r.id))
+                print("%r %s %s" % (r, r.name, r.id))
         print("Done")
 
     def test_empty_file_read(self):
@@ -1179,15 +1169,9 @@ class TestSelf(unittest.TestCase):
 
     def test_multiple_output(self):
         records = [
-            SeqRecord(
-                Seq("ATGCTGCTGAT"), id="foo", annotations={"molecule_type": "DNA"}
-            ),
-            SeqRecord(
-                Seq("ATGCTGCAGAT"), id="bar", annotations={"molecule_type": "DNA"}
-            ),
-            SeqRecord(
-                Seq("ATGCTGCGGAT"), id="baz", annotations={"molecule_type": "DNA"}
-            ),
+            Seq("ATGCTGCTGAT", id="foo", annotations={"molecule_type": "DNA"}),
+            Seq("ATGCTGCAGAT", id="bar", annotations={"molecule_type": "DNA"}),
+            Seq("ATGCTGCGGAT", id="baz", annotations={"molecule_type": "DNA"}),
         ]
         a = MultipleSeqAlignment(records)
 

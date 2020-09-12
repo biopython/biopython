@@ -21,7 +21,6 @@ from search_tests_common import compare_search_obj
 from Bio.Align import MultipleSeqAlignment
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 
 # mock HSPFragments
@@ -383,7 +382,7 @@ class QueryResultCases(unittest.TestCase):
                     self.assertEqual(new_desc, fragment.query.description)
 
     def test_description_set_no_seqrecord(self):
-        """Test QueryResult.description setter, without HSP SeqRecords."""
+        """Test QueryResult.description setter, without HSP Seq objects."""
         frag1 = HSPFragment("hit1", "query")
         frag2 = HSPFragment("hit1", "query")
         frag3 = HSPFragment("hit2", "query")
@@ -613,26 +612,26 @@ class QueryResultCases(unittest.TestCase):
             for hsp in hit.hsps:
                 self.assertFalse(hasattr(hsp, "mock"))
         # check hsps in hit1
-        self.assertEqual("TGCGCAT", str(mapped["hit1"][0][0].hit.seq))
-        self.assertEqual("TGCGCAT", str(mapped["hit1"][0][0].query.seq))
-        self.assertEqual("TG", str(mapped["hit1"][1][0].hit.seq))
-        self.assertEqual("AT", str(mapped["hit1"][1][0].query.seq))
-        self.assertEqual("TTCG", str(mapped["hit1"][2][0].hit.seq))
-        self.assertEqual("T-CG", str(mapped["hit1"][2][0].query.seq))
-        self.assertEqual("TTCG", str(mapped["hit1"][2][1].hit.seq))
-        self.assertEqual("T-CG", str(mapped["hit1"][2][1].query.seq))
-        self.assertEqual("T", str(mapped["hit1"][3][0].hit.seq))
-        self.assertEqual("T", str(mapped["hit1"][3][0].query.seq))
-        self.assertEqual("TCG", str(mapped["hit1"][3][1].hit.seq))
-        self.assertEqual("TGG", str(mapped["hit1"][3][1].query.seq))
+        self.assertEqual("TGCGCAT", mapped["hit1"][0][0].hit)
+        self.assertEqual("TGCGCAT", mapped["hit1"][0][0].query)
+        self.assertEqual("TG", mapped["hit1"][1][0].hit)
+        self.assertEqual("AT", mapped["hit1"][1][0].query)
+        self.assertEqual("TTCG", mapped["hit1"][2][0].hit)
+        self.assertEqual("T-CG", mapped["hit1"][2][0].query)
+        self.assertEqual("TTCG", mapped["hit1"][2][1].hit)
+        self.assertEqual("T-CG", mapped["hit1"][2][1].query)
+        self.assertEqual("T", mapped["hit1"][3][0].hit)
+        self.assertEqual("T", mapped["hit1"][3][0].query)
+        self.assertEqual("TCG", mapped["hit1"][3][1].hit)
+        self.assertEqual("TGG", mapped["hit1"][3][1].query)
         # check hsps in hit2
-        self.assertEqual("GGCCC", str(mapped["hit2"][0][0].hit.seq))
-        self.assertEqual("GGCC-", str(mapped["hit2"][0][0].query.seq))
+        self.assertEqual("GGCCC", mapped["hit2"][0][0].hit)
+        self.assertEqual("GGCC-", mapped["hit2"][0][0].query)
         # check hsps in hit3
-        self.assertEqual("ATG", str(mapped["hit3"][0][0].hit.seq))
-        self.assertEqual("TTG", str(mapped["hit3"][0][0].query.seq))
-        self.assertEqual("TATAT", str(mapped["hit3"][1][0].hit.seq))
-        self.assertEqual("TATAT", str(mapped["hit3"][1][0].query.seq))
+        self.assertEqual("ATG", mapped["hit3"][0][0].hit)
+        self.assertEqual("TTG", mapped["hit3"][0][0].query)
+        self.assertEqual("TATAT", mapped["hit3"][1][0].hit)
+        self.assertEqual("TATAT", mapped["hit3"][1][0].query)
         # and make sure the attributes are transferred
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual("refseq_rna", mapped.target)
@@ -905,7 +904,7 @@ class HitCases(unittest.TestCase):
                 self.assertEqual(new_desc, fragment.hit.description)
 
     def test_desc_set_no_seqrecord(self):
-        """Test Hit.description setter, without HSP SeqRecords."""
+        """Test Hit.description setter, without HSP Seq objects."""
         frag1 = HSPFragment("hit1", "query")
         frag2 = HSPFragment("hit1", "query")
         hit = Hit([HSP([x]) for x in [frag1, frag2]])
@@ -1007,14 +1006,14 @@ class HitCases(unittest.TestCase):
         for hsp in mapped:
             self.assertFalse(hasattr(hsp, "mock"))
         # check hsps in hit1
-        self.assertEqual("TGCGCAT", str(mapped[0][0].hit.seq))
-        self.assertEqual("TGCGCAT", str(mapped[0][0].query.seq))
-        self.assertEqual("TG", str(mapped[1][0].hit.seq))
-        self.assertEqual("AT", str(mapped[1][0].query.seq))
-        self.assertEqual("TTCG", str(mapped[2][0].hit.seq))
-        self.assertEqual("T-CG", str(mapped[2][0].query.seq))
-        self.assertEqual("TTCG", str(mapped[2][1].hit.seq))
-        self.assertEqual("T-CG", str(mapped[2][1].query.seq))
+        self.assertEqual("TGCGCAT", mapped[0][0].hit)
+        self.assertEqual("TGCGCAT", mapped[0][0].query)
+        self.assertEqual("TG", mapped[1][0].hit)
+        self.assertEqual("AT", mapped[1][0].query)
+        self.assertEqual("TTCG", mapped[2][0].hit)
+        self.assertEqual("T-CG", mapped[2][0].query)
+        self.assertEqual("TTCG", mapped[2][1].hit)
+        self.assertEqual("T-CG", mapped[2][1].query)
         # and make sure the attributes are transferred
         self.assertEqual(5e-10, mapped.evalue)
         self.assertEqual("test", mapped.name)
@@ -1082,16 +1081,16 @@ class HSPSingleFragmentCases(unittest.TestCase):
 
     def test_seq(self):
         """Test HSP sequence properties."""
-        self.assertEqual("ATCAGT", str(self.hsp.hit.seq))
-        self.assertEqual("AT-ACT", str(self.hsp.query.seq))
+        self.assertEqual("ATCAGT", self.hsp.hit)
+        self.assertEqual("AT-ACT", self.hsp.query)
 
     def test_alignment(self):
         """Test HSP.alignment property."""
         aln = self.hsp.aln
         self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(2, len(aln))
-        self.assertTrue("ATCAGT", str(aln[0].seq))
-        self.assertTrue("AT-ACT", str(aln[1].seq))
+        self.assertTrue("ATCAGT", aln[0])
+        self.assertTrue("AT-ACT", aln[1])
 
     def test_aln_span(self):
         """Test HSP.aln_span property."""
@@ -1188,8 +1187,8 @@ class HSPMultipleFragmentCases(unittest.TestCase):
 
     def test_seqs(self):
         """Test HSP sequence properties."""
-        self.assertEqual(["ATCAGT", "GGG"], [str(x.seq) for x in self.hsp.hit_all])
-        self.assertEqual(["AT-ACT", "CCC"], [str(x.seq) for x in self.hsp.query_all])
+        self.assertEqual(["ATCAGT", "GGG"], self.hsp.hit_all)
+        self.assertEqual(["AT-ACT", "CCC"], self.hsp.query_all)
 
     def test_id_desc_set(self):
         """Test HSP query and hit id and description setters."""
@@ -1316,13 +1315,13 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         """Test HSPFragment.__getitem__, only query."""
         # getitem should work if only query is present
         self.fragment.query = "AATCG"
-        self.assertEqual("ATCG", str(self.fragment[1:].query.seq))
+        self.assertEqual("ATCG", self.fragment[1:].query)
 
     def test_getitem_only_hit(self):
         """Test HSPFragment.__getitem__, only hit."""
         # getitem should work if only query is present
         self.fragment.hit = "CATGC"
-        self.assertEqual("ATGC", str(self.fragment[1:].hit.seq))
+        self.assertEqual("ATGC", self.fragment[1:].hit)
 
     def test_iter(self):
         """Test HSP.__iter__, no alignments."""
@@ -1344,20 +1343,20 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertTrue(compare_search_obj(self.fragment, unp))
 
     def test_init_with_seqrecord(self):
-        """Test HSPFragment.__init__, with SeqRecord."""
+        """Test HSPFragment.__init__, with Seq object."""
         # init should work with seqrecords
-        hit_seq = SeqRecord(Seq("ATGCTAGCTACA"))
-        query_seq = SeqRecord(Seq("ATG--AGCTAGG"))
+        hit_seq = Seq("ATGCTAGCTACA")
+        query_seq = Seq("ATG--AGCTAGG")
         hsp = HSPFragment("hit_id", "query_id", hit_seq, query_seq)
-        self.assertIsInstance(hsp.query, SeqRecord)
-        self.assertIsInstance(hsp.hit, SeqRecord)
+        self.assertIsInstance(hsp.query, Seq)
+        self.assertIsInstance(hsp.hit, Seq)
         self.assertIsInstance(hsp.aln, MultipleSeqAlignment)
 
     def test_init_wrong_seqtypes(self):
         """Test HSPFragment.__init__, wrong sequence argument types."""
         # init should only work with string or seqrecords
-        wrong_query = Seq("ATGC")
-        wrong_hit = Seq("ATGC")
+        wrong_query = b"ATGC"
+        wrong_hit = b"ATGC"
         self.assertRaises(
             TypeError, HSPFragment, "hit_id", "query_id", wrong_hit, wrong_query
         )
@@ -1365,12 +1364,12 @@ class HSPFragmentCases(unittest.TestCase):
     def test_seqmodel(self):
         """Test HSPFragment sequence attribute types and default values."""
         # check hit
-        self.assertIsInstance(self.fragment.hit, SeqRecord)
+        self.assertIsInstance(self.fragment.hit, Seq)
         self.assertEqual("<unknown description>", self.fragment.hit.description)
         self.assertEqual("aligned hit sequence", self.fragment.hit.name)
         self.assertEqual(None, self.fragment.hit.annotations["molecule_type"])
         # check query
-        self.assertIsInstance(self.fragment.query, SeqRecord)
+        self.assertIsInstance(self.fragment.query, Seq)
         self.assertEqual("<unknown description>", self.fragment.query.description)
         self.assertEqual("aligned query sequence", self.fragment.query.name)
         self.assertEqual(None, self.fragment.query.annotations["molecule_type"])
@@ -1388,8 +1387,8 @@ class HSPFragmentCases(unittest.TestCase):
     def test_molecule_type_with_seq(self):
         """Test HSPFragment molecule_type property, query or hit sequences present."""
         self.assertTrue(self.fragment.molecule_type is None)
-        self.fragment._hit = SeqRecord(Seq("AAA"))
-        self.fragment._query = SeqRecord(Seq("AAA"))
+        self.fragment._hit = Seq("AAA")
+        self.fragment._query = Seq("AAA")
         self.fragment.molecule_type = "DNA"
         self.assertTrue(self.fragment.molecule_type == "DNA")
         self.assertTrue(self.fragment.hit.annotations["molecule_type"] == "DNA")
@@ -1424,8 +1423,8 @@ class HSPFragmentCases(unittest.TestCase):
         sliced_fragment = self.fragment[:5]
         self.assertIsInstance(sliced_fragment, HSPFragment)
         self.assertEqual(5, len(sliced_fragment))
-        self.assertEqual("ATGCT", str(sliced_fragment.hit.seq))
-        self.assertEqual("ATG--", str(sliced_fragment.query.seq))
+        self.assertEqual("ATGCT", sliced_fragment.hit)
+        self.assertEqual("ATG--", sliced_fragment.query)
 
     def test_getitem_attrs(self):
         """Test HSPFragment.__getitem__, with attributes."""

@@ -111,26 +111,26 @@ offet of 33).  This means we can parse this file using Bio.SeqIO using
 
 >>> from Bio import SeqIO
 >>> for record in SeqIO.parse("Quality/example.fastq", "fastq"):
-...     print("%s %s" % (record.id, record.seq))
+...     print("%s %s" % (record.id, record))
 EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
 EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
 EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
 
 The qualities are held as a list of integers in each record's annotation:
 
->>> print(record)
+>>> print(format(record, 'debug'))
+GTTGCTTCTGGCGTGGGTGGGGGGG
 ID: EAS54_6_R1_2_1_443_348
 Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-Seq('GTTGCTTCTGGCGTGGGTGGGGGGG')
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+(26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18)
 
-You can use the SeqRecord format method to show this in the QUAL format:
+You can use the Seq object's format method to show this in the QUAL format:
 
->>> print(record.format("qual"))
+>>> print(format(record, "qual"))
 >EAS54_6_R1_2_1_443_348
 26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
 24 18 18 18 18
@@ -138,7 +138,7 @@ You can use the SeqRecord format method to show this in the QUAL format:
 
 Or go back to the FASTQ format, use "fastq" (or "fastq-sanger"):
 
->>> print(record.format("fastq"))
+>>> print(format(record, "fastq"))
 @EAS54_6_R1_2_1_443_348
 GTTGCTTCTGGCGTGGGTGGGGGGG
 +
@@ -148,7 +148,7 @@ GTTGCTTCTGGCGTGGGTGGGGGGG
 Or, using the Illumina 1.3+ FASTQ encoding (PHRED values with an ASCII offset
 of 64):
 
->>> print(record.format("fastq-illumina"))
+>>> print(format(record, "fastq-illumina"))
 @EAS54_6_R1_2_1_443_348
 GTTGCTTCTGGCGTGGGTGGGGGGG
 +
@@ -158,7 +158,7 @@ ZZZZZZZZZZZXZVZZMVZRXRRRR
 You can also get Biopython to convert the scores and show a Solexa style
 FASTQ file:
 
->>> print(record.format("fastq-solexa"))
+>>> print(format(record, "fastq-solexa"))
 @EAS54_6_R1_2_1_443_348
 GTTGCTTCTGGCGTGGGTGGGGGGG
 +
@@ -172,19 +172,19 @@ for poor quality reads. See the functions solexa_quality_from_phred and
 phred_quality_from_solexa for more details.
 
 If you wanted to trim your sequences (perhaps to remove low quality regions,
-or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
+or to remove a primer sequence), try slicing the Seq objects.  e.g.
 
 >>> sub_rec = record[5:15]
->>> print(sub_rec)
+>>> print(format(sub_rec, 'debug'))
+TTCTGGCGTG
 ID: EAS54_6_R1_2_1_443_348
 Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-Seq('TTCTGGCGTG')
 >>> print(sub_rec.letter_annotations["phred_quality"])
-[26, 26, 26, 26, 26, 26, 24, 26, 22, 26]
->>> print(sub_rec.format("fastq"))
+(26, 26, 26, 26, 26, 26, 24, 26, 22, 26)
+>>> print(format(sub_rec, "fastq"))
 @EAS54_6_R1_2_1_443_348
 TTCTGGCGTG
 +
@@ -203,7 +203,7 @@ You can of course read in a QUAL file, such as the one we just created:
 
 >>> from Bio import SeqIO
 >>> for record in SeqIO.parse("Quality/temp.qual", "qual"):
-...     print("%s %s" % (record.id, record.seq))
+...     print("%s %s" % (record.id, record))
 EAS54_6_R1_2_1_413_324 ?????????????????????????
 EAS54_6_R1_2_1_540_792 ?????????????????????????
 EAS54_6_R1_2_1_443_348 ?????????????????????????
@@ -211,15 +211,15 @@ EAS54_6_R1_2_1_443_348 ?????????????????????????
 Notice that QUAL files don't have a proper sequence present!  But the quality
 information is there:
 
->>> print(record)
+>>> print(format(record, 'debug'))
+?????????????????????????
 ID: EAS54_6_R1_2_1_443_348
 Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-UnknownSeq(25, character='?')
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+(26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18)
 
 Just to keep things tidy, if you are following this example yourself, you can
 delete this temporary file now:
@@ -244,7 +244,7 @@ then a simple dictionary approach would work:
 You can then access any record by its key, and get both the sequence and the
 quality scores.
 
->>> print(reads["EAS54_6_R1_2_1_540_792"].format("fastq"))
+>>> print(format(reads["EAS54_6_R1_2_1_540_792"], "fastq"))
 @EAS54_6_R1_2_1_540_792
 TTGGCAGGCCAAGGCCGATGGATCA
 +
@@ -260,27 +260,26 @@ automatically.
 To illustrate this problem, let's consider an artificial example:
 
 >>> from Bio.Seq import Seq
->>> from Bio.SeqRecord import SeqRecord
->>> test = SeqRecord(Seq("NACGTACGTA"), id="Test", description="Made up!")
->>> print(test.format("fasta"))
+>>> test = Seq("NACGTACGTA", id="Test", description="Made up!")
+>>> print(format(test, "fasta"))
 >Test Made up!
 NACGTACGTA
 <BLANKLINE>
->>> print(test.format("fastq"))
+>>> print(format(test, "fastq"))
 Traceback (most recent call last):
  ...
-ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+ValueError: No suitable quality scores found in letter_annotations of Seq object (id=Test).
 
-We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
+We created a sample Seq object, and can show it in FASTA format - but for QUAL
 or FASTQ format we need to provide some quality scores. These are held as a
 list of integers (one for each base) in the letter_annotations dictionary:
 
->>> test.letter_annotations["phred_quality"] = [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
->>> print(test.format("qual"))
+>>> test.letter_annotations["phred_quality"] = (0, 1, 2, 3, 4, 5, 10, 20, 30, 40)
+>>> print(format(test, "qual"))
 >Test Made up!
 0 1 2 3 4 5 10 20 30 40
 <BLANKLINE>
->>> print(test.format("fastq"))
+>>> print(format(test, "fastq"))
 @Test Made up!
 NACGTACGTA
 +
@@ -301,7 +300,7 @@ the letter "I":
 Similarly, we could produce an Illumina 1.3 to 1.7 style FASTQ file using PHRED
 scores with an offset of 64:
 
->>> print(test.format("fastq-illumina"))
+>>> print(format(test, "fastq-illumina"))
 @Test Made up!
 NACGTACGTA
 +
@@ -340,7 +339,7 @@ PHRED 40 maps to Solexa 40.0
 
 Now here is the record using the old Solexa style FASTQ file:
 
->>> print(test.format("fastq-solexa"))
+>>> print(format(test, "fastq-solexa"))
 @Test Made up!
 NACGTACGTA
 +
@@ -360,7 +359,6 @@ are approximately equal.
 
 from Bio.File import as_handle
 from Bio.Seq import Seq, UnknownSeq
-from Bio.SeqRecord import SeqRecord
 from Bio import StreamModeError
 from .Interfaces import SequenceIterator, SequenceWriter, _clean, _get_seq_string
 
@@ -518,7 +516,7 @@ def phred_quality_from_solexa(solexa_quality):
 
 
 def _get_phred_quality(record):
-    """Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).
+    """Extract PHRED qualities from a Seq object's letter_annotations (PRIVATE).
 
     If there are no PHRED qualities, but there are Solexa qualities, those are
     used instead after conversion.
@@ -528,14 +526,14 @@ def _get_phred_quality(record):
     except KeyError:
         pass
     try:
-        return [
+        return tuple(
             phred_quality_from_solexa(q)
             for q in record.letter_annotations["solexa_quality"]
-        ]
+        )
     except KeyError:
         raise ValueError(
             "No suitable quality scores found in "
-            "letter_annotations of SeqRecord (id=%s)." % record.id
+            "letter_annotations of Seq object (id=%s)." % record.id
         )
 
 
@@ -554,26 +552,25 @@ def _get_sanger_quality_str(record):
     """Return a Sanger FASTQ encoded quality string (PRIVATE).
 
     >>> from Bio.Seq import Seq
-    >>> from Bio.SeqRecord import SeqRecord
-    >>> r = SeqRecord(Seq("ACGTAN"), id="Test",
-    ...               letter_annotations = {"phred_quality":[50, 40, 30, 20, 10, 0]})
+    >>> r = Seq("ACGTAN", id="Test",
+    ...         letter_annotations = {"phred_quality":(50, 40, 30, 20, 10, 0)})
     >>> _get_sanger_quality_str(r)
     'SI?5+!'
 
-    If as in the above example (or indeed a SeqRecord parser with Bio.SeqIO),
+    If as in the above example (or indeed a Seq parser with Bio.SeqIO),
     the PHRED qualities are integers, this function is able to use a very fast
     pre-cached mapping. However, if they are floats which differ slightly, then
     it has to do the appropriate rounding - which is slower:
 
-    >>> r2 = SeqRecord(Seq("ACGTAN"), id="Test2",
-    ...      letter_annotations = {"phred_quality":[50.0, 40.05, 29.99, 20, 9.55, 0.01]})
+    >>> r2 = Seq("ACGTAN", id="Test2",
+    ...      letter_annotations = {"phred_quality":(50.0, 40.05, 29.99, 20, 9.55, 0.01)})
     >>> _get_sanger_quality_str(r2)
     'SI?5+!'
 
     If your scores include a None value, this raises an exception:
 
-    >>> r3 = SeqRecord(Seq("ACGTAN"), id="Test3",
-    ...               letter_annotations = {"phred_quality":[50, 40, 30, 20, 10, None]})
+    >>> r3 = Seq("ACGTAN", id="Test3",
+    ...          letter_annotations = {"phred_quality":(50, 40, 30, 20, 10, None)})
     >>> _get_sanger_quality_str(r3)
     Traceback (most recent call last):
        ...
@@ -582,25 +579,25 @@ def _get_sanger_quality_str(record):
     If (strangely) your record has both PHRED and Solexa scores, then the PHRED
     scores are used in preference:
 
-    >>> r4 = SeqRecord(Seq("ACGTAN"), id="Test4",
-    ...               letter_annotations = {"phred_quality":[50, 40, 30, 20, 10, 0],
-    ...                                     "solexa_quality":[-5, -4, 0, None, 0, 40]})
+    >>> r4 = Seq("ACGTAN", id="Test4",
+    ...          letter_annotations = {"phred_quality":(50, 40, 30, 20, 10, 0),
+    ...                                "solexa_quality":(-5, -4, 0, None, 0, 40)})
     >>> _get_sanger_quality_str(r4)
     'SI?5+!'
 
     If there are no PHRED scores, but there are Solexa scores, these are used
     instead (after the appropriate conversion):
 
-    >>> r5 = SeqRecord(Seq("ACGTAN"), id="Test5",
-    ...      letter_annotations = {"solexa_quality":[40, 30, 20, 10, 0, -5]})
+    >>> r5 = Seq("ACGTAN", id="Test5",
+    ...      letter_annotations = {"solexa_quality":(40, 30, 20, 10, 0, -5)})
     >>> _get_sanger_quality_str(r5)
     'I?5+$"'
 
     Again, integer Solexa scores can be looked up in a pre-cached mapping making
     this very fast. You can still use approximate floating point scores:
 
-    >>> r6 = SeqRecord(Seq("ACGTAN"), id="Test6",
-    ...      letter_annotations = {"solexa_quality":[40.1, 29.7, 20.01, 10, 0.0, -4.9]})
+    >>> r6 = Seq("ACGTAN", id="Test6",
+    ...      letter_annotations = {"solexa_quality":(40.1, 29.7, 20.01, 10, 0.0, -4.9)})
     >>> _get_sanger_quality_str(r6)
     'I?5+$"'
 
@@ -641,7 +638,7 @@ def _get_sanger_quality_str(record):
     except KeyError:
         raise ValueError(
             "No suitable quality scores found in "
-            "letter_annotations of SeqRecord (id=%s)." % record.id
+            "letter_annotations of Seq object (id=%s)." % record.id
         )
     # Try and use the precomputed mapping:
     try:
@@ -716,7 +713,7 @@ def _get_illumina_quality_str(record):
     except KeyError:
         raise ValueError(
             "No suitable quality scores found in "
-            "letter_annotations of SeqRecord (id=%s)." % record.id
+            "letter_annotations of Seq object (id=%s)." % record.id
         )
     # Try and use the precomputed mapping:
     try:
@@ -791,7 +788,7 @@ def _get_solexa_quality_str(record):
     except KeyError:
         raise ValueError(
             "No suitable quality scores found in "
-            "letter_annotations of SeqRecord (id=%s)." % record.id
+            "letter_annotations of Seq object (id=%s)." % record.id
         )
     # Try and use the precomputed mapping:
     try:
@@ -816,7 +813,7 @@ def _get_solexa_quality_str(record):
 
 # TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(source):
-    """Iterate over Fastq records as string tuples (not as SeqRecord objects).
+    """Iterate over Fastq records as string tuples (not as Seq objects).
 
     Arguments:
      - source - input stream opened in text mode, or a path to a file
@@ -825,10 +822,10 @@ def FastqGeneralIterator(source):
     just returns tuples of the title, sequence and quality as strings.  For
     the sequence and quality, any whitespace (such as new lines) is removed.
 
-    Our SeqRecord based FASTQ iterators call this function internally, and then
-    turn the strings into a SeqRecord objects, mapping the quality string into
-    a list of numerical scores.  If you want to do a custom quality mapping,
-    then you might consider calling this function directly.
+    Our Seq based FASTQ iterators call this function internally, and then turn
+    the strings into a Seq objects, mapping the quality string into a list of
+    numerical scores.  If you want to do a custom quality mapping, then you
+    might consider calling this function directly.
 
     For parsing FASTQ files, the title string from the "@" line at the start
     of each record can optionally be omitted on the "+" lines.  If it is
@@ -990,7 +987,7 @@ class FastqPhredIterator(SequenceIterator):
     """Parser for FASTQ files."""
 
     def __init__(self, source, alphabet=None, title2ids=None):
-        """Iterate over FASTQ records as SeqRecord objects.
+        """Iterate over FASTQ records as Seq objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -1030,7 +1027,7 @@ class FastqPhredIterator(SequenceIterator):
 
         >>> with open("Quality/example.fastq") as handle:
         ...     for record in FastqPhredIterator(handle):
-        ...         print("%s %s" % (record.id, record.seq))
+        ...         print("%s %s" % (record.id, record))
         EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
         EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
         EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
@@ -1041,7 +1038,7 @@ class FastqPhredIterator(SequenceIterator):
         >>> from Bio import SeqIO
         >>> with open("Quality/example.fastq") as handle:
         ...     for record in SeqIO.parse(handle, "fastq"):
-        ...         print("%s %s" % (record.id, record.seq))
+        ...         print("%s %s" % (record.id, record))
         EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
         EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
         EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
@@ -1050,7 +1047,7 @@ class FastqPhredIterator(SequenceIterator):
         per-letter-annotation dictionary as a simple list of integers:
 
         >>> print(record.letter_annotations["phred_quality"])
-        [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+        (26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18)
 
         """
         if alphabet is not None:
@@ -1059,12 +1056,12 @@ class FastqPhredIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="Fastq")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         title2ids = self.title2ids
         assert SANGER_SCORE_OFFSET == ord("!")
         # Originally, I used a list expression for each record:
@@ -1084,17 +1081,12 @@ class FastqPhredIterator(SequenceIterator):
                 descr = title_line
                 id = descr.split()[0]
                 name = id
-            record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
+            record = Seq(seq_string, id=id, name=name, description=descr)
             try:
-                qualities = [q_mapping[letter] for letter in quality_string]
+                qualities = tuple([q_mapping[letter] for letter in quality_string])
             except KeyError:
                 raise ValueError("Invalid character in quality string") from None
-            # For speed, will now use a dirty trick to speed up assigning the
-            # qualities. We do this to bypass the length check imposed by the
-            # per-letter-annotations restricted dict (as this has already been
-            # checked by FastqGeneralIterator). This is equivalent to:
-            # record.letter_annotations["phred_quality"] = qualities
-            dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
+            record.letter_annotations["phred_quality"] = qualities
             yield record
 
 
@@ -1138,7 +1130,7 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
 
     >>> with open("Quality/solexa_example.fastq") as handle:
     ...     for record in FastqSolexaIterator(handle):
-    ...         print("%s %s" % (record.id, record.seq))
+    ...         print("%s %s" % (record.id, record))
     SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA
     SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA
     SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG
@@ -1151,7 +1143,7 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     >>> from Bio import SeqIO
     >>> with open("Quality/solexa_example.fastq") as handle:
     ...     for record in SeqIO.parse(handle, "fastq-solexa"):
-    ...         print("%s %s" % (record.id, record.seq))
+    ...         print("%s %s" % (record.id, record))
     SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA
     SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA
     SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG
@@ -1162,7 +1154,7 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     per-letter-annotation dictionary as a simple list of integers:
 
     >>> print(record.letter_annotations["solexa_quality"])
-    [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 23, 25, 25, 25, 25, 23, 25, 23, 23, 21, 23, 23, 23, 17, 17]
+    (25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 23, 25, 25, 25, 25, 23, 25, 23, 23, 21, 23, 23, 23, 17, 17)
 
     These scores aren't very good, but they are high enough that they map
     almost exactly onto PHRED scores:
@@ -1187,10 +1179,10 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     >>> from Bio import SeqIO
     >>> with open("Quality/solexa_faked.fastq") as handle:
     ...     record = SeqIO.read(handle, "fastq-solexa")
-    >>> print("%s %s" % (record.id, record.seq))
+    >>> print("%s %s" % (record.id, record))
     slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     >>> print(record.letter_annotations["solexa_quality"])
-    [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+    (40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5)
 
     These quality scores are so low that when converted from the Solexa scheme
     into PHRED scores they look quite different:
@@ -1200,10 +1192,10 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     >>> print("%0.2f" % phred_quality_from_solexa(-5))
     1.19
 
-    Note you can use the Bio.SeqIO.write() function or the SeqRecord's format
+    Note you can use the Bio.SeqIO.write() function or the Seq object's format
     method to output the record(s):
 
-    >>> print(record.format("fastq-solexa"))
+    >>> print(format(record, "fastq-solexa"))
     @slxa_0001_1_0001_01
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     +
@@ -1215,14 +1207,14 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     line.  If you want the to use PHRED scores, use "fastq" or "qual" as the
     output format instead, and Biopython will do the conversion for you:
 
-    >>> print(record.format("fastq"))
+    >>> print(format(record, "fastq"))
     @slxa_0001_1_0001_01
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     +
     IHGFEDCBA@?>=<;:9876543210/.-,++*)('&&%%$$##""
     <BLANKLINE>
 
-    >>> print(record.format("qual"))
+    >>> print(format(record, "qual"))
     >slxa_0001_1_0001_01
     40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21
     20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 5 4 4 3 3 2 2
@@ -1247,15 +1239,13 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
             descr = title_line
             id = descr.split()[0]
             name = id
-        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
+        record = Seq(seq_string, id=id, name=name, description=descr)
         try:
-            qualities = [q_mapping[letter] for letter in quality_string]
+            qualities = tuple(q_mapping[letter] for letter in quality_string)
         # DO NOT convert these into PHRED qualities automatically!
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
-        # Dirty trick to speed up this line:
-        # record.letter_annotations["solexa_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, "solexa_quality", qualities)
+        record.letter_annotations["solexa_quality"] = qualities
         yield record
 
 
@@ -1269,7 +1259,7 @@ def FastqIlluminaIterator(source, alphabet=None, title2ids=None):
 
     >>> from Bio import SeqIO
     >>> record = SeqIO.read("Quality/illumina_faked.fastq", "fastq-illumina")
-    >>> print("%s %s" % (record.id, record.seq))
+    >>> print("%s %s" % (record.id, record))
     Test ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     >>> max(record.letter_annotations["phred_quality"])
     40
@@ -1303,14 +1293,12 @@ def FastqIlluminaIterator(source, alphabet=None, title2ids=None):
             descr = title_line
             id = descr.split()[0]
             name = id
-        record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
+        record = Seq(seq_string, id=id, name=name, description=descr)
         try:
-            qualities = [q_mapping[letter] for letter in quality_string]
+            qualities = tuple(q_mapping[letter] for letter in quality_string)
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
-        # Dirty trick to speed up this line:
-        # record.letter_annotations["phred_quality"] = qualities
-        dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
+        record.letter_annotations["phred_quality"] = qualities
         yield record
 
 
@@ -1336,7 +1324,7 @@ class QualPhredIterator(SequenceIterator):
 
         >>> with open("Quality/example.qual") as handle:
         ...     for record in QualPhredIterator(handle):
-        ...         print("%s %s" % (record.id, record.seq))
+        ...         print("%s %s" % (record.id, record))
         EAS54_6_R1_2_1_413_324 ?????????????????????????
         EAS54_6_R1_2_1_540_792 ?????????????????????????
         EAS54_6_R1_2_1_443_348 ?????????????????????????
@@ -1347,7 +1335,7 @@ class QualPhredIterator(SequenceIterator):
         >>> from Bio import SeqIO
         >>> with open("Quality/example.qual") as handle:
         ...     for record in SeqIO.parse(handle, "qual"):
-        ...         print("%s %s" % (record.id, record.seq))
+        ...         print("%s %s" % (record.id, record))
         EAS54_6_R1_2_1_413_324 ?????????????????????????
         EAS54_6_R1_2_1_540_792 ?????????????????????????
         EAS54_6_R1_2_1_443_348 ?????????????????????????
@@ -1361,17 +1349,17 @@ class QualPhredIterator(SequenceIterator):
         in each record's per-letter-annotation:
 
         >>> print(record.letter_annotations["phred_quality"])
-        [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+        (26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18)
 
-        You can still slice one of these SeqRecord objects with an UnknownSeq:
+        You can still slice one of these Seq objects with an UnknownSeq:
 
         >>> sub_record = record[5:10]
         >>> print("%s %s" % (sub_record.id, sub_record.letter_annotations["phred_quality"]))
-        EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]
+        EAS54_6_R1_2_1_443_348 (26, 26, 26, 26, 26)
 
-        As of Biopython 1.59, this parser will accept files with negatives quality
-        scores but will replace them with the lowest possible PHRED score of zero.
-        This will trigger a warning, previously it raised a ValueError exception.
+        This parser will accept files with negatives quality scores but will
+        replace them with the lowest possible PHRED score of zero.
+        This will trigger a warning.
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
@@ -1379,12 +1367,12 @@ class QualPhredIterator(SequenceIterator):
         super().__init__(source, mode="t", fmt="QUAL")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         records = self.iterate(handle)
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         title2ids = self.title2ids
         # Skip any text before the first record (e.g. blank lines, comments)
         for line in handle:
@@ -1413,21 +1401,18 @@ class QualPhredIterator(SequenceIterator):
             else:
                 line = None
 
-            if qualities and min(qualities) < 0:
-                warnings.warn(
-                    "Negative quality score %i found, substituting PHRED zero instead."
-                    % min(qualities),
-                    BiopythonParserWarning,
-                )
-                qualities = [max(0, q) for q in qualities]
+            if qualities:
+                if min(qualities) < 0:
+                    warnings.warn(
+                        "Negative quality score %i found, substituting PHRED zero instead."
+                        % min(qualities),
+                        BiopythonParserWarning,
+                    )
+                    qualities = [max(0, q) for q in qualities]
 
             # Return the record and then continue...
-            record = SeqRecord(
-                UnknownSeq(len(qualities)), id=id, name=name, description=descr,
-            )
-            # Dirty trick to speed up this line:
-            # record.letter_annotations["phred_quality"] = qualities
-            dict.__setitem__(record._per_letter_annotations, "phred_quality", qualities)
+            record = UnknownSeq(len(qualities), id=id, name=name, description=descr)
+            record.letter_annotations["phred_quality"] = tuple(qualities)
             yield record
 
             if line is None:
@@ -1467,8 +1452,8 @@ class FastqPhredWriter(SequenceWriter):
     ...     SeqIO.write(record_iterator, out_handle, "fastq")
     5
 
-    This code is also called if you use the .format("fastq") method of a
-    SeqRecord, or .format("fastq-sanger") if you prefer that alias.
+    This code is also called if you use format function on a Seq object with
+    the "fastq" or "fastq-sanger" format specification.
 
     Note that Sanger FASTQ files have an upper limit of PHRED quality 93, which is
     encoded as ASCII 126, the tilde. If your quality scores are truncated to fit, a
@@ -1489,14 +1474,13 @@ class FastqPhredWriter(SequenceWriter):
         assert not self._footer_written
         self._record_written = True
         # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
+        if len(record) == 0:
             raise ValueError("No sequence for record %s" % record.id)
         qualities_str = _get_sanger_quality_str(record)
-        if len(qualities_str) != len(seq):
+        if len(qualities_str) != len(record):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
+                % (record.id, len(record), len(qualities_str))
             )
 
         # FASTQ files can include a description, just like FASTA files
@@ -1511,13 +1495,13 @@ class FastqPhredWriter(SequenceWriter):
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record, qualities_str))
 
 
 def as_fastq(record):
-    """Turn a SeqRecord into a Sanger FASTQ formatted string.
+    """Turn a Seq object into a Sanger FASTQ formatted string.
 
-    This is used internally by the SeqRecord's .format("fastq")
+    This is used internally by the Seq object's .__format__("fastq")
     method and by the SeqIO.write(..., ..., "fastq") function,
     and under the format alias "fastq-sanger" as well.
     """
@@ -1555,8 +1539,8 @@ class QualPhredWriter(SequenceWriter):
     ...     SeqIO.write(record_iterator, out_handle, "qual")
     3
 
-    This code is also called if you use the .format("qual") method of a
-    SeqRecord.
+    This code is also called if you use the .__format__("qual") method of a
+    Seq object.
 
     P.S. Don't forget to clean up the temp file if you don't need it anymore:
 
@@ -1653,9 +1637,9 @@ class QualPhredWriter(SequenceWriter):
 
 
 def as_qual(record):
-    """Turn a SeqRecord into a QUAL formatted string.
+    """Turn a Seq object into a QUAL formatted string.
 
-    This is used internally by the SeqRecord's .format("qual")
+    This is used internally by the Seq object's .__format__("qual")
     method and by the SeqIO.write(..., ..., "qual") function.
     """
     id = _clean(record.id)
@@ -1717,11 +1701,11 @@ class FastqSolexaWriter(SequenceWriter):
     string on a single line (which is considered desirable for maximum
     compatibility).
 
-    This code is also called if you use the .format("fastq-solexa") method of
-    a SeqRecord. For example,
+    This code is also called if you use the .__format__("fastq-solexa") method
+    of a Seq object. For example,
 
     >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
-    >>> print(record.format("fastq-solexa"))
+    >>> print(format(record, "fastq-solexa"))
     @Test PHRED qualities from 40 to 0 inclusive
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     +
@@ -1745,14 +1729,13 @@ class FastqSolexaWriter(SequenceWriter):
         self._record_written = True
 
         # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
+        if len(record) == 0:
             raise ValueError("No sequence for record %s" % record.id)
         qualities_str = _get_solexa_quality_str(record)
-        if len(qualities_str) != len(seq):
+        if len(qualities_str) != len(record):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
+                % (record.id, len(record), len(qualities_str))
             )
 
         # FASTQ files can include a description, just like FASTA files
@@ -1767,13 +1750,13 @@ class FastqSolexaWriter(SequenceWriter):
         else:
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record, qualities_str))
 
 
 def as_fastq_solexa(record):
-    """Turn a SeqRecord into a Solexa FASTQ formatted string.
+    """Turn a Seq object into a Solexa FASTQ formatted string.
 
-    This is used internally by the SeqRecord's .format("fastq-solexa")
+    This is used internally by the Seq object's .__format__("fastq-solexa")
     method and by the SeqIO.write(..., ..., "fastq-solexa") function.
     """
     seq_str = _get_seq_string(record)
@@ -1806,11 +1789,11 @@ class FastqIlluminaWriter(SequenceWriter):
     Although you can use this class directly, you are strongly encouraged to
     use the ``as_fastq_illumina`` or top-level ``Bio.SeqIO.write()`` function
     with format name "fastq-illumina" instead. This code is also called if you
-    use the .format("fastq-illumina") method of a SeqRecord. For example,
+    use the .__format__("fastq-illumina") method of a Seq object. For example,
 
     >>> from Bio import SeqIO
     >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
-    >>> print(record.format("fastq-illumina"))
+    >>> print(format(record, "fastq-illumina"))
     @Test PHRED qualities from 40 to 0 inclusive
     ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     +
@@ -1829,14 +1812,13 @@ class FastqIlluminaWriter(SequenceWriter):
         self._record_written = True
 
         # TODO - Is an empty sequence allowed in FASTQ format?
-        seq = record.seq
-        if seq is None:
+        if record is None:
             raise ValueError("No sequence for record %s" % record.id)
         qualities_str = _get_illumina_quality_str(record)
-        if len(qualities_str) != len(seq):
+        if len(qualities_str) != len(record):
             raise ValueError(
                 "Record %s has sequence length %i but %i quality scores"
-                % (record.id, len(seq), len(qualities_str))
+                % (record.id, len(record), len(qualities_str))
             )
 
         # FASTQ files can include a description, just like FASTA files
@@ -1855,9 +1837,9 @@ class FastqIlluminaWriter(SequenceWriter):
 
 
 def as_fastq_illumina(record):
-    """Turn a SeqRecord into an Illumina FASTQ formatted string.
+    """Turn a Seq object into an Illumina FASTQ formatted string.
 
-    This is used internally by the SeqRecord's .format("fastq-illumina")
+    This is used internally by the Seq object's .__format__("fastq-illumina")
     method and by the SeqIO.write(..., ..., "fastq-illumina") function.
     """
     seq_str = _get_seq_string(record)
@@ -1879,7 +1861,7 @@ def as_fastq_illumina(record):
 
 
 def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=None):
-    """Iterate over matched FASTA and QUAL files as SeqRecord objects.
+    """Iterate over matched FASTA and QUAL files as Seq objects.
 
     For example, consider this short QUAL file with PHRED quality scores::
 
@@ -1903,16 +1885,16 @@ def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=
         GTTGCTTCTGGCGTGGGTGGGGGGG
 
     You can parse these separately using Bio.SeqIO with the "qual" and
-    "fasta" formats, but then you'll get a group of SeqRecord objects with
-    no sequence, and a matching group with the sequence but not the
-    qualities.  Because it only deals with one input file handle, Bio.SeqIO
-    can't be used to read the two files together - but this function can!
+    "fasta" formats, but then you'll get a group of Seq objects with no
+    sequence, and a matching group with the sequence but not the qualities.
+    Because it only deals with one input file handle, Bio.SeqIO can't be used
+    to read the two files together - but this function can!
     For example,
 
     >>> with open("Quality/example.fasta") as f:
     ...     with open("Quality/example.qual") as q:
     ...         for record in PairedFastaQualIterator(f, q):
-    ...             print("%s %s" % (record.id, record.seq))
+    ...             print("%s %s" % (record.id, record))
     ...
     EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
     EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
@@ -1923,7 +1905,7 @@ def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=
     list of integers:
 
     >>> print(record.letter_annotations["phred_quality"])
-    [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+    (26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18)
 
     If you have access to data as a FASTQ format file, using that directly
     would be simpler and more straight forward.  Note that you can easily use
@@ -1986,7 +1968,7 @@ def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=
 
 def _fastq_generic(in_file, out_file, mapping):
     """FASTQ helper function where can't have data loss by truncation (PRIVATE)."""
-    # For real speed, don't even make SeqRecord and Seq objects!
+    # For real speed, don't even make Seq objects!
     count = 0
     null = chr(0)
     with as_handle(out_file, "w") as out_handle:
@@ -2002,7 +1984,7 @@ def _fastq_generic(in_file, out_file, mapping):
 
 def _fastq_generic2(in_file, out_file, mapping, truncate_char, truncate_msg):
     """FASTQ helper function where there could be data loss by truncation (PRIVATE)."""
-    # For real speed, don't even make SeqRecord and Seq objects!
+    # For real speed, don't even make Seq objects!
     count = 0
     null = chr(0)
     with as_handle(out_file, "w") as out_handle:
@@ -2025,8 +2007,7 @@ def _fastq_sanger_convert_fastq_sanger(in_file, out_file):
     Useful for removing line wrapping and the redundant second identifier
     on the plus lines. Will check also check the quality string is valid.
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2043,8 +2024,7 @@ def _fastq_solexa_convert_fastq_solexa(in_file, out_file):
 
     Useful for removing line wrapping and the redundant second identifier
     on the plus lines. Will check also check the quality string is valid.
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2061,8 +2041,7 @@ def _fastq_illumina_convert_fastq_illumina(in_file, out_file):
 
     Useful for removing line wrapping and the redundant second identifier
     on the plus lines. Will check also check the quality string is valid.
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2077,8 +2056,7 @@ def _fastq_illumina_convert_fastq_illumina(in_file, out_file):
 def _fastq_illumina_convert_fastq_sanger(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Sanger FASTQ conversion (PRIVATE).
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2093,8 +2071,8 @@ def _fastq_illumina_convert_fastq_sanger(in_file, out_file):
 def _fastq_sanger_convert_fastq_illumina(in_file, out_file):
     """Fast Sanger FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion. Will issue a warning if the scores had to be truncated at 62
+    Avoids creating Seq objects in order to speed up this conversion.
+    Will issue a warning if the scores had to be truncated at 62
     (maximum possible in the Illumina 1.3+ FASTQ format)
     """
     # Map unexpected chars to null
@@ -2118,8 +2096,7 @@ def _fastq_sanger_convert_fastq_illumina(in_file, out_file):
 def _fastq_solexa_convert_fastq_sanger(in_file, out_file):
     """Fast Solexa FASTQ to Sanger FASTQ conversion (PRIVATE).
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2137,8 +2114,8 @@ def _fastq_solexa_convert_fastq_sanger(in_file, out_file):
 def _fastq_sanger_convert_fastq_solexa(in_file, out_file):
     """Fast Sanger FASTQ to Solexa FASTQ conversion (PRIVATE).
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion. Will issue a warning if the scores had to be truncated at 62
+    Avoids creating Seq objects in order to speed up this conversion.
+    Will issue a warning if the scores had to be truncated at 62
     (maximum possible in the Solexa FASTQ format)
     """
     # Map unexpected chars to null
@@ -2162,8 +2139,7 @@ def _fastq_sanger_convert_fastq_solexa(in_file, out_file):
 def _fastq_solexa_convert_fastq_illumina(in_file, out_file):
     """Fast Solexa FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2181,8 +2157,7 @@ def _fastq_solexa_convert_fastq_illumina(in_file, out_file):
 def _fastq_illumina_convert_fastq_solexa(in_file, out_file):
     """Fast Illumina 1.3+ FASTQ to Solexa FASTQ conversion (PRIVATE).
 
-    Avoids creating SeqRecord and Seq objects in order to speed up this
-    conversion.
+    Avoids creating Seq objects in order to speed up this conversion.
     """
     # Map unexpected chars to null
     mapping = "".join(
@@ -2197,13 +2172,13 @@ def _fastq_illumina_convert_fastq_solexa(in_file, out_file):
 def _fastq_convert_fasta(in_file, out_file):
     """Fast FASTQ to FASTA conversion (PRIVATE).
 
-    Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
-    Seq objects in order to speed up this conversion.
+    Avoids dealing with the FASTQ quality encoding, and creating Seq objects
+    in order to speed up this conversion.
 
     NOTE - This does NOT check the characters used in the FASTQ quality string
     are valid!
     """
-    # For real speed, don't even make SeqRecord and Seq objects!
+    # For real speed, don't even make Seq objects!
     count = 0
     with as_handle(out_file, "w") as out_handle:
         for title, seq, qual in FastqGeneralIterator(in_file):
@@ -2218,13 +2193,13 @@ def _fastq_convert_fasta(in_file, out_file):
 def _fastq_convert_tab(in_file, out_file):
     """Fast FASTQ to simple tabbed conversion (PRIVATE).
 
-    Avoids dealing with the FASTQ quality encoding, and creating SeqRecord and
-    Seq objects in order to speed up this conversion.
+    Avoids dealing with the FASTQ quality encoding, and creating Seq objects
+    in order to speed up this conversion.
 
     NOTE - This does NOT check the characters used in the FASTQ quality string
     are valid!
     """
-    # For real speed, don't even make SeqRecord and Seq objects!
+    # For real speed, don't even make Seq objects!
     count = 0
     with as_handle(out_file, "w") as out_handle:
         for title, seq, qual in FastqGeneralIterator(in_file):
@@ -2239,7 +2214,7 @@ def _fastq_convert_qual(in_file, out_file, mapping):
     Mapping should be a dictionary mapping expected ASCII characters from the
     FASTQ quality string to PHRED quality scores (as strings).
     """
-    # For real speed, don't even make SeqRecord and Seq objects!
+    # For real speed, don't even make Seq objects!
     count = 0
     with as_handle(out_file, "w") as out_handle:
         for title, seq, qual in FastqGeneralIterator(in_file):

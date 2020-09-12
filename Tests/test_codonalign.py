@@ -13,7 +13,6 @@ from Bio import BiopythonWarning, BiopythonExperimentalWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import CodonTable
 
@@ -55,17 +54,12 @@ class TestCodonSeq(unittest.TestCase):
 
 class TestCodonAlignment(unittest.TestCase):
     def setUp(self):
-        codonseq1 = codonalign.CodonSeq("AAATTT---TTTGGACCC")
-        codonseq2 = codonalign.CodonSeq("AAGTTT---TTTGGGCCC")
-        codonseq3 = codonalign.CodonSeq("AAGTAT---TTTGGACCC")
-        codonseq4 = codonalign.CodonSeq("AACTTT---TTTGGACGC")
+        codonseq1 = codonalign.CodonSeq("AAATTT---TTTGGACCC", id="alpha")
+        codonseq2 = codonalign.CodonSeq("AAGTTT---TTTGGGCCC", id="beta")
+        codonseq3 = codonalign.CodonSeq("AAGTAT---TTTGGACCC", id="gamma")
+        codonseq4 = codonalign.CodonSeq("AACTTT---TTTGGACGC", id="delta")
 
-        self.seqrec = [
-            SeqRecord(codonseq1, id="alpha"),
-            SeqRecord(codonseq2, id="beta"),
-            SeqRecord(codonseq3, id="gamma"),
-            SeqRecord(codonseq4, id="delta"),
-        ]
+        self.seqrec = [codonseq1, codonseq2, codonseq3, codonseq4]
 
     def test_align(self):
         codonAlign = codonalign.CodonAlignment(self.seqrec)
@@ -75,15 +69,15 @@ class TestCodonAlignment(unittest.TestCase):
 
 class TestAddition(unittest.TestCase):
     def setUp(self):
-        self.seq1 = SeqRecord(Seq("ATGTCTCGT"), id="pro1")
-        self.seq2 = SeqRecord(Seq("ATGCGT"), id="pro2")
-        self.pro1 = SeqRecord(Seq("MSR"), id="pro1")
-        self.pro2 = SeqRecord(Seq("M-R"), id="pro2")
+        self.seq1 = Seq("ATGTCTCGT", id="pro1")
+        self.seq2 = Seq("ATGCGT", id="pro2")
+        self.pro1 = Seq("MSR", id="pro1")
+        self.pro2 = Seq("M-R", id="pro2")
         self.aln = MultipleSeqAlignment([self.pro1, self.pro2])
         self.codon_aln = codonalign.build(self.aln, [self.seq1, self.seq2])
 
-        tail1 = SeqRecord(Seq("AAA"), id="pro1")
-        tail2 = SeqRecord(Seq("AAA"), id="pro2")
+        tail1 = Seq("AAA", id="pro1")
+        tail2 = Seq("AAA", id="pro2")
         self.multi_aln = MultipleSeqAlignment([tail1, tail2])
 
     def test_addition_MultipleSeqAlignment(self):
@@ -93,8 +87,8 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln1, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln1[x].seq),
-                str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq),
+                str(new_aln1[x]),
+                str(self.codon_aln[x]) + str(self.multi_aln[x]),
             )
 
         new_aln2 = self.multi_aln + self.codon_aln
@@ -102,8 +96,8 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln2, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln2[x].seq),
-                str(self.multi_aln[x].seq) + str(self.codon_aln[x].seq),
+                str(new_aln2[x]),
+                str(self.multi_aln[x]) + str(self.codon_aln[x]),
             )
 
     def test_addition_CodonAlignment(self):
@@ -113,18 +107,18 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln[x].seq),
-                str(self.codon_aln[x].seq) + str(self.codon_aln[x].seq),
+                str(new_aln[x]),
+                str(self.codon_aln[x]) + str(self.codon_aln[x]),
             )
 
     def test_ValueError(self):
         """Check that ValueError is thrown for Alignments of different lengths."""
         # original len(self.aln) = 2 , len(aln) = 3
         aln = MultipleSeqAlignment(
-            [self.pro1, self.pro2, SeqRecord(Seq("M--"), id="pro3")]
+            [self.pro1, self.pro2, Seq("M--", id="pro3")]
         )
         triple_codon = codonalign.build(
-            aln, [self.seq1, self.seq2, SeqRecord(Seq("ATG"), id="pro3")]
+            aln, [self.seq1, self.seq2, Seq("ATG", id="pro3")]
         )
         with self.assertRaises(ValueError):
             triple_codon + self.multi_aln
@@ -185,61 +179,48 @@ class TestBuildAndIO(unittest.TestCase):
 class Test_build(unittest.TestCase):
     def setUp(self):
         # Test set 1
-        seq1 = SeqRecord(
-            Seq(
-                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG",
-            ),
-            id="pro1",
+        seq1 = Seq(
+                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG", id="pro1",
         )
-        seq2 = SeqRecord(
-            Seq(
-                "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG",
-            ),
-            id="pro2",
+        seq2 = Seq(
+                "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG", id="pro2",
         )
-        pro1 = SeqRecord(Seq("SGTARTKLLLLLAALCAAGGALE"), id="pro1")
-        pro2 = SeqRecord(Seq("SGTSRTKRLLLLAALGAAGGALE"), id="pro2")
+        pro1 = Seq("SGTARTKLLLLLAALCAAGGALE", id="pro1")
+        pro2 = Seq("SGTSRTKRLLLLAALGAAGGALE", id="pro2")
         aln1 = MultipleSeqAlignment([pro1, pro2])
         self.aln1 = aln1
         self.seqlist1 = [seq1, seq2]
         # Test set 2
         #                      M  K  K  H  E L(F)L  C  Q  G  T  S  N  K  L  T  Q(L)L  G  T  F  E  D  H  F  L  S  L  Q  R  M  F  N  N  C  E  V  V
-        seq3 = SeqRecord(
-            Seq(
-                "ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC"
-            ),
+        seq3 = Seq(
+                "ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC",
             id="pro1",
         )
-        # seq4 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAA TGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC'), id='pro2')
-        seq4 = SeqRecord(
-            Seq(
+        # seq4 =Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAA TGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', id='pro2')
+        seq4 = Seq(
                 "ATGAAAAAGCACGAGTTCTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAATGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC"
-            ),
+            ,
             id="pro2",
         )
-        # seq5 =SeqRecord(Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCC  TTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC'), id='pro3')
-        seq5 = SeqRecord(
-            Seq(
+        # seq5 = Seq('ATGAAAAAGCACGAGTT CTTTGCCAAGGGACAAGTAACAAGCTCACCC  TTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC', id='pro3')
+        seq5 = Seq(
                 "ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCTTGGGCACTTTTGAAGACCACTTTCTGAGCCTACAGAGGATGTTCAACAACTGTGAGGTGGTCCTTGGGAATTTGGAAATTACCTACATGCAGAGTAGTTACAACCTTTCTTTTCTCAAGACCATCCAGGAGGTTGCCGGCTATGTACTCATTGCCCTC"
-            ),
+            ,
             id="pro3",
         )
-        pro3 = SeqRecord(
-            Seq(
+        pro3 = Seq(
                 "MKKHELLCQGTSNKLTQLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL"
-            ),
+            ,
             id="pro1",
         )
-        pro4 = SeqRecord(
-            Seq(
+        pro4 = Seq(
                 "MKKHEFLCQGTSNKLTQLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL"
-            ),
+            ,
             id="pro2",
         )
-        pro5 = SeqRecord(
-            Seq(
+        pro5 = Seq(
                 "MKKHELLCQGTSNKLTLLGTFEDHFLSLQRMFNNCEVVLGNLEITYMQSSYNLSFLKTIQEVAGYVLIAL"
-            ),
+            ,
             id="pro3",
         )
         aln2 = MultipleSeqAlignment([pro3, pro4, pro5])
@@ -248,27 +229,24 @@ class Test_build(unittest.TestCase):
 
         # Test set 3
         # use Yeast mitochondrial codon table
-        seq6 = SeqRecord(
-            Seq(
+        seq6 = Seq(
                 "ATGGCAAGGGACCACCCAGTTGGGCACTGATATGATCGGGTGTATTTGCAGAGTAGTAACCTTTCTTTTCTCAAGACCATCCAG"
-            ),
+            ,
             id="pro6",
         )
-        seq7 = SeqRecord(
-            Seq(
+        seq7 = Seq(
                 "ATGGCAAGGCACCATCCAGTTGAGCACTGATATGATCGGGTGTATTTGCAGAGTAGTAACGTGTCTCTGCTCAAGACCATCCAG"
-            ),
+            ,
             id="pro7",
         )
-        seq8 = SeqRecord(
-            Seq(
+        seq8 = Seq(
                 "ATGGCAGGGGACCACCCAGTTGGGCACTGATATGATCGTGTGTATCTGCAGAGTAGTAACCACTCTTTTCTCATGACCATCCAG"
-            ),
+            ,
             id="pro8",
         )
-        pro6 = SeqRecord(Seq("MARDHPVGHWYDRVYLQSSNTSFTKTIQ"), id="pro6")
-        pro7 = SeqRecord(Seq("MARHHPVEHWYDRVYLQSSNVSTTKTIQ"), id="pro7")
-        pro8 = SeqRecord(Seq("MAGDHPVGHWYDRVYTQSSNHSFTMTIQ"), id="pro8")
+        pro6 = Seq("MARDHPVGHWYDRVYLQSSNTSFTKTIQ", id="pro6")
+        pro7 = Seq("MARHHPVEHWYDRVYLQSSNVSTTKTIQ", id="pro7")
+        pro8 = Seq("MAGDHPVGHWYDRVYTQSSNHSFTMTIQ", id="pro8")
         aln3 = MultipleSeqAlignment([pro6, pro7, pro8])
         self.aln3 = aln3
         self.seqlist3 = [seq6, seq7, seq8]

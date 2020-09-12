@@ -23,11 +23,10 @@ import sys
 from os.path import basename
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
-# dictionary for determining which tags goes into SeqRecord annotation
+# dictionary for determining which tags goes into Seq annotation
 # each key is tag_name + tag_number
 # if a tag entry needs to be added, just add its key and its key
 # for the annotations dictionary as the value
@@ -354,7 +353,7 @@ class AbiIterator(SequenceIterator):
         super().__init__(source, mode="b", fmt="ABI")
 
     def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
+        """Start parsing the file, and return a Seq generator."""
         # check if input file is a valid Abi file
         marker = handle.read(4)
         if not marker:
@@ -367,7 +366,7 @@ class AbiIterator(SequenceIterator):
         return records
 
     def iterate(self, handle):
-        """Parse the file and generate SeqRecord objects."""
+        """Parse the file and generate Seq objects."""
         # dirty hack for handling time information
         times = {"RUND1": "", "RUND2": "", "RUNT1": "", "RUNT2": ""}
 
@@ -392,7 +391,7 @@ class AbiIterator(SequenceIterator):
                 seq = tag_data.decode()
             # PCON2 is quality values of base-called sequence
             elif key == "PCON2":
-                qual = [ord(val) for val in tag_data.decode()]
+                qual = tuple(ord(val) for val in tag_data.decode())
             # SMPL1 is sample id entered before sequencing run, it must be
             # a string.
             elif key == "SMPL1":
@@ -421,8 +420,8 @@ class AbiIterator(SequenceIterator):
 
             sample_id = _get_string_tag(raw.get("LIMS1"), sample_id)
             description = _get_string_tag(raw.get("CTID1"), "<unknown description>")
-            record = SeqRecord(
-                Seq(""),
+            record = Seq(
+                "",
                 id=sample_id,
                 name=file_name,
                 description=description,
@@ -430,13 +429,13 @@ class AbiIterator(SequenceIterator):
             )
 
         else:
-            # use the file name as SeqRecord.name if available
+            # use the file name as Seq.name if available
             try:
                 file_name = basename(handle.name).replace(".ab1", "")
             except AttributeError:
                 file_name = ""
-            record = SeqRecord(
-                Seq(seq),
+            record = Seq(
+                seq,
                 id=sample_id,
                 name=file_name,
                 description="",
@@ -452,7 +451,7 @@ class AbiIterator(SequenceIterator):
 
 
 def _AbiTrimIterator(handle):
-    """Return an iterator for the Abi file format that yields trimmed SeqRecord objects (PRIVATE)."""
+    """Return an iterator for the Abi file format that yields trimmed Seq objects (PRIVATE)."""
     return AbiIterator(handle, trim=True)
 
 
@@ -500,7 +499,7 @@ def _abi_trim(seq_record):
     """Trims the sequence using Richard Mott's modified trimming algorithm (PRIVATE).
 
     Arguments:
-        - seq_record - SeqRecord object to be trimmed.
+        - seq_record - Seq object to be trimmed.
 
     Trimmed bases are determined from their segment score, which is a
     cumulative sum of each base's score. Base scores are calculated from

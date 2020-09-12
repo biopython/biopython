@@ -971,7 +971,7 @@ class BlastXmlWriter:
 
         # for seqrecord objects, we only need the sequence string
         elif elem in ("Hsp_hseq", "Hsp_qseq"):
-            content = str(getattr(hsp, attr).seq)
+            content = getattr(hsp, attr)
         elif elem == "Hsp_midline":
             content = hsp.aln_annotation["similarity"]
         elif elem in ("Hsp_evalue", "Hsp_bit-score"):

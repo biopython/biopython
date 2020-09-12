@@ -322,7 +322,7 @@ class TestGckWithArtificialData(unittest.TestCase):
         """Read an artificial sample file."""
         h = BytesIO(self.buffer)
         record = SeqIO.read(h, "gck")
-        self.assertEqual("ACGTACGTACGT", record.seq)
+        self.assertEqual("ACGTACGTACGT", record)
         self.assertEqual("Sample construct", record.description)
         self.assertEqual("linear", record.annotations["topology"])
         self.assertEqual(2, len(record.features))
