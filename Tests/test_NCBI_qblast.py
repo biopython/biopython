@@ -290,14 +290,14 @@ class TestQblast(unittest.TestCase):
         # Check the recorded input parameters agree with those requested
         self.assertEqual(float(record.expect), e_value)
         self.assertEqual(record.application.lower(), program)
-        self.assertTrue(len(record.alignments) <= 10)
-        self.assertTrue(len(record.descriptions) <= 10)
+        self.assertLessEqual(len(record.alignments), 10)
+        self.assertLessEqual(len(record.descriptions), 10)
 
         # Check the expected result(s) are found in the alignments
         if expected_hits is None:
             self.assertEqual(len(record.alignments), 0)  # Expected no alignments!
         else:
-            self.assertTrue(len(record.alignments) > 0)  # Expected some alignments!
+            self.assertGreater(len(record.alignments), 0)  # Expected some alignments!
             found_result = False
             for expected_hit in expected_hits:
                 for alignment in record.alignments:
@@ -317,7 +317,9 @@ class TestQblast(unittest.TestCase):
         if expected_hits is None:
             self.assertEqual(len(record.descriptions), 0)  # Expected no descriptions!
         else:
-            self.assertTrue(len(record.descriptions) > 0)  # Expected some descriptions!
+            self.assertGreater(
+                len(record.descriptions), 0
+            )  # Expected some descriptions!
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:
