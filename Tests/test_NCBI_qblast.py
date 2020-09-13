@@ -315,11 +315,11 @@ class TestQblast(unittest.TestCase):
 
         # Check the expected result(s) are found in the descriptions
         if expected_hits is None:
-            self.assertEqual(len(record.descriptions), 0)  # Expected no descriptions!
+            # Expected no descriptions!
+            self.assertEqual(len(record.descriptions), 0)
         else:
-            self.assertGreater(
-                len(record.descriptions), 0
-            )  # Expected some descriptions!
+            # Expected some descriptions!
+            self.assertGreater(len(record.descriptions), 0)
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:
