@@ -118,7 +118,7 @@ class StructureBuilder:
         if field != " ":
             if field == "H":
                 # The hetero field consists of H_ + the residue name (e.g. H_FUC)
-                field = "H_" + resname
+                field = ("H_" + resname).replace(" ", "")
         res_id = (field, resseq, icode)
         if field == " ":
             if self.chain.has_id(res_id):
