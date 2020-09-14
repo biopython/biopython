@@ -88,6 +88,11 @@ class ShrakeRupley:
             the calculation. Values will replace/complement those in the
             default ATOMIC_RADII dictionary.
         :type radii_dict: dict
+
+        Examples:
+        >>> sr = ShrakeRupley()
+        >>> sr = ShrakeRupley(n_points=960)
+        >>> sr = ShrakeRupley(radii_dict={"O": 3.1415})
         """
         if probe_radius <= 0.0:
             raise ValueError(
@@ -152,6 +157,17 @@ class ShrakeRupley:
             "S" (Structure). The ASA value of an entity is the sum of all ASA
             values of its children. Defaults to "A".
         :type entity: Bio.PDB.Entity
+
+        Example:
+        >>> from Bio.PDB import PDBParser
+        >>> p = PDBParser(QUIET=1)
+        >>> struct = p.get_structure("1LCD", "PDB/1LCD.pdb")
+        >>> sr = ShrakeRupley()
+        >>> sr.compute(struct, level="S")
+        >>> struct.sasa
+        7053.429219297465
+        >>> struct[0]["A"][11]["OE1"].sasa
+        9.643131216564484
         """
         is_valid = hasattr(entity, "level") and entity.level in {"R", "C", "M", "S"}
         if not is_valid:
