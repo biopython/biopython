@@ -12,9 +12,8 @@ which uses a sphere (of equal radius to a solvent molecule) to probe the
 surface of the molecule.
 
 Reference:
-Shrake, A; Rupley, JA. (1973).
-"Environment and exposure to solvent of protein atoms. Lysozyme and insulin".
-J Mol Biol
+    Shrake, A; Rupley, JA. (1973). J Mol Biol
+    "Environment and exposure to solvent of protein atoms. Lysozyme and insulin".
 """
 
 import collections
@@ -38,17 +37,35 @@ _ENTITY_HIERARCHY = {
 # vdW radii taken from:
 # https://en.wikipedia.org/wiki/Atomic_radii_of_the_elements_(data_page)
 #
+# Radii for CL, K, NA, etc are _not_ ionic radii.
+#
 # References:
 # A. Bondi (1964). "van der Waals Volumes and Radii".
+# M. Mantina, A.C. et al., J. Phys. Chem. 2009, 113, 5806.
 ATOMIC_RADII = collections.defaultdict(lambda x: 2.0)
 ATOMIC_RADII.update(
     {
         "H": 1.200,
+        "HE": 1.400,
         "C": 1.700,
         "N": 1.550,
         "O": 1.520,
-        "S": 1.800,
+        "F": 1.470,
+        "NA": 2.270,
+        "MG": 1.730,
         "P": 1.800,
+        "S": 1.800,
+        "CL": 1.750,
+        "K": 2.750,
+        "CA": 2.310,
+        "NI": 1.630,
+        "CU": 1.400,
+        "ZN": 1.390,
+        "SE": 1.900,
+        "BR": 1.850,
+        "CD": 1.580,
+        "I": 1.980,
+        "HG": 1.550,
     }
 )
 
@@ -56,14 +73,21 @@ ATOMIC_RADII.update(
 class ShrakeRupley:
     """Calculates SASAs using the Shrake-Rupley algorithm."""
 
-    def __init__(self, probe_radius=1.40, n_points=100):
+    def __init__(self, probe_radius=1.40, n_points=100, radii_dict=None):
         """Initialize the class.
 
-        :param probe_radius: radius of the probe in A.
+        :param probe_radius: radius of the probe in A. Default is 1.40.
         :type probe_radius: float
 
-        :param n_points: resolution of the surface of each atom.
+        :param n_points: resolution of the surface of each atom. Default is 100.
+            A higher number of points results in more precise measurements, but
+            slows down the calculation.
         :type n_points: int
+
+        :param radii_dict: user-provided dictionary of atomic radii to use in
+            the calculation. Values will replace/complement those in the
+            default ATOMIC_RADII dictionary.
+        :type radii_dict: dict
         """
         if probe_radius <= 0.0:
             raise ValueError(
@@ -77,6 +101,11 @@ class ShrakeRupley:
                 f"Number of sphere points must be larger than 1: {n_points}"
             )
         self.n_points = n_points
+
+        # Update radii list with user provided lists.
+        if radii_dict is not None:
+            ATOMIC_RADII.update(radii_dict)
+        self.radii_dict = ATOMIC_RADII
 
         # Pre-compute reference sphere
         self._sphere = self._compute_sphere()
@@ -153,7 +182,7 @@ class ShrakeRupley:
         kdt = KDTree(coords, 10)
 
         # Pre-compute radius * probe table
-        radii = np.array([ATOMIC_RADII[a.element] for a in atoms], dtype=np.float64)
+        radii = np.array([self.radii_dict[a.element] for a in atoms], dtype=np.float64)
         radii += self.probe_radius
         twice_maxradii = np.max(radii) * 2
 
