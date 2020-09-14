@@ -20,6 +20,9 @@ unambiguously guessed from the atom name, in accordance with PDB structures.
 Bio.PDB entities now have a ``center_of_mass()`` method that calculates either
 centers of gravity or geometry.
 
+New module Bio.PDB.SASA implements the Shrake-Rupley algorithm to calculate
+atomic solvent accessible areas without third-party tools.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
