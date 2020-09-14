@@ -10,7 +10,16 @@
 Includes: PDB and mmCIF parsers, a Structure class, a module to keep a local
 copy of the PDB up-to-date, selective IO of PDB files, etc.
 
-Author: Thomas Hamelryck.  Additional code by Kristian Rother.
+Original Author: Thomas Hamelryck.
+Contributions by:
+- Peter Cock
+- Joe Greener
+- Rob Miller
+- Lenna X. Peterson
+- Joao Rodrigues
+- Kristian Rother
+- Eric Talevich
+- and many others.
 """
 
 # Get a Structure object from a PDB file
@@ -70,5 +79,12 @@ from .Dice import extract
 # Depends on kdtrees C module
 try:
     from .NeighborSearch import NeighborSearch
+except ImportError:
+    pass
+
+# Native Shrake-Rupley algorithm for SASA calculations.
+# Depends on kdtrees C module
+try:
+    from .SASA import ShrakeRupley
 except ImportError:
     pass
