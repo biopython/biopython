@@ -108,9 +108,9 @@ class ShrakeRupley:
         self.n_points = n_points
 
         # Update radii list with user provided lists.
+        self.radii_dict = ATOMIC_RADII.copy()
         if radii_dict is not None:
-            ATOMIC_RADII.update(radii_dict)
-        self.radii_dict = ATOMIC_RADII
+            self.radii_dict.update(radii_dict)
 
         # Pre-compute reference sphere
         self._sphere = self._compute_sphere()
