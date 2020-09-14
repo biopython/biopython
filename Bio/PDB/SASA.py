@@ -164,10 +164,10 @@ class ShrakeRupley:
         >>> struct = p.get_structure("1LCD", "PDB/1LCD.pdb")
         >>> sr = ShrakeRupley()
         >>> sr.compute(struct, level="S")
-        >>> struct.sasa
-        7053.429219297465
-        >>> struct[0]["A"][11]["OE1"].sasa
-        9.643131216564484
+        >>> struct.sasa.round(2)
+        7053.43
+        >>> struct[0]["A"][11]["OE1"].sasa.round(2)
+        9.64
         """
         is_valid = hasattr(entity, "level") and entity.level in {"R", "C", "M", "S"}
         if not is_valid:
