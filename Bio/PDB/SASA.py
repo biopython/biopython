@@ -18,11 +18,22 @@ J Mol Biol
 """
 
 import collections
+import itertools
 import math
 
 import numpy as np
 
 from Bio.PDB.kdtrees import KDTree
+
+__all__ = ["ShrakeRupley"]
+
+_ENTITY_HIERARCHY = {
+    "A": 0,
+    "R": 1,
+    "C": 2,
+    "M": 3,
+    "S": 4,
+}
 
 # vdW radii taken from:
 # https://en.wikipedia.org/wiki/Atomic_radii_of_the_elements_(data_page)
@@ -97,15 +108,42 @@ class ShrakeRupley:
 
         return coords
 
-    def compute(self, entity):
-        """Calculate atomic surface accessibility values for a given entity.
+    def compute(self, entity, level="A"):
+        """Calculate surface accessibility surface area for an entity.
+
+        The resulting atomic surface accessibility values are attached to the
+        .sasa attribute of each entity (or atom), depending on the level. For
+        example, if level="R", all residues will have a .sasa attribute. Atoms
+        will always be assigned a .sasa attribute with their individual values.
 
         :param entity: input entity.
-        :type entity: Bio.PDB.Entity.
+        :type entity: Bio.PDB.Entity, e.g. Residue, Chain, ...
+
+        :param level: the level at which ASA values are assigned, which can be
+            one of "A" (Atom), "R" (Residue), "C" (Chain), "M" (Model), or
+            "S" (Structure). The ASA value of an entity is the sum of all ASA
+            values of its children. Defaults to "A".
+        :type entity: Bio.PDB.Entity
         """
+        is_valid = hasattr(entity, "level") and entity.level in {"R", "C", "M", "S"}
+        if not is_valid:
+            raise ValueError(
+                f"Invalid entity type '{type(entity)}'. "
+                "Must be Residue, Chain, Model, or Structure"
+            )
+
+        if level not in _ENTITY_HIERARCHY:
+            raise ValueError(f"Invalid level '{level}'. Must be A, R, C, M, or S.")
+        elif _ENTITY_HIERARCHY[level] > _ENTITY_HIERARCHY[entity.level]:
+            raise ValueError(
+                f"Level '{level}' must be equal or smaller than input entity: {entity.level}"
+            )
+
         # Get atoms onto list for lookup
         atoms = list(entity.get_atoms())
         n_atoms = len(atoms)
+        if not n_atoms:
+            raise ValueError("Entity has no child atoms.")
 
         # Get coordinates as a numpy array
         # We trust DisorderedAtom and friends to pick representatives.
@@ -117,7 +155,7 @@ class ShrakeRupley:
         # Pre-compute radius * probe table
         radii = np.array([ATOMIC_RADII[a.element] for a in atoms], dtype=np.float64)
         radii += self.probe_radius
-        twice_maxradii = max(radii) * 2
+        twice_maxradii = np.max(radii) * 2
 
         # Calculate ASAs
         asa_array = np.zeros((n_atoms, 1), dtype=np.int)
@@ -150,9 +188,18 @@ class ShrakeRupley:
         f = radii * radii * (4 * np.pi / self.n_points)
         asa_array = asa_array * f[:, np.newaxis]
 
-        # Set atom attribute
+        # Set atom .sasa
         for i, atom in enumerate(atoms):
             atom.sasa = asa_array[i, 0]
-            # atom.xtra["SASA"] = asa_array[i, 0]
 
-        return asa_array
+        # Aggregate values per entity level if necessary
+        if level != "A":
+            entities = set(atoms)
+            target = _ENTITY_HIERARCHY[level]
+            for _ in range(target):
+                entities = {e.parent for e in entities}
+
+            atomdict = {a.full_id: idx for idx, a in enumerate(atoms)}
+            for e in entities:
+                e_atoms = [atomdict[a.full_id] for a in e.get_atoms()]
+                e.sasa = asa_array[e_atoms].sum()
