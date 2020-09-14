@@ -17,7 +17,6 @@ Reference:
 """
 
 import collections
-import itertools
 import math
 
 import numpy as np
@@ -76,7 +75,8 @@ class ShrakeRupley:
     def __init__(self, probe_radius=1.40, n_points=100, radii_dict=None):
         """Initialize the class.
 
-        :param probe_radius: radius of the probe in A. Default is 1.40.
+        :param probe_radius: radius of the probe in A. Default is 1.40, roughly
+            the radius of a water molecule.
         :type probe_radius: float
 
         :param n_points: resolution of the surface of each atom. Default is 100.
@@ -113,10 +113,9 @@ class ShrakeRupley:
     def _compute_sphere(self):
         """Return the 3D coordinates of n points on a sphere.
 
-        Uses the golden spiral algorithm to place points 'evenly'
-        on the sphere surface. We compute this once and then move
-        the sphere to the centroid of each atom as we compute the
-        ASAs.
+        Uses the golden spiral algorithm to place points 'evenly' on the sphere
+        surface. We compute this once and then move the sphere to the centroid
+        of each atom as we compute the ASAs.
         """
         n = self.n_points
 
