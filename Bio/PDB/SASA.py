@@ -182,19 +182,21 @@ class ShrakeRupley:
         kdt = KDTree(coords, 10)
 
         # Pre-compute radius * probe table
-        radii = np.array([self.radii_dict[a.element] for a in atoms], dtype=np.float64)
+        radii_dict = self.radii_dict
+        radii = np.array([radii_dict[a.element] for a in atoms], dtype=np.float64)
         radii += self.probe_radius
         twice_maxradii = np.max(radii) * 2
 
         # Calculate ASAs
         asa_array = np.zeros((n_atoms, 1), dtype=np.int)
+        ptset = set(range(self.n_points))
         for i in range(n_atoms):
 
             r_i = radii[i]
 
             # Move sphere to atom
             s_on_i = (np.array(self._sphere, copy=True) * r_i) + coords[i]
-            available_set = set(range(self.n_points))
+            available_set = ptset.copy()
 
             # KDtree for sphere points
             kdt_sphere = KDTree(s_on_i, 10)
