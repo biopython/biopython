@@ -469,6 +469,13 @@ class DisorderedEntityWrapper:
         """
         raise NotImplementedError
 
+    def disordered_remove(self, child):
+        """Remove disordered entry.
+
+        This is implemented by DisorderedAtom and DisorderedResidue.
+        """
+        raise NotImplementedError
+
     def is_disordered(self):
         """Return 2, indicating that this Entity is a collection of Entities."""
         return 2

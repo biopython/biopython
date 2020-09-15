@@ -8,6 +8,7 @@
 """Unit tests for disordered atoms in the Bio.PDB module."""
 
 import os
+import sys
 import tempfile
 import unittest
 import warnings
@@ -30,6 +31,7 @@ class TestDisordered(unittest.TestCase):
         """Return a list of all atoms in the structure."""
         return [a for r in structure.get_residues() for a in r.get_unpacked_list()]
 
+    # Copying
     def test_copy_disordered_atom(self):
         """Copies disordered atoms and all their children."""
         resi27 = self.structure[0]["A"][27]
@@ -58,6 +60,7 @@ class TestDisordered(unittest.TestCase):
         for ai, aj in zip(atoms, copy_atoms):
             self.assertEqual(ai.name, aj.name)
 
+    # Transforming
     def test_transform_disordered(self):
         """Transform propagates through disordered atoms."""
         # This test relates to issue #455 where applying a transformation
@@ -76,6 +79,7 @@ class TestDisordered(unittest.TestCase):
         for ai, aj in zip(atoms, copy_atoms):
             self.assertEqual(ai - aj, 20.0)  # check distance == 20.0
 
+    # Extract and write
     def test_copy_and_write_disordered(self):
         """Extract, save, and parse again disordered atoms."""
         writer = PDBIO()
@@ -141,6 +145,71 @@ class TestDisordered(unittest.TestCase):
         da = DisorderedAtom("dummy")
         with self.assertRaises(ValueError):
             da.center_of_mass()
+
+    # disordered_remove
+    def test_remove_disordered_residue(self):
+        """Remove residues from DisorderedResidue entities."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            s = self.parser.get_structure("a", "PDB/a_structure.pdb")
+
+        # Residue 10 of chain A is disordered
+        disres = s[1]["A"][(" ", 10, " ")]
+        self.assertEqual(disres.is_disordered(), 2)
+        self.assertEqual(len(disres.child_dict), 2)  # GLY and SER
+
+        disres.disordered_remove("GLY")
+        self.assertEqual(len(disres.child_dict), 1)
+        self.assertEqual(disres.resname, "SER")  # selects new child?
+
+        disres.disordered_remove("SER")
+        self.assertEqual(len(disres.child_dict), 0)
+        self.assertIsNone(disres.selected_child)
+        with self.assertRaises(AttributeError):
+            _ = disres.resname
+
+        self.assertEqual(str(disres), "<Empty DisorderedResidue>")
+
+        # Should still be in chain with the same id though
+        # Up to the user to detach the DisorderedResidue from its parent.
+        disres = s[1]["A"][(" ", 10, " ")]
+
+    def test_remove_disordered_atom(self):
+        """Remove altlocs from DisorderedAtom entities."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            s = self.parser.get_structure("a", "PDB/a_structure.pdb")
+
+        # Residue 3 of chain A is disordered
+        disres = s[1]["A"][(" ", 3, " ")]
+        self.assertEqual(disres.is_disordered(), 1)
+
+        disatom = disres["N"]
+        self.assertEqual(len(disatom.child_dict), 2)  # "A" and " "
+
+        # Add new atom with bogus occupancy to test selection on removal
+        atom = disatom.child_dict["A"].copy()
+        atom.altloc = "B"
+        atom.occupancy = 2.0
+        disatom.disordered_add(atom)
+
+        disatom.disordered_remove(" ")
+        self.assertEqual(len(disatom.child_dict), 2)
+        self.assertEqual(disatom.altloc, "B")
+
+        # Remove all children
+        disatom.disordered_remove("A")
+        disatom.disordered_remove("B")
+
+        self.assertEqual(len(disatom.child_dict), 0)
+        self.assertIsNone(disatom.selected_child)
+        self.assertEqual(disatom.last_occupancy, -sys.maxsize)
+        with self.assertRaises(AttributeError):
+            _ = disatom.altloc
+
+        self.assertEqual(str(disatom), "<Empty DisorderedAtom N>")
+
+        disatm = s[1]["A"][(" ", 3, " ")]["N"]
 
 
 if __name__ == "__main__":

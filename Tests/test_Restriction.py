@@ -229,27 +229,27 @@ class EnzymeComparison(unittest.TestCase):
         # Comparison of iso- and neoschizomers
         self.assertEqual(Acc65I, Acc65I)
         self.assertNotEqual(Acc65I, KpnI)
-        self.assertFalse(Acc65I == Asp718I)
+        self.assertFalse(Acc65I == Asp718I)  # noqa: A500
         # self.assertNotEqual(Acc65I, Asp718I) it doesn't work as expected
-        self.assertFalse(Acc65I != Asp718I)
+        self.assertFalse(Acc65I != Asp718I)  # noqa: A500
         self.assertNotEqual(Acc65I, EcoRI)
         self.assertTrue(Acc65I >> KpnI)
         self.assertFalse(Acc65I >> Asp718I)
 
         # Compare length of recognition sites
         self.assertFalse(EcoRI >= EcoRV)
-        self.assertTrue(EcoRV >= EcoRI)
+        self.assertGreaterEqual(EcoRV, EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV >= 3
         self.assertFalse(EcoRI > EcoRV)
-        self.assertTrue(EcoRV > EcoRI)
+        self.assertGreater(EcoRV, EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV > 3
-        self.assertTrue(EcoRI <= EcoRV)
+        self.assertLessEqual(EcoRI, EcoRV)
         self.assertFalse(EcoRV <= EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV <= 3
-        self.assertTrue(EcoRI < EcoRV)
+        self.assertLess(EcoRI, EcoRV)
         self.assertFalse(EcoRV < EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV < 3
