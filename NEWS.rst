@@ -72,6 +72,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
+- Vini Salazar (first contribution)
 - Yogesh Kulkarni (first contribution)
 - Zheng Ruan
 
