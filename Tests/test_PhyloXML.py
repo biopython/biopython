@@ -718,8 +718,8 @@ class MethodTests(unittest.TestCase):
         evts = self.phyloxml.phylogenies[4].clade.events
         # Container behavior: __len__, __contains__
         self.assertEqual(len(evts), 1)
-        self.assertTrue("speciations" in evts)
-        self.assertFalse("duplications" in evts)
+        self.assertIn("speciations", evts)
+        self.assertNotIn("duplications", evts)
         # Attribute access: __get/set/delitem__
         self.assertEqual(evts["speciations"], 1)
         self.assertRaises(KeyError, lambda k: evts[k], "duplications")  # noqa: E731
