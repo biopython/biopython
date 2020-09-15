@@ -2291,7 +2291,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record["BondChiralUndefCount"], 0)
         self.assertEqual(record["IsotopeAtomCount"], 0)
         self.assertEqual(record["CovalentUnitCount"], 1)
-        self.assertEqual(record["TautomerCount"], None)
+        self.assertIsNone(record["TautomerCount"])
         self.assertEqual(record["SubstanceIDList"], [])
         self.assertEqual(record["TPSA"], "34.1")
         self.assertEqual(record["AssaySourceNameList"], [])
@@ -2300,7 +2300,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record["MinTC"], "")
         self.assertEqual(record["MaxTC"], "")
         self.assertEqual(record["ActiveAidCount"], 1)
-        self.assertEqual(record["InactiveAidCount"], None)
+        self.assertIsNone(record["InactiveAidCount"])
         self.assertEqual(record["TotalAidCount"], 243)
         self.assertEqual(record["InChIKey"], "LXEJRKJRKIFVNY-UHFFFAOYSA-N")
         self.assertEqual(

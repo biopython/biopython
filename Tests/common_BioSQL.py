@@ -701,7 +701,7 @@ class DeleteTest(unittest.TestCase):
 
             del db[seq_id]
             # check to see that the entry in the bioentry table is removed
-            self.assertEqual(seq_id in db, False)
+            self.assertFalse(seq_id in db)
 
             # no need to check seqfeature presence if it had none to begin with
             if len(seqfeatures):
