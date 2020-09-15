@@ -132,8 +132,8 @@ class TestPhenoMicro(unittest.TestCase):
         p["A02"] = p["A02"]
         for w in p:
             pass
-        self.assertTrue("A01" in p)
-        self.assertFalse("test" in p)
+        self.assertIn("A01", p)
+        self.assertNotIn("test", p)
         self.assertRaises(ValueError, next, p.get_row("test"))
         self.assertEqual(next(p.get_row("A")), p["A01"])
         self.assertRaises(ValueError, next, p.get_column("test"))

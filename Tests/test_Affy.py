@@ -69,15 +69,25 @@ class AffyTest(unittest.TestCase):
             self.assertAlmostEqual(record.AlgorithmParameters["OutlierHigh"], 1.500)
             self.assertAlmostEqual(record.AlgorithmParameters["OutlierLow"], 1.004)
             self.assertEqual(record.AlgorithmParameters["AlgVersion"], "6.0")
-            self.assertTrue(record.AlgorithmParameters["FixedCellSize"])
+            self.assertEqual(
+                record.AlgorithmParameters["FixedCellSize"], True
+            )  # noqa: A502
             self.assertEqual(record.AlgorithmParameters["FullFeatureWidth"], 7)
             self.assertEqual(record.AlgorithmParameters["FullFeatureHeight"], 7)
-            self.assertFalse(record.AlgorithmParameters["IgnoreOutliersInShiftRows"])
-            self.assertTrue(record.AlgorithmParameters["FeatureExtraction"])
+            self.assertEqual(
+                record.AlgorithmParameters["IgnoreOutliersInShiftRows"], False
+            )  # noqa: A502
+            self.assertEqual(
+                record.AlgorithmParameters["FeatureExtraction"], True
+            )  # noqa: A502
             self.assertEqual(record.AlgorithmParameters["PoolWidthExtenstion"], 2)
             self.assertEqual(record.AlgorithmParameters["PoolHeightExtension"], 2)
-            self.assertFalse(record.AlgorithmParameters["UseSubgrids"])
-            self.assertFalse(record.AlgorithmParameters["RandomizePixels"])
+            self.assertEqual(
+                record.AlgorithmParameters["UseSubgrids"], False
+            )  # noqa: A502
+            self.assertEqual(
+                record.AlgorithmParameters["RandomizePixels"], False
+            )  # noqa: A502
             self.assertEqual(record.AlgorithmParameters["ErrorBasis"], "StdvMean")
             self.assertAlmostEqual(record.AlgorithmParameters["StdMult"], 1.0)
             self.assertEqual(record.NumberCells, 25)
