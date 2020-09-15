@@ -229,9 +229,9 @@ class EnzymeComparison(unittest.TestCase):
         # Comparison of iso- and neoschizomers
         self.assertEqual(Acc65I, Acc65I)
         self.assertNotEqual(Acc65I, KpnI)
-        self.assertEqual(Acc65I == Asp718I, False)
+        self.assertFalse(Acc65I == Asp718I)  # noqa: A500
         # self.assertNotEqual(Acc65I, Asp718I) it doesn't work as expected
-        self.assertEqual(Acc65I != Asp718I, False)
+        self.assertFalse(Acc65I != Asp718I)  # noqa: A500
         self.assertNotEqual(Acc65I, EcoRI)
         self.assertTrue(Acc65I >> KpnI)
         self.assertFalse(Acc65I >> Asp718I)
