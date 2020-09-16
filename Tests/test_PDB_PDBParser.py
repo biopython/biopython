@@ -110,7 +110,7 @@ class FlawedPDB_tests(unittest.TestCase):
         atoms = structure[0]["A"][(" ", 152, " ")]
 
         # Blank occupancy behavior set in Bio/PDB/PDBParser
-        self.assertEqual(atoms["N"].get_occupancy(), None)
+        self.assertIsNone(atoms["N"].get_occupancy())
         self.assertEqual(atoms["CA"].get_occupancy(), 1.0)
         self.assertEqual(atoms["C"].get_occupancy(), 0.0)
 

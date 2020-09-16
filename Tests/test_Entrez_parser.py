@@ -2291,7 +2291,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record["BondChiralUndefCount"], 0)
         self.assertEqual(record["IsotopeAtomCount"], 0)
         self.assertEqual(record["CovalentUnitCount"], 1)
-        self.assertEqual(record["TautomerCount"], None)
+        self.assertEqual(record["TautomerCount"], None)  # noqa: A502
         self.assertEqual(record["SubstanceIDList"], [])
         self.assertEqual(record["TPSA"], "34.1")
         self.assertEqual(record["AssaySourceNameList"], [])

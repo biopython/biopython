@@ -13943,7 +13943,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(record.blast_cutoff[0], 58)
             self.assertAlmostEqual(record.blast_cutoff[1], 26.9)
             record = next(records)
-            self.assertEqual(record, None)
+            self.assertIsNone(record)
 
     def test_text_2202L_blastn_001(self):
         """Parsing BLASTN 2.2.2 output with error messages (text_2202L_blastn_001)."""
@@ -13975,7 +13975,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
             self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
             self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2202L_blastn_002(self):
         """Parsing BLASTN 2.2.2 output with missing error messages (text_2202L_blastn_002)."""
@@ -14007,7 +14007,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
             self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
             self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2208L_psiblast_001(self):
         """Parsing BLASTP 2.2.8 output (text_2208L_psiblast_001)."""
@@ -14104,7 +14104,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(record.database_letters, 1573298872)
             self.assertEqual(len(record.descriptions), 0)
             self.assertEqual(len(record.alignments), 0)
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2220L_blastx_001(self):
         """Parsing BLASTX 2.2.20 output (text_2220L_blastx_001)."""
@@ -14140,7 +14140,7 @@ class TestNCBITextParser(unittest.TestCase):
                 else:
                     self.assertEqual(a.title, ">" + b[0])
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2220L_blastx_002(self):
         """Parsing BLASTX 2.2.20 output with multiple queries (text_2220L_blastx_002)."""
@@ -14252,7 +14252,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.descriptions), 0)
             self.assertEqual(len(record.alignments), 0)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2221L_blastp_001(self):
         """Parsing BLASTP 2.2.21 output with multiple queries (text_2221L_blastp_001)."""
@@ -14299,7 +14299,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.alignments), 1)  # I used -b 1
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2222L_blastx_001(self):
         """Parsing BLASTX 2.2.22 output with multiple queries (text_2222L_blastx_001)."""
@@ -14397,7 +14397,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.alignments), 1)  # I used -b 1
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2222_blastx_001(self):
         """Parsing BLASTX 2.2.22+ output with multiple queries (text_2222_blastx_001)."""
@@ -14497,7 +14497,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.alignments), 1)  # I used -b 1
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastn_001(self):
         """Parsing BLASTN 2.2.26+ output with no results."""
@@ -14516,7 +14516,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.descriptions), 0)
             self.assertEqual(len(record.alignments), 0)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastn_002(self):
         """Parsing BLASTN 2.2.26+ output with single hsp results."""
@@ -14537,7 +14537,7 @@ class TestNCBITextParser(unittest.TestCase):
             for ali in record.alignments:
                 self.assertEqual(len(ali.hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastn_003(self):
         """Parsing BLASTN 2.2.26+ output with multiple hsp results present."""
@@ -14561,7 +14561,7 @@ class TestNCBITextParser(unittest.TestCase):
                 else:
                     self.assertEqual(len(ali.hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastp_001(self):
         """Parsing BLASTP 2.2.26+ with no results."""
@@ -14580,7 +14580,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.descriptions), 0)
             self.assertEqual(len(record.alignments), 0)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastp_002(self):
         """Parsing BLASTP 2.2.26+ with single hsp results."""
@@ -14601,7 +14601,7 @@ class TestNCBITextParser(unittest.TestCase):
             for ali in record.alignments:
                 self.assertEqual(len(ali.hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastp_003(self):
         """Parsing BLASTP 2.2.26+ with multiple hsp results present."""
@@ -14625,7 +14625,7 @@ class TestNCBITextParser(unittest.TestCase):
                 else:
                     self.assertEqual(len(ali.hsps), 2)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastx_001(self):
         """Parsing BLASTX 2.2.26+ with no results."""
@@ -14663,7 +14663,7 @@ class TestNCBITextParser(unittest.TestCase):
             for ali in record.alignments:
                 self.assertEqual(len(ali.hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_blastx_003(self):
         """Parsing BLASTP 2.2.26+ with multiple hsp results present."""
@@ -14687,7 +14687,7 @@ class TestNCBITextParser(unittest.TestCase):
                 else:
                     self.assertEqual(len(ali.hsps), 2)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_tblastn_001(self):
         """Parsing TBLASTN 2.2.26+ output with no results."""
@@ -14706,7 +14706,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.descriptions), 0)
             self.assertEqual(len(record.alignments), 0)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_tblastn_002(self):
         """Parsing TBLASTN 2.2.26+ output with single hsp results."""
@@ -14727,7 +14727,7 @@ class TestNCBITextParser(unittest.TestCase):
             for ali in record.alignments:
                 self.assertEqual(len(ali.hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_tblastn_003(self):
         """Parsing TBLASTN 2.2.26+ output with multiple hsp results present."""
@@ -14751,7 +14751,7 @@ class TestNCBITextParser(unittest.TestCase):
                 else:
                     self.assertEqual(len(ali.hsps), 2)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_tblastx_001(self):
         """Parsing TBLASTX 2.2.26+ output with no results."""
@@ -14770,7 +14770,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.descriptions), 0)
             self.assertEqual(len(record.alignments), 0)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_tblastx_002(self):
         """Parsing TBLASTX 2.2.26+ output with single hsp results."""
@@ -14791,7 +14791,7 @@ class TestNCBITextParser(unittest.TestCase):
             for ali in record.alignments:
                 self.assertEqual(len(ali.hsps), 1)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2226_tblastx_003(self):
         """Parsing TBLASTX 2.2.26+ output with multiple hsp results present."""
@@ -14815,7 +14815,7 @@ class TestNCBITextParser(unittest.TestCase):
                 else:
                     self.assertEqual(len(ali.hsps), 3)
 
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
     def test_text_2230_blastp_001(self):
         """Parsing BLASTP 2.2.30+ output with line of dashes."""
@@ -14835,7 +14835,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertTrue(h.query.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
             h = record.alignments[0].hsps[2]
             self.assertTrue(h.query.startswith("YSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPAY"))
-            self.assertEqual(None, next(records))
+            self.assertIsNone(next(records))
 
 
 if __name__ == "__main__":

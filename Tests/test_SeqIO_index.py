@@ -116,7 +116,7 @@ if sqlite3:
             )
 
             filenames, flag = raw_filenames("Roche/triple_sff_rel_paths.idx")
-            self.assertEqual(flag, True)
+            self.assertTrue(flag)
             self.assertEqual(
                 filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
             )
@@ -210,7 +210,7 @@ if sqlite3:
 
             # Now directly check the filenames inside the SQLite index:
             filenames, flag = raw_filenames(index_file)
-            self.assertEqual(flag, True)
+            self.assertTrue(flag)
             self.assertEqual(filenames, expt_sff_files)
 
             # Load index...
@@ -666,7 +666,7 @@ class IndexDictTests(SeqIOTestBaseClass):
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)
-            self.assertEqual(True, compare_record(rec1, rec2))
+            self.assertTrue(compare_record(rec1, rec2))
         rec_dict.close()
         del rec_dict
 

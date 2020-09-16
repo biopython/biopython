@@ -27,6 +27,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - João Rodrigues
+- Vini Salazar (first contribution)
 
 4 September 2020: Biopython 1.78
 ================================

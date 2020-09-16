@@ -184,8 +184,8 @@ class PrankConversion(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
         self.assertIn("PRANK", message)
-        self.assertTrue(
-            ("converting '%s' to '%s'" % (self.input, filename)) in message, message
+        self.assertIn(
+            ("converting '%s' to '%s'" % (self.input, filename)), message, message
         )
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))
