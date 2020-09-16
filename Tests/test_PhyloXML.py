@@ -166,12 +166,12 @@ class TreeTests(unittest.TestCase):
         # Monitor lizards
         self.assertEqual(trees[9].name, "monitor lizards")
         self.assertEqual(trees[9].description, "a pylogeny of some monitor lizards")
-        self.assertEqual(trees[9].rooted, True)
+        self.assertTrue(trees[9].rooted)
         # Network (unrooted)
         self.assertEqual(
             trees[6].name, "network, node B is connected to TWO nodes: AB and C"
         )
-        self.assertEqual(trees[6].rooted, False)
+        self.assertFalse(trees[6].rooted)
 
     def test_Clade(self):
         """Instantiation of Clade objects."""
@@ -718,8 +718,8 @@ class MethodTests(unittest.TestCase):
         evts = self.phyloxml.phylogenies[4].clade.events
         # Container behavior: __len__, __contains__
         self.assertEqual(len(evts), 1)
-        self.assertEqual("speciations" in evts, True)
-        self.assertEqual("duplications" in evts, False)
+        self.assertIn("speciations", evts)
+        self.assertNotIn("duplications", evts)
         # Attribute access: __get/set/delitem__
         self.assertEqual(evts["speciations"], 1)
         self.assertRaises(KeyError, lambda k: evts[k], "duplications")  # noqa: E731

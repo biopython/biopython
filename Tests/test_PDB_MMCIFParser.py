@@ -321,7 +321,7 @@ class ParseReal(unittest.TestCase):
         self.assertEqual("", structure.header["head"])
         self.assertEqual("", structure.header["deposition_date"])
         self.assertEqual("", structure.header["structure_method"])
-        self.assertEqual(None, structure.header["resolution"])
+        self.assertIsNone(structure.header["resolution"])
 
         # test extracting fields
         structure = parser.get_structure("example", "PDB/1A8O.cif")
@@ -333,7 +333,7 @@ class ParseReal(unittest.TestCase):
 
         # test not confused by '.'
         structure = parser.get_structure("example", "PDB/1SSU_mod.cif")
-        self.assertEqual(None, structure.header["resolution"])
+        self.assertIsNone(structure.header["resolution"])
 
 
 class CIFtoPDB(unittest.TestCase):

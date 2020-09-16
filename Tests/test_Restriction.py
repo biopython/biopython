@@ -148,7 +148,7 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertFalse(SnaI.is_ambiguous())
         self.assertTrue(SnaI.is_unknown())
         self.assertFalse(SnaI.is_comm())
-        self.assertEqual(SnaI.suppliers(), None)
+        self.assertIsNone(SnaI.suppliers())
         self.assertEqual(SnaI.supplier_list(), [])
         with self.assertRaises(TypeError):
             SnaI.buffers("no company")
@@ -565,7 +565,7 @@ class TestPrintOutputs(unittest.TestCase):
         self.sys.stdout = out
         EcoRI.suppliers()
         self.assertIn("Life Technologies", out.getvalue())
-        self.assertEqual(SnaI.suppliers(), None)
+        self.assertIsNone(SnaI.suppliers())
         EcoRI.all_suppliers()  # Independent of enzyme, list of all suppliers
         self.assertIn("Agilent Technologies", out.getvalue())
         batch = EcoRI + SnaI

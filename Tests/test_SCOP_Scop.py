@@ -67,9 +67,9 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(domains[4].sunid, 14988)
 
         dom = scop.getNodeBySunid(-111)
-        self.assertEqual(dom, None)
+        self.assertIsNone(dom)
         dom = scop.getDomainBySid("no such domain")
-        self.assertEqual(dom, None)
+        self.assertIsNone(dom)
 
     def testSccsOrder(self):
         self.assertEqual(cmp_sccs("a.1.1.1", "a.1.1.1"), 0)
@@ -126,11 +126,11 @@ class ScopTests(unittest.TestCase):
 
         # px has no px ascendent
         px = domain.getAscendent("px")
-        self.assertEqual(px, None)
+        self.assertIsNone(px)
 
         # an sf has no px ascendent
         px2 = sf.getAscendent("px")
-        self.assertEqual(px2, None)
+        self.assertIsNone(px2)
 
     def test_get_descendents(self):
         """Test getDescendents method."""

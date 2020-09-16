@@ -234,7 +234,7 @@ class WriteTest(unittest.TestCase):
                 warnings.simplefilter("ignore", PDBConstructionWarning)
                 struct2 = self.parser.get_structure("test", filename)
             atoms = struct2[0]["A"][(" ", 152, " ")]
-            self.assertEqual(atoms["N"].get_occupancy(), None)
+            self.assertIsNone(atoms["N"].get_occupancy())
         finally:
             os.remove(filename)
 
