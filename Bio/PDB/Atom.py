@@ -7,8 +7,9 @@
 
 """Atom class, used in Structure objects."""
 
-import warnings
 import copy
+import sys
+import warnings
 
 import numpy as np
 
@@ -481,7 +482,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
 
         """
         # TODO - make this a private attribute?
-        self.last_occupancy = -999999
+        self.last_occupancy = -sys.maxsize
         DisorderedEntityWrapper.__init__(self, id)
 
     # Special methods
@@ -492,7 +493,10 @@ class DisorderedAtom(DisorderedEntityWrapper):
 
     def __repr__(self):
         """Return disordered atom identifier."""
-        return "<Disordered Atom %s>" % self.get_id()
+        if self.child_dict:
+            return "<DisorderedAtom %s>" % self.get_id()
+        else:
+            return "<Empty DisorderedAtom %s>" % self.get_id()
 
     # This is a separate method from Entity.center_of_mass since DisorderedAtoms
     # will be unpacked by Residue.get_unpacked_list(). Here we allow for a very
@@ -530,6 +534,28 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy > self.last_occupancy:
             self.last_occupancy = occupancy
             self.disordered_select(altloc)
+
+    def disordered_remove(self, altloc):
+        """Remove a child atom altloc from the DisorderedAtom.
+
+        Arguments:
+         - altloc - name of the altloc to remove, as a string.
+
+        """
+        # Get child altloc
+        atom = self.child_dict[altloc]
+        is_selected = self.selected_child is atom
+
+        # Detach
+        del self.child_dict[altloc]
+        atom.detach_parent()
+
+        if is_selected and self.child_dict:  # pick next highest occupancy
+            child = sorted(self.child_dict.values(), key=lambda a: a.occupancy)[-1]
+            self.disordered_select(child.altloc)
+        elif not self.child_dict:
+            self.selected_child = None
+            self.last_occupancy = -sys.maxsize
 
     def transform(self, rot, tran):
         """Apply rotation and translation to all children.

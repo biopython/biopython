@@ -76,7 +76,7 @@ class PolypeptideTests(unittest.TestCase):
         pp = ppb.build_peptides(self.structure)
 
         phi_psi = pp[0].get_phi_psi_list()
-        self.assertEqual(phi_psi[0][0], None)
+        self.assertIsNone(phi_psi[0][0])
         self.assertAlmostEqual(phi_psi[0][1], -0.46297171497725553, places=3)
         self.assertAlmostEqual(phi_psi[1][0], -1.0873937604007962, places=3)
         self.assertAlmostEqual(phi_psi[1][1], 2.1337707832637109, places=3)
@@ -84,7 +84,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(phi_psi[2][1], 2.3807316946081554, places=3)
 
         phi_psi = pp[1].get_phi_psi_list()
-        self.assertEqual(phi_psi[0][0], None)
+        self.assertIsNone(phi_psi[0][0])
         self.assertAlmostEqual(phi_psi[0][1], -0.6810077089092923, places=3)
         self.assertAlmostEqual(phi_psi[1][0], -1.2654003477656888, places=3)
         self.assertAlmostEqual(phi_psi[1][1], -0.58689987042756309, places=3)
@@ -92,7 +92,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(phi_psi[2][1], -1.5655066256698336, places=3)
 
         phi_psi = pp[2].get_phi_psi_list()
-        self.assertEqual(phi_psi[0][0], None)
+        self.assertIsNone(phi_psi[0][0])
         self.assertAlmostEqual(phi_psi[0][1], -0.73222884210889716, places=3)
         self.assertAlmostEqual(phi_psi[1][0], -1.1044740234566259, places=3)
         self.assertAlmostEqual(phi_psi[1][1], -0.69681334592782884, places=3)

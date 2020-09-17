@@ -248,6 +248,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Sergei Lebedev <https://github.com/superbobry>
 - Sergio Valqui <https://github.com/svalqui>
 - Seth Sims <seth.sims at gmail>
+- Shoichiro Kawauchi <https://github.com/lacrosse91>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
@@ -278,6 +279,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Uwe Schmitt <https://github.com/uweschmitt>
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
+- Vini Salazar <https://github.com/vinisalazar>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
