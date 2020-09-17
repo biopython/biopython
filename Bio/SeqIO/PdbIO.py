@@ -49,7 +49,8 @@ def AtomIterator(pdb_id, structure):
         residues = [
             res
             for res in chain.get_unpacked_list()
-            if seq1(res.get_resname().upper(), custom_map=protein_letters_3to1) != "X"
+            if seq1(res.get_resname().upper(), custom_map=protein_letters_3to1)
+            not in ("X", "")
         ]
         if not residues:
             continue
