@@ -23,6 +23,9 @@ centers of gravity or geometry.
 New method ``disordered_remove()`` implemented in Bio.PDB DisorderedAtom and
 DisorderedResidue to remove children.
 
+New module Bio.PDB.SASA implements the Shrake-Rupley algorithm to calculate
+atomic solvent accessible areas without third-party tools.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
