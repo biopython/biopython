@@ -83,7 +83,7 @@ Tables for RNA and RNA/DNA hybrids are included:
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.RNA_NN1))  # Freier '86
     73.35
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.R_DNA_NN1))  # Sugimoto '95
-    57.17
+    58.45
 
 Several types of salc correction (for Tm_NN and Tm_GC):
 
