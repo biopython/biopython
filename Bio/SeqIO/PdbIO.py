@@ -12,20 +12,24 @@ import warnings
 
 from Bio import BiopythonParserWarning
 from Bio.Data.SCOPData import protein_letters_3to1
+from Bio.Data.IUPACData import protein_letters_3to1_extended
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
 def _res2aacode(residue, undef_code="X"):
-    """Return a residue's type as a one-letter code.
+    """Return the one-letter amino acid code from the residue name.
 
-    Non-standard residues (e.g. CSD, ANP) are returned as 'X'.
+    Non-amino acid are returned as "X".
     """
     onecode = protein_letters_3to1
     onecode.update((k, v) for k, v in {"XAA": "X", "XLE": "J", "PYL": "O"}.items())
 
-    return onecode.get(residue, undef_code)
+    if isinstance(residue, str):
+        return onecode.get(residue, undef_code)
+
+    return onecode.get(residue.resname, undef_code)
 
 
 def AtomIterator(pdb_id, structure):
