@@ -11,11 +11,16 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.SCOPData import protein_letters_3to1
-from Bio.Data.IUPACData import protein_letters_3to1_extended
+from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
+from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
+
+
+_aa3to1_dict = {}
+_aa3to1_dict.update(iupac_3to1_ext)
+_aa3to1_dict.update(scop_3to1)
 
 
 def _res2aacode(residue, undef_code="X"):
@@ -23,13 +28,11 @@ def _res2aacode(residue, undef_code="X"):
 
     Non-amino acid are returned as "X".
     """
-    onecode = protein_letters_3to1
-    onecode.update((k, v) for k, v in {"XAA": "X", "XLE": "J", "PYL": "O"}.items())
-
-    if isinstance(residue, str):
-        return onecode.get(residue, undef_code)
-
-    return onecode.get(residue.resname, undef_code)
+    return (
+        _aa3to1_dict.get(residue, undef_code)
+        if isinstance(residue, str)
+        else _aa3to1_dict.get(residue.resname, undef_code)
+    )
 
 
 def AtomIterator(pdb_id, structure):
