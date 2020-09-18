@@ -83,7 +83,7 @@ Tables for RNA and RNA/DNA hybrids are included:
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.RNA_NN1))  # Freier '86
     73.35
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.R_DNA_NN1))  # Sugimoto '95
-    57.17
+    58.45
 
 Several types of salc correction (for Tm_NN and Tm_GC):
 
@@ -267,12 +267,12 @@ R_DNA_NN1 = {
     "init": (1.9, -3.9), "init_A/T": (0, 0), "init_G/C": (0, 0),
     "init_oneG/C": (0, 0), "init_allA/T": (0, 0), "init_5T/A": (0, 0),
     "sym": (0, 0),
-    "AA/TT": (-11.5, -36.4), "AC/TG": (-7.8, -21.6), "AG/TC": (-7.0, -19.7),
-    "AT/TA": (-8.3, -23.9), "CA/GT": (-10.4, -28.4), "CC/GG": (-12.8, -31.9),
-    "CG/GC": (-16.3, -47.1), "CT/GA": (-9.1, -23.5), "GA/CT": (-8.6, -22.9),
-    "GC/CG": (-8.0, -17.1), "GG/CC": (-9.3, -23.2), "GT/CA": (-5.9, -12.3),
-    "TA/AT": (-7.8, -23.2), "TC/AG": (-5.5, -13.5), "TG/AC": (-9.0, -26.1),
-    "TT/AA": (-7.8, -21.9)}
+    "TT/AA": (-11.5, -36.4), "GT/CA": (-7.8, -21.6), "CT/GA": (-7.0, -19.7),
+    "AT/TA": (-8.3, -23.9), "TG/AC": (-10.4, -28.4), "GG/CC": (-12.8, -31.9),
+    "CG/GC": (-16.3, -47.1), "AG/TC": (-9.1, -23.5), "TC/AG": (-8.6, -22.9),
+    "GC/CG": (-8.0, -17.1), "CC/GG": (-9.3, -23.2), "AC/TG": (-5.9, -12.3),
+    "TA/AT": (-7.8, -23.2), "GA/CT": (-5.5, -13.5), "CA/GT": (-9.0, -26.1),
+    "AA/TT": (-7.8, -21.9)}
 
 # Internal mismatch and inosine table (DNA)
 # Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
