@@ -2132,7 +2132,7 @@ static char distancematrix__doc__[] =
 "\n"
 " - transpose: if equal to 0: the distances between rows are\n"
 "   calculated;\n"
-"   if equal to 1, the distances beteeen columns are calculated.\n"
+"   if equal to 1, the distances between columns are calculated.\n"
 "\n"
 " - dist: specifies the distance function to be used:\n"
 "\n"
