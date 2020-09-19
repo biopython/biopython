@@ -11,10 +11,27 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.SCOPData import protein_letters_3to1
+from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
+from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
+
+
+_aa3to1_dict = {}
+_aa3to1_dict.update(iupac_3to1_ext)
+_aa3to1_dict.update(scop_3to1)
+
+
+def _res2aacode(residue, undef_code="X"):
+    """Return the one-letter amino acid code from the residue name.
+
+    Non-amino acid are returned as "X".
+    """
+    if isinstance(residue, str):
+        return _aa3to1_dict.get(residue, undef_code)
+
+    return _aa3to1_dict.get(residue.resname, undef_code)
 
 
 def AtomIterator(pdb_id, structure):
@@ -34,22 +51,13 @@ def AtomIterator(pdb_id, structure):
     See Bio.SeqIO.PdbIO.PdbAtomIterator and Bio.SeqIO.PdbIO.CifAtomIterator for
     details.
     """
-    from Bio.SeqUtils import seq1
-
-    def restype(residue):
-        """Return a residue's type as a one-letter code.
-
-        Non-standard residues (e.g. CSD, ANP) are returned as 'X'.
-        """
-        return seq1(residue.resname, custom_map=protein_letters_3to1)
-
     model = structure[0]
     for chn_id, chain in sorted(model.child_dict.items()):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [
             res
             for res in chain.get_unpacked_list()
-            if seq1(res.get_resname().upper(), custom_map=protein_letters_3to1) != "X"
+            if _res2aacode(res.get_resname().upper()) != "X"
         ]
         if not residues:
             continue
@@ -67,7 +75,7 @@ def AtomIterator(pdb_id, structure):
             for i, pregap, postgap in gaps:
                 if postgap > pregap:
                     gapsize = postgap - pregap - 1
-                    res_out.extend(restype(x) for x in residues[prev_idx:i])
+                    res_out.extend(_res2aacode(x) for x in residues[prev_idx:i])
                     prev_idx = i
                     res_out.append("X" * gapsize)
                 else:
@@ -77,14 +85,14 @@ def AtomIterator(pdb_id, structure):
                     )
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
-                    res_out.extend(restype(x) for x in residues[prev_idx:i])
+                    res_out.extend(_res2aacode(x) for x in residues[prev_idx:i])
                     break
             else:
                 # Last segment
-                res_out.extend(restype(x) for x in residues[prev_idx:])
+                res_out.extend(_res2aacode(x) for x in residues[prev_idx:])
         else:
             # No gaps
-            res_out = [restype(x) for x in residues]
+            res_out = [_res2aacode(x) for x in residues]
         record_id = "%s:%s" % (pdb_id, chn_id)
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)
@@ -152,10 +160,6 @@ class PdbSeqresIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Iterate over the records in the PDB file."""
-        # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
-        # Not sure if this is really needed; Python can handle circular dependencies.
-        from Bio.SeqUtils import seq1
-
         chains = collections.defaultdict(list)
         metadata = collections.defaultdict(list)
 
@@ -174,10 +178,7 @@ class PdbSeqresIterator(SequenceIterator):
                 chn_id = line[11]
                 # Number of residues in the chain (repeated on every record)
                 # num_res = int(line[13:17])
-                residues = [
-                    seq1(res, custom_map=protein_letters_3to1)
-                    for res in line[19:].split()
-                ]
+                residues = [_res2aacode(res) for res in line[19:].split()]
                 chains[chn_id].extend(residues)
             elif rec_name == "DBREF":
                 #  ID code of this entry (PDB ID)
@@ -374,9 +375,6 @@ def CifSeqresIterator(source):
     Note the chain is recorded in the annotations dictionary, and any mmCIF
     _struct_ref_seq entries are recorded in the database cross-references list.
     """
-    # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
-    from Bio.SeqUtils import seq1
-
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
@@ -398,7 +396,7 @@ def CifSeqresIterator(source):
         records["_pdbx_poly_seq_scheme.asym_id"],
         records["_pdbx_poly_seq_scheme.mon_id"],
     ):
-        mon_id_1l = seq1(mon_id, custom_map=protein_letters_3to1)
+        mon_id_1l = _res2aacode(mon_id)
         chains[asym_id].append(mon_id_1l)
 
     # Build a dict of _struct_ref records, indexed by the id field:

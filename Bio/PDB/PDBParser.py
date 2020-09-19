@@ -189,7 +189,7 @@ class PDBParser:
                     # atom name is like " CA ", so we can strip spaces
                     name = split_list[0]
                 altloc = line[16]
-                resname = line[17:20]
+                resname = line[17:20].strip()
                 chainid = line[21]
                 try:
                     serial_number = int(line[6:11])
