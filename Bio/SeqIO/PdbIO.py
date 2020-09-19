@@ -28,11 +28,10 @@ def _res2aacode(residue, undef_code="X"):
 
     Non-amino acid are returned as "X".
     """
-    return (
-        _aa3to1_dict.get(residue, undef_code)
-        if isinstance(residue, str)
-        else _aa3to1_dict.get(residue.resname, undef_code)
-    )
+    if isinstance(residue, str):
+        return _aa3to1_dict.get(residue, undef_code)
+
+    return _aa3to1_dict.get(residue.resname, undef_code)
 
 
 def AtomIterator(pdb_id, structure):
@@ -58,7 +57,7 @@ def AtomIterator(pdb_id, structure):
         residues = [
             res
             for res in chain.get_unpacked_list()
-            if _res2aacode(res.get_resname().upper(), undef_code="X") != "X"
+            if _res2aacode(res.get_resname().upper()) != "X"
         ]
         if not residues:
             continue

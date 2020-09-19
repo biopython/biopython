@@ -31,6 +31,7 @@ possible, especially the following contributors:
 
 - João Rodrigues
 - Markus Piotrowski
+- Suyash Gupta
 - Vini Salazar (first contribution)
 
 4 September 2020: Biopython 1.78
