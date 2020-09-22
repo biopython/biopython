@@ -1,0 +1,27 @@
+{# This is a modified RTD versions.hmtl tailored for the Biopython project #}
+{% if READTHEDOCS or display_version_footer %}
+{# Add rst-badge after rst-versions for small badge style. #}
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      Biopython v: {{ current_version }}
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>{{ _('Versions') }}</dt>
+        {% for slug, url in versions %}
+          <dd><a href="{{ url }}">{{ slug }}</a></dd>
+        {% endfor %}
+      </dl>
+      <dl>
+        <dt>{{ _('Biopython Project') }}</dt>
+          <dd>
+            <a href="{{ project_home_url }}" class="icon icon-home"> {{ _(' Homepage') }}</a>
+          </dd>
+          <dd>
+            <a href="{{ project_github_url }}" class="fa fa-github"> {{ _(' On GitHub') }}</a>
+          </dd>
+      </dl>
+    </div>
+  </div>
+{% endif %}
