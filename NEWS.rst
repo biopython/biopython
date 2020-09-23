@@ -29,6 +29,7 @@ atomic solvent accessible areas without third-party tools.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Damien Goutte-Gattat
 - João Rodrigues
 - Markus Piotrowski
 - Suyash Gupta
