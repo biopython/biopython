@@ -434,8 +434,6 @@ class DataHandler:
             # to find out their first and last invocation for each namespace.
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
-            assert uri == "http://www.w3.org/1998/Math/MathML"
-            assert prefix == "mml"
 
     def endNamespaceDeclHandler(self, prefix):
         """Handle end of an XML namespace declaration."""
@@ -647,7 +645,10 @@ class DataHandler:
         if self.level == 0:
             self.parser.EndElementHandler = self.endStringElementHandler
         if self.namespace_prefix:
-            uri, name = name.split()
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
         tag = "</%s>" % name
         self.data.append(tag)
 
