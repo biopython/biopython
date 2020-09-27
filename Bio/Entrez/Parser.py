@@ -432,6 +432,12 @@ class DataHandler:
             # and endNamespaceDeclHandler. Therefore we need to count how often
             # startNamespaceDeclHandler and endNamespaceDeclHandler were called
             # to find out their first and last invocation for each namespace.
+            if prefix == "mml":
+                assert uri == "http://www.w3.org/1998/Math/MathML"
+            elif prefix == "xlink":
+                assert uri == "http://www.w3.org/1999/xlink"
+            else:
+                raise ValueError("Unknown prefix '%s' with uri '%s'" % (prefix, uri))
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
 
