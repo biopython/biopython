@@ -135,9 +135,6 @@ def _parse_features_packet(length, data, record):
         quals = {}
 
         type = _get_attribute_value(feature, "type", default="misc_feature")
-        label = _get_attribute_value(feature, "name")
-        if label:
-            quals["label"] = [label]
 
         strand = +1
         directionality = int(
@@ -169,6 +166,16 @@ def _parse_features_packet(length, data, record):
                 elif value.hasAttribute("int"):
                     qvalues.append(int(value.attributes["int"].value))
             quals[qname] = qvalues
+
+        name = _get_attribute_value(feature, "name")
+        if name:
+            if "label" not in quals:
+                # No explicit label attribute, use the SnapGene name
+                quals["label"] = [name]
+            elif name not in quals["label"]:
+                # The SnapGene name is different from the label,
+                # add a specific attribute to represent it
+                quals["name"] = [name]
 
         feature = SeqFeature(location, type=type, qualifiers=quals)
         record.features.append(feature)

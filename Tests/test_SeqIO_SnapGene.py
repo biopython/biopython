@@ -23,7 +23,7 @@ class TestSnapGene(unittest.TestCase):
             "description": "Sample Sequence D",
             "length": 1000,
             "topology": "linear",
-            "date": datetime.datetime(2019, 8, 3, 0, 0),
+            "date": datetime.datetime(2020, 9, 23, 0, 0),
             "features": [
                 {
                     "type": "misc_binding",
@@ -38,6 +38,21 @@ class TestSnapGene(unittest.TestCase):
                     "end": 150,
                     "strand": 1,
                     "label": "FeatureA",
+                },
+                {
+                    "type": "misc_feature",
+                    "start": 700,
+                    "end": 720,
+                    "strand": 1,
+                    "label": "FeatureC",
+                },
+                {
+                    "type": "misc_feature",
+                    "start": 720,
+                    "end": 740,
+                    "strand": 1,
+                    "label": "SampleFeatureD",
+                    "name": "FeatureD",
                 },
             ],
         },
@@ -162,6 +177,10 @@ class TestSnapGene(unittest.TestCase):
                 self.assertEqual(exp_feat["end"], read_feat.location.end)
                 self.assertEqual(exp_feat["strand"], read_feat.location.strand)
                 self.assertEqual(exp_feat["label"], read_feat.qualifiers["label"][0])
+                if "name" in exp_feat:
+                    self.assertEqual(exp_feat["name"], read_feat.qualifiers["name"][0])
+                else:
+                    self.assertTrue("name" not in read_feat.qualifiers)
 
 
 class TestCorruptedSnapGene(unittest.TestCase):
