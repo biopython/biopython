@@ -1,0 +1,34 @@
+!gpi-version: 1.2
+!
+!This file has been trimmed, to include only few records, for testing Biopython GOA.py module.
+! Original file can be found here ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/
+!
+!The set of protein accessions included in this file is based on UniProt reference proteomes, which provide one protein per gene.
+!They include the protein sequences annotated in Swiss-Prot or the longest TrEMBL transcript if there is no Swiss-Prot record.
+!Protein accessions are represented in this file even if there is no associated GO annotation.
+!
+!Columns:
+!
+!   name                   required? cardinality   GAF column #  Example content
+!   DB                     required  1             1             UniProtKB
+!   DB_Object_ID           required  1             2/17          Q4VCS5-1
+!   DB_Object_Symbol       required  1             3             AMOT
+!   DB_Object_Name         optional  0 or greater  10            Angiomotin
+!   DB_Object_Synonym(s)   optional  0 or greater  11            AMOT|KIAA1071
+!   DB_Object_Type         required  1             12            protein
+!   Taxon                  required  1             13            taxon:9606
+!   Parent_Object_ID       optional  0 or 1        -             UniProtKB:Q4VCS5
+!   DB_Xref(s)             optional  0 or greater  -             HGNC:17810
+!   Properties             optional  0 or greater  -             db_subset=Swiss-Prot
+!
+!Generated: 2019-12-17 09:36
+!
+UniProtKB	A0A024R1R8	hCG_2014768	HCG2014768, isoform CRA_a	hCG_2014768	protein	taxon:9606			db_subset=TrEMBL
+UniProtKB	P01889	HLA-B	HLA class I histocompatibility antigen, B alpha chain	HLA-B|HLAB	protein	taxon:9606		HGNC:4932	db_subset=Swiss-Prot
+UniProtKB	P01893	HLA-H	Putative HLA class I histocompatibility antigen, alpha chain H	HLA-H|HLAH	protein	taxon:9606		HGNC:4965	db_subset=Swiss-Prot
+UniProtKB	P01903	HLA-DRA	HLA class II histocompatibility antigen, DR alpha chain	HLA-DRA|HLA-DRA1	protein	taxon:9606		HGNC:4947	db_subset=Swiss-Prot
+UniProtKB	P01906	HLA-DQA2	HLA class II histocompatibility antigen, DQ alpha 2 chain	HLA-DQA2|HLA-DXA	protein	taxon:9606		HGNC:4943	db_subset=Swiss-Prot
+UniProtKB	P01909	HLA-DQA1	HLA class II histocompatibility antigen, DQ alpha 1 chain	HLA-DQA1	protein	taxon:9606		HGNC:4942	db_subset=Swiss-Prot
+UniProtKB	P01911	HLA-DRB1	HLA class II histocompatibility antigen, DRB1 beta chain	HLA-DRB1	protein	taxon:9606		HGNC:4948	db_subset=Swiss-Prot
+UniProtKB	P01920	HLA-DQB1	HLA class II histocompatibility antigen, DQ beta 1 chain	HLA-DQB1|HLA-DQB	protein	taxon:9606		HGNC:4944	db_subset=Swiss-Prot
+UniProtKB	P02008	HBZ	Hemoglobin subunit zeta	HBZ|HBZ2	protein	taxon:9606		HGNC:4835	db_subset=Swiss-Prot

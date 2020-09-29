@@ -1,4 +1,5 @@
-# Copyright 2019 by Sergio Valqui. All rights reserved.
+# Copyright 2019-2020 by Sergio Valqui. All rights reserved.
+#
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -82,7 +83,7 @@ class GoaTests(unittest.TestCase):
         self.assertEqual(recs[0]["Annotation_Properties"], "go_evidence=ND")
 
     def test_gpi_iterator(self):
-        """Test GOA GPI file iterator."""
+        """Test GOA GPI file iterator, gpi-version: 1.1."""
         recs = []
         with open("UniProt/gp_information.goa_yeast.28.gpi") as handle:
             for rec in GOA.gpi_iterator(handle):
@@ -106,6 +107,28 @@ class GoaTests(unittest.TestCase):
         self.assertEqual(recs[0]["Parent_Object_ID"], "")
         self.assertEqual(recs[0]["DB_Xref"], [""])
         self.assertEqual(recs[0]["Gene_Product_Properties"], ["db_subset=Swiss-Prot"])
+
+    def test_gpi_iterator_one_two(self):
+        """Test GOA GPI file iterator, gpi-version: 1.2."""
+        recs = []
+        with open("UniProt/goa_human_sample.gpi") as handle:
+            for rec in GOA.gpi_iterator(handle):
+                recs.append(rec)
+        self.assertEqual(len(recs), 9)
+        self.assertEqual(sorted(recs[0].keys()), sorted(GOA.GPI12FIELDS))
+        # Check values of first record
+        self.assertEqual(recs[0]["DB"], "UniProtKB")
+        self.assertEqual(recs[0]["DB_Object_ID"], "A0A024R1R8")
+        self.assertEqual(recs[0]["DB_Object_Symbol"], "hCG_2014768")
+        self.assertEqual(
+            recs[0]["DB_Object_Name"], ["HCG2014768, isoform CRA_a"],
+        )
+        self.assertEqual(recs[0]["DB_Object_Synonym"], ["hCG_2014768"])
+        self.assertEqual(recs[0]["DB_Object_Type"], "protein")
+        self.assertEqual(recs[0]["Taxon"], "taxon:9606")
+        self.assertEqual(recs[0]["Parent_Object_ID"], "")
+        self.assertEqual(recs[0]["DB_Xref"], [""])
+        self.assertEqual(recs[0]["Gene_Product_Properties"], ["db_subset=TrEMBL"])
 
     def test_selection_writing(self):
         """Test record_has, and writerec.
