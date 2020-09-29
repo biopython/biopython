@@ -27,7 +27,8 @@ New module Bio.PDB.SASA implements the Shrake-Rupley algorithm to calculate
 atomic solvent accessible areas without third-party tools.
 
 Bio.UniProt.GOA now parses Gene Product Information (GPI) files version 1.2,
-files can be found on the EBI ftp site ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
+files can be downloaded from the EBI ftp site:
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
