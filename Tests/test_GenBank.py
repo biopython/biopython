@@ -3342,7 +3342,7 @@ class TestFeatureParser(unittest.TestCase):
             return seq[:54] + "..." + seq[-3:]
 
     def test_feature_parser(self):
-        """Test parsed features vs the existing once"""
+        """Test parsed features vs the existing once."""
         with open("GenBank/good_records.json") as good_handle:
             good_records = json.loads(good_handle.read())
             for path in good_records:
@@ -3446,7 +3446,7 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
-                record = SeqIO.read(path, "genbank")
+                SeqIO.read(path, "genbank")
             self.assertEqual(
                 "Couldn't parse feature location: '-2..492'", str(cm.exception)
             )
@@ -3457,7 +3457,7 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
-                record = SeqIO.read(path, "genbank")
+                SeqIO.read(path, "genbank")
             self.assertIn(
                 "It appears that '6801..100' is a feature that spans the origin",
                 str(cm.exception),
@@ -3469,7 +3469,7 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
-                record = SeqIO.read(path, "genbank")
+                SeqIO.read(path, "genbank")
             self.assertEqual(
                 str(cm.exception),
                 "Attempting to fix invalid location '6801..100' "
@@ -3536,7 +3536,7 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
-                record = SeqIO.read(path, "genbank")
+                SeqIO.read(path, "genbank")
             self.assertEqual(
                 str(cm.exception),
                 "Attempting to fix invalid location '<2644..159' "
@@ -4045,7 +4045,7 @@ KEYWORDS    """,
                 long_in_tmp = StringIO()
                 long_in_tmp.writelines(data2)
                 long_in_tmp.seek(0)
-                record = SeqIO.read(long_in_tmp, "genbank")
+                SeqIO.read(long_in_tmp, "genbank")
 
             self.assertRaises(ValueError, read_longer_than_maxsize)
 
