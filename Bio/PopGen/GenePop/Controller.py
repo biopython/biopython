@@ -240,7 +240,6 @@ class GenePopController:
         self.controller()  # checks error level is zero
         os.chdir(cwd)
         shutil.rmtree(temp_dir)
-        return
 
     def _test_pop_hz_both(
         self,

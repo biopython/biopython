@@ -283,7 +283,6 @@ class newenzyme:
                 "\n\tin this REBASE release."
                 "\n\tThe supplier is : %s." % (name, supp)
             )
-        return
 
 
 class TypeCompiler:
@@ -566,7 +565,6 @@ class DictionaryBuilder:
                 "\n\t %s ?\n\n" % os.path.split(old)[0]
             )
             return self.no_install()
-        return
 
     def no_install(self):
         """Build the new dictionary but do not install the dictionary."""
@@ -600,7 +598,6 @@ class DictionaryBuilder:
             "\n\t%s\n" % places
         )
         print("\n " + "*" * 78 + "\n")
-        return
 
     def lastrebasefile(self):
         """Check the emboss files are up to date and download them if not."""
@@ -999,7 +996,6 @@ class DictionaryBuilder:
             #
             t = i.strip().split(" ", 1)
             suppliersdict[t[0]] = (t[1], [])
-        return
 
 
 def standalone():

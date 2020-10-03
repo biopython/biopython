@@ -110,7 +110,6 @@ def clear_output():
     """Clear the output window."""
     input_text.delete(1.0, tk.END)
     output_text.delete(1.0, tk.END)
-    return
 
 
 def apply_operation():
@@ -136,7 +135,6 @@ def apply_operation():
     output_text.delete(1.0, tk.END)
     output_text.insert(tk.END, result)
     print(f"Result: {result}")
-    return
 
 
 def set_statusbar(event):
@@ -148,7 +146,6 @@ def set_statusbar(event):
         statustext.set("Terminate the program")
     else:
         statustext.set("This is the statusbar")
-    return
 
 
 # Set commands and bind events

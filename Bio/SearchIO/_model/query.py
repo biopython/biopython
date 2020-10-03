@@ -403,7 +403,6 @@ class QueryResult(_BaseSearchObject):
                 deleted = True
             if not deleted:
                 raise KeyError(repr(key))
-        return
 
     # properties #
     id = optionalcascade("_id", "query_id", """QueryResult ID string""")
