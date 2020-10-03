@@ -1305,7 +1305,7 @@ class _HSPConsumer:
         if len(seq) < self._query_len:
             # Make sure the alignment is the same length as the query
             seq += " " * (self._query_len - len(seq))
-        elif len(seq) < self._query_len:
+        if len(seq) < self._query_len:
             raise ValueError("Match is longer than the query in line\n%s" % line)
         self._hsp.match = self._hsp.match + seq
 
