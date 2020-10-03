@@ -55,8 +55,8 @@ def read(handle):
             return record
         name = line.split()[1]
         motif_number += 1
-        length, num_occurrences, evalue = _read_motif_statistics(line, handle)
-        counts = _read_lpm(line, handle)
+        length, num_occurrences, evalue = _read_motif_statistics(handle)
+        counts = _read_lpm(handle)
         # {'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
         motif = motifs.Motif(alphabet=record.alphabet, counts=counts)
         motif.background = record.background
@@ -148,7 +148,7 @@ def _read_alphabet(record, handle):
     record.alphabet = al
 
 
-def _read_lpm(line, handle):
+def _read_lpm(handle):
     """Read letter probability matrix (PRIVATE)."""
     counts = [[], [], [], []]
     for line in handle:
@@ -167,7 +167,7 @@ def _read_lpm(line, handle):
     return c
 
 
-def _read_motif_statistics(line, handle):
+def _read_motif_statistics(handle):
     """Read motif statistics (PRIVATE)."""
     # minimal :
     #      letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
