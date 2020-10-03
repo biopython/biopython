@@ -1205,7 +1205,6 @@ class GenBankScanner(InsdcScanner):
             self.line = self.handle.readline()
             if not self.line:
                 raise ValueError("Premature end of file")
-            self.line = self.line
 
         if self.line[: self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
             raise ValueError("Eh? '%s'" % self.line)
