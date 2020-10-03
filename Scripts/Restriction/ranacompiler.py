@@ -610,9 +610,7 @@ class DictionaryBuilder:
         dircontent = os.listdir(os.getcwd())
         base = os.getcwd()  # added for biopython current directory
         for name in emboss_now:
-            if name in dircontent:
-                pass
-            else:
+            if name not in dircontent:
                 update_needed = True
 
         if not update_needed:
@@ -654,7 +652,6 @@ class DictionaryBuilder:
                         print(f"\nNo {name} file found. Upgrade is impossible.\n")
                         sys.exit()
                     continue
-                pass
         #
         #   now find the last file.
         #
