@@ -560,7 +560,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 break  # End of file
             try:
                 key = line.split(tab_char)[0]
-            except ValueError as err:
+            except ValueError:
                 if not line.strip():
                     # Ignore blank lines
                     continue
