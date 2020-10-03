@@ -547,8 +547,7 @@ class DictionaryBuilder:
             exec(compile(open(new).read(), new, "exec"))
             print("\n\tThe new file seems ok. Proceeding with the installation.")
         except SyntaxError:
-            print("\n The new dictionary file is corrupted. Aborting the installation.")
-            return
+            sys.exit("ERROR: new dictionary file is corrupted. Aborting installation.")
         try:
             shutil.copyfile(new, old)
             print(
