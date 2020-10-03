@@ -1620,7 +1620,7 @@ class QualPhredWriter(SequenceWriter):
             # This rounds to the nearest integer.
             # TODO - can we record a float in a qual file?
             qualities_strs = [("%i" % round(q, 0)) for q in qualities]
-        except TypeError as e:
+        except TypeError:
             if None in qualities:
                 raise TypeError("A quality value of None was found") from None
             else:
@@ -1673,7 +1673,7 @@ def as_qual(record):
         # This rounds to the nearest integer.
         # TODO - can we record a float in a qual file?
         qualities_strs = [("%i" % round(q, 0)) for q in qualities]
-    except TypeError as e:
+    except TypeError:
         if None in qualities:
             raise TypeError("A quality value of None was found") from None
         else:
