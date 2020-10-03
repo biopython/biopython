@@ -465,7 +465,7 @@ def _sff_find_roche_index(handle):
         key_sequence,
     ) = _sff_file_header(handle)
     assert handle.tell() == header_length
-    if not index_offset or not index_offset:
+    if not index_offset or not index_length:
         raise ValueError("No index present in this SFF file")
     # Now jump to the header...
     handle.seek(index_offset)
