@@ -2217,7 +2217,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
             "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
             "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).",
-            "seqxml": "ncbiTaxID should be of type string or int",
+            "seqxml": "Multiple entries for record.annotations['ncbi_taxid'], ['82077', '82078']",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
