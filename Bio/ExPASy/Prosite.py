@@ -300,8 +300,6 @@ def __read(handle):
             record.prorules.extend(rules)
         elif keyword == "DO":
             record.pdoc = value.rstrip(";")
-        elif keyword == "CC":
-            continue
         elif keyword == "//":
             if not record:
                 # Then this was the copyright statement
