@@ -486,8 +486,7 @@ class SummaryInfo:
             for key in obs_freq:
                 if key != gap_char and key not in e_freq_table:
                     raise ValueError(
-                        "Expected frequency letters %s do not match observed %s"
-                        % (list(e_freq_table), list(obs_freq) - [gap_char])
+                        f"Frequency table provided does not contain observed letter {key}"
                     )
 
         total_info = 0.0
