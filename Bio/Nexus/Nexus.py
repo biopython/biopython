@@ -1978,7 +1978,7 @@ class Nexus:
         else:
             sitesm = list(zip(*[cm[t] for t in undelete]))
         bootstrapsitesm = [
-            sitesm[random.randint(0, len(sitesm) - 1)] for i in range(len(sitesm))
+            sitesm[random.randint(0, len(sitesm) - 1)] for _ in range(len(sitesm))
         ]
         bootstrapseqs = ["".join(x) for x in zip(*bootstrapsitesm)]
         if seqobjects:

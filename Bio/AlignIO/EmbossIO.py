@@ -100,7 +100,7 @@ class EmbossIterator(AlignmentIterator):
                 % (number_of_seqs, self.records_per_alignment)
             )
 
-        seqs = ["" for id in ids]
+        seqs = ["" for _ in ids]
         seq_starts = []
         index = 0
 
