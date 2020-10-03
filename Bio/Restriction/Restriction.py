@@ -202,18 +202,15 @@ class FormattedSeq:
     def circularise(self):
         """Circularise sequence in place."""
         self.linear = False
-        return
 
     def linearise(self):
         """Linearise sequence in place."""
         self.linear = True
-        return
 
     def to_linear(self):
         """Make a new instance of sequence as linear."""
         new = self.__class__(self)
         new.linear = True
-        return new
 
     def to_circular(self):
         """Make a new instance of sequence as circular."""
@@ -556,7 +553,6 @@ class AbstractCut(RestrictionType):
         """Print all the suppliers of restriction enzyme."""
         supply = sorted(x[0] for x in suppliers_dict.values())
         print(",\n".join(supply))
-        return
 
     @classmethod
     def is_equischizomer(cls, other):
@@ -1549,7 +1545,6 @@ class Defined(AbstractCut):
                     cls.results[-(index + 1)] -= length
                 else:
                     break
-        return
 
     @classmethod
     def is_defined(cls):
@@ -1698,7 +1693,6 @@ class Ambiguous(AbstractCut):
                     cls.results[-(index + 1)] -= length
                 else:
                     break
-        return
 
     @classmethod
     def is_defined(cls):
@@ -1875,7 +1869,6 @@ class NotDefined(AbstractCut):
                     cls.results[-(index + 1)] -= length
                 else:
                     break
-        return
 
     @classmethod
     def is_defined(cls):
@@ -1983,7 +1976,6 @@ class Commercially_available(AbstractCut):
         """Print a list of suppliers of the enzyme."""
         for s in cls.suppl:
             print(suppliers_dict[s][0] + ",")
-        return
 
     @classmethod
     def supplier_list(cls):
@@ -1996,7 +1988,6 @@ class Commercially_available(AbstractCut):
 
         Not implemented yet.
         """
-        return
 
     @classmethod
     def is_comm(cls):
@@ -2142,7 +2133,6 @@ class RestrictionBatch(set):
         self.suppliers.append(letter)
         for x in supplier[1]:
             self.add_nocheck(eval(x))
-        return
 
     def current_suppliers(self):
         """List the current suppliers for the restriction batch.
@@ -2272,7 +2262,6 @@ class RestrictionBatch(set):
         """Print a list of supplier codes."""
         supply = [" = ".join(i) for i in cls.suppl_codes().items()]
         print("\n".join(supply))
-        return
 
     def search(self, dna, linear=True):
         """Return a dic of cutting sites in the seq for the batch enzymes."""
@@ -2441,7 +2430,6 @@ class Analysis(RestrictionBatch, PrintFormat):
                 )
             else:
                 raise AttributeError("Analysis has no attribute %s" % k)
-        return
 
     def full(self, linear=True):
         """Perform analysis with all enzymes of batch and return all results.

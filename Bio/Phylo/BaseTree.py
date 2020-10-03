@@ -906,7 +906,6 @@ class Tree(TreeElement, TreeMixin):
 
         self.root = new_root
         self.rooted = True
-        return
 
     def root_at_midpoint(self):
         """Root the tree at the midpoint of the two most distant taxa.

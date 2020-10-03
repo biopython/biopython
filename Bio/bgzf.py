@@ -830,7 +830,6 @@ class BgzfWriter:
         if len(self._buffer) + data_len < 65536:
             # print("Cached %r" % data)
             self._buffer += data
-            return
         else:
             # print("Got %r, writing out some data..." % data)
             self._buffer += data
