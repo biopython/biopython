@@ -211,6 +211,7 @@ class FormattedSeq:
         """Make a new instance of sequence as linear."""
         new = self.__class__(self)
         new.linear = True
+        return new
 
     def to_circular(self):
         """Make a new instance of sequence as circular."""
