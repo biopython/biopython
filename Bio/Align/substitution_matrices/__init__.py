@@ -363,7 +363,7 @@ class Array(numpy.ndarray):
     def _format_2D(self, fmt):
         alphabet = self.alphabet
         n = len(alphabet)
-        words = [[None] * n] * n
+        words = [[None] * n for _ in range(n)]
         lines = []
         try:
             header = self.header
