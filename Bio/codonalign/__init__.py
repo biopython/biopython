@@ -187,7 +187,7 @@ def build(
                 pair[1],
                 corr_span,
                 gap_char=gap_char,
-                complete_protein=False,
+                complete_protein=complete_protein,
                 codon_table=codon_table,
                 max_score=max_score,
             )
@@ -606,7 +606,7 @@ def _get_codon_rec(
             elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq[span[0] : span[0] + 3]
                 if not re.search(
-                    _codons2re[codon_table.start_codons], this_codon.upper()
+                    _codons2re(codon_table.start_codons), str(this_codon.upper())
                 ):
                     max_score -= 1
                     warnings.warn(
@@ -672,7 +672,7 @@ def _get_codon_rec(
             elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq[rf_table[0] : rf_table[0] + 3]
                 if not re.search(
-                    _codons2re[codon_table.start_codons], this_codon.upper()
+                    _codons2re(codon_table.start_codons), str(this_codon.upper())
                 ):
                     max_score -= 1
                     warnings.warn(
