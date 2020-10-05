@@ -280,6 +280,7 @@ class Test_build(unittest.TestCase):
         codon_aln3 = codonalign.build(
             self.aln3, self.seqlist3, codon_table=self.codontable3
         )
+        codon_aln4 = codonalign.build(self.aln1, self.seqlist1, complete_protein=True)
 
 
 class Test_dn_ds(unittest.TestCase):
