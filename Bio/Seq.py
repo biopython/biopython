@@ -16,7 +16,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 .. _Seq: http://biopython.org/wiki/Seq
 .. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
-.. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+.. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutclassorial.pdf
 
 """
 
@@ -1392,30 +1392,46 @@ class UnknownSeq(Seq):
         return end - start - len_sub_str + 1
 
     def complement(self):
-        """Return the complement of an unknown nucleotide usually equals itself.
+        """Return the complement assuming it is DNA.
 
-        >>> my_nuc = UnknownSeq(8)
+        In typical usage this will return the same unknown sequence:
+
+        >>> my_nuc = UnknownSeq(8, character='N')
         >>> my_nuc
-        UnknownSeq(8, character='?')
+        UnknownSeq(8, character='N')
         >>> print(my_nuc)
-        ????????
+        NNNNNNNN
         >>> my_nuc.complement()
-        UnknownSeq(8, character='?')
+        UnknownSeq(8, character='N')
         >>> print(my_nuc.complement())
-        ????????
+        NNNNNNNN
+
+        It would be unexpected to use a nucleotide letter other than N, but if
+        you do the complement base is used:
+
+        >>> UnknownSeq(8, character="A").complement()
+        UnknownSeq(8, character='T')
         """
         s = Seq(self._character).complement()
         return UnknownSeq(self._length, character=str(s))
 
     def complement_rna(self):
-        """Return the complement assuming it is RNA."""
+        """Return the complement assuming it is RNA.
+
+        In typical usage this will return the same unknown sequence. It would
+        be unexpected to use a nucleotide letter other than N, but if you do,
+        the complement base is used:
+
+        >>> UnknownSeq(8, character="A").complement_rna()
+        UnknownSeq(8, character='U')
+        """
         s = Seq(self._character).complement_rna()
         return UnknownSeq(self._length, character=str(s))
 
     def reverse_complement(self):
-        """Return the reverse complement of an unknown sequence.
+        """Return the reverse complement assuming it is DNA.
 
-        The reverse complement of an unknown nucleotide equals itself:
+        In typical usage this will return the same unknown sequence:
 
         >>> from Bio.Seq import UnknownSeq
         >>> example = UnknownSeq(6, character="N")
@@ -1423,11 +1439,25 @@ class UnknownSeq(Seq):
         NNNNNN
         >>> print(example.reverse_complement())
         NNNNNN
+
+        It would be unexpected to use a nucleotide letter other than N, but if
+        you do, the complement base is used:
+
+        >>> UnknownSeq(8, character="A").reverse_complement()
+        UnknownSeq(8, character='T')
         """
         return self.complement()
 
     def reverse_complement_rna(self):
-        """Return the reverse complement assuming it is RNA."""
+        """Return the reverse complement assuming it is RNA.
+
+        In typical usage this will return the same unknown sequence. It would
+        be unexpected to use a nucleotide letter other than N, but if you do,
+        the complement base is used:
+
+        >>> UnknownSeq(8, character="A").reverse_complement_rna()
+        UnknownSeq(8, character='U')
+        """
         return self.complement_rna()
 
     def transcribe(self):
@@ -1443,6 +1473,13 @@ class UnknownSeq(Seq):
         UnknownSeq(10, character='N')
         >>> print(my_rna)
         NNNNNNNNNN
+
+        In typical usage this will return the same unknown sequence. It would
+        be unexpected to use a nucleotide letter other than N, but if you do
+        use T, then U is returned:
+
+        >>> UnknownSeq(9, character="t").transcribe()
+        UnknownSeq(9, character='u')
         """
         s = Seq(self._character).transcribe()
         return UnknownSeq(self._length, character=str(s))
@@ -1460,6 +1497,13 @@ class UnknownSeq(Seq):
         UnknownSeq(20, character='N')
         >>> print(my_dna)
         NNNNNNNNNNNNNNNNNNNN
+
+        In typical usage this will return the same unknown sequence. It would
+        be unexpected to use a nucleotide letter other than N, but if you do
+        use U, then T is returned:
+
+        >>> UnknownSeq(9, character="U").back_transcribe()
+        UnknownSeq(9, character='T')
         """
         s = Seq(self._character).back_transcribe()
         return UnknownSeq(self._length, character=str(s))
@@ -1527,6 +1571,8 @@ class UnknownSeq(Seq):
         >>> print(my_protein)
         XXX
 
+        Note even if your sequence makes sense as codons (e.g. AAA), it will
+        be translated as an unknown protein sequence of X.
         """
         return UnknownSeq(self._length // 3, character="X")
 
