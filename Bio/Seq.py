@@ -1392,7 +1392,7 @@ class UnknownSeq(Seq):
         return end - start - len_sub_str + 1
 
     def complement(self):
-        """Return the complement of an unknown nucleotide equals itself.
+        """Return the complement of an unknown nucleotide usually equals itself.
 
         >>> my_nuc = UnknownSeq(8)
         >>> my_nuc
@@ -1404,11 +1404,13 @@ class UnknownSeq(Seq):
         >>> print(my_nuc.complement())
         ????????
         """
-        return self
+        s = Seq(self._character).complement()
+        return UnknownSeq(self._length, character=str(s))
 
     def complement_rna(self):
         """Return the complement assuming it is RNA."""
-        return self.complement()
+        s = Seq(self._character).complement_rna()
+        return UnknownSeq(self._length, character=str(s))
 
     def reverse_complement(self):
         """Return the reverse complement of an unknown sequence.
@@ -1422,11 +1424,11 @@ class UnknownSeq(Seq):
         >>> print(example.reverse_complement())
         NNNNNN
         """
-        return self
+        return self.complement()
 
     def reverse_complement_rna(self):
         """Return the reverse complement assuming it is RNA."""
-        return self.reverse_complement()
+        return self.complement_rna()
 
     def transcribe(self):
         """Return an unknown RNA sequence from an unknown DNA sequence.
