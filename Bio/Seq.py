@@ -1113,6 +1113,18 @@ class UnknownSeq(Seq):
     Seq('????ACGT')
     >>> known_seq + unk_four
     Seq('ACGT????')
+
+    Although originally intended for unknown sequences (thus the class name),
+    this can be used for homopolymer sequences like AAAAAA, and the biological
+    methods will respect this:
+
+    >>> homopolymer = UnknownSeq(6, character="A")
+    >>> homopolymer.complement()
+    UnknownSeq(6, character='T')
+    >>> homopolymer.complement_rna()
+    UnknownSeq(6, character='U')
+    >>> homopolymer.translate()
+    UnknownSeq(2, character='K')
     """
 
     def __init__(self, length, alphabet=None, character="?"):
@@ -1406,8 +1418,8 @@ class UnknownSeq(Seq):
         >>> print(my_nuc.complement())
         NNNNNNNN
 
-        It would be unexpected to use a nucleotide letter other than N, but if
-        you do the complement base is used:
+        If your sequence isn't actually unknown, and has a nucleotide letter
+        other than N, the appropriate DNA complement base is used:
 
         >>> UnknownSeq(8, character="A").complement()
         UnknownSeq(8, character='T')
@@ -1418,9 +1430,9 @@ class UnknownSeq(Seq):
     def complement_rna(self):
         """Return the complement assuming it is RNA.
 
-        In typical usage this will return the same unknown sequence. It would
-        be unexpected to use a nucleotide letter other than N, but if you do,
-        the complement base is used:
+        In typical usage this will return the same unknown sequence. If your
+        sequence isn't actually unknown, the appropriate RNA complement base
+        is used:
 
         >>> UnknownSeq(8, character="A").complement_rna()
         UnknownSeq(8, character='U')
@@ -1440,8 +1452,8 @@ class UnknownSeq(Seq):
         >>> print(example.reverse_complement())
         NNNNNN
 
-        It would be unexpected to use a nucleotide letter other than N, but if
-        you do, the complement base is used:
+        If your sequence isn't actually unknown, the appropriate DNA
+        complement base is used:
 
         >>> UnknownSeq(8, character="A").reverse_complement()
         UnknownSeq(8, character='T')
@@ -1451,9 +1463,9 @@ class UnknownSeq(Seq):
     def reverse_complement_rna(self):
         """Return the reverse complement assuming it is RNA.
 
-        In typical usage this will return the same unknown sequence. It would
-        be unexpected to use a nucleotide letter other than N, but if you do,
-        the complement base is used:
+        In typical usage this will return the same unknown sequence. If your
+        sequence isn't actually unknown, the appropriate RNA complement base
+        is used:
 
         >>> UnknownSeq(8, character="A").reverse_complement_rna()
         UnknownSeq(8, character='U')
@@ -1474,9 +1486,9 @@ class UnknownSeq(Seq):
         >>> print(my_rna)
         NNNNNNNNNN
 
-        In typical usage this will return the same unknown sequence. It would
-        be unexpected to use a nucleotide letter other than N, but if you do
-        use T, then U is returned:
+        In typical usage this will return the same unknown sequence. If your
+        sequence isn't actually unknown, but a homopolymer of T, the standard
+        DNA to RNA transcription is done, replacing T with U:
 
         >>> UnknownSeq(9, character="t").transcribe()
         UnknownSeq(9, character='u')
@@ -1498,9 +1510,9 @@ class UnknownSeq(Seq):
         >>> print(my_dna)
         NNNNNNNNNNNNNNNNNNNN
 
-        In typical usage this will return the same unknown sequence. It would
-        be unexpected to use a nucleotide letter other than N, but if you do
-        use U, then T is returned:
+        In typical usage this will return the same unknown sequence. If your
+        sequence is actually a U homopolymer, the standard RNA to DNA back
+        translation applies, replacing U with T:
 
         >>> UnknownSeq(9, character="U").back_transcribe()
         UnknownSeq(9, character='T')
@@ -1571,10 +1583,17 @@ class UnknownSeq(Seq):
         >>> print(my_protein)
         XXX
 
-        Note even if your sequence makes sense as codons (e.g. AAA), it will
-        be translated as an unknown protein sequence of X.
+        If your sequence makes sense as codons (e.g. a poly-A tail AAAAAA),
+        it will be translated accordingly:
+
+        >>> UnknownSeq(7, character='A').translate()
+        UnknownSeq(2, character='K')
         """
-        return UnknownSeq(self._length // 3, character="X")
+        s = Seq(self._character * 3).translate(
+            table=table, stop_symbol=stop_symbol, to_stop=to_stop, cds=cds, gap=gap
+        )
+        # Don't worry about to_stop - no known stop codon is three bases the same,
+        return UnknownSeq(self._length // 3, character=str(s))
 
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s).
