@@ -1561,37 +1561,24 @@ class UnknownSeq(Seq):
     ):
         """Translate an unknown nucleotide sequence into an unknown protein.
 
-        e.g.
-
-        >>> my_seq = UnknownSeq(9, character="N")
-        >>> print(my_seq)
-        NNNNNNNNN
-        >>> my_protein = my_seq.translate()
-        >>> my_protein
-        UnknownSeq(3, character='X')
-        >>> print(my_protein)
-        XXX
-
-        In comparison, using a normal Seq object:
-
-        >>> my_seq = Seq("NNNNNNNNN")
-        >>> print(my_seq)
-        NNNNNNNNN
-        >>> my_protein = my_seq.translate()
-        >>> my_protein
-        Seq('XXX')
-        >>> print(my_protein)
-        XXX
-
         If your sequence makes sense as codons (e.g. a poly-A tail AAAAAA),
         it will be translated accordingly:
 
         >>> UnknownSeq(7, character='A').translate()
         UnknownSeq(2, character='K')
+
+        Otherwise, it will be translated as X for unknown amino acid:
+
+        >>> UnknownSeq(7).translate()
+        UnknownSeq(2, character='X')
         """
-        s = Seq(self._character * 3).translate(
-            table=table, stop_symbol=stop_symbol, to_stop=to_stop, cds=cds, gap=gap
-        )
+        try:
+            s = Seq(self._character * 3).translate(
+                table=table, stop_symbol=stop_symbol, to_stop=to_stop, cds=cds, gap=gap
+            )
+        except CodonTable.TranslationError:
+            # Preserve historic behaviour, ??? (default character) and XXX -> X
+            s = "X"
         # Don't worry about to_stop - no known stop codon is three bases the same,
         return UnknownSeq(self._length // 3, character=str(s))
 
