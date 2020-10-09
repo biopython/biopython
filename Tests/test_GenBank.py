@@ -318,7 +318,7 @@ class GenBankTests(unittest.TestCase):
                 str(cm.exception),
             )
 
-    def test_001_implicit_orign_wrap_fix(self):
+    def test_001_implicit_origin_wrap_fix(self):
         """Attempt to fix implied origin wrapping."""
         path = "GenBank/bad_origin_wrap.gb"
         with warnings.catch_warnings():
@@ -360,7 +360,7 @@ class GenBankTests(unittest.TestCase):
                 "join{[5399:5600](+), [5699:6100](+), [0:100](-), [<6800:7000](-)}",
             )
 
-    def test_implicit_orign_wrap_extract_and_translate(self):
+    def test_implicit_origin_wrap_extract_and_translate(self):
         """Test that features wrapped around origin give expected data."""
         path = "GenBank/bad_origin_wrap_CDS.gb"
         with warnings.catch_warnings():
@@ -911,7 +911,7 @@ class LineOneTests(unittest.TestCase):
     def test_topology_genbank(self):
         """Check GenBank LOCUS line parsing."""
         # This is a bit low level,
-        # but can test pasing the LOCUS line only
+        # but can test passing the LOCUS line only
         tests = [
             ("LOCUS       U00096", None, None, None, None),
             # This example is actually fungal,
@@ -994,7 +994,7 @@ class LineOneTests(unittest.TestCase):
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        # This is a bit low level, but can test passing the ID line only
         tests = [
             # Modern examples with sequence version
             (
@@ -1200,40 +1200,27 @@ class GenBankScannerTests(unittest.TestCase):
 
     def test_genbank_cds_interaction(self):
         """Test CDS interaction, parse CDS features on gb(k) files."""
-        # Test parse CDS features on NC_000932.gb
         l_cds_f = self.gb_to_l_cds_f("GenBank/NC_000932.gb")
-        # number of records, should be 85
         self.assertEqual(len(l_cds_f), 85)
-        # Seq ID
         self.assertEqual(l_cds_f[0].id, "NP_051037.1")
-        self.assertEqual(l_cds_f[84].id, "NP_051123.1")
+        self.assertEqual(l_cds_f[-1].id, "NP_051123.1")
 
-        # Test parse CDS features on NC_005816.gb, Tag to ID
-        l_cds_f = self.gb_to_l_cds_f(
-            "GenBank/NC_005816.gb", tags2id=("gene", "locus_tag", "product")
-        )
-        # number of records, should be 10
-        self.assertEqual(len(l_cds_f), 10)
-        # Seq ID
-        self.assertEqual(l_cds_f[0].id, "<unknown id>")
-        self.assertEqual(l_cds_f[0].name, "YP_pPCP01")
-
-        # Test parse CDS features on
-        # NC_000932.gb and NC_005816.gb combined
-        l_cds_f1 = self.gb_to_l_cds_f(
-            "GenBank/NC_000932.gb", tags2id=("gene", "locus_tag", "product")
-        )
         l_cds_f2 = self.gb_to_l_cds_f(
             "GenBank/NC_005816.gb", tags2id=("gene", "locus_tag", "product")
         )
+        self.assertEqual(len(l_cds_f2), 10)
+        self.assertEqual(l_cds_f2[0].id, "<unknown id>")
+        self.assertEqual(l_cds_f2[0].name, "YP_pPCP01")
+
+        l_cds_f1 = self.gb_to_l_cds_f(
+            "GenBank/NC_000932.gb", tags2id=("gene", "locus_tag", "product")
+        )
         l_cds_combined = l_cds_f1 + l_cds_f2
-        # number of records combined, should be 95
         self.assertEqual(len(l_cds_combined), 95)
-        # Seq ID
         self.assertEqual(l_cds_combined[0].id, "rps12")
         self.assertEqual(l_cds_combined[0].description, "ribosomal protein S12")
-        self.assertEqual(l_cds_combined[94].id, "<unknown id>")
-        self.assertEqual(l_cds_combined[94].description, "hypothetical protein")
+        self.assertEqual(l_cds_combined[-1].id, "<unknown id>")
+        self.assertEqual(l_cds_combined[-1].description, "hypothetical protein")
 
     def test_genbank_interaction(self):
         """Test GenBank records interaction on gbk files."""
@@ -1292,12 +1279,9 @@ class GenBankScannerTests(unittest.TestCase):
         """Test EMBL CDS interaction, parse CDS features on embl files."""
         embl_s = GenBank.Scanner.EmblScanner()
 
-        # Test parse CDS features on embl_file
         with open("EMBL/AE017046.embl") as handle_embl7046:
             l_cds_f = list(embl_s.parse_cds_features(handle_embl7046))
-        # number of records, should be 10
         self.assertEqual(len(l_cds_f), 10)
-        # Seq ID
         self.assertEqual(l_cds_f[0].id, "AAS58758.1")
         self.assertEqual(l_cds_f[0].description, "putative transposase")
 
@@ -1305,10 +1289,8 @@ class GenBankScannerTests(unittest.TestCase):
         """Test EMBL Record interaction on embl files."""
         embl_s = GenBank.Scanner.EmblScanner()
 
-        #  Test parse records on embl_file
         with open("EMBL/AE017046.embl") as handle_embl7046:
             l_embl_r = list(embl_s.parse_records(handle_embl7046, do_features=True))
-        # number of records, should be 1
         self.assertEqual(len(l_embl_r), 1)
         self.assertEqual(l_embl_r[0].id, "AE017046.1")
         self.assertEqual(
