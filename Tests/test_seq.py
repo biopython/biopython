@@ -43,11 +43,11 @@ protein_seqs = [
     Seq.Seq("ATCGPK"),
     Seq.Seq("T.CGPK"),
     Seq.Seq("T-CGPK"),
-    Seq.Seq("MEDG-KRXR*"),
+    Seq.Seq("MEDG-KRX*"),
     Seq.MutableSeq("ME-K-DRXR*XU"),
-    Seq.Seq("MEDG-KRXR@"),
+    Seq.Seq("MEDG-KRX@"),
     Seq.Seq("ME-KR@"),
-    Seq.Seq("MEDG.KRXR@"),
+    Seq.Seq("MEDG.KRX@"),
 ]
 
 
