@@ -157,6 +157,17 @@ class SeqRecord:
 
     """
 
+    __slots__ = (
+        '_seq',
+        'id',
+        'name',
+        'description',
+        'dbxrefs',
+        'annotations',
+        '_per_letter_annotations',
+        'features'
+    )
+
     def __init__(
         self,
         seq,
@@ -229,7 +240,8 @@ class SeqRecord:
                 self._per_letter_annotations = _RestrictedDict(length=0)
             else:
                 try:
-                    self._per_letter_annotations = _RestrictedDict(length=len(seq))
+                    self._per_letter_annotations = _RestrictedDict(
+                        length=len(seq))
                 except TypeError:
                     raise TypeError(
                         "seq argument should be a Seq object or similar"
@@ -238,7 +250,18 @@ class SeqRecord:
             # This will be handled via the property set function, which will
             # turn this into a _RestrictedDict and thus ensure all the values
             # in the dict are the right length
-            self.letter_annotations = letter_annotations
+            if not isinstance(letter_annotations, dict):
+                raise TypeError(
+                    "The per-letter-annotations should be a (restricted) dictionary."
+                )
+            # Turn this into a restricted-dictionary (and check the entries)
+            try:
+                self._per_letter_annotations = _RestrictedDict(
+                    length=len(self.seq))
+            except AttributeError:
+                # e.g. seq is None
+                self._per_letter_annotations = _RestrictedDict(length=0)
+            self._per_letter_annotations.update(letter_annotations)
 
         # annotations about parts of the sequence
         if features is None:
@@ -250,23 +273,10 @@ class SeqRecord:
         self.features = features
 
     # TODO - Just make this a read only property?
-    def _set_per_letter_annotations(self, value):
-        if not isinstance(value, dict):
-            raise TypeError(
-                "The per-letter-annotations should be a (restricted) dictionary."
-            )
-        # Turn this into a restricted-dictionary (and check the entries)
-        try:
-            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
-        except AttributeError:
-            # e.g. seq is None
-            self._per_letter_annotations = _RestrictedDict(length=0)
-        self._per_letter_annotations.update(value)
 
-    letter_annotations = property(
-        fget=lambda self: self._per_letter_annotations,
-        fset=_set_per_letter_annotations,
-        doc="""Dictionary of per-letter-annotation for the sequence.
+    @property
+    def letter_annotations(self):
+        """Dictionary of per-letter-annotation for the sequence.
 
         For example, this can hold quality scores used in FASTQ or QUAL files.
         Consider this example using Bio.SeqIO to read in an example Solexa
@@ -314,15 +324,36 @@ class SeqRecord:
 
         Note that if replacing the record's sequence with a sequence of a
         different length you must first clear the letter_annotations dict.
-        """,
-    )
+        """
+        return self._per_letter_annotations
 
-    def _set_seq(self, value):
+    @letter_annotations.setter
+    def letter_annotations(self, value):
+        if not isinstance(value, dict):
+            raise TypeError(
+                "The per-letter-annotations should be a (restricted) dictionary."
+            )
+        # Turn this into a restricted-dictionary (and check the entries)
+        try:
+            self._per_letter_annotations = _RestrictedDict(
+                length=len(self.seq))
+        except AttributeError:
+            # e.g. seq is None
+            self._per_letter_annotations = _RestrictedDict(length=0)
+        self._per_letter_annotations.update(value)
+
+    @property
+    def seq(self):
+        return self._seq
+
+    @seq.setter
+    def seq(self, value):
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
             if len(self) != len(value):
                 # TODO - Make this a warning? Silently empty the dictionary?
-                raise ValueError("You must empty the letter annotations first!")
+                raise ValueError(
+                    "You must empty the letter annotations first!")
             else:
                 # Leave the existing per letter annotations unchanged:
                 self._seq = value
@@ -330,16 +361,11 @@ class SeqRecord:
             self._seq = value
             # Reset the (empty) letter annotations dict with new length:
             try:
-                self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
+                self._per_letter_annotations = _RestrictedDict(
+                    length=len(self.seq))
             except AttributeError:
                 # e.g. seq is None
                 self._per_letter_annotations = _RestrictedDict(length=0)
-
-    seq = property(
-        fget=lambda self: self._seq,
-        fset=_set_seq,
-        doc="The sequence itself, as a Seq or MutableSeq object.",
-    )
 
     def __getitem__(self, index):
         """Return a sub-sequence or an individual letter.
@@ -456,7 +482,8 @@ class SeqRecord:
             return self.seq[index]
         elif isinstance(index, slice):
             if self.seq is None:
-                raise ValueError("If the sequence is None, we cannot slice it.")
+                raise ValueError(
+                    "If the sequence is None, we cannot slice it.")
             parent_length = len(self)
             try:
                 from BioSQL.BioSeq import DBSeqRecord
@@ -640,13 +667,15 @@ class SeqRecord:
         if self.description:
             lines.append(f"Description: {self.description}")
         if self.dbxrefs:
-            lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
+            lines.append("Database cross-references: " +
+                         ", ".join(self.dbxrefs))
         lines.append(f"Number of features: {len(self.features)}")
         for a in self.annotations:
             lines.append(f"/{a}={str(self.annotations[a])}")
         if self.letter_annotations:
             lines.append(
-                "Per letter annotation for: " + ", ".join(self.letter_annotations)
+                "Per letter annotation for: " +
+                ", ".join(self.letter_annotations)
             )
         # Don't want to include the entire sequence
         lines.append(repr(self.seq))
