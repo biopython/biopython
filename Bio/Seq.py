@@ -263,8 +263,7 @@ class Seq:
         Seq('ATGATG')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other)
 
     def __rmul__(self, other):
@@ -275,8 +274,7 @@ class Seq:
         Seq('ATGATG')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other)
 
     def __imul__(self, other):
@@ -289,8 +287,7 @@ class Seq:
         Seq('ATGATG')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other)
 
     def tomutable(self):  # Needed?  Or use a function?
@@ -1012,8 +1009,7 @@ class Seq:
             codon_table = CodonTable.ambiguous_generic_by_id[table_id]
 
         return Seq(
-            _translate_str(str(self), codon_table,
-                           stop_symbol, to_stop, cds, gap=gap)
+            _translate_str(str(self), codon_table, stop_symbol, to_stop, cds, gap=gap)
         )
 
     def ungap(self, gap="-"):
@@ -1151,8 +1147,7 @@ class UnknownSeq(Seq):
             # TODO - Block zero length UnknownSeq?  You can just use a Seq!
             raise ValueError("Length must not be negative.")
         if not character or len(character) != 1:
-            raise ValueError(
-                "character argument should be a single letter string.")
+            raise ValueError("character argument should be a single letter string.")
         self._character = character
 
     def __len__(self):
@@ -1211,8 +1206,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, character='N')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(len(self) * other, character=self._character)
 
     def __rmul__(self, other):
@@ -1225,8 +1219,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, character='N')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(len(self) * other, character=self._character)
 
     def __imul__(self, other):
@@ -1239,8 +1232,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, character='N')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(len(self) * other, character=self._character)
 
     def __getitem__(self, index):
@@ -1908,8 +1900,7 @@ class MutableSeq:
         MutableSeq('ATGATG')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self.data * other)
 
     def __rmul__(self, other):
@@ -1923,8 +1914,7 @@ class MutableSeq:
         MutableSeq('ATGATG')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self.data * other)
 
     def __imul__(self, other):
@@ -1937,8 +1927,7 @@ class MutableSeq:
         MutableSeq('ATGATG')
         """
         if not isinstance(other, int):
-            raise TypeError(
-                f"can't multiply {self.__class__.__name__} by non-int type")
+            raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(self.data * other)
 
     def append(self, c):
@@ -2398,14 +2387,12 @@ def _translate_str(
         )
     if gap is not None:
         if not isinstance(gap, str):
-            raise TypeError(
-                "Gap character should be a single character string.")
+            raise TypeError("Gap character should be a single character string.")
         elif len(gap) > 1:
-            raise ValueError(
-                "Gap character should be a single character string.")
+            raise ValueError("Gap character should be a single character string.")
 
     for i in range(0, n - n % 3, 3):
-        codon = sequence[i: i + 3]
+        codon = sequence[i : i + 3]
         try:
             amino_acids.append(forward_table[codon])
         except (KeyError, CodonTable.TranslationError):
