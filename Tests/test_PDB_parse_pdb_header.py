@@ -97,7 +97,7 @@ class ParseReal(unittest.TestCase):
             },
         )
 
-        info = _parse_remark_465("U R    -9") # Based on PDB id: 7c7a
+        info = _parse_remark_465("U R    -9")  # Based on PDB id: 7c7a
         self.assertEqual(
             info,
             {
