@@ -73,7 +73,7 @@ class Seq:
     not applicable to protein sequences).
     """
 
-    __slots__ = ('_data', 'alphabet')
+    __slots__ = ("_data", "alphabet")
 
     def __init__(self, data):
         """Create a Seq object.
@@ -1129,7 +1129,7 @@ class UnknownSeq(Seq):
     UnknownSeq(2, character='K')
     """
 
-    __slots__ = ('_length', '_character')
+    __slots__ = ("_length", "_character")
 
     def __init__(self, length, alphabet=None, character="?"):
         """Create a new UnknownSeq object.
@@ -1700,7 +1700,7 @@ class MutableSeq:
     or biological methods as the Seq object.
     """
 
-    __slots__ = ('data')
+    __slots__ = "data"
 
     def __init__(self, data):
         """Initialize the class."""

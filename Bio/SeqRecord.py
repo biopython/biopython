@@ -158,16 +158,16 @@ class SeqRecord:
     """
 
     __slots__ = (
-        '_seq',
-        'id',
-        'name',
-        'description',
-        'dbxrefs',
-        'annotations',
-        '_per_letter_annotations',
-        'features',
-        '_al_start',
-        '_al_stop'
+        "_seq",
+        "id",
+        "name",
+        "description",
+        "dbxrefs",
+        "annotations",
+        "_per_letter_annotations",
+        "features",
+        "_al_start",
+        "_al_stop",
     )
 
     def __init__(
@@ -257,8 +257,7 @@ class SeqRecord:
                 )
             # Turn this into a restricted-dictionary (and check the entries)
             try:
-                self._per_letter_annotations = _RestrictedDict(
-                    length=len(self.seq))
+                self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
             except AttributeError:
                 # e.g. seq is None
                 self._per_letter_annotations = _RestrictedDict(length=0)
@@ -273,11 +272,9 @@ class SeqRecord:
             )
         self.features = features
 
-    # TODO - Just make this a read only property?
-
     @property
     def letter_annotations(self):
-        """Dictionary of per-letter-annotation for the sequence.
+        """Return a dictionary of per-letter-annotation for the sequence.
 
         For example, this can hold quality scores used in FASTQ or QUAL files.
         Consider this example using Bio.SeqIO to read in an example Solexa
@@ -331,7 +328,9 @@ class SeqRecord:
     @letter_annotations.setter
     def letter_annotations(self, value):
         if not isinstance(value, dict):
-            raise TypeError("The per-letter-annotations should be a (restricted) dictionary.")
+            raise TypeError(
+                "The per-letter-annotations should be a (restricted) dictionary."
+            )
         # Turn this into a restricted-dictionary (and check the entries)
         try:
             self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
@@ -342,7 +341,7 @@ class SeqRecord:
 
     @property
     def seq(self):
-        """The sequence itself, as a Seq or MutableSeq object."""
+        """Return the sequence itself, as a Seq or MutableSeq object."""
         return self._seq
 
     @seq.setter
