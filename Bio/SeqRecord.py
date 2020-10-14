@@ -344,6 +344,7 @@ class SeqRecord:
 
     @property
     def seq(self):
+        """The sequence itself, as a Seq or MutableSeq object."""
         return self._seq
 
     @seq.setter
