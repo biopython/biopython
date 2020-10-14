@@ -978,16 +978,6 @@ class TestTranslating(unittest.TestCase):
         seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
         self.assertEqual("VAIVMGRWKGAR", Seq.translate(seq, table=2, to_stop=True))
 
-    def test_translation_on_proteins(self):
-        """Check translation fails on a protein."""
-        for s in protein_seqs:
-            with self.assertRaises(TranslationError):
-                Seq.translate(s)
-
-            if isinstance(s, Seq.Seq):
-                with self.assertRaises(TranslationError):
-                    s.translate()
-
     def test_translation_of_invalid_codon(self):
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
             with self.assertRaises(TranslationError):
