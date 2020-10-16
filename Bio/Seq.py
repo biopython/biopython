@@ -1699,14 +1699,14 @@ class MutableSeq:
     def __init__(self, data):
         """Initialize the class."""
         if isinstance(data, str):  # TODO - What about unicode?
-            self.data = array.array("u", data)
+            self._data = array.array("u", data)
         elif isinstance(data, (Seq, int, float)):
             raise TypeError(
                 "The sequence data given to a MutableSeq object "
                 "should be a string or an array (not a Seq object etc)"
             )
         else:
-            self.data = data  # assumes the input is an array
+            self._data = data  # assumes the input is an array
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -1727,7 +1727,7 @@ class MutableSeq:
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
         # See test_GAQueens.py for an historic usage of a non-string alphabet!
-        return "".join(self.data)
+        return "".join(self._data)
 
     def __eq__(self, other):
         """Compare the sequence to another sequence or a string.
@@ -1757,13 +1757,13 @@ class MutableSeq:
 
         """
         if isinstance(other, MutableSeq):
-            return self.data == other.data
+            return self._data == other._data
         return str(self) == str(other)
 
     def __lt__(self, other):
         """Implement the less-than operand."""
         if isinstance(other, MutableSeq):
-            return self.data < other.data
+            return self._data < other._data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) < str(other)
         raise TypeError(
@@ -1774,7 +1774,7 @@ class MutableSeq:
     def __le__(self, other):
         """Implement the less-than or equal operand."""
         if isinstance(other, MutableSeq):
-            return self.data <= other.data
+            return self._data <= other._data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) <= str(other)
         raise TypeError(
@@ -1785,7 +1785,7 @@ class MutableSeq:
     def __gt__(self, other):
         """Implement the greater-than operand."""
         if isinstance(other, MutableSeq):
-            return self.data > other.data
+            return self._data > other._data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) > str(other)
         raise TypeError(
@@ -1796,7 +1796,7 @@ class MutableSeq:
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
         if isinstance(other, MutableSeq):
-            return self.data >= other.data
+            return self._data >= other._data
         if isinstance(other, (str, Seq, UnknownSeq)):
             return str(self) >= str(other)
         raise TypeError(
@@ -1806,7 +1806,7 @@ class MutableSeq:
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
-        return len(self.data)
+        return len(self._data)
 
     def __getitem__(self, index):
         """Return a subsequence of single letter, use my_seq[index].
@@ -1817,10 +1817,10 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Return a single letter as a string
-            return self.data[index]
+            return self._data[index]
         else:
             # Return the (sub)sequence as another Seq object
-            return MutableSeq(self.data[index])
+            return MutableSeq(self._data[index])
 
     def __setitem__(self, index, value):
         """Set a subsequence of single letter via value parameter.
@@ -1832,15 +1832,15 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Replacing a single letter with a new string
-            self.data[index] = value
+            self._data[index] = value
         else:
             # Replacing a sub-sequence
             if isinstance(value, MutableSeq):
-                self.data[index] = value.data
-            elif isinstance(value, type(self.data)):
-                self.data[index] = value
+                self._data[index] = value._data
+            elif isinstance(value, type(self._data)):
+                self._data[index] = value
             else:
-                self.data[index] = array.array("u", str(value))
+                self._data[index] = array.array("u", str(value))
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -1851,7 +1851,7 @@ class MutableSeq:
         MutableSeq('CTCGACGTCG')
         """
         # Could be deleting a single letter, or a slice
-        del self.data[index]
+        del self._data[index]
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1861,7 +1861,7 @@ class MutableSeq:
         if isinstance(other, MutableSeq):
             # See test_GAQueens.py for an historic usage of a non-string
             # alphabet!  Adding the arrays should support this.
-            return self.__class__(self.data + other.data)
+            return self.__class__(self._data + other._data)
         elif isinstance(other, (str, Seq)):
             return self.__class__(str(self) + str(other))
         else:
@@ -1877,7 +1877,7 @@ class MutableSeq:
         if isinstance(other, MutableSeq):
             # See test_GAQueens.py for an historic usage of a non-string
             # alphabet!  Adding the arrays should support this.
-            return self.__class__(other.data + self.data)
+            return self.__class__(other._data + self._data)
         elif isinstance(other, (str, Seq)):
             return self.__class__(str(other) + str(self))
         else:
@@ -1895,7 +1895,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other)
+        return self.__class__(self._data * other)
 
     def __rmul__(self, other):
         """Multiply integer by MutableSeq.
@@ -1909,7 +1909,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other)
+        return self.__class__(self._data * other)
 
     def __imul__(self, other):
         """Multiply MutableSeq in-place.
@@ -1922,7 +1922,7 @@ class MutableSeq:
         """
         if not isinstance(other, int):
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
-        return self.__class__(self.data * other)
+        return self.__class__(self._data * other)
 
     def append(self, c):
         """Add a subsequence to the mutable sequence object.
@@ -1934,7 +1934,7 @@ class MutableSeq:
 
         No return value.
         """
-        self.data.append(c)
+        self._data.append(c)
 
     def insert(self, i, c):
         """Add a subsequence to the mutable sequence object at a given index.
@@ -1949,7 +1949,7 @@ class MutableSeq:
 
         No return value.
         """
-        self.data.insert(i, c)
+        self._data.insert(i, c)
 
     def pop(self, i=(-1)):
         """Remove a subsequence of a single letter at given index.
@@ -1966,8 +1966,8 @@ class MutableSeq:
 
         Returns the last character of the sequence.
         """
-        c = self.data[i]
-        del self.data[i]
+        c = self._data[i]
+        del self._data[i]
         return c
 
     def remove(self, item):
@@ -1983,9 +1983,9 @@ class MutableSeq:
 
         No return value.
         """
-        for i in range(len(self.data)):
-            if self.data[i] == item:
-                del self.data[i]
+        for i in range(len(self._data)):
+            if self._data[i] == item:
+                del self._data[i]
                 return
         raise ValueError("MutableSeq.remove(x): x not in list")
 
@@ -2042,7 +2042,7 @@ class MutableSeq:
         if len(search) == 1:
             # Try and be efficient and work directly from the array.
             count = 0
-            for c in self.data[start:end]:
+            for c in self._data[start:end]:
                 if c == search:
                     count += 1
             return count
@@ -2127,9 +2127,9 @@ class MutableSeq:
         subsequences are not supported.  Instead this acts like an array or
         a list of the entries. There is therefore no ``.rindex()`` method.
         """
-        # TODO?: return self.data.index(i)
-        for i in range(len(self.data)):
-            if self.data[i] == item:
+        # TODO?: return self._data.index(i)
+        for i in range(len(self._data)):
+            if self._data[i] == item:
                 return i
         raise ValueError("MutableSeq.index(x): x not in list")
 
@@ -2138,7 +2138,7 @@ class MutableSeq:
 
         No return value.
         """
-        self.data.reverse()
+        self._data.reverse()
 
     def complement(self):
         """Modify the mutable sequence to take on its complement.
@@ -2150,16 +2150,16 @@ class MutableSeq:
 
         If the sequence contains both T and U, an exception is raised.
         """
-        if "U" in self.data and "T" in self.data:
+        if "U" in self._data and "T" in self._data:
             raise ValueError("Mixed RNA/DNA found")
-        elif "U" in self.data:
+        elif "U" in self._data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
         mixed = d.copy()  # We're going to edit this to be mixed case!
         mixed.update((x.lower(), y.lower()) for x, y in d.items())
-        self.data = [mixed[_] for _ in self.data]
-        self.data = array.array("u", self.data)
+        self._data = [mixed[_] for _ in self._data]
+        self._data = array.array("u", self._data)
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
@@ -2167,7 +2167,7 @@ class MutableSeq:
         No return value.
         """
         self.complement()
-        self.data.reverse()
+        self._data.reverse()
 
     def extend(self, other):
         """Add a sequence to the original mutable sequence object.
@@ -2183,11 +2183,11 @@ class MutableSeq:
         No return value.
         """
         if isinstance(other, MutableSeq):
-            for c in other.data:
-                self.data.append(c)
+            for c in other._data:
+                self._data.append(c)
         else:
             for c in other:
-                self.data.append(c)
+                self._data.append(c)
 
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
@@ -2199,7 +2199,7 @@ class MutableSeq:
         >>> my_mseq.toseq()
         Seq('MKQHKAMIVALIVICITAVVAAL')
         """
-        return Seq("".join(self.data))
+        return Seq("".join(self._data))
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
