@@ -1710,6 +1710,7 @@ class MutableSeq:
 
     @property
     def data(self):
+        """Get the data."""
         warnings.warn(
             "Accessing MutableSeq.data has been deprecated, as it is now a private "
             "attribute. Please use indexing to access the sequence contents of "
@@ -1720,6 +1721,7 @@ class MutableSeq:
 
     @data.setter
     def data(self, value):
+        """Set the data."""
         warnings.warn(
             "Accessing MutableSeq.data has been deprecated, as it is now a private "
             "attribute. Please use indexing to access the sequence contents of "
