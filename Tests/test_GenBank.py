@@ -836,16 +836,7 @@ KEYWORDS    """,
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            in_tmp.seek(0)
-            record = SeqIO.read(in_tmp, "genbank")
-
-            # Create temporary output memory file
-            out_tmp = StringIO()
-            SeqIO.write(record, out_tmp, "genbank")
-
-            # Check that the written file can be read back in
-            out_tmp.seek(0)
-            record_in = SeqIO.read(out_tmp, "genbank")
+            record_in = self.create_record(in_tmp)
             self.assertEqual(record_in.id, "DS830848.1")
             self.assertEqual(record_in.name, "AZZZAA021234567891234")
             self.assertEqual(len(record_in.seq), 2147483647)
@@ -873,16 +864,8 @@ KEYWORDS    """,
 
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                in_tmp.seek(0)
-                record = SeqIO.read(in_tmp, "genbank")
 
-                # Create temporary output memory file
-                out_tmp = StringIO()
-                SeqIO.write(record, out_tmp, "genbank")
-
-                # Check that the written file can be read back in
-                out_tmp.seek(0)
-                record_in = SeqIO.read(out_tmp, "genbank")
+                record_in = self.create_record(in_tmp)
                 self.assertEqual(record_in.id, "DS830848.1")
                 self.assertEqual(record_in.name, "AZZZAA02123456789")
                 self.assertEqual(len(record_in.seq), 10000000000)
@@ -903,6 +886,17 @@ KEYWORDS    """,
                 SeqIO.read(long_in_tmp, "genbank")
 
             self.assertRaises(ValueError, read_longer_than_maxsize)
+
+        def create_record(self, in_tmp):
+            in_tmp.seek(0)
+            record = SeqIO.read(in_tmp, "genbank")
+            # Create temporary output memory file
+            out_tmp = StringIO()
+            SeqIO.write(record, out_tmp, "genbank")
+            # Check that the written file can be read back in
+            out_tmp.seek(0)
+            record_in = SeqIO.read(out_tmp, "genbank")
+            return record_in
 
 
 class LineOneTests(unittest.TestCase):
@@ -969,28 +963,28 @@ class LineOneTests(unittest.TestCase):
             with warnings.catch_warnings(record=True) as caught:
                 warnings.simplefilter("always")
                 scanner = GenBank.Scanner.GenBankScanner()
-                consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
-                scanner._feed_first_line(consumer, line)
-                t = consumer.data.annotations.get("topology", None)
-                self.assertEqual(
-                    t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
-                )
-                mt = consumer.data.annotations.get("molecule_type", None)
-                self.assertEqual(
-                    mt,
-                    mol_type,
-                    "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
-                )
-                d = consumer.data.annotations.get("data_file_division", None)
-                self.assertEqual(
-                    d, div, "Wrong division %r not %r from %r" % (d, div, line)
-                )
+                self.consume_for_warnings(scanner, data=(div, line, mol_type, topo))
                 if warning_list is None:
                     self.assertEqual(len(caught), 0)
                 else:
                     self.assertEqual(len(caught), len(warning_list))
                     for i, warning_class in enumerate(warning_list):
                         self.assertEqual(caught[i].category, warning_class)
+
+    def consume_for_warnings(self, scanner, data=None):
+        div, line, mol_type, topo = data
+        consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+        scanner._feed_first_line(consumer, line)
+        t = consumer.data.annotations.get("topology", None)
+        self.assertEqual(t, topo, "Wrong topology %r not %r from %r" % (t, topo, line))
+        mt = consumer.data.annotations.get("molecule_type", None)
+        self.assertEqual(
+            mt,
+            mol_type,
+            "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+        )
+        d = consumer.data.annotations.get("data_file_division", None)
+        self.assertEqual(d, div, "Wrong division %r not %r from %r" % (d, div, line))
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
@@ -1041,48 +1035,18 @@ class LineOneTests(unittest.TestCase):
         ]
         for (line, topo, mol_type, div) in tests:
             scanner = GenBank.Scanner.EmblScanner()
-            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
-            scanner._feed_first_line(consumer, line)
-            t = consumer.data.annotations.get("topology", None)
-            self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
-            )
-            mt = consumer.data.annotations.get("molecule_type", None)
-            self.assertEqual(
-                mt,
-                mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
-            )
-            d = consumer.data.annotations.get("data_file_division", None)
-            self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
-            )
+            self.consume_for_warnings(div, line, mol_type, scanner, topo)
 
     def test_first_line_imgt(self):
         """Check IMGT ID line parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        # This is a bit low level, but can test passing the ID line only
         tests = [
             ("ID   HLA00001   standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
             ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
         ]
         for (line, topo, mol_type, div) in tests:
             scanner = GenBank.Scanner._ImgtScanner()
-            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
-            scanner._feed_first_line(consumer, line)
-            t = consumer.data.annotations.get("topology", None)
-            self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
-            )
-            mt = consumer.data.annotations.get("molecule_type", None)
-            self.assertEqual(
-                mt,
-                mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
-            )
-            d = consumer.data.annotations.get("data_file_division", None)
-            self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
-            )
+            self.consume_for_warnings(div, line, mol_type, scanner, topo)
 
 
 class OutputTests(unittest.TestCase):
@@ -1224,56 +1188,34 @@ class GenBankScannerTests(unittest.TestCase):
 
     def test_genbank_interaction(self):
         """Test GenBank records interaction on gbk files."""
-        # Test parse records, on NC_005816, do_features False
-        l_r = self.gb_to_l_r("GenBank/NC_005816.gb", do_features=False)
-        # number of records, should be 1
-        self.assertEqual(len(l_r), 1)
-        self.assertEqual(l_r[0].id, "NC_005816.1")
-        self.assertEqual(l_r[0].name, "NC_005816")
-        self.assertEqual(
-            l_r[0].description,
-            "Yersinia pestis biovar "
-            "Microtus str. 91001 plasmid "
-            "pPCP1, complete sequence",
-        )
-        self.assertEqual(len(l_r[0].features), 0)
-
-        # Test parse records on NC_005816, do_features True
-        l_r = self.gb_to_l_r("GenBank/NC_005816.gb", do_features=True)
-        # number of records, should be 1
-        self.assertEqual(len(l_r), 1)
-        self.assertEqual(l_r[0].id, "NC_005816.1")
-        self.assertEqual(l_r[0].name, "NC_005816")
-        self.assertEqual(
-            l_r[0].description,
-            "Yersinia pestis biovar "
-            "Microtus str. 91001 plasmid "
-            "pPCP1, complete sequence",
-        )
-        self.assertEqual(len(l_r[0].features), 41)
-
-        # Test parse records on "GenBank/NC_000932.gb",
-        # do_features False
-        l_r = self.gb_to_l_r("GenBank/NC_000932.gb", do_features=False)
-        # number of records, should be 1
-        self.assertEqual(len(l_r), 1)
-        self.assertEqual(l_r[0].id, "NC_000932.1")
-        self.assertEqual(l_r[0].name, "NC_000932")
-        self.assertEqual(
-            l_r[0].description, "Arabidopsis thaliana chloroplast, complete genome"
-        )
-        self.assertEqual(len(l_r[0].features), 0)
-
-        # Test parse records on NC_000932, do_features True
-        l_r = self.gb_to_l_r("GenBank/NC_000932.gb", do_features=True)
-        # number of records, should be 1
-        self.assertEqual(len(l_r), 1)
-        self.assertEqual(l_r[0].id, "NC_000932.1")
-        self.assertEqual(l_r[0].name, "NC_000932")
-        self.assertEqual(
-            l_r[0].description, "Arabidopsis thaliana chloroplast, complete genome"
-        )
-        self.assertEqual(len(l_r[0].features), 259)
+        data = {
+            "GenBank/NC_005816.gb": {
+                "len": 1,
+                "id": "NC_005816.1",
+                "name": "NC_005816",
+                "description": "Yersinia pestis biovar "
+                "Microtus str. 91001 plasmid "
+                "pPCP1, complete sequence",
+                "features_len": 41,
+            },
+            "GenBank/NC_000932.gb": {
+                "len": 1,
+                "id": "NC_000932.1",
+                "name": "NC_000932",
+                "description": "Arabidopsis thaliana chloroplast, complete genome",
+                "features_len": 259,
+            },
+        }
+        for path in data:
+            for do_features in [False, True]:
+                record = data[path]
+                l_r = self.gb_to_l_r(path, do_features=do_features)
+                self.assertEqual(len(l_r), record["len"])
+                self.assertEqual(l_r[0].id, record["id"])
+                self.assertEqual(l_r[0].name, record["name"])
+                self.assertEqual(l_r[0].description, record["description"])
+                features_len = record["features_len"] if do_features else 0
+                self.assertEqual(len(l_r[0].features), features_len)
 
     def test_embl_cds_interaction(self):
         """Test EMBL CDS interaction, parse CDS features on embl files."""
