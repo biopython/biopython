@@ -1711,7 +1711,7 @@ class MutableSeq:
     @property
     def data(self):
         warnings.warn(
-            "Accessing MutableSeq.data has been deprecated, as it is a private "
+            "Accessing MutableSeq.data has been deprecated, as it is now a private "
             "attribute. Please use indexing to access the sequence contents of "
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
@@ -1721,7 +1721,7 @@ class MutableSeq:
     @data.setter
     def data(self, value):
         warnings.warn(
-            "Accessing MutableSeq.data has been deprecated, as it is a private "
+            "Accessing MutableSeq.data has been deprecated, as it is now a private "
             "attribute. Please use indexing to access the sequence contents of "
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
