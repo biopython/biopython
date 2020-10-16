@@ -24,7 +24,7 @@ import array
 import sys
 import warnings
 
-from Bio import BiopythonWarning
+from Bio import BiopythonWarning, BiopythonDeprecationWarning
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
 from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
@@ -1707,6 +1707,26 @@ class MutableSeq:
             )
         else:
             self._data = data  # assumes the input is an array
+
+    @property
+    def data(self):
+        warnings.warn(
+            "Accessing MutableSeq.data has been deprecated, as it is a private "
+            "attribute. Please use indexing to access the sequence contents of "
+            "a MutableSeq object.",
+            BiopythonDeprecationWarning,
+        )
+        return self._data
+
+    @data.setter
+    def data(self, value):
+        warnings.warn(
+            "Accessing MutableSeq.data has been deprecated, as it is a private "
+            "attribute. Please use indexing to access the sequence contents of "
+            "a MutableSeq object.",
+            BiopythonDeprecationWarning,
+        )
+        self._data = value
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
