@@ -21,10 +21,10 @@ from Bio import BiopythonWarning
 from Bio import BiopythonParserWarning
 
 from Bio import SeqIO
+from Bio.SeqFeature import CompoundLocation
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 
-# GenBank stuff to test:
 from Bio import GenBank
 
 
@@ -49,7 +49,6 @@ class TestBasics(unittest.TestCase):
 
     def test_write_format(self):
         """Test writing to the difference formats."""
-        # We only test writing on a subset of the examples:
         filenames = [
             "noref.gb",
             "cor6_6.gb",
@@ -88,7 +87,6 @@ class TestBasics(unittest.TestCase):
         with open(path) as handle:
             iterator = GenBank.Iterator(handle, gb_parser)
             first_record = next(iterator)
-        # test for cleaning of translation
         translation_feature = first_record.features[1]
         test_trans = translation_feature.qualifiers["translation"][0]
         self.assertNotIn(" ", test_trans, "Did not clean spaces out of the translation")
@@ -185,16 +183,17 @@ class TestRecordParser(unittest.TestCase):
                                 self.assertEqual(good_record["tsa"], test_record.tsa)
 
 
+def shorten(seq):
+    """Shorten the sequence to 60 symbols."""
+    if len(seq) <= 60:
+        return seq
+    return seq[:54] + "..." + seq[-3:]
+
+
 class TestFeatureParser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.feat_parser = GenBank.FeatureParser(debug_level=0)
-
-    def shorten(self, seq):
-        if len(seq) <= 60:
-            return seq
-        else:
-            return seq[:54] + "..." + seq[-3:]
 
     def test_feature_parser(self):
         """Test parsed features vs the existing once."""
@@ -214,7 +213,7 @@ class TestFeatureParser(unittest.TestCase):
                             test_record=test_record, good_record=good_records[path]
                         ):
                             self.assertEqual(
-                                self.shorten(test_record.seq), good_record["seq"]
+                                shorten(test_record.seq), good_record["seq"]
                             )
                             self.assertEqual(test_record.id, good_record["id"])
                             self.assertEqual(test_record.name, good_record["name"])
@@ -244,6 +243,17 @@ class TestFeatureParser(unittest.TestCase):
                             self.assertEqual(
                                 test_record.dbxrefs, good_record.get("dbxrefs")
                             )
+
+
+def create_record(in_tmp):
+    """Create a temporary record."""
+    in_tmp.seek(0)
+    record = SeqIO.read(in_tmp, "genbank")
+    out_tmp = StringIO()
+    SeqIO.write(record, out_tmp, "genbank")
+    out_tmp.seek(0)
+    record_in = SeqIO.read(out_tmp, "genbank")
+    return record_in
 
 
 class GenBankTests(unittest.TestCase):
@@ -335,8 +345,6 @@ class GenBankTests(unittest.TestCase):
 
     def test_compound_complex_origin_wrap(self):
         """Test the attempts to fix compound complex origin wrapping."""
-        from Bio.SeqFeature import CompoundLocation
-
         path = "GenBank/bad_origin_wrap.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
@@ -836,7 +844,7 @@ KEYWORDS    """,
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            record_in = self.create_record(in_tmp)
+            record_in = create_record(in_tmp)
             self.assertEqual(record_in.id, "DS830848.1")
             self.assertEqual(record_in.name, "AZZZAA021234567891234")
             self.assertEqual(len(record_in.seq), 2147483647)
@@ -848,7 +856,6 @@ KEYWORDS    """,
 
             This is only run if sys.maxsize > 2147483647.
             """
-            # Create example file from existing file
             path = "GenBank/DS830848.gb"
             with open(path) as inhandle:
                 data = inhandle.readlines()
@@ -857,7 +864,6 @@ KEYWORDS    """,
                 " 15-OCT-2018\n"
             )
 
-            # Create memory file from modified genbank file
             in_tmp = StringIO()
             in_tmp.writelines(data)
             in_tmp.seek(0)
@@ -865,7 +871,7 @@ KEYWORDS    """,
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
 
-                record_in = self.create_record(in_tmp)
+                record_in = create_record(in_tmp)
                 self.assertEqual(record_in.id, "DS830848.1")
                 self.assertEqual(record_in.name, "AZZZAA02123456789")
                 self.assertEqual(len(record_in.seq), 10000000000)
@@ -886,17 +892,6 @@ KEYWORDS    """,
                 SeqIO.read(long_in_tmp, "genbank")
 
             self.assertRaises(ValueError, read_longer_than_maxsize)
-
-        def create_record(self, in_tmp):
-            in_tmp.seek(0)
-            record = SeqIO.read(in_tmp, "genbank")
-            # Create temporary output memory file
-            out_tmp = StringIO()
-            SeqIO.write(record, out_tmp, "genbank")
-            # Check that the written file can be read back in
-            out_tmp.seek(0)
-            record_in = SeqIO.read(out_tmp, "genbank")
-            return record_in
 
 
 class LineOneTests(unittest.TestCase):
@@ -972,6 +967,7 @@ class LineOneTests(unittest.TestCase):
                         self.assertEqual(caught[i].category, warning_class)
 
     def consume_for_warnings(self, scanner, data=None):
+        """Consume data and catch warnings."""
         div, line, mol_type, topo = data
         consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
         scanner._feed_first_line(consumer, line)
