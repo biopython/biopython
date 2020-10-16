@@ -630,7 +630,6 @@ class IC_Chain:
         self.dAtoms[:, 3][mdRev] = a4rot[udRev]  # [self.dRev]
 
         self.dAtoms_needs_update[...] = False
-        pass
 
     def internal_to_atom_coordinates(
         self,

@@ -553,7 +553,7 @@ class SeqXmlWriter(SequenceWriter):
                 elif len(local_ncbi_taxid) == 0:
                     local_ncbi_taxid = None
                 else:
-                    ValueError(
+                    raise ValueError(
                         "Multiple entries for record.annotations['ncbi_taxid'], %r"
                         % local_ncbi_taxid
                     )

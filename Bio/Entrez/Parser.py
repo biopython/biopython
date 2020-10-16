@@ -716,7 +716,6 @@ class DataHandler:
 
     def skipCharacterDataHandler(self, content):
         """Handle character data by skipping it."""
-        return
 
     def parse_xsd(self, root):
         """Parse an XSD file."""

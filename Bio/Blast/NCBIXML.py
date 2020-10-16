@@ -296,7 +296,6 @@ class BlastParser(_XMLparser):
     def _start_blast_record(self):
         """Start interaction (PRIVATE)."""
         self._blast = Record.Blast()
-        pass
 
     def _end_blast_record(self):
         """End interaction (PRIVATE)."""

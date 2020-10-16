@@ -334,7 +334,7 @@ class Array(numpy.ndarray):
     def _format_1D(self, fmt):
         _alphabet = self._alphabet
         n = len(_alphabet)
-        words = [None for i in range(n)]
+        words = [None] * n
         lines = []
         try:
             header = self.header
@@ -363,7 +363,7 @@ class Array(numpy.ndarray):
     def _format_2D(self, fmt):
         alphabet = self.alphabet
         n = len(alphabet)
-        words = [[None for j in range(n)] for i in range(n)]
+        words = [[None] * n for _ in range(n)]
         lines = []
         try:
             header = self.header
