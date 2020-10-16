@@ -1035,7 +1035,7 @@ class LineOneTests(unittest.TestCase):
         ]
         for (line, topo, mol_type, div) in tests:
             scanner = GenBank.Scanner.EmblScanner()
-            self.consume_for_warnings(div, line, mol_type, scanner, topo)
+            self.consume_for_warnings(scanner, data=(div, line, mol_type, topo))
 
     def test_first_line_imgt(self):
         """Check IMGT ID line parsing."""
@@ -1046,7 +1046,7 @@ class LineOneTests(unittest.TestCase):
         ]
         for (line, topo, mol_type, div) in tests:
             scanner = GenBank.Scanner._ImgtScanner()
-            self.consume_for_warnings(div, line, mol_type, scanner, topo)
+            self.consume_for_warnings(scanner, data=(div, line, mol_type, topo))
 
 
 class OutputTests(unittest.TestCase):
