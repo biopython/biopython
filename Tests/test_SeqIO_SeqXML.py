@@ -210,7 +210,10 @@ class TestReadAndWrite(unittest.TestCase):
         text = output.decode("UTF-8")
         self.assertIn("Homo sapiens (Human)", text)
         self.assertIn("9606", text)
-        if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>' not in text:
+        if (
+            '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>'
+            not in text
+        ):
             raise ValueError("Missing expected <species> tag: %r" % text)
 
 
