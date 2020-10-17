@@ -56,12 +56,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         )
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-    if isinstance(old.seq, UnknownSeq) and isinstance(new.seq, UnknownSeq):
-        # Jython didn't like us comparing the string of very long
-        # UnknownSeq object (out of heap memory error)
-        if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%r vs %r" % (old.seq, new.seq))
-    elif str(old.seq).upper() != str(new.seq).upper():
+    if str(old.seq).upper() != str(new.seq).upper():
         if len(old.seq) < 200:
             raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
         else:
