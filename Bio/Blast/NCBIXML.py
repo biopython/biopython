@@ -852,11 +852,6 @@ def parse(handle, debug=0):
                 text, pending = pending, NULL
                 break
 
-        # this was added because it seems that the Jython expat parser
-        # was adding records later then the Python one
-        while blast_parser._records:
-            yield blast_parser._records.pop(0)
-
         # At this point we have finished the first XML record.
         # If the file is from an old version of blast, it may
         # contain more XML records (check if text=="").

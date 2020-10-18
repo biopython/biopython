@@ -210,20 +210,11 @@ class TestReadAndWrite(unittest.TestCase):
         text = output.decode("UTF-8")
         self.assertIn("Homo sapiens (Human)", text)
         self.assertIn("9606", text)
-        if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"/>' in text:
-            # Good, but don't get this (do we?)
-            pass
-        elif '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>' in text:
-            # Not as concise, but fine (seen on C Python)
-            pass
-        elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"></species>' in text:
-            # Jython uses a different order
-            pass
-        elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"/>' in text:
-            # This would be fine too, but don't get this (do we?)
-            pass
-        else:
-            raise ValueError("Mising expected <species> tag: %r" % text)
+        if (
+            '<species name="Homo sapiens (Human)" ncbiTaxID="9606"></species>'
+            not in text
+        ):
+            raise ValueError("Missing expected <species> tag: %r" % text)
 
 
 class TestReadCorruptFiles(unittest.TestCase):

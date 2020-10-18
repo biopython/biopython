@@ -252,16 +252,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.assertEqual(record_one.name, record_two.name, msg=msg)
         self.assertEqual(record_one.description, record_two.description, msg=msg)
         self.assertEqual(len(record_one), len(record_two), msg=msg)
-        if isinstance(record_one.seq, UnknownSeq) and isinstance(
-            record_two.seq, UnknownSeq
-        ):
-            # Jython didn't like us comparing the string of very long UnknownSeq
-            # object (out of heap memory error)
-            self.assertEqual(
-                record_one.seq._character, record_two.seq._character, msg=msg
-            )
-        else:
-            self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
+        self.assertEqual(str(record_one.seq), str(record_two.seq), msg=msg)
         # TODO - check features and annotation (see code for BioSQL tests)
         for key in set(record_one.letter_annotations).intersection(
             record_two.letter_annotations
@@ -377,14 +368,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # Check the sequence
                 if fmt in ["gb", "genbank", "embl", "imgt"]:
                     # The GenBank/EMBL parsers will convert to upper case.
-                    if isinstance(r1.seq, UnknownSeq) and isinstance(
-                        r2.seq, UnknownSeq
-                    ):
-                        # Jython didn't like us comparing the string of very long
-                        # UnknownSeq object (out of heap memory error)
-                        self.assertEqual(r1.seq._character.upper(), r2.seq._character)
-                    else:
-                        self.assertEqual(str(r1.seq).upper(), str(r2.seq))
+                    self.assertEqual(str(r1.seq).upper(), str(r2.seq))
                 elif fmt == "qual":
                     self.assertIsInstance(r2.seq, UnknownSeq)
                     self.assertEqual(len(r2), len(r1))
