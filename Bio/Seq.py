@@ -618,11 +618,34 @@ class Seq:
         omitted or None (default) then as for the python string method,
         this defaults to removing any white space.
 
-        e.g. print(my_seq.strip("-"))
+        e.g.
+
+        >>> Seq("ACGT ").strip()
+        Seq('ACGT')
+        >>> Seq("ACGT ").strip(" ")
+        Seq('ACGT')
+
+        Just like the Python string, the order of the characters to be
+        removed is not important:
+
+        >>> Seq("ACGTACGT").strip("TGCA")
+        Seq('')
+
+        As with the Python string, an inappropriate argument
+        will give a TypeError:
+
+        >>> Seq("ACGT ").strip(7)
+        Traceback (most recent call last):
+           ...
+        TypeError: strip arg must be None or str
 
         See also the lstrip and rstrip methods.
         """
-        return Seq(str(self).strip(str(chars)))
+        if isinstance(chars, (Seq, MutableSeq)):
+            return Seq(str(self).strip(str(chars)))
+        else:
+            # Want TypeError on None, int, etc
+            return Seq(str(self).strip(chars))
 
     def lstrip(self, chars=None):
         """Return a new Seq object with leading (left) end stripped.
@@ -633,11 +656,16 @@ class Seq:
         omitted or None (default) then as for the python string method,
         this defaults to removing any white space.
 
-        e.g. print(my_seq.lstrip("-"))
+        >>> Seq("AAACGTA").lstrip("A")
+        Seq('CGTA')
 
         See also the strip and rstrip methods.
         """
-        return Seq(str(self).lstrip(str(chars)))
+        if isinstance(chars, (Seq, MutableSeq)):
+            return Seq(str(self).lstrip(str(chars)))
+        else:
+            # Want TypeError on None, int, etc
+            return Seq(str(self).lstrip(chars))
 
     def rstrip(self, chars=None):
         """Return a new Seq object with trailing (right) end stripped.
@@ -659,7 +687,11 @@ class Seq:
 
         See also the strip and lstrip methods.
         """
-        return Seq(str(self).rstrip(str(chars)))
+        if isinstance(chars, (Seq, MutableSeq)):
+            return Seq(str(self).rstrip(str(chars)))
+        else:
+            # Want TypeError on None, int, etc
+            return Seq(str(self).rstrip(chars))
 
     def upper(self):
         """Return an upper case copy of the sequence.

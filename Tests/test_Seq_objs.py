@@ -465,10 +465,20 @@ class StringMethodTests(unittest.TestCase):
     def test_str_strip(self):
         """Check matches the python string strip method."""
         self._test_method("strip", pre_comp_function=str)
+        self.assertEqual(Seq(" ACGT ").strip(), "ACGT")
+        self.assertRaises(TypeError, Seq("ACGT").strip, 7)
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip", pre_comp_function=str)
+        self.assertEqual(Seq(" ACGT ").rstrip(), " ACGT")
+        self.assertRaises(TypeError, Seq("ACGT").rstrip, 7)
+
+    def test_str_lstrip(self):
+        """Check matches the python string lstrip method."""
+        self._test_method("rstrip", pre_comp_function=str)
+        self.assertEqual(Seq(" ACGT ").lstrip(), "ACGT ")
+        self.assertRaises(TypeError, Seq("ACGT").lstrip, 7)
 
     def test_str_split(self):
         """Check matches the python string rstrip method."""
