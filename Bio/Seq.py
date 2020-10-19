@@ -449,7 +449,11 @@ class Seq:
         >>> my_rna.find("AUG")
         3
         """
-        return str(self).find(str(sub), start, end)
+        if isinstance(sub, (Seq, MutableSeq)):
+            return str(self).find(str(sub), start, end)
+        else:
+            # Want TypeError on int etc
+            return str(self).find(sub, start, end)
 
     def rfind(self, sub, start=0, end=sys.maxsize):
         """Find from right method, like that of a python string.
@@ -473,7 +477,11 @@ class Seq:
         >>> my_rna.rfind("AUG")
         15
         """
-        return str(self).rfind(str(sub), start, end)
+        if isinstance(sub, (Seq, MutableSeq)):
+            return str(self).rfind(str(sub), start, end)
+        else:
+            # Want TypeError on int etc
+            return str(self).rfind(sub, start, end)
 
     def index(self, sub, start=0, end=sys.maxsize):
         """Like find() but raise ValueError when the substring is not found.
@@ -487,11 +495,19 @@ class Seq:
                    ...
         ValueError: substring not found...
         """
-        return str(self).index(str(sub), start, end)
+        if isinstance(sub, (Seq, MutableSeq)):
+            return str(self).index(str(sub), start, end)
+        else:
+            # Want TypeError on int etc
+            return str(self).index(sub, start, end)
 
     def rindex(self, sub, start=0, end=sys.maxsize):
         """Like rfind() but raise ValueError when the substring is not found."""
-        return str(self).rindex(str(sub), start, end)
+        if isinstance(sub, (Seq, MutableSeq)):
+            return str(self).rindex(str(sub), start, end)
+        else:
+            # Want TypeError on int etc
+            return str(self).rindex(sub, start, end)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
         """Return True if the Seq starts with the given prefix, False otherwise.
@@ -516,10 +532,14 @@ class Seq:
         True
         """
         if isinstance(prefix, tuple):
-            prefix_strs = tuple(str(p) for p in prefix)
+            prefix_strs = tuple(
+                str(p) if isinstance(p, (Seq, MutableSeq)) else p for p in prefix
+            )
             return str(self).startswith(prefix_strs, start, end)
-        else:
+        elif isinstance(prefix, (Seq, MutableSeq)):
             return str(self).startswith(str(prefix), start, end)
+        else:
+            return str(self).startswith(prefix, start, end)
 
     def endswith(self, suffix, start=0, end=sys.maxsize):
         """Return True if the Seq ends with the given suffix, False otherwise.
@@ -544,10 +564,14 @@ class Seq:
         True
         """
         if isinstance(suffix, tuple):
-            suffix_strs = tuple(str(p) for p in suffix)
+            suffix_strs = tuple(
+                str(p) if isinstance(p, (Seq, MutableSeq)) else p for p in suffix
+            )
             return str(self).endswith(suffix_strs, start, end)
-        else:
+        elif isinstance(suffix, (Seq, MutableSeq)):
             return str(self).endswith(str(suffix), start, end)
+        else:
+            return str(self).endswith(suffix, start, end)
 
     def split(self, sep=None, maxsplit=-1):
         """Split method, like that of a python string.
@@ -587,7 +611,10 @@ class Seq:
         Seq('VMAIVMGR*KGAR')
         Seq('L')
         """
-        return [Seq(part) for part in str(self).split(str(sep), maxsplit)]
+        if isinstance(sep, (Seq, MutableSeq)):
+            return [Seq(part) for part in str(self).split(str(sep), maxsplit)]
+        else:
+            return [Seq(part) for part in str(self).split(sep, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
         """Do a right split method, like that of a python string.
@@ -607,7 +634,10 @@ class Seq:
 
         See also the split method.
         """
-        return [Seq(part) for part in str(self).rsplit(str(sep), maxsplit)]
+        if isinstance(sep, (Seq, MutableSeq)):
+            return [Seq(part) for part in str(self).rsplit(str(sep), maxsplit)]
+        else:
+            return [Seq(part) for part in str(self).rsplit(sep, maxsplit)]
 
     def strip(self, chars=None):
         """Return a new Seq object with leading and trailing ends stripped.

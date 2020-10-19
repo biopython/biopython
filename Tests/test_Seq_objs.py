@@ -394,18 +394,26 @@ class StringMethodTests(unittest.TestCase):
     def test_str_find(self):
         """Check matches the python string find method."""
         self._test_method("find", start_end=True)
+        self.assertEqual(Seq("AC7GT").find("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").find, 7)
 
     def test_str_rfind(self):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
+        self.assertEqual(Seq("AC7GT").rfind("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").rfind, 7)
 
     def test_str_index(self):
         """Check matches the python string index method."""
         self._test_method("index", start_end=True)
+        self.assertEqual(Seq("AC7GT").index("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").index, 7)
 
     def test_str_rindex(self):
         """Check matches the python string rindex method."""
         self._test_method("rindex", start_end=True)
+        self.assertEqual(Seq("AC7GT").rindex("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").rindex, 7)
 
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
@@ -487,6 +495,8 @@ class StringMethodTests(unittest.TestCase):
         self._test_method(
             "split", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
         )
+        self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".split("7"))
+        self.assertRaises(TypeError, Seq("AC7GT").split, 7)
 
     def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
@@ -495,14 +505,8 @@ class StringMethodTests(unittest.TestCase):
         self._test_method(
             "rsplit", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
         )
-
-    def test_str_lsplit(self):
-        """Check matches the python string rstrip method."""
-        # Calling lsplit should return a list of Seq-like objects, we'll
-        # just apply str() to each of them so it matches the string method
-        self._test_method(
-            "lsplit", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
-        )
+        self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".rsplit("7"))
+        self.assertRaises(TypeError, Seq("AC7GT").rsplit, 7)
 
     def test_str_length(self):
         """Check matches the python string __len__ method."""
