@@ -94,32 +94,33 @@ class TestBasics(unittest.TestCase):
             "\012", test_trans, "Did not clean newlines out of the translation"
         )
 
+    # TODO: Dissect this
     def test_ensembl_locus(self):
         """Test the ENSEMBL locus line."""
         line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
-        s = GenBank.Scanner.GenBankScanner()
-        c = GenBank._FeatureConsumer(True)
-        s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG531_PATCH")
-        self.assertEqual(c._expected_size, 1000000)
+        scanner = GenBank.Scanner.GenBankScanner()
+        consumer = GenBank._FeatureConsumer(True)
+        scanner._feed_first_line(consumer, line)
+        self.assertEqual(consumer.data.name, "HG531_PATCH")
+        self.assertEqual(consumer._expected_size, 1000000)
         line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
-        s = GenBank.Scanner.GenBankScanner()
-        c = GenBank._FeatureConsumer(True)
-        s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG531_PATCH")
-        self.assertEqual(c._expected_size, 759984)
+        scanner = GenBank.Scanner.GenBankScanner()
+        consumer = GenBank._FeatureConsumer(True)
+        scanner._feed_first_line(consumer, line)
+        self.assertEqual(consumer.data.name, "HG531_PATCH")
+        self.assertEqual(consumer._expected_size, 759984)
         line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
-        s = GenBank.Scanner.GenBankScanner()
-        c = GenBank._FeatureConsumer(True)
-        s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG506_HG1000_1_PATCH")
-        self.assertEqual(c._expected_size, 814959)
+        scanner = GenBank.Scanner.GenBankScanner()
+        consumer = GenBank._FeatureConsumer(True)
+        scanner._feed_first_line(consumer, line)
+        self.assertEqual(consumer.data.name, "HG506_HG1000_1_PATCH")
+        self.assertEqual(consumer._expected_size, 814959)
         line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
-        s = GenBank.Scanner.GenBankScanner()
-        c = GenBank._FeatureConsumer(True)
-        s._feed_first_line(c, line)
-        self.assertEqual(c.data.name, "HG506_HG1000_1_PATCH")
-        self.assertEqual(c._expected_size, 1219964)
+        scanner = GenBank.Scanner.GenBankScanner()
+        consumer = GenBank._FeatureConsumer(True)
+        scanner._feed_first_line(consumer, line)
+        self.assertEqual(consumer.data.name, "HG506_HG1000_1_PATCH")
+        self.assertEqual(consumer._expected_size, 1219964)
 
 
 class TestRecordParser(unittest.TestCase):
@@ -289,54 +290,51 @@ class GenBankTests(unittest.TestCase):
         with open(path) as handle:
             self.assertRaises(ValueError, GenBank.read, handle)
 
-    # Evil hack with 000 to manipulate sort order to ensure this is tested
-    # first (otherwise something silences the warning)
-    def test_000_genbank_bad_loc_wrap_warning(self):
+    def test_genbank_bad_loc_wrap_warning(self):
         """Feature line wrapping warning."""
         path = "GenBank/bad_loc_wrap.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             with open(path) as handle:
-                with self.assertRaises(BiopythonParserWarning) as cm:
+                with self.assertRaises(BiopythonParserWarning) as context:
                     GenBank.read(handle)
                 self.assertEqual(
                     "Non-standard feature line wrapping (didn't break on comma)?",
-                    str(cm.exception),
+                    str(context.exception),
                 )
 
-    # Similar hack as we also want to catch that warning here
-    def test_001_negative_location_warning(self):
+    def test_negative_location_warning(self):
         """Un-parsable feature location warning."""
         path = "GenBank/negative_location.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
-            with self.assertRaises(BiopythonParserWarning) as cm:
+            with self.assertRaises(BiopythonParserWarning) as context:
                 SeqIO.read(path, "genbank")
             self.assertEqual(
-                "Couldn't parse feature location: '-2..492'", str(cm.exception)
+                "Couldn't parse feature location: '-2..492'", str(context.exception)
             )
 
-    def test_001_genbank_bad_origin_wrapping_location(self):
+    def test_genbank_bad_origin_wrapping_location(self):
         """Bad origin wrapping."""
         path = "GenBank/bad_origin_wrap_linear.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
-            with self.assertRaises(BiopythonParserWarning) as cm:
+            with self.assertRaises(BiopythonParserWarning) as context:
                 SeqIO.read(path, "genbank")
             self.assertIn(
                 "It appears that '6801..100' is a feature that spans the origin",
-                str(cm.exception),
+                str(context.exception),
             )
 
-    def test_001_implicit_origin_wrap_fix(self):
+    def test_implicit_origin_wrap_fix(self):
         """Attempt to fix implied origin wrapping."""
         path = "GenBank/bad_origin_wrap.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
-            with self.assertRaises(BiopythonParserWarning) as cm:
+            with self.assertRaises(BiopythonParserWarning) as context:
                 SeqIO.read(path, "genbank")
             self.assertEqual(
-                str(cm.exception),
+                str(context.exception),
                 "Attempting to fix invalid location '6801..100' "
                 "as it looks like incorrect origin wrapping. "
                 "Please fix input file, this could have "
@@ -398,10 +396,10 @@ class GenBankTests(unittest.TestCase):
         path = "GenBank/bad_origin_wrap_fuzzy.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
-            with self.assertRaises(BiopythonParserWarning) as cm:
+            with self.assertRaises(BiopythonParserWarning) as context:
                 SeqIO.read(path, "genbank")
             self.assertEqual(
-                str(cm.exception),
+                str(context.exception),
                 "Attempting to fix invalid location '<2644..159' "
                 "as it looks like incorrect origin wrapping. "
                 "Please fix input file, this could have "
@@ -460,8 +458,8 @@ class GenBankTests(unittest.TestCase):
         path = "GenBank/NC_005816.gb"
         record = SeqIO.read(path, "gb")
         self.assertEqual(record.dbxrefs, ["Project:58037"])
-        gb = record.format("gb")
-        self.assertIn("\nDBLINK      Project: 58037\n", gb)
+        genbank = record.format("gb")
+        self.assertIn("\nDBLINK      Project: 58037\n", genbank)
         embl = record.format("embl")
         self.assertIn("XX\nPR   Project:58037;\nXX\n", embl)
 
@@ -470,13 +468,13 @@ class GenBankTests(unittest.TestCase):
         path = "GenBank/NP_416719.gbwithparts"
         record = SeqIO.read(path, "gb")
         self.assertEqual(record.dbxrefs, ["Project:57779", "BioProject:PRJNA57779"])
-        gb = record.format("gb")
+        genbank = record.format("gb")
         self.assertIn(
             """
 DBLINK      Project: 57779
             BioProject: PRJNA57779
 KEYWORDS    """,
-            gb,
+            genbank,
         )
         embl = record.format("embl")
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
@@ -485,13 +483,13 @@ KEYWORDS    """,
         """Parse GenBank/EMBL paired records with PR project entry: GenBank."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
-        gb = record.format("gb")
+        genbank = record.format("gb")
         self.assertIn(
             """
 DBLINK      BioProject: PRJNA16232
             BioSample: SAMN03004382
 KEYWORDS    """,
-            gb,
+            genbank,
         )
         # Also check EMBL output
         embl = record.format("embl")
@@ -502,7 +500,7 @@ KEYWORDS    """,
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertIn("Project:PRJNA16232", record.dbxrefs)
-        gb = record.format("gb")
+        genbank = record.format("gb")
         self.assertIn(
             """
 DBLINK      Project: PRJNA16232
@@ -511,7 +509,7 @@ DBLINK      Project: PRJNA16232
             ENA: ABJB000000000
             BioSample: SAMN03004382
 KEYWORDS    """,
-            gb,
+            genbank,
         )
         embl = record.format("embl")
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
@@ -611,16 +609,16 @@ KEYWORDS    """,
         SeqIO.write([record], out_handle, "genbank")
         first_line = out_handle.getvalue().split("\n")[0]
         self.assertIn("linear", first_line)
-        with open("GenBank/DS830848.gb") as fh:
-            orig_first_line = fh.readline().strip()
+        with open("GenBank/DS830848.gb") as handle:
+            orig_first_line = handle.readline().strip()
         self.assertEqual(first_line, orig_first_line)
 
     def test_qualifier_order(self):
         """Check the qualifier order is preserved."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
-        f = record.features[0]
+        feature = record.features[0]
         self.assertEqual(
-            list(f.qualifiers),
+            list(feature.qualifiers),
             ["organism", "mol_type", "strain", "db_xref", "dev_stage"],
         )
 
@@ -639,35 +637,43 @@ KEYWORDS    """,
                 "%r" % 'One missing ""quotation mark" here',
             )
         # Check records parsed as expected
-        f1 = record.features[0]
-        f2 = record.features[1]
-        f3 = record.features[2]
-        f4 = record.features[3]
-        f5 = record.features[4]
-        self.assertEqual(f1.qualifiers["note"][0], '"This" is "already" "escaped"')
-        self.assertEqual(f2.qualifiers["note"][0], 'One missing "quotation mark" here')
-        self.assertEqual(f3.qualifiers["note"][0], 'End not properly "escaped"')
-        self.assertEqual(f4.qualifiers["note"][0], '"Start" not properly escaped')
-        self.assertEqual(f5.qualifiers["note"][0], 'Middle not "properly" escaped')
+        feature1 = record.features[0]
+        feature2 = record.features[1]
+        feature3 = record.features[2]
+        feature4 = record.features[3]
+        feature5 = record.features[4]
+        self.assertEqual(
+            feature1.qualifiers["note"][0], '"This" is "already" "escaped"'
+        )
+        self.assertEqual(
+            feature2.qualifiers["note"][0], 'One missing "quotation mark" here'
+        )
+        self.assertEqual(feature3.qualifiers["note"][0], 'End not properly "escaped"')
+        self.assertEqual(feature4.qualifiers["note"][0], '"Start" not properly escaped')
+        self.assertEqual(
+            feature5.qualifiers["note"][0], 'Middle not "properly" escaped'
+        )
 
     def test_qualifier_escaping_write(self):
         """Check qualifier escaping is preserved when writing."""
         # Write some properly escaped qualifiers and test
         genbank_out = "GenBank/qualifier_escaping_write.gb"
         record = SeqIO.read(genbank_out, "gb")
-        f1 = record.features[0]
-        f2 = record.features[1]
-        f1.qualifiers["note"][0] = '"Should" now "be" escaped in "file"'
-        f2.qualifiers["note"][0] = '"Should also be escaped in file"'
+        feature1 = record.features[0]
+        feature2 = record.features[1]
+        feature1.qualifiers["note"][0] = '"Should" now "be" escaped in "file"'
+        feature2.qualifiers["note"][0] = '"Should also be escaped in file"'
         SeqIO.write(record, genbank_out, "gb")
         # Read newly escaped qualifiers and test
         record = SeqIO.read(genbank_out, "gb")
-        f1 = record.features[0]
-        f2 = record.features[1]
+        feature1 = record.features[0]
+        feature2 = record.features[1]
         self.assertEqual(
-            f1.qualifiers["note"][0], '"Should" now "be" escaped in "file"'
+            feature1.qualifiers["note"][0], '"Should" now "be" escaped in "file"'
         )
-        self.assertEqual(f2.qualifiers["note"][0], '"Should also be escaped in file"')
+        self.assertEqual(
+            feature2.qualifiers["note"][0], '"Should also be escaped in file"'
+        )
 
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
@@ -675,7 +681,7 @@ KEYWORDS    """,
         self.assertEqual(len(original), 1326)
         # Acceptability of LOCUS line with length > 80
         # invalidates some of these tests
-        for name, seq_len, ok in [
+        for name, seq_len, is_ok in [
             ("short", 1, True),
             ("max_length_of_16", 1000, True),
             ("overly_long_at_17", 1000, True),
@@ -694,7 +700,7 @@ KEYWORDS    """,
             # Set the identifier to the desired name
             record.id = record.name = name
             # Attempt to output the record...
-            if not ok:
+            if not is_ok:
                 # e.g. ValueError:
                 # Locus identifier 'excessively_long_at_22' is too long
                 self.assertRaises(ValueError, record.format, "gb")
@@ -737,8 +743,8 @@ KEYWORDS    """,
         handle = StringIO()
         SeqIO.write(record, handle, "genbank")
         handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
-        self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+        genbank = SeqIO.read(handle, "gb")
+        self.assertEqual(genbank.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
         """Check if user provided date is inserted correctly."""
@@ -754,8 +760,8 @@ KEYWORDS    """,
         handle = StringIO()
         SeqIO.write(record, handle, "genbank")
         handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
-        self.assertEqual(gb.annotations["date"], "24-DEC-2015")
+        genbank = SeqIO.read(handle, "gb")
+        self.assertEqual(genbank.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
         """Check if date lists are handled correctly."""
@@ -771,8 +777,8 @@ KEYWORDS    """,
         handle = StringIO()
         SeqIO.write(record, handle, "genbank")
         handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
-        self.assertEqual(gb.annotations["date"], "24-DEC-2015")
+        genbank = SeqIO.read(handle, "gb")
+        self.assertEqual(genbank.annotations["date"], "24-DEC-2015")
 
         record = SeqRecord(
             sequence_object,
@@ -785,8 +791,8 @@ KEYWORDS    """,
         handle = StringIO()
         SeqIO.write(record, handle, "genbank")
         handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
-        self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+        genbank = SeqIO.read(handle, "gb")
+        self.assertEqual(genbank.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_datetime(self):
         """Check if datetime objects are handled correctly."""
@@ -802,8 +808,8 @@ KEYWORDS    """,
         handle = StringIO()
         SeqIO.write(record, handle, "genbank")
         handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
-        self.assertEqual(gb.annotations["date"], "02-FEB-2000")
+        genbank = SeqIO.read(handle, "gb")
+        self.assertEqual(genbank.annotations["date"], "02-FEB-2000")
 
     def test_genbank_date_invalid(self):
         """Check if invalid dates are treated as default."""
@@ -823,8 +829,8 @@ KEYWORDS    """,
             handle = StringIO()
             SeqIO.write(record, handle, "genbank")
             handle.seek(0)
-            gb = SeqIO.read(handle, "gb")
-            self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+            genbank = SeqIO.read(handle, "gb")
+            self.assertEqual(genbank.annotations["date"], "01-JAN-1980")
 
     def test_longer_locus_line(self):
         """Check that we can read and write files with longer locus lines."""
@@ -971,16 +977,20 @@ class LineOneTests(unittest.TestCase):
         div, line, mol_type, topo = data
         consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
         scanner._feed_first_line(consumer, line)
-        t = consumer.data.annotations.get("topology", None)
-        self.assertEqual(t, topo, "Wrong topology %r not %r from %r" % (t, topo, line))
-        mt = consumer.data.annotations.get("molecule_type", None)
+        topology = consumer.data.annotations.get("topology", None)
         self.assertEqual(
-            mt,
-            mol_type,
-            "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+            topology, topo, "Wrong topology %r not %r from %r" % (topology, topo, line)
         )
-        d = consumer.data.annotations.get("data_file_division", None)
-        self.assertEqual(d, div, "Wrong division %r not %r from %r" % (d, div, line))
+        molecule_type = consumer.data.annotations.get("molecule_type", None)
+        self.assertEqual(
+            molecule_type,
+            mol_type,
+            "Wrong molecule_type %r not %r from %r" % (molecule_type, mol_type, line),
+        )
+        division = consumer.data.annotations.get("data_file_division", None)
+        self.assertEqual(
+            division, div, "Wrong division %r not %r from %r" % (division, div, line)
+        )
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
