@@ -191,6 +191,31 @@ def shorten(seq):
     return seq[:54] + "..." + seq[-3:]
 
 
+def read_size(size):
+    path = "GenBank/DS830848.gb"
+    with open(path) as inhandle:
+        data2 = inhandle.readlines()
+    data2[0] = (
+        f"LOCUS       AZZZAA021234567891234 {size}"
+        " bp    DNA     linear   PRI 15-OCT-2018\n"
+    )
+    in_tmp = StringIO()
+    in_tmp.writelines(data2)
+    in_tmp.seek(0)
+    return in_tmp
+
+
+def create_record(in_tmp):
+    """Create a temporary record."""
+    in_tmp.seek(0)
+    record = SeqIO.read(in_tmp, "genbank")
+    out_tmp = StringIO()
+    SeqIO.write(record, out_tmp, "genbank")
+    out_tmp.seek(0)
+    record_in = SeqIO.read(out_tmp, "genbank")
+    return record_in
+
+
 class TestFeatureParser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -244,17 +269,6 @@ class TestFeatureParser(unittest.TestCase):
                             self.assertEqual(
                                 test_record.dbxrefs, good_record.get("dbxrefs")
                             )
-
-
-def create_record(in_tmp):
-    """Create a temporary record."""
-    in_tmp.seek(0)
-    record = SeqIO.read(in_tmp, "genbank")
-    out_tmp = StringIO()
-    SeqIO.write(record, out_tmp, "genbank")
-    out_tmp.seek(0)
-    record_in = SeqIO.read(out_tmp, "genbank")
-    return record_in
 
 
 class GenBankTests(unittest.TestCase):
@@ -834,70 +848,22 @@ KEYWORDS    """,
 
     def test_longer_locus_line(self):
         """Check that we can read and write files with longer locus lines."""
-        # Create example file from existing file
-        path = "GenBank/DS830848.gb"
-        with open(path) as inhandle:
-            data = inhandle.readlines()
-        data[0] = (
-            "LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI"
-            " 15-OCT-2018\n"
-        )
-
-        # Create memory file from modified genbank file
-        in_tmp = StringIO()
-        in_tmp.writelines(data)
-        in_tmp.seek(0)
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            record_in = create_record(in_tmp)
-            self.assertEqual(record_in.id, "DS830848.1")
-            self.assertEqual(record_in.name, "AZZZAA021234567891234")
-            self.assertEqual(len(record_in.seq), 2147483647)
-
-    if sys.maxsize > 2147483647:
-
-        def test_extremely_long_sequence(self):
-            """Tests if extremely long sequences can be read.
-
-            This is only run if sys.maxsize > 2147483647.
-            """
-            path = "GenBank/DS830848.gb"
-            with open(path) as inhandle:
-                data = inhandle.readlines()
-            data[0] = (
-                "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI"
-                " 15-OCT-2018\n"
-            )
-
-            in_tmp = StringIO()
-            in_tmp.writelines(data)
-            in_tmp.seek(0)
-
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-
-                record_in = create_record(in_tmp)
-                self.assertEqual(record_in.id, "DS830848.1")
-                self.assertEqual(record_in.name, "AZZZAA02123456789")
-                self.assertEqual(len(record_in.seq), 10000000000)
-
-            def read_longer_than_maxsize():
-                path = "GenBank/DS830848.gb"
-                with open(path) as inhandle:
-                    data2 = inhandle.readlines()
-                data2[0] = (
-                    "LOCUS       AZZZAA02123456789 "
-                    + str(sys.maxsize + 1)
-                    + " bp    DNA     linear   PRI 15-OCT-2018\n"
-                )
-
-                long_in_tmp = StringIO()
-                long_in_tmp.writelines(data2)
-                long_in_tmp.seek(0)
-                SeqIO.read(long_in_tmp, "genbank")
-
-            self.assertRaises(ValueError, read_longer_than_maxsize)
+        sizes = [2147483647, sys.maxsize + 1]
+        if sys.maxsize > 2147483647:
+            sizes.append(10000000000)
+        for size in sizes:
+            with self.subTest(size=size):
+                in_tmp = read_size(size)
+                if size > sys.maxsize:
+                    with self.assertRaises(ValueError):
+                        SeqIO.read(in_tmp, "genbank")
+                else:
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore")
+                        record_in = create_record(in_tmp)
+                        self.assertEqual(record_in.id, "DS830848.1")
+                        self.assertEqual(record_in.name, "AZZZAA021234567891234")
+                        self.assertEqual(len(record_in.seq), size)
 
 
 class LineOneTests(unittest.TestCase):
