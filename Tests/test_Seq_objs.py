@@ -186,6 +186,15 @@ class StringMethodTests(unittest.TestCase):
     def test_str_count(self):
         """Check matches the python string count method."""
         self._test_method("count", start_end=True)
+        self.assertEqual(Seq("AC777GT").count("7"), 3)
+        self.assertRaises(TypeError, Seq("AC777GT").count, 7)
+
+    def test_count_overlap(self):
+        """Check count_overlap exception matches python string count method."""
+        self.assertEqual(Seq("AC777GT").count("77"), 1)
+        self.assertEqual(Seq("AC777GT").count_overlap("77"), 2)
+        self.assertEqual(Seq("AC777GT").count_overlap("7"), 3)
+        self.assertRaises(TypeError, Seq("AC777GT").count_overlap, 7)
 
     def test_str_count_overlap_GG(self):
         """Check our count_overlap method using GG."""
