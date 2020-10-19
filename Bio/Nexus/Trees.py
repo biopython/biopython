@@ -594,8 +594,7 @@ class Tree(Nodes.Chain):
         table = [
             ("#", "taxon", "prev", "succ", "brlen", "blen (sum)", "support", "comment")
         ]
-        # Sort this to be consistent across CPython, Jython, etc
-        for i in sorted(self.all_ids()):
+        for i in self.all_ids():
             n = self.node(i)
             if not n.data:
                 table.append(

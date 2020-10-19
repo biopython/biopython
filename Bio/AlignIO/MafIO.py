@@ -35,14 +35,7 @@ A 1-column wide alignment would have ``start == end``.
 import os
 from itertools import islice
 
-try:
-    from sqlite3 import dbapi2 as _sqlite
-except ImportError:
-    # Not present on Jython, but should be included in Python 2.5
-    # or later (unless compiled from source without its dependencies)
-    # Still want to offer simple parsing/output
-    _sqlite = None
-
+from sqlite3 import dbapi2
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -275,10 +268,10 @@ class MafIndex:
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
-            self._con = _sqlite.connect(sqlite_file)
+            self._con = dbapi2.connect(sqlite_file)
             self._record_count = self.__check_existing_db()
         else:
-            self._con = _sqlite.connect(sqlite_file)
+            self._con = dbapi2.connect(sqlite_file)
             self._record_count = self.__make_new_index()
 
         # lastly, setup a MafIterator pointing at the open maf_file
@@ -352,7 +345,7 @@ class MafIndex:
 
             return records_found
 
-        except (_sqlite.OperationalError, _sqlite.DatabaseError) as err:
+        except (dbapi2.OperationalError, dbapi2.DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err) from None
 
     def __make_new_index(self):

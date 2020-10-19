@@ -8,8 +8,7 @@
 try:
     import sqlite3
 except ImportError:
-    # Try to run what tests we can on Jython
-    # where we don't expect this to be installed.
+    # Try to run what tests we can in case sqlite3 was not installed
     sqlite3 = None
 
 import os
