@@ -343,7 +343,10 @@ class Seq:
         An overlapping search, as implemented in .count_overlap(),
         would give the answer as three!
         """
-        return str(self).count(str(sub), start, end)
+        if isinstance(sub, (Seq, MutableSeq)):
+            return str(self).count(str(sub), start, end)
+        else:
+            return str(self).count(sub, start, end)
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
@@ -395,7 +398,11 @@ class Seq:
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
         """
-        sub_str = str(sub)
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub_str = str(sub)
+        else:
+            # Allow string's .find to trigger any TypeError
+            sub_str = sub
         self_str = str(self)
         overlap_count = 0
         while True:
