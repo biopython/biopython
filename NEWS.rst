@@ -26,6 +26,9 @@ DisorderedResidue to remove children.
 New module Bio.PDB.SASA implements the Shrake-Rupley algorithm to calculate
 atomic solvent accessible areas without third-party tools.
 
+Expected ``TypeError`` behaviour has been restored to the ``Seq`` object's
+string like methods (fixing a regression in Biopython 1.78).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
