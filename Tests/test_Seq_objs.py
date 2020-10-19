@@ -990,6 +990,27 @@ class StringMethodTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, "fasta"))
 
+    def test_equality(self):
+        """Test equality when mixing types."""
+        self.assertEqual(Seq("6"), "6")
+        self.assertNotEqual(Seq("6"), 6)
+        self.assertEqual(Seq(""), "")
+        self.assertNotEqual(Seq(""), None)
+        self.assertEqual(Seq("None"), "None")
+        self.assertNotEqual(Seq("None"), None)
+
+        self.assertEqual(MutableSeq("6"), "6")
+        self.assertNotEqual(MutableSeq("6"), 6)
+        self.assertEqual(MutableSeq(""), "")
+        self.assertNotEqual(MutableSeq(""), None)
+        self.assertEqual(MutableSeq("None"), "None")
+        self.assertNotEqual(MutableSeq("None"), None)
+
+        self.assertEqual(UnknownSeq(1, character="6"), "6")
+        self.assertNotEqual(UnknownSeq(1, character="6"), 6)
+        self.assertEqual(UnknownSeq(0), "")
+        self.assertNotEqual(UnknownSeq(0), None)
+
     # TODO - Addition...
 
 

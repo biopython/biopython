@@ -165,7 +165,10 @@ class Seq:
         >>> seq1 == "ACGT"
         True
         """
-        return str(self) == str(other)
+        if isinstance(other, (Seq, MutableSeq)):
+            return str(self) == str(other)
+        else:
+            return str(self) == other
 
     def __lt__(self, other):
         """Implement the less-than operand."""
@@ -1780,7 +1783,10 @@ class MutableSeq:
         """
         if isinstance(other, MutableSeq):
             return self._data == other._data
-        return str(self) == str(other)
+        elif isinstance(other, Seq):
+            return str(self) == str(other)
+        else:
+            return str(self) == other
 
     def __lt__(self, other):
         """Implement the less-than operand."""
