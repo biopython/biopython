@@ -408,12 +408,9 @@ class StockholmIterator(AlignmentIterator):
                     # Generic per-Column annotation, exactly 1 char per column
                     # Format: "#=GC <feature> <exactly 1 char per column>"
                     feature, text = line[5:].strip().split(None, 1)
-                    # Each feature key could be used more than once,
-                    # so store the entries as a list of strings.
-                    try:
-                        gc[feature].append(text)
-                    except KeyError:
-                        gc[feature] = [text]
+                    if feature in gc:
+                        raise ValueError("Duplicate feature for #=GC label:\n" + line)
+                    gc[feature] = text
                 elif line[:5] == '#=GS ':
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
