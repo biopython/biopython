@@ -399,14 +399,11 @@ class Seq:
         count() method is much for efficient.
         """
         if isinstance(sub, (Seq, MutableSeq)):
-            sub_str = str(sub)
-        else:
-            # Allow string's .find to trigger any TypeError
-            sub_str = sub
+            sub = str(sub)
         self_str = str(self)
         overlap_count = 0
         while True:
-            start = self_str.find(sub_str, start, end) + 1
+            start = self_str.find(sub, start, end) + 1
             if start != 0:
                 overlap_count += 1
             else:
