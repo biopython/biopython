@@ -6262,7 +6262,7 @@ static int*
 convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
                          const char s[])
 {
-    char c;
+    unsigned char c;
     Py_ssize_t i;
     int index;
     int* indices;
@@ -6277,6 +6277,12 @@ convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
     }
     for (i = 0; i < n; i++) {
         c = s[i];
+        if (c >= 128) {
+            PyErr_SetString(PyExc_ValueError,
+                "sequence letters should be ASCII");
+            PyMem_Free(indices);
+            return NULL;
+        }
         index = mapping[(int)c];
         if (index == MISSING_LETTER) {
             PyErr_SetString(PyExc_ValueError,
@@ -6375,8 +6381,14 @@ sequence_converter(PyObject* argument, void* pointer)
         return Py_CLEANUP_SUPPORTED;
     }
     
-    s = PyUnicode_AsUTF8AndSize(argument, &n);
-    if (s) {
+    if (PyUnicode_Check(argument)) {
+        if (PyUnicode_READY(argument) == -1) return 0;
+        if (PyUnicode_KIND(argument) != PyUnicode_1BYTE_KIND) {
+            PyErr_SetString(PyExc_TypeError, "string should be ASCII");
+            return 0;
+        }
+        s = PyUnicode_DATA(argument);
+        n = PyUnicode_GET_LENGTH(argument);
         indices = convert_sequence_to_ints(aligner->mapping, n, s);
         if (!indices) return 0;
         view->buf = indices;
@@ -6384,7 +6396,6 @@ sequence_converter(PyObject* argument, void* pointer)
         view->len = n;
         return Py_CLEANUP_SUPPORTED;
     }
-    PyErr_Clear();
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
         PyErr_SetString(PyExc_ValueError, "sequence has unexpected format");
         return 0;
