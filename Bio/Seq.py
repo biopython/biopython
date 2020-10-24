@@ -1716,8 +1716,8 @@ class MutableSeq:
         elif isinstance(data, str):  # TODO - What about unicode?
             self._data = array.array("u", data)
         elif isinstance(data, MutableSeq):
-            self._data = array.array("u", data._data)
-        else:
+            self._data = data._data[:]  # Take a copy
+        elif isinstance(data, Seq):
             # Make no assumptions about the Seq subclass internal storage
             self._data = array.array("u", str(data))
         else:
