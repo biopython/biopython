@@ -98,9 +98,7 @@ class Seq:
         elif isinstance(data, (Seq, MutableSeq)):
             data = str(data)
         else:
-            raise TypeError(
-                "data should be a string, Seq object, or MutableSeq object"
-            )
+            raise TypeError("data should be a string, Seq object, or MutableSeq object")
         self._data = data
 
     def __repr__(self):
