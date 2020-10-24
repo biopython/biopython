@@ -313,7 +313,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertIsInstance(new, str)
         self.assertEqual(new, answer_str)
 
-        new = feature.extract(parent_seq.tomutable())
+        new = feature.extract(MutableSeq(parent_seq))
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 

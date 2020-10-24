@@ -609,7 +609,8 @@ However, you can convert it into a mutable sequence (a \verb|MutableSeq| object)
 
 %cont-doctest
 \begin{minted}{pycon}
->>> mutable_seq = my_seq.tomutable()
+>>> from Bio.Seq import MutableSeq
+>>> mutable_seq = MutableSeq(my_seq)
 >>> mutable_seq
 MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA')
 \end{minted}
@@ -647,7 +648,8 @@ Once you have finished editing your a \verb|MutableSeq| object, it's easy to get
 
 %cont-doctest
 \begin{minted}{pycon}
->>> new_seq = mutable_seq.toseq()
+>>> from Bio.Seq import Seq
+>>> new_seq = Seq(mutable_seq)
 >>> new_seq
 Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 \end{minted}

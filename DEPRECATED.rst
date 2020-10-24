@@ -181,6 +181,12 @@ Deprecated in release 1.64, and removed in release 1.73.
 You should now use str(Bio.Seq.Seq) or str(Bio.Seq.MutableSeq) instead of
 the tostring() methods.
 
+Bio.Seq.Seq.tomutable() and Bio.Seq.MutableSeq.toseq()
+------------------------------------------------------
+Deprecated in release 1.79.
+Instead of myseq.tomutable() or mymutableseq.toseq(), you should now use
+Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
+
 Iterator .next() methods
 ------------------------
 The .next() method defined for any Biopython iterator is deprecated as of

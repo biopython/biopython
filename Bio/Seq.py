@@ -93,11 +93,12 @@ class Seq:
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
         # Enforce string storage
-        if not isinstance(data, str):
-            raise TypeError(
-                "The sequence data given to a Seq object should "
-                "be a string (not another Seq object etc)"
-            )
+        if isinstance(data, str):
+            pass
+        elif isinstance(data, (Seq, MutableSeq)):
+            data = str(data)
+        else:
+            raise TypeError("data should be a string, Seq object, or MutableSeq object")
         self._data = data
 
     def __repr__(self):
@@ -291,7 +292,7 @@ class Seq:
             raise TypeError(f"can't multiply {self.__class__.__name__} by non-int type")
         return self.__class__(str(self) * other)
 
-    def tomutable(self):  # Needed?  Or use a function?
+    def tomutable(self):
         """Return the full sequence as a MutableSeq object.
 
         >>> from Bio.Seq import Seq
@@ -301,7 +302,11 @@ class Seq:
         >>> my_seq.tomutable()
         MutableSeq('MKQHKAMIVALIVICITAVVAAL')
         """
-        return MutableSeq(str(self))
+        warnings.warn(
+            "myseq.tomutable() is deprecated; please use MutableSeq(myseq) instead.",
+            BiopythonDeprecationWarning,
+        )
+        return MutableSeq(self)
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
@@ -1700,16 +1705,26 @@ class MutableSeq:
     """
 
     def __init__(self, data):
-        """Initialize the class."""
-        if isinstance(data, str):  # TODO - What about unicode?
+        """Create a MutableSeq object."""
+        if isinstance(data, array.array):
+            if data.typecode != "u":
+                raise ValueError(
+                    "data should be a string, array of characters, Seq object, "
+                    "or MutableSeq object"
+                )
+            self._data = data
+        elif isinstance(data, str):  # TODO - What about unicode?
             self._data = array.array("u", data)
-        elif isinstance(data, (Seq, int, float)):
-            raise TypeError(
-                "The sequence data given to a MutableSeq object "
-                "should be a string or an array (not a Seq object etc)"
-            )
+        elif isinstance(data, MutableSeq):
+            self._data = data._data[:]  # Take a copy
+        elif isinstance(data, Seq):
+            # Make no assumptions about the Seq subclass internal storage
+            self._data = array.array("u", str(data))
         else:
-            self._data = data  # assumes the input is an array
+            raise TypeError(
+                "data should be a string, array of characters, Seq object, or "
+                "MutableSeq object"
+            )
 
     @property
     def data(self):
@@ -2227,7 +2242,11 @@ class MutableSeq:
         >>> my_mseq.toseq()
         Seq('MKQHKAMIVALIVICITAVVAAL')
         """
-        return Seq("".join(self._data))
+        warnings.warn(
+            "myseq.toseq() is deprecated; please use Seq(myseq) instead.",
+            BiopythonDeprecationWarning,
+        )
+        return Seq(self)
 
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
@@ -2242,7 +2261,7 @@ class MutableSeq:
         are not Seq or String objects
         """
         # returns Seq object instead of MutableSeq
-        return self.toseq().join(other)
+        return Seq(self).join(other)
 
 
 # The transcribe, backward_transcribe, and translate functions are
@@ -2265,7 +2284,7 @@ def transcribe(dna):
     if isinstance(dna, Seq):
         return dna.transcribe()
     elif isinstance(dna, MutableSeq):
-        return dna.toseq().transcribe()
+        return Seq(dna).transcribe()
     else:
         return dna.replace("T", "U").replace("t", "u")
 
@@ -2285,7 +2304,7 @@ def back_transcribe(rna):
     if isinstance(rna, Seq):
         return rna.back_transcribe()
     elif isinstance(rna, MutableSeq):
-        return rna.toseq().back_transcribe()
+        return Seq(rna).back_transcribe()
     else:
         return rna.replace("U", "T").replace("u", "t")
 
@@ -2537,7 +2556,7 @@ def translate(
         return sequence.translate(table, stop_symbol, to_stop, cds)
     elif isinstance(sequence, MutableSeq):
         # Return a Seq object
-        return sequence.toseq().translate(table, stop_symbol, to_stop, cds)
+        return Seq(sequence).translate(table, stop_symbol, to_stop, cds)
     else:
         # Assume its a string, return a string
         try:
@@ -2602,7 +2621,7 @@ def complement(sequence):
         # Return a Seq
         # Don't use the MutableSeq reverse_complement method as it is
         # 'in place'.
-        return sequence.toseq().complement()
+        return Seq(sequence).complement()
 
     # Assume its a string.
     # In order to avoid some code duplication, the old code would turn the
@@ -2634,7 +2653,7 @@ def complement_rna(sequence):
         return sequence.complement_rna()
     elif isinstance(sequence, MutableSeq):
         # Return a Seq
-        return sequence.toseq().complement_rna()
+        return Seq(sequence).complement_rna()
     return sequence.translate(_rna_complement_table)
 
 

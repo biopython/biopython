@@ -83,7 +83,7 @@ class StringMethodTests(unittest.TestCase):
     ]
     for seq in _examples[:]:
         if isinstance(seq, Seq):
-            _examples.append(seq.tomutable())
+            _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
     def _test_method(self, method_name, pre_comp_function=None, start_end=False):
@@ -596,22 +596,16 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(str(example1[i:j:step]), str1[i:j:step])
 
     def test_tomutable(self):
-        """Check obj.tomutable() method."""
+        """Check creating a MutableSeq object."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
-            mut = example1.tomutable()
+            mut = MutableSeq(example1)
             self.assertIsInstance(mut, MutableSeq)
             self.assertEqual(str(mut), str(example1))
 
     def test_toseq(self):
-        """Check obj.toseq() method."""
+        """Check creating a Seq object."""
         for example1 in self._examples:
-            try:
-                seq = example1.toseq()
-            except AttributeError:
-                self.assertIsInstance(example1, Seq)
-                continue
+            seq = Seq(example1)
             self.assertIsInstance(seq, Seq)
             self.assertEqual(str(seq), str(example1))
 
@@ -799,14 +793,15 @@ class StringMethodTests(unittest.TestCase):
 
     def test_init_typeerror(self):
         """Check Seq __init__ gives TypeError exceptions."""
-        # Only expect it to take strings - not Seq objects!
-        self.assertRaises(TypeError, Seq, 1066)
-        self.assertRaises(TypeError, Seq, Seq("ACGT"))
+        self.assertRaises(TypeError, Seq, ("A", "C", "G", "T"))
+        self.assertRaises(TypeError, Seq, ["A", "C", "G", "T"])
+        self.assertRaises(TypeError, Seq, 1)
+        self.assertRaises(TypeError, Seq, 1.0)
 
     def test_MutableSeq_init_typeerror(self):
         """Check MutableSeq __init__ gives TypeError exceptions."""
-        self.assertRaises(TypeError, MutableSeq, (Seq("A")))
-        self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
+        self.assertRaises(TypeError, MutableSeq, ("A", "C", "G", "T"))
+        self.assertRaises(TypeError, MutableSeq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
 
