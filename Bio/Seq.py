@@ -1715,10 +1715,11 @@ class MutableSeq:
             self._data = data
         elif isinstance(data, str):  # TODO - What about unicode?
             self._data = array.array("u", data)
-        elif isinstance(data, UnknownSeq):
-            self._data = array.array("u", str(data))
-        elif isinstance(data, (Seq, MutableSeq)):
+        elif isinstance(data, MutableSeq):
             self._data = array.array("u", data._data)
+        else:
+            # Make no assumptions about the Seq subclass internal storage
+            self._data = array.array("u", str(data))
         else:
             raise TypeError(
                 "data should be a string, array of characters, Seq object, or "
