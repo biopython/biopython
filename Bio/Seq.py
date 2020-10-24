@@ -1716,7 +1716,7 @@ class MutableSeq:
         elif isinstance(data, str):  # TODO - What about unicode?
             self._data = array.array("u", data)
         elif isinstance(data, (Seq, MutableSeq)):
-            self._data = array.array("u", str(data))
+            self._data = array.array("u", data._data)
         else:
             raise TypeError(
                 "data should be a string, array of characters, Seq object, or "
