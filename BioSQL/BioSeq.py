@@ -109,11 +109,12 @@ class DBSeq(Seq):
         my_seq.tostring().
         """
         import warnings
+        from Bio import BiopythonDeprecationWarning
 
         warnings.warn(
             "This method is obsolete; please use str(my_seq) "
             "instead of my_seq.tostring().",
-            PendingDeprecationWarning,
+            BiopythonDeprecationWarning,
         )
         return self.adaptor.get_subseq_as_string(
             self.primary_id, self.start, self.start + self._length
@@ -129,8 +130,16 @@ class DBSeq(Seq):
 
     def toseq(self):
         """Return the full sequence as a Seq object."""
+        import warnings
+        from Bio import BiopythonDeprecationWarning
+
+        warnings.warn(
+            "This method is obsolete; please use Seq(my_seq) "
+            "instead of my_seq.toseq().",
+            BiopythonDeprecationWarning,
+        )
         # Note - the method name copies that of the MutableSeq object
-        return Seq(str(self))
+        return Seq(self)
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -138,7 +147,7 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before the addition.
         The returned object is a Seq object, not a DBSeq object.
         """
-        return self.toseq() + other
+        return Seq(self) + other
 
     def __radd__(self, other):
         """Add another sequence or string to the left.
@@ -146,7 +155,7 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before the addition.
         The returned object is a Seq object, not a DBSeq object.
         """
-        return other + self.toseq()
+        return other + Seq(self)
 
     def __mul__(self, other):
         """Multiply sequence by an integer.
@@ -154,7 +163,7 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before multiplication.
         The returned object is a Seq object, not a DBSeq object.
         """
-        return self.toseq() * other
+        return Seq(self) * other
 
     def __rmul__(self, other):
         """Multiply integer by a sequence.
@@ -162,7 +171,7 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before multiplication.
         The returned object is a Seq object, not a DBSeq object.
         """
-        return other * self.toseq()
+        return other * Seq(self)
 
     def __imul__(self, other):
         """Multiply sequence by integer in-place.
@@ -170,7 +179,7 @@ class DBSeq(Seq):
         The sequence is first converted to a Seq object before multiplication.
         The returned object is a Seq object, not a DBSeq object.
         """
-        return self.toseq() * other
+        return Seq(self) * other
 
 
 def _retrieve_seq_len(adaptor, primary_id):

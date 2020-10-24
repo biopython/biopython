@@ -497,11 +497,11 @@ class SeqInterfaceTest(unittest.TestCase):
         """Check can turn a DBSeq object into a Seq or MutableSeq."""
         test_seq = self.item.seq
 
-        other = test_seq.toseq()
+        other = Seq(test_seq)
         self.assertEqual(str(test_seq), str(other))
         self.assertIsInstance(other, Seq)
 
-        other = test_seq.tomutable()
+        other = MutableSeq(test_seq)
         self.assertEqual(str(test_seq), str(other))
         self.assertIsInstance(other, MutableSeq)
 

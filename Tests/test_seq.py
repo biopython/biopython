@@ -61,8 +61,8 @@ class TestSeq(unittest.TestCase):
 
     def test_construction_using_a_seq_object(self):
         """Test using a Seq object to initialize another Seq object."""
-        with self.assertRaises(TypeError):
-            Seq.Seq(self.s)
+        s = Seq.Seq(self.s)
+        self.assertEqual(s, self.s)
 
     def test_repr(self):
         """Test representation of Seq object."""
@@ -458,7 +458,7 @@ class TestMutableSeq(unittest.TestCase):
         mutable_s = MutableSeq("TCAAAAGGATGCATCATG")
         self.assertIsInstance(mutable_s, MutableSeq, "Creating MutableSeq")
 
-        mutable_s = self.s.tomutable()
+        mutable_s = MutableSeq(self.s)
         self.assertIsInstance(mutable_s, MutableSeq, "Converting Seq to mutable")
 
         array_seq = MutableSeq(array.array("u", "TCAAAAGGATGCATCATG"))
@@ -559,7 +559,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(18, len(self.mutable_s))
 
     def test_converting_to_immutable(self):
-        self.assertIsInstance(self.mutable_s.toseq(), Seq.Seq)
+        self.assertIsInstance(Seq.Seq(self.mutable_s), Seq.Seq)
 
     def test_first_nucleotide(self):
         self.assertEqual("T", self.mutable_s[0])
