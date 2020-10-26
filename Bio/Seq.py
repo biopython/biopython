@@ -1319,36 +1319,12 @@ class UnknownSeq(Seq):
         NNN
         """
         if isinstance(index, int):
-            # TODO - Check the bounds without wasting memory
-            return str(self)[index]
-        old_length = self._length
-        step = index.step
-        if step is None or step == 1:
-            # This calculates the length you'd get from ("N"*old_length)[index]
-            start = index.start
-            end = index.stop
-            if start is None:
-                start = 0
-            elif start < 0:
-                start = max(0, old_length + start)
-            elif start > old_length:
-                start = old_length
-            if end is None:
-                end = old_length
-            elif end < 0:
-                end = max(0, old_length + end)
-            elif end > old_length:
-                end = old_length
-            new_length = max(0, end - start)
-        elif step == 0:
-            raise ValueError("slice step cannot be zero")
-        else:
-            # TODO - handle step efficiently
-            new_length = len(("X" * old_length)[index])
-        # assert new_length == len(("X"*old_length)[index]), \
-        #       (index, start, end, step, old_length,
-        #        new_length, len(("X"*old_length)[index]))
-        return UnknownSeq(new_length, character=self._character)
+            if index >= -self._length and index < self._length:
+                return self._character
+            raise IndexError("sequence index out of range")
+        start, stop, stride = index.indices(self._length)
+        length = len(range(start, stop, stride))
+        return UnknownSeq(length, character=self._character)
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
