@@ -678,7 +678,7 @@ class Seq:
         if isinstance(chars, (Seq, MutableSeq)):
             return Seq(str(self).strip(str(chars)))
         else:
-            # Want TypeError on None, int, etc
+            # Want TypeError on int, etc
             return Seq(str(self).strip(chars))
 
     def lstrip(self, chars=None):
@@ -698,7 +698,7 @@ class Seq:
         if isinstance(chars, (Seq, MutableSeq)):
             return Seq(str(self).lstrip(str(chars)))
         else:
-            # Want TypeError on None, int, etc
+            # Want TypeError on int, etc
             return Seq(str(self).lstrip(chars))
 
     def rstrip(self, chars=None):
@@ -724,7 +724,7 @@ class Seq:
         if isinstance(chars, (Seq, MutableSeq)):
             return Seq(str(self).rstrip(str(chars)))
         else:
-            # Want TypeError on None, int, etc
+            # Want TypeError on int, etc
             return Seq(str(self).rstrip(chars))
 
     def upper(self):
