@@ -188,6 +188,7 @@ class StringMethodTests(unittest.TestCase):
         self._test_method("count", start_end=True)
         self.assertEqual(Seq("AC777GT").count("7"), 3)
         self.assertRaises(TypeError, Seq("AC777GT").count, 7)
+        self.assertRaises(TypeError, Seq("AC777GT").count, None)
 
     def test_count_overlap(self):
         """Check count_overlap exception matches python string count method."""
@@ -195,6 +196,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(Seq("AC777GT").count_overlap("77"), 2)
         self.assertEqual(Seq("AC777GT").count_overlap("7"), 3)
         self.assertRaises(TypeError, Seq("AC777GT").count_overlap, 7)
+        self.assertRaises(TypeError, Seq("AC777GT").count_overlap, None)
 
     def test_str_count_overlap_GG(self):
         """Check our count_overlap method using GG."""
@@ -405,29 +407,34 @@ class StringMethodTests(unittest.TestCase):
         self._test_method("find", start_end=True)
         self.assertEqual(Seq("AC7GT").find("7"), 2)
         self.assertRaises(TypeError, Seq("AC7GT").find, 7)
+        self.assertRaises(TypeError, Seq("ACGT").find, None)
 
     def test_str_rfind(self):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
         self.assertEqual(Seq("AC7GT").rfind("7"), 2)
         self.assertRaises(TypeError, Seq("AC7GT").rfind, 7)
+        self.assertRaises(TypeError, Seq("ACGT").rfind, None)
 
     def test_str_index(self):
         """Check matches the python string index method."""
         self._test_method("index", start_end=True)
         self.assertEqual(Seq("AC7GT").index("7"), 2)
         self.assertRaises(TypeError, Seq("AC7GT").index, 7)
+        self.assertRaises(TypeError, Seq("ACGT").index, None)
 
     def test_str_rindex(self):
         """Check matches the python string rindex method."""
         self._test_method("rindex", start_end=True)
         self.assertEqual(Seq("AC7GT").rindex("7"), 2)
         self.assertRaises(TypeError, Seq("AC7GT").rindex, 7)
+        self.assertRaises(TypeError, Seq("ACGT").rindex, None)
 
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
         self.assertTrue("ABCDE".startswith(("ABE", "OBE", "ABC")))
+        self.assertRaises(TypeError, Seq("ACGT").startswith, None)
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
@@ -457,6 +464,7 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string endswith method."""
         self._test_method("endswith", start_end=True)
         self.assertTrue("ABCDE".endswith(("ABE", "OBE", "CDE")))
+        self.assertRaises(TypeError, Seq("ACGT").endswith, None)
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
