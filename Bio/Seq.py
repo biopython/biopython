@@ -429,7 +429,9 @@ class Seq:
         >>> Seq("AAA") in my_dna
         True
         """
-        return str(char) in str(self)
+        if isinstance(char, (Seq, MutableSeq)):
+            char = str(char)
+        return char in str(self)
 
     def find(self, sub, start=0, end=sys.maxsize):
         """Find method, like that of a python string.
@@ -1326,7 +1328,7 @@ class UnknownSeq(Seq):
         length = len(range(start, stop, stride))
         return UnknownSeq(length, character=self._character)
 
-    def count(self, sub, start=0, end=sys.maxsize):
+    def count(self, sub, start=None, end=None):
         """Return a non-overlapping count, like that of a python string.
 
         This behaves like the python string (and Seq object) method of the
@@ -1364,32 +1366,17 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(4, character="N").count("NNN")
         1
         """
-        sub_str = str(sub)
-        len_self, len_sub_str = self._length, len(sub_str)
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = str(sub)
+        elif not isinstance(sub, str):
+            raise TypeError("expected a string, Seq, or MutableSeq object")
         # Handling case where substring not in self
-        if set(sub_str) != set(self._character):
+        if set(sub) != set(self._character):
             return 0
-        # Setting None to the default arguments
-        if start is None:
-            start = 0
-        if end is None:
-            end = sys.maxsize
-        # Truncating start and end to max of self._length and min of -self._length
-        start = max(min(start, len_self), -len_self)
-        end = max(min(end, len_self), -len_self)
-        # Convert start and ends to positive indexes
-        if start < 0:
-            start += len_self
-        if end < 0:
-            end += len_self
-        # Handle case where end <= start (no negative step argument here)
-        # and case where len_sub_str is larger than the search space
-        if end <= start or (end - start) < len_sub_str:
-            return 0
-        # 'Normal' calculation
-        return (end - start) // len_sub_str
+        start, stop, stride = slice(start, end, len(sub)).indices(self._length)
+        return len(range(start, stop-len(sub)+1, stride))
 
-    def count_overlap(self, sub, start=0, end=sys.maxsize):
+    def count_overlap(self, sub, start=None, end=None):
         """Return an overlapping count.
 
         For a non-overlapping search use the count() method.
@@ -1428,30 +1415,15 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
         True
         """
-        sub_str = str(sub)
-        len_self, len_sub_str = self._length, len(sub_str)
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = str(sub)
+        elif not isinstance(sub, str):
+            raise TypeError("expected a string, Seq, or MutableSeq object")
         # Handling case where substring not in self
-        if set(sub_str) != set(self._character):
+        if set(sub) != set(self._character):
             return 0
-        # Setting None to the default arguments
-        if start is None:
-            start = 0
-        if end is None:
-            end = sys.maxsize
-        # Truncating start and end to max of self._length and min of -self._length
-        start = max(min(start, len_self), -len_self)
-        end = max(min(end, len_self), -len_self)
-        # Convert start and ends to positive indexes
-        if start < 0:
-            start += len_self
-        if end < 0:
-            end += len_self
-        # Handle case where end <= start (no negative step argument here)
-        # and case where len_sub_str is larger than the search space
-        if end <= start or (end - start) < len_sub_str:
-            return 0
-        # 'Normal' calculation
-        return end - start - len_sub_str + 1
+        start, stop, stride = slice(start, end).indices(self._length)
+        return len(range(start, stop-len(sub)+1, stride))
 
     def complement(self):
         """Return the complement assuming it is DNA.
@@ -1923,8 +1895,10 @@ class MutableSeq:
                 self._data[index] = value._data
             elif isinstance(value, type(self._data)):
                 self._data[index] = value
-            else:
+            elif isinstance(value, (str, Seq)):
                 self._data[index] = array.array("u", str(value))
+            else:
+                raise TypeError("received unexpected type %s" % type(value))
 
     def __delitem__(self, index):
         """Delete a subsequence of single letter.
@@ -2111,24 +2085,21 @@ class MutableSeq:
 
         An overlapping search would give the answer as three!
         """
-        try:
-            search = str(sub)
-        except AttributeError:
-            search = sub
-
-        if not isinstance(search, str):
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = str(sub)
+        elif not isinstance(sub, str):
             raise TypeError("expected a string, Seq or MutableSeq")
 
-        if len(search) == 1:
+        if len(sub) == 1:
             # Try and be efficient and work directly from the array.
             count = 0
             for c in self._data[start:end]:
-                if c == search:
+                if c == sub:
                     count += 1
             return count
         else:
             # TODO - Can we do this more efficiently?
-            return str(self).count(search, start, end)
+            return str(self).count(sub, start, end)
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
@@ -2182,11 +2153,14 @@ class MutableSeq:
         """
         # The implementation is currently identical to that of
         # Seq.count_overlap() apart from the definition of sub_str
-        sub_str = str(sub)
+        if isinstance(sub, (Seq, MutableSeq)):
+            sub = str(sub)
+        elif not isinstance(sub, str):
+            raise TypeError("expected a string, Seq or MutableSeq")
         self_str = str(self)
         overlap_count = 0
         while True:
-            start = self_str.find(sub_str, start, end) + 1
+            start = self_str.find(sub, start, end) + 1
             if start != 0:
                 overlap_count += 1
             else:
