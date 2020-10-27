@@ -1808,7 +1808,6 @@ class MutableSeq:
         which needs to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
-        # See test_GAQueens.py for an historic usage of a non-string alphabet!
         return "".join(self._data)
 
     def __eq__(self, other):
@@ -1944,8 +1943,6 @@ class MutableSeq:
         Returns a new MutableSeq object.
         """
         if isinstance(other, MutableSeq):
-            # See test_GAQueens.py for an historic usage of a non-string
-            # alphabet!  Adding the arrays should support this.
             return self.__class__(self._data + other._data)
         elif isinstance(other, (str, Seq)):
             return self.__class__(str(self) + str(other))
@@ -1960,8 +1957,6 @@ class MutableSeq:
         MutableSeq('LVMELKI')
         """
         if isinstance(other, MutableSeq):
-            # See test_GAQueens.py for an historic usage of a non-string
-            # alphabet!  Adding the arrays should support this.
             return self.__class__(other._data + self._data)
         elif isinstance(other, (str, Seq)):
             return self.__class__(str(other) + str(self))
