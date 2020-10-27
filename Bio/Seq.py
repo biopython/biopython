@@ -1374,7 +1374,7 @@ class UnknownSeq(Seq):
         if set(sub) != set(self._character):
             return 0
         start, stop, stride = slice(start, end, len(sub)).indices(self._length)
-        return len(range(start, stop-len(sub)+1, stride))
+        return len(range(start, stop - len(sub) + 1, stride))
 
     def count_overlap(self, sub, start=None, end=None):
         """Return an overlapping count.
@@ -1423,7 +1423,7 @@ class UnknownSeq(Seq):
         if set(sub) != set(self._character):
             return 0
         start, stop, stride = slice(start, end).indices(self._length)
-        return len(range(start, stop-len(sub)+1, stride))
+        return len(range(start, stop - len(sub) + 1, stride))
 
     def complement(self):
         """Return the complement assuming it is DNA.
