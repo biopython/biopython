@@ -35,9 +35,10 @@ possible, especially the following contributors:
 - Damien Goutte-Gattat
 - João Rodrigues
 - Markus Piotrowski
+- Pascal Schläpfer (first contribution)
 - Suyash Gupta
 - Vini Salazar (first contribution)
-- Pascal Schläpfer (first contribution)
+
 
 4 September 2020: Biopython 1.78
 ================================
