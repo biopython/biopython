@@ -29,10 +29,10 @@ class Record(list):
         self.warning = None
 
 
-### October 28th 2020 it was recognised that between October 10th 2020 and October
-### 28th the main url of prosite changed from https://www.expasy.org to
-### https://prosite.expasy.org. Thus a change in the mirror was issued from
-### https://www.expasy.org to https://prosite.expasy.org.
+# October 28th 2020 it was recognised that between October 10th 2020 and October
+# 28th the main url of prosite changed from https://www.expasy.org to
+# https://prosite.expasy.org. Thus a change in the mirror was issued from
+# https://www.expasy.org to https://prosite.expasy.org.
 def scan(seq="", mirror="https://prosite.expasy.org", output="xml", **keywords):
     """Execute a ScanProsite search.
 
