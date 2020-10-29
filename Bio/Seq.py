@@ -1726,17 +1726,26 @@ class MutableSeq:
                     "data should be a string, array of characters, Seq object, "
                     "or MutableSeq object"
                 )
+            warnings.warn(
+                "Initializing a MutableSeq by an array has been deprecated; please "
+                "use a bytearray object instead.",
+                BiopythonDeprecationWarning,
+            )
+            data = data.tounicode()
+        if isinstance(data, bytearray):
             self._data = data
-        elif isinstance(data, str):  # TODO - What about unicode?
-            self._data = array.array("u", data)
+        elif isinstance(data, bytes):
+            self._data = bytearray(data)
+        elif isinstance(data, str):
+            self._data = bytearray(data, "ASCII")
         elif isinstance(data, MutableSeq):
             self._data = data._data[:]  # Take a copy
         elif isinstance(data, Seq):
             # Make no assumptions about the Seq subclass internal storage
-            self._data = array.array("u", str(data))
+            self._data = bytearray(str(data), "ASCII")
         else:
             raise TypeError(
-                "data should be a string, array of characters, Seq object, or "
+                "data should be a string, bytearray obejct, Seq object, or a "
                 "MutableSeq object"
             )
 
@@ -1749,7 +1758,7 @@ class MutableSeq:
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
         )
-        return self._data
+        return array.array('u', self._data.decode("ASCII"))
 
     @data.setter
     def data(self, value):
@@ -1760,7 +1769,7 @@ class MutableSeq:
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
         )
-        self._data = value
+        self.__init__(value)
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -1780,7 +1789,7 @@ class MutableSeq:
         which needs to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq).
         """
-        return "".join(self._data)
+        return self._data.decode("ASCII")
 
     def __eq__(self, other):
         """Compare the sequence to another sequence or a string.
@@ -1873,7 +1882,7 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Return a single letter as a string
-            return self._data[index]
+            return chr(self._data[index])
         else:
             # Return the (sub)sequence as another Seq object
             return MutableSeq(self._data[index])
@@ -1888,15 +1897,15 @@ class MutableSeq:
         """
         if isinstance(index, int):
             # Replacing a single letter with a new string
-            self._data[index] = value
+            self._data[index] = ord(value)
         else:
             # Replacing a sub-sequence
             if isinstance(value, MutableSeq):
                 self._data[index] = value._data
-            elif isinstance(value, type(self._data)):
+            elif isinstance(value, (bytes, bytearray)):
                 self._data[index] = value
             elif isinstance(value, (str, Seq)):
-                self._data[index] = array.array("u", str(value))
+                self._data[index] = str(value).encode("ASCII")
             else:
                 raise TypeError("received unexpected type %s" % type(value))
 
@@ -1988,7 +1997,7 @@ class MutableSeq:
 
         No return value.
         """
-        self._data.append(c)
+        self._data.append(ord(c.encode("ASCII")))
 
     def insert(self, i, c):
         """Add a subsequence to the mutable sequence object at a given index.
@@ -2003,7 +2012,7 @@ class MutableSeq:
 
         No return value.
         """
-        self._data.insert(i, c)
+        self._data.insert(i, ord(c.encode("ASCII")))
 
     def pop(self, i=(-1)):
         """Remove a subsequence of a single letter at given index.
@@ -2022,7 +2031,7 @@ class MutableSeq:
         """
         c = self._data[i]
         del self._data[i]
-        return c
+        return chr(c)
 
     def remove(self, item):
         """Remove a subsequence of a single letter from mutable sequence.
@@ -2037,11 +2046,11 @@ class MutableSeq:
 
         No return value.
         """
-        for i in range(len(self._data)):
-            if self._data[i] == item:
-                del self._data[i]
-                return
-        raise ValueError("MutableSeq.remove(x): x not in list")
+        codepoint = ord(item)
+        try:
+            self._data.remove(codepoint)
+        except ValueError:
+            raise ValueError("value not found in MutableSeq") from None
 
     def count(self, sub, start=0, end=sys.maxsize):
         """Return a non-overlapping count, like that of a python string.
@@ -2089,17 +2098,8 @@ class MutableSeq:
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError("expected a string, Seq or MutableSeq")
-
-        if len(sub) == 1:
-            # Try and be efficient and work directly from the array.
-            count = 0
-            for c in self._data[start:end]:
-                if c == sub:
-                    count += 1
-            return count
-        else:
-            # TODO - Can we do this more efficiently?
-            return str(self).count(sub, start, end)
+        sub = sub.encode("ASCII")
+        return self._data.count(sub, start, end)
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
@@ -2151,16 +2151,15 @@ class MutableSeq:
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
         """
-        # The implementation is currently identical to that of
-        # Seq.count_overlap() apart from the definition of sub_str
         if isinstance(sub, (Seq, MutableSeq)):
             sub = str(sub)
         elif not isinstance(sub, str):
             raise TypeError("expected a string, Seq or MutableSeq")
-        self_str = str(self)
+        sub = sub.encode("ASCII")
+        data = self._data
         overlap_count = 0
         while True:
-            start = self_str.find(sub, start, end) + 1
+            start = data.find(sub, start, end) + 1
             if start != 0:
                 overlap_count += 1
             else:
@@ -2176,16 +2175,13 @@ class MutableSeq:
         2
         >>> my_seq.index(Seq("T"))
         2
-
-        Note unlike a Biopython Seq object, or Python string, multi-letter
-        subsequences are not supported.  Instead this acts like an array or
-        a list of the entries. There is therefore no ``.rindex()`` method.
         """
-        # TODO?: return self._data.index(i)
-        for i in range(len(self._data)):
-            if self._data[i] == item:
-                return i
-        raise ValueError("MutableSeq.index(x): x not in list")
+        if isinstance(item, (Seq, MutableSeq)):
+            item = str(item)
+        elif not isinstance(item, str):
+            raise TypeError("expected a string, Seq or MutableSeq")
+        item = item.encode("ASCII")
+        return self._data.index(item)
 
     def reverse(self):
         """Modify the mutable sequence to reverse itself.
@@ -2204,16 +2200,16 @@ class MutableSeq:
 
         If the sequence contains both T and U, an exception is raised.
         """
-        if "U" in self._data and "T" in self._data:
+        if ord("U") in self._data and ord("T") in self._data:
             raise ValueError("Mixed RNA/DNA found")
-        elif "U" in self._data:
+        elif ord("U") in self._data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        mixed = d.copy()  # We're going to edit this to be mixed case!
-        mixed.update((x.lower(), y.lower()) for x, y in d.items())
-        self._data = [mixed[_] for _ in self._data]
-        self._data = array.array("u", self._data)
+        keys = "".join(d.keys()).encode("ASCII")
+        values = "".join(d.values()).encode("ASCII")
+        table = bytes.maketrans(keys + keys.lower(), values + values.lower())
+        self._data = self._data.translate(table)
 
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
@@ -2240,6 +2236,7 @@ class MutableSeq:
             for c in other._data:
                 self._data.append(c)
         else:
+            other = str(other).encode("ASCII")
             for c in other:
                 self._data.append(c)
 
