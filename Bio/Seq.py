@@ -93,13 +93,17 @@ class Seq:
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
         # Enforce string storage
-        if isinstance(data, str):
-            pass
-        elif isinstance(data, (Seq, MutableSeq)):
-            data = str(data)
+        if isinstance(data, bytes):
+            self._data = data
+        elif isinstance(data, (bytearray, Seq, MutableSeq)):
+            self._data = bytes(data)
+        elif isinstance(data, str):
+            self._data = bytes(data, encoding="ASCII")
         else:
-            raise TypeError("data should be a string, Seq object, or MutableSeq object")
-        self._data = data
+            raise TypeError("data should be a string, bytes, bytearray, Seq, or MutableSeq object")
+
+    def __bytes__(self):
+        return self._data
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
@@ -109,7 +113,7 @@ class Seq:
             # Note total length is 54+3+3=60
             return f"{self.__class__.__name__}('{str(self[:54])}...{str(self[-3:])}')"
         else:
-            return f"{self.__class__.__name__}({self._data!r})"
+            return f"{self.__class__.__name__}('{str(self)}')"
 
     def __str__(self):
         """Return the full sequence as a python string, use str(my_seq).
@@ -128,7 +132,7 @@ class Seq:
                 as_string = str(seq_obj)
 
         """
-        return self._data
+        return self._data.decode("ASCII")
 
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
@@ -220,7 +224,7 @@ class Seq:
         """
         if isinstance(index, int):
             # Return a single letter as a string
-            return self._data[index]
+            return chr(self._data[index])
         else:
             # Return the (sub)sequence as another Seq object
             return Seq(self._data[index])
@@ -832,12 +836,12 @@ class Seq:
         "A" has complement "T". The letter "I" has no defined
         meaning under the IUPAC convention, and is unchanged.
         """
-        if ("U" in self._data or "u" in self._data) and (
-            "T" in self._data or "t" in self._data
+        if (b"U" in self._data or b"u" in self._data) and (
+            b"T" in self._data or b"t" in self._data
         ):
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif "U" in self._data or "u" in self._data:
+        elif b"U" in self._data or b"u" in self._data:
             ttable = _rna_complement_table
         else:
             ttable = _dna_complement_table
@@ -1225,6 +1229,10 @@ class UnknownSeq(Seq):
     def __len__(self):
         """Return the stated length of the unknown sequence."""
         return self._length
+
+    def __bytes__(self):
+        """Return the unknown sequence as full string of the given length."""
+        return self._character.encode("ASCII") * self._length
 
     def __str__(self):
         """Return the unknown sequence as full string of the given length."""
@@ -1770,6 +1778,9 @@ class MutableSeq:
             BiopythonDeprecationWarning,
         )
         self.__init__(value)
+
+    def __bytes__(self):
+        return bytes(self._data)
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
