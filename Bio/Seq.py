@@ -1656,8 +1656,13 @@ class UnknownSeq(Seq):
         UnknownSeq(2, character='X')
         """
         try:
-            s = translate(self._character * 3,
-                table=table, stop_symbol=stop_symbol, to_stop=to_stop, cds=cds, gap=gap
+            s = translate(
+                self._character * 3,
+                table=table,
+                stop_symbol=stop_symbol,
+                to_stop=to_stop,
+                cds=cds,
+                gap=gap,
             )
         except CodonTable.TranslationError:
             # Preserve historic behaviour, ??? (default character) and XXX -> X
@@ -1819,7 +1824,7 @@ class MutableSeq:
             "a MutableSeq object.",
             BiopythonDeprecationWarning,
         )
-        return array.array('u', self._data.decode("ASCII"))
+        return array.array("u", self._data.decode("ASCII"))
 
     @data.setter
     def data(self, value):
