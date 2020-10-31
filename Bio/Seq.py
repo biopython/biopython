@@ -1509,7 +1509,9 @@ class UnknownSeq(Seq):
         if isinstance(sub, (Seq, MutableSeq)):
             sub = str(sub)
         elif not isinstance(sub, str):
-            raise TypeError("a Seq, MutableSeq, or string object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
+            )
         # Handling case where subsequence not in self
         if set(sub) != set(self._character):
             return 0
