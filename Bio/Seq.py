@@ -97,7 +97,9 @@ class Seq:
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
         else:
-            raise TypeError("data should be a string, bytes, bytearray, Seq, or MutableSeq object")
+            raise TypeError(
+                "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
+            )
 
     def __bytes__(self):
         return self._data
@@ -375,7 +377,10 @@ class Seq:
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
         elif not isinstance(sub, (bytes, bytearray)):
-            raise TypeError("a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
         return bytes(self).count(sub, start, end)
 
     def count_overlap(self, sub, start=None, end=None):
@@ -433,7 +438,10 @@ class Seq:
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
         elif not isinstance(sub, (bytes, bytearray)):
-            raise TypeError("a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
         data = bytes(self)
         overlap_count = 0
         while True:
@@ -488,7 +496,10 @@ class Seq:
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
         elif not isinstance(sub, (bytes, bytearray)):
-            raise TypeError("a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
         return bytes(self).find(sub, start, end)
 
     def rfind(self, sub, start=None, end=None):
@@ -518,7 +529,10 @@ class Seq:
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
         elif not isinstance(sub, (bytes, bytearray)):
-            raise TypeError("a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
         return bytes(self).rfind(sub, start, end)
 
     def index(self, sub, start=None, end=None):
@@ -538,7 +552,10 @@ class Seq:
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
         elif not isinstance(sub, (bytes, bytearray)):
-            raise TypeError("a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
         return bytes(self).index(sub, start, end)
 
     def rindex(self, sub, start=None, end=None):
@@ -548,7 +565,10 @@ class Seq:
         elif isinstance(sub, str):
             sub = sub.encode("ASCII")
         elif not isinstance(sub, (bytes, bytearray)):
-            raise TypeError("a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                % type(sub)
+            )
         return bytes(self).rindex(sub, start, end)
 
     def startswith(self, prefix, start=None, end=None):
@@ -575,7 +595,8 @@ class Seq:
         """
         if isinstance(prefix, tuple):
             prefix = tuple(
-                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII") for p in prefix
+                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII")
+                for p in prefix
             )
         elif isinstance(prefix, (Seq, MutableSeq)):
             prefix = bytes(prefix)
@@ -607,7 +628,8 @@ class Seq:
         """
         if isinstance(suffix, tuple):
             suffix = tuple(
-                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII") for p in suffix
+                bytes(p) if isinstance(p, (Seq, MutableSeq)) else p.encode("ASCII")
+                for p in suffix
             )
         elif isinstance(suffix, (Seq, MutableSeq)):
             suffix = bytes(suffix)
@@ -722,7 +744,9 @@ class Seq:
         try:
             data = bytes(self).strip(chars)
         except TypeError:
-            raise TypeError("argument must be None or a string, Seq, MutableSeq, or bytes-like object") from None
+            raise TypeError(
+                "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
         return Seq(data)
 
     def lstrip(self, chars=None):
@@ -746,7 +770,9 @@ class Seq:
         try:
             data = bytes(self).lstrip(chars)
         except TypeError:
-            raise TypeError("argument should be a string, Seq, MutableSeq, or bytes-like object") from None
+            raise TypeError(
+                "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
         return Seq(data)
 
     def rstrip(self, chars=None):
@@ -776,7 +802,9 @@ class Seq:
         try:
             data = bytes(self).rstrip(chars)
         except TypeError:
-            raise TypeError("argument should be a string, Seq, MutableSeq, or bytes-like object") from None
+            raise TypeError(
+                "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
         return Seq(data)
 
     def upper(self):
@@ -1430,7 +1458,9 @@ class UnknownSeq(Seq):
         if isinstance(sub, (Seq, MutableSeq)):
             sub = str(sub)
         elif not isinstance(sub, str):
-            raise TypeError("a Seq, MutableSeq, or string object is required, not '%s'" % type(sub))
+            raise TypeError(
+                "a Seq, MutableSeq, or string object is required, not '%s'" % type(sub)
+            )
         # Handling case where subsequence not in self
         if set(sub) != set(self._character):
             return 0
@@ -2729,7 +2759,9 @@ def complement(sequence):
     # to a string.
     # This worked, but is over five times slower on short sequences!
     sequence = sequence.encode("ASCII")
-    if (b"U" in sequence or b"u" in sequence) and (b"T" in sequence or b"t" in sequence):
+    if (b"U" in sequence or b"u" in sequence) and (
+        b"T" in sequence or b"t" in sequence
+    ):  # ugly but this is what black wants
         raise ValueError("Mixed RNA/DNA found")
     elif b"U" in sequence or b"u" in sequence:
         # TODO - warning or exception in future?
