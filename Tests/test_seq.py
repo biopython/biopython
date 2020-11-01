@@ -76,7 +76,9 @@ class TestSeq(unittest.TestCase):
         s = Seq.Seq(Seq.MutableSeq(sequence))
         self.assertIsInstance(s, Seq.Seq, "Creating MutableSeq using MutableSeq")
         self.assertEqual(s, self.s)
-        self.assertRaises(UnicodeEncodeError, Seq.Seq, "ÄþÇÐ")  # All are Latin-1 characters
+        self.assertRaises(
+            UnicodeEncodeError, Seq.Seq, "ÄþÇÐ"
+        )  # All are Latin-1 characters
         self.assertRaises(UnicodeEncodeError, Seq.Seq, "あいうえお")  # These are not
 
     def test_repr(self):
@@ -473,25 +475,39 @@ class TestMutableSeq(unittest.TestCase):
         """Test MutableSeq object initialization."""
         sequence = bytes(self.s)
         mutable_s = Seq.MutableSeq(sequence)
-        self.assertIsInstance(mutable_s, Seq.MutableSeq, "Initializing MutableSeq from bytes")
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from bytes"
+        )
         self.assertEqual(mutable_s, self.s)
         mutable_s = Seq.MutableSeq(bytearray(sequence))
-        self.assertIsInstance(mutable_s, Seq.MutableSeq, "Initializing MutableSeq from bytearray")
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from bytearray"
+        )
         self.assertEqual(mutable_s, self.s)
         mutable_s = Seq.MutableSeq(sequence.decode("ASCII"))
-        self.assertIsInstance(mutable_s, Seq.MutableSeq, "Initializing MutableSeq from str")
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from str"
+        )
         self.assertEqual(mutable_s, self.s)
         mutable_s = Seq.MutableSeq(self.s)
-        self.assertIsInstance(mutable_s, Seq.MutableSeq, "Initializing MutableSeq from Seq")
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from Seq"
+        )
         self.assertEqual(mutable_s, self.s)
         mutable_s = Seq.MutableSeq(Seq.MutableSeq(sequence))
         self.assertEqual(mutable_s, self.s)
-        self.assertIsInstance(mutable_s, Seq.MutableSeq, "Initializing MutableSeq from MutableSeq")
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from MutableSeq"
+        )
         # Deprecated:
         mutable_s = Seq.MutableSeq(array.array("u", sequence.decode("ASCII")))
-        self.assertIsInstance(mutable_s, Seq.MutableSeq, "Creating MutableSeq using array")
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Creating MutableSeq using array"
+        )
         self.assertEqual(mutable_s, self.s)
-        self.assertRaises(UnicodeEncodeError, Seq.MutableSeq, "ÄþÇÐ")  # All are Latin-1 characters
+        self.assertRaises(
+            UnicodeEncodeError, Seq.MutableSeq, "ÄþÇÐ"
+        )  # All are Latin-1 characters
         self.assertRaises(UnicodeEncodeError, Seq.MutableSeq, "あいうえお")  # These are not
 
     def test_repr(self):
