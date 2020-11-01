@@ -89,7 +89,6 @@ class Seq:
         >>> print(my_seq)
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
-        # Enforce string storage
         if isinstance(data, bytes):
             self._data = data
         elif isinstance(data, (bytearray, Seq, MutableSeq)):
@@ -545,7 +544,7 @@ class Seq:
         >>> my_rna.index("T")
         Traceback (most recent call last):
                    ...
-        ValueError: subsection not found...
+        ValueError: ...
         """
         if isinstance(sub, (Seq, MutableSeq)):
             sub = bytes(sub)
