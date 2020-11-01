@@ -469,7 +469,6 @@ class TestMutableSeq(unittest.TestCase):
         self.s = Seq.Seq(sequence)
         self.mutable_s = Seq.MutableSeq(sequence)
 
-
     def test_mutableseq_construction(self):
         """Test MutableSeq object initialization."""
         sequence = bytes(self.s)
