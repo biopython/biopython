@@ -2068,6 +2068,73 @@ class Seq(_SeqAbstractBaseClass):
                 "data should be a string, bytes, bytearray, Seq, or MutableSeq object"
             )
 
+    def removeprefix(self, prefix=None):
+        """Return a new Seq object with prefix (left) removed.
+
+        This behaves like the python string method of the same name.
+
+        e.g. Removing a start Codon:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("ATGGTGTGTGT")
+        >>> my_seq
+        Seq('ATGGTGTGTGT')
+        >>> my_seq.removeprefix('ATG')
+        Seq('GTGTGTGT')
+
+        See also the removesuffix method.
+        """
+        if isinstance(prefix, (Seq, MutableSeq)):
+            prefix = str(prefix)
+        try:
+            return Seq(str(self).removeprefix(prefix))
+        except AttributeError:
+            if not isinstance(prefix, str):
+                raise TypeError(
+                    f"can't remove object of type {type(prefix)}"
+                    "from Seq try Seq or Str"
+                )
+            # TODO - remove once we require Python 3.9+
+            else:
+                if str(self).startswith(prefix):
+                    return Seq(str(self)[len(prefix) :])
+                else:
+                    return self
+
+    def removesuffix(self, suffix=None):
+        """Return a new Seq object with suffix (right) removed.
+
+        This behaves like the python string method of the same name.
+
+        e.g. Removing a stop codon:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("GTGTGTGTTAG")
+        >>> my_seq
+        Seq('GTGTGTGTTAG')
+        >>> stop_codon = Seq("TAG")
+        >>> my_seq.removesuffix(stop_codon)
+        Seq('GTGTGTGT')
+
+        See also the removeprefix method.
+        """
+        if isinstance(suffix, (Seq, MutableSeq)):
+            suffix = str(suffix)
+        try:
+            return Seq(str(self).removesuffix(suffix))
+        except AttributeError:
+            if not isinstance(suffix, str):
+                raise TypeError(
+                    f"can't remove object of type {type(suffix)}"
+                    "from Seq try Seq or Str"
+                )
+            # TODO - remove once we require Python 3.9+
+            else:
+                if str(self).endswith(suffix):
+                    return Seq(str(self)[: -len(suffix)])
+                else:
+                    return self
+
     def __hash__(self):
         """Hash of the sequence as a string for comparison.
 

@@ -23,6 +23,9 @@ object historically returned (sheet, turn, helix) while claiming to return
 (helix, turn, sheet). This was fixed to correctly return (helix, turn, sheet).
 Additionally, the amino acids considered were revised as per recent literature.
 
+The sequence objects now have ``.removeprefix()`` and ``removesuffix`` methods
+matching that added to strings in Python 3.9.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -30,6 +33,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Arpan Sahoo (first contribution)
+- Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
 - João Rodrigues
 - Joe Greener
