@@ -189,12 +189,10 @@ class CustomDirectoryTest(unittest.TestCase):
 
         # Confirm that the two temp directories are named what we want.
         self.assertEqual(
-            handler.local_dtd_dir,
-            os.path.join(tmpdir, "Bio", "Entrez", "DTDs"),
+            handler.local_dtd_dir, os.path.join(tmpdir, "Bio", "Entrez", "DTDs"),
         )
         self.assertEqual(
-            handler.local_xsd_dir,
-            os.path.join(tmpdir, "Bio", "Entrez", "XSDs"),
+            handler.local_xsd_dir, os.path.join(tmpdir, "Bio", "Entrez", "XSDs"),
         )
 
         # And that they were created.
