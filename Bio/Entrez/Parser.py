@@ -256,9 +256,10 @@ class ValidationError(ValueError):
         )
 
 
-# A metaclass is needed until Python supports @classproperty
 class DataHandlerMeta(type):
+    """A metaclass is needed until Python supports @classproperty."""
     def __init__(cls, *args, **kwargs):
+        """"""
         cls._directory = None
 
     @property
@@ -286,7 +287,7 @@ class DataHandlerMeta(type):
         os.makedirs(cls.local_xsd_dir, exist_ok=True)
 
 
-class DataHandler(metaclass = DataHandlerMeta):
+class DataHandler(metaclass=DataHandlerMeta):
     """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez
