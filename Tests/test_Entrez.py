@@ -185,16 +185,16 @@ class CustomDirectoryTest(unittest.TestCase):
         # Set the custom directory to the temporary directory.
         # This assignment statement will also initialize the local DTD and XSD
         # directories.
-        handler.directory = tmpdir
+        Parser.DataHandler.directory = tmpdir
 
         # Confirm that the two temp directories are named what we want.
         self.assertEqual(
             handler.local_dtd_dir,
-            os.path.join(handler.directory, "Bio", "Entrez", "DTDs"),
+            os.path.join(tmpdir, "Bio", "Entrez", "DTDs"),
         )
         self.assertEqual(
             handler.local_xsd_dir,
-            os.path.join(handler.directory, "Bio", "Entrez", "XSDs"),
+            os.path.join(tmpdir, "Bio", "Entrez", "XSDs"),
         )
 
         # And that they were created.
