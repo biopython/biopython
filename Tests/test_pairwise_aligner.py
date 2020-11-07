@@ -2285,6 +2285,101 @@ Pairwise sequence aligner with parameters
         )
 
 
+class TestUnicodeStrings(unittest.TestCase):
+    def test_needlemanwunsch_simple1(self):
+        seq1 = "ĞĀĀČŦ"
+        seq2 = "ĞĀŦ"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        aligner.alphabet = None
+        self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ĞĀĀČŦ
+||--|
+ĞĀ--Ŧ
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (4, 5)), ((0, 2), (2, 3))))
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+ĞĀĀČŦ
+|-|-|
+Ğ-Ā-Ŧ
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+        )
+
+    def test_align_affine1_score(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        aligner.alphabet = None
+        aligner.match_score = 0
+        aligner.mismatch_score = -1
+        aligner.open_gap_score = -5
+        aligner.extend_gap_score = -1
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
+        score = aligner.score("いい", "あいいう")
+        self.assertAlmostEqual(score, -7.0)
+
+    def test_smithwaterman(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.alphabet = None
+        aligner.gap_score = -0.1
+        self.assertEqual(aligner.algorithm, "Smith-Waterman")
+        score = aligner.score("ℵℷℶℷ", "ℸℵℶℸ")
+        self.assertAlmostEqual(score, 1.9)
+        alignments = aligner.align("ℵℷℶℷ", "ℸℵℶℸ")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+ ℵℷℶℷ
+ |-| 
+ℸℵ-ℶℸ
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
+
+    def test_gotoh_local(self):
+        aligner = Align.PairwiseAligner()
+        aligner.alphabet = None
+        aligner.mode = "local"
+        aligner.open_gap_score = -0.1
+        aligner.extend_gap_score = 0.0
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
+        score = aligner.score("生物科物", "学生科学")
+        self.assertAlmostEqual(score, 1.9)
+        alignments = aligner.align("生物科物", "学生科学")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+ 生物科物
+ |-| 
+学生-科学
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
