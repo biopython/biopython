@@ -356,6 +356,54 @@ zA-Bz
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
 
+class TestUnknownCharacter(unittest.TestCase):
+    def test_needlemanwunsch_simple1(self):
+        seq1 = "GACT"
+        seq2 = "GAXT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        aligner.gap_score = -1.0
+        aligner.mismatch_score = -1.0
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GAXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+
+    def test_needlemanwunsch_simple2(self):
+        seq1 = "GAXAT"
+        seq2 = "GAAXT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAXA-T
+||-|-|
+GA-AXT
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5)))
+        )
+
+
 class TestPairwiseOpenPenalty(unittest.TestCase):
     def test_match_score_open_penalty1(self):
         aligner = Align.PairwiseAligner()
