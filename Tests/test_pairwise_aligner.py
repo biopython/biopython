@@ -399,7 +399,9 @@ GAXA-T
 GA-AXT
 """,
         )
-        self.assertEqual(alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5))))
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5)))
+        )
 
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
