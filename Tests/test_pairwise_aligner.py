@@ -356,6 +356,139 @@ zA-Bz
         self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
 
 
+class TestUnknownCharacter(unittest.TestCase):
+    def test_needlemanwunsch_simple1(self):
+        seq1 = "GACT"
+        seq2 = "GAXT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        aligner.gap_score = -1.0
+        aligner.mismatch_score = -1.0
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GAXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+
+    def test_needlemanwunsch_simple2(self):
+        seq1 = "GAXAT"
+        seq2 = "GAAXT"
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "global"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GAXA-T
+||-|-|
+GA-AXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5))))
+
+
+class TestPairwiseLocal(unittest.TestCase):
+    def test_smithwaterman(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.gap_score = -0.1
+        self.assertEqual(aligner.algorithm, "Smith-Waterman")
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: -0.100000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: -0.100000
+  mode: local
+""",
+        )
+        score = aligner.score("AwBw", "zABz")
+        self.assertAlmostEqual(score, 1.9)
+        alignments = aligner.align("AwBw", "zABz")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+ AwBw
+ |-| 
+zA-Bz
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
+
+    def test_gotoh_local(self):
+        aligner = Align.PairwiseAligner()
+        aligner.mode = "local"
+        aligner.open_gap_score = -0.1
+        aligner.extend_gap_score = 0.0
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
+        self.assertEqual(
+            str(aligner),
+            """\
+Pairwise sequence aligner with parameters
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_internal_open_gap_score: -0.100000
+  target_internal_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: 0.000000
+  query_internal_open_gap_score: -0.100000
+  query_internal_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
+  mode: local
+""",
+        )
+        score = aligner.score("AwBw", "zABz")
+        self.assertAlmostEqual(score, 1.9)
+        alignments = aligner.align("AwBw", "zABz")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+ AwBw
+ |-| 
+zA-Bz
+""",  # noqa: W291
+        )
+        self.assertEqual(alignment.aligned, (((0, 1), (2, 3)), ((1, 2), (2, 3))))
+
+
 class TestPairwiseOpenPenalty(unittest.TestCase):
     def test_match_score_open_penalty1(self):
         aligner = Align.PairwiseAligner()
