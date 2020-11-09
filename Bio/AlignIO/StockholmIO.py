@@ -69,7 +69,7 @@ consensus in this example:
 You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
-    >>> print(align.format("fasta"))
+    >>> print(format(align, "fasta"))
     >AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
     GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -81,7 +81,7 @@ using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 Most output formats won't be able to hold the annotation possible in a
 Stockholm file:
 
-    >>> print(align.format("stockholm"))
+    >>> print(format(align, "stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -137,7 +137,7 @@ slicing specific columns of an alignment will slice any per-column-annotations:
 
 You can also see this in the Stockholm output of this partial-alignment:
 
-    >>> print(part_align.format("stockholm"))
+    >>> print(format(part_align, "stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UCAACACUCU
