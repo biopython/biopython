@@ -86,4 +86,5 @@ jobs:
 
     - name: Run test suite (simple version)
       run: |
-        python setup.py test
+        cd Tests
+        python run_tests.py --offline
