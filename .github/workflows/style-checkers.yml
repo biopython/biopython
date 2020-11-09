@@ -21,9 +21,9 @@ jobs:
 
     - name: Installing dependencies via pre-commit
       run: |
-        - python -m pip install pre-commit
-        - pre-commit install --install-hooks
+        python -m pip install pre-commit
+        pre-commit install --install-hooks
 
     - name: Run pre-commit
       run: |
-        - pre-commit run -a
+        pre-commit run -a
