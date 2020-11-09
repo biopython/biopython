@@ -170,7 +170,6 @@ PACKAGES = [
     "Bio.SeqUtils",
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
-    "Bio.Statistics",
     "Bio.SubsMat",
     "Bio.SVDSuperimposer",
     "Bio.PDB.QCPSuperimposer",

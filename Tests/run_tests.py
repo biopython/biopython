@@ -109,7 +109,6 @@ if numpy is None:
             "Bio.phenotype.phen_micro",
             "Bio.phenotype.pm_fitting",
             "Bio.SeqIO.PdbIO",
-            "Bio.Statistics.lowess",
             "Bio.SVDSuperimposer",
         ]
     )

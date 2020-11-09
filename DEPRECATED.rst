@@ -855,8 +855,8 @@ implementing a trie data structure.
 
 Bio.Statistics
 --------------
-This module was declared obsolete in Release 1.74, and deprecated in Release
-1.76.
+This module was declared obsolete in Release 1.74, deprecated in Release 1.76,
+and removed in Release 1.79.
 
 Bio.File
 --------
