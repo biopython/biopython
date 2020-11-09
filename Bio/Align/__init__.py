@@ -13,10 +13,6 @@ class, used in the Bio.AlignIO module.
 
 """
 
-
-import warnings
-
-from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq
@@ -294,20 +290,6 @@ class MultipleSeqAlignment:
         # but it can be VERY long:
         # return "%s(%r)" \
         #       % (self.__class__, self._records)
-
-    def format(self, format_spec):
-        """Return the alignment as a string in the specified file format [DEPRECATED].
-
-        This method is deprecated; instead of alignment.format(format_spec),
-        please use format(alignment, format_spec) or an f-string.
-        """
-        warnings.warn(
-            "alignment.format has been deprecated, and we intend to remove it in a "
-            "future release of Biopython. Instead of alignment.format(format_spec), "
-            "please use format(alignment, format_spec) or an f-string.",
-            BiopythonDeprecationWarning,
-        )
-        return self.__format__(format_spec)
 
     def __format__(self, format_spec):
         """Return the alignment as a string in the specified file format.
@@ -1267,20 +1249,6 @@ class PairwiseAlignment:
         ]
         line = "\t".join(words) + "\n"
         return line
-
-    def format(self):
-        """Create a human-readable representation of the alignment (DEPRECATED).
-
-        This method is deprecated; instead of alignment.format(), please use
-        format(alignment) or an f-string.
-        """
-        warnings.warn(
-            "alignment.format has been deprecated, and we intend to remove it in a "
-            "future release of Biopython. Instead of alignment.format(), please use "
-            "format(alignment) or an f-string.",
-            BiopythonDeprecationWarning,
-        )
-        return self.__format__(None)
 
     def __str__(self):
         return self.__format__(None)
