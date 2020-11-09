@@ -80,8 +80,8 @@ Biopython.
 
 Bio.Crystal
 -----------
-Declared obsolete in release 1.75, deprecated in release 1.76. PDB NDB files
-can be opened with Bio.PDB.
+Declared obsolete in release 1.75, deprecated in release 1.76, removed in
+release 1.79. PDB NDB files can be opened with Bio.PDB.
 
 Bio.motifs
 ----------

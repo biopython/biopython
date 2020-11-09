@@ -127,7 +127,6 @@ PACKAGES = [
     "Bio.Cluster",
     "Bio.codonalign",
     "Bio.Compass",
-    "Bio.Crystal",
     "Bio.Data",
     "Bio.Emboss",
     "Bio.Entrez",
