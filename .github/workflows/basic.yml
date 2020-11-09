@@ -27,10 +27,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Installing dependencies via pre-commit
-      if: steps.cache-precommit.outputs.cache-hit != 'true'
+    - name: Installing pre-commit
       run: |
         python -m pip install pre-commit
+
+    - name: Installing pre-commit hooks
+      if: steps.cache-precommit.outputs.cache-hit != 'true'
+      run: |
         pre-commit install --install-hooks
 
     - name: Run style checking via pre-commit
