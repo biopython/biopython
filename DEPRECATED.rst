@@ -824,7 +824,7 @@ Bio.Align
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
 deprecated in Release 1.57 and removed in Release 1.69.
 The format method of the MultipleSeqAlignment class and the PairwiseAlignment
-class were deprecated in Release 1.76.
+class were deprecated in Release 1.76, and removed in Release 1.79.
 
 Bio.Align.Generic
 -----------------
