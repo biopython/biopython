@@ -6,6 +6,10 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Motif command line tool wrappers."""
+"""Motif command line tool wrappers (OBSOLETE).
+
+We have decided to remove this module in future, and instead recommend
+building your command and invoking it via the subprocess module directly.
+"""
 
 from ._xxmotif import XXmotifCommandline

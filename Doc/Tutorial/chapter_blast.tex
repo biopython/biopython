@@ -235,6 +235,10 @@ contains seven sequences, so the BLAST XML output should contain multiple result
 Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
 Section~\ref{sec:parsing-blast}.
 
+\emph{WARNING:}	We have decided to drop these command line wrappers in a future Biopython
+release. We will be updating this documentation to instead build the command line
+directly, and invoke it with the \texttt{subprocess} module.
+
 \subsection{Other versions of BLAST}
 
 NCBI BLAST+ (written in C++) was first released in 2009 as a replacement for
