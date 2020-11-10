@@ -680,6 +680,10 @@ programs available that do. These are supported through the module
 \texttt{Bio.Phylo.Applications}, using the same general framework as
 \texttt{Bio.Emboss.Applications}, \texttt{Bio.Align.Applications} and others.
 
+\emph{WARNING:} We have decided to drop these command line wrappers in a future Biopython
+release. We will be updating this documentation to instead build the command line
+directly, and invoke it with the \texttt{subprocess} module.
+
 Biopython 1.58 introduced a wrapper for PhyML
 (\url{http://www.atgc-montpellier.fr/phyml/}). The program accepts an input alignment in
 \texttt{phylip-relaxed} format (that's Phylip format, but without the 10-character limit
