@@ -4,7 +4,13 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Main entry point for sequencing related command line application wrappers."""
+
+"""Sequencing related command line application wrappers (OBSOLETE).
+
+We have decided to remove this module in future, and instead recommend
+building your command and invoking it via the subprocess module directly.
+"""
+
 from ._Novoalign import NovoalignCommandline
 from ._bwa import BwaIndexCommandline, BwaAlignCommandline, BwaSamseCommandline
 from ._bwa import BwaSampeCommandline, BwaBwaswCommandline, BwaMemCommandline

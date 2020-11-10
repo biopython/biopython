@@ -74,6 +74,11 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.Application and the command line wrappers using it
+------------------------------------------------------
+Declared obsolete in release 1.79. Please use the standard library subprocess
+module directly instead.
+
 Bio.Index
 ---------
 Deprecated in release 1.75, removed in release 1.77. Was not used anywhere in
