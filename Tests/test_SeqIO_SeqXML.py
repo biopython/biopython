@@ -194,7 +194,6 @@ class TestReadAndWrite(unittest.TestCase):
             self.assertEqual(record1.dbxrefs, record2.dbxrefs)
             self.assertEqual(record1.annotations, record2.annotations)
 
-
     def test_write_species(self):
         """Test writing species from annotation tags."""
         record = SeqIO.read("SwissProt/sp016", "swiss")
