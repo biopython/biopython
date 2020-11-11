@@ -840,7 +840,7 @@ object into an array of letters (length one strings) -- and you can do this with
 >>> import numpy as np
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> align_array = np.array([list(rec) for rec in alignment], "S1")
+>>> align_array = np.array([list(rec) for rec in alignment], "U")
 >>> print("Array shape %i by %i" % align_array.shape)
 Array shape 7 by 52
 \end{minted}
@@ -849,7 +849,7 @@ If you will be working heavily with the columns, you can tell NumPy to store
 the array by column (as in Fortran) rather than its default of by row (as in C):
 
 \begin{minted}{pycon}
->>> align_array = np.array([list(rec) for rec in alignment], "S1", order="F")
+>>> align_array = np.array([list(rec) for rec in alignment], "U", order="F")
 \end{minted}
 
 Note that this leaves the original Biopython alignment object and the NumPy array
