@@ -150,8 +150,8 @@ CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
 >>> record_dict.close()
 
 Here the original file and what Biopython would output differ in the line
-wrapping. Also note that the get_raw method will return a bytes string,
-hence the use of decode to turn it into a (unicode) string.
+wrapping. Also note that the get_raw method will return a bytes object,
+hence the use of decode to turn it into a string.
 
 Also note that the get_raw method will preserve the newline endings. This
 example FASTQ file uses Unix style endings (b"\n" only),
@@ -336,8 +336,8 @@ making up each alignment as SeqRecords.
 """
 
 # TODO
-# - define policy on reading aligned sequences with gaps in
-#   (e.g. - and . characters) including how the alphabet interacts
+# - define policy on reading aligned sequences with more than
+#   one gap character (see also AlignIO)
 #
 # - How best to handle unique/non unique record.id when writing.
 #   For most file formats reading such files is fine; The stockholm
@@ -380,7 +380,6 @@ making up each alignment as SeqRecords.
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
@@ -562,9 +561,7 @@ def parse(handle, format, alphabet=None):
      - handle   - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format   - lower case string describing the file format.
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, should be None.
 
     Typical usage, opening a file to read in, and looping over the record(s):
 
@@ -575,20 +572,6 @@ def parse(handle, format, alphabet=None):
     ...    print("Sequence length %i" % len(record))
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
-
-    For file formats like FASTA where the alphabet cannot be determined, it
-    may be useful to specify the alphabet explicitly:
-
-    >>> from Bio import SeqIO
-    >>> from Bio.Alphabet import generic_dna
-    >>> filename = "Fasta/sweetpea.nu"
-    >>> for record in SeqIO.parse(filename, "fasta", generic_dna):
-    ...    print("ID %s" % record.id)
-    ...    print("Sequence length %i" % len(record))
-    ...    print("Sequence alphabet %s" % record.seq.alphabet)
-    ID gi|3176602|gb|U78617.1|LOU78617
-    Sequence length 309
-    Sequence alphabet DNAAlphabet()
 
     If you have a string 'data' containing the file contents, you must
     first turn this into a handle in order to parse it:
@@ -616,43 +599,16 @@ def parse(handle, format, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %r" % alphabet)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     iterator_generator = _FormatToIterator.get(format)
     if iterator_generator:
-        if alphabet is None:
-            i = iterator_generator(handle)
-        else:
-            try:
-                i = iterator_generator(handle, alphabet=alphabet)
-            except TypeError:
-                i = _force_alphabet(iterator_generator(handle), alphabet)
-        return i
+        return iterator_generator(handle)
     if format in AlignIO._FormatToIterator:
         # Use Bio.AlignIO to read in the alignments
-        i = (
-            r
-            for alignment in AlignIO.parse(handle, format, alphabet=alphabet)
-            for r in alignment
-        )
-        return i
+        return (r for alignment in AlignIO.parse(handle, format) for r in alignment)
     raise ValueError("Unknown format '%s'" % format)
-
-
-def _force_alphabet(record_iterator, alphabet):
-    """Iterate over records, over-riding the alphabet (PRIVATE)."""
-    # Assume the alphabet argument has been pre-validated
-    given_base_class = _get_base_alphabet(alphabet).__class__
-    for record in record_iterator:
-        if isinstance(_get_base_alphabet(record.seq.alphabet), given_base_class):
-            record.seq.alphabet = alphabet
-            yield record
-        else:
-            raise ValueError(
-                "Specified alphabet %r clashes with "
-                "that determined from the file, %r" % (alphabet, record.seq.alphabet)
-            )
 
 
 def read(handle, format, alphabet=None):
@@ -662,9 +618,7 @@ def read(handle, format, alphabet=None):
      - handle   - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format   - string describing the file format.
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, should be None.
 
     This function is for use parsing sequence files containing
     exactly one record.  For example, reading a GenBank file:
@@ -793,9 +747,7 @@ def index(filename, format, alphabet=None, key_function=None):
     Arguments:
      - filename - string giving name of file to be indexed
      - format   - lower case string describing the file format
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, leave as None
      - key_function - Optional callback function which when given a
        SeqRecord identifier string should return a unique key for the
        dictionary.
@@ -905,8 +857,8 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Format required (lower case string)")
     if not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %r" % alphabet)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
@@ -915,7 +867,7 @@ def index(filename, format, alphabet=None, key_function=None):
     try:
         proxy_class = _FormatToRandomAccess[format]
     except KeyError:
-        raise ValueError("Unsupported format %r" % format)
+        raise ValueError("Unsupported format %r" % format) from None
     repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" % (
         filename,
         format,
@@ -923,7 +875,7 @@ def index(filename, format, alphabet=None, key_function=None):
         key_function,
     )
     return _IndexedSeqFileDict(
-        proxy_class(filename, format, alphabet), key_function, repr, "SeqRecord"
+        proxy_class(filename, format), key_function, repr, "SeqRecord"
     )
 
 
@@ -942,9 +894,7 @@ def index_db(
        (optional if reloading an existing index, but must match)
      - format   - lower case string describing the file format
        (optional if reloading an existing index, but must match)
-     - alphabet - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. format="fasta" or "tab")
+     - alphabet - no longer used, leave as None.
      - key_function - Optional callback function which when given a
        SeqRecord identifier string should return a unique
        key for the dictionary.
@@ -991,22 +941,24 @@ def index_db(
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not isinstance(alphabet, (Alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %r" % alphabet)
+    if alphabet is not None:
+        raise ValueError("The alphabet argument is no longer supported")
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
 
-    repr = (
-        "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)"
-        % (index_filename, filenames, format, alphabet, key_function)
+    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, key_function=%r)" % (
+        index_filename,
+        filenames,
+        format,
+        key_function,
     )
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
         if filename:
-            return _FormatToRandomAccess[format](filename, format, alphabet)
+            return _FormatToRandomAccess[format](filename, format)
         else:
             return format in _FormatToRandomAccess
 
@@ -1054,7 +1006,7 @@ _converter = {
 }
 
 
-def convert(in_file, in_format, out_file, out_format, alphabet=None):
+def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """Convert between two sequence file formats, return number of records.
 
     Arguments:
@@ -1062,7 +1014,8 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - in_format - input file format, lower case string
      - out_file - an output handle or filename
      - out_format - output file format, lower case string
-     - alphabet - optional alphabet to assume
+     - molecule_type - optional molecule type to apply, string containing
+       "DNA", "RNA" or "protein".
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning.
@@ -1096,12 +1049,41 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     >EAS54_6_R1_2_1_443_348
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
+
+    Note some formats like SeqXML require you to specify the molecule type
+    when it cannot be determined by the parser:
+
+    >>> from Bio import SeqIO
+    >>> from io import BytesIO
+    >>> handle = BytesIO()
+    >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "seqxml", "DNA")
+    3
     """
+    if molecule_type:
+        if not isinstance(molecule_type, str):
+            raise TypeError("Molecule type should be a string, not %r" % molecule_type)
+        elif (
+            "DNA" in molecule_type
+            or "RNA" in molecule_type
+            or "protein" in molecule_type
+        ):
+            pass
+        else:
+            raise ValueError("Unexpected molecule type, %r" % molecule_type)
     f = _converter.get((in_format, out_format))
     if f:
-        count = f(in_file, out_file, alphabet)
+        count = f(in_file, out_file)
     else:
-        records = parse(in_file, in_format, alphabet)
+        records = parse(in_file, in_format)
+        if molecule_type:
+            # Edit the records on the fly to set molecule type
+
+            def over_ride(record):
+                """Over-ride molecule in-place."""
+                record.annotations["molecule_type"] = molecule_type
+                return record
+
+            records = (over_ride(_) for _ in records)
         count = write(records, out_file, out_format)
     return count
 

@@ -1720,6 +1720,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             Py_DECREF(self->alphabet);
             self->alphabet = NULL;
         }
+        *(self->mapping) = UNMAPPED;
         return 0;
     }
     else if (PyUnicode_Check(alphabet)) {
@@ -1729,6 +1730,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             PyErr_SetString(PyExc_ValueError, "alphabet has zero length");
             return 0;
         }
+        *(self->mapping) = UNMAPPED;
         if (PyUnicode_KIND(alphabet) == PyUnicode_1BYTE_KIND) {
             int i;
             /* don't set self->mapping until we are sure there are no
@@ -1747,11 +1749,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
                 }
                 mapping[j] = i;
             }
-            if (i < size) {
-                /* alphabet is not an ASCII string; cannot use mapping */
-                *(self->mapping) = UNMAPPED;
-            }
-            else {
+            if (i == size) {
                 /* alphabet is an ASCII string; use mapping for speed */
                 memcpy(self->mapping, mapping, 128);
             }
@@ -1770,6 +1768,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             "alphabet should support the sequence protocol (e.g.,\n"
             "strings, lists, and tuples can be valid alphabets).");
         if (!sequence) return -1;
+        *(self->mapping) = UNMAPPED;
         size = PySequence_Fast_GET_SIZE(sequence);
         for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
         for (i = 0; i < size; i++) {
@@ -1793,11 +1792,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
             }
             mapping[j] = i;
         }
-        if (i < size) {
-            /* alphabet is not an ASCII string; cannot use mapping */
-            *(self->mapping) = UNMAPPED;
-        }
-        else {
+        if (i == size) {
             /* alphabet is an ASCII string; use mapping for speed */
             memcpy(self->mapping, mapping, 128);
         }
@@ -6262,7 +6257,7 @@ static int*
 convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
                          const char s[])
 {
-    char c;
+    unsigned char c;
     Py_ssize_t i;
     int index;
     int* indices;
@@ -6277,6 +6272,12 @@ convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
     }
     for (i = 0; i < n; i++) {
         c = s[i];
+        if (c >= 128) {
+            PyErr_SetString(PyExc_ValueError,
+                "sequence letters should be ASCII");
+            PyMem_Free(indices);
+            return NULL;
+        }
         index = mapping[(int)c];
         if (index == MISSING_LETTER) {
             PyErr_SetString(PyExc_ValueError,
@@ -6299,6 +6300,45 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
     PyObject *obj1, *obj2;
     int equal;
     view->buf = NULL;
+    if (!alphabet) {
+        if (!PyUnicode_Check(sequence)) {
+            PyErr_SetString(PyExc_ValueError, "alphabet is None; cannot interpret sequence");
+            return 0;
+        }
+        if (PyUnicode_READY(sequence) == -1) return 0;
+        n = PyUnicode_GET_LENGTH(sequence);
+        indices = PyMem_Malloc(n*sizeof(int));
+        if (!indices) {
+            PyErr_NoMemory();
+            return 0;
+        }
+        switch (PyUnicode_KIND(sequence)) {
+            case PyUnicode_1BYTE_KIND: {
+                Py_UCS1* data = PyUnicode_1BYTE_DATA(sequence);
+                for (i = 0; i < n; i++) indices[i] = (int)(data[i]);
+                break;
+            }
+            case PyUnicode_2BYTE_KIND: {
+                Py_UCS2* data = PyUnicode_2BYTE_DATA(sequence);
+                for (i = 0; i < n; i++) indices[i] = (int)(data[i]);
+                break;
+            }
+            case PyUnicode_4BYTE_KIND: {
+                Py_UCS4* data = PyUnicode_4BYTE_DATA(sequence);
+                for (i = 0; i < n; i++) indices[i] = (int)(data[i]);
+                break;
+            }
+            case PyUnicode_WCHAR_KIND:
+            default:
+                PyErr_SetString(PyExc_ValueError, "cannot interpret unicode data");
+                PyMem_Del(indices);
+                return 0;
+        }
+        view->buf = indices;
+        view->itemsize = 1;
+        view->len = n;
+        return 1;
+    }
     sequence = PySequence_Fast(sequence,
                                "argument should support the sequence protocol");
     if (!sequence) return 0;
@@ -6375,8 +6415,14 @@ sequence_converter(PyObject* argument, void* pointer)
         return Py_CLEANUP_SUPPORTED;
     }
     
-    s = PyUnicode_AsUTF8AndSize(argument, &n);
-    if (s) {
+    if (PyUnicode_Check(argument)) {
+        if (PyUnicode_READY(argument) == -1) return 0;
+        if (PyUnicode_KIND(argument) != PyUnicode_1BYTE_KIND) {
+            PyErr_SetString(PyExc_TypeError, "string should be ASCII");
+            return 0;
+        }
+        s = PyUnicode_DATA(argument);
+        n = PyUnicode_GET_LENGTH(argument);
         indices = convert_sequence_to_ints(aligner->mapping, n, s);
         if (!indices) return 0;
         view->buf = indices;
@@ -6384,7 +6430,6 @@ sequence_converter(PyObject* argument, void* pointer)
         view->len = n;
         return Py_CLEANUP_SUPPORTED;
     }
-    PyErr_Clear();
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
         PyErr_SetString(PyExc_ValueError, "sequence has unexpected format");
         return 0;

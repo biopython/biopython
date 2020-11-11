@@ -54,7 +54,6 @@ def get_files():
                 "from: ftp://ftp.neb.com/pub/rebase.".format(release_number)
             )
             return
-    return
 
 
 if __name__ == "__main__":

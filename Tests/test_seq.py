@@ -61,8 +61,8 @@ class TestSeq(unittest.TestCase):
 
     def test_construction_using_a_seq_object(self):
         """Test using a Seq object to initialize another Seq object."""
-        with self.assertRaises(TypeError):
-            Seq.Seq(self.s)
+        s = Seq.Seq(self.s)
+        self.assertEqual(s, self.s)
 
     def test_repr(self):
         """Test representation of Seq object."""
@@ -458,7 +458,7 @@ class TestMutableSeq(unittest.TestCase):
         mutable_s = MutableSeq("TCAAAAGGATGCATCATG")
         self.assertIsInstance(mutable_s, MutableSeq, "Creating MutableSeq")
 
-        mutable_s = self.s.tomutable()
+        mutable_s = MutableSeq(self.s)
         self.assertIsInstance(mutable_s, MutableSeq, "Converting Seq to mutable")
 
         array_seq = MutableSeq(array.array("u", "TCAAAAGGATGCATCATG"))
@@ -490,7 +490,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s < 1
 
-    def test_less_than_comparison_without_alphabet(self):
+    def test_less_than_comparison_with_str(self):
         self.assertLessEqual(self.mutable_s[:-1], "TCAAAAGGATGCATCATG")
 
     def test_less_than_or_equal_comparison(self):
@@ -501,7 +501,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s <= 1
 
-    def test_less_than_or_equal_comparison_without_alphabet(self):
+    def test_less_than_or_equal_comparison_with_str(self):
         self.assertLessEqual(self.mutable_s[:-1], "TCAAAAGGATGCATCATG")
 
     def test_greater_than_comparison(self):
@@ -512,7 +512,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s > 1
 
-    def test_greater_than_comparison_without_alphabet(self):
+    def test_greater_than_comparison_with_str(self):
         self.assertGreater(self.mutable_s, "TCAAAAGGATGCATCAT")
 
     def test_greater_than_or_equal_comparison(self):
@@ -523,7 +523,7 @@ class TestMutableSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.mutable_s >= 1
 
-    def test_greater_than_or_equal_comparison_without_alphabet(self):
+    def test_greater_than_or_equal_comparison_with_str(self):
         self.assertGreaterEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
 
     def test_add_method(self):
@@ -537,7 +537,7 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s.__radd__(self.mutable_s),
         )
 
-    def test_radd_method_incompatible_alphabets(self):
+    def test_radd_method_using_mutalbeseq_object(self):
         self.assertEqual(
             "UCAAAAGGATCAAAAGGATGCATCATG",
             self.mutable_s.__radd__(MutableSeq("UCAAAAGGA")),
@@ -559,7 +559,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(18, len(self.mutable_s))
 
     def test_converting_to_immutable(self):
-        self.assertIsInstance(self.mutable_s.toseq(), Seq.Seq)
+        self.assertIsInstance(Seq.Seq(self.mutable_s), Seq.Seq)
 
     def test_first_nucleotide(self):
         self.assertEqual("T", self.mutable_s[0])
@@ -785,17 +785,12 @@ class TestComplement(unittest.TestCase):
 
     def test_complement_ambiguous_rna_values(self):
         for ambig_char, values in sorted(ambiguous_rna_values.items()):
-            compl_values = str(
-                # Will default to DNA if neither T or U found...
-                # Turn black code style off
-                # fmt: off
-                Seq.Seq(values).complement().transcribe()
-                # fmt: on
-            )
+            # Will default to DNA if neither T nor U found...
+            compl_values = str(Seq.Seq(values).complement().transcribe())
             ambig_values = ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]
             self.assertEqual(set(compl_values), set(ambig_values))
 
-    def test_complement_incompatible_alphabets(self):
+    def test_complement_incompatible_letters(self):
         seq = Seq.Seq("CAGGTU")
         with self.assertRaises(ValueError):
             seq.complement()

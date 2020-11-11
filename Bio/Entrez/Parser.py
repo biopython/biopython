@@ -1,8 +1,10 @@
 # Copyright 2008-2014 by Michiel de Hoon.  All rights reserved.
 # Revisions copyright 2008-2015 by Peter Cock. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Parser for XML results returned by NCBI's Entrez Utilities.
 
@@ -136,29 +138,6 @@ class StringElement(str):
         return "StringElement(%s, attributes=%r)" % (text, attributes)
 
 
-class UnicodeElement(str):
-    """NCBI Entrez XML element mapped to a unicode string."""
-
-    def __new__(cls, value, tag, attributes, key=None):
-        """Create a UnicodeElement."""
-        self = str.__new__(cls, value)
-        self.tag = tag
-        if key is None:
-            self.key = tag
-        else:
-            self.key = key
-        self.attributes = attributes
-        return self
-
-    def __repr__(self):
-        """Return a string representation of the object."""
-        text = str.__repr__(self)
-        attributes = self.attributes
-        if not attributes:
-            return text
-        return "UnicodeElement(%s, attributes=%r)" % (text, attributes)
-
-
 class ListElement(list):
     """NCBI Entrez XML element mapped to a list."""
 
@@ -277,13 +256,45 @@ class ValidationError(ValueError):
         )
 
 
-class DataHandler:
+class DataHandlerMeta(type):
+    """A metaclass is needed until Python supports @classproperty."""
+
+    def __init__(cls, *args, **kwargs):
+        """Initialize."""
+        cls._directory = None
+
+    @property
+    def directory(cls):
+        """Directory for caching XSD and DTD files."""
+        return cls._directory
+
+    @directory.setter
+    def directory(cls, value):
+        """Set a custom directory for the local DTD/XSD directories."""
+        if value is None:
+            import platform
+
+            if platform.system() == "Windows":
+                value = os.path.join(os.getenv("APPDATA"), "biopython")
+            else:  # Unix/Linux/Mac
+                home = os.path.expanduser("~")
+                value = os.path.join(home, ".config", "biopython")
+        cls._directory = value
+        # Create DTD local directory
+        cls.local_dtd_dir = os.path.join(cls._directory, "Bio", "Entrez", "DTDs")
+        os.makedirs(cls.local_dtd_dir, exist_ok=True)
+        # Create XSD local directory
+        cls.local_xsd_dir = os.path.join(cls._directory, "Bio", "Entrez", "XSDs")
+        os.makedirs(cls.local_xsd_dir, exist_ok=True)
+
+
+class DataHandler(metaclass=DataHandlerMeta):
     """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez
 
-    global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
-    global_xsd_dir = os.path.join(str(Entrez.__path__[0]), "XSDs")
+    global_dtd_dir = os.path.join(Entrez.__path__[0], "DTDs")
+    global_xsd_dir = os.path.join(Entrez.__path__[0], "XSDs")
     local_dtd_dir = ""
     local_xsd_dir = ""
 
@@ -309,7 +320,6 @@ class DataHandler:
         self.schema_namespace = None
         self.namespace_level = Counter()
         self.namespace_prefix = {}
-        self._directory = None
         if escape:
             self.characterDataHandler = self.characterDataHandlerEscape
         else:
@@ -420,7 +430,7 @@ class DataHandler:
         self.parser = None
         if self.element is not None:
             # No more XML data, but there is still some unfinished business
-            raise CorruptedXMLError("Premature end of XML stream")
+            raise CorruptedXMLError("Premature end of data")
 
         # Send out the remaining records
         yield from records
@@ -453,10 +463,14 @@ class DataHandler:
             # and endNamespaceDeclHandler. Therefore we need to count how often
             # startNamespaceDeclHandler and endNamespaceDeclHandler were called
             # to find out their first and last invocation for each namespace.
+            if prefix == "mml":
+                assert uri == "http://www.w3.org/1998/Math/MathML"
+            elif prefix == "xlink":
+                assert uri == "http://www.w3.org/1999/xlink"
+            else:
+                raise ValueError("Unknown prefix '%s' with uri '%s'" % (prefix, uri))
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
-            assert uri == "http://www.w3.org/1998/Math/MathML"
-            assert prefix == "mml"
 
     def endNamespaceDeclHandler(self, prefix):
         """Handle end of an XML namespace declaration."""
@@ -494,8 +508,8 @@ class DataHandler:
         """Handle start of an XML element."""
         if tag in self.items:
             assert tag == "Item"
-            name = str(attrs["Name"])  # convert from Unicode
-            itemtype = str(attrs["Type"])  # convert from Unicode
+            name = attrs["Name"]
+            itemtype = attrs["Type"]
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
@@ -651,15 +665,11 @@ class DataHandler:
         self.attributes = None
         if tag in self.items:
             assert tag == "Item"
-            key = str(attributes["Name"])  # convert from Unicode
+            key = attributes["Name"]
             del attributes["Name"]
         else:
             key = tag
-        # Convert Unicode strings to plain strings if possible
-        try:
-            value = StringElement(value, tag, attributes, key)
-        except UnicodeEncodeError:
-            value = UnicodeElement(value, tag, attributes, key)
+        value = StringElement(value, tag, attributes, key)
         if element is None:
             self.record = element
         else:
@@ -672,7 +682,10 @@ class DataHandler:
         if self.level == 0:
             self.parser.EndElementHandler = self.endStringElementHandler
         if self.namespace_prefix:
-            uri, name = name.split()
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
         tag = "</%s>" % name
         self.data.append(tag)
 
@@ -705,7 +718,7 @@ class DataHandler:
         attributes = self.attributes
         self.attributes = None
         assert tag == "Item"
-        key = str(attributes["Name"])  # convert from Unicode
+        key = attributes["Name"]
         del attributes["Name"]
         if self.data:
             value = int("".join(self.data))
@@ -734,7 +747,6 @@ class DataHandler:
 
     def skipCharacterDataHandler(self, content):
         """Handle character data by skipping it."""
-        return
 
     def parse_xsd(self, root):
         """Parse an XSD file."""
@@ -882,15 +894,14 @@ class DataHandler:
 
     def open_dtd_file(self, filename):
         """Open specified DTD file."""
-        self._initialize_directory()
-        path = os.path.join(self.local_dtd_dir, filename)
+        path = os.path.join(DataHandler.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
             pass
         else:
             return handle
-        path = os.path.join(self.global_dtd_dir, filename)
+        path = os.path.join(DataHandler.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
@@ -901,15 +912,14 @@ class DataHandler:
 
     def open_xsd_file(self, filename):
         """Open specified XSD file."""
-        self._initialize_directory()
-        path = os.path.join(self.local_xsd_dir, filename)
+        path = os.path.join(DataHandler.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
             pass
         else:
             return handle
-        path = os.path.join(self.global_xsd_dir, filename)
+        path = os.path.join(DataHandler.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
         except FileNotFoundError:
@@ -920,8 +930,7 @@ class DataHandler:
 
     def save_dtd_file(self, filename, text):
         """Save DTD file to cache."""
-        self._initialize_directory()
-        path = os.path.join(self.local_dtd_dir, filename)
+        path = os.path.join(DataHandler.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
         except OSError:
@@ -932,8 +941,7 @@ class DataHandler:
 
     def save_xsd_file(self, filename, text):
         """Save XSD file to cache."""
-        self._initialize_directory()
-        path = os.path.join(self.local_xsd_dir, filename)
+        path = os.path.join(DataHandler.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
         except OSError:
@@ -995,38 +1003,3 @@ class DataHandler:
         self.dtd_urls.pop()
         self.parser.StartElementHandler = self.startElementHandler
         return 1
-
-    def _initialize_directory(self):
-        """Initialize the local DTD/XSD directories (PRIVATE).
-
-        Added to allow for custom directory (cache) locations,
-        for example when code is deployed on AWS Lambda.
-        """
-        # If user hasn't set a custom cache location, initialize it.
-        if self.directory is None:
-            import platform
-
-            if platform.system() == "Windows":
-                self.directory = os.path.join(os.getenv("APPDATA"), "biopython")
-            else:  # Unix/Linux/Mac
-                home = os.path.expanduser("~")
-                self.directory = os.path.join(home, ".config", "biopython")
-                del home
-            del platform
-        # Create DTD local directory
-        self.local_dtd_dir = os.path.join(self.directory, "Bio", "Entrez", "DTDs")
-        os.makedirs(self.local_dtd_dir, exist_ok=True)
-        # Create XSD local directory
-        self.local_xsd_dir = os.path.join(self.directory, "Bio", "Entrez", "XSDs")
-        os.makedirs(self.local_xsd_dir, exist_ok=True)
-
-    @property
-    def directory(self):
-        """Directory for caching XSD and DTD files."""
-        return self._directory
-
-    @directory.setter
-    def directory(self, directory):
-        """Allow user to set a custom directory, also triggering subdirectory initialization."""
-        self._directory = directory
-        self._initialize_directory()

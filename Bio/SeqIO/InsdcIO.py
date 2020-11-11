@@ -37,7 +37,6 @@ from Bio import BiopythonWarning
 
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
-from Bio import Alphabet
 from Bio import SeqIO
 from Bio import SeqFeature
 from .Interfaces import SequenceIterator, SequenceWriter
@@ -177,7 +176,7 @@ class ImgtIterator(SequenceIterator):
 class GenBankCdsFeatureIterator(SequenceIterator):
     """Parser for GenBank files, creating a SeqRecord for each CDS feature."""
 
-    def __init__(self, source, alphabet=Alphabet.generic_protein):
+    def __init__(self, source):
         """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
         Argument source is a file-like object opened in text mode or a path to a file.
@@ -186,19 +185,17 @@ class GenBankCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="GenBank")
+        super().__init__(source, mode="t", fmt="GenBank")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-        alphabet = self.alphabet
-        records = GenBankScanner(debug=0).parse_cds_features(handle, alphabet)
-        return records
+        return GenBankScanner(debug=0).parse_cds_features(handle)
 
 
 class EmblCdsFeatureIterator(SequenceIterator):
     """Parser for EMBL files, creating a SeqRecord for each CDS feature."""
 
-    def __init__(self, source, alphabet=Alphabet.generic_protein):
+    def __init__(self, source):
         """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
         Argument source is a file-like object opened in text mode or a path to a file.
@@ -207,13 +204,11 @@ class EmblCdsFeatureIterator(SequenceIterator):
         many CDS features.  These are returned as with the stated amino acid
         translation sequence (if given).
         """
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="EMBL")
+        super().__init__(source, mode="t", fmt="EMBL")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
-        alphabet = self.alphabet
-        records = EmblScanner(debug=0).parse_cds_features(handle, alphabet)
-        return records
+        return EmblScanner(debug=0).parse_cds_features(handle)
 
 
 def _insdc_feature_position_string(pos, offset=0):
@@ -1145,7 +1140,6 @@ class EmblWriter(_InsdcWriter):
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
 
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         molecule_type = record.annotations.get("molecule_type")
         if molecule_type is not None and "DNA" in molecule_type:
             # TODO - What if we have RNA?
@@ -1466,19 +1460,17 @@ class ImgtWriter(EmblWriter):
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
 
 
-def _genbank_convert_fasta(in_file, out_file, alphabet=None):
+def _genbank_convert_fasta(in_file, out_file):
     """Fast GenBank to FASTA (PRIVATE)."""
     # We don't need to parse the features...
     records = GenBankScanner().parse_records(in_file, do_features=False)
-    # For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_file, "fasta")
 
 
-def _embl_convert_fasta(in_file, out_file, alphabet=None):
+def _embl_convert_fasta(in_file, out_file):
     """Fast EMBL to FASTA (PRIVATE)."""
     # We don't need to parse the features...
     records = EmblScanner().parse_records(in_file, do_features=False)
-    # For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_file, "fasta")
 
 

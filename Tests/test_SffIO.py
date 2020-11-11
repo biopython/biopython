@@ -349,10 +349,11 @@ class TestConcatenated(unittest.TestCase):
             for record in SeqIO.parse("Roche/invalid_greek_E3MFGYR02.sff", "sff"):
                 count += 1
         except ValueError as err:
-            self.assertTrue(
+            self.assertIn(
                 "Additional data at end of SFF file, perhaps "
                 "multiple SFF files concatenated? "
-                "See offset 65296" in str(err),
+                "See offset 65296",
+                str(err),
                 err,
             )
             caught = True
@@ -363,10 +364,11 @@ class TestConcatenated(unittest.TestCase):
         try:
             d = SeqIO.index("Roche/invalid_greek_E3MFGYR02.sff", "sff")
         except ValueError as err:
-            self.assertTrue(
+            self.assertIn(
                 "Additional data at end of SFF file, perhaps "
                 "multiple SFF files concatenated? "
-                "See offset 65296" in str(err),
+                "See offset 65296",
+                str(err),
                 err,
             )
         else:
@@ -379,11 +381,12 @@ class TestConcatenated(unittest.TestCase):
             for record in SeqIO.parse("Roche/invalid_paired_E3MFGYR02.sff", "sff"):
                 count += 1
         except ValueError as err:
-            self.assertTrue(
+            self.assertIn(
                 "Your SFF file is invalid, post index 5 byte "
                 "null padding region ended '.sff' which could "
                 "be the start of a concatenated SFF file? "
-                "See offset 54371" in str(err),
+                "See offset 54371",
+                str(err),
                 err,
             )
             caught = True
@@ -394,11 +397,12 @@ class TestConcatenated(unittest.TestCase):
         try:
             d = SeqIO.index("Roche/invalid_paired_E3MFGYR02.sff", "sff")
         except ValueError as err:
-            self.assertTrue(
+            self.assertIn(
                 "Your SFF file is invalid, post index 5 byte "
                 "null padding region ended '.sff' which could "
                 "be the start of a concatenated SFF file? "
-                "See offset 54371" in str(err),
+                "See offset 54371",
+                str(err),
                 err,
             )
         else:

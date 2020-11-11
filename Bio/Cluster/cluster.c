@@ -35,16 +35,226 @@
 #include "cluster.h"
 
 /* ************************************************************************ */
+/*                            SORTING FUNCTIONS                                */
+/*
+* C qsort() is very slow, much slower than C++ std::sort().
+* This is because qsort() doesn't utilize data-type information at compile time,
+* and it has redundant pointer dereference since it requires a compare function.
+* For projects that use old C, it's impossible to convert to C++/newer C.
+* 
+* So we implement a simple quicksort that is ~~25% faster than std::sort() 
+* with mostly random data, and much faster with structured/sorted data 
+*/
+
+static const int INF = INT_MAX; // 2^31 - 1
+
+static int TEMP_SWAP_INT;
+#define swap_int(x,y) {TEMP_SWAP_INT = (x); (x) = (y); (y) = TEMP_SWAP_INT;}
+
+/* For quicksort, we need to choose a random pivot. Any random function should work. Even bad ones. */
+static int
+cheap_random()
+{
+    const int base = 2 * 100 * 1000 * 1000 + 33;
+    static int seed = 0;
+    seed = seed * 7 + 13;
+    if (seed > base) seed %= base;
+    return seed;
+}
+
+static inline int
+median_index_of3_index(const double arr[], int index[], const int a, const int b, const int c)
+{
+    if (arr[index[a]] < arr[index[b]]) {
+        if (arr[index[b]] < arr[index[c]]) return b;
+        else if (arr[index[a]] < arr[index[c]]) return c;
+        else return a;
+    }
+    else {
+        if (arr[index[a]] < arr[index[c]]) return a;
+        else if (arr[index[b]] < arr[index[c]]) return c;
+        else return b;
+    }
+}
+
+
+/* Insertion sort is best when the array is small. */
+static void
+insertion_sort_index(const double a[], int index[], int l, int r)
+{
+    int i, j, current_index;
+    double value;
+
+    if (r <= l) return;
+    i = l; j = r;
+    value = a[index[(l + r) >> 1]];
+    while (i <= j) {
+        while (a[index[i]] < value) i++;
+        while (a[index[j]] > value) j--;
+
+        if (i <= j) {
+            swap_int(index[i], index[j]);
+            i++;
+            j--;
+        }
+    }
+
+    for (i = l + 1; i <= r; i++) {
+        j = i - 1;
+        value = a[index[i]];
+        current_index = index[i];
+
+        while (j >= l && a[index[j]] > value) {
+            index[j + 1] = index[j];
+            j--;
+        }
+        index[j + 1] = current_index;
+    }
+}
+
+//***************
+static void
+fastsort_partition_index(const double a[], int index[], const int left, const int right, int* first_end_ptr, int* second_start_ptr) {
+    int low, high, i, pivot, mid;
+    double value;
+    int increasing = 1, decreasing = 1;
+
+    /*******/
+    /* choose a random way to choose pivot, to prevent all possible worst-cases*/
+    if ((right - left) & 1) pivot = left + cheap_random() % (right - left);
+    else pivot = median_index_of3_index(a, index, left, (left + right) >> 1, right);
+    value = a[index[pivot]];
+
+    /*******/
+    /* Skip through smaller values on left and larger values on right*/
+    low = left; high = right;
+    while (a[index[low]] < value) {
+        low++;
+        decreasing = 0;
+        if (a[index[low]] < a[index[low - 1]]) increasing = 0;
+    }
+
+    while (a[index[high]] > value) {
+        high--;
+        decreasing = 0;
+        if (a[index[high]] > a[index[high + 1]]) increasing = 0;
+    }
+
+    increasing &= a[index[high]] >= a[index[low]];
+    decreasing &= a[index[high]] <= a[index[low]];
+
+    /*******/
+    /* Resolve degenerate input cases */
+    if (increasing) {
+        if ((right - left) & 1) {
+            for (i = low + 1; i <= high; i++) if (a[index[i]] < a[index[i - 1]]) {
+                increasing = 0;
+                break;
+            }
+        }
+        else {
+            for (i = high; i >= low + 1; i--) if (a[index[i]] < a[index[i - 1]]) {
+                increasing = 0;
+                break;
+            }
+        }
+        if (increasing) {    /* sorted */
+            *first_end_ptr = INF;
+            return;
+        }
+    }
+
+    if (decreasing) {
+        if ((right - left) & 1) {
+            for (i = low + 1; i <= high; i++) if (a[index[i]] > a[index[i - 1]]) {
+                decreasing = 0;
+                break;
+            }
+        }
+        else {
+            for (i = high; i >= low + 1; i--) if (a[index[i]] > a[index[i - 1]]) {
+                decreasing = 0;
+                break;
+            }
+        }
+        if (decreasing) {
+            mid = (right - left + 1) >> 1;
+            for (i = 0; i < mid; i++) swap_int(index[left + i], index[right - i]);
+            *first_end_ptr = INF;
+            return;
+        }
+    }
+
+    /******/
+    while (low <= high) {
+        while (a[index[low]] < value) low++;
+        while (a[index[high]] > value) high--;
+
+        if (low <= high) {
+            swap_int(index[low], index[high]);
+            low++;
+            high--;
+        }
+    }
+
+    *first_end_ptr = high;
+    *second_start_ptr = low;
+}
+
+//***************
+static void
+fastsort_recursive_index(const double a[], int index[], int l, int r)
+{
+    int first_end, second_start;
+    while (l < r) {
+        if (r - l <= 70) {    /* determined through experiments and benchmarks, not randomly. 70-150 works fine on random/mixed (hard) data */
+            insertion_sort_index(a, index, l, r);
+            return;
+        }
+
+        fastsort_partition_index(a, index, l, r, &first_end, &second_start);
+        if (first_end == INF) return; /* sorted */
+
+        /* Recurse into smaller branch to avoid stack overflow */
+        if (first_end - l < r - second_start) {
+            fastsort_recursive_index(a, index, l, first_end);
+            l = second_start;
+        }
+        else {
+            fastsort_recursive_index(a, index, second_start, r);
+            r = first_end;
+        }
+    }
+}
+
+/* ************************************************************************ */
 
 double
-mean(int n, double x[])
+mean(int n, double a[])
+/*
+ Add 4 elements at once instead of 1. The advantages are:
+ 1. less loop overhead
+ 2. compile with -O2 -> use SSE/AVX. 
+ 3. without AVX, still faster because 4 independent additions -> parallel instruction possible
+ 4. smaller floating-point error
+*/
 {
     double result = 0.;
     int i;
+    double sum[4] = {0., 0., 0., 0.};
 
-    for (i = 0; i < n; i++) result += x[i];
-    result /= n;
-    return result;
+    int nstep4 = n - n % 4;
+    for (i = 0; i < nstep4; i += 4) {
+        sum[0] += a[i];
+        sum[1] += a[i + 1];
+        sum[2] += a[i + 2];
+        sum[3] += a[i + 3];
+    }
+
+    for (i = nstep4; i < n; i++) result += a[i];
+    result += (sum[0] + sum[1]) + (sum[2] + sum[3]);
+
+    return result / n;
 }
 
 /* ************************************************************************ */
@@ -147,40 +357,16 @@ Based on Alan J. Miller's median.f90 routine.
 
 /* ********************************************************************** */
 
-static const double* sortdata = NULL; /* used in the quicksort algorithm */
-
-/* ---------------------------------------------------------------------- */
-
-static int
-compare(const void* a, const void* b)
-/* Helper function for sort. Previously, this was a nested function under
- * sort, which is not allowed under ANSI C.
- */
-{
-    const int i1 = *(const int*)a;
-    const int i2 = *(const int*)b;
-    const double term1 = sortdata[i1];
-    const double term2 = sortdata[i2];
-
-    if (term1 < term2) return -1;
-    if (term1 > term2) return +1;
-    return 0;
-}
-
-/* ---------------------------------------------------------------------- */
-
 void
-sort(int n, const double data[], int index[])
+sort_index(int n, const double data[], int index[])
 /* Sets up an index table given the data, such that data[index[]] is in
  * increasing order. Sorting is done on the indices; the array data
  * is unchanged.
  */
 {
     int i;
-
-    sortdata = data;
     for (i = 0; i < n; i++) index[i] = i;
-    qsort(index, n, sizeof(int), compare);
+    fastsort_recursive_index(data, index, 0, n - 1);
 }
 
 /* ********************************************************************** */
@@ -210,7 +396,7 @@ getrank(int n, const double data[], const double weight[])
         return NULL;
     }
     /* Call sort to get an index table */
-    sort(n, data, index);
+    sort_index(n, data, index);
     /* Build a rank table */
     k = 0;
     j = index[0];
@@ -902,7 +1088,7 @@ positive integer if the singular value decomposition fails to converge.
                 const double s = w[j];
                 for (i = 0; i < nrows; i++) u[i][j] *= s;
             }
-            sort(ncolumns, w, index);
+            sort_index(ncolumns, w, index);
             for (i = 0; i < ncolumns/2; i++) {
                 j = index[i];
                 index[i] = index[ncolumns-1-i];
@@ -924,7 +1110,7 @@ positive integer if the singular value decomposition fails to converge.
                 const double s = w[j];
                 for (i = 0; i < nrows; i++) v[i][j] *= s;
             }
-            sort(nrows, w, index);
+            sort_index(nrows, w, index);
             for (i = 0; i < nrows/2; i++) {
                 j = index[i];
                 index[i] = index[nrows-1-i];

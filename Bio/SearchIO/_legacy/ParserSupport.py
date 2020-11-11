@@ -27,8 +27,10 @@ Functions:
 import sys
 from io import StringIO
 
+from abc import ABC, abstractmethod
 
-class UndoHandle(object):
+
+class UndoHandle:
     """A Python handle that adds functionality for saving lines.
 
     Saves lines in a LIFO fashion.
@@ -125,12 +127,13 @@ class UndoHandle(object):
         self._handle.close()
 
 
-class AbstractParser:
-    """Base class for other parsers."""
+class AbstractParser(ABC):
+    """Abstract base class for other parsers."""
 
+    @abstractmethod
     def parse(self, handle):
         """Provision for parsing a file handle."""
-        raise NotImplementedError("Please implement in a derived class")
+        raise NotImplementedError
 
     def parse_str(self, string):
         """Make string a handle, so it can be taken by parse."""
@@ -151,9 +154,11 @@ class AbstractConsumer:
 
     """
 
+    # Optionally implement in the sub-class
     def _unhandled_section(self):
         pass
 
+    # Optionally implement in the sub-class
     def _unhandled(self, data):
         pass
 

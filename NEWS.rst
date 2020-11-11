@@ -8,8 +8,38 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.78
+(In progress, not yet released): Biopython 1.79
 ===============================================
+
+This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
+tested on PyPy3.6.1 v7.1.1.
+
+Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
+unambiguously guessed from the atom name, in accordance with PDB structures.
+
+Bio.PDB entities now have a ``center_of_mass()`` method that calculates either
+centers of gravity or geometry.
+
+New method ``disordered_remove()`` implemented in Bio.PDB DisorderedAtom and
+DisorderedResidue to remove children.
+
+New module Bio.PDB.SASA implements the Shrake-Rupley algorithm to calculate
+atomic solvent accessible areas without third-party tools.
+
+Expected ``TypeError`` behaviour has been restored to the ``Seq`` object's
+string like methods (fixing a regression in Biopython 1.78).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Damien Goutte-Gattat
+- João Rodrigues
+- Markus Piotrowski
+- Suyash Gupta
+- Vini Salazar (first contribution)
+
+4 September 2020: Biopython 1.78
+================================
 
 This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
 tested on PyPy3.6.1 v7.1.1.
@@ -18,10 +48,13 @@ The main change is that ``Bio.Alphabet`` is no longer used. In some cases you
 will now have to specify expected letters, molecule type (DNA, RNA, protein),
 or gap character explicitly. Please consult the updated Tutorial and API
 documentation for guidance. This simplification has sped up many ``Seq``
-object methods.
+object methods. See https://biopython.org/wiki/Alphabet for more information.
 
 ``Bio.SeqIO.parse()`` is faster with "fastq" format due to small improvements
 in the ``Bio.SeqIO.QualityIO`` module.
+
+The ``SeqFeature`` object's ``.extract()`` method can now be used for
+trans-spliced locations via an optional dictionary of references.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
@@ -30,20 +63,26 @@ more details.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite. There has been further work to follow the Python PEP8,
-PEP257 and best practice standard coding style, and more of the tests have
+PEP257 and best practice standard coding style, and all of the tests have
 been reformatted with the ``black`` tool to match the main code base.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Adam Sjøgren (first contribution)
 - Carlos Pena
+- Chris Daley
 - Chris Rands
 - Christian Brueffer
+- Damien Goutte-Gattat
 - João Rodrigues
 - João Vitor F Cavalcante (first contribution)
+- Marie Crane
+- Markus Piotrowski
 - Michiel de Hoon
 - Peter Cock
 - Sergio Valqui
+- Yogesh Kulkarni (first contribution)
 - Zheng Ruan
 
 25 May 2020: Biopython 1.77
@@ -798,7 +837,7 @@ an optional external dependency on the mmtf-python library.
 Module Bio.pairwise2 has been re-written (contributed by Markus Piotrowski).
 It is now faster, addresses some problems with local alignments, and also
 now allows gap insertions after deletions, and vice versa, inspired by the
-http://dx.doi.org/10.1101/031500 preprint from Flouri et al.
+https://doi.org/10.1101/031500 preprint from Flouri et al.
 
 The two sample graphical tools SeqGui (Sequence Graphical User Interface)
 and xbbtools were rewritten (SeqGui) or updated (xbbtools) using the tkinter
@@ -1499,7 +1538,7 @@ as a Python re-implementation of chi2 was added as the Bio.Phylo.PAML module.
 
 Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
 format offering basic annotation support. See Schmitt et al (2011) in
-Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
+Briefings in Bioinformatics, https://doi.org/10.1093/bib/bbr025
 
 Bio.SeqIO now includes read support for ABI files ("Sanger" capillary
 sequencing trace files, containing called sequence with PHRED qualities).

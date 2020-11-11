@@ -121,10 +121,13 @@ class DisorderedResidue(DisorderedEntityWrapper):
 
     def __repr__(self):
         """Return disordered residue full identifier."""
-        resname = self.get_resname()
-        hetflag, resseq, icode = self.get_id()
-        full_id = (resname, hetflag, resseq, icode)
-        return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
+        if self.child_dict:
+            resname = self.get_resname()
+            hetflag, resseq, icode = self.get_id()
+            full_id = (resname, hetflag, resseq, icode)
+            return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
+        else:
+            return "<Empty DisorderedResidue>"
 
     def add(self, atom):
         """Add atom to residue."""
@@ -161,3 +164,24 @@ class DisorderedResidue(DisorderedEntityWrapper):
         assert not self.disordered_has_id(resname)
         self[resname] = residue
         self.disordered_select(resname)
+
+    def disordered_remove(self, resname):
+        """Remove a child residue from the DisorderedResidue.
+
+        Arguments:
+         - resname - name of the child residue to remove, as a string.
+
+        """
+        # Get child residue
+        residue = self.child_dict[resname]
+        is_selected = self.selected_child is residue
+
+        # Detach
+        del self.child_dict[resname]
+        residue.detach_parent()
+
+        if is_selected and self.child_dict:  # pick another selected_child
+            child = next(iter(self.child_dict))
+            self.disordered_select(child)
+        elif not self.child_dict:  # no more children
+            self.selected_child = None

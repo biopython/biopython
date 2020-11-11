@@ -317,18 +317,12 @@ class MsfIterator(AlignmentIterator):
             )
 
         records = (
-            SeqRecord(
-                Seq(s, self.alphabet),
-                id=i,
-                name=i,
-                description=i,
-                annotations={"weight": w},
-            )
+            SeqRecord(Seq(s), id=i, name=i, description=i, annotations={"weight": w},)
             for (i, s, w) in zip(ids, seqs, weights)
         )
 
         # This will check alignment lengths are self-consistent:
-        align = MultipleSeqAlignment(records, self.alphabet)
+        align = MultipleSeqAlignment(records)
         # Check matches the header:
         if align.get_alignment_length() != aln_length:
             raise ValueError(

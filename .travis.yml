@@ -18,20 +18,27 @@ services:
   - mysql
   - postgresql
 language: python
-cache: pip
+cache:
+ - pip
+ - $HOME/.cache/pre-commit
 matrix:
   include:
     - stage: basics
       python: 3.7
-      env: TOXENV=style
+      env: SKIP=black
       services:
       addons:
         apt:
           packages:
-      before_install: echo "Going to run basic checks"
+      before_install: echo "Going to run style checks using pre-commit"
+      install:
+        - pip install pre-commit
+        - pre-commit install --install-hooks
+      script:
+        - pre-commit run -a
     - stage: basics
       python: 3.7
-      env: TOXENV=sdist,bdist_wheel
+      env: TOXENV=style,sdist,bdist_wheel
       services:
       addons:
         apt:

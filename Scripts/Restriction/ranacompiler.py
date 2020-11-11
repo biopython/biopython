@@ -283,7 +283,6 @@ class newenzyme:
                 "\n\tin this REBASE release."
                 "\n\tThe supplier is : %s." % (name, supp)
             )
-        return
 
 
 class TypeCompiler:
@@ -548,8 +547,7 @@ class DictionaryBuilder:
             exec(compile(open(new).read(), new, "exec"))
             print("\n\tThe new file seems ok. Proceeding with the installation.")
         except SyntaxError:
-            print("\n The new dictionary file is corrupted. Aborting the installation.")
-            return
+            sys.exit("ERROR: new dictionary file is corrupted. Aborting installation.")
         try:
             shutil.copyfile(new, old)
             print(
@@ -566,7 +564,6 @@ class DictionaryBuilder:
                 "\n\t %s ?\n\n" % os.path.split(old)[0]
             )
             return self.no_install()
-        return
 
     def no_install(self):
         """Build the new dictionary but do not install the dictionary."""
@@ -600,7 +597,6 @@ class DictionaryBuilder:
             "\n\t%s\n" % places
         )
         print("\n " + "*" * 78 + "\n")
-        return
 
     def lastrebasefile(self):
         """Check the emboss files are up to date and download them if not."""
@@ -614,9 +610,7 @@ class DictionaryBuilder:
         dircontent = os.listdir(os.getcwd())
         base = os.getcwd()  # added for biopython current directory
         for name in emboss_now:
-            if name in dircontent:
-                pass
-            else:
+            if name not in dircontent:
                 update_needed = True
 
         if not update_needed:
@@ -658,7 +652,6 @@ class DictionaryBuilder:
                         print(f"\nNo {name} file found. Upgrade is impossible.\n")
                         sys.exit()
                     continue
-                pass
         #
         #   now find the last file.
         #
@@ -999,7 +992,6 @@ class DictionaryBuilder:
             #
             t = i.strip().split(" ", 1)
             suppliersdict[t[0]] = (t[1], [])
-        return
 
 
 def standalone():

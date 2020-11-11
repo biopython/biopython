@@ -262,19 +262,13 @@ class MMCIF2dictTests(unittest.TestCase):
 
     def test_token_after_multiline(self):
         """Multi-line string followed by token on the same line."""
-        stream = io.StringIO("data_test _key1\n"
-                             ";foo bar\n"
-                             "; _key2 'value 2'\n")
+        stream = io.StringIO("data_test _key1\n;foo bar\n; _key2 'value 2'\n")
         mmcif_dict = MMCIF2Dict(stream)
-        self.assertEqual(mmcif_dict, {
-            "data_": "test",
-            "_key1": ["foo bar"],
-            "_key2": ["value 2"],
-        })
+        self.assertEqual(
+            mmcif_dict, {"data_": "test", "_key1": ["foo bar"], "_key2": ["value 2"]}
+        )
 
-        stream = io.StringIO("data_test _key1\n"
-                             ";foo bar\n"
-                             ";# missing space here")
+        stream = io.StringIO("data_test _key1\n;foo bar\n;# missing space here")
         with self.assertRaisesRegex(ValueError, "Missing whitespace"):
             mmcif_dict = MMCIF2Dict(stream)
 

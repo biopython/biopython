@@ -80,14 +80,14 @@ class QueryResultCases(unittest.TestCase):
     def test_init_none(self):
         """Test QueryResult.__init__, no arguments."""
         qresult = QueryResult()
-        self.assertEqual(None, qresult.id)
-        self.assertEqual(None, qresult.description)
+        self.assertIsNone(qresult.id)
+        self.assertIsNone(qresult.description)
 
     def test_init_id_only(self):
         """Test QueryResult.__init__, with ID only."""
         qresult = QueryResult(id="query1")
         self.assertEqual("query1", qresult.id)
-        self.assertEqual(None, qresult.description)
+        self.assertIsNone(qresult.description)
 
     def test_init_hits_only(self):
         """Test QueryResult.__init__, with hits only."""
@@ -260,8 +260,8 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.__setitem__, from empty container."""
         qresult = QueryResult()
         # initial desc and id is None
-        self.assertEqual(None, qresult.id)
-        self.assertEqual(None, qresult.description)
+        self.assertIsNone(qresult.id)
+        self.assertIsNone(qresult.description)
         # but changes to the first item's after append
         qresult.append(hit11)
         self.assertEqual("query1", qresult.id)
@@ -393,12 +393,12 @@ class QueryResultCases(unittest.TestCase):
         # test initial condition
         for hit in qresult:
             for hsp in hit.hsps:
-                self.assertTrue(getattr(hsp, "query") is None)
+                self.assertIsNone(getattr(hsp, "query"))
         qresult.description = "unicorn hox homolog"
         # test after setting
         for hit in qresult:
             for hsp in hit.hsps:
-                self.assertTrue(getattr(hsp, "query") is None)
+                self.assertIsNone(getattr(hsp, "query"))
 
     def test_id_set(self):
         """Test QueryResult.id setter."""
@@ -766,18 +766,18 @@ class HitCases(unittest.TestCase):
     def test_init_none(self):
         """Test Hit.__init__, no arguments."""
         hit = Hit()
-        self.assertEqual(None, hit.id)
-        self.assertEqual(None, hit.description)
-        self.assertEqual(None, hit.query_id)
-        self.assertEqual(None, hit.query_description)
+        self.assertIsNone(hit.id)
+        self.assertIsNone(hit.description)
+        self.assertIsNone(hit.query_id)
+        self.assertIsNone(hit.query_description)
 
     def test_init_id_only(self):
         """Test Hit.__init__, with ID only."""
         hit = Hit(id="hit1")
         self.assertEqual("hit1", hit.id)
-        self.assertEqual(None, hit.description)
-        self.assertEqual(None, hit.query_id)
-        self.assertEqual(None, hit.query_description)
+        self.assertIsNone(hit.description)
+        self.assertIsNone(hit.query_id)
+        self.assertIsNone(hit.query_description)
 
     def test_init_hsps_only(self):
         """Test Hit.__init__, with hsps only."""
@@ -865,7 +865,7 @@ class HitCases(unittest.TestCase):
         # validation should pass if item is an hsp object with matching
         # query and hit ids
         # if validation passes, None is returned
-        self.assertEqual(None, self.hit._validate_hsp(hsp114))
+        self.assertIsNone(self.hit._validate_hsp(hsp114))
 
     def test_validate_hsp_wrong_type(self):
         """Test Hit._validate_hsp, wrong type."""
@@ -977,7 +977,7 @@ class HitCases(unittest.TestCase):
         # when the filter filters out all hits, it should return None
         filter_func = lambda hsp: len(hsp[0]) > 50  # noqa: E731
         filtered = self.hit.filter(filter_func)
-        self.assertTrue(filtered is None)
+        self.assertIsNone(filtered)
 
     def test_index(self):
         """Test Hit.index."""
@@ -1074,7 +1074,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
 
     def test_fragment(self):
         """Test HSP.fragment property."""
-        self.assertTrue(self.frag is self.hsp.fragment)
+        self.assertIs(self.frag, self.hsp.fragment)
 
     def test_is_fragmented(self):
         """Test HSP.is_fragmented property."""
@@ -1146,16 +1146,16 @@ class HSPMultipleFragmentCases(unittest.TestCase):
 
     def test_getitem(self):
         """Test HSP.__getitem__."""
-        self.assertTrue(self.frag1 is self.hsp[0])
-        self.assertTrue(self.frag2 is self.hsp[1])
+        self.assertIs(self.frag1, self.hsp[0])
+        self.assertIs(self.frag2, self.hsp[1])
 
     def test_setitem_single(self):
         """Test HSP.__setitem___, single item."""
         frag3 = HSPFragment("hit_id", "query_id", "AAA", "AAT")
         self.hsp[1] = frag3
         self.assertEqual(2, len(self.hsp))
-        self.assertTrue(self.frag1 is self.hsp[0])
-        self.assertTrue(frag3 is self.hsp[1])
+        self.assertIs(self.frag1, self.hsp[0])
+        self.assertIs(frag3, self.hsp[1])
 
     def test_setitem_multiple(self):
         """Test HSP.__setitem__, multiple items."""
@@ -1163,14 +1163,14 @@ class HSPMultipleFragmentCases(unittest.TestCase):
         frag4 = HSPFragment("hit_id", "query_id", "GGG", "GAG")
         self.hsp[:2] = [frag3, frag4]
         self.assertEqual(2, len(self.hsp))
-        self.assertTrue(frag3 is self.hsp[0])
-        self.assertTrue(frag4 is self.hsp[1])
+        self.assertIs(frag3, self.hsp[0])
+        self.assertIs(frag4, self.hsp[1])
 
     def test_delitem(self):
         """Test HSP.__delitem__."""
         del self.hsp[0]
         self.assertEqual(1, len(self.hsp))
-        self.assertTrue(self.frag2 is self.hsp[0])
+        self.assertIs(self.frag2, self.hsp[0])
 
     def test_contains(self):
         """Test HSP.__contains__."""
@@ -1219,19 +1219,19 @@ class HSPMultipleFragmentCases(unittest.TestCase):
 
     def test_molecule_type(self):
         """Test HSP.molecule_type getter."""
-        self.assertTrue(self.hsp.molecule_type is None)
+        self.assertIsNone(self.hsp.molecule_type)
 
     def test_molecule_type_set(self):
         """Test HSP.molecule_type setter."""
         # test initial values
-        self.assertTrue(self.hsp.molecule_type is None)
+        self.assertIsNone(self.hsp.molecule_type)
         for frag in self.hsp.fragments:
-            self.assertTrue(frag.molecule_type is None)
+            self.assertIsNone(frag.molecule_type)
         self.hsp.molecule_type = "DNA"
         # test values after setting
-        self.assertTrue(self.hsp.molecule_type == "DNA")
+        self.assertEqual(self.hsp.molecule_type, "DNA")
         for frag in self.hsp.fragments:
-            self.assertTrue(frag.molecule_type == "DNA")
+            self.assertEqual(frag.molecule_type, "DNA")
 
     def test_range(self):
         """Test HSP range properties."""
@@ -1272,20 +1272,20 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         """Test HSPFragment.__init__ attributes."""
         fragment = HSPFragment("hit_id", "query_id")
         for seq_type in ("query", "hit"):
-            self.assertTrue(getattr(fragment, seq_type) is None)
+            self.assertIsNone(getattr(fragment, seq_type))
             for attr in ("strand", "frame", "start", "end"):
                 attr_name = "%s_%s" % (seq_type, attr)
-                self.assertTrue(getattr(fragment, attr_name) is None)
-        self.assertTrue(fragment.aln is None)
-        self.assertTrue(fragment.molecule_type is None)
+                self.assertIsNone(getattr(fragment, attr_name))
+        self.assertIsNone(fragment.aln)
+        self.assertIsNone(fragment.molecule_type)
         self.assertEqual(fragment.aln_annotation, {})
 
     def test_seqmodel(self):
         """Test HSPFragment sequence attributes, no alignments."""
         # all query, hit, and alignment objects should be None
-        self.assertTrue(self.fragment.query is None)
-        self.assertTrue(self.fragment.hit is None)
-        self.assertTrue(self.fragment.aln is None)
+        self.assertIsNone(self.fragment.query)
+        self.assertIsNone(self.fragment.hit)
+        self.assertIsNone(self.fragment.aln)
 
     def test_len(self):
         """Test HSPFragment.__len__, no alignments."""
@@ -1368,12 +1368,12 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertIsInstance(self.fragment.hit, SeqRecord)
         self.assertEqual("<unknown description>", self.fragment.hit.description)
         self.assertEqual("aligned hit sequence", self.fragment.hit.name)
-        self.assertEqual(None, self.fragment.hit.annotations["molecule_type"])
+        self.assertIsNone(self.fragment.hit.annotations["molecule_type"])
         # check query
         self.assertIsInstance(self.fragment.query, SeqRecord)
         self.assertEqual("<unknown description>", self.fragment.query.description)
         self.assertEqual("aligned query sequence", self.fragment.query.name)
-        self.assertEqual(None, self.fragment.query.annotations["molecule_type"])
+        self.assertIsNone(self.fragment.query.annotations["molecule_type"])
         # check alignment
         self.assertIsInstance(self.fragment.aln, MultipleSeqAlignment)
         with self.assertRaises(AttributeError):
@@ -1381,19 +1381,19 @@ class HSPFragmentCases(unittest.TestCase):
 
     def test_molecule_type_no_seq(self):
         """Test HSPFragment molecule_type property, query and hit sequences not present."""
-        self.assertTrue(self.fragment.molecule_type is None)
+        self.assertIsNone(self.fragment.molecule_type)
         self.fragment.molecule_type = "DNA"
-        self.assertTrue(self.fragment.molecule_type == "DNA")
+        self.assertEqual(self.fragment.molecule_type, "DNA")
 
     def test_molecule_type_with_seq(self):
         """Test HSPFragment molecule_type property, query or hit sequences present."""
-        self.assertTrue(self.fragment.molecule_type is None)
+        self.assertIsNone(self.fragment.molecule_type)
         self.fragment._hit = SeqRecord(Seq("AAA"))
         self.fragment._query = SeqRecord(Seq("AAA"))
         self.fragment.molecule_type = "DNA"
-        self.assertTrue(self.fragment.molecule_type == "DNA")
-        self.assertTrue(self.fragment.hit.annotations["molecule_type"] == "DNA")
-        self.assertTrue(self.fragment.query.annotations["molecule_type"] == "DNA")
+        self.assertEqual(self.fragment.molecule_type, "DNA")
+        self.assertEqual(self.fragment.hit.annotations["molecule_type"], "DNA")
+        self.assertEqual(self.fragment.query.annotations["molecule_type"], "DNA")
 
     def test_seq_unequal_hit_query_len(self):
         """Test HSPFragment sequence setter with unequal hit and query lengths."""
@@ -1439,14 +1439,14 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertEqual(1000, getattr(self.fragment, "attr_original"))
         self.assertEqual("yeah", getattr(self.fragment, "hit_description"))
         self.assertEqual(1, getattr(self.fragment, "hit_strand"))
-        self.assertEqual(None, getattr(self.fragment, "query_frame"))
+        self.assertIsNone(getattr(self.fragment, "query_frame"))
         new_hsp = self.fragment[:5]
         # test values after slicing
         self.assertFalse(hasattr(new_hsp, "attr_original"))
         self.assertEqual(1000, getattr(self.fragment, "attr_original"))
         self.assertEqual("yeah", getattr(self.fragment, "hit_description"))
         self.assertEqual(1, getattr(self.fragment, "hit_strand"))
-        self.assertEqual(None, getattr(self.fragment, "query_frame"))
+        self.assertIsNone(getattr(self.fragment, "query_frame"))
 
     def test_getitem_alignment_annot(self):
         """Test HSPFragment.__getitem__, with alignment annotation."""
@@ -1463,15 +1463,15 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertEqual("<unknown id>", fragment.query_id)
         self.assertEqual("<unknown description>", fragment.hit_description)
         self.assertEqual("<unknown description>", fragment.query_description)
-        self.assertEqual(None, fragment.hit)
-        self.assertEqual(None, fragment.query)
-        self.assertEqual(None, fragment.aln)
+        self.assertIsNone(fragment.hit)
+        self.assertIsNone(fragment.query)
+        self.assertIsNone(fragment.aln)
         self.assertEqual([], fragment.hit_features)
         self.assertEqual([], fragment.query_features)
-        self.assertEqual(None, fragment.hit_strand)
-        self.assertEqual(None, fragment.query_strand)
-        self.assertEqual(None, fragment.hit_frame)
-        self.assertEqual(None, fragment.query_frame)
+        self.assertIsNone(fragment.hit_strand)
+        self.assertIsNone(fragment.query_strand)
+        self.assertIsNone(fragment.hit_frame)
+        self.assertIsNone(fragment.query_frame)
 
     def test_id_desc_set(self):
         """Test HSPFragment query and hit id and description setters."""
@@ -1530,7 +1530,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit strand getters, from plus frame."""
         for seq_type in ("query", "hit"):
             attr_name = "%s_strand" % seq_type
-            self.assertTrue(getattr(self.fragment, attr_name) is None)
+            self.assertIsNone(getattr(self.fragment, attr_name))
             setattr(self.fragment, "%s_frame" % seq_type, 3)
             self.assertEqual(1, getattr(self.fragment, attr_name))
 
@@ -1538,7 +1538,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit strand getters, from minus frame."""
         for seq_type in ("query", "hit"):
             attr_name = "%s_strand" % seq_type
-            self.assertTrue(getattr(self.fragment, attr_name) is None)
+            self.assertIsNone(getattr(self.fragment, attr_name))
             setattr(self.fragment, "%s_frame" % seq_type, -2)
             self.assertEqual(-1, getattr(self.fragment, attr_name))
 
@@ -1546,7 +1546,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment query and hit strand getters, from zero frame."""
         for seq_type in ("query", "hit"):
             attr_name = "%s_strand" % seq_type
-            self.assertTrue(getattr(self.fragment, attr_name) is None)
+            self.assertIsNone(getattr(self.fragment, attr_name))
             setattr(self.fragment, "%s_frame" % seq_type, 0)
             self.assertEqual(0, getattr(self.fragment, attr_name))
 

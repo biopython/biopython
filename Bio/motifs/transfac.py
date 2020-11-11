@@ -272,7 +272,7 @@ XX
                     lines.append(line)
                     for i in range(length):
                         line = (
-                            " ".join(["%02.d"] + ["%6.20g" for l in letters])
+                            " ".join(["%02.d"] + ["%6.20g" for _ in letters])
                             + "      %s"
                         )
                         line = line % tuple(

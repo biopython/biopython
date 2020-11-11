@@ -1194,21 +1194,21 @@ class SeqRecord:
         >>> print("%s %s" % (rc.id, rc.seq))
         Test ACGA
         """
-        from Bio.Seq import MutableSeq  # Lazy to avoid circular imports
+        from Bio.Seq import Seq, MutableSeq  # Lazy to avoid circular imports
 
         if "protein" in self.annotations.get("molecule_type", ""):
             raise ValueError("Proteins do not have complements!")
         if "RNA" in self.annotations.get("molecule_type", ""):
             if isinstance(self.seq, MutableSeq):
                 # Does not currently have reverse_complement_rna method:
-                answer = SeqRecord(self.seq.toseq().reverse_complement_rna())
+                answer = SeqRecord(Seq(self.seq).reverse_complement_rna())
             else:
                 answer = SeqRecord(self.seq.reverse_complement_rna())
         else:
             # Default to DNA
             if isinstance(self.seq, MutableSeq):
                 # Currently the MutableSeq reverse complement is in situ
-                answer = SeqRecord(self.seq.toseq().reverse_complement())
+                answer = SeqRecord(Seq(self.seq).reverse_complement())
             else:
                 answer = SeqRecord(self.seq.reverse_complement())
         if isinstance(id, str):

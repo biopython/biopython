@@ -359,7 +359,6 @@ def write_PIC(entity, file, pdbid=None, chainid=None):
                     chainid = entity.id
                 for res in entity:
                     write_PIC(res, fp, pdbid, chainid)
-                    pass
             elif "M" == entity.level:
                 for chn in entity:
                     write_PIC(chn, fp, pdbid, chainid)

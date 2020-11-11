@@ -1,4 +1,4 @@
-# Copyright 2006-2017 by Peter Cock.  All rights reserved.
+# Copyright 2006-2017,2020 by Peter Cock.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -15,7 +15,6 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 
 
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator, SequenceWriter
@@ -138,12 +137,12 @@ def FastaTwoLineParser(handle):
 class FastaIterator(SequenceIterator):
     """Parser for Fasta files."""
 
-    def __init__(self, source, alphabet=single_letter_alphabet, title2ids=None):
+    def __init__(self, source, alphabet=None, title2ids=None):
         """Iterate over Fasta records as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
-         - alphabet - optional alphabet
+         - alphabet - optional alphabet, not used. Leave as None.
          - title2ids - A function that, when given the title of the FASTA
            file (without the beginning >), will return the id, name and
            description (in that order) for the record as a tuple of strings.
@@ -178,8 +177,10 @@ class FastaIterator(SequenceIterator):
         DELTA
 
         """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         self.title2ids = title2ids
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="Fasta")
+        super().__init__(source, mode="t", fmt="Fasta")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -188,14 +189,11 @@ class FastaIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
         title2ids = self.title2ids
         if title2ids:
             for title, sequence in SimpleFastaParser(handle):
                 id, name, descr = title2ids(title)
-                yield SeqRecord(
-                    Seq(sequence, alphabet), id=id, name=name, description=descr
-                )
+                yield SeqRecord(Seq(sequence), id=id, name=name, description=descr)
         else:
             for title, sequence in SimpleFastaParser(handle):
                 try:
@@ -205,22 +203,18 @@ class FastaIterator(SequenceIterator):
                     # Should we use SeqRecord default for no ID?
                     first_word = ""
                 yield SeqRecord(
-                    Seq(sequence, alphabet),
-                    id=first_word,
-                    name=first_word,
-                    description=title,
+                    Seq(sequence), id=first_word, name=first_word, description=title,
                 )
 
 
 class FastaTwoLineIterator(SequenceIterator):
     """Parser for Fasta files with exactly two lines per record."""
 
-    def __init__(self, source, alphabet=single_letter_alphabet):
+    def __init__(self, source):
         """Iterate over two-line Fasta records (as SeqRecord objects).
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
-         - alphabet - optional alphabet
 
         This uses a strict interpretation of the FASTA as requiring
         exactly two lines per record (no line wrapping).
@@ -228,7 +222,7 @@ class FastaTwoLineIterator(SequenceIterator):
         Only the default title to ID/name/description parsing offered
         by the relaxed FASTA parser is offered.
         """
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="FASTA")
+        super().__init__(source, mode="t", fmt="FASTA")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -237,7 +231,6 @@ class FastaTwoLineIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
         for title, sequence in FastaTwoLineParser(handle):
             try:
                 first_word = title.split(None, 1)[0]
@@ -246,10 +239,7 @@ class FastaTwoLineIterator(SequenceIterator):
                 # Should we use SeqRecord default for no ID?
                 first_word = ""
             yield SeqRecord(
-                Seq(sequence, alphabet),
-                id=first_word,
-                name=first_word,
-                description=title,
+                Seq(sequence), id=first_word, name=first_word, description=title,
             )
 
 

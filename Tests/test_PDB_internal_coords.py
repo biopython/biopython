@@ -146,9 +146,9 @@ class Rebuild(unittest.TestCase):
         self.assertEqual(tcount, ttcount)
         self.assertEqual(c1count, c1tcount)
         self.assertEqual(psicount, psitcount)
-        self.assertTrue(ttcount > 0)
-        self.assertTrue(c1count > 0)
-        self.assertTrue(psicount > 0)
+        self.assertGreater(ttcount, 0)
+        self.assertGreater(c1count, 0)
+        self.assertGreater(psicount, 0)
 
     def test_write_SCAD(self):
         """Check SCAD output plus MaxPeptideBond and Gly CB.

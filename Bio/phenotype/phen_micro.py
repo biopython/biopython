@@ -1107,7 +1107,7 @@ def CsvIterator(handle):
                 continue
             qualifiers[_csvData][_position] = line[1].strip()
 
-        elif _other in line[0].strip():
+        elif _setupTime in line[0].strip():
             if plate is None:
                 continue
             qualifiers[_csvData][_setupTime] = line[1].strip()

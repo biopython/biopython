@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.
+# Copyright 2006-2013,2020 by Peter Cock.
 # Revisions copyright 2008-2009 by Michiel de Hoon.
 # All rights reserved.
 #
@@ -16,9 +16,8 @@ See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
 """
 
 
-from Bio import Seq
-from Bio import SeqRecord
-from Bio import Alphabet
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio import SeqFeature
 from Bio import SwissProt
 
@@ -78,15 +77,13 @@ def SwissIterator(source):
 
     for swiss_record in swiss_records:
         # Convert the SwissProt record to a SeqRecord
-        seq = Seq.Seq(swiss_record.sequence, Alphabet.generic_protein)
-        record = SeqRecord.SeqRecord(
-            seq,
+        record = SeqRecord(
+            Seq(swiss_record.sequence),
             id=swiss_record.accessions[0],
             name=swiss_record.entry_name,
             description=swiss_record.description,
             features=swiss_record.features,
         )
-        record.description = swiss_record.description
         for cross_reference in swiss_record.cross_references:
             if len(cross_reference) < 2:
                 continue

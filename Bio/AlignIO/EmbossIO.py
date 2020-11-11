@@ -100,7 +100,7 @@ class EmbossIterator(AlignmentIterator):
                 % (number_of_seqs, self.records_per_alignment)
             )
 
-        seqs = ["" for id in ids]
+        seqs = [""] * len(ids)
         seq_starts = []
         index = 0
 
@@ -217,5 +217,5 @@ class EmbossIterator(AlignmentIterator):
                     "different length? You could be using an "
                     "old version of EMBOSS."
                 )
-            records.append(SeqRecord(Seq(seq, self.alphabet), id=id, description=id))
-        return MultipleSeqAlignment(records, self.alphabet, annotations=header_dict)
+            records.append(SeqRecord(Seq(seq), id=id, description=id))
+        return MultipleSeqAlignment(records, annotations=header_dict)

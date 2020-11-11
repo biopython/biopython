@@ -6,11 +6,14 @@
 
 try:
     import numpy
+
     del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
+
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.Align.substitution_matrices.") from None
+        "Install NumPy if you want to use Bio.Align.substitution_matrices."
+    ) from None
 
 
 import os
@@ -22,28 +25,35 @@ import numpy
 from Bio import SeqIO
 
 from Bio.Data import IUPACData
+
 nucleotide_alphabet = IUPACData.unambiguous_dna_letters
 protein_alphabet = IUPACData.protein_letters
 
 
 class Test_basics(unittest.TestCase):
-
     def test_basics_vector(self):
         from Bio.Align import substitution_matrices
+
         counts = substitution_matrices.Array("XYZ")
-        self.assertEqual(str(counts), """\
+        self.assertEqual(
+            str(counts),
+            """\
 X 0.0
 Y 0.0
 Z 0.0
-""")
+""",
+        )
         self.assertEqual(counts.alphabet, "XYZ")
         counts["X"] = -9
         counts[2] = 5.5
-        self.assertEqual(str(counts), """\
+        self.assertEqual(
+            str(counts),
+            """\
 X -9.0
 Y  0.0
 Z  5.5
-""")
+""",
+        )
         self.assertAlmostEqual(counts[0], -9)
         with self.assertRaises(IndexError):
             counts["U"]
@@ -54,40 +64,54 @@ Z  5.5
 
     def test_basics_matrix(self):
         from Bio.Align import substitution_matrices
+
         counts = substitution_matrices.Array("XYZ", dims=2)
-        self.assertEqual(str(counts), """\
+        self.assertEqual(
+            str(counts),
+            """\
     X   Y   Z
 X 0.0 0.0 0.0
 Y 0.0 0.0 0.0
 Z 0.0 0.0 0.0
-""")
+""",
+        )
         counts["X", "Z"] = 12.0
         counts[2, 1] = 3.0
         counts["Y", 0] = -2.0
         counts[0, "Y"] = 5.0
-        self.assertEqual(str(counts), """\
+        self.assertEqual(
+            str(counts),
+            """\
      X   Y    Z
 X  0.0 5.0 12.0
 Y -2.0 0.0  0.0
 Z  0.0 3.0  0.0
-""")
+""",
+        )
         with self.assertRaises(IndexError):
             counts["U", 1]
         with self.assertRaises(IndexError):
             counts["X", 5]
-        self.assertEqual(str(counts["Y"]), """\
+        self.assertEqual(
+            str(counts["Y"]),
+            """\
 X -2.0
 Y  0.0
 Z  0.0
-""")
-        self.assertEqual(str(counts[:, "Z"]), """\
+""",
+        )
+        self.assertEqual(
+            str(counts[:, "Z"]),
+            """\
 X 12.0
 Y  0.0
 Z  0.0
-""")
+""",
+        )
 
     def test_read_write(self):
         from Bio.Align import substitution_matrices
+
         path = os.path.join("Align", "hg38.chrom.sizes")
         sizes = substitution_matrices.read(path, numpy.int64)
         # Note that sum(sizes) below is larger than 2147483647, and won't
@@ -109,6 +133,7 @@ Z  0.0
 
     def test_nucleotide_freq(self):
         from Bio.Align import substitution_matrices
+
         counts = Counter()
         path = os.path.join("Align", "ecoli.fa")
         records = SeqIO.parse(path, "fasta")
@@ -120,7 +145,7 @@ Z  0.0
         path = os.path.join("Align", "ecoli.txt")
         frequencies = substitution_matrices.read(path)
         self.assertEqual(frequencies.alphabet, nucleotide_alphabet)
-        self.assertEqual(frequencies.shape, (len(nucleotide_alphabet), ))
+        self.assertEqual(frequencies.shape, (len(nucleotide_alphabet),))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
@@ -145,7 +170,7 @@ Z  0.0
         path = os.path.join("Align", "bsubtilis.txt")
         frequencies = substitution_matrices.read(path)
         self.assertEqual(frequencies.alphabet, nucleotide_alphabet)
-        self.assertEqual(frequencies.shape, (len(nucleotide_alphabet), ))
+        self.assertEqual(frequencies.shape, (len(nucleotide_alphabet),))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
@@ -162,6 +187,7 @@ Z  0.0
 
     def test_protein_freq(self):
         from Bio.Align import substitution_matrices
+
         counts = Counter()
         path = os.path.join("Align", "cow.fa")
         records = SeqIO.parse(path, "fasta")
@@ -173,7 +199,7 @@ Z  0.0
         path = os.path.join("Align", "cow.txt")
         frequencies = substitution_matrices.read(path)
         self.assertEqual(frequencies.alphabet, protein_alphabet)
-        self.assertEqual(frequencies.shape, (len(protein_alphabet), ))
+        self.assertEqual(frequencies.shape, (len(protein_alphabet),))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
@@ -214,7 +240,7 @@ Z  0.0
         path = os.path.join("Align", "pig.txt")
         frequencies = substitution_matrices.read(path)
         self.assertEqual(frequencies.alphabet, protein_alphabet)
-        self.assertEqual(frequencies.shape, (len(protein_alphabet), ))
+        self.assertEqual(frequencies.shape, (len(protein_alphabet),))
         for letter in letters:
             self.assertAlmostEqual(frequencies[letter], counts[letter])
         with open(path) as handle:
@@ -247,7 +273,6 @@ Z  0.0
 
 
 class TestScoringMatrices(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
 
@@ -2358,12 +2383,13 @@ class TestScoringMatrices(unittest.TestCase):
         # 10915-10919 (1992).
         from Bio.Data.IUPACData import protein_letters as alphabet
         from Bio.Align import substitution_matrices
+
         m = substitution_matrices.load("BLOSUM62")
         self.assertEqual(alphabet, "ACDEFGHIKLMNPQRSTVWY")
         match_score = round(numpy.mean([m[c, c] for c in alphabet]))
-        mismatch_score = round(numpy.mean([m[c1, c2]
-                               for c1 in alphabet for c2 in alphabet
-                               if c1 != c2]))
+        mismatch_score = round(
+            numpy.mean([m[c1, c2] for c1 in alphabet for c2 in alphabet if c1 != c2])
+        )
         self.assertAlmostEqual(match_score, 6.0)
         self.assertAlmostEqual(mismatch_score, -1.0)
 

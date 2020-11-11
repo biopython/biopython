@@ -64,7 +64,14 @@ class AppTest(unittest.TestCase):
         """Test Nm estimation."""
         ctrl = GenePopController()
         path = os.path.join("PopGen", "big.gen")
-        mean_sample_size, mean_priv_alleles, mig10, mig25, mig50, mig_corrected = ctrl.estimate_nm(path)
+        (
+            mean_sample_size,
+            mean_priv_alleles,
+            mig10,
+            mig25,
+            mig50,
+            mig_corrected,
+        ) = ctrl.estimate_nm(path)
         self.assertAlmostEqual(mean_sample_size, 28.0)
         self.assertAlmostEqual(mean_priv_alleles, 0.016129)
         self.assertAlmostEqual(mig10, 52.5578)

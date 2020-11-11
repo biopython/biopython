@@ -234,7 +234,6 @@ http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 import struct
 import re
 
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import StreamModeError
@@ -309,7 +308,7 @@ def _sff_file_header(handle):
             flowgram_format,
         ) = struct.unpack(fmt, data)
     except TypeError:
-        raise StreamModeError("SFF files must be opened in binary mode.")
+        raise StreamModeError("SFF files must be opened in binary mode.") from None
     if magic_number in [_hsh, _srt, _mft]:
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
@@ -466,7 +465,7 @@ def _sff_find_roche_index(handle):
         key_sequence,
     ) = _sff_file_header(handle)
     assert handle.tell() == header_length
-    if not index_offset or not index_offset:
+    if not index_offset or not index_length:
         raise ValueError("No index present in this SFF file")
     # Now jump to the header...
     handle.seek(index_offset)
@@ -642,7 +641,7 @@ _valid_UAN_read_name = re.compile(r"^[a-zA-Z0-9]{14}$")
 
 
 def _sff_read_seq_record(
-    handle, number_of_flows_per_read, flow_chars, key_sequence, alphabet, trim=False
+    handle, number_of_flows_per_read, flow_chars, key_sequence, trim=False
 ):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
     # Now on to the reads...
@@ -774,7 +773,7 @@ def _sff_read_seq_record(
         annotations["coords"] = _get_read_xy(name)
     annotations["molecule_type"] = "DNA"
     record = SeqRecord(
-        Seq(seq, alphabet), id=name, name=name, description="", annotations=annotations
+        Seq(seq), id=name, name=name, description="", annotations=annotations
     )
     # Dirty trick to speed up this line:
     # record.letter_annotations["phred_quality"] = quals
@@ -919,12 +918,12 @@ class _AddTellHandle:
 class SffIterator(SequenceIterator):
     """Parser for Standard Flowgram Format (SFF) files."""
 
-    def __init__(self, source, alphabet=Alphabet.generic_dna, trim=False):
+    def __init__(self, source, alphabet=None, trim=False):
         """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
             - source - path to an SFF file, e.g. from Roche 454 sequencing,
               or a file-like object opened in binary mode.
-            - alphabet - optional alphabet, defaults to generic DNA.
+            - alphabet - optional alphabet, unused. Leave as None.
             - trim - should the sequences be trimmed?
 
         The resulting SeqRecord objects should match those from a paired FASTA
@@ -984,7 +983,9 @@ class SffIterator(SequenceIterator):
         E3MFGYR02F7Z7G 130
 
         """
-        super().__init__(source, alphabet=alphabet, mode="b", fmt="SFF")
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, mode="b", fmt="SFF")
         self.trim = trim
 
     def parse(self, handle):
@@ -1000,11 +1001,6 @@ class SffIterator(SequenceIterator):
 
     def iterate(self, handle):
         """Parse the file and generate SeqRecord objects."""
-        alphabet = self.alphabet
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.ProteinAlphabet):
-            raise ValueError("Invalid alphabet, SFF files do not hold proteins.")
-        if isinstance(Alphabet._get_base_alphabet(alphabet), Alphabet.RNAAlphabet):
-            raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
         trim = self.trim
         (
             header_length,
@@ -1047,12 +1043,7 @@ class SffIterator(SequenceIterator):
                 # the index_offset so we can skip extra handle.tell() calls:
                 index_offset = 0
             yield _sff_read_seq_record(
-                handle,
-                number_of_flows_per_read,
-                flow_chars,
-                key_sequence,
-                alphabet,
-                trim,
+                handle, number_of_flows_per_read, flow_chars, key_sequence, trim,
             )
         _check_eof(handle, index_offset, index_length)
 
@@ -1139,8 +1130,8 @@ def _check_eof(handle, index_offset, index_length):
 class _SffTrimIterator(SffIterator):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
 
-    def __init__(self, source, alphabet=Alphabet.generic_dna):
-        super().__init__(source, alphabet=alphabet, trim=True)
+    def __init__(self, source):
+        super().__init__(source, trim=True)
 
 
 class SffWriter(SequenceWriter):
@@ -1175,7 +1166,7 @@ class SffWriter(SequenceWriter):
                     "A handle with a seek/tell methods is required in order "
                     "to record the total record count in the file header "
                     "(once it is known at the end)."
-                )
+                ) from None
         if self._index is not None and not (
             hasattr(self.handle, "seek") and hasattr(self.handle, "tell")
         ):
@@ -1206,7 +1197,7 @@ class SffWriter(SequenceWriter):
             self._flow_chars = record.annotations["flow_chars"].encode()
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
-            raise ValueError("Missing SFF flow information")
+            raise ValueError("Missing SFF flow information") from None
         self.write_header()
         self.write_record(record)
         count = 1
@@ -1375,7 +1366,9 @@ class SffWriter(SequenceWriter):
         try:
             quals = record.letter_annotations["phred_quality"]
         except KeyError:
-            raise ValueError("Missing PHRED qualities information for %s" % record.id)
+            raise ValueError(
+                "Missing PHRED qualities information for %s" % record.id
+            ) from None
         # Flow
         try:
             flow_values = record.annotations["flow_values"]
@@ -1386,9 +1379,11 @@ class SffWriter(SequenceWriter):
             ):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
-            raise ValueError("Missing SFF flow information for %s" % record.id)
+            raise ValueError(
+                "Missing SFF flow information for %s" % record.id
+            ) from None
         except AttributeError:
-            raise ValueError("Header not written yet?")
+            raise ValueError("Header not written yet?") from None
         # Clipping
         try:
             clip_qual_left = record.annotations["clip_qual_left"]
@@ -1414,7 +1409,9 @@ class SffWriter(SequenceWriter):
                     "Negative SFF clip_adapter_right value for %s" % record.id
                 )
         except KeyError:
-            raise ValueError("Missing SFF clipping information for %s" % record.id)
+            raise ValueError(
+                "Missing SFF clipping information for %s" % record.id
+            ) from None
 
         # Capture information for index
         if self._index is not None:

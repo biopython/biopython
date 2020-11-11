@@ -102,12 +102,20 @@ implemented in the respective modules.
 
 Bio.Alphabet
 ------------
-Declared obsolete in Biopython 1.74, please avoid using this module
-explicitly in your code.
+Declared obsolete in Biopython release 1.74, and removed from Biopython in
+release 1.78. This module defined an ``Alphabet`` class and various subclasses,
+which were used as attributes to ``Seq`` and objects to describe how the
+individual characters in the sequence string should be interpreted. For
+example, a string "AGTACACTGGT" could be a DNA sequence or a protein sequence
+that happens to be rich in Alanines, Glycines, Cysteines and Threonines.
+However, as the exact definition of the alphabet and its purpose remained
+unclear, this class was removed from Biopython.
+Starting with Biopython 1.78, the molecule type, if specified in the input
+file, is stored by the ``SeqIO`` parser as ``molecule_type`` in the annotations
+of each ``SeqRecord``. We urge users to use this attribute with caution, as the
+molecule type means different things in different sequence file formats, and in
+a sense the interpretation of ``molecule_type`` can still be ambiguous.
 
-The design of Bio.Aphabet included a number of historic design choices
-which, with the benefit of hindsight, were regretable. While the details
-remain to be agreed, we intend to remove or replace Bio.Alphabet in 2020.
 
 Bio.ExPASy.sprot_search_ful and ExPASy.sprot_search_de
 ------------------------------------------------------
@@ -172,6 +180,12 @@ Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 Deprecated in release 1.64, and removed in release 1.73.
 You should now use str(Bio.Seq.Seq) or str(Bio.Seq.MutableSeq) instead of
 the tostring() methods.
+
+Bio.Seq.Seq.tomutable() and Bio.Seq.MutableSeq.toseq()
+------------------------------------------------------
+Deprecated in release 1.79.
+Instead of myseq.tomutable() or mymutableseq.toseq(), you should now use
+Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
 
 Iterator .next() methods
 ------------------------
@@ -419,13 +433,15 @@ Numeric support
 Following the Release of 1.48, Numeric support in Biopython is discontinued.
 Please move to NumPy for Biopython 1.49 or later.
 
-Bio.Seq and the data property
------------------------------
+Bio.Seq, Bio.MutableSeq and the data property
+---------------------------------------------
 Direct use of the Seq object (and MutableSeq object) .data property is
 deprecated.  As of Release 1.49, writing to the Seq object's .data property
 triggered a warning, and this property was made read only in Release 1.53. In
-Release 1.55 final, accessing the .data property gives a DeprecationWarning.
-The Seq object's .data property was removed in Release 1.61.
+Release 1.55 final, accessing the .data property of a Seq object gives a
+DeprecationWarning. The Seq object's .data property was removed in Release
+1.61.  Starting from Release 1.78, accessing the .data property of a MutableSeq
+object similarly gives a deprecation warning.
 
 Bio.Transcribe and Bio.Translate
 --------------------------------

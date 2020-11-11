@@ -41,20 +41,6 @@ using the Bio.AlignIO.read() function:
     AP001509.1 104
     AE007476.1 104
 
-This example file is clearly using RNA, so you might want the alignment object
-(and the SeqRecord objects it holds) to reflect this, rather than simple using
-the default single letter alphabet as shown above.  You can do this with an
-optional argument to the Bio.AlignIO.read() function:
-
-    >>> from Bio import AlignIO
-    >>> from Bio.Alphabet import generic_rna
-    >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
-    ...                      alphabet=generic_rna)
-    >>> print(align)
-    Alignment with 2 rows and 104 columns
-    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
-    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
-
 In addition to the sequences themselves, this example alignment also includes
 some GR lines for the secondary structure of the sequences.  These are
 strings, with one character for each letter in the associated sequence:
@@ -117,12 +103,10 @@ tools.
 
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
 iterate over the alignment rows as SeqRecord objects - rather than working
-with Alignnment objects. Again, if you want to you can specify this is RNA:
+with Alignnment objects.
 
     >>> from Bio import SeqIO
-    >>> from Bio.Alphabet import generic_rna
-    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm",
-    ...                           alphabet=generic_rna):
+    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm"):
     ...     print(record.id)
     ...     print(record.seq)
     ...     print(record.letter_annotations['secondary_structure'])
@@ -456,7 +440,13 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == "#=GS ":
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
-                    seq_id, feature, text = line[5:].strip().split(None, 2)
+                    try:
+                        seq_id, feature, text = line[5:].strip().split(None, 2)
+                    except ValueError:
+                        # Free text can sometimes be empty, which a one line split throws an error for.
+                        # See https://github.com/biopython/biopython/issues/2982 for more details
+                        seq_id, feature = line[5:].strip().split(None, 1)
+                        text = ""
                     # if seq_id not in ids:
                     #    ids.append(seq_id)
                     if seq_id not in gs:
@@ -509,7 +499,7 @@ class StockholmIterator(AlignmentIterator):
                     )
                 name, start, end = self._identifier_split(seq_id)
                 record = SeqRecord(
-                    Seq(seq, self.alphabet),
+                    Seq(seq),
                     id=seq_id,
                     name=name,
                     description=seq_id,
@@ -531,7 +521,7 @@ class StockholmIterator(AlignmentIterator):
                     raise ValueError(
                         "%s length %i, expected %i" % (k, len(v), alignment_length)
                     )
-            alignment = MultipleSeqAlignment(records, self.alphabet)
+            alignment = MultipleSeqAlignment(records)
 
             for k, v in sorted(gc.items()):
                 if k in self.pfam_gc_mapping:

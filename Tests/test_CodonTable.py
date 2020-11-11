@@ -10,15 +10,20 @@
 import unittest
 
 from Bio.Data import IUPACData
-from Bio.Data.CodonTable import (generic_by_id, generic_by_name,
-                                 ambiguous_generic_by_id,
-                                 ambiguous_generic_by_name,
-                                 ambiguous_rna_by_id, ambiguous_dna_by_id,
-                                 ambiguous_dna_by_name, ambiguous_rna_by_name,
-                                 unambiguous_rna_by_id,
-                                 unambiguous_rna_by_name,
-                                 unambiguous_dna_by_id,
-                                 unambiguous_dna_by_name)
+from Bio.Data.CodonTable import (
+    generic_by_id,
+    generic_by_name,
+    ambiguous_generic_by_id,
+    ambiguous_generic_by_name,
+    ambiguous_rna_by_id,
+    ambiguous_dna_by_id,
+    ambiguous_dna_by_name,
+    ambiguous_rna_by_name,
+    unambiguous_rna_by_id,
+    unambiguous_rna_by_name,
+    unambiguous_dna_by_id,
+    unambiguous_dna_by_name,
+)
 from Bio.Data.CodonTable import list_ambiguous_codons, list_possible_proteins
 from Bio.Data.CodonTable import TranslationError
 
@@ -42,18 +47,22 @@ class BasicSanityTests(unittest.TestCase):
 
     def test_number_of_tables(self):
         """Check if we have the same number of tables for each type."""
-        self.assertTrue(len(unambiguous_dna_by_id)
-                        == len(unambiguous_rna_by_id)
-                        == len(generic_by_id)
-                        == len(ambiguous_dna_by_id)
-                        == len(ambiguous_rna_by_id)
-                        == len(ambiguous_generic_by_id))
-        self.assertTrue(len(unambiguous_dna_by_name)
-                        == len(unambiguous_rna_by_name)
-                        == len(generic_by_name)
-                        == len(ambiguous_dna_by_name)
-                        == len(ambiguous_rna_by_name)
-                        == len(ambiguous_generic_by_name))
+        self.assertTrue(
+            len(unambiguous_dna_by_id)
+            == len(unambiguous_rna_by_id)
+            == len(generic_by_id)
+            == len(ambiguous_dna_by_id)
+            == len(ambiguous_rna_by_id)
+            == len(ambiguous_generic_by_id)
+        )
+        self.assertTrue(
+            len(unambiguous_dna_by_name)
+            == len(unambiguous_rna_by_name)
+            == len(generic_by_name)
+            == len(ambiguous_dna_by_name)
+            == len(ambiguous_rna_by_name)
+            == len(ambiguous_generic_by_name)
+        )
 
     def test_complete_tables(self):
         """Check if all unambiguous codon tables have all entries.
@@ -73,12 +82,15 @@ class BasicSanityTests(unittest.TestCase):
             rna_table = unambiguous_rna_by_id[id]
 
             if id not in exception_list:
-                self.assertEqual(len(dna_table.forward_table)
-                                 + len(dna_table.stop_codons), 64)
-                self.assertEqual(len(rna_table.forward_table)
-                                 + len(rna_table.stop_codons), 64)
-                self.assertEqual(len(nuc_table.forward_table)
-                                 + len(nuc_table.stop_codons), 101)
+                self.assertEqual(
+                    len(dna_table.forward_table) + len(dna_table.stop_codons), 64
+                )
+                self.assertEqual(
+                    len(rna_table.forward_table) + len(rna_table.stop_codons), 64
+                )
+                self.assertEqual(
+                    len(nuc_table.forward_table) + len(nuc_table.stop_codons), 101
+                )
                 self.assertTrue(dna_table.stop_codons)
                 self.assertTrue(dna_table.start_codons)
                 self.assertTrue(rna_table.stop_codons)
@@ -102,21 +114,28 @@ class AmbiguousCodonsTests(unittest.TestCase):
 
     def test_list_ambiguous_codons(self):
         """Check if stop codons are properly extended."""
-        self.assertEqual(list_ambiguous_codons(["TGA", "TAA"],
-                                               IUPACData.ambiguous_dna_values),
-                         ["TGA", "TAA", "TRA"])
-        self.assertEqual(list_ambiguous_codons(["TAG", "TGA"],
-                                               IUPACData.ambiguous_dna_values),
-                         ["TAG", "TGA"])
-        self.assertEqual(list_ambiguous_codons(["TAG", "TAA"],
-                                               IUPACData.ambiguous_dna_values),
-                         ["TAG", "TAA", "TAR"])
-        self.assertEqual(list_ambiguous_codons(["UAG", "UAA"],
-                                               IUPACData.ambiguous_rna_values),
-                         ["UAG", "UAA", "UAR"])
-        self.assertEqual(list_ambiguous_codons(["TGA", "TAA", "TAG"],
-                                               IUPACData.ambiguous_dna_values),
-                         ["TGA", "TAA", "TAG", "TAR", "TRA"])
+        self.assertEqual(
+            list_ambiguous_codons(["TGA", "TAA"], IUPACData.ambiguous_dna_values),
+            ["TGA", "TAA", "TRA"],
+        )
+        self.assertEqual(
+            list_ambiguous_codons(["TAG", "TGA"], IUPACData.ambiguous_dna_values),
+            ["TAG", "TGA"],
+        )
+        self.assertEqual(
+            list_ambiguous_codons(["TAG", "TAA"], IUPACData.ambiguous_dna_values),
+            ["TAG", "TAA", "TAR"],
+        )
+        self.assertEqual(
+            list_ambiguous_codons(["UAG", "UAA"], IUPACData.ambiguous_rna_values),
+            ["UAG", "UAA", "UAR"],
+        )
+        self.assertEqual(
+            list_ambiguous_codons(
+                ["TGA", "TAA", "TAG"], IUPACData.ambiguous_dna_values
+            ),
+            ["TGA", "TAA", "TAG", "TAR", "TRA"],
+        )
 
     def test_coding(self):
         """Check a few ambiguous codons for correct coding."""
@@ -158,8 +177,11 @@ class AmbiguousCodonsTests(unittest.TestCase):
             amb_nuc = ambiguous_generic_by_id[id]
 
             # R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
-            if "UAA" in amb_rna.stop_codons and "UGA" in amb_rna.stop_codons \
-               and id not in (28, 32):
+            if (
+                "UAA" in amb_rna.stop_codons
+                and "UGA" in amb_rna.stop_codons
+                and id not in (28, 32)
+            ):
                 self.assertEqual(amb_dna.forward_table.get("TRA", "X"), "X")
                 with self.assertRaises(KeyError):
                     amb_dna.forward_table["TRA"]
@@ -170,8 +192,12 @@ class AmbiguousCodonsTests(unittest.TestCase):
                 self.assertIn("TRA", amb_nuc.stop_codons)
                 self.assertIn("TRA", amb_dna.stop_codons)
 
-            if "UAG" in rna.stop_codons and "UAA" in rna.stop_codons \
-               and "UGA" in rna.stop_codons and id not in (28, 32):
+            if (
+                "UAG" in rna.stop_codons
+                and "UAA" in rna.stop_codons
+                and "UGA" in rna.stop_codons
+                and id not in (28, 32)
+            ):
                 with self.assertRaises(KeyError):
                     amb_dna.forward_table["TAR"]
                     amb_rna.forward_table["UAR"]
@@ -194,8 +220,12 @@ class AmbiguousCodonsTests(unittest.TestCase):
             amb_dna = ambiguous_dna_by_id[id]
             amb_rna = ambiguous_rna_by_id[id]
 
-            if "UUG" in rna.start_codons and "CUG" in rna.start_codons and \
-               "AUG" in rna.start_codons and "UUG" not in rna.start_codons:
+            if (
+                "UUG" in rna.start_codons
+                and "CUG" in rna.start_codons
+                and "AUG" in rna.start_codons
+                and "UUG" not in rna.start_codons
+            ):
                 self.assertNotIn("NUG", amb_rna.start_codons)
                 self.assertNotIn("RUG", amb_rna.start_codons)
                 self.assertNotIn("WUG", amb_rna.start_codons)
@@ -225,10 +255,13 @@ class SingleTableTests(unittest.TestCase):
     def test_table01(self):
         """Check table 1: Standard."""
         self.assertEqual(ambiguous_dna_by_id[1].names, ["Standard", "SGC0"])
-        self.assertEqual(ambiguous_dna_by_name["Standard"].stop_codons,
-                         ambiguous_dna_by_id[1].stop_codons)
-        self.assertEqual(generic_by_id[1].start_codons,
-                         ["TTG", "UUG", "CTG", "CUG", "ATG", "AUG"])
+        self.assertEqual(
+            ambiguous_dna_by_name["Standard"].stop_codons,
+            ambiguous_dna_by_id[1].stop_codons,
+        )
+        self.assertEqual(
+            generic_by_id[1].start_codons, ["TTG", "UUG", "CTG", "CUG", "ATG", "AUG"]
+        )
         self.assertEqual(len(unambiguous_dna_by_id[1].start_codons), 3)
         self.assertEqual(len(unambiguous_dna_by_id[1].stop_codons), 3)
 
@@ -267,8 +300,7 @@ class SingleTableTests(unittest.TestCase):
         self.assertIn("GTG", unambiguous_dna_by_id[3].start_codons)
         self.assertIn("TAR", ambiguous_dna_by_id[3].stop_codons)
         self.assertNotIn("TGA", ambiguous_dna_by_id[3].stop_codons)
-        self.assertEqual(generic_by_id[3].forward_table["UGA"],
-                         "W")
+        self.assertEqual(generic_by_id[3].forward_table["UGA"], "W")
         self.assertEqual(ambiguous_rna_by_id[3].forward_table["CUN"], "T")
 
     def test_table04(self):
@@ -427,8 +459,7 @@ class SingleTableTests(unittest.TestCase):
         amb_rna_table = ambiguous_rna_by_id[14]
         amb_nuc_table = ambiguous_generic_by_id[14]
 
-        self.assertEqual(generic_by_name["Alternative Flatworm "
-                                         "Mitochondrial"].id, 14)
+        self.assertEqual(generic_by_name["Alternative Flatworm Mitochondrial"].id, 14)
         self.assertIn("Alternative Flatworm Mitochondrial", nuc_table.names)
         self.assertEqual(len(dna_table.start_codons), 1)
         self.assertEqual(len(dna_table.stop_codons), 1)
@@ -490,8 +521,7 @@ class SingleTableTests(unittest.TestCase):
         nuc_table = generic_by_id[22]
         amb_rna_table = ambiguous_rna_by_id[22]
 
-        self.assertEqual(generic_by_name["Scenedesmus obliquus "
-                                         "Mitochondrial"].id, 22)
+        self.assertEqual(generic_by_name["Scenedesmus obliquus Mitochondrial"].id, 22)
         self.assertIn("Scenedesmus obliquus Mitochondrial", nuc_table.names)
         self.assertEqual(len(dna_table.start_codons), 1)
         self.assertEqual(len(dna_table.stop_codons), 3)
@@ -508,8 +538,7 @@ class SingleTableTests(unittest.TestCase):
         nuc_table = generic_by_id[23]
         amb_rna_table = ambiguous_rna_by_id[23]
 
-        self.assertEqual(generic_by_name["Thraustochytrium Mitochondrial"].id,
-                         23)
+        self.assertEqual(generic_by_name["Thraustochytrium Mitochondrial"].id, 23)
         self.assertIn("Thraustochytrium Mitochondrial", nuc_table.names)
         self.assertEqual(len(dna_table.start_codons), 3)
         self.assertEqual(len(dna_table.stop_codons), 4)
@@ -565,8 +594,7 @@ class SingleTableTests(unittest.TestCase):
         dna_table = unambiguous_dna_by_id[26]
         nuc_table = generic_by_id[26]
 
-        self.assertEqual(generic_by_name["Pachysolen tannophilus "
-                                         "Nuclear"].id, 26)
+        self.assertEqual(generic_by_name["Pachysolen tannophilus Nuclear"].id, 26)
         self.assertIn("Pachysolen tannophilus Nuclear", nuc_table.names)
         self.assertEqual(len(dna_table.start_codons), 2)
         self.assertEqual(len(dna_table.stop_codons), 3)
@@ -711,7 +739,7 @@ class ErrorConditions(unittest.TestCase):
     def test_ambiguous_forward_table(self):
         """Raise errors in AmbiguousForwardTable."""
         table = ambiguous_dna_by_id[1]
-        self.assertEqual(table.forward_table.get("ZZZ"), None)
+        self.assertIsNone(table.forward_table.get("ZZZ"))
         with self.assertRaises(KeyError):
             table.forward_table["ZZZ"]  # KeyError it's a stop codon
             table.forward_table["TGA"]  # KeyError stop codon

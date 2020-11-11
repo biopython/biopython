@@ -83,7 +83,7 @@ class StringMethodTests(unittest.TestCase):
     ]
     for seq in _examples[:]:
         if isinstance(seq, Seq):
-            _examples.append(seq.tomutable())
+            _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
     def _test_method(self, method_name, pre_comp_function=None, start_end=False):
@@ -124,8 +124,7 @@ class StringMethodTests(unittest.TestCase):
                     j = ValueError
                 if i != j:
                     raise ValueError(
-                        "%r.%s(%r) = %r, not %r"
-                        % (example1, method_name, str2, i, j)
+                        "%r.%s(%r) = %r, not %r" % (example1, method_name, str2, i, j)
                     )
 
                 try:
@@ -181,20 +180,23 @@ class StringMethodTests(unittest.TestCase):
                             if i != j:
                                 raise ValueError(
                                     "%r.%s(%r, %i, %i) = %r, not %r"
-                                    % (
-                                        example1,
-                                        method_name,
-                                        str2,
-                                        start,
-                                        end,
-                                        i,
-                                        j,
-                                    )
+                                    % (example1, method_name, str2, start, end, i, j,)
                                 )
 
     def test_str_count(self):
         """Check matches the python string count method."""
         self._test_method("count", start_end=True)
+        self.assertEqual(Seq("AC777GT").count("7"), 3)
+        self.assertRaises(TypeError, Seq("AC777GT").count, 7)
+        self.assertRaises(TypeError, Seq("AC777GT").count, None)
+
+    def test_count_overlap(self):
+        """Check count_overlap exception matches python string count method."""
+        self.assertEqual(Seq("AC777GT").count("77"), 1)
+        self.assertEqual(Seq("AC777GT").count_overlap("77"), 2)
+        self.assertEqual(Seq("AC777GT").count_overlap("7"), 3)
+        self.assertRaises(TypeError, Seq("AC777GT").count_overlap, 7)
+        self.assertRaises(TypeError, Seq("AC777GT").count_overlap, None)
 
     def test_str_count_overlap_GG(self):
         """Check our count_overlap method using GG."""
@@ -403,23 +405,36 @@ class StringMethodTests(unittest.TestCase):
     def test_str_find(self):
         """Check matches the python string find method."""
         self._test_method("find", start_end=True)
+        self.assertEqual(Seq("AC7GT").find("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").find, 7)
+        self.assertRaises(TypeError, Seq("ACGT").find, None)
 
     def test_str_rfind(self):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
+        self.assertEqual(Seq("AC7GT").rfind("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").rfind, 7)
+        self.assertRaises(TypeError, Seq("ACGT").rfind, None)
 
     def test_str_index(self):
         """Check matches the python string index method."""
         self._test_method("index", start_end=True)
+        self.assertEqual(Seq("AC7GT").index("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").index, 7)
+        self.assertRaises(TypeError, Seq("ACGT").index, None)
 
     def test_str_rindex(self):
         """Check matches the python string rindex method."""
         self._test_method("rindex", start_end=True)
+        self.assertEqual(Seq("AC7GT").rindex("7"), 2)
+        self.assertRaises(TypeError, Seq("AC7GT").rindex, 7)
+        self.assertRaises(TypeError, Seq("ACGT").rindex, None)
 
     def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
         self.assertTrue("ABCDE".startswith(("ABE", "OBE", "ABC")))
+        self.assertRaises(TypeError, Seq("ACGT").startswith, None)
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
@@ -449,6 +464,7 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string endswith method."""
         self._test_method("endswith", start_end=True)
         self.assertTrue("ABCDE".endswith(("ABE", "OBE", "CDE")))
+        self.assertRaises(TypeError, Seq("ACGT").endswith, None)
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
@@ -474,34 +490,40 @@ class StringMethodTests(unittest.TestCase):
     def test_str_strip(self):
         """Check matches the python string strip method."""
         self._test_method("strip", pre_comp_function=str)
+        self.assertEqual(Seq(" ACGT ").strip(), "ACGT")
+        self.assertRaises(TypeError, Seq("ACGT").strip, 7)
 
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip", pre_comp_function=str)
+        self.assertEqual(Seq(" ACGT ").rstrip(), " ACGT")
+        self.assertRaises(TypeError, Seq("ACGT").rstrip, 7)
+
+    def test_str_lstrip(self):
+        """Check matches the python string lstrip method."""
+        self._test_method("rstrip", pre_comp_function=str)
+        self.assertEqual(Seq(" ACGT ").lstrip(), "ACGT ")
+        self.assertRaises(TypeError, Seq("ACGT").lstrip, 7)
 
     def test_str_split(self):
         """Check matches the python string rstrip method."""
-        # Calling (r)split should return a list of Seq-like objects, we'll
+        # Calling split should return a list of Seq-like objects, we'll
         # just apply str() to each of them so it matches the string method
         self._test_method(
-            "rstrip", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
+            "split", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
         )
+        self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".split("7"))
+        self.assertRaises(TypeError, Seq("AC7GT").split, 7)
 
     def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
-        # Calling (r)split should return a list of Seq-like objects, we'll
+        # Calling rsplit should return a list of Seq-like objects, we'll
         # just apply str() to each of them so it matches the string method
         self._test_method(
-            "rstrip", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
+            "rsplit", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
         )
-
-    def test_str_lsplit(self):
-        """Check matches the python string rstrip method."""
-        # Calling (r)split should return a list of Seq-like objects, we'll
-        # just apply str() to each of them so it matches the string method
-        self._test_method(
-            "rstrip", pre_comp_function=lambda x: [str(y) for y in x]  # noqa: E731
-        )
+        self.assertEqual(Seq("AC7GT").rsplit("7"), "AC7GT".rsplit("7"))
+        self.assertRaises(TypeError, Seq("AC7GT").rsplit, 7)
 
     def test_str_length(self):
         """Check matches the python string __len__ method."""
@@ -605,22 +627,16 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(str(example1[i:j:step]), str1[i:j:step])
 
     def test_tomutable(self):
-        """Check obj.tomutable() method."""
+        """Check creating a MutableSeq object."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq):
-                continue
-            mut = example1.tomutable()
+            mut = MutableSeq(example1)
             self.assertIsInstance(mut, MutableSeq)
             self.assertEqual(str(mut), str(example1))
 
     def test_toseq(self):
-        """Check obj.toseq() method."""
+        """Check creating a Seq object."""
         for example1 in self._examples:
-            try:
-                seq = example1.toseq()
-            except AttributeError:
-                self.assertIsInstance(example1, Seq)
-                continue
+            seq = Seq(example1)
             self.assertIsInstance(seq, Seq)
             self.assertEqual(str(seq), str(example1))
 
@@ -739,7 +755,9 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
         self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
         # These test the Bio.Seq.translate() function - move these?:
-        self.assertEqual("*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table))
+        self.assertEqual(
+            "*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table)
+        )
         self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
         self.assertEqual("", translate(str(nuc), to_stop=True))
         self.assertEqual("***RR", translate(str(nuc), table="Bacterial"))
@@ -806,14 +824,15 @@ class StringMethodTests(unittest.TestCase):
 
     def test_init_typeerror(self):
         """Check Seq __init__ gives TypeError exceptions."""
-        # Only expect it to take strings and unicode - not Seq objects!
-        self.assertRaises(TypeError, Seq, 1066)
-        self.assertRaises(TypeError, Seq, Seq("ACGT"))
+        self.assertRaises(TypeError, Seq, ("A", "C", "G", "T"))
+        self.assertRaises(TypeError, Seq, ["A", "C", "G", "T"])
+        self.assertRaises(TypeError, Seq, 1)
+        self.assertRaises(TypeError, Seq, 1.0)
 
     def test_MutableSeq_init_typeerror(self):
         """Check MutableSeq __init__ gives TypeError exceptions."""
-        self.assertRaises(TypeError, MutableSeq, (Seq("A")))
-        self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
+        self.assertRaises(TypeError, MutableSeq, ("A", "C", "G", "T"))
+        self.assertRaises(TypeError, MutableSeq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
 
@@ -844,7 +863,9 @@ class StringMethodTests(unittest.TestCase):
     def test_join_Seq(self):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         spacer = Seq("NNNNN")
-        self.assertEqual("N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),)
+        self.assertEqual(
+            "N" * 15, spacer.join([Seq("NNNNN"), Seq("NNNNN")]),
+        )
 
         spacer1 = Seq("")
         spacers = [spacer1, Seq("NNNNN"), Seq("GGG")]
@@ -873,21 +894,11 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(
             "-" * 15,
-            spacer1.join(
-                [
-                    UnknownSeq(5, character="-"),
-                    UnknownSeq(5, character="-"),
-                ]
-            ),
+            spacer1.join([UnknownSeq(5, character="-"), UnknownSeq(5, character="-")]),
         )
         self.assertEqual(
             "N" * 5 + "-" * 10,
-            spacer1.join(
-                [
-                    Seq("NNNNN"),
-                    UnknownSeq(5, character="-"),
-                ]
-            ),
+            spacer1.join([Seq("NNNNN"), UnknownSeq(5, character="-")]),
         )
 
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
@@ -911,16 +922,10 @@ class StringMethodTests(unittest.TestCase):
         """Check MutableSeq objects can be joined."""
         spacer = MutableSeq("NNNNN")
         self.assertEqual(
-            "N" * 15,
-            spacer.join(
-                [MutableSeq("NNNNN"), MutableSeq("NNNNN")]
-            ),
+            "N" * 15, spacer.join([MutableSeq("NNNNN"), MutableSeq("NNNNN")]),
         )
         self.assertRaises(
-            TypeError,
-            spacer.join(
-                [Seq("NNNNN"), MutableSeq("NNNNN")]
-            ),
+            TypeError, spacer.join([Seq("NNNNN"), MutableSeq("NNNNN")]),
         )
 
     def test_join_Seq_with_file(self):
@@ -1010,6 +1015,27 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(seq_concatenated1), ref_data1)
         with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, "fasta"))
+
+    def test_equality(self):
+        """Test equality when mixing types."""
+        self.assertEqual(Seq("6"), "6")
+        self.assertNotEqual(Seq("6"), 6)
+        self.assertEqual(Seq(""), "")
+        self.assertNotEqual(Seq(""), None)
+        self.assertEqual(Seq("None"), "None")
+        self.assertNotEqual(Seq("None"), None)
+
+        self.assertEqual(MutableSeq("6"), "6")
+        self.assertNotEqual(MutableSeq("6"), 6)
+        self.assertEqual(MutableSeq(""), "")
+        self.assertNotEqual(MutableSeq(""), None)
+        self.assertEqual(MutableSeq("None"), "None")
+        self.assertNotEqual(MutableSeq("None"), None)
+
+        self.assertEqual(UnknownSeq(1, character="6"), "6")
+        self.assertNotEqual(UnknownSeq(1, character="6"), 6)
+        self.assertEqual(UnknownSeq(0), "")
+        self.assertNotEqual(UnknownSeq(0), None)
 
     # TODO - Addition...
 

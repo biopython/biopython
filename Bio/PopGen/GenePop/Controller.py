@@ -160,11 +160,7 @@ class _FileIterator:
 
     def __del__(self):
         self.stream.close()
-        try:
-            os.remove(self.fname)
-        except OSError:
-            # Jython seems to call the iterator twice
-            pass
+        os.remove(self.fname)
 
 
 class _GenePopCommandline(AbstractCommandline):
@@ -240,7 +236,6 @@ class GenePopController:
         self.controller()  # checks error level is zero
         os.chdir(cwd)
         shutil.rmtree(temp_dir)
-        return
 
     def _test_pop_hz_both(
         self,

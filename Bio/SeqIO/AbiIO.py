@@ -382,6 +382,7 @@ class AbiIterator(SequenceIterator):
         sample_id = "<unknown id>"
 
         raw = {}
+        seq = qual = None
         for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
             key = tag_name + str(tag_number)
 
@@ -441,7 +442,14 @@ class AbiIterator(SequenceIterator):
                 name=file_name,
                 description="",
                 annotations=annot,
-                letter_annotations={"phred_quality": qual},
+            )
+        if qual:
+            # Expect this to be missing for FSA files.
+            record.letter_annotations["phred_quality"] = qual
+        elif not is_fsa_file and not qual and self.trim:
+            raise ValueError(
+                "The 'abi-trim' format can not be used for files without"
+                " quality values."
             )
 
         if self.trim and not is_fsa_file:

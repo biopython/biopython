@@ -52,7 +52,7 @@ publications (listed on our website):
 
 Cock, P.J.A. et al. Biopython: freely available Python tools for computational
 molecular biology and bioinformatics. Bioinformatics 2009 Jun 1; 25(11) 1422-3
-http://dx.doi.org/10.1093/bioinformatics/btp163 pmid:19304878
+https://doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 
 
 For the impatient
@@ -107,8 +107,8 @@ other optional Python dependencies, which can be installed later if needed:
 - matplotlib, see http://matplotlib.org/ (optional)
   ``Bio.Phylo`` uses this package to plot phylogenetic trees.
 
-- networkx, see http://networkx.lanl.gov/ (optional) and
-  pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
+- networkx, see https://networkx.github.io/ (optional) and
+  pygraphviz or pydot, see https://pygraphviz.github.io/ and
   http://code.google.com/p/pydot/ (optional)
   These packages are used for certain niche functions in ``Bio.Phylo``.
 

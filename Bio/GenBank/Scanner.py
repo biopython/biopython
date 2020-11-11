@@ -36,7 +36,6 @@ from collections import OrderedDict
 from Bio.File import as_handle
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_protein
 from Bio import BiopythonParserWarning
 
 
@@ -530,23 +529,22 @@ class InsdcScanner:
                 yield record
 
     def parse_cds_features(
-        self,
-        handle,
-        alphabet=generic_protein,
-        tags2id=("protein_id", "locus_tag", "product"),
+        self, handle, alphabet=None, tags2id=("protein_id", "locus_tag", "product"),
     ):
         """Parse CDS features, return SeqRecord object iterator.
 
         Each CDS feature becomes a SeqRecord.
 
         Arguments:
-         - alphabet - Used for any sequence found in a translation field.
+         - alphabet - Obsolete, should be left as None.
          - tags2id  - Tupple of three strings, the feature keys to use
            for the record id, name and description,
 
         This method is intended for use in Bio.SeqIO
 
         """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
         with as_handle(handle) as handle:
             self.set_handle(handle)
             while self.find_start():
@@ -572,7 +570,7 @@ class InsdcScanner:
                         # then populate it:
                         record = SeqRecord(seq=None)
                         annotations = record.annotations
-
+                        annotations["molecule_type"] = "protein"
                         # Should we add a location object to the annotations?
                         # I *think* that only makes sense for SeqFeatures with their
                         # sub features...
@@ -589,9 +587,7 @@ class InsdcScanner:
                             # Append the data to the annotation qualifier...
                             if qualifier_name == "translation":
                                 assert record.seq is None, "Multiple translations!"
-                                record.seq = Seq(
-                                    qualifier_data.replace("\n", ""), alphabet
-                                )
+                                record.seq = Seq(qualifier_data.replace("\n", ""))
                             elif qualifier_name == "db_xref":
                                 # its a list, possibly empty.  Its safe to extend
                                 record.dbxrefs.append(qualifier_data)
@@ -1209,7 +1205,6 @@ class GenBankScanner(InsdcScanner):
             self.line = self.handle.readline()
             if not self.line:
                 raise ValueError("Premature end of file")
-            self.line = self.line
 
         if self.line[: self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
             raise ValueError("Eh? '%s'" % self.line)
@@ -1355,9 +1350,6 @@ class GenBankScanner(InsdcScanner):
 
             if line[33:51].strip() == "" and line[29:33] == " aa ":
                 # Amino acids -> protein (even if there is no residue type given)
-                # We want to use a protein alphabet in this case, rather than a
-                # generic one. Not sure if this is the best way to achieve this,
-                # but it works because the scanner checks for this:
                 consumer.residue_type("PROTEIN")
             else:
                 consumer.residue_type(line[33:51].strip())
@@ -1471,9 +1463,6 @@ class GenBankScanner(InsdcScanner):
 
             if line[44:54].strip() == "" and line[40:44] == " aa ":
                 # Amino acids -> protein (even if there is no residue type given)
-                # We want to use a protein alphabet in this case, rather than a
-                # generic one. Not sure if this is the best way to achieve this,
-                # but it works because the scanner checks for this:
                 consumer.residue_type(("PROTEIN " + line[54:63]).strip())
             else:
                 consumer.residue_type(line[44:63].strip())

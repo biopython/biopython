@@ -130,16 +130,16 @@ class TestQblast(unittest.TestCase):
             "pan [ORGN]",
             {"megablast": "FALSE"},
             [
-                "XM_009432096.3",
-                "XM_009432102.3",
-                "XM_009432101.3",
-                "XM_016930487.2",
-                "XM_009432104.3",
-                "XM_009432099.3",
-                "XR_001710553.2",
-                "XM_016930485.2",
-                "XM_009432089.3",
-                "XM_016930484.2",
+                "XM_034941187.1",
+                "XM_034941186.1",
+                "XM_034941185.1",
+                "XM_034941184.1",
+                "XM_034941183.1",
+                "XM_034941182.1",
+                "XM_034941180.1",
+                "XM_034941179.1",
+                "XM_034941178.1",
+                "XM_034941177.1",
             ],
         )
 
@@ -290,14 +290,14 @@ class TestQblast(unittest.TestCase):
         # Check the recorded input parameters agree with those requested
         self.assertEqual(float(record.expect), e_value)
         self.assertEqual(record.application.lower(), program)
-        self.assertTrue(len(record.alignments) <= 10)
-        self.assertTrue(len(record.descriptions) <= 10)
+        self.assertLessEqual(len(record.alignments), 10)
+        self.assertLessEqual(len(record.descriptions), 10)
 
         # Check the expected result(s) are found in the alignments
         if expected_hits is None:
             self.assertEqual(len(record.alignments), 0)  # Expected no alignments!
         else:
-            self.assertTrue(len(record.alignments) > 0)  # Expected some alignments!
+            self.assertGreater(len(record.alignments), 0)  # Expected some alignments!
             found_result = False
             for expected_hit in expected_hits:
                 for alignment in record.alignments:
@@ -315,9 +315,11 @@ class TestQblast(unittest.TestCase):
 
         # Check the expected result(s) are found in the descriptions
         if expected_hits is None:
-            self.assertEqual(len(record.descriptions), 0)  # Expected no descriptions!
+            # Expected no descriptions!
+            self.assertEqual(len(record.descriptions), 0)
         else:
-            self.assertTrue(len(record.descriptions) > 0)  # Expected some descriptions!
+            # Expected some descriptions!
+            self.assertGreater(len(record.descriptions), 0)
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:

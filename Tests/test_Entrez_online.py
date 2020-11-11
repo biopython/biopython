@@ -55,7 +55,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIsInstance(rec, dict)
         self.assertIn("DbList", rec)
         # arbitrary number, just to make sure that DbList has contents
-        self.assertTrue(len(rec["DbList"]) > 5)
+        self.assertGreater(len(rec["DbList"]), 5)
 
     def test_read_from_url(self):
         """Test Entrez.read from URL."""
@@ -69,7 +69,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIsInstance(rec, dict)
         self.assertIn("DbList", rec)
         # arbitrary number, just to make sure that DbList has contents
-        self.assertTrue(len(rec["DbList"]) > 5)
+        self.assertGreater(len(rec["DbList"]), 5)
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL."""
@@ -223,7 +223,7 @@ class EntrezOnlineCase(unittest.TestCase):
         done = False
         for row in record["eGQueryResult"]:
             if "pmc" in row["DbName"]:
-                self.assertTrue(int(row["Count"]) > 60)
+                self.assertGreater(int(row["Count"]), 60)
                 done = True
         self.assertTrue(done)
 

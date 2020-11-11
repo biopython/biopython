@@ -343,7 +343,7 @@ class Record:
     def _keywords_line(self):
         """Output for the KEYWORDS line (PRIVATE)."""
         output = ""
-        if len(self.keywords) >= 0:
+        if self.keywords:
             output += Record.BASE_FORMAT % "KEYWORDS"
             keyword_info = ""
             for keyword in self.keywords:

@@ -9,13 +9,13 @@
 The Biopython Project is an international association of developers
 of freely available Python tools for computational molecular biology.
 
-http://biopython.org
+https://biopython.org
 """
 
 import os
 import warnings
 
-__version__ = "1.78.dev0"
+__version__ = "1.79.dev0"
 
 
 class MissingExternalDependencyError(Exception):

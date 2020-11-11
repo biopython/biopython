@@ -56,12 +56,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         )
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-    if isinstance(old.seq, UnknownSeq) and isinstance(new.seq, UnknownSeq):
-        # Jython didn't like us comparing the string of very long
-        # UnknownSeq object (out of heap memory error)
-        if old.seq._character.upper() != new.seq._character:
-            raise ValueError("%r vs %r" % (old.seq, new.seq))
-    elif str(old.seq).upper() != str(new.seq).upper():
+    if str(old.seq).upper() != str(new.seq).upper():
         if len(old.seq) < 200:
             raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
         else:
@@ -73,9 +68,7 @@ def compare_record(old, new, expect_minor_diffs=False):
     if (old.description or new.description) and not set(
         old.description.split()
     ).intersection(new.description.split()):
-        raise ValueError(
-            "%r versus %r" % (old.description, new.description)
-        )
+        raise ValueError("%r versus %r" % (old.description, new.description))
     # This only checks common annotation
     # Would a white list be easier?
     for key in set(old.annotations).intersection(new.annotations):
@@ -149,8 +142,7 @@ def compare_feature(old, new):
         or old.location.nofuzzy_end != new.location.nofuzzy_end
     ):
         raise ValueError(
-            "%s versus %s:\n%r\nvs:\n%r"
-            % (old.location, new.location, old, new)
+            "%s versus %s:\n%r\nvs:\n%r" % (old.location, new.location, old, new)
         )
     if old.strand is not None and old.strand != new.strand:
         raise ValueError("Different strand:\n%r\nvs:\n%r" % (old, new))
@@ -321,11 +313,11 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertIsInstance(new, str)
         self.assertEqual(new, answer_str)
 
-        new = feature.extract(parent_seq.tomutable())
+        new = feature.extract(MutableSeq(parent_seq))
         self.assertIsInstance(new, Seq)  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
-        new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
+        new = feature.extract(UnknownSeq(len(parent_seq), character="N"))
         self.assertIsInstance(new, UnknownSeq)
         self.assertEqual(len(new), len(answer_str))
 
@@ -369,8 +361,8 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         """Feature on RNA (simple, default strand)."""
         s = Seq("GAUCRYWSMKHBVDN")
         f = SeqFeature(FeatureLocation(5, 10))
-        self.assertEqual(f.strand, None)
-        self.assertEqual(f.location.strand, None)
+        self.assertIsNone(f.strand)
+        self.assertIsNone(f.location.strand)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):

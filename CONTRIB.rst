@@ -130,6 +130,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - Jakub Lipinski <https://github.com/jakublipinski>
+- James Baker <https://github.com/JamesABaker>
 - James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
@@ -144,7 +145,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
-- Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
 - Joerg Schaarschmidt <https://github.com/schaarj>
@@ -157,6 +157,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jose Blanca <https://github.com/JoseBlanca>
 - Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
+- João Rodrigues <https://github.com/joaorodrigues>
 - João Vitor F Cavalcante <https://github.com/jvfe>
 - Jun Aruga <https://github.com/junaruga>
 - Juraj Szász <https:/github.com/sars1492>
@@ -185,10 +186,12 @@ please open an issue on GitHub or mention it on the mailing list.
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lewis A. Marshall <https://github.com/lewisamarshall>
 - Lucas Sinclair <https://github.com/xapple>
+- Lukasz Walejko <https://github.com/lwalejko>
 - Manuel Nuno Melo <https://github.com/mnmelo>
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
+- Marie Crane <https://github.com/mariecrane>
 - Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Martin Thoma <https://martin-thoma.com/author/martin-thoma/>
@@ -246,6 +249,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Sergei Lebedev <https://github.com/superbobry>
 - Sergio Valqui <https://github.com/svalqui>
 - Seth Sims <seth.sims at gmail>
+- Shoichiro Kawauchi <https://github.com/lacrosse91>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
@@ -259,6 +263,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Sujan Dulal <https://github.com/Dsujan>
 - Sunhwan Jo <https://github.com/sunhwan>
 - Suresh Panneerselvam <https://github.com/Amrithasuresh>
+- Suyash Gupta <https://github.com/sgalpha01>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
 - Tarjei Mikkelsen <https://github.com/tmikkelsen>
 - Ted Cybulski <https://github.com/tcyb>
@@ -275,6 +280,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Uwe Schmitt <https://github.com/uweschmitt>
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
+- Vini Salazar <https://github.com/vinisalazar>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
@@ -284,6 +290,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yi Hsiao <https://github.com/hsiaoyi0504>
+- Yogesh Kulkarni <https://https://github.com/yogeshhk>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
 - Zachary Sailer <https://github.com/Zsailer>

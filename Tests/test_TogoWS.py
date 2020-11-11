@@ -594,9 +594,7 @@ class TogoSearch(unittest.TestCase):
         search_iter = list(TogoWS.search_iter(database, search_term, limit))
         self.assertEqual(count, len(search_iter))
         for match in expected_matches:
-            self.assertTrue(
-                match in search_iter, "Expected %s in results but not" % match
-            )
+            self.assertIn(match, search_iter, "Expected %s in results" % match)
 
 
 class TogoConvert(unittest.TestCase):
