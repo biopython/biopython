@@ -13,15 +13,6 @@ from Bio.SeqRecord import SeqRecord
 from io import BytesIO
 
 
-def assert_equal_records(testCase, record_a, record_b):
-    testCase.assertEqual(record_a.id, record_b.id)
-    testCase.assertEqual(record_a.name, record_b.name)
-    testCase.assertEqual(record_a.description, record_b.description)
-    testCase.assertEqual(str(record_a.seq), str(record_b.seq))
-    testCase.assertEqual(record_a.dbxrefs, record_b.dbxrefs)
-    testCase.assertEqual(record_a.annotations, record_a.annotations)
-
-
 class TestSimpleRead(unittest.TestCase):
     def test_check_SeqIO(self):
         """Files readable using parser via SeqIO."""
@@ -196,7 +187,12 @@ class TestReadAndWrite(unittest.TestCase):
         self.assertEqual(len(read1_records), len(read2_records))
 
         for record1, record2 in zip(read1_records, read2_records):
-            assert_equal_records(self, record1, record2)
+            self.assertEqual(record1.id, record2.id)
+            self.assertEqual(record1.name, record2.name)
+            self.assertEqual(record1.description, record2.description)
+            self.assertEqual(record1.seq, record2.seq)
+            self.assertEqual(record1.dbxrefs, record2.dbxrefs)
+            self.assertEqual(record1.annotations, record2.annotations)
 
     def test_write_species(self):
         """Test writing species from annotation tags."""

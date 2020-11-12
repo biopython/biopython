@@ -653,12 +653,14 @@ class SeqXmlWriter(SequenceWriter):
                 elif isinstance(value, list):
 
                     for v in value:
-                        if isinstance(value, (int, float, str)):
-                            attr = {"name": key, "value": v}
-                            self.xml_generator.startElement(
-                                "property", AttributesImpl(attr)
-                            )
-                            self.xml_generator.endElement("property")
+                        if v is None:
+                            attr = {"name": key}
+                        else:
+                            attr = {"name": key, "value": str(v)}
+                        self.xml_generator.startElement(
+                            "property", AttributesImpl(attr)
+                        )
+                        self.xml_generator.endElement("property")
 
                 elif isinstance(value, (int, float, str)):
 
