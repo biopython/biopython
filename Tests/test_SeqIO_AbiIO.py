@@ -220,12 +220,17 @@ def open_files(test_array):
 
 def open_files_wrong_mode(test_array):
     for trace in test_array:
-        test_array[trace]["handle"] = open(join(*test_array[trace]["path"]))
+        test_array[trace]["texthandle"] = open(join(*test_array[trace]["path"]))
 
 
 def close_files(test_array):
     for trace in test_array:
         test_array[trace]["handle"].close()
+
+
+def close_files_wrong_mode(test_array):
+    for trace in test_array:
+        test_array[trace]["texthandle"].close()
 
 
 class TestAbi(unittest.TestCase):
@@ -512,15 +517,20 @@ class TestAbiNonAscii(unittest.TestCase):
 
 class TestAbiWrongMode(unittest.TestCase):
     def setUp(self):
+        open_files(test_data)
         open_files_wrong_mode(test_data)
 
     def tearDown(self):
         close_files(test_data)
+        close_files_wrong_mode(test_data)
 
     def test_file_mode(self):
-        """Test if exception is raised if file is not opened in 'rb' mode."""
+        """Test if file is read correctly even if inadvertently opened in text mode."""
         for trace in test_data:
-            self.assertRaises(ValueError, SeqIO.read, test_data[trace]["handle"], "abi")
+            record1 = SeqIO.read(test_data[trace]["handle"], "abi")
+            record2 = SeqIO.read(test_data[trace]["texthandle"], "abi")
+            self.assertEqual(record1.seq, record2.seq)
+            self.assertEqual(vars(record1), vars(record2))
 
 
 class TestAbiFake(unittest.TestCase):

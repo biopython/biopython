@@ -54,9 +54,19 @@ class SequenceIterator(ABC):
                     ) from None
             elif mode == "b":
                 if source.read(0) != b"":
-                    raise StreamModeError(
-                        "%s files must be opened in binary mode." % fmt
-                    ) from None
+                    try:  # to get the underlying stream if the file was opened in text mode
+                        encoding = source.encoding
+                        source = source.buffer
+                    except AttributeError:
+                        # for example, io.StringIO does not have a binary stream
+                        raise StreamModeError(
+                            "%s files must be opened in binary mode." % fmt
+                        ) from None
+                    if source.read(0) != b"":
+                        raise StreamModeError(
+                            "%s files must be opened in binary mode." % fmt
+                        ) from None
+                    self.encoding = encoding
             else:
                 raise ValueError("Unknown mode '%s'" % mode) from None
             self.stream = source
@@ -151,8 +161,17 @@ class SequenceWriter:
             try:
                 target.write(b"")
             except TypeError:
-                # target was opened in text mode
-                raise StreamModeError("File must be opened in binary mode.") from None
+                try:  # to get the underlying stream if the file was opened in text mode
+                    encoding = target.encoding
+                    target = target.buffer
+                    handle = target
+                except AttributeError:
+                    # for example, io.StringIO does not have a binary stream
+                    raise StreamModeError("File must be opened in binary mode.") from None
+                try:
+                    handle.write(b"")
+                except TypeError:
+                    raise StreamModeError("File must be opened in binary mode.") from None
             except AttributeError:
                 # target is a path
                 handle = open(target, mode)
