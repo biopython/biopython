@@ -167,11 +167,15 @@ class SequenceWriter:
                     handle = target
                 except AttributeError:
                     # for example, io.StringIO does not have a binary stream
-                    raise StreamModeError("File must be opened in binary mode.") from None
+                    raise StreamModeError(
+                        "File must be opened in binary mode."
+                    ) from None
                 try:
                     handle.write(b"")
                 except TypeError:
-                    raise StreamModeError("File must be opened in binary mode.") from None
+                    raise StreamModeError(
+                        "File must be opened in binary mode."
+                    ) from None
             except AttributeError:
                 # target is a path
                 handle = open(target, mode)
