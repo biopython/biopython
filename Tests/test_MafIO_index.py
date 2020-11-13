@@ -189,9 +189,7 @@ if sqlite3:
             self.assertEqual(len(self.idx), 48)
 
         def test_records_begin(self):
-            recs = {}
-
-            recs[0] = SeqRecord(
+            rec1 = SeqRecord(
                 Seq(
                     "TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAA"
                     "CACACCGATTACTTAAAATAGGATTAACC--CCCATACACTTTA"
@@ -209,7 +207,7 @@ if sqlite3:
                 },
             )
 
-            recs[1] = SeqRecord(
+            rec2 = SeqRecord(
                 Seq(
                     "TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGG"
                     "TTCATAGGTTACTTGGAATTGGATTAACCTTCTTATTCATTGCA"
@@ -227,14 +225,14 @@ if sqlite3:
                 },
             )
 
+            recs = [rec1, rec2]
+
             fetched_recs = self.idx._get_record(34)
 
             self.compare_records(recs, fetched_recs)
 
         def test_records_end(self):
-            recs = {}
-
-            recs[0] = SeqRecord(
+            rec1 = SeqRecord(
                 Seq("TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt"),
                 id="mm9.chr10",
                 name="mm9.chr10",
@@ -247,7 +245,7 @@ if sqlite3:
                 },
             )
 
-            recs[1] = SeqRecord(
+            rec2 = SeqRecord(
                 Seq("TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
                 id="ponAbe2.chr6",
                 name="ponAbe2.chr6",
@@ -260,7 +258,7 @@ if sqlite3:
                 },
             )
 
-            recs[2] = SeqRecord(
+            rec3 = SeqRecord(
                 Seq("TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
                 id="panTro2.chr6",
                 name="panTro2.chr6",
@@ -273,7 +271,7 @@ if sqlite3:
                 },
             )
 
-            recs[3] = SeqRecord(
+            rec4 = SeqRecord(
                 Seq("TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
                 id="hg18.chr6",
                 name="hg18.chr6",
@@ -286,7 +284,7 @@ if sqlite3:
                 },
             )
 
-            recs[4] = SeqRecord(
+            rec5 = SeqRecord(
                 Seq("TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT"),
                 id="canFam2.chr1",
                 name="canFam2.chr1",
@@ -299,7 +297,7 @@ if sqlite3:
                 },
             )
 
-            recs[5] = SeqRecord(
+            rec6 = SeqRecord(
                 Seq("TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----"),
                 id="ornAna1.chr2",
                 name="ornAna1.chr2",
@@ -311,6 +309,8 @@ if sqlite3:
                     "size": 36,
                 },
             )
+
+            recs = [rec1, rec2, rec3, rec4, rec5, rec6]
 
             fetched_recs = self.idx._get_record(99228)
 
