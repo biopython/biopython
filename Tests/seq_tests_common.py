@@ -15,22 +15,6 @@ from Bio.SeqRecord import SeqRecord
 from test_SeqIO import SeqIOTestBaseClass
 
 
-def checksum_summary(record):
-    """Abbreviated string showing sequence, checksum, and length."""
-    if isinstance(record.seq, UnknownSeq):
-        return repr(record.seq)
-    if len(record.seq) < 25:
-        short = str(record.seq)
-    else:
-        short = str(record.seq)[:19] + "..." + str(record.seq)[-3:]
-    return "%s [%s] len %i" % (short, seguid(record.seq), len(record.seq))
-
-
-
-
-
-
-
 class SeqRecordTestBaseClass(unittest.TestCase):
 
     def compare_reference(self, r1, r2):
@@ -49,19 +33,19 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             # it seems that it will get either the MEDLINE or PUBMED,
             # but not both.  I *think* the current schema does not allow
             # us to store both... must confirm this.
-    
+
         # TODO - assert r1.comment == r2.comment
         # Looking at the tables, I *think* the current schema does not
         # allow us to store a reference comment.  Must confirm this.
         if r2.comment:
             self.assertEqual(r1.comment, r2.comment)
-    
+
         # TODO - assert r1.consrtm == r2.consrtm
         # Looking at the tables, I *think* the current schema does not
         # allow us to store a consortium.
         if r2.consrtm:
             self.assertEqual(r1.consrtm, r2.consrtm)
-    
+
         if len(r1.location) == 0:
             self.assertEqual(len(r2.location), 0)
         else:
@@ -71,7 +55,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             self.assertIsInstance(r2.location[0], FeatureLocation)
             self.assertEqual(r1.location[0].start, r2.location[0].start)
             self.assertEqual(r1.location[0].end, r2.location[0].end)
-    
+
     def compare_feature(self, old_f, new_f):
         """Compare two SeqFeature objects."""
         self.assertIsInstance(old_f, SeqFeature)
@@ -91,10 +75,10 @@ class SeqRecordTestBaseClass(unittest.TestCase):
 
         # We dont store fuzzy locations:
         if not (isinstance(old_f.location.start, UnknownPosition)
-            and isinstance(new_f.location.start, UnknownPosition)):
+                and isinstance(new_f.location.start, UnknownPosition)):
             self.assertEqual(old_f.location.start, new_f.location.start)
         if not (isinstance(old_f.location.end, UnknownPosition)
-            and isinstance(new_f.location.end, UnknownPosition)):
+                and isinstance(new_f.location.end, UnknownPosition)):
             self.assertEqual(old_f.location.end, new_f.location.end)
 
         if isinstance(old_f.location, CompoundLocation):
@@ -225,7 +209,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             ["ncbi_taxid", "structured_comment"]  # Can't store chimeras
         )
         self.assertEqual(len(missing_keys), 0, msg="Unexpectedly missing annotation keys: %s" % ", ".join(missing_keys))
-    
+
         # In the short term, just compare any shared keys:
         for key in set(old.annotations).intersection(new.annotations):
             if key == "references":

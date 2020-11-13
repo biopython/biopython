@@ -1132,7 +1132,6 @@ class AutoSeqIOTests(SeqRecordTestBaseClass):
         self.server.commit()
 
         for record in records:
-            # print(" - %s, %s" % (checksum_summary(record), record.id))
             key = record.name
             # print(" - Retrieving by name/display_id '%s'," % key)
             db_rec = db.lookup(name=key)
