@@ -82,7 +82,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             isinstance(old_f.location.end, UnknownPosition)
             and isinstance(new_f.location.end, UnknownPosition)
         ):
-        self.assertEqual(old_f.location.end, new_f.location.end)
+            self.assertEqual(old_f.location.end, new_f.location.end)
 
         if isinstance(old_f.location, CompoundLocation):
             self.assertIsInstance(new_f.location, CompoundLocation)
