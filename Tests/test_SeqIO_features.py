@@ -78,7 +78,6 @@ assert gbk_template.count("%") == 1, gbk_template
 
 
 class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
-
     def compare_feature(self, old, new, msg=None):
         """Check two SeqFeatures agree."""
         self.assertEqual(old.type, new.type, msg=msg)
