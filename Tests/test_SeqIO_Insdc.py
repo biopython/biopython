@@ -14,7 +14,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
 
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOConverterTestBaseClass
 
 
@@ -74,7 +74,7 @@ class TestEmbl(unittest.TestCase):
         self.assertIn(' /text="blah"\n', gbk)
 
 
-class TestEmblRewrite(unittest.TestCase):
+class TestEmblRewrite(SeqRecordTestBaseClass):
     def check_rewrite(self, filename):
         old = SeqIO.read(filename, "embl")
 
@@ -88,7 +88,7 @@ class TestEmblRewrite(unittest.TestCase):
         buffer.seek(0)
         new = SeqIO.read(buffer, "embl")
 
-        self.assertTrue(compare_record(old, new))
+        self.compare_record(old, new)
 
     def test_annotation1(self):
         """Check writing-and-parsing EMBL file (1)."""

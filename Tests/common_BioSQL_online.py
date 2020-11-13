@@ -29,8 +29,6 @@ from Bio import Entrez
 
 from common_BioSQL import create_database, destroy_database, check_config
 
-from seq_tests_common import compare_record, compare_records
-
 import requires_internet
 
 if __name__ == "__main__":
