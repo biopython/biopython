@@ -113,7 +113,8 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                 old.id,
                 old.name,
                 new.id,
-                new.name)
+                new.name,
+            )
             if msg:
                 err_msg = "%s; %s" % (msg, err_msg)
             self.assertTrue(
@@ -122,7 +123,7 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                 or old.id in new.id
                 or new.id in old.id
                 or old.id.replace(" ", "_") == new.id.replace(" ", "_"),
-                msg=err_msg
+                msg=err_msg,
             )
         self.assertEqual(len(old.seq), len(new.seq), msg=msg)
         if len(old.seq) < 200:
@@ -1114,7 +1115,7 @@ class NC_005816(NC_000932):
             msg = "FAA vs FNA translation problem:\n%s\n%s\n%s\n" % (
                 fna.format("fasta"),
                 t.format("fasta"),
-                faa.format("fasta")
+                faa.format("fasta"),
             )
             self.assertTrue(
                 str(translation) == str(faa.seq)
