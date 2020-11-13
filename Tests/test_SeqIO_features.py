@@ -82,7 +82,9 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
     def compare_feature(self, old, new, msg=None):
         """Check two SeqFeatures agree."""
         self.assertEqual(old.type, new.type, msg=msg)
-        self.assertEqual(old.location.nofuzzy_start, new.location.nofuzzy_start, msg=msg)
+        self.assertEqual(
+            old.location.nofuzzy_start, new.location.nofuzzy_start, msg=msg
+        )
         if old.strand is not None:
             self.assertEqual(old.strand, new.strand, msg=msg)
         self.assertEqual(old.ref, new.ref, msg=msg)
@@ -107,14 +109,21 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
     def compare_record(self, old, new, msg=None, expect_minor_diffs=False):
         # Note the name matching is a bit fuzzy
         if not expect_minor_diffs:
-            err_msg = "'%s' or '%s' vs '%s' or '%s' records" % (old.id, old.name, new.id, new.name)
+            err_msg = "'%s' or '%s' vs '%s' or '%s' records" % (
+                old.id,
+                old.name,
+                new.id,
+                new.name)
             if msg:
                 err_msg = "%s; %s" % (msg, err_msg)
-            self.assertTrue(old.id == new.id
-                            or old.name == new.name
-                            or old.id in new.id
-                            or old.id in old.id
-                            or old.id.replace(" ", "_") == new.id.replace(" ", "_"), msg=err_msg)
+            self.assertTrue(
+                old.id == new.id
+                or old.name == new.name
+                or old.id in new.id
+                or new.id in old.id
+                or old.id.replace(" ", "_") == new.id.replace(" ", "_"),
+                msg=err_msg
+            )
         self.assertEqual(len(old.seq), len(new.seq), msg=msg)
         if len(old.seq) < 200:
             err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
@@ -148,12 +157,16 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                 self.assertGreater(len(common_words), 0, msg=msg)
             elif key == "comment":
                 # Ignore whitespace
-                self.assertEqual(old.annotations[key].split(), new.annotations[key].split(), msg=msg)
+                self.assertEqual(
+                    old.annotations[key].split(), new.annotations[key].split(), msg=msg
+                )
             elif key == "references":
                 if expect_minor_diffs:
                     # TODO - Implement EMBL output of references
                     continue
-                self.assertEqual(len(old.annotations[key]), len(new.annotations[key]), msg=msg)
+                self.assertEqual(
+                    len(old.annotations[key]), len(new.annotations[key]), msg=msg
+                )
                 for r1, r2 in zip(old.annotations[key], new.annotations[key]):
                     self.assertEqual(r1.title, r2.title, msg=msg)
                     self.assertEqual(r1.authors, r2.authors, msg=msg)
@@ -166,7 +179,9 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                         self.assertEqual(r1.medline_id, r2.medline_id, msg=msg)
                     self.assertEqual(r1.pubmed_id, r2.pubmed_id, msg=msg)
             else:
-                self.assertEqual(repr(old.annotations[key]), repr(new.annotations[key]), msg=msg)
+                self.assertEqual(
+                    repr(old.annotations[key]), repr(new.annotations[key]), msg=msg
+                )
 
 
 class GenBankLocations(SeqIOFeatureTestBaseClass):
@@ -1096,8 +1111,15 @@ class NC_005816(NC_000932):
             t = SeqRecord(
                 translation, id="Translation", description="Table %s" % self.table
             )
-            msg = "FAA vs FNA translation problem:\n%s\n%s\n%s\n" % (fna.format("fasta"), t.format("fasta"), faa.format("fasta"))
-            self.assertTrue(str(translation) == str(faa.seq) or str(translation) != str(faa.seq) + "*")
+            msg = "FAA vs FNA translation problem:\n%s\n%s\n%s\n" % (
+                fna.format("fasta"),
+                t.format("fasta"),
+                faa.format("fasta")
+            )
+            self.assertTrue(
+                str(translation) == str(faa.seq)
+                or str(translation) != str(faa.seq) + "*"
+            )
 
     def test_Genome(self):
         """Checking GenBank sequence vs FASTA fna file."""
