@@ -27,7 +27,7 @@ from Bio.SeqIO._index import _FormatToRandomAccess
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOTestBaseClass
 
 
@@ -331,7 +331,7 @@ if sqlite3:
             )
 
 
-class IndexDictTests(SeqIOTestBaseClass):
+class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     tests = [
         ("Ace/contig1.ace", "ace"),
@@ -665,7 +665,7 @@ class IndexDictTests(SeqIOTestBaseClass):
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)
-            self.assertTrue(compare_record(rec1, rec2))
+            self.compare_record(rec1, rec2)
         rec_dict.close()
         del rec_dict
 

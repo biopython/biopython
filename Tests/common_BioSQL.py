@@ -27,7 +27,7 @@ from Bio.SeqRecord import SeqRecord
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
-from seq_tests_common import compare_record, compare_records
+from seq_tests_common import SeqRecordTestBaseClass
 
 if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")
@@ -793,7 +793,7 @@ class DupLoadTest(unittest.TestCase):
         raise Exception("Should have failed! Loaded %i records" % count)
 
 
-class ClosedLoopTest(unittest.TestCase):
+class ClosedLoopTest(SeqRecordTestBaseClass):
     """Test file -> BioSQL -> file."""
 
     @classmethod
@@ -861,7 +861,7 @@ class ClosedLoopTest(unittest.TestCase):
         # Now read them back...
         biosql_records = [db.lookup(name=rec.name) for rec in original_records]
         # And check they agree
-        self.assertTrue(compare_records(original_records, biosql_records))
+        self.compare_records(original_records, biosql_records)
         # Now write to a handle...
         handle = StringIO()
         SeqIO.write(biosql_records, handle, "gb")
@@ -875,13 +875,13 @@ class ClosedLoopTest(unittest.TestCase):
             for key in ["comment", "references", "db_source"]:
                 if key in old.annotations and key not in new.annotations:
                     del old.annotations[key]
-            self.assertTrue(compare_record(old, new))
+            self.compare_record(old, new)
         # Done
         handle.close()
         server.close()
 
 
-class TransferTest(unittest.TestCase):
+class TransferTest(SeqRecordTestBaseClass):
     """Test file -> BioSQL, BioSQL -> BioSQL."""
 
     # NOTE - For speed I don't bother to create a new database each time,
@@ -946,7 +946,7 @@ class TransferTest(unittest.TestCase):
         # Now read them back...
         biosql_records = [db.lookup(name=rec.name) for rec in original_records]
         # And check they agree
-        self.assertTrue(compare_records(original_records, biosql_records))
+        self.compare_records(original_records, biosql_records)
         # Now write to a second name space...
         db_name = "test_trans2_%s" % filename  # new namespace!
         db = server.new_database(db_name)
@@ -955,7 +955,7 @@ class TransferTest(unittest.TestCase):
         # Now read them back again,
         biosql_records2 = [db.lookup(name=rec.name) for rec in original_records]
         # And check they also agree
-        self.assertTrue(compare_records(original_records, biosql_records2))
+        self.compare_records(original_records, biosql_records2)
         # Done
         server.close()
 
@@ -1081,7 +1081,7 @@ class InDepthLoadTest(unittest.TestCase):
 #####################################################################
 
 
-class AutoSeqIOTests(unittest.TestCase):
+class AutoSeqIOTests(SeqRecordTestBaseClass):
     """Test SeqIO and BioSQL together."""
 
     server = None
@@ -1136,15 +1136,15 @@ class AutoSeqIOTests(unittest.TestCase):
             key = record.name
             # print(" - Retrieving by name/display_id '%s'," % key)
             db_rec = db.lookup(name=key)
-            compare_record(record, db_rec)
+            self.compare_record(record, db_rec)
             db_rec = db.lookup(display_id=key)
-            compare_record(record, db_rec)
+            self.compare_record(record, db_rec)
 
             key = record.id
             if key.count(".") == 1 and key.split(".")[1].isdigit():
                 # print(" - Retrieving by version '%s'," % key)
                 db_rec = db.lookup(version=key)
-                compare_record(record, db_rec)
+                self.compare_record(record, db_rec)
 
             if "accessions" in record.annotations:
                 # Only expect FIRST accession to work!
@@ -1153,14 +1153,14 @@ class AutoSeqIOTests(unittest.TestCase):
                 if key != record.id:
                     # print(" - Retrieving by accession '%s'," % key)
                     db_rec = db.lookup(accession=key)
-                    compare_record(record, db_rec)
+                    self.compare_record(record, db_rec)
 
             if "gi" in record.annotations:
                 key = record.annotations["gi"]
                 if key != record.id:
                     # print(" - Retrieving by GI '%s'," % key)
                     db_rec = db.lookup(primary_id=key)
-                    compare_record(record, db_rec)
+                    self.compare_record(record, db_rec)
 
     def test_SeqIO_loading(self):
         self.check("fasta", "Fasta/lupine.nu")

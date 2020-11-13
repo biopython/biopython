@@ -21,7 +21,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 
 
 class StaticMethodTest(unittest.TestCase):
@@ -179,7 +179,7 @@ if sqlite3:
                 "mm9.chr10",
             )
 
-    class TestGetRecord(unittest.TestCase):
+    class TestGetRecord(SeqRecordTestBaseClass):
         """Make sure we can seek and fetch records properly."""
 
         def setUp(self):
@@ -229,8 +229,8 @@ if sqlite3:
 
             fetched_recs = self.idx._get_record(34)
 
-            for i in range(2):
-                self.assertTrue(compare_record(recs[i], fetched_recs[i]))
+            self.compare_record(recs[0], fetched_recs[0])
+            self.compare_record(recs[1], fetched_recs[1])
 
         def test_records_end(self):
             recs = {}
@@ -315,8 +315,12 @@ if sqlite3:
 
             fetched_recs = self.idx._get_record(99228)
 
-            for i in range(6):
-                self.assertTrue(compare_record(recs[i], fetched_recs[i]))
+            self.compare_record(recs[0], fetched_recs[0])
+            self.compare_record(recs[1], fetched_recs[1])
+            self.compare_record(recs[2], fetched_recs[2])
+            self.compare_record(recs[3], fetched_recs[3])
+            self.compare_record(recs[4], fetched_recs[4])
+            self.compare_record(recs[5], fetched_recs[5])
 
     class TestSearchGoodMAF(unittest.TestCase):
         """Test index searching on a properly-formatted MAF."""
