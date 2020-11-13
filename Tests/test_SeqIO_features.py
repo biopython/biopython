@@ -89,7 +89,7 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
         self.assertEqual(old.ref_db, new.ref_db, msg=msg)
         self.assertEqual(old.location_operator, new.location_operator, msg=msg)
         self.assertEqual(old.location.start, new.location.start, msg=msg)
-        self.assertEqual(str(old.location.start), str( new.location.start), msg=msg)
+        self.assertEqual(str(old.location.start), str(new.location.start), msg=msg)
         self.assertEqual(old.location.end, new.location.end, msg=msg)
         self.assertEqual(str(old.location.end), str(new.location.end), msg=msg)
         # This only checks key shared qualifiers
@@ -1146,7 +1146,6 @@ class TestWriteRead(SeqIOFeatureTestBaseClass):
             # Now load it back and check it agrees,
             gb_records2 = list(SeqIO.parse(handle, out_format))
             self.compare_records(gb_records, gb_records2, msg=msg)
-
 
     def test_NC_000932(self):
         """Write and read back NC_000932.gb."""
