@@ -252,14 +252,14 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 # guarantee that they will be identical after a load/retrieve.
                 self.assertTrue(
                     isinstance(new.annotations[key], str)
-                    or isinstance( new.annotations[key], list)
+                    or isinstance(new.annotations[key], list)
                 )
             elif isinstance(old.annotations[key], type(new.annotations[key])):
                 self.assertEqual(
                     old.annotations[key],
                     new.annotations[key],
                     msg="Annotation '%s' changed by load/retrieve" % key
-            )
+                )
             elif isinstance(old.annotations[key], str) and isinstance(
                 new.annotations[key], list
             ):
