@@ -16,7 +16,7 @@ import unittest
 from io import BytesIO
 from copy import deepcopy
 
-from search_tests_common import compare_search_obj
+from search_tests_common import SearchTestBaseClass
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -54,7 +54,7 @@ hit41 = Hit([hsp411])
 hit12 = Hit([hsp121])
 
 
-class QueryResultCases(unittest.TestCase):
+class QueryResultCases(SearchTestBaseClass):
     def setUp(self):
         self.qresult = QueryResult([hit11, hit21, hit31], "query1")
         # set mock attributes
@@ -66,7 +66,7 @@ class QueryResultCases(unittest.TestCase):
         buf = BytesIO()
         pickle.dump(self.qresult, buf)
         unp = pickle.loads(buf.getvalue())
-        self.assertTrue(compare_search_obj(self.qresult, unp))
+        self.compare_search_obj(self.qresult, unp)
 
     def test_order(self):
         # added hits should be ordered
@@ -503,7 +503,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hit_filter should create a new object with
         # the same contents
         filtered = self.qresult.hit_filter()
-        self.assertTrue(compare_search_obj(filtered, self.qresult))
+        self.compare_search_obj(filtered, self.qresult)
         self.assertNotEqual(id(filtered), id(self.qresult))
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual("refseq_rna", filtered.target)
@@ -547,7 +547,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hit_map should create a new object with
         # the same contents
         mapped = self.qresult.hit_map()
-        self.assertTrue(compare_search_obj(mapped, self.qresult))
+        self.compare_search_obj(mapped, self.qresult)
         self.assertNotEqual(id(mapped), id(self.qresult))
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual("refseq_rna", mapped.target)
@@ -576,7 +576,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hsp_filter should create a new object with
         # the same contents
         filtered = self.qresult.hsp_filter()
-        self.assertTrue(compare_search_obj(filtered, self.qresult))
+        self.compare_search_obj(filtered, self.qresult)
         self.assertNotEqual(id(filtered), id(self.qresult))
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual("refseq_rna", filtered.target)
@@ -642,7 +642,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hit_map should create a new object with
         # the same contents
         mapped = self.qresult.hsp_map()
-        self.assertTrue(compare_search_obj(mapped, self.qresult))
+        self.compare_search_obj(mapped, self.qresult)
         self.assertNotEqual(id(mapped), id(self.qresult))
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual("refseq_rna", mapped.target)
@@ -750,7 +750,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
 
 
-class HitCases(unittest.TestCase):
+class HitCases(SearchTestBaseClass):
     def setUp(self):
         self.hit = Hit([hsp111, hsp112, hsp113])
         self.hit.evalue = 5e-10
@@ -761,7 +761,7 @@ class HitCases(unittest.TestCase):
         buf = BytesIO()
         pickle.dump(self.hit, buf)
         unp = pickle.loads(buf.getvalue())
-        self.assertTrue(compare_search_obj(self.hit, unp))
+        self.compare_search_obj(self.hit, unp)
 
     def test_init_none(self):
         """Test Hit.__init__, no arguments."""
@@ -967,7 +967,7 @@ class HitCases(unittest.TestCase):
         # when given no arguments, filter should create a new object with
         # the same contents
         filtered = self.hit.filter()
-        self.assertTrue(compare_search_obj(filtered, self.hit))
+        self.compare_search_obj(filtered, self.hit)
         self.assertNotEqual(id(filtered), id(self.hit))
         self.assertEqual(5e-10, filtered.evalue)
         self.assertEqual("test", filtered.name)
@@ -1024,7 +1024,7 @@ class HitCases(unittest.TestCase):
         # when given no arguments, map should create a new object with
         # the same contents
         mapped = self.hit.map()
-        self.assertTrue(compare_search_obj(mapped, self.hit))
+        self.compare_search_obj(mapped, self.hit)
         self.assertNotEqual(id(mapped), id(self.hit))
         self.assertEqual(5e-10, mapped.evalue)
         self.assertEqual("test", mapped.name)
@@ -1119,7 +1119,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
         self.assertRaises(AttributeError, setattr, self.hsp, "aln", None)
 
 
-class HSPMultipleFragmentCases(unittest.TestCase):
+class HSPMultipleFragmentCases(SearchTestBaseClass):
     def setUp(self):
         self.frag1 = HSPFragment("hit_id", "query_id", "ATCAGT", "AT-ACT")
         self.frag1.query_start = 0
@@ -1138,7 +1138,7 @@ class HSPMultipleFragmentCases(unittest.TestCase):
         buf = BytesIO()
         pickle.dump(self.hsp, buf)
         unp = pickle.loads(buf.getvalue())
-        self.assertTrue(compare_search_obj(self.hsp, unp))
+        self.compare_search_obj(self.hsp, unp)
 
     def test_len(self):
         """Test HSP.__len__."""
@@ -1330,7 +1330,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         self.assertRaises(TypeError, iter, self)
 
 
-class HSPFragmentCases(unittest.TestCase):
+class HSPFragmentCases(SearchTestBaseClass):
     def setUp(self):
         self.fragment = HSPFragment(
             "hit_id", "query_id", "ATGCTAGCTACA", "ATG--AGCTAGG"
@@ -1341,7 +1341,7 @@ class HSPFragmentCases(unittest.TestCase):
         buf = BytesIO()
         pickle.dump(self.fragment, buf)
         unp = pickle.loads(buf.getvalue())
-        self.assertTrue(compare_search_obj(self.fragment, unp))
+        self.compare_search_obj(self.fragment, unp)
 
     def test_init_with_seqrecord(self):
         """Test HSPFragment.__init__, with SeqRecord."""
