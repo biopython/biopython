@@ -12,6 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: trilom/file-changes-action@v1.2.4
+      with:
+        # Creates files.txt
+        output: ' '
+        fileOutput: ' '
 
     - name: Cache pre-commit hooks
       id: cache-precommit
@@ -38,7 +43,7 @@ jobs:
 
     - name: Run style checking via pre-commit
       run: |
-        pre-commit run -a
+        pre-commit run --files $( cat ${HOME}/files.txt )
 
   # Build package: sdist, bdist_wheel
   build:
