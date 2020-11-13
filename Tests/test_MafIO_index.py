@@ -229,8 +229,7 @@ if sqlite3:
 
             fetched_recs = self.idx._get_record(34)
 
-            self.compare_record(recs[0], fetched_recs[0])
-            self.compare_record(recs[1], fetched_recs[1])
+            self.compare_records(recs, fetched_recs)
 
         def test_records_end(self):
             recs = {}
@@ -315,12 +314,7 @@ if sqlite3:
 
             fetched_recs = self.idx._get_record(99228)
 
-            self.compare_record(recs[0], fetched_recs[0])
-            self.compare_record(recs[1], fetched_recs[1])
-            self.compare_record(recs[2], fetched_recs[2])
-            self.compare_record(recs[3], fetched_recs[3])
-            self.compare_record(recs[4], fetched_recs[4])
-            self.compare_record(recs[5], fetched_recs[5])
+            self.compare_records(recs, fetched_recs)
 
     class TestSearchGoodMAF(unittest.TestCase):
         """Test index searching on a properly-formatted MAF."""

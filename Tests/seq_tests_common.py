@@ -281,8 +281,6 @@ class SeqRecordTestBaseClass(unittest.TestCase):
 
     def compare_records(self, old_list, new_list):
         """Compare two lists of SeqRecord objects."""
-        self.assertIsInstance(old_list, list)
-        self.assertIsInstance(new_list, list)
         self.assertEqual(len(old_list), len(new_list))
         for old_r, new_r in zip(old_list, new_list):
             self.compare_record(old_r, new_r)
