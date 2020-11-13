@@ -462,7 +462,9 @@ class TestUniprot(SeqRecordTestBaseClass):
             if key in ["date"]:
                 # TODO - Why is this a list vs str?
                 continue
-            self.assertIsInstance(old.annotations[key], type(new.annotations[key]), msg="key=%s" % key)
+            self.assertIsInstance(
+                old.annotations[key], type(new.annotations[key]), msg="key=%s" % key
+            )
             if key == "references":
                 self.assertEqual(len(old.annotations[key]), len(new.annotations[key]))
                 for r1, r2 in zip(old.annotations[key], new.annotations[key]):
@@ -478,11 +480,18 @@ class TestUniprot(SeqRecordTestBaseClass):
                         r1.journal = ""
                     self.compare_reference(r1, r2)
             elif key in ["organism"]:
-                self.assertTrue(old.annotations[key] == new.annotations[key] or old.annotations[key].startswith(new.annotations[key] + " "))
+                self.assertTrue(
+                    old.annotations[key] == new.annotations[key]
+                    or old.annotations[key].startswith(new.annotations[key] + " ")
+                )
             elif isinstance(old.annotations[key], list):
-                self.assertEqual(sorted(old.annotations[key]), sorted(new.annotations[key]))
+                self.assertEqual(
+                    sorted(old.annotations[key]), sorted(new.annotations[key])
+                )
             else:
-                self.assertEqual(old.annotations[key], new.annotations[key], msg="key=%s" % key)
+                self.assertEqual(
+                    old.annotations[key], new.annotations[key], msg="key=%s" % key
+                )
         self.assertEqual(
             len(old.features),
             len(new.features),

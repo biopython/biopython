@@ -16,7 +16,6 @@ from test_SeqIO import SeqIOTestBaseClass
 
 
 class SeqRecordTestBaseClass(unittest.TestCase):
-
     def compare_reference(self, r1, r2):
         """Compare two Reference objects.
 
@@ -74,12 +73,16 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         #        "%s -> %s" % (old_f.location_operator, new_f.location_operator)
 
         # We dont store fuzzy locations:
-        if not (isinstance(old_f.location.start, UnknownPosition)
-                and isinstance(new_f.location.start, UnknownPosition)):
+        if not (
+            isinstance(old_f.location.start, UnknownPosition)
+            and isinstance(new_f.location.start, UnknownPosition)
+        ):
             self.assertEqual(old_f.location.start, new_f.location.start)
-        if not (isinstance(old_f.location.end, UnknownPosition)
-                and isinstance(new_f.location.end, UnknownPosition)):
-            self.assertEqual(old_f.location.end, new_f.location.end)
+        if not (
+            isinstance(old_f.location.end, UnknownPosition)
+            and isinstance(new_f.location.end, UnknownPosition)
+        ):
+        self.assertEqual(old_f.location.end, new_f.location.end)
 
         if isinstance(old_f.location, CompoundLocation):
             self.assertIsInstance(new_f.location, CompoundLocation)
@@ -203,12 +206,20 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         new_keys = new_keys.difference(
             ["cross_references", "date", "data_file_division", "ncbi_taxid", "gi"]
         )
-        self.assertEqual(len(new_keys), 0, msg="Unexpected new annotation keys: %s" % ", ".join(new_keys))
+        self.assertEqual(
+            len(new_keys),
+            0,
+            msg="Unexpected new annotation keys: %s" % ", ".join(new_keys)
+        )
         missing_keys = set(old.annotations).difference(new.annotations)
         missing_keys = missing_keys.difference(
             ["ncbi_taxid", "structured_comment"]  # Can't store chimeras
         )
-        self.assertEqual(len(missing_keys), 0, msg="Unexpectedly missing annotation keys: %s" % ", ".join(missing_keys))
+        self.assertEqual(
+            len(missing_keys),
+            0,
+            msg="Unexpectedly missing annotation keys: %s" % ", ".join(missing_keys)
+        )
 
         # In the short term, just compare any shared keys:
         for key in set(old.annotations).intersection(new.annotations):
@@ -230,26 +241,43 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                     new_comment = new.annotations[key]
                 old_comment = old_comment.replace("\n", " ").replace("  ", " ")
                 new_comment = new_comment.replace("\n", " ").replace("  ", " ")
-                self.assertEqual(old_comment, new_comment, msg="Comment annotation changed by load/retrieve")
+                self.assertEqual(
+                    old_comment,
+                    new_comment,
+                    msg="Comment annotation changed by load/retrieve"
+                )
             elif key in ["taxonomy", "organism", "source"]:
                 # If there is a taxon id recorded, these fields get overwritten
                 # by data from the taxon/taxon_name tables.  There is no
                 # guarantee that they will be identical after a load/retrieve.
-                self.assertTrue(isinstance(new.annotations[key], str) or isinstance(
-                    new.annotations[key], list
-                ))
+                self.assertTrue(
+                    isinstance(new.annotations[key], str)
+                    or isinstance( new.annotations[key], list)
+                )
             elif isinstance(old.annotations[key], type(new.annotations[key])):
-                self.assertEqual(old.annotations[key], new.annotations[key], msg="Annotation '%s' changed by load/retrieve" % key)
+                self.assertEqual(
+                    old.annotations[key],
+                    new.annotations[key],
+                    msg="Annotation '%s' changed by load/retrieve" % key
+            )
             elif isinstance(old.annotations[key], str) and isinstance(
                 new.annotations[key], list
             ):
                 # Any annotation which is a single string gets turned into
                 # a list containing one string by BioSQL at the moment.
-                self.assertEqual([old.annotations[key]], new.annotations[key], msg="Annotation '%s' changed by load/retrieve" % key)
+                self.assertEqual(
+                    [old.annotations[key]],
+                    new.annotations[key],
+                    msg="Annotation '%s' changed by load/retrieve" % key
+                )
             elif isinstance(old.annotations[key], list) and isinstance(
                 new.annotations[key], str
             ):
-                self.assertEqual(old.annotations[key], [new.annotations[key]], msg="Annotation '%s' changed by load/retrieve" % key)
+                self.assertEqual(
+                    old.annotations[key],
+                    [new.annotations[key]],
+                    msg="Annotation '%s' changed by load/retrieve" % key
+                )
 
     def compare_records(self, old_list, new_list):
         """Compare two lists of SeqRecord objects."""
