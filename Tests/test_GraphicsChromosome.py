@@ -431,7 +431,9 @@ class ChromosomeCountTest(unittest.TestCase):
     def test_add_label(self):
         """Add labels to chromosome segments."""
         self.count_display.add_label(self.names[1], "Rules")
-        self.assertRaises(KeyError, self.count_display.add_label, "Non-existent", "elephant")
+        self.assertRaises(
+            KeyError, self.count_display.add_label, "Non-existent", "elephant"
+        )
 
     def test_set_scale(self):
         """Set the scale for a chromosome segment."""
