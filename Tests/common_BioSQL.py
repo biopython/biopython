@@ -415,25 +415,13 @@ class ReadTest(unittest.TestCase):
     def test_lookup_items(self):
         """Test retrieval of items using various ids."""
         self.db.lookup(accession="X62281")
-        try:
-            self.db.lookup(accession="Not real")
-            raise AssertionError("No problem on fake id retrieval")
-        except IndexError:
-            pass
+        self.assertRaises(IndexError, self.db.lookup, accession="Not real")
         self.db.lookup(display_id="ATKIN2")
-        try:
-            self.db.lookup(display_id="Not real")
-            raise AssertionError("No problem on fake id retrieval")
-        except IndexError:
-            pass
+        self.assertRaises(IndexError, self.db.lookup, display_id="Not real")
 
         # primary id retrieval
         self.db.lookup(primary_id="16353")
-        try:
-            self.db.lookup(primary_id="Not Real")
-            raise AssertionError("No problem on fake primary id retrieval")
-        except IndexError:
-            pass
+        self.assertRaises(IndexError, self.db.lookup, primary_id="Not Real")
 
 
 class SeqInterfaceTest(unittest.TestCase):
@@ -574,14 +562,13 @@ class SeqInterfaceTest(unittest.TestCase):
             str(cds_feature.location), "join{[103:160](+), [319:390](+), [503:579](+)}"
         )
 
-        try:
-            self.assertEqual(cds_feature.qualifiers["gene"], ["kin2"])
-            self.assertEqual(cds_feature.qualifiers["protein_id"], ["CAA44171.1"])
-            self.assertEqual(cds_feature.qualifiers["codon_start"], ["1"])
-        except KeyError:
-            raise KeyError(
-                "Missing expected entries, have %r" % cds_feature.qualifiers
-            ) from None
+        msg = "Missing expected entries, have %r" % cds_feature.qualifiers
+        self.assertIn("gene", cds_feature.qualifiers)
+        self.assertIn("protein_id", cds_feature.qualifiers)
+        self.assertIn("codon_start", cds_feature.qualifiers)
+        self.assertEqual(cds_feature.qualifiers.get("gene"), ["kin2"])
+        self.assertEqual(cds_feature.qualifiers.get("protein_id"), ["CAA44171.1"])
+        self.assertEqual(cds_feature.qualifiers.get("codon_start"), ["1"])
 
         self.assertIn("db_xref", cds_feature.qualifiers)
         multi_ann = cds_feature.qualifiers["db_xref"]
@@ -737,23 +724,15 @@ class DupLoadTest(unittest.TestCase):
         record = SeqRecord(
             Seq("ATGCTATGACTAT"), id="Test1", annotations={"molecule_type": "DNA"}
         )
-        try:
-            count = self.db.load([record, record])
-        except Exception as err:
-            # Good!
-            # Note we don't do a specific exception handler because the
-            # exception class will depend on which DB back end is in use.
-            self.assertIn(
-                err.__class__.__name__,
-                [
-                    "IntegrityError",
-                    "UniqueViolation",
-                    "AttributeError",
-                    "OperationalError",
-                ],
-            )
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
+        with self.assertRaises(Exception) as cm:
+            self.db.load([record, record])
+        err = cm.exception
+        # Note we check for a specific exception because the exception
+        # class will depend on which DB back end is in use.
+        self.assertIn(
+            err.__class__.__name__,
+            ["IntegrityError", "UniqueViolation", "AttributeError", "OperationalError"],
+        )
 
     def test_duplicate_load2(self):
         """Make sure can't import a single record twice (in steps)."""
@@ -762,16 +741,15 @@ class DupLoadTest(unittest.TestCase):
         )
         count = self.db.load([record])
         self.assertEqual(count, 1)
-        try:
-            count = self.db.load([record])
-        except Exception as err:
-            # Good!
-            self.assertIn(
-                err.__class__.__name__,
-                ["IntegrityError", "UniqueViolation", "AttributeError"],
-            )
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
+        with self.assertRaises(Exception) as cm:
+            self.db.load([record])
+        err = cm.exception
+        # Note we check for a specific exception because the exception
+        # class will depend on which DB back end is in use.
+        self.assertIn(
+            err.__class__.__name__,
+            ["IntegrityError", "UniqueViolation", "AttributeError"],
+        )
 
     def test_duplicate_id_load(self):
         """Make sure can't import records with same ID (in one go)."""
@@ -781,16 +759,15 @@ class DupLoadTest(unittest.TestCase):
         record2 = SeqRecord(
             Seq("GGGATGCGACTAT"), id="TestA", annotations={"molecule_type": "DNA"}
         )
-        try:
-            count = self.db.load([record1, record2])
-        except Exception as err:
-            # Good!
-            self.assertIn(
-                err.__class__.__name__,
-                ["IntegrityError", "UniqueViolation", "AttributeError"],
-            )
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
+        with self.assertRaises(Exception) as cm:
+            self.db.load([record1, record2])
+        err = cm.exception
+        # Note we check for a specific exception because the exception
+        # class will depend on which DB back end is in use.
+        self.assertIn(
+            err.__class__.__name__,
+            ["IntegrityError", "UniqueViolation", "AttributeError"],
+        )
 
 
 class ClosedLoopTest(SeqRecordTestBaseClass):
@@ -1003,16 +980,15 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(db_record.description, record.description)
         self.assertEqual(str(db_record.seq), str(record.seq))
         # Good... now try reloading it!
-        try:
-            count = self.db.load([record])
-        except Exception as err:
-            # Good!
-            self.assertIn(
-                err.__class__.__name__,
-                ["IntegrityError", "UniqueViolation", "AttributeError"],
-            )
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
+        with self.assertRaises(Exception) as cm:
+            self.db.load([record])
+        err = cm.exception
+        # Note we check for a specific exception because the exception
+        # class will depend on which DB back end is in use.
+        self.assertIn(
+            err.__class__.__name__,
+            ["IntegrityError", "UniqueViolation", "AttributeError"],
+        )
 
     def test_record_loading(self):
         """Make sure all records are correctly loaded."""
