@@ -17,6 +17,7 @@ Tests/Quality/example.fastq binary
 Tests/Quality/example_dos.fastq binary
 Tests/Blast/wnts.xml binary
 Tests/MAF/cnksr3.fa binary
+Tests/MAF/ucsc_mm9_chr10_big.maf binary
 
 # This pickle file has to be using Unix new lines otherwise at
 # least Python 3.4's C pickle parser fails with exception:
