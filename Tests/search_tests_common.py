@@ -21,7 +21,6 @@ from Bio.SeqRecord import SeqRecord
 
 
 class SearchTestBaseClass(unittest.TestCase):
-
     def compare_attrs(self, obj_a, obj_b, attrs):
         """Compare attribute values of two objects."""
         for attr in attrs:
