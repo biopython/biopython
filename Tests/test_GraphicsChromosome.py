@@ -426,46 +426,28 @@ class ChromosomeCountTest(unittest.TestCase):
         """Add counts to specific chromosome segments."""
         self.count_display.add_count(self.names[1])
         self.count_display.add_count(self.names[2], 5)
-
-        try:
-            self.count_display.add_count("Non-existent")
-            raise AssertionError("Didn't raise a KeyError on a fake key")
-        except KeyError:
-            pass
+        self.assertRaises(KeyError, self.count_display.add_count, "Non-existent")
 
     def test_add_label(self):
         """Add labels to chromosome segments."""
         self.count_display.add_label(self.names[1], "Rules")
-
-        try:
-            self.count_display.add_label("Non-existent", "Elephant")
-            raise AssertionError("Didn't raise a KeyError on a fake key")
-        except KeyError:
-            pass
+        self.assertRaises(
+            KeyError, self.count_display.add_label, "Non-existent", "elephant"
+        )
 
     def test_set_scale(self):
         """Set the scale for a chromosome segment."""
         self.count_display.set_scale(self.names[1], 1.5)
-
-        try:
-            self.count_display.set_scale("Non-existant", 5)
-            raise AssertionError("Didn't raise a KeyError on a fake key.")
-        except KeyError:
-            pass
+        self.assertRaises(KeyError, self.count_display.set_scale, "Non-existent", 5)
 
     def test_color_from_count(self):
         """Retrieve a color from a count number with the default color scheme."""
         test_color = self.count_display._color_from_count(3)
-        assert test_color == colors.blue, "Unexpected color %s" % test_color
+        self.assertEqual(test_color, colors.blue)
 
         test_color = self.count_display._color_from_count(9)
-        assert test_color == colors.red, "Unexpected color %s" % test_color
-
-        try:
-            self.count_display._color_from_count(200)
-            raise AssertionError("Didn't raise an error for bad count.")
-        except ValueError:
-            pass
+        self.assertEqual(test_color, colors.red)
+        self.assertRaises(ValueError, self.count_display._color_from_count, 200)
 
     def test_fill_chromosome(self):
         """Test filling out the information on a chromosome."""
