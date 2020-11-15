@@ -191,23 +191,22 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 
-        try:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-        except ApplicationError as err:
-            # Ideally we'd catch the return code and raise the specific
-            # error for "invalid format", rather than just notice there
-            # is not output file.
-            # Note:
-            # Python 2.3 on Windows gave (0, 'Error')
-            # Python 2.5 on Windows gives [Errno 0] Error
-            self.assertTrue(
-                "invalid format" in str(err)
-                or "not produced" in str(err)
-                or "No sequences in file" in str(err)
-                or "Non-zero return code " in str(err)
-            )
-        else:
-            self.fail("expected an ApplicationError")
+            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+        err = str(cm.exception)
+        # Ideally we'd catch the return code and raise the specific
+        # error for "invalid format", rather than just notice there
+        # is not output file.
+        # Note:
+        # Python 2.3 on Windows gave (0, 'Error')
+        # Python 2.5 on Windows gives [Errno 0] Error
+        self.assertTrue(
+            "invalid format" in err
+            or "not produced" in err
+            or "No sequences in file" in err
+            or "Non-zero return code " in err
+        )
 
 
 class ClustalWTestNormalConditions(ClustalWTestCase):
