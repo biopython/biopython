@@ -14,6 +14,7 @@ adam consensus.
 
 import random
 import itertools
+import queue
 
 from ast import literal_eval
 from Bio.Phylo import BaseTree
@@ -219,14 +220,20 @@ class _BitString(str):
         return cls("".join(map(str, map(int, bools))))
 
 
-def strict_consensus(trees):
+def strict_consensus(trees, mcmc=False):
     """Search strict consensus tree from multiple trees.
 
     :Parameters:
-        trees : iterable
-            iterable of trees to produce consensus tree.
+        trees : list
+            list of trees to produce consensus tree or a list of tuples
+            output of mcmc if mcmc=True, tuples like (tree, number of occurences in MCMC)
+
+        mcmc : Boolean
+            True if parameter trees is a tuple, output of mcmc
 
     """
+    if mcmc:
+        trees = [tree[0] for tree in trees]
     trees_iter = iter(trees)
     first_tree = next(trees_iter)
 
@@ -271,7 +278,7 @@ def strict_consensus(trees):
     return BaseTree.Tree(root=root)
 
 
-def majority_consensus(trees, cutoff=0):
+def majority_consensus(trees, cutoff=0, mcmc=False, n=1):
     """Search majority rule consensus tree from multiple trees.
 
     This is a extend majority rule method, which means the you can set any
@@ -283,106 +290,147 @@ def majority_consensus(trees, cutoff=0):
 
     :Parameters:
         trees : iterable
-            iterable of trees to produce consensus tree.
+            iterable of trees to produce consensus tree or a list of tuples
+            output of mcmc if mcmc=True, tuples like (tree, number of occurences in MCMC)
+
+        cutoff : float
+            Must be between 0 and 1. cutoff=0.5 means, that all clades in the consensus tree
+            must occur in at least 50% of trees, cutoff=1 is the same as strict consensus.
+
+        mcmc : Boolean
+            True if parameter trees is a tuple, output of mcmc
+
+        n : integer
+            Maximum number of best consensus trees returned - if the number is too big,
+            it may be impossible to produce that many different consensus tree.
 
     """
+    if not (0 <= cutoff <= 1):
+        raise ValueError("Cutoff must be a number between 0 and 1")
     tree_iter = iter(trees)
     first_tree = next(tree_iter)
-
-    terms = first_tree.get_terminals()
-    bitstr_counts, tree_count = _count_clades(itertools.chain([first_tree], tree_iter))
-
+    if mcmc:
+        terms = first_tree[0].get_terminals()
+        term_names = [term.name for term in terms]
+        bitstr_counts, tree_count = _count_clades_mcmc(itertools.chain([first_tree], tree_iter), term_names)
+    else:
+        terms = first_tree.get_terminals()
+        term_names = [term.name for term in terms]
+        bitstr_counts, tree_count = _count_clades(itertools.chain([first_tree], tree_iter), term_names)
     # Sort bitstrs by descending #occurrences, then #tips, then tip order
     bitstrs = sorted(
         bitstr_counts.keys(),
         key=lambda bitstr: (bitstr_counts[bitstr][0], bitstr.count("1"), str(bitstr)),
         reverse=True,
     )
-    root = BaseTree.Clade()
-    if bitstrs[0].count("1") == len(terms):
-        root.clades.extend(terms)
-    else:
+    if not bitstrs[0].count("1") == len(terms):
         raise ValueError("Taxons in provided trees should be consistent")
     # Make a bitstr-to-clades dict and store root clade
-    bitstr_clades = {bitstrs[0]: root}
     # create inner clades
-    for bitstr in bitstrs[1:]:
-        # apply majority rule
-        count_in_trees, branch_length_sum = bitstr_counts[bitstr]
-        confidence = 100.0 * count_in_trees / tree_count
-        if confidence < cutoff * 100.0:
-            break
-        clade_terms = [terms[i] for i in bitstr.index_one()]
-        clade = BaseTree.Clade()
-        clade.clades.extend(clade_terms)
-        clade.confidence = confidence
-        clade.branch_length = branch_length_sum / count_in_trees
-        bsckeys = sorted(bitstr_clades, key=lambda bs: bs.count("1"), reverse=True)
+    possible_starts = queue.Queue()
+    possible_starts.put([bitstrs[0]])
+    clades_used = set()
+    consensus_trees = []
+    # we will try to produce n different consensus trees, starting with bitstrings
+    # that were not compatible with previous trees
+    while len(consensus_trees) < n and not possible_starts.empty():
+        root = BaseTree.Clade()
+        root.clades.extend(terms)
 
-        # check if current clade is compatible with previous clades and
-        # record it's possible parent and child clades.
-        compatible = True
-        parent_bitstr = None
-        child_bitstrs = []  # multiple independent childs
-        for bs in bsckeys:
-            if not bs.iscompatible(bitstr):
-                compatible = False
+        bitstr_clades = {bitstrs[0]: root}
+        new_start = possible_starts.get()
+        new_start_appeared = 0
+        for bitstr in itertools.chain(new_start, bitstrs[1:]):
+            if bitstr == new_start[0]:
+                new_start_appeared += 1
+                if new_start_appeared > 1:
+                    continue
+            if bitstr == bitstrs[0]:
+                continue
+            # apply majority rule
+            count_in_trees, branch_length_sum = bitstr_counts[bitstr]
+            confidence = count_in_trees / tree_count
+            if confidence < cutoff:
                 break
-            # assign the closest ancestor as its parent
-            # as bsckeys is sorted, it should be the last one
-            if bs.contains(bitstr):
-                parent_bitstr = bs
-            # assign the closest descendant as its child
-            # the largest and independent clades
-            if (
-                bitstr.contains(bs)
-                and bs != bitstr
-                and all(c.independent(bs) for c in child_bitstrs)
-            ):
-                child_bitstrs.append(bs)
-        if not compatible:
-            continue
+            clade_terms = [terms[i] for i in bitstr.index_one()]
+            clade = BaseTree.Clade()
+            clade.clades.extend(clade_terms)
+            clade.confidence = confidence
+            clade.branch_length = branch_length_sum / count_in_trees
+            bsckeys = sorted(bitstr_clades, key=lambda bs: bs.count("1"), reverse=True)
 
-        if parent_bitstr:
-            # insert current clade; remove old bitstring
-            parent_clade = bitstr_clades.pop(parent_bitstr)
-            # update parent clade childs
-            parent_clade.clades = [
-                c for c in parent_clade.clades if c not in clade_terms
-            ]
-            # set current clade as child of parent_clade
-            parent_clade.clades.append(clade)
-            # update bitstring
-            # parent = parent ^ bitstr
-            # update clade
-            bitstr_clades[parent_bitstr] = parent_clade
+            # check if current clade is compatible with previous clades and
+            # record it's possible parent and child clades.
+            compatible = True
+            parent_bitstr = None
+            child_bitstrs = []  # multiple independent childs
+            for bs in bsckeys:
+                if not bs.iscompatible(bitstr):
+                    if bitstr not in clades_used:
+                        possible_starts.put([bitstr])
+                    compatible = False
+                    break
+                # assign the closest ancestor as its parent
+                # as bsckeys is sorted, it should be the last one
+                if bs.contains(bitstr):
+                    parent_bitstr = bs
+                # assign the closest descendant as its child
+                # the largest and independent clades
+                if (
+                    bitstr.contains(bs)
+                    and bs != bitstr
+                    and all(c.independent(bs) for c in child_bitstrs)
+                ):
+                    child_bitstrs.append(bs)
+            if not compatible:
+                continue
 
-        if child_bitstrs:
-            remove_list = []
-            for c in child_bitstrs:
-                remove_list.extend(c.index_one())
-                child_clade = bitstr_clades[c]
-                parent_clade.clades.remove(child_clade)
-                clade.clades.append(child_clade)
-            remove_terms = [terms[i] for i in remove_list]
-            clade.clades = [c for c in clade.clades if c not in remove_terms]
-        # put new clade
-        bitstr_clades[bitstr] = clade
-        if (len(bitstr_clades) == len(terms) - 1) or (
-            len(bitstr_clades) == len(terms) - 2 and len(root.clades) == 3
-        ):
-            break
-    return BaseTree.Tree(root=root)
+            if parent_bitstr:
+                # insert current clade; remove old bitstring
+                parent_clade = bitstr_clades.pop(parent_bitstr)
+                # update parent clade childs
+                parent_clade.clades = [
+                    c for c in parent_clade.clades if c not in clade_terms
+                ]
+                # set current clade as child of parent_clade
+                parent_clade.clades.append(clade)
+                # update bitstring
+                # parent = parent ^ bitstr
+                # update clade
+                bitstr_clades[parent_bitstr] = parent_clade
+
+            if child_bitstrs:
+                remove_list = []
+                for c in child_bitstrs:
+                    remove_list.extend(c.index_one())
+                    child_clade = bitstr_clades[c]
+                    parent_clade.clades.remove(child_clade)
+                    clade.clades.append(child_clade)
+                remove_terms = [terms[i] for i in remove_list]
+                clade.clades = [c for c in clade.clades if c not in remove_terms]
+            # put new clade
+            bitstr_clades[bitstr] = clade
+            clades_used.add(bitstr)
+        consensus_trees.append(BaseTree.Tree(root=root))
+    if n == 1:
+        return consensus_trees[0]
+    return consensus_trees
 
 
-def adam_consensus(trees):
+def adam_consensus(trees, mcmc=False):
     """Search Adam Consensus tree from multiple trees.
 
     :Parameters:
         trees : list
-            list of trees to produce consensus tree.
+            list of trees to produce consensus tree or a list of tuples
+            output of mcmc if mcmc=True, tuples like (tree, number of occurences in MCMC)
+
+        mcmc : Boolean
+            True if parameter trees is a tuple, output of mcmc
 
     """
+    if mcmc:
+        trees = [tree[0] for tree in trees]
     clades = [tree.root for tree in trees]
     return BaseTree.Tree(root=_part(clades), rooted=True)
 
@@ -470,7 +518,7 @@ def _sub_clade(clade, term_names):
     return sub_clade
 
 
-def _count_clades(trees):
+def _count_clades(trees, term_names=None):
     """Count distinct clades (different sets of terminal names) in the trees (PRIVATE).
 
     Return a tuple first a dict of bitstring (representing clade) and a tuple of its count of
@@ -485,7 +533,7 @@ def _count_clades(trees):
     tree_count = 0
     for tree in trees:
         tree_count += 1
-        clade_bitstrs = _tree_to_bitstrs(tree)
+        clade_bitstrs = _tree_to_bitstrs(tree, term_names)
         for clade in tree.find_clades(terminal=False):
             bitstr = clade_bitstrs[clade]
             if bitstr in bitstrs:
@@ -495,6 +543,34 @@ def _count_clades(trees):
                 bitstrs[bitstr] = (count, sum_bl)
             else:
                 bitstrs[bitstr] = (1, clade.branch_length or 0)
+    return bitstrs, tree_count
+
+
+def _count_clades_mcmc(trees, term_names=None):
+    """Count distinct clades (different sets of terminal names) in the trees (PRIVATE).
+
+    Return a tuple first a dict of bitstring (representing clade) and a tuple of its count of
+    occurrences and sum of branch length for that clade, second the number of trees processed.
+
+    :Parameters:
+        trees : iterable
+            An iterable that returns the trees to count
+
+    """
+    bitstrs = {}
+    tree_count = 0
+    for tree in trees:
+        tree_count += tree[1]
+        clade_bitstrs = _tree_to_bitstrs(tree[0], term_names)
+        for clade in tree[0].find_clades(terminal=False):
+            bitstr = clade_bitstrs[clade]
+            if bitstr in bitstrs:
+                count, sum_bl = bitstrs[bitstr]
+                count += tree[1]
+                sum_bl += clade.branch_length or 0
+                bitstrs[bitstr] = (count, sum_bl)
+            else:
+                bitstrs[bitstr] = (tree[1], clade.branch_length or 0)
     return bitstrs, tree_count
 
 
@@ -606,10 +682,11 @@ def _clade_to_bitstr(clade, tree_term_names):
     return _BitString.from_bool((name in clade_term_names) for name in tree_term_names)
 
 
-def _tree_to_bitstrs(tree):
+def _tree_to_bitstrs(tree, term_names=None):
     """Create a dict of a tree's clades to corresponding BitStrings (PRIVATE)."""
     clades_bitstrs = {}
-    term_names = [term.name for term in tree.find_clades(terminal=True)]
+    if term_names is None:
+        term_names = [term.name for term in tree.find_clades(terminal=True)]
     for clade in tree.find_clades(terminal=False):
         bitstr = _clade_to_bitstr(clade, term_names)
         clades_bitstrs[clade] = bitstr
@@ -638,3 +715,53 @@ def _equal_topology(tree1, tree2):
     return (term_names1 == term_names2) and (
         _bitstring_topology(tree1) == _bitstring_topology(tree2)
     )
+
+
+def maximum_clade_probability_consensus(trees, n=1, mcmc=False):
+    """Select best trees based on maximum clade probability, meaning best product
+    of all clades probability.
+
+    Parameters
+    ----------
+    trees : list
+            list of trees to produce consensus tree or a list of tuples
+            output of mcmc if mcmc=True, tuples like (tree, number of occurences in MCMC)
+
+    n : integer
+            number of best trees to be returned, default 1
+
+    mcmc : Boolean
+            True if parameter trees is a tuple, output of mcmc
+    """
+    tree_iter = iter(trees)
+    first_tree = next(tree_iter)
+    if mcmc:
+        terms = first_tree[0].get_terminals()
+        term_names = [term.name for term in terms]
+        bitstr_counts, tree_count = _count_clades_mcmc(itertools.chain([first_tree], tree_iter), term_names)
+    else:
+        terms = first_tree.get_terminals()
+        term_names = [term.name for term in terms]
+        bitstr_counts, tree_count = _count_clades(itertools.chain([first_tree], tree_iter), term_names)
+    tree_probabilities = []
+
+    for tree in trees:
+        probability = 1
+        if mcmc:
+            tree = tree[0]
+
+        for clade in tree.find_clades(terminal=False):
+            clade_count = bitstr_counts[_clade_to_bitstr(clade, term_names)][0]
+            if mcmc:
+                number_of_trees = sum(n for tree, n in trees)
+            else:
+                number_of_trees = len(trees)
+            clade_probability = clade_count / number_of_trees
+            probability *= clade_probability
+        tree_probabilities.append([tree, probability])
+
+    tree_probabilities.sort(key=lambda x: x[1])
+    if n == 1:
+        return tree_probabilities[0]
+    else:
+        return tree_probabilities[:n]

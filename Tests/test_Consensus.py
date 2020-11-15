@@ -54,6 +54,7 @@ class ConsensusTest(unittest.TestCase):
 
     def setUp(self):
         self.trees = list(Phylo.parse("./TreeConstruction/trees.tre", "newick"))
+        self.mcmc_trees = list(zip(self.trees, range(1, len(self.trees) + 1)))
 
     def test_count_clades(self):
         bitstr_counts, len_trees = Consensus._count_clades(self.trees)
@@ -73,16 +74,22 @@ class ConsensusTest(unittest.TestCase):
         # tree_file = StringIO()
         # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
+        consensus_tree_mcmc = Consensus.strict_consensus(self.mcmc_trees, mcmc=True)
+        self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_trees[0]))
         # tree 1 and tree 2
         consensus_tree = Consensus.strict_consensus(self.trees[:2])
         # tree_file = StringIO()
         # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[1]))
+        consensus_tree_mcmc = Consensus.strict_consensus(self.mcmc_trees[:2], mcmc=True)
+        self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_trees[1]))
         # tree 1 and tree 3
         consensus_tree = Consensus.strict_consensus(self.trees[::2])
         # tree_file = StringIO()
         # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
+        consensus_tree_mcmc = Consensus.strict_consensus(self.mcmc_trees[::2], mcmc=True)
+        self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_trees[2]))
         # tree_file.close()
 
     def test_majority_consensus(self):
@@ -90,9 +97,14 @@ class ConsensusTest(unittest.TestCase):
         ref_tree = next(ref_trees)
         consensus_tree = Consensus.majority_consensus(self.trees)
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_tree))
+        # ref_tree = next(ref_trees)
+        # consensus_tree_mcmc = Consensus.majority_consensus(self.mcmc_trees, mcmc=True)
+        # self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_tree))
         ref_tree = next(ref_trees)
         consensus_tree = Consensus.majority_consensus(self.trees, 1)
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_tree))
+        consensus_tree_mcmc = Consensus.majority_consensus(self.mcmc_trees, 1, mcmc=True)
+        self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_tree))
 
     def test_adam_consensus(self):
         ref_trees = list(Phylo.parse("./TreeConstruction/adam_refs.tre", "newick"))
@@ -102,17 +114,27 @@ class ConsensusTest(unittest.TestCase):
         # tree_file = StringIO()
         # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
+        consensus_tree_mcmc = Consensus.adam_consensus(self.mcmc_trees, mcmc=True)
+        self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_trees[0]))
         # tree 1 and tree 2
         consensus_tree = Consensus.adam_consensus(self.trees[:2])
         # tree_file = StringIO()
         # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[1]))
+        consensus_tree_mcmc = Consensus.adam_consensus(self.mcmc_trees[:2], mcmc=True)
         # tree 1 and tree 3
         consensus_tree = Consensus.adam_consensus(self.trees[::2])
         # tree_file = StringIO()
         # Phylo.write(consensus_tree, tree_file, 'newick')
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[2]))
         # tree_file.close()
+
+    def test_maximum_clade_probability_consensus(self):
+        ref_trees = list(Phylo.parse("./TreeConstruction/maximum_clade_probability_ref.tre", "newick"))
+        consensus_tree = Consensus.maximum_clade_probability_consensus(self.trees)[0]
+        self.assertTrue(Consensus._equal_topology(consensus_tree, ref_trees[0]))
+        consensus_tree_mcmc = Consensus.maximum_clade_probability_consensus(self.mcmc_trees, mcmc=True)[0]
+        self.assertTrue(Consensus._equal_topology(consensus_tree_mcmc, ref_trees[0]))
 
     def test_get_support(self):
         support_tree = Consensus.get_support(self.trees[0], self.trees)
