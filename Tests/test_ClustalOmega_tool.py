@@ -126,14 +126,13 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         input_file = "Medline/pubmed_result1.txt"
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
-        try:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-        except ApplicationError as err:
-            # Ideally we'd catch the return code and raise the specific
-            # error for "invalid format".
-            self.assertIn("Can't determine format of sequence file", str(err))
-        else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+        err = str(cm.exception)
+        # Ideally we'd catch the return code and raise the specific
+        # error for "invalid format".
+        self.assertIn("Can't determine format of sequence file", err)
 
 
 #################################################################
