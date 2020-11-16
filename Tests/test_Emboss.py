@@ -451,7 +451,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
             self.assertEqual(len(alignment), 2)
             # self.assertEqual(target.id, alignment[1].id) #too strict
             msg = "%s vs %s or %s" % (alignment[1].id, target.id, target.name)
-            self.assertTrue(alignment[1].id in target.id or alignment[1].id in target.name, msg=msg)
+            self.assertTrue(
+                alignment[1].id in target.id or alignment[1].id in target.name, msg=msg
+            )
             if local:
                 # Local alignment
                 self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
