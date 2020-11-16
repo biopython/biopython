@@ -377,7 +377,7 @@ class TestConcatenated(unittest.TestCase):
             "null padding region ended '.sff' which could "
             "be the start of a concatenated SFF file? "
             "See offset 54371",
-            str(cm.exception)
+            str(cm.exception),
         )
 
 
