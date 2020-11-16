@@ -450,10 +450,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
         for target, alignment in zip(targets, alignments):
             self.assertEqual(len(alignment), 2)
             # self.assertEqual(target.id, alignment[1].id) #too strict
-            if alignment[1].id not in target.id and alignment[1].id not in target.name:
-                raise AssertionError(
-                    "%s vs %s or %s" % (alignment[1].id, target.id, target.name)
-                )
+            msg = "%s vs %s or %s" % (alignment[1].id, target.id, target.name)
+            self.assertTrue(
+                alignment[1].id in target.id or alignment[1].id in target.name, msg=msg
+            )
             if local:
                 # Local alignment
                 self.assertIn(str(alignment[0].seq).replace("-", ""), query_seq)
@@ -535,7 +535,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             shell=(sys.platform != "win32"),
         )
         child.stdin.close()
-        # Check we could read it's output
+        # Check we could read its output
         align = AlignIO.read(child.stdout, "emboss")
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
@@ -607,7 +607,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             shell=(sys.platform != "win32"),
         )
         child.stdin.close()
-        # Check we could read it's output
+        # Check we could read its output
         align = AlignIO.read(child.stdout, "emboss")
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
@@ -799,7 +799,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             shell=(sys.platform != "win32"),
         )
         child.stdin.close()
-        # Check we could read it's output
+        # Check we could read its output
         for align in AlignIO.parse(child.stdout, "emboss"):
             self.assertEqual(len(align), 2)
             self.assertEqual(align.get_alignment_length(), 9)
@@ -808,87 +808,6 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(0, child.wait())
         child.stdout.close()
         child.stderr.close()
-
-
-# Top level function as this makes it easier to use for debugging:
-def emboss_translate(sequence, table=None, frame=None):
-    """Call transeq, returns protein sequence as string."""
-    # TODO - Support transeq in Bio.Emboss.Applications?
-    # (doesn't seem worthwhile as Biopython can do translations)
-
-    if not sequence:
-        raise ValueError(sequence)
-
-    # Setup,
-    cline = exes["transeq"]
-
-    if len(sequence) < 100:
-        filename = None
-        cline += " -sequence asis:%s" % sequence
-    else:
-        # There are limits on command line string lengths...
-        # use a temp file instead.
-        filename = "Emboss/temp_transeq.txt"
-        SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
-        cline += " -sequence %s" % filename
-
-    cline += " -auto"  # no prompting
-    cline += " -filter"  # use stdout
-    if table is not None:
-        cline += " -table %s" % str(table)
-    if frame is not None:
-        cline += " -frame %s" % str(frame)
-    # Run the tool,
-    child = subprocess.Popen(
-        str(cline),
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        shell=(sys.platform != "win32"),
-    )
-    out, err = child.communicate()
-    # Check no error output:
-    if err != "":
-        raise ValueError(str(cline) + "\n" + err)
-
-    # Check we could read it's output
-    record = SeqIO.read(StringIO(out), "fasta")
-
-    if 0 != child.wait():
-        raise ValueError(str(cline))
-
-    if filename:
-        os.remove(filename)
-        if not record.id.startswith("Test"):
-            raise ValueError(str(cline))
-    else:
-        if not record.id.startswith("asis"):
-            raise ValueError(str(cline))
-    return str(record.seq)
-
-
-# Top level function as this makes it easier to use for debugging:
-def check_translation(sequence, translation, table=None):
-    if table is None:
-        t = 1
-    else:
-        t = table
-    if (
-        translation != str(sequence.translate(t))
-        or translation != str(translate(sequence, t))
-        or translation != translate(str(sequence), t)
-    ):
-        # More details...
-        for i, amino in enumerate(translation):
-            codon = sequence[i * 3 : i * 3 + 3]
-            if amino != str(codon.translate(t)):
-                raise ValueError(
-                    "%s -> %s not %s (table %s)" % (codon, amino, codon.translate(t), t)
-                )
-        # Shouldn't reach this line:
-        raise ValueError("%s -> %s (table %s)" % (sequence, translation, t))
-    return True
 
 
 class TranslationTests(unittest.TestCase):
@@ -932,18 +851,78 @@ class TranslationTests(unittest.TestCase):
             self.assertGreater(len(sequence), 0)
             self.check(sequence)
 
+    def check_emboss_translate(self, sequence, table=None, frame=None):
+        """Call transeq, returns protein sequence as string."""
+        # TODO - Support transeq in Bio.Emboss.Applications?
+        # (doesn't seem worthwhile as Biopython can do translations)
+
+        # Setup,
+        cline = exes["transeq"]
+
+        if len(sequence) < 100:
+            filename = None
+            cline += " -sequence asis:%s" % sequence
+        else:
+            # There are limits on command line string lengths...
+            # use a temp file instead.
+            filename = "Emboss/temp_transeq.txt"
+            SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
+            cline += " -sequence %s" % filename
+
+        cline += " -auto"  # no prompting
+        cline += " -filter"  # use stdout
+        if table is not None:
+            cline += " -table %s" % str(table)
+        if frame is not None:
+            cline += " -frame %s" % str(frame)
+        # Run the tool,
+        child = subprocess.Popen(
+            str(cline),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            shell=(sys.platform != "win32"),
+        )
+        out, err = child.communicate()
+
+        msg = "cline='%s'" % cline
+        # Check no error output:
+        self.assertEqual(err, "", msg=msg)
+
+        # Check we could read its output
+        record = SeqIO.read(StringIO(out), "fasta")
+
+        result = child.wait()
+        self.assertEqual(result, 0, msg=msg)
+
+        if filename:
+            os.remove(filename)
+            self.assertTrue(record.id.startswith("Test"), msg=msg)
+        else:
+            self.assertTrue(record.id.startswith("asis"), msg=msg)
+
+        translation = str(record.seq)
+        if table is None:
+            table = 1
+        self.assertEqual(translation, sequence.translate(table))
+        self.assertEqual(translation, translate(sequence, table))
+        self.assertEqual(translation, translate(str(sequence), table))
+        # More details...
+        for i, amino in enumerate(translation):
+            codon = sequence[i * 3 : i * 3 + 3]
+            msg = "codon %s, table %s" % (codon, table)
+            self.assertEqual(amino, codon.translate(table), msg=msg)
+
     def check(self, sequence):
         """Compare our translation to EMBOSS's using all tables.
 
         Takes a Seq object (and a filename containing it).
         """
-        translation = emboss_translate(sequence)
-        self.assertTrue(check_translation(sequence, translation))
+        self.check_emboss_translate(sequence)
 
         for table in [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 21, 22, 23]:
-            translation = emboss_translate(sequence, table)
-            self.assertTrue(check_translation(sequence, translation, table))
-        return True
+            self.check_emboss_translate(sequence, table)
 
     def translate_all_codons(self, letters):
         sequence = Seq(
