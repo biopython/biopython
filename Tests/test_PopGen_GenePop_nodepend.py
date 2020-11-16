@@ -129,7 +129,9 @@ class FileParserTest(unittest.TestCase):
             )
             self.assertEqual(len(rec.loci_list), self.num_loci[index])
             for skip in range(self.pops_indivs[index][0]):
-                self.assertIn(rec.skip_population(), (True, None), msg="Not enough populations")
+                self.assertIn(
+                    rec.skip_population(), (True, None), msg="Not enough populations"
+                )
             self.assertFalse(rec.skip_population(), msg="Too much populations")
             for i in range(self.pops_indivs[index][0]):
                 continue
