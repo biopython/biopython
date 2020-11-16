@@ -1,8 +1,10 @@
 # Copyright 2009 by Osvaldo Zagordi.  All rights reserved.
 # Revisions copyright 2010 by Peter Cock.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Command line wrapper for the short read aligner Novoalign by Novocraft."""
 
 
