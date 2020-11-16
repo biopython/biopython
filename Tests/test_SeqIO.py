@@ -316,24 +316,22 @@ class TestSeqIO(SeqIOTestBaseClass):
 
             if msg:
                 # Should fail.
-                # Can't use assertRaisesRegex with some of our msg strings
-                try:
-                    with warnings.catch_warnings():
-                        # e.g. data loss
-                        warnings.simplefilter("ignore", BiopythonWarning)
+                if debug:
+                    try:
                         SeqIO.write(sequences=records1, handle=handle, format=fmt)
-                except (ValueError, TypeError) as e:
-                    if debug:
+                    except (ValueError, TypeError) as e:
                         messages[fmt] = str(e)
-                    else:
-                        self.assertEqual(
-                            str(e), msg, "Wrong error on %s -> %s" % (t_format, fmt)
-                        )
                 else:
-                    if not debug:
-                        raise ValueError(
-                            "Expected following error writing to %s:\n%s" % (fmt, msg)
-                        )
+                    message = "%s -> %s" % (t_format, fmt)
+                    with self.assertRaises(Exception, msg=message) as cm:
+                        with warnings.catch_warnings():
+                            # e.g. data loss
+                            warnings.simplefilter("ignore", BiopythonWarning)
+                            SeqIO.write(sequences=records1, handle=handle, format=fmt)
+                    self.assertTrue(
+                        isinstance(cm.exception, (ValueError, TypeError)), msg=message
+                    )
+                    self.assertEqual(str(cm.exception), msg, msg=message)
 
                 # Carry on to the next format:
                 continue
@@ -355,9 +353,8 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError(
-                    "%s\n\n%r\n\n%r" % (str(e), handle.read(), records1)
-                ) from None
+                message = "%s\n\n%r\n\n%r" % (str(e), handle.read(), records1)
+                self.fail(message)
 
             self.assertEqual(len(records2), t_count)
             for r1, r2 in zip(records1, records2):
