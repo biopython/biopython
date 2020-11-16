@@ -45,7 +45,7 @@ class IsoelectricPoint:
     ----------
     :protein_sequence: A ``Bio.Seq`` or string object containing a protein
                        sequence.
-    :aa_content: A dictionary with amino acid letters as keys and it's
+    :aa_content: A dictionary with amino acid letters as keys and its
                  occurrences as integers, e.g. ``{"A": 3, "C": 0, ...}``.
                  Default: ``None``. If ``None``, the dic will be calculated
                  from the given sequence.
@@ -66,8 +66,8 @@ class IsoelectricPoint:
     >>> protein = IP("INGAR")
     >>> print(f"IEP of peptide {protein.sequence} is {protein.pi():.2f}")
     IEP of peptide INGAR is 9.75
-    >>> print(f"It's charge at pH 7 is {protein.charge_at_pH(7.0):.2f}")
-    It's charge at pH 7 is 0.76
+    >>> print(f"Its charge at pH 7 is {protein.charge_at_pH(7.0):.2f}")
+    Its charge at pH 7 is 0.76
 
 
     >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA

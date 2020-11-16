@@ -97,7 +97,7 @@ class _ChromosomeComponent(Widget):
 class Organism(_ChromosomeComponent):
     """Top level class for drawing chromosomes.
 
-    This class holds information about an organism and all of it's
+    This class holds information about an organism and all of its
     chromosomes, and provides the top level object which could be used
     for drawing a chromosome representation of an organism.
 
