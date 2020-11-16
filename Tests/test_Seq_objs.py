@@ -122,11 +122,7 @@ class StringMethodTests(unittest.TestCase):
                     j = pre_comp_function(getattr(str1, method_name)(str2))
                 except ValueError:
                     j = ValueError
-                if i != j:
-                    raise ValueError(
-                        "%r.%s(%r) = %r, not %r" % (example1, method_name, str2, i, j)
-                    )
-
+                self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, str2))
                 try:
                     i = pre_comp_function(getattr(example1, method_name)(example2))
                 except ValueError:
@@ -135,11 +131,7 @@ class StringMethodTests(unittest.TestCase):
                     j = pre_comp_function(getattr(str1, method_name)(str2))
                 except ValueError:
                     j = ValueError
-                if i != j:
-                    raise ValueError(
-                        "%r.%s(%r) = %r, not %r"
-                        % (example1, method_name, example2, i, j)
-                    )
+                self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, example2))
 
                 if start_end:
                     if isinstance(example1, MutableSeq):
@@ -158,11 +150,9 @@ class StringMethodTests(unittest.TestCase):
                             )
                         except ValueError:
                             j = ValueError
-                        if i != j:
-                            raise ValueError(
-                                "%r.%s(%r, %i) = %r, not %r"
-                                % (example1, method_name, str2, start, i, j)
-                            )
+                        self.assertEqual(
+                            i, j, "%r.%s(%r, %s)" % (example1, method_name, str2, start)
+                        )
 
                         for end in self._start_end_values:
                             try:
@@ -177,11 +167,12 @@ class StringMethodTests(unittest.TestCase):
                                 )
                             except ValueError:
                                 j = ValueError
-                            if i != j:
-                                raise ValueError(
-                                    "%r.%s(%r, %i, %i) = %r, not %r"
-                                    % (example1, method_name, str2, start, end, i, j,)
-                                )
+                            self.assertEqual(
+                                i,
+                                j,
+                                "%r.%s(%r, %s, %s)"
+                                % (example1, method_name, str2, start, end),
+                            )
 
     def test_str_count(self):
         """Check matches the python string count method."""
