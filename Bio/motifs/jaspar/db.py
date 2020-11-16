@@ -104,7 +104,7 @@ class JASPAR5:
         return r"%s\@%s:%s" % (self.user, self.host, self.name)
 
     def fetch_motif_by_id(self, id):
-        """Fetch a single JASPAR motif from the DB by it's JASPAR matrix ID.
+        """Fetch a single JASPAR motif from the DB by its JASPAR matrix ID.
 
         Example id 'MA0001.1'.
 
