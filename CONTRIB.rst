@@ -224,6 +224,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
+- Osvaldo Zagordi <https://github.com/ozagordi>
 - Owen Solberg <https://github.com/odoublewen>
 - Pamela Russell <https://github.com/pamelarussell>
 - Patrick Kunzmann <https://github.com/padix-key>
