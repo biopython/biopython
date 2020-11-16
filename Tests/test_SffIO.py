@@ -107,23 +107,18 @@ class TestErrors(unittest.TestCase):
 
     def test_empty(self):
         fh = BytesIO()
-        try:
+        with self.assertRaises(ValueError) as cm:
             records = list(SeqIO.parse(fh, "sff"))
-        except ValueError as err:
-            self.assertEqual(str(err), "Empty file.")
-        else:
-            self.assertTrue(False, "Empty file did not raise exception")
+        self.assertEqual(str(cm.exception), "Empty file.")
 
     def check_bad_header(self, header, msg):
-        try:
+        with self.assertRaises(ValueError) as cm:
             records = list(SeqIO.parse(BytesIO(header), "sff"))
-        except ValueError as err:
-            if isinstance(msg, (tuple, list)):
-                self.assertIn(str(err), msg, "Unexpected error: %s" % err)
-            else:
-                self.assertEqual(str(err), msg)
+        err = str(cm.exception)
+        if isinstance(msg, (tuple, list)):
+            self.assertIn(err, msg, "Unexpected error: %s" % err)
         else:
-            self.assertTrue(False, "Test SFF header only did not raise exception")
+            self.assertEqual(err, msg)
 
     def test_30bytes(self):
         self.check_bad_header(b"x" * 30, "File too small to hold a valid SFF header.")
@@ -184,42 +179,30 @@ class TestErrors(unittest.TestCase):
             for a, b in zip(records, new):
                 self.assertEqual(a.id, b.id)
             handle.seek(0)
-            try:
+            with self.assertRaises(ValueError) as cm:
                 values = _sff_find_roche_index(handle)
-            except ValueError as err:
-                self.assertEqual(str(err), "No index present in this SFF file")
-            else:
-                self.assertTrue(
-                    False, "Test _sff_find_roche_index did not raise exception"
-                )
+            err = str(cm.exception)
+            self.assertEqual(err, "No index present in this SFF file")
 
     def test_unknown_index(self):
         # TODO - Add SFF file with no index,
         # self.assertEqual(str(err), "No index present in this SFF file")
         with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
-            try:
+            with self.assertRaises(ValueError) as cm:
                 values = _sff_find_roche_index(handle)
-            except ValueError as err:
-                self.assertIn(
-                    str(err),
-                    (
-                        "Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
-                        "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'",
-                    ),
-                )
-            else:
-                self.assertTrue(
-                    False, "Test _sff_find_roche_index did not raise exception"
-                )
+        self.assertIn(
+            str(cm.exception),
+            (
+                "Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
+                "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'",
+            ),
+        )
 
     def check_sff_read_roche_index(self, data, msg):
         handle = BytesIO(data)
-        try:
+        with self.assertRaises(ValueError) as cm:
             index = list(_sff_read_roche_index(handle))
-        except ValueError as err:
-            self.assertEqual(str(err), msg)
-        else:
-            self.assertTrue(False, "_sff_read_roche_index did not raise exception")
+        self.assertEqual(str(cm.exception), msg)
 
     def test_premature_end_of_index(self):
         self.check_sff_read_roche_index(self.good[:-50], "Premature end of file!")
@@ -255,12 +238,9 @@ class TestErrors(unittest.TestCase):
 
     def test_no_manifest_xml(self):
         with open("Roche/E3MFGYR02_no_manifest.sff", "rb") as handle:
-            try:
+            with self.assertRaises(ValueError) as cm:
                 xml = ReadRocheXmlManifest(handle)
-            except ValueError as err:
-                self.assertEqual(str(err), "No XML manifest found")
-            else:
-                self.assertTrue(False, "ReadRocheXmlManifest did not raise exception")
+            self.assertEqual(str(cm.exception), "No XML manifest found")
 
 
 class TestIndex(unittest.TestCase):
@@ -361,18 +341,14 @@ class TestConcatenated(unittest.TestCase):
         self.assertEqual(count, 24)
 
     def test_index1(self):
-        try:
+        with self.assertRaises(ValueError) as cm:
             d = SeqIO.index("Roche/invalid_greek_E3MFGYR02.sff", "sff")
-        except ValueError as err:
-            self.assertIn(
-                "Additional data at end of SFF file, perhaps "
-                "multiple SFF files concatenated? "
-                "See offset 65296",
-                str(err),
-                err,
-            )
-        else:
-            raise ValueError("Indxing Roche/invalid_greek_E3MFGYR02.sff should fail")
+        err = str(cm.exception)
+        self.assertIn(
+            "Additional data at end of SFF file, perhaps "
+            "multiple SFF files concatenated? See offset 65296",
+            err,
+        )
 
     def test_parse2(self):
         count = 0
@@ -394,19 +370,15 @@ class TestConcatenated(unittest.TestCase):
         self.assertEqual(count, 20)
 
     def test_index2(self):
-        try:
+        with self.assertRaises(ValueError) as cm:
             d = SeqIO.index("Roche/invalid_paired_E3MFGYR02.sff", "sff")
-        except ValueError as err:
-            self.assertIn(
-                "Your SFF file is invalid, post index 5 byte "
-                "null padding region ended '.sff' which could "
-                "be the start of a concatenated SFF file? "
-                "See offset 54371",
-                str(err),
-                err,
-            )
-        else:
-            raise ValueError("Indxing Roche/invalid_paired_E3MFGYR02.sff should fail")
+        self.assertIn(
+            "Your SFF file is invalid, post index 5 byte "
+            "null padding region ended '.sff' which could "
+            "be the start of a concatenated SFF file? "
+            "See offset 54371",
+            str(cm.exception),
+        )
 
 
 class TestSelf(unittest.TestCase):
