@@ -89,16 +89,12 @@ class FastTreeTestCase(unittest.TestCase):
         self.assertTrue(err.strip().startswith("FastTree"))
         tree = Phylo.read(StringIO(out), "newick")
 
-        def lookup_by_names(tree):
-            names = {}
-            for clade in tree.find_clades():
-                if clade.name:
-                    if clade.name in names:
-                        raise ValueError("Duplicate key: %s" % clade.name)
-                    names[clade.name] = clade
-            return names
+        names = {}
+        for clade in tree.find_clades():
+            if clade.name:
+                self.assertNotIn(clade.name, names)
+                names[clade.name] = clade
 
-        names = lookup_by_names(tree)
         self.assertGreater(len(names), 0)
 
         def terminal_neighbor_dists(self):
