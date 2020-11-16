@@ -150,8 +150,9 @@ class StringMethodTests(unittest.TestCase):
                             )
                         except ValueError:
                             j = ValueError
-                        self.assertEqual(i, j, "%r.%s(%r, %s)" % (example1, method_name, str2, start)
-                            )
+                        self.assertEqual(
+                            i, j, "%r.%s(%r, %s)" % (example1, method_name, str2, start)
+                        )
 
                         for end in self._start_end_values:
                             try:
@@ -166,8 +167,12 @@ class StringMethodTests(unittest.TestCase):
                                 )
                             except ValueError:
                                 j = ValueError
-                            self.assertEqual(i, j, "%r.%s(%r, %s, %s)" % (example1, method_name, str2, start, end)
-                                )
+                            self.assertEqual(
+                                i,
+                                j,
+                                "%r.%s(%r, %s, %s)"
+                                % (example1, method_name, str2, start, end),
+                            )
 
     def test_str_count(self):
         """Check matches the python string count method."""
