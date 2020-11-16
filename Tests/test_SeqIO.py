@@ -328,9 +328,10 @@ class TestSeqIO(SeqIOTestBaseClass):
                             # e.g. data loss
                             warnings.simplefilter("ignore", BiopythonWarning)
                             SeqIO.write(sequences=records1, handle=handle, format=fmt)
-                    self.assertTrue(isinstance(cm.exception, (ValueError, TypeError)), msg=message)
+                    self.assertTrue(
+                        isinstance(cm.exception, (ValueError, TypeError)), msg=message
+                    )
                     self.assertEqual(str(cm.exception), msg, msg=message)
-
 
                 # Carry on to the next format:
                 continue
