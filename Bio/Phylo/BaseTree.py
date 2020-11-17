@@ -16,6 +16,9 @@ import copy
 import itertools
 import random
 import re
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 # General tree-traversal algorithms
@@ -954,8 +957,7 @@ class Tree(TreeElement, TreeMixin):
     def __format__(self, format_spec):
         """Serialize the tree as a string in the specified file format.
 
-        This method supports the ``format`` built-in function added in Python
-        2.6/3.0.
+        This method supports Python's ``format`` built-in function.
 
         :param format_spec: a lower-case string supported by ``Bio.Phylo.write``
             as an output file format.
@@ -977,6 +979,12 @@ class Tree(TreeElement, TreeMixin):
 
         This duplicates the __format__ magic method for pre-2.6 Pythons.
         """
+        warnings.warn(
+            "Tree.format has been deprecated, and we intend to remove it in "
+            "a future release of Biopython. Instead of tree.format(format), "
+            "please use format(tree, format_spec) or an f-string.",
+            BiopythonDeprecationWarning,
+        )
         return self.__format__(format)
 
     # Pretty-printer for the entire tree hierarchy
