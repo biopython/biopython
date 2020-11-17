@@ -867,3 +867,8 @@ Biopython still using this class.
 Bio.FSSP
 -----------
 Deprecated in release 1.77.
+
+Bio.Phylo.BaseTree.Tree
+-----------------------
+The format method was deprecated in Release 1.79 in favor of the __format__
+method, which supports Python's built-in format function.
