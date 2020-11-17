@@ -285,9 +285,9 @@ class TestAbi(unittest.TestCase):
         record = SeqIO.read("Abi/no_smpl1.ab1", "abi")
         self.assertEqual(record.id, "<unknown id>")
         raw_keys = record.annotations["abif_raw"]
-        self.assertEqual(
-            set(raw_keys),
-            {
+        self.assertCountEqual(
+            raw_keys,
+            [
                 "FWO_1",
                 "AEPt1",
                 "AEPt2",
@@ -307,7 +307,7 @@ class TestAbi(unittest.TestCase):
                 "PLOC2",
                 "PCON1",
                 "PCON2",
-            },
+            ],
         )
 
     # Turn black code style off
@@ -315,12 +315,12 @@ class TestAbi(unittest.TestCase):
     def test_raw(self):
         """Test access to raw ABIF tags."""
         record = SeqIO.read("Abi/A6_1-DB3.ab1", "abi")
-        self.assertEqual(set(record.annotations),
-                         {"polymer", "run_finish", "sample_well", "run_start",
-                          "machine_model", "dye", "abif_raw", "molecule_type"})
+        self.assertCountEqual(record.annotations,
+                         ["polymer", "run_finish", "sample_well", "run_start",
+                          "machine_model", "dye", "abif_raw", "molecule_type"])
 
-        self.assertEqual(set(record.annotations["abif_raw"]),
-                         {"RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1",
+        self.assertCountEqual(record.annotations["abif_raw"].keys(),
+                         ["RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1",
                           "PCON2", "RUNT2", "PBAS2", "RUNT1", "MODL1",
                           "TUBE1", "RMdX1", "ASPt1", "ASPt2", "PCON1",
                           "DyeN4", "DyeN1", "DyeN3", "DyeN2", "APrX1",
@@ -346,7 +346,7 @@ class TestAbi(unittest.TestCase):
                           "AEPt2", "AEPt1", "User1", "NLNE1", "PBAS1",
                           "S/N%1", "CTTL1", "AUDT1", "PXLB1", "RMdV1",
                           "DATA9", "RGNm1", "DATA11", "DATA10", "DATA12"
-                          })
+                          ])
 
         self.assertEqual(record.annotations["abif_raw"]["AEPt1"], 16627)
         self.assertEqual(record.annotations["abif_raw"]["AEPt2"], 16627)

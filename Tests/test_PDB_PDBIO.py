@@ -261,7 +261,7 @@ class WriteTest(unittest.TestCase):
                 "END\n",
                 "END   ",
             }
-            self.assertEqual(record_set, set())
+            self.assertEqual(len(record_set), 0)
         finally:
             os.remove(filename)
 

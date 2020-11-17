@@ -104,8 +104,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
             self.assertEqual(old_sub.nofuzzy_end, new_sub.nofuzzy_end)
             self.assertEqual(old_sub.strand, new_sub.strand)
 
-        self.assertEqual(len(old_f.qualifiers), len(new_f.qualifiers))
-        self.assertEqual(set(old_f.qualifiers), set(new_f.qualifiers))
+        self.assertCountEqual(old_f.qualifiers, new_f.qualifiers)
         for key in old_f.qualifiers:
             if isinstance(old_f.qualifiers[key], str):
                 if isinstance(new_f.qualifiers[key], str):
