@@ -1689,10 +1689,10 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(len(qresults), 2)
 
         # Test whether proper query id is read
-        self.assertListEqual([x.id for x in qresults], ["infile_sto", "infile_sto2"])
+        self.assertEqual([x.id for x in qresults], ["infile_sto", "infile_sto2"])
 
         # Test if proper number of hits is read
-        self.assertListEqual([len(x.hits) for x in qresults], [10, 10])
+        self.assertEqual([len(x.hits) for x in qresults], [10, 10])
 
     def test_31b2_hmmscan_001(self):
         """Test parsing hmmscan 3.1b2 (text_31b2_hmmscan_001)."""

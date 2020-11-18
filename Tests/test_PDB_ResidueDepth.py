@@ -111,7 +111,7 @@ class ResidueDepth_tests(unittest.TestCase):
         biopy_radii = []
         for atom in model.get_atoms():
             biopy_radii.append(_get_atom_radius(atom, rtype="united"))
-        self.assertListEqual(msms_radii, biopy_radii)
+        self.assertEqual(msms_radii, biopy_radii)
 
 
 if __name__ == "__main__":
