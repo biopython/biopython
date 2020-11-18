@@ -81,8 +81,8 @@ class GraphTestCase(unittest.TestCase):
             repr(a),
             "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>",
         )
-        self.assertListEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
-        self.assertListEqual(a.labels(), ["label1", "label2"])
+        self.assertEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
+        self.assertEqual(a.labels(), ["label1", "label2"])
 
 
 class MultiGraphTestCase(unittest.TestCase):
@@ -167,8 +167,8 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertEqual(
             str(a), "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>"
         )
-        self.assertListEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
-        self.assertListEqual(a.labels(), ["label1", "label2"])
+        self.assertEqual(a.edges("label1"), [("a", "b"), ("b", "c")])
+        self.assertEqual(a.labels(), ["label1", "label2"])
 
 
 class ReactionTestCase(unittest.TestCase):
