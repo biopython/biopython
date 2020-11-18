@@ -346,8 +346,8 @@ class TestAbi(unittest.TestCase):
                                "AEPt2", "AEPt1", "User1", "NLNE1", "PBAS1",
                                "S/N%1", "CTTL1", "AUDT1", "PXLB1", "RMdV1",
                                "DATA9", "RGNm1", "DATA11", "DATA10", "DATA12"
-                              ]
-                             )
+                              ]  # noqa: E124
+                             )  # noqa: E124
 
         self.assertEqual(record.annotations["abif_raw"]["AEPt1"], 16627)
         self.assertEqual(record.annotations["abif_raw"]["AEPt2"], 16627)
