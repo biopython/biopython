@@ -316,8 +316,8 @@ class TestAbi(unittest.TestCase):
         """Test access to raw ABIF tags."""
         record = SeqIO.read("Abi/A6_1-DB3.ab1", "abi")
         self.assertCountEqual(record.annotations,
-                         ["polymer", "run_finish", "sample_well", "run_start",
-                          "machine_model", "dye", "abif_raw", "molecule_type"])
+                              ["polymer", "run_finish", "sample_well", "run_start",
+                               "machine_model", "dye", "abif_raw", "molecule_type"])
 
         self.assertCountEqual(record.annotations["abif_raw"].keys(),
                          ["RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1",
