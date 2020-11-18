@@ -952,7 +952,9 @@ class Seq:
         >>> my_protein.transcribe()
         Seq('MAIVMGRU')
         """
-        return Seq(str(self).replace("T", "U").replace("t", "u"))
+        return Seq(
+            str.translate(str(self), {84: 85, 116: 117})
+        )  # str.maketrans("Tt", "Uu")
 
     def back_transcribe(self):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
@@ -977,7 +979,9 @@ class Seq:
         >>> my_protein.back_transcribe()
         Seq('MAIVMGRT')
         """
-        return Seq(str(self).replace("U", "T").replace("u", "t"))
+        return Seq(
+            str.translate(str(self), {85: 84, 117: 116})
+        )  # str.maketrans("Uu", "Tt")
 
     def translate(
         self, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap="-"
@@ -2297,7 +2301,7 @@ def transcribe(dna):
     elif isinstance(dna, MutableSeq):
         return Seq(dna).transcribe()
     else:
-        return dna.replace("T", "U").replace("t", "u")
+        return str.translate(dna, {84: 85, 116: 117})  # str.maketrans("Tt", "Uu")
 
 
 def back_transcribe(rna):
@@ -2317,7 +2321,7 @@ def back_transcribe(rna):
     elif isinstance(rna, MutableSeq):
         return Seq(rna).back_transcribe()
     else:
-        return rna.replace("U", "T").replace("u", "t")
+        return str.translate(rna, {85: 84, 117: 116})  # str.maketrans("Uu", "Tt")
 
 
 def _translate_str(

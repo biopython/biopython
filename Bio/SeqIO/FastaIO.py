@@ -57,15 +57,16 @@ def SimpleFastaParser(handle):
     # (and any embedded \r which are possible in mangled files
     # when not opened in universal read lines mode)
     lines = []
+    ordinal_mapping = {32: None, 13: None}  # ord(" "), ord("\r")
     for line in handle:
         if line[0] == ">":
-            yield title, "".join(lines).replace(" ", "").replace("\r", "")
+            yield title, str.translate("".join(lines), ordinal_mapping)
             lines = []
             title = line[1:].rstrip()
             continue
         lines.append(line.rstrip())
 
-    yield title, "".join(lines).replace(" ", "").replace("\r", "")
+    yield title, str.translate("".join(lines), ordinal_mapping)
 
 
 def FastaTwoLineParser(handle):
