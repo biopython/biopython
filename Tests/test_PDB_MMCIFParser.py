@@ -357,7 +357,6 @@ class CIFtoPDB(unittest.TestCase):
 
         pdb_atom_names = [a.name for a in pdb_struct.get_atoms()]
         cif_atom_names = [a.name for a in cif_struct.get_atoms()]
-        self.assertEqual(len(pdb_atom_names), len(cif_atom_names))
         self.assertEqual(pdb_atom_names, cif_atom_names)
 
         pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
