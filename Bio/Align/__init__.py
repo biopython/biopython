@@ -1011,6 +1011,8 @@ class PairwiseAlignment:
         return self.path >= other.path
 
     def _convert_sequence_string(self, sequence):
+        if isinstance(sequence, (bytes, bytearray)):
+            return sequence.decode()
         if isinstance(sequence, str):
             return sequence
         if isinstance(sequence, Seq):
