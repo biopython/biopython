@@ -311,12 +311,12 @@ class MMCIF2dictTests(unittest.TestCase):
         mmcif_dict2 = MMCIF2Dict(
             io.StringIO(textwrap.dedent(test_data.replace("loop_", "LOOP_")))
         )
-        self.assertDictEqual(mmcif_dict, mmcif_dict2)
+        self.assertEqual(mmcif_dict, mmcif_dict2)
 
         mmcif_dict2 = MMCIF2Dict(
             io.StringIO(textwrap.dedent(test_data.replace("loop_", "looP_")))
         )
-        self.assertDictEqual(mmcif_dict, mmcif_dict2)
+        self.assertEqual(mmcif_dict, mmcif_dict2)
 
         mmcif_dict2 = MMCIF2Dict(
             io.StringIO(textwrap.dedent(test_data.replace("_loop", "_LOOP")))
