@@ -1779,6 +1779,7 @@ for the pairwise alignments. To see an overview of the values for all parameters
 \begin{minted}{pycon}
 >>> print(aligner)
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: 0.000000
@@ -1847,10 +1848,11 @@ Substitution scores define the value to be added to the total score when two let
 >>> print(score)
 1.0
 \end{minted}
-When using match and mismatch scores, the character \verb+X+ is interpreted as an unknown character and gets a zero score in alignments, irrespective of the value of the match or mismatch score:
+When using match and mismatch scores, you can specify a wildcard character (+None+ by default) for unknown letters. These will get a zero score in alignments, irrespective of the value of the match or mismatch score:
 %cont-doctest
 \begin{minted}{pycon}
->>> score = aligner.score("ACGT","ACXT")
+>>> aligner.wildcard = "?"
+>>> score = aligner.score("ACGT","AC?T")
 >>> print(score)
 3.0
 \end{minted}
@@ -2503,11 +2505,14 @@ Internally, the first step when performing an alignment is to replace the two se
 \end{minted}
 Note that the indices should consist of 32-bit integers, as specified in this example by \verb+numpy.int32+.
 
-Negative indices are interpreted as unknown letters, and receive a zero score:
+Unknown letters can again be included by defining a wildcard character, and using the corresponding Unicode code point number as the index:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> s2 = numpy.array([2, -5, 13], numpy.int32)
+>>> aligner.wildcard = "?"
+>>> ord(aligner.wildcard)
+63
+>>> s2 = numpy.array([2, 63, 13], numpy.int32)
 >>> aligner.gap_score = -3
 >>> alignments = aligner.align(s1, s2)
 >>> print(len(alignments))
@@ -2515,12 +2520,12 @@ Negative indices are interpreted as unknown letters, and receive a zero score:
 >>> print(alignments[0])
 2 10 10 13
 | .. -- ||
-2 -5 -- 13
+2 63 -- 13
 <BLANKLINE>
 >>> print(alignments[1])
 2 10 10 13
 | -- .. ||
-2 -- -5 13
+2 -- 63 13
 <BLANKLINE>
 >>> print(alignments.score)
 9.0

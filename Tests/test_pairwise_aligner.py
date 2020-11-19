@@ -48,6 +48,7 @@ class TestAlignerProperties(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 3.000000
   mismatch_score: -2.000000
   target_internal_open_gap_score: 0.000000
@@ -90,6 +91,7 @@ Pairwise sequence aligner with parameters
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -5.000000
@@ -145,6 +147,7 @@ Pairwise sequence aligner with parameters
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -3.000000
@@ -189,6 +192,7 @@ class TestPairwiseGlobal(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: 0.000000
@@ -248,6 +252,7 @@ G-A-T
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 0.000000
   mismatch_score: -1.000000
   target_internal_open_gap_score: -5.000000
@@ -279,6 +284,7 @@ class TestPairwiseLocal(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -322,6 +328,7 @@ zA-Bz
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -359,11 +366,29 @@ zA-Bz
 class TestUnknownCharacter(unittest.TestCase):
     def test_needlemanwunsch_simple1(self):
         seq1 = "GACT"
-        seq2 = "GAXT"
+        seq2 = "GA?T"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.gap_score = -1.0
         aligner.mismatch_score = -1.0
+        aligner.wildcard = "?"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GA?T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        seq2 = "GAXT"
+        aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -379,12 +404,49 @@ GAXT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        aligner.wildcard = None
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 2.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GAXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
 
     def test_needlemanwunsch_simple2(self):
-        seq1 = "GAXAT"
-        seq2 = "GAAXT"
+        seq1 = "GA?AT"
+        seq2 = "GAA?T"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
+        aligner.wildcard = "?"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GA?A-T
+||-|-|
+GA-A?T
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5)))
+        )
+        seq1 = "GAXAT"
+        seq2 = "GAAXT"
+        aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
@@ -417,6 +479,7 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 2.000000
   mismatch_score: -1.000000
   target_internal_open_gap_score: -0.100000
@@ -475,6 +538,7 @@ A-
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.500000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -531,6 +595,7 @@ GA-
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: 0.000000
@@ -577,6 +642,7 @@ GA--T
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -2.000000
   target_internal_open_gap_score: -0.100000
@@ -635,6 +701,7 @@ class TestPairwiseExtendPenalty(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
@@ -680,6 +747,7 @@ G--T
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
@@ -738,6 +806,7 @@ class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -1.700000
@@ -787,6 +856,7 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
@@ -867,6 +937,7 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -923,6 +994,7 @@ GTCT
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -978,6 +1050,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -1421,6 +1494,7 @@ class TestPairwiseOneCharacter(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1464,6 +1538,7 @@ abcde
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1518,6 +1593,7 @@ abcce
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1563,6 +1639,7 @@ abcde
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1611,6 +1688,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1663,6 +1741,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1725,6 +1804,7 @@ AAB------------BBAAAACCCCAAAABBBAA--
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -1758,6 +1838,7 @@ TTG--GAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -1842,6 +1923,7 @@ TTG--GAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1902,6 +1984,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1964,6 +2047,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -2008,6 +2092,7 @@ TTGGAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -2186,30 +2271,31 @@ Gly Ala Ala Cys Thr
 class TestArgumentErrors(unittest.TestCase):
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        message = "^sequence has unexpected format$"
-        with self.assertRaisesRegex(ValueError, message):
+        message = "^argument should support the sequence protocol$"
+        with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
         message = "^sequence has zero length$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "")
         message = "^sequence contains letters not in the alphabet$"
+        aligner.alphabet = "ABCD"
         with self.assertRaisesRegex(ValueError, message):
-            aligner.score("AAA", "AA&")
+            aligner.score("AAA", "AAE")
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
-        self.assertEqual(aligner.alphabet, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         s1 = "GGG"
-        s2 = array.array("i", [6, 0, 6])
+        s2 = array.array("i", [ord("G"), ord("A"), ord("G")])
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
         s2 = array.array("f", [1.0, 0.0, 1.0])
         message = "^sequence has incorrect data type 'f'$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
+        aligner.wildcard = chr(99)
         s1 = array.array("i", [1, 5, 6])
         s2 = array.array("i", [1, 8, 6])
-        s2a = array.array("i", [1, 8, -6])
+        s2a = array.array("i", [1, 8, 99])
         s2b = array.array("i", [1, 28, 6])
         aligner.match = 3.0
         aligner.mismatch = -2.0
@@ -2219,8 +2305,8 @@ class TestArgumentErrors(unittest.TestCase):
         # the following two are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
-        # negative number is interpreted as an unknown character, and
-        # gets a zero score:
+        # since we set the wildcard character to chr(99), the number 99
+        # is interpreted as an unknown character, and gets a zero score:
         self.assertAlmostEqual(score, 1.0)
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
@@ -2229,8 +2315,9 @@ class TestArgumentErrors(unittest.TestCase):
         except ImportError:
             return
         aligner = Align.PairwiseAligner()
+        aligner.wildcard = chr(99)
         s1 = "GGG"
-        s2 = numpy.array([6, 0, 6], numpy.int32)  # interpreted as GAG
+        s2 = numpy.array([ord("G"), ord("A"), ord("G")], numpy.int32)
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
         s2 = numpy.array([1.0, 0.0, 1.0])
@@ -2243,8 +2330,9 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score(s1, s2)
         s1 = numpy.array([1, 5, 6], numpy.int32)
         s2 = numpy.array([1, 8, 6], numpy.int32)
-        s2a = numpy.array([1, 8, -6], numpy.int32)
+        s2a = numpy.array([1, 8, 99], numpy.int32)
         s2b = numpy.array([1, 28, 6], numpy.int32)
+        s2c = numpy.array([1, 8, -6], numpy.int32)
         aligner.match = 3.0
         aligner.mismatch = -2.0
         aligner.gap_score = -10.0
@@ -2253,8 +2341,6 @@ class TestArgumentErrors(unittest.TestCase):
         # the following two are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
-        # negative number is interpreted as an unknown character, and
-        # gets a zero score:
         self.assertAlmostEqual(score, 1.0)
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
@@ -2266,10 +2352,15 @@ class TestArgumentErrors(unittest.TestCase):
         self.assertAlmostEqual(score, 10.0)
         message = "^sequence item 2 is negative \\(-6\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            aligner.score(s1, s2a)
+            aligner.score(s1, s2c)
         message = "^sequence item 1 is out of bound \\(28, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2b)
+        # note that the wildcard character is ignored when using a substitution
+        # matrix, so 99 is interpreted as an index here:
+        message = "^sequence item 2 is out of bound \\(99, should be < 10\\)$"
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.score(s1, s2a)
 
 
 class TestOverflowError(unittest.TestCase):
@@ -2314,6 +2405,7 @@ class TestKeywordArgumentsConstructor(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000

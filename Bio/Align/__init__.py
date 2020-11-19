@@ -1011,6 +1011,8 @@ class PairwiseAlignment:
         return self.path >= other.path
 
     def _convert_sequence_string(self, sequence):
+        if isinstance(sequence, (bytes, bytearray)):
+            return sequence.decode()
         if isinstance(sequence, str):
             return sequence
         if isinstance(sequence, Seq):
@@ -1554,9 +1556,9 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
         if isinstance(seqA, Seq):
-            seqA = str(seqA)
+            seqA = str(seqA).encode()
         if isinstance(seqB, Seq):
-            seqB = str(seqB)
+            seqB = str(seqB).encode()
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
@@ -1564,9 +1566,9 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     def score(self, seqA, seqB):
         """Return the alignments score of two sequences using PairwiseAligner."""
         if isinstance(seqA, Seq):
-            seqA = str(seqA)
+            seqA = str(seqA).encode()
         if isinstance(seqB, Seq):
-            seqB = str(seqB)
+            seqB = str(seqB).encode()
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
 
