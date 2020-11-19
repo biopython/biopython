@@ -388,7 +388,7 @@ GA?T
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
         seq2 = "GAXT"
-        aligner.wildcard = 'X'
+        aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -420,7 +420,6 @@ GAXT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
-
 
     def test_needlemanwunsch_simple2(self):
         seq1 = "GA?AT"
