@@ -790,12 +790,23 @@ any relevant information as appropriate.
 []
 \end{minted}
 
+\noindent
 If you plan to output the sub-record in GenBank or EMBL format, you will need
 to retain the molecule type information:
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.annotations['molecule_type'] = record.annotations['molecule_type']
+\end{minted}
+
+\noindent
+You may wish to preserve other entries like the organism? Beware of copying
+the entire annotations dictionary as in this case your partial sequence is no
+longer circular DNA - it is now linear:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> sub_record.annotations['topology'] = 'linear'
 \end{minted}
 
 The same point could be made about the record \texttt{id}, \texttt{name}
@@ -820,7 +831,7 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
 >>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial"
 >>> print(sub_record.format("genbank")[:200] + "...")
-LOCUS       NC_005816                500 bp    DNA              UNK 01-JAN-1980
+LOCUS       NC_005816                500 bp    DNA     linear   UNK 01-JAN-1980
 DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial.
 ACCESSION   NC_005816
 VERSION     NC_0058...
