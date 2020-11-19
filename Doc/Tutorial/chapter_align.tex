@@ -2507,7 +2507,7 @@ Negative indices are interpreted as unknown letters, and receive a zero score:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> s2 = numpy.array([2, -5, 13], numpy.int32)
+>>> s2 = numpy.array([2, ord('X'), 13], numpy.int32)
 >>> aligner.gap_score = -3
 >>> alignments = aligner.align(s1, s2)
 >>> print(len(alignments))
@@ -2515,12 +2515,12 @@ Negative indices are interpreted as unknown letters, and receive a zero score:
 >>> print(alignments[0])
 2 10 10 13
 | .. -- ||
-2 -5 -- 13
+2 88 -- 13
 <BLANKLINE>
 >>> print(alignments[1])
 2 10 10 13
 | -- .. ||
-2 -- -5 13
+2 -- 88 13
 <BLANKLINE>
 >>> print(alignments.score)
 9.0

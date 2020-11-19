@@ -26,7 +26,7 @@
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
 
-#define ANY_LETTER -1
+#define ANY_LETTER (int)'X'
 #define MISSING_LETTER -2
 #define UNMAPPED -3
 
@@ -1807,7 +1807,7 @@ set_alphabet(Aligner* self, PyObject* alphabet)
 static int
 Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
 {
-    int i, j;
+    int i;
     Py_ssize_t n;
     self->alphabet = NULL;
     n = set_alphabet(self, NULL);
@@ -1833,16 +1833,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.obj = NULL;
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
-    for (i = 0; i < 128; i++) self->mapping[i] = MISSING_LETTER;
-    i = (int)'A';
-    for (j = 0; j < n; i++, j++) self->mapping[i] = j;
-    i = (int)'a';
-    for (j = 0; j < n; i++, j++) self->mapping[i] = j;
-    /* X represents an undetermined letter. */
-    i = (int)'x';
-    self->mapping[i] = ANY_LETTER;
-    i = (int)'X';
-    self->mapping[i] = ANY_LETTER;
+    for (i = 0; i < 128; i++) self->mapping[i] = i;
     return 0;
 }
 
@@ -5970,7 +5961,7 @@ exit:
 /* ----------------- alignment algorithms ----------------- */
 
 #define MATRIX_SCORE scores[kA*n+kB]
-#define COMPARE_SCORE (kA < 0 || kB < 0) ? 0 : (kA == kB) ? match : mismatch
+#define COMPARE_SCORE (kA == ANY_LETTER || kB == ANY_LETTER) ? 0 : (kA == kB) ? match : mismatch
 
 
 static PyObject*

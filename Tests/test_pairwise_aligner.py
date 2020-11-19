@@ -2193,14 +2193,15 @@ class TestArgumentErrors(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, message):
             aligner.score("AAA", "")
         message = "^sequence contains letters not in the alphabet$"
+        aligner.alphabet = "ABCD"
         with self.assertRaisesRegex(ValueError, message):
-            aligner.score("AAA", "AA&")
+            aligner.score("AAA", "AAE")
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
         self.assertEqual(aligner.alphabet, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         s1 = "GGG"
-        s2 = array.array("i", [6, 0, 6])
+        s2 = array.array("i", [ord("G"), ord("A"), ord("G")])
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
         s2 = array.array("f", [1.0, 0.0, 1.0])
@@ -2209,7 +2210,7 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score(s1, s2)
         s1 = array.array("i", [1, 5, 6])
         s2 = array.array("i", [1, 8, 6])
-        s2a = array.array("i", [1, 8, -6])
+        s2a = array.array("i", [1, 8, ord('X')])
         s2b = array.array("i", [1, 28, 6])
         aligner.match = 3.0
         aligner.mismatch = -2.0
@@ -2230,7 +2231,7 @@ class TestArgumentErrors(unittest.TestCase):
             return
         aligner = Align.PairwiseAligner()
         s1 = "GGG"
-        s2 = numpy.array([6, 0, 6], numpy.int32)  # interpreted as GAG
+        s2 = numpy.array([ord("G"), ord("A"), ord("G")], numpy.int32)
         score = aligner.score(s1, s2)
         self.assertAlmostEqual(score, 2.0)
         s2 = numpy.array([1.0, 0.0, 1.0])
@@ -2243,8 +2244,9 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score(s1, s2)
         s1 = numpy.array([1, 5, 6], numpy.int32)
         s2 = numpy.array([1, 8, 6], numpy.int32)
-        s2a = numpy.array([1, 8, -6], numpy.int32)
+        s2a = numpy.array([1, 8, ord('X')], numpy.int32)
         s2b = numpy.array([1, 28, 6], numpy.int32)
+        s2c = numpy.array([1, 8, -6], numpy.int32)
         aligner.match = 3.0
         aligner.mismatch = -2.0
         aligner.gap_score = -10.0
@@ -2253,8 +2255,6 @@ class TestArgumentErrors(unittest.TestCase):
         # the following two are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
-        # negative number is interpreted as an unknown character, and
-        # gets a zero score:
         self.assertAlmostEqual(score, 1.0)
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
@@ -2266,7 +2266,7 @@ class TestArgumentErrors(unittest.TestCase):
         self.assertAlmostEqual(score, 10.0)
         message = "^sequence item 2 is negative \\(-6\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            aligner.score(s1, s2a)
+            aligner.score(s1, s2c)
         message = "^sequence item 1 is out of bound \\(28, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2b)
