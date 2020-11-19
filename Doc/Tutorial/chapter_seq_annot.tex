@@ -790,6 +790,14 @@ any relevant information as appropriate.
 []
 \end{minted}
 
+If you plan to output the sub-record in GenBank or EMBL format, you will need
+to retain the molecule type information:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> sub_record.annotations['molecule_type'] = record.annotations['molecule_type']
+\end{minted}
+
 The same point could be made about the record \texttt{id}, \texttt{name}
 and \texttt{description}, but for practicality these are preserved:
 
@@ -808,10 +816,14 @@ and \texttt{description}, but for practicality these are preserved:
 Let's fix this and then view the sub-record as a reduced GenBank file using
 the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}:
 
+%cont-doctest
 \begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
->>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial."
->>> print(sub_record.format("genbank"))
-...
+>>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial"
+>>> print(sub_record.format("genbank")[:200] + "...")
+LOCUS       NC_005816                500 bp    DNA              UNK 01-JAN-1980
+DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial.
+ACCESSION   NC_005816
+VERSION     NC_0058...
 \end{minted}
 
 See Sections~\ref{sec:FASTQ-slicing-off-primer}
