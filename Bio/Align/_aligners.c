@@ -27,8 +27,7 @@
 #define MEMORY_ERROR -2
 
 #define ANY_LETTER (int)'X'
-#define MISSING_LETTER -2
-#define UNMAPPED -3
+#define MISSING_LETTER -1
 
 #define SAFE_ADD(t, s) \
 {   if (s != OVERFLOW_ERROR) { \
@@ -1698,7 +1697,7 @@ typedef struct {
     PyObject* query_gap_function;
     Py_buffer substitution_matrix;
     PyObject* alphabet;
-    signed char mapping[128];
+    int* mapping;
 } Aligner;
 
 
@@ -1706,97 +1705,81 @@ static Py_ssize_t
 set_alphabet(Aligner* self, PyObject* alphabet)
 {
     Py_ssize_t size;
-    if (alphabet == NULL) {
-        const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        size = strlen(letters);
-        alphabet = PyUnicode_FromString(letters);
-        if (!alphabet) {
-            PyErr_SetString(PyExc_ValueError, "failed to initialize alphabet");
-            return -1;
-        }
-    }
-    else if (alphabet == Py_None) {
+    if (alphabet == Py_None) {
         if (self->alphabet) {
             Py_DECREF(self->alphabet);
             self->alphabet = NULL;
         }
-        *(self->mapping) = UNMAPPED;
+        if (self->mapping) {
+            PyMem_Free(self->mapping);
+            self->mapping = NULL;
+        }
         return 0;
     }
     else if (PyUnicode_Check(alphabet)) {
-        if (PyUnicode_READY(alphabet) == -1) return 0;
+        int* mapping;
+        int i;
+        int n;
+        int kind;
+        void* characters;
+        if (PyUnicode_READY(alphabet) == -1) return -1;
         size = PyUnicode_GET_LENGTH(alphabet);
         if (size == 0) {
             PyErr_SetString(PyExc_ValueError, "alphabet has zero length");
-            return 0;
+            return -1;
         }
-        *(self->mapping) = UNMAPPED;
-        if (PyUnicode_KIND(alphabet) == PyUnicode_1BYTE_KIND) {
-            int i;
-            /* don't set self->mapping until we are sure there are no
-             * problems with the alphabet; define temporary storage: */
-            signed char mapping[128];
-            const char* characters = PyUnicode_DATA(alphabet);
-            for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
-            for (i = 0; i < size; i++) {
-                int j = characters[i];
-                if (j < 0 || j >= 128) break;
-                if (mapping[j] != MISSING_LETTER) {
-                    PyErr_Format(PyExc_ValueError,
-                                 "alphabet contains '%c' more than once",
-                                 characters[i]);
-                    return 0;
-                }
-                mapping[j] = i;
+        kind = PyUnicode_KIND(alphabet);
+        switch (kind) {
+            case PyUnicode_1BYTE_KIND: {
+                n = 1 << 8 * sizeof(Py_UCS1);
+                break;
             }
-            if (i == size) {
-                /* alphabet is an ASCII string; use mapping for speed */
-                memcpy(self->mapping, mapping, 128);
+            case PyUnicode_2BYTE_KIND: {
+                n = 1 << 8 * sizeof(Py_UCS2);
+                break;
             }
+            case PyUnicode_4BYTE_KIND: {
+                n = 0x110000;  /* Maximum code point in Unicode 6.0
+                                * is 0x10ffff = 1114111 */
+                break;
+            }
+            case PyUnicode_WCHAR_KIND:
+            default:
+                PyErr_SetString(PyExc_ValueError, "could not interpret alphabet");
+                return -1;
+        }
+        characters = PyUnicode_DATA(alphabet);
+        mapping = PyMem_Malloc(n*sizeof(int));
+        if (!mapping) return -1;
+        for (i = 0; i < n; i++) mapping[i] = MISSING_LETTER;
+        for (i = 0; i < size; i++) {
+            Py_UCS4 character = PyUnicode_READ(kind, characters, i);
+            if (mapping[character] != MISSING_LETTER) {
+                PyObject* c = PyUnicode_FromKindAndData(kind, &character, 1);
+                PyErr_Format(PyExc_ValueError,
+                             "alphabet contains '%S' more than once", c);
+                Py_XDECREF(c);
+                PyMem_Free(mapping);
+                return -1;
+            }
+            mapping[character] = i;
         }
         Py_INCREF(alphabet);
+        if (self->mapping) PyMem_Free(self->mapping);
+        self->mapping = mapping;
     }
     else {
         /* alphabet is not a string; cannot use mapping */
-        int i, j;
-        PyObject* item;
-        const char* character;
-        Py_ssize_t k;
-        PyObject* sequence;
-        signed char mapping[128];
-        sequence = PySequence_Fast(alphabet,
+        PyObject* sequence = PySequence_Fast(alphabet,
             "alphabet should support the sequence protocol (e.g.,\n"
             "strings, lists, and tuples can be valid alphabets).");
         if (!sequence) return -1;
-        *(self->mapping) = UNMAPPED;
         size = PySequence_Fast_GET_SIZE(sequence);
-        for (i = 0; i < 128; i++) mapping[i] = MISSING_LETTER;
-        for (i = 0; i < size; i++) {
-            item = PySequence_Fast_GET_ITEM(sequence, i);
-            if (!PyUnicode_Check(item)) break;
-            if (PyUnicode_READY(item) == -1) {
-                Py_DECREF(sequence);
-                return -1;
-            }
-            k = PyUnicode_GET_LENGTH(item);
-            if (k != 1) break;
-            if (PyUnicode_KIND(item) != PyUnicode_1BYTE_KIND) break;
-            character = PyUnicode_DATA(item);
-            j = *character;
-            if (j < 0 || j >= 128) break;
-            if (mapping[j] != MISSING_LETTER) {
-                PyErr_Format(PyExc_ValueError,
-                             "alphabet contains '%c' more than once",
-                             *character);
-                return 0;
-            }
-            mapping[j] = i;
-        }
-        if (i == size) {
-            /* alphabet is an ASCII string; use mapping for speed */
-            memcpy(self->mapping, mapping, 128);
-        }
         Py_DECREF(sequence);
+        if (self->mapping) {
+            PyMem_Free(self->mapping);
+            self->mapping = NULL;
+        }
         Py_INCREF(alphabet);
     }
     Py_XDECREF(self->alphabet);
@@ -1829,7 +1812,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
     self->alphabet = NULL;
-    *(self->mapping) = UNMAPPED;
+    self->mapping = NULL;
     return 0;
 }
 
@@ -1839,6 +1822,7 @@ Aligner_dealloc(Aligner* self)
     Py_XDECREF(self->query_gap_function);
     if (self->substitution_matrix.obj) PyBuffer_Release(&self->substitution_matrix);
     Py_XDECREF(self->alphabet);
+    Py_XDECREF(self->mapping);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -1981,7 +1965,7 @@ Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
         return -1;
     }
     if (self->substitution_matrix.obj) {
-        if (set_alphabet(self, NULL) < 0) return -1;
+        if (set_alphabet(self, Py_None) < 0) return -1;
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->match = match;
@@ -2008,7 +1992,7 @@ Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
         return -1;
     }
     if (self->substitution_matrix.obj) {
-        if (set_alphabet(self, NULL) < 0) return -1;
+        if (set_alphabet(self, Py_None) < 0) return -1;
         PyBuffer_Release(&self->substitution_matrix);
     }
     self->mismatch = mismatch;
@@ -2082,7 +2066,7 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
         /* Set a substitution matrix without setting an alphabet; useful
          * when aligning integers. */
         PyErr_Clear();
-        size = set_alphabet(self, NULL);
+        size = set_alphabet(self, Py_None);
     }
     if (size < 0) {
         PyBuffer_Release(&view);
@@ -6241,8 +6225,7 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 }
 
 static int*
-convert_1bytes_to_ints(const signed char mapping[], Py_ssize_t n,
-                       const unsigned char s[])
+convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[])
 {
     unsigned char c;
     Py_ssize_t i;
@@ -6257,7 +6240,7 @@ convert_1bytes_to_ints(const signed char mapping[], Py_ssize_t n,
         PyErr_NoMemory();
         return NULL;
     }
-    if (*mapping == UNMAPPED) for (i = 0; i < n; i++) indices[i] = s[i];
+    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
     else {
         for (i = 0; i < n; i++) {
             c = s[i];
@@ -6275,10 +6258,11 @@ convert_1bytes_to_ints(const signed char mapping[], Py_ssize_t n,
 }
 
 static int*
-convert_2bytes_to_ints(const signed char mapping[], Py_ssize_t n,
-                       const Py_UCS2 s[])
+convert_2bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS2 s[])
 {
+    unsigned char c;
     Py_ssize_t i;
+    int index;
     int* indices;
     if (n == 0) {
         PyErr_SetString(PyExc_ValueError, "sequence has zero length");
@@ -6289,20 +6273,29 @@ convert_2bytes_to_ints(const signed char mapping[], Py_ssize_t n,
         PyErr_NoMemory();
         return NULL;
     }
-    if (*mapping == UNMAPPED) for (i = 0; i < n; i++) indices[i] = s[i];
+    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
     else {
-        PyErr_SetString(PyExc_ValueError, "2BYTE strings are not supported for mapping");
-        PyMem_Free(indices);
-        return NULL;
+        for (i = 0; i < n; i++) {
+            c = s[i];
+            index = mapping[(int)c];
+            if (index == MISSING_LETTER) {
+                PyErr_SetString(PyExc_ValueError,
+                    "sequence contains letters not in the alphabet");
+                PyMem_Free(indices);
+                return NULL;
+            }
+            indices[i] = index;
+        }
     }
     return indices;
 }
 
 static int*
-convert_4bytes_to_ints(const signed char mapping[], Py_ssize_t n,
-                       const Py_UCS4 s[])
+convert_4bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS4 s[])
 {
+    unsigned char c;
     Py_ssize_t i;
+    int index;
     int* indices;
     if (n == 0) {
         PyErr_SetString(PyExc_ValueError, "sequence has zero length");
@@ -6313,11 +6306,19 @@ convert_4bytes_to_ints(const signed char mapping[], Py_ssize_t n,
         PyErr_NoMemory();
         return NULL;
     }
-    if (*mapping == UNMAPPED) for (i = 0; i < n; i++) indices[i] = s[i];
+    if (!mapping) for (i = 0; i < n; i++) indices[i] = s[i];
     else {
-        PyErr_SetString(PyExc_ValueError, "4BYTE strings are not supported for mapping");
-        PyMem_Free(indices);
-        return NULL;
+        for (i = 0; i < n; i++) {
+            c = s[i];
+            index = mapping[(int)c];
+            if (index == MISSING_LETTER) {
+                PyErr_SetString(PyExc_ValueError,
+                    "sequence contains letters not in the alphabet");
+                PyMem_Free(indices);
+                return NULL;
+            }
+            indices[i] = index;
+        }
     }
     return indices;
 }
@@ -6331,6 +6332,7 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
     int* indices = NULL;
     PyObject *obj1, *obj2;
     int equal;
+
     view->buf = NULL;
     sequence = PySequence_Fast(sequence,
                                "argument should support the sequence protocol");
@@ -6340,9 +6342,7 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
                         "alphabet is None; cannot interpret sequence");
         goto exit;
     }
-    alphabet = PySequence_Fast(alphabet,
-                               "alphabet should support the sequence protocol");
-    if (!alphabet) goto exit;
+    alphabet = PySequence_Fast(alphabet, NULL); /* should never fail */
     n = PySequence_Size(sequence);
     m = PySequence_Size(alphabet);
     indices = PyMem_Malloc(n*sizeof(int));
@@ -6390,7 +6390,7 @@ sequence_converter(PyObject* argument, void* pointer)
     int* indices;
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
-    signed char* mapping;
+    int* mapping;
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
@@ -6470,19 +6470,16 @@ sequence_converter(PyObject* argument, void* pointer)
             case PyUnicode_1BYTE_KIND: {
                 Py_UCS1* s = PyUnicode_1BYTE_DATA(argument);
                 indices = convert_1bytes_to_ints(mapping, n, (unsigned char*)s);
-                if (!indices) return 0;
                 break;
             }
             case PyUnicode_2BYTE_KIND: {
                 Py_UCS2* s = PyUnicode_2BYTE_DATA(argument);
                 indices = convert_2bytes_to_ints(mapping, n, s);
-                if (!indices) return 0;
                 break;
             }
             case PyUnicode_4BYTE_KIND: {
                 Py_UCS4* s = PyUnicode_4BYTE_DATA(argument);
                 indices = convert_4bytes_to_ints(mapping, n, s);
-                if (!indices) return 0;
                 break;
             }
             case PyUnicode_WCHAR_KIND:
@@ -6490,13 +6487,14 @@ sequence_converter(PyObject* argument, void* pointer)
                 PyErr_SetString(PyExc_ValueError, "could not interpret unicode data");
                 return 0;
         }
+        if (!indices) return 0;
         view->buf = indices;
         view->itemsize = 1;
         view->len = n;
         return Py_CLEANUP_SUPPORTED;
     }
 
-    if (*mapping == UNMAPPED) {
+    if (!mapping) {
         if (!convert_objects_to_ints(view, aligner->alphabet, argument)) return 0;
         return Py_CLEANUP_SUPPORTED;
     }
