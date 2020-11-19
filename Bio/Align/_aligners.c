@@ -1807,11 +1807,6 @@ set_alphabet(Aligner* self, PyObject* alphabet)
 static int
 Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
 {
-    int i;
-    Py_ssize_t n;
-    self->alphabet = NULL;
-    n = set_alphabet(self, NULL);
-    if (n < 0) return -1;
     self->mode = Global;
     self->match = 1.0;
     self->mismatch = 0.0;
@@ -1833,7 +1828,8 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->substitution_matrix.obj = NULL;
     self->substitution_matrix.buf = NULL;
     self->algorithm = Unknown;
-    for (i = 0; i < 128; i++) self->mapping[i] = i;
+    self->alphabet = NULL;
+    *(self->mapping) = UNMAPPED;
     return 0;
 }
 
@@ -6245,8 +6241,8 @@ Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
 }
 
 static int*
-convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
-                         const char s[])
+convert_1bytes_to_ints(const signed char mapping[], Py_ssize_t n,
+                       const unsigned char s[])
 {
     unsigned char c;
     Py_ssize_t i;
@@ -6261,22 +6257,67 @@ convert_sequence_to_ints(const signed char mapping[], Py_ssize_t n,
         PyErr_NoMemory();
         return NULL;
     }
-    for (i = 0; i < n; i++) {
-        c = s[i];
-        if (c >= 128) {
-            PyErr_SetString(PyExc_ValueError,
-                "sequence letters should be ASCII");
-            PyMem_Free(indices);
-            return NULL;
+    if (*mapping == UNMAPPED) for (i = 0; i < n; i++) indices[i] = s[i];
+    else {
+        for (i = 0; i < n; i++) {
+            c = s[i];
+            index = mapping[(int)c];
+            if (index == MISSING_LETTER) {
+                PyErr_SetString(PyExc_ValueError,
+                    "sequence contains letters not in the alphabet");
+                PyMem_Free(indices);
+                return NULL;
+            }
+            indices[i] = index;
         }
-        index = mapping[(int)c];
-        if (index == MISSING_LETTER) {
-            PyErr_SetString(PyExc_ValueError,
-                "sequence contains letters not in the alphabet");
-            PyMem_Free(indices);
-            return NULL;
-        }
-        indices[i] = index;
+    }
+    return indices;
+}
+
+static int*
+convert_2bytes_to_ints(const signed char mapping[], Py_ssize_t n,
+                       const Py_UCS2 s[])
+{
+    Py_ssize_t i;
+    int* indices;
+    if (n == 0) {
+        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        return NULL;
+    }
+    indices = PyMem_Malloc(n*sizeof(int));
+    if (!indices) {
+        PyErr_NoMemory();
+        return NULL;
+    }
+    if (*mapping == UNMAPPED) for (i = 0; i < n; i++) indices[i] = s[i];
+    else {
+        PyErr_SetString(PyExc_ValueError, "2BYTE strings are not supported for mapping");
+        PyMem_Free(indices);
+        return NULL;
+    }
+    return indices;
+}
+
+static int*
+convert_4bytes_to_ints(const signed char mapping[], Py_ssize_t n,
+                       const Py_UCS4 s[])
+{
+    Py_ssize_t i;
+    int* indices;
+    if (n == 0) {
+        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
+        return NULL;
+    }
+    indices = PyMem_Malloc(n*sizeof(int));
+    if (!indices) {
+        PyErr_NoMemory();
+        return NULL;
+    }
+    if (*mapping == UNMAPPED) for (i = 0; i < n; i++) indices[i] = s[i];
+    else {
+        PyErr_SetString(PyExc_ValueError, "4BYTE strings are not supported for mapping");
+        PyMem_Free(indices);
+        return NULL;
     }
     return indices;
 }
@@ -6291,48 +6332,14 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
     PyObject *obj1, *obj2;
     int equal;
     view->buf = NULL;
-    if (!alphabet) {
-        if (!PyUnicode_Check(sequence)) {
-            PyErr_SetString(PyExc_ValueError, "alphabet is None; cannot interpret sequence");
-            return 0;
-        }
-        if (PyUnicode_READY(sequence) == -1) return 0;
-        n = PyUnicode_GET_LENGTH(sequence);
-        indices = PyMem_Malloc(n*sizeof(int));
-        if (!indices) {
-            PyErr_NoMemory();
-            return 0;
-        }
-        switch (PyUnicode_KIND(sequence)) {
-            case PyUnicode_1BYTE_KIND: {
-                Py_UCS1* data = PyUnicode_1BYTE_DATA(sequence);
-                for (i = 0; i < n; i++) indices[i] = (int)(data[i]);
-                break;
-            }
-            case PyUnicode_2BYTE_KIND: {
-                Py_UCS2* data = PyUnicode_2BYTE_DATA(sequence);
-                for (i = 0; i < n; i++) indices[i] = (int)(data[i]);
-                break;
-            }
-            case PyUnicode_4BYTE_KIND: {
-                Py_UCS4* data = PyUnicode_4BYTE_DATA(sequence);
-                for (i = 0; i < n; i++) indices[i] = (int)(data[i]);
-                break;
-            }
-            case PyUnicode_WCHAR_KIND:
-            default:
-                PyErr_SetString(PyExc_ValueError, "cannot interpret unicode data");
-                PyMem_Del(indices);
-                return 0;
-        }
-        view->buf = indices;
-        view->itemsize = 1;
-        view->len = n;
-        return 1;
-    }
     sequence = PySequence_Fast(sequence,
                                "argument should support the sequence protocol");
     if (!sequence) return 0;
+    if (!alphabet) {
+        PyErr_SetString(PyExc_ValueError,
+                        "alphabet is None; cannot interpret sequence");
+        goto exit;
+    }
     alphabet = PySequence_Fast(alphabet,
                                "alphabet should support the sequence protocol");
     if (!alphabet) goto exit;
@@ -6367,10 +6374,8 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
     view->itemsize = 1;
     view->len = n;
 exit:
-    if (sequence) {
-        Py_DECREF(sequence);
-        if (alphabet) Py_DECREF(alphabet);
-    }
+    Py_DECREF(sequence);
+    Py_XDECREF(alphabet);
     if (view->buf) return 1;
     return 0;
 }
@@ -6383,7 +6388,6 @@ sequence_converter(PyObject* argument, void* pointer)
     Py_ssize_t n;
     int index;
     int* indices;
-    const char* s;
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
     signed char* mapping;
@@ -6400,89 +6404,105 @@ sequence_converter(PyObject* argument, void* pointer)
     aligner = (Aligner*)view->obj;
     view->obj = NULL;
 
-    mapping = aligner->mapping;
-    if (*mapping == UNMAPPED) {
-        if (!convert_objects_to_ints(view, aligner->alphabet, argument)) return 0;
-        return Py_CLEANUP_SUPPORTED;
-    }
-    
-    if (PyUnicode_Check(argument)) {
-        if (PyUnicode_READY(argument) == -1) return 0;
-        if (PyUnicode_KIND(argument) != PyUnicode_1BYTE_KIND) {
-            PyErr_SetString(PyExc_TypeError, "string should be ASCII");
-            return 0;
-        }
-        s = PyUnicode_DATA(argument);
-        n = PyUnicode_GET_LENGTH(argument);
-        indices = convert_sequence_to_ints(aligner->mapping, n, s);
-        if (!indices) return 0;
-        view->buf = indices;
-        view->itemsize = 1;
-        view->len = n;
-        return Py_CLEANUP_SUPPORTED;
-    }
-    if (PyObject_GetBuffer(argument, view, flag) == -1) {
-        PyErr_SetString(PyExc_ValueError, "sequence has unexpected format");
-        return 0;
-    }
-    if (view->ndim != 1) {
-        PyErr_Format(PyExc_ValueError,
-                     "sequence has incorrect rank (%d expected 1)", view->ndim);
-        return 0;
-    }
-    n = view->len / view->itemsize;
-    if (n == 0) {
-        PyErr_SetString(PyExc_ValueError, "sequence has zero length");
-        return 0;
-    }
-    if (strcmp(view->format, "c") == 0
-     || strcmp(view->format, "B") == 0) {
-        if (view->itemsize != sizeof(char)) {
+    if (PyObject_GetBuffer(argument, view, flag) == 0) {
+        if (view->ndim != 1) {
             PyErr_Format(PyExc_ValueError,
-                        "sequence has unexpected item byte size "
-                        "(%ld, expected %ld)", view->itemsize, sizeof(char));
+                         "sequence has incorrect rank (%d expected 1)", view->ndim);
             return 0;
         }
-        indices = convert_sequence_to_ints(aligner->mapping, n, view->buf);
-        if (!indices) return 0;
-        view->itemsize = 1;
-        view->len = n;
-        view->buf = indices;
-    }
-    else if (strcmp(view->format, "i") == 0
-          || strcmp(view->format, "l") == 0) {
-        if (view->itemsize != sizeof(int)) {
-            PyErr_Format(PyExc_ValueError,
-                        "sequence has unexpected item byte size "
-                        "(%ld, expected %ld)", view->itemsize, sizeof(int));
+        n = view->len / view->itemsize;
+        if (n == 0) {
+            PyErr_SetString(PyExc_ValueError, "sequence has zero length");
             return 0;
         }
-        indices = view->buf;
-        if (aligner->substitution_matrix.obj) {
-            const Py_ssize_t m = aligner->substitution_matrix.shape[0];
-            for (i = 0; i < n; i++) {
-                index = indices[i];
-                if (index < 0) {
-                    PyErr_Format(PyExc_ValueError,
-                                 "sequence item %zd is negative (%d)",
-                                 i, index);
-                    return 0;
-                }
-                if (index >= m) {
-                    PyErr_Format(PyExc_ValueError,
-                                 "sequence item %zd is out of bound"
-                                 " (%d, should be < %zd)", i, index, m);
-                    return 0;
+        if (strcmp(view->format, "c") == 0 || strcmp(view->format, "B") == 0) {
+            if (view->itemsize != sizeof(char)) {
+                PyErr_Format(PyExc_ValueError,
+                            "sequence has unexpected item byte size "
+                            "(%ld, expected %ld)", view->itemsize, sizeof(char));
+                return 0;
+            }
+            indices = convert_1bytes_to_ints(aligner->mapping, n, view->buf);
+            if (!indices) return 0;
+            view->itemsize = 1;
+            view->len = n;
+            view->buf = indices;
+            return Py_CLEANUP_SUPPORTED;
+        }
+        if (strcmp(view->format, "i") == 0 || strcmp(view->format, "l") == 0) {
+            if (view->itemsize != sizeof(int)) {
+                PyErr_Format(PyExc_ValueError,
+                            "sequence has unexpected item byte size "
+                            "(%ld, expected %ld)", view->itemsize, sizeof(int));
+                return 0;
+            }
+            indices = view->buf;
+            if (aligner->substitution_matrix.obj) {
+                const Py_ssize_t m = aligner->substitution_matrix.shape[0];
+                for (i = 0; i < n; i++) {
+                    index = indices[i];
+                    if (index < 0) {
+                        PyErr_Format(PyExc_ValueError,
+                                     "sequence item %zd is negative (%d)",
+                                     i, index);
+                        return 0;
+                    }
+                    if (index >= m) {
+                        PyErr_Format(PyExc_ValueError,
+                                     "sequence item %zd is out of bound"
+                                     " (%d, should be < %zd)", i, index, m);
+                        return 0;
+                    }
                 }
             }
+            return Py_CLEANUP_SUPPORTED;
         }
-    }
-    else {
         PyErr_Format(PyExc_ValueError,
                      "sequence has incorrect data type '%s'", view->format);
         return 0;
     }
-    return Py_CLEANUP_SUPPORTED;
+    PyErr_Clear();  /* To clear the exception raised by PyObject_GetBuffer */
+    mapping = aligner->mapping;
+    if (PyUnicode_Check(argument)) {
+        if (PyUnicode_READY(argument) == -1) return 0;
+        n = PyUnicode_GET_LENGTH(argument);
+        switch (PyUnicode_KIND(argument)) {
+            case PyUnicode_1BYTE_KIND: {
+                Py_UCS1* s = PyUnicode_1BYTE_DATA(argument);
+                indices = convert_1bytes_to_ints(mapping, n, (unsigned char*)s);
+                if (!indices) return 0;
+                break;
+            }
+            case PyUnicode_2BYTE_KIND: {
+                Py_UCS2* s = PyUnicode_2BYTE_DATA(argument);
+                indices = convert_2bytes_to_ints(mapping, n, s);
+                if (!indices) return 0;
+                break;
+            }
+            case PyUnicode_4BYTE_KIND: {
+                Py_UCS4* s = PyUnicode_4BYTE_DATA(argument);
+                indices = convert_4bytes_to_ints(mapping, n, s);
+                if (!indices) return 0;
+                break;
+            }
+            case PyUnicode_WCHAR_KIND:
+            default:
+                PyErr_SetString(PyExc_ValueError, "could not interpret unicode data");
+                return 0;
+        }
+        view->buf = indices;
+        view->itemsize = 1;
+        view->len = n;
+        return Py_CLEANUP_SUPPORTED;
+    }
+
+    if (*mapping == UNMAPPED) {
+        if (!convert_objects_to_ints(view, aligner->alphabet, argument)) return 0;
+        return Py_CLEANUP_SUPPORTED;
+    }
+
+    PyErr_SetString(PyExc_ValueError, "sequence has unexpected format");
+    return 0;
 }
  
 static const char Aligner_score__doc__[] = "calculates the alignment score";

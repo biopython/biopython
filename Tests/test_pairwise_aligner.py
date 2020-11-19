@@ -2186,8 +2186,8 @@ Gly Ala Ala Cys Thr
 class TestArgumentErrors(unittest.TestCase):
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        message = "^sequence has unexpected format$"
-        with self.assertRaisesRegex(ValueError, message):
+        message = "^argument should support the sequence protocol$"
+        with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
         message = "^sequence has zero length$"
         with self.assertRaisesRegex(ValueError, message):
@@ -2199,7 +2199,6 @@ class TestArgumentErrors(unittest.TestCase):
 
     def test_aligner_array_errors(self):
         aligner = Align.PairwiseAligner()
-        self.assertEqual(aligner.alphabet, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         s1 = "GGG"
         s2 = array.array("i", [ord("G"), ord("A"), ord("G")])
         score = aligner.score(s1, s2)
