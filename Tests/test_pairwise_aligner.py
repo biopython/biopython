@@ -359,11 +359,28 @@ zA-Bz
 class TestUnknownCharacter(unittest.TestCase):
     def test_needlemanwunsch_simple1(self):
         seq1 = "GACT"
-        seq2 = "GAXT"
+        seq2 = "GA?T"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
         aligner.gap_score = -1.0
         aligner.mismatch_score = -1.0
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 3.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GA?T
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        seq2 = "GAXT"
+        aligner.wildcard = 'X'
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -381,10 +398,30 @@ GAXT
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
 
     def test_needlemanwunsch_simple2(self):
-        seq1 = "GAXAT"
-        seq2 = "GAAXT"
+        seq1 = "GA?AT"
+        seq2 = "GAA?T"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 4.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 4.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GA?A-T
+||-|-|
+GA-A?T
+""",
+        )
+        self.assertEqual(
+            alignment.aligned, (((0, 2), (3, 4), (4, 5)), ((0, 2), (2, 3), (4, 5)))
+        )
+        seq1 = "GAXAT"
+        seq2 = "GAAXT"
+        aligner.wildcard = "X"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
@@ -2207,9 +2244,10 @@ class TestArgumentErrors(unittest.TestCase):
         message = "^sequence has incorrect data type 'f'$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2)
+        aligner.wildcard = chr(99)
         s1 = array.array("i", [1, 5, 6])
         s2 = array.array("i", [1, 8, 6])
-        s2a = array.array("i", [1, 8, ord('X')])
+        s2a = array.array("i", [1, 8, 99])
         s2b = array.array("i", [1, 28, 6])
         aligner.match = 3.0
         aligner.mismatch = -2.0
@@ -2219,8 +2257,8 @@ class TestArgumentErrors(unittest.TestCase):
         # the following two are valid as we are using match/mismatch scores
         # instead of a substitution matrix:
         score = aligner.score(s1, s2a)
-        # negative number is interpreted as an unknown character, and
-        # gets a zero score:
+        # since we set the wildcard character to chr(99), the number 99
+        # is interpreted as an unknown character, and gets a zero score:
         self.assertAlmostEqual(score, 1.0)
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
@@ -2229,6 +2267,7 @@ class TestArgumentErrors(unittest.TestCase):
         except ImportError:
             return
         aligner = Align.PairwiseAligner()
+        aligner.wildcard = chr(99)
         s1 = "GGG"
         s2 = numpy.array([ord("G"), ord("A"), ord("G")], numpy.int32)
         score = aligner.score(s1, s2)
@@ -2243,7 +2282,7 @@ class TestArgumentErrors(unittest.TestCase):
             aligner.score(s1, s2)
         s1 = numpy.array([1, 5, 6], numpy.int32)
         s2 = numpy.array([1, 8, 6], numpy.int32)
-        s2a = numpy.array([1, 8, ord('X')], numpy.int32)
+        s2a = numpy.array([1, 8, 99], numpy.int32)
         s2b = numpy.array([1, 28, 6], numpy.int32)
         s2c = numpy.array([1, 8, -6], numpy.int32)
         aligner.match = 3.0
@@ -2269,6 +2308,11 @@ class TestArgumentErrors(unittest.TestCase):
         message = "^sequence item 1 is out of bound \\(28, should be < 10\\)$"
         with self.assertRaisesRegex(ValueError, message):
             aligner.score(s1, s2b)
+        # note that the wildcard character is ignored when using a substitution
+        # matrix, so 99 is interpreted as an index here:
+        message = "^sequence item 2 is out of bound \\(99, should be < 10\\)$"
+        with self.assertRaisesRegex(ValueError, message):
+            aligner.score(s1, s2a)
 
 
 class TestOverflowError(unittest.TestCase):

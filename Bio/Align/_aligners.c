@@ -26,7 +26,6 @@
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
 
-#define ANY_LETTER (int)'X'
 #define MISSING_LETTER -1
 
 #define SAFE_ADD(t, s) \
@@ -1698,6 +1697,7 @@ typedef struct {
     Py_buffer substitution_matrix;
     PyObject* alphabet;
     int* mapping;
+    Py_UCS4 wildcard;
 } Aligner;
 
 
@@ -1813,6 +1813,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->algorithm = Unknown;
     self->alphabet = NULL;
     self->mapping = NULL;
+    self->wildcard = (Py_UCS4)'?';
     return 0;
 }
 
@@ -3667,6 +3668,30 @@ Aligner_set_epsilon(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
+static PyObject*
+Aligner_get_wildcard(Aligner* self, void* closure)
+{
+    return PyUnicode_FromKindAndData(PyUnicode_4BYTE_KIND, &self->wildcard, 1);
+}
+
+static int
+Aligner_set_wildcard(Aligner* self, PyObject* value, void* closure)
+{
+    if (!PyUnicode_Check(value)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "wildcard should be a single character");
+    }
+    if (PyUnicode_READY(value) == -1) return -1;
+    if (PyUnicode_GET_LENGTH(value) != 1) {
+        PyErr_SetString(PyExc_ValueError,
+                        "wildcard should be a single character");
+    }
+    self->wildcard = PyUnicode_READ_CHAR(value, 0);
+    return 0;
+}
+
+static char Aligner_wildcard__doc__[] = "wildcard character";
+
 static Algorithm _get_algorithm(Aligner* self)
 {
     Algorithm algorithm = self->algorithm;
@@ -3959,6 +3984,10 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_epsilon,
         (setter)Aligner_set_epsilon,
         Aligner_epsilon__doc__, NULL},
+    {"wildcard",
+        (getter)Aligner_get_wildcard,
+        (setter)Aligner_set_wildcard,
+        Aligner_wildcard__doc__, NULL},
     {"algorithm",
         (getter)Aligner_get_algorithm,
         (setter)NULL,
@@ -5941,7 +5970,7 @@ exit:
 /* ----------------- alignment algorithms ----------------- */
 
 #define MATRIX_SCORE scores[kA*n+kB]
-#define COMPARE_SCORE (kA == ANY_LETTER || kB == ANY_LETTER) ? 0 : (kA == kB) ? match : mismatch
+#define COMPARE_SCORE (kA == wildcard || kB == wildcard) ? 0 : (kA == kB) ? match : mismatch
 
 
 static PyObject*
@@ -5951,6 +5980,7 @@ Aligner_needlemanwunsch_score_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     NEEDLEMANWUNSCH_SCORE(COMPARE_SCORE);
 }
 
@@ -5971,6 +6001,7 @@ Aligner_smithwaterman_score_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     SMITHWATERMAN_SCORE(COMPARE_SCORE);
 }
 
@@ -5991,6 +6022,7 @@ Aligner_needlemanwunsch_align_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     NEEDLEMANWUNSCH_ALIGN(COMPARE_SCORE);
 }
 
@@ -6011,6 +6043,7 @@ Aligner_smithwaterman_align_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     SMITHWATERMAN_ALIGN(COMPARE_SCORE);
 }
 
@@ -6031,6 +6064,7 @@ Aligner_gotoh_global_score_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     GOTOH_GLOBAL_SCORE(COMPARE_SCORE);
 }
 
@@ -6051,6 +6085,7 @@ Aligner_gotoh_local_score_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     GOTOH_LOCAL_SCORE(COMPARE_SCORE);
 }
 
@@ -6071,6 +6106,7 @@ Aligner_gotoh_global_align_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     GOTOH_GLOBAL_ALIGN(COMPARE_SCORE);
 }
 
@@ -6091,6 +6127,7 @@ Aligner_gotoh_local_align_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     GOTOH_LOCAL_ALIGN(COMPARE_SCORE);
 }
 
@@ -6151,6 +6188,7 @@ Aligner_watermansmithbeyer_global_score_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     WATERMANSMITHBEYER_GLOBAL_SCORE(COMPARE_SCORE);
 }
 
@@ -6171,6 +6209,7 @@ Aligner_watermansmithbeyer_local_score_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     WATERMANSMITHBEYER_LOCAL_SCORE(COMPARE_SCORE);
 }
 
@@ -6191,6 +6230,7 @@ Aligner_watermansmithbeyer_global_align_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     WATERMANSMITHBEYER_GLOBAL_ALIGN(COMPARE_SCORE);
 }
 
@@ -6211,6 +6251,7 @@ Aligner_watermansmithbeyer_local_align_compare(Aligner* self,
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
+    const int wildcard = self->wildcard;
     WATERMANSMITHBEYER_LOCAL_ALIGN(COMPARE_SCORE);
 }
 

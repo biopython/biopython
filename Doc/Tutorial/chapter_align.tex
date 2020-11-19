@@ -1847,10 +1847,10 @@ Substitution scores define the value to be added to the total score when two let
 >>> print(score)
 1.0
 \end{minted}
-When using match and mismatch scores, the character \verb+X+ is interpreted as an unknown character and gets a zero score in alignments, irrespective of the value of the match or mismatch score:
+When using match and mismatch scores, the wildcard character ('\verb+?+' by default) is interpreted as an unknown character and gets a zero score in alignments, irrespective of the value of the match or mismatch score:
 %cont-doctest
 \begin{minted}{pycon}
->>> score = aligner.score("ACGT","ACXT")
+>>> score = aligner.score("ACGT","AC?T")
 >>> print(score)
 3.0
 \end{minted}
@@ -2503,11 +2503,14 @@ Internally, the first step when performing an alignment is to replace the two se
 \end{minted}
 Note that the indices should consist of 32-bit integers, as specified in this example by \verb+numpy.int32+.
 
-Negative indices are interpreted as unknown letters, and receive a zero score:
+For an \verb+Aligner+ object with the default wildcard character '\verb+?+', unknown letters can be represented by the corresponding Unicode code point number \verb+ord("?")+, which happens to be 63:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> s2 = numpy.array([2, ord('X'), 13], numpy.int32)
+>>> u = ord("?")
+>>> u
+63
+>>> s2 = numpy.array([2, 63, 13], numpy.int32)
 >>> aligner.gap_score = -3
 >>> alignments = aligner.align(s1, s2)
 >>> print(len(alignments))
@@ -2515,12 +2518,34 @@ Negative indices are interpreted as unknown letters, and receive a zero score:
 >>> print(alignments[0])
 2 10 10 13
 | .. -- ||
-2 88 -- 13
+2 63 -- 13
 <BLANKLINE>
 >>> print(alignments[1])
 2 10 10 13
 | -- .. ||
-2 -- 88 13
+2 -- 63 13
+<BLANKLINE>
+>>> print(alignments.score)
+9.0
+\end{minted}
+Alternatively you can redefine the wildcard character to a value of your liking, for example to 0:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.wildcard = chr(0)
+>>> s2 = numpy.array([2, 0, 13], numpy.int32)
+>>> aligner.gap_score = -3
+>>> alignments = aligner.align(s1, s2)
+>>> print(len(alignments))
+2
+>>> print(alignments[0])
+2 10 10 13
+| .  -- ||
+2 0  -- 13
+<BLANKLINE>
+>>> print(alignments[1])
+2 10 10 13
+| -- .  ||
+2 -- 0  13
 <BLANKLINE>
 >>> print(alignments.score)
 9.0
