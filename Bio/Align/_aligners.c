@@ -1697,7 +1697,7 @@ typedef struct {
     Py_buffer substitution_matrix;
     PyObject* alphabet;
     int* mapping;
-    Py_UCS4 wildcard;
+    int wildcard;
 } Aligner;
 
 
@@ -1813,7 +1813,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
     self->algorithm = Unknown;
     self->alphabet = NULL;
     self->mapping = NULL;
-    self->wildcard = (Py_UCS4)'?';
+    self->wildcard = -1;
     return 0;
 }
 
@@ -1837,83 +1837,76 @@ Aligner_repr(Aligner* self)
 static PyObject*
 Aligner_str(Aligner* self)
 {
-    int n;
     char text[1024];
     char* p = text;
     PyObject* substitution_matrix = self->substitution_matrix.obj;
-    n = sprintf(text, "Pairwise sequence aligner with parameters\n");
-    p += n;
+    void* args[3];
+    int n = 0;
+    PyObject* wildcard = NULL;
+    PyObject* s;
+
+    p += sprintf(p, "Pairwise sequence aligner with parameters\n");
     if (substitution_matrix) {
-        n = sprintf(p, "  substitution_matrix: <%s object at %p>\n",
-                       Py_TYPE(substitution_matrix)->tp_name, substitution_matrix);
-        p += n;
+        p += sprintf(p, "  substitution_matrix: <%s object at %p>\n",
+                     Py_TYPE(substitution_matrix)->tp_name,
+                     substitution_matrix);
     } else {
-        n = sprintf(p, "  match_score: %f\n", self->match);
-        p += n;
-        n = sprintf(p, "  mismatch_score: %f\n", self->mismatch);
-        p += n;
+        if (self->wildcard == -1) {
+            p += sprintf(p, "  wildcard: None\n");
+        }
+        else {
+            wildcard = PyUnicode_FromKindAndData(PyUnicode_4BYTE_KIND,
+                                                 &self->wildcard, 1);
+            if (!wildcard) return NULL;
+            p += sprintf(p, "  wildcard: '%%U'\n");
+            args[n++] = wildcard;
+        }
+        p += sprintf(p, "  match_score: %f\n", self->match);
+        p += sprintf(p, "  mismatch_score: %f\n", self->mismatch);
     }
     if (self->target_gap_function) {
-        n = sprintf(p, "  target_gap_function: %%R\n");
-        p += n;
+        p += sprintf(p, "  target_gap_function: %%R\n");
+        args[n++] = self->target_gap_function;
     }
     else {
-        n = sprintf(p, "  target_internal_open_gap_score: %f\n",
-                       self->target_internal_open_gap_score);
-        p += n;
-        n = sprintf(p, "  target_internal_extend_gap_score: %f\n",
-                       self->target_internal_extend_gap_score);
-        p += n;
-        n = sprintf(p, "  target_left_open_gap_score: %f\n",
-                       self->target_left_open_gap_score);
-        p += n;
-        n = sprintf(p, "  target_left_extend_gap_score: %f\n",
-                       self->target_left_extend_gap_score);
-        p += n;
-        n = sprintf(p, "  target_right_open_gap_score: %f\n",
-                       self->target_right_open_gap_score);
-        p += n;
-        n = sprintf(p, "  target_right_extend_gap_score: %f\n",
-                       self->target_right_extend_gap_score);
-        p += n;
+        p += sprintf(p, "  target_internal_open_gap_score: %f\n",
+                     self->target_internal_open_gap_score);
+        p += sprintf(p, "  target_internal_extend_gap_score: %f\n",
+                     self->target_internal_extend_gap_score);
+        p += sprintf(p, "  target_left_open_gap_score: %f\n",
+                     self->target_left_open_gap_score);
+        p += sprintf(p, "  target_left_extend_gap_score: %f\n",
+                     self->target_left_extend_gap_score);
+        p += sprintf(p, "  target_right_open_gap_score: %f\n",
+                     self->target_right_open_gap_score);
+        p += sprintf(p, "  target_right_extend_gap_score: %f\n",
+                     self->target_right_extend_gap_score);
     }
     if (self->query_gap_function) {
-        n = sprintf(p, "  query_gap_function: %%R\n");
-        p += n;
+        p += sprintf(p, "  query_gap_function: %%R\n");
+        args[n++] = self->query_gap_function;
     }
     else {
-        n = sprintf(p, "  query_internal_open_gap_score: %f\n",
-                       self->query_internal_open_gap_score);
-        p += n;
-        n = sprintf(p, "  query_internal_extend_gap_score: %f\n",
-                       self->query_internal_extend_gap_score);
-        p += n;
-        n = sprintf(p, "  query_left_open_gap_score: %f\n",
-                       self->query_left_open_gap_score);
-        p += n;
-        n = sprintf(p, "  query_left_extend_gap_score: %f\n",
-                       self->query_left_extend_gap_score);
-        p += n;
-        n = sprintf(p, "  query_right_open_gap_score: %f\n",
-                       self->query_right_open_gap_score);
-        p += n;
-        n = sprintf(p, "  query_right_extend_gap_score: %f\n",
-                       self->query_right_extend_gap_score);
-        p += n;
+        p += sprintf(p, "  query_internal_open_gap_score: %f\n",
+                     self->query_internal_open_gap_score);
+        p += sprintf(p, "  query_internal_extend_gap_score: %f\n",
+                     self->query_internal_extend_gap_score);
+        p += sprintf(p, "  query_left_open_gap_score: %f\n",
+                     self->query_left_open_gap_score);
+        p += sprintf(p, "  query_left_extend_gap_score: %f\n",
+                     self->query_left_extend_gap_score);
+        p += sprintf(p, "  query_right_open_gap_score: %f\n",
+                     self->query_right_open_gap_score);
+        p += sprintf(p, "  query_right_extend_gap_score: %f\n",
+                     self->query_right_extend_gap_score);
     }
     switch (self->mode) {
-        case Global: n = sprintf(p, "  mode: global\n"); break;
-        case Local: n = sprintf(p, "  mode: local\n"); break;
+        case Global: sprintf(p, "  mode: global\n"); break;
+        case Local: sprintf(p, "  mode: local\n"); break;
     }
-    p += n;
-    if (self->target_gap_function || self->query_gap_function)
-        return PyUnicode_FromFormat(text, self->target_gap_function, self->query_gap_function);
-    else if (self->target_gap_function)
-        return PyUnicode_FromFormat(text, self->target_gap_function);
-    else if (self->query_gap_function)
-        return PyUnicode_FromFormat(text, self->query_gap_function);
-    else
-        return PyUnicode_FromString(text);
+    s = PyUnicode_FromFormat(text, args[0], args[1], args[2]);
+    Py_XDECREF(wildcard);
+    return s;
 }
 
 static char Aligner_mode__doc__[] = "alignment mode ('global' or 'local')";
@@ -3671,20 +3664,32 @@ Aligner_set_epsilon(Aligner* self, PyObject* value, void* closure)
 static PyObject*
 Aligner_get_wildcard(Aligner* self, void* closure)
 {
-    return PyUnicode_FromKindAndData(PyUnicode_4BYTE_KIND, &self->wildcard, 1);
+    if (self->wildcard == -1) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    else {
+        return PyUnicode_FromKindAndData(PyUnicode_4BYTE_KIND, &self->wildcard, 1);
+    }
 }
 
 static int
 Aligner_set_wildcard(Aligner* self, PyObject* value, void* closure)
 {
+    if (value == Py_None) {
+        self->wildcard = -1;
+        return 0;
+    }
     if (!PyUnicode_Check(value)) {
         PyErr_SetString(PyExc_TypeError,
-                        "wildcard should be a single character");
+                        "wildcard should be a single character, or None");
+        return -1;
     }
     if (PyUnicode_READY(value) == -1) return -1;
     if (PyUnicode_GET_LENGTH(value) != 1) {
         PyErr_SetString(PyExc_ValueError,
-                        "wildcard should be a single character");
+                        "wildcard should be a single character, or None");
+        return -1;
     }
     self->wildcard = PyUnicode_READ_CHAR(value, 0);
     return 0;

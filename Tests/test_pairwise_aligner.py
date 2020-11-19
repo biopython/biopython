@@ -48,6 +48,7 @@ class TestAlignerProperties(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 3.000000
   mismatch_score: -2.000000
   target_internal_open_gap_score: 0.000000
@@ -90,6 +91,7 @@ Pairwise sequence aligner with parameters
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -5.000000
@@ -145,6 +147,7 @@ Pairwise sequence aligner with parameters
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -3.000000
@@ -189,6 +192,7 @@ class TestPairwiseGlobal(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: 0.000000
@@ -248,6 +252,7 @@ G-A-T
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 0.000000
   mismatch_score: -1.000000
   target_internal_open_gap_score: -5.000000
@@ -279,6 +284,7 @@ class TestPairwiseLocal(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -322,6 +328,7 @@ zA-Bz
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -364,6 +371,7 @@ class TestUnknownCharacter(unittest.TestCase):
         aligner.mode = "global"
         aligner.gap_score = -1.0
         aligner.mismatch_score = -1.0
+        aligner.wildcard = "?"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
@@ -396,12 +404,30 @@ GAXT
 """,
         )
         self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+        aligner.wildcard = None
+        score = aligner.score(seq1, seq2)
+        self.assertAlmostEqual(score, 2.0)
+        alignments = aligner.align(seq1, seq2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+GACT
+||.|
+GAXT
+""",
+        )
+        self.assertEqual(alignment.aligned, (((0, 4),), ((0, 4),)))
+
 
     def test_needlemanwunsch_simple2(self):
         seq1 = "GA?AT"
         seq2 = "GAA?T"
         aligner = Align.PairwiseAligner()
         aligner.mode = "global"
+        aligner.wildcard = "?"
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 4.0)
         alignments = aligner.align(seq1, seq2)
@@ -454,6 +480,7 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 2.000000
   mismatch_score: -1.000000
   target_internal_open_gap_score: -0.100000
@@ -512,6 +539,7 @@ A-
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.500000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -568,6 +596,7 @@ GA-
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: 0.000000
@@ -614,6 +643,7 @@ GA--T
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -2.000000
   target_internal_open_gap_score: -0.100000
@@ -672,6 +702,7 @@ class TestPairwiseExtendPenalty(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
@@ -717,6 +748,7 @@ G--T
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
@@ -775,6 +807,7 @@ class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -1.700000
@@ -824,6 +857,7 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
@@ -904,6 +938,7 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -960,6 +995,7 @@ GTCT
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1015,6 +1051,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.100000
@@ -1458,6 +1495,7 @@ class TestPairwiseOneCharacter(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1501,6 +1539,7 @@ abcde
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1555,6 +1594,7 @@ abcce
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1600,6 +1640,7 @@ abcde
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.300000
@@ -1648,6 +1689,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1700,6 +1742,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1762,6 +1805,7 @@ AAB------------BBAAAACCCCAAAABBBAA--
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -1795,6 +1839,7 @@ TTG--GAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -1879,6 +1924,7 @@ TTG--GAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -1939,6 +1985,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -1.000000
   target_gap_function: %s
@@ -2001,6 +2048,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -2045,6 +2093,7 @@ TTGGAA
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: -10.000000
   target_gap_function: %s
@@ -2357,6 +2406,7 @@ class TestKeywordArgumentsConstructor(unittest.TestCase):
             str(aligner),
             """\
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: -0.200000
