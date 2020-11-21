@@ -392,37 +392,6 @@ TwoBitSequence_dealloc(TwoBitSequence* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
-static PyObject*
-TwoBitSequence_str(TwoBitSequence* self)
-{
-    char* sequence;
-    const int fd = self->fd;
-    const uint32_t size = self->dnaSize;
-    const uint32_t nBlockCount = self->nBlockCount;
-    const uint32_t* const nBlockStarts = self->nBlockStarts;
-    const uint32_t* const nBlockSizes = self->nBlockSizes;
-    const uint32_t maskBlockCount = self->maskBlockCount;
-    const uint32_t* const maskBlockStarts = self->maskBlockStarts;
-    const uint32_t* const maskBlockSizes = self->maskBlockSizes;
-    PyObject* obj;
-    if (lseek(fd, self->offset, SEEK_SET) == -1) {
-        PyErr_Format(PyExc_RuntimeError,
-                     "failed to seek in file (errno = %d)", errno);
-        return NULL;
-    }
-    obj = PyUnicode_New(size, 255);
-    if (!obj) return NULL;
-    sequence = PyUnicode_DATA(obj);
-    if (!extract(fd, 0, size, sequence)) {
-        Py_DECREF(obj);
-        return NULL;
-    }
-    applyNs(sequence, 0, size, nBlockCount, nBlockStarts, nBlockSizes);
-    applyMask(sequence, 0, size,
-              maskBlockCount, maskBlockStarts, maskBlockSizes);
-    return obj;
-}
-
 static int
 TwoBitSequence_length(TwoBitSequence *self)
 {
@@ -551,7 +520,7 @@ static PyTypeObject TwoBitSequenceType = {
     &TwoBitSequence_mapping,                     /* tp_as_mapping */
     0,                                           /* tp_hash */
     0,                                           /* tp_call */
-    (reprfunc)TwoBitSequence_str,                /* tp_str */
+    0,                                           /* tp_str */
     0,                                           /* tp_getattro */
     0,                                           /* tp_setattro */
     0,                                           /* tp_as_buffer */
