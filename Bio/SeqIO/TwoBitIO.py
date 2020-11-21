@@ -1,3 +1,6 @@
+"""Bio.SeqIO support for UCSC's "twoBit" (.2bit) file format."""
+
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -9,6 +12,7 @@ class TwoBitIterator(SequenceIterator):
     """Parser for UCSC twoBit (.2bit) files."""
 
     def __init__(self, source):
+        """Read the file index."""
         super().__init__(source, mode="b", fmt="twoBit")
         isByteSwapped, names, sequences = _twoBitIO.TwoBitIterator(self.stream)
         self.isByteSwapped = isByteSwapped
@@ -18,6 +22,7 @@ class TwoBitIterator(SequenceIterator):
         self.should_close_stream = False
 
     def parse(self, stream):
+        """Iterate over the sequences in the file."""
         for name, sequence in zip(self.names, self.sequences):
             sequence = Seq(sequence)
             record = SeqRecord(sequence, id=name)
@@ -32,6 +37,7 @@ class TwoBitIterator(SequenceIterator):
         return SeqRecord(sequence, id=key)
 
     def keys(self):
+        """Return a list with the names of the sequences in the file."""
         return self.names
 
     def __len__(self):

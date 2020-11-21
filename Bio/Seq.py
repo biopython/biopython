@@ -112,7 +112,7 @@ class Seq:
             c = data[:0]
         except TypeError:
             return False
-        if c != b'':
+        if c != b"":
             return False
         return True
 

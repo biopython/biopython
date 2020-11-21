@@ -5701,16 +5701,20 @@ class TestSeqIO(SeqIOTestBaseClass):
         for t_format in SeqIO._FormatToIterator:
             mode = self.get_mode(t_format)
             try:
-                temp = tempfile.NamedTemporaryFile(mode="w"+mode, delete=False)
+                temp = tempfile.NamedTemporaryFile(mode="w" + mode, delete=False)
                 temp.close()
-                with open(temp.name, "r"+mode) as handle:
-                    if t_format in (
-                        "uniprot-xml",
-                        "pdb-seqres",
-                        "pdb-atom",
-                        "cif-atom",
-                        "cif-seqres",
-                    ) or mode == "b":
+                with open(temp.name, "r" + mode) as handle:
+                    if (
+                        t_format
+                        in (
+                            "uniprot-xml",
+                            "pdb-seqres",
+                            "pdb-atom",
+                            "cif-atom",
+                            "cif-seqres",
+                        )
+                        or mode == "b"
+                    ):
                         with self.assertRaisesRegex(ValueError, "Empty file."):
                             list(SeqIO.parse(handle, t_format))
                     else:

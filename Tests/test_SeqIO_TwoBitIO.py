@@ -1,5 +1,5 @@
 """Tests for SeqIO TwoBitIO module."""
-  
+
 
 import os
 import random
@@ -16,7 +16,7 @@ class Parsing(unittest.TestCase):
 
     def setUp(self):
         path = "TwoBit/sequence.fa"
-        records = SeqIO.parse(path, 'fasta')
+        records = SeqIO.parse(path, "fasta")
         self.records = list(records)
 
     def test_littleendian(self):
@@ -58,7 +58,10 @@ class Parsing(unittest.TestCase):
         with open(path, "rb") as handle:
             with self.assertRaises(ValueError) as cm:
                 TwoBitIO.TwoBitIterator(handle)
-            self.assertEqual(str(cm.exception), "version-1 twoBit files with 64-bit offsets for index are currently not supported")
+            self.assertEqual(
+                str(cm.exception),
+                 "version-1 twoBit files with 64-bit offsets for index are currently not supported",
+            )
 
 
 if __name__ == "__main__":
