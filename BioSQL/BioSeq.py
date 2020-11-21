@@ -120,6 +120,10 @@ class DBSeq(Seq):
             self.primary_id, self.start, self.start + self._length
         )
 
+    def __bytes__(self):
+        """Return the full sequence as bytes."""
+        return str(self).encode("ASCII")
+
     def __str__(self):
         """Return the full sequence as a python string."""
         return self.adaptor.get_subseq_as_string(

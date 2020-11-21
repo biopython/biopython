@@ -18,7 +18,6 @@ from Bio.Data.IUPACData import (
     ambiguous_rna_values,
 )
 from Bio.Data.CodonTable import TranslationError, standard_dna_table
-from Bio.Seq import MutableSeq
 
 test_seqs = [
     Seq.Seq("TCAAAAGGATGCATCATG"),
@@ -59,10 +58,28 @@ class TestSeq(unittest.TestCase):
         """Test converting Seq to string."""
         self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
 
-    def test_construction_using_a_seq_object(self):
-        """Test using a Seq object to initialize another Seq object."""
-        s = Seq.Seq(self.s)
+    def test_seq_construction(self):
+        """Test Seq object initialization."""
+        sequence = bytes(self.s)
+        s = Seq.Seq(sequence)
+        self.assertIsInstance(s, Seq.Seq, "Creating MutableSeq using bytes")
         self.assertEqual(s, self.s)
+        s = Seq.Seq(bytearray(sequence))
+        self.assertIsInstance(s, Seq.Seq, "Creating MutableSeq using bytearray")
+        self.assertEqual(s, self.s)
+        s = Seq.Seq(sequence.decode("ASCII"))
+        self.assertIsInstance(s, Seq.Seq, "Creating MutableSeq using str")
+        self.assertEqual(s, self.s)
+        s = Seq.Seq(self.s)
+        self.assertIsInstance(s, Seq.Seq, "Creating MutableSeq using Seq")
+        self.assertEqual(s, self.s)
+        s = Seq.Seq(Seq.MutableSeq(sequence))
+        self.assertIsInstance(s, Seq.Seq, "Creating MutableSeq using MutableSeq")
+        self.assertEqual(s, self.s)
+        self.assertRaises(
+            UnicodeEncodeError, Seq.Seq, "ÄþÇÐ"
+        )  # All are Latin-1 characters
+        self.assertRaises(UnicodeEncodeError, Seq.Seq, "あいうえお")  # These are not
 
     def test_repr(self):
         """Test representation of Seq object."""
@@ -450,19 +467,48 @@ class TestSeqMultiplication(unittest.TestCase):
 
 class TestMutableSeq(unittest.TestCase):
     def setUp(self):
-        self.s = Seq.Seq("TCAAAAGGATGCATCATG")
-        self.mutable_s = MutableSeq("TCAAAAGGATGCATCATG")
+        sequence = b"TCAAAAGGATGCATCATG"
+        self.s = Seq.Seq(sequence)
+        self.mutable_s = Seq.MutableSeq(sequence)
 
-    def test_mutableseq_creation(self):
-        """Test creating MutableSeqs in multiple ways."""
-        mutable_s = MutableSeq("TCAAAAGGATGCATCATG")
-        self.assertIsInstance(mutable_s, MutableSeq, "Creating MutableSeq")
-
-        mutable_s = MutableSeq(self.s)
-        self.assertIsInstance(mutable_s, MutableSeq, "Converting Seq to mutable")
-
-        array_seq = MutableSeq(array.array("u", "TCAAAAGGATGCATCATG"))
-        self.assertIsInstance(array_seq, MutableSeq, "Creating MutableSeq using array")
+    def test_mutableseq_construction(self):
+        """Test MutableSeq object initialization."""
+        sequence = bytes(self.s)
+        mutable_s = Seq.MutableSeq(sequence)
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from bytes"
+        )
+        self.assertEqual(mutable_s, self.s)
+        mutable_s = Seq.MutableSeq(bytearray(sequence))
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from bytearray"
+        )
+        self.assertEqual(mutable_s, self.s)
+        mutable_s = Seq.MutableSeq(sequence.decode("ASCII"))
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from str"
+        )
+        self.assertEqual(mutable_s, self.s)
+        mutable_s = Seq.MutableSeq(self.s)
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from Seq"
+        )
+        self.assertEqual(mutable_s, self.s)
+        mutable_s = Seq.MutableSeq(Seq.MutableSeq(sequence))
+        self.assertEqual(mutable_s, self.s)
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Initializing MutableSeq from MutableSeq"
+        )
+        # Deprecated:
+        mutable_s = Seq.MutableSeq(array.array("u", sequence.decode("ASCII")))
+        self.assertIsInstance(
+            mutable_s, Seq.MutableSeq, "Creating MutableSeq using array"
+        )
+        self.assertEqual(mutable_s, self.s)
+        self.assertRaises(
+            UnicodeEncodeError, Seq.MutableSeq, "ÄþÇÐ"
+        )  # All are Latin-1 characters
+        self.assertRaises(UnicodeEncodeError, Seq.MutableSeq, "あいうえお")  # These are not
 
     def test_repr(self):
         self.assertEqual("MutableSeq('TCAAAAGGATGCATCATG')", repr(self.mutable_s))
@@ -472,7 +518,7 @@ class TestMutableSeq(unittest.TestCase):
         expected = (
             "MutableSeq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATG...GGA')"
         )
-        self.assertEqual(expected, repr(MutableSeq(seq)))
+        self.assertEqual(expected, repr(Seq.MutableSeq(seq)))
 
     def test_equal_comparison(self):
         """Test __eq__ comparison method."""
@@ -540,7 +586,7 @@ class TestMutableSeq(unittest.TestCase):
     def test_radd_method_using_mutalbeseq_object(self):
         self.assertEqual(
             "UCAAAAGGATCAAAAGGATGCATCATG",
-            self.mutable_s.__radd__(MutableSeq("UCAAAAGGA")),
+            self.mutable_s.__radd__(Seq.MutableSeq("UCAAAAGGA")),
         )
 
     def test_radd_method_using_seq_object(self):
@@ -566,47 +612,42 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_setting_slices(self):
         self.assertEqual(
-            MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq",
+            Seq.MutableSeq("CAAA"), self.mutable_s[1:5], "Slice mutable seq",
         )
 
         self.mutable_s[1:3] = "GAT"
         self.assertEqual(
-            MutableSeq("TGATAAAGGATGCATCATG"),
+            Seq.MutableSeq("TGATAAAGGATGCATCATG"),
             self.mutable_s,
             "Set slice with string and adding extra nucleotide",
         )
 
         self.mutable_s[1:3] = self.mutable_s[5:7]
         self.assertEqual(
-            MutableSeq("TAATAAAGGATGCATCATG"),
+            Seq.MutableSeq("TAATAAAGGATGCATCATG"),
             self.mutable_s,
             "Set slice with MutableSeq",
         )
 
-        self.mutable_s[1:3] = array.array("u", "GAT")
-        self.assertEqual(
-            MutableSeq("TGATTAAAGGATGCATCATG"), self.mutable_s, "Set slice with array",
-        )
-
     def test_setting_item(self):
         self.mutable_s[3] = "G"
-        self.assertEqual(MutableSeq("TCAGAAGGATGCATCATG"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAGAAGGATGCATCATG"), self.mutable_s)
 
     def test_deleting_slice(self):
         del self.mutable_s[4:5]
-        self.assertEqual(MutableSeq("TCAAAGGATGCATCATG"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAAAGGATGCATCATG"), self.mutable_s)
 
     def test_deleting_item(self):
         del self.mutable_s[3]
-        self.assertEqual(MutableSeq("TCAAAGGATGCATCATG"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAAAGGATGCATCATG"), self.mutable_s)
 
     def test_appending(self):
         self.mutable_s.append("C")
-        self.assertEqual(MutableSeq("TCAAAAGGATGCATCATGC"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAAAAGGATGCATCATGC"), self.mutable_s)
 
     def test_inserting(self):
         self.mutable_s.insert(4, "G")
-        self.assertEqual(MutableSeq("TCAAGAAGGATGCATCATG"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAAGAAGGATGCATCATG"), self.mutable_s)
 
     def test_popping_last_item(self):
         self.assertEqual("G", self.mutable_s.pop())
@@ -614,7 +655,7 @@ class TestMutableSeq(unittest.TestCase):
     def test_remove_items(self):
         self.mutable_s.remove("G")
         self.assertEqual(
-            MutableSeq("TCAAAAGATGCATCATG"), self.mutable_s, "Remove first G"
+            Seq.MutableSeq("TCAAAAGATGCATCATG"), self.mutable_s, "Remove first G"
         )
 
         self.assertRaises(ValueError, self.mutable_s.remove, "Z")
@@ -630,11 +671,11 @@ class TestMutableSeq(unittest.TestCase):
     def test_reverse(self):
         """Test using reverse method."""
         self.mutable_s.reverse()
-        self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("GTACTACGTAGGAAAACT"), self.mutable_s)
 
     def test_reverse_with_stride(self):
         """Test reverse using -1 stride."""
-        self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT"), self.mutable_s[::-1])
+        self.assertEqual(Seq.MutableSeq("GTACTACGTAGGAAAACT"), self.mutable_s[::-1])
 
     def test_complement(self):
         self.mutable_s.complement()
@@ -666,33 +707,33 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_extend_method(self):
         self.mutable_s.extend("GAT")
-        self.assertEqual(MutableSeq("TCAAAAGGATGCATCATGGAT"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAAAAGGATGCATCATGGAT"), self.mutable_s)
 
     def test_extend_with_mutable_seq(self):
-        self.mutable_s.extend(MutableSeq("TTT"))
-        self.assertEqual(MutableSeq("TCAAAAGGATGCATCATGTTT"), self.mutable_s)
+        self.mutable_s.extend(Seq.MutableSeq("TTT"))
+        self.assertEqual(Seq.MutableSeq("TCAAAAGGATGCATCATGTTT"), self.mutable_s)
 
     def test_delete_stride_slice(self):
         del self.mutable_s[4 : 6 - 1]
-        self.assertEqual(MutableSeq("TCAAAGGATGCATCATG"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCAAAGGATGCATCATG"), self.mutable_s)
 
     def test_extract_third_nucleotide(self):
         """Test extracting every third nucleotide (slicing with stride 3)."""
-        self.assertEqual(MutableSeq("TAGTAA"), self.mutable_s[0::3])
-        self.assertEqual(MutableSeq("CAGGTT"), self.mutable_s[1::3])
-        self.assertEqual(MutableSeq("AAACCG"), self.mutable_s[2::3])
+        self.assertEqual(Seq.MutableSeq("TAGTAA"), self.mutable_s[0::3])
+        self.assertEqual(Seq.MutableSeq("CAGGTT"), self.mutable_s[1::3])
+        self.assertEqual(Seq.MutableSeq("AAACCG"), self.mutable_s[2::3])
 
     def test_set_wobble_codon_to_n(self):
         """Test setting wobble codon to N (set slice with stride 3)."""
         self.mutable_s[2::3] = "N" * len(self.mutable_s[2::3])
-        self.assertEqual(MutableSeq("TCNAANGGNTGNATNATN"), self.mutable_s)
+        self.assertEqual(Seq.MutableSeq("TCNAANGGNTGNATNATN"), self.mutable_s)
 
 
 class TestUnknownSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.UnknownSeq(6)
 
-    def test_construction(self):
+    def test_unknownseq_construction(self):
         self.assertEqual("??????", str(Seq.UnknownSeq(6)))
         self.assertEqual("NNNNNN", str(Seq.UnknownSeq(6, character="N")))
         self.assertEqual("XXXXXX", str(Seq.UnknownSeq(6, character="X")))
