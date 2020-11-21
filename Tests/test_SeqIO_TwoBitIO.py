@@ -60,7 +60,7 @@ class Parsing(unittest.TestCase):
                 TwoBitIO.TwoBitIterator(handle)
             self.assertEqual(
                 str(cm.exception),
-                 "version-1 twoBit files with 64-bit offsets for index are currently not supported",
+                "version-1 twoBit files with 64-bit offsets for index are currently not supported",
             )
 
 
