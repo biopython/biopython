@@ -10,6 +10,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.SeqIO import TwoBitIO
 
+
 class Parsing(unittest.TestCase):
     """Test parsing 2bit files."""
 
@@ -20,54 +21,44 @@ class Parsing(unittest.TestCase):
 
     def test_littleendian(self):
         path = "TwoBit/sequence.littleendian.2bit"
-        handle = open(path)
-        records = TwoBitIO.TwoBitIterator(handle)
-        self.assertEqual(len(sequences), 5)
-        self.assertFalse(records.isByteSwapped)
-        for record1, record2 in zip(self.records, records):
-            self.assertEqual(record1.seq, record2.seq)
-            self.assertEqual(record1.id, record2.id)
-        handle.close()
+        with open(path, "rb") as handle:
+            records = TwoBitIO.TwoBitIterator(handle)
+            self.assertFalse(records.isByteSwapped)
+            self.assertEqual(len(self.records), len(records))
+            for record1, record2 in zip(self.records, records):
+                self.assertEqual(record1.id, record2.id)
+                seq1 = record1.seq
+                seq2 = record2.seq
+                self.assertEqual(seq1, seq2)
+                n = len(seq1)
+                for i in range(n):
+                    for j in range(i, n):
+                        self.assertEqual(seq1[i:j], seq2[i:j])
+                        self.assertEqual(repr(seq1[i:j]), repr(seq2[i:j]))
 
     def test_bigendian(self):
         path = "TwoBit/sequence.bigendian.2bit"
-        handle = open(path)
-        records = TwoBitIO.TwoBitIterator(handle)
-        self.assertEqual(len(sequences), 5)
-        self.assertFalse(records.isByteSwapped)
-        for record1, record2 in zip(self.records, records):
-            self.assertEqual(record1.seq, record2.seq)
-            self.assertEqual(record1.id, record2.id)
-        handle.close()
+        with open(path, "rb") as handle:
+            records = TwoBitIO.TwoBitIterator(handle)
+            self.assertEqual(len(records), 6)
+            self.assertTrue(records.isByteSwapped)
+            for record1, record2 in zip(self.records, records):
+                self.assertEqual(record1.id, record2.id)
+                seq1 = record1.seq
+                seq2 = record2.seq
+                self.assertEqual(seq1, seq2)
+                n = len(seq1)
+                for i in range(n):
+                    for j in range(i, n):
+                        self.assertEqual(seq1[i:j], seq2[i:j])
+                        self.assertEqual(repr(seq1[i:j]), repr(seq2[i:j]))
 
-if False:
-  for length in range(1,21):
-    records = []
-    for i in range(10):
-        nucleotides = ['ACGTNacgtn'[random.randint(0,9)] for i in range(length)]
-        sequence = ''.join(nucleotides)
-        seq = Seq(sequence)
-        record = SeqRecord(seq, id='name_%d' % i)
-        records.append(record)
-    handle = open("test.fa", 'w')
-    SeqIO.write(records, handle, 'fasta')
-    handle.close()
-    os.system("faToTwoBit test.fa test.2bit")
-    handle = open("test.2bit")
-    sequences = TwoBitIO.TwoBitIterator(handle)
-    for sequence, record in zip(sequences, records):
-        seq1 = sequence
-        seq2 = str(record.seq)
-        assert str(seq1) == str(seq2)
-        for start in range(length):
-            for end in range(start+1, length+1):
-                print("Testing sequence length %d start %d end %d" % (length, start, end))
-                for i in range(10):
-                    assert str(seq1[start:end]) == str(seq2[start:end])
-                    for step in range(1, end-start+1):
-                        assert str(seq1[start:end:step]) == str(seq2[start:end:step])
-                        assert str(seq1[end:start:-step]) == str(seq2[end:start:-step])
-
+    def test_sequence_long(self):
+        path = "TwoBit/sequence.long.2bit"
+        with open(path, "rb") as handle:
+            with self.assertRaises(ValueError) as cm:
+                TwoBitIO.TwoBitIterator(handle)
+            self.assertEqual(str(cm.exception), "version-1 twoBit files with 64-bit offsets for index are currently not supported")
 
 
 if __name__ == "__main__":

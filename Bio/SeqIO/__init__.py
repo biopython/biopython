@@ -396,6 +396,7 @@ from Bio.SeqIO import SffIO
 from Bio.SeqIO import SnapGeneIO
 from Bio.SeqIO import SwissIO
 from Bio.SeqIO import TabIO
+from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import QualityIO  # FastQ and qual files
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
@@ -438,10 +439,10 @@ _FormatToIterator = {
     "seqxml": SeqXmlIO.SeqXmlIterator,
     "sff": SffIO.SffIterator,
     "snapgene": SnapGeneIO.SnapGeneIterator,
-    # Not sure about this in the long run:
-    "sff-trim": SffIO._SffTrimIterator,
+    "sff-trim": SffIO._SffTrimIterator,  # Not sure about this in the long run
     "swiss": SwissIO.SwissIterator,
     "tab": TabIO.TabIterator,
+    "twobit": TwoBitIO.TwoBitIterator,
     "uniprot-xml": UniprotIO.UniprotIterator,
     "xdna": XdnaIO.XdnaIterator,
 }

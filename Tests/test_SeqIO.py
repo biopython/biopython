@@ -6,9 +6,11 @@
 """Tests for SeqIO module."""
 
 
+import os
 import copy
 import gzip
 import sys
+import tempfile
 import unittest
 import warnings
 
@@ -5698,24 +5700,24 @@ class TestSeqIO(SeqIOTestBaseClass):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
             mode = self.get_mode(t_format)
-            if mode == "t":
-                handle = StringIO()
-                if t_format in (
-                    "uniprot-xml",
-                    "pdb-seqres",
-                    "pdb-atom",
-                    "cif-atom",
-                    "cif-seqres",
-                ):
-                    with self.assertRaisesRegex(ValueError, "Empty file."):
-                        list(SeqIO.parse(handle, t_format))
-                else:
-                    records = list(SeqIO.parse(handle, t_format))
-                    self.assertEqual(len(records), 0)
-            elif mode == "b":
-                handle = BytesIO()
-                with self.assertRaisesRegex(ValueError, "Empty file."):
-                    list(SeqIO.parse(handle, t_format))
+            try:
+                temp = tempfile.NamedTemporaryFile(mode="w"+mode, delete=False)
+                temp.close()
+                with open(temp.name, "r"+mode) as handle:
+                    if t_format in (
+                        "uniprot-xml",
+                        "pdb-seqres",
+                        "pdb-atom",
+                        "cif-atom",
+                        "cif-seqres",
+                    ) or mode == "b":
+                        with self.assertRaisesRegex(ValueError, "Empty file."):
+                            list(SeqIO.parse(handle, t_format))
+                    else:
+                        records = list(SeqIO.parse(handle, t_format))
+                        self.assertEqual(len(records), 0)
+            finally:
+                os.remove(temp.name)
 
     def test_fasta_to_seqxml_without_mol_type(self):
         """Convert FASTA to SeqXML without molecule type."""
