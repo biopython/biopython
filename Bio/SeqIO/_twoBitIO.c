@@ -603,10 +603,10 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
     if (!names) goto error;
     for (i = 0; i < sequenceCount; i++) {
         if (!safe_read(fd, sizeof(uint8_t), &nameSize, "nameSize")) goto error;
-        name = PyUnicode_New(nameSize, 127);
+        name = PyBytes_FromStringAndSize(NULL, nameSize);
         if (!name) goto error;
         PyTuple_SET_ITEM(names, i, (PyObject*)name);
-        if (!safe_read(fd, nameSize, PyUnicode_DATA(name), "name")) goto error;
+        if (!safe_read(fd, nameSize, PyBytes_AS_STRING(name), "name")) goto error;
         if (!safe_read(fd, sizeof(uint32_t), &offset, "offset")) goto error;
         if (isByteSwapped) BYTESWAP(offset);
         offsets[i] = offset;

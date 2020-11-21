@@ -16,7 +16,7 @@ class TwoBitIterator(SequenceIterator):
         super().__init__(source, mode="b", fmt="twoBit")
         isByteSwapped, names, sequences = _twoBitIO.TwoBitIterator(self.stream)
         self.isByteSwapped = isByteSwapped
-        self.names = names
+        self.names = [name.decode("ASCII") for name in names]
         self.sequences = [Seq(sequence) for sequence in sequences]
         # wait to close the file until the TwoBitIterator goes out of scope:
         self.should_close_stream = False
