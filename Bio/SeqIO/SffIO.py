@@ -324,8 +324,8 @@ def _sff_file_header(handle):
         raise ValueError(
             "Index offset %i but index length %i" % (index_offset, index_length)
         )
-    flow_chars = handle.read(number_of_flows_per_read).decode()
-    key_sequence = handle.read(key_length).decode()
+    flow_chars = handle.read(number_of_flows_per_read).decode("ASCII")
+    key_sequence = handle.read(key_length).decode("ASCII")
     # According to the spec, the header_length field should be the total number
     # of bytes required by this set of header fields, and should be equal to
     # "31 + number_of_flows_per_read + key_length" rounded up to the next value
@@ -1193,8 +1193,8 @@ class SffWriter(SequenceWriter):
             # return 0
             raise ValueError("Must have at least one sequence")
         try:
-            self._key_sequence = record.annotations["flow_key"].encode()
-            self._flow_chars = record.annotations["flow_chars"].encode()
+            self._key_sequence = record.annotations["flow_key"].encode("ASCII")
+            self._flow_chars = record.annotations["flow_chars"].encode("ASCII")
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
             raise ValueError("Missing SFF flow information") from None
@@ -1360,7 +1360,7 @@ class SffWriter(SequenceWriter):
         # Basics
         name = record.id.encode()
         name_len = len(name)
-        seq = record.seq.upper().encode()
+        seq = record.seq.upper().encode("ASCII")  # TODO - how to get bytes now?
         seq_len = len(seq)
         # Qualities
         try:
