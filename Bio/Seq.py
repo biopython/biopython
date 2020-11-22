@@ -96,6 +96,8 @@ class Seq:
         elif isinstance(data, str):
             self._data = bytes(data, encoding="ASCII")
         elif self._check_bytes_like(data):
+            # e.g. the TwoBitSequence objects, which return bytes when
+            # __getitem__ is called on them.
             self._data = data
         else:
             raise TypeError(
@@ -103,7 +105,9 @@ class Seq:
             )
 
     def _check_bytes_like(self, data):
-        # Check if data is bytes-like
+        # Check if data is bytes-like. This currently requires two things:
+        # - calling len(data) must return the length of the data
+        # - calling __getitem__ must return a bytes object for the requested region
         try:
             len(data)
         except TypeError:
