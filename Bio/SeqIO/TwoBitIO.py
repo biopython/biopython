@@ -5,12 +5,25 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Bio.SeqIO support for UCSC's "twoBit" (.2bit) file format."""
+"""Bio.SeqIO support for UCSC's "twoBit" (.2bit) file format.
+
+This parser reads the index stored in the twoBit file, as well as the masked
+regions and the N's for ean sequence. It also creates sequence data objects
+(TwoBitSequence objects, defined in Bio/SeqIO/_twoBitIO.c), which support only
+two methods: __len__ and __getitem__. The former will return the length of the
+sequence, while the latter returns the sequence (as a bytes object) for the
+requested region.  Using the information in the index, The __getitem__ method
+calculates the file position at which the requested region starts, and only
+reads the requested sequence region. Note that the full sequence of a record
+is loaded only if specifically requested, making the parser memory-efficient.
+
+The TwoBitIterator object implements the __getitem__, keys, and __len__
+methods that allow it to be used as a dictionary.
+"""
 
 # The .2bit file format is defined by UCSC as follows
 # (see http://genome.ucsc.edu/FAQ/FAQformat.html#format7):
 #
-# ----------------------------------------------------------------------------
 #
 # A .2bit file stores multiple DNA sequences (up to 4 Gb total) in a compact
 # randomly-accessible format. The file contains masking information as well
@@ -59,20 +72,6 @@
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
 #             significant 2-bit byte; the last base is in the least significan
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-# ----------------------------------------------------------------------------
-#
-# This parser reads the index stored in the twoBit file, as well as the masked
-# regions and the N's for ean sequence. It also creates sequence data objects
-# (TwoBitSequence objects, defined in Bio/SeqIO/_twoBitIO.c), which support only
-# two methods: __len__ and __getitem__. The former will return the length of the
-# sequence, while the latter returns the sequence (as a bytes object) for the
-# requested region.  Using the information in the index, The __getitem__ method
-# calculates the file position at which the requested region starts, and only
-# reads the requested sequence region. Note that the full sequence of a record
-# is loaded only if specifically requested, making the parser memory-efficient.
-#
-# The TwoBitIterator object implements the __getitem__, keys, and __len__
-# methods that allow it to be used as a dictionary.
 
 
 from Bio.Seq import Seq
