@@ -693,7 +693,7 @@ def _sff_read_seq_record(
     flow_values = handle.read(read_flow_size)  # unpack later if needed
     temp_fmt = ">%iB" % seq_len  # used for flow index and quals
     flow_index = handle.read(seq_len)  # unpack later if needed
-    seq = handle.read(seq_len).decode()  # TODO - Use bytes in Seq?
+    seq = handle.read(seq_len)  # Leave as bytes for Seq object
     quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
     # now any padding...
     padding = (read_flow_size + seq_len * 3) % 8
