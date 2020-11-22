@@ -4,6 +4,8 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
+
+# fmt: off
 """Bio.SeqIO support for UCSC's "twoBit" (.2bit) file format.
 
 The .2bit file format is defined by UCSC as follows
@@ -71,8 +73,8 @@ loaded only if specifically requested, making the parser memory-efficient.
 
 The TwoBitIterator object implements the __getitem__, keys, and __len__ methods
 that allow it to be used as a dictionary.
-
 """
+# fmt: on
 
 
 from Bio.Seq import Seq
