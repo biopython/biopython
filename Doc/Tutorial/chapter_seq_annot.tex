@@ -776,27 +776,19 @@ qualifiers:
 
 \noindent Notice that their locations have been adjusted to reflect the new parent sequence!
 
-While Biopython has done something sensible and hopefully intuitive with the features
-(and any per-letter annotation), for the other annotation it is impossible to know if
-this still applies to the sub-sequence or not. To avoid guessing, the \texttt{annotations}
-and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
-any relevant information as appropriate.
+While Biopython has done something sensible and hopefully intuitive with the
+features (and any per-letter annotation), for the other annotation it is
+impossible to know if this still applies to the sub-sequence or not. To avoid
+guessing, with the exception of the molecule type, the \texttt{.annotations}
+and \texttt{.dbxrefs} are omitted from the sub-record, and it is up to you to
+transfer any relevant information as appropriate.
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.annotations
-{}
+{'molecule_type': 'DNA'}
 >>> sub_record.dbxrefs
 []
-\end{minted}
-
-\noindent
-If you plan to output the sub-record in GenBank or EMBL format, you will need
-to retain the molecule type information:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> sub_record.annotations['molecule_type'] = record.annotations['molecule_type']
 \end{minted}
 
 \noindent
@@ -934,8 +926,9 @@ SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA'
 9609
 \end{minted}
 
-Note that this isn't perfect in that some annotation like the database cross references
-and one of the features (the source feature) have been lost:
+Note that this isn't perfect in that some annotation like the database cross
+references, all the annotations except molecule type, and one of the features
+(the source feature) have been lost:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -944,7 +937,7 @@ and one of the features (the source feature) have been lost:
 >>> shifted.dbxrefs
 []
 >>> shifted.annotations.keys()
-dict_keys([])
+dict_keys(['molecule_type'])
 \end{minted}
 
 This is because the \verb|SeqRecord| slicing step is cautious in what annotation

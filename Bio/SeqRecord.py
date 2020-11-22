@@ -355,8 +355,9 @@ class SeqRecord:
           adjusted accordingly). If you want to preserve any truncated
           features (e.g. GenBank/EMBL source features), you must
           explicitly add them to the new SeqRecord yourself.
-        * The annotations dictionary and the dbxrefs list are not used
-          for the new SeqRecord, as in general they may not apply to the
+        * With the exception of any molecule type, the annotations
+          dictionary and the dbxrefs list are not used for the new
+          SeqRecord, as in general they may not apply to the
           subsequence. If you want to preserve them, you must explicitly
           copy them to the new SeqRecord yourself.
 
@@ -488,6 +489,10 @@ class SeqRecord:
             # answer.annotations = dict(self.annotations.items())
             # answer.dbxrefs = self.dbxrefs[:]
             # TODO - Review this in light of adding SeqRecord objects?
+
+            if "molecule_type" in self.annotations:
+                # This will still apply, and we need it for GenBank/EMBL etc output
+                answer.annotations["molecule_type"] = self.annotations["molecule_type"]
 
             # TODO - Cope with strides by generating ambiguous locations?
             start, stop, step = index.indices(parent_length)
