@@ -1360,7 +1360,7 @@ class SffWriter(SequenceWriter):
         # Basics
         name = record.id.encode()
         name_len = len(name)
-        seq = record.seq.upper().encode("ASCII")  # TODO - how to get bytes now?
+        seq = bytes(record.seq).upper()
         seq_len = len(seq)
         # Qualities
         try:
