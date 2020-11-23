@@ -574,6 +574,10 @@ def parse(handle, format, alphabet=None):
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
 
+    For lazy-loading file formats such as twobit, for which the file contents
+    is read on demand only, ensure that the file remains open while extracting
+    sequence data.
+
     If you have a string 'data' containing the file contents, you must
     first turn this into a handle in order to parse it:
 

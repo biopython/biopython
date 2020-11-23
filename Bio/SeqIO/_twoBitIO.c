@@ -291,7 +291,7 @@ safe_read(int fd, ssize_t size, void* pointer, const char variable[])
 }
 
 static int
-extract(int fd, uint32_t start, uint32_t end, char sequence[]) {
+extract(int fd, uint32_t offset, uint32_t start, uint32_t end, char sequence[]) {
     uint32_t i;
     const uint32_t size = end - start;
     const uint32_t byteStart = start / 4;
@@ -299,9 +299,17 @@ extract(int fd, uint32_t start, uint32_t end, char sequence[]) {
     const uint32_t byteSize = byteEnd - byteStart;
     unsigned char* bytes;
     int ok = 1;
-    if (lseek(fd, byteStart, SEEK_CUR) == -1) {
-        PyErr_Format(PyExc_RuntimeError,
-                     "failed to seek in sequence (errno = %d)", errno);
+
+    if (lseek(fd, offset + byteStart, SEEK_SET) == -1) {
+        if (errno == EBADF) {
+            PyErr_SetString(PyExc_ValueError,
+                            "cannot retrieve sequence: file is closed");
+        }
+        else {
+            PyErr_Format(PyExc_RuntimeError,
+                         "lseek failed while retrieving sequence (errno = %d)",
+                         errno);
+        }
         return 0;
     }
     bytes = PyMem_Malloc(byteSize*sizeof(unsigned char));
@@ -411,11 +419,6 @@ TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
     const uint32_t* const maskBlockSizes = self->maskBlockSizes;
 
     PyObject* obj;
-    if (lseek(fd, self->offset, SEEK_SET) == -1) {
-        PyErr_Format(PyExc_RuntimeError,
-                     "failed to seek in file (errno = %d)", errno);
-        return NULL;
-    }
     if (PyIndex_Check(item)) {
         char sequence;
         Py_ssize_t i = PyNumber_AsSsize_t(item, PyExc_IndexError);
@@ -428,7 +431,7 @@ TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
                             "TwoBitSequence index out of range");
             return NULL;
         }
-        if (!extract(fd, i, i+1, &sequence)) return NULL;
+        if (!extract(fd, self->offset, i, i+1, &sequence)) return NULL;
         applyNs(&sequence, i, i+1, nBlockCount, nBlockStarts, nBlockSizes);
         applyMask(&sequence, i, i+1,
                   maskBlockCount, maskBlockStarts, maskBlockSizes);
@@ -444,7 +447,7 @@ TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
         if (slicelength == 0) return obj;
         sequence = PyBytes_AS_STRING(obj);
         if (step == 1) {
-            if (!extract(fd, start, stop, sequence)) {
+            if (!extract(fd, self->offset, start, stop, sequence)) {
                 Py_DECREF(obj);
                 return NULL;
             }
@@ -472,7 +475,7 @@ TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
                 Py_DECREF(obj);
                 return NULL;
             }
-            if (!extract(fd, full_start, full_stop, full_sequence)) {
+            if (!extract(fd, self->offset, full_start, full_stop, full_sequence)) {
 	        PyMem_Free(full_sequence);
                 Py_DECREF(obj);
                 return NULL;
@@ -549,8 +552,10 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
     uint32_t maskBlockCount;
     uint32_t* maskBlockStarts;
     uint32_t* maskBlockSizes;
+
     PyObject* fileobj;
     int fd;
+    off_t position;
     PyObject* name;
     TwoBitSequence* sequence;
 
@@ -616,7 +621,15 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
     if (!sequences) goto error;
     for (i = 0; i < sequenceCount; i++) {
         if (lseek(fd, offsets[i], SEEK_SET) == -1) {
-            PyErr_SetString(PyExc_RuntimeError, "failed to seek in file");
+            if (errno == EBADF) {
+                PyErr_SetString(PyExc_ValueError,
+                                "failed to read index: file is closed");
+            }
+            else {
+                PyErr_Format(PyExc_RuntimeError,
+                             "lseek failed while reading index (errno = %d)",
+                             errno);
+            }
             goto error;
         }
         if (!safe_read(fd, sizeof(uint32_t), &dnaSize, "dnaSize")) goto error;
@@ -677,8 +690,20 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
             goto error;
         }
         /* get the file position at the start of the sequence data */
-        offset = lseek(fd, 0, SEEK_CUR);
-        sequence->offset = offset;
+        position = lseek(fd, 0, SEEK_CUR);
+        if (position == -1) {
+            if (errno == EBADF) {
+                PyErr_SetString(PyExc_ValueError,
+                                "failed to read index: file is closed");
+            }
+            else {
+                PyErr_Format(PyExc_RuntimeError,
+                             "lseek failed while reading index (errno = %d)",
+                             errno);
+            }
+            goto error;
+        }
+        sequence->offset = position;
     }
     PyMem_Free(offsets);
     return Py_BuildValue("OOO",
