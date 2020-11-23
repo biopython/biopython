@@ -379,7 +379,7 @@ typedef struct {
     PyObject* fileobj;
     int fd;
     uint32_t offset;
-    uint32_t dnaSize;
+    Py_ssize_t dnaSize;
     uint32_t nBlockCount;
     uint32_t* nBlockStarts;
     uint32_t* nBlockSizes;
@@ -410,7 +410,7 @@ static PyObject*
 TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
 {
     const int fd = self->fd;
-    const uint32_t n = self->dnaSize;
+    const Py_ssize_t n = self->dnaSize;
     const uint32_t nBlockCount = self->nBlockCount;
     const uint32_t* const nBlockStarts = self->nBlockStarts;
     const uint32_t* const nBlockSizes = self->nBlockSizes;
