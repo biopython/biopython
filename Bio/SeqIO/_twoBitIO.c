@@ -1,4 +1,5 @@
 #include "Python.h"
+#include <fcntl.h>
 
 
 #define BYTESWAP(x) { \
@@ -301,11 +302,16 @@ extract(int fd, uint32_t offset, uint32_t start, uint32_t end, char sequence[]) 
     int ok = 1;
     off_t position;
 
-    printf("Seeking to %d\n", offset + byteStart); fflush(stdout);
+
+    if (fcntl(fd, F_GETFL) < 0 && errno == EBADF) {
+        PyErr_SetString(PyExc_ValueError,
+                        "cannot retrieve sequence: file is closed");
+        return 0;
+    }
+
     position = lseek(fd, offset + byteStart, SEEK_SET);
-    printf("lseek returned %lld\n", position); fflush(stdout);
+
     if (position == -1) {
-        printf("errno = %d\n", errno);
         if (errno == EBADF) {
             PyErr_SetString(PyExc_ValueError,
                             "cannot retrieve sequence: file is closed");
@@ -709,7 +715,6 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
             goto error;
         }
         sequence->offset = position;
-        printf("sequence offset %u, dnaSize %ld\n", sequence->offset, sequence->dnaSize); fflush(stdout);
     }
     PyMem_Free(offsets);
     return Py_BuildValue("OOO",
