@@ -300,6 +300,7 @@ extract(int fd, uint32_t offset, uint32_t start, uint32_t end, char sequence[]) 
     unsigned char* bytes;
     int ok = 1;
 
+    printf("Seeking to %d\n", offset + byteStart); fflush(stdout);
     if (lseek(fd, offset + byteStart, SEEK_SET) == -1) {
         if (errno == EBADF) {
             PyErr_SetString(PyExc_ValueError,
@@ -400,7 +401,7 @@ TwoBitSequence_dealloc(TwoBitSequence* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
-static int
+static Py_ssize_t
 TwoBitSequence_length(TwoBitSequence *self)
 {
     return self->dnaSize;
@@ -704,6 +705,7 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
             goto error;
         }
         sequence->offset = position;
+        printf("sequence offset %u, dnaSize %ld\n", sequence->offset, sequence->dnaSize); fflush(stdout);
     }
     PyMem_Free(offsets);
     return Py_BuildValue("OOO",
