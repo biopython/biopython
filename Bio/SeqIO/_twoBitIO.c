@@ -299,9 +299,13 @@ extract(int fd, uint32_t offset, uint32_t start, uint32_t end, char sequence[]) 
     const uint32_t byteSize = byteEnd - byteStart;
     unsigned char* bytes;
     int ok = 1;
+    off_t position;
 
     printf("Seeking to %d\n", offset + byteStart); fflush(stdout);
-    if (lseek(fd, offset + byteStart, SEEK_SET) == -1) {
+    position = lseek(fd, offset + byteStart, SEEK_SET);
+    printf("lseek returned %lld\n", position); fflush(stdout);
+    if (position == -1) {
+        printf("errno = %d\n", errno);
         if (errno == EBADF) {
             PyErr_SetString(PyExc_ValueError,
                             "cannot retrieve sequence: file is closed");
