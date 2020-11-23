@@ -292,7 +292,7 @@ safe_read(int fd, ssize_t size, void* pointer, const char variable[])
 }
 
 static int
-extract(int fd, uint32_t offset, uint32_t start, uint32_t end, char sequence[]) {
+extract(int fd, uint32_t start, uint32_t end, char sequence[]) {
     uint32_t i;
     const uint32_t size = end - start;
     const uint32_t byteStart = start / 4;
@@ -300,29 +300,7 @@ extract(int fd, uint32_t offset, uint32_t start, uint32_t end, char sequence[]) 
     const uint32_t byteSize = byteEnd - byteStart;
     unsigned char* bytes;
     int ok = 1;
-    off_t position;
 
-
-    if (fcntl(fd, F_GETFL) < 0 && errno == EBADF) {
-        PyErr_SetString(PyExc_ValueError,
-                        "cannot retrieve sequence: file is closed");
-        return 0;
-    }
-
-    position = lseek(fd, offset + byteStart, SEEK_SET);
-
-    if (position == -1) {
-        if (errno == EBADF) {
-            PyErr_SetString(PyExc_ValueError,
-                            "cannot retrieve sequence: file is closed");
-        }
-        else {
-            PyErr_Format(PyExc_RuntimeError,
-                         "lseek failed while retrieving sequence (errno = %d)",
-                         errno);
-        }
-        return 0;
-    }
     bytes = PyMem_Malloc(byteSize*sizeof(unsigned char));
     if (!bytes) return 0;
     if (!safe_read(fd, byteSize, bytes, "sequence data")) {
@@ -388,8 +366,6 @@ applyMask(char sequence[], uint32_t start, uint32_t end,
 typedef struct {
     PyObject_HEAD
     PyObject* fileobj;
-    int fd;
-    uint32_t offset;
     Py_ssize_t dnaSize;
     uint32_t nBlockCount;
     uint32_t* nBlockStarts;
@@ -417,11 +393,12 @@ TwoBitSequence_length(TwoBitSequence *self)
     return self->dnaSize;
 }
 
+static char TwoBitSequence_extract__doc__[] = "convert sequence";
+
 static PyObject*
-TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
+TwoBitSequence_extract(TwoBitSequence* self, PyObject* args, PyObject* keywords)
 {
-    const int fd = self->fd;
-    const Py_ssize_t n = self->dnaSize;
+    int fd;
     const uint32_t nBlockCount = self->nBlockCount;
     const uint32_t* const nBlockStarts = self->nBlockStarts;
     const uint32_t* const nBlockSizes = self->nBlockSizes;
@@ -429,89 +406,82 @@ TwoBitSequence_subscript(TwoBitSequence* self, PyObject* item)
     const uint32_t* const maskBlockStarts = self->maskBlockStarts;
     const uint32_t* const maskBlockSizes = self->maskBlockSizes;
 
+    PyObject* fileobj;
+    Py_ssize_t start;
+    Py_ssize_t end;
+    Py_ssize_t step;
+    Py_ssize_t length;
     PyObject* obj;
-    if (PyIndex_Check(item)) {
-        char sequence;
-        Py_ssize_t i = PyNumber_AsSsize_t(item, PyExc_IndexError);
-        if (i == -1 && PyErr_Occurred())
+
+    static char* kwlist[] = {"fileobj", "start", "end", "step", "length", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "Onnnn", kwlist, &fileobj, &start, &end, &step, &length))
+        return NULL;
+
+    fd = PyObject_AsFileDescriptor(fileobj);
+    if (fd == -1) return NULL;
+
+    obj = PyBytes_FromStringAndSize(NULL, length);
+    if (!obj) return NULL;
+    if (length == 0) return obj;
+
+    char* sequence = PyBytes_AS_STRING(obj);
+
+    if (step == 1) {
+        if (!extract(fd, start, end, sequence)) {
+            Py_DECREF(obj);
             return NULL;
-        if (i < 0)
-            i += n;
-        if (i < 0 || i >= n) {
-            PyErr_SetString(PyExc_IndexError,
-                            "TwoBitSequence index out of range");
-            return NULL;
         }
-        if (!extract(fd, self->offset, i, i+1, &sequence)) return NULL;
-        applyNs(&sequence, i, i+1, nBlockCount, nBlockStarts, nBlockSizes);
-        applyMask(&sequence, i, i+1,
-                  maskBlockCount, maskBlockStarts, maskBlockSizes);
-        obj = PyLong_FromLong((long)sequence);
-    }
-    else if (PySlice_Check(item)) {
-        char* sequence;
-        Py_ssize_t start, stop, step, slicelength;
-        if (PySlice_GetIndicesEx(item, n, &start, &stop, &step,
-                                 &slicelength) == -1) return NULL;
-        obj = PyBytes_FromStringAndSize(NULL, slicelength);
-        if (!obj) return NULL;
-        if (slicelength == 0) return obj;
-        sequence = PyBytes_AS_STRING(obj);
-        if (step == 1) {
-            if (!extract(fd, self->offset, start, stop, sequence)) {
-                Py_DECREF(obj);
-                return NULL;
-            }
-            applyNs(sequence, start, stop,
-                    nBlockCount, nBlockStarts, nBlockSizes);
-            applyMask(sequence, start, stop,
-                    maskBlockCount, maskBlockStarts, maskBlockSizes);
-        }
-        else {
-            Py_ssize_t current, i;
-            Py_ssize_t full_start, full_stop;
-	    char* full_sequence;
-            if (start <= stop) {
-                full_start = start;
-                full_stop = stop;
-                current = 0; /* first position in sequence */
-            }
-            else {
-                full_start = stop + 1;
-                full_stop = start + 1;
-                current = start - stop - 1; /* last position in sequence */
-            }
-            full_sequence = PyMem_Malloc((full_stop-full_start)*sizeof(char));
-            if (!full_sequence) {
-                Py_DECREF(obj);
-                return NULL;
-            }
-            if (!extract(fd, self->offset, full_start, full_stop, full_sequence)) {
-	        PyMem_Free(full_sequence);
-                Py_DECREF(obj);
-                return NULL;
-            }
-            applyNs(full_sequence, full_start, full_stop,
-                    nBlockCount, nBlockStarts, nBlockSizes);
-            applyMask(full_sequence, full_start, full_stop,
-                      maskBlockCount, maskBlockStarts, maskBlockSizes);
-            for (i = 0; i < slicelength; current += step, i++)
-                sequence[i] = full_sequence[current];
-            PyMem_Free(full_sequence);
-        }
+        applyNs(sequence, start, end, nBlockCount, nBlockStarts, nBlockSizes);
+        applyMask(sequence, start, end, maskBlockCount, maskBlockStarts, maskBlockSizes);
     }
     else {
-        PyErr_Format(PyExc_TypeError,
-                     "TwoBitSequence indices must be integers, not %.200s",
-                     Py_TYPE(item)->tp_name);
-        return NULL;
+        Py_ssize_t current, i;
+        Py_ssize_t full_start, full_end;
+        char* full_sequence;
+        if (start <= end) {
+            full_start = start;
+            full_end = end;
+            current = 0; /* first position in sequence */
+        }
+        else {
+            full_start = end + 1;
+            full_end = start + 1;
+            current = start - end - 1; /* last position in sequence */
+        }
+        full_sequence = PyMem_Malloc((full_end-full_start)*sizeof(char));
+        if (!full_sequence) {
+            Py_DECREF(obj);
+            return NULL;
+        }
+        if (!extract(fd, full_start, full_end, full_sequence)) {
+            PyMem_Free(full_sequence);
+            Py_DECREF(obj);
+            return NULL;
+        }
+        applyNs(full_sequence, full_start, full_end,
+                nBlockCount, nBlockStarts, nBlockSizes);
+        applyMask(full_sequence, full_start, full_end,
+                  maskBlockCount, maskBlockStarts, maskBlockSizes);
+        for (i = 0; i < length; current += step, i++)
+            sequence[i] = full_sequence[current];
+        PyMem_Free(full_sequence);
     }
     return obj;
 }
 
 static PyMappingMethods TwoBitSequence_mapping = {
     (lenfunc)TwoBitSequence_length,           /* mp_length */
-    (binaryfunc)TwoBitSequence_subscript,     /* mp_subscript */
+    NULL,
+};
+
+static PyMethodDef TwoBitSequence_methods[] = {
+    {"extract",
+     (PyCFunction)TwoBitSequence_extract,
+     METH_VARARGS | METH_KEYWORDS,
+     TwoBitSequence_extract__doc__
+    },
+    {NULL}  /* Sentinel */
 };
 
 static char TwoBitSequence_doc[] =
@@ -540,37 +510,36 @@ static PyTypeObject TwoBitSequenceType = {
     0,                                           /* tp_as_buffer */
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,    /* tp_flags*/
     TwoBitSequence_doc,                          /* tp_doc */
+    0,                                           /* tp_traverse */
+    0,                                           /* tp_clear */
+    0,                                           /* tp_richcompare */
+    0,                                           /* tp_weaklistoffset */
+    0,                                           /* tp_iter */
+    0,                                           /* tp_iternext */
+    TwoBitSequence_methods,                      /* tp_methods */
 };
 
-static char TwoBitIterator__doc__[] = "Lazy parser for TwoBit files";
+static char TwoBit_read_index__doc__[] = "Read the index of a twoBit file";
 
 static PyObject*
-TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
+TwoBit_read_index(PyObject* self, PyObject* args, PyObject* keywords)
 {
     int isByteSwapped = 0;
     uint32_t signature;
     uint32_t version;
     uint32_t sequenceCount;
     uint32_t reserved;
-    uint32_t i, j;
+    uint32_t i;
     uint8_t nameSize;
     uint32_t offset;
-    uint32_t* offsets;
-    uint32_t dnaSize;
-    uint32_t nBlockCount;
-    uint32_t* nBlockStarts;
-    uint32_t* nBlockSizes;
-    uint32_t maskBlockCount;
-    uint32_t* maskBlockStarts;
-    uint32_t* maskBlockSizes;
 
     PyObject* fileobj;
     int fd;
-    off_t position;
     PyObject* name;
-    TwoBitSequence* sequence;
 
-    PyObject* sequences = NULL;
+    PyObject* item;
+
+    PyObject* offsets = NULL;
     PyObject* names = NULL;
 
     static char* kwlist[] = {"handle", NULL};
@@ -617,6 +586,8 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
 
     names = PyTuple_New(sequenceCount);
     if (!names) goto error;
+    offsets = PyTuple_New(sequenceCount);
+    if (!offsets) goto error;
     for (i = 0; i < sequenceCount; i++) {
         if (!safe_read(fd, sizeof(uint8_t), &nameSize, "nameSize")) goto error;
         name = PyBytes_FromStringAndSize(NULL, nameSize);
@@ -625,113 +596,120 @@ TwoBitIterator(PyObject* self, PyObject* args, PyObject* keywords)
         if (!safe_read(fd, nameSize, PyBytes_AS_STRING(name), "name")) goto error;
         if (!safe_read(fd, sizeof(uint32_t), &offset, "offset")) goto error;
         if (isByteSwapped) BYTESWAP(offset);
-        offsets[i] = offset;
+        item = PyLong_FromLong(offset);
+        if (!item) goto error;
+        PyTuple_SET_ITEM(offsets, i, (PyObject*)item);
     }
 
-    sequences = PyTuple_New(sequenceCount);
-    if (!sequences) goto error;
-    for (i = 0; i < sequenceCount; i++) {
-        if (lseek(fd, offsets[i], SEEK_SET) == -1) {
-            if (errno == EBADF) {
-                PyErr_SetString(PyExc_ValueError,
-                                "failed to read index: file is closed");
-            }
-            else {
-                PyErr_Format(PyExc_RuntimeError,
-                             "lseek failed while reading index (errno = %d)",
-                             errno);
-            }
-            goto error;
-        }
-        if (!safe_read(fd, sizeof(uint32_t), &dnaSize, "dnaSize")) goto error;
-        if (isByteSwapped) BYTESWAP(dnaSize);
-        if (!safe_read(fd, sizeof(uint32_t),
-                       &nBlockCount, "nBlockCount")) return NULL;
-        if (isByteSwapped) BYTESWAP(nBlockCount);
-        sequence = (TwoBitSequence*)PyType_GenericAlloc(&TwoBitSequenceType, 0);
-        if (!sequence) goto error;
-        Py_INCREF(fileobj);
-        sequence->fileobj = fileobj;
-        sequence->fd = fd;
-        sequence->dnaSize = dnaSize;
-        sequence->nBlockCount = nBlockCount;
-        PyTuple_SET_ITEM(sequences, i, (PyObject*)sequence);
-        nBlockStarts = PyMem_Malloc(nBlockCount*sizeof(uint32_t));
-        if (!nBlockStarts) goto error;
-        sequence->nBlockStarts = nBlockStarts;
-        nBlockSizes = PyMem_Malloc(nBlockCount*sizeof(uint32_t));
-        if (!nBlockSizes) goto error;
-        sequence->nBlockSizes = nBlockSizes;
-        for (j = 0; j < nBlockCount; j++) {
-            if (!safe_read(fd, sizeof(uint32_t),
-                           nBlockStarts+j, "nBlockStarts")) goto error;
-            if (isByteSwapped) BYTESWAP(nBlockStarts[j]);
-        }
-        for (j = 0; j < nBlockCount; j++) {
-            if (!safe_read(fd, sizeof(uint32_t),
-                           nBlockSizes+j, "nBlockSizes")) goto error;
-            if (isByteSwapped) BYTESWAP(nBlockSizes[j]);
-        }
-        if (!safe_read(fd, sizeof(uint32_t),
-                       &maskBlockCount, "maskBlockCount")) goto error;
-        if (isByteSwapped) BYTESWAP(maskBlockCount);
-        sequence->maskBlockCount = maskBlockCount;
-        maskBlockStarts = PyMem_Malloc(maskBlockCount*sizeof(uint32_t));
-        if (!maskBlockStarts) goto error;
-        sequence->maskBlockStarts = maskBlockStarts;
-        maskBlockSizes = PyMem_Malloc(maskBlockCount*sizeof(uint32_t));
-        if (!maskBlockSizes) goto error;
-        sequence->maskBlockSizes = maskBlockSizes;
-        for (j = 0; j < maskBlockCount; j++) {
-            if (!safe_read(fd, sizeof(uint32_t),
-                           maskBlockStarts+j, "maskBlockStarts")) goto error;
-            if (isByteSwapped) BYTESWAP(maskBlockStarts[j]);
-        }
-        for (j = 0; j < maskBlockCount; j++) {
-            if (!safe_read(fd, sizeof(uint32_t),
-                           maskBlockSizes+j, "maskBlockSizes")) goto error;
-            if (isByteSwapped) BYTESWAP(maskBlockSizes[j]);
-        }
-        if (!safe_read(fd, sizeof(uint32_t),
-                       &reserved, "reserved")) goto error;
-        if (reserved != 0) {
-            PyErr_Format(PyExc_RuntimeError,
-                         "Found non-zero reserved field %u in sequence "
-                         "record %i; aborting\n", reserved, i);
-            goto error;
-        }
-        /* get the file position at the start of the sequence data */
-        position = lseek(fd, 0, SEEK_CUR);
-        if (position == -1) {
-            if (errno == EBADF) {
-                PyErr_SetString(PyExc_ValueError,
-                                "failed to read index: file is closed");
-            }
-            else {
-                PyErr_Format(PyExc_RuntimeError,
-                             "lseek failed while reading index (errno = %d)",
-                             errno);
-            }
-            goto error;
-        }
-        sequence->offset = position;
-    }
-    PyMem_Free(offsets);
     return Py_BuildValue("OOO",
-                         isByteSwapped ? Py_True: Py_False, names, sequences);
+                         isByteSwapped ? Py_True: Py_False, names, offsets);
 error:
-    PyMem_Free(offsets);
     Py_XDECREF(names);
-    Py_XDECREF(sequences);
+    Py_XDECREF(offsets);
     /* everything else is freed in the deallocators */
     return NULL;
 }
 
+static char TwoBit_initialize_sequence__doc__[] = "Read the mask and nBlocks of  a single sequence in a twoBit file";
+
+static PyObject*
+TwoBit_initialize_sequence(PyObject* self, PyObject* args, PyObject* keywords)
+{
+    int isByteSwapped = 0;
+    uint32_t reserved;
+    uint32_t j;
+    uint32_t dnaSize;
+    uint32_t nBlockCount;
+    uint32_t* nBlockStarts;
+    uint32_t* nBlockSizes;
+    uint32_t maskBlockCount;
+    uint32_t* maskBlockStarts;
+    uint32_t* maskBlockSizes;
+
+    PyObject* fileobj;
+    int fd;
+    TwoBitSequence* sequence;
+
+    static char* kwlist[] = {"stream", "isByteSwapped", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "Op", kwlist, &fileobj, &isByteSwapped))
+        return NULL;
+
+    fd = PyObject_AsFileDescriptor(fileobj);
+    if (fd == -1) return NULL;
+
+    if (!safe_read(fd, sizeof(uint32_t), &dnaSize, "dnaSize")) return NULL;
+    if (isByteSwapped) BYTESWAP(dnaSize);
+    if (!safe_read(fd, sizeof(uint32_t),
+                   &nBlockCount, "nBlockCount")) return NULL;
+    if (isByteSwapped) BYTESWAP(nBlockCount);
+    sequence = (TwoBitSequence*)PyType_GenericAlloc(&TwoBitSequenceType, 0);
+    if (!sequence) return NULL;
+    Py_INCREF(fileobj);
+    sequence->fileobj = fileobj;
+    sequence->dnaSize = dnaSize;
+    sequence->nBlockCount = nBlockCount;
+    nBlockStarts = PyMem_Malloc(nBlockCount*sizeof(uint32_t));
+    if (!nBlockStarts) goto error;
+    sequence->nBlockStarts = nBlockStarts;
+    nBlockSizes = PyMem_Malloc(nBlockCount*sizeof(uint32_t));
+    if (!nBlockSizes) goto error;
+    sequence->nBlockSizes = nBlockSizes;
+    for (j = 0; j < nBlockCount; j++) {
+        if (!safe_read(fd, sizeof(uint32_t),
+                       nBlockStarts+j, "nBlockStarts")) goto error;
+        if (isByteSwapped) BYTESWAP(nBlockStarts[j]);
+    }
+    for (j = 0; j < nBlockCount; j++) {
+        if (!safe_read(fd, sizeof(uint32_t),
+                       nBlockSizes+j, "nBlockSizes")) goto error;
+        if (isByteSwapped) BYTESWAP(nBlockSizes[j]);
+    }
+    if (!safe_read(fd, sizeof(uint32_t),
+                   &maskBlockCount, "maskBlockCount")) goto error;
+    if (isByteSwapped) BYTESWAP(maskBlockCount);
+    sequence->maskBlockCount = maskBlockCount;
+    maskBlockStarts = PyMem_Malloc(maskBlockCount*sizeof(uint32_t));
+    if (!maskBlockStarts) goto error;
+    sequence->maskBlockStarts = maskBlockStarts;
+    maskBlockSizes = PyMem_Malloc(maskBlockCount*sizeof(uint32_t));
+    if (!maskBlockSizes) goto error;
+    sequence->maskBlockSizes = maskBlockSizes;
+    for (j = 0; j < maskBlockCount; j++) {
+        if (!safe_read(fd, sizeof(uint32_t),
+                       maskBlockStarts+j, "maskBlockStarts")) goto error;
+        if (isByteSwapped) BYTESWAP(maskBlockStarts[j]);
+    }
+    for (j = 0; j < maskBlockCount; j++) {
+        if (!safe_read(fd, sizeof(uint32_t),
+                       maskBlockSizes+j, "maskBlockSizes")) goto error;
+        if (isByteSwapped) BYTESWAP(maskBlockSizes[j]);
+    }
+    if (!safe_read(fd, sizeof(uint32_t),
+                   &reserved, "reserved")) goto error;
+    if (reserved != 0) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "Found non-zero reserved field %u", reserved);
+        goto error;
+    }
+    return (PyObject*)sequence;
+error:
+    Py_DECREF(sequence);
+    /* everything else is freed in the deallocators */
+    return NULL;
+}
+
+
 static struct PyMethodDef _twoBitIO_methods[] = {
-    {"TwoBitIterator",
-     (PyCFunction)TwoBitIterator,
+    {"read_index",
+     (PyCFunction)TwoBit_read_index,
      METH_VARARGS | METH_KEYWORDS,
-     TwoBitIterator__doc__
+     TwoBit_read_index__doc__
+    },
+    {"initialize_sequence",
+     (PyCFunction)TwoBit_initialize_sequence,
+     METH_VARARGS | METH_KEYWORDS,
+     TwoBit_initialize_sequence__doc__
     },
     {NULL,          NULL, 0, NULL} /* sentinel */
 };

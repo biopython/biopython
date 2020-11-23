@@ -155,7 +155,7 @@ class Seq:
         """
         data = self._data
         if not isinstance(data, (bytes, bytearray)):
-            data = bytes(data)
+            data = bytes(self)
         return data.decode("ASCII")
 
     def __hash__(self):

@@ -81,18 +81,48 @@ from . import _twoBitIO
 from .Interfaces import SequenceIterator
 
 
+class TwoBitSequenceData():
+    def __init__(self, sequence, stream, offset):
+        self.stream = stream
+        self.sequence = sequence
+        self.offset = offset
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            start, end, step = key.indices(len(self.sequence))
+            length = len(range(start, end, step))
+        else:
+            start = key
+            end = key + 1
+            step = 1
+            length = 1
+        byteStart = start // 4
+        self.stream.seek(self.offset + byteStart)
+        sequence = self.sequence.extract(self.stream, start, end, step, length)
+        return sequence
+
+    def __len__(self):
+        return len(self.sequence)
+
+
 class TwoBitIterator(SequenceIterator):
     """Parser for UCSC twoBit (.2bit) files."""
 
     def __init__(self, source):
         """Read the file index."""
         super().__init__(source, mode="b", fmt="twoBit")
-        isByteSwapped, names, sequences = _twoBitIO.TwoBitIterator(self.stream)
-        self.isByteSwapped = isByteSwapped
-        self.names = [name.decode("ASCII") for name in names]
-        self.sequences = [Seq(sequence) for sequence in sequences]
         # wait to close the file until the TwoBitIterator goes out of scope:
         self.should_close_stream = False
+        isByteSwapped, names, offsets = _twoBitIO.read_index(self.stream)
+        self.isByteSwapped = isByteSwapped
+        self.names = [name.decode("ASCII") for name in names]
+        self.sequences = []
+        for offset in offsets:
+            self.stream.seek(offset)
+            sequence = _twoBitIO.initialize_sequence(self.stream, isByteSwapped)
+            offset = self.stream.tell()
+            sequence = TwoBitSequenceData(sequence, self.stream, offset)
+            self.sequences.append(sequence)
 
     def parse(self, stream):
         """Iterate over the sequences in the file."""
@@ -106,7 +136,7 @@ class TwoBitIterator(SequenceIterator):
             index = self.names.index(key)
         except ValueError:
             raise KeyError(key) from None
-        sequence = self.sequences[index]
+        sequence = Seq(self.sequences[index])
         return SeqRecord(sequence, id=key)
 
     def keys(self):
