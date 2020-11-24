@@ -40,12 +40,12 @@ class IQTreeCommandline(AbstractCommandline):
 				   #TODO: checker function
 				),
 
-            _Argument(
-                ["input"],
-                """Enter <input file>
-                      """,
-                filename=True,
-                is_required=True,
+           		 _Argument(
+               			 ["input"],
+               			 """Enter <input file>
+               			       """,
+            			 filename=True,
+            			 is_required=True,
 				),
 			_Option(
 				["-st", "SequenceType"],
