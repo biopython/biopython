@@ -28,7 +28,7 @@ class IQTreeCommandline(AbstractCommandline):
 		"""initialize the class"""
 
 		self.parameters = [
-			_Switch(
+			_Switch(           #prob need to remove this
 				["-h", "Help"],
 				"Print help usage"
 				),
@@ -36,7 +36,16 @@ class IQTreeCommandline(AbstractCommandline):
 				["-s", "Specify"],
 				"""Specify input alignment file in PHYLIP, FASTA, NEXUS
 				   CLUSTAL or MSF format""",
+				   #is_required = True,
 				   #TODO: checker function
+				),
+
+            _Argument(
+                ["input"],
+                """Enter <input file>
+                      """,
+                filename=True,
+                is_required=True,
 				),
 			_Option(
 				["-st", "SequenceType"],
@@ -86,6 +95,7 @@ class IQTreeCommandline(AbstractCommandline):
 					A special option -nt AUTO will tell IQTree to automatically determine
 					the best number of cores given the current data and computer""",
 					#TODO: checker function probably for Int number of cores
+					equate = False,
 				),
 			_Option(
 				["-ntmax", "ntmax"],
@@ -123,13 +133,7 @@ class IQTreeCommandline(AbstractCommandline):
 				   Default: IQTree will not exceed the computer RAM size""",
 				#TODO: Checker function for int +G
 				),
-            _Argument(
-                ["input"],
-                """Enter <input file>
-                      """,
-                filename=True,
-                is_required=True,
-				)
+
 		]
 
 		AbstractCommandline.__init__(self, cmd, **kwargs)
