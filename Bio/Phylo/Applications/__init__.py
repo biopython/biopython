@@ -7,6 +7,7 @@
 from ._Phyml import PhymlCommandline
 from ._Raxml import RaxmlCommandline
 from ._Fasttree import FastTreeCommandline
+from ._IQtree import IQTreeCommandline
 
 # Make this explicit, then they show up in the API docs
-__all__ = ("PhymlCommandline", "RaxmlCommandline", "FastTreeCommandline")
+__all__ = ("PhymlCommandline", "RaxmlCommandline", "FastTreeCommandline", "IQTreeCommandline")
