@@ -23,7 +23,7 @@ class Parsing(unittest.TestCase):
         path = "TwoBit/sequence.littleendian.2bit"
         with open(path, "rb") as handle:
             records = TwoBitIO.TwoBitIterator(handle)
-            self.assertFalse(records.isByteSwapped)
+            self.assertEqual(records.byteorder, "little")
             self.assertEqual(len(self.records), len(records))
             for record1, record2 in zip(self.records, records):
                 self.assertEqual(record1.id, record2.id)
@@ -41,7 +41,7 @@ class Parsing(unittest.TestCase):
         with open(path, "rb") as handle:
             records = TwoBitIO.TwoBitIterator(handle)
             self.assertEqual(len(records), 6)
-            self.assertTrue(records.isByteSwapped)
+            self.assertEqual(records.byteorder, "big")
             for record1, record2 in zip(self.records, records):
                 self.assertEqual(record1.id, record2.id)
                 seq1 = record1.seq
