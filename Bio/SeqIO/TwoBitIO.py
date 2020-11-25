@@ -365,7 +365,12 @@ class TwoBitSequenceData():
         byteEnd = (end + 3) // 4
         byteSize = byteEnd - byteStart
         stream = self.stream
-        stream.seek(self.offset + byteStart)
+        try:
+            stream.seek(self.offset + byteStart)
+        except ValueError as exception:
+            if str(exception) == "seek of closed file":
+                raise ValueError("cannot retrieve sequence: file is closed") from None
+            raise
         data = numpy.fromfile(stream, dtype="uint8", count=byteSize)
         sequence = self.bases[data]
         sequence.shape = (4*byteSize, )
@@ -416,6 +421,8 @@ class TwoBitIterator(SequenceIterator):
         self.should_close_stream = False
         stream = self.stream
         data = stream.read(4)
+        if not data:
+            raise ValueError("Empty file.")
         byteorders = ("little", "big")
         dtypes = ("<u4", ">u4")
         for byteorder, dtype in zip(byteorders, dtypes):

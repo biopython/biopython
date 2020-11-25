@@ -548,7 +548,7 @@ Looping over the iterator returned by \verb|SeqIO.parse| once will exhaust the f
 >>> handle = open("sequence.bigendian.2bit", "rb")
 >>> records = SeqIO.parse(handle, "twobit")
 >>> records.keys()
-['seq11111', 'seq222', 'seq3333', 'seq4', 'seq555', 'seq6']
+dict_keys(['seq11111', 'seq222', 'seq3333', 'seq4', 'seq555', 'seq6'])
 >>> records['seq222']
 SeqRecord(seq=Seq('TTGATCGGTGACAAATTTTTTACAAAGAACTGTAGGACTTGCTACTTCTCCCTC...ACA'), id='seq222', name='<unknown name>', description='<unknown description>', dbxrefs=[])
 >>> records['seq222'].seq
