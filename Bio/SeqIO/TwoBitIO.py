@@ -389,7 +389,7 @@ class TwoBitSequenceData():
             raise
         data = numpy.fromfile(stream, dtype="uint8", count=byteSize)
         sequence = self.bases[data]
-        sequence.shape = (byteSize * 4, )
+        sequence.shape = (byteSize * 4,)
         skip = byteStart * 4
         sequence = sequence[start - skip : start - skip + size]
         nBlockStarts = self.nBlockStarts
