@@ -20,7 +20,7 @@ In this case consider the low-level \verb|SimpleFastaParser| and \verb|FastqGene
 The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments:
 
 \begin{enumerate}
-\item The first argument is a \textit{handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles. Alternatively, in most cases the filename can be used instead of a handle. An exception is for file formats for which a lazy-loading strategy is used (see Section~\ref{}).
+\item The first argument is a \textit{handle} to read the data from, or a filename. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
