@@ -83,7 +83,7 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
-class TwoBitSequenceData():
+class TwoBitSequenceData:
     """Store the information needed to retrieve sequence data from a .2bit file.
 
     Objects of this class store the file position at which the sequence data
