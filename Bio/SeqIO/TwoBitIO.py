@@ -388,36 +388,24 @@ class TwoBitSequenceData:
                 raise ValueError("cannot retrieve sequence: file is closed") from None
             raise
         data = numpy.fromfile(stream, dtype="uint8", count=byteSize)
-        sequence = self.bases[data]
+        sequence = self.bases.take(data, axis=0)
         sequence.shape = (byteSize * 4,)
         skip = byteStart * 4
         sequence = sequence[start - skip : start - skip + size]
-        nBlockStarts = self.nBlockStarts
-        nBlockEnds = self.nBlockEnds
-        i = nBlockEnds.searchsorted(start + 1)
-        j = i + nBlockStarts[i:].searchsorted(end)
+        i = self.nBlockEnds.searchsorted(start + 1)
+        j = i + self.nBlockStarts[i:].searchsorted(end)
+        nBlockStarts = self.nBlockStarts[i:j].clip(start) - start
+        nBlockEnds = self.nBlockEnds[i:j].clip(max=end) - start
         n = ord("N")
-        for k in range(i, j):
-            nBlockStart = nBlockStarts[k]
-            nBlockEnd = nBlockEnds[k]
-            if nBlockStart < start:
-                nBlockStart = start
-            if end < nBlockEnd:
-                nBlockEnd = end
-            sequence[nBlockStart - start : nBlockEnd - start] = n
-        maskBlockStarts = self.maskBlockStarts
-        maskBlockEnds = self.maskBlockEnds
-        i = maskBlockEnds.searchsorted(start + 1)
-        j = i + maskBlockStarts[i:].searchsorted(end)
+        for nBlockStart, nBlockEnd in zip(nBlockStarts, nBlockEnds):
+            sequence[nBlockStart:nBlockEnd] = n
+        i = self.maskBlockEnds.searchsorted(start + 1)
+        j = i + self.maskBlockStarts[i:].searchsorted(end)
+        maskBlockStarts = self.maskBlockStarts[i:j].clip(start) - start
+        maskBlockEnds = self.maskBlockEnds[i:j].clip(max=end) - start
         difference = ord("a") - ord("A")
-        for k in range(i, j):
-            maskBlockStart = maskBlockStarts[k]
-            maskBlockEnd = maskBlockEnds[k]
-            if maskBlockStart < start:
-                maskBlockStart = start
-            if end < maskBlockEnd:
-                maskBlockEnd = end
-            sequence[maskBlockStart - start : maskBlockEnd - start] += difference
+        for maskBlockStart, maskBlockEnd in zip(maskBlockStarts, maskBlockEnds):
+            sequence[maskBlockStart:maskBlockEnd] += difference
         if step == 1:
             return bytes(sequence)
         else:
