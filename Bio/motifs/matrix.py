@@ -27,19 +27,6 @@ from Bio.Seq import Seq
 from . import _pwm
 
 
-def _calculate(score_dict, sequence, m):
-    """Calculate scores using C code (PRIVATE)."""
-    n = len(sequence)
-    # Create the numpy arrays here; the C module then does not rely on numpy
-    # Use a float32 for the scores array to save space
-    scores = np.empty(n - m + 1, np.float32)
-    logodds = np.array(
-        [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)], float
-    )
-    _pwm.calculate(sequence, logodds, scores)
-    return scores
-
-
 class GenericPositionMatrix(dict):
     """Base class for the support of position matrix operations."""
 
@@ -347,7 +334,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
          - the search is performed only on one strand
          - if the sequence and the motif have the same length, a single
            number is returned
-         - otherwise, the result is a one-dimensional list or numpy array
+         - otherwise, the result is a one-dimensional numpy array
 
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
@@ -359,9 +346,33 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
         # case would impose an overhead to allocate the extra memory.
-        sequence = str(sequence)
+        try:
+            sequence = bytes(sequence)
+        except TypeError:  # str
+            try:
+                sequence = bytes(sequence, "ASCII")
+            except TypeError:
+                raise ValueError(
+                    "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+                ) from None
+            except UnicodeEncodeError:
+                raise ValueError(
+                    "sequence should contain ASCII characters only"
+                ) from None
+        except Exception:
+            raise ValueError(
+                "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+            ) from None
+
+        n = len(sequence)
         m = self.length
-        scores = _calculate(self, sequence, m)
+        # Create the numpy arrays here; the C module then does not rely on numpy
+        # Use a float32 for the scores array to save space
+        scores = np.empty(n - m + 1, np.float32)
+        logodds = np.array(
+            [[self[letter][i] for letter in "ACGT"] for i in range(m)], float
+        )
+        _pwm.calculate(sequence, logodds, scores)
 
         if len(scores) == 1:
             return scores[0]
