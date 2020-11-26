@@ -352,11 +352,17 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             try:
                 sequence = bytes(sequence, "ASCII")
             except TypeError:
-                raise ValueError("sequence should be a Seq, MutableSeq, string, or bytes-like object") from None
+                raise ValueError(
+                    "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+                ) from None
             except UnicodeEncodeError:
-                raise ValueError("sequence should contain ASCII characters only") from None
-        except:
-            raise ValueError("sequence should be a Seq, MutableSeq, string, or bytes-like object") from None
+                raise ValueError(
+                    "sequence should contain ASCII characters only"
+                ) from None
+        except Exception:
+            raise ValueError(
+                "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+            ) from None
 
         n = len(sequence)
         m = self.length
