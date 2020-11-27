@@ -116,10 +116,10 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ("g", "11", "10840"))
         self.assertEqual(record.sites[-2], ("t", "11", "10855"))
         self.assertEqual(record.sites[-1], ("g", "11", "10864"))
-        self.assertEqual(str(record.seq)[:10], "ctccgtcgga")
-        self.assertEqual(str(record.seq)[-10:], "ccaaagcgtg")
-        self.assertEqual(str(record.seq_trimmed)[:10], "cgtcggaaca")
-        self.assertEqual(str(record.seq_trimmed)[-10:], "tatttcggag")
+        self.assertEqual(record.seq[:10], "ctccgtcgga")
+        self.assertEqual(record.seq[-10:], "ccaaagcgtg")
+        self.assertEqual(record.seq_trimmed[:10], "cgtcggaaca")
+        self.assertEqual(record.seq_trimmed[-10:], "tatttcggag")
         # Record 2
         record = next(records)
         center = len(record.sites) // 2
@@ -168,10 +168,10 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ("a", "8", "10574"))
         self.assertEqual(record.sites[-2], ("a", "7", "10584"))
         self.assertEqual(record.sites[-1], ("g", "7", "10599"))
-        self.assertEqual(str(record.seq)[:10], "cgggatccca")
-        self.assertEqual(str(record.seq)[-10:], "cccagccaag")
-        self.assertEqual(str(record.seq_trimmed)[:10], "cctgatccga")
-        self.assertEqual(str(record.seq_trimmed)[-10:], "ggggccgcca")
+        self.assertEqual(record.seq[:10], "cgggatccca")
+        self.assertEqual(record.seq[-10:], "cccagccaag")
+        self.assertEqual(record.seq_trimmed[:10], "cctgatccga")
+        self.assertEqual(record.seq_trimmed[-10:], "ggggccgcca")
         # Record 3
         record = next(records)
         center = len(record.sites) // 2
@@ -220,8 +220,8 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ("t", "8", "9495"))
         self.assertEqual(record.sites[-2], ("t", "3", "9504"))
         self.assertEqual(record.sites[-1], ("n", "0", "9511"))
-        self.assertEqual(str(record.seq)[:10], "acataaatca")
-        self.assertEqual(str(record.seq)[-10:], "atctgctttn")
+        self.assertEqual(record.seq[:10], "acataaatca")
+        self.assertEqual(record.seq[-10:], "atctgctttn")
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 
@@ -277,7 +277,7 @@ class PhdTest454(unittest.TestCase):
         self.assertEqual(record.id, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.name, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.description, "EBE03TV04IHLTF.77-243 1")
-        self.assertEqual(str(record.seq), "ggggatgaaagggatctcggtggtaggtga")
+        self.assertEqual(record.seq, "ggggatgaaagggatctcggtggtaggtga")
         self.assertEqual(
             record.letter_annotations["phred_quality"][:10],
             [37, 37, 37, 37, 37, 37, 37, 37, 37, 37],
@@ -323,7 +323,7 @@ class PhdTestSolexa(unittest.TestCase):
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.description, "HWI-EAS94_4_1_1_537_446 1")
-        self.assertEqual(str(record.seq), "gccaatcaggtttctctgcaagcccctttagcagctgagc")
+        self.assertEqual(record.seq, "gccaatcaggtttctctgcaagcccctttagcagctgagc")
         self.assertEqual(
             record.letter_annotations["phred_quality"],
             [
@@ -400,7 +400,7 @@ class PhdTestSolexa(unittest.TestCase):
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.description, "HWI-EAS94_4_1_1_602_99 1")
-        self.assertEqual(str(record.seq), "gccatggcacatatatgaaggtcagaggacaacttgctgt")
+        self.assertEqual(record.seq, "gccatggcacatatatgaaggtcagaggacaacttgctgt")
         self.assertEqual(
             record.letter_annotations["phred_quality"],
             [
