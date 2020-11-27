@@ -233,21 +233,16 @@ class StockholmWriter(SequentialAlignmentWriter):
         seq_name = seq_name.replace(" ", "_")
 
         if "start" in record.annotations and "end" in record.annotations:
-            suffix = "/%s-%s" % (
-                str(record.annotations["start"]),
-                str(record.annotations["end"]),
-            )
+            suffix = "/%s-%s" % (record.annotations["start"], record.annotations["end"])
             if seq_name[-len(suffix) :] != suffix:
                 seq_name = "%s/%s-%s" % (
-                    seq_name,
-                    str(record.annotations["start"]),
-                    str(record.annotations["end"]),
+                    seq_name, record.annotations["start"], record.annotations["end"],
                 )
 
         if seq_name in self._ids_written:
             raise ValueError("Duplicate record identifier: %s" % seq_name)
         self._ids_written.append(seq_name)
-        self.handle.write("%s %s\n" % (seq_name, str(record.seq)))
+        self.handle.write("%s %s\n" % (seq_name, record.seq))
 
         # The recommended placement for GS lines (per sequence annotation)
         # is above the alignment (as a header block) or just below the

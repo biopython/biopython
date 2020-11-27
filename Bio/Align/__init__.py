@@ -15,7 +15,7 @@ class, used in the Bio.AlignIO module.
 
 from Bio.Align import _aligners
 from Bio.Align import substitution_matrices
-from Bio.Seq import Seq
+from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
 # Import errors may occur here if a compiled aligners.c file
@@ -1555,20 +1555,20 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""
-        if isinstance(seqA, Seq):
-            seqA = str(seqA).encode()
-        if isinstance(seqB, Seq):
-            seqB = str(seqB).encode()
+        if isinstance(seqA, (Seq, MutableSeq)):
+            seqA = bytes(seqA)
+        if isinstance(seqB, (Seq, MutableSeq)):
+            seqB = bytes(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
     def score(self, seqA, seqB):
         """Return the alignments score of two sequences using PairwiseAligner."""
-        if isinstance(seqA, Seq):
-            seqA = str(seqA).encode()
-        if isinstance(seqB, Seq):
-            seqB = str(seqB).encode()
+        if isinstance(seqA, (Seq, MutableSeq)):
+            seqA = bytes(seqA)
+        if isinstance(seqB, (Seq, MutableSeq)):
+            seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
 

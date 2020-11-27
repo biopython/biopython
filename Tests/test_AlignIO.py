@@ -78,7 +78,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 # Check the bare minimum (ID and sequence) as
                 # many formats can't store more than that.
                 # Check the sequence:
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(r1.seq, r2.seq)
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -224,7 +224,7 @@ class TestAlignIO_reading(unittest.TestCase):
         items = []
         for record in alignment:
             name = record.id
-            sequence = str(record.seq)
+            sequence = record.seq
             if len(sequence) > max_len:
                 sequence = sequence[: max_len - 6] + "..." + sequence[-3:]
             item = (name, sequence)
