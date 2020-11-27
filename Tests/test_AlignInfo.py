@@ -30,10 +30,10 @@ class AlignInfoTests(unittest.TestCase):
         summary = SummaryInfo(alignment)
 
         c = summary.dumb_consensus(ambiguous="N")
-        self.assertEqual(str(c), "NNNNNNNN")
+        self.assertEqual(c, "NNNNNNNN")
 
         c = summary.gap_consensus(ambiguous="N")
-        self.assertEqual(str(c), "NNNNNNNN")
+        self.assertEqual(c, "NNNNNNNN")
 
         expected = {"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25}
 
@@ -69,10 +69,10 @@ N  0.0 2.0 1.0 0.0
         s = SummaryInfo(a)
 
         c = s.dumb_consensus(ambiguous="X")
-        self.assertEqual(str(c), "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
+        self.assertEqual(c, "MHQAIFIYQIGYXXLKSGYIQSIRSPEYDNW*")
 
         c = s.gap_consensus(ambiguous="X")
-        self.assertEqual(str(c), "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
+        self.assertEqual(c, "MHXXIFIYQIGYXXLKSGYIQSIRSPEYXNWX")
 
         m = s.pos_specific_score_matrix(chars_to_ignore=["-", "*"], axis_seq=c)
         self.assertEqual(

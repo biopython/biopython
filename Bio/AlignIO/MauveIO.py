@@ -160,12 +160,12 @@ class MauveWriter(SequentialAlignmentWriter):
         # of the produced XMFA file.
         if "start" in record.annotations and "end" in record.annotations:
             suffix0 = "/%s-%s" % (
-                str(record.annotations["start"]),
-                str(record.annotations["end"]),
+                record.annotations["start"],
+                record.annotations["end"],
             )
             suffix1 = "/%s-%s" % (
-                str(record.annotations["start"] + 1),
-                str(record.annotations["end"]),
+                record.annotations["start"] + 1,
+                record.annotations["end"],
             )
             if seq_name[-len(suffix0) :] == suffix0:
                 seq_name = seq_name[: -len(suffix0)]
@@ -223,7 +223,7 @@ class MauveWriter(SequentialAlignmentWriter):
             id_line = id_line.replace("\n", " ").replace("\r", " ")
             self.handle.write(id_line + "\n")
             for i in range(0, len(record.seq), 80):
-                self.handle.write("%s\n" % str(record.seq[i : i + 80]))
+                self.handle.write("%s\n" % record.seq[i : i + 80])
 
 
 class MauveIterator(AlignmentIterator):
