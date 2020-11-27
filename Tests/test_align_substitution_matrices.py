@@ -298,8 +298,8 @@ class TestScoringMatrices(unittest.TestCase):
         cow_records = SeqIO.parse(cow_path, "fasta")
         pig_records = SeqIO.parse(pig_path, "fasta")
         for cow_record, pig_record in zip(cow_records, pig_records):
-            cow_sequence = str(cow_record.seq)
-            pig_sequence = str(pig_record.seq)
+            cow_sequence = cow_record.seq
+            pig_sequence = pig_record.seq
             alignments = aligner.align(cow_sequence, pig_sequence)
             assert len(alignments) == 1
             alignment = alignments[0]

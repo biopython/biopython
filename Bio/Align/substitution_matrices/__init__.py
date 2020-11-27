@@ -87,7 +87,7 @@ class Array(numpy.ndarray):
             if dims is None:
                 dims = 1
             elif dims not in (1, 2):
-                raise ValueError("dims should be 1 or 2 (found %s)" % str(dims))
+                raise ValueError("dims should be 1 or 2 (found %s)" % dims)
             shape = (n,) * dims
         else:
             if dims is None:

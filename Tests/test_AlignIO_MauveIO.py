@@ -81,8 +81,8 @@ class TestMauveIO(unittest.TestCase):
 
         for aln in aln_list:
             for record in aln:
-                if not str(record.seq).startswith("-"):
-                    expected = str(record.seq)[0:10]
+                if not record.seq.startswith("-"):
+                    expected = record.seq[0:10]
                     # seqs 0, 1 are ids 1, 2
                     actual = seqs[int(record.name) - 1].seq
                     # Slice out portion mentioned in file
@@ -114,7 +114,7 @@ class TestMauveIO(unittest.TestCase):
             self.assertEqual(len(a1), len(a2))
             for r1, r2 in zip(a1, a2):
                 self.assertEqual(r1.id, r2.id)
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(r1.seq, r2.seq)
 
 
 if __name__ == "__main__":

@@ -2368,10 +2368,10 @@ class TestOverflowError(unittest.TestCase):
         aligner = Align.PairwiseAligner()
         path = os.path.join("Align", "bsubtilis.fa")
         record = SeqIO.read(path, "fasta")
-        seq1 = str(record.seq)
+        seq1 = record.seq
         path = os.path.join("Align", "ecoli.fa")
         record = SeqIO.read(path, "fasta")
-        seq2 = str(record.seq)
+        seq2 = record.seq
         alignments = aligner.align(seq1, seq2)
         self.assertAlmostEqual(alignments.score, 1286.0)
         message = "^number of optimal alignments is larger than (%d|%d)$" % (
