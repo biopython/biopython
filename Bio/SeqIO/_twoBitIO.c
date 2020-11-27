@@ -300,7 +300,7 @@ applyNs(char sequence[], uint32_t start, uint32_t end, Py_buffer *nBlocks)
     const Py_ssize_t nBlockCount = nBlocks->shape[0];
     const uint32_t* const nBlockPositions = nBlocks->buf;
 
-    uint32_t i;
+    Py_ssize_t i;
     for (i = 0; i < nBlockCount; i++) {
         uint32_t nBlockStart = nBlockPositions[2*i];
         uint32_t nBlockEnd = nBlockPositions[2*i+1];
@@ -317,9 +317,11 @@ applyMask(char sequence[], uint32_t start, uint32_t end, Py_buffer* maskBlocks)
 {
     const Py_ssize_t maskBlockCount = maskBlocks->shape[0];
     const uint32_t* const maskBlockPositions = maskBlocks->buf;
+    const char diff = 'a' - 'A';
 
-    uint32_t i, j;
+    Py_ssize_t i;
     for (i = 0; i < maskBlockCount; i++) {
+        uint32_t j;
         uint32_t maskBlockStart = maskBlockPositions[2*i];
         uint32_t maskBlockEnd = maskBlockPositions[2*i+1];
         if (maskBlockEnd < start) continue;
@@ -327,7 +329,7 @@ applyMask(char sequence[], uint32_t start, uint32_t end, Py_buffer* maskBlocks)
         if (maskBlockStart < start) maskBlockStart = start;
         if (end < maskBlockEnd) maskBlockEnd = end;
         for (j = maskBlockStart - start; j < maskBlockEnd - start; j++)
-            sequence[j] += 32;
+            sequence[j] += diff;
     }
 }
 
@@ -444,8 +446,8 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
     }
 
 exit:
-    blocks_converter(NULL, nBlocks);
-    blocks_converter(NULL, maskBlocks);
+    blocks_converter(NULL, &nBlocks);
+    blocks_converter(NULL, &maskBlocks);
     return object;
 }
 
