@@ -76,7 +76,7 @@ class GenericPositionMatrix(dict):
                     else:
                         raise KeyError(key1)
                 else:
-                    raise KeyError("Cannot understand key %s", str(key1))
+                    raise KeyError("Cannot understand key %s" % key1)
                 if isinstance(key2, slice):
                     start2, stop2, stride2 = key2.indices(self.length)
                     indices2 = range(start2, stop2, stride2)
@@ -85,7 +85,7 @@ class GenericPositionMatrix(dict):
                     index2 = key2
                     dim2 = 1
                 else:
-                    raise KeyError("Cannot understand key %s", str(key2))
+                    raise KeyError("Cannot understand key %s" % key2)
                 if dim1 == 1 and dim2 == 1:
                     return dict.__getitem__(self, letter1)[index2]
                 elif dim1 == 1 and dim2 == 2:
@@ -127,7 +127,7 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError(key)
         else:
-            raise KeyError("Cannot understand key %s", str(key))
+            raise KeyError("Cannot understand key %s" % key)
         if dim == 1:
             return dict.__getitem__(self, letter)
         elif dim == 2:
