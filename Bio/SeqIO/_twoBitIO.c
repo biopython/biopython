@@ -337,6 +337,8 @@ blocks_converter(PyObject* object, void* pointer)
     const int flag = PyBUF_ND | PyBUF_FORMAT;
     Py_buffer *view = pointer;
 
+    if (object == NULL) goto exit;
+
     if (PyObject_GetBuffer(object, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError, "blocks have unexpected format.");
         return 0;
@@ -347,20 +349,24 @@ blocks_converter(PyObject* object, void* pointer)
         PyErr_Format(PyExc_RuntimeError,
                      "blocks have incorrect data type (itemsize %zd, format %s)",
                      view->itemsize, view->format);
-        return 0;
+        goto exit;
     }
     if (view->ndim != 2) {
         PyErr_Format(PyExc_RuntimeError,
                      "blocks have incorrect rank %d (expected 2)", view->ndim);
-        return 0;
+        goto exit;
     }
     if (view->shape[1] != 2) {
         PyErr_Format(PyExc_RuntimeError,
                      "blocks should have two colums (found %zd)",
                      view->shape[1]);
-        return 0;
+        goto exit;
     }
-    return 1;
+    return Py_CLEANUP_SUPPORTED;
+
+exit:
+    PyBuffer_Release(view);
+    return 0;
 }
 
 static char TwoBit_convert__doc__[] = "convert twoBit data to the DNA sequence, apply blocks of N's (representing unknown sequences) and masked (lower case) blocks, and return the sequence as a bytes object";
@@ -390,13 +396,15 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
 
     size = (end - start) / step;
     object = PyBytes_FromStringAndSize(NULL, size);
-    if (!object) return NULL;
+    if (!object) goto exit;
+
     sequence = PyBytes_AS_STRING(object);
 
     if (step == 1) {
         if (extract(data, length, start, end, sequence) < 0) {
             Py_DECREF(object);
-            return NULL;
+            object = NULL;
+            goto exit;
         }
         applyNs(sequence, start, end, &nBlocks);
         applyMask(sequence, start, end, &maskBlocks);
@@ -419,12 +427,14 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
         full_sequence[full_end-full_start] = '\0';
         if (!full_sequence) {
             Py_DECREF(object);
-            return NULL;
+            object = NULL;
+            goto exit;
         }
         if (extract(data, length, full_start, full_end, full_sequence) < 0) {
-            Py_DECREF(object);
             PyMem_Free(full_sequence);
-            return NULL;
+            Py_DECREF(object);
+            object = NULL;
+            goto exit;
         }
         applyNs(full_sequence, full_start, full_end, &nBlocks);
         applyMask(full_sequence, full_start, full_end, &maskBlocks);
@@ -432,6 +442,10 @@ TwoBit_convert(PyObject* self, PyObject* args, PyObject* keywords)
             sequence[i] = full_sequence[current];
         PyMem_Free(full_sequence);
     }
+
+exit:
+    blocks_converter(NULL, nBlocks);
+    blocks_converter(NULL, maskBlocks);
     return object;
 }
 
