@@ -527,7 +527,7 @@ class PlateRecord:
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "%s['%s']" % (self[x].__class__.__name__, self[x].id)
                         for x in sorted(self._wells.keys())[:3]
                     ]
                 ),
@@ -542,7 +542,7 @@ class PlateRecord:
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "%s['%s']" % (self[x].__class__.__name__, self[x].id)
                         for x in sorted(self._wells.keys())
                     ]
                 ),
