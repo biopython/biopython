@@ -457,7 +457,7 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual(len(old), len(new))
-        self.assertEqual(str(old.seq), str(new.seq))
+        self.assertEqual(old.seq, new.seq)
         for key in set(old.annotations).intersection(new.annotations):
             if key in ["date"]:
                 # TODO - Why is this a list vs str?
@@ -564,7 +564,7 @@ class TestUniprot(SeqRecordTestBaseClass):
         for txt, xml, fas, id in zip(txt_list, xml_list, fas_list, ids):
             self.assertEqual(txt.id, id)
             self.assertIn(txt.id, fas.id.split("|"))
-            self.assertEqual(str(txt.seq), str(fas.seq))
+            self.assertEqual(txt.seq, fas.seq)
             self.compare_txt_xml(txt, xml)
 
     def test_multi_ex_index(self):
