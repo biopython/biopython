@@ -595,7 +595,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single tax ID
-                clause = "ms.TAX_ID = '%s'" % str(species)
+                clause = "ms.TAX_ID = '%s'" % species
 
             where_clauses.append(clause)
 
