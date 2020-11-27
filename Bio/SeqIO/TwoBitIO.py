@@ -125,8 +125,9 @@ class TwoBitSequenceData:
                 raise ValueError("cannot retrieve sequence: file is closed") from None
             raise
         data = numpy.fromfile(stream, dtype="uint8", count=byteSize)
-        sequence = _twoBitIO.convert(data, start, end, step,
-                                     self.nBlocks, self.maskBlocks)
+        sequence = _twoBitIO.convert(
+            data, start, end, step, self.nBlocks, self.maskBlocks
+        )
         return sequence
 
     def __len__(self):
@@ -190,15 +191,15 @@ class TwoBitIterator(SequenceIterator):
             nBlockStarts = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
             nBlockSizes = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
             sequence.nBlocks = numpy.empty((nBlockCount, 2), dtype="uint32")
-            sequence.nBlocks[:,0] = nBlockStarts
-            sequence.nBlocks[:,1] = nBlockStarts + nBlockSizes
+            sequence.nBlocks[:, 0] = nBlockStarts
+            sequence.nBlocks[:, 1] = nBlockStarts + nBlockSizes
             data = stream.read(4)
             maskBlockCount = int.from_bytes(data, byteorder, signed=False)
             maskBlockStarts = numpy.fromfile(stream, dtype=dtype, count=maskBlockCount)
             maskBlockSizes = numpy.fromfile(stream, dtype=dtype, count=maskBlockCount)
             sequence.maskBlocks = numpy.empty((maskBlockCount, 2), dtype="uint32")
-            sequence.maskBlocks[:,0] = maskBlockStarts
-            sequence.maskBlocks[:,1] = maskBlockStarts + maskBlockSizes
+            sequence.maskBlocks[:, 0] = maskBlockStarts
+            sequence.maskBlocks[:, 1] = maskBlockStarts + maskBlockSizes
             data = stream.read(4)
             reserved = int.from_bytes(data, byteorder, signed=False)
             if reserved != 0:
