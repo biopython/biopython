@@ -239,7 +239,9 @@ class StockholmWriter(SequentialAlignmentWriter):
             )
             if seq_name[-len(suffix) :] != suffix:
                 seq_name = "%s/%s-%s" % (
-                    seq_name, record.annotations["start"], record.annotations["end"],
+                    seq_name,
+                    record.annotations["start"],
+                    record.annotations["end"],
                 )
 
         if seq_name in self._ids_written:
