@@ -620,7 +620,7 @@ class TogoConvert(unittest.TestCase):
         old = SeqIO.read(filename, "gb")
         with open(filename) as handle:
             new = SeqIO.read(TogoWS.convert(handle, "genbank", "fasta"), "fasta")
-        self.assertEqual(str(old.seq), str(new.seq))
+        self.assertEqual(old.seq, new.seq)
 
 
 #    def test_genbank_to_embl(self):
