@@ -129,9 +129,9 @@ class ClustalWTestCase(unittest.TestCase):
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertEqual(set(input_records.keys()), set(output_records.keys()))
         for record in align:
-            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+            self.assertEqual(record.seq, output_records[record.id].seq)
             self.assertEqual(
-                str(record.seq).replace("-", ""), str(input_records[record.id].seq)
+                str(record.seq).replace("-", ""), input_records[record.id].seq
             )
 
         # Check the DND file was created.
@@ -155,11 +155,12 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
+            message = str(err)
             self.assertTrue(
-                "Cannot open sequence file" in str(err)
-                or "Cannot open input file" in str(err)
-                or "Non-zero return code " in str(err),
-                str(err),
+                "Cannot open sequence file" in message
+                or "Cannot open input file" in message
+                or "Non-zero return code " in message,
+                message,
             )
         else:
             self.fail("expected an ApplicationError")
