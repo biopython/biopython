@@ -110,7 +110,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[0].references[0], ("MEDLINE", "96299740"))
 
         # Check that the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -126,7 +126,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -225,7 +225,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[2].references[0], ("MEDLINE", "96188189"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -241,7 +241,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -448,7 +448,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[12].references[0], ("MEDLINE", "90345949"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -464,7 +464,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -596,7 +596,7 @@ class TestSwissProt(unittest.TestCase):
         )
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -612,7 +612,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -699,7 +699,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[1].references[0], ("MEDLINE", "94141932"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -715,7 +715,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -792,7 +792,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[0].references[0], ("MEDLINE", "92193265"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -808,7 +808,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -929,7 +929,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -945,7 +945,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -1728,7 +1728,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[26].references[0], ("MEDLINE", "91245570"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -1744,7 +1744,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -1827,7 +1827,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[0].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -1843,7 +1843,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -2141,7 +2141,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[5].references[1], ("PubMed", "7656980"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -2156,7 +2156,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -2549,7 +2549,7 @@ class TestSwissProt(unittest.TestCase):
         )
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -2564,7 +2564,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3085,7 +3085,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[7].references[1], ("PubMed", "1714448"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3100,7 +3100,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3178,7 +3178,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3193,7 +3193,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3273,7 +3273,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3288,7 +3288,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3403,7 +3403,7 @@ class TestSwissProt(unittest.TestCase):
         )
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3418,7 +3418,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3485,7 +3485,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3501,7 +3501,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
