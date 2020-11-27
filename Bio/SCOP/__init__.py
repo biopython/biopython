@@ -128,7 +128,7 @@ def cmp_sccs(sccs1, sccs2):
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
 
 
-def parse_domain(str):
+def parse_domain(term):
     """Convert an ASTRAL header string into a Scop domain.
 
     An ASTRAL (http://astral.stanford.edu/) header contains a concise
@@ -141,9 +141,9 @@ def parse_domain(str):
     A typical ASTRAL header looks like --
     >d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}
     """
-    m = _domain_re.match(str)
+    m = _domain_re.match(term)
     if not m:
-        raise ValueError("Domain: " + str)
+        raise ValueError("Domain: " + term)
 
     dom = Domain()
     dom.sid = m.group(1)
