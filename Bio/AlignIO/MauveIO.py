@@ -159,8 +159,14 @@ class MauveWriter(SequentialAlignmentWriter):
         # We remove the "/{start}-{end}" before writing, as it cannot be part
         # of the produced XMFA file.
         if "start" in record.annotations and "end" in record.annotations:
-            suffix0 = "/%s-%s" % (record.annotations["start"], record.annotations["end"])
-            suffix1 = "/%s-%s" % (record.annotations["start"] + 1, record.annotations["end"])
+            suffix0 = "/%s-%s" % (
+                record.annotations["start"],
+                record.annotations["end"],
+            )
+            suffix1 = "/%s-%s" % (
+                record.annotations["start"] + 1,
+                record.annotations["end"],
+            )
             if seq_name[-len(suffix0) :] == suffix0:
                 seq_name = seq_name[: -len(suffix0)]
             if seq_name[-len(suffix1) :] == suffix1:
