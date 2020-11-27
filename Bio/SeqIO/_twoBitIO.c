@@ -342,9 +342,11 @@ blocks_converter(PyObject* object, void* pointer)
         return 0;
     }
 
-    if (view->itemsize != sizeof(uint32_t) || strcmp(view->format, "I") != 0) {
+    if (view->itemsize != sizeof(uint32_t)
+     || (strcmp(view->format, "I") != 0 && strcmp(view->format, "L") != 0 )) {
         PyErr_Format(PyExc_RuntimeError,
-                        "blocks have incorrect data type %d %d %s", view->itemsize, sizeof(uint32_t), view->format);
+                     "blocks have incorrect data type (itemsize %zd, format %s)",
+                     view->itemsize, view->format);
         return 0;
     }
     if (view->ndim != 2) {
