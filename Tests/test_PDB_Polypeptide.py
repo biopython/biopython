@@ -9,7 +9,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Unit tests for the Bio.PDB.Polypetide module."""
+"""Unit tests for the Bio.PDB.Polypeptide module."""
 
 import unittest
 
@@ -18,7 +18,7 @@ from Bio.Seq import Seq
 
 
 class PolypeptideTests(unittest.TestCase):
-    """Test Polypetide module."""
+    """Test Polypeptide module."""
 
     @classmethod
     def setUpClass(self):
@@ -66,8 +66,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertIsInstance(s, Seq)
         # Here non-standard MSE are shown as M
         self.assertEqual(
-            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
-            s,
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG", s,
         )
 
     def test_ppbuilder_torsion(self):
@@ -165,8 +164,7 @@ class PolypeptideTests(unittest.TestCase):
         self.assertIsInstance(s, Seq)
         # Here non-standard MSE are shown as M
         self.assertEqual(
-            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
-            s,
+            "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG", s,
         )
 
     def test_cappbuilder_tau(self):
