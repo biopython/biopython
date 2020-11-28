@@ -247,17 +247,14 @@ class HSP:
             )
             lines.append("               %s" % self.match)
             lines.append(
-                "Sbjct:%8s %s %s"
-                % (self.sbjct_start, self.sbjct, self.sbjct_end)
+                "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
             )
         else:
             lines.append(
                 "Query:%8s %s...%s %s"
                 % (self.query_start, self.query[:45], self.query[-3:], self.query_end,)
             )
-            lines.append(
-                "               %s...%s" % (self.match[:45], self.match[-3:])
-            )
+            lines.append("               %s...%s" % (self.match[:45], self.match[-3:]))
             lines.append(
                 "Sbjct:%8s %s...%s %s"
                 % (self.sbjct_start, self.sbjct[:45], self.sbjct[-3:], self.sbjct_end)
