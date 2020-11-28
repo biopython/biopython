@@ -46,9 +46,9 @@ class PolypeptideTests(unittest.TestCase):
         pp1_seq = pp[1].get_sequence()
         pp2_seq = pp[2].get_sequence()
         self.assertIsInstance(pp0_seq, Seq)
-        self.assertEqual(str(pp0_seq), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
-        self.assertEqual(str(pp1_seq), "TETLLVQNANPDCKTILKALGPGATLEE")
-        self.assertEqual(str(pp2_seq), "TACQG")
+        self.assertEqual(pp0_seq, "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
+        self.assertEqual(pp1_seq, "TETLLVQNANPDCKTILKALGPGATLEE")
+        self.assertEqual(pp2_seq, "TACQG")
 
     def test_ppbuilder_real_nonstd(self):
         """Test PPBuilder on real PDB file allowing non-standard amino acids."""
@@ -67,7 +67,7 @@ class PolypeptideTests(unittest.TestCase):
         # Here non-standard MSE are shown as M
         self.assertEqual(
             "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
-            str(s),
+            s,
         )
 
     def test_ppbuilder_torsion(self):
@@ -107,9 +107,9 @@ class PolypeptideTests(unittest.TestCase):
         pp0_seq = pp[0].get_sequence()
         pp1_seq = pp[1].get_sequence()
         pp2_seq = pp[2].get_sequence()
-        self.assertEqual(str(pp0_seq), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
-        self.assertEqual(str(pp1_seq), "TETLLVQNANPDCKTILKALGPGATLEE")
-        self.assertEqual(str(pp2_seq), "TACQG")
+        self.assertEqual(pp0_seq, "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
+        self.assertEqual(pp1_seq, "TETLLVQNANPDCKTILKALGPGATLEE")
+        self.assertEqual(pp2_seq, "TACQG")
         self.assertEqual(
             [ca.serial_number for ca in pp[0].get_ca_list()],
             [
@@ -166,7 +166,7 @@ class PolypeptideTests(unittest.TestCase):
         # Here non-standard MSE are shown as M
         self.assertEqual(
             "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
-            str(s),
+            s,
         )
 
     def test_cappbuilder_tau(self):
