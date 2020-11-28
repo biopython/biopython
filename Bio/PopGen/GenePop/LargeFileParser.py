@@ -43,11 +43,11 @@ def read(handle):
 
     """
     record = Record(handle)
-    record.comment_line = str(handle.readline()).rstrip()
+    record.comment_line = next(handle).rstrip()
     # We can now have one loci per line or all loci in a single line
     # separated by either space or comma+space...
     # We will remove all commas on loci... that should not be a problem
-    sample_loci_line = str(handle.readline()).rstrip().replace(",", "")
+    sample_loci_line = next(handle).rstrip().replace(",", "")
     all_loci = sample_loci_line.split(" ")
     record.loci_list.extend(all_loci)
     line = handle.readline()
