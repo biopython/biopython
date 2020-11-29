@@ -25,7 +25,7 @@ def lcc_mult(seq, wsize):
     """
     l2 = math.log(2)
     tamseq = len(seq)
-    upper = seq.upper()
+    upper = str(seq).upper()
     compone = [0]
     lccsal = [0]
     for i in range(wsize):
@@ -132,7 +132,7 @@ def lcc_simp(seq):
     https://doi.org/10.1038/npg.els.0005260
     """
     wsize = len(seq)
-    upper = seq.upper()
+    upper = str(seq).upper()
     l2 = math.log(2)
     if "A" not in seq:
         term_a = 0
