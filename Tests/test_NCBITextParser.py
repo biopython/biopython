@@ -35,7 +35,7 @@ class TestBlastRecord(unittest.TestCase):
             record = self.parser.parse(handle)
         generic_align = record.multiple_alignment.to_generic()
         test_seq = generic_align[0].seq
-        self.assertEqual(str(test_seq[:60]), record.multiple_alignment.alignment[0][2])
+        self.assertEqual(test_seq[:60], record.multiple_alignment.alignment[0][2])
 
 
 class TestNCBITextParser(unittest.TestCase):
