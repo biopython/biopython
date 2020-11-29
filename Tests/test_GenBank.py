@@ -7496,20 +7496,19 @@ class GenBankTests(unittest.TestCase):
                 seq_record = SeqIO.read(handle, "genbank")
         seq_features = seq_record.features
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.lower()),
+            seq_features[1].extract(seq_record).seq.lower(),
             "atgccctataaaacccagggctgccttggaaaaggcgcaaccccaaccccctcgagccgcggcatataa",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.lower()),
+            seq_features[2].extract(seq_record).seq.lower(),
             "atgccgcggctcgagggggttggggttgcgccttttccaaggcagccctgggttttatag",
         )
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.translate()),
+            seq_features[1].extract(seq_record).seq.translate(),
             "MPYKTQGCLGKGATPTPSSRGI*",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.translate()),
-            "MPRLEGVGVAPFPRQPWVL*",
+            seq_features[2].extract(seq_record).seq.translate(), "MPRLEGVGVAPFPRQPWVL*",
         )
 
     def test_fuzzy_origin_wrap(self):
