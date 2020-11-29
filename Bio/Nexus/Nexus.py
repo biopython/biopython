@@ -1060,17 +1060,15 @@ class Nexus:
                 else:
                     if self.matchchar:
                         while True:
-                            p = str(iupac_seq).find(self.matchchar)
+                            p = iupac_seq.find(self.matchchar)
                             if p == -1:
                                 break
                             iupac_seq = Seq(
-                                str(iupac_seq)[:p]
-                                + refseq[p]
-                                + str(iupac_seq)[p + 1 :],
+                                iupac_seq[:p] + refseq[p] + iupac_seq[p + 1 :]
                             )
 
                 # Check for invalid characters
-                for i, c in enumerate(str(iupac_seq)):
+                for i, c in enumerate(iupac_seq):
                     if (
                         c not in self.valid_characters
                         and c != self.gap
