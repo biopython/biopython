@@ -1064,9 +1064,7 @@ class Nexus:
                             if p == -1:
                                 break
                             iupac_seq = Seq(
-                                iupac_seq[:p]
-                                + refseq[p]
-                                + iupac_seq[p + 1 :],
+                                iupac_seq[:p] + refseq[p] + iupac_seq[p + 1 :]
                             )
 
                 # Check for invalid characters
