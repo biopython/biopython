@@ -235,7 +235,7 @@ class Hit(_BaseSearchObject):
                 # append the hsp row
                 lines.append(
                     pattern
-                    % (str(idx), evalue, bitscore, aln_span, query_range, hit_range)
+                    % (idx, evalue, bitscore, aln_span, query_range, hit_range)
                 )
 
         return "\n".join(lines)

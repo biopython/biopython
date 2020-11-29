@@ -122,7 +122,7 @@ class InterproscanXmlParser:
                 if value is not None:
                     setattr(hit, attr, caster(value))
             # format specific attributes
-            hit.attributes["Hit type"] = str(hit_type)
+            hit.attributes["Hit type"] = hit_type
             signature_lib = signature.find(self.NS + "signature-library-release")
             hit.attributes["Target"] = str(signature_lib.attrib.get("library"))
             hit.attributes["Target version"] = str(signature_lib.attrib.get("version"))
