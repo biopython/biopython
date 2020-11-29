@@ -7508,8 +7508,7 @@ class GenBankTests(unittest.TestCase):
             "MPYKTQGCLGKGATPTPSSRGI*",
         )
         self.assertEqual(
-            seq_features[2].extract(seq_record).seq.translate(),
-            "MPRLEGVGVAPFPRQPWVL*",
+            seq_features[2].extract(seq_record).seq.translate(), "MPRLEGVGVAPFPRQPWVL*",
         )
 
     def test_fuzzy_origin_wrap(self):
