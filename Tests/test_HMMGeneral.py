@@ -298,7 +298,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         max_prob = math.log(max_prob)
         seq = viterbi[0]
         prob = viterbi[1]
-        self.assertEqual(str(seq), seq_first_state + seq_second_state)
+        self.assertEqual(seq, seq_first_state + seq_second_state)
         self.assertAlmostEqual(prob, max_prob, 11)
 
     def test_non_ergodic(self):
@@ -339,7 +339,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         prob = viterbi[1]
 
         # the most probable path must be from state 1 to state 2
-        self.assertEqual(str(seq), "12")
+        self.assertEqual(seq, "12")
 
         # The probability of that path is the probability of starting in
         # state 1, then emitting an A, then transitioning 1 -> 2, then
