@@ -135,7 +135,7 @@ def is_palindrom(sequence):
 
 def is_palindrome(sequence):
     """Check whether the sequence is a palindrome or not."""
-    return str(sequence) == str(sequence.reverse_complement())
+    return sequence == sequence.reverse_complement()
 
 
 class newenzyme:
@@ -970,7 +970,7 @@ class DictionaryBuilder:
                     other = line[0].replace("-", "_").replace(".", "_")
                     dna = Seq(line[1])
                     sense1 = regex(dna)
-                    antisense1 = regex(str(dna.reverse_complement()))
+                    antisense1 = regex(dna.reverse_complement())
                     dna = Seq(enzymedict[other][0])
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
