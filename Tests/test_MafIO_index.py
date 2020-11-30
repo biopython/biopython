@@ -656,8 +656,7 @@ if sqlite3:
             result = self.idx.get_spliced((0, 1000), (500, 1500), 1)
 
             self.assertEqual(len(result), 1)
-            self.assertEqual(len(result[0].seq), 1000)
-            self.assertEqual(str(result[0].seq), "N" * 1000)
+            self.assertEqual(result[0].seq, "N" * 1000)
 
         def test_correct_retrieval_1(self):
             """Correct retrieval of Cnksr3 in mouse.
@@ -700,7 +699,7 @@ if sqlite3:
                 1,
             )
 
-            cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta").seq).upper()
+            cnksr3 = SeqIO.read("MAF/cnksr3.fa", "fasta").seq.upper()
             mm9_seq = "".join(
                 [str(x.seq) for x in result if x.id.startswith("mm9")]
             ).replace("-", "")
