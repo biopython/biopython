@@ -1319,9 +1319,7 @@ class BlatPslxCases(BlatPslCases):
         )
         self.assertEqual("DAIEVCKKFMERDPDELRFNAIALSAA", hsp.query_all[1].seq)
 
-        self.assertEqual(
-            "MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVY", hsp.hit_all[0].seq[:35]
-        )
+        self.assertEqual("MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVY", hsp.hit_all[0].seq[:35])
         self.assertEqual(
             "ETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYEL", hsp.hit_all[0].seq[-35:]
         )

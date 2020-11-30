@@ -250,14 +250,14 @@ class BlastnCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG", hsp.hit.seq[:40])
-        self.assertEqual("AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:])
+        self.assertEqual(
+            "AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "||||||||||||||||||||||||||||||||||||||||",
             hsp.aln_annotation["similarity"][-40:],
         )
-        self.assertEqual(
-            "AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA", hsp.hit.seq[-40:]
-        )
+        self.assertEqual("AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA", hsp.hit.seq[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
         self.assertEqual(53, hsp.aln_span)
@@ -594,7 +594,9 @@ class BlastpCases(BaseBlastCases):
             hsp.aln_annotation["similarity"][:40],
         )
         self.assertEqual("MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG", hsp.hit.seq[:40])
-        self.assertEqual("DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:])
+        self.assertEqual(
+            "DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN", hsp.query.seq[-40:]
+        )
         self.assertEqual(
             "DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN",
             hsp.aln_annotation["similarity"][-40:],
